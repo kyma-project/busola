@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+
 import PropTypes from 'prop-types';
 import { Icon } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
 import './FileInput.scss';
-import { showAddClusterWizard } from 'state/showAddClusterWizard';
-import { spacing } from '@ui5/webcomponents-react-base';
 
 FileInput.propTypes = {
   fileInputChanged: PropTypes.func.isRequired,
@@ -98,7 +98,7 @@ export function FileInput({
           design="Information"
           className="file-input__icon"
         />
-        <p style={spacing.sapUiSmallMarginTopBottom}>{message}</p>
+        <p className="sap-margin-y-small">{message}</p>
         {availableFormatsMessage && (
           <p className="file-input__secondary">{availableFormatsMessage}</p>
         )}

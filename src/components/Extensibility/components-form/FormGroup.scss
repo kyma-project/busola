@@ -2,9 +2,3 @@
   display: grid;
   column-gap: 10px;
 }
-
-@container (max-width: 800px) {
-  .form-group__grid-wrapper {
-    grid-template-columns: 1fr !important;
-  }
-}

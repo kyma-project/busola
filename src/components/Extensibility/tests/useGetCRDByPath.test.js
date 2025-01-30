@@ -13,6 +13,18 @@ vi.mock('react-router-dom', async () => ({
   }),
 }));
 
+vi.mock('@ui5/webcomponents-react', () => {
+  return {
+    Link: () => ({}),
+  };
+});
+
+vi.mock('shared/components/Dropdown/Dropdown', () => {
+  return {
+    default: () => ({}),
+  };
+});
+
 const TestComponent = () => {
   const value = useGetCRbyPath();
 

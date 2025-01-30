@@ -81,7 +81,10 @@ export function K8sResourceSelect({
               value: pluralResourceType,
             }),
       };
-    } else return undefined;
+    } else
+      return {
+        state: 'None',
+      };
   };
 
   const onChange = event => {

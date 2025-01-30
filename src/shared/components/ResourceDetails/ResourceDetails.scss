@@ -24,7 +24,7 @@
   min-width: 200px;
 }
 
-@container (min-width: 650px) {
+@container (min-width: 550px) {
   .cluster-overview__details-wrapper {
     grid-template-columns: fit-content(100%) max-content;
   }

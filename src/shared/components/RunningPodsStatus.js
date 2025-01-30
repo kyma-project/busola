@@ -7,7 +7,7 @@ export function RunningPodsStatus({ running, expected }) {
     running === 1
       ? t('common.tooltips.running-pods-singular')
       : t('common.tooltips.running-pods-plural', { running });
-  const statusType = running === expected ? 'Success' : 'Error';
+  const statusType = running === expected ? 'Positive' : 'Negative';
 
   return (
     <StatusBadge

@@ -77,6 +77,10 @@
   }
 }
 
+.add-modules-form::part(layout) {
+  background-color: var(--sapBackgroundColor);
+}
+
 @container (max-width: 350px) {
   .gridbox-addModule {
     --card-width: 300px;

@@ -22,21 +22,21 @@ export function SchemaViewer({ name, schema }) {
           <SegmentedButton>
             <SegmentedButtonItem
               compact
-              pressed={schemaMode === 'viewer'}
+              selected={schemaMode === 'viewer'}
               onClick={() => setSchemaMode('viewer')}
             >
               {t('schema.modes.viewer')}
             </SegmentedButtonItem>
             <SegmentedButtonItem
               compact
-              pressed={schemaMode === 'json'}
+              selected={schemaMode === 'json'}
               onClick={() => setSchemaMode('json')}
             >
               {t('schema.modes.json')}
             </SegmentedButtonItem>
             <SegmentedButtonItem
               compact
-              pressed={schemaMode === 'yaml'}
+              selected={schemaMode === 'yaml'}
               onClick={() => setSchemaMode('yaml')}
             >
               {t('schema.modes.yaml')}

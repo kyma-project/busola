@@ -1,0 +1,54 @@
+name: Definition of done Check
+
+on: 
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+jobs:
+  check-unchecked-tasks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const getPendingTasks = (body) => {
+              let responseString = "";
+              try {
+                  const uncompletedTasks = body.match(/(- \[[ ]\].+)/g);
+                  if (uncompletedTasks != undefined) {
+                      responseString += 'Uncompleted Tasks\n';
+                      uncompletedTasks.forEach(u => {
+                          responseString += `${u}\n`;
+                      });
+                  }
+              } catch (e) {
+                  responseString = "";
+              }
+              return responseString;
+            }
+            (async () => {
+              try {
+                  const prBody = context?.payload?.pull_request?.body;
+                  if (!prBody) {
+                      core.info("PR don't have tasks to check");
+                      return
+                  }
+                  core.debug('Getting a list of uncompleted tasks: ');
+                  let pendingTasks = getPendingTasks(prBody);
+                  core.debug(pendingTasks);
+                  let isTaskListCompleted = false;
+                  if (!pendingTasks) {
+                      isTaskListCompleted = true;
+                  }
+                  core.debug(`All tasks completed: ${isTaskListCompleted}`);
+                
+                  if (isTaskListCompleted) {
+                      core.info(`SUCCESS: All tasks completed`);
+                      return;
+                  } else {
+                      core.setFailed(`FAILED: Some tasks are still pending! \n${pendingTasks}\nLength: ${pendingTasks.length}`);
+                  }
+              } catch (error) {
+                  core.setFailed(error.message)
+              }
+            })();

@@ -1,8 +1,6 @@
-import React from 'react';
 import { Button, FlexBox, RadioButton, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ClusterPreview.scss';
-import { spacing } from '@ui5/webcomponents-react-base';
 import {
   findInitialValue,
   findInitialValues,
@@ -39,13 +37,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
       <>
         {issuerUrl && (
           <>
-            <p
-              className="cluster-preview__data-header"
-              style={{
-                ...spacing.sapUiSmallMarginTop,
-                ...spacing.sapUiTinyMarginBottom,
-              }}
-            >
+            <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
               {t('clusters.labels.issuer-url')}:
             </p>
             <div>{issuerUrl}</div>
@@ -53,13 +45,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
         )}
         {clientId && (
           <>
-            <p
-              className="cluster-preview__data-header"
-              style={{
-                ...spacing.sapUiSmallMarginTop,
-                ...spacing.sapUiTinyMarginBottom,
-              }}
-            >
+            <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
               {t('clusters.labels.client-id')}:
             </p>
             <div>{clientId}</div>
@@ -67,13 +53,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
         )}
         {clientSecret && (
           <>
-            <p
-              className="cluster-preview__data-header"
-              style={{
-                ...spacing.sapUiSmallMarginTop,
-                ...spacing.sapUiTinyMarginBottom,
-              }}
-            >
+            <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
               {t('clusters.labels.client-secret')}:
             </p>
             <div>{clientSecret}</div>
@@ -81,13 +61,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
         )}
         {extraScopes && (
           <>
-            <p
-              className="cluster-preview__data-header"
-              style={{
-                ...spacing.sapUiSmallMarginTop,
-                ...spacing.sapUiTinyMarginBottom,
-              }}
-            >
+            <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
               {t('clusters.labels.scopes')}:
             </p>
             {<Tokens tokens={extraScopes} />}
@@ -101,13 +75,7 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
     const token = kubeconfig?.users?.[userIndex]?.user?.token;
     return (
       <>
-        <p
-          className="cluster-preview__data-header"
-          style={{
-            ...spacing.sapUiSmallMarginTop,
-            ...spacing.sapUiTinyMarginBottom,
-          }}
-        >
+        <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
           {`${t('clusters.token')}:`}
         </p>
         {token && <div className="cluster-preview__token">{token}</div>}
@@ -118,30 +86,17 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
   return (
     <div className="cluster-preview">
       <div className="add-cluster__content-container">
-        <Title level="H5" style={spacing.sapUiMediumMarginBottom}>
+        <Title level="H5" className="sap-margin-bottom-medium">
           {t('clusters.wizard.review')}
         </Title>
         <Title
           level="H5"
-          className="cluster-preview__subtitle"
-          style={spacing.sapUiSmallMarginTopBottom}
+          className="cluster-preview__subtitle sap-margin-y-small"
         >{`1. ${t('common.headers.configuration')}`}</Title>
-        <p
-          className="cluster-preview__data-header"
-          style={{
-            ...spacing.sapUiSmallMarginTop,
-            ...spacing.sapUiTinyMarginBottom,
-          }}
-        >
+        <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
           {t('clusters.name_singular')}:
         </p>
-        <div
-          className="cluster-preview__content"
-          style={{
-            ...spacing.sapUiMediumMarginBottom,
-            ...spacing.sapUiTinyMarginTop,
-          }}
-        >
+        <div className="cluster-preview__content sap-margin-top-small sap-margin-bottom-tiny">
           <div>{kubeconfig?.['current-context']}</div>
           <Button
             design="Transparent"
@@ -153,17 +108,10 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
         </div>
         <Title
           level="H5"
-          className="cluster-preview__subtitle"
-          style={spacing.sapUiSmallMarginTopBottom}
+          className="cluster-preview__subtitle sap-margin-y-small"
         >{`2. ${t('clusters.wizard.authentication')}`}</Title>
 
-        <div
-          className="cluster-preview__content"
-          style={{
-            ...spacing.sapUiMediumMarginBottom,
-            ...spacing.sapUiTinyMarginTop,
-          }}
-        >
+        <div className="cluster-preview__content sap-margin-top-small sap-margin-bottom-tiny">
           <div className="cluster-preview__auth">
             {authenticationType === 'token' ? <TokenData /> : <OidcData />}
           </div>
@@ -177,25 +125,12 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
         </div>
         <Title
           level="H5"
-          className="cluster-preview__subtitle"
-          style={spacing.sapUiSmallMarginTopBottom}
+          className="cluster-preview__subtitle sap-margin-y-small"
         >{`3. ${t('clusters.wizard.storage')}`}</Title>
-        <p
-          className="cluster-preview__data-header"
-          style={{
-            ...spacing.sapUiSmallMarginTop,
-            ...spacing.sapUiTinyMarginBottom,
-          }}
-        >
+        <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
           {`${t('clusters.storage.storage-preference')}:`}
         </p>
-        <div
-          className="cluster-preview__content"
-          style={{
-            ...spacing.sapUiMediumMarginBottom,
-            ...spacing.sapUiTinyMarginTop,
-          }}
-        >
+        <div className="cluster-preview__content sap-margin-bottom-medium sap-margin-top-tiny">
           <FlexBox
             direction="Column"
             className="cluster-preview__storage-container"

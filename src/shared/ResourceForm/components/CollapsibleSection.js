@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { ResourceFormWrapper } from './Wrapper';
-import { Panel, Toolbar, ToolbarSpacer } from '@ui5/webcomponents-react';
+import { Panel } from '@ui5/webcomponents-react';
 import { Title } from './Title';
 import './CollapsibleSection.scss';
+import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
+import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
 export function CollapsibleSection({
   disabled = false,

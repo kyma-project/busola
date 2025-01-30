@@ -92,7 +92,7 @@ export function NamespaceWorkloads({ namespace }) {
       {(podsData || deploymentsData) && (
         <>
           {podsData && (
-            <div className="item-wrapper wide">
+            <div className="item-wrapper card-wide">
               <CountingCard
                 className="item"
                 value={podsData?.length}
@@ -118,7 +118,7 @@ export function NamespaceWorkloads({ namespace }) {
             </div>
           )}
           {deploymentsData && (
-            <div className="item-wrapper wide">
+            <div className="item-wrapper card-wide">
               <CountingCard
                 className="item"
                 value={deploymentsData?.length}
@@ -140,7 +140,7 @@ export function NamespaceWorkloads({ namespace }) {
             </div>
           )}
           {daemonsetsData && (
-            <div className="item-wrapper wide">
+            <div className="item-wrapper card-wide">
               <CountingCard
                 className="item"
                 value={daemonsetsData?.length}
@@ -164,7 +164,7 @@ export function NamespaceWorkloads({ namespace }) {
             </div>
           )}
           {statefulsetsData && (
-            <div className="item-wrapper wide">
+            <div className="item-wrapper card-wide">
               <CountingCard
                 className="item"
                 value={statefulsetsData?.length}
@@ -190,7 +190,7 @@ export function NamespaceWorkloads({ namespace }) {
             </div>
           )}
           {servicesData && (
-            <div className="item-wrapper wide">
+            <div className="item-wrapper card-wide">
               <CountingCard
                 className="item"
                 value={servicesData?.length}

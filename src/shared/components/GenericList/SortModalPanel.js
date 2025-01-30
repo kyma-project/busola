@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import {
   Button,
-  CustomListItem,
-  GroupHeaderListItem,
+  ListItemCustom,
+  ListItemGroup,
   List,
   RadioButton,
   Text,
@@ -72,10 +72,8 @@ export const SortModalPanel = ({
         }}
         accessibleName="sortOrderList"
       >
-        <GroupHeaderListItem>
-          {t('common.sorting.sort-order')}
-        </GroupHeaderListItem>
-        <CustomListItem selected={order === 'ASC'}>
+        <ListItemGroup headerText={t('common.sorting.sort-order')} />
+        <ListItemCustom selected={order === 'ASC'}>
           <RadioButton
             name="sortOrder"
             value="ASC"
@@ -83,8 +81,8 @@ export const SortModalPanel = ({
             onChange={event => setOrder(event.target.value)}
           />
           <Text>{t('common.sorting.asc')}</Text>
-        </CustomListItem>
-        <CustomListItem selected={order === 'DESC'}>
+        </ListItemCustom>
+        <ListItemCustom selected={order === 'DESC'}>
           <RadioButton
             name="sortOrder"
             value="DESC"
@@ -92,7 +90,7 @@ export const SortModalPanel = ({
             onChange={event => setOrder(event.target.value)}
           />
           <Text>{t('common.sorting.desc')}</Text>
-        </CustomListItem>
+        </ListItemCustom>
       </List>
       <List
         separators="All"
@@ -101,12 +99,12 @@ export const SortModalPanel = ({
         }}
         accessibleName="sortByList"
       >
-        <GroupHeaderListItem>{t('common.sorting.sort-by')}</GroupHeaderListItem>
+        <ListItemGroup headerText={t('common.sorting.sort-by')} />
         {sortBy && (
           <>
             {Object.entries(sortBy).flatMap(([value]) => {
               return (
-                <CustomListItem key={value} selected={name === value}>
+                <ListItemCustom key={value} selected={name === value}>
                   <RadioButton
                     name="sortBy"
                     value={value}
@@ -118,7 +116,7 @@ export const SortModalPanel = ({
                       ? t(`common.sorting.${value}`)
                       : value}
                   </Text>
-                </CustomListItem>
+                </ListItemCustom>
               );
             })}
           </>

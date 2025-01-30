@@ -12,9 +12,13 @@ Each pull request (PR) to the repository triggers CI/CD jobs that verify the Bus
 - `PR Kyma Dashboard Smoke Tests Prod / run-smoke-test-prod` - Performs smoke testing for Busola with PROD environement and configuration related to the Kyma functionalities using a k3d cluster with installed Kyma.
 - `PR Lighthouse Test / run-lighthouse-test` - Performs performance testing for Busola - threshold for accessibility: 80, best-practices: 100.
 - `PR Lint Check / run-lint-check` - Performing ESlint and Prettier code quality.
-- `PR Unit Tests / run-unit-test` - Performs unit tests of the Busola.
+- `PR Unit and Component Tests / run-unit-and-component-test` - Performs unit and component tests of Busola.
 - `Lint Markdown Links PR / markdown-link-check` - Checks links in documentation.
 - `CodeQL / Analyze (javascript)` - Code quality static code check.
+- `PR Title Check / check-pr-type` - Checks the PR title prefix.
+- `Check linked issues / check-linked-issue` - Checks if PR is linked to the issue.
+- `Definition of done Check / check-unchecked-tasks` - Checks if all definitions of done boxes are checked.
+- `Description Check / check-description` - Checks if the description is not empty.
 
 After the pull request is merged, the following CI/CD jobs are executed:
 
