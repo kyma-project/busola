@@ -1,6 +1,6 @@
 name: PR Lint Check
 
-on: 
+on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
@@ -12,10 +12,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: peter-evans/rebase@v3
       - name: lint_check
         shell: bash
         run: |
-            set -e
-            npm ci
-            npx eslint --max-warnings 0 src/ backend/ 
-            npm run lint-check
+          set -e
+          npm ci
+          npx eslint --max-warnings 0 src/ backend/ 
+          npm run lint-check

@@ -1,16 +1,16 @@
 name: PR Kyma Dashboard Smoke Tests Stage
 
-on: 
+on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-smoke-test-stage.yml"
-      - "resources/**"
-      - "tests/kyma/**"
-      - "nginx/**"
-      - "src/**"
-      - "kyma/**"
-      - "Dockerfile*"
+      - '.github/workflows/pull-smoke-test-stage.yml'
+      - 'resources/**'
+      - 'tests/kyma/**'
+      - 'nginx/**'
+      - 'src/**'
+      - 'kyma/**'
+      - 'Dockerfile*'
 
 jobs:
   run-smoke-test-stage:
@@ -21,7 +21,7 @@ jobs:
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-      # - uses: ./.github/actions/rebase
+      - uses: ./.github/actions/rebase # Would it work?
       - name: Install k3d
         env:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
@@ -36,7 +36,7 @@ jobs:
         shell: bash
         run: |
           ./.github/scripts/setup-busola.sh | tee busola-build.log
-        env: 
+        env:
           ENV: stage
       - name: Run tests
         shell: bash
