@@ -195,6 +195,18 @@ export default function KymaModulesCreate({ resource, ...props }) {
     });
   };
 
+  const onChange = (module, value, index) => {
+    setChannel(module, value, index, selectedModules, setSelectedModules);
+    setKymaResource({
+      ...kymaResource,
+      spec: {
+        ...kymaResource.spec,
+        modules: selectedModules,
+      },
+    });
+    setShowChannelChangeWarning(true);
+  };
+
   const renderModules = () => {
     const modulesList = [];
     modulesEditData?.forEach((module, i) => {
@@ -212,21 +224,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           <Select
             accessibleName={`channel-select-${module.name}`}
             onChange={event => {
-              setChannel(
-                module,
-                event.detail.selectedOption.value,
-                index,
-                selectedModules,
-                setSelectedModules,
-              );
-              setKymaResource({
-                ...kymaResource,
-                spec: {
-                  ...kymaResource.spec,
-                  modules: selectedModules,
-                },
-              });
-              setShowChannelChangeWarning(true);
+              onChange(module, event.detail.selectedOption.value, index);
             }}
             value={
               findSpec(kymaResource, module.name)?.channel ||
