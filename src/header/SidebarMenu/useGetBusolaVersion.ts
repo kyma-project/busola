@@ -6,6 +6,8 @@ const BUSOLA_GITHUB_LINKS = {
   REPOSITORY: 'https://github.com/kyma-project/busola',
   PULLS: 'https://github.com/kyma-project/busola/pull',
   COMMITS: 'https://github.com/kyma-project/busola/commit',
+  RELEASE: 'https://github.com/kyma-project/busola/releases/tag/',
+  RELEASES: 'https://github.com/kyma-project/busola/releases/',
 };
 
 function createGithubLink(version: string): string {
@@ -15,11 +17,17 @@ function createGithubLink(version: string): string {
     if (version !== devVersion && version !== unknownVersion) {
       if (version.toString().startsWith('PR-')) {
         return `${BUSOLA_GITHUB_LINKS.PULLS}/${version.slice(3)}`;
-      } else if (version.toString().startsWith('v20')) {
+      } else if (
+        version.toString().startsWith('v20') &&
+        version.toString().includes('-')
+      ) {
         return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version.substring(
           version.length - 8,
         )}`;
-      }
+      } else if (version.toString().startsWith('v')) {
+        return `${BUSOLA_GITHUB_LINKS.RELEASE}/${version}`;
+      } else if (version.toString() === 'latest')
+        return `${BUSOLA_GITHUB_LINKS.RELEASES}`;
       return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version}`;
     }
   }
