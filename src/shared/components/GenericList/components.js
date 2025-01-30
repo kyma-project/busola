@@ -1,16 +1,12 @@
-import { useState } from 'react';
 import {
-  Button,
-  FlexBox,
-  Icon,
-  Text,
-  TableCell,
   TableColumn,
+  TableCell,
   TableRow,
-} from '@ui5/webcomponents-react';
-import ListActions from 'shared/components/ListActions/ListActions';
+} from '../../../components/App/UI5Imports';
+import { useState } from 'react';
+import { Button, FlexBox, Icon, Text } from '@ui5/webcomponents-react';
 
-import { spacing } from '@ui5/webcomponents-react-base';
+import ListActions from 'shared/components/ListActions/ListActions';
 
 export const BodyFallback = ({ children }) => (
   // TODO replace once new Table component is available in ui5-webcomponents-react
@@ -141,11 +137,7 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow
-      type={hasDetailsView ? 'Active' : 'Inactive'}
-      navigated={isSelected}
-      selected={isSelected}
-    >
+    <TableRow type="Active" selected={isSelected} navigated={isSelected}>
       {cells}
       {!!actions.length && actionsCell}
       {displayArrow && (
@@ -189,7 +181,7 @@ const CollapsedRowRenderer = ({
         >
           <FlexBox>
             <Icon
-              style={spacing.sapUiTinyMarginEnd}
+              className="sap-margin-end-tiny"
               name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
             />
             {title}

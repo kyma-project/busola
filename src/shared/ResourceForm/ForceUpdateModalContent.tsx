@@ -5,8 +5,6 @@ import { useCreateDiffEditor } from 'shared/components/MonacoEditorESM/hooks/use
 import { RecoilRoot } from 'recoil';
 import { K8sResource } from 'types';
 
-import { spacing } from '@ui5/webcomponents-react-base';
-
 type ForceUpdateModalContentProps<TResourceType extends K8sResource> = {
   error: Error;
   singularName: string;
@@ -38,7 +36,7 @@ function ForceUpdateModalContentComponent({
 
   return (
     <>
-      <p style={spacing.sapUiSmallMarginBottom}>
+      <p className="sap-margin-bottom-small">
         {t('common.create-form.messages.patch-failure', {
           resourceType: singularName,
           error: error.message,
@@ -46,9 +44,9 @@ function ForceUpdateModalContentComponent({
       </p>
       <div style={{ height: '400px' }} ref={divRef}></div>
       <MessageStrip
-        design="Warning"
+        design="Critical"
         hideCloseButton
-        style={spacing.sapUiSmallMarginTop}
+        className="sap-margin-top-small"
       >
         {t('common.create-form.messages.force-update')}
       </MessageStrip>

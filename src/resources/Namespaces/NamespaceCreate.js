@@ -294,7 +294,6 @@ export default function NamespaceCreate({
               container={limits}
               setContainer={setLimits}
               propertyPath="$.spec.limits[0].max.memory"
-              enableResource={setWithLimits}
               disabled={!withLimits}
               required={withLimits}
             />
@@ -303,7 +302,6 @@ export default function NamespaceCreate({
               container={limits}
               setContainer={setLimits}
               propertyPath="$.spec.limits[0].default.memory"
-              enableResource={setWithLimits}
               disabled={!withLimits}
               required={withLimits}
             />
@@ -312,7 +310,6 @@ export default function NamespaceCreate({
               container={limits}
               setContainer={setLimits}
               propertyPath="$.spec.limits[0].defaultRequest.memory"
-              enableResource={setWithLimits}
               disabled={!withLimits}
               required={withLimits}
             />

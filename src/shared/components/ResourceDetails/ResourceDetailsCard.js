@@ -1,4 +1,3 @@
-import { spacing } from '@ui5/webcomponents-react-base';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import './ResourceDetails.scss';
 
@@ -9,15 +8,9 @@ export default function ResourceDetailsCard({
   className = '',
 }) {
   return (
-    <div style={spacing.sapUiSmallMarginBeginEnd} className={wrapperClassname}>
+    <div className={`${wrapperClassname} sap-margin-x-small`}>
       <Card className={className} header={<CardHeader titleText={titleText} />}>
-        <div
-          style={{
-            ...spacing.sapUiSmallMargin,
-            ...spacing.sapUiTinyMarginTop,
-          }}
-          className="cluster-overview__details-grid"
-        >
+        <div className="cluster-overview__details-grid sap-margin-small sap-margin-top-tiny">
           {content}
         </div>
       </Card>

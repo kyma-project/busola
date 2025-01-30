@@ -2,8 +2,6 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
 import 'babel-polyfill';
 import 'jsdom-worker-fix';
-import Enzyme from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { act, cleanup } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
@@ -32,15 +30,7 @@ export const ignoreConsoleWarns = patterns => {
 };
 
 // shutup popper error
-ignoreConsoleErrors([
-  'Element passed as the argument does not exist in the instance',
-  'Error: Could not parse CSS stylesheet',
-  'Warning: validateDOMNesting(...): <tr> cannot appear as a child of <ui5-table>.',
-  '2',
-]);
-
-// ignore lit dev mode log - it's UI5 dependency
-ignoreConsoleWarns(['Lit is in dev mode.']);
+ignoreConsoleErrors(['2']);
 
 // Mock IntersectionObserver
 class IntersectionObserver {
@@ -116,8 +106,6 @@ vi.mock('react-i18next', () => ({
     };
   },
 }));
-
-Enzyme.configure({ adapter: new Adapter() });
 
 afterEach(() => {
   cleanup();

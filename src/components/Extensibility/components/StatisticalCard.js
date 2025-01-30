@@ -42,7 +42,7 @@ export function StatisticalCard({
   }
 
   return (
-    <div className={`item-wrapper ${extraInfo ? 'wide' : 'small'}`}>
+    <div className={`item-wrapper ${extraInfo ? 'card-wide' : 'card-small'}`}>
       <CountingCard
         className="item"
         value={mainValue !== undefined ? mainValue : EMPTY_TEXT_PLACEHOLDER}

@@ -4,19 +4,19 @@ import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
-  DynamicPageHeader,
+  Tag,
   Button,
+  DynamicPageHeader,
   FlexBox,
-  Text,
-  Badge,
   List,
-  StandardListItem,
   MessageStrip,
+  ListItemStandard,
+  Text,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
-import { spacing } from '@ui5/webcomponents-react-base';
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import {
   useGet,
@@ -28,11 +28,11 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import KymaModulesCreate from './KymaModulesCreate';
 import {
+  apiGroup,
+  apiVersion,
   ReleaseChannelDescription,
   ResourceDescription,
   resourceType,
-  apiGroup,
-  apiVersion,
 } from 'components/KymaModules';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -41,10 +41,14 @@ import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Label } from 'shared/ResourceForm/components/Label';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { ModuleStatus } from './components/ModuleStatus';
+import { ModuleStatus, resolveType } from './components/ModuleStatus';
 import { cloneDeep } from 'lodash';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useNavigate } from 'react-router-dom';
+import {
+  useModulesReleaseQuery,
+  useModuleTemplatesQuery,
+} from './kymaModulesQueries';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -56,7 +60,6 @@ export default function KymaModulesList({
   resourceUrl,
   kymaResource,
   kymaResourceLoading,
-  kymaResourcesLoading,
   kymaResourceState,
   selectedModules,
   setOpenedModuleIndex,
@@ -83,21 +86,13 @@ export default function KymaModulesList({
 
   const namespace = 'kyma-system';
 
-  const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
-  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
-
-  const { data: moduleReleaseMetas } = useGet(modulesReleaseMetaResourceUrl, {
-    pollingInterval: 3000,
+  const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
   });
-
-  const { data: modules, loading: modulesLoading } = useGet(
-    modulesResourceUrl,
-    {
-      pollingInterval: 3000,
-      skip: !resourceName,
-    },
-  );
+  const {
+    data: moduleTemplates,
+    loading: moduleTemplateLoading,
+  } = useModuleTemplatesQuery({ skip: !resourceName });
 
   const crdUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const { data: crds } = useGet(crdUrl, {
@@ -105,7 +100,7 @@ export default function KymaModulesList({
   });
   const [chosenModuleIndex, setChosenModuleIndex] = useState(null);
 
-  if (kymaResourcesLoading || modulesLoading || kymaResourceLoading) {
+  if (moduleTemplateLoading || kymaResourceLoading) {
     return <Spinner />;
   }
 
@@ -125,22 +120,25 @@ export default function KymaModulesList({
 
   const ModulesList = resource => {
     const findModule = (moduleName, channel, version) => {
-      // This change was made due to changes in modules and should be simplified once all modules migrate
-      const moduleWithoutInfo = modules?.items?.find(
-        module =>
+      // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
+      const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
+        moduleTemplate =>
           moduleName ===
-            module.metadata.labels['operator.kyma-project.io/module-name'] &&
-          module.spec.channel === channel,
+            moduleTemplate.metadata.labels[
+              'operator.kyma-project.io/module-name'
+            ] && moduleTemplate.spec.channel === channel,
       );
-      const moduleWithInfo = modules?.items?.find(
-        module =>
+      const moduleWithInfo = moduleTemplates?.items?.find(
+        moduleTemplate =>
           moduleName ===
-            module.metadata.labels['operator.kyma-project.io/module-name'] &&
-          !module.spec.channel &&
-          module.spec.version === version,
+            moduleTemplate.metadata.labels[
+              'operator.kyma-project.io/module-name'
+            ] &&
+          !moduleTemplate.spec.channel &&
+          moduleTemplate.spec.version === version,
       );
 
-      return moduleWithInfo ?? moduleWithoutInfo;
+      return moduleWithInfo ?? moduleTemplateWithoutInfo;
     };
 
     const findModuleReleaseMeta = moduleName => {
@@ -232,9 +230,14 @@ export default function KymaModulesList({
             resource.name
           )}
           {checkBeta(currentModule, currentModuleReleaseMeta) ? (
-            <Badge style={spacing.sapUiTinyMarginBegin}>
+            <Tag
+              className="sap-margin-begin-tiny"
+              hideStateIcon
+              colorScheme="3"
+              design="Set2"
+            >
               {t('kyma-modules.beta')}
-            </Badge>
+            </Tag>
           ) : null}
         </>,
         // Namespace
@@ -245,14 +248,14 @@ export default function KymaModulesList({
             ? moduleStatus?.channel
             : kymaResource?.spec?.modules?.[moduleIndex]?.channel}
           {isChannelOverriden ? (
-            <Badge
+            <Tag
               hideStateIcon
               design="Set2"
               colorScheme="5"
-              style={spacing.sapUiTinyMarginBegin}
+              className="sap-margin-begin-tiny"
             >
               {t('kyma-modules.channel-overridden')}
-            </Badge>
+            </Tag>
           ) : (
             ''
           )}
@@ -264,16 +267,7 @@ export default function KymaModulesList({
         // Installation State
         <StatusBadge
           resourceKind="kymas"
-          type={
-            moduleStatus?.state === 'Ready'
-              ? 'Success'
-              : moduleStatus?.state === 'Processing' ||
-                moduleStatus?.state === 'Deleting' ||
-                moduleStatus?.state === 'Unmanaged' ||
-                moduleStatus?.state === 'Unknown'
-              ? 'None'
-              : moduleStatus?.state || 'None'
-          }
+          type={resolveType(moduleStatus?.state)}
           tooltipContent={moduleStatus?.message}
         >
           {moduleStatus?.state || 'Unknown'}
@@ -471,7 +465,7 @@ export default function KymaModulesList({
     };
 
     return (
-      <>
+      <React.Fragment key="modules-list">
         {!detailsOpen &&
           createPortal(
             <DeleteMessageBox
@@ -479,7 +473,7 @@ export default function KymaModulesList({
               additionalDeleteInfo={
                 getAssociatedResources().length > 0 && (
                   <>
-                    <MessageStrip design="Warning" hideCloseButton>
+                    <MessageStrip design="Critical" hideCloseButton>
                       {t('kyma-modules.associated-resources-warning')}
                     </MessageStrip>
                     <List
@@ -487,27 +481,33 @@ export default function KymaModulesList({
                       mode="None"
                       separators="All"
                     >
-                      {getAssociatedResources().map(assResource => (
-                        <StandardListItem
-                          onClick={e => {
-                            e.preventDefault();
-                            handleItemClick(
-                              assResource.kind,
-                              assResource.group,
-                              assResource.version,
-                            );
-                          }}
-                          type="Active"
-                          key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
-                          additionalText={
-                            resourceCounts[
-                              `${assResource.kind}-${assResource.group}-${assResource.version}`
-                            ] || t('common.headers.loading')
-                          }
-                        >
-                          {pluralize(assResource?.kind)}
-                        </StandardListItem>
-                      ))}
+                      {getAssociatedResources().map(assResource => {
+                        const resourceCount =
+                          resourceCounts[
+                            `${assResource.kind}-${assResource.group}-${assResource.version}`
+                          ];
+
+                        return (
+                          <ListItemStandard
+                            onClick={e => {
+                              e.preventDefault();
+                              handleItemClick(
+                                assResource.kind,
+                                assResource.group,
+                                assResource.version,
+                              );
+                            }}
+                            type="Active"
+                            key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
+                            additionalText={
+                              (resourceCount === 0 ? '0' : resourceCount) ||
+                              t('common.headers.loading')
+                            }
+                          >
+                            {pluralize(assResource?.kind)}
+                          </ListItemStandard>
+                        );
+                      })}
                     </List>
                   </>
                 )
@@ -565,7 +565,7 @@ export default function KymaModulesList({
             onClick: handleShowAddModule,
           }}
         />
-      </>
+      </React.Fragment>
     );
   };
 
@@ -575,13 +575,13 @@ export default function KymaModulesList({
       layoutNumber="StartColumn"
       windowTitle={t('kyma-modules.title')}
       headerContent={
-        <DynamicPageHeader>
+        <DynamicPageHeader className="no-shadow">
           <FlexBox alignItems="Center">
             <Label showColon>{t('kyma-modules.release-channel')}</Label>
-            <Text renderWhitespace={true}> </Text>
+            <Text style={{ marginRight: '0.2rem' }}> </Text>
             <Text>{kymaResource?.spec.channel}</Text>
             <HintButton
-              style={spacing.sapUiTinyMarginBegin}
+              className="sap-margin-begin-tiny"
               setShowTitleDescription={setShowReleaseChannelTitleDescription}
               showTitleDescription={showReleaseChannelTitleDescription}
               description={ReleaseChannelDescription}

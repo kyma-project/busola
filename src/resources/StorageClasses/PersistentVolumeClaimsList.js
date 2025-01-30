@@ -17,5 +17,10 @@ export function PersistentVolumeClaimsList(storageclass) {
       storageclass.metadata.name,
   };
 
-  return <PersistentVolumeClaimsListComponent {...params} />;
+  return (
+    <PersistentVolumeClaimsListComponent
+      key="persistent-volume-claims-list"
+      {...params}
+    />
+  );
 }

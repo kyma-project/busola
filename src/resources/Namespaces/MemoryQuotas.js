@@ -11,7 +11,7 @@ export function MemoryInput({
   setContainer,
   required,
   className,
-  ...otherProps
+  disabled,
 }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
   const options = [
@@ -31,7 +31,6 @@ export function MemoryInput({
     jp.value(container, propertyPath, val);
     setContainer({ ...container });
   };
-  if (!otherProps.readOnly) delete otherProps.readOnly;
   return (
     <FlexBox
       direction="Column"
@@ -48,14 +47,14 @@ export function MemoryInput({
           value={numericValue}
           onInput={e => setValue(e.target.value + selectedUnit)}
           className="full-width"
-          {...otherProps}
+          disabled={disabled}
         />
         <Dropdown
           options={options}
           required={required}
           selectedKey={selectedUnit}
           onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
-          {...otherProps}
+          disabled={disabled}
         />
       </FlexBox>
     </FlexBox>

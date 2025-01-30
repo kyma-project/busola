@@ -16,5 +16,7 @@ export function PersistentVolumesList(storageclass) {
       persistentvolumes.spec.storageClassName === storageclass.metadata.name,
   };
 
-  return <PersistentVolumesListComponent {...params} />;
+  return (
+    <PersistentVolumesListComponent key="persistent-volumes-list" {...params} />
+  );
 }

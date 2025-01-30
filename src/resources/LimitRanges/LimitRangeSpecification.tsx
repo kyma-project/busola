@@ -163,9 +163,10 @@ export default function LimitRangeSpecification({
       title={t('limit-ranges.headers.limits')}
       className={'limit-range-spec'}
     >
-      {transLimits.map((limit: { type: string; props: FlatLimitProps[] }) => {
-        return (
+      {transLimits.map(
+        (limit: { type: string; props: FlatLimitProps[] }, index: number) => (
           <GenericList
+            key={`${limit.type}-${index}`}
             title={limit.type || ''}
             entries={limit.props || []}
             headerRenderer={headerRenderer}
@@ -174,8 +175,8 @@ export default function LimitRangeSpecification({
               showSearchField: false,
             }}
           />
-        );
-      })}
+        ),
+      )}
     </UI5Panel>
   );
 }

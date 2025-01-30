@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { useTranslation } from 'react-i18next';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import ModulesCard from './ModulesCard';
-import './KymaModulesAddModule.scss';
 import { cloneDeep } from 'lodash';
+import {
+  useModulesReleaseQuery,
+  useModuleTemplatesQuery,
+} from './kymaModulesQueries';
+
+import './KymaModulesAddModule.scss';
 
 export default function KymaModulesAddModule({
   resourceName,
@@ -20,10 +23,6 @@ export default function KymaModulesAddModule({
   props,
 }) {
   const { t } = useTranslation();
-
-  const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
-
-  const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
@@ -48,13 +47,10 @@ export default function KymaModulesAddModule({
     }
   }, [setKymaResource, kymaResource, selectedModules, activeKymaModules]);
 
-  const { data: modules } = useGet(modulesResourceUrl, {
-    pollingInterval: 3000,
+  const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
   });
-
-  const { data: moduleReleaseMetas } = useGet(modulesReleaseMetaResourceUrl, {
-    pollingInterval: 3000,
+  const { data: moduleTemplates } = useModuleTemplatesQuery({
     skip: !resourceName,
   });
 
@@ -99,7 +95,7 @@ export default function KymaModulesAddModule({
     );
   }
 
-  const modulesAddData = modules?.items.reduce((acc, module) => {
+  const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
     const name = module.metadata.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => item.name === name);
     const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
@@ -263,6 +259,7 @@ export default function KymaModulesAddModule({
           module={module}
           kymaResource={kymaResource}
           index={index}
+          key={module.name}
           isChecked={isChecked}
           setCheckbox={setCheckbox}
           setChannel={setChannel}
@@ -276,9 +273,8 @@ export default function KymaModulesAddModule({
 
     return (
       <div
-        className="gridbox-addModule"
+        className="gridbox-addModule sap-margin-top-small"
         ref={setCardsContainerRef}
-        style={spacing.sapUiSmallMarginTop}
       >
         {columns.map((column, columnIndex) => (
           <div
@@ -309,15 +305,16 @@ export default function KymaModulesAddModule({
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
       formWithoutPanel
+      className="add-modules-form"
     >
       {modulesAddData?.length !== 0 ? (
         <>
           {checkIfSelectedModuleIsBeta() ? (
             <MessageStrip
               key={'beta'}
-              design="Warning"
+              design="Critical"
               hideCloseButton
-              style={spacing.sapUiSmallMarginTop}
+              className="sap-margin-top-small"
             >
               {t('kyma-modules.beta-alert')}
             </MessageStrip>
@@ -328,15 +325,15 @@ export default function KymaModulesAddModule({
         <MessageStrip
           design="Information"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
+          className="sap-margin-top-small"
         >
           {t('extensibility.widgets.modules.all-modules-added')}
         </MessageStrip>
       ) : (
         <MessageStrip
-          design="Warning"
+          design="Critical"
           hideCloseButton
-          style={spacing.sapUiSmallMarginTop}
+          className="sap-margin-top-small"
         >
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>

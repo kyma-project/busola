@@ -49,6 +49,7 @@ export function SecretDetails(props) {
     <UI5Panel
       fixed
       keyComponent={'secret-configuration'}
+      key="secret-configuration"
       title={t('common.headers.configuration')}
     >
       <LayoutPanelRow name={t('secrets.headers.type')} value={secret.type} />

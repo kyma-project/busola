@@ -142,7 +142,7 @@ export const ResourcesUsage = ({ namespace }) => {
   if (!resourceQuotas || resourceQuotas?.length < 1) return null;
   return (
     <>
-      <div className="item-wrapper tall">
+      <div className="item-wrapper card-tall">
         <Card
           className="radial-chart-card"
           header={
@@ -157,7 +157,7 @@ export const ResourcesUsage = ({ namespace }) => {
           />
         </Card>
       </div>
-      <div className="item-wrapper tall">
+      <div className="item-wrapper card-tall">
         <Card
           className="radial-chart-card"
           header={

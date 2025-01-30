@@ -41,9 +41,8 @@ export const ExtensibilityListCore = ({
   const { resource, description, features, filter: generalFilter } =
     resMetaData?.general ?? {};
 
-  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
+  const { disableCreate, disableDelete } = features?.actions ?? {
     disableCreate: props.disableCreate,
-    disableEdit: props.disableEdit,
     disableDelete: props.disableDelete,
   };
 
@@ -126,7 +125,6 @@ export const ExtensibilityListCore = ({
       {...props}
       displayLabelForLabels
       disableCreate={disableCreate}
-      disableEdit={disableEdit}
       disableDelete={disableDelete}
       createResourceForm={ExtensibilityCreate}
       sortBy={defaultSortOptions =>

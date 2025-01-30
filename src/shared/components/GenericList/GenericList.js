@@ -1,9 +1,11 @@
+import { Table } from '../../../components/App/UI5Imports';
+
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Table } from '@ui5/webcomponents-react';
+
 import { useNavigate } from 'react-router-dom';
 import {
   BodyFallback,
@@ -23,7 +25,6 @@ import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
-import { spacing } from '@ui5/webcomponents-react-base';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -31,6 +32,7 @@ import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import './GenericList.scss';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -46,19 +48,19 @@ const defaultSearch = {
 };
 
 export const GenericList = ({
-  entries,
-  actions,
+  entries = [],
+  actions = [],
   extraHeaderContent,
   title,
   headerRenderer,
   rowRenderer,
   testid,
-  serverDataError,
-  serverDataLoading,
+  serverDataError = null,
+  serverDataLoading = false,
   pagination,
   sortBy,
-  notFoundMessage,
-  searchSettings,
+  notFoundMessage = 'components.generic-list.messages.not-found',
+  searchSettings = defaultSearch,
   disableMargin,
   emptyListProps = null,
   columnLayout = null,
@@ -112,9 +114,7 @@ export const GenericList = ({
   }, [pageSize, pagination]);
 
   const { i18n, t } = useTranslation();
-  const [currentPage, setCurrentPage] = React.useState(
-    pagination?.initialPage || 1,
-  );
+  const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
 
   const [filteredEntries, setFilteredEntries] = useState(() =>
     sorting(sort, entries),
@@ -196,7 +196,7 @@ export const GenericList = ({
   const renderTableBody = () => {
     if (serverDataError) {
       return (
-        <BodyFallback>
+        <BodyFallback key="tableErrorMessage">
           <p>{getErrorMessage(serverDataError)}</p>
         </BodyFallback>
       );
@@ -204,7 +204,7 @@ export const GenericList = ({
 
     if (serverDataLoading) {
       return (
-        <BodyFallback>
+        <BodyFallback key="tableDataLoading">
           <Spinner />
         </BodyFallback>
       );
@@ -222,32 +222,34 @@ export const GenericList = ({
         );
       }
 
-      return (
-        <BodyFallback>
-          {emptyListProps?.simpleEmptyListMessage === false ||
-          (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
-            <EmptyListComponent
-              titleText={emptyListProps.titleText}
-              subtitleText={emptyListProps.subtitleText}
-              showButton={emptyListProps.showButton}
-              buttonText={emptyListProps.buttonText}
-              url={emptyListProps.url}
-              onClick={emptyListProps.onClick}
-              image={emptyListProps?.image}
-            />
-          ) : (
-            <p>
-              {emptyListProps?.titleText ? (
-                <Trans i18nKey={emptyListProps?.titleText} />
-              ) : i18n.exists(notFoundMessage) ? (
-                t(notFoundMessage)
-              ) : (
-                notFoundMessage
-              )}
-            </p>
-          )}
-        </BodyFallback>
-      );
+      if (!entries.length) {
+        return (
+          <BodyFallback>
+            {emptyListProps?.simpleEmptyListMessage === false ||
+            (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
+              <EmptyListComponent
+                titleText={emptyListProps.titleText}
+                subtitleText={emptyListProps.subtitleText}
+                showButton={emptyListProps.showButton}
+                buttonText={emptyListProps.buttonText}
+                url={emptyListProps.url}
+                onClick={emptyListProps.onClick}
+                image={emptyListProps?.image}
+              />
+            ) : (
+              <p>
+                {emptyListProps?.titleText ? (
+                  <Trans i18nKey={emptyListProps?.titleText} />
+                ) : i18n.exists(notFoundMessage) ? (
+                  t(notFoundMessage)
+                ) : (
+                  notFoundMessage
+                )}
+              </p>
+            )}
+          </BodyFallback>
+        );
+      }
     }
 
     let pagedItems = filteredEntries;
@@ -400,8 +402,7 @@ export const GenericList = ({
       title={title}
       headerActions={!headerActionsEmpty && headerActions}
       data-testid={testid}
-      disableMargin
-      style={disableMargin ? {} : spacing.sapUiSmallMargin}
+      disableMargin={disableMargin}
       className={className}
     >
       <Table
@@ -435,7 +436,6 @@ export const GenericList = ({
       >
         {renderTableBody()}
       </Table>
-
       {pagination &&
         (!pagination.autoHide ||
           filteredEntries.length > pagination.itemsPerPage) && (
@@ -494,13 +494,4 @@ GenericList.propTypes = {
   hasDetailsView: PropTypes.bool,
   noHideFields: PropTypes.arrayOf(PropTypes.string),
   customRowClick: PropTypes.func,
-};
-
-GenericList.defaultProps = {
-  entries: [],
-  actions: [],
-  serverDataError: null,
-  serverDataLoading: false,
-  notFoundMessage: 'components.generic-list.messages.not-found',
-  searchSettings: defaultSearch,
 };

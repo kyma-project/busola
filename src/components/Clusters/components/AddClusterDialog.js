@@ -29,7 +29,7 @@ export function AddClusterDialog() {
       open={showWizard}
       className="add-cluster-wizard-dialog"
       headerText={t('clusters.add.title')}
-      onAfterClose={() => setShowWizard(false)}
+      onClose={() => setShowWizard(false)}
     >
       <ErrorBoundary>
         <AddClusterDialogComponent />
