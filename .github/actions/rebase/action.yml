@@ -25,9 +25,9 @@ runs:
         git switch --detach ${{ github.sha }}
       shell: bash
 
-    - name: Rebase to main
+    - name: Merge to main
       run: |
-        git rebase main
+        git merge main
       shell: bash
 
     - name: Print branch log
