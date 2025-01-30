@@ -17,8 +17,8 @@ runs:
     - name: Update origin/main
       run: |
         git fetch origin main
-        git checkout --depth 10000 origin/main
-        git checkout --depth 10000 -B main
+        git checkout origin/main
+        git checkout -B main
         git pull --depth 10000 origin main
 
         # go back to the HEAD commit
