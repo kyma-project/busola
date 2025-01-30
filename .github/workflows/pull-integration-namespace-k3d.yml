@@ -21,7 +21,7 @@ jobs:
           comment_on_pr: false
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 10000
           ref: ${{ github.ref }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
       - uses: ./.github/actions/rebase # Would it work?
       - name: Create Single Cluster

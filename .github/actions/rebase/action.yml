@@ -16,9 +16,9 @@ runs:
     # read more: https://github.com/actions/checkout?tab=readme-ov-file#usage
     - name: Update origin/main
       run: |
-        git fetch --depth 10000 origin main
-        git checkout origin/main
-        git checkout -B main
+        git fetch origin main
+        git checkout --depth 10000 origin/main
+        git checkout --depth 10000 -B main
         git pull --depth 10000 origin main
 
         # go back to the HEAD commit
