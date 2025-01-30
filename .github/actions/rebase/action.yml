@@ -19,7 +19,7 @@ runs:
         git fetch origin main
         git checkout origin/main
         git checkout -B main
-        git pull --unshallow origin main
+        git pull --depth 10000 origin main
 
         # go back to the HEAD commit
         git switch --detach ${{ github.sha }}
