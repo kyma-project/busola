@@ -266,7 +266,7 @@ export function Header() {
           ))}
           <MenuItem
             onClick={() => {
-              window.open(githubLink);
+              window.open(githubLink, '_blank', 'noopener, noreferrer');
             }}
             text={t('common.labels.version')}
             additionalText={busolaVersion}
