@@ -14,7 +14,7 @@ data:
         kind: Kyma
         group: operator.kyma-project.io
         version: v1beta2
-  injections: 
+  injections: |-
     - title: Introducing Modules
       name: Modules
       description: Modules add functionalities to your cluster. Consume SAP BTP services, monitor your cluster, build serverless applications and more.
