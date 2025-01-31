@@ -19,7 +19,6 @@ Each pull request (PR) to the repository triggers CI/CD jobs that verify the Bus
 - `Check linked issues / check-linked-issue` - Checks if PR is linked to the issue.
 - `Definition of done Check / check-unchecked-tasks` - Checks if all definitions of done boxes are checked.
 - `Description Check / check-description` - Checks if the description is not empty.
-- `Rebase Pull Requests` - Makes sure the PR branch is up to date with `main` branch.
 
 After the pull request is merged, the following CI/CD jobs are executed:
 

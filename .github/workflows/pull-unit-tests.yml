@@ -21,7 +21,9 @@ jobs:
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-      # - uses: ./.github/actions/rebase # Would it work?
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/rebase
       - uses: actions/setup-node@v4
         with:
           node-version: 20
