@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.ref }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
+          # ref: ${{ github.ref }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
       - uses: ./.github/actions/rebase # Would it work?
       - name: Create Single Cluster
         uses: AbsaOSS/k3d-action@4e8b3239042be1dc0aed6c5eb80c13b18200fc79 #v2.4.0
