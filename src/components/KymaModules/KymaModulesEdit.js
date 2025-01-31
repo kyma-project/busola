@@ -29,7 +29,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { ManagedWarnings } from 'components/KymaModules/components/ManagedWarnings';
-import { ChannelWarning } from './components/ChannelWarning';
+import { ChannelWarning } from 'components/KymaModules/components/ChannelWarning';
 import { UnmanagedModuleInfo } from 'components/KymaModules/components/UnmanagedModuleInfo';
 import {
   useModulesReleaseQuery,
