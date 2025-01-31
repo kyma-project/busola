@@ -3,8 +3,8 @@ import { useRecoilValue } from 'recoil';
 import { allNodesSelector } from 'state/navigation/allNodesSelector';
 import { useUrl } from 'hooks/useUrl';
 
-export function useCustomResourceUrl(crd, columnLayout = false) {
-  const { resourceUrl, clusterUrl, namespaceUrl } = useUrl();
+export function useCustomResourceUrl(crd) {
+  const { clusterUrl, namespaceUrl } = useUrl();
   const clusterNodes = useRecoilValue(allNodesSelector).filter(
     node => !node.namespaced,
   );
