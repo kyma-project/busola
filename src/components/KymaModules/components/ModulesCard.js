@@ -9,10 +9,14 @@ import {
   Text,
   Title,
 } from '@ui5/webcomponents-react';
-import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink.js';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { findSpec, findStatus, setChannel } from './support';
+import {
+  findSpec,
+  findStatus,
+  setChannel,
+} from 'components/KymaModules/support.js';
 
 async function isImageAvailable(url) {
   try {

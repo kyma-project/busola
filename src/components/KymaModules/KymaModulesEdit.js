@@ -28,9 +28,9 @@ import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { ManagedWarnings } from './ManagedWarnings';
-import { ChannelWarning } from './ChannelWarning';
-import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
+import { ManagedWarnings } from 'components/KymaModules/components/ManagedWarnings.js';
+import { ChannelWarning } from './components/ChannelWarning';
+import { UnmanagedModuleInfo } from 'components/KymaModules/components/UnmanagedModuleInfo.js';
 import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
