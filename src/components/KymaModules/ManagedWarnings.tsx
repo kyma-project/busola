@@ -9,7 +9,7 @@ type ManagedWarningsTypes = {
   showManagedBox: ShowManagedBox;
   setShowManagedBox(value: ShowManagedBox): void;
   handleCreate(): void;
-  isEdited: boolean;
+  showChannelChangeWarning: boolean;
   setShowMessageBox(value: ShowManagedBox): void;
 };
 
@@ -17,7 +17,7 @@ export const ManagedWarnings = ({
   showManagedBox,
   setShowManagedBox,
   handleCreate,
-  isEdited,
+  showChannelChangeWarning,
   setShowMessageBox,
 }: ManagedWarningsTypes) => {
   const { t } = useTranslation();
@@ -40,7 +40,7 @@ export const ManagedWarnings = ({
             design="Emphasized"
             key={'change-managed'}
             onClick={() =>
-              isEdited
+              showChannelChangeWarning
                 ? setShowManagedBox({
                     isOpen: false,
                     onSave: false,
@@ -48,7 +48,11 @@ export const ManagedWarnings = ({
                 : handleCreate()
             }
           >
-            {t(isEdited ? 'common.buttons.ok' : 'kyma-modules.change')}
+            {t(
+              showChannelChangeWarning
+                ? 'common.buttons.ok'
+                : 'kyma-modules.change',
+            )}
           </Button>,
           <Button
             accessibleName="cancel-managed"

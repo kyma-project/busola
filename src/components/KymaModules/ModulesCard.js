@@ -12,6 +12,7 @@ import {
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { findSpec, findStatus, setChannel } from './support';
 
 async function isImageAvailable(url) {
   try {
@@ -38,10 +39,9 @@ export default function ModulesCard({
   index,
   isChecked,
   setCheckbox,
-  setChannel,
-  findStatus,
-  findSpec,
   checkIfStatusModuleIsBeta,
+  selectedModules,
+  setSelectedModules,
 }) {
   const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState('');
@@ -58,7 +58,7 @@ export default function ModulesCard({
     <Card key={module.name} className="addModuleCard">
       <ListItemStandard
         className="moduleCardHeader"
-        onClick={e => setCheckbox(module, !isChecked(module.name), index)}
+        onClick={() => setCheckbox(module, !isChecked(module.name), index)}
       >
         <CheckBox className="checkbox" checked={isChecked(module.name)} />
         <div className="titles">
@@ -66,8 +66,8 @@ export default function ModulesCard({
             {module.name}
           </Title>
           <Text className="bsl-has-color-status-4">
-            {findStatus(module.name)?.version
-              ? `v${findStatus(module.name)?.version} ${
+            {findStatus(kymaResource, module.name)?.version
+              ? `v${findStatus(kymaResource, module.name)?.version} ${
                   checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''
                 }`
               : module.channels.find(
@@ -110,11 +110,17 @@ export default function ModulesCard({
           <Label>{t('kyma-modules.release-channel') + ':'} </Label>
           <Select
             onChange={event => {
-              setChannel(module, event.detail.selectedOption.value, index);
+              setChannel(
+                module,
+                event.detail.selectedOption.value,
+                index,
+                selectedModules,
+                setSelectedModules,
+              );
             }}
             value={
-              findSpec(module.name)?.channel ||
-              findStatus(module.name)?.channel ||
+              findSpec(kymaResource, module.name)?.channel ||
+              findStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
             className="channel-select"
@@ -122,7 +128,9 @@ export default function ModulesCard({
             <Option
               selected={
                 !module.channels?.filter(
-                  channel => channel.channel === findSpec(module.name)?.channel,
+                  channel =>
+                    channel.channel ===
+                    findSpec(kymaResource, module.name)?.channel,
                 )
               }
               value={'predefined'}
@@ -139,7 +147,10 @@ export default function ModulesCard({
             </Option>
             {module.channels?.map(channel => (
               <Option
-                selected={channel.channel === findSpec(module.name)?.channel}
+                selected={
+                  channel.channel ===
+                  findSpec(kymaResource, module.name)?.channel
+                }
                 key={`${channel.channel}${
                   channel.isMetaRelease ? '-meta' : ''
                 }`}
