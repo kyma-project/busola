@@ -5,8 +5,8 @@ export function Logo(props: any) {
   const { t } = useTranslation();
 
   return (
-    <FlexBox alignItems="Center" slot={props.slot}>
-      <img alt="SAP" src="\assets\sap-logo.svg" style={{ height: '32px' }} />
+    <FlexBox className="header-logo" alignItems="Center" slot={props.slot}>
+      <img alt="SAP" src="\assets\sap-logo.svg" />
       <Title level="H5">{t('common.product-title')}</Title>
     </FlexBox>
   );
