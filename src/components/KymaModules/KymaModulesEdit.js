@@ -35,116 +35,13 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
+import { findSpec, findStatus, setChannel } from './support';
 
-export default function KymaModulesCreate({ resource, ...props }) {
-  const { t } = useTranslation();
-  const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
-  const [initialResource] = useState(resource);
-  const [initialUnchangedResource] = useState(cloneDeep(resource));
-  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
-
-  const resourceName = kymaResource?.metadata.name;
-
-  const {
-    data: moduleReleaseMetas,
-    loading: loadingModulesReleaseMetas,
-  } = useModulesReleaseQuery({
-    skip: !resourceName,
-  });
-  const {
-    data: moduleTemplates,
-    loading: lodingModuleTemplates,
-  } = useModuleTemplatesQuery({
-    skip: !resourceName,
-  });
-
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const notification = useNotification();
-  const { scopedUrl } = useUrl();
-
-  const getRequest = useSingleGet();
-  const patchRequest = useUpdate();
-  const [selectedModules] = useState(
-    cloneDeep(initialResource?.spec?.modules) ?? [],
-  );
-  const [isEdited, setIsEdited] = useState(false);
-  const [isManagedChanged, setIsManagedChanged] = useState(false);
-  const [showMessageBox, setShowMessageBox] = useState({
-    isOpen: false,
-  });
-  const [showManagedBox, setShowManagedBox] = useState({
-    isOpen: false,
-    onSave: false,
-  });
-
-  if (lodingModuleTemplates || loadingModulesReleaseMetas) {
-    return (
-      <div style={{ height: 'calc(100vh - 14rem)' }}>
-        <Spinner />
-      </div>
-    );
-  }
-
-  const setChannel = (module, channel, index) => {
-    if (
-      selectedModules.find(
-        selectedModule => selectedModule.name === module.name,
-      )
-    ) {
-      if (channel === 'predefined') {
-        delete selectedModules[index].channel;
-      } else selectedModules[index].channel = channel;
-    } else {
-      selectedModules.push({
-        name: module.name,
-      });
-      if (channel !== 'predefined')
-        selectedModules[selectedModules.length - 1].channel = channel;
-    }
-
-    setKymaResource({
-      ...kymaResource,
-      spec: {
-        ...kymaResource.spec,
-        modules: selectedModules,
-      },
-    });
-    setIsEdited(true);
-  };
-
-  const setManaged = (managed, index) => {
-    selectedModules[index].managed = managed;
-
-    setKymaResource({
-      ...kymaResource,
-      spec: {
-        ...kymaResource.spec,
-        modules: selectedModules,
-      },
-    });
-    setIsManagedChanged(true);
-    setShowManagedBox({ isOpen: true, onSave: false });
-  };
-
-  const installedModules = moduleTemplates?.items.filter(module => {
-    const name =
-      module.metadata?.labels['operator.kyma-project.io/module-name'];
-    return (
-      selectedModules?.findIndex(kymaResourceModule => {
-        return kymaResourceModule.name === name;
-      }) !== -1
-    );
-  });
-
-  const modulesEditData = (installedModules || []).reduce((acc, module) => {
+const addChannelsToModules = moduleReleaseMetas => {
+  return (acc, module) => {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => item.name === name);
-    const moduleMetaRelase = moduleReleaseMetas?.items.find(
-      item => item.spec.moduleName === name,
-    );
-
     if (module.spec.channel) {
       if (!existingModule) {
         acc.push({
@@ -173,6 +70,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
       }
     } else {
       if (!existingModule) {
+        const moduleMetaRelase = moduleReleaseMetas?.items.find(
+          item => item.spec.moduleName === name,
+        );
         moduleMetaRelase?.spec.channels.forEach(channel => {
           if (!acc.find(item => item.name === name)) {
             acc.push({
@@ -201,19 +101,89 @@ export default function KymaModulesCreate({ resource, ...props }) {
       }
     }
     return acc;
-  }, []);
+  };
+};
 
-  const findStatus = moduleName => {
-    return kymaResource?.status?.modules?.find(
-      module => moduleName === module.name,
+export default function KymaModulesEdit({ resource, ...props }) {
+  const { t } = useTranslation();
+  const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
+  const [initialResource] = useState(resource);
+  const [initialUnchangedResource] = useState(cloneDeep(resource));
+  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+
+  const resourceName = kymaResource?.metadata.name;
+
+  const {
+    data: moduleReleaseMetas,
+    loading: loadingModulesReleaseMetas,
+  } = useModulesReleaseQuery({
+    skip: !resourceName,
+  });
+  const {
+    data: moduleTemplates,
+    loading: lodingModuleTemplates,
+  } = useModuleTemplatesQuery({
+    skip: !resourceName,
+  });
+
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const notification = useNotification();
+  const { scopedUrl } = useUrl();
+
+  const getRequest = useSingleGet();
+  const patchRequest = useUpdate();
+  const [selectedModules, setSelectedModules] = useState(
+    cloneDeep(initialResource?.spec?.modules) ?? [],
+  );
+  const [showChannelChangeWarning, setShowChannelChangeWarning] = useState(
+    false,
+  );
+  const [isManagedChanged, setIsManagedChanged] = useState(false);
+  const [showMessageBox, setShowMessageBox] = useState({
+    isOpen: false,
+  });
+  const [showManagedBox, setShowManagedBox] = useState({
+    isOpen: false,
+    onSave: false,
+  });
+
+  if (lodingModuleTemplates || loadingModulesReleaseMetas) {
+    return (
+      <div style={{ height: 'calc(100vh - 14rem)' }}>
+        <Spinner />
+      </div>
     );
+  }
+
+  const setManaged = (managed, index) => {
+    selectedModules[index].managed = managed;
+
+    setKymaResource({
+      ...kymaResource,
+      spec: {
+        ...kymaResource.spec,
+        modules: selectedModules,
+      },
+    });
+    setIsManagedChanged(true);
+    setShowManagedBox({ isOpen: true, onSave: false });
   };
 
-  const findSpec = moduleName => {
-    return kymaResource?.spec.modules?.find(
-      module => moduleName === module.name,
+  const installedModules = moduleTemplates?.items.filter(module => {
+    const name =
+      module.metadata?.labels['operator.kyma-project.io/module-name'];
+    return (
+      selectedModules?.findIndex(kymaResourceModule => {
+        return kymaResourceModule.name === name;
+      }) !== -1
     );
-  };
+  });
+
+  const modulesEditData = (installedModules || []).reduce(
+    addChannelsToModules(moduleReleaseMetas),
+    [],
+  );
 
   const checkIfSelectedModuleIsBeta = moduleName => {
     return selectedModules.some(({ name, channel }) => {
@@ -229,6 +199,18 @@ export default function KymaModulesCreate({ resource, ...props }) {
           )
         : false;
     });
+  };
+
+  const onChange = (module, value, index) => {
+    setChannel(module, value, index, selectedModules, setSelectedModules);
+    setKymaResource({
+      ...kymaResource,
+      spec: {
+        ...kymaResource.spec,
+        modules: selectedModules,
+      },
+    });
+    setShowChannelChangeWarning(true);
   };
 
   const renderModules = () => {
@@ -248,11 +230,11 @@ export default function KymaModulesCreate({ resource, ...props }) {
           <Select
             accessibleName={`channel-select-${module.name}`}
             onChange={event => {
-              setChannel(module, event.detail.selectedOption.value, index);
+              onChange(module, event.detail.selectedOption.value, index);
             }}
             value={
-              findSpec(module.name)?.channel ||
-              findStatus(module.name)?.channel ||
+              findSpec(kymaResource, module.name)?.channel ||
+              findStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
             className="channel-select"
@@ -260,7 +242,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
             <Option
               selected={
                 !module.channels?.filter(
-                  channel => channel.channel === findSpec(module.name)?.channel,
+                  channel =>
+                    channel.channel ===
+                    findSpec(kymaResource, module.name)?.channel,
                 )
               }
               value={'predefined'}
@@ -278,7 +262,10 @@ export default function KymaModulesCreate({ resource, ...props }) {
             </Option>
             {module.channels?.map(channel => (
               <Option
-                selected={channel.channel === findSpec(module.name)?.channel}
+                selected={
+                  channel.channel ===
+                  findSpec(kymaResource, module.name)?.channel
+                }
                 key={`${channel.channel}-${module.name}${
                   channel.isMetaRelease ? '-meta' : ''
                 }`}
@@ -296,8 +283,9 @@ export default function KymaModulesCreate({ resource, ...props }) {
           <CheckBox
             accessibleName="managed-checkbox"
             text={t('kyma-modules.managed')}
-            checked={findSpec(module.name)?.managed}
+            checked={findSpec(kymaResource, module.name)?.managed}
             onChange={event => {
+              console.log(event);
               setManaged(event.target.checked, index);
             }}
           />
@@ -405,23 +393,20 @@ export default function KymaModulesCreate({ resource, ...props }) {
   };
 
   const skipModuleFn = () => {
-    const shouldShowManagedWarning = isManagedChanged;
-    const shouldShowChannelWarning = isEdited;
-
-    if (shouldShowManagedWarning) {
+    if (isManagedChanged) {
       setShowManagedBox({
         ...showManagedBox,
         isOpen: true,
         onSave: true,
       });
     }
-    if (shouldShowChannelWarning) {
+    if (showChannelChangeWarning) {
       setShowMessageBox({
         ...showMessageBox,
         isOpen: true,
       });
     }
-    return shouldShowManagedWarning || shouldShowChannelWarning;
+    return isManagedChanged || showChannelChangeWarning;
   };
 
   return (
@@ -439,7 +424,7 @@ export default function KymaModulesCreate({ resource, ...props }) {
           showManagedBox={showManagedBox}
           setShowManagedBox={setShowManagedBox}
           handleCreate={handleCreate}
-          isEdited={isEdited}
+          showChannelChangeWarning={showChannelChangeWarning}
           setShowMessageBox={setShowMessageBox}
         />,
         document.body,

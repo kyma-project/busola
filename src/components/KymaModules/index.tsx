@@ -7,7 +7,7 @@ export const apiGroup = 'operator.kyma-project.io';
 export const apiVersion = 'v1beta2';
 
 export const List = React.lazy(() => import('./KymaModulesList'));
-export const Create = React.lazy(() => import('./KymaModulesCreate'));
+export const Create = React.lazy(() => import('./KymaModulesEdit'));
 
 export const ResourceDescription = (
   <Description

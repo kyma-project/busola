@@ -20,7 +20,7 @@ export const resolveType = (status: string) => {
 };
 
 export const ModuleStatus = ({ resource }: any) => {
-  const { data: status } = useModuleStatus(resource);
+  const { data: status } = useModuleStatus(resource?.resource);
 
   const moduleState = status?.state || 'Unknown';
   const moduleMessage = status?.description;

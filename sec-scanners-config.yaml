@@ -1,4 +1,5 @@
 module-name: busola
+kind: kcp
 protecode:
   - europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest
   - europe-docker.pkg.dev/kyma-project/prod/busola-web:latest
@@ -8,6 +9,17 @@ whitesource:
     - 'package-lock.json'
     - '**/backend/package-lock.json'
     - '**/backend/config/config.yaml'
+    - '**/tests/**'
+    - '**/kyma/enviroments/**'
+    - '**/kyma/extensions/**'
+checkmarx-one:
+  preset: javascript-default
+  exclude:
+    - '**/.github/**'
+    - 'package-lock.json'
+    - '**/backend/package-lock.json'
+    - '**/backend/config/config.yaml'
+    - '**/cypress/**'
     - '**/tests/**'
     - '**/kyma/enviroments/**'
     - '**/kyma/extensions/**'

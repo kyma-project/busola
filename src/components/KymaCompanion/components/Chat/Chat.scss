@@ -1,0 +1,31 @@
+.chat-container {
+  height: 100%;
+  overflow: hidden;
+
+  .chat-list {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    gap: 8px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .left-aligned {
+      align-self: flex-start;
+      background-color: var(--sapBackgroundColor);
+      border-radius: 8px 8px 8px 0;
+    }
+
+    .right-aligned {
+      align-self: flex-end;
+      background-color: var(--sapContent_Illustrative_Color1);
+      border-radius: 8px 8px 0 8px;
+
+      .text {
+        color: white;
+      }
+    }
+  }
+}
