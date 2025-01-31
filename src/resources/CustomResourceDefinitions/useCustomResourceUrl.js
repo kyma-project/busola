@@ -22,14 +22,10 @@ export function useCustomResourceUrl(crd, columnLayout = false) {
     );
 
     if (clusterNode) {
-      return resourceUrl(cr, { resourceType: clusterNode.pathSegment });
-    } else if (namespaceNode && !columnLayout) {
-      return resourceUrl(cr, { resourceType: namespaceNode.pathSegment });
-    } else if (crd.spec.scope === 'Cluster') {
       return clusterUrl(
         `customresources/${crd.metadata.name}/${cr.metadata.name}`,
       );
-    } else {
+    } else if (namespaceNode) {
       return namespaceUrl(
         `customresources/${crd.metadata.name}/${cr.metadata.name}`,
         { namespace: cr.metadata.namespace },
