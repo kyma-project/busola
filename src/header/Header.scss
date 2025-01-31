@@ -12,6 +12,31 @@ ui5-shellbar.header {
     padding-inline-end: 1.25rem;
     box-shadow: var(--sapContainer_Shadow1);
   }
+
+  .header-logo {
+    img[alt='SAP'] {
+      height: 32px;
+    }
+  }
+}
+
+@media (max-width: 340px) {
+  ui5-shellbar.header {
+    ui5-button[accessible-name='collapse-sidebar'] {
+      margin-inline: 0rem;
+    }
+
+    &::part(root) {
+      padding-inline-start: 0.5rem;
+      padding-inline-end: 0.75rem;
+    }
+
+    .header-logo {
+      img[alt='SAP'] {
+        height: 30px;
+      }
+    }
+  }
 }
 
 .snowflake {
