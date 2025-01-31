@@ -6,7 +6,6 @@ import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { permissionSetsSelector } from 'state/permissionSetsSelector';
 import { jwtDecode } from 'jwt-decode';
 import { AuthDataState, authDataState } from 'state/authDataAtom';
-import { useModuleStatus } from '../../KymaModules/support';
 
 /*
   Turns jsonata expressions like
