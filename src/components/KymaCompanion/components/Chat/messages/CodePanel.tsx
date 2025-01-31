@@ -6,7 +6,7 @@ interface CodePanelProps {
 }
 
 export default function CodePanel({ text }: CodePanelProps): JSX.Element {
-  const { language, code } = { language: '', code: '' };
+  const { language, code } = { language: 'yaml', code: text };
   // TODO: uncomment when utils changes are added
   //const { language, code } = formatCodeSegment(text);
   return !language ? (

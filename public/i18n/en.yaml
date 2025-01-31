@@ -761,7 +761,8 @@ kyma-companion:
     subtitle: A temporary interruption occured. Please try again.
   introduction1: Hello there,
   introduction2: How can I help you?
-  placeholder: Type something
+  placeholder: Message Joule
+  disclaimer: Joule is powered by generative AI and all output should be reviewed before use. Please do not enter any sensitive personal data, and avoid entering any other personal data you do not wish to be processed.
   tabs:
     chat: Chat
     page-insights: Page Insights

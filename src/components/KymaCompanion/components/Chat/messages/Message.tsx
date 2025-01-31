@@ -47,13 +47,15 @@ export default function Message({
     );
   }
 
-  const segmentedText: any[] = [];
+  const segmentedText: any[] = [
+    { type: '', content: messageChunks[0]?.result },
+  ];
   // TODO: uncomment when utils changes are added
   // const segmentedText = segmentMarkdownText(messageChunks.slice(-1)[0]?.result);
   return (
     <div className={'message ' + className}>
       {segmentedText && (
-        <Text className="text">
+        <Text className="text" style={{ whiteSpace: 'pre-line' }}>
           {segmentedText.map((segment, index) =>
             segment.type === 'bold' ? (
               <Text key={index} className="text bold">

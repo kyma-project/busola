@@ -3,7 +3,7 @@
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { FlexBox, Icon, Input } from '@ui5/webcomponents-react';
+import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
 import { initialPromptState } from 'components/KymaCompanion/state/initalPromptAtom';
 import Message from './messages/Message';
 import Bubbles from './messages/Bubbles';
@@ -112,12 +112,15 @@ export default function Chat() {
       justifyContent="SpaceBetween"
       className="chat-container"
     >
-      <div className="chat-list sap-margin-tiny" ref={containerRef}>
+      <div
+        className="chat-list sap-margin-x-tiny sap-margin-top-small"
+        ref={containerRef}
+      >
         {chatHistory.map((message, index) => {
           return message.author === 'ai' ? (
             <React.Fragment key={index}>
               <Message
-                className="left-aligned"
+                className="left-aligned sap-margin-begin-tiny"
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
               />
@@ -131,7 +134,7 @@ export default function Chat() {
           ) : (
             <Message
               key={index}
-              className="right-aligned"
+              className="right-aligned sap-margin-end-tiny"
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}
             />
@@ -144,16 +147,32 @@ export default function Chat() {
           />
         )}
       </div>
-      <div className="sap-margin-x-tiny">
-        <Input
+      <div className="input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
+        <TextArea
           className="full-width"
-          disabled={chatHistory[chatHistory.length - 1]?.isLoading}
+          growing
+          growingMaxRows={10}
+          rows={1}
           placeholder={t('kyma-companion.placeholder')}
           value={inputValue}
-          icon={<Icon name="paper-plane" onClick={onSubmitInput} />}
-          onKeyDown={e => e.key === 'Enter' && onSubmitInput()}
-          onInput={e => setInputValue(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              onSubmitInput();
+            }
+          }}
+          onInput={e => {
+            setInputValue(e.target.value);
+          }}
+          valueState="None"
         />
+        <Icon
+          id="text-area-icon"
+          name="paper-plane"
+          mode="Interactive"
+          onClick={onSubmitInput}
+        />
+        <Text id="disclaimer">{t('kyma-companion.disclaimer')}</Text>
       </div>
     </FlexBox>
   );

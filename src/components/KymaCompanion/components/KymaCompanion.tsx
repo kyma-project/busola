@@ -1,11 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  Card,
-  Tab,
-  TabContainer,
-  Title,
-} from '@ui5/webcomponents-react';
+import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
 import {
   ShowKymaCompanion,
@@ -29,7 +23,13 @@ export default function KymaCompanion() {
             <Title level="H4" size="H4" className="title">
               {t('kyma-companion.name')}
             </Title>
-            <div>
+            <div className="actions-container">
+              <Button
+                design="Transparent"
+                icon="restart"
+                className="action"
+                onClick={() => {}}
+              />
               <Button
                 design="Transparent"
                 icon={
@@ -55,14 +55,7 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <TabContainer
-          contentBackgroundDesign="Transparent"
-          className={`tab-container`}
-        >
-          <Tab selected text={t('kyma-companion.tabs.chat')}>
-            <Chat />
-          </Tab>
-        </TabContainer>
+        <Chat />
       </Card>
     </div>
   );

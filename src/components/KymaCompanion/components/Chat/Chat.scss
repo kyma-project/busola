@@ -1,5 +1,5 @@
 .chat-container {
-  height: 100%;
+  height: calc(100vh - 60px - 1rem);
   overflow: hidden;
 
   .chat-list {
@@ -14,18 +14,33 @@
 
     .left-aligned {
       align-self: flex-start;
-      background-color: var(--sapBackgroundColor);
+      // --sapNeutralColor
+      background-color: rgba(#788fa6, 0.2);
       border-radius: 8px 8px 8px 0;
     }
 
     .right-aligned {
       align-self: flex-end;
-      background-color: var(--sapContent_Illustrative_Color1);
+      // --sapContent_Illustrative_Color1
+      background-color: rgba(#5d36ff, 0.2);
       border-radius: 8px 8px 0 8px;
+    }
+  }
 
-      .text {
-        color: white;
-      }
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+
+    #text-area-icon {
+      position: absolute;
+      right: 0.5rem;
+      top: 0.6rem;
+    }
+
+    #disclaimer {
+      font-size: 0.65rem;
     }
   }
 }

@@ -99,6 +99,7 @@ export default function App() {
               : '70%'
             : '100%'
         }
+        minSize={400}
       >
         <div id="html-wrap">
           <Header />
@@ -136,7 +137,7 @@ export default function App() {
         <SplitterElement
           resizable={!showCompanion.fullScreen}
           size={showCompanion.fullScreen ? '100%' : '30%'}
-          minSize={350}
+          minSize={400}
         >
           <KymaCompanion />
         </SplitterElement>
