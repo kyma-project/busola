@@ -329,6 +329,3 @@ See the [Code of Conduct](CODE_OF_CONDUCT.md) document.
 ## Licensing
 
 See the [license](./LICENSE) file.
-ff
-testt
-ll
