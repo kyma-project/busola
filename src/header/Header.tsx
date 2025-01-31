@@ -31,6 +31,7 @@ import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { showKymaCompanionState } from 'components/KymaCompanion/state/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
 import { themeState } from 'state/preferences/themeAtom';
 
@@ -67,6 +68,9 @@ export function Header() {
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const [theme] = useRecoilState(themeState);
+
+  const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
+  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
 
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
@@ -217,6 +221,19 @@ export function Header() {
             icon="feedback"
             text={t('navigation.feedback')}
             title={t('navigation.feedback')}
+          />
+        )}
+        {isKymaCompanionEnabled && window.location.pathname !== '/clusters' && (
+          <ShellBarItem
+            onClick={() =>
+              setShowCompanion({
+                show: true,
+                fullScreen: false,
+              })
+            }
+            icon="da"
+            text={t('kyma-companion.name')}
+            title={t('kyma-companion.name')}
           />
         )}
       </ShellBar>

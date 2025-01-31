@@ -239,6 +239,7 @@ common:
     remove-all: Remove all
     reset: Reset
     restart: Restart
+    retry: Retry
     save: Save
     submit: Submit
     update: Update
@@ -748,6 +749,22 @@ jobs:
 kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
+kyma-companion:
+  name: Joule
+  opener:
+    use-ai: AI Companion
+    suggestions: Suggestions
+    input-placeholder: Ask about this resource
+    error-message: Couldn't fetch suggestions. Please try again.
+  error:
+    title: Service is interrupted
+    subtitle: A temporary interruption occured. Please try again.
+  introduction1: Hello there,
+  introduction2: How can I help you?
+  placeholder: Type something
+  tabs:
+    chat: Chat
+    page-insights: Page Insights
 kyma-modules:
   associated-resources: Associated Resources
   unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.

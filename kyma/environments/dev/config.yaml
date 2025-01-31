@@ -70,6 +70,8 @@ config:
       isEnabled: false
     EXTENSIBILITY_WIZARD:
       isEnabled: true
+    KYMA_COMPANION:
+      isEnabled: false
     TRACKING:
       isEnabled: false
     EVENTING:
