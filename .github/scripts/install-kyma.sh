@@ -2,10 +2,7 @@
 
 set -e
 
-OS="$(uname -s | tr 'A-Z' 'a-z')"
-
 APPLICATION_CONNECTOR_VERSION="1.1.3"
-echo "Using OS:" "${OS}"
 
 if [ ! -f "./bin/kyma" ]; then
   echo "Kyma CLI Download is starting"
@@ -14,12 +11,6 @@ if [ ! -f "./bin/kyma" ]; then
   chmod +x ./bin/kyma
   echo "Kyma CLI Download finished"
 fi
-
-echo "Provisioning k3d cluster for Kyma"
-k3d registry create kyma-registry --port 5001
-
-# kyma alpha deploy command expects a cluster with an internal k3d registry, so we provide one
-k3d cluster create kyma --kubeconfig-switch-context -p 80:80@loadbalancer -p 443:443@loadbalancer --registry-use kyma-registry
 
 kubectl create ns kyma-system
 

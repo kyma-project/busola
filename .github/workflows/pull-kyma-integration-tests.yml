@@ -31,7 +31,8 @@ jobs:
         run: curl --silent --fail $K3D_URL | bash
       - name: Setup Kyma
         run: |
-          ./.github/scripts/setup-kyma.sh | tee kyma-alpha-deploy.log
+          ./.github/scripts/provision_kyma_k3d.sh | tee kyma-provision.log
+          ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -64,6 +65,7 @@ jobs:
         with:
           name: kyma-dashboard-logs-${{ github.job }}
           path: |
-            kyma-alpha-deploy.log
+            kyma-alpha-deploy.
+            kyma-provision.log
             busola-build.log
           retention-days: 90
