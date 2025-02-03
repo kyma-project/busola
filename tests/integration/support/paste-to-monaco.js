@@ -5,7 +5,7 @@ Cypress.Commands.add(
     return cy
       .get('div.monaco-editor')
       .find('textarea[aria-roledescription="editor"]')
-      .if(':visible')
+      .filter(':visible')
       .eq(monacoCount)
       .focus();
   },
