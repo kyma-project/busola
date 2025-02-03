@@ -4,7 +4,7 @@ Cypress.Commands.add(
   (monacoCount = 0) => {
     return cy
       .get('div.monaco-editor')
-      .find('textarea[aria-roledescription="editor"]')
+      .find('textarea[aria-roledescription="editor"]:not([hidden])')
       .eq(monacoCount)
       .focus();
   },
