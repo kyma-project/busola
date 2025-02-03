@@ -3,6 +3,8 @@
 set -e
 
 APPLICATION_CONNECTOR_VERSION="1.1.3"
+OS="$(uname -s | tr 'A-Z' 'a-z')"
+echo "Using OS:" "${OS}"
 
 if [ ! -f "./bin/kyma" ]; then
   echo "Kyma CLI Download is starting"
@@ -12,7 +14,8 @@ if [ ! -f "./bin/kyma" ]; then
   echo "Kyma CLI Download finished"
 fi
 
-kubectl create ns kyma-system
+#Create if not exist
+kubectl get ns kyma-system || kubectl create ns kyma-system
 
 ./bin/kyma alpha deploy
 
