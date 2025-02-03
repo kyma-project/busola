@@ -16,16 +16,12 @@ Cypress.Commands.add(
   (content, monacoCount) => {
     // Ignore Cypress issue with Monaco on CI
     cy.handleExceptions();
-    cy.wait(1000);
 
     cy.findMonaco(monacoCount).then(monaco => {
       if (monaco.is(':visible')) {
+        cy.wait(1000);
+
         monaco.click({ force: true });
-      }
-    });
-
-    cy.findMonaco(monacoCount).then(monaco => {
-      if (monaco.is(':visible')) {
         monaco
           .should('have.focus')
           .clearInput()
