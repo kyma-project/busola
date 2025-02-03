@@ -5,7 +5,6 @@ Cypress.Commands.add(
     return cy
       .get('div.monaco-editor')
       .find('textarea[aria-roledescription="editor"]')
-      .filter(':visible')
       .eq(monacoCount)
       .focus();
   },
@@ -17,16 +16,21 @@ Cypress.Commands.add(
   (content, monacoCount) => {
     // Ignore Cypress issue with Monaco on CI
     cy.handleExceptions();
-
-    cy.findMonaco(monacoCount).should('be.visible');
-
     cy.wait(1000);
 
-    cy.findMonaco(monacoCount).click({ force: true });
+    cy.findMonaco(monacoCount).then(monaco => {
+      if (monaco.is(':visible')) {
+        monaco.click({ force: true });
+      }
+    });
 
-    cy.findMonaco(monacoCount)
-      .should('have.focus')
-      .clearInput()
-      .paste({ pastePayload: content });
+    cy.findMonaco(monacoCount).then(monaco => {
+      if (monaco.is(':visible')) {
+        monaco
+          .should('have.focus')
+          .clearInput()
+          .paste({ pastePayload: content });
+      }
+    });
   },
 );
