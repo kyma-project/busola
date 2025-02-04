@@ -99,7 +99,6 @@ export default function App() {
               : '70%'
             : '100%'
         }
-        minSize={400}
       >
         <div id="html-wrap">
           <Header />

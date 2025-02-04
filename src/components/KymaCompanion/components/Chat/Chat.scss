@@ -27,16 +27,19 @@
     }
   }
 
-  .input-container {
+  .outer-input-container {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    position: relative;
 
-    #text-area-icon {
-      position: absolute;
-      right: 0.5rem;
-      top: 0.6rem;
+    .input-container {
+      position: relative;
+
+      #text-area-icon {
+        position: absolute;
+        right: 0.5rem;
+        bottom: 0.55rem;
+      }
     }
 
     #disclaimer {

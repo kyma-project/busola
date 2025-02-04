@@ -161,31 +161,33 @@ export default function Chat() {
           />
         )}
       </div>
-      <div className="input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
-        <TextArea
-          className="full-width"
-          growing
-          growingMaxRows={10}
-          rows={1}
-          placeholder={t('kyma-companion.placeholder')}
-          value={inputValue}
-          onKeyDown={e => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              onSubmitInput();
-            }
-          }}
-          onInput={e => {
-            setInputValue(e.target.value);
-          }}
-          valueState="None"
-        />
-        <Icon
-          id="text-area-icon"
-          name="paper-plane"
-          mode="Interactive"
-          onClick={onSubmitInput}
-        />
+      <div className="outer-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
+        <div className="input-container">
+          <TextArea
+            className="full-width"
+            growing
+            growingMaxRows={10}
+            rows={1}
+            placeholder={t('kyma-companion.placeholder')}
+            value={inputValue}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                onSubmitInput();
+              }
+            }}
+            onInput={e => {
+              setInputValue(e.target.value);
+            }}
+            valueState="None"
+          />
+          <Icon
+            id="text-area-icon"
+            name="paper-plane"
+            mode="Interactive"
+            onClick={onSubmitInput}
+          />
+        </div>
         <Text id="disclaimer">{t('kyma-companion.disclaimer')}</Text>
       </div>
     </FlexBox>

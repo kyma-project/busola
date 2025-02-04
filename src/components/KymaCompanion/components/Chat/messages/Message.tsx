@@ -52,7 +52,7 @@ export default function Message({
   return (
     <div className={'message ' + className}>
       {segmentedText && (
-        <Text className="text" style={{ whiteSpace: 'pre-line' }}>
+        <Text className="text">
           {segmentedText.map((segment, index) =>
             segment.type === 'bold' ? (
               <Text key={index} className="text bold">
