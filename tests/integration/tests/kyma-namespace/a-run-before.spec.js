@@ -26,8 +26,7 @@ context('Create Namespace', () => {
       .find('ui5-combobox[placeholder="Choose template"]:visible')
       .click();
 
-    cy.get('ui5-responsive-popover:visible')
-      .contains('ui5-li:visible', 'XL (limits: 9Gi, requests: 8.4Gi)')
+    cy.get('ui5-cb-item:visible', 'XL (limits: 9Gi, requests: 8.4Gi)')
       .find('li')
       .click({ force: true });
 

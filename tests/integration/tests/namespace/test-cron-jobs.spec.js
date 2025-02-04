@@ -79,7 +79,7 @@ context('Test Cron Jobs', () => {
 
     cy.get('ui5-combobox[value="IfNotPresent"]').click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('Always')
       .click();
 
@@ -145,7 +145,7 @@ context('Test Cron Jobs', () => {
 
     cy.get('ui5-combobox[value="Always"]').click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('Never')
       .click();
 

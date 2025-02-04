@@ -32,7 +32,7 @@ context('Test Cluster Role Bindings', () => {
       .click()
       .type('admin');
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('cluster-admin')
       .find('li')
       .click();
