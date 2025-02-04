@@ -1,5 +1,3 @@
-// TODO: uncomment when API changes are added
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Button,
   ListItemCustom,
@@ -20,6 +18,7 @@ import { initialPromptState } from '../state/initalPromptAtom';
 import { createPortal } from 'react-dom';
 import { sessionIDState } from '../state/sessionIDAtom';
 import { clusterState } from 'state/clusterAtom';
+import getPromptSuggestions from '../api/getPromptSuggestions';
 import './CompanionOpener.scss';
 
 interface AIOpenerProps {
@@ -56,9 +55,19 @@ export default function CompanionOpener({
       // TODO
       const sessionID = '';
       setSessionID(sessionID);
-      const promptSuggestions: string[] = [];
-      // TODO: uncomment when API changes are added
-      //const promptSuggestions = await getPromptSuggestions({ namespace, resourceType, groupVersion, resourceName, sessionID, clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '', token: '', certificateAuthorityData: cluster?.currentContext.cluster.cluster['certificate-authority-data'] ?? ''});
+      const promptSuggestions = await getPromptSuggestions({
+        namespace,
+        resourceType,
+        groupVersion,
+        resourceName,
+        sessionID,
+        clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '',
+        token: '',
+        certificateAuthorityData:
+          cluster?.currentContext.cluster.cluster[
+            'certificate-authority-data'
+          ] ?? '',
+      });
       setIsLoading(false);
       if (!promptSuggestions) {
         setErrorOccured(true);
