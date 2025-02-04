@@ -107,9 +107,10 @@ See the following example of the standard `ConditionList`:
 
 ```yaml
 status:
-  - name: Condition details
-    widget: ConditionList
-    source: status.conditions
+  body:
+    - name: Condition details
+      widget: ConditionList
+      source: status.conditions
 ```
 
 <img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget" style="border: 1px solid #D2D5D9">
@@ -118,24 +119,25 @@ This is an example of `ConditionList` with overriden statuses:
 
 ```yaml
 status:
-  - name: Condition details
-    widget: ConditionList
-    source: status.conditions
-    highlights:
-      - type: ScalingActive
-        positive:
-          - 'False'
-        negative:
-          - 'True'
-        informative:
-          - unknown
-      - type: ScalingLimited
-        positive:
-          - 'False'
-        critical:
-          - 'True'
-        informative:
-          - unknown
+  body:
+    - name: Condition details
+      widget: ConditionList
+      source: status.conditions
+      highlights:
+        - type: ScalingActive
+          positive:
+            - 'False'
+          negative:
+            - 'True'
+          informative:
+            - unknown
+        - type: ScalingLimited
+          positive:
+            - 'False'
+          critical:
+            - 'True'
+          informative:
+            - unknown
 ```
 
 <img src="./assets/display-widgets/ConditionListHighlights.png" alt="Example of a condition list widget with overriden statuses" style="border: 1px solid #D2D5D9">
