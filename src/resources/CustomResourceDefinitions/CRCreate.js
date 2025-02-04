@@ -32,7 +32,7 @@ function CRCreate({
 
   const navigate = useNavigate();
   const { nextQuery, currentQuery } = usePrepareLayout(layoutNumber);
-  const goToLayoutQuery = customUrl(cr).includes('customresources/')
+  const goToLayoutQuery = customUrl(cr)?.includes('customresources/')
     ? nextQuery
     : currentQuery;
 

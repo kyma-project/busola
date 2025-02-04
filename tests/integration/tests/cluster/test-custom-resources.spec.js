@@ -81,8 +81,6 @@ context('Test Custom Resources', () => {
 
     cy.contains('ui5-button', 'Create').click();
 
-    cy.wait(1000);
-
     cy.wrap(loadFile(TCLUSTER_FILE_NAME)).then(TC_CONFIG => {
       const TC = JSON.stringify(TC_CONFIG);
       cy.pasteToMonaco(TC);
