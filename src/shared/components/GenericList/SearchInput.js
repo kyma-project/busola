@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
-import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
 import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -41,7 +40,6 @@ export function SearchInput({
   allowSlashShortcut,
 }) {
   const { t } = useTranslation();
-  const { isOpen: isSideDrawerOpened } = useYamlEditor();
   const isDetailsView = useContext(ResourceDetailContext);
   const searchInputRef = useRef(null);
   const columnLayout = useRecoilValue(columnLayoutState);
@@ -61,7 +59,6 @@ export function SearchInput({
       key === '/' &&
       !disabled &&
       allowSlashShortcut &&
-      !isSideDrawerOpened &&
       columnLayout.layout === 'OneColumn'
     ) {
       // Prevent firefox native quick find panel open
@@ -73,11 +70,7 @@ export function SearchInput({
     }
   };
 
-  useEventListener('keydown', onKeyPress, null, [
-    disabled,
-    allowSlashShortcut,
-    isSideDrawerOpened,
-  ]);
+  useEventListener('keydown', onKeyPress, null, [disabled, allowSlashShortcut]);
 
   const renderSearchList = entries => {
     const suggestions = getSearchSuggestions(entries);
