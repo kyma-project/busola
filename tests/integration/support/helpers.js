@@ -7,7 +7,6 @@ export function chooseComboboxOption(selector, optionText) {
 
   cy.get('ui5-cb-item:visible')
     .contains(optionText)
-    .find('li')
     .click();
 
   return cy.end();

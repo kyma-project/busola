@@ -34,7 +34,6 @@ context('Test Cluster Role Bindings', () => {
 
     cy.get('ui5-cb-item:visible')
       .contains('cluster-admin')
-      .find('li')
       .click();
 
     cy.get('[accessible-name="User name"]')
