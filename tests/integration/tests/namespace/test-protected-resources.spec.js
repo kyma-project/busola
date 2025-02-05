@@ -124,12 +124,11 @@ context('Test Protected Resources', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains(
-      '.preferences-row',
-      'Allow for modification of protected resources',
+    cy.get(
+      'ui5-switch[accessible-name="Allow for modification of protected resources"',
     )
-      .find('ui5-switch')
-      .click();
+      .find('div[role="switch"')
+      .click({ force: true });
 
     cy.contains('Close').click();
   });

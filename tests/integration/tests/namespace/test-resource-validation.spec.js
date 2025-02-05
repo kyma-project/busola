@@ -53,7 +53,8 @@ context('Test resource validation', () => {
 
     cy.contains('ui5-panel', 'Validate Resources')
       .find('ui5-switch')
-      .click();
+      .find('div[role="switch"')
+      .click({ force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Close')
@@ -72,7 +73,8 @@ context('Test resource validation', () => {
 
     cy.contains('.validate-resources', 'Validate resources')
       .find('ui5-switch')
-      .click();
+      .find('div[role="switch"')
+      .click({ force: true });
 
     cy.get('[data-testid=yaml-cancel]').click();
   });
@@ -94,15 +96,18 @@ context('Test resource validation', () => {
 
     cy.contains('.policy-row', 'Default')
       .find('ui5-switch')
-      .click();
+      .find('div[role="switch"')
+      .click({ force: true });
 
     cy.contains('.policy-row', 'PodSecurityStandardsBaseline')
       .find('ui5-switch')
-      .click();
+      .find('div[role="switch"')
+      .click({ force: true });
 
     cy.contains('.policy-row', 'TestPolicy')
       .find('ui5-switch')
-      .click();
+      .find('div[role="switch"')
+      .click({ force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Close')

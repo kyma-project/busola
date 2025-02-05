@@ -34,7 +34,7 @@ describe('Dropdown Component', () => {
     cy.mount(<Dropdown {...defaultProps} onSelect={onSelect} />);
 
     cy.get('[data-testid="test-dropdown"]').click();
-    cy.get('ui5-li')
+    cy.get('ui5-cb-item')
       .eq(1)
       .click();
 
