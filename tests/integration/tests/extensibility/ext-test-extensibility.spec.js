@@ -67,7 +67,7 @@ context('Test Extensibility Create/Update', () => {
 
     cy.openCreate();
 
-    chooseComboboxOption('[id="combobox-input"]', 'potato');
+    chooseComboboxOption('[id="combobox-input"]', 'potato', true);
 
     cy.wait(500);
 

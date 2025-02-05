@@ -19,7 +19,7 @@ context('Test app settings and preferences', () => {
 
     cy.contains('.preferences-row', 'Delete without confirmation')
       .find('ui5-switch')
-      .click();
+      .click({ force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Close')
@@ -60,7 +60,7 @@ context('Test app settings and preferences', () => {
 
     cy.contains('.preferences-row', 'Delete without confirmation')
       .find('ui5-switch')
-      .click();
+      .click({ force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Close')
@@ -109,7 +109,7 @@ context('Test app settings and preferences', () => {
         if (value === 'true' || value === 'checked') {
           cy.contains('.preferences-row', 'Show hidden Namespaces')
             .find('ui5-switch')
-            .click();
+            .click({ force: true });
         }
       });
 
