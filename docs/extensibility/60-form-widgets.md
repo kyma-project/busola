@@ -53,7 +53,7 @@ See the following examples:
   decodedPlaceholder: Plain text data
 ```
 
-<img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/TextDecoded.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
 
 ```yaml
 - path: protocol
@@ -70,9 +70,8 @@ See the following examples:
   description: Choose a protocol type from the dropdown.
   tooltip: Specifies which protocol to use for tunneling the downstream connection.
 ```
-
-<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
-<img src="./assets/form-widgets/Dropdown2.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/TextInfo.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/TextDropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
 
 ### `Number`
 
@@ -159,7 +158,7 @@ See the following examples:
   disableOnEdit: true
 ```
 
-<img src="./assets/form-widgets/Name2.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/NameDisableOnEdit.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
 
 ### `CodeEditor`
 
