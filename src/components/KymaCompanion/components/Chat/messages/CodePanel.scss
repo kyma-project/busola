@@ -1,28 +1,28 @@
 .code-response {
-  background-color: #484848;
-  color: white;
+  background-color: var(--sapBaseColor);
   padding: 0.75rem;
   border-radius: 4px;
+  position: relative;
 
-  .text {
-    color: white;
+  #copy-icon {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+  }
+
+  #code-text {
+    white-space: pre-wrap;
   }
 }
 
 .code-panel::part(header) {
-  background-color: #484848;
-  color: white;
+  background-color: var(--sapBaseColor);
   border-radius: 4px 4px 0 0;
-  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem !important;
 }
 
 .code-panel::part(content) {
-  background-color: #484848;
+  background-color: var(--sapBaseColor);
   border-radius: 0 0 4px 4px;
-}
-
-.code-panel {
-  .text {
-    color: white;
-  }
+  padding: 0;
 }
