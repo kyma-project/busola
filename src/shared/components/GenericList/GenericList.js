@@ -77,6 +77,7 @@ export const GenericList = ({
   noHideFields,
   customRowClick,
   className = '',
+  accessibleName,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -406,6 +407,7 @@ export const GenericList = ({
       className={className}
     >
       <Table
+        accessibleName={accessibleName ?? title}
         className={`ui5-generic-list ${
           hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
         }`}
