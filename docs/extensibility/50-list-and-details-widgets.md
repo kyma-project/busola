@@ -59,9 +59,8 @@ See the following example:
   description: status.message
 ```
 
-<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/status.svg" alt="Example of a badge widget" width="70%" style="border: 1px solid #D2D5D9">
 <br/><br/>
-<img src="./assets/display-widgets/Bagde2.png" alt="Example of a badge widget with a tooltip" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `ControlledBy`
 
@@ -142,6 +141,7 @@ status:
 
 <img src="./assets/display-widgets/ConditionListHighlights.png" alt="Example of a condition list widget with overriden statuses" style="border: 1px solid #D2D5D9">
 
+
 ### `ExternalLink`
 
 The `ExternalLink` widgets render the link to an external page.
@@ -162,8 +162,6 @@ This is an example of the linkFormula and textFormula usage:
   link: "'https://' & $item.port.name & ':' & $string($item.port.number)"
 ```
 
-<img src="./assets/display-widgets/ExternalLink.png" alt="Example of a ExternalLink widget" width="50%" style="border: 1px solid #D2D5D9">
-
 This is an example of source only usage:
 
 ```yaml
@@ -172,7 +170,7 @@ This is an example of source only usage:
   name: spec.servers.hosts
 ```
 
-<img src="./assets/display-widgets/ExternalLink2.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/hosts.svg" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
 
 ### `ExternalLinkButton`
 
@@ -193,7 +191,7 @@ See the following example:
   link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
 ```
 
-<img src="./assets/display-widgets/ExternalLinkButton.png" alt="Example of a ExternalLinkButton widget" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ExternalLinkButton.png" alt="Example of a ExternalLinkButton widget" width="30%" style="border: 1px solid #D2D5D9">
 
 ### `JoinedArray`
 
@@ -210,19 +208,23 @@ These are the available `JoinedArray` widget parameters:
 See the following example:
 
 ```yaml
-- name: Joined array
-  source: spec.dnsNames
+- name: Comments
   widget: JoinedArray
-  separator: ': '
-- name: Joined array
-  source: spec.statuses
+  source: spec.comments
+  separator: ' || '
+```
+<img src="./assets/display-widgets/joined-array-comments.svg" alt="Example of a joined array widget" width="60%" style="border: 1px solid #D2D5D9">
+
+```yaml
+- name: Toppings
+  source: spec.toppings.name
   widget: JoinedArray
   children:
     - source: $item
       widget: Badge
 ```
 
-<img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/joined-array.svg" alt="Example of a joined array widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `Labels`
 
@@ -243,7 +245,7 @@ See the following example:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/labels.svg" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `ResourceButton`
 
@@ -260,16 +262,17 @@ These are the available `ResourceButton` widget parameters:
 This is an example for widget usage in the details section:
 
 ```yaml
-- widget: ResourceButton
+- name: Deployments
+  widget: ResourceButton
   source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
   resource:
     name: metadata.ownerReferences[0].name
     namespace: $root.metadata.namespace
     kind: "'Deployment'"
-  icon: add
+  icon: right-arrow
 ```
 
-<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/resource-button.svg" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `ResourceLink`
 
@@ -285,15 +288,18 @@ These are the available `ResourceLink` widget parameters:
 This is an example of the `ResourceLink` widget usage in the details section:
 
 ```yaml
-- widget: ResourceLink
-  source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+- name: Owner References
+  widget: ResourceLink
+  source: >-
+    'Go to ' & $item.spec.ownerReferences[0].kind & ' ' &
+    $item.spec.ownerReferences[0].name
   resource:
-    name: metadata.ownerReferences[0].name
+    name: $item.spec.ownerReferences[0].name
     namespace: $root.metadata.namespace
-    kind: "'Deployment'"
+    kind: $item.spec.ownerReferences[0].kind
 ```
 
-<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/owner-reference.svg" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `Text`
 
@@ -314,7 +320,7 @@ See the following example:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/text.svg" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ## Block Widgets
 
@@ -334,7 +340,7 @@ These are the available `Alert` widget parameters:
 See the following example:
 
 ```yaml
-- source: "'I am some warning for a user'"
+- source: "'Here is a warning message'"
   widget: Alert
   severity: warning
 
@@ -342,6 +348,9 @@ See the following example:
   widget: Alert
   disableMargin: true
 ```
+
+<img src="./assets/display-widgets/alert.svg" alt="Example of a text widget" width="80%" style="border: 1px solid #D2D5D9">
+
 
 ### `CodeViewer`
 
@@ -361,7 +370,7 @@ See the following example:
   language: "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 ```
 
-<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/code-viewer.svg" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
 
 ### `Columns`
 
@@ -390,7 +399,7 @@ See the following example:
         - source: spec.other-value
 ```
 
-<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/columns.svg" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
 
 ### `EventList`
 
@@ -414,7 +423,7 @@ See the following examples:
   defaultType: information
 ```
 
-<img src="./assets/display-widgets/EventList.png" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/eventlist-involved.svg" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
 
 ---
 
@@ -426,7 +435,7 @@ See the following examples:
   hideInvolvedObjects: true
 ```
 
-<img src="./assets/display-widgets/EventListHiddenField.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/eventlist-hidden.svg" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
 ### `FeaturedCard`
 
@@ -504,7 +513,7 @@ See the following example:
     - source: '$parent.entry2'
 ```
 
-<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/panel.svg" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
 
 See the following example:
 
@@ -707,7 +716,7 @@ See the following example:
         searchFunction: '$filter($item.price, function($p){ $p > $number($input) }'
 ```
 
-<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/table.svg" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
 
 ### `Tabs`
 
