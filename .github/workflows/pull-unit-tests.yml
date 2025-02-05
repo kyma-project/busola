@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Merge
+      - name: Merge with latest main
         uses: ./.github/actions/merge
       - uses: actions/setup-node@v4
         with:

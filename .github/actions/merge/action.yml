@@ -1,5 +1,5 @@
 name: 'Merge'
-description: 'Action for merging to the main branch'
+description: 'Action for merging PR with the latest main branch'
 
 runs:
   using: 'composite'
@@ -25,7 +25,7 @@ runs:
         git switch --detach ${{ github.sha }}
       shell: bash
 
-    - name: Merge to main
+    - name: Merge with latest main
       run: |
         git merge main
       shell: bash
