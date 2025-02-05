@@ -1,5 +1,5 @@
-name: 'Rebase'
-description: 'Action for rebasing to the main branch'
+name: 'Merge'
+description: 'Action for merging to the main branch'
 
 runs:
   using: 'composite'
@@ -7,8 +7,8 @@ runs:
     # Setup identity to avoid errors when git is trying to rebase without identity set
     - name: Setup git identity
       run: |
-        git config --global user.email "rebase@action.com"
-        git config --global user.name "Rebase Action"
+        git config --global user.email "merge@action.com"
+        git config --global user.name "Merge Action"
       shell: bash
 
     # Update origin/main branch locally to cover case when repo is not fully cloned
