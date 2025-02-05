@@ -8,7 +8,6 @@ import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNot
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { getErrorMessage, prettifyNameSingular } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -117,7 +116,7 @@ function ResourceDetailsRenderer(props) {
   }
 
   return (
-    <YamlEditorProvider>
+    <>
       {resource && (
         <Resource
           key={resource.metadata.name}
@@ -128,7 +127,7 @@ function ResourceDetailsRenderer(props) {
           {...props}
         />
       )}
-    </YamlEditorProvider>
+    </>
   );
 }
 

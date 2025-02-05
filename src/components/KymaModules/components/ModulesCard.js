@@ -2,17 +2,21 @@ import {
   Card,
   CheckBox,
   Label,
+  ListItemStandard,
   Option,
   Panel,
   Select,
-  ListItemStandard,
   Text,
   Title,
 } from '@ui5/webcomponents-react';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { findSpec, findStatus, setChannel } from './support';
+import {
+  findSpec,
+  findStatus,
+  setChannel,
+} from 'components/KymaModules/support';
 
 async function isImageAvailable(url) {
   try {
@@ -22,6 +26,7 @@ async function isImageAvailable(url) {
     return false;
   }
 }
+
 async function getImageSrc(module) {
   const defaultImage = '/assets/sap-logo.svg';
   const iconLink = module.icon.link;
@@ -51,6 +56,7 @@ export default function ModulesCard({
       const src = await getImageSrc(module);
       setImageSrc(src);
     }
+
     checkImage();
   }, [module]);
 
