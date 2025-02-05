@@ -23,7 +23,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/rebase
+      - name: Rebase
+        uses: ./.github/actions/rebase
       - uses: actions/setup-node@v4
         with:
           node-version: 20
