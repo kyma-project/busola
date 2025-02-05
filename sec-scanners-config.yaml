@@ -1,9 +1,9 @@
 module-name: busola
 kind: kcp
-protecode:
+bdba:
   - europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest
   - europe-docker.pkg.dev/kyma-project/prod/busola-web:latest
-whitesource:
+mend:
   language: javascript
   exclude:
     - 'package-lock.json'
