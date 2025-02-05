@@ -126,7 +126,9 @@ context('Test Protected Resources', () => {
 
     cy.get(
       'ui5-switch[accessible-name="Allow for modification of protected resources"',
-    ).click({ force: true });
+    )
+      .find('div[role="switch"')
+      .click({ force: true });
 
     cy.contains('Close').click();
   });
