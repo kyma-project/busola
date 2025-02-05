@@ -19,7 +19,7 @@ export function CustomResources({
 }) {
   const { group, names } = crd.spec;
   const name = names.plural;
-  const customUrl = useCustomResourceUrl(crd);
+  const customUrl = useCustomResourceUrl(crd, true);
   const { namespace } = useUrl();
   const resourceUrl =
     namespace && namespace !== '-all-'
