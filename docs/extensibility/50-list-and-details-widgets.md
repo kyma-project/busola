@@ -513,7 +513,7 @@ See the following example:
     - source: '$parent.entry2'
 ```
 
-<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9" width="40%">
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
 
 See the following example:
 
@@ -716,7 +716,7 @@ See the following example:
         searchFunction: '$filter($item.price, function($p){ $p > $number($input) }'
 ```
 
-<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9" width="40%">
 
 ### `Tabs`
 
