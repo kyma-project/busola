@@ -210,11 +210,12 @@ These are the available `Bagde` widget parameters:
 See the following example:
 
 ```yaml
-- path: spec.namespace
+- path: spec.serviceInstanceName
   widget: Resource
   resource:
-    scope: cluster
-    kind: Namespace
+    kind: ServiceInstance
+    scope: namespace
+    group: services.cloud.sap.com
     version: v1
 - path: spec.gateway
   widget: Resource
@@ -224,13 +225,6 @@ See the following example:
     namespace: kyma-system
     group: networking.istio.io
     version: v1alpha3
-- path: spec.serviceInstanceName
-  widget: Resource
-  resource:
-    kind: ServiceInstance
-    scope: namespace
-    group: services.cloud.sap.com
-    version: v1
 ```
 
 <img src="./assets/form-widgets/Resource.png" alt="Example of a Resource widget" style="border: 1px solid #D2D5D9">
