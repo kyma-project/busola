@@ -216,7 +216,7 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
         data-step={!hasAuth || !hasOneContext ? '3' : '2'}
       >
         <div className="add-cluster__content-container">
-          <Title level="H5" className="sap-margin-small">
+          <Title level="H5" className="sap-margin-bottom-small">
             {t('clusters.storage.choose-storage.label')}
             <>
               <Button
