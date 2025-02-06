@@ -1,5 +1,5 @@
 #companion_wrapper {
-  width: calc(100% - 1rem);
+  width: 100%;
 
   .kyma-companion {
     height: 100%;
@@ -18,31 +18,16 @@
         text-shadow: none;
       }
 
-      .action {
-        color: white;
-        background: transparent;
+      .actions-container {
+        display: flex;
+        justify-content: end;
+        gap: 1rem;
+
+        .action {
+          color: white;
+          background: transparent;
+        }
       }
     }
-
-    .tab-container {
-      height: calc(100vh - 60px - 1.4rem);
-      container-type: inline-size;
-    }
-  }
-}
-
-@container (max-width: 950px) {
-  .tab-container::part(content) {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-
-@container (min-width: 950px) {
-  .tab-container::part(content) {
-    width: 70%;
-    margin-left: 15%;
-    margin-right: 15%;
   }
 }

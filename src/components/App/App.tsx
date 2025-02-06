@@ -136,7 +136,7 @@ export default function App() {
         <SplitterElement
           resizable={!showCompanion.fullScreen}
           size={showCompanion.fullScreen ? '100%' : '30%'}
-          minSize={350}
+          minSize={400}
         >
           <KymaCompanion />
         </SplitterElement>

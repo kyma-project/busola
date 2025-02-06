@@ -11,7 +11,11 @@ export default function Bubbles({
   onClick,
 }: BubblesProps): JSX.Element {
   return suggestions ? (
-    <FlexBox wrap="Wrap" justifyContent="Start" className={'bubbles-container'}>
+    <FlexBox
+      wrap="Wrap"
+      justifyContent="Start"
+      className="bubbles-container sap-margin-begin-tiny sap-margin-bottom-tiny"
+    >
       {suggestions.map((suggestion, index) => (
         <Button
           key={index}
