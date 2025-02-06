@@ -762,7 +762,7 @@ kyma-companion:
   introduction1: Hello there,
   introduction2: How can I help you?
   placeholder: Message Joule
-  disclaimer: Joule is powered by generative AI and all output should be reviewed before use. Please do not enter any sensitive personal data, and avoid entering any other personal data you do not wish to be processed.
+  disclaimer: Joule is powered by generative AI, and the output must be reviewed before use. Do not enter any sensitive personal data, and avoid entering any other data you do not wish to be processed.
   tabs:
     chat: Chat
     page-insights: Page Insights
