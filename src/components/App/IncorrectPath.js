@@ -21,16 +21,28 @@ export function IncorrectPath({ to, title = '', message = '' }) {
   message = message || t('components.incorrect-path.message.default');
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
-  const { namespaceResourceType = '', namespaceResourceName = '' } =
+  const { namespaceResourceName = '' } =
     useMatch({
       path:
         '/cluster/:cluster/namespaces/:namespace/:namespaceResourceType/:namespaceResourceName',
       end: false,
     })?.params ?? {};
 
-  const { clusterResourceType = '', clusterResourceName = '' } =
+  const { namespaceResourceType = '' } =
+    useMatch({
+      path: '/cluster/:cluster/namespaces/:namespace/:namespaceResourceType',
+      end: false,
+    })?.params ?? {};
+
+  const { clusterResourceName = '' } =
     useMatch({
       path: '/cluster/:cluster/:clusterResourceType/:clusterResourceName',
+      end: false,
+    })?.params ?? {};
+
+  const { clusterResourceType = '' } =
+    useMatch({
+      path: '/cluster/:cluster/:clusterResourceType',
       end: false,
     })?.params ?? {};
 
@@ -51,8 +63,11 @@ export function IncorrectPath({ to, title = '', message = '' }) {
     const crdGroup = data[0]?.spec?.group;
 
     const path = `customresources/${resourceType}.${crdGroup}/${resourceName}`;
-
-    const link = namespace ? namespaceUrl(path) : clusterUrl(path);
+    const link = namespace
+      ? namespace !== '-all-'
+        ? namespaceUrl(path)
+        : namespaceUrl(path, { namespace: '-all-' })
+      : clusterUrl(path);
 
     if (link && crdGroup) {
       notificationManager.notifySuccess({
