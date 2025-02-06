@@ -16,9 +16,14 @@
   ui5-side-navigation {
     border-radius: 0.5rem;
     z-index: 999;
+
+    .namespace-combobox {
+      padding-top: 0.75rem;
+    }
   }
+
   .space-top {
-    height: 0.75rem;
+    height: 0.5rem;
   }
 
   .disable-effects {
