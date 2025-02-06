@@ -88,7 +88,6 @@ export function SidebarNavigation() {
               }}
             >
               <SideNavigationItem
-                className="hide-shadow"
                 icon={'slim-arrow-left'}
                 text={'Back To Cluster Details'}
                 onClick={() => {
@@ -183,7 +182,6 @@ export function SidebarNavigation() {
       )}
       {!namespace && !isSidebarCondensed && (
         <SideNavigationItem
-          className="hide-shadow"
           icon={'bbyd-dashboard'}
           text={'Cluster Details'}
           onClick={() => {
