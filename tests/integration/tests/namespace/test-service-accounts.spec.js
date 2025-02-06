@@ -115,7 +115,7 @@ context('Test Service Accounts', () => {
       .get('.form-field')
       .find('ui5-icon')
       .click()
-      .get('ui5-list')
+      .get('ui5-cb-item')
       .contains('21600s (6h)')
       .wait(100)
       .click({ force: true });

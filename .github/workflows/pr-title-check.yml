@@ -1,6 +1,6 @@
 name: PR Title Check
 
-on: 
+on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
@@ -19,5 +19,6 @@ jobs:
             refactor
             test
             chore
+            revert
           requireScope: false
           subjectPattern: ^([A-Z].*[^.]|bump .*)$

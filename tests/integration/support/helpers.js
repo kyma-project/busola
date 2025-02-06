@@ -1,14 +1,13 @@
-export function chooseComboboxOption(selector, optionText) {
+export function chooseComboboxOption(selector, optionText, force = false) {
   cy.get(`ui5-combobox${selector}`)
     .find('input')
     .filterWithNoValue()
     .click()
     .type(optionText);
 
-  cy.get('ui5-li:visible')
+  cy.get('ui5-cb-item:visible')
     .contains(optionText)
-    .find('li')
-    .click();
+    .click({ force: force });
 
   return cy.end();
 }

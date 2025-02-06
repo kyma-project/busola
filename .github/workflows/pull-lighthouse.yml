@@ -1,14 +1,14 @@
 name: PR Lighthouse Test
 
-on: 
+on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-lighthouse.yml"
-      - "resources/**"
-      - "tests/**"
-      - "nginx/**"
-      - "src/**"
+      - '.github/workflows/pull-lighthouse.yml'
+      - 'resources/**'
+      - 'tests/**'
+      - 'nginx/**'
+      - 'src/**'
 
 jobs:
   run-lighthouse-test:
@@ -19,11 +19,14 @@ jobs:
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-      # - uses: ./.github/actions/rebase
+        with:
+          fetch-depth: 0
+      - name: Merge with latest main
+        uses: ./.github/actions/merge
       - name: Create Single Cluster
         uses: AbsaOSS/k3d-action@4e8b3239042be1dc0aed6c5eb80c13b18200fc79 #v2.4.0
         with:
-          cluster-name: "k3dCluster"
+          cluster-name: 'k3dCluster'
           args: >-
             --agents 1
             --port 80:80@loadbalancer

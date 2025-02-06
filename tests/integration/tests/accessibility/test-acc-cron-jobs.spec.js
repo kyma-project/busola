@@ -120,7 +120,7 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.get('ui5-combobox[value="IfNotPresent"]').click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('Always')
       .click();
 

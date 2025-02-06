@@ -27,6 +27,7 @@ Changes proposed in this pull request:
   - docs: Documentation only changes
   - refactor: A code change that neither fixes a bug nor adds a feature
   - test: Adding tests
+  - revert: Revert commit
   - chore: Maintainance changes to the build process or auxiliary tools, libraries, workflows, etc.
 - [ ] Related issues are linked. To link internal trackers, use the issue IDs like `backlog#4567`
 - [ ] Explain clearly why you created the PR and what changes it introduces

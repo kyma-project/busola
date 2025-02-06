@@ -219,8 +219,7 @@ Cypress.Commands.add('changeCluster', clusterName => {
     .find('button[aria-haspopup="menu"][data-ui5-stable="menu"]:visible')
     .click({ force: true });
 
-  cy.get('ui5-list')
-    .find(`[accessible-name="${clusterName}"]:visible`)
+  cy.get(`[accessible-name="${clusterName}"]:visible`)
     .find('span[part="title"]')
     .click({ force: true });
 });
