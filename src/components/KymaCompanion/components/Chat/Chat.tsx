@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
-import { initialPromptState } from 'components/KymaCompanion/state/initalPromptAtom';
 import Message from './messages/Message';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
@@ -20,13 +19,20 @@ interface MessageType {
   suggestions?: any[];
 }
 
-export default function Chat() {
+export default function Chat({ suggestions }: { suggestions: string[] }) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
-  const [chatHistory, setChatHistory] = useState<MessageType[]>([]);
+  const [chatHistory, setChatHistory] = useState<MessageType[]>([
+    {
+      author: 'ai',
+      messageChunks: [
+        { step: 'output', result: t('kyma-companion.introduction') },
+      ],
+      isLoading: false,
+    },
+  ]);
   const [errorOccured, setErrorOccured] = useState<boolean>(false);
-  const initialPrompt = useRecoilValue<string>(initialPromptState);
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
@@ -109,9 +115,11 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    if (chatHistory.length === 0) sendPrompt(initialPrompt);
-    // eslint-disable-next-line
-  }, []);
+    if (suggestions.length && chatHistory.length === 1) {
+      handleFollowUpQuestions(suggestions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [suggestions]);
 
   useEffect(() => {
     const delay = errorOccured ? 500 : 0;
@@ -157,7 +165,7 @@ export default function Chat() {
         {errorOccured && (
           <ErrorMessage
             errorOnInitialMessage={chatHistory.length === 0}
-            resendInitialPrompt={() => sendPrompt(initialPrompt)}
+            retryPrompt={() => {}}
           />
         )}
       </div>

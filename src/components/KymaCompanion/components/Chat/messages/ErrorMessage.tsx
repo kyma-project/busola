@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 interface ErrorMessageProps {
   errorOnInitialMessage: boolean;
-  resendInitialPrompt: () => void;
+  retryPrompt: () => void;
 }
 
 export default function ErrorMessage({
   errorOnInitialMessage,
-  resendInitialPrompt,
+  retryPrompt,
 }: ErrorMessageProps): JSX.Element {
   const { t } = useTranslation();
 
@@ -24,7 +24,7 @@ export default function ErrorMessage({
         >
           {errorOnInitialMessage && (
             <Button
-              onClick={resendInitialPrompt}
+              onClick={retryPrompt}
               design="Emphasized"
               className="sap-margin-bottom-tiny"
             >
