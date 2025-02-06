@@ -1,6 +1,6 @@
 name: Lint Markdown Links PR
 run-name: ${{github.event.pull_request.title}}
-on: [ pull_request ]
+on: [pull_request]
 jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: gaurav-nelson/github-action-markdown-link-check@d53a906aa6b22b8979d33bc86170567e619495ec
         with:
-          use-quiet-mode: 'yes'  
+          use-quiet-mode: 'yes'
           use-verbose-mode: 'yes'
           config-file: '.mlc.config.json'
           folder-path: '.'

@@ -4,14 +4,14 @@ on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/pull-kyma-intergation-tests.yml"
-      - "resources/**"
-      - "tests/integration/**"
-      - "nginx/**"
-      - "src/**"
-      - "backend/**"
-      - "kyma/**"
-      - "Dockerfile*"
+      - '.github/workflows/pull-kyma-intergation-tests.yml'
+      - 'resources/**'
+      - 'tests/integration/**'
+      - 'nginx/**'
+      - 'src/**'
+      - 'backend/**'
+      - 'kyma/**'
+      - 'Dockerfile*'
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
@@ -21,7 +21,10 @@ jobs:
         with:
           comment_on_pr: false
       - uses: actions/checkout@v4
-      # - uses: ./.github/actions/rebase
+        with:
+          fetch-depth: 0
+      - name: Merge with latest main
+        uses: ./.github/actions/merge
       - name: Install k3d
         env:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh

@@ -1,5 +1,5 @@
-name: 'Rebase'
-description: 'Action for rebasing to the main branch'
+name: 'Merge'
+description: 'Action for merging PR with the latest main branch'
 
 runs:
   using: 'composite'
@@ -7,8 +7,8 @@ runs:
     # Setup identity to avoid errors when git is trying to rebase without identity set
     - name: Setup git identity
       run: |
-        git config --global user.email "rebase@action.com"
-        git config --global user.name "Rebase Action"
+        git config --global user.email "merge@action.com"
+        git config --global user.name "Merge Action"
       shell: bash
 
     # Update origin/main branch locally to cover case when repo is not fully cloned
@@ -19,15 +19,15 @@ runs:
         git fetch origin main
         git checkout origin/main
         git checkout -B main
-        git pull --unshallow origin main
+        git pull origin main
 
         # go back to the HEAD commit
         git switch --detach ${{ github.sha }}
       shell: bash
 
-    - name: Rebase to main
+    - name: Merge with latest main
       run: |
-        git rebase main
+        git merge main
       shell: bash
 
     - name: Print branch log
