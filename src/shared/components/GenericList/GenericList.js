@@ -96,10 +96,11 @@ export const GenericList = ({
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
+
     if (sort.order === 'ASC') {
-      return [...resources.sort(sortFunction)];
+      return [...resources].sort(sortFunction);
     } else {
-      return [...resources.sort((a, b) => sortFunction(b, a))];
+      return [...resources].sort((a, b) => sortFunction(b, a));
     }
   };
 
