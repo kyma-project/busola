@@ -7,6 +7,7 @@ import {
   Theme,
   themeState,
 } from 'state/preferences/themeAtom';
+import copyToCliboard from 'copy-to-clipboard';
 import './CodePanel.scss';
 
 function getCustomTheme(theme: Theme) {
@@ -64,6 +65,7 @@ export default function CodePanel({ text }: CodePanelProps): JSX.Element {
         mode="Interactive"
         name="copy"
         design="Information"
+        onClick={() => copyToCliboard(code)}
       />
       <Text id="code-text">{code}</Text>
     </div>
@@ -75,7 +77,12 @@ export default function CodePanel({ text }: CodePanelProps): JSX.Element {
           <Title level="H6" size="H6">
             {language}
           </Title>
-          <Icon mode="Interactive" name="copy" design="Information" />
+          <Icon
+            mode="Interactive"
+            name="copy"
+            design="Information"
+            onClick={() => copyToCliboard(code)}
+          />
         </FlexBox>
       }
       fixed
