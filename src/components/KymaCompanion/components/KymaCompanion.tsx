@@ -23,17 +23,16 @@ export default function KymaCompanion() {
 
   useEffect(() => {
     async function fetchSuggestions() {
-      // TODO
-      const sessionID = '';
+      const sessionID = ''; // TODO
       setSessionID(sessionID);
       const promptSuggestions = await getPromptSuggestions({
         namespace: 'default', // TODO
         resourceType: 'deployment', // TODO
         groupVersion: 'apps/v1', // TODO
         resourceName: 'test-x', // TODO
-        sessionID,
+        sessionID, // TODO
         clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '',
-        token: '',
+        token: '', // TODO
         certificateAuthorityData:
           cluster?.currentContext.cluster.cluster[
             'certificate-authority-data'
@@ -42,10 +41,6 @@ export default function KymaCompanion() {
       if (promptSuggestions) {
         setSuggestions(promptSuggestions);
       }
-      setSuggestions([
-        "What's going on?",
-        'How is the weather in Munich today?',
-      ]);
     }
 
     if (cluster && suggestions.length === 0) {
