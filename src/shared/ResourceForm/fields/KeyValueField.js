@@ -24,6 +24,7 @@ export function KeyValueField({
   required,
   disableOnEdit,
   editMode,
+  accessibleName,
   ...props
 }) {
   const { t } = useTranslation();
@@ -103,11 +104,12 @@ export function KeyValueField({
               onKeyDown: e => focus(e, 1),
               onBlur: updateValue,
               placeholder: t('components.key-value-field.enter-key'),
+              accessibleName: `${props.title} key`,
               ...keyProps,
             })}
           </div>
         ),
-        ({ focus, value, setValue, updateValue, index, ...props }) => (
+        ({ focus, value, setValue, updateValue, index, ...valueProps }) => (
           <div
             key={`key-value-field-value-${index}`}
             className={readableFromFile ? 'bsl-col-md--5' : 'bsl-col-md--6'}
@@ -138,7 +140,8 @@ export function KeyValueField({
                       }),
                     }
                   : undefined,
-              ...props,
+              accessibleName: `${props.title} value`,
+              ...valueProps,
             })}
           </div>
         ),

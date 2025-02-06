@@ -36,6 +36,7 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
         setValue={value => setValue(value + 'm')}
         className="full-width"
         required
+        accessibleName={label}
       />
     </FlexBox>
   );
