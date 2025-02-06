@@ -59,7 +59,7 @@ See the following example:
   description: status.message
 ```
 
-<img src="./assets/display-widgets/status.svg" alt="Example of a badge widget" width="70%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="50%" style="border: 1px solid #D2D5D9">
 <br/><br/>
 
 ### `ControlledBy`
@@ -170,7 +170,7 @@ This is an example of source only usage:
   name: spec.servers.hosts
 ```
 
-<img src="./assets/display-widgets/hosts.svg" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ExternalLinks.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `ExternalLinkButton`
 
@@ -213,7 +213,7 @@ See the following example:
   source: spec.comments
   separator: ' || '
 ```
-<img src="./assets/display-widgets/joined-array-comments.svg" alt="Example of a joined array widget" width="60%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/JoinedArray1.png" alt="Example of a joined array widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ```yaml
 - name: Toppings
@@ -224,7 +224,7 @@ See the following example:
       widget: Badge
 ```
 
-<img src="./assets/display-widgets/joined-array.svg" alt="Example of a joined array widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/JoinedArray2.png" alt="Example of a joined array widget" width="30%" style="border: 1px solid #D2D5D9">
 
 ### `Labels`
 
@@ -245,7 +245,7 @@ See the following example:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/labels.svg" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Lables.png" alt="Example of a Labels widget" width="30%" style="border: 1px solid #D2D5D9">
 
 ### `ResourceButton`
 
@@ -272,7 +272,7 @@ This is an example for widget usage in the details section:
   icon: right-arrow
 ```
 
-<img src="./assets/display-widgets/resource-button.svg" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `ResourceLink`
 
@@ -299,7 +299,7 @@ This is an example of the `ResourceLink` widget usage in the details section:
     kind: $item.spec.ownerReferences[0].kind
 ```
 
-<img src="./assets/display-widgets/owner-reference.svg" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `Text`
 
@@ -320,7 +320,7 @@ See the following example:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/text.svg" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ## Block Widgets
 
@@ -349,7 +349,7 @@ See the following example:
   disableMargin: true
 ```
 
-<img src="./assets/display-widgets/alert.svg" alt="Example of a text widget" width="80%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="80%" style="border: 1px solid #D2D5D9">
 
 
 ### `CodeViewer`
@@ -370,7 +370,7 @@ See the following example:
   language: "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 ```
 
-<img src="./assets/display-widgets/code-viewer.svg" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
 
 ### `Columns`
 
@@ -399,7 +399,7 @@ See the following example:
         - source: spec.other-value
 ```
 
-<img src="./assets/display-widgets/columns.svg" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
 
 ### `EventList`
 
@@ -423,7 +423,7 @@ See the following examples:
   defaultType: information
 ```
 
-<img src="./assets/display-widgets/eventlist-involved.svg" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/EventList-InvolvedObject.png" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
 
 ---
 
@@ -435,7 +435,7 @@ See the following examples:
   hideInvolvedObjects: true
 ```
 
-<img src="./assets/display-widgets/eventlist-hidden.svg" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/EventList-Hidden.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
 ### `FeaturedCard`
 
@@ -513,7 +513,7 @@ See the following example:
     - source: '$parent.entry2'
 ```
 
-<img src="./assets/display-widgets/panel.svg" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
 
 See the following example:
 
@@ -679,7 +679,7 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="75%">
+<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="50%">
 
 ### `Table`
 
@@ -716,7 +716,7 @@ See the following example:
         searchFunction: '$filter($item.price, function($p){ $p > $number($input) }'
 ```
 
-<img src="./assets/display-widgets/table.svg" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
 
 ### `Tabs`
 
@@ -780,4 +780,4 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="75%">
+<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="50%">

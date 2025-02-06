@@ -422,12 +422,16 @@ These are the available `GenericList` widget parameters:
 See the following example:
 
 ```yaml
-- path: spec.services
-  widget: GenericList
-  children:
-    - path: '[].host'
-    - path: '[].port'
+- path: spec.ownerReferences
+      widget: GenericList
+      children:
+        - path: '[].apiVersion'
+        - path: '[].kind'
+        - path: '[].name'
+```
+<img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
 
+```yaml
  - widget: GenericList
    path: spec.filter.filters
    children:
@@ -443,8 +447,6 @@ See the following example:
        property: type
        type: exact
 ```
-
-<img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
 
 ### `SimpleList`
 
@@ -464,6 +466,7 @@ These are the available `SimpleList` widget parameters:
 
 See the following example:
 
+
 ```yaml
 - path: spec.services
   widget: SimpleList
@@ -474,15 +477,15 @@ See the following example:
       placeholder: Enter the required port
 ```
 
-<img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
-
 #### Scalar Values
 
 When array items are scalars instead of objects, a child still has to be provided with the path `[]`; no header with the field title is then rendered in the resulting table.
 
 ```yaml
-- path: spec.services
+- path: spec.comments
   widget: SimpleList
   children:
     - path: '[]'
 ```
+
+<img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
