@@ -44,7 +44,7 @@ jobs:
           ./.github/scripts/setup-busola.sh | tee busola-build.log
         env:
           ENV: prod
-      - name: run_tests
+      - name: Run tests
         shell: bash
         run: |
           k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml

@@ -34,6 +34,7 @@ jobs:
           ./.github/scripts/provision_kyma_k3d.sh | tee kyma-provision.log
           ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
+        name: Setup node
         with:
           node-version: 20
       - name: Deploy Busola
