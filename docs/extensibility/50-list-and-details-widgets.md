@@ -272,7 +272,7 @@ This is an example for widget usage in the details section:
   icon: right-arrow
 ```
 
-<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="30%" style="border: 1px solid #D2D5D9">
 
 ### `ResourceLink`
 
@@ -349,7 +349,7 @@ See the following example:
   disableMargin: true
 ```
 
-<img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="80%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="70%" style="border: 1px solid #D2D5D9">
 
 
 ### `CodeViewer`
@@ -513,7 +513,7 @@ See the following example:
     - source: '$parent.entry2'
 ```
 
-<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9" width="40%">
 
 See the following example:
 
@@ -780,4 +780,4 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="50%">
+<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="30%">
