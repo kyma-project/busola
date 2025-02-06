@@ -23,7 +23,8 @@ jobs:
       - name: Setup Kyma
         run: |
           set -o pipefail
-          ./.github/scripts/setup-kyma.sh | tee kyma-alpha-deploy.log
+          ./.github/scripts/provision_kyma_k3d.sh | tee kyma-provision.log
+          ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -55,5 +56,6 @@ jobs:
           path: |
             backend/backend.log
             kyma-alpha-deploy.log
+            kyma-provision.log
             busola.log
           retention-days: 90

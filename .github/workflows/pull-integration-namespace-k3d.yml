@@ -34,6 +34,7 @@ jobs:
             --port 443:443@loadbalancer
             --wait
       - uses: actions/setup-node@v4
+        name: Setup node
         with:
           node-version: 20
       - name: Setup Busola
