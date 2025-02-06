@@ -53,7 +53,7 @@ See the following examples:
   decodedPlaceholder: Plain text data
 ```
 
-<img src="./assets/form-widgets/TextDecoded.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Text-Decoded.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
 
 ```yaml
 - path: protocol
@@ -70,8 +70,8 @@ See the following examples:
   description: Choose a protocol type from the dropdown.
   tooltip: Specifies which protocol to use for tunneling the downstream connection.
 ```
-<img src="./assets/form-widgets/TextInfo.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
-<img src="./assets/form-widgets/TextDropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Text-Info.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Text-Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
 
 ### `Number`
 
@@ -158,7 +158,7 @@ See the following examples:
   disableOnEdit: true
 ```
 
-<img src="./assets/form-widgets/NameDisableOnEdit.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Name-DisableOnEdit.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
 
 ### `CodeEditor`
 
@@ -224,6 +224,13 @@ See the following example:
     namespace: kyma-system
     group: networking.istio.io
     version: v1alpha3
+- path: spec.serviceInstanceName
+  widget: Resource
+  resource:
+    kind: ServiceInstance
+    scope: namespace
+    group: services.cloud.sap.com
+    version: v1
 ```
 
 <img src="./assets/form-widgets/Resource.png" alt="Example of a Resource widget" style="border: 1px solid #D2D5D9">
@@ -400,7 +407,7 @@ See the following example:
 - path: spec.service
   widget: FormGroup
   children:
-    - path: host
+    - path: name
     - path: port
 ```
 
