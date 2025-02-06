@@ -30,7 +30,12 @@ import { ClusterPreview } from './ClusterPreview';
 import './AddClusterWizard.scss';
 import { isFormOpenState } from 'state/formOpenAtom';
 
-export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
+export function AddClusterWizard({
+  kubeconfig,
+  setKubeconfig,
+  config,
+  dialogRef,
+}) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
@@ -46,20 +51,6 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-
-  useEffect(() => {
-    const wizard = document.getElementsByTagName('ui5-wizard')[0];
-    const wizardContent = wizard?.shadowRoot?.querySelector('.ui5-wiz-content');
-
-    const contentContainer = wizardContent?.querySelectorAll(
-      '.ui5-wiz-content-item-wrapper',
-    )[selected - 1];
-
-    if (contentContainer) {
-      contentContainer.style['background-color'] = 'transparent';
-      contentContainer.style['padding'] = '0';
-    }
-  });
 
   const {
     isValid: authValid,
@@ -147,144 +138,141 @@ export function AddClusterWizard({ kubeconfig, setKubeconfig, config }) {
     setSelected(Number(e.detail.step.dataset.step));
   };
 
+  const isCurrentStepInvalid = step => {
+    switch (step) {
+      case 1:
+        return !kubeconfig;
+      case 2:
+        return kubeconfig && (!hasAuth || !hasOneContext) ? !authValid : false;
+      default:
+        return false;
+    }
+  };
+
   return (
-    <Wizard contentLayout="SingleStep" onStepChange={handleStepChange}>
-      <WizardStep
-        titleText={t('common.headers.configuration')}
-        branching={!kubeconfig}
-        selected={selected === 1}
-        data-step={'1'}
-      >
-        <KubeconfigUpload
-          kubeconfig={kubeconfig}
-          config={config}
-          setKubeconfig={updateKubeconfig}
-          formRef={authFormRef}
-        />
-        <WizardButtons
-          selected={selected}
-          setSelected={setSelected}
-          firstStep={true}
-          onCancel={() => setShowWizard(false)}
-          validation={!kubeconfig}
-          className="cluster-wizard__buttons__sticky"
-        />
-      </WizardStep>
-      {kubeconfig && (!hasAuth || !hasOneContext) && (
+    <>
+      <Wizard contentLayout="SingleStep" onStepChange={handleStepChange}>
         <WizardStep
-          titleText={t('clusters.wizard.authentication')}
-          selected={selected === 2}
-          disabled={selected !== 2}
-          data-step={'2'}
+          titleText={t('common.headers.configuration')}
+          branching={!kubeconfig}
+          selected={selected === 1}
+          data-step={'1'}
         >
-          <div className="cluster-wizard__auth-container">
-            <ResourceForm.Single
-              formElementRef={authFormRef}
-              resource={kubeconfig}
-              setResource={setKubeconfig}
-              setCustomValid={setCustomValid}
-              createResource={e => {
-                e.preventDefault();
-              }}
-              className="cluster-wizard__auth-form"
-            >
-              {!hasOneContext && <ContextChooser />}
-              {!hasAuth && <AuthForm revalidate={revalidate} />}
-            </ResourceForm.Single>
-          </div>
-          <WizardButtons
-            selected={selected}
-            setSelected={setSelected}
-            onCancel={() => setShowWizard(false)}
-            validation={!authValid}
-            className="cluster-wizard__buttons__absolute"
+          <KubeconfigUpload
+            kubeconfig={kubeconfig}
+            config={config}
+            setKubeconfig={updateKubeconfig}
+            formRef={authFormRef}
           />
         </WizardStep>
-      )}
-      <WizardStep
-        titleText={t('clusters.wizard.storage')}
-        selected={
-          kubeconfig && (!hasAuth || !hasOneContext)
-            ? selected === 3
-            : selected === 2
-        }
-        disabled={
-          kubeconfig && (!hasAuth || !hasOneContext)
-            ? selected !== 3
-            : selected !== 2
-        }
-        data-step={!hasAuth || !hasOneContext ? '3' : '2'}
-      >
-        <div className="add-cluster__content-container">
-          <Title level="H5" className="sap-margin-bottom-small">
-            {t('clusters.storage.choose-storage.label')}
-            <>
-              <Button
-                id="storageDescriptionOpener"
-                icon="hint"
-                design="Transparent"
-                className="sap-margin-begin-tiny"
-                onClick={() => setShowTitleDescription(true)}
-              />
-              {createPortal(
-                <Popover
-                  opener="storageDescriptionOpener"
-                  open={showTitleDescription}
-                  onClose={() => setShowTitleDescription(false)}
-                  placement="End"
-                >
-                  <Text className="description">
-                    {t('clusters.storage.info')}
-                  </Text>
-                </Popover>,
-                document.body,
-              )}
-            </>
-          </Title>
-          <ChooseStorage storage={storage} setStorage={setStorage} />
-          <WizardButtons
-            selected={selected}
+        {kubeconfig && (!hasAuth || !hasOneContext) && (
+          <WizardStep
+            titleText={t('clusters.wizard.authentication')}
+            selected={selected === 2}
+            disabled={selected !== 2}
+            data-step={'2'}
+          >
+            <div className="cluster-wizard__auth-container">
+              <ResourceForm.Single
+                formElementRef={authFormRef}
+                resource={kubeconfig}
+                setResource={setKubeconfig}
+                setCustomValid={setCustomValid}
+                createResource={e => {
+                  e.preventDefault();
+                }}
+                className="cluster-wizard__auth-form"
+              >
+                {!hasOneContext && <ContextChooser />}
+                {!hasAuth && <AuthForm revalidate={revalidate} />}
+              </ResourceForm.Single>
+            </div>
+          </WizardStep>
+        )}
+        <WizardStep
+          titleText={t('clusters.wizard.storage')}
+          selected={
+            kubeconfig && (!hasAuth || !hasOneContext)
+              ? selected === 3
+              : selected === 2
+          }
+          disabled={
+            kubeconfig && (!hasAuth || !hasOneContext)
+              ? selected !== 3
+              : selected !== 2
+          }
+          data-step={!hasAuth || !hasOneContext ? '3' : '2'}
+        >
+          <div className="add-cluster__content-container">
+            <Title level="H5" className="sap-margin-bottom-small">
+              {t('clusters.storage.choose-storage.label')}
+              <>
+                <Button
+                  id="storageDescriptionOpener"
+                  icon="hint"
+                  design="Transparent"
+                  className="sap-margin-begin-tiny"
+                  onClick={() => setShowTitleDescription(true)}
+                />
+                {createPortal(
+                  <Popover
+                    opener="storageDescriptionOpener"
+                    open={showTitleDescription}
+                    onClose={() => setShowTitleDescription(false)}
+                    placement="End"
+                  >
+                    <Text className="description">
+                      {t('clusters.storage.info')}
+                    </Text>
+                  </Popover>,
+                  document.body,
+                )}
+              </>
+            </Title>
+            <ChooseStorage storage={storage} setStorage={setStorage} />
+          </div>
+        </WizardStep>
+        <WizardStep
+          titleText={t('clusters.wizard.review')}
+          selected={
+            kubeconfig && (!hasAuth || !hasOneContext)
+              ? selected === 4
+              : selected === 3
+          }
+          disabled={
+            kubeconfig && (!hasAuth || !hasOneContext)
+              ? selected !== 4
+              : selected !== 3
+          }
+          data-step={!hasAuth || !hasOneContext ? '4' : '3'}
+        >
+          <ClusterPreview
+            storage={storage}
+            kubeconfig={kubeconfig}
             setSelected={setSelected}
-            validation={!storage}
-            onCancel={() => setShowWizard(false)}
-            className="cluster-wizard__buttons__absolute"
+            hasAuth={hasAuth}
           />
-        </div>
-      </WizardStep>
-      <WizardStep
-        titleText={t('clusters.wizard.review')}
-        selected={
-          kubeconfig && (!hasAuth || !hasOneContext)
-            ? selected === 4
-            : selected === 3
-        }
-        disabled={
-          kubeconfig && (!hasAuth || !hasOneContext)
-            ? selected !== 4
-            : selected !== 3
-        }
-        data-step={!hasAuth || !hasOneContext ? '4' : '3'}
-      >
-        <ClusterPreview
-          storage={storage}
-          kubeconfig={kubeconfig}
-          setSelected={setSelected}
-          hasAuth={hasAuth}
-        />
-        <WizardButtons
-          selected={selected}
-          setSelected={setSelected}
-          lastStep={true}
-          customFinish={t('clusters.buttons.connect-cluster')}
-          onComplete={onComplete}
-          onCancel={() => {
-            setShowWizard(false);
-            setIsFormOpen({ formOpen: false });
-          }}
-          validation={!storage}
-          className="cluster-wizard__buttons__sticky"
-        />
-      </WizardStep>
-    </Wizard>
+        </WizardStep>
+      </Wizard>
+      {dialogRef?.current &&
+        createPortal(
+          <WizardButtons
+            className="cluster-wizard-buttons"
+            selectedStep={selected}
+            setSelectedStep={setSelected}
+            firstStep={selected === 1}
+            lastStep={
+              kubeconfig && (!hasAuth || !hasOneContext)
+                ? selected === 4
+                : selected === 3
+            }
+            onCancel={() => setShowWizard(false)}
+            customFinish={t('clusters.buttons.connect-cluster')}
+            onComplete={onComplete}
+            invalid={isCurrentStepInvalid(selected)}
+          />,
+          dialogRef.current,
+        )}
+    </>
   );
 }
