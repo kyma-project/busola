@@ -13,17 +13,43 @@
     }
 
     .left-aligned {
+      position: relative;
       align-self: flex-start;
-      // --sapNeutralColor
-      background-color: rgba(#788fa6, 0.2);
       border-radius: 8px 8px 8px 0;
+      z-index: 0;
+    }
+
+    .left-aligned::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--sapNeutralColor);
+      opacity: 0.2;
+      border-radius: 8px 8px 8px 0;
+      z-index: -1;
     }
 
     .right-aligned {
+      position: relative;
       align-self: flex-end;
-      // --sapContent_Illustrative_Color1
-      background-color: rgba(#5d36ff, 0.2);
       border-radius: 8px 8px 0 8px;
+      z-index: 0;
+    }
+
+    .right-aligned::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--sapContent_Illustrative_Color1);
+      opacity: 0.25;
+      border-radius: 8px 8px 0 8px;
+      z-index: -1;
     }
   }
 
