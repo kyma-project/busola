@@ -14,7 +14,7 @@ if [ ! -f "./bin/kyma" ]; then
   echo "Kyma CLI Download finished"
 fi
 
-#Create if not exist
+# Create if not exist
 kubectl get ns kyma-system || kubectl create ns kyma-system
 
 ./bin/kyma alpha deploy
