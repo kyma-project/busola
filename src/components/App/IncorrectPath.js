@@ -63,11 +63,13 @@ export function IncorrectPath({ to, title = '', message = '' }) {
     const crdGroup = data[0]?.spec?.group;
 
     const path = `customresources/${resourceType}.${crdGroup}/${resourceName}`;
-    const link = namespace
-      ? namespace !== '-all-'
-        ? namespaceUrl(path)
-        : namespaceUrl(path, { namespace: '-all-' })
-      : clusterUrl(path);
+    let link;
+    if (namespace) {
+      link =
+        namespace !== '-all-'
+          ? namespaceUrl(path)
+          : namespaceUrl(path, { namespace: '-all-' });
+    } else link = clusterUrl(path);
 
     if (link && crdGroup) {
       notificationManager.notifySuccess({
