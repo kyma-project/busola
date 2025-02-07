@@ -1,4 +1,4 @@
-# Extensibility wizard
+# Extensibility Wizard
 
 ## Overview
 
