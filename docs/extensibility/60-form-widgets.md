@@ -70,6 +70,7 @@ See the following examples:
   description: Choose a protocol type from the dropdown.
   tooltip: Specifies which protocol to use for tunneling the downstream connection.
 ```
+
 <img src="./assets/form-widgets/Text-Info.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
 <img src="./assets/form-widgets/Text-Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
 
@@ -430,23 +431,24 @@ See the following example:
         - path: '[].kind'
         - path: '[].name'
 ```
+
 <img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
 
 ```yaml
- - widget: GenericList
-   path: spec.filter.filters
-   children:
-     - path: '[].eventType.value'
-       placeholder: placeholder.eventType
-     - path: '[].eventSource.value'
-   template:
-     eventSource:
-       property: source
-       type: exact
-       value: ''
-     eventType:
-       property: type
-       type: exact
+- widget: GenericList
+  path: spec.filter.filters
+  children:
+    - path: '[].eventType.value'
+      placeholder: placeholder.eventType
+    - path: '[].eventSource.value'
+  template:
+    eventSource:
+      property: source
+      type: exact
+      value: ''
+    eventType:
+      property: type
+      type: exact
 ```
 
 ### `SimpleList`
@@ -466,7 +468,6 @@ These are the available `SimpleList` widget parameters:
 | **defaultExpanded** | No       | boolean | Specifies if the widget should be expanded by default. Defaults to `false`.                                                                                             |
 
 See the following example:
-
 
 ```yaml
 - path: spec.services

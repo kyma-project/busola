@@ -141,7 +141,6 @@ status:
 
 <img src="./assets/display-widgets/ConditionListHighlights.png" alt="Example of a condition list widget with overriden statuses" style="border: 1px solid #D2D5D9">
 
-
 ### `ExternalLink`
 
 The `ExternalLink` widgets render the link to an external page.
@@ -213,6 +212,7 @@ See the following example:
   source: spec.comments
   separator: ' || '
 ```
+
 <img src="./assets/display-widgets/JoinedArray1.png" alt="Example of a joined array widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ```yaml
@@ -350,7 +350,6 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="70%" style="border: 1px solid #D2D5D9">
-
 
 ### `CodeViewer`
 
