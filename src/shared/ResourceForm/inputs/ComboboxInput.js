@@ -12,6 +12,7 @@ export function ComboboxInput({
   _ref,
   onSelectionChange,
   fullWidth,
+  accessibleName,
   ...props
 }) {
   const onChange = event => {
@@ -43,7 +44,7 @@ export function ComboboxInput({
   return (
     <ComboBox
       className={className}
-      accessibleName="Combobox input"
+      accessibleName={`${accessibleName} Combobox input`}
       id={id || 'combobox-input'}
       ref={_ref}
       disabled={props.disabled || !options?.length}
