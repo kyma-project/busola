@@ -20,7 +20,7 @@ data:
       - name: Order details
         widget: CodeViewer
         source: spec.orderDetails
-        language: "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
+        language: '"yaml"'
       - name: Pizzas
         source: spec.pizzas
         widget: ResourceRefs
