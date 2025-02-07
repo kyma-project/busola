@@ -53,7 +53,7 @@ See the following examples:
   decodedPlaceholder: Plain text data
 ```
 
-<img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Text-Decoded.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
 
 ```yaml
 - path: protocol
@@ -71,8 +71,8 @@ See the following examples:
   tooltip: Specifies which protocol to use for tunneling the downstream connection.
 ```
 
-<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
-<img src="./assets/form-widgets/Dropdown2.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Text-Info.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Text-Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
 
 ### `Number`
 
@@ -159,7 +159,7 @@ See the following examples:
   disableOnEdit: true
 ```
 
-<img src="./assets/form-widgets/Name2.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Name-DisableOnEdit.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
 
 ### `CodeEditor`
 
@@ -211,11 +211,12 @@ These are the available `Bagde` widget parameters:
 See the following example:
 
 ```yaml
-- path: spec.namespace
+- path: spec.serviceInstanceName
   widget: Resource
   resource:
-    scope: cluster
-    kind: Namespace
+    kind: ServiceInstance
+    scope: namespace
+    group: services.cloud.sap.com
     version: v1
 - path: spec.gateway
   widget: Resource
@@ -401,7 +402,7 @@ See the following example:
 - path: spec.service
   widget: FormGroup
   children:
-    - path: host
+    - path: name
     - path: port
 ```
 
@@ -423,29 +424,32 @@ These are the available `GenericList` widget parameters:
 See the following example:
 
 ```yaml
-- path: spec.services
-  widget: GenericList
-  children:
-    - path: '[].host'
-    - path: '[].port'
-
- - widget: GenericList
-   path: spec.filter.filters
-   children:
-     - path: '[].eventType.value'
-       placeholder: placeholder.eventType
-     - path: '[].eventSource.value'
-   template:
-     eventSource:
-       property: source
-       type: exact
-       value: ''
-     eventType:
-       property: type
-       type: exact
+- path: spec.ownerReferences
+      widget: GenericList
+      children:
+        - path: '[].apiVersion'
+        - path: '[].kind'
+        - path: '[].name'
 ```
 
 <img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
+
+```yaml
+- widget: GenericList
+  path: spec.filter.filters
+  children:
+    - path: '[].eventType.value'
+      placeholder: placeholder.eventType
+    - path: '[].eventSource.value'
+  template:
+    eventSource:
+      property: source
+      type: exact
+      value: ''
+    eventType:
+      property: type
+      type: exact
+```
 
 ### `SimpleList`
 
@@ -475,15 +479,15 @@ See the following example:
       placeholder: Enter the required port
 ```
 
-<img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
-
 #### Scalar Values
 
 When array items are scalars instead of objects, a child still has to be provided with the path `[]`; no header with the field title is then rendered in the resulting table.
 
 ```yaml
-- path: spec.services
+- path: spec.comments
   widget: SimpleList
   children:
     - path: '[]'
 ```
+
+<img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
