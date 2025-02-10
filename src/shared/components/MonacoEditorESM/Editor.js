@@ -67,18 +67,15 @@ export function Editor({
 
   // update editor when was error
   useEffect(() => {
-    if (prevValueRef.current !== value && editorInstance && error) {
+    if (
+      prevValueRef.current !== value &&
+      editorInstance &&
+      (error || readOnly)
+    ) {
       editorInstance.setValue(value);
       prevValueRef.current = value;
     }
-  }, [value, editorInstance, error]);
-
-  useEffect(() => {
-    if (prevValueRef.current !== value && readOnly) {
-      editorInstance.setValue(value);
-      prevValueRef.current = value;
-    }
-  }, [value, editorInstance, readOnly]);
+  }, [value, editorInstance, error, readOnly]);
 
   useUpdateValueOnParentChange({
     updateValueOnParentChange,
