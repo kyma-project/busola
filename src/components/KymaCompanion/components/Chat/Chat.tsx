@@ -5,7 +5,7 @@ import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
 import Message from './messages/Message';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
-import { sessionIDState } from 'components/KymaCompanion/state/sessionIDAtom';
+import { sessionIDState } from 'state/companion/sessionIDAtom';
 import { clusterState } from 'state/clusterAtom';
 import { authDataState } from 'state/authDataAtom';
 import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuestions';
