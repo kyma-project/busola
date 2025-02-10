@@ -67,11 +67,13 @@ export function Editor({
 
   // update editor when was error
   useEffect(() => {
-    if (prevValueRef.current !== value && editorInstance) {
-      if (error || readOnly) {
-        editorInstance.setValue(value);
-        prevValueRef.current = value;
-      }
+    if (
+      prevValueRef.current !== value &&
+      editorInstance &&
+      (error || readOnly)
+    ) {
+      editorInstance.setValue(value);
+      prevValueRef.current = value;
     }
   }, [value, editorInstance, error, readOnly]);
 
