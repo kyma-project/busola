@@ -215,8 +215,8 @@ export function ExtensibilityWizardCore({
                 </UIStoreProvider>
               </section>
               <WizardButtons
-                selected={selected}
-                setSelected={setSelected}
+                selectedStep={selected}
+                setSelectedStep={setSelected}
                 firstStep={selectedIndex === 1}
                 onCancel={onCancel}
               />
@@ -241,8 +241,8 @@ export function ExtensibilityWizardCore({
             </div>
           </div>
           <WizardButtons
-            selected={selected}
-            setSelected={setSelected}
+            selectedStep={selected}
+            setSelectedStep={setSelected}
             lastStep={true}
             customFinish={
               uploadState === OPERATION_STATE_SUCCEEDED
