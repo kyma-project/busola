@@ -21,9 +21,9 @@ echo "Previous release: ${PREVIOUS_RELEASE}"
 
 echo "## What has changed" >> ${CHANGELOG_FILE}
 
-NEW_FEATURES_SECTION="## New Features\n"
-FIXES_SECTION="## Bug Fixes\n"
-OTHERS_SECTION="## Others\n"
+export NEW_FEATURES_SECTION="## New Features\n"
+export FIXES_SECTION="## Bug Fixes\n"
+export OTHERS_SECTION="## Others\n"
 
 git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse | while read -r COMMIT
 do
@@ -33,7 +33,7 @@ do
       echo COMMIT_MESSAGE: ${COMMIT_MESSAGE}
       if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
         echo "NEW_FEATURES_SECTION: ${COMMIT_MESSAGE}"
-        NEW_FEATURES_SECTION+="\* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+        NEW_FEATURES_SECTION="${NEW_FEATURES_SECTION} \* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
         echo "FIXES_SECTION: ${COMMIT_MESSAGE}"
         FIXES_SECTION+="\* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
