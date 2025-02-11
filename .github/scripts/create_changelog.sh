@@ -29,7 +29,7 @@ FIXES_SECTION="## Bug Fixes\n"
 OTHERS_SECTION="## Others\n"
 
 # Assuming you have a way to get the list of commits, for example:
-COMMITS=$(git log --format="%H")
+COMMITS=$(git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%H" --reverse)
 
 for COMMIT in $COMMITS; do
     COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
