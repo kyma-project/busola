@@ -28,7 +28,6 @@ NEW_FEATURES_SECTION="## New Features\n"
 FIXES_SECTION="## Bug Fixes\n"
 OTHERS_SECTION="## Others\n"
 
-# Assuming you have a way to get the list of commits, for example:
 COMMITS=$(git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%H" --reverse)
 
 for COMMIT in $COMMITS; do
