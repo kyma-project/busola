@@ -21,35 +21,27 @@ echo "Previous release: ${PREVIOUS_RELEASE}"
 
 echo "## What has changed" >> ${CHANGELOG_FILE}
 
-export NEW_FEATURES_SECTION="## New Features\n"
-export FIXES_SECTION="## Bug Fixes\n"
-export OTHERS_SECTION="## Others\n"
+NEW_FEATURES_SECTION="## New Features\n"
+FIXES_SECTION="## Bug Fixes\n"
+OTHERS_SECTION="## Others\n"
 
-git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse | while read -r COMMIT
+while read -r COMMIT;
 do
     COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
     if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
       COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
-      echo COMMIT_MESSAGE: ${COMMIT_MESSAGE}
       if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
-        echo "NEW_FEATURES_SECTION: ${COMMIT_MESSAGE}"
-        NEW_FEATURES_SECTION="${NEW_FEATURES_SECTION} \* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+        NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
-        echo "FIXES_SECTION: ${COMMIT_MESSAGE}"
-        FIXES_SECTION+="\* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+        FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       else
-        echo "OTHERS_SECTION: ${COMMIT_MESSAGE}"
-        OTHERS_SECTION+="\* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+        OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       fi
     fi
-done 
-
-echo "NEW_FEATURES_SECTION: ${NEW_FEATURES_SECTION}"
-echo "FIXES_SECTION: ${FIXES_SECTION}"
-echo "OTHERS_SECTION: ${OTHERS_SECTION}"
+done< <(git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse)
 
 echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
-echo "CHANGELOG.md updated: $(cat ${CHANGELOG_FILE})"
+
 # do
 #     COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
 #     if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
