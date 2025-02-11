@@ -1,5 +1,4 @@
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
-import { proxyHandler } from './proxy.js';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
@@ -55,7 +54,8 @@ if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
 
-app.use('/proxy', proxyHandler);
+// Uncomment after: https://github.com/kyma-project/busola/issues/3680
+// app.use('/proxy', proxyHandler);
 
 let server = null;
 
