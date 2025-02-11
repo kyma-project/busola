@@ -43,7 +43,7 @@ do
     fi
 done< <(git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse)
 
-echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
+echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${DOCS_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
 
 NEW_CONTRIB=$(mktemp --suffix=.new XXXXX)
 
