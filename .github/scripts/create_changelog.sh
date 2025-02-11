@@ -42,8 +42,7 @@ do
         OTHERS_SECTION2+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       fi
     fi
-    return $NEW_FEATURES_SECTION=$NEW_FEATURES_SECTION
-done
+done < input.data
 
 echo "NEW_FEATURES_SECTION: ${NEW_FEATURES_SECTION}"
 echo "FIXES_SECTION: ${FIXES_SECTION}"
