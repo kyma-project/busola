@@ -1,8 +1,3 @@
-#!/usr/bin/env bash
-
-PREVIOUS_RELEASE=$2 # for testability
-
-# standard bash error handling
 set -o nounset  # treat unset variables as an error and exit immediately.
 set -o errexit  # exit immediately when a command fails.
 set -E          # needs to be set if we want the ERR trap
@@ -14,16 +9,13 @@ GITHUB_URL=https://api.github.com/repos/${REPOSITORY}
 GITHUB_AUTH_HEADER="Authorization: token ${GITHUB_TOKEN}"
 CHANGELOG_FILE="CHANGELOG.md"
 
-
-if [ "${PREVIOUS_RELEASE}"  == "" ]
-then
+if [ -z "${PREVIOUS_RELEASE:-}" ]; then
   PREVIOUS_RELEASE=$(git describe --tags --abbrev=0)
 fi
 echo "Previous release: ${PREVIOUS_RELEASE}"
 
 echo "## What has changed" >> ${CHANGELOG_FILE}
 
-git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse | while read -r COMMIT
 NEW_FEATURES_SECTION="## New Features\n"
 FIXES_SECTION="## Bug Fixes\n"
 OTHERS_SECTION="## Others\n"
