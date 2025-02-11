@@ -152,10 +152,6 @@ export function useDeleteResource({
     }
   };
 
-  const closeDeleteDialog = () => {
-    setShowDeleteDialog(false);
-  };
-
   const handleResourceDelete = ({ resource, resourceUrl, deleteFn }) => {
     if (dontConfirmDelete && !forceConfirmDelete) {
       performDelete(resource, resourceUrl, deleteFn);
@@ -172,10 +168,18 @@ export function useDeleteResource({
     resourceTitle,
     resourceIsCluster = false,
     resourceUrl,
+    closeFn,
     deleteFn,
     additionalDeleteInfo,
     disableDeleteButton = false,
   }) => {
+    const closeDeleteDialog = () => {
+      setShowDeleteDialog(false);
+      if (closeFn) {
+        closeFn();
+      }
+    };
+
     return (
       <MessageBox
         type="Warning"
@@ -207,7 +211,7 @@ export function useDeleteResource({
             key="delete-cancel"
             data-testid="delete-cancel"
             design="Transparent"
-            onClick={() => setShowDeleteDialog(false)}
+            onClick={closeDeleteDialog}
           >
             {t('common.buttons.cancel')}
           </Button>,

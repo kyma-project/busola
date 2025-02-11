@@ -4,13 +4,14 @@ import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
-  Tag,
   Button,
+  CheckBox,
   DynamicPageHeader,
   FlexBox,
-  List,
   MessageStrip,
+  List,
   ListItemStandard,
+  Tag,
   Text,
 } from '@ui5/webcomponents-react';
 
@@ -437,6 +438,7 @@ export default function KymaModulesList({
     };
 
     const [resourceCounts, setResourceCounts] = useState({});
+    const [allowForceDelete, setAllowForceDelete] = useState(false);
 
     useEffect(() => {
       const fetchCounts = async () => {
@@ -467,7 +469,9 @@ export default function KymaModulesList({
         {!detailsOpen &&
           createPortal(
             <DeleteMessageBox
-              disableDeleteButton={checkIfAssociatedResourceLeft()}
+              disableDeleteButton={
+                checkIfAssociatedResourceLeft() ? !allowForceDelete : true
+              }
               additionalDeleteInfo={
                 getAssociatedResources().length > 0 && (
                   <>
@@ -507,6 +511,12 @@ export default function KymaModulesList({
                         );
                       })}
                     </List>
+                    <CheckBox
+                      checked={allowForceDelete}
+                      onChange={() => setAllowForceDelete(!allowForceDelete)}
+                      accessibleName={t('kyma-modules.force-edit-info')}
+                      text={t('kyma-modules.force-edit-info')}
+                    />
                   </>
                 )
               }
@@ -522,6 +532,9 @@ export default function KymaModulesList({
                 });
                 handleModuleUninstall();
                 setInitialUnchangedResource(cloneDeep(kymaResourceState));
+              }}
+              closeFn={() => {
+                setAllowForceDelete(false);
               }}
             />,
             document.body,
