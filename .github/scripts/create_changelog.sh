@@ -33,13 +33,14 @@ do
       echo COMMIT_MESSAGE: ${COMMIT_MESSAGE}
       if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
         echo "NEW_FEATURES_SECTION: ${COMMIT_MESSAGE}"
-        NEW_FEATURES_SECTION=$(echo -e "${NEW_FEATURES_SECTION} * ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n")
+        "* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n" >> ${NEW_FEATURES_SECTION}
+        echo "* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n" >> ${NEW_FEATURES_SECTION}
       elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
         echo "FIXES_SECTION: ${COMMIT_MESSAGE}"
-        FIXES_SECTION=$(echo -e "${FIXES_SECTION} * ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n")
+        FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       else
         echo "OTHERS_SECTION: ${COMMIT_MESSAGE}"
-        OTHERS_SECTION=$(echo -e "${OTHERS_SECTION} * ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n")
+        OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       fi
     fi
 done
