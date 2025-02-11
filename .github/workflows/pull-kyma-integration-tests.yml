@@ -2,7 +2,11 @@ name: PR Kyma Dashboard Integration Tests Dev
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, reopened, ready_for_review]
+    types: [ opened, edited, synchronize, reopened, ready_for_review ]
+    workflow_run:
+      workflow: ["Busola Build"]
+      types:
+        - completed
     paths:
       - '.github/workflows/pull-kyma-intergation-tests.yml'
       - 'resources/**'
