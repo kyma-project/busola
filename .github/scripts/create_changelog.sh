@@ -28,7 +28,10 @@ NEW_FEATURES_SECTION="## New Features\n"
 FIXES_SECTION="## Bug Fixes\n"
 OTHERS_SECTION="## Others\n"
 
-do
+# Assuming you have a way to get the list of commits, for example:
+COMMITS=$(git log --format="%H")
+
+for COMMIT in $COMMITS; do
     COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
     if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
       COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
@@ -41,6 +44,8 @@ do
       fi
     fi
 done
+
+echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
 
 echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
 # do
