@@ -28,20 +28,18 @@ NEW_FEATURES_SECTION="## New Features\n"
 FIXES_SECTION="## Bug Fixes\n"
 OTHERS_SECTION="## Others\n"
 
-COMMITS=$(git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%H" --reverse)
-
-for COMMIT in $COMMITS; do
-    COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
-    if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
-      COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
-      if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
-        NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
-      elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
-        FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
-      else
-        OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
-      fi
+do
+  COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
+  if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
+    COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
+    if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
+      NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+    elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
+      FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+    else
+      OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
     fi
+  fi
 done
 
 echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
