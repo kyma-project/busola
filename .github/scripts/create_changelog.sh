@@ -25,7 +25,7 @@ echo "## What has changed" >> ${CHANGELOG_FILE}
 
 git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse | while read -r COMMIT
 NEW_FEATURES_SECTION="## New Features\n"
-FIXES_SECTION="## Fixes\n"
+FIXES_SECTION="## Bug Fixes\n"
 OTHERS_SECTION="## Others\n"
 
 do
