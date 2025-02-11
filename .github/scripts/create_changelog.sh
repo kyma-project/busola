@@ -1,6 +1,6 @@
-#!/usr/bin/env bash	
+#!/usr/bin/env bash
 
-PREVIOUS_RELEASE=$2 # for testability	
+PREVIOUS_RELEASE=$2 # for testability
 
 # standard bash error handling
 set -o nounset  # treat unset variables as an error and exit immediately.
@@ -27,17 +27,17 @@ OTHERS_SECTION="## Others\n"
 
 git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse | while read -r COMMIT
 do
-  COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
-  if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
-    COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
-    if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
-      NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
-    elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
-      FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
-    else
-      OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+    COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
+    if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
+      COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
+      if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
+        NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+      elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
+        FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+      else
+        OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+      fi
     fi
-  fi
 done
 
 echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
