@@ -85,7 +85,12 @@ export function StringRenderer({
         };
       });
 
-      return { input: Inputs.ComboboxInput, options: displayOptions };
+      return {
+        input: schema.get('dropdownOnly')
+          ? Inputs.Dropdown
+          : Inputs.ComboboxInput,
+        options: displayOptions,
+      };
     } else if (!decodable) {
       return { input: Inputs.Text };
     } else {
