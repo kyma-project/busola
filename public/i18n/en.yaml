@@ -759,7 +759,7 @@ kyma-companion:
   error:
     title: Service is interrupted
     subtitle: A temporary interruption occured. Please try again.
-  introduction: Hi, I am your Kyma assistant! You can ask me any question you have and I will try to help you with your problem to the best of my abilities. Meanwhile, you can check suggested questions below, maybe you will find it useful!
+  introduction: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. Meanwhile, you can check the suggested questions below; you may find them helpful!
   placeholder: Message Joule
   disclaimer: Joule is powered by generative AI, and the output must be reviewed before use. Do not enter any sensitive personal data, and avoid entering any other data you do not wish to be processed.
   tabs:
