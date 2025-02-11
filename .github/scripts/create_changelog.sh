@@ -40,7 +40,12 @@ do
     fi
 done
 
+echo "NEW_FEATURES_SECTION: ${NEW_FEATURES_SECTION}"
+echo "FIXES_SECTION: ${FIXES_SECTION}"
+echo "OTHERS_SECTION: ${OTHERS_SECTION}"
+
 echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
+echo "CHANGELOG.md updated: $(cat ${CHANGELOG_FILE})"
 # do
 #     COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
 #     if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
