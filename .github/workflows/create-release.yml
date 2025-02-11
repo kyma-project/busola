@@ -35,7 +35,7 @@ jobs:
 
   create-release:
     name: Create release
-    needs: [build-busola-web, build-busola-backend, build-busola]
+    # needs: [build-busola-web, build-busola-backend, build-busola]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
