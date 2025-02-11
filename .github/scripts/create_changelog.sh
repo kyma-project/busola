@@ -30,11 +30,15 @@ do
     COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
     if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
       COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
+      echo COMMIT_MESSAGE: ${COMMIT_MESSAGE}
       if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
+        echo "NEW_FEATURES_SECTION: ${COMMIT_MESSAGE}"
         NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
+        echo "FIXES_SECTION: ${COMMIT_MESSAGE}"
         FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       else
+        echo "OTHERS_SECTION: ${COMMIT_MESSAGE}"
         OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       fi
     fi
