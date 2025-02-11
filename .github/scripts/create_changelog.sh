@@ -25,6 +25,7 @@ NEW_FEATURES_SECTION="## New Features\n"
 FIXES_SECTION="## Bug Fixes\n"
 OTHERS_SECTION="## Others\n"
 
+git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse | while read -r COMMIT
 do
   COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
   if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
