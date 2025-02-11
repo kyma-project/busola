@@ -31,7 +31,7 @@ import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
-import { showKymaCompanionState } from 'components/KymaCompanion/state/showKymaCompanionAtom';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
 import { themeState } from 'state/preferences/themeAtom';
 

@@ -29,7 +29,7 @@ import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAt
 import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
 import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
-import { showKymaCompanionState } from 'components/KymaCompanion/state/showKymaCompanionAtom';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
 import { Preferences } from 'components/Preferences/Preferences';
 import { Header } from 'header/Header';

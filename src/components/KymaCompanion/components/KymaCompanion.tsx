@@ -4,8 +4,9 @@ import { useRecoilState } from 'recoil';
 import {
   ShowKymaCompanion,
   showKymaCompanionState,
-} from 'components/KymaCompanion/state/showKymaCompanionAtom';
+} from 'state/companion/showKymaCompanionAtom';
 import Chat from './Chat/Chat';
+import { usePromptSuggestions } from '../hooks/usePromptSuggestions';
 import './KymaCompanion.scss';
 
 export default function KymaCompanion() {
@@ -13,6 +14,7 @@ export default function KymaCompanion() {
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
+  const suggestions = usePromptSuggestions();
 
   return (
     <div id="companion_wrapper" className="sap-margin-tiny">
@@ -55,7 +57,7 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <Chat />
+        <Chat suggestions={suggestions} />
       </Card>
     </div>
   );
