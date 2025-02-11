@@ -33,11 +33,11 @@ do
     if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
       COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
       if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
-        NEW_FEATURES_SECTION+=git show -s "${COMMIT}" --format="* %s by @${COMMIT_AUTHOR}"
+        NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
-        FIXES_SECTION+=git show -s "${COMMIT}" --format="* %s by @${COMMIT_AUTHOR}"
+        FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       else
-        OTHERS_SECTION+=git show -s "${COMMIT}" --format="* %s by @${COMMIT_AUTHOR}"
+        OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       fi
     fi
 done
