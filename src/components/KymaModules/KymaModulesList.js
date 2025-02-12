@@ -49,7 +49,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findModuleSpec, findModuleStatus } from './support';
+import { findModuleStatus } from './support';
 
 export default function KymaModulesList({
   DeleteMessageBox,
