@@ -323,20 +323,20 @@ export default function KymaModulesList({
       },
     ];
 
-    const handleClickResource = (resourceName, resource) => {
+    const handleClickResource = (moduleName, moduleStatus) => {
       setOpenedModuleIndex(
-        selectedModules.findIndex(entry => entry.name === resourceName),
+        selectedModules.findIndex(entry => entry.name === moduleName),
       );
 
       // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
-      if (!resource.resource) {
+      if (!moduleStatus.resource) {
         const connectedModule = findModule(
-          resourceName,
-          resource.channel,
-          resource.version,
+          moduleName,
+          moduleStatus.channel,
+          moduleStatus.version,
         );
         const moduleCr = connectedModule.spec.data;
-        resource.resource = {
+        moduleStatus.resource = {
           kind: moduleCr.kind,
           apiVersion: moduleCr.apiVersion,
           metadata: {
@@ -346,10 +346,9 @@ export default function KymaModulesList({
         };
       }
 
-      const isExtension = !!findExtension(resource?.resource?.kind);
-      const moduleStatus = resource;
-      const moduleCrd = findCrd(resource?.resource?.kind);
-      const skipRedirect = !hasDetailsLink(resource);
+      const isExtension = !!findExtension(moduleStatus?.resource?.kind);
+      const moduleCrd = findCrd(moduleStatus?.resource?.kind);
+      const skipRedirect = !hasDetailsLink(moduleStatus);
 
       if (skipRedirect) {
         return;
