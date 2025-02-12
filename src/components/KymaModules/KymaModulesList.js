@@ -469,46 +469,53 @@ export default function KymaModulesList({
             <DeleteMessageBox
               disableDeleteButton={checkIfAssociatedResourceLeft()}
               additionalDeleteInfo={
-                getAssociatedResources().length > 0 && (
-                  <>
-                    <MessageStrip design="Critical" hideCloseButton>
-                      {t('kyma-modules.associated-resources-warning')}
-                    </MessageStrip>
-                    <List
-                      headerText={t('kyma-modules.associated-resources')}
-                      mode="None"
-                      separators="All"
-                    >
-                      {getAssociatedResources().map(assResource => {
-                        const resourceCount =
-                          resourceCounts[
-                            `${assResource.kind}-${assResource.group}-${assResource.version}`
-                          ];
+                <>
+                  <Text>
+                    {t('kyma-modules.delete-module', {
+                      name: selectedModules[chosenModuleIndex]?.name,
+                    })}
+                  </Text>
+                  {getAssociatedResources().length > 0 && (
+                    <>
+                      <MessageStrip design="Critical" hideCloseButton>
+                        {t('kyma-modules.associated-resources-warning')}
+                      </MessageStrip>
+                      <List
+                        headerText={t('kyma-modules.associated-resources')}
+                        mode="None"
+                        separators="All"
+                      >
+                        {getAssociatedResources().map(assResource => {
+                          const resourceCount =
+                            resourceCounts[
+                              `${assResource.kind}-${assResource.group}-${assResource.version}`
+                            ];
 
-                        return (
-                          <ListItemStandard
-                            onClick={e => {
-                              e.preventDefault();
-                              handleItemClick(
-                                assResource.kind,
-                                assResource.group,
-                                assResource.version,
-                              );
-                            }}
-                            type="Active"
-                            key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
-                            additionalText={
-                              (resourceCount === 0 ? '0' : resourceCount) ||
-                              t('common.headers.loading')
-                            }
-                          >
-                            {pluralize(assResource?.kind)}
-                          </ListItemStandard>
-                        );
-                      })}
-                    </List>
-                  </>
-                )
+                          return (
+                            <ListItemStandard
+                              onClick={e => {
+                                e.preventDefault();
+                                handleItemClick(
+                                  assResource.kind,
+                                  assResource.group,
+                                  assResource.version,
+                                );
+                              }}
+                              type="Active"
+                              key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
+                              additionalText={
+                                (resourceCount === 0 ? '0' : resourceCount) ||
+                                t('common.headers.loading')
+                              }
+                            >
+                              {pluralize(assResource?.kind)}
+                            </ListItemStandard>
+                          );
+                        })}
+                      </List>
+                    </>
+                  )}
+                </>
               }
               resourceTitle={selectedModules[chosenModuleIndex]?.name}
               deleteFn={() => {
