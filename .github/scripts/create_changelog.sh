@@ -23,7 +23,6 @@ echo "## What has changed" >> ${CHANGELOG_FILE}
 
 NEW_FEATURES_SECTION="### New Features\n"
 FIXES_SECTION="### Bug Fixes\n"
-DOCS_SECTION="### Documentation\n"
 OTHERS_SECTION="### Others\n"
 
 while read -r COMMIT;
@@ -35,15 +34,13 @@ do
         NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
         FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
-      elif [[ "${COMMIT_MESSAGE}" == docs* ]]; then
-        DOCS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       else
         OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
       fi
     fi
 done< <(git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse)
 
-echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${DOCS_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
+echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
 
 NEW_CONTRIB=$(mktemp --suffix=.new XXXXX)
 
