@@ -49,7 +49,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findStatus } from './support';
+import { findModuleSpec, findModuleStatus } from './support';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -122,7 +122,7 @@ export default function KymaModulesList({
   };
 
   const ModulesList = resource => {
-    const findModule = (moduleName, channel, version) => {
+    const findModuleTemplate = (moduleName, channel, version) => {
       // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
       const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
         moduleTemplate =>
@@ -184,14 +184,14 @@ export default function KymaModulesList({
         selectedModules?.findIndex(kymaResourceModule => {
           return kymaResourceModule?.name === resource?.name;
         }) >= 0;
-      const moduleStatus = findStatus(kymaResource, resource.name);
+      const moduleStatus = findModuleStatus(kymaResource, resource.name);
       const isDeletionFailed = moduleStatus?.state === 'Warning';
       const isError = moduleStatus?.state === 'Error';
 
       const hasExtension = !!findExtension(resource?.resource?.kind);
       const hasCrd = !!findCrd(resource?.resource?.kind);
 
-      let hasModuleTpl = !!findModule(
+      let hasModuleTpl = !!findModuleTemplate(
         resource.name,
         resource.channel,
         resource.version,
@@ -203,7 +203,7 @@ export default function KymaModulesList({
     };
 
     const rowRenderer = resource => {
-      const moduleStatus = findStatus(kymaResource, resource.name);
+      const moduleStatus = findModuleStatus(kymaResource, resource.name);
       const showDetailsLink = hasDetailsLink(resource);
       const moduleIndex = kymaResource?.spec?.modules?.findIndex(
         kymaResourceModule => {
@@ -211,7 +211,7 @@ export default function KymaModulesList({
         },
       );
 
-      const currentModule = findModule(
+      const currentModuleTemplate = findModuleTemplate(
         resource?.name,
         resource?.channel || kymaResource?.spec?.channel,
         resource?.version,
@@ -232,7 +232,7 @@ export default function KymaModulesList({
           ) : (
             resource.name
           )}
-          {checkBeta(currentModule, currentModuleReleaseMeta) ? (
+          {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
             <Tag
               className="sap-margin-begin-tiny"
               hideStateIcon
@@ -278,9 +278,9 @@ export default function KymaModulesList({
         // Documentation
         <ExternalLink
           url={
-            currentModule?.spec?.info
-              ? currentModule.spec.info.documentation
-              : currentModule?.metadata?.annotations[
+            currentModuleTemplate?.spec?.info
+              ? currentModuleTemplate.spec.info.documentation
+              : currentModuleTemplate?.metadata?.annotations[
                   'operator.kyma-project.io/doc-url'
                 ]
           }
@@ -294,10 +294,10 @@ export default function KymaModulesList({
       return {
         resourceName: resource?.name,
         resourceType: pluralize(
-          findStatus(kymaResource, resource.name)?.resource?.kind || '',
+          findModuleStatus(kymaResource, resource.name)?.resource?.kind || '',
         ),
         namespaceId:
-          findStatus(kymaResource, resource.name)?.resource?.metadata
+          findModuleStatus(kymaResource, resource.name)?.resource?.metadata
             ?.namespace || '',
       };
     };
@@ -330,7 +330,7 @@ export default function KymaModulesList({
 
       // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
       if (!moduleStatus.resource) {
-        const connectedModule = findModule(
+        const connectedModule = findModuleTemplate(
           moduleName,
           moduleStatus.channel,
           moduleStatus.version,
@@ -346,7 +346,7 @@ export default function KymaModulesList({
         };
       }
 
-      const isExtension = !!findExtension(moduleStatus?.resource?.kind);
+      const hasExtension = !!findExtension(moduleStatus?.resource?.kind);
       const moduleCrd = findCrd(moduleStatus?.resource?.kind);
       const skipRedirect = !hasDetailsLink(moduleStatus);
 
@@ -355,7 +355,7 @@ export default function KymaModulesList({
       }
 
       const pathName = `${
-        isExtension
+        hasExtension
           ? `${pluralize(moduleStatus?.resource?.kind || '').toLowerCase()}/${
               moduleStatus?.resource?.metadata?.name
             }`
@@ -372,7 +372,7 @@ export default function KymaModulesList({
 
       setLayoutColumn({
         midColumn: {
-          resourceType: isExtension
+          resourceType: hasExtension
             ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
             : moduleCrd?.metadata?.name,
           resourceName: moduleStatus?.resource?.metadata?.name,
@@ -398,9 +398,9 @@ export default function KymaModulesList({
         selectedModule?.channel || kymaResource?.spec?.channel;
       const moduleVersion =
         selectedModule?.version ||
-        findStatus(kymaResource, selectedModule?.name)?.version;
+        findModuleStatus(kymaResource, selectedModule?.name)?.version;
 
-      const module = findModule(
+      const module = findModuleTemplate(
         selectedModule?.name,
         moduleChannel,
         moduleVersion,
