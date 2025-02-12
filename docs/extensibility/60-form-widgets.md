@@ -40,7 +40,7 @@ These are the available `Text` widget parameters:
 | **decodable**         | No       | boolean             | Specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**.                                                                                                    |
 | **decodedPlacehoder** | No       | string              | An optional alternative placeholder to use when the field is decoded.                                                                                                                                                |
 | **disableOnEdit**     | No       | boolean             | Disables a field in edit mode, defaults to `false`. Ignored if **readOnly** is set to `true`.                                                                                                                        |
-| **dropdownOnly**      | No       | boolean             | Applicable only to inputs with a dropdown. When set to `true`, it restricts user input, allowing selection only from the predefined options. Defaults to `false`.                                                      |
+| **dropdownOnly**      | No       | boolean             | Applicable only to inputs with a dropdown. When set to `true`, it restricts user input, allowing selection only from the predefined options. Defaults to `false`.                                                    |
 
 See the following examples:
 
