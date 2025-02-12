@@ -111,9 +111,17 @@ function createWebComponent(
         const attribute = this.attributes[i];
 
         if (attribute.name.includes('prop_')) {
-          props[kebabToCamelCase(attribute.name.replace('prop_', ''))] = eval(
-            this.attributes[i].value,
-          );
+          try {
+            props[
+              kebabToCamelCase(attribute.name.replace('prop_', ''))
+            ] = JSON.parse(this.attributes[i].value);
+          } catch (e) {
+            console.error(
+              'Failed to parse prop value:',
+              this.attributes[i].value,
+              e,
+            );
+          }
           this.removeAttribute(attribute.value);
         }
 
