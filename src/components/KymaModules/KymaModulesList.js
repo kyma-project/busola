@@ -390,14 +390,20 @@ export default function KymaModulesList({
     };
 
     const getAssociatedResources = () => {
-      // TODO: tutaj leci undefined dla 1 i 3 argumentu
+      if (!chosenModuleIndex) {
+        return [];
+      }
+      const selectedModule = selectedModules[chosenModuleIndex];
+      const moduleChannel =
+        selectedModule?.channel || kymaResource?.spec?.channel;
+      const moduleVersion =
+        selectedModule?.version ||
+        findStatus(kymaResource, selectedModule?.name)?.version;
+
       const module = findModule(
-        selectedModules[chosenModuleIndex]?.name,
-        selectedModules[chosenModuleIndex]?.channel ||
-          kymaResource?.spec?.channel,
-        selectedModules[chosenModuleIndex]?.version ||
-          findStatus(kymaResource, selectedModules[chosenModuleIndex]?.name)
-            ?.version,
+        selectedModule?.name,
+        moduleChannel,
+        moduleVersion,
       );
 
       return module?.spec?.associatedResources || [];
@@ -477,6 +483,9 @@ export default function KymaModulesList({
           createPortal(
             <DeleteMessageBox
               disableDeleteButton={checkIfAssociatedResourceLeft()}
+              cancelFn={() => {
+                setChosenModuleIndex(null);
+              }}
               additionalDeleteInfo={
                 getAssociatedResources().length > 0 && (
                   <>
@@ -531,6 +540,7 @@ export default function KymaModulesList({
                 });
                 handleModuleUninstall();
                 setInitialUnchangedResource(cloneDeep(kymaResourceState));
+                setChosenModuleIndex(null);
               }}
             />,
             document.body,

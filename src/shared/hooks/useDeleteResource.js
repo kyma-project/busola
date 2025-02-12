@@ -8,9 +8,8 @@ import {
 } from '@ui5/webcomponents-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
@@ -57,6 +56,12 @@ export function useDeleteResource({
     currentQuery,
   } = usePrepareLayout(layoutNumber);
 
+  const performCancel = cancelFn => {
+    if (cancelFn) {
+      cancelFn();
+    }
+    setShowDeleteDialog(false);
+  };
   const performDelete = async (resource, resourceUrl, deleteFn) => {
     const withoutQueryString = path => path?.split('?')?.[0];
     const url = withoutQueryString(resourceUrl);
@@ -173,6 +178,7 @@ export function useDeleteResource({
     resourceIsCluster = false,
     resourceUrl,
     deleteFn,
+    cancelFn,
     additionalDeleteInfo,
     disableDeleteButton = false,
   }) => {
@@ -207,7 +213,7 @@ export function useDeleteResource({
             key="delete-cancel"
             data-testid="delete-cancel"
             design="Transparent"
-            onClick={() => setShowDeleteDialog(false)}
+            onClick={() => performCancel(cancelFn)}
           >
             {t('common.buttons.cancel')}
           </Button>,
