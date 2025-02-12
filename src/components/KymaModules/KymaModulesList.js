@@ -395,22 +395,6 @@ export default function KymaModulesList({
       return module?.spec?.associatedResources || [];
     };
 
-    const getNumberOfResources = async (kind, group, version) => {
-      const url =
-        group === 'v1'
-          ? '/api/v1'
-          : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
-
-      try {
-        const response = await fetch(url);
-        const json = await response.json();
-        return json.items.length;
-      } catch (e) {
-        console.warn(e);
-        return 'Error';
-      }
-    };
-
     const handleItemClick = async (kind, group, version) => {
       const isNamespaced = await getScope(group, version, kind);
       const path = `${pluralize(kind.toLowerCase())}`;
@@ -421,18 +405,80 @@ export default function KymaModulesList({
       navigate(link);
     };
 
+    const getResources = async (kind, group, version) => {
+      const url =
+        group === 'v1'
+          ? '/api/v1'
+          : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
+
+      try {
+        const response = await fetch(url);
+        const json = await response.json();
+        return json.items;
+      } catch (e) {
+        console.warn(e);
+        return 'Error';
+      }
+    };
+
+    const getUrlsByNamespace = resources => {
+      return resources.reduce((urls, resource) => {
+        const url = `/apis/${resource.apiVersion}/namespaces/${
+          resource.metadata.namespace
+        }/${pluralize(resource.kind.toLowerCase())}`;
+
+        if (!urls.includes(url)) {
+          urls.push(url);
+        }
+        return urls;
+      }, []);
+    };
+
+    const generateAssociatedResourcesUrls = async () => {
+      const resources = getAssociatedResources();
+      const allUrls = [];
+      for (const resource of resources) {
+        const isNamespaced = await getScope(
+          resource.group,
+          resource.version,
+          resource.kind,
+        );
+        let resources,
+          urls = [];
+        if (isNamespaced) {
+          resources = await getResources(
+            resource.kind,
+            resource.group,
+            resource.version,
+          );
+          urls = getUrlsByNamespace(resources);
+        } else {
+          urls = [
+            resource.group === 'v1'
+              ? '/api/v1'
+              : `/apis/${resource.group}/${resource.version}/${pluralize(
+                  resource.kind.toLowerCase(),
+                )}`,
+          ];
+        }
+
+        allUrls.push(...urls);
+      }
+
+      return allUrls;
+    };
+
     const fetchResourceCounts = async () => {
       const resources = getAssociatedResources();
       const counts = {};
       for (const resource of resources) {
-        const count = await getNumberOfResources(
+        const resources = await getResources(
           resource.kind,
           resource.group,
           resource.version,
         );
-        counts[
-          `${resource.kind}-${resource.group}-${resource.version}`
-        ] = count;
+        counts[`${resource.kind}-${resource.group}-${resource.version}`] =
+          resources.length;
       }
       return counts;
     };
@@ -443,6 +489,7 @@ export default function KymaModulesList({
     useEffect(() => {
       const fetchCounts = async () => {
         const counts = await fetchResourceCounts();
+        const forceDeleteUrls = generateAssociatedResourcesUrls();
         setResourceCounts(counts);
       };
 
@@ -472,6 +519,7 @@ export default function KymaModulesList({
               disableDeleteButton={
                 checkIfAssociatedResourceLeft() ? !allowForceDelete : true
               }
+              allowForceDelete={allowForceDelete}
               additionalDeleteInfo={
                 getAssociatedResources().length > 0 && (
                   <>
