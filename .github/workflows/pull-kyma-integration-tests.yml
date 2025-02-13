@@ -1,20 +1,21 @@
 name: PR Kyma Dashboard Integration Tests Dev
 
 on:
-#  pull_request:
-#    types: [ opened, edited, synchronize, reopened, ready_for_review ]
-#    paths:
-#      - '.github/workflows/pull-kyma-intergation-tests.yml'
-#      - 'resources/**'
-#      - 'tests/integration/**'
-#      - 'nginx/**'
-#      - 'src/**'
-#      - 'backend/**'
-#      - 'kyma/**'
-#      - 'Dockerfile*'
+  #  pull_request:
+  #    types: [ opened, edited, synchronize, reopened, ready_for_review ]
+  #    paths:
+  #      - '.github/workflows/pull-kyma-intergation-tests.yml'
+  #      - 'resources/**'
+  #      - 'tests/integration/**'
+  #      - 'nginx/**'
+  #      - 'src/**'
+  #      - 'backend/**'
+  #      - 'kyma/**'
+  #      - 'Dockerfile*'
   workflow_run:
     workflows: [ Busola Build ]
-    types: [ "completed" ]
+    types:
+      - completed
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
