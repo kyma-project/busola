@@ -79,7 +79,7 @@ export function useModulesStatuses(modules: any[]) {
       try {
         const results = await Promise.all(
           modules.map(async module => {
-            const resource = module?.resource;
+            const resource = module?.resource ?? module;
 
             if (!resource) return null;
             const path = getResourcePath(resource);
@@ -87,9 +87,16 @@ export function useModulesStatuses(modules: any[]) {
             try {
               const response = await fetch({ relativeUrl: path });
               const status = (await response.json())?.status;
-              return { key: resource?.metadata?.name, status: status.state };
+              return {
+                key: resource?.metadata?.name ?? resource?.name,
+                status: status?.state || 'Unknown',
+              };
             } catch (e) {
-              return { key: resource?.metadata?.name, status: null, error: e };
+              return {
+                key: resource?.metadata?.name ?? resource?.name,
+                status: null,
+                error: e,
+              };
             }
           }),
         );

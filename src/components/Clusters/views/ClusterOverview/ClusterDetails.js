@@ -48,9 +48,9 @@ export default function ClusterDetails({ currentCluster }) {
     if (statuses && !loadingStatuses && !statusesError) {
       return statuses.reduce(
         (acc, m) => {
-          if (m.status === 'Ready') acc.ready++;
-          else if (m.status === 'Error') acc.error++;
-          else if (m.status === 'Warning') acc.warning++;
+          if (m?.status === 'Ready') acc.ready++;
+          else if (m?.status === 'Error') acc.error++;
+          else if (m?.status === 'Warning') acc.warning++;
           return acc;
         },
         { ready: 0, error: 0, warning: 0 },
@@ -104,11 +104,11 @@ export default function ClusterDetails({ currentCluster }) {
           subTitle={t('kyma-modules.installed-modules')}
           extraInfo={[
             {
-              title: t('cluster-overview.statistics.modules-ready'),
+              title: t('common.statuses.ready'),
               value: moduleCounts.ready,
             },
             {
-              title: t('cluster-overview.statistics.modules-error'),
+              title: t('common.statuses.error'),
               value: moduleCounts.error,
             },
             {

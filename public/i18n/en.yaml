@@ -42,8 +42,6 @@ cluster-overview:
     persistent-volumes-total-capacity: 'Total Capacity'
     nodes: 'Nodes'
     modules-overview: 'Modules Overview'
-    modules-ready: 'Ready'
-    modules-error: 'Error'
     modules-warning: 'Warning'
   tooltips:
       cpu-used-percentage: 'CPU used: {{percentage}}'
