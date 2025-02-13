@@ -61,7 +61,7 @@ export function useModuleStatus(resource: KymaResourceType) {
   return { data, loading, error };
 }
 
-export const findStatus = (
+export const findModuleStatus = (
   kymaResource: KymaResourceType,
   moduleName: string,
 ) => {
@@ -70,7 +70,7 @@ export const findStatus = (
   );
 };
 
-export const findSpec = (
+export const findModuleSpec = (
   kymaResource: KymaResourceType,
   moduleName: string,
 ) => {

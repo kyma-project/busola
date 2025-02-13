@@ -766,6 +766,7 @@ kyma-companion:
     chat: Chat
     page-insights: Page Insights
 kyma-modules:
+  delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
   associated-resources: Associated Resources
   unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
   unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
