@@ -50,6 +50,7 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleStatus } from './support';
+import { UnmanagedModuleInfo } from './components/UnmanagedModuleInfo';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -552,6 +553,9 @@ export default function KymaModulesList({
             />,
             document.body,
           )}
+        <div className="sap-margin-small">
+          <UnmanagedModuleInfo kymaResource={kymaResource} />
+        </div>
         <GenericList
           actions={actions}
           customRowClick={handleClickResource}
