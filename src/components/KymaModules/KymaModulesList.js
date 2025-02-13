@@ -532,7 +532,9 @@ export default function KymaModulesList({
               disableDeleteButton={
                 checkIfAssociatedResourceLeft() ? !allowForceDelete : false
               }
-              allowForceDelete={allowForceDelete}
+              allowForceDelete={
+                checkIfAssociatedResourceLeft() ? allowForceDelete : false
+              }
               additionalDeleteInfo={
                 getAssociatedResources().length > 0 && (
                   <>
@@ -574,6 +576,7 @@ export default function KymaModulesList({
                     </List>
                     <CheckBox
                       checked={allowForceDelete}
+                      readonly={!checkIfAssociatedResourceLeft()}
                       onChange={() => setAllowForceDelete(!allowForceDelete)}
                       accessibleName={t('kyma-modules.force-edit-info')}
                       text={t('kyma-modules.force-edit-info')}

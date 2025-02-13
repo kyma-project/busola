@@ -172,6 +172,7 @@ export function useDeleteResource({
     deleteFn,
     additionalDeleteInfo,
     disableDeleteButton = false,
+    allowForceDelete = false,
   }) => {
     const closeDeleteDialog = () => {
       setShowDeleteDialog(false);
@@ -204,6 +205,8 @@ export function useDeleteResource({
             {t(
               resourceIsCluster
                 ? 'common.buttons.disconnect'
+                : allowForceDelete
+                ? 'common.buttons.force-delete'
                 : 'common.buttons.delete',
             )}
           </Button>,
