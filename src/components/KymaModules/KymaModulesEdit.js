@@ -35,7 +35,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findSpec, findStatus, setChannel } from './support';
+import { findModuleSpec, findModuleStatus, setChannel } from './support';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
@@ -233,8 +233,8 @@ export default function KymaModulesEdit({ resource, ...props }) {
               onChange(module, event.detail.selectedOption.value, index);
             }}
             value={
-              findSpec(kymaResource, module.name)?.channel ||
-              findStatus(kymaResource, module.name)?.channel ||
+              findModuleSpec(kymaResource, module.name)?.channel ||
+              findModuleStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
             className="channel-select"
@@ -244,7 +244,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
                 !module.channels?.filter(
                   channel =>
                     channel.channel ===
-                    findSpec(kymaResource, module.name)?.channel,
+                    findModuleSpec(kymaResource, module.name)?.channel,
                 )
               }
               value={'predefined'}
@@ -264,7 +264,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
               <Option
                 selected={
                   channel.channel ===
-                  findSpec(kymaResource, module.name)?.channel
+                  findModuleSpec(kymaResource, module.name)?.channel
                 }
                 key={`${channel.channel}-${module.name}${
                   channel.isMetaRelease ? '-meta' : ''
@@ -283,7 +283,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
           <CheckBox
             accessibleName={`${module.name} managed checkbox`}
             text={t('kyma-modules.managed')}
-            checked={findSpec(kymaResource, module.name)?.managed}
+            checked={findModuleSpec(kymaResource, module.name)?.managed}
             onChange={event => {
               console.log(event);
               setManaged(event.target.checked, index);

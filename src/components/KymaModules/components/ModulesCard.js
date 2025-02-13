@@ -13,8 +13,8 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import {
-  findSpec,
-  findStatus,
+  findModuleSpec,
+  findModuleStatus,
   setChannel,
 } from 'components/KymaModules/support';
 
@@ -72,8 +72,8 @@ export default function ModulesCard({
             {module.name}
           </Title>
           <Text className="bsl-has-color-status-4">
-            {findStatus(kymaResource, module.name)?.version
-              ? `v${findStatus(kymaResource, module.name)?.version} ${
+            {findModuleStatus(kymaResource, module.name)?.version
+              ? `v${findModuleStatus(kymaResource, module.name)?.version} ${
                   checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''
                 }`
               : module.channels.find(
@@ -125,8 +125,8 @@ export default function ModulesCard({
               );
             }}
             value={
-              findSpec(kymaResource, module.name)?.channel ||
-              findStatus(kymaResource, module.name)?.channel ||
+              findModuleSpec(kymaResource, module.name)?.channel ||
+              findModuleStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
             className="channel-select"
@@ -136,7 +136,7 @@ export default function ModulesCard({
                 !module.channels?.filter(
                   channel =>
                     channel.channel ===
-                    findSpec(kymaResource, module.name)?.channel,
+                    findModuleSpec(kymaResource, module.name)?.channel,
                 )
               }
               value={'predefined'}
@@ -155,7 +155,7 @@ export default function ModulesCard({
               <Option
                 selected={
                   channel.channel ===
-                  findSpec(kymaResource, module.name)?.channel
+                  findModuleSpec(kymaResource, module.name)?.channel
                 }
                 key={`${channel.channel}${
                   channel.isMetaRelease ? '-meta' : ''

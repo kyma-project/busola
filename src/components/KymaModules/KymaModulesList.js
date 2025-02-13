@@ -4,18 +4,18 @@ import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
-  Tag,
   Button,
   DynamicPageHeader,
   FlexBox,
   List,
-  MessageStrip,
   ListItemStandard,
+  MessageStrip,
+  Tag,
   Text,
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import {
@@ -49,7 +49,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findStatus } from './support';
+import { findModuleStatus } from './support';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -90,6 +90,8 @@ export default function KymaModulesList({
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
   });
+
+  // Fetching all Module Templates can be replcaed with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
   const {
     data: moduleTemplates,
     loading: moduleTemplateLoading,
@@ -120,7 +122,7 @@ export default function KymaModulesList({
   };
 
   const ModulesList = resource => {
-    const findModule = (moduleName, channel, version) => {
+    const findModuleTemplate = (moduleName, channel, version) => {
       // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
       const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
         moduleTemplate =>
@@ -182,21 +184,26 @@ export default function KymaModulesList({
         selectedModules?.findIndex(kymaResourceModule => {
           return kymaResourceModule?.name === resource?.name;
         }) >= 0;
-      const moduleStatus = findStatus(kymaResource, resource.name);
+      const moduleStatus = findModuleStatus(kymaResource, resource.name);
       const isDeletionFailed = moduleStatus?.state === 'Warning';
       const isError = moduleStatus?.state === 'Error';
 
       const hasExtension = !!findExtension(resource?.resource?.kind);
       const hasCrd = !!findCrd(resource?.resource?.kind);
 
+      let hasModuleTpl = !!findModuleTemplate(
+        resource.name,
+        resource.channel,
+        resource.version,
+      );
       return (
         (isInstalled || isDeletionFailed || !isError) &&
-        (hasCrd || hasExtension)
+        (hasCrd || hasExtension || hasModuleTpl)
       );
     };
 
     const rowRenderer = resource => {
-      const moduleStatus = findStatus(kymaResource, resource.name);
+      const moduleStatus = findModuleStatus(kymaResource, resource.name);
       const showDetailsLink = hasDetailsLink(resource);
       const moduleIndex = kymaResource?.spec?.modules?.findIndex(
         kymaResourceModule => {
@@ -204,8 +211,8 @@ export default function KymaModulesList({
         },
       );
 
-      const currentModule = findModule(
-        resource.name,
+      const currentModuleTemplate = findModuleTemplate(
+        resource?.name,
         resource?.channel || kymaResource?.spec?.channel,
         resource?.version,
       );
@@ -225,7 +232,7 @@ export default function KymaModulesList({
           ) : (
             resource.name
           )}
-          {checkBeta(currentModule, currentModuleReleaseMeta) ? (
+          {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
             <Tag
               className="sap-margin-begin-tiny"
               hideStateIcon
@@ -271,9 +278,9 @@ export default function KymaModulesList({
         // Documentation
         <ExternalLink
           url={
-            currentModule?.spec?.info
-              ? currentModule.spec.info.documentation
-              : currentModule?.metadata?.annotations[
+            currentModuleTemplate?.spec?.info
+              ? currentModuleTemplate.spec.info.documentation
+              : currentModuleTemplate?.metadata?.annotations[
                   'operator.kyma-project.io/doc-url'
                 ]
           }
@@ -287,10 +294,10 @@ export default function KymaModulesList({
       return {
         resourceName: resource?.name,
         resourceType: pluralize(
-          findStatus(kymaResource, resource.name)?.resource?.kind || '',
+          findModuleStatus(kymaResource, resource.name)?.resource?.kind || '',
         ),
         namespaceId:
-          findStatus(kymaResource, resource.name)?.resource?.metadata
+          findModuleStatus(kymaResource, resource.name)?.resource?.metadata
             ?.namespace || '',
       };
     };
@@ -316,21 +323,39 @@ export default function KymaModulesList({
       },
     ];
 
-    const handleClickResource = (resourceName, resource) => {
+    const handleClickResource = (moduleName, moduleStatus) => {
       setOpenedModuleIndex(
-        selectedModules.findIndex(entry => entry.name === resourceName),
+        selectedModules.findIndex(entry => entry.name === moduleName),
       );
-      const isExtension = !!findExtension(resource?.resource?.kind);
-      const moduleStatus = findStatus(kymaResource, resourceName);
-      const moduleCrd = findCrd(resource?.resource?.kind);
-      const skipRedirect = !hasDetailsLink(resource);
+
+      // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
+      if (!moduleStatus.resource) {
+        const connectedModule = findModuleTemplate(
+          moduleName,
+          moduleStatus.channel,
+          moduleStatus.version,
+        );
+        const moduleCr = connectedModule.spec.data;
+        moduleStatus.resource = {
+          kind: moduleCr.kind,
+          apiVersion: moduleCr.apiVersion,
+          metadata: {
+            name: moduleCr.metadata.name,
+            namespace: moduleCr.metadata.namespace,
+          },
+        };
+      }
+
+      const hasExtension = !!findExtension(moduleStatus?.resource?.kind);
+      const moduleCrd = findCrd(moduleStatus?.resource?.kind);
+      const skipRedirect = !hasDetailsLink(moduleStatus);
 
       if (skipRedirect) {
         return;
       }
 
       const pathName = `${
-        isExtension
+        hasExtension
           ? `${pluralize(moduleStatus?.resource?.kind || '').toLowerCase()}/${
               moduleStatus?.resource?.metadata?.name
             }`
@@ -345,34 +370,17 @@ export default function KymaModulesList({
         ? namespaceUrl(partialPath)
         : clusterUrl(partialPath);
 
-      if (!isExtension) {
-        setLayoutColumn({
-          midColumn: {
-            resourceType: moduleCrd?.metadata?.name,
-            resourceName: moduleStatus?.resource?.metadata?.name,
-            namespaceId: moduleStatus?.resource?.metadata.namespace || '',
-          },
-          layout: 'TwoColumnsMidExpanded',
-          endColumn: null,
-        });
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${path}?layout=TwoColumnsMidExpanded`,
-        );
-      } else {
-        setLayoutColumn({
-          midColumn: {
-            resourceType: pluralize(
-              moduleStatus?.resource?.kind || '',
-            ).toLowerCase(),
-            resourceName: moduleStatus?.resource?.metadata?.name,
-            namespaceId: moduleStatus?.resource?.metadata.namespace || '',
-          },
-          layout: 'TwoColumnsMidExpanded',
-          endColumn: null,
-        });
-      }
+      setLayoutColumn({
+        midColumn: {
+          resourceType: hasExtension
+            ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
+            : moduleCrd?.metadata?.name,
+          resourceName: moduleStatus?.resource?.metadata?.name,
+          namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+        },
+        layout: 'TwoColumnsMidExpanded',
+        endColumn: null,
+      });
 
       window.history.pushState(
         window.history.state,
@@ -382,13 +390,20 @@ export default function KymaModulesList({
     };
 
     const getAssociatedResources = () => {
-      const module = findModule(
-        selectedModules[chosenModuleIndex]?.name,
-        selectedModules[chosenModuleIndex]?.channel ||
-          kymaResource?.spec?.channel,
-        selectedModules[chosenModuleIndex]?.version ||
-          findStatus(kymaResource, selectedModules[chosenModuleIndex]?.name)
-            ?.version,
+      if (!chosenModuleIndex) {
+        return [];
+      }
+      const selectedModule = selectedModules[chosenModuleIndex];
+      const moduleChannel =
+        selectedModule?.channel || kymaResource?.spec?.channel;
+      const moduleVersion =
+        selectedModule?.version ||
+        findModuleStatus(kymaResource, selectedModule?.name)?.version;
+
+      const module = findModuleTemplate(
+        selectedModule?.name,
+        moduleChannel,
+        moduleVersion,
       );
 
       return module?.spec?.associatedResources || [];
@@ -468,6 +483,9 @@ export default function KymaModulesList({
           createPortal(
             <DeleteMessageBox
               disableDeleteButton={checkIfAssociatedResourceLeft()}
+              cancelFn={() => {
+                setChosenModuleIndex(null);
+              }}
               additionalDeleteInfo={
                 getAssociatedResources().length > 0 && (
                   <>
@@ -522,6 +540,7 @@ export default function KymaModulesList({
                 });
                 handleModuleUninstall();
                 setInitialUnchangedResource(cloneDeep(kymaResourceState));
+                setChosenModuleIndex(null);
               }}
             />,
             document.body,
