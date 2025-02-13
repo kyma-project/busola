@@ -10,6 +10,8 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router-dom';
+import { useModulesStatuses } from 'components/KymaModules/support';
+import { useMemo } from 'react';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -36,6 +38,26 @@ export default function ClusterDetails({ currentCluster }) {
   const { modules, error, loading: loadingModules } = useKymaModulesQuery();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
+  const {
+    data: statuses,
+    loading: loadingStatuses,
+    error: statusesError,
+  } = useModulesStatuses(modules);
+
+  const moduleCounts = useMemo(() => {
+    if (statuses && !loadingStatuses && !statusesError) {
+      return statuses.reduce(
+        (acc, m) => {
+          if (m.status === 'Ready') acc.ready++;
+          else if (m.status === 'Error') acc.error++;
+          else if (m.status === 'Warning') acc.warning++;
+          return acc;
+        },
+        { ready: 0, error: 0, warning: 0 },
+      );
+    }
+    return { ready: 0, error: 0, warning: 0 };
+  }, [statuses, statusesError]);
 
   return (
     <div className="resource-details-container">
@@ -73,21 +95,34 @@ export default function ClusterDetails({ currentCluster }) {
         }
       />
       {!error && !loadingModules && modules && (
-        <div className="item-wrapper sap-margin-x-small">
-          <CountingCard
-            className="item"
-            value={modules?.length}
-            title={t('kyma-modules.installed-modules')}
-            additionalContent={
-              <Button
-                design="Emphasized"
-                onClick={() => navigate(clusterUrl('kymamodules'))}
-              >
-                {t('kyma-modules.modify-modules')}
-              </Button>
-            }
-          />
-        </div>
+        <CountingCard
+          className="item"
+          value={modules?.length}
+          title={t('cluster-overview.statistics.modules-overview')}
+          subTitle={t('kyma-modules.installed-modules')}
+          extraInfo={[
+            {
+              title: t('cluster-overview.statistics.modules-ready'),
+              value: moduleCounts.ready,
+            },
+            {
+              title: t('cluster-overview.statistics.modules-error'),
+              value: moduleCounts.error,
+            },
+            {
+              title: t('cluster-overview.statistics.modules-warning'),
+              value: moduleCounts.warning,
+            },
+          ]}
+          additionalContent={
+            <Button
+              design="Emphasized"
+              onClick={() => navigate(clusterUrl('kymamodules'))}
+            >
+              {t('kyma-modules.modify-modules')}
+            </Button>
+          }
+        />
       )}
     </div>
   );
