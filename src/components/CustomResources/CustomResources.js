@@ -29,6 +29,7 @@ export function CustomResources({
   const getJsonPath = (resource, jsonPath) => {
     // try catch to parse annotations to take value from resource using jsonpath
     console.log('Trigger job');
+
     let value;
     try {
       value =
