@@ -57,6 +57,8 @@ export default function ClusterDetails({ currentCluster }) {
       );
     }
     return { ready: 0, error: 0, warning: 0 };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statuses, statusesError]);
 
   return (
