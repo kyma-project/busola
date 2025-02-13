@@ -30,8 +30,11 @@ on:
       - "src/**"
       - "package.json"
       - "Makefile"
-      - "Dockerfile"
-      - "nginx/nginx.conf"
+      - "Dockerfile*"
+      - "nginx/**"
+      - '.github/workflows/pull-kyma-intergation-tests.yml'
+      - 'resources/**'
+      - 'tests/integration/**'
 
 permissions:
   id-token: write # This is required for requesting the JWT token
