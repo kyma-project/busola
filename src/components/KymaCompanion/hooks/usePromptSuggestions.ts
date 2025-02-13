@@ -36,22 +36,21 @@ export function usePromptSuggestions() {
     const groupVersion = apiGroup ? `${apiGroup}/${apiVersion}` : apiVersion;
 
     async function fetchSuggestions() {
-      const sessionID = ''; // TODO
-      setSessionID(sessionID);
-      const promptSuggestions = await getPromptSuggestions({
+      const result = await getPromptSuggestions({
         namespace: namespace,
         resourceType: resourceType,
         groupVersion: groupVersion,
         resourceName: resourceName,
         clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '',
-        token: userAuth && 'token' in userAuth ? userAuth.token : '', // TODO
+        clusterToken: userAuth && 'token' in userAuth ? userAuth.token : '', // TODO
         certificateAuthorityData:
           cluster?.currentContext.cluster.cluster[
             'certificate-authority-data'
           ] ?? '',
       });
-      if (promptSuggestions) {
-        setSuggestions(promptSuggestions);
+      if (result) {
+        setSuggestions(result.promptSuggestions);
+        setSessionID(result.conversationId);
       }
     }
 
