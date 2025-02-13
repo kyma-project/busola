@@ -51,6 +51,7 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findStatus } from './support';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -79,6 +80,7 @@ export default function KymaModulesList({
   const fetch = useSingleGet();
   const getScope = useGetScope();
   const navigate = useNavigate();
+  const deleteResourceMutation = useDelete();
 
   const { data: kymaExt } = useGetList(
     ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
@@ -484,13 +486,15 @@ export default function KymaModulesList({
     };
 
     const [resourceCounts, setResourceCounts] = useState({});
+    const [forceDeleteUrls, setForceDeleteUrls] = useState([]);
     const [allowForceDelete, setAllowForceDelete] = useState(false);
 
     useEffect(() => {
       const fetchCounts = async () => {
         const counts = await fetchResourceCounts();
-        const forceDeleteUrls = generateAssociatedResourcesUrls();
+        const urls = await generateAssociatedResourcesUrls();
         setResourceCounts(counts);
+        setForceDeleteUrls(urls);
       };
 
       fetchCounts();
@@ -510,6 +514,15 @@ export default function KymaModulesList({
       }
       return false;
     };
+    const deleteAssociatedResources = async () => {
+      let result = await Promise.all(
+        forceDeleteUrls.map(async url => {
+          return await deleteResourceMutation(url);
+        }),
+      );
+
+      console.log('lololololo result', result);
+    };
 
     return (
       <React.Fragment key="modules-list">
@@ -517,7 +530,7 @@ export default function KymaModulesList({
           createPortal(
             <DeleteMessageBox
               disableDeleteButton={
-                checkIfAssociatedResourceLeft() ? !allowForceDelete : true
+                checkIfAssociatedResourceLeft() ? !allowForceDelete : false
               }
               allowForceDelete={allowForceDelete}
               additionalDeleteInfo={
@@ -570,6 +583,9 @@ export default function KymaModulesList({
               }
               resourceTitle={selectedModules[chosenModuleIndex]?.name}
               deleteFn={() => {
+                if (allowForceDelete && forceDeleteUrls.length > 0) {
+                  deleteAssociatedResources();
+                }
                 selectedModules.splice(chosenModuleIndex, 1);
                 setKymaResourceState({
                   ...kymaResource,
