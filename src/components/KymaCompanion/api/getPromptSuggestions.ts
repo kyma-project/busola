@@ -1,6 +1,3 @@
-import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { extractApiGroup } from 'resources/Roles/helpers';
-
 interface GetPromptSuggestionsParams {
   namespace?: string;
   resourceType?: string;
@@ -21,18 +18,18 @@ export default async function getPromptSuggestions({
   certificateAuthorityData,
 }: GetPromptSuggestionsParams): Promise<string[] | false> {
   try {
-    const { backendAddress } = getClusterConfig();
-    const url = `${backendAddress}/api/v1/namespaces/ai-core/services/http:ai-backend-clusterip:5000/proxy/api/v1/llm/init`;
-    const apiGroup = extractApiGroup(groupVersion);
+    const url = 'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
     const payload = JSON.parse(
-      `{"resource_kind":"${resourceType.toLowerCase()}","resource_api_version": "${apiGroup}","resource_name":"${resourceName}","namespace":"${namespace}"}`,
+      `{"resource_kind":"${resourceType.toLowerCase()}","resource_api_version": "${groupVersion}","resource_name":"${resourceName}","namespace":"${namespace}"}`,
     );
     const k8sAuthorization = `Bearer ${token}`;
 
+    const AUTH_TOKEN = '<AUTH_TOKEN>';
     let { results } = await fetch(url, {
       headers: {
         accept: 'application/json',
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${AUTH_TOKEN}`,
         'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
         'X-Cluster-Url': clusterUrl,
         'X-K8s-Authorization': k8sAuthorization,

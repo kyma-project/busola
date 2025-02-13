@@ -41,6 +41,8 @@ const ColumnWrapper = ({
           resourceName: resourceName,
           resourceType: urlPath ?? resourceType,
           namespaceId: namespaceId,
+          apiGroup: extension?.general.resource.group,
+          apiVersion: extension?.general.resource.version,
         },
         endColumn: null,
       }

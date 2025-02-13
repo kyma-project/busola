@@ -64,6 +64,8 @@ const ColumnWrapper = ({
           resourceName: resourceName,
           resourceType: props.resourceType,
           namespaceId: namespaceId,
+          apiGroup: props.apiGroup,
+          apiVersion: props.apiVersion,
         },
         endColumn: null,
       }

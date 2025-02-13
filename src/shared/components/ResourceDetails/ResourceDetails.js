@@ -1,4 +1,4 @@
-import React, { createContext, Suspense, useEffect, useState } from 'react';
+import React, { createContext, Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -27,10 +27,9 @@ import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
-import { currentResourceState } from 'state/companion/currentResourceAtom';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -171,25 +170,6 @@ function Resource({
   className,
   headerDescription,
 }) {
-  const SetCurrentResource = useSetRecoilState(currentResourceState);
-  useEffect(() => {
-    SetCurrentResource({
-      namespace: resource?.metadata?.namespace ?? '',
-      resourceType: resource?.kind ?? '',
-      groupVersion: resource?.apiVersion ?? '',
-      resourceName: resource?.metadata?.name ?? '',
-    });
-
-    return () => {
-      SetCurrentResource({
-        namespace: '',
-        resourceType: '',
-        groupVersion: '',
-        resourceName: '',
-      });
-    };
-  }, [SetCurrentResource, resource]);
-
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
   const prettifiedResourceKind = prettifyNameSingular(

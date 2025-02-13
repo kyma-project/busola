@@ -50,6 +50,7 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findStatus } from './support';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -345,12 +346,17 @@ export default function KymaModulesList({
         ? namespaceUrl(partialPath)
         : clusterUrl(partialPath);
 
+      const { group, version } = extractApiGroupVersion(
+        moduleStatus?.resource?.apiVersion,
+      );
       if (!isExtension) {
         setLayoutColumn({
           midColumn: {
             resourceType: moduleCrd?.metadata?.name,
             resourceName: moduleStatus?.resource?.metadata?.name,
             namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+            apiGroup: group,
+            apiVersion: version,
           },
           layout: 'TwoColumnsMidExpanded',
           endColumn: null,
@@ -368,6 +374,8 @@ export default function KymaModulesList({
             ).toLowerCase(),
             resourceName: moduleStatus?.resource?.metadata?.name,
             namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+            apiGroup: group,
+            apiVersion: version,
           },
           layout: 'TwoColumnsMidExpanded',
           endColumn: null,

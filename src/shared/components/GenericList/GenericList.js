@@ -32,6 +32,7 @@ import pluralize from 'pluralize';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import './GenericList.scss';
 
 const defaultSort = {
@@ -71,7 +72,6 @@ export const GenericList = ({
   hasDetailsView,
   disableHiding = true,
   displayArrow = false,
-  handleRedirect = null,
   nameColIndex = 0,
   namespaceColIndex = -1,
   noHideFields,
@@ -343,20 +343,6 @@ export const GenericList = ({
       setEntrySelectedNamespace(itemNamespace);
       return customRowClick(item, selectedEntry);
     } else {
-      if (handleRedirect) {
-        const redirectLayout = handleRedirect(selectedEntry, resourceType);
-        if (redirectLayout) {
-          setLayoutColumn({
-            ...redirectLayout,
-          });
-          navigate(
-            redirectLayout.layout === 'OneColumn'
-              ? linkTo(selectedEntry)
-              : `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
-          );
-          return;
-        }
-      }
       setEntrySelected(
         selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
       );
@@ -370,6 +356,9 @@ export const GenericList = ({
 
         navigate(linkTo(selectedEntry));
       } else {
+        const { group, version } = extractApiGroupVersion(
+          selectedEntry?.apiVersion,
+        );
         setLayoutColumn(
           columnLayout
             ? {
@@ -384,6 +373,8 @@ export const GenericList = ({
                     e.target.children[0].innerText,
                   resourceType: resourceType,
                   namespaceId: selectedEntry?.metadata?.namespace,
+                  apiGroup: group,
+                  apiVersion: version,
                 },
                 endColumn: null,
                 layout: 'TwoColumnsMidExpanded',

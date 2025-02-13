@@ -14,6 +14,7 @@ import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
 
 export function useCreateResource({
   singularName,
@@ -65,6 +66,7 @@ export function useCreateResource({
           showCreate: null,
         });
       } else {
+        const { group, version } = extractApiGroupVersion(resource?.apiVersion);
         setLayoutColumn(
           nextLayout === 'TwoColumnsMidExpanded'
             ? {
@@ -74,6 +76,8 @@ export function useCreateResource({
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
                   namespaceId: resource.metadata.namespace,
+                  apiGroup: group,
+                  apiVersion: version,
                 },
                 endColumn: null,
               }
