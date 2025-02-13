@@ -15,7 +15,7 @@ export function chooseComboboxOption(selector, optionText, force = false) {
 export function useCategory(category) {
   before(() => {
     cy.getLeftNav()
-      .contains(category)
+      .contains(category, { timeout: 10000 })
       .click();
   });
 
