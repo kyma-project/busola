@@ -184,6 +184,7 @@ export function useDeleteResource({
   }) => {
     return (
       <MessageBox
+        style={{ maxWidth: '700px' }}
         type="Warning"
         titleText={t(
           resourceIsCluster
