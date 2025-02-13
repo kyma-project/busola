@@ -39,7 +39,7 @@ jobs:
       - name: Run busola
         shell: bash
         run: |
-          .github/scripts/setup_local_busola.sh
+          .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Run lighthouse tests
         shell: bash
         run: |
