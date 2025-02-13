@@ -11,7 +11,7 @@ import {
 } from './kymaModulesQueries';
 
 import './KymaModulesAddModule.scss';
-import { findStatus } from './support';
+import { findModuleStatus } from './support';
 
 export default function KymaModulesAddModule({
   resourceName,
@@ -210,7 +210,7 @@ export default function KymaModulesAddModule({
       ?.find(mod => mod.name === moduleName)
       ?.channels.some(
         ({ channel: ch, isBeta }) =>
-          ch === findStatus(kymaResource, moduleName)?.channel ||
+          ch === findModuleStatus(kymaResource, moduleName)?.channel ||
           (kymaResource.spec.channel && isBeta),
       );
   };
