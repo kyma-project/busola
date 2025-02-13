@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/develop/orders-service:68a58069';
+const DOCKER_IMAGE =
+  'europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest';
 const DEPLOYMENT_NAME = 'orders-service';
 
 context('Test Deployments', () => {
