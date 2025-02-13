@@ -228,7 +228,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
         >
           <Label>{`${module.name}:`}</Label>
           <Select
-            accessibleName={`channel-select-${module.name}`}
+            accessibleName={`${module.name} channel select`}
             onChange={event => {
               onChange(module, event.detail.selectedOption.value, index);
             }}
@@ -281,7 +281,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
             ))}
           </Select>
           <CheckBox
-            accessibleName="managed-checkbox"
+            accessibleName={`${module.name} managed checkbox`}
             text={t('kyma-modules.managed')}
             checked={findSpec(kymaResource, module.name)?.managed}
             onChange={event => {

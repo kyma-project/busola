@@ -1,17 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  Card,
-  Tab,
-  TabContainer,
-  Title,
-} from '@ui5/webcomponents-react';
+import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
 import {
   ShowKymaCompanion,
   showKymaCompanionState,
-} from 'components/KymaCompanion/state/showKymaCompanionAtom';
+} from 'state/companion/showKymaCompanionAtom';
 import Chat from './Chat/Chat';
+import { usePromptSuggestions } from '../hooks/usePromptSuggestions';
 import './KymaCompanion.scss';
 
 export default function KymaCompanion() {
@@ -19,6 +14,7 @@ export default function KymaCompanion() {
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
+  const suggestions = usePromptSuggestions();
 
   return (
     <div id="companion_wrapper" className="sap-margin-tiny">
@@ -29,7 +25,13 @@ export default function KymaCompanion() {
             <Title level="H4" size="H4" className="title">
               {t('kyma-companion.name')}
             </Title>
-            <div>
+            <div className="actions-container">
+              <Button
+                design="Transparent"
+                icon="restart"
+                className="action"
+                onClick={() => {}}
+              />
               <Button
                 design="Transparent"
                 icon={
@@ -55,14 +57,7 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <TabContainer
-          contentBackgroundDesign="Transparent"
-          className={`tab-container`}
-        >
-          <Tab selected text={t('kyma-companion.tabs.chat')}>
-            <Chat />
-          </Tab>
-        </TabContainer>
+        <Chat suggestions={suggestions} />
       </Card>
     </div>
   );

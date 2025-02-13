@@ -77,6 +77,7 @@ export const GenericList = ({
   noHideFields,
   customRowClick,
   className = '',
+  accessibleName,
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -95,10 +96,11 @@ export const GenericList = ({
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
+
     if (sort.order === 'ASC') {
-      return [...resources.sort(sortFunction)];
+      return [...resources].sort(sortFunction);
     } else {
-      return [...resources.sort((a, b) => sortFunction(b, a))];
+      return [...resources].sort((a, b) => sortFunction(b, a));
     }
   };
 
@@ -406,6 +408,7 @@ export const GenericList = ({
       className={className}
     >
       <Table
+        accessibleName={accessibleName ?? title}
         className={`ui5-generic-list ${
           hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
         }`}

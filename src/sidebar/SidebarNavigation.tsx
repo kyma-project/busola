@@ -84,11 +84,10 @@ export function SidebarNavigation() {
                 height: 'auto',
                 width: 'auto',
                 boxShadow: 'none',
-                marginTop: '0.75rem',
+                marginTop: '0.5rem',
               }}
             >
               <SideNavigationItem
-                className="hide-shadow"
                 icon={'slim-arrow-left'}
                 text={'Back To Cluster Details'}
                 onClick={() => {
@@ -108,7 +107,10 @@ export function SidebarNavigation() {
             </SideNavigation>
           )}
           {(!namespace || isSidebarCondensed) && <div className="space-top" />}
-          <div style={namespace ? { zIndex: '0' } : { display: 'none' }}>
+          <div
+            className="namespace-combobox"
+            style={namespace ? { zIndex: '0' } : { display: 'none' }}
+          >
             <Label
               for="NamespaceComboBox"
               className="sap-margin-bottom-tiny sap-margin-begin-small"
@@ -183,7 +185,6 @@ export function SidebarNavigation() {
       )}
       {!namespace && !isSidebarCondensed && (
         <SideNavigationItem
-          className="hide-shadow"
           icon={'bbyd-dashboard'}
           text={'Cluster Details'}
           onClick={() => {

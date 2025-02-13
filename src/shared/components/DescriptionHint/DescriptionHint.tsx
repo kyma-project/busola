@@ -45,6 +45,7 @@ export function HintButton({
         }}
         accessibleName={`${ariaTitle} information`}
         tooltip={`${ariaTitle} Information`}
+        style={{ pointerEvents: 'auto' }}
       />
       {createPortal(
         <Popover

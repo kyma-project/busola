@@ -99,11 +99,11 @@ context('Test extensibility variables', () => {
       })
       .click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('simple')
       .should('exist');
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('advanced')
       .should('exist');
 
@@ -117,7 +117,7 @@ context('Test extensibility variables', () => {
     );
 
     // test visibility based on var (select 'simple')
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('simple')
       .click();
 
@@ -134,7 +134,7 @@ context('Test extensibility variables', () => {
       })
       .click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('advanced')
       .click();
 
@@ -165,7 +165,7 @@ context('Test extensibility variables', () => {
       .get('ui5-combobox[placeholder="Choose template"]:visible')
       .click();
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('Fixes')
       .click();
 

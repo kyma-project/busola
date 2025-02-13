@@ -55,6 +55,7 @@ export function FormField({
               required,
               disabled,
               className: 'full-width',
+              accessibleName: label,
               ...inputProps,
             })}
         {inputInfo && (

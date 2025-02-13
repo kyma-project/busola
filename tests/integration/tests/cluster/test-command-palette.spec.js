@@ -85,7 +85,8 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().type('ns/-a');
 
-    cy.get('li')
+    cy.get('ul[class="command-palette-ui__results"]')
+      .find('li')
       .contains('All Namespaces')
       .click();
 

@@ -68,9 +68,8 @@ context('Test Issuers', () => {
       .clear()
       .type('ACME');
 
-    cy.get('ui5-li:visible')
+    cy.get('ui5-cb-item:visible')
       .contains('ACME')
-      .find('li')
       .click({ force: true });
 
     cy.get('[placeholder="ACME Server URL"]:visible')

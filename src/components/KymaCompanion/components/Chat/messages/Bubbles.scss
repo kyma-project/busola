@@ -4,11 +4,13 @@
 
   .bubble-button {
     align-self: flex-start;
-    color: var(--sapChart_OrderedColor_5);
+    color: var(--sapLinkColor);
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 1px 3px var(--sapLinkColor);
   }
 
   .bubble-button:hover {
-    background-color: var(--sapBackgroundColor1);
-    border-color: var(--sapChart_OrderedColor_5);
+    background-color: var(--sapBackgroundColor);
   }
 }

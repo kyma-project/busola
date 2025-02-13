@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { FlexBox, Icon, Input } from '@ui5/webcomponents-react';
-import { initialPromptState } from 'components/KymaCompanion/state/initalPromptAtom';
+import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
 import Message from './messages/Message';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
-import { sessionIDState } from 'components/KymaCompanion/state/sessionIDAtom';
+import { sessionIDState } from 'state/companion/sessionIDAtom';
 import { clusterState } from 'state/clusterAtom';
 import { authDataState } from 'state/authDataAtom';
 import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuestions';
@@ -20,13 +19,20 @@ interface MessageType {
   suggestions?: any[];
 }
 
-export default function Chat() {
+export default function Chat({ suggestions }: { suggestions: string[] }) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
-  const [chatHistory, setChatHistory] = useState<MessageType[]>([]);
+  const [chatHistory, setChatHistory] = useState<MessageType[]>([
+    {
+      author: 'ai',
+      messageChunks: [
+        { step: 'output', result: t('kyma-companion.introduction') },
+      ],
+      isLoading: false,
+    },
+  ]);
   const [errorOccured, setErrorOccured] = useState<boolean>(false);
-  const initialPrompt = useRecoilValue<string>(initialPromptState);
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
@@ -109,9 +115,11 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    if (chatHistory.length === 0) sendPrompt(initialPrompt);
-    // eslint-disable-next-line
-  }, []);
+    if (suggestions.length && chatHistory.length === 1) {
+      handleFollowUpQuestions(suggestions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [suggestions]);
 
   useEffect(() => {
     const delay = errorOccured ? 500 : 0;
@@ -126,12 +134,15 @@ export default function Chat() {
       justifyContent="SpaceBetween"
       className="chat-container"
     >
-      <div className="chat-list sap-margin-tiny" ref={containerRef}>
+      <div
+        className="chat-list sap-margin-x-tiny sap-margin-top-small"
+        ref={containerRef}
+      >
         {chatHistory.map((message, index) => {
           return message.author === 'ai' ? (
             <React.Fragment key={index}>
               <Message
-                className="left-aligned"
+                className="left-aligned sap-margin-begin-tiny"
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
               />
@@ -145,7 +156,7 @@ export default function Chat() {
           ) : (
             <Message
               key={index}
-              className="right-aligned"
+              className="right-aligned sap-margin-end-tiny"
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}
             />
@@ -154,20 +165,38 @@ export default function Chat() {
         {errorOccured && (
           <ErrorMessage
             errorOnInitialMessage={chatHistory.length === 0}
-            resendInitialPrompt={() => sendPrompt(initialPrompt)}
+            retryPrompt={() => {}}
           />
         )}
       </div>
-      <div className="sap-margin-x-tiny">
-        <Input
-          className="full-width"
-          disabled={chatHistory[chatHistory.length - 1]?.isLoading}
-          placeholder={t('kyma-companion.placeholder')}
-          value={inputValue}
-          icon={<Icon name="paper-plane" onClick={onSubmitInput} />}
-          onKeyDown={e => e.key === 'Enter' && onSubmitInput()}
-          onInput={e => setInputValue(e.target.value)}
-        />
+      <div className="outer-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
+        <div className="input-container">
+          <TextArea
+            className="full-width"
+            growing
+            growingMaxRows={10}
+            rows={1}
+            placeholder={t('kyma-companion.placeholder')}
+            value={inputValue}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                onSubmitInput();
+              }
+            }}
+            onInput={e => {
+              setInputValue(e.target.value);
+            }}
+            valueState="None"
+          />
+          <Icon
+            id="text-area-icon"
+            name="paper-plane"
+            mode="Interactive"
+            onClick={onSubmitInput}
+          />
+        </div>
+        <Text id="disclaimer">{t('kyma-companion.disclaimer')}</Text>
       </div>
     </FlexBox>
   );

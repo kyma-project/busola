@@ -233,6 +233,7 @@ export function ResourceListRenderer({
   disableHiding,
   displayArrow,
   handleRedirect,
+  accessibleName,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -535,6 +536,9 @@ export function ResourceListRenderer({
             enableColumnLayout={enableColumnLayout}
             disableMargin={disableMargin}
             title={showTitle ? title || prettifiedResourceName : null}
+            accessibleName={
+              accessibleName ?? prettifyNamePlural(resourceTitle, resourceType)
+            }
             actions={actions}
             entries={resources || []}
             headerRenderer={headerRenderer}

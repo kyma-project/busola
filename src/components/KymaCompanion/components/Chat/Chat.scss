@@ -1,5 +1,5 @@
 .chat-container {
-  height: 100%;
+  height: calc(100vh - 60px - 1rem);
   overflow: hidden;
 
   .chat-list {
@@ -13,19 +13,37 @@
     }
 
     .left-aligned {
+      position: relative;
       align-self: flex-start;
-      background-color: var(--sapBackgroundColor);
       border-radius: 8px 8px 8px 0;
+      background-color: var(--sapAssistant_Answer_Background);
     }
 
     .right-aligned {
+      position: relative;
       align-self: flex-end;
-      background-color: var(--sapContent_Illustrative_Color1);
       border-radius: 8px 8px 0 8px;
+      background-color: var(--sapAssistant_Question_Background);
+    }
+  }
 
-      .text {
-        color: white;
+  .outer-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .input-container {
+      position: relative;
+
+      #text-area-icon {
+        position: absolute;
+        right: 0.5rem;
+        bottom: 0.6rem;
       }
+    }
+
+    #disclaimer {
+      font-size: 0.65rem;
     }
   }
 }

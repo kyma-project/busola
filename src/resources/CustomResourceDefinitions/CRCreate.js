@@ -28,11 +28,16 @@ function CRCreate({
   const [initialResource] = useState(
     initialCustomResource || createTemplate(crd),
   );
-  const customUrl = useCustomResourceUrl(crd);
+  const currUrl = window.location.href;
+
+  const customUrl = useCustomResourceUrl(
+    crd,
+    currUrl.includes('customresources/'),
+  );
 
   const navigate = useNavigate();
   const { nextQuery, currentQuery } = usePrepareLayout(layoutNumber);
-  const goToLayoutQuery = customUrl(cr)?.includes('customresources/')
+  const goToLayoutQuery = customUrl(cr).includes('customresources/')
     ? nextQuery
     : currentQuery;
 

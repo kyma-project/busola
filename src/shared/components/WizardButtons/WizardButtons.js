@@ -2,24 +2,24 @@ import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 export function WizardButtons({
-  selected,
-  setSelected,
+  selectedStep,
+  setSelectedStep,
   firstStep = false,
   customFinish,
   lastStep = false,
   onComplete,
   onCancel,
-  validation,
+  invalid,
   className,
 }) {
   const { t } = useTranslation();
 
   const goToNextStep = () => {
-    setSelected(selected + 1);
+    setSelectedStep(selectedStep + 1);
   };
 
   const goToPreviousStep = () => {
-    setSelected(selected - 1);
+    setSelectedStep(selectedStep - 1);
   };
 
   return (
@@ -37,7 +37,7 @@ export function WizardButtons({
       <Button
         design="Emphasized"
         onClick={lastStep ? onComplete : goToNextStep}
-        disabled={validation}
+        disabled={invalid}
         className="sap-margin-end-tiny"
         accessibleName={lastStep ? 'last-step' : 'next-step'}
       >
