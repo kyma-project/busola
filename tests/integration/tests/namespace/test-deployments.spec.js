@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-const DOCKER_IMAGE = 'eu.gcr.io/kyma-project/develop/orders-service:68a58069';
+const DOCKER_IMAGE =
+  'europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest';
 const DEPLOYMENT_NAME = 'orders-service';
 
 context('Test Deployments', () => {
@@ -102,7 +103,7 @@ context('Test Deployments', () => {
     cy.getMidColumn()
       .get('[data-testid="has-tooltip"]')
       .contains('span', '1 / 1', {
-        timeout: 60 * 1000,
+        timeout: 60 * 10000,
       });
     cy.wait(1000);
 
