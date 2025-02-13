@@ -14,6 +14,7 @@ context('Test Cluster Extensions views', () => {
     useCategory('Telemetry');
 
     it('Test Trace Pipelines', () => {
+      cy.wait(1000);
       cy.checkExtension('Trace Pipelines');
     });
 
