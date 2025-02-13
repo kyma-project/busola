@@ -4,9 +4,7 @@ import { useCategory } from '../../support/helpers';
 context('Test Cluster Extensions views', () => {
   before(() => {
     cy.loginAndSelectCluster();
-    cy.wait(500);
-    cy.reload();
-    cy.wait(1000);
+    cy.wait(10000);
   });
 
   // Telemetry

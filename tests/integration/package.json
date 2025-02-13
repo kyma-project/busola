@@ -18,11 +18,11 @@
     "test:accesibility:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome"
   },
   "devDependencies": {
+    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-6.1.0.tgz",
     "cypress": "^13.17.0",
     "cypress-file-upload": "^5.0.8",
     "cypress-plugin-tab": "^1.0.5",
-    "js-yaml": "^4.1.0",
-    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-6.1.0.tgz"
+    "js-yaml": "^4.1.0"
   },
   "optionalDependencies": {
     "cypress": "^13.6.1"
