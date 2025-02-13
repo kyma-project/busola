@@ -103,7 +103,7 @@ context('Test Deployments', () => {
     cy.getMidColumn()
       .get('[data-testid="has-tooltip"]')
       .contains('span', '1 / 1', {
-        timeout: 60 * 10000,
+        timeout: 60 * 1000,
       });
     cy.wait(1000);
 
