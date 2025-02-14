@@ -51,12 +51,14 @@ export default function ClusterDetails({ currentCluster }) {
           if (m?.status === 'Ready') acc.ready++;
           else if (m?.status === 'Error') acc.error++;
           else if (m?.status === 'Warning') acc.warning++;
+          else if (m?.status === 'Processing') acc.processing++;
+          else acc.other++;
           return acc;
         },
-        { ready: 0, error: 0, warning: 0 },
+        { ready: 0, error: 0, warning: 0, processing: 0, other: 0 },
       );
     }
-    return { ready: 0, error: 0, warning: 0 };
+    return { ready: 0, error: 0, warning: 0, processing: 0, other: 0 };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statuses, statusesError]);
@@ -98,7 +100,7 @@ export default function ClusterDetails({ currentCluster }) {
       />
       {!error && !loadingModules && modules && (
         <CountingCard
-          className="item"
+          className="modules-statuses"
           value={modules?.length}
           title={t('cluster-overview.statistics.modules-overview')}
           subTitle={t('kyma-modules.installed-modules')}
@@ -108,13 +110,23 @@ export default function ClusterDetails({ currentCluster }) {
               value: moduleCounts.ready,
             },
             {
+              title: t('common.statuses.warning'),
+              value: moduleCounts.warning,
+            },
+            {
+              title: t('common.statuses.processing'),
+              value: moduleCounts.processing,
+            },
+            {
               title: t('common.statuses.error'),
               value: moduleCounts.error,
             },
-            {
-              title: t('cluster-overview.statistics.modules-warning'),
-              value: moduleCounts.warning,
-            },
+            moduleCounts.other > 0
+              ? {
+                  title: t('common.statuses.other'),
+                  value: moduleCounts.other,
+                }
+              : null,
           ]}
           additionalContent={
             <Button
