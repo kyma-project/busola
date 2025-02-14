@@ -51,6 +51,7 @@ jobs:
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
 
   run-k3d-integration-tests:
+    needs: build-busola-image
     uses: ./.github/workflows/pull-kyma-integration-tests.yml
     with:
       pr_number: ${{github.event.number}}
