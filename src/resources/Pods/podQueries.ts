@@ -49,18 +49,20 @@ export function usePodsMetricsQuery(namespace?: string) {
     const node = nodesItems?.find(node => node.metadata.name === nodeName);
     const getCapacityFromNode = (isUse: boolean, allocatableItem?: string) =>
       isUse && allocatableItem ? allocatableItem : 0;
-    const cpuCapacity = limits?.cpu
-      ? limits?.cpu
-      : getCapacityFromNode(
-          !!(usage?.cpu ?? undefined),
-          node?.status?.allocatable?.cpu,
-        );
-    const memoryCapacity = limits?.memory
-      ? limits?.memory
-      : getCapacityFromNode(
-          !!(usage?.memory ?? undefined),
-          node?.status?.allocatable?.memory,
-        );
+    const cpuCapacity =
+      limits?.cpu != undefined
+        ? limits?.cpu
+        : getCapacityFromNode(
+            !!(usage?.cpu ?? false),
+            node?.status?.allocatable?.cpu,
+          );
+    const memoryCapacity =
+      limits?.memory != undefined
+        ? limits?.memory
+        : getCapacityFromNode(
+            !!(usage?.memory ?? false),
+            node?.status?.allocatable?.memory,
+          );
     return { cpu: cpuCapacity, memory: memoryCapacity };
   };
 
@@ -81,8 +83,8 @@ export function usePodsMetricsQuery(namespace?: string) {
                   status: {
                     allocatable: getAllocatable(
                       pod.spec.nodeName,
-                      metricsForPod?.containers?.[0].usage,
-                      pod.spec.containers[0].resources?.limits,
+                      metricsForPod?.containers?.[0]?.usage,
+                      pod.spec.containers?.[0]?.resources?.limits,
                       nodes?.items,
                     ),
                   },

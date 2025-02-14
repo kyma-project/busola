@@ -10,6 +10,7 @@ import { Tokens } from 'shared/components/Tokens';
 import { Card, CardHeader, Text, Title } from '@ui5/webcomponents-react';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { getLimitsAndUsageChartsData } from './support';
+import { usePodsMetricsQuery } from 'resources/Pods/podQueries';
 
 export type ResourceQuotaProps = {
   kind: string;
@@ -43,6 +44,7 @@ export type ResourceQuotaProps = {
 
 export default function ResourceQuotaDetails(props: any) {
   const { t } = useTranslation();
+  const { podsMetrics } = usePodsMetricsQuery(props.namespace);
 
   const customComponents = [
     (resource: ResourceQuotaProps) => (
@@ -87,24 +89,26 @@ export default function ResourceQuotaDetails(props: any) {
     (resource: ResourceQuotaProps) => (
       <React.Fragment key="resource-quota-limits">
         <div className="cluster-stats sap-margin-tiny">
-          {getLimitsAndUsageChartsData(resource).map((chartData, index) => (
-            <div
-              key={`${chartData.headerTitle}-${index}`}
-              className="item-wrapper card-tall"
-            >
-              <Card
-                className="radial-chart-card"
-                header={<CardHeader titleText={t(chartData.headerTitle)} />}
+          {getLimitsAndUsageChartsData(resource, podsMetrics).map(
+            (chartData, index) => (
+              <div
+                key={`${chartData.headerTitle}-${index}`}
+                className="item-wrapper card-tall"
               >
-                <UI5RadialChart
-                  color={chartData.color}
-                  value={chartData.value}
-                  max={chartData.max}
-                  additionalInfo={chartData.additionalInfo}
-                />
-              </Card>
-            </div>
-          ))}
+                <Card
+                  className="radial-chart-card"
+                  header={<CardHeader titleText={t(chartData.headerTitle)} />}
+                >
+                  <UI5RadialChart
+                    color={chartData.color}
+                    value={chartData.value}
+                    max={chartData.max}
+                    additionalInfo={chartData.additionalInfo}
+                  />
+                </Card>
+              </div>
+            ),
+          )}
         </div>
         <ResourceQuotaLimits resource={resource} />
       </React.Fragment>
