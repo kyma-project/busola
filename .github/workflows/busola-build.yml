@@ -42,10 +42,15 @@ permissions:
 
 jobs:
   build-busola-image:
-    uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
+    uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/blob/main/.github/workflows/image-builder.yml
     if: github.event.pull_request.draft == false
     with:
       name: busola
       dockerfile: Dockerfile
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
+
+  run-k3d-integration-tests:
+    uses: ./.github/workflows/pull-kyma-integration-tests.yml
+    with:
+      pr_number: ${{github.event.number}}

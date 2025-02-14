@@ -1,10 +1,12 @@
 name: PR Kyma Dashboard Integration Tests Dev
 
 on:
-  workflow_run:
-    workflows: [ Busola Build ]
-    types:
-      - completed
+  workflow_call:
+    inputs:
+      pr_number:
+        description: "PR number"
+        required: true
+        type: string
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
@@ -36,7 +38,7 @@ jobs:
         env:
           ENV: dev
         run: |
-          .github/scripts/deploy_busola.sh PR-${{ github.event.number }} | tee busola-deploy.log
+          .github/scripts/deploy_busola.sh PR-${{ inputs.pr_number }} | tee busola-deploy.log
       - name: Prepare kubeconfig
         run: |
           .github/scripts/prepare_kubeconfig.sh

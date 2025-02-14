@@ -31,8 +31,6 @@ export function CustomResources({
     console.log('Trigger job');
     console.log('Trigger job');
     console.log('Trigger job');
-    console.log('Trigger job');
-    console.log('Trigger job');
 
     let value;
     try {
