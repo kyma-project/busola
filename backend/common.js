@@ -1,13 +1,13 @@
 import PinoHttp from 'pino-http';
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
-import escape from 'lodash/escape';
 
 const https = require('https');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid').v4;
+const escape = require('lodash.escape');
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
