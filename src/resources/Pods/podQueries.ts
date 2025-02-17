@@ -54,14 +54,14 @@ export function usePodsMetricsQuery(namespace?: string) {
     const getCapacityFromNode = (isUse: boolean, allocatableItem?: string) =>
       isUse && allocatableItem ? allocatableItem : 0;
     const cpuCapacity =
-      limits?.cpu != undefined
+      limits?.cpu !== undefined && limits?.cpu !== null
         ? limits?.cpu
         : getCapacityFromNode(
             !!(usage?.cpu ?? false),
             node?.status?.allocatable?.cpu,
           );
     const memoryCapacity =
-      limits?.memory != undefined
+      limits?.memory !== undefined && limits?.memory !== null
         ? limits?.memory
         : getCapacityFromNode(
             !!(usage?.memory ?? false),
