@@ -13,6 +13,8 @@ import {
 
 export function usePodsMetricsQuery(namespace?: string) {
   const [metrics, setMetrics] = useState<UsageMetrics[] | undefined>(undefined);
+
+  // Fetch all data needed for the metrics.
   const {
     data: podMetrics,
     error: podMetricsError,
@@ -40,6 +42,7 @@ export function usePodsMetricsQuery(namespace?: string) {
     pollingInterval: 5500,
   } as UseGetOptions) as { data: NodeList | null };
 
+  // Finding capacity for a given usage.
   const getAllocatable = (
     nodeName: string,
     usage: StatusData,
@@ -47,6 +50,7 @@ export function usePodsMetricsQuery(namespace?: string) {
     nodesItems?: NodeListItem[],
   ) => {
     const node = nodesItems?.find(node => node.metadata.name === nodeName);
+    // If a pod has no limits set, it uses the available capacity from its node.
     const getCapacityFromNode = (isUse: boolean, allocatableItem?: string) =>
       isUse && allocatableItem ? allocatableItem : 0;
     const cpuCapacity =
@@ -67,6 +71,7 @@ export function usePodsMetricsQuery(namespace?: string) {
   };
 
   useEffect(() => {
+    // Collects all fetched data and creates useful metrics.
     if (pods) {
       const podsWithMetrics = pods?.items?.reduce(
         (arr: UsageMetrics[], pod) => {
@@ -108,6 +113,7 @@ export function usePodsMetricsQuery(namespace?: string) {
   };
 }
 
+// Totals all usage and all capacity.
 export function calculateMetrics(podsMetrics?: UsageMetrics[]) {
   const defaultMetrics = {
     cpu: { usage: 0, capacity: 0 },

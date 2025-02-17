@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
 import { Card, CardHeader, Text, Title } from '@ui5/webcomponents-react';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
-import { getLimitsAndUsageChartsData } from './support';
+import { mapLimitsAndUsageToChartsData } from './support';
 import { usePodsMetricsQuery } from 'resources/Pods/podQueries';
 
 export type ResourceQuotaProps = {
@@ -89,7 +89,7 @@ export default function ResourceQuotaDetails(props: any) {
     (resource: ResourceQuotaProps) => (
       <React.Fragment key="resource-quota-limits">
         <div className="cluster-stats sap-margin-tiny">
-          {getLimitsAndUsageChartsData(resource, podsMetrics).map(
+          {mapLimitsAndUsageToChartsData(resource, podsMetrics).map(
             (chartData, index) => (
               <div
                 key={`${chartData.headerTitle}-${index}`}

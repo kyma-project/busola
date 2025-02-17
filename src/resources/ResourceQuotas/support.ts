@@ -10,7 +10,9 @@ import { calculateMetrics } from 'resources/Pods/podQueries';
 import { UsageMetrics } from 'resources/Pods/types';
 import { isEmpty } from 'lodash';
 
-export const getLimitsAndUsageChartsData = (
+// It takes resource, usage and limits data
+// and maps it to data suitable for charts to make it easier to iterate and render.
+export const mapLimitsAndUsageToChartsData = (
   resource?: ResourceQuotaProps,
   podsMetrics?: UsageMetrics[],
 ) => {
