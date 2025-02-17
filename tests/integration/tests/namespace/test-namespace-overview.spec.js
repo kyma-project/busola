@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import { is } from 'core-js/core/object';
 import 'cypress-file-upload';
 
 const LIMIT_NAME = `${Cypress.env('NAMESPACE_NAME')}-limits`;
