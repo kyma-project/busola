@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGetAllModulesStatuses } from 'components/KymaModules/support';
 import { useMemo } from 'react';
 
-export default function ClusterModulesCard({}) {
+export default function ClusterModulesCard() {
   const { t } = useTranslation();
   const { modules, error, loading: loadingModules } = useKymaModulesQuery();
   const { clusterUrl } = useUrl();
