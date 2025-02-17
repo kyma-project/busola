@@ -393,8 +393,25 @@ export default function KymaModulesList({
           findStatus(kymaResource, selectedModules[chosenModuleIndex]?.name)
             ?.version,
       );
-
       return module?.spec?.associatedResources || [];
+    };
+
+    const getCRResource = () => {
+      const module = findModule(
+        selectedModules[chosenModuleIndex]?.name,
+        selectedModules[chosenModuleIndex]?.channel ||
+          kymaResource?.spec?.channel,
+        selectedModules[chosenModuleIndex]?.version ||
+          findStatus(kymaResource, selectedModules[chosenModuleIndex]?.name)
+            ?.version,
+      );
+      const resource = {};
+      if (module.spec.data) {
+        resource.group = module.spec.data.apiVersion.split('/')[0];
+        resource.version = module.spec.data.apiVersion.split('/')[1];
+        resource.kind = module.spec.data.kind;
+      }
+      return resource;
     };
 
     const handleItemClick = async (kind, group, version) => {
@@ -436,8 +453,7 @@ export default function KymaModulesList({
       }, []);
     };
 
-    const generateAssociatedResourcesUrls = async () => {
-      const resources = getAssociatedResources();
+    const generateAssociatedResourcesUrls = async resources => {
       const allUrls = [];
       for (const resource of resources) {
         const isNamespaced = await getScope(
@@ -470,8 +486,7 @@ export default function KymaModulesList({
       return allUrls;
     };
 
-    const fetchResourceCounts = async () => {
-      const resources = getAssociatedResources();
+    const fetchResourceCounts = async resources => {
       const counts = {};
       for (const resource of resources) {
         const resources = await getResources(
@@ -487,14 +502,20 @@ export default function KymaModulesList({
 
     const [resourceCounts, setResourceCounts] = useState({});
     const [forceDeleteUrls, setForceDeleteUrls] = useState([]);
+    const [crUrls, setCrUrls] = useState([]);
     const [allowForceDelete, setAllowForceDelete] = useState(false);
 
     useEffect(() => {
       const fetchCounts = async () => {
-        const counts = await fetchResourceCounts();
-        const urls = await generateAssociatedResourcesUrls();
+        const resources = getAssociatedResources();
+        const counts = await fetchResourceCounts(resources);
+        const urls = await generateAssociatedResourcesUrls(resources);
+        const crUResource = await getCRResource();
+        const crUrl = await generateAssociatedResourcesUrls([crUResource]);
+        console.log('counts', counts, 'urls', urls, 'crUrls', crUrl);
         setResourceCounts(counts);
-        setForceDeleteUrls(urls);
+        setForceDeleteUrls([urls]);
+        setCrUrls([crUrl]);
       };
 
       fetchCounts();
@@ -514,14 +535,31 @@ export default function KymaModulesList({
       }
       return false;
     };
-    const deleteAssociatedResources = async () => {
-      let result = await Promise.all(
-        forceDeleteUrls.map(async url => {
-          return await deleteResourceMutation(url);
-        }),
-      );
 
-      console.log('lololololo result', result);
+    const deleteAssociatedResources = async () => {
+      try {
+        await Promise.all(
+          forceDeleteUrls.map(async url => {
+            return await deleteResourceMutation(url);
+          }),
+        );
+      } catch (e) {
+        console.warn(e);
+        return 'Error while deleting Associated Resources';
+      }
+    };
+
+    const deleteCrResources = async () => {
+      try {
+        await Promise.all(
+          crUrls.map(async url => {
+            return await deleteResourceMutation(url);
+          }),
+        );
+      } catch (e) {
+        console.warn(e);
+        return 'Error while deleting Custom Resource';
+      }
     };
 
     return (
@@ -599,6 +637,9 @@ export default function KymaModulesList({
                 });
                 handleModuleUninstall();
                 setInitialUnchangedResource(cloneDeep(kymaResourceState));
+                if (allowForceDelete && forceDeleteUrls.length > 0) {
+                  deleteCrResources();
+                }
               }}
               closeFn={() => {
                 setAllowForceDelete(false);
