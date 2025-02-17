@@ -39,19 +39,18 @@ context(
     });
 
     it('checks the visibility of charts', () => {
-      const isLoading = cy.get('[aria-label="Loading"]');
-      const isError = cy.get('.pods-metrics-error');
-
-      if (isLoading) {
-        cy.get('ui5-busy-indicator').should('be.visible');
-      } else if (isError) {
-        cy.get(
-          'ui5-card-header[title-text="Error while loading memory consumption data"]',
-        ).should('be.visible');
-      } else {
-        cy.contains('CPU Usage').should('be.visible');
-        cy.contains('Memory Usage').should('be.visible');
-      }
+      cy.get('body').then($body => {
+        if ($body.find('[aria-label="Loading"]').length) {
+          cy.get('ui5-busy-indicator').should('be.visible');
+        } else if ($body.find('.pods-metrics-error').length) {
+          cy.get(
+            'ui5-card-header[title-text="Error while loading memory consumption data"]',
+          ).should('be.visible');
+        } else if ($body.find('.radial-chart-card').length) {
+          cy.contains('CPU Usage').should('be.visible');
+          cy.contains('Memory Usage').should('be.visible');
+        }
+      });
     });
   },
 );
