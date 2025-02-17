@@ -1,11 +1,11 @@
+import { PostFn } from 'shared/hooks/BackendAPI/usePost';
+
 interface GetPromptSuggestionsParams {
+  post: PostFn;
   namespace?: string;
-  resourceType?: string;
-  groupVersion?: string;
+  resourceType: string;
+  groupVersion: string;
   resourceName?: string;
-  clusterUrl: string;
-  clusterToken: string;
-  certificateAuthorityData: string;
 }
 
 interface PromptSuggestionsResponse {
@@ -14,39 +14,31 @@ interface PromptSuggestionsResponse {
 }
 
 export default async function getPromptSuggestions({
+  post,
   namespace = '',
   resourceType = '',
   groupVersion = '',
   resourceName = '',
-  clusterUrl,
-  clusterToken,
-  certificateAuthorityData,
 }: GetPromptSuggestionsParams): Promise<PromptSuggestionsResponse | false> {
   try {
-    const url = 'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
-    const payload = JSON.parse(
-      `{"resource_kind":"${resourceType}","resource_api_version": "${groupVersion}","resource_name":"${resourceName}","namespace":"${namespace}"}`,
-    );
-    const AUTH_TOKEN = '<AUTH_TOKEN>';
-
-    const response = await fetch(url, {
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-        'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-        'X-Cluster-Url': clusterUrl,
-        'X-K8s-Authorization': clusterToken,
-      },
-      body: JSON.stringify(payload),
-      method: 'POST',
+    const response = await post('/ai-chat/suggestions', {
+      namespace,
+      resourceType,
+      groupVersion,
+      resourceName,
     });
-    const data = await response.json();
 
-    return {
-      promptSuggestions: data.initial_questions,
-      conversationId: data.conversation_id,
-    };
+    if (
+      response &&
+      typeof response === 'object' &&
+      Array.isArray(response.promptSuggestions) &&
+      typeof response.conversationId === 'string'
+    ) {
+      return response as PromptSuggestionsResponse;
+    }
+
+    console.error('Invalid response format:', response);
+    return false;
   } catch (error) {
     console.error('Error fetching data:', error);
     return false;

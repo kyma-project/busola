@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { sessionIDState } from '../../../state/companion/sessionIDAtom';
-import { clusterState } from 'state/clusterAtom';
 import getPromptSuggestions from '../api/getPromptSuggestions';
 import { ColumnLayoutState, columnLayoutState } from 'state/columnLayoutAtom';
 import { prettifyNameSingular } from 'shared/utils/helpers';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 
 export function usePromptSuggestions() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const setSessionID = useSetRecoilState(sessionIDState);
-  const cluster = useRecoilValue(clusterState);
   const columnLayout = useRecoilValue(columnLayoutState);
+  const post = usePost();
 
   const getResourceFromColumnnLayout = (columnLayout: ColumnLayoutState) => {
     return {
@@ -25,7 +25,6 @@ export function usePromptSuggestions() {
   };
 
   useEffect(() => {
-    const userAuth = cluster?.currentContext.user.user;
     const {
       namespace,
       resourceType,
@@ -37,16 +36,11 @@ export function usePromptSuggestions() {
 
     async function fetchSuggestions() {
       const result = await getPromptSuggestions({
+        post,
         namespace: namespace,
         resourceType: resourceType,
         groupVersion: groupVersion,
         resourceName: resourceName,
-        clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '',
-        clusterToken: userAuth && 'token' in userAuth ? userAuth.token : '', // TODO
-        certificateAuthorityData:
-          cluster?.currentContext.cluster.cluster[
-            'certificate-authority-data'
-          ] ?? '',
       });
       if (result) {
         setSuggestions(result.promptSuggestions);
@@ -54,10 +48,10 @@ export function usePromptSuggestions() {
       }
     }
 
-    if (cluster && resourceType && groupVersion && suggestions.length === 0) {
+    if (resourceType && groupVersion && suggestions.length === 0) {
       fetchSuggestions();
     }
-  }, [cluster, columnLayout, suggestions, setSessionID]);
+  }, [columnLayout, suggestions, post, setSessionID]);
 
   return suggestions;
 }
