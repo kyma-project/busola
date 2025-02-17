@@ -5,11 +5,8 @@ import { useGetVersions } from './useGetVersions';
 import { useFeature } from 'hooks/useFeature';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
-import { Button, Text } from '@ui5/webcomponents-react';
-import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries';
-import { useUrl } from 'hooks/useUrl';
-import { useNavigate } from 'react-router-dom';
+import { Text } from '@ui5/webcomponents-react';
+import ClusterModulesCard from './ClusterModulesCard';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -33,9 +30,6 @@ export default function ClusterDetails({ currentCluster }) {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
   const config = currentCluster?.config;
-  const { modules, error, loading: loadingModules } = useKymaModulesQuery();
-  const { clusterUrl } = useUrl();
-  const navigate = useNavigate();
 
   return (
     <div className="resource-details-container">
@@ -72,23 +66,7 @@ export default function ClusterDetails({ currentCluster }) {
           </>
         }
       />
-      {!error && !loadingModules && modules && (
-        <div className="item-wrapper sap-margin-x-small">
-          <CountingCard
-            className="item"
-            value={modules?.length}
-            title={t('kyma-modules.installed-modules')}
-            additionalContent={
-              <Button
-                design="Emphasized"
-                onClick={() => navigate(clusterUrl('kymamodules'))}
-              >
-                {t('kyma-modules.modify-modules')}
-              </Button>
-            }
-          />
-        </div>
-      )}
+      <ClusterModulesCard />
     </div>
   );
 }
