@@ -1,6 +1,7 @@
 import PinoHttp from 'pino-http';
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
+import escape from 'lodash/escape';
 
 const https = require('https');
 const express = require('express');
@@ -47,7 +48,9 @@ export const makeHandleRequest = () => {
         id: req.id,
         method: req.method,
         url: req.url,
-        apiServerAddress: req.headers['x-cluster-url'],
+        apiServerAddress: req.headers['x-cluster-url']
+          ? escape(req.headers['x-cluster-url'])
+          : undefined,
         code: req.code,
         stack: req.stack,
         type: req.type,
@@ -63,6 +66,7 @@ export const makeHandleRequest = () => {
       headersData = extractHeadersData(req);
     } catch (e) {
       req.log.error('Headers error:' + e.message);
+      res.setHeader('Content-Type', 'text/plain');
       res.status(400).send('Headers are missing or in a wrong format.');
       return;
     }
@@ -71,7 +75,7 @@ export const makeHandleRequest = () => {
       filters.forEach(filter => filter(req, headersData));
     } catch (e) {
       req.log.error('Filters rejected the request: ' + e.message);
-      res.status(400).send('Request ID: ' + req.id);
+      res.status(400).send('Request ID: ' + escape(req.id));
       return;
     }
 
@@ -120,7 +124,10 @@ export const makeHandleRequest = () => {
 
     function throwInternalServerError(originalError) {
       req.log.warn(originalError);
-      res.status(502).send('Request ID: ' + req.id);
+      res.setHeader('Content-Type', 'text/plain');
+      res
+        .status(502)
+        .send('Internal server error. Request ID: ' + escape(req.id));
     }
   };
 };
@@ -143,11 +150,19 @@ function extractHeadersData(req) {
   const clientKeyDataHeader = 'x-client-key-data';
   const authorizationHeader = 'x-k8s-authorization';
   let targetApiServer;
+
   if (req.headers[urlHeader]) {
-    targetApiServer = handleDockerDesktopSubsitution(
-      new URL(req.headers[urlHeader]),
-    );
+    try {
+      targetApiServer = handleDockerDesktopSubsitution(
+        new URL(req.headers[urlHeader]),
+      );
+    } catch (e) {
+      throw new Error('Invalid cluster URL provided.');
+    }
+  } else {
+    throw new Error('Missing required cluster URL.');
   }
+
   const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
   const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);
