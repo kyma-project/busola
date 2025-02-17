@@ -14,6 +14,7 @@ on:
 jobs:
   run-namespace-test:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
