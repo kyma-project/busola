@@ -11,7 +11,7 @@ import './CountingCard.scss';
 
 type CountingCardProps = {
   value: number;
-  extraInfo: [ExtraInfo];
+  extraInfo: ExtraInfo[];
   title: string;
   subTitle: string;
   resourceUrl?: string;
@@ -24,7 +24,7 @@ type CountingCardProps = {
 type ExtraInfo = {
   value: string;
   title: string;
-};
+} | null;
 
 export const CountingCard = ({
   value,
