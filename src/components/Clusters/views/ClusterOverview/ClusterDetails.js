@@ -5,13 +5,8 @@ import { useGetVersions } from './useGetVersions';
 import { useFeature } from 'hooks/useFeature';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
-import { Button, Text } from '@ui5/webcomponents-react';
-import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries';
-import { useUrl } from 'hooks/useUrl';
-import { useNavigate } from 'react-router-dom';
-import { useModulesStatuses } from 'components/KymaModules/support';
-import { useMemo } from 'react';
+import { Text } from '@ui5/webcomponents-react';
+import ClusterModulesCard from './ClusterModulesCard';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -35,33 +30,6 @@ export default function ClusterDetails({ currentCluster }) {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
   const config = currentCluster?.config;
-  const { modules, error, loading: loadingModules } = useKymaModulesQuery();
-  const { clusterUrl } = useUrl();
-  const navigate = useNavigate();
-  const {
-    data: statuses,
-    loading: loadingStatuses,
-    error: statusesError,
-  } = useModulesStatuses(modules);
-
-  const moduleCounts = useMemo(() => {
-    if (statuses && !loadingStatuses && !statusesError) {
-      return statuses.reduce(
-        (acc, m) => {
-          if (m?.status === 'Ready') acc.ready++;
-          else if (m?.status === 'Error') acc.error++;
-          else if (m?.status === 'Warning') acc.warning++;
-          else if (m?.status === 'Processing') acc.processing++;
-          else acc.other++;
-          return acc;
-        },
-        { ready: 0, error: 0, warning: 0, processing: 0, other: 0 },
-      );
-    }
-    return { ready: 0, error: 0, warning: 0, processing: 0, other: 0 };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statuses, statusesError]);
 
   return (
     <div className="resource-details-container">
@@ -98,46 +66,7 @@ export default function ClusterDetails({ currentCluster }) {
           </>
         }
       />
-      {!error && !loadingModules && modules && (
-        <CountingCard
-          className="modules-statuses"
-          value={modules?.length}
-          title={t('cluster-overview.statistics.modules-overview')}
-          subTitle={t('kyma-modules.installed-modules')}
-          extraInfo={[
-            {
-              title: t('common.statuses.ready'),
-              value: moduleCounts.ready,
-            },
-            {
-              title: t('common.statuses.warning'),
-              value: moduleCounts.warning,
-            },
-            {
-              title: t('common.statuses.processing'),
-              value: moduleCounts.processing,
-            },
-            {
-              title: t('common.statuses.error'),
-              value: moduleCounts.error,
-            },
-            moduleCounts.other > 0
-              ? {
-                  title: t('common.statuses.other'),
-                  value: moduleCounts.other,
-                }
-              : null,
-          ]}
-          additionalContent={
-            <Button
-              design="Emphasized"
-              onClick={() => navigate(clusterUrl('kymamodules'))}
-            >
-              {t('kyma-modules.modify-modules')}
-            </Button>
-          }
-        />
-      )}
+      <ClusterModulesCard />
     </div>
   );
 }

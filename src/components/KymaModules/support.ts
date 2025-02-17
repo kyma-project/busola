@@ -66,7 +66,7 @@ export function useModuleStatus(resource: KymaResourceType) {
   return { data, loading, error };
 }
 
-export function useModulesStatuses(modules: any[]) {
+export function useGetAllModulesStatuses(modules: any[]) {
   const fetch = useFetch();
   const [data, setData] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
