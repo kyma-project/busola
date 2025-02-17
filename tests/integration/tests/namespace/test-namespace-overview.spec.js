@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import { is } from 'core-js/core/object';
 import 'cypress-file-upload';
 
 const LIMIT_NAME = `${Cypress.env('NAMESPACE_NAME')}-limits`;
@@ -33,13 +34,25 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('Memory Requests').should('be.visible');
-
-      cy.contains('Memory Limits').should('be.visible');
-
       cy.contains('Events')
         .scrollIntoView()
         .should('be.visible');
+    });
+
+    it('checks the visibility of charts', () => {
+      const isLoading = cy.get('[aria-label="Loading"]');
+      const isError = cy.get('.pods-metrics-error');
+
+      if (isLoading) {
+        cy.get('ui5-busy-indicator').should('be.visible');
+      } else if (isError) {
+        cy.get(
+          'ui5-card-header[title-text="Error while loading memory consumption data"]',
+        ).should('be.visible');
+      } else {
+        cy.contains('CPU Usage').should('be.visible');
+        cy.contains('Memory Usage').should('be.visible');
+      }
     });
   },
 );

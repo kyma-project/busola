@@ -72,7 +72,7 @@ export const ResourcesUsage = ({ namespace }) => {
     return <Spinner />;
   } else if (error) {
     return (
-      <div className="item-wrapper card-small">
+      <div className="item-wrapper card-small pods-metrics-error">
         <Card
           className="item"
           header={
