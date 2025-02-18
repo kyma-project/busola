@@ -39,6 +39,7 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
       >
         {buttonsToDisplay.map(button => (
           <SegmentedButtonItem
+            className="min-width-button"
             key={button.mode}
             selected={mode === button.mode}
             disabled={isDisabled}

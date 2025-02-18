@@ -5,11 +5,11 @@ context('Test Kyma Modules views', () => {
     cy.loginAndSelectCluster();
   });
 
-  it('Test Feature card for Modules', () => {
+  it('Test Modules Overview card', () => {
     cy.wait(2000);
 
     cy.get('ui5-card')
-      .contains('Installed Modules')
+      .contains('Modules Overview')
       .should('be.visible');
 
     cy.contains('ui5-card', 'Installed Modules')
@@ -99,12 +99,16 @@ context('Test Kyma Modules views', () => {
       .should('be.visible');
   });
 
-  it('Test number of Modules in Feature card', () => {
+  it('Test number of Modules in Modules Overview card', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();
 
     cy.contains('ui5-card', 'Installed Modules')
+      .contains('2')
+      .should('be.visible');
+
+    cy.contains('ui5-card', 'Ready')
       .contains('2')
       .should('be.visible');
 

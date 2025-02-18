@@ -14,21 +14,33 @@ GITHUB_URL=https://api.github.com/repos/${REPOSITORY}
 GITHUB_AUTH_HEADER="Authorization: token ${GITHUB_TOKEN}"
 CHANGELOG_FILE="CHANGELOG.md"
 
-if [ "${PREVIOUS_RELEASE}"  == "" ]
-then
+if [ -z "${PREVIOUS_RELEASE:-}" ]; then
   PREVIOUS_RELEASE=$(git describe --tags --abbrev=0)
 fi
 echo "Previous release: ${PREVIOUS_RELEASE}"
 
 echo "## What has changed" >> ${CHANGELOG_FILE}
 
-git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse | while read -r COMMIT
+NEW_FEATURES_SECTION="### New Features\n"
+FIXES_SECTION="### Bug Fixes\n"
+OTHERS_SECTION="### Others\n"
+
+while read -r COMMIT;
 do
     COMMIT_AUTHOR=$(curl -H "${GITHUB_AUTH_HEADER}" -sS "${GITHUB_URL}/commits/${COMMIT}" | jq -r '.author.login')
     if [ "${COMMIT_AUTHOR}" != "kyma-bot" ]; then
-      git show -s "${COMMIT}" --format="* %s by @${COMMIT_AUTHOR}" >> ${CHANGELOG_FILE}
+      COMMIT_MESSAGE=$(git show -s "${COMMIT}" --format="%s")
+      if [[ "${COMMIT_MESSAGE}" == feat* ]]; then
+        NEW_FEATURES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+      elif [[ "${COMMIT_MESSAGE}" == fix* ]]; then
+        FIXES_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+      else
+        OTHERS_SECTION+="* ${COMMIT_MESSAGE} by @${COMMIT_AUTHOR}\n"
+      fi
     fi
-done
+done< <(git log "${PREVIOUS_RELEASE}"..HEAD --pretty=tformat:"%h" --reverse)
+
+echo -e "${NEW_FEATURES_SECTION}\n${FIXES_SECTION}\n${OTHERS_SECTION}" >> ${CHANGELOG_FILE}
 
 NEW_CONTRIB=$(mktemp --suffix=.new XXXXX)
 

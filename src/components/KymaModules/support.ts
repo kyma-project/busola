@@ -22,13 +22,9 @@ type KymaResourceType = {
   };
 };
 
-export function useModuleStatus(resource: KymaResourceType) {
-  const fetch = useFetch();
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  const path = resource?.metadata?.namespace
+const getResourcePath = (resource: KymaResourceType) => {
+  if (!resource) return '';
+  return resource?.metadata?.namespace
     ? `/apis/${resource?.apiVersion}/namespaces/${
         resource?.metadata?.namespace
       }/${pluralize(resource?.kind || '').toLowerCase()}/${
@@ -37,6 +33,15 @@ export function useModuleStatus(resource: KymaResourceType) {
     : `/apis/${resource?.apiVersion}/${pluralize(
         resource?.kind || '',
       ).toLowerCase()}/${resource?.metadata?.name}`;
+};
+
+export function useModuleStatus(resource: KymaResourceType) {
+  const fetch = useFetch();
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const path = getResourcePath(resource);
 
   useEffect(() => {
     async function fetchModule() {
@@ -61,7 +66,59 @@ export function useModuleStatus(resource: KymaResourceType) {
   return { data, loading, error };
 }
 
-export const findStatus = (
+export function useGetAllModulesStatuses(modules: any[]) {
+  const fetch = useFetch();
+  const [data, setData] = useState<Record<string, any>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    async function fetchModules() {
+      if (!modules || modules.length === 0) return;
+      setLoading(true);
+      try {
+        const results = await Promise.all(
+          modules.map(async module => {
+            const resource = module?.resource ?? module;
+
+            if (!resource) return null;
+            const path = getResourcePath(resource);
+
+            try {
+              const response = await fetch({ relativeUrl: path });
+              const status = (await response.json())?.status;
+              return {
+                key: resource?.metadata?.name ?? resource?.name,
+                status: status?.state || 'Unknown',
+              };
+            } catch (e) {
+              return {
+                key: resource?.metadata?.name ?? resource?.name,
+                status: null,
+                error: e,
+              };
+            }
+          }),
+        );
+
+        setData(results);
+      } catch (e) {
+        if (e instanceof Error) {
+          setError(e);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchModules();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(modules)]);
+
+  return { data, loading, error };
+}
+
+export const findModuleStatus = (
   kymaResource: KymaResourceType,
   moduleName: string,
 ) => {
@@ -70,7 +127,7 @@ export const findStatus = (
   );
 };
 
-export const findSpec = (
+export const findModuleSpec = (
   kymaResource: KymaResourceType,
   moduleName: string,
 ) => {
