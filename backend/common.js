@@ -48,9 +48,7 @@ export const makeHandleRequest = () => {
         id: req.id,
         method: req.method,
         url: req.url,
-        apiServerAddress: req.headers['x-cluster-url']
-          ? escape(req.headers['x-cluster-url'])
-          : undefined,
+        apiServerAddress: escape(req.headers['x-cluster-url']),
         code: req.code,
         stack: req.stack,
         type: req.type,
@@ -66,7 +64,7 @@ export const makeHandleRequest = () => {
       headersData = extractHeadersData(req);
     } catch (e) {
       req.log.error('Headers error:' + e.message);
-      res.setHeader('Content-Type', 'text/plain');
+      res.contentType('text/plain');
       res.status(400).send('Headers are missing or in a wrong format.');
       return;
     }
@@ -75,6 +73,7 @@ export const makeHandleRequest = () => {
       filters.forEach(filter => filter(req, headersData));
     } catch (e) {
       req.log.error('Filters rejected the request: ' + e.message);
+      res.contentType('text/plain');
       res.status(400).send('Request ID: ' + escape(req.id));
       return;
     }
@@ -124,7 +123,7 @@ export const makeHandleRequest = () => {
 
     function throwInternalServerError(originalError) {
       req.log.warn(originalError);
-      res.setHeader('Content-Type', 'text/plain');
+      res.contentType('text/plain');
       res
         .status(502)
         .send('Internal server error. Request ID: ' + escape(req.id));
