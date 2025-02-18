@@ -512,9 +512,9 @@ export default function KymaModulesList({
         const urls = await generateAssociatedResourcesUrls(resources);
         const crUResource = await getCRResource();
         const crUrl = await generateAssociatedResourcesUrls([crUResource]);
-        console.log('counts', counts, 'urls', urls, 'crUrls', crUrl);
+
         setResourceCounts(counts);
-        setForceDeleteUrls([urls]);
+        setForceDeleteUrls(urls);
         setCrUrls([crUrl]);
       };
 
