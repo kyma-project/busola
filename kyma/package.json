@@ -15,7 +15,7 @@
     "prepare-extensibility-prod": "ENV=prod npm run prepare-extensions && ENV=prod npm run pack-extensions && ENV=prod npm run prepare-wizards && ENV=prod npm run pack-wizards && ENV=prod npm run prepare-statics && ENV=prod npm run pack-statics"
   },
   "devDependencies": {
-    "gulp": "^4.0.1",
+    "gulp": "^5.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-concat": "^2.6.1",
     "husky": "^2.4.1",
