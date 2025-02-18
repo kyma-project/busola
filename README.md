@@ -17,7 +17,7 @@ Busola project contains additional sub-projects:
 ## Prerequisites
 
 - [`npm`](https://www.npmjs.com/) in version 10.x
-- [`node`](https://nodejs.org/en/) in version 20.x
+- [`node`](https://nodejs.org/en/) in version 22.x
 
 Busola supports:
 
