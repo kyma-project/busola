@@ -1,7 +1,7 @@
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
-import companionRouter from './routes/companion';
+import companionRouter from './companion/companionRouter';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');

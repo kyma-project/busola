@@ -1,4 +1,8 @@
 import express from 'express';
+import { TokenManager } from './TokenManager';
+
+const tokenManager = new TokenManager();
+
 const router = express.Router();
 
 router.use(express.json());
@@ -24,7 +28,7 @@ async function handleAIChatRequest(req, res) {
       namespace: namespace,
     };
 
-    const AUTH_TOKEN = '<AUTH_TOKEN>';
+    const AUTH_TOKEN = await tokenManager.getToken();
 
     const response = await fetch(url, {
       method: 'POST',
