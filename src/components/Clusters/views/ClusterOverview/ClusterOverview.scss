@@ -1,3 +1,12 @@
 .gardener-provider {
   text-transform: uppercase;
 }
+
+.modules-statuses {
+  max-width: 400px !important;
+  width: max-content !important;
+
+  span {
+    max-width: unset;
+  }
+}
