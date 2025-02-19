@@ -6,7 +6,7 @@ import {
   NodeListItem,
   PodList,
   PodMetricsList,
-  StatusData,
+  ResourceList,
   UsageMetrics,
   UseGetOptions,
 } from './types';
@@ -45,8 +45,8 @@ export function usePodsMetricsQuery(namespace?: string) {
   // Finding capacity for a given usage.
   const getAllocatable = (
     nodeName: string,
-    usage: StatusData,
-    limits: StatusData,
+    usage: ResourceList,
+    limits: ResourceList,
     nodesItems?: NodeListItem[],
   ) => {
     const node = nodesItems?.find(node => node.metadata.name === nodeName);
@@ -74,7 +74,7 @@ export function usePodsMetricsQuery(namespace?: string) {
     // Collects all fetched data and creates useful metrics.
     if (pods) {
       const podsWithMetrics = pods?.items?.reduce(
-        (arr: UsageMetrics[], pod) => {
+        (acc: UsageMetrics[], pod) => {
           const metricsForPod = podMetrics?.items?.find(
             metrics =>
               pod?.metadata?.name &&
@@ -82,7 +82,7 @@ export function usePodsMetricsQuery(namespace?: string) {
           );
           if (metricsForPod) {
             return [
-              ...arr,
+              ...acc,
               createUsageMetrics(
                 {
                   status: {
@@ -98,7 +98,7 @@ export function usePodsMetricsQuery(namespace?: string) {
               ),
             ];
           }
-          return arr;
+          return acc;
         },
         [],
       );

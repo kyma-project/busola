@@ -16,7 +16,7 @@ export type UsageMetrics = {
   };
 };
 
-export type StatusData = {
+export type ResourceList = {
   cpu?: string;
   memory?: string;
 };
@@ -29,7 +29,7 @@ export type PodMetricsList = {
     };
     containers: {
       name: string;
-      usage: StatusData;
+      usage: ResourceList;
     }[];
   }[];
 };
@@ -45,8 +45,8 @@ export type PodList = {
       containers: {
         name: string;
         resources: {
-          limits: StatusData;
-          requests: StatusData;
+          limits: ResourceList;
+          requests: ResourceList;
         };
       }[];
     };
@@ -58,7 +58,7 @@ export type NodeListItem = {
     name: string;
   };
   status: {
-    allocatable: StatusData;
+    allocatable: ResourceList;
   };
 };
 
