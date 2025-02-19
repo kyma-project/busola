@@ -1,16 +1,15 @@
-import React from 'react';
+import { useState } from 'react';
 import * as Sentry from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
 import { useFeature } from './useFeature';
 
 export function useSentry() {
-  const [dsn, setDsn] = React.useState();
+  const [dsn, setDsn] = useState();
 
   const initSentry = dsn => {
     Sentry.init({
       dsn,
       release: 'busola',
-      integrations: [new Integrations.BrowserTracing()],
+      integrations: [new Sentry.browserTracingIntegration()],
       tracesSampleRate: 1.0,
     });
   };
