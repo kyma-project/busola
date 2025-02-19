@@ -60,6 +60,7 @@ export function useCreateResource({
     if (!isEdit || resetLayout) {
       if (resetLayout) {
         setLayoutColumn({
+          ...layoutColumn,
           layout: 'OneColumn',
           midColumn: null,
           endColumn: null,
@@ -70,6 +71,7 @@ export function useCreateResource({
         setLayoutColumn(
           nextLayout === 'TwoColumnsMidExpanded'
             ? {
+                ...layoutColumn,
                 layout: nextLayout,
                 showCreate: null,
                 midColumn: {

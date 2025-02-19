@@ -19,22 +19,22 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const layout = searchParams.get('layout');
   const { namespaceId, releaseName } = useParams();
 
-  const initialLayoutState = layout
-    ? {
-        layout: layout ? layout : layoutState?.layout,
-        midColumn: {
-          resourceName: releaseName,
-          resourceType: 'HelmReleases',
-          namespaceId,
-        },
-        endColumn: null,
-      }
-    : null;
+  const initialLayoutState = {
+    layout: layout ? layout : layoutState?.layout,
+    startColumn: {
+      resourceType: 'HelmReleases',
+      namespaceId,
+    },
+    midColumn: {
+      resourceName: releaseName,
+      resourceType: 'HelmReleases',
+      namespaceId,
+    },
+    endColumn: null,
+  };
 
   useEffect(() => {
-    if (layout) {
-      setLayoutColumn(initialLayoutState);
-    }
+    setLayoutColumn(initialLayoutState);
   }, [layout, namespaceId, releaseName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let startColumnComponent = null;

@@ -13,6 +13,7 @@ type ShowCreate = {
 };
 
 export type ColumnLayoutState = {
+  startColumn: null | ColumnState;
   midColumn: null | ColumnState;
   endColumn: null | ColumnState;
   showCreate?: null | ShowCreate;
@@ -23,6 +24,7 @@ export type ColumnLayoutState = {
 
 const defaultValue = {
   layout: 'OneColumn',
+  startColumn: null,
   midColumn: null,
   endColumn: null,
   showCreate: null,

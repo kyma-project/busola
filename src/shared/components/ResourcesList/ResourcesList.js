@@ -344,6 +344,7 @@ export function ResourceListRenderer({
     setLayoutColumn(
       layoutNumber === 'MidColumn' && enableColumnLayout
         ? {
+            ...layoutState,
             midColumn: layoutState?.midColumn,
             endColumn: null,
             showCreate: {
@@ -354,6 +355,7 @@ export function ResourceListRenderer({
             layout: 'ThreeColumnsEndExpanded',
           }
         : {
+            ...layoutState,
             midColumn: null,
             endColumn: null,
             showCreate: {
@@ -435,6 +437,7 @@ export function ResourceListRenderer({
     setLayoutColumn(
       layoutNumber === 'MidColumn' && enableColumnLayout
         ? {
+            ...layoutState,
             midColumn: layoutState?.midColumn,
             endColumn: null,
             showCreate: {
@@ -444,6 +447,7 @@ export function ResourceListRenderer({
             layout: 'ThreeColumnsEndExpanded',
           }
         : {
+            ...layoutState,
             midColumn: null,
             endColumn: null,
             showCreate: {

@@ -349,6 +349,7 @@ export const GenericList = ({
       setEntrySelectedNamespace(selectedEntry?.metadata?.namespace ?? '');
       if (!enableColumnLayout) {
         setLayoutColumn({
+          startColumn: null,
           midColumn: null,
           endColumn: null,
           layout: 'OneColumn',
@@ -362,11 +363,12 @@ export const GenericList = ({
         setLayoutColumn(
           columnLayout
             ? {
-                midColumn: layoutState.midColumn,
+                ...layoutState,
                 endColumn: customColumnLayout(selectedEntry),
                 layout: columnLayout,
               }
             : {
+                ...layoutState,
                 midColumn: {
                   resourceName:
                     selectedEntry?.metadata?.name ??

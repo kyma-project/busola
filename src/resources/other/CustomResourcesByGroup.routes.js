@@ -36,31 +36,30 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const { crdName, crName } = useParams();
   const { namespace, scopedUrl } = useUrl();
 
-  const initialLayoutState = layout
-    ? {
-        layout: layout ?? layoutState?.layout,
-        midColumn: crdName
-          ? {
-              resourceName: crdName,
-              resourceType: 'CustomResourceDefinition',
-              namespaceId: null,
-            }
-          : null,
-        endColumn:
-          crdName && crName
-            ? {
-                resourceName: crName,
-                resourceType: crdName,
-                namespaceId: namespace,
-              }
-            : null,
-      }
-    : null;
+  const initialLayoutState = {
+    layout: layout ?? layoutState?.layout,
+    startColumn: {
+      resourceType: 'CustomResourceDefinition',
+    },
+    midColumn: crdName
+      ? {
+          resourceName: crdName,
+          resourceType: 'CustomResourceDefinition',
+          namespaceId: null,
+        }
+      : null,
+    endColumn:
+      crdName && crName
+        ? {
+            resourceName: crName,
+            resourceType: crdName,
+            namespaceId: namespace,
+          }
+        : null,
+  };
 
   useEffect(() => {
-    if (layout) {
-      setLayoutColumn(initialLayoutState);
-    }
+    setLayoutColumn(initialLayoutState);
   }, [layout, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const layoutCloseCreateUrl = scopedUrl(

@@ -111,6 +111,9 @@ export default function KymaModulesList({
 
   const handleShowAddModule = () => {
     setLayoutColumn({
+      startColumn: {
+        resourceType: 'kymamodules',
+      },
       midColumn: null,
       endColumn: null,
       layout: 'TwoColumnsMidExpanded',
@@ -376,6 +379,14 @@ export default function KymaModulesList({
         moduleStatus?.resource?.apiVersion,
       );
       setLayoutColumn({
+        startColumn: {
+          resourceType: hasExtension
+            ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
+            : moduleCrd?.metadata?.name,
+          namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+          apiGroup: group,
+          apiVersion: version,
+        },
         midColumn: {
           resourceType: hasExtension
             ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()

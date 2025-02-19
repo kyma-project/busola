@@ -13,14 +13,16 @@ export function usePromptSuggestions() {
   const post = usePost();
 
   const getResourceFromColumnnLayout = (columnLayout: ColumnLayoutState) => {
+    const column =
+      columnLayout?.endColumn ??
+      columnLayout?.midColumn ??
+      columnLayout?.startColumn;
     return {
-      namespace: columnLayout.midColumn?.namespaceId ?? '',
-      resourceType: prettifyNameSingular(
-        columnLayout.midColumn?.resourceType ?? '',
-      ),
-      apiGroup: columnLayout.midColumn?.apiGroup ?? '',
-      apiVersion: columnLayout.midColumn?.apiVersion ?? '',
-      resourceName: columnLayout.midColumn?.resourceName ?? '',
+      namespace: column?.namespaceId ?? '',
+      resourceType: prettifyNameSingular(column?.resourceType ?? ''),
+      apiGroup: column?.apiGroup ?? '',
+      apiVersion: column?.apiVersion ?? '',
+      resourceName: column?.resourceName ?? '',
     };
   };
 

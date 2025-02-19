@@ -66,6 +66,13 @@ export function SidebarNavigation() {
 
   const setDefaultColumnLayout = () => {
     setLayoutColumn({
+      startColumn: {
+        resourceType: null,
+        resourceName: 'Cluster Overview',
+        namespaceId: null,
+        apiGroup: null,
+        apiVersion: null,
+      },
       midColumn: null,
       endColumn: null,
       layout: 'OneColumn',
@@ -131,7 +138,20 @@ export function SidebarNavigation() {
                     isFormOpen,
                     setIsFormOpen,
                     () => {
-                      setDefaultColumnLayout();
+                      setLayoutColumn(prevState => ({
+                        startColumn: {
+                          resourceType:
+                            prevState.startColumn?.resourceType ?? null,
+                          resourceName:
+                            prevState.startColumn?.resourceName ?? null,
+                          apiGroup: prevState.startColumn?.apiGroup ?? null,
+                          apiVersion: prevState.startColumn?.apiVersion ?? null,
+                          namespaceId: e.target.value,
+                        },
+                        midColumn: null,
+                        endColumn: null,
+                        layout: 'OneColumn',
+                      }));
                       return e.target.value === t('navigation.all-namespaces')
                         ? navigate(
                             namespaceUrl(resourceType, {
