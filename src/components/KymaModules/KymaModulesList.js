@@ -435,7 +435,7 @@ export default function KymaModulesList({
         resource.version = module.spec.data.apiVersion.split('/')[1];
         resource.kind = module.spec.data.kind;
       }
-      return resource;
+      return resource ? [resource] : [];
     };
 
     const handleItemClick = async (kind, group, version) => {
@@ -479,6 +479,7 @@ export default function KymaModulesList({
 
     const generateAssociatedResourcesUrls = async resources => {
       const allUrls = [];
+
       for (const resource of resources) {
         const isNamespaced = await getScope(
           resource.group,
@@ -534,8 +535,8 @@ export default function KymaModulesList({
         const resources = getAssociatedResources();
         const counts = await fetchResourceCounts(resources);
         const urls = await generateAssociatedResourcesUrls(resources);
-        const crUResource = await getCRResource();
-        const crUrl = await generateAssociatedResourcesUrls([crUResource]);
+        const crUResources = await getCRResource();
+        const crUrl = await generateAssociatedResourcesUrls(crUResources);
 
         setResourceCounts(counts);
         setForceDeleteUrls(urls);
