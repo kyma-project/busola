@@ -4,7 +4,7 @@ interface GetPromptSuggestionsParams {
   post: PostFn;
   namespace?: string;
   resourceType: string;
-  groupVersion: string;
+  groupVersion?: string;
   resourceName?: string;
 }
 

@@ -67,8 +67,8 @@ export function SidebarNavigation() {
   const setDefaultColumnLayout = () => {
     setLayoutColumn({
       startColumn: {
-        resourceType: null,
-        resourceName: 'Cluster Overview',
+        resourceType: 'Cluster',
+        resourceName: null,
         namespaceId: null,
         apiGroup: null,
         apiVersion: null,

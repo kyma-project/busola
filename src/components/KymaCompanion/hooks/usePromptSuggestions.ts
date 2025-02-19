@@ -50,7 +50,7 @@ export function usePromptSuggestions() {
       }
     }
 
-    if (resourceType && groupVersion && suggestions.length === 0) {
+    if (resourceType && suggestions.length === 0) {
       fetchSuggestions();
     }
   }, [columnLayout, suggestions, post, setSessionID]);
