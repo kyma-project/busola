@@ -32,7 +32,6 @@ config:
         kubeconfigUrl: /kubeconfig
     SENTRY:
       isEnabled: true
-      selectors: []
       config:
         dsn: ''
     EXTERNAL_NODES:

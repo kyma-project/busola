@@ -43,7 +43,6 @@ config:
         kubeconfigUrl: https://kyma-env-broker.cp.kyma.cloud.sap/kubeconfig
     SENTRY:
       isEnabled: false
-      selectors: []
       config:
         dsn: ''
     SHOW_KYMA_VERSION:
