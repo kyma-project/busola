@@ -47,6 +47,13 @@ export function ResourceQuotasList(props: any) {
 
   const handleShowCreate = () => {
     setLayoutColumn({
+      startColumn: {
+        resourceName: null,
+        resourceType: 'ResourceQuota',
+        namespaceId: props.namespace,
+        apiGroup: '',
+        apiVersion: 'v1',
+      },
       midColumn: null,
       endColumn: null,
       showCreate: {

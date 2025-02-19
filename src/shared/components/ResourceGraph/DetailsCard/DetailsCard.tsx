@@ -68,6 +68,7 @@ export function DetailsCard({
 
             setLayoutColumn({
               layout: 'OneColumn',
+              startColumn: null,
               midColumn: null,
               endColumn: null,
             });

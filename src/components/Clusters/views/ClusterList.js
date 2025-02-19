@@ -50,6 +50,7 @@ function ClusterList() {
   useEffect(() => {
     setLayoutColumn({
       layout: 'OneColumn',
+      startColumn: null,
       midColumn: null,
       endColumn: null,
     });

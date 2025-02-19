@@ -56,6 +56,7 @@ export function useSearchResults({
   const navigateAndCloseColumns = (to: To) => {
     setLayoutColumn({
       layout: 'OneColumn',
+      startColumn: null,
       midColumn: null,
       endColumn: null,
     });
