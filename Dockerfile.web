@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM node:20.17-alpine3.20  AS builder
+FROM node:22.14-alpine3.21  AS builder
 ARG default_tag
 ARG tag
 
@@ -22,7 +22,7 @@ RUN export TAG=${tag:-$default_tag} &&  yq -i '.version = "'${TAG}'"' public/ver
 RUN npm run build:docker
 
 # ---- Environments Configuration ----
-FROM node:20.17-alpine3.20 as configuration
+FROM node:22.14-alpine3.21 as configuration
 WORKDIR /kyma
 
 RUN apk add make

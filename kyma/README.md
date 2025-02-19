@@ -36,7 +36,7 @@ The `extensions` directory contains a general extensibility configuration to avo
 ## Prerequisites
 
 - [`npm`](https://www.npmjs.com/) in version 10.x
-- [Node.js](https://nodejs.org/en/) in version 20.x
+- [Node.js](https://nodejs.org/en/) in version 22.x
 - [Make](https://www.gnu.org/software/make/)
 
 ## Installation

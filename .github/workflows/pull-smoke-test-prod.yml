@@ -36,7 +36,7 @@ jobs:
           ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: setup_busola
         shell: bash
         run: |
@@ -57,7 +57,7 @@ jobs:
         if: ${{ always() }}
         with:
           name: cypress-${{ github.job }}
-          path: tests/cypress/
+          path: tests/integration/cypress/
           retention-days: 90
       - name: Upload Kyma Dashboard logs
         uses: actions/upload-artifact@v4

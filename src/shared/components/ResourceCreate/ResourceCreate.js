@@ -120,6 +120,7 @@ export const ResourceCreate = ({
   function renderConfirmButton() {
     return (
       <Button
+        className="min-width-button"
         disabled={readOnly || disableEdit}
         aria-disabled={readOnly || disableEdit}
         onClick={handleFormSubmit}
