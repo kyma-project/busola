@@ -123,7 +123,7 @@ export const findModuleStatus = (
   moduleName: string,
 ) => {
   return kymaResource?.status?.modules?.find(
-    (module: { name: string }) => moduleName === module.name,
+    (module: { name: string }) => moduleName === module?.name,
   );
 };
 
@@ -132,7 +132,7 @@ export const findModuleSpec = (
   moduleName: string,
 ) => {
   return kymaResource?.spec.modules?.find(
-    (module: { name: string }) => moduleName === module.name,
+    (module: { name: string }) => moduleName === module?.name,
   );
 };
 
