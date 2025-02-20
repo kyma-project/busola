@@ -30,7 +30,7 @@ export function CommandPaletteSearchBar({ slot }: { slot?: string }) {
       '.command-palette-ui__wrapper',
     ) as HTMLElement;
 
-    if (paletteWrapper) {
+    if (paletteWrapper && window.screen.width > 1040) {
       paletteWrapper.style.left = `${shellbarRect.left +
         shellbarRect.width / 2 -
         paletteContent.offsetWidth / 2}px`;

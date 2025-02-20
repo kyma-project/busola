@@ -12,7 +12,7 @@ import {
 import { ResultsList } from './ResultsList/ResultsList';
 import { useSearchResults } from './useSearchResults';
 import { K8sResource } from 'types';
-import { Icon, Input } from '@ui5/webcomponents-react';
+import { Button, Icon, Input } from '@ui5/webcomponents-react';
 import './CommandPaletteUI.scss';
 
 function Background({
@@ -185,16 +185,27 @@ export function CommandPaletteUI({
             namespaceContext={namespaceContext}
             setNamespaceContext={setNamespaceContext}
           />
-          <Input
-            id="command-palette-search"
-            accessibleName="command-palette-search"
-            value={!isHistoryMode ? query : ''}
-            placeholder={!isHistoryMode ? '' : query}
-            onInput={(e: any) => setQuery((e.target as HTMLInputElement).value)}
-            showClearIcon
-            className="search-with-display-more full-width"
-            icon={<Icon name="slim-arrow-right" />}
-          />
+          <div className="input-container">
+            <Button
+              className="input-back-button"
+              design="Transparent"
+              onClick={hide}
+            >
+              <Icon name="nav-back"></Icon>
+            </Button>
+            <Input
+              id="command-palette-search"
+              accessibleName="command-palette-search"
+              value={!isHistoryMode ? query : ''}
+              placeholder={!isHistoryMode ? '' : query}
+              onInput={(e: any) =>
+                setQuery((e.target as HTMLInputElement).value)
+              }
+              showClearIcon
+              className="search-with-display-more full-width"
+              icon={<Icon name="slim-arrow-right" />}
+            />
+          </div>
           {!showHelp && (
             <>
               <ResultsList

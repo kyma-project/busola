@@ -7,6 +7,7 @@
   z-index: 1000000;
 
   &__wrapper {
+    display: flex;
     width: 60vw;
     max-width: 700px;
     position: fixed;
@@ -24,5 +25,45 @@
         color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
       0 0.5rem 1rem 0
         color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .search-with-display-more {
+    }
+
+    .input-back-button {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 1040px) {
+  .command-palette-ui {
+    &__wrapper {
+      width: 100vw;
+      max-width: unset;
+      top: 0;
+      height: 100%;
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .search-with-display-more {
+        margin-right: 2.5rem;
+      }
+
+      .input-back-button {
+        display: block;
+        padding: 0 0.25rem;
+        box-sizing: content-box;
+      }
+    }
   }
 }
