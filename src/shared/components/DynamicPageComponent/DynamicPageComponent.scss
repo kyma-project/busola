@@ -10,6 +10,12 @@
     [slot='actionsBar'] {
       pointer-events: auto;
     }
+
+    @media (max-width: 340px) {
+      .bold-title {
+        text-wrap-mode: wrap;
+      }
+    }
   }
 
   .bold-title {
