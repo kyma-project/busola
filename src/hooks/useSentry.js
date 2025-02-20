@@ -9,8 +9,14 @@ export function useSentry() {
     Sentry.init({
       dsn,
       release: 'busola',
-      integrations: [new Sentry.browserTracingIntegration()],
+      integrations: [
+        new Sentry.browserTracingIntegration(),
+        Sentry.replayIntegration(),
+      ],
       tracesSampleRate: 1.0,
+      // Session Replay
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
     });
   };
 
