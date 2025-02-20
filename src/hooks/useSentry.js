@@ -8,7 +8,7 @@ const initSentry = dsn => {
     release: 'busola',
     integrations: [
       new Sentry.browserTracingIntegration(),
-      Sentry.replayIntegration(),
+      new Sentry.replayIntegration(),
     ],
     tracesSampleRate: 1.0,
     // Session Replay
