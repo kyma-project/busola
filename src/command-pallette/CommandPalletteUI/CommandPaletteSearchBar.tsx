@@ -50,6 +50,7 @@ export function CommandPaletteSearchBar({ slot }: { slot?: string }) {
       <Input
         accessibleName="command-palette-search-bar"
         onClick={() => setOpen(true)}
+        onInput={e => e.preventDefault()}
         showClearIcon
         className="search-with-display-more command-palette-search-bar"
         icon={<Icon name="slim-arrow-right" />}

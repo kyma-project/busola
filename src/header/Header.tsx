@@ -177,6 +177,7 @@ export function Header() {
         onProfileClick={() => setIsMenuOpen(true)}
         searchField={<CommandPaletteSearchBar slot="searchField" />}
         showSearchField
+        onSearchButtonClick={e => e.preventDefault()}
         ref={shellbarRef}
       >
         {isSnowEnabled && (
