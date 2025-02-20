@@ -57,23 +57,35 @@ const ColumnWrapper = ({
     [props.namespaceId, namespaceIdFromParams],
   );
 
-  const initialLayoutState = {
-    layout: layout ?? layoutState?.layout,
-    startColumn: {
-      resourceType: props.resourceType,
-      namespaceId: namespaceId,
-      apiGroup: props.apiGroup,
-      apiVersion: props.apiVersion,
-    },
-    midColumn: {
-      resourceName: resourceName,
-      resourceType: props.resourceType,
-      namespaceId: namespaceId,
-      apiGroup: props.apiGroup,
-      apiVersion: props.apiVersion,
-    },
-    endColumn: null,
-  };
+  const initialLayoutState = layout
+    ? {
+        layout: layout,
+        startColumn: {
+          resourceType: props.resourceType,
+          namespaceId: namespaceId,
+          apiGroup: props.apiGroup,
+          apiVersion: props.apiVersion,
+        },
+        midColumn: {
+          resourceName: resourceName,
+          resourceType: props.resourceType,
+          namespaceId: namespaceId,
+          apiGroup: props.apiGroup,
+          apiVersion: props.apiVersion,
+        },
+        endColumn: null,
+      }
+    : {
+        layout: layoutState?.layout,
+        startColumn: {
+          resourceType: props.resourceType,
+          namespaceId: namespaceId,
+          apiGroup: props.apiGroup,
+          apiVersion: props.apiVersion,
+        },
+        midColumn: null,
+        endColumn: null,
+      };
 
   useEffect(() => {
     setLayoutColumn(initialLayoutState);

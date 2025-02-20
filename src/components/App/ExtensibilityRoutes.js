@@ -34,24 +34,36 @@ const ColumnWrapper = ({
   const { t } = useTranslation();
 
   const { namespaceId, resourceName } = useParams();
-  const initialLayoutState = {
-    layout: layout ?? layoutState?.layout,
-    startColumn: {
-      resourceName: null,
-      resourceType: urlPath ?? resourceType,
-      namespaceId: namespaceId,
-      apiGroup: extension?.general.resource.group,
-      apiVersion: extension?.general.resource.version,
-    },
-    midColumn: {
-      resourceName: resourceName,
-      resourceType: urlPath ?? resourceType,
-      namespaceId: namespaceId,
-      apiGroup: extension?.general.resource.group,
-      apiVersion: extension?.general.resource.version,
-    },
-    endColumn: null,
-  };
+  const initialLayoutState = layout
+    ? {
+        layout: layout,
+        startColumn: {
+          resourceName: null,
+          resourceType: urlPath ?? resourceType,
+          namespaceId: namespaceId,
+          apiGroup: extension?.general.resource.group,
+          apiVersion: extension?.general.resource.version,
+        },
+        midColumn: {
+          resourceName: resourceName,
+          resourceType: urlPath ?? resourceType,
+          namespaceId: namespaceId,
+          apiGroup: extension?.general.resource.group,
+          apiVersion: extension?.general.resource.version,
+        },
+        endColumn: null,
+      }
+    : {
+        layout: layoutState?.layout,
+        startColumn: {
+          resourceType: urlPath ?? resourceType,
+          namespaceId: namespaceId,
+          apiGroup: extension?.general.resource.group,
+          apiVersion: extension?.general.resource.version,
+        },
+        midColumn: null,
+        endColumn: null,
+      };
 
   useEffect(() => {
     setLayoutColumn(initialLayoutState);

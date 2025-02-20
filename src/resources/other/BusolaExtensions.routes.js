@@ -32,19 +32,29 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const { namespace, name } = useParams();
 
-  const initialLayoutState = {
-    layout: layout ?? layoutState?.layout,
-    startColumn: {
-      resourceType: 'Extensions',
-      namespaceId: namespace,
-    },
-    midColumn: {
-      resourceName: name,
-      resourceType: 'Extensions',
-      namespaceId: namespace,
-    },
-    endColumn: null,
-  };
+  const initialLayoutState = layout
+    ? {
+        layout: layout,
+        startColumn: {
+          resourceType: 'Extensions',
+          namespaceId: namespace,
+        },
+        midColumn: {
+          resourceName: name,
+          resourceType: 'Extensions',
+          namespaceId: namespace,
+        },
+        endColumn: null,
+      }
+    : {
+        layout: layoutState?.layout,
+        startColumn: {
+          resourceType: 'Extensions',
+          namespaceId: namespace,
+        },
+        midColumn: null,
+        endColumn: null,
+      };
 
   useEffect(() => {
     setLayoutColumn(initialLayoutState);

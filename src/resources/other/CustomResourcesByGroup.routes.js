@@ -36,27 +36,36 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const { crdName, crName } = useParams();
   const { namespace, scopedUrl } = useUrl();
 
-  const initialLayoutState = {
-    layout: layout ?? layoutState?.layout,
-    startColumn: {
-      resourceType: 'CustomResourceDefinition',
-    },
-    midColumn: crdName
-      ? {
-          resourceName: crdName,
+  const initialLayoutState = layout
+    ? {
+        layout: layout,
+        startColumn: {
           resourceType: 'CustomResourceDefinition',
-          namespaceId: null,
-        }
-      : null,
-    endColumn:
-      crdName && crName
-        ? {
-            resourceName: crName,
-            resourceType: crdName,
-            namespaceId: namespace,
-          }
-        : null,
-  };
+        },
+        midColumn: crdName
+          ? {
+              resourceName: crdName,
+              resourceType: 'CustomResourceDefinition',
+              namespaceId: null,
+            }
+          : null,
+        endColumn:
+          crdName && crName
+            ? {
+                resourceName: crName,
+                resourceType: crdName,
+                namespaceId: namespace,
+              }
+            : null,
+      }
+    : {
+        layout: layoutState?.layout,
+        startColumn: {
+          resourceType: 'CustomResourceDefinition',
+        },
+        midColumn: null,
+        endColumn: null,
+      };
 
   useEffect(() => {
     setLayoutColumn(initialLayoutState);

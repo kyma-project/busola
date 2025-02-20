@@ -19,19 +19,29 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const layout = searchParams.get('layout');
   const { namespaceId, releaseName } = useParams();
 
-  const initialLayoutState = {
-    layout: layout ? layout : layoutState?.layout,
-    startColumn: {
-      resourceType: 'HelmReleases',
-      namespaceId,
-    },
-    midColumn: {
-      resourceName: releaseName,
-      resourceType: 'HelmReleases',
-      namespaceId,
-    },
-    endColumn: null,
-  };
+  const initialLayoutState = layout
+    ? {
+        layout: layout,
+        startColumn: {
+          resourceType: 'HelmReleases',
+          namespaceId,
+        },
+        midColumn: {
+          resourceName: releaseName,
+          resourceType: 'HelmReleases',
+          namespaceId,
+        },
+        endColumn: null,
+      }
+    : {
+        layout: layoutState?.layout,
+        startColumn: {
+          resourceType: 'HelmReleases',
+          namespaceId,
+        },
+        midColumn: null,
+        endColumn: null,
+      };
 
   useEffect(() => {
     setLayoutColumn(initialLayoutState);
