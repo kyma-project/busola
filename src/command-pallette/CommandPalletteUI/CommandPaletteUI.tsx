@@ -1,5 +1,8 @@
 import { ReactNode, useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { useEventListener } from 'hooks/useEventListener';
+import { addHistoryEntry, getHistoryEntries } from './search-history';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import {
   CommandPalletteHelp,
   NamespaceContextDisplay,
@@ -7,13 +10,10 @@ import {
   SuggestedQuery,
 } from './components/components';
 import { ResultsList } from './ResultsList/ResultsList';
-import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { useSearchResults } from './useSearchResults';
-import './CommandPaletteUI.scss';
 import { K8sResource } from 'types';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { Icon, Input } from '@ui5/webcomponents-react';
+import './CommandPaletteUI.scss';
 
 function Background({
   hide,

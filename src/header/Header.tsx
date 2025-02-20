@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
   ShellBar,
   ShellBarItem,
   ListItemStandard,
+  ShellBarDomRef,
 } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
@@ -59,6 +60,22 @@ export function Header() {
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
+
+  const shellbarRef = useRef<ShellBarDomRef | null>(null);
+
+  useEffect(() => {
+    const shellbarChildren = shellbarRef?.current?.shadowRoot
+      ?.querySelector('header')
+      ?.querySelector('.ui5-shellbar-overflow-container-right-child');
+    const searchField = shellbarChildren?.querySelector(
+      '.ui5-shellbar-search-field',
+    );
+
+    if (shellbarChildren && searchField) {
+      (shellbarChildren as HTMLElement).style.width = '100%';
+      (searchField as HTMLElement).style.justifyContent = 'center';
+    }
+  }, [shellbarRef.current]);
 
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
@@ -160,6 +177,7 @@ export function Header() {
         onProfileClick={() => setIsMenuOpen(true)}
         searchField={<CommandPaletteSearchBar slot="searchField" />}
         showSearchField
+        ref={shellbarRef}
       >
         {isSnowEnabled && (
           <ShellBarItem
