@@ -31,9 +31,7 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
   const getHelpLinks = useGetHelpLinks();
-  const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
-    configFeaturesNames.FEEDBACK,
-  );
+  const { link: feedbackLink } = useFeature(configFeaturesNames.FEEDBACK);
 
   const nonBreakableSpaces = (number: number): string => {
     let spaces = '';

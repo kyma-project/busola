@@ -75,6 +75,7 @@ export function Header() {
       (shellbarChildren as HTMLElement).style.width = '100%';
       (searchField as HTMLElement).style.justifyContent = 'center';
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shellbarRef.current]);
 
   useEffect(() => {
