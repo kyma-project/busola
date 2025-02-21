@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 import { allNodesSelector } from 'state/navigation/allNodesSelector';
 import { useUrl } from 'hooks/useUrl';
 
-export function useCustomResourceUrl(crd, columnLayout = false) {
+export function useCustomResourceUrl(crd) {
   const { resourceUrl, clusterUrl, namespaceUrl } = useUrl();
   const clusterNodes = useRecoilValue(allNodesSelector).filter(
     node => !node.namespaced,
@@ -22,8 +22,10 @@ export function useCustomResourceUrl(crd, columnLayout = false) {
     );
 
     if (clusterNode) {
-      return resourceUrl(cr, { resourceType: clusterNode.pathSegment });
-    } else if (namespaceNode && !columnLayout) {
+      return clusterUrl(
+        `customresources/${crd.metadata.name}/${cr.metadata.name}`,
+      );
+    } else if (namespaceNode) {
       return resourceUrl(cr, { resourceType: namespaceNode.pathSegment });
     } else if (crd.spec.scope === 'Cluster') {
       return clusterUrl(
