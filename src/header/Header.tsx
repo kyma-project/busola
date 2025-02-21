@@ -1,16 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
-  Menu,
-  MenuItem,
-  Ui5CustomEvent,
-  MenuDomRef,
   ShellBar,
   ShellBarItem,
   ListItemStandard,
+  ShellBarDomRef,
 } from '@ui5/webcomponents-react';
-import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -18,22 +14,20 @@ import { useFeature } from 'hooks/useFeature';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
-import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 
 import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
-import { useGetLegalLinks, LegalLink } from './SidebarMenu/useGetLegalLinks';
-import { useGetHelpLinks, GetHelpLink } from './SidebarMenu/useGetHelpLinks';
-import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 
-import './Header.scss';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
 import { themeState } from 'state/preferences/themeAtom';
+import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
+import './Header.scss';
+import { HeaderMenu } from './HeaderMenu';
 
 const SNOW_STORAGE_KEY = 'snow-animation';
 
@@ -48,6 +42,7 @@ export function Header() {
   };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSnowOpen, setIsSnowOpen] = useState(localStorageSnowEnabled());
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -56,11 +51,6 @@ export function Header() {
   );
   const { isEnabled: isSnowEnabled } = useFeature(configFeaturesNames.SNOW);
 
-  const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
-  const legalLinks = useGetLegalLinks();
-  const getHelpLinks = useGetHelpLinks();
-
-  const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
@@ -72,6 +62,22 @@ export function Header() {
   const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
 
+  const shellbarRef = useRef<ShellBarDomRef | null>(null);
+
+  useEffect(() => {
+    const shellbarChildren = shellbarRef?.current?.shadowRoot
+      ?.querySelector('header')
+      ?.querySelector('.ui5-shellbar-overflow-container-right-child');
+    const searchField = shellbarChildren?.querySelector(
+      '.ui5-shellbar-search-field',
+    );
+
+    if (searchField) {
+      (searchField as HTMLElement).style.display = 'flex'; //prevents search bar from disappearing after some time of inactivity
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shellbarRef.current]);
+
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
       setIsSnowOpen(false);
@@ -82,14 +88,6 @@ export function Header() {
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
-
-  const nonBreakableSpaces = (number: number): string => {
-    let spaces = '';
-    for (let i = 0; i < number; i++) {
-      spaces += '\u00a0';
-    }
-    return spaces;
-  };
 
   const handleSnowButtonClick = () => {
     if (isSnowOpen) {
@@ -113,32 +111,6 @@ export function Header() {
       {t('clusters.overview.title-all-clusters')}
     </ListItemStandard>,
   ];
-
-  const openNewWindow = (link: string) => {
-    const newWindow = window.open(link, '_blank', 'noopener, noreferrer');
-    if (newWindow) newWindow.opener = null;
-  };
-
-  const handleMenuItemClick = (
-    e: Ui5CustomEvent<MenuDomRef, MenuItemClickEventDetail>,
-  ) => {
-    const legalLinkUsed = legalLinks.find(x => x.label === e.detail.text);
-    const getHelpLinkUsed = getHelpLinks.find(x => x.label === e.detail.text);
-
-    if (e.detail.text === t('navigation.preferences.title')) {
-      setPreferencesOpen(true);
-    } else if (e.detail.text === t('navigation.menu.give-feedback')) {
-      openNewWindow(feedbackLink);
-    } else if (legalLinkUsed) {
-      openNewWindow(legalLinkUsed.link);
-    } else if (
-      e.detail.text === `${t('common.labels.version')} ${busolaVersion}`
-    ) {
-      openNewWindow(githubLink);
-    } else if (getHelpLinkUsed) {
-      openNewWindow(getHelpLinkUsed.link);
-    }
-  };
 
   return (
     <>
@@ -204,6 +176,22 @@ export function Header() {
           />
         }
         onProfileClick={() => setIsMenuOpen(true)}
+        searchField={
+          <CommandPaletteSearchBar
+            shouldFocus={isSearchOpen}
+            slot="searchField"
+            setShouldFocus={setIsSearchOpen}
+          />
+        }
+        showSearchField
+        onSearchButtonClick={e => {
+          if (!e.detail.searchFieldVisible) {
+            setIsSearchOpen(true);
+            return;
+          }
+          setIsSearchOpen(false);
+        }}
+        ref={shellbarRef}
       >
         {isSnowEnabled && (
           <ShellBarItem
@@ -237,60 +225,7 @@ export function Header() {
           />
         )}
       </ShellBar>
-      <Menu
-        open={isMenuOpen}
-        opener="openShellbarMenu"
-        onClose={() => {
-          setIsMenuOpen(false);
-        }}
-        onItemClick={handleMenuItemClick}
-      >
-        <MenuItem
-          onClick={() => setPreferencesOpen(true)}
-          key="preferences"
-          text={t('navigation.preferences.title')}
-          icon="wrench"
-        />
-        <MenuItem
-          key="give-feedback"
-          text={t('navigation.menu.give-feedback')}
-          icon="feedback"
-        />
-        <MenuItem
-          key="get-help"
-          text={t('navigation.menu.get-help')}
-          icon="sys-help"
-        >
-          {getHelpLinks.map((getHelpLint: GetHelpLink) => (
-            <MenuItem
-              key={getHelpLint.link}
-              text={getHelpLint.label}
-              icon="inspect"
-            />
-          ))}
-        </MenuItem>
-        <MenuItem
-          key="legal-information"
-          text={t('navigation.menu.legal-information') + nonBreakableSpaces(6)}
-          icon="official-service"
-        >
-          {legalLinks.map((legalLink: LegalLink) => (
-            <MenuItem
-              key={legalLink.link}
-              text={legalLink.label}
-              icon="inspect"
-            />
-          ))}
-          <MenuItem
-            onClick={() => {
-              window.open(githubLink, '_blank', 'noopener, noreferrer');
-            }}
-            text={t('common.labels.version')}
-            additionalText={busolaVersion}
-            icon="inspect"
-          />
-        </MenuItem>
-      </Menu>
+      <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
     </>
   );
 }

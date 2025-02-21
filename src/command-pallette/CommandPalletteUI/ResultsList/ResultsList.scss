@@ -6,3 +6,9 @@
     background: var(--sapList_SelectionBackgroundColor);
   }
 }
+
+@media (max-width: 1040px) {
+  .command-palette-ui__results {
+    max-height: unset;
+  }
+}
