@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useEventListener } from 'hooks/useEventListener';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -14,6 +14,9 @@ import { useSearchResults } from './useSearchResults';
 import { K8sResource } from 'types';
 import { Button, Icon, Input } from '@ui5/webcomponents-react';
 import './CommandPaletteUI.scss';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 function Background({
   hide,
@@ -51,6 +54,10 @@ export function CommandPaletteUI({
   updateResourceCache,
 }: CommandPaletteProps) {
   const namespace = useRecoilValue(activeNamespaceIdState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
@@ -79,7 +86,10 @@ export function CommandPaletteUI({
 
   useEffect(() => setNamespaceContext(namespace), [namespace]);
   useEffect(() => {
-    document.getElementById('command-palette-search')?.focus();
+    setTimeout(
+      () => document.getElementById('command-palette-search')?.focus(),
+      100,
+    );
   }, []);
 
   useEffect(() => {
@@ -132,8 +142,18 @@ export function CommandPaletteUI({
     const historyEntries = getHistoryEntries();
     if (key === 'Enter' && results[0]) {
       // choose current entry
-      addHistoryEntry(results[0].query);
-      results[0].onActivate();
+      e.preventDefault();
+
+      handleActionIfFormOpen(
+        isResourceEdited,
+        setIsResourceEdited,
+        isFormOpen,
+        setIsFormOpen,
+        () => {
+          addHistoryEntry(results[0].query);
+          results[0].onActivate();
+        },
+      );
     } else if (key === 'Tab') {
       e.preventDefault();
       // fill search with active history entry
