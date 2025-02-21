@@ -10,32 +10,9 @@ import './CommandPaletteSearchBar.scss';
 export function CommandPaletteSearchBar({ slot }: { slot?: string }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const inputRef = useRef<InputDomRef | null>(null);
-  const commandPaletteRef = useRef<HTMLDivElement | null>(null);
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
-
-  useEffect(() => {
-    if (!open || !inputRef.current || !commandPaletteRef.current) return;
-
-    const shellbarRect = inputRef.current.getBoundingClientRect();
-    const paletteContent = commandPaletteRef.current.querySelector(
-      '.command-palette-ui__content',
-    ) as HTMLElement;
-
-    if (!paletteContent) return;
-
-    const paletteWrapper = commandPaletteRef.current.querySelector(
-      '.command-palette-ui__wrapper',
-    ) as HTMLElement;
-
-    if (paletteWrapper && window.screen.width > 1040) {
-      paletteWrapper.style.left = `${shellbarRect.left +
-        shellbarRect.width / 2 -
-        paletteContent.offsetWidth / 2}px`;
-    }
-  }, [open]);
 
   const setShowDialog = (value: boolean) => {
     const modalPresent = document.querySelector('ui5-dialog[open]');
@@ -48,6 +25,7 @@ export function CommandPaletteSearchBar({ slot }: { slot?: string }) {
   return (
     <>
       <Input
+        id="command-palette-search-bar"
         accessibleName="command-palette-search-bar"
         onClick={() => setOpen(true)}
         onInput={e => e.preventDefault()}
@@ -56,18 +34,15 @@ export function CommandPaletteSearchBar({ slot }: { slot?: string }) {
         icon={<Icon name="slim-arrow-right" />}
         slot={slot}
         placeholder={t('command-palette.search.quick-navigation')}
-        ref={inputRef}
       />
       {open &&
         createPortal(
-          <div ref={commandPaletteRef}>
-            <CommandPaletteUI
-              showCommandPalette={open}
-              hide={() => setShowDialog(false)}
-              resourceCache={resourceCache}
-              updateResourceCache={updateResourceCache}
-            />
-          </div>,
+          <CommandPaletteUI
+            showCommandPalette={open}
+            hide={() => setShowDialog(false)}
+            resourceCache={resourceCache}
+            updateResourceCache={updateResourceCache}
+          />,
           document.body,
         )}
     </>

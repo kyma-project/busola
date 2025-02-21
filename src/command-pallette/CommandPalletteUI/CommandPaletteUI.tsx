@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useEventListener } from 'hooks/useEventListener';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
@@ -62,6 +62,8 @@ export function CommandPaletteUI({
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
 
+  const commandPaletteRef = useRef<HTMLDivElement | null>(null);
+
   const {
     results,
     suggestedQuery,
@@ -79,6 +81,21 @@ export function CommandPaletteUI({
   useEffect(() => {
     document.getElementById('command-palette-search')?.focus();
   }, []);
+
+  useEffect(() => {
+    const headerInput = document.getElementById('command-palette-search-bar');
+    const paletteCurrent = commandPaletteRef.current;
+
+    if (!showCommandPalette || !headerInput || !paletteCurrent) return;
+
+    const shellbarRect = headerInput.getBoundingClientRect();
+
+    if (paletteCurrent && window.screen.width > 1040) {
+      paletteCurrent.style.left = `${shellbarRect.left +
+        shellbarRect.width / 2 -
+        paletteCurrent.offsetWidth / 2}px`;
+    }
+  }, [showCommandPalette]);
 
   const commandPaletteInput = document.getElementById('command-palette-search');
 
@@ -179,7 +196,11 @@ export function CommandPaletteUI({
 
   return (
     <Background hide={hide}>
-      <div className="command-palette-ui__wrapper" role="dialog">
+      <div
+        className="command-palette-ui__wrapper"
+        role="dialog"
+        ref={commandPaletteRef}
+      >
         <div className="command-palette-ui__content">
           <NamespaceContextDisplay
             namespaceContext={namespaceContext}
