@@ -19,7 +19,7 @@ const getPercentageFromUsage = (value, total) => {
 const formatKiToGiMemory = memoryStr =>
   round(parseInt(memoryStr || '0') / 1024 / 1024, 1);
 
-const createUsageMetrics = (node, metricsForNode) => {
+export const createUsageMetrics = (node, metricsForNode) => {
   const cpuUsage = getCpus(metricsForNode?.usage.cpu);
   const memoryUsage = formatKiToGiMemory(metricsForNode?.usage.memory);
   const cpuCapacity = getCpus(node.status.allocatable?.cpu || '0');
