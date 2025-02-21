@@ -59,20 +59,36 @@ const ColumnWrapper = ({
 
   const initialLayoutState = layout
     ? {
-        layout: layout ?? layoutState?.layout,
+        layout: layout,
+        startColumn: {
+          resourceType: props.resourceType,
+          namespaceId: namespaceId,
+          apiGroup: props.apiGroup,
+          apiVersion: props.apiVersion,
+        },
         midColumn: {
           resourceName: resourceName,
           resourceType: props.resourceType,
           namespaceId: namespaceId,
+          apiGroup: props.apiGroup,
+          apiVersion: props.apiVersion,
         },
         endColumn: null,
       }
-    : null;
+    : {
+        layout: layoutState?.layout,
+        startColumn: {
+          resourceType: props.resourceType,
+          namespaceId: namespaceId,
+          apiGroup: props.apiGroup,
+          apiVersion: props.apiVersion,
+        },
+        midColumn: null,
+        endColumn: null,
+      };
 
   useEffect(() => {
-    if (layout && resourceName && props.resourceType) {
-      setLayoutColumn(initialLayoutState);
-    }
+    setLayoutColumn(initialLayoutState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout, namespaceId, resourceName, props.resourceType]);
 
