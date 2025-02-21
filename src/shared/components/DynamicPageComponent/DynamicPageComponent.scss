@@ -10,16 +10,11 @@
     [slot='actionsBar'] {
       pointer-events: auto;
     }
-
-    @media (max-width: 340px) {
-      .bold-title {
-        text-wrap-mode: wrap;
-      }
-    }
   }
 
   .bold-title {
     font-family: var(--sapObjectHeader_Title_FontFamily);
+    text-wrap-mode: wrap;
   }
 
   .description {
