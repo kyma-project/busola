@@ -173,20 +173,12 @@ export function useDeleteResource({
     resourceTitle,
     resourceIsCluster = false,
     resourceUrl,
-    closeFn,
     deleteFn,
     cancelFn,
     additionalDeleteInfo,
     disableDeleteButton = false,
     allowForceDelete = false,
   }) => {
-    const closeDeleteDialog = () => {
-      setShowDeleteDialog(false);
-      if (closeFn) {
-        closeFn();
-      }
-    };
-
     return (
       <MessageBox
         style={{ maxWidth: '700px' }}
@@ -223,13 +215,14 @@ export function useDeleteResource({
             design="Transparent"
             onClick={() => {
               performCancel(cancelFn);
-              closeDeleteDialog();
             }}
           >
             {t('common.buttons.cancel')}
           </Button>,
         ]}
-        onClose={closeDeleteDialog}
+        onClose={() => {
+          performCancel(cancelFn);
+        }}
       >
         <FlexBox
           direction="Column"

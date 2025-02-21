@@ -535,7 +535,7 @@ export default function KymaModulesList({
         const resources = getAssociatedResources();
         const counts = await fetchResourceCounts(resources);
         const urls = await generateAssociatedResourcesUrls(resources);
-        const crUResources = await getCRResource();
+        const crUResources = getCRResource();
         const crUrl = await generateAssociatedResourcesUrls(crUResources);
 
         setResourceCounts(counts);
@@ -599,6 +599,7 @@ export default function KymaModulesList({
                 checkIfAssociatedResourceLeft() ? allowForceDelete : false
               }
               cancelFn={() => {
+                setAllowForceDelete(false);
                 setChosenModuleIndex(null);
               }}
               additionalDeleteInfo={
@@ -646,13 +647,16 @@ export default function KymaModulesList({
                           );
                         })}
                       </List>
-                      <CheckBox
-                        checked={allowForceDelete}
-                        readonly={!checkIfAssociatedResourceLeft()}
-                        onChange={() => setAllowForceDelete(!allowForceDelete)}
-                        accessibleName={t('kyma-modules.force-edit-info')}
-                        text={t('kyma-modules.force-edit-info')}
-                      />
+                      {checkIfAssociatedResourceLeft() && (
+                        <CheckBox
+                          checked={allowForceDelete}
+                          onChange={() =>
+                            setAllowForceDelete(!allowForceDelete)
+                          }
+                          accessibleName={t('kyma-modules.force-edit-info')}
+                          text={t('kyma-modules.force-edit-info')}
+                        />
+                      )}
                     </>
                   )}
                 </>
@@ -675,10 +679,6 @@ export default function KymaModulesList({
                 if (allowForceDelete && forceDeleteUrls.length > 0) {
                   deleteCrResources();
                 }
-              }}
-              closeFn={() => {
-                setAllowForceDelete(false);
-                setChosenModuleIndex(null);
               }}
             />,
             document.body,
