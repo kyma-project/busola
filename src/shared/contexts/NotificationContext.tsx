@@ -61,6 +61,7 @@ export const NotificationProvider = ({
       {toastProps?.parentContainer &&
         createPortal(
           <Toast
+            accessible-name="notification-content"
             open={!!toastProps}
             ref={toast}
             duration={defaultVisibilityTime}
@@ -76,6 +77,7 @@ export const NotificationProvider = ({
         )}
       {!toastProps?.parentContainer && (
         <Toast
+          accessible-name="notification-content"
           ref={toast}
           duration={defaultVisibilityTime}
           style={{ zIndex: 1 }}
