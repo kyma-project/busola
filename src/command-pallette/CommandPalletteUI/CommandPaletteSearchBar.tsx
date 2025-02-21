@@ -7,12 +7,23 @@ import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
 import './CommandPaletteSearchBar.scss';
 
-export function CommandPaletteSearchBar({ slot }: { slot?: string }) {
+type CommandPaletteSearchBarProps = {
+  slot?: string;
+  shouldFocus?: boolean;
+  setShouldFocus?: Function;
+};
+
+export function CommandPaletteSearchBar({
+  slot,
+  shouldFocus,
+  setShouldFocus,
+}: CommandPaletteSearchBarProps) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(shouldFocus || false);
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
+  const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const setShowDialog = (value: boolean) => {
     const modalPresent = document.querySelector('ui5-dialog[open]');
@@ -35,11 +46,14 @@ export function CommandPaletteSearchBar({ slot }: { slot?: string }) {
         slot={slot}
         placeholder={t('command-palette.search.quick-navigation')}
       />
-      {open &&
+      {shouldShowDialog &&
         createPortal(
           <CommandPaletteUI
-            showCommandPalette={open}
-            hide={() => setShowDialog(false)}
+            showCommandPalette={shouldShowDialog}
+            hide={() => {
+              setShowDialog(false);
+              if (setShouldFocus) setShouldFocus(false);
+            }}
             resourceCache={resourceCache}
             updateResourceCache={updateResourceCache}
           />,

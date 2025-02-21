@@ -42,6 +42,7 @@ export function Header() {
   };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSnowOpen, setIsSnowOpen] = useState(localStorageSnowEnabled());
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -71,9 +72,7 @@ export function Header() {
       '.ui5-shellbar-search-field',
     );
 
-    if (shellbarChildren && searchField) {
-      (shellbarChildren as HTMLElement).style.width = '100%';
-      (searchField as HTMLElement).style.justifyContent = 'center';
+    if (searchField) {
       (searchField as HTMLElement).style.display = 'flex'; //prevents search bar from disappearing after some time of inactivity
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -177,8 +176,21 @@ export function Header() {
           />
         }
         onProfileClick={() => setIsMenuOpen(true)}
-        searchField={<CommandPaletteSearchBar slot="searchField" />}
+        searchField={
+          <CommandPaletteSearchBar
+            shouldFocus={isSearchOpen}
+            slot="searchField"
+            setShouldFocus={setIsSearchOpen}
+          />
+        }
         showSearchField
+        onSearchButtonClick={e => {
+          if (!e.detail.searchFieldVisible) {
+            setIsSearchOpen(true);
+            return;
+          }
+          setIsSearchOpen(false);
+        }}
         ref={shellbarRef}
       >
         {isSnowEnabled && (
