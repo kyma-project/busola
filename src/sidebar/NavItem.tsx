@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import {
+  NavigationType,
   useLocation,
   useNavigate,
   useNavigationType,
-  NavigationType,
+  useSearchParams,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
@@ -15,8 +16,8 @@ import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import {
-  SideNavigationSubItem,
   SideNavigationItem,
+  SideNavigationSubItem,
 } from '@ui5/webcomponents-react';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
@@ -35,6 +36,8 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+
   const navigationType = useNavigationType();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
@@ -83,11 +86,17 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         isFormOpen,
         setIsFormOpen,
         () => {
-          setLayoutColumn({
-            midColumn: null,
-            endColumn: null,
-            layout: 'OneColumn',
-          });
+          // TODO: The layout state change is too late. It happens always after page load.
+          const layout = searchParams.get('layout');
+          console.log(layout);
+          if (!layout) {
+            setLayoutColumn({
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
+          }
+
           const url = node.createUrlFn
             ? node.createUrlFn(urlGenerators)
             : scopedUrl(node.pathSegment);
