@@ -37,8 +37,6 @@ export const CommandPaletteProvider = ({
       setShowDialog(!showDialog);
       // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
       e.preventDefault();
-    } else if (key === 'Escape') {
-      hide();
     }
   };
 

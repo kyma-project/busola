@@ -198,6 +198,10 @@ export function CommandPaletteUI({
     'keydown',
     (e: Event) => {
       const { key } = e as KeyboardEvent;
+      if (key === 'Escape') {
+        hide();
+      }
+
       return !isHistoryMode
         ? keyDownInDropdownMode(key, e)
         : keyDownInHistoryMode(key, e);
