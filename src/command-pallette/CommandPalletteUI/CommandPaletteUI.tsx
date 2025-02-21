@@ -89,8 +89,7 @@ export function CommandPaletteUI({
       ?.shadowRoot?.querySelector('.ui5-shellbar-search-field') as HTMLElement;
     const paletteCurrent = commandPaletteRef.current;
 
-    if (!showCommandPalette || !headerInput || !paletteCurrent || !headerSlot)
-      return;
+    if (!showCommandPalette || !headerSlot) return;
 
     //show search bar when Command Palette is open
     document
@@ -99,14 +98,13 @@ export function CommandPaletteUI({
     headerSlot.style.display = 'flex';
 
     //position Command Palette
-    if (window.innerWidth > 1040) {
+    if (window.innerWidth > 1040 && headerInput && paletteCurrent) {
       const shellbarRect = headerInput.getBoundingClientRect();
 
-      if (paletteCurrent) {
-        paletteCurrent.style.left = `${shellbarRect.left +
-          shellbarRect.width / 2 -
-          paletteCurrent.offsetWidth / 2}px`;
-      }
+      paletteCurrent.style.left = `${shellbarRect.left +
+        shellbarRect.width / 2 -
+        paletteCurrent.offsetWidth / 2}px`;
+      paletteCurrent.style.opacity = '100%'; //prevent visually jumping
     }
   }, [showCommandPalette]);
 

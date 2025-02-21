@@ -12,6 +12,7 @@
     max-width: 700px;
     position: fixed;
     top: 0.5rem;
+    opacity: 0%; //prevent visually jumping
   }
 
   &__content {
@@ -45,6 +46,7 @@
       max-width: unset;
       top: 0;
       height: 100%;
+      opacity: 100%;
     }
 
     .input-container {
