@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { Icon, Input, InputDomRef } from '@ui5/webcomponents-react';
+import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
