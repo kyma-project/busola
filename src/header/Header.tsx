@@ -74,6 +74,7 @@ export function Header() {
     if (shellbarChildren && searchField) {
       (shellbarChildren as HTMLElement).style.width = '100%';
       (searchField as HTMLElement).style.justifyContent = 'center';
+      (searchField as HTMLElement).style.display = 'flex'; //prevents search bar from disappearing after some time of inactivity
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shellbarRef.current]);
