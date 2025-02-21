@@ -87,6 +87,9 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         setIsFormOpen,
         () => {
           // TODO: The layout state change is too late. It happens always after page load.
+          // Should we set layout here?
+          // When we enter here it's before url change, so the layout will always be old because the url didn't change
+          // It change later after `navigate`. It's look like a bad place to manage layout but where?
           const layout = searchParams.get('layout');
           console.log(layout);
           if (!layout) {
