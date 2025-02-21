@@ -176,8 +176,8 @@ export function useDeleteResource({
     deleteFn,
     cancelFn,
     additionalDeleteInfo,
+    customDeleteText,
     disableDeleteButton = false,
-    allowForceDelete = false,
   }) => {
     return (
       <MessageBox
@@ -204,8 +204,8 @@ export function useDeleteResource({
             {t(
               resourceIsCluster
                 ? 'common.buttons.disconnect'
-                : allowForceDelete
-                ? 'common.buttons.force-delete'
+                : customDeleteText
+                ? customDeleteText
                 : 'common.buttons.delete',
             )}
           </Button>,

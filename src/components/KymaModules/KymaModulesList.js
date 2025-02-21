@@ -595,8 +595,10 @@ export default function KymaModulesList({
               disableDeleteButton={
                 checkIfAssociatedResourceLeft() ? !allowForceDelete : false
               }
-              allowForceDelete={
-                checkIfAssociatedResourceLeft() ? allowForceDelete : false
+              customDeleteText={
+                checkIfAssociatedResourceLeft() && allowForceDelete
+                  ? 'common.buttons.force-delete'
+                  : null
               }
               cancelFn={() => {
                 setAllowForceDelete(false);
