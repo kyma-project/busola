@@ -39,17 +39,9 @@ context(
     });
 
     it('checks the visibility of charts', () => {
-      cy.get('ui5-dynamic-page').then($parent => {
-        // Check if the loading spinner is visible.
-        if ($parent.find('[aria-label="Loading"]').length) {
-          cy.get('ui5-busy-indicator').should('be.visible');
-          // Check if the error message is visible when error occurs.
-        } else if ($parent.find('.pods-metrics-error').length) {
-          cy.get(
-            'ui5-card-header[title-text="Error while loading memory consumption data"]',
-          ).should('be.visible');
-          // Check if the proper charts are visible.
-        } else if ($parent.find('.radial-chart-card').length) {
+      cy.get('div.cluster-stats').then($parent => {
+        // Check if the proper charts are visible.
+        if ($parent.find('.radial-chart-card').length) {
           cy.contains('CPU Usage').should('be.visible');
           cy.contains('Memory Usage').should('be.visible');
           // If there is no any pods usage on the namespace.

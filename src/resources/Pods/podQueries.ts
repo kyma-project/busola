@@ -11,6 +11,32 @@ import {
   UseGetOptions,
 } from './types';
 
+// Finding capacity for a given usage.
+const getAllocatable = (
+  nodeName: string,
+  usage: ResourceList,
+  limits: ResourceList,
+  nodesItems?: NodeListItem[],
+) => {
+  const node = nodesItems?.find(node => node.metadata.name === nodeName);
+  // If a pod has no limits set, it uses the available capacity from its node.
+  const getCapacityFromNode = (isUse: boolean, allocatableItem?: string) =>
+    isUse && allocatableItem ? allocatableItem : 0;
+  const cpuCapacity =
+    limits?.cpu ??
+    getCapacityFromNode(
+      !!(usage?.cpu ?? false),
+      node?.status?.allocatable?.cpu,
+    );
+  const memoryCapacity =
+    limits?.memory ??
+    getCapacityFromNode(
+      !!(usage?.memory ?? false),
+      node?.status?.allocatable?.memory,
+    );
+  return { cpu: cpuCapacity, memory: memoryCapacity };
+};
+
 export function usePodsMetricsQuery(namespace?: string) {
   const [metrics, setMetrics] = useState<UsageMetrics[] | undefined>(undefined);
 
@@ -41,34 +67,6 @@ export function usePodsMetricsQuery(namespace?: string) {
   const { data: nodes } = useGet('/api/v1/nodes', {
     pollingInterval: 5500,
   } as UseGetOptions) as { data: NodeList | null };
-
-  // Finding capacity for a given usage.
-  const getAllocatable = (
-    nodeName: string,
-    usage: ResourceList,
-    limits: ResourceList,
-    nodesItems?: NodeListItem[],
-  ) => {
-    const node = nodesItems?.find(node => node.metadata.name === nodeName);
-    // If a pod has no limits set, it uses the available capacity from its node.
-    const getCapacityFromNode = (isUse: boolean, allocatableItem?: string) =>
-      isUse && allocatableItem ? allocatableItem : 0;
-    const cpuCapacity =
-      limits?.cpu !== undefined && limits?.cpu !== null
-        ? limits?.cpu
-        : getCapacityFromNode(
-            !!(usage?.cpu ?? false),
-            node?.status?.allocatable?.cpu,
-          );
-    const memoryCapacity =
-      limits?.memory !== undefined && limits?.memory !== null
-        ? limits?.memory
-        : getCapacityFromNode(
-            !!(usage?.memory ?? false),
-            node?.status?.allocatable?.memory,
-          );
-    return { cpu: cpuCapacity, memory: memoryCapacity };
-  };
 
   useEffect(() => {
     // Collects all fetched data and creates useful metrics.

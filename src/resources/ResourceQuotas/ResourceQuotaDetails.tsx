@@ -14,9 +14,8 @@ import {
   mapUsagesToChartsData,
 } from './support';
 import { usePodsMetricsQuery } from 'resources/Pods/podQueries';
-import { isEmpty } from 'lodash';
 
-export type ResourceQuotaProps = {
+export type ResourceQuota = {
   kind: string;
   apiVersion: string;
   metadata: {
@@ -51,7 +50,7 @@ export default function ResourceQuotaDetails(props: any) {
   const { podsMetrics } = usePodsMetricsQuery(props.namespace);
 
   const customComponents = [
-    (resource: ResourceQuotaProps) => (
+    (resource: ResourceQuota) => (
       <React.Fragment key="resource-quota-details">
         {(resource.spec.scopes || resource.spec.scopeSelector) && (
           <UI5Panel title={t('common.headers.specification')}>
@@ -90,30 +89,17 @@ export default function ResourceQuotaDetails(props: any) {
         )}
       </React.Fragment>
     ),
-    (resource: ResourceQuotaProps) => (
-      <React.Fragment key="resource-quota-limits">
-        {(!!podsMetrics?.length || !isEmpty(resource?.status)) && (
-          <div className="cluster-stats sap-margin-tiny">
-            {mapUsagesToChartsData(podsMetrics).map((chartData, index) => (
-              <div
-                key={`${chartData.headerTitle}-${index}`}
-                className="item-wrapper card-tall"
-              >
-                <Card
-                  className="radial-chart-card"
-                  header={<CardHeader titleText={t(chartData.headerTitle)} />}
-                >
-                  <UI5RadialChart
-                    color={chartData.color}
-                    value={chartData.value}
-                    max={chartData.max}
-                    additionalInfo={chartData.additionalInfo}
-                  />
-                </Card>
-              </div>
-            ))}
-            {mapLimitsAndRequestsToChartsData(resource).map(
-              (chartData, index) => (
+    (resource: ResourceQuota) => {
+      const monitoringCharts = [
+        ...mapUsagesToChartsData(podsMetrics),
+        ...mapLimitsAndRequestsToChartsData(resource),
+      ];
+
+      return (
+        <React.Fragment key="resource-quota-limits">
+          {!!monitoringCharts.length && (
+            <div className="cluster-stats sap-margin-tiny">
+              {monitoringCharts.map((chartData, index) => (
                 <div
                   key={`${chartData.headerTitle}-${index}`}
                   className="item-wrapper card-tall"
@@ -130,13 +116,13 @@ export default function ResourceQuotaDetails(props: any) {
                     />
                   </Card>
                 </div>
-              ),
-            )}
-          </div>
-        )}
-        <ResourceQuotaLimits resource={resource} />
-      </React.Fragment>
-    ),
+              ))}
+            </div>
+          )}
+          <ResourceQuotaLimits resource={resource} />
+        </React.Fragment>
+      );
+    },
   ];
 
   return (
