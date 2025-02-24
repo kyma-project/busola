@@ -16,7 +16,7 @@ data:
     urlPath: OpenIDConnect
     scope: cluster
     name: OpenIDConnect
-    category: Integration
+    category: Configuration
     description: >-
       {{dfgfdfgd}}
       represents an external solution connected to Kyma.
