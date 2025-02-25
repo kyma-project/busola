@@ -4,7 +4,6 @@ import {
   useLocation,
   useNavigate,
   useNavigationType,
-  useSearchParams,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
@@ -36,7 +35,6 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams] = useSearchParams();
 
   const navigationType = useNavigationType();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
@@ -50,7 +48,6 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const cluster = useRecoilValue(clusterState);
 
   const jsonata = useJsonata({ resource: {} as Resource });
-  const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
 
   const isNodeSelected = (node: NavNode) => {
     if (node.externalUrl) return false;
@@ -68,6 +65,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   const handleNavigation = (isNavigatingForward?: boolean) => {
     if (node.dataSources) {
+      const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
       let link =
         !jsonataError && jsonataLink ? jsonataLink : node.externalUrl ?? '';
       link = link.startsWith('http') ? link : `https://${link}`;
@@ -86,24 +84,15 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         isFormOpen,
         setIsFormOpen,
         () => {
-          // TODO: The layout state change is too late. It happens always after page load.
-          // Should we set layout here?
-          // When we enter here it's before url change, so the layout will always be old because the url didn't change
-          // It change later after `navigate`. It's look like a bad place to manage layout but where?
-          const layout = searchParams.get('layout');
-          console.log(layout);
-          if (!layout) {
+          const url = node.createUrlFn
+            ? node.createUrlFn(urlGenerators)
+            : scopedUrl(node.pathSegment);
+          if (location?.pathname !== url && isNavigatingForward) {
             setLayoutColumn({
               midColumn: null,
               endColumn: null,
               layout: 'OneColumn',
             });
-          }
-
-          const url = node.createUrlFn
-            ? node.createUrlFn(urlGenerators)
-            : scopedUrl(node.pathSegment);
-          if (location?.pathname !== url && isNavigatingForward) {
             navigate(url);
           }
         },
