@@ -51,6 +51,16 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleStatus } from './support';
+import {
+  checkIfAssociatedResourceLeft,
+  deleteAssociatedResources,
+  deleteCrResources,
+  fetchResourceCounts,
+  generateAssociatedResourcesUrls,
+  getAssociatedResources,
+  getCRResource,
+  handleItemClick,
+} from './deleteModulesHelpers';
 import { UnmanagedModuleInfo } from './components/UnmanagedModuleInfo';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 
@@ -78,7 +88,7 @@ export default function KymaModulesList({
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { clusterUrl, namespaceUrl } = useUrl();
-  const fetch = useSingleGet();
+  const fetchFn = useSingleGet();
   const getScope = useGetScope();
   const navigate = useNavigate();
   const deleteResourceMutation = useDelete();
@@ -393,150 +403,47 @@ export default function KymaModulesList({
       );
     };
 
-    const getAssociatedResources = () => {
-      if (!chosenModuleIndex) {
-        return [];
-      }
-      const selectedModule = selectedModules[chosenModuleIndex];
-      const moduleChannel =
-        selectedModule?.channel || kymaResource?.spec?.channel;
-      const moduleVersion =
-        selectedModule?.version ||
-        findModuleStatus(kymaResource, selectedModule?.name)?.version;
-
-      const module = findModuleTemplate(
-        selectedModule?.name,
-        moduleChannel,
-        moduleVersion,
-      );
-      return module?.spec?.associatedResources || [];
-    };
-
-    const getCRResource = () => {
-      if (!chosenModuleIndex) {
-        return [];
-      }
-      const selectedModule = selectedModules[chosenModuleIndex];
-      const moduleChannel =
-        selectedModule?.channel || kymaResource?.spec?.channel;
-      const moduleVersion =
-        selectedModule?.version ||
-        findModuleStatus(kymaResource, selectedModule?.name)?.version;
-
-      const module = findModuleTemplate(
-        selectedModule?.name,
-        moduleChannel,
-        moduleVersion,
-      );
-
-      const resource = {};
-      if (module.spec.data) {
-        resource.group = module.spec.data.apiVersion.split('/')[0];
-        resource.version = module.spec.data.apiVersion.split('/')[1];
-        resource.kind = module.spec.data.kind;
-      }
-      return resource ? [resource] : [];
-    };
-
-    const handleItemClick = async (kind, group, version) => {
-      const isNamespaced = await getScope(group, version, kind);
-      const path = `${pluralize(kind.toLowerCase())}`;
-      const link = isNamespaced
-        ? namespaceUrl(path, { namespace: '-all-' })
-        : clusterUrl(path);
-
-      navigate(link);
-    };
-
-    const getResources = async (kind, group, version) => {
-      const url =
-        group === 'v1'
-          ? '/api/v1'
-          : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
-
-      try {
-        const response = await fetch(url);
-        const json = await response.json();
-        return json.items;
-      } catch (e) {
-        console.warn(e);
-        return 'Error';
-      }
-    };
-
-    const getUrlsByNamespace = resources => {
-      return resources.reduce((urls, resource) => {
-        const url = `/apis/${resource.apiVersion}/namespaces/${
-          resource.metadata.namespace
-        }/${pluralize(resource.kind.toLowerCase())}`;
-
-        if (!urls.includes(url)) {
-          urls.push(url);
-        }
-        return urls;
-      }, []);
-    };
-
-    const generateAssociatedResourcesUrls = async resources => {
-      const allUrls = [];
-
-      for (const resource of resources) {
-        const isNamespaced = await getScope(
-          resource.group,
-          resource.version,
-          resource.kind,
-        );
-        let resources,
-          urls = [];
-        if (isNamespaced) {
-          resources = await getResources(
-            resource.kind,
-            resource.group,
-            resource.version,
-          );
-          urls = getUrlsByNamespace(resources);
-        } else {
-          urls = [
-            resource.group === 'v1'
-              ? '/api/v1'
-              : `/apis/${resource.group}/${resource.version}/${pluralize(
-                  resource.kind.toLowerCase(),
-                )}`,
-          ];
-        }
-
-        allUrls.push(...urls);
-      }
-
-      return allUrls;
-    };
-
-    const fetchResourceCounts = async resources => {
-      const counts = {};
-      for (const resource of resources) {
-        const resources = await getResources(
-          resource.kind,
-          resource.group,
-          resource.version,
-        );
-        counts[`${resource.kind}-${resource.group}-${resource.version}`] =
-          resources.length;
-      }
-      return counts;
-    };
-
     const [resourceCounts, setResourceCounts] = useState({});
     const [forceDeleteUrls, setForceDeleteUrls] = useState([]);
     const [crUrls, setCrUrls] = useState([]);
     const [allowForceDelete, setAllowForceDelete] = useState(false);
+    const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
     useEffect(() => {
       const fetchCounts = async () => {
-        const resources = getAssociatedResources();
+        const resources = getAssociatedResources(
+          chosenModuleIndex,
+          findModuleTemplate,
+          selectedModules,
+          kymaResource,
+        );
+
         const counts = await fetchResourceCounts(resources);
-        const urls = await generateAssociatedResourcesUrls(resources);
-        const crUResources = getCRResource();
-        const crUrl = await generateAssociatedResourcesUrls(crUResources);
+
+        const urls = await generateAssociatedResourcesUrls(
+          resources,
+          fetchFn,
+          clusterUrl,
+          getScope,
+          namespaceUrl,
+          navigate,
+        );
+
+        const crUResources = getCRResource(
+          chosenModuleIndex,
+          findModuleTemplate,
+          selectedModules,
+          kymaResource,
+        );
+
+        const crUrl = await generateAssociatedResourcesUrls(
+          crUResources,
+          fetchFn,
+          clusterUrl,
+          getScope,
+          namespaceUrl,
+          navigate,
+        );
 
         setResourceCounts(counts);
         setForceDeleteUrls(urls);
@@ -547,45 +454,19 @@ export default function KymaModulesList({
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chosenModuleIndex]);
 
-    const checkIfAssociatedResourceLeft = () => {
-      const resources = getAssociatedResources();
-      for (const resource of resources) {
-        if (
-          resourceCounts[
-            `${resource.kind}-${resource.group}-${resource.version}`
-          ] > 0
-        ) {
-          return true;
-        }
-      }
-      return false;
-    };
+    useEffect(() => {
+      const resourcesLeft = checkIfAssociatedResourceLeft(
+        resourceCounts,
+        chosenModuleIndex,
+        findModuleTemplate,
+        selectedModules,
+        kymaResource,
+      );
 
-    const deleteAssociatedResources = async () => {
-      try {
-        await Promise.all(
-          forceDeleteUrls.map(async url => {
-            return await deleteResourceMutation(url);
-          }),
-        );
-      } catch (e) {
-        console.warn(e);
-        return 'Error while deleting Associated Resources';
-      }
-    };
+      setAssociatedResourceLeft(resourcesLeft);
 
-    const deleteCrResources = async () => {
-      try {
-        await Promise.all(
-          crUrls.map(async url => {
-            return await deleteResourceMutation(url);
-          }),
-        );
-      } catch (e) {
-        console.warn(e);
-        return 'Error while deleting Custom Resource';
-      }
-    };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [resourceCounts]);
 
     return (
       <React.Fragment key="modules-list">
@@ -593,10 +474,10 @@ export default function KymaModulesList({
           createPortal(
             <DeleteMessageBox
               disableDeleteButton={
-                checkIfAssociatedResourceLeft() ? !allowForceDelete : false
+                associatedResourceLeft ? !allowForceDelete : false
               }
               customDeleteText={
-                checkIfAssociatedResourceLeft() && allowForceDelete
+                associatedResourceLeft && allowForceDelete
                   ? 'common.buttons.force-delete'
                   : null
               }
@@ -611,7 +492,12 @@ export default function KymaModulesList({
                       name: selectedModules[chosenModuleIndex]?.name,
                     })}
                   </Text>
-                  {getAssociatedResources().length > 0 && (
+                  {getAssociatedResources(
+                    chosenModuleIndex,
+                    findModuleTemplate,
+                    selectedModules,
+                    kymaResource,
+                  ).length > 0 && (
                     <>
                       <MessageStrip design="Critical" hideCloseButton>
                         {t('kyma-modules.associated-resources-warning')}
@@ -621,7 +507,12 @@ export default function KymaModulesList({
                         mode="None"
                         separators="All"
                       >
-                        {getAssociatedResources().map(assResource => {
+                        {getAssociatedResources(
+                          chosenModuleIndex,
+                          findModuleTemplate,
+                          selectedModules,
+                          kymaResource,
+                        ).map(assResource => {
                           const resourceCount =
                             resourceCounts[
                               `${assResource.kind}-${assResource.group}-${assResource.version}`
@@ -635,6 +526,10 @@ export default function KymaModulesList({
                                   assResource.kind,
                                   assResource.group,
                                   assResource.version,
+                                  clusterUrl,
+                                  getScope,
+                                  namespaceUrl,
+                                  navigate,
                                 );
                               }}
                               type="Active"
@@ -649,7 +544,7 @@ export default function KymaModulesList({
                           );
                         })}
                       </List>
-                      {checkIfAssociatedResourceLeft() && (
+                      {associatedResourceLeft && (
                         <CheckBox
                           checked={allowForceDelete}
                           onChange={() =>
@@ -666,7 +561,10 @@ export default function KymaModulesList({
               resourceTitle={selectedModules[chosenModuleIndex]?.name}
               deleteFn={() => {
                 if (allowForceDelete && forceDeleteUrls.length > 0) {
-                  deleteAssociatedResources();
+                  deleteAssociatedResources(
+                    deleteResourceMutation,
+                    forceDeleteUrls,
+                  );
                 }
                 selectedModules.splice(chosenModuleIndex, 1);
                 setKymaResourceState({
@@ -679,7 +577,7 @@ export default function KymaModulesList({
                 handleModuleUninstall();
                 setInitialUnchangedResource(cloneDeep(kymaResourceState));
                 if (allowForceDelete && forceDeleteUrls.length > 0) {
-                  deleteCrResources();
+                  deleteCrResources(deleteResourceMutation, crUrls);
                 }
               }}
             />,
