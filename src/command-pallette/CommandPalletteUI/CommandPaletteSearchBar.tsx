@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
+import { useRecoilValue } from 'recoil';
+import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
+import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
 
 type CommandPaletteSearchBarProps = {
@@ -18,6 +21,7 @@ export function CommandPaletteSearchBar({
   shouldFocus,
   setShouldFocus,
 }: CommandPaletteSearchBarProps) {
+  useRecoilValue(availableNodesSelector); // preload the values to prevent page rerenders
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
   const [resourceCache, updateResourceCache] = useObjectState<
@@ -32,6 +36,35 @@ export function CommandPaletteSearchBar({
       setOpen(value);
     }
   };
+
+  useEffect(() => {
+    const headerSlot = document
+      .querySelector('ui5-shellbar')
+      ?.shadowRoot?.querySelector('.ui5-shellbar-search-field') as HTMLElement;
+    const searchButton = document
+      .querySelector('ui5-shellbar')
+      ?.shadowRoot?.querySelector('.ui5-shellbar-search-button') as HTMLElement;
+
+    if (
+      searchButton &&
+      headerSlot &&
+      window.innerWidth > SCREEN_SIZE_BREAKPOINT_M
+    ) {
+      searchButton.style.display = 'none';
+
+      // search bar has to be always visible on big screen
+      document
+        .querySelector('ui5-shellbar')
+        ?.setAttribute('show-search-field', '');
+      headerSlot.style.display = 'flex';
+    } else if (searchButton) {
+      searchButton.style.display = 'inline-block';
+      document
+        .querySelector('ui5-shellbar')
+        ?.removeAttribute('show-search-field');
+      headerSlot.style.display = 'none';
+    }
+  }, [window.innerWidth, document.querySelector('ui5-shellbar')]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

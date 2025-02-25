@@ -17,6 +17,7 @@ import './CommandPaletteUI.scss';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 
 function Background({
   hide,
@@ -108,12 +109,14 @@ export function CommandPaletteUI({
     headerSlot.style.display = 'flex';
 
     //position Command Palette
-    if (window.innerWidth > 1040 && headerInput && paletteCurrent) {
+    if (
+      window.innerWidth > SCREEN_SIZE_BREAKPOINT_M &&
+      headerInput &&
+      paletteCurrent
+    ) {
       const shellbarRect = headerInput.getBoundingClientRect();
-
-      paletteCurrent.style.left = `${shellbarRect.left +
-        shellbarRect.width / 2 -
-        paletteCurrent.offsetWidth / 2}px`;
+      paletteCurrent.style.right = `${window.innerWidth -
+        shellbarRect.right}px`;
       paletteCurrent.style.opacity = '100%'; //prevent visually jumping
     }
   }, [showCommandPalette]);

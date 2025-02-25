@@ -1,33 +1,32 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
   ShellBar,
   ShellBarItem,
   ListItemStandard,
-  ShellBarDomRef,
 } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFeature } from 'hooks/useFeature';
+import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { themeState } from 'state/preferences/themeAtom';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
-import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
-
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
-import { configFeaturesNames } from 'state/types';
-import { themeState } from 'state/preferences/themeAtom';
-import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
-import './Header.scss';
 import { HeaderMenu } from './HeaderMenu';
+import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
+
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { configFeaturesNames } from 'state/types';
+import './Header.scss';
 
 const SNOW_STORAGE_KEY = 'snow-animation';
 
@@ -61,22 +60,6 @@ export function Header() {
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
-
-  const shellbarRef = useRef<ShellBarDomRef | null>(null);
-
-  useEffect(() => {
-    const shellbarChildren = shellbarRef?.current?.shadowRoot
-      ?.querySelector('header')
-      ?.querySelector('.ui5-shellbar-overflow-container-right-child');
-    const searchField = shellbarChildren?.querySelector(
-      '.ui5-shellbar-search-field',
-    );
-
-    if (searchField) {
-      (searchField as HTMLElement).style.display = 'flex'; //prevents search bar from disappearing after some time of inactivity
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shellbarRef.current]);
 
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
@@ -191,7 +174,6 @@ export function Header() {
           }
           setIsSearchOpen(false);
         }}
-        ref={shellbarRef}
       >
         {isSnowEnabled && (
           <ShellBarItem
