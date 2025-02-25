@@ -7,8 +7,13 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/accessibility-tests.yml'
-      - 'tests/integration/tests/accessibility/**'
-      - 'tests/integration/support/**'
+      - 'resources/**'
+      - 'tests/integration/**'
+      - 'nginx/**'
+      - 'src/**'
+      - 'backend/**'
+      - 'kyma/**'
+      - 'Dockerfile*'
 
 jobs:
   run-accessibility-tests:
