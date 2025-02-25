@@ -15,9 +15,10 @@ context('Accessibility test Namespace overview', () => {
 
     cy.createNamespace('acc-test-namespace');
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') !== 'true')
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Namespace overview',
       );

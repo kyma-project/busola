@@ -43,9 +43,10 @@ context('Accessibility test Extensions view', () => {
 
     cy.wait(500);
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') !== 'true')
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Extensions list',
       );
@@ -54,9 +55,10 @@ context('Accessibility test Extensions view', () => {
   it('Acc test Extensions create', () => {
     cy.openCreate();
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') !== 'true')
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Extensions create',
       );
@@ -74,9 +76,10 @@ context('Accessibility test Extensions view', () => {
 
     cy.clickGenericListLink('pizzas');
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') !== 'true')
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Extensions details',
       );
