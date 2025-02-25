@@ -39,14 +39,13 @@ context(
     });
 
     it('checks the visibility of charts', () => {
-      cy.get('div.cluster-stats').then($parent => {
+      cy.get('div.item-wrapper').each($parent => {
         // Check if the proper charts are visible.
         if ($parent.find('.radial-chart-card').length) {
           cy.contains('CPU Usage').should('be.visible');
           cy.contains('Memory Usage').should('be.visible');
-          // If there is no any pods usage on the namespace.
         } else {
-          cy.log('Pods metrics data is empty.');
+          cy.log('No pods metrics chart found in this wrapper.');
         }
       });
     });
