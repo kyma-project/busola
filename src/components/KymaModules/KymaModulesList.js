@@ -499,7 +499,11 @@ export default function KymaModulesList({
                     kymaResource,
                   ).length > 0 && (
                     <>
-                      <MessageStrip design="Critical" hideCloseButton>
+                      <MessageStrip
+                        design="Information"
+                        hideCloseButton
+                        className="sap-margin-top-small"
+                      >
                         {t('kyma-modules.associated-resources-warning')}
                       </MessageStrip>
                       <List
@@ -553,6 +557,16 @@ export default function KymaModulesList({
                           accessibleName={t('kyma-modules.force-edit-info')}
                           text={t('kyma-modules.force-edit-info')}
                         />
+                      )}
+
+                      {associatedResourceLeft && allowForceDelete && (
+                        <MessageStrip
+                          design="Critical"
+                          hideCloseButton
+                          className="sap-margin-y-small"
+                        >
+                          {t('kyma-modules.force-delete-warning')}
+                        </MessageStrip>
                       )}
                     </>
                   )}
