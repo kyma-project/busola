@@ -41,24 +41,13 @@ export function CommandPaletteSearchBar({
     const headerSlot = document
       .querySelector('ui5-shellbar')
       ?.shadowRoot?.querySelector('.ui5-shellbar-search-field') as HTMLElement;
-    const searchButton = document
-      .querySelector('ui5-shellbar')
-      ?.shadowRoot?.querySelector('.ui5-shellbar-search-button') as HTMLElement;
-
-    if (
-      searchButton &&
-      headerSlot &&
-      window.innerWidth > SCREEN_SIZE_BREAKPOINT_M
-    ) {
-      searchButton.style.display = 'none';
-
+    if (headerSlot && window.innerWidth > SCREEN_SIZE_BREAKPOINT_M) {
       // search bar has to be always visible on big screen
       document
         .querySelector('ui5-shellbar')
         ?.setAttribute('show-search-field', '');
       headerSlot.style.display = 'flex';
-    } else if (searchButton) {
-      searchButton.style.display = 'inline-block';
+    } else if (headerSlot) {
       document
         .querySelector('ui5-shellbar')
         ?.removeAttribute('show-search-field');
