@@ -19,7 +19,7 @@ context('Accessibility test Cluster list and overview', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') !== 'true')
+    if (Cypress.env('IS_PR') !== true)
       cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Performance panel',

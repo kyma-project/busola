@@ -14,7 +14,7 @@ context('Accessibility test Cluster list and overview', () => {
       .runAllAccessibilityTests()
       .printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') !== 'true')
+    if (Cypress.env('IS_PR') !== true)
       cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Clusters list',
@@ -28,7 +28,7 @@ context('Accessibility test Cluster list and overview', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') !== 'true')
+    if (Cypress.env('IS_PR') !== true)
       cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Cluster overview',

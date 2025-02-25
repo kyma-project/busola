@@ -17,7 +17,7 @@ context('Accessibility test Namespace overview', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') !== 'true')
+    if (Cypress.env('IS_PR') !== true)
       cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Namespace overview',
