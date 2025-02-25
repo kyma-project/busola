@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import './ResourceQuotaDetails.scss';
-import { ResourceQuotaProps } from './ResourceQuotaDetails';
+import { ResourceQuota } from './ResourceQuotaDetails';
 
 type ResourceTableEntry = {
   resource: string;
@@ -15,7 +15,7 @@ export default function ResourceQuotaLimits({
   resource,
   isCompact = false,
 }: {
-  resource: ResourceQuotaProps;
+  resource: ResourceQuota;
   isCompact?: boolean;
 }) {
   const { t } = useTranslation();

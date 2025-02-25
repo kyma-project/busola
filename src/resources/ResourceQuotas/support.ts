@@ -4,16 +4,14 @@ import {
   getBytes,
   getCpus,
 } from 'resources/Namespaces/ResourcesUsage';
-import { ResourceQuotaProps } from './ResourceQuotaDetails';
+import { ResourceQuota } from './ResourceQuotaDetails';
 import { roundTwoDecimals } from 'shared/utils/helpers';
 import { calculateMetrics } from 'resources/Pods/podQueries';
 import { UsageMetrics } from 'resources/Pods/types';
 import { isEmpty } from 'lodash';
 
 // It takes resource limits and requests and maps it to data suitable for charts to make it easier to iterate and render.
-export const mapLimitsAndRequestsToChartsData = (
-  resource?: ResourceQuotaProps,
-) => {
+export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
   if (isEmpty(resource?.status)) {
     return [];
   }
