@@ -61,6 +61,7 @@ context('Test extensibility variables', () => {
     cy.loginAndSelectCluster();
 
     cy.getLeftNav()
+      .find('ui5-side-navigation-item')
       .contains('Namespaces')
       .click();
 
