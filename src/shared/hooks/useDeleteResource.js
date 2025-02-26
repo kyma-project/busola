@@ -204,9 +204,7 @@ export function useDeleteResource({
             {t(
               resourceIsCluster
                 ? 'common.buttons.disconnect'
-                : customDeleteText
-                ? customDeleteText
-                : 'common.buttons.delete',
+                : customDeleteText ?? 'common.buttons.delete',
             )}
           </Button>,
           <Button
