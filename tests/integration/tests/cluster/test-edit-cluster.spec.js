@@ -20,7 +20,7 @@ context('Test edit cluster', () => {
       .eq(0)
       .then(el => (originalName = el.text()));
 
-    cy.get('ui5-button[data-testid="edit"]').click();
+    cy.get('ui5-button[data-testid="edit"]').click({ force: true });
 
     cy.get('ui5-input[data-testid="cluster-description"]')
       .find('input')
