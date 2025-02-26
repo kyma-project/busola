@@ -1,7 +1,5 @@
 import pluralize from 'pluralize';
-
 import { findModuleStatus } from './support';
-import { useUrl } from 'hooks/useUrl';
 
 interface Counts {
   [key: string]: number;
