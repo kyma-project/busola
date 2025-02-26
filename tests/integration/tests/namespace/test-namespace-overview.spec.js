@@ -36,18 +36,14 @@ context(
       cy.contains('Events')
         .scrollIntoView()
         .should('be.visible');
-    });
 
-    it('checks the visibility of charts', () => {
-      cy.get('div.item-wrapper').each($parent => {
-        // Check if the proper charts are visible.
-        if ($parent.find('.radial-chart-card').length) {
-          cy.contains('CPU Usage').should('be.visible');
-          cy.contains('Memory Usage').should('be.visible');
-        } else {
-          cy.log('No pods metrics chart found in this wrapper.');
-        }
-      });
+      cy.contains('CPU Usage')
+        .scrollIntoView()
+        .should('be.visible');
+
+      cy.contains('Memory Usage')
+        .scrollIntoView()
+        .should('be.visible');
     });
   },
 );
