@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { Icon, Input } from '@ui5/webcomponents-react';
@@ -14,12 +14,14 @@ type CommandPaletteSearchBarProps = {
   slot?: string;
   shouldFocus?: boolean;
   setShouldFocus?: Function;
+  shellbarRef?: RefObject<HTMLElement>;
 };
 
 export function CommandPaletteSearchBar({
   slot,
   shouldFocus,
   setShouldFocus,
+  shellbarRef,
 }: CommandPaletteSearchBarProps) {
   useRecoilValue(availableNodesSelector); // preload the values to prevent page rerenders
   const { t } = useTranslation();
@@ -30,7 +32,9 @@ export function CommandPaletteSearchBar({
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const setShowDialog = (value: boolean) => {
-    const modalPresent = document.querySelector('ui5-dialog[open]');
+    const modalPresent =
+      document.querySelector('ui5-dialog[open]') ||
+      document.querySelector('.command-palette-ui');
     // disable opening palette if other modal is present
     if (!modalPresent || !value) {
       setOpen(value);
@@ -38,22 +42,30 @@ export function CommandPaletteSearchBar({
   };
 
   useEffect(() => {
-    const headerSlot = document
-      .querySelector('ui5-shellbar')
-      ?.shadowRoot?.querySelector('.ui5-shellbar-search-field') as HTMLElement;
-    if (headerSlot && window.innerWidth > SCREEN_SIZE_BREAKPOINT_M) {
+    const shellbarCurr = shellbarRef?.current;
+    const searchButton = shellbarCurr?.shadowRoot?.querySelector(
+      '.ui5-shellbar-search-button',
+    ) as HTMLElement;
+    const searchField = shellbarCurr?.shadowRoot?.querySelector(
+      '.ui5-shellbar-search-field',
+    ) as HTMLElement;
+
+    if (
+      searchButton &&
+      searchField &&
+      window.innerWidth > SCREEN_SIZE_BREAKPOINT_M
+    ) {
+      searchButton.style.display = 'none';
+
       // search bar has to be always visible on big screen
-      document
-        .querySelector('ui5-shellbar')
-        ?.setAttribute('show-search-field', '');
-      headerSlot.style.display = 'flex';
-    } else if (headerSlot) {
-      document
-        .querySelector('ui5-shellbar')
-        ?.removeAttribute('show-search-field');
-      headerSlot.style.display = 'none';
+      shellbarCurr?.setAttribute('show-search-field', '');
+      searchField.style.display = 'flex';
+    } else if (searchButton && searchField) {
+      searchButton.style.display = 'inline-block';
+      shellbarCurr?.removeAttribute('show-search-field');
+      searchField.style.display = 'none';
     }
-  }, [window.innerWidth, document.querySelector('ui5-shellbar')]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [window.innerWidth, shellbarRef?.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

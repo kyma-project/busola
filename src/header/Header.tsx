@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
@@ -23,24 +23,16 @@ import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
+import { SnowFeature } from './SnowFeature';
 
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { configFeaturesNames } from 'state/types';
 import './Header.scss';
 
-const SNOW_STORAGE_KEY = 'snow-animation';
-
 export function Header() {
   useAvailableNamespaces();
-  const localStorageSnowEnabled = () => {
-    const snowStorage = localStorage.getItem(SNOW_STORAGE_KEY);
-    if (snowStorage && typeof JSON.parse(snowStorage) === 'boolean') {
-      return JSON.parse(snowStorage);
-    }
-    return true;
-  };
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSnowOpen, setIsSnowOpen] = useState(localStorageSnowEnabled());
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const { t } = useTranslation();
@@ -48,7 +40,6 @@ export function Header() {
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
     configFeaturesNames.FEEDBACK,
   );
-  const { isEnabled: isSnowEnabled } = useFeature(configFeaturesNames.SNOW);
 
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
@@ -56,31 +47,14 @@ export function Header() {
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  const [theme] = useRecoilState(themeState);
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
-
-  useEffect(() => {
-    if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
-      setIsSnowOpen(false);
-      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(false));
-    }
-  }, [theme]);
+  const shellbarRef = useRef(null);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== cluster?.name,
   );
-
-  const handleSnowButtonClick = () => {
-    if (isSnowOpen) {
-      setIsSnowOpen(false);
-      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(false));
-    } else {
-      setIsSnowOpen(true);
-      localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(true));
-    }
-  };
 
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
@@ -97,15 +71,6 @@ export function Header() {
 
   return (
     <>
-      {isSnowOpen && isSnowEnabled && (
-        <div className="snowflakes" aria-hidden="true">
-          {[...Array(10).keys()].map(key => (
-            <div key={`snowflake-${key}`} className="snowflake">
-              ❅
-            </div>
-          ))}
-        </div>
-      )}
       <ShellBar
         className="header"
         accessibilityAttributes={{
@@ -164,6 +129,7 @@ export function Header() {
             shouldFocus={isSearchOpen}
             slot="searchField"
             setShouldFocus={setIsSearchOpen}
+            shellbarRef={shellbarRef}
           />
         }
         showSearchField
@@ -174,17 +140,9 @@ export function Header() {
           }
           setIsSearchOpen(false);
         }}
+        ref={shellbarRef}
       >
-        {isSnowEnabled && (
-          <ShellBarItem
-            onClick={handleSnowButtonClick}
-            icon={isSnowOpen ? 'heating-cooling' : 'activate'}
-            text={isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')}
-            title={
-              isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')
-            }
-          />
-        )}
+        <SnowFeature />
         {isFeedbackEnabled && (
           <ShellBarItem
             onClick={() => window.open(feedbackLink, '_blank')}
