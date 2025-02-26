@@ -7,7 +7,6 @@ import {
   calculateMetrics,
   usePodsMetricsQuery,
 } from 'resources/Pods/podQueries';
-import { roundTwoDecimals } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const MEMORY_SUFFIX_POWER = {
@@ -53,13 +52,11 @@ export function getCpus(cpuString) {
   return number * suffixPower;
 }
 
-export function bytesToHumanReadable(bytes) {
-  if (!bytes) return bytes;
-  return formatResourceUnit(bytes, true, { withoutSpace: true });
+export function bytesToHumanReadable(bytes, { fixed = 0, unit = '' } = {}) {
+  return formatResourceUnit(bytes, true, { withoutSpace: true, fixed, unit });
 }
 
 export function cpusToHumanReadable(cpus, { fixed = 0, unit = '' } = {}) {
-  if (!cpus) return cpus;
   return formatResourceUnit(cpus, false, { withoutSpace: true, fixed, unit });
 }
 
@@ -96,13 +93,25 @@ export const ResourcesUsage = ({ namespace }) => {
         >
           <UI5RadialChart
             color="var(--sapChart_OrderedColor_5)"
-            value={roundTwoDecimals(cpu.usage)}
-            max={roundTwoDecimals(cpu.capacity)}
-            additionalInfo={`${cpusToHumanReadable(cpu.usage, {
-              unit: 'm',
-            })} / ${cpusToHumanReadable(cpu.capacity, {
-              unit: 'm',
-            })}`}
+            value={
+              cpusToHumanReadable(cpu.usage, {
+                unit: 'm',
+              }).value
+            }
+            max={
+              cpusToHumanReadable(cpu.capacity, {
+                unit: 'm',
+              }).value
+            }
+            additionalInfo={`${
+              cpusToHumanReadable(cpu.usage, {
+                unit: 'm',
+              }).string
+            } / ${
+              cpusToHumanReadable(cpu.capacity, {
+                unit: 'm',
+              }).string
+            }`}
           />
         </Card>
       </div>
@@ -117,11 +126,25 @@ export const ResourcesUsage = ({ namespace }) => {
         >
           <UI5RadialChart
             color="var(--sapChart_OrderedColor_6)"
-            value={roundTwoDecimals(memory.usage)}
-            max={roundTwoDecimals(memory.capacity)}
-            additionalInfo={`${roundTwoDecimals(
-              memory.usage,
-            )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+            value={
+              bytesToHumanReadable(memory.usage, {
+                unit: 'Gi',
+              }).value
+            }
+            max={
+              bytesToHumanReadable(memory.capacity, {
+                unit: 'Gi',
+              }).value
+            }
+            additionalInfo={`${
+              bytesToHumanReadable(memory.usage, {
+                unit: 'Gi',
+              }).string
+            } / ${
+              bytesToHumanReadable(memory.capacity, {
+                unit: 'Gi',
+              }).string
+            }`}
           />
         </Card>
       </div>

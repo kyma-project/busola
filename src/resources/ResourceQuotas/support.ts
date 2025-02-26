@@ -5,7 +5,6 @@ import {
   getCpus,
 } from 'resources/Namespaces/ResourcesUsage';
 import { ResourceQuota } from './ResourceQuotaDetails';
-import { roundTwoDecimals } from 'shared/utils/helpers';
 import { calculateMetrics } from 'resources/Pods/podQueries';
 import { UsageMetrics } from 'resources/Pods/types';
 import { isEmpty } from 'lodash';
@@ -37,43 +36,79 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
   return [
     {
       headerTitle: 'cluster-overview.statistics.cpu-limits',
-      value: totalUsageCpuLimits,
-      max: totalCpuLimits,
+      value: cpusToHumanReadable(totalUsageCpuLimits, {
+        unit: 'm',
+      }).value,
+      max: cpusToHumanReadable(totalCpuLimits, {
+        unit: 'm',
+      }).value,
       color: 'var(--sapChart_OrderedColor_5)',
-      additionalInfo: `${cpusToHumanReadable(totalUsageCpuLimits, {
-        unit: 'm',
-      })} / ${cpusToHumanReadable(totalCpuLimits, {
-        unit: 'm',
-      })}`,
+      additionalInfo: `${
+        cpusToHumanReadable(totalUsageCpuLimits, {
+          unit: 'm',
+        }).string
+      } / ${
+        cpusToHumanReadable(totalCpuLimits, {
+          unit: 'm',
+        }).string
+      }`,
     },
     {
       headerTitle: 'namespaces.overview.resources.limits',
-      value: totalUsageMemoryLimits,
-      max: totalMemoryLimits,
+      value: bytesToHumanReadable(totalUsageMemoryLimits, {
+        unit: 'Gi',
+      }).value,
+      max: bytesToHumanReadable(totalMemoryLimits, {
+        unit: 'Gi',
+      }).value,
       color: 'var(--sapChart_OrderedColor_6)',
-      additionalInfo: `${bytesToHumanReadable(
-        totalUsageMemoryLimits,
-      )} / ${bytesToHumanReadable(totalMemoryLimits)}`,
+      additionalInfo: `${
+        bytesToHumanReadable(totalUsageMemoryLimits, {
+          unit: 'Gi',
+        }).string
+      } / ${
+        bytesToHumanReadable(totalMemoryLimits, {
+          unit: 'Gi',
+        }).string
+      }`,
     },
     {
       headerTitle: 'cluster-overview.statistics.cpu-requests',
-      value: totalUsageCpuRequests,
-      max: totalCpuRequests,
+      value: cpusToHumanReadable(totalUsageCpuRequests, {
+        unit: 'm',
+      }).value,
+      max: cpusToHumanReadable(totalCpuRequests, {
+        unit: 'm',
+      }).value,
       color: 'var(--sapChart_OrderedColor_5)',
-      additionalInfo: `${cpusToHumanReadable(totalUsageCpuRequests, {
-        unit: 'm',
-      })} / ${cpusToHumanReadable(totalCpuRequests, {
-        unit: 'm',
-      })}`,
+      additionalInfo: `${
+        cpusToHumanReadable(totalUsageCpuRequests, {
+          unit: 'm',
+        }).string
+      } / ${
+        cpusToHumanReadable(totalCpuRequests, {
+          unit: 'm',
+        }).string
+      }`,
     },
     {
       headerTitle: 'namespaces.overview.resources.requests',
-      value: totalUsageMemoryRequests,
-      max: totalMemoryRequests,
+      value: bytesToHumanReadable(totalUsageMemoryRequests, {
+        unit: 'Gi',
+      }).value,
+      max: bytesToHumanReadable(totalMemoryRequests, {
+        unit: 'Gi',
+      }).value,
       color: 'var(--sapChart_OrderedColor_6)',
-      additionalInfo: `${bytesToHumanReadable(
-        totalUsageMemoryRequests,
-      )} / ${bytesToHumanReadable(totalMemoryRequests)}`,
+      additionalInfo: `${
+        bytesToHumanReadable(totalUsageMemoryRequests, {
+          unit: 'Gi',
+        }).string
+      } / ${
+        bytesToHumanReadable(totalMemoryRequests, {
+          unit: 'Gi',
+        }).string
+      }`,
     },
   ];
 };
@@ -88,21 +123,35 @@ export const mapUsagesToChartsData = (podsMetrics?: UsageMetrics[]) => {
   return [
     {
       headerTitle: 'cluster-overview.statistics.cpu-usage',
-      value: roundTwoDecimals(cpu.usage) as number,
-      max: roundTwoDecimals(cpu.capacity) as number,
-      color: 'var(--sapChart_OrderedColor_5)',
-      additionalInfo: `${cpusToHumanReadable(cpu.usage, {
+      value: cpusToHumanReadable(cpu.usage, {
         unit: 'm',
-      })} / ${cpusToHumanReadable(cpu.capacity, { unit: 'm' })}`,
+      }).value,
+      max: cpusToHumanReadable(cpu.capacity, { unit: 'm' }).value,
+      color: 'var(--sapChart_OrderedColor_5)',
+      additionalInfo: `${
+        cpusToHumanReadable(cpu.usage, {
+          unit: 'm',
+        }).string
+      } / ${cpusToHumanReadable(cpu.capacity, { unit: 'm' }).string}`,
     },
     {
       headerTitle: 'cluster-overview.statistics.memory-usage',
-      value: roundTwoDecimals(memory.usage) as number,
-      max: roundTwoDecimals(memory.capacity) as number,
+      value: bytesToHumanReadable(memory.usage, {
+        unit: 'Gi',
+      }).value,
+      max: bytesToHumanReadable(memory.capacity, {
+        unit: 'Gi',
+      }).value,
       color: 'var(--sapChart_OrderedColor_6)',
-      additionalInfo: `${roundTwoDecimals(memory.usage)}Gi / ${roundTwoDecimals(
-        memory.capacity,
-      )}Gi`,
+      additionalInfo: `${
+        bytesToHumanReadable(memory.usage, {
+          unit: 'Gi',
+        }).string
+      } / ${
+        bytesToHumanReadable(memory.capacity, {
+          unit: 'Gi',
+        }).string
+      }`,
     },
   ];
 };

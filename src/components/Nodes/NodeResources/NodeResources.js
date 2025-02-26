@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
-import { roundTwoDecimals } from 'shared/utils/helpers';
 import './NodeResources.scss';
-import { cpusToHumanReadable } from '../../../resources/Namespaces/ResourcesUsage.js';
+import {
+  bytesToHumanReadable,
+  cpusToHumanReadable,
+} from '../../../resources/Namespaces/ResourcesUsage.js';
 
 export function NodeResources({ metrics, resources }) {
   const { t } = useTranslation();
@@ -19,11 +21,17 @@ export function NodeResources({ metrics, resources }) {
       >
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
-          value={cpu.usage}
-          max={cpu.capacity}
-          additionalInfo={`${cpusToHumanReadable(cpu.usage, {
-            unit: 'm',
-          })} / ${cpusToHumanReadable(cpu.capacity, { unit: 'm' })}`}
+          value={
+            cpusToHumanReadable(cpu.usage, {
+              unit: 'm',
+            }).value
+          }
+          max={cpusToHumanReadable(cpu.capacity, { unit: 'm' }).value}
+          additionalInfo={`${
+            cpusToHumanReadable(cpu.usage, {
+              unit: 'm',
+            }).string
+          } / ${cpusToHumanReadable(cpu.capacity, { unit: 'm' }).string}`}
         />
       </Card>
       <Card
@@ -36,11 +44,11 @@ export function NodeResources({ metrics, resources }) {
       >
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_6)"
-          value={memory.usage}
-          max={memory.capacity}
-          additionalInfo={`${roundTwoDecimals(
-            memory.usage,
-          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
+          value={bytesToHumanReadable(memory.usage, { unit: 'Gi' }).value}
+          max={bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value}
+          additionalInfo={`${
+            bytesToHumanReadable(memory.usage, { unit: 'Gi' }).string
+          } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`}
         />
       </Card>
       <Card
@@ -53,13 +61,25 @@ export function NodeResources({ metrics, resources }) {
       >
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
-          value={resources?.requests?.cpu}
-          max={cpu.capacity}
-          additionalInfo={`${cpusToHumanReadable(resources?.requests?.cpu, {
-            unit: 'm',
-          })} / ${cpusToHumanReadable(cpu.capacity, {
-            unit: 'm',
-          })}`}
+          value={
+            cpusToHumanReadable(resources?.requests?.cpu, {
+              unit: 'm',
+            }).value
+          }
+          max={
+            cpusToHumanReadable(cpu.capacity, {
+              unit: 'm',
+            }).value
+          }
+          additionalInfo={`${
+            cpusToHumanReadable(resources?.requests?.cpu, {
+              unit: 'm',
+            }).string
+          } / ${
+            cpusToHumanReadable(cpu.capacity, {
+              unit: 'm',
+            }).string
+          }`}
         />
       </Card>
       <Card
@@ -72,11 +92,15 @@ export function NodeResources({ metrics, resources }) {
       >
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_6)"
-          value={resources?.requests?.memory}
-          max={memory.capacity}
-          additionalInfo={`${roundTwoDecimals(
-            resources.requests?.memory,
-          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
+          value={
+            bytesToHumanReadable(resources.requests?.memory, { unit: 'Gi' })
+              .value
+          }
+          max={bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value}
+          additionalInfo={`${
+            bytesToHumanReadable(resources.requests?.memory, { unit: 'Gi' })
+              .string
+          } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`}
         />
       </Card>
       <Card
@@ -87,13 +111,25 @@ export function NodeResources({ metrics, resources }) {
       >
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_5)"
-          value={resources?.limits?.cpu}
-          max={cpu.capacity}
-          additionalInfo={`${cpusToHumanReadable(resources?.limits?.cpu, {
-            unit: 'm',
-          })} / ${cpusToHumanReadable(cpu.capacity, {
-            unit: 'm',
-          })}`}
+          value={
+            cpusToHumanReadable(resources?.limits?.cpu, {
+              unit: 'm',
+            }).value
+          }
+          max={
+            cpusToHumanReadable(cpu.capacity, {
+              unit: 'm',
+            }).value
+          }
+          additionalInfo={`${
+            cpusToHumanReadable(resources?.limits?.cpu, {
+              unit: 'm',
+            }).string
+          } / ${
+            cpusToHumanReadable(cpu.capacity, {
+              unit: 'm',
+            }).string
+          }`}
         />
       </Card>
       <Card
@@ -106,11 +142,13 @@ export function NodeResources({ metrics, resources }) {
       >
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_6)"
-          value={resources?.limits?.memory}
-          max={memory.capacity}
-          additionalInfo={`${roundTwoDecimals(
-            resources.limits.memory,
-          )}Gi / ${roundTwoDecimals(memory.capacity)}Gi`}
+          value={
+            bytesToHumanReadable(resources.limits.memory, { unit: 'Gi' }).value
+          }
+          max={bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value}
+          additionalInfo={`${
+            bytesToHumanReadable(resources.limits.memory, { unit: 'Gi' }).string
+          } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`}
         />
       </Card>
     </>
