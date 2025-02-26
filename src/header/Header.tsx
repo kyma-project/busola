@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
@@ -15,7 +15,6 @@ import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
-import { themeState } from 'state/preferences/themeAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 
