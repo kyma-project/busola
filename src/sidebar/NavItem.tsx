@@ -48,6 +48,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const cluster = useRecoilValue(clusterState);
 
   const jsonata = useJsonata({ resource: {} as Resource });
+  const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
 
   const isNodeSelected = (node: NavNode) => {
     if (node.externalUrl) return false;
@@ -65,7 +66,6 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   const handleNavigation = (isNavigatingForward?: boolean) => {
     if (node.dataSources) {
-      const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
       let link =
         !jsonataError && jsonataLink ? jsonataLink : node.externalUrl ?? '';
       link = link.startsWith('http') ? link : `https://${link}`;

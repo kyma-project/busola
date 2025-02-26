@@ -116,7 +116,14 @@ export function ResourcesList({
           />
         }
       />
-      <Resources {...allProps} />
+      {resources ? (
+        <ResourceListRenderer
+          resources={(resources || []).filter(filterFn)}
+          {...allProps}
+        />
+      ) : (
+        <Resources {...allProps} />
+      )}
     </>
   );
 
