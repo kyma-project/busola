@@ -554,8 +554,9 @@ export default function KymaModulesList({
                           onChange={() =>
                             setAllowForceDelete(!allowForceDelete)
                           }
-                          accessibleName={t('kyma-modules.force-edit-info')}
-                          text={t('kyma-modules.force-edit-info')}
+                          accessibleName={t('kyma-modules.force-edit')}
+                          text={t('kyma-modules.force-edit')}
+                          className="sap-margin-top-tiny"
                         />
                       )}
 
