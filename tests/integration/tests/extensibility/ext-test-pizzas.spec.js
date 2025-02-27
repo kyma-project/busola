@@ -67,6 +67,7 @@ context('Test Pizzas', () => {
     cy.loginAndSelectCluster();
 
     cy.getLeftNav()
+      .find('ui5-side-navigation-item')
       .contains('Namespaces')
       .click();
 

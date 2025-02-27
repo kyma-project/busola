@@ -15,6 +15,8 @@ context('Test Custom Resources', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
+    cy.wait(1000);
+
     cy.get('body').type(
       `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
     );

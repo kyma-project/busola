@@ -16,7 +16,9 @@ export const CommandPaletteProvider = ({
   >();
 
   const setShowDialog = (value: boolean) => {
-    const modalPresent = document.querySelector('ui5-dialog[open]');
+    const modalPresent =
+      document.querySelector('ui5-dialog[open]') ||
+      document.querySelector('.command-palette-ui');
     // disable opening palette if other modal is present
     if (!modalPresent || !value) {
       _setShowDialog(value);
@@ -37,8 +39,6 @@ export const CommandPaletteProvider = ({
       setShowDialog(!showDialog);
       // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
       e.preventDefault();
-    } else if (key === 'Escape') {
-      hide();
     }
   };
 

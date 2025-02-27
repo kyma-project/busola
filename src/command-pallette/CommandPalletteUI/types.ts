@@ -4,6 +4,7 @@ import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { K8sResource } from 'types';
 
 export const LOADING_INDICATOR = 'LOADING_INDICATOR';
+export const SCREEN_SIZE_BREAKPOINT_M = 1040;
 
 export type CommandPaletteContext = {
   fetch: (relativeUrl: string) => Promise<any>;
