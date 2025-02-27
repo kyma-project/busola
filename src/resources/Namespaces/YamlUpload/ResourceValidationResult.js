@@ -79,6 +79,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
           <FlexBox alignItems={'Begin'}>
             <ObjectStatus
               showDefaultIcon
+              aria-label="Warning"
               state="Critical"
               className="sap-margin-end-small"
               style={{
@@ -112,9 +113,9 @@ export const ResourceValidationResult = ({ resource }) => {
   ];
   const statusIcon = validateResources.isEnabled ? (
     warnings.flat().length !== 0 ? (
-      <ObjectStatus showDefaultIcon state="Critical" />
+      <ObjectStatus showDefaultIcon aria-label="Warning" state="Critical" />
     ) : (
-      <ObjectStatus showDefaultIcon state="Positive" />
+      <ObjectStatus showDefaultIcon state="Positive" aria-label="Positive" />
     )
   ) : (
     <div></div>
