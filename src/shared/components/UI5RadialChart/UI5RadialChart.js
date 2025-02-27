@@ -24,6 +24,7 @@ export const UI5RadialChart = ({
   return (
     <div className={classnames} onClick={onClick}>
       <RadialChart
+        accessibleName={'Radial chart'}
         displayValue={text}
         displayValueStyle={{
           fontSize: textSize,
@@ -38,8 +39,8 @@ export const UI5RadialChart = ({
           width: size + 'px',
         }}
         chartConfig={{
-          innerRadius: '99%',
-          outerRadius: '99%',
+          innerRadius: '98%',
+          outerRadius: '98%',
           barSize: 12,
         }}
       />

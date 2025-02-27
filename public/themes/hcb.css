@@ -4,3 +4,8 @@ html,
 #root {
   height: 100%;
 }
+
+.recharts-radial-bar-background-sector{
+  stroke: var(--sapTextColor);
+  stroke-width: 1.5;
+}
