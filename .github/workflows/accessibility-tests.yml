@@ -41,8 +41,8 @@ jobs:
         shell: bash
         env:
           ACC_AMP_TOKEN: ${{ secrets.ACC_AMP_TOKEN }}
-          IS_PR: ${{ github.event_name == 'pull_request' || github.event_name == 'pull_request_target' }}
         run: |
+          IS_PR=$([ "${{ github.event_name }}" == 'pull_request' ] || [ "${{ github.event_name }}" == 'pull_request_target' ] && echo true || echo false)
           k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3001          
           cd tests/integration
