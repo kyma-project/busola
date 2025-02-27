@@ -34,11 +34,13 @@ import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/help
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
 import { themeState } from 'state/preferences/themeAtom';
+import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
 const SNOW_STORAGE_KEY = 'snow-animation';
 
 export function Header() {
   useAvailableNamespaces();
+  const isSAPUser = useCheckSAPUser();
   const localStorageSnowEnabled = () => {
     const snowStorage = localStorage.getItem(SNOW_STORAGE_KEY);
     if (snowStorage && typeof JSON.parse(snowStorage) === 'boolean') {
@@ -169,6 +171,10 @@ export function Header() {
             setIsFormOpen,
             () => navigate('/clusters'),
           );
+          setShowCompanion({
+            show: false,
+            fullScreen: false,
+          });
         }}
         logo={<Logo />}
         primaryTitle={
@@ -194,6 +200,10 @@ export function Header() {
                   );
             },
           );
+          setShowCompanion({
+            show: false,
+            fullScreen: false,
+          });
         }}
         profile={
           <Avatar
@@ -223,19 +233,21 @@ export function Header() {
             title={t('navigation.feedback')}
           />
         )}
-        {isKymaCompanionEnabled && window.location.pathname !== '/clusters' && (
-          <ShellBarItem
-            onClick={() =>
-              setShowCompanion({
-                show: true,
-                fullScreen: false,
-              })
-            }
-            icon="da"
-            text={t('kyma-companion.name')}
-            title={t('kyma-companion.name')}
-          />
-        )}
+        {isKymaCompanionEnabled &&
+          isSAPUser &&
+          window.location.pathname !== '/clusters' && (
+            <ShellBarItem
+              onClick={() =>
+                setShowCompanion({
+                  show: true,
+                  fullScreen: false,
+                })
+              }
+              icon="da"
+              text={t('kyma-companion.name')}
+              title={t('kyma-companion.name')}
+            />
+          )}
       </ShellBar>
       <Menu
         open={isMenuOpen}

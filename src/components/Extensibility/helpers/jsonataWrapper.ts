@@ -4,8 +4,7 @@ import { isEqual } from 'lodash';
 import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { permissionSetsSelector } from 'state/permissionSetsSelector';
-import { jwtDecode } from 'jwt-decode';
-import { AuthDataState, authDataState } from 'state/authDataAtom';
+import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
 /*
   Turns jsonata expressions like
@@ -95,17 +94,8 @@ export function jsonataWrapper(expression: string) {
   });
 
   exp.registerFunction('isSAPuser', () => {
-    const authData: AuthDataState = useRecoilValue(authDataState);
-    try {
-      if (authData && 'token' in authData) {
-        const decoded = jwtDecode(authData?.token);
-        return decoded?.sub?.includes('@sap.com');
-      }
-    } catch (error) {
-      console.error('Error while checking if user is SAP user', error);
-      return false;
-    }
-    return false;
+    const isSAPUser = useCheckSAPUser();
+    return isSAPUser;
   });
 
   return exp;
