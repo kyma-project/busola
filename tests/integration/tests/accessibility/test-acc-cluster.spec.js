@@ -10,6 +10,7 @@ context('Accessibility test Cluster list and overview', () => {
   });
 
   it('Acc test clusters list', () => {
+    alert(Cypress.env('IS_PR'));
     cy.visit(`${config.clusterAddress}/clusters`)
       .runAllAccessibilityTests()
       .printAccessibilityTestResults();
