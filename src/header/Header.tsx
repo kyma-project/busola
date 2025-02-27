@@ -196,6 +196,10 @@ export function Header() {
                   );
             },
           );
+          setShowCompanion({
+            show: false,
+            fullScreen: false,
+          });
         }}
         profile={
           <Avatar
