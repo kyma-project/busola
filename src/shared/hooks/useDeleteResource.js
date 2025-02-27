@@ -157,10 +157,6 @@ export function useDeleteResource({
     }
   };
 
-  const closeDeleteDialog = () => {
-    setShowDeleteDialog(false);
-  };
-
   const handleResourceDelete = ({ resource, resourceUrl, deleteFn }) => {
     if (dontConfirmDelete && !forceConfirmDelete) {
       performDelete(resource, resourceUrl, deleteFn);
@@ -180,6 +176,7 @@ export function useDeleteResource({
     deleteFn,
     cancelFn,
     additionalDeleteInfo,
+    customDeleteText,
     disableDeleteButton = false,
   }) => {
     return (
@@ -207,19 +204,23 @@ export function useDeleteResource({
             {t(
               resourceIsCluster
                 ? 'common.buttons.disconnect'
-                : 'common.buttons.delete',
+                : customDeleteText ?? 'common.buttons.delete',
             )}
           </Button>,
           <Button
             key="delete-cancel"
             data-testid="delete-cancel"
             design="Transparent"
-            onClick={() => performCancel(cancelFn)}
+            onClick={() => {
+              performCancel(cancelFn);
+            }}
           >
             {t('common.buttons.cancel')}
           </Button>,
         ]}
-        onClose={closeDeleteDialog}
+        onClose={() => {
+          performCancel(cancelFn);
+        }}
       >
         <FlexBox
           direction="Column"

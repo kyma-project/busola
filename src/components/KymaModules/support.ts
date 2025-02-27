@@ -18,6 +18,7 @@ type KymaResourceType = {
   status: {
     modules: {
       name: string;
+      version: string;
     }[];
   };
 };
@@ -123,7 +124,7 @@ export const findModuleStatus = (
   moduleName: string,
 ) => {
   return kymaResource?.status?.modules?.find(
-    (module: { name: string }) => moduleName === module?.name,
+    (module: { name: string; version: string }) => moduleName === module?.name,
   );
 };
 
