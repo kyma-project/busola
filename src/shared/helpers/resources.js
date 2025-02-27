@@ -29,7 +29,7 @@ const preciseRound = (num, places) =>
   Math.pow(10, places);
 
 export function formatResourceUnit(
-  amount,
+  amount = 0,
   binary = false,
   { unit = '', withoutSpace = true, fixed = 2 } = {},
 ) {
@@ -38,17 +38,30 @@ export function formatResourceUnit(
 
   if (unit && prefixMap[unit]) {
     const value = (amount / prefixMap[unit]).toFixed(fixed);
-    return `${value}${infix}${unit}`;
+    return {
+      string: `${value}${infix}${unit}`,
+      unit: unit,
+      value: Number(value),
+    };
   }
 
   const coreValue = preciseRound(amount, 2).toFixed(fixed);
 
-  let output = `${coreValue}${infix}${unit}`;
+  let output = {
+    string: `${coreValue}${infix}${unit}`,
+    unit: unit,
+    value: Number(coreValue),
+  };
+
   Object.entries(prefixMap).forEach(([prefix, power]) => {
     const tmpValue = amount / power;
     if (tmpValue >= 1) {
       const value = preciseRound(tmpValue, 2).toFixed(fixed);
-      output = `${value}${infix}${prefix}${unit}`;
+      output = {
+        string: `${value}${infix}${prefix}${unit}`,
+        unit: unit,
+        value: Number(value),
+      };
     }
   });
 

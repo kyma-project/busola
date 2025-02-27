@@ -5,10 +5,6 @@ import {
   getCpus,
 } from '../../resources/Namespaces/ResourcesUsage.js';
 
-const round = (num, places) =>
-  Math.round((num + Number.EPSILON) * Math.pow(10, places)) /
-  Math.pow(10, places);
-
 const getPercentageFromUsage = (value, total) => {
   if (total === 0) {
     return 'Unknown';
@@ -16,14 +12,11 @@ const getPercentageFromUsage = (value, total) => {
   return Math.round((100 * value) / total);
 };
 
-const formatKiToGiMemory = memoryStr =>
-  round(parseInt(memoryStr || '0') / 1024 / 1024, 1);
-
-const createUsageMetrics = (node, metricsForNode) => {
+export const createUsageMetrics = (node, metricsForNode) => {
   const cpuUsage = getCpus(metricsForNode?.usage.cpu);
-  const memoryUsage = formatKiToGiMemory(metricsForNode?.usage.memory);
+  const memoryUsage = getBytes(metricsForNode?.usage.memory);
   const cpuCapacity = getCpus(node.status.allocatable?.cpu || '0');
-  const memoryCapacity = formatKiToGiMemory(node.status.allocatable?.memory);
+  const memoryCapacity = getBytes(node.status.allocatable?.memory);
 
   const cpuPercentage = getPercentageFromUsage(cpuUsage, cpuCapacity);
   const memoryPercentage = getPercentageFromUsage(memoryUsage, memoryCapacity);

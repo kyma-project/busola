@@ -57,16 +57,14 @@ export default function NamespaceDetails(props) {
   );
 
   const headerActions = (
-    <>
-      <Button
-        icon="add"
-        onClick={() => {
-          setShowAdd(true);
-        }}
-      >
-        {t('upload-yaml.title')}
-      </Button>
-    </>
+    <Button
+      icon="add"
+      onClick={() => {
+        setShowAdd(true);
+      }}
+    >
+      {t('upload-yaml.title')}
+    </Button>
   );
 
   const customColumns = [
