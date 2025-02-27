@@ -19,7 +19,7 @@ module.exports = (on, config) => {
     '/' +
     date.getDate() +
     '-' +
-    (date.getUTCHours() + 2) +
+    (date.getUTCHours() + 1) +
     ':' +
     date.getUTCMinutes();
   const reportName = `AMP_REPORT_${todaysDate}`;
