@@ -1,40 +1,59 @@
 import { useState, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { sessionIDState } from '../../../state/companion/sessionIDAtom';
-import { clusterState } from 'state/clusterAtom';
 import getPromptSuggestions from '../api/getPromptSuggestions';
+import { ColumnLayoutState, columnLayoutState } from 'state/columnLayoutAtom';
+import { prettifyNameSingular } from 'shared/utils/helpers';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 
 export function usePromptSuggestions() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const setSessionID = useSetRecoilState(sessionIDState);
-  const cluster = useRecoilValue(clusterState);
+  const columnLayout = useRecoilValue(columnLayoutState);
+  const post = usePost();
+
+  const getResourceFromColumnnLayout = (columnLayout: ColumnLayoutState) => {
+    const column =
+      columnLayout?.endColumn ??
+      columnLayout?.midColumn ??
+      columnLayout?.startColumn;
+    return {
+      namespace: column?.namespaceId ?? '',
+      resourceType: prettifyNameSingular(column?.resourceType ?? ''),
+      apiGroup: column?.apiGroup ?? '',
+      apiVersion: column?.apiVersion ?? '',
+      resourceName: column?.resourceName ?? '',
+    };
+  };
 
   useEffect(() => {
+    const {
+      namespace,
+      resourceType,
+      apiGroup,
+      apiVersion,
+      resourceName,
+    } = getResourceFromColumnnLayout(columnLayout);
+    const groupVersion = apiGroup ? `${apiGroup}/${apiVersion}` : apiVersion;
+
     async function fetchSuggestions() {
-      const sessionID = ''; // TODO
-      setSessionID(sessionID);
-      const promptSuggestions = await getPromptSuggestions({
-        namespace: 'default', // TODO
-        resourceType: 'deployment', // TODO
-        groupVersion: 'apps/v1', // TODO
-        resourceName: 'test-x', // TODO
-        sessionID,
-        clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '',
-        token: '', // TODO
-        certificateAuthorityData:
-          cluster?.currentContext.cluster.cluster[
-            'certificate-authority-data'
-          ] ?? '',
+      const result = await getPromptSuggestions({
+        post,
+        namespace: namespace,
+        resourceType: resourceType,
+        groupVersion: groupVersion,
+        resourceName: resourceName,
       });
-      if (promptSuggestions) {
-        setSuggestions(promptSuggestions);
+      if (result) {
+        setSuggestions(result.promptSuggestions);
+        setSessionID(result.conversationId);
       }
     }
 
-    if (cluster && suggestions.length === 0) {
+    if (resourceType && suggestions.length === 0) {
       fetchSuggestions();
     }
-  }, [cluster, suggestions, setSessionID]);
+  }, [columnLayout, suggestions, post, setSessionID]);
 
   return suggestions;
 }

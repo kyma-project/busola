@@ -63,6 +63,11 @@ export default function BusolaExtensionCreate({
             setLayoutColumn({
               layout: nextLayout,
               showCreate: null,
+              startColumn: {
+                resourceName: null,
+                resourceType: 'Extensions',
+                namespaceId: 'kube-public',
+              },
               midColumn: {
                 resourceName: crd.metadata.name,
                 resourceType: 'Extensions',

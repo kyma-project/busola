@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ import ClusterStats from './ClusterStats';
 import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import './ClusterOverview.scss';
 
@@ -38,6 +39,18 @@ export function ClusterOverview() {
     resourceType: t('clusters.labels.name'),
   });
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
+
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  useEffect(() => {
+    setLayoutColumn({
+      layout: 'OneColumn',
+      startColumn: {
+        resourceType: 'Cluster',
+      },
+      midColumn: null,
+      endColumn: null,
+    });
+  }, [setLayoutColumn]);
 
   const actions = [
     <Button

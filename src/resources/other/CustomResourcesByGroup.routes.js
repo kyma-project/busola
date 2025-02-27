@@ -38,7 +38,10 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: layout ?? layoutState?.layout,
+        layout: layout,
+        startColumn: {
+          resourceType: 'CustomResourceDefinition',
+        },
         midColumn: crdName
           ? {
               resourceName: crdName,
@@ -55,12 +58,17 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
               }
             : null,
       }
-    : null;
+    : {
+        layout: layoutState?.layout,
+        startColumn: {
+          resourceType: 'CustomResourceDefinition',
+        },
+        midColumn: null,
+        endColumn: null,
+      };
 
   useEffect(() => {
-    if (layout) {
-      setLayoutColumn(initialLayoutState);
-    }
+    setLayoutColumn(initialLayoutState);
   }, [layout, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const layoutCloseCreateUrl = scopedUrl(
