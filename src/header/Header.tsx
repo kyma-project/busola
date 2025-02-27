@@ -171,6 +171,10 @@ export function Header() {
             setIsFormOpen,
             () => navigate('/clusters'),
           );
+          setShowCompanion({
+            show: false,
+            fullScreen: false,
+          });
         }}
         logo={<Logo />}
         primaryTitle={
