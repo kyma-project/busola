@@ -17,8 +17,8 @@ export type UsageMetrics = {
 };
 
 export type ResourceList = {
-  cpu?: string;
-  memory?: string;
+  cpu?: string | number;
+  memory?: string | number;
 };
 
 export type PodMetricsList = {

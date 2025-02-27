@@ -10,6 +10,7 @@ import {
   UsageMetrics,
   UseGetOptions,
 } from './types';
+import { getBytes, getCpus } from 'resources/Namespaces/ResourcesUsage';
 
 // Finding capacity for a given usage.
 const getAllocatable = (
@@ -20,8 +21,10 @@ const getAllocatable = (
 ) => {
   const node = nodesItems?.find(node => node.metadata.name === nodeName);
   // If a pod has no limits set, it uses the available capacity from its node.
-  const getCapacityFromNode = (isUse: boolean, allocatableItem?: string) =>
-    isUse && allocatableItem ? allocatableItem : 0;
+  const getCapacityFromNode = (
+    isUse: boolean,
+    allocatableItem?: string | number,
+  ) => (isUse && allocatableItem ? allocatableItem : 0);
   const cpuCapacity =
     limits?.cpu ??
     getCapacityFromNode(
@@ -35,6 +38,79 @@ const getAllocatable = (
       node?.status?.allocatable?.memory,
     );
   return { cpu: cpuCapacity, memory: memoryCapacity };
+};
+
+const sumValuesFromUsageContainers = (
+  usageContainers: {
+    name: string;
+    usage: ResourceList;
+  }[],
+) => {
+  // Sum all values ​​from the container. If all are undefined, we leave them as they are, because it will be important later.
+  const isAllCpuUndefined = usageContainers?.every(
+    container => container?.usage?.cpu === undefined,
+  );
+  const isAllMemoryUndefined = usageContainers?.every(
+    container => container?.usage?.memory === undefined,
+  );
+
+  const defaultValue = {
+    cpu: isAllCpuUndefined ? undefined : 0,
+    memory: isAllMemoryUndefined ? undefined : 0,
+  };
+
+  return (
+    usageContainers?.reduce((accData, container) => {
+      return {
+        cpu:
+          accData.cpu === undefined
+            ? undefined
+            : accData.cpu + getCpus(container?.usage?.cpu),
+        memory:
+          accData.memory === undefined
+            ? undefined
+            : accData.memory + getBytes(container?.usage?.memory),
+      };
+    }, defaultValue) ?? defaultValue
+  );
+};
+
+const sumValuesFromLimitsContainers = (
+  limitsContainers: {
+    name: string;
+    resources: {
+      limits: ResourceList;
+      requests: ResourceList;
+    };
+  }[],
+) => {
+  // Sum all values ​​from the container. If all are undefined, we leave them as they are, because it will be important later.
+  const isAllCpuUndefined = limitsContainers?.every(
+    container => container?.resources?.limits?.cpu === undefined,
+  );
+  const isAllMemoryUndefined = limitsContainers?.every(
+    container => container?.resources?.limits?.memory === undefined,
+  );
+
+  const defaultValue = {
+    cpu: isAllCpuUndefined ? undefined : 0,
+    memory: isAllMemoryUndefined ? undefined : 0,
+  };
+
+  return (
+    limitsContainers?.reduce((accData, container) => {
+      return {
+        cpu:
+          accData.cpu === undefined
+            ? undefined
+            : accData.cpu + getCpus(container?.resources?.limits?.cpu),
+        memory:
+          accData.memory === undefined
+            ? undefined
+            : accData.memory + getBytes(container?.resources?.limits?.memory),
+      };
+    }, defaultValue) ?? defaultValue
+  );
 };
 
 export function usePodsMetricsQuery(namespace?: string) {
@@ -79,6 +155,10 @@ export function usePodsMetricsQuery(namespace?: string) {
               pod?.metadata?.name === metrics?.metadata?.name,
           );
           if (metricsForPod) {
+            const usages = sumValuesFromUsageContainers(
+              metricsForPod?.containers,
+            );
+            const limits = sumValuesFromLimitsContainers(pod.spec.containers);
             return [
               ...acc,
               createUsageMetrics(
@@ -86,13 +166,13 @@ export function usePodsMetricsQuery(namespace?: string) {
                   status: {
                     allocatable: getAllocatable(
                       pod.spec.nodeName,
-                      metricsForPod?.containers?.[0]?.usage,
-                      pod.spec.containers?.[0]?.resources?.limits,
+                      usages,
+                      limits,
                       nodes?.items,
                     ),
                   },
                 },
-                { usage: metricsForPod?.containers?.[0].usage },
+                { usage: usages },
               ),
             ];
           }
