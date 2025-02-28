@@ -13,7 +13,7 @@ data:
       kind: OpenIDConnect
       group: authentication.gardener.cloud
       version: v1alpha1
-    name: OpenIDConnect Entries
+    name: OpenIDConnect
     category: Configuration
     urlPath: openidconnect
     scope: cluster
