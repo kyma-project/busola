@@ -161,7 +161,7 @@ export const GenericList = ({
       setEntrySelected(selected);
     }
   }, [entries]);
-
+  console.log(entries);
   const headerActions = (
     <>
       {searchSettings?.showSearchField && (
