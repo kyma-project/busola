@@ -12,12 +12,14 @@ async function handleAIChatRequest(req, res) {
     req.body.toString(),
   );
   const clusterUrl = req.headers['x-cluster-url'];
-  const clusterToken = req.headers['x-k8s-authorization'].replace(
+  const certificateAuthorityData =
+    req.headers['x-cluster-certificate-authority-data'];
+  const clusterToken = req.headers['x-k8s-authorization']?.replace(
     /^Bearer\s+/i,
     '',
   );
-  const certificateAuthorityData =
-    req.headers['x-cluster-certificate-authority-data'];
+  const clientCertificateData = req.headers['x-client-certificate-data'];
+  const clientKeyData = req.headers['x-client-key-data'];
 
   try {
     const url = 'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
@@ -30,16 +32,26 @@ async function handleAIChatRequest(req, res) {
 
     const AUTH_TOKEN = await tokenManager.getToken();
 
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
+      'X-Cluster-Url': clusterUrl,
+    };
+
+    if (clusterToken) {
+      headers['X-K8s-Authorization'] = clusterToken;
+    } else if (clientCertificateData && clientKeyData) {
+      headers['X-Client-Certificate-Data'] = clientCertificateData;
+      headers['X-Client-Key-Data'] = clientKeyData;
+    } else {
+      throw new Error('Missing authentication credentials');
+    }
+
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-        'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-        'X-Cluster-Url': clusterUrl,
-        'X-K8s-Authorization': clusterToken,
-      },
+      headers,
       body: JSON.stringify(payload),
     });
 

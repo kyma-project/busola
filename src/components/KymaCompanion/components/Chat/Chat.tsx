@@ -77,6 +77,7 @@ export default function Chat({
   };
 
   const setFollowUpLoading = () => {
+    setErrorOccured(false);
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
       return prevMessages.slice(0, -1).concat({
@@ -141,7 +142,7 @@ export default function Chat({
     if (chatHistory.length === 1) {
       if (initialSuggestionsLoading) {
         setFollowUpLoading();
-      } else if (initialSuggestions.length) {
+      } else if (initialSuggestions) {
         handleFollowUpQuestions(initialSuggestions);
       }
     }

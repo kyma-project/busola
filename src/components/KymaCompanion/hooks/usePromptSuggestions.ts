@@ -42,6 +42,7 @@ export function usePromptSuggestions() {
 
     async function fetchSuggestions() {
       setLoading(true);
+      setSuggestions([]);
       try {
         const result = await getPromptSuggestions({
           post,
