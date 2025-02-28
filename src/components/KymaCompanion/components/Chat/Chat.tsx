@@ -10,6 +10,7 @@ import { clusterState } from 'state/clusterAtom';
 import { authDataState } from 'state/authDataAtom';
 import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuestions';
 import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
+import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
 import './Chat.scss';
 
 interface MessageType {
@@ -20,15 +21,7 @@ interface MessageType {
   suggestionsLoading?: boolean;
 }
 
-interface ChatProps {
-  initialSuggestions: string[];
-  initialSuggestionsLoading: boolean;
-}
-
-export default function Chat({
-  initialSuggestions,
-  initialSuggestionsLoading,
-}: ChatProps) {
+export default function Chat() {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
@@ -46,6 +39,11 @@ export default function Chat({
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
+
+  const {
+    initialSuggestions,
+    initialSuggestionsLoading,
+  } = usePromptSuggestions({ skip: chatHistory.length > 1 });
 
   const addMessage = ({ author, messageChunks, isLoading }: MessageType) => {
     setChatHistory(prevItems =>

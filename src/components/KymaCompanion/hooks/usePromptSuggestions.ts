@@ -20,15 +20,19 @@ const getResourceFromColumnnLayout = (columnLayout: ColumnLayoutState) => {
   };
 };
 
-export function usePromptSuggestions() {
+export function usePromptSuggestions(options?: { skip?: boolean }) {
   const post = usePost();
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [initialSuggestions, setInitialSuggestions] = useState<string[]>([]);
   const setSessionID = useSetRecoilState(sessionIDState);
   const columnLayout = useRecoilValue(columnLayoutState);
   const [loading, setLoading] = useState(false);
   const fetchedResourceRef = useRef('');
 
   useEffect(() => {
+    if (options?.skip) {
+      return;
+    }
+
     const {
       namespace,
       resourceType,
@@ -42,7 +46,7 @@ export function usePromptSuggestions() {
 
     async function fetchSuggestions() {
       setLoading(true);
-      setSuggestions([]);
+      setInitialSuggestions([]);
       try {
         const result = await getPromptSuggestions({
           post,
@@ -52,7 +56,7 @@ export function usePromptSuggestions() {
           resourceName: resourceName,
         });
         if (result) {
-          setSuggestions(result.promptSuggestions);
+          setInitialSuggestions(result.promptSuggestions);
           setSessionID(result.conversationId);
         }
       } finally {
@@ -64,7 +68,7 @@ export function usePromptSuggestions() {
       fetchedResourceRef.current = resourceKey;
       fetchSuggestions();
     }
-  }, [columnLayout, post, setSessionID]);
+  }, [columnLayout, options?.skip, post, setSessionID]);
 
-  return { suggestions, loading };
+  return { initialSuggestions, initialSuggestionsLoading: loading };
 }
