@@ -13,13 +13,13 @@ data:
       kind: OpenIDConnect
       group: authentication.gardener.cloud
       version: v1alpha1
-    name: OpenIDConnect
+    name: OpenID Connect
     category: Configuration
     urlPath: openidconnect
     scope: cluster
     description: >-
-      {{[DNSEntry](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-02-setup-custom-domain-for-workload/)}}
-      is an object that represents the request to create an external DNS record.
+      {{[OpenID Connect](https://gardener.cloud/docs/extensions/others/gardener-extension-shoot-oidc-service/openidconnects/)}}
+      is an open standard authentication protocol built on top of the OAuth 2.0 framework. It provides a secure and flexible way to authenticate and authorize users within applications and systems.
   details: ''
   form: ''
   list: ''
