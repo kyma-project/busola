@@ -8,7 +8,6 @@ import {
   usePodsMetricsQuery,
 } from 'resources/Pods/podQueries';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { roundTwoDecimals } from 'shared/utils/helpers';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
