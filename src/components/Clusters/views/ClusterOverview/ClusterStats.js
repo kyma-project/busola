@@ -161,9 +161,9 @@ export default function ClusterStats({ nodesData }) {
               color="var(--sapChart_OrderedColor_6)"
               value={bytesToHumanReadable(memory.usage).value}
               max={bytesToHumanReadable(memory.capacity).value}
-              additionalInfo={`${
-                bytesToHumanReadable(memory.usage).value
-              }Gi / ${bytesToHumanReadable(memory.capacity).value}Gi`}
+              additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
+                bytesToHumanReadable(memory.capacity).string
+              }`}
             />
           </Card>
         </div>
