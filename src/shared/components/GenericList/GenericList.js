@@ -124,20 +124,22 @@ export const GenericList = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    if (pagination) {
-      // move back when the last item from the last page is deleted
-      const pagesCount = Math.ceil(entries.length / pagination.itemsPerPage);
-      if (currentPage > pagesCount && pagesCount > 0) {
-        setCurrentPage(pagesCount);
+    if (entries.length > 0) {
+      if (pagination) {
+        // move back when the last item from the last page is deleted
+        const pagesCount = Math.ceil(entries.length / pagination.itemsPerPage);
+        if (currentPage > pagesCount && pagesCount > 0) {
+          setCurrentPage(pagesCount);
+        }
       }
+      setFilteredEntries(
+        filterEntries(
+          sorting(sort, entries),
+          searchQuery,
+          searchSettings?.textSearchProperties,
+        ),
+      );
     }
-    setFilteredEntries(
-      filterEntries(
-        sorting(sort, entries),
-        searchQuery,
-        searchSettings?.textSearchProperties,
-      ),
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     searchQuery,
