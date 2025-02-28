@@ -11,6 +11,7 @@ const createExternalNode = (
   scope?: string,
 ): NavNode => ({
   resourceType: '',
+  resourceTypeCased: '',
   category: category,
   icon: icon,
   namespaced: scope === 'namespace',
