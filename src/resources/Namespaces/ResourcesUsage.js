@@ -8,6 +8,7 @@ import {
   usePodsMetricsQuery,
 } from 'resources/Pods/podQueries';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { roundTwoDecimals } from 'shared/utils/helpers';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
@@ -126,25 +127,11 @@ export const ResourcesUsage = ({ namespace }) => {
         >
           <UI5RadialChart
             color="var(--sapChart_OrderedColor_6)"
-            value={
-              bytesToHumanReadable(memory.usage, {
-                unit: 'Gi',
-              }).value
-            }
-            max={
-              bytesToHumanReadable(memory.capacity, {
-                unit: 'Gi',
-              }).value
-            }
-            additionalInfo={`${
-              bytesToHumanReadable(memory.usage, {
-                unit: 'Gi',
-              }).string
-            } / ${
-              bytesToHumanReadable(memory.capacity, {
-                unit: 'Gi',
-              }).string
-            }`}
+            value={bytesToHumanReadable(memory.usage).value}
+            max={bytesToHumanReadable(memory.capacity).value}
+            additionalInfo={`${bytesToHumanReadable(memory.usage).value}Gi / ${
+              bytesToHumanReadable(memory.capacity).value
+            }Gi`}
           />
         </Card>
       </div>

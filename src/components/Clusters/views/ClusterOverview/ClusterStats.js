@@ -159,13 +159,11 @@ export default function ClusterStats({ nodesData }) {
           >
             <UI5RadialChart
               color="var(--sapChart_OrderedColor_6)"
-              value={bytesToHumanReadable(memory.usage, { unit: 'Gi' }).value}
-              max={bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value}
+              value={bytesToHumanReadable(memory.usage).value}
+              max={bytesToHumanReadable(memory.capacity).value}
               additionalInfo={`${
-                bytesToHumanReadable(memory.usage, { unit: 'Gi' }).string
-              } / ${
-                bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string
-              }`}
+                bytesToHumanReadable(memory.usage).value
+              }Gi / ${bytesToHumanReadable(memory.capacity).value}Gi`}
             />
           </Card>
         </div>
