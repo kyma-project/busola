@@ -85,7 +85,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         () => {
           setLayoutColumn({
             startColumn: {
-              resourceType: node?.resourceType,
+              resourceType: node?.resourceTypeCased,
               resourceName: null,
               namespaceId: namespaceId,
               apiGroup: node?.apiGroup,

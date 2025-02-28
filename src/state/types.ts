@@ -135,7 +135,8 @@ export interface UrlGenerators {
 }
 
 export type NavNode = {
-  resourceType: string; // Jobs, CronJobs etc.
+  resourceType: string; // jobs, cronjobs etc.
+  resourceTypeCased: string; // Jobs, CronJobs etc.
   category: string;
   namespaced: boolean;
   label: string;
