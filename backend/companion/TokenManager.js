@@ -35,8 +35,9 @@ export class TokenManager {
   getExpirationFromJWT(token) {
     try {
       // Split the token and get the payload
+      const PAYLOAD_INDEX = 1;
       const payload = JSON.parse(
-        Buffer.from(token.split('.')[1], 'base64').toString(),
+        Buffer.from(token.split('.')[PAYLOAD_INDEX], 'base64').toString(),
       );
       // exp is in seconds, convert to milliseconds
       return payload.exp * 1000;

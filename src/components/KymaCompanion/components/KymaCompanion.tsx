@@ -14,7 +14,7 @@ export default function KymaCompanion() {
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
-  const suggestions = usePromptSuggestions();
+  const { suggestions, loading: suggestionsLoading } = usePromptSuggestions();
 
   return (
     <div id="companion_wrapper" className="sap-margin-tiny">
@@ -29,6 +29,7 @@ export default function KymaCompanion() {
               <Button
                 design="Transparent"
                 icon="restart"
+                tooltip={t('common.buttons.reset')}
                 className="action"
                 onClick={() => {}}
               />
@@ -48,6 +49,7 @@ export default function KymaCompanion() {
               <Button
                 design="Transparent"
                 icon="decline"
+                tooltip={t('common.buttons.close')}
                 className="action"
                 onClick={() =>
                   setShowCompanion({ show: false, fullScreen: false })
@@ -57,7 +59,10 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <Chat suggestions={suggestions} />
+        <Chat
+          initialSuggestions={suggestions}
+          initialSuggestionsLoading={suggestionsLoading}
+        />
       </Card>
     </div>
   );

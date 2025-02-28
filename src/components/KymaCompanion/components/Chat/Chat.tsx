@@ -16,10 +16,19 @@ interface MessageType {
   author: 'user' | 'ai';
   messageChunks: { step: string; result: string }[];
   isLoading: boolean;
-  suggestions?: any[];
+  suggestions?: string[];
+  suggestionsLoading?: boolean;
 }
 
-export default function Chat({ suggestions }: { suggestions: string[] }) {
+interface ChatProps {
+  initialSuggestions: string[];
+  initialSuggestionsLoading: boolean;
+}
+
+export default function Chat({
+  initialSuggestions,
+  initialSuggestionsLoading,
+}: ChatProps) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
@@ -30,6 +39,7 @@ export default function Chat({ suggestions }: { suggestions: string[] }) {
         { step: 'output', result: t('kyma-companion.introduction') },
       ],
       isLoading: false,
+      suggestionsLoading: true,
     },
   ]);
   const [errorOccured, setErrorOccured] = useState<boolean>(false);
@@ -46,6 +56,7 @@ export default function Chat({ suggestions }: { suggestions: string[] }) {
   const handleChatResponse = (response: any) => {
     const isLoading = response?.step !== 'output';
     if (!isLoading) {
+      setFollowUpLoading();
       getFollowUpQuestions({
         sessionID,
         handleFollowUpQuestions,
@@ -65,12 +76,24 @@ export default function Chat({ suggestions }: { suggestions: string[] }) {
     });
   };
 
-  const handleFollowUpQuestions = (questions: any) => {
+  const setFollowUpLoading = () => {
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages
-        .slice(0, -1)
-        .concat({ ...latestMessage, suggestions: questions });
+      return prevMessages.slice(0, -1).concat({
+        ...latestMessage,
+        suggestionsLoading: true,
+      });
+    });
+  };
+
+  const handleFollowUpQuestions = (questions: string[]) => {
+    setChatHistory(prevMessages => {
+      const [latestMessage] = prevMessages.slice(-1);
+      return prevMessages.slice(0, -1).concat({
+        ...latestMessage,
+        suggestions: questions,
+        suggestionsLoading: false,
+      });
     });
   };
 
@@ -115,11 +138,15 @@ export default function Chat({ suggestions }: { suggestions: string[] }) {
   };
 
   useEffect(() => {
-    if (suggestions.length && chatHistory.length === 1) {
-      handleFollowUpQuestions(suggestions);
+    if (chatHistory.length === 1) {
+      if (initialSuggestionsLoading) {
+        setFollowUpLoading();
+      } else if (initialSuggestions.length) {
+        handleFollowUpQuestions(initialSuggestions);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [suggestions]);
+  }, [initialSuggestions, initialSuggestionsLoading]);
 
   useEffect(() => {
     const delay = errorOccured ? 500 : 0;
@@ -150,6 +177,7 @@ export default function Chat({ suggestions }: { suggestions: string[] }) {
                 <Bubbles
                   onClick={sendPrompt}
                   suggestions={message.suggestions}
+                  isLoading={message.suggestionsLoading ?? false}
                 />
               )}
             </React.Fragment>

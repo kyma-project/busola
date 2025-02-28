@@ -1,15 +1,28 @@
-import { Button, FlexBox } from '@ui5/webcomponents-react';
+import { BusyIndicator, Button, FlexBox } from '@ui5/webcomponents-react';
 import './Bubbles.scss';
 
 interface BubblesProps {
   suggestions: any[] | undefined;
+  isLoading: boolean;
   onClick: (suggestion: string) => void;
 }
 
 export default function Bubbles({
   suggestions,
+  isLoading,
   onClick,
 }: BubblesProps): JSX.Element {
+  if (isLoading) {
+    return (
+      <BusyIndicator
+        className="suggestions-loading-indicator sap-margin-begin-tiny"
+        active
+        size="M"
+        delay={0}
+      />
+    );
+  }
+
   return suggestions ? (
     <FlexBox
       wrap="Wrap"
