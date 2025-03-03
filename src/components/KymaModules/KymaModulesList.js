@@ -231,6 +231,12 @@ export default function KymaModulesList({
         resource?.version,
       );
 
+      const moduleDocs =
+        currentModuleTemplate?.spec?.info?.documentation ||
+        currentModuleTemplate?.metadata?.annotations[
+          'operator.kyma-project.io/doc-url'
+        ];
+
       const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
 
       const isChannelOverriden =
@@ -263,7 +269,8 @@ export default function KymaModulesList({
         <>
           {moduleStatus?.channel
             ? moduleStatus?.channel
-            : kymaResource?.spec?.modules?.[moduleIndex]?.channel}
+            : kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
+              kymaResource?.spec?.channel}
           {isChannelOverriden ? (
             <Tag
               hideStateIcon
@@ -290,17 +297,13 @@ export default function KymaModulesList({
           {moduleStatus?.state || 'Unknown'}
         </StatusBadge>,
         // Documentation
-        <ExternalLink
-          url={
-            currentModuleTemplate?.spec?.info
-              ? currentModuleTemplate.spec.info.documentation
-              : currentModuleTemplate?.metadata?.annotations[
-                  'operator.kyma-project.io/doc-url'
-                ]
-          }
-        >
-          {t('common.headers.link')}
-        </ExternalLink>,
+        moduleDocs ? (
+          <ExternalLink url={moduleDocs}>
+            {t('common.headers.link')}
+          </ExternalLink>
+        ) : (
+          EMPTY_TEXT_PLACEHOLDER
+        ),
       ];
     };
 
@@ -468,6 +471,19 @@ export default function KymaModulesList({
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resourceCounts]);
 
+    function getEntries(statusModules = [], specModules = []) {
+      specModules.forEach(specItem => {
+        const exists = statusModules.some(
+          statusItem => statusItem.name === specItem.name,
+        );
+
+        if (!exists) {
+          statusModules.push({ name: specItem.name });
+        }
+      });
+      return statusModules;
+    }
+
     return (
       <React.Fragment key="modules-list">
         {!detailsOpen &&
@@ -616,7 +632,10 @@ export default function KymaModulesList({
           customColumnLayout={customColumnLayout}
           enableColumnLayout
           hasDetailsView
-          entries={resource?.status?.modules}
+          entries={getEntries(
+            resource?.status?.modules,
+            resource?.spec?.modules,
+          )}
           headerRenderer={headerRenderer}
           rowRenderer={rowRenderer}
           noHideFields={['Name', '', 'Namespace']}

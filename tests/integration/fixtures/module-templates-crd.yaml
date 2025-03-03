@@ -1,0 +1,481 @@
+kind: CustomResourceDefinition
+apiVersion: apiextensions.k8s.io/v1
+metadata:
+  name: moduletemplates.operator.kyma-project.io
+  annotations:
+    cert-manager.io/inject-ca-from: $(CERTIFICATE_NAMESPACE)/$(CERTIFICATE_NAME)
+    controller-gen.kubebuilder.io/version: v0.14.0
+spec:
+  group: operator.kyma-project.io
+  names:
+    plural: moduletemplates
+    singular: moduletemplate
+    kind: ModuleTemplate
+    listKind: ModuleTemplateList
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: false
+      storage: false
+      deprecated: true
+      deprecationWarning: >-
+        kyma-project.io/v1beta1 ModuleTemplate is deprecated. Use v1beta2
+        instead.
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            apiVersion:
+              description: >-
+                APIVersion defines the versioned schema of this representation
+                of an object.
+
+                Servers should convert recognized schemas to the latest internal
+                value, and
+
+                may reject unrecognized values.
+
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: >-
+                Kind is a string value representing the REST resource this
+                object represents.
+
+                Servers may infer this from the endpoint the client submits
+                requests to.
+
+                Cannot be updated.
+
+                In CamelCase.
+
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: ModuleTemplateSpec defines the desired state of ModuleTemplate.
+              type: object
+              required:
+                - descriptor
+                - target
+              properties:
+                channel:
+                  description: >-
+                    Channel is the targeted channel of the ModuleTemplate. It
+                    will be used to directly assign a Template
+
+                    to a target channel. It has to be provided at any given
+                    time.
+
+                    Deprecated: This field is deprecated and will be removed in
+                    a future release.
+                  type: string
+                  maxLength: 32
+                  pattern: ^$|^[a-z]{3,}$
+                customStateCheck:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - jsonPath
+                      - mappedState
+                      - value
+                    properties:
+                      jsonPath:
+                        description: >-
+                          JSONPath specifies the JSON path to the state variable
+                          in the Module CR
+                        type: string
+                      mappedState:
+                        description: MappedState is the Kyma CR State
+                        type: string
+                        enum:
+                          - Processing
+                          - Deleting
+                          - Ready
+                          - Error
+                          - ''
+                          - Warning
+                          - Unmanaged
+                      value:
+                        description: >-
+                          Value is the value at the JSONPath for which the
+                          Module CR state should map with MappedState
+                        type: string
+                data:
+                  description: >-
+                    Data is the default set of attributes that are used to
+                    generate the Module. It contains a default set of values
+
+                    for a given channel, and is thus different from default
+                    values allocated during struct parsing of the Module.
+
+                    While Data can change after the initial creation of
+                    ModuleTemplate, it is not expected to be propagated to
+
+                    downstream modules as it is considered a set of default
+                    values. This means that an update of the data block
+
+                    will only propagate to new Modules created form
+                    ModuleTemplate, not any existing Module.
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  x-kubernetes-embedded-resource: true
+                descriptor:
+                  description: >-
+                    The Descriptor is the Open Component Model Descriptor of a
+                    Module, containing all relevant information
+
+                    to correctly initialize a module (e.g. Charts, Manifests,
+                    References to Binaries and/or configuration)
+
+                    Name more information on Component Descriptors, see
+
+                    https://github.com/open-component-model/ocm
+
+
+
+                    It is translated inside the Lifecycle of the Cluster and
+                    will be used by downstream controllers
+
+                    to bootstrap and manage the module. This part is also
+                    propagated for every change of the template.
+
+                    This means for upgrades of the Descriptor, downstream
+                    controllers will also update the dependant modules
+
+                    (e.g. by updating the controller binary linked in a chart
+                    referenced in the descriptor)
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                mandatory:
+                  description: >-
+                    Mandatory indicates whether the module is mandatory. It is
+                    used to enforce the installation of the module with
+
+                    its configuration in all runtime clusters.
+                  type: boolean
+                requiresDowntime:
+                  description: >-
+                    RequiresDowntime indicates whether the module requires
+                    downtime in support of maintenance windows during module
+                    upgrades.
+                  type: boolean
+                target:
+                  description: >-
+                    Target describes where the Module should later on be
+                    installed if parsed correctly. It is used as installation
+
+                    hint by downstream controllers to determine which client
+                    implementation to use for working with the Module
+                  type: string
+                  enum:
+                    - control-plane
+                    - remote
+      subresources: {}
+      additionalPrinterColumns:
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+    - name: v1beta2
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            apiVersion:
+              description: >-
+                APIVersion defines the versioned schema of this representation
+                of an object.
+
+                Servers should convert recognized schemas to the latest internal
+                value, and
+
+                may reject unrecognized values.
+
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: >-
+                Kind is a string value representing the REST resource this
+                object represents.
+
+                Servers may infer this from the endpoint the client submits
+                requests to.
+
+                Cannot be updated.
+
+                In CamelCase.
+
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: ModuleTemplateSpec defines the desired state of ModuleTemplate.
+              type: object
+              required:
+                - descriptor
+              properties:
+                associatedResources:
+                  description: >-
+                    AssociatedResources is a list of module related resources
+                    that usually must be cleaned when uninstalling a module.
+                    Informational purpose only.
+                  type: array
+                  items:
+                    description: >-
+                      GroupVersionKind unambiguously identifies a kind.  It
+                      doesn't anonymously include GroupVersion
+
+                      to avoid automatic coercion.  It doesn't use a
+                      GroupVersion to avoid custom marshalling
+                    type: object
+                    required:
+                      - group
+                      - kind
+                      - version
+                    properties:
+                      group:
+                        type: string
+                      kind:
+                        type: string
+                      version:
+                        type: string
+                channel:
+                  description: >-
+                    Channel is the targeted channel of the ModuleTemplate. It
+                    will be used to directly assign a Template
+
+                    to a target channel. It has to be provided at any given
+                    time.
+
+                    Deprecated: This field is deprecated and will be removed in
+                    a future release.
+                  type: string
+                  maxLength: 32
+                  pattern: ^$|^[a-z]{3,}$
+                customStateCheck:
+                  description: CustomStateCheck is deprecated.
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - jsonPath
+                      - mappedState
+                      - value
+                    properties:
+                      jsonPath:
+                        description: >-
+                          JSONPath specifies the JSON path to the state variable
+                          in the Module CR
+                        type: string
+                      mappedState:
+                        description: MappedState is the Kyma CR State
+                        type: string
+                        enum:
+                          - Processing
+                          - Deleting
+                          - Ready
+                          - Error
+                          - ''
+                          - Warning
+                          - Unmanaged
+                      value:
+                        description: >-
+                          Value is the value at the JSONPath for which the
+                          Module CR state should map with MappedState
+                        type: string
+                data:
+                  description: >-
+                    Data is the default set of attributes that are used to
+                    generate the Module. It contains a default set of values
+
+                    for a given channel, and is thus different from default
+                    values allocated during struct parsing of the Module.
+
+                    While Data can change after the initial creation of
+                    ModuleTemplate, it is not expected to be propagated to
+
+                    downstream modules as it is considered a set of default
+                    values. This means that an update of the data block
+
+                    will only propagate to new Modules created form
+                    ModuleTemplate, not any existing Module.
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  x-kubernetes-embedded-resource: true
+                descriptor:
+                  description: >-
+                    The Descriptor is the Open Component Model Descriptor of a
+                    Module, containing all relevant information
+
+                    to correctly initialize a module (e.g. Manifests, References
+                    to Binaries and/or configuration)
+
+                    Name more information on Component Descriptors, see
+
+                    https://github.com/open-component-model/ocm
+
+
+
+                    It is translated inside the Lifecycle of the Cluster and
+                    will be used by downstream controllers
+
+                    to bootstrap and manage the module. This part is also
+                    propagated for every change of the template.
+
+                    This means for upgrades of the Descriptor, downstream
+                    controllers will also update the dependant modules
+
+                    (e.g. by updating the controller binary linked in a chart
+                    referenced in the descriptor)
+
+
+
+                    NOTE: Only Raw Rendering is Supported for the layers. So
+                    previously used "config" layers for the helm
+
+                    charts and kustomize renderers are deprecated and ignored.
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                info:
+                  description: Info contains metadata about the module.
+                  type: object
+                  required:
+                    - documentation
+                    - repository
+                  properties:
+                    documentation:
+                      description: >-
+                        Documentation is the link to the documentation of the
+                        module.
+                      type: string
+                    icons:
+                      description: Icons is a list of icons of the module.
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - link
+                          - name
+                        properties:
+                          link:
+                            description: Link is the link to the icon.
+                            type: string
+                          name:
+                            description: Name is the name of the icon.
+                            type: string
+                      x-kubernetes-list-map-keys:
+                        - name
+                      x-kubernetes-list-type: map
+                    repository:
+                      description: Repository is the link to the repository of the module.
+                      type: string
+                manager:
+                  description: >-
+                    Manager contains information for identifying a module's
+                    resource that can be used as indicator for the installation
+                    readiness of the module. Typically, this is the manager
+                    Deployment of the module. In exceptional cases, it may also
+                    be another resource.
+                  type: object
+                  required:
+                    - group
+                    - kind
+                    - name
+                    - version
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      description: Name is the name of the manager.
+                      type: string
+                    namespace:
+                      description: >-
+                        Namespace is the namespace of the manager. It is
+                        optional.
+                      type: string
+                    version:
+                      type: string
+                mandatory:
+                  description: >-
+                    Mandatory indicates whether the module is mandatory. It is
+                    used to enforce the installation of the module with
+
+                    its configuration in all runtime clusters.
+                  type: boolean
+                moduleName:
+                  description: ModuleName is the name of the Module. Can be empty.
+                  type: string
+                  maxLength: 64
+                  pattern: ^([a-z]{3,}(-[a-z]{3,})*)?$
+                requiresDowntime:
+                  description: >-
+                    RequiresDowntime indicates whether the module requires
+                    downtime in support of maintenance windows during module
+                    upgrades.
+                  type: boolean
+                resources:
+                  description: >-
+                    Resources is a list of additional resources of the module
+                    that can be fetched, e.g., the raw manifest.
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - link
+                      - name
+                    properties:
+                      link:
+                        description: Link is the URL to the resource.
+                        type: string
+                        format: uri
+                      name:
+                        description: Name is the name of the resource.
+                        type: string
+                  x-kubernetes-list-map-keys:
+                    - name
+                  x-kubernetes-list-type: map
+                version:
+                  description: >-
+                    Version identifies the version of the Module. Can be empty,
+                    or a semantic version.
+                  type: string
+                  maxLength: 32
+                  pattern: >-
+                    ^((0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[a-zA-Z-][0-9a-zA-Z-]*)?)?$
+      subresources: {}
+      additionalPrinterColumns:
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+  conversion:
+    strategy: None
+status:
+  conditions:
+    - type: NamesAccepted
+      status: 'True'
+      lastTransitionTime: '2025-02-28T11:14:56Z'
+      reason: NoConflicts
+      message: no conflicts found
+    - type: Established
+      status: 'True'
+      lastTransitionTime: '2025-02-28T11:14:56Z'
+      reason: InitialNamesAccepted
+      message: the initial names have been accepted
+  acceptedNames:
+    plural: moduletemplates
+    singular: moduletemplate
+    kind: ModuleTemplate
+    listKind: ModuleTemplateList
+  storedVersions:
+    - v1beta2

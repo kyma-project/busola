@@ -100,4 +100,4 @@ config:
     COLUMN_LAYOUT:
       isEnabled: true
     SNOW:
-      isEnabled: true
+      isEnabled: false
