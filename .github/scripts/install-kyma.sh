@@ -17,7 +17,7 @@ fi
 # Create if not exist
 kubectl get ns kyma-system || kubectl create ns kyma-system
 
-./bin/kyma alpha deploy
+# ./bin/kyma alpha deploy
 
 echo "Apply and enable keda module"
 kubectl apply -f https://github.com/kyma-project/keda-manager/releases/latest/download/keda-manager.yaml
