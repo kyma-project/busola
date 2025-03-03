@@ -1,11 +1,9 @@
 import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { setSSOAuthData } from 'shared/utils/sso';
 
 const timeout = 30; // s
 
-export function checkForTokenExpiration(
-  token?: string,
-  reloadMessageData?: any,
-) {
+export function checkForTokenExpiration(token?: string) {
   if (!token) return;
 
   try {
@@ -14,10 +12,9 @@ export function checkForTokenExpiration(
       new Date(expirationTimestamp).getTime() - Date.now() / 1000;
 
     if (secondsLeft < timeout) {
-      // LuigiClient.sendCustomMessage({
-      //   id: 'busola.reload',
-      //   ...reloadMessageData,
-      // });
+      setSSOAuthData(null);
+
+      window.location.reload();
     }
   } catch (_) {} // ignore errors from non-JWT tokens
 }

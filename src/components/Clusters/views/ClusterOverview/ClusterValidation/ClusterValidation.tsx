@@ -36,17 +36,20 @@ import '@ui5/webcomponents-icons/dist/status-positive.js';
 import { ScanResult } from './ScanResult';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
+import { ssoDataState } from 'state/ssoDataAtom';
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
 
   const authData = useRecoilValue(authDataState);
   const cluster = useRecoilValue(clusterState);
+  const ssoData = useRecoilValue(ssoDataState);
 
   const { fetch, post } = useMemo(() => {
     const fetch = createFetchFn({
       authData,
       cluster,
+      ssoData,
     });
     const post = createPostFn(fetch);
     return { fetch, post };

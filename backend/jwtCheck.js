@@ -15,14 +15,7 @@ const jwtCheck = ({ issuer, jwksUri }) =>
 
 export function setupJWTCheck(app) {
   const { isEnabled, config } = global.config.features?.JWT_CHECK_CONFIG || {};
-  console.log(
-    isEnabled,
-    '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-  );
-  console.log(
-    config,
-    '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-  );
+
   if (isEnabled) {
     app.use(jwtCheck(config));
   }

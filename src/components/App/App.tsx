@@ -45,6 +45,7 @@ import { initTheme } from './initTheme';
 
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
+import { useSSOLogin } from '../../shared/utils/sso';
 
 export default function App() {
   const theme = useRecoilValue(themeState);
@@ -64,6 +65,8 @@ export default function App() {
   useResourceSchemas();
   useSidebarCondensed();
 
+  const ssoLogin = useSSOLogin();
+  ssoLogin();
   const { isLoading } = useAuthHandler();
   useGetConfiguration();
   useGetExtensions();
