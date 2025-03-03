@@ -15,13 +15,28 @@ data:
       version: v1alpha1
     name: OpenID Connect
     category: Configuration
-    urlPath: openidconnect
+    urlPath: openidconnects
     scope: cluster
     description: >-
       {{[OpenID Connect](https://gardener.cloud/docs/extensions/others/gardener-extension-shoot-oidc-service/openidconnects/)}}
       is an open standard authentication protocol built on top of the OAuth 2.0 framework. It provides a secure and flexible way to authenticate and authorize users within applications and systems.
-  details: ''
-  form: ''
-  list: ''
+  details: |-
+    header:
+      - source: metadata.name
+        name: Name
+    body:
+      - widget: Panel
+        name: Specification
+        children:
+          - source: spec.supportedSigningAlgs
+            widget: JoinedArray
+            name: Supported signing algorithms
+          - source: spec.issuerURL
+            name: Issuer
+          - source: spec.usernameClaim
+            name: Username Claim
+      - source: metadata
+        name: Metadata
+        widget: CodeViewer
+        language: "'json'"
   presets: ''
-  translations: ''
