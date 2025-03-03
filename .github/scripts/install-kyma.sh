@@ -49,6 +49,7 @@ kubectl apply -f https://github.com/kyma-project/telemetry-manager/releases/late
 
 echo "Apply modules fixtures"
 kubectl apply -f tests/integration/fixtures/module-templates-crd.yaml
+kubectl apply -f tests/integration/fixtures/test-crd-kyma.yaml
 kubectl apply -f tests/integration/fixtures/modules
 
 echo "Apply gardener resources"
