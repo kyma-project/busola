@@ -121,7 +121,7 @@ export function CommandPaletteUI({
     } else if (paletteCurrent) {
       paletteCurrent.style.right = '0px';
     }
-  }, [showCommandPalette, window.innerWidth]);
+  }, [showCommandPalette, window.innerWidth]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const commandPaletteInput = document.getElementById('command-palette-search');
 
