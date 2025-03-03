@@ -61,11 +61,11 @@ export function NamespaceContextDisplay({
 
 export function ShortHelpText() {
   return (
-    <p className="short-help help-text">
+    <div className="short-help help-text">
       <Trans i18nKey="command-palette.help.short-help">
         <pre className="key"></pre>
       </Trans>
-    </p>
+    </div>
   );
 }
 
