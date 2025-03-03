@@ -102,7 +102,7 @@ export function YamlResourcesList({ resourcesData }) {
                   <span style={{ fontWeight: 'bold' }}></span>
                 </Trans>
               </p>
-              <Title level="H4" size="H4" className="sap-margin-top-small">
+              <Title level="H2" size="H4" className="sap-margin-top-small">
                 {t('upload-yaml.uploaded-resources')}
               </Title>
               <SeparatorLine style={{ margin: '0rem -1rem' }} />
