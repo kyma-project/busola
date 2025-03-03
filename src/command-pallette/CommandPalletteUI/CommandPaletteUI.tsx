@@ -118,8 +118,10 @@ export function CommandPaletteUI({
       paletteCurrent.style.right = `${window.innerWidth -
         shellbarRect.right}px`;
       paletteCurrent.style.opacity = '100%'; //prevent visually jumping
+    } else if (paletteCurrent) {
+      paletteCurrent.style.right = '0px';
     }
-  }, [showCommandPalette]);
+  }, [showCommandPalette, window.innerWidth]);
 
   const commandPaletteInput = document.getElementById('command-palette-search');
 
