@@ -8,6 +8,7 @@ const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
 const merge = require('lodash.merge');
+const { setupJWTCheck } = require('./jwtCheck');
 
 global.config = {};
 
@@ -53,6 +54,8 @@ if (process.env.NODE_ENV === 'development') {
   console.log('Use development settings of cors');
   app.use(cors({ origin: '*' }));
 }
+
+setupJWTCheck(app);
 
 // Uncomment after: https://github.com/kyma-project/busola/issues/3680
 // app.use('/proxy', proxyHandler);
