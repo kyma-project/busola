@@ -16,6 +16,7 @@ fi
 
 # Create if not exist
 kubectl get ns kyma-system || kubectl create ns kyma-system
+kubectl get ns kcp-system || kubectl create ns kcp-system
 
 # ./bin/kyma alpha deploy
 
