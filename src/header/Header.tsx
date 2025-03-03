@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
+import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -30,6 +31,7 @@ import './Header.scss';
 
 export function Header() {
   useAvailableNamespaces();
+  const isSAPUser = useCheckSAPUser();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -88,6 +90,10 @@ export function Header() {
             setIsFormOpen,
             () => navigate('/clusters'),
           );
+          setShowCompanion({
+            show: false,
+            fullScreen: false,
+          });
         }}
         logo={<Logo />}
         primaryTitle={
@@ -113,6 +119,10 @@ export function Header() {
                   );
             },
           );
+          setShowCompanion({
+            show: false,
+            fullScreen: false,
+          });
         }}
         profile={
           <Avatar
@@ -150,19 +160,21 @@ export function Header() {
             title={t('navigation.feedback')}
           />
         )}
-        {isKymaCompanionEnabled && window.location.pathname !== '/clusters' && (
-          <ShellBarItem
-            onClick={() =>
-              setShowCompanion({
-                show: true,
-                fullScreen: false,
-              })
-            }
-            icon="da"
-            text={t('kyma-companion.name')}
-            title={t('kyma-companion.name')}
-          />
-        )}
+        {isKymaCompanionEnabled &&
+          isSAPUser &&
+          window.location.pathname !== '/clusters' && (
+            <ShellBarItem
+              onClick={() =>
+                setShowCompanion({
+                  show: true,
+                  fullScreen: false,
+                })
+              }
+              icon="da"
+              text={t('kyma-companion.name')}
+              title={t('kyma-companion.name')}
+            />
+          )}
       </ShellBar>
       <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
     </>
