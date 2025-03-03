@@ -157,7 +157,10 @@ export function SidebarNavigation() {
     >
       {isSidebarCondensed && (
         <>
-          <SideNavigationItem className="space-top disable-effects" />
+          <SideNavigationItem
+            aria-hidden
+            className="space-top disable-effects"
+          />
           <SideNavigationItem
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}

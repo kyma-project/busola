@@ -120,11 +120,19 @@ export function ReplicaSetsDetails(props) {
       value: resource => <div>{resource?.status?.replicas ?? 0}</div>,
     },
   ];
-
   const statusConditions = resource => {
     return resource?.status?.conditions?.map(condition => {
+      const overridenStatus = () => {
+        if (condition.type === 'ReplicaFailure')
+          return condition.status === 'True' ? 'Negative' : 'Positive';
+        return undefined;
+      };
       return {
-        header: { titleText: condition.type, status: condition.status },
+        header: {
+          titleText: condition.type,
+          status: condition.status,
+          overrideStatusType: overridenStatus(),
+        },
         message: condition.message,
       };
     });

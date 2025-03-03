@@ -41,7 +41,6 @@ config:
         kubeconfigUrl: https://kyma-env-broker.cp.stage.kyma.cloud.sap/kubeconfig
     SENTRY:
       isEnabled: true
-      selectors: []
       config:
         dsn: https://6b34a073f53c4949bf4f1fae1b788527@o399001.ingest.sentry.io/5953495
     SHOW_KYMA_VERSION:
@@ -100,4 +99,4 @@ config:
     COLUMN_LAYOUT:
       isEnabled: true
     SNOW:
-      isEnabled: true
+      isEnabled: false
