@@ -132,14 +132,14 @@ export const GenericList = ({
           setCurrentPage(pagesCount);
         }
       }
-      setFilteredEntries(
-        filterEntries(
-          sorting(sort, entries),
-          searchQuery,
-          searchSettings?.textSearchProperties,
-        ),
-      );
     }
+    setFilteredEntries(
+      filterEntries(
+        sorting(sort, entries),
+        searchQuery,
+        searchSettings?.textSearchProperties,
+      ),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     searchQuery,
