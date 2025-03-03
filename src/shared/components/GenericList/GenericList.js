@@ -131,6 +131,7 @@ export const GenericList = ({
         setCurrentPage(pagesCount);
       }
     }
+
     setFilteredEntries(
       filterEntries(
         sorting(sort, entries),
