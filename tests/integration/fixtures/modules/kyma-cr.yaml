@@ -7,5 +7,5 @@ metadata:
   name: default
   namespace: kyma-system
 spec:
-  channel: fast
+  channel: regular
   modules: []
