@@ -33,11 +33,15 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('Memory Requests').should('be.visible');
-
-      cy.contains('Memory Limits').should('be.visible');
-
       cy.contains('Events')
+        .scrollIntoView()
+        .should('be.visible');
+
+      cy.contains('CPU Usage')
+        .scrollIntoView()
+        .should('be.visible');
+
+      cy.contains('Memory Usage')
         .scrollIntoView()
         .should('be.visible');
     });
