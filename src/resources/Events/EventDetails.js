@@ -32,14 +32,14 @@ const Specification = event => {
             {event.type === 'Warning' ? (
               <ObjectStatus
                 aria-label="Warning"
-                icon={<Icon name="warning" />}
+                icon={<Icon accessibleName="Warning" name="warning" />}
                 className="has-tooltip sap-margin-begin-tiny"
                 state="Critical"
               />
             ) : (
               <ObjectStatus
                 aria-label="Normal"
-                icon={<Icon name="information" />}
+                icon={<Icon accessibleName="Normal" name="information" />}
                 className="has-tooltip sap-margin-begin-tiny"
                 state="Information"
               />
