@@ -219,7 +219,6 @@ export default function KymaModulesList({
       );
 
       const moduleDocs =
-        currentModuleTemplate?.spec?.info ||
         currentModuleTemplate?.spec?.info?.documentation ||
         currentModuleTemplate?.metadata?.annotations[
           'operator.kyma-project.io/doc-url'
