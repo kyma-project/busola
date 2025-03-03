@@ -51,6 +51,18 @@ export default function Chat() {
     );
   };
 
+  const updateLatestMessage = (updates: Partial<MessageType>) => {
+    setChatHistory(prevMessages => {
+      if (prevMessages.length === 0) return prevMessages;
+
+      const [latestMessage] = prevMessages.slice(-1);
+      return prevMessages.slice(0, -1).concat({
+        ...latestMessage,
+        ...updates,
+      });
+    });
+  };
+
   const handleChatResponse = (response: any) => {
     const isLoading = response?.step !== 'output';
     if (!isLoading) {
@@ -76,24 +88,11 @@ export default function Chat() {
 
   const setFollowUpLoading = () => {
     setErrorOccured(false);
-    setChatHistory(prevMessages => {
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        ...latestMessage,
-        suggestionsLoading: true,
-      });
-    });
+    updateLatestMessage({ suggestionsLoading: true });
   };
 
   const handleFollowUpQuestions = (questions: string[]) => {
-    setChatHistory(prevMessages => {
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        ...latestMessage,
-        suggestions: questions,
-        suggestionsLoading: false,
-      });
-    });
+    updateLatestMessage({ suggestions: questions, suggestionsLoading: false });
   };
 
   const handleError = () => {
@@ -139,9 +138,24 @@ export default function Chat() {
   useEffect(() => {
     if (chatHistory.length === 1) {
       if (initialSuggestionsLoading) {
+        updateLatestMessage({
+          messageChunks: [
+            { step: 'output', result: t('kyma-companion.introduction') },
+          ],
+        });
         setFollowUpLoading();
       } else if (initialSuggestions) {
         handleFollowUpQuestions(initialSuggestions);
+        if (initialSuggestions.length === 0) {
+          updateLatestMessage({
+            messageChunks: [
+              {
+                step: 'output',
+                result: t('kyma-companion.introduction-no-suggestions'),
+              },
+            ],
+          });
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

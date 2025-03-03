@@ -25,7 +25,7 @@ export function usePromptSuggestions(options?: { skip?: boolean }) {
   const [initialSuggestions, setInitialSuggestions] = useState<string[]>([]);
   const setSessionID = useSetRecoilState(sessionIDState);
   const columnLayout = useRecoilValue(columnLayoutState);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const fetchedResourceRef = useRef('');
 
   useEffect(() => {
