@@ -285,7 +285,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
             text={t('kyma-modules.managed')}
             checked={findModuleSpec(kymaResource, module.name)?.managed}
             onChange={event => {
-              console.log(event);
               setManaged(event.target.checked, index);
             }}
           />
