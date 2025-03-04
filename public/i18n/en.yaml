@@ -800,7 +800,7 @@ kyma-modules:
   no-version: No version available
   channel-overridden: Overridden
   managed: Managed
-  associated-resources-warning: If there are resources left, remove them first to delete the module or use force delete.
+  associated-resources-warning: If there are resources left, remove them first to delete the module or use cascade delete.
   cascade-delete: Cascade Delete
   cascade-delete-warning: Cascade delete removes all connected resources first and then removes the module. This action cannot be undone.
   beta: Beta
