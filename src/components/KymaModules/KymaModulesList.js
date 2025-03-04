@@ -421,7 +421,7 @@ export default function KymaModulesList({
           kymaResource,
         );
 
-        const counts = await fetchResourceCounts(resources);
+        const counts = await fetchResourceCounts(resources, fetchFn);
 
         const urls = await generateAssociatedResourcesUrls(
           resources,
