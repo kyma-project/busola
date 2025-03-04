@@ -389,12 +389,9 @@ export const GenericList = ({
                 layout: 'TwoColumnsMidExpanded',
               },
         );
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${linkTo(selectedEntry)}?layout=${columnLayout ??
-            'TwoColumnsMidExpanded'}`,
-        );
+        const link = `${linkTo(selectedEntry)}?layout=${columnLayout ??
+          'TwoColumnsMidExpanded'}`;
+        navigate(link);
       }
     }
   };
