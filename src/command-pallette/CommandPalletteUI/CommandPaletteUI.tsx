@@ -1,5 +1,8 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useEventListener } from 'hooks/useEventListener';
+import { addHistoryEntry, getHistoryEntries } from './search-history';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import {
   CommandPalletteHelp,
   NamespaceContextDisplay,
@@ -7,13 +10,14 @@ import {
   SuggestedQuery,
 } from './components/components';
 import { ResultsList } from './ResultsList/ResultsList';
-import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { useSearchResults } from './useSearchResults';
-import './CommandPaletteUI.scss';
 import { K8sResource } from 'types';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { Icon, Input } from '@ui5/webcomponents-react';
+import { Button, Icon, Input } from '@ui5/webcomponents-react';
+import './CommandPaletteUI.scss';
+import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 
 function Background({
   hide,
@@ -51,6 +55,10 @@ export function CommandPaletteUI({
   updateResourceCache,
 }: CommandPaletteProps) {
   const namespace = useRecoilValue(activeNamespaceIdState);
+  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+    isResourceEditedState,
+  );
+  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
@@ -61,6 +69,8 @@ export function CommandPaletteUI({
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
+
+  const commandPaletteRef = useRef<HTMLDivElement | null>(null);
 
   const {
     results,
@@ -77,8 +87,41 @@ export function CommandPaletteUI({
 
   useEffect(() => setNamespaceContext(namespace), [namespace]);
   useEffect(() => {
-    document.getElementById('command-palette-search')?.focus();
+    setTimeout(
+      () => document.getElementById('command-palette-search')?.focus(),
+      100,
+    );
   }, []);
+
+  useEffect(() => {
+    const headerInput = document.getElementById('command-palette-search-bar');
+    const headerSlot = document
+      .querySelector('ui5-shellbar')
+      ?.shadowRoot?.querySelector('.ui5-shellbar-search-field') as HTMLElement;
+    const paletteCurrent = commandPaletteRef.current;
+
+    if (!showCommandPalette || !headerSlot) return;
+
+    //show search bar when Command Palette is open
+    document
+      .querySelector('ui5-shellbar')
+      ?.setAttribute('show-search-field', '');
+    headerSlot.style.display = 'flex';
+
+    //position Command Palette
+    if (
+      window.innerWidth > SCREEN_SIZE_BREAKPOINT_M &&
+      headerInput &&
+      paletteCurrent
+    ) {
+      const shellbarRect = headerInput.getBoundingClientRect();
+      paletteCurrent.style.right = `${window.innerWidth -
+        shellbarRect.right}px`;
+      paletteCurrent.style.opacity = '100%'; //prevent visually jumping
+    } else if (paletteCurrent) {
+      paletteCurrent.style.right = '0px';
+    }
+  }, [showCommandPalette, window.innerWidth]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const commandPaletteInput = document.getElementById('command-palette-search');
 
@@ -104,8 +147,18 @@ export function CommandPaletteUI({
     const historyEntries = getHistoryEntries();
     if (key === 'Enter' && results[0]) {
       // choose current entry
-      addHistoryEntry(results[0].query);
-      results[0].onActivate();
+      e.preventDefault();
+
+      handleActionIfFormOpen(
+        isResourceEdited,
+        setIsResourceEdited,
+        isFormOpen,
+        setIsFormOpen,
+        () => {
+          addHistoryEntry(results[0].query);
+          results[0].onActivate();
+        },
+      );
     } else if (key === 'Tab') {
       e.preventDefault();
       // fill search with active history entry
@@ -170,6 +223,10 @@ export function CommandPaletteUI({
     'keydown',
     (e: Event) => {
       const { key } = e as KeyboardEvent;
+      if (key === 'Escape') {
+        hide();
+      }
+
       return !isHistoryMode
         ? keyDownInDropdownMode(key, e)
         : keyDownInHistoryMode(key, e);
@@ -179,22 +236,37 @@ export function CommandPaletteUI({
 
   return (
     <Background hide={hide}>
-      <div className="command-palette-ui__wrapper" role="dialog">
+      <div
+        className="command-palette-ui__wrapper"
+        role="dialog"
+        ref={commandPaletteRef}
+      >
         <div className="command-palette-ui__content">
           <NamespaceContextDisplay
             namespaceContext={namespaceContext}
             setNamespaceContext={setNamespaceContext}
           />
-          <Input
-            id="command-palette-search"
-            accessibleName="command-palette-search"
-            value={!isHistoryMode ? query : ''}
-            placeholder={!isHistoryMode ? '' : query}
-            onInput={(e: any) => setQuery((e.target as HTMLInputElement).value)}
-            showClearIcon
-            className="search-with-display-more full-width"
-            icon={<Icon name="slim-arrow-right" />}
-          />
+          <div className="input-container">
+            <Button
+              className="input-back-button"
+              design="Transparent"
+              onClick={hide}
+            >
+              <Icon name="nav-back"></Icon>
+            </Button>
+            <Input
+              id="command-palette-search"
+              accessibleName="command-palette-search"
+              value={!isHistoryMode ? query : ''}
+              placeholder={!isHistoryMode ? '' : query}
+              onInput={(e: any) =>
+                setQuery((e.target as HTMLInputElement).value)
+              }
+              showClearIcon
+              className="search-with-display-more full-width"
+              icon={<Icon name="slim-arrow-right" />}
+            />
+          </div>
           {!showHelp && (
             <>
               <ResultsList

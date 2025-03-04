@@ -1,10 +1,13 @@
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 
 import { formatResourceUnit } from 'shared/helpers/resources.js';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
+import {
+  calculateMetrics,
+  usePodsMetricsQuery,
+} from 'resources/Pods/podQueries';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const MEMORY_SUFFIX_POWER = {
   // must be sorted from the smallest to the largest; it is case sensitive; more info: https://medium.com/swlh/understanding-kubernetes-resource-cpu-and-memory-units-30284b3cc866
@@ -49,124 +52,85 @@ export function getCpus(cpuString) {
   return number * suffixPower;
 }
 
-export function bytesToHumanReadable(bytes) {
-  if (!bytes) return bytes;
-  return formatResourceUnit(bytes, true, { withoutSpace: true });
+export function bytesToHumanReadable(bytes, { fixed = 0, unit = '' } = {}) {
+  return formatResourceUnit(bytes, true, { withoutSpace: true, fixed, unit });
 }
 
 export function cpusToHumanReadable(cpus, { fixed = 0, unit = '' } = {}) {
-  if (!cpus) return cpus;
   return formatResourceUnit(cpus, false, { withoutSpace: true, fixed, unit });
 }
 
-const MemoryRequestsCircle = ({ resourceQuotas, isLoading }) => {
-  const { t } = useTranslation();
-
-  if (isLoading) {
-    return <Spinner />;
-  } else if (!resourceQuotas) {
-    return t('namespaces.overview.resources.error');
-  }
-
-  const totalRequests = resourceQuotas.reduce(
-    (sum, quota) =>
-      sum +
-      getBytes(
-        quota.status?.hard?.['requests.memory'] || quota.status?.hard?.memory,
-      ),
-    0,
-  );
-  const totalUsage = resourceQuotas.reduce(
-    (sum, quota) =>
-      sum +
-      getBytes(
-        quota.status?.used?.['requests.memory'] || quota.status?.used?.memory,
-      ),
-    0,
-  );
-
-  const valueText = bytesToHumanReadable(totalUsage);
-  const maxText = bytesToHumanReadable(totalRequests);
-
-  return (
-    <UI5RadialChart
-      color="var(--sapChart_OrderedColor_5)"
-      value={totalUsage}
-      max={totalRequests}
-      additionalInfo={`${valueText} / ${maxText}`}
-    />
-  );
-};
-
-const MemoryLimitsCircle = ({ resourceQuotas, isLoading }) => {
-  const { t } = useTranslation();
-
-  if (isLoading) {
-    return <Spinner />;
-  } else if (!resourceQuotas) {
-    return t('namespaces.overview.resources.error');
-  }
-
-  const totalLimits = resourceQuotas.reduce(
-    (sum, quota) => sum + getBytes(quota.status?.hard?.['limits.memory']),
-    0,
-  );
-  const totalUsage = resourceQuotas.reduce(
-    (sum, quota) => sum + getBytes(quota.status?.used?.['limits.memory']),
-    0,
-  );
-
-  const valueText = bytesToHumanReadable(totalUsage);
-  const maxText = bytesToHumanReadable(totalLimits);
-
-  return (
-    <UI5RadialChart
-      color="var(--sapChart_OrderedColor_6)"
-      value={totalUsage}
-      max={totalLimits}
-      additionalInfo={`${valueText} / ${maxText}`}
-    />
-  );
-};
-
 export const ResourcesUsage = ({ namespace }) => {
   const { t } = useTranslation();
-  const { data: resourceQuotas, loading = true } = useGetList()(
-    namespace
-      ? `/api/v1/namespaces/${namespace}/resourcequotas`
-      : '/api/v1/resourcequotas',
-    {
-      pollingInterval: 3300,
-    },
-  );
-  if (!resourceQuotas || resourceQuotas?.length < 1) return null;
+  const { podsMetrics, error, loading } = usePodsMetricsQuery(namespace);
+  const { cpu, memory } = calculateMetrics(podsMetrics);
+
+  if (loading) {
+    return <Spinner />;
+  } else if (error) {
+    return (
+      <div className="item-wrapper card-small pods-metrics-error">
+        <Card
+          className="item"
+          header={
+            <CardHeader titleText={t('namespaces.overview.resources.error')} />
+          }
+        />
+      </div>
+    );
+  } else if (!podsMetrics?.length) return null;
+
   return (
     <>
       <div className="item-wrapper card-tall">
         <Card
-          className="radial-chart-card"
+          className="radial-chart-card item"
           header={
             <CardHeader
-              titleText={t('namespaces.overview.resources.requests')}
+              titleText={t('cluster-overview.statistics.cpu-usage')}
             />
           }
         >
-          <MemoryRequestsCircle
-            resourceQuotas={resourceQuotas}
-            isLoading={loading}
+          <UI5RadialChart
+            color="var(--sapChart_OrderedColor_5)"
+            value={
+              cpusToHumanReadable(cpu.usage, {
+                unit: 'm',
+              }).value
+            }
+            max={
+              cpusToHumanReadable(cpu.capacity, {
+                unit: 'm',
+              }).value
+            }
+            additionalInfo={`${
+              cpusToHumanReadable(cpu.usage, {
+                unit: 'm',
+              }).string
+            } / ${
+              cpusToHumanReadable(cpu.capacity, {
+                unit: 'm',
+              }).string
+            }`}
           />
         </Card>
       </div>
       <div className="item-wrapper card-tall">
         <Card
-          className="radial-chart-card"
+          className="radial-chart-card item"
           header={
-            <CardHeader titleText={t('namespaces.overview.resources.limits')} />
+            <CardHeader
+              titleText={t('cluster-overview.statistics.memory-usage')}
+            />
           }
         >
-          <MemoryLimitsCircle
-            resourceQuotas={resourceQuotas}
-            isLoading={loading}
+          <UI5RadialChart
+            color="var(--sapChart_OrderedColor_6)"
+            value={bytesToHumanReadable(memory.usage).value}
+            max={bytesToHumanReadable(memory.capacity).value}
+            additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
+              bytesToHumanReadable(memory.capacity).string
+            }`}
           />
         </Card>
       </div>
