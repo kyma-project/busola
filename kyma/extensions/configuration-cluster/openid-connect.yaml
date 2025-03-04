@@ -1,0 +1,58 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: openidconnect
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: openidconnect
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  general: |
+    resource:
+      kind: OpenIDConnect
+      group: authentication.gardener.cloud
+      version: v1alpha1
+    name: OpenID Connect
+    category: Configuration
+    urlPath: openidconnects
+    scope: cluster
+    description: >-
+      {{[OpenID Connect](https://gardener.cloud/docs/extensions/others/gardener-extension-shoot-oidc-service/openidconnects/)}}
+      is an open standard authentication protocol built on top of the OAuth 2.0 framework. It provides a secure and flexible way to authenticate and authorize users within applications and systems.
+  details: |-
+    header:
+      - source: metadata.name
+        name: Name
+    body:
+      - widget: Panel
+        name: Specification
+        children:
+          - source: spec.supportedSigningAlgs
+            widget: JoinedArray
+            name: Supported signing algorithms
+          - source: spec.issuerURL
+            name: Issuer
+          - source: spec.usernameClaim
+            name: Username Claim
+          - source: spec.groupsClaim
+            name: Groups Claim
+          - source: spec.clientID
+            name: Client ID
+          - source: spec.jwks.distributedClaims
+            name: Distributed Claims
+      - source: spec
+        name: Specification JSON
+        widget: CodeViewer
+        language: "'json'"
+      - source: metadata
+        name: Metadata
+        widget: CodeViewer
+        language: "'json'"
+  presets: |-
+    - name: template
+      default: true
+      value: 
+        metadata:
+          annotations: 
+            authentication.gardener.cloud/class: garden
