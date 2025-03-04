@@ -88,7 +88,20 @@ async function handleChatMessage(req, res) {
   const conversationId = sessionId;
 
   try {
-    const url = `https://companion.cp.dev.kyma.cloud.sap/api/conversations/${conversationId}/messages`;
+    if (!conversationId || typeof conversationId !== 'string') {
+      return res.status(400).json({ error: 'Invalid conversation ID' });
+    }
+
+    const baseUrl =
+      'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
+    let targetUrl;
+    try {
+      targetUrl = new URL(`${conversationId}/messages`, baseUrl);
+    } catch (urlError) {
+      console.error('Invalid URL construction:', urlError);
+      return res.status(400).json({ error: 'Invalid conversation ID' });
+    }
+
     const payload = {
       query,
       resource_kind: resourceType,
@@ -123,13 +136,11 @@ async function handleChatMessage(req, res) {
       throw new Error('Missing authentication credentials');
     }
 
-    const response = await fetch(url, {
+    const response = await fetch(targetUrl, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
     });
-
-    console.log(response);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
