@@ -134,12 +134,14 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
         searchField={
-          <CommandPaletteSearchBar
-            shouldFocus={isSearchOpen}
-            slot="searchField"
-            setShouldFocus={setIsSearchOpen}
-            shellbarRef={shellbarRef}
-          />
+          window.location.pathname !== '/clusters' && (
+            <CommandPaletteSearchBar
+              shouldFocus={isSearchOpen}
+              slot="searchField"
+              setShouldFocus={setIsSearchOpen}
+              shellbarRef={shellbarRef}
+            />
+          )
         }
         showSearchField
         onSearchButtonClick={e => {
