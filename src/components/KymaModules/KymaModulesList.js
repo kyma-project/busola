@@ -438,7 +438,7 @@ export default function KymaModulesList({
           kymaResource,
         );
 
-        const counts = await fetchResourceCounts(resources);
+        const counts = await fetchResourceCounts(resources, fetchFn);
 
         const urls = await generateAssociatedResourcesUrls(
           resources,
@@ -511,7 +511,7 @@ export default function KymaModulesList({
               }
               customDeleteText={
                 associatedResourceLeft && allowForceDelete
-                  ? 'common.buttons.force-delete'
+                  ? 'common.buttons.cascade-delete'
                   : null
               }
               cancelFn={() => {
@@ -587,8 +587,8 @@ export default function KymaModulesList({
                           onChange={() =>
                             setAllowForceDelete(!allowForceDelete)
                           }
-                          accessibleName={t('kyma-modules.force-edit')}
-                          text={t('kyma-modules.force-edit')}
+                          accessibleName={t('kyma-modules.cascade-delete')}
+                          text={t('kyma-modules.cascade-delete')}
                           className="sap-margin-top-tiny"
                         />
                       )}
@@ -599,7 +599,7 @@ export default function KymaModulesList({
                           hideCloseButton
                           className="sap-margin-y-small"
                         >
-                          {t('kyma-modules.force-delete-warning')}
+                          {t('kyma-modules.cascade-delete-warning')}
                         </MessageStrip>
                       )}
                     </>
