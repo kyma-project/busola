@@ -21,9 +21,6 @@ data:
       {{[OpenID Connect](https://gardener.cloud/docs/extensions/others/gardener-extension-shoot-oidc-service/openidconnects/)}}
       is an open standard authentication protocol built on top of the OAuth 2.0 framework. It provides a secure and flexible way to authenticate and authorize users within applications and systems.
   details: |-
-    header:
-      - source: metadata.name
-        name: Name
     body:
       - widget: Panel
         name: Specification
@@ -41,18 +38,36 @@ data:
             name: Client ID
           - source: spec.jwks.distributedClaims
             name: Distributed Claims
-      - source: spec
-        name: Specification JSON
-        widget: CodeViewer
-        language: "'json'"
-      - source: metadata
-        name: Metadata
-        widget: CodeViewer
-        language: "'json'"
-  presets: |-
-    - name: template
-      default: true
-      value: 
-        metadata:
-          annotations: 
-            authentication.gardener.cloud/class: garden
+  list: |-
+    - name: Issuer
+      source: spec.issuerURL
+    - name: Username Claim
+      source: spec.usernameClaim
+    - name: Groups Claim
+      source: spec.groupsClaim
+    - name: Client ID
+      source: spec.clientID
+    - name: Age
+      source: '$getElapsedTime(metadata.creationTimestamp)'
+  form: |-
+    - path: spec.issuerURL
+      widget: Text
+      placeholder: Issuer
+    - path: spec.usernameClaim
+      widget: Text
+      placeholder: Username Claim
+    - path: spec.groupsClaim
+      widget: Text
+      placeholder: Groups Claim
+    - path: spec.clientID
+      widget: Text
+      placeholder: Client ID
+    - path: spec.jwks.distributedClaims
+      enum:
+      - true
+      - false
+    - path: spec.supportedSigningAlgs
+      widget: SimpleList
+      defaultExpanded: true
+      children:
+        - path: '[]'

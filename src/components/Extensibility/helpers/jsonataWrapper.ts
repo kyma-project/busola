@@ -5,6 +5,7 @@ import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestam
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { permissionSetsSelector } from 'state/permissionSetsSelector';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
+import { getElapsedTime } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 /*
   Turns jsonata expressions like
@@ -96,6 +97,10 @@ export function jsonataWrapper(expression: string) {
   exp.registerFunction('isSAPuser', () => {
     const isSAPUser = useCheckSAPUser();
     return isSAPUser;
+  });
+
+  exp.registerFunction('getElapsedTime', timestamp => {
+    return getElapsedTime(timestamp, 'd');
   });
 
   return exp;
