@@ -40,6 +40,10 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
 
   const initialLayoutState = {
     layout: layout,
+    startColumn: {
+      resourceType: resourceType,
+      namespaceId: namespace,
+    },
     midColumn: {
       resourceName: resourceName,
       resourceType: resourceType,
@@ -122,6 +126,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
             setInitialUnchangedResource(cloneDeep(kymaResourceState));
             setLayoutColumn({
               layout: 'OneColumn',
+              startColumn: null,
               midColumn: null,
               endColumn: null,
             });

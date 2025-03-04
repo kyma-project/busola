@@ -113,6 +113,12 @@ export default function NamespaceCreate({
     setLayoutColumn({
       layout: 'OneColumn',
       showCreate: null,
+      startColumn: {
+        resourceType: 'Namespace',
+        resourceName: namespace.metadata?.name,
+        apiGroup: '',
+        apiVersion: 'v1',
+      },
       midColumn: null,
       endColumn: null,
     });

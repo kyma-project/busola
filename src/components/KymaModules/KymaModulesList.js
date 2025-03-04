@@ -62,6 +62,7 @@ import {
   handleItemClick,
 } from './deleteModulesHelpers';
 import { UnmanagedModuleInfo } from './components/UnmanagedModuleInfo';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 
 export default function KymaModulesList({
@@ -123,6 +124,9 @@ export default function KymaModulesList({
 
   const handleShowAddModule = () => {
     setLayoutColumn({
+      startColumn: {
+        resourceType: 'kymamodules',
+      },
       midColumn: null,
       endColumn: null,
       layout: 'TwoColumnsMidExpanded',
@@ -387,13 +391,26 @@ export default function KymaModulesList({
         ? namespaceUrl(partialPath)
         : clusterUrl(partialPath);
 
+      const { group, version } = extractApiGroupVersion(
+        moduleStatus?.resource?.apiVersion,
+      );
       setLayoutColumn({
+        startColumn: {
+          resourceType: hasExtension
+            ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
+            : moduleCrd?.metadata?.name,
+          namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+          apiGroup: group,
+          apiVersion: version,
+        },
         midColumn: {
           resourceType: hasExtension
             ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
             : moduleCrd?.metadata?.name,
           resourceName: moduleStatus?.resource?.metadata?.name,
           namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+          apiGroup: group,
+          apiVersion: version,
         },
         layout: 'TwoColumnsMidExpanded',
         endColumn: null,
