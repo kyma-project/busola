@@ -185,10 +185,15 @@ ui5-tabcontainer::part(content) {
 .search-with-display-more {
   @include input-icon(
     url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iMjYiIGhlaWdodD0iMjYiPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzRENUE2QyIgZD0iTTQyMiAwcTM4IDAgNjQgMjZ0MjYgNjR2MzMycTAgMzgtMjYgNjR0LTY0IDI2SDEzOHEtMjggMC01My41LTExdC00NC0yOS41LTI5LjUtNDRUMCAzNzRxMC0yOSAxMS01My41VDQwLjUgMjc3dDQ0LTI5LjVUMTM4IDIzN2gxMjdsLTMzLTMzcS04LTgtOC0xOCAwLTExIDcuNS0xOC41VDI1MCAxNjB0MTggN2w3NyA3N3E3IDkgNyAxOCAwIDExLTcgMThsLTc3IDc3cS04IDgtMTggOC0xMSAwLTE4LjUtNy41VDIyNCAzMzlxMC0xMCA4LTE4bDMzLTMzSDEzOHEtMTggMC0zNCA3dC0yNy41IDE4LjUtMTguNSAyNy03IDMzLjVxMCAzNiAyNS41IDYxLjVUMTM4IDQ2MWgyODRxMTcgMCAyOC0xMXQxMS0yOFY5MHEwLTE3LTExLTI4dC0yOC0xMUg5MHEtMTcgMC0yOCAxMVQ1MSA5MHY3NnEwIDExLTcgMTguNVQyNiAxOTJ0LTE4LjUtNy41VDAgMTY2VjkwcTAtMzggMjYtNjRUOTAgMGgzMzJ6IiAvPjwvc3ZnPg==),
-    48px,
-    16px center,
+    2rem,
+    0.75rem center,
     16px
   );
+  height: 2rem;
+
+  ui5-icon {
+    align-self: center;
+  }
 }
 
 .combobox-with-dimension-icon {

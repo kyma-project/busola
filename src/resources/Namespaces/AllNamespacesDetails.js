@@ -58,29 +58,27 @@ export function AllNamespacesDetails() {
   );
 
   return (
-    <>
-      <DynamicPageComponent
-        title={t('navigation.all-namespaces')}
-        content={
-          <>
-            <Title
-              level="H3"
-              size="H3"
-              className="sap-margin-begin-medium sap-margin-y-medium"
-            >
-              {t('common.headers.monitoring-and-health')}
-            </Title>
-            <div className="cluster-stats sap-margin-tiny">
-              <ResourcesUsage />
-              <NamespaceWorkloads />
-            </div>
-            {LimitrangesList}
-            {ResourceQuotasList}
-            {Events}
-          </>
-        }
-        actions={headerActions}
-      />
-    </>
+    <DynamicPageComponent
+      title={t('navigation.all-namespaces')}
+      content={
+        <>
+          <Title
+            level="H3"
+            size="H3"
+            className="sap-margin-begin-medium sap-margin-y-medium"
+          >
+            {t('common.headers.monitoring-and-health')}
+          </Title>
+          <div className="cluster-stats sap-margin-tiny">
+            <ResourcesUsage />
+            <NamespaceWorkloads />
+          </div>
+          {LimitrangesList}
+          {ResourceQuotasList}
+          {Events}
+        </>
+      }
+      actions={headerActions}
+    />
   );
 }

@@ -16,7 +16,6 @@ import {
   getStatusesPodCount,
   PodStatusCounterKey,
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
-import { roundTwoDecimals } from 'shared/utils/helpers';
 
 import './ClusterStats.scss';
 
@@ -61,7 +60,7 @@ export default function ClusterStats({ nodesData }) {
       for (const pv of persistentVolumesData) {
         total_bytes_capacity += getBytes(pv?.spec?.capacity?.storage);
       }
-      setPvCapacity(bytesToHumanReadable(total_bytes_capacity));
+      setPvCapacity(bytesToHumanReadable(total_bytes_capacity).string);
     }
   }, [persistentVolumesData]);
 
@@ -127,13 +126,25 @@ export default function ClusterStats({ nodesData }) {
           >
             <UI5RadialChart
               color="var(--sapChart_OrderedColor_5)"
-              value={roundTwoDecimals(cpu.usage)}
-              max={roundTwoDecimals(cpu.capacity)}
-              additionalInfo={`${cpusToHumanReadable(cpu.usage, {
-                unit: 'm',
-              })} / ${cpusToHumanReadable(cpu.capacity, {
-                unit: 'm',
-              })}`}
+              value={
+                cpusToHumanReadable(cpu.usage, {
+                  unit: 'm',
+                }).value
+              }
+              max={
+                cpusToHumanReadable(cpu.capacity, {
+                  unit: 'm',
+                }).value
+              }
+              additionalInfo={`${
+                cpusToHumanReadable(cpu.usage, {
+                  unit: 'm',
+                }).string
+              } / ${
+                cpusToHumanReadable(cpu.capacity, {
+                  unit: 'm',
+                }).string
+              }`}
             />
           </Card>
         </div>
@@ -148,11 +159,11 @@ export default function ClusterStats({ nodesData }) {
           >
             <UI5RadialChart
               color="var(--sapChart_OrderedColor_6)"
-              value={roundTwoDecimals(memory.usage)}
-              max={roundTwoDecimals(memory.capacity)}
-              additionalInfo={`${roundTwoDecimals(
-                memory.usage,
-              )}GiB / ${roundTwoDecimals(memory.capacity)}GiB`}
+              value={bytesToHumanReadable(memory.usage).value}
+              max={bytesToHumanReadable(memory.capacity).value}
+              additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
+                bytesToHumanReadable(memory.capacity).string
+              }`}
             />
           </Card>
         </div>
