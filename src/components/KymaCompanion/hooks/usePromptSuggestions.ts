@@ -6,7 +6,16 @@ import { ColumnLayoutState, columnLayoutState } from 'state/columnLayoutAtom';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 
-const getResourceFromColumnnLayout = (columnLayout: ColumnLayoutState) => {
+interface CurrentResource {
+  resourceName: string;
+  resourceType: string;
+  namespace: string;
+  groupVersion: string;
+}
+
+const getResourceFromColumnnLayout = (
+  columnLayout: ColumnLayoutState,
+): CurrentResource => {
   const column =
     columnLayout?.endColumn ??
     columnLayout?.midColumn ??
@@ -14,8 +23,9 @@ const getResourceFromColumnnLayout = (columnLayout: ColumnLayoutState) => {
   return {
     namespace: column?.namespaceId ?? '',
     resourceType: prettifyNameSingular(column?.resourceType ?? ''),
-    apiGroup: column?.apiGroup ?? '',
-    apiVersion: column?.apiVersion ?? '',
+    groupVersion: column?.apiGroup
+      ? `${column?.apiGroup}/${column?.apiVersion}`
+      : column?.apiVersion ?? '',
     resourceName: column?.resourceName ?? '',
   };
 };
@@ -27,6 +37,28 @@ export function usePromptSuggestions(options?: { skip?: boolean }) {
   const columnLayout = useRecoilValue(columnLayoutState);
   const [loading, setLoading] = useState(true);
   const fetchedResourceRef = useRef('');
+  const [currentResource, setCurrentResource] = useState<CurrentResource>({
+    namespace: '',
+    resourceName: '',
+    resourceType: '',
+    groupVersion: '',
+  });
+
+  useEffect(() => {
+    const {
+      namespace,
+      resourceType,
+      groupVersion,
+      resourceName,
+    } = getResourceFromColumnnLayout(columnLayout);
+
+    setCurrentResource({
+      namespace,
+      resourceName,
+      resourceType,
+      groupVersion,
+    });
+  }, [columnLayout]);
 
   useEffect(() => {
     if (options?.skip) {
@@ -36,12 +68,9 @@ export function usePromptSuggestions(options?: { skip?: boolean }) {
     const {
       namespace,
       resourceType,
-      apiGroup,
-      apiVersion,
       resourceName,
-    } = getResourceFromColumnnLayout(columnLayout);
-    const groupVersion = apiGroup ? `${apiGroup}/${apiVersion}` : apiVersion;
-
+      groupVersion,
+    } = currentResource;
     const resourceKey = `${namespace}|${resourceType}|${groupVersion}|${resourceName}`.toLocaleLowerCase();
 
     async function fetchSuggestions() {
@@ -68,7 +97,11 @@ export function usePromptSuggestions(options?: { skip?: boolean }) {
       fetchedResourceRef.current = resourceKey;
       fetchSuggestions();
     }
-  }, [columnLayout, options?.skip, post, setSessionID]);
+  }, [currentResource, options?.skip, post, setSessionID]);
 
-  return { initialSuggestions, initialSuggestionsLoading: loading };
+  return {
+    initialSuggestions,
+    initialSuggestionsLoading: loading,
+    currentResource,
+  };
 }

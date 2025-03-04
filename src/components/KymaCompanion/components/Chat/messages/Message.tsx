@@ -11,8 +11,25 @@ import './Message.scss';
 
 interface MessageProps {
   className: string;
-  messageChunks: Array<{ result: string }>; // Adjust this type based on the structure of 'messageChunks'
+  messageChunks: MessageChunk[];
   isLoading: boolean;
+}
+
+export interface MessageChunk {
+  event?: string;
+  data: {
+    agent?: string;
+    answer: {
+      content: string;
+      tasks?: {
+        task_id: number;
+        task_name: string;
+        status: string;
+        agent: string;
+      }[];
+      next: string;
+    };
+  };
 }
 
 export default function Message({
@@ -24,23 +41,27 @@ export default function Message({
     return (
       <div className={'message loading ' + className}>
         {messageChunks.length > 0 ? (
-          messageChunks.map((chunk, index) => (
-            <FlexBox
-              justifyContent="SpaceBetween"
-              alignItems="Center"
-              className="loading-item"
-              key={index}
-            >
-              <Text className="text">{chunk?.result}</Text>
-              <div className="loading-status">
-                {index !== messageChunks.length - 1 ? (
-                  <ObjectStatus state="Positive" showDefaultIcon />
-                ) : (
-                  <BusyIndicator active size="S" delay={0} />
-                )}
-              </div>
-            </FlexBox>
-          ))
+          messageChunks.map((chunk, index) => {
+            const taskName =
+              chunk?.data?.answer?.tasks?.[index]?.task_name || '';
+            return (
+              <FlexBox
+                justifyContent="SpaceBetween"
+                alignItems="Center"
+                className="loading-item"
+                key={index}
+              >
+                <Text className="text">{taskName}</Text>
+                <div className="loading-status">
+                  {index !== messageChunks.length - 1 ? (
+                    <ObjectStatus state="Positive" showDefaultIcon />
+                  ) : (
+                    <BusyIndicator active size="S" delay={0} />
+                  )}
+                </div>
+              </FlexBox>
+            );
+          })
         ) : (
           <BusyIndicator active size="M" delay={0} />
         )}
@@ -48,7 +69,9 @@ export default function Message({
     );
   }
 
-  const segmentedText = segmentMarkdownText(messageChunks.slice(-1)[0]?.result);
+  const segmentedText = segmentMarkdownText(
+    messageChunks.slice(-1)[0]?.data?.answer?.content,
+  );
   return (
     <div className={'message ' + className}>
       {segmentedText && (
