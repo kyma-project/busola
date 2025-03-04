@@ -35,7 +35,6 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
-
   const navigationType = useNavigationType();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
@@ -89,6 +88,13 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
             : scopedUrl(node.pathSegment);
           if (location?.pathname !== url && isNavigatingForward) {
             setLayoutColumn({
+              startColumn: {
+                resourceType: node?.resourceTypeCased,
+                resourceName: null,
+                namespaceId: namespaceId,
+                apiGroup: node?.apiGroup,
+                apiVersion: node?.apiVersion,
+              },
               midColumn: null,
               endColumn: null,
               layout: 'OneColumn',

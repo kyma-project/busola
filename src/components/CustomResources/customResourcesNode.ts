@@ -3,6 +3,7 @@ import { NavNode, Scope } from '../../state/types';
 export const createCustomResourcesNavNode = (scope: Scope): NavNode => ({
   category: 'Configuration',
   resourceType: 'customresources',
+  resourceTypeCased: 'CustomResources',
   pathSegment: 'customresources',
   label: 'Custom Resources',
   namespaced: scope === 'namespace',

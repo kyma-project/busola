@@ -42,6 +42,8 @@ context('Test Resource Quotas', () => {
     cy.contains('Limits and Usage');
     cy.contains('Scope Selectors');
     cy.contains('PriorityClass');
+    cy.contains('Memory Requests').should('be.visible');
+    cy.contains('Memory Limits').should('be.visible');
   });
 
   it('Checks the list view', () => {

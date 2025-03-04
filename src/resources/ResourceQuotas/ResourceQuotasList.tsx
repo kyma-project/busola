@@ -8,7 +8,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
-import { ResourceQuotaProps } from './ResourceQuotaDetails';
+import { ResourceQuota } from './ResourceQuotaDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export function ResourceQuotasList(props: any) {
@@ -21,24 +21,24 @@ export function ResourceQuotasList(props: any) {
   const customColumns = [
     {
       header: t('resource-quotas.headers.limits.cpu'),
-      value: (quota: ResourceQuotaProps) =>
+      value: (quota: ResourceQuota) =>
         quota.spec?.hard?.['limits.cpu'] || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.limits.memory'),
-      value: (quota: ResourceQuotaProps) =>
+      value: (quota: ResourceQuota) =>
         quota.spec?.hard?.['limits.memory'] || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.requests.cpu'),
-      value: (quota: ResourceQuotaProps) =>
+      value: (quota: ResourceQuota) =>
         quota.spec?.hard?.['requests.cpu'] ||
         quota.spec?.hard?.cpu ||
         EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.requests.memory'),
-      value: (quota: ResourceQuotaProps) =>
+      value: (quota: ResourceQuota) =>
         quota.spec?.hard?.['requests.memory'] ||
         quota.spec?.hard?.memory ||
         EMPTY_TEXT_PLACEHOLDER,
@@ -47,6 +47,13 @@ export function ResourceQuotasList(props: any) {
 
   const handleShowCreate = () => {
     setLayoutColumn({
+      startColumn: {
+        resourceName: null,
+        resourceType: 'ResourceQuota',
+        namespaceId: props.namespace,
+        apiGroup: '',
+        apiVersion: 'v1',
+      },
       midColumn: null,
       endColumn: null,
       showCreate: {

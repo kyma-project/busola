@@ -5,6 +5,7 @@ import jsyaml from 'js-yaml';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import {
   Button,
+  CheckBox,
   DynamicPageHeader,
   FlexBox,
   List,
@@ -50,7 +51,19 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleStatus } from './support';
+import {
+  checkIfAssociatedResourceLeft,
+  deleteAssociatedResources,
+  deleteCrResources,
+  fetchResourceCounts,
+  generateAssociatedResourcesUrls,
+  getAssociatedResources,
+  getCRResource,
+  handleItemClick,
+} from './deleteModulesHelpers';
 import { UnmanagedModuleInfo } from './components/UnmanagedModuleInfo';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 
 export default function KymaModulesList({
   DeleteMessageBox,
@@ -76,9 +89,10 @@ export default function KymaModulesList({
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { clusterUrl, namespaceUrl } = useUrl();
-  const fetch = useSingleGet();
+  const fetchFn = useSingleGet();
   const getScope = useGetScope();
   const navigate = useNavigate();
+  const deleteResourceMutation = useDelete();
 
   const { data: kymaExt } = useGetList(
     ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
@@ -110,6 +124,9 @@ export default function KymaModulesList({
 
   const handleShowAddModule = () => {
     setLayoutColumn({
+      startColumn: {
+        resourceType: 'kymamodules',
+      },
       midColumn: null,
       endColumn: null,
       layout: 'TwoColumnsMidExpanded',
@@ -218,6 +235,12 @@ export default function KymaModulesList({
         resource?.version,
       );
 
+      const moduleDocs =
+        currentModuleTemplate?.spec?.info?.documentation ||
+        currentModuleTemplate?.metadata?.annotations[
+          'operator.kyma-project.io/doc-url'
+        ];
+
       const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
 
       const isChannelOverriden =
@@ -250,7 +273,8 @@ export default function KymaModulesList({
         <>
           {moduleStatus?.channel
             ? moduleStatus?.channel
-            : kymaResource?.spec?.modules?.[moduleIndex]?.channel}
+            : kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
+              kymaResource?.spec?.channel}
           {isChannelOverriden ? (
             <Tag
               hideStateIcon
@@ -277,17 +301,13 @@ export default function KymaModulesList({
           {moduleStatus?.state || 'Unknown'}
         </StatusBadge>,
         // Documentation
-        <ExternalLink
-          url={
-            currentModuleTemplate?.spec?.info
-              ? currentModuleTemplate.spec.info.documentation
-              : currentModuleTemplate?.metadata?.annotations[
-                  'operator.kyma-project.io/doc-url'
-                ]
-          }
-        >
-          {t('common.headers.link')}
-        </ExternalLink>,
+        moduleDocs ? (
+          <ExternalLink url={moduleDocs}>
+            {t('common.headers.link')}
+          </ExternalLink>
+        ) : (
+          EMPTY_TEXT_PLACEHOLDER
+        ),
       ];
     };
 
@@ -371,13 +391,26 @@ export default function KymaModulesList({
         ? namespaceUrl(partialPath)
         : clusterUrl(partialPath);
 
+      const { group, version } = extractApiGroupVersion(
+        moduleStatus?.resource?.apiVersion,
+      );
       setLayoutColumn({
+        startColumn: {
+          resourceType: hasExtension
+            ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
+            : moduleCrd?.metadata?.name,
+          namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+          apiGroup: group,
+          apiVersion: version,
+        },
         midColumn: {
           resourceType: hasExtension
             ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
             : moduleCrd?.metadata?.name,
           resourceName: moduleStatus?.resource?.metadata?.name,
           namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+          apiGroup: group,
+          apiVersion: version,
         },
         layout: 'TwoColumnsMidExpanded',
         endColumn: null,
@@ -390,101 +423,99 @@ export default function KymaModulesList({
       );
     };
 
-    const getAssociatedResources = () => {
-      if (!chosenModuleIndex) {
-        return [];
-      }
-      const selectedModule = selectedModules[chosenModuleIndex];
-      const moduleChannel =
-        selectedModule?.channel || kymaResource?.spec?.channel;
-      const moduleVersion =
-        selectedModule?.version ||
-        findModuleStatus(kymaResource, selectedModule?.name)?.version;
-
-      const module = findModuleTemplate(
-        selectedModule?.name,
-        moduleChannel,
-        moduleVersion,
-      );
-
-      return module?.spec?.associatedResources || [];
-    };
-
-    const getNumberOfResources = async (kind, group, version) => {
-      const url =
-        group === 'v1'
-          ? '/api/v1'
-          : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
-
-      try {
-        const response = await fetch(url);
-        const json = await response.json();
-        return json.items.length;
-      } catch (e) {
-        console.warn(e);
-        return 'Error';
-      }
-    };
-
-    const handleItemClick = async (kind, group, version) => {
-      const isNamespaced = await getScope(group, version, kind);
-      const path = `${pluralize(kind.toLowerCase())}`;
-      const link = isNamespaced
-        ? namespaceUrl(path, { namespace: '-all-' })
-        : clusterUrl(path);
-
-      navigate(link);
-    };
-
-    const fetchResourceCounts = async () => {
-      const resources = getAssociatedResources();
-      const counts = {};
-      for (const resource of resources) {
-        const count = await getNumberOfResources(
-          resource.kind,
-          resource.group,
-          resource.version,
-        );
-        counts[
-          `${resource.kind}-${resource.group}-${resource.version}`
-        ] = count;
-      }
-      return counts;
-    };
-
     const [resourceCounts, setResourceCounts] = useState({});
+    const [forceDeleteUrls, setForceDeleteUrls] = useState([]);
+    const [crUrls, setCrUrls] = useState([]);
+    const [allowForceDelete, setAllowForceDelete] = useState(false);
+    const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
     useEffect(() => {
       const fetchCounts = async () => {
-        const counts = await fetchResourceCounts();
+        const resources = getAssociatedResources(
+          chosenModuleIndex,
+          findModuleTemplate,
+          selectedModules,
+          kymaResource,
+        );
+
+        const counts = await fetchResourceCounts(resources);
+
+        const urls = await generateAssociatedResourcesUrls(
+          resources,
+          fetchFn,
+          clusterUrl,
+          getScope,
+          namespaceUrl,
+          navigate,
+        );
+
+        const crUResources = getCRResource(
+          chosenModuleIndex,
+          findModuleTemplate,
+          selectedModules,
+          kymaResource,
+        );
+
+        const crUrl = await generateAssociatedResourcesUrls(
+          crUResources,
+          fetchFn,
+          clusterUrl,
+          getScope,
+          namespaceUrl,
+          navigate,
+        );
+
         setResourceCounts(counts);
+        setForceDeleteUrls(urls);
+        setCrUrls([crUrl]);
       };
 
       fetchCounts();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chosenModuleIndex]);
 
-    const checkIfAssociatedResourceLeft = () => {
-      const resources = getAssociatedResources();
-      for (const resource of resources) {
-        if (
-          resourceCounts[
-            `${resource.kind}-${resource.group}-${resource.version}`
-          ] > 0
-        ) {
-          return true;
+    useEffect(() => {
+      const resourcesLeft = checkIfAssociatedResourceLeft(
+        resourceCounts,
+        chosenModuleIndex,
+        findModuleTemplate,
+        selectedModules,
+        kymaResource,
+      );
+
+      setAssociatedResourceLeft(resourcesLeft);
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [resourceCounts]);
+
+    function getEntries(statusModules = [], specModules = []) {
+      specModules.forEach(specItem => {
+        const exists = statusModules.some(
+          statusItem => statusItem.name === specItem.name,
+        );
+
+        if (!exists) {
+          statusModules.push({ name: specItem.name });
         }
-      }
-      return false;
-    };
+      });
+      return statusModules;
+    }
 
     return (
       <React.Fragment key="modules-list">
         {!detailsOpen &&
           createPortal(
             <DeleteMessageBox
-              disableDeleteButton={checkIfAssociatedResourceLeft()}
+              disableDeleteButton={
+                associatedResourceLeft ? !allowForceDelete : false
+              }
+              customDeleteText={
+                associatedResourceLeft && allowForceDelete
+                  ? 'common.buttons.force-delete'
+                  : null
+              }
               cancelFn={() => {
+                setAllowForceDelete(false);
                 setChosenModuleIndex(null);
               }}
               additionalDeleteInfo={
@@ -494,9 +525,18 @@ export default function KymaModulesList({
                       name: selectedModules[chosenModuleIndex]?.name,
                     })}
                   </Text>
-                  {getAssociatedResources().length > 0 && (
+                  {getAssociatedResources(
+                    chosenModuleIndex,
+                    findModuleTemplate,
+                    selectedModules,
+                    kymaResource,
+                  ).length > 0 && (
                     <>
-                      <MessageStrip design="Critical" hideCloseButton>
+                      <MessageStrip
+                        design="Information"
+                        hideCloseButton
+                        className="sap-margin-top-small"
+                      >
                         {t('kyma-modules.associated-resources-warning')}
                       </MessageStrip>
                       <List
@@ -504,7 +544,12 @@ export default function KymaModulesList({
                         mode="None"
                         separators="All"
                       >
-                        {getAssociatedResources().map(assResource => {
+                        {getAssociatedResources(
+                          chosenModuleIndex,
+                          findModuleTemplate,
+                          selectedModules,
+                          kymaResource,
+                        ).map(assResource => {
                           const resourceCount =
                             resourceCounts[
                               `${assResource.kind}-${assResource.group}-${assResource.version}`
@@ -518,6 +563,10 @@ export default function KymaModulesList({
                                   assResource.kind,
                                   assResource.group,
                                   assResource.version,
+                                  clusterUrl,
+                                  getScope,
+                                  namespaceUrl,
+                                  navigate,
                                 );
                               }}
                               type="Active"
@@ -532,12 +581,39 @@ export default function KymaModulesList({
                           );
                         })}
                       </List>
+                      {associatedResourceLeft && (
+                        <CheckBox
+                          checked={allowForceDelete}
+                          onChange={() =>
+                            setAllowForceDelete(!allowForceDelete)
+                          }
+                          accessibleName={t('kyma-modules.force-edit')}
+                          text={t('kyma-modules.force-edit')}
+                          className="sap-margin-top-tiny"
+                        />
+                      )}
+
+                      {associatedResourceLeft && allowForceDelete && (
+                        <MessageStrip
+                          design="Critical"
+                          hideCloseButton
+                          className="sap-margin-y-small"
+                        >
+                          {t('kyma-modules.force-delete-warning')}
+                        </MessageStrip>
+                      )}
                     </>
                   )}
                 </>
               }
               resourceTitle={selectedModules[chosenModuleIndex]?.name}
               deleteFn={() => {
+                if (allowForceDelete && forceDeleteUrls.length > 0) {
+                  deleteAssociatedResources(
+                    deleteResourceMutation,
+                    forceDeleteUrls,
+                  );
+                }
                 selectedModules.splice(chosenModuleIndex, 1);
                 setKymaResourceState({
                   ...kymaResource,
@@ -548,7 +624,9 @@ export default function KymaModulesList({
                 });
                 handleModuleUninstall();
                 setInitialUnchangedResource(cloneDeep(kymaResourceState));
-                setChosenModuleIndex(null);
+                if (allowForceDelete && forceDeleteUrls.length > 0) {
+                  deleteCrResources(deleteResourceMutation, crUrls);
+                }
               }}
             />,
             document.body,
@@ -571,7 +649,10 @@ export default function KymaModulesList({
           customColumnLayout={customColumnLayout}
           enableColumnLayout
           hasDetailsView
-          entries={resource?.status?.modules}
+          entries={getEntries(
+            resource?.status?.modules,
+            resource?.spec?.modules,
+          )}
           headerRenderer={headerRenderer}
           rowRenderer={rowRenderer}
           noHideFields={['Name', '', 'Namespace']}

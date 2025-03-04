@@ -105,6 +105,7 @@ export function Editor({
             design="Negative"
             hideCloseButton
             className="break-word sap-margin-small"
+            role="alert"
           >
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
@@ -113,6 +114,7 @@ export function Editor({
           <MessageStrip
             className="break-word sap-margin-small"
             design="Critical"
+            role="alert"
           >
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError.error || schemaError.message || schemaError,
@@ -124,6 +126,7 @@ export function Editor({
             design="Critical"
             hideCloseButton
             className="break-word sap-margin-small"
+            role="alert"
           >
             {warnings.map(m => (
               <span

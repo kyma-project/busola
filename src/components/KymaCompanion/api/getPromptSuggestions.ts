@@ -1,53 +1,44 @@
-import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { extractApiGroup } from 'resources/Roles/helpers';
+import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 interface GetPromptSuggestionsParams {
+  post: PostFn;
   namespace?: string;
-  resourceType?: string;
+  resourceType: string;
   groupVersion?: string;
   resourceName?: string;
-  sessionID?: string;
-  clusterUrl: string;
-  token: string;
-  certificateAuthorityData: string;
 }
 
-// TODO add return type
+interface PromptSuggestionsResponse {
+  promptSuggestions: string[];
+  conversationId: string;
+}
 
 export default async function getPromptSuggestions({
+  post,
   namespace = '',
   resourceType = '',
   groupVersion = '',
   resourceName = '',
-  sessionID = '',
-  clusterUrl,
-  token,
-  certificateAuthorityData,
-}: GetPromptSuggestionsParams): Promise<any[] | false> {
+}: GetPromptSuggestionsParams): Promise<PromptSuggestionsResponse | false> {
   try {
-    const { backendAddress } = getClusterConfig();
-    const url = `${backendAddress}/api/v1/namespaces/ai-core/services/http:ai-backend-clusterip:5000/proxy/api/v1/llm/init`;
-    const apiGroup = extractApiGroup(groupVersion);
-    const payload = JSON.parse(
-      `{"resource_type":"${resourceType.toLowerCase()}${
-        apiGroup.length ? `.${apiGroup}` : ''
-      }","resource_name":"${resourceName}","namespace":"${namespace}","session_id":"${sessionID}"}`,
-    );
-    const k8sAuthorization = `Bearer ${token}`;
+    const response = await post('/ai-chat/suggestions', {
+      namespace,
+      resourceType,
+      groupVersion,
+      resourceName,
+    });
 
-    let { results } = await fetch(url, {
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-        'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-        'X-Cluster-Url': clusterUrl,
-        'X-K8s-Authorization': k8sAuthorization,
-        'X-User': sessionID,
-      },
-      body: JSON.stringify(payload),
-      method: 'POST',
-    }).then(result => result.json());
-    return results;
+    if (
+      response &&
+      typeof response === 'object' &&
+      Array.isArray(response.promptSuggestions) &&
+      typeof response.conversationId === 'string'
+    ) {
+      return response as PromptSuggestionsResponse;
+    }
+
+    console.error('Invalid response format:', response);
+    return false;
   } catch (error) {
     console.error('Error fetching data:', error);
     return false;

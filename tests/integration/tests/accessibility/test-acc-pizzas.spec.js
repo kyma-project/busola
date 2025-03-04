@@ -77,9 +77,11 @@ context('Accessibility test Pizza Orders', () => {
       .contains('Pizza Orders')
       .click();
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === true) cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Pizza Orders list',
       );
@@ -88,9 +90,11 @@ context('Accessibility test Pizza Orders', () => {
   it('Acc test Pizza Orders create', () => {
     cy.contains('ui5-button', 'Create').click();
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === true) cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Pizza Orders create',
       );
@@ -103,9 +107,11 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.clickGenericListLink('diavola-order');
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === true) cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Pizza Orders details',
       );

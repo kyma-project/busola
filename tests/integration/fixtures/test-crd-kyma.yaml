@@ -1,0 +1,1301 @@
+kind: CustomResourceDefinition
+apiVersion: apiextensions.k8s.io/v1
+metadata:
+  name: kymas.operator.kyma-project.io
+  annotations:
+    cert-manager.io/inject-ca-from: $(CERTIFICATE_NAMESPACE)/$(CERTIFICATE_NAME)
+    controller-gen.kubebuilder.io/version: v0.14.0
+spec:
+  group: operator.kyma-project.io
+  names:
+    plural: kymas
+    singular: kyma
+    kind: Kyma
+    listKind: KymaList
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: false
+      storage: false
+      deprecated: true
+      deprecationWarning: kyma-project.io/v1beta1 Kyma is deprecated. Use v1beta2 instead.
+      schema:
+        openAPIV3Schema:
+          description: Kyma is the Schema for the kymas API.
+          type: object
+          properties:
+            apiVersion:
+              description: >-
+                APIVersion defines the versioned schema of this representation
+                of an object.
+
+                Servers should convert recognized schemas to the latest internal
+                value, and
+
+                may reject unrecognized values.
+
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: >-
+                Kind is a string value representing the REST resource this
+                object represents.
+
+                Servers may infer this from the endpoint the client submits
+                requests to.
+
+                Cannot be updated.
+
+                In CamelCase.
+
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: KymaSpec defines the desired state of Kyma.
+              type: object
+              required:
+                - channel
+              properties:
+                channel:
+                  description: >-
+                    Channel specifies the desired Channel of the Installation,
+                    usually targeting different module versions.
+                  type: string
+                  maxLength: 32
+                  minLength: 3
+                  pattern: ^[a-z]+$
+                modules:
+                  description: Modules specifies the list of modules to be installed
+                  type: array
+                  items:
+                    description: Module defines the components to be installed.
+                    type: object
+                    required:
+                      - managed
+                      - name
+                    properties:
+                      channel:
+                        description: >-
+                          Channel is the desired channel of the Module. If this
+                          changes or is set, it will be used to resolve a new
+
+                          ModuleTemplate based on the new resolved resources.
+                        type: string
+                        maxLength: 32
+                        minLength: 3
+                        pattern: ^[a-z]+$
+                      controller:
+                        description: >-
+                          ControllerName is able to set the controller used for
+                          reconciliation of the module. It can be used
+
+                          together with Cache Configuration on the Operator
+                          responsible for the templated Modules to split
+
+                          workload.
+                        type: string
+                      customResourcePolicy:
+                        description: >-
+                          CustomResourcePolicy determines how a ModuleTemplate
+                          should be parsed. When CustomResourcePolicy is set to
+
+                          CustomResourcePolicyCreateAndDelete, the Manifest will
+                          receive instructions to create it on installation with
+
+                          the default values provided in ModuleTemplate, and to
+                          remove it when the module or Kyma is deleted.
+                        type: string
+                        default: CreateAndDelete
+                        enum:
+                          - CreateAndDelete
+                          - Ignore
+                      managed:
+                        description: >-
+                          Managed is determining whether the module is managed
+                          or not. If the module is unmanaged, the user is
+                          responsible
+
+                          for the lifecycle of the module.
+                        type: boolean
+                        default: true
+                      name:
+                        description: >-
+                          Name is a unique identifier of the module.
+
+                          It is used to resolve a ModuleTemplate for creating a
+                          set of resources on the cluster.
+
+
+
+                          Name can only be the ModuleName label value of the
+                          module-template, e.g.
+                          operator.kyma-project.io/module-name=my-module
+                        type: string
+                      remoteModuleTemplateRef:
+                        description: >-
+                          RemoteModuleTemplateRef is deprecated and will no
+                          longer have any functionality.
+
+                          It will be removed in the upcoming API version.
+                        type: string
+                skipMaintenanceWindows:
+                  description: >-
+                    SkipMaintenanceWindows indicates whether module upgrades
+                    that require downtime
+
+                    should bypass the defined Maintenance Windows and be applied
+                    immediately.
+                  type: boolean
+                sync:
+                  description: Active Synchronization Settings
+                  type: object
+                  properties:
+                    enabled:
+                      description: >-
+                        Enabled set to true will look up a kubeconfig for the
+                        remote cluster based on the strategy
+
+                        and synchronize its state there.
+                      type: boolean
+                      default: false
+                    moduleCatalog:
+                      description: >-
+                        ModuleCatalog set to true will cause a copy of all
+                        ModuleTemplate in the cluster
+
+                        to be synchronized for discovery purposes
+                      type: boolean
+                      default: true
+                    namespace:
+                      description: >-
+                        The target namespace, if empty the namespace is
+                        reflected from the control plane
+
+                        Note that cleanup is currently not supported if you are
+                        switching the namespace, so you will
+
+                        manually need to clean up old synchronized Kymas
+                      type: string
+                    noModuleCopy:
+                      description: >-
+                        NoModuleCopy set to true will cause the remote Kyma to
+                        be initialized without copying over the
+
+                        module spec of the control plane into the SKR
+                      type: boolean
+                      default: true
+                    strategy:
+                      description: >-
+                        Strategy determines the way to look up the remotely
+                        synced kubeconfig, by default it is fetched from a
+                        secret
+                      type: string
+                      default: secret
+            status:
+              description: KymaStatus defines the observed state of Kyma.
+              type: object
+              properties:
+                activeChannel:
+                  description: Active Channel
+                  type: string
+                conditions:
+                  description: >-
+                    List of status conditions to indicate the status of a
+                    ServiceInstance.
+                  type: array
+                  items:
+                    description: "Condition contains details for one aspect of the current state of this API Resource.\n---\nThis struct is intended for direct use as an array at the field path .status.conditions.  For example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the observations of a foo's current state.\n\t    // Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    // +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t    // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t    // other fields\n\t}"
+                    type: object
+                    required:
+                      - lastTransitionTime
+                      - message
+                      - reason
+                      - status
+                      - type
+                    properties:
+                      lastTransitionTime:
+                        description: >-
+                          lastTransitionTime is the last time the condition
+                          transitioned from one status to another.
+
+                          This should be when the underlying condition changed. 
+                          If that is not known, then using the time when the API
+                          field changed is acceptable.
+                        type: string
+                        format: date-time
+                      message:
+                        description: >-
+                          message is a human readable message indicating details
+                          about the transition.
+
+                          This may be an empty string.
+                        type: string
+                        maxLength: 32768
+                      observedGeneration:
+                        description: >-
+                          observedGeneration represents the .metadata.generation
+                          that the condition was set based upon.
+
+                          For instance, if .metadata.generation is currently 12,
+                          but the .status.conditions[x].observedGeneration is 9,
+                          the condition is out of date
+
+                          with respect to the current state of the instance.
+                        type: integer
+                        format: int64
+                        minimum: 0
+                      reason:
+                        description: >-
+                          reason contains a programmatic identifier indicating
+                          the reason for the condition's last transition.
+
+                          Producers of specific condition types may define
+                          expected values and meanings for this field,
+
+                          and whether the values are considered a guaranteed
+                          API.
+
+                          The value should be a CamelCase string.
+
+                          This field may not be empty.
+                        type: string
+                        maxLength: 1024
+                        minLength: 1
+                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      status:
+                        description: status of the condition, one of True, False, Unknown.
+                        type: string
+                        enum:
+                          - 'True'
+                          - 'False'
+                          - Unknown
+                      type:
+                        description: >-
+                          type of condition in CamelCase or in
+                          foo.example.com/CamelCase.
+
+                          ---
+
+                          Many .condition.type values are consistent across
+                          resources like Available, but because arbitrary
+                          conditions can be
+
+                          useful (see .node.status.conditions), the ability to
+                          deconflict is important.
+
+                          The regex it matches is
+                          (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                        type: string
+                        maxLength: 316
+                        pattern: >-
+                          ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                  x-kubernetes-list-map-keys:
+                    - type
+                  x-kubernetes-list-type: map
+                lastOperation:
+                  description: >-
+                    LastOperation defines the last operation from the
+                    control-loop.
+                  type: object
+                  required:
+                    - operation
+                  properties:
+                    lastUpdateTime:
+                      type: string
+                      format: date-time
+                    operation:
+                      type: string
+                modules:
+                  description: >-
+                    Contains essential information about the current deployed
+                    module
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - name
+                      - state
+                    properties:
+                      channel:
+                        description: >-
+                          Channel tracks the active Channel of the Module. In
+                          Case it changes, the new Channel will have caused
+
+                          a new lookup to be necessary that maybe picks a
+                          different ModuleTemplate, which is why we need to
+                          reconcile.
+                        type: string
+                      fqdn:
+                        description: >-
+                          FQDN is the fully qualified domain name of the module.
+
+                          In the ModuleTemplate it is located in
+                          .spec.descriptor.component.name of the ModuleTemplate
+
+                          FQDN is used to calculate Namespace and Name of the
+                          Manifest for tracking.
+                        type: string
+                      manifest:
+                        description: >-
+                          Manifest contains the Information of a related
+                          Manifest
+                        type: object
+                        properties:
+                          apiVersion:
+                            description: >-
+                              APIVersion defines the versioned schema of this
+                              representation of an object.
+
+                              Servers should convert recognized schemas to the
+                              latest internal value, and
+
+                              may reject unrecognized values.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                            type: string
+                          kind:
+                            description: >-
+                              Kind is a string value representing the REST
+                              resource this object represents.
+
+                              Servers may infer this from the endpoint the
+                              client submits requests to.
+
+                              Cannot be updated.
+
+                              In CamelCase.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                            type: string
+                          metadata:
+                            description: >-
+                              PartialMeta is a subset of ObjectMeta that
+                              contains relevant information to track an Object.
+
+                              see
+                              https://github.com/kubernetes/apimachinery/blob/v0.26.1/pkg/apis/meta/v1/types.go#L111
+                            type: object
+                            properties:
+                              generation:
+                                description: >-
+                                  A sequence number representing a specific
+                                  generation of the desired state.
+
+                                  Populated by the system. Read-only.
+                                type: integer
+                                format: int64
+                              name:
+                                description: >-
+                                  Name must be unique within a namespace. Is
+                                  required when creating resources, although
+
+                                  some resources may allow a client to request
+                                  the generation of an appropriate name
+
+                                  automatically. Name is primarily intended for
+                                  creation idempotence and configuration
+
+                                  definition.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/identifiers#names
+                                type: string
+                              namespace:
+                                description: >-
+                                  Namespace defines the space within which each
+                                  name must be unique. An empty namespace is
+
+                                  equivalent to the "default" namespace, but
+                                  "default" is the canonical representation.
+
+                                  Not all objects are required to be scoped to a
+                                  namespace - the value of this field for
+
+                                  those objects will be empty.
+
+
+
+                                  Must be a DNS_LABEL.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/namespaces
+                                type: string
+                      message:
+                        description: >-
+                          Message is a human-readable message indicating details
+                          about the State.
+                        type: string
+                      name:
+                        description: >-
+                          Name defines the name of the Module in the Spec that
+                          the status is used for.
+
+                          It can be any kind of Reference format supported by
+                          Module.Name.
+                        type: string
+                      resource:
+                        description: >-
+                          Resource contains information about the created module
+                          CR.
+                        type: object
+                        properties:
+                          apiVersion:
+                            description: >-
+                              APIVersion defines the versioned schema of this
+                              representation of an object.
+
+                              Servers should convert recognized schemas to the
+                              latest internal value, and
+
+                              may reject unrecognized values.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                            type: string
+                          kind:
+                            description: >-
+                              Kind is a string value representing the REST
+                              resource this object represents.
+
+                              Servers may infer this from the endpoint the
+                              client submits requests to.
+
+                              Cannot be updated.
+
+                              In CamelCase.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                            type: string
+                          metadata:
+                            description: >-
+                              PartialMeta is a subset of ObjectMeta that
+                              contains relevant information to track an Object.
+
+                              see
+                              https://github.com/kubernetes/apimachinery/blob/v0.26.1/pkg/apis/meta/v1/types.go#L111
+                            type: object
+                            properties:
+                              generation:
+                                description: >-
+                                  A sequence number representing a specific
+                                  generation of the desired state.
+
+                                  Populated by the system. Read-only.
+                                type: integer
+                                format: int64
+                              name:
+                                description: >-
+                                  Name must be unique within a namespace. Is
+                                  required when creating resources, although
+
+                                  some resources may allow a client to request
+                                  the generation of an appropriate name
+
+                                  automatically. Name is primarily intended for
+                                  creation idempotence and configuration
+
+                                  definition.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/identifiers#names
+                                type: string
+                              namespace:
+                                description: >-
+                                  Namespace defines the space within which each
+                                  name must be unique. An empty namespace is
+
+                                  equivalent to the "default" namespace, but
+                                  "default" is the canonical representation.
+
+                                  Not all objects are required to be scoped to a
+                                  namespace - the value of this field for
+
+                                  those objects will be empty.
+
+
+
+                                  Must be a DNS_LABEL.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/namespaces
+                                type: string
+                      state:
+                        description: >-
+                          State of the Module in the currently tracked
+                          Generation
+                        type: string
+                        enum:
+                          - Processing
+                          - Deleting
+                          - Ready
+                          - Error
+                          - ''
+                          - Warning
+                          - Unmanaged
+                      template:
+                        description: >-
+                          It contains information about the last parsed
+                          ModuleTemplate in Context of the Installation.
+
+                          This will update when Channel or the ModuleTemplate is
+                          changed.
+                        type: object
+                        properties:
+                          apiVersion:
+                            description: >-
+                              APIVersion defines the versioned schema of this
+                              representation of an object.
+
+                              Servers should convert recognized schemas to the
+                              latest internal value, and
+
+                              may reject unrecognized values.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                            type: string
+                          kind:
+                            description: >-
+                              Kind is a string value representing the REST
+                              resource this object represents.
+
+                              Servers may infer this from the endpoint the
+                              client submits requests to.
+
+                              Cannot be updated.
+
+                              In CamelCase.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                            type: string
+                          metadata:
+                            description: >-
+                              PartialMeta is a subset of ObjectMeta that
+                              contains relevant information to track an Object.
+
+                              see
+                              https://github.com/kubernetes/apimachinery/blob/v0.26.1/pkg/apis/meta/v1/types.go#L111
+                            type: object
+                            properties:
+                              generation:
+                                description: >-
+                                  A sequence number representing a specific
+                                  generation of the desired state.
+
+                                  Populated by the system. Read-only.
+                                type: integer
+                                format: int64
+                              name:
+                                description: >-
+                                  Name must be unique within a namespace. Is
+                                  required when creating resources, although
+
+                                  some resources may allow a client to request
+                                  the generation of an appropriate name
+
+                                  automatically. Name is primarily intended for
+                                  creation idempotence and configuration
+
+                                  definition.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/identifiers#names
+                                type: string
+                              namespace:
+                                description: >-
+                                  Namespace defines the space within which each
+                                  name must be unique. An empty namespace is
+
+                                  equivalent to the "default" namespace, but
+                                  "default" is the canonical representation.
+
+                                  Not all objects are required to be scoped to a
+                                  namespace - the value of this field for
+
+                                  those objects will be empty.
+
+
+
+                                  Must be a DNS_LABEL.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/namespaces
+                                type: string
+                      version:
+                        description: Channel tracks the active Version of the Module.
+                        type: string
+                state:
+                  description: >-
+                    State signifies current state of Kyma.
+
+                    Value can be one of ("Ready", "Processing", "Error",
+                    "Deleting").
+                  type: string
+                  enum:
+                    - Processing
+                    - Deleting
+                    - Ready
+                    - Error
+                    - ''
+                    - Warning
+                    - Unmanaged
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: State
+          type: string
+          jsonPath: .status.state
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+    - name: v1beta2
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          description: Kyma is the Schema for the kymas API.
+          type: object
+          properties:
+            apiVersion:
+              description: >-
+                APIVersion defines the versioned schema of this representation
+                of an object.
+
+                Servers should convert recognized schemas to the latest internal
+                value, and
+
+                may reject unrecognized values.
+
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: >-
+                Kind is a string value representing the REST resource this
+                object represents.
+
+                Servers may infer this from the endpoint the client submits
+                requests to.
+
+                Cannot be updated.
+
+                In CamelCase.
+
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: KymaSpec defines the desired state of Kyma.
+              type: object
+              required:
+                - channel
+              properties:
+                channel:
+                  description: >-
+                    Channel specifies the desired Channel of the Installation,
+                    usually targeting different module versions.
+                  type: string
+                  maxLength: 32
+                  minLength: 3
+                  pattern: ^[a-z]+$
+                modules:
+                  description: Modules specifies the list of modules to be installed
+                  type: array
+                  items:
+                    description: Module defines the components to be installed.
+                    type: object
+                    required:
+                      - managed
+                      - name
+                    properties:
+                      channel:
+                        description: >-
+                          Channel is the desired channel of the Module. If this
+                          changes or is set, it will be used to resolve a new
+
+                          ModuleTemplate based on the new resolved resources.
+                        type: string
+                        maxLength: 32
+                        minLength: 3
+                        pattern: ^[a-z]+$
+                      controller:
+                        description: >-
+                          ControllerName is able to set the controller used for
+                          reconciliation of the module. It can be used
+
+                          together with Cache Configuration on the Operator
+                          responsible for the templated Modules to split
+
+                          workload.
+                        type: string
+                      customResourcePolicy:
+                        description: >-
+                          CustomResourcePolicy determines how a ModuleTemplate
+                          should be parsed. When CustomResourcePolicy is set to
+
+                          CustomResourcePolicyCreateAndDelete, the Manifest will
+                          receive instructions to create it on installation with
+
+                          the default values provided in ModuleTemplate, and to
+                          remove it when the module or Kyma is deleted.
+                        type: string
+                        default: CreateAndDelete
+                        enum:
+                          - CreateAndDelete
+                          - Ignore
+                      managed:
+                        description: >-
+                          Managed is determining whether the module is managed
+                          or not. If the module is unmanaged, the user is
+                          responsible
+
+                          for the lifecycle of the module.
+                        type: boolean
+                        default: true
+                      name:
+                        description: >-
+                          Name is a unique identifier of the module.
+
+                          It is used to resolve a ModuleTemplate for creating a
+                          set of resources on the cluster.
+
+
+
+                          Name can only be the ModuleName label value of the
+                          module-template, e.g.
+                          operator.kyma-project.io/module-name=my-module
+                        type: string
+                      remoteModuleTemplateRef:
+                        description: >-
+                          RemoteModuleTemplateRef is deprecated and will no
+                          longer have any functionality.
+
+                          It will be removed in the upcoming API version.
+                        type: string
+                  x-kubernetes-list-map-keys:
+                    - name
+                  x-kubernetes-list-type: map
+                skipMaintenanceWindows:
+                  description: >-
+                    SkipMaintenanceWindows indicates whether module upgrades
+                    that require downtime
+
+                    should bypass the defined Maintenance Windows and be applied
+                    immediately.
+                  type: boolean
+            status:
+              description: KymaStatus defines the observed state of Kyma.
+              type: object
+              properties:
+                activeChannel:
+                  description: Active Channel
+                  type: string
+                conditions:
+                  description: >-
+                    List of status conditions to indicate the status of a
+                    ServiceInstance.
+                  type: array
+                  items:
+                    description: "Condition contains details for one aspect of the current state of this API Resource.\n---\nThis struct is intended for direct use as an array at the field path .status.conditions.  For example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the observations of a foo's current state.\n\t    // Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    // +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t    // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t    // other fields\n\t}"
+                    type: object
+                    required:
+                      - lastTransitionTime
+                      - message
+                      - reason
+                      - status
+                      - type
+                    properties:
+                      lastTransitionTime:
+                        description: >-
+                          lastTransitionTime is the last time the condition
+                          transitioned from one status to another.
+
+                          This should be when the underlying condition changed. 
+                          If that is not known, then using the time when the API
+                          field changed is acceptable.
+                        type: string
+                        format: date-time
+                      message:
+                        description: >-
+                          message is a human readable message indicating details
+                          about the transition.
+
+                          This may be an empty string.
+                        type: string
+                        maxLength: 32768
+                      observedGeneration:
+                        description: >-
+                          observedGeneration represents the .metadata.generation
+                          that the condition was set based upon.
+
+                          For instance, if .metadata.generation is currently 12,
+                          but the .status.conditions[x].observedGeneration is 9,
+                          the condition is out of date
+
+                          with respect to the current state of the instance.
+                        type: integer
+                        format: int64
+                        minimum: 0
+                      reason:
+                        description: >-
+                          reason contains a programmatic identifier indicating
+                          the reason for the condition's last transition.
+
+                          Producers of specific condition types may define
+                          expected values and meanings for this field,
+
+                          and whether the values are considered a guaranteed
+                          API.
+
+                          The value should be a CamelCase string.
+
+                          This field may not be empty.
+                        type: string
+                        maxLength: 1024
+                        minLength: 1
+                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      status:
+                        description: status of the condition, one of True, False, Unknown.
+                        type: string
+                        enum:
+                          - 'True'
+                          - 'False'
+                          - Unknown
+                      type:
+                        description: >-
+                          type of condition in CamelCase or in
+                          foo.example.com/CamelCase.
+
+                          ---
+
+                          Many .condition.type values are consistent across
+                          resources like Available, but because arbitrary
+                          conditions can be
+
+                          useful (see .node.status.conditions), the ability to
+                          deconflict is important.
+
+                          The regex it matches is
+                          (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                        type: string
+                        maxLength: 316
+                        pattern: >-
+                          ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                  x-kubernetes-list-map-keys:
+                    - type
+                  x-kubernetes-list-type: map
+                lastOperation:
+                  description: >-
+                    LastOperation defines the last operation from the
+                    control-loop.
+                  type: object
+                  required:
+                    - operation
+                  properties:
+                    lastUpdateTime:
+                      type: string
+                      format: date-time
+                    operation:
+                      type: string
+                modules:
+                  description: >-
+                    Contains essential information about the current deployed
+                    module
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - name
+                      - state
+                    properties:
+                      channel:
+                        description: >-
+                          Channel tracks the active Channel of the Module. In
+                          Case it changes, the new Channel will have caused
+
+                          a new lookup to be necessary that maybe picks a
+                          different ModuleTemplate, which is why we need to
+                          reconcile.
+                        type: string
+                      fqdn:
+                        description: >-
+                          FQDN is the fully qualified domain name of the module.
+
+                          In the ModuleTemplate it is located in
+                          .spec.descriptor.component.name of the ModuleTemplate
+
+                          FQDN is used to calculate Namespace and Name of the
+                          Manifest for tracking.
+                        type: string
+                      manifest:
+                        description: >-
+                          Manifest contains the Information of a related
+                          Manifest
+                        type: object
+                        properties:
+                          apiVersion:
+                            description: >-
+                              APIVersion defines the versioned schema of this
+                              representation of an object.
+
+                              Servers should convert recognized schemas to the
+                              latest internal value, and
+
+                              may reject unrecognized values.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                            type: string
+                          kind:
+                            description: >-
+                              Kind is a string value representing the REST
+                              resource this object represents.
+
+                              Servers may infer this from the endpoint the
+                              client submits requests to.
+
+                              Cannot be updated.
+
+                              In CamelCase.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                            type: string
+                          metadata:
+                            description: >-
+                              PartialMeta is a subset of ObjectMeta that
+                              contains relevant information to track an Object.
+
+                              see
+                              https://github.com/kubernetes/apimachinery/blob/v0.26.1/pkg/apis/meta/v1/types.go#L111
+                            type: object
+                            properties:
+                              generation:
+                                description: >-
+                                  A sequence number representing a specific
+                                  generation of the desired state.
+
+                                  Populated by the system. Read-only.
+                                type: integer
+                                format: int64
+                              name:
+                                description: >-
+                                  Name must be unique within a namespace. Is
+                                  required when creating resources, although
+
+                                  some resources may allow a client to request
+                                  the generation of an appropriate name
+
+                                  automatically. Name is primarily intended for
+                                  creation idempotence and configuration
+
+                                  definition.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/identifiers#names
+                                type: string
+                              namespace:
+                                description: >-
+                                  Namespace defines the space within which each
+                                  name must be unique. An empty namespace is
+
+                                  equivalent to the "default" namespace, but
+                                  "default" is the canonical representation.
+
+                                  Not all objects are required to be scoped to a
+                                  namespace - the value of this field for
+
+                                  those objects will be empty.
+
+
+
+                                  Must be a DNS_LABEL.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/namespaces
+                                type: string
+                      message:
+                        description: >-
+                          Message is a human-readable message indicating details
+                          about the State.
+                        type: string
+                      name:
+                        description: >-
+                          Name defines the name of the Module in the Spec that
+                          the status is used for.
+
+                          It can be any kind of Reference format supported by
+                          Module.Name.
+                        type: string
+                      resource:
+                        description: >-
+                          Resource contains information about the created module
+                          CR.
+                        type: object
+                        properties:
+                          apiVersion:
+                            description: >-
+                              APIVersion defines the versioned schema of this
+                              representation of an object.
+
+                              Servers should convert recognized schemas to the
+                              latest internal value, and
+
+                              may reject unrecognized values.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                            type: string
+                          kind:
+                            description: >-
+                              Kind is a string value representing the REST
+                              resource this object represents.
+
+                              Servers may infer this from the endpoint the
+                              client submits requests to.
+
+                              Cannot be updated.
+
+                              In CamelCase.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                            type: string
+                          metadata:
+                            description: >-
+                              PartialMeta is a subset of ObjectMeta that
+                              contains relevant information to track an Object.
+
+                              see
+                              https://github.com/kubernetes/apimachinery/blob/v0.26.1/pkg/apis/meta/v1/types.go#L111
+                            type: object
+                            properties:
+                              generation:
+                                description: >-
+                                  A sequence number representing a specific
+                                  generation of the desired state.
+
+                                  Populated by the system. Read-only.
+                                type: integer
+                                format: int64
+                              name:
+                                description: >-
+                                  Name must be unique within a namespace. Is
+                                  required when creating resources, although
+
+                                  some resources may allow a client to request
+                                  the generation of an appropriate name
+
+                                  automatically. Name is primarily intended for
+                                  creation idempotence and configuration
+
+                                  definition.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/identifiers#names
+                                type: string
+                              namespace:
+                                description: >-
+                                  Namespace defines the space within which each
+                                  name must be unique. An empty namespace is
+
+                                  equivalent to the "default" namespace, but
+                                  "default" is the canonical representation.
+
+                                  Not all objects are required to be scoped to a
+                                  namespace - the value of this field for
+
+                                  those objects will be empty.
+
+
+
+                                  Must be a DNS_LABEL.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/namespaces
+                                type: string
+                      state:
+                        description: >-
+                          State of the Module in the currently tracked
+                          Generation
+                        type: string
+                        enum:
+                          - Processing
+                          - Deleting
+                          - Ready
+                          - Error
+                          - ''
+                          - Warning
+                          - Unmanaged
+                      template:
+                        description: >-
+                          It contains information about the last parsed
+                          ModuleTemplate in Context of the Installation.
+
+                          This will update when Channel or the ModuleTemplate is
+                          changed.
+                        type: object
+                        properties:
+                          apiVersion:
+                            description: >-
+                              APIVersion defines the versioned schema of this
+                              representation of an object.
+
+                              Servers should convert recognized schemas to the
+                              latest internal value, and
+
+                              may reject unrecognized values.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                            type: string
+                          kind:
+                            description: >-
+                              Kind is a string value representing the REST
+                              resource this object represents.
+
+                              Servers may infer this from the endpoint the
+                              client submits requests to.
+
+                              Cannot be updated.
+
+                              In CamelCase.
+
+                              More info:
+                              https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                            type: string
+                          metadata:
+                            description: >-
+                              PartialMeta is a subset of ObjectMeta that
+                              contains relevant information to track an Object.
+
+                              see
+                              https://github.com/kubernetes/apimachinery/blob/v0.26.1/pkg/apis/meta/v1/types.go#L111
+                            type: object
+                            properties:
+                              generation:
+                                description: >-
+                                  A sequence number representing a specific
+                                  generation of the desired state.
+
+                                  Populated by the system. Read-only.
+                                type: integer
+                                format: int64
+                              name:
+                                description: >-
+                                  Name must be unique within a namespace. Is
+                                  required when creating resources, although
+
+                                  some resources may allow a client to request
+                                  the generation of an appropriate name
+
+                                  automatically. Name is primarily intended for
+                                  creation idempotence and configuration
+
+                                  definition.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/identifiers#names
+                                type: string
+                              namespace:
+                                description: >-
+                                  Namespace defines the space within which each
+                                  name must be unique. An empty namespace is
+
+                                  equivalent to the "default" namespace, but
+                                  "default" is the canonical representation.
+
+                                  Not all objects are required to be scoped to a
+                                  namespace - the value of this field for
+
+                                  those objects will be empty.
+
+
+
+                                  Must be a DNS_LABEL.
+
+                                  Cannot be updated.
+
+                                  More info:
+                                  http://kubernetes.io/docs/user-guide/namespaces
+                                type: string
+                      version:
+                        description: Channel tracks the active Version of the Module.
+                        type: string
+                state:
+                  description: >-
+                    State signifies current state of Kyma.
+
+                    Value can be one of ("Ready", "Processing", "Error",
+                    "Deleting").
+                  type: string
+                  enum:
+                    - Processing
+                    - Deleting
+                    - Ready
+                    - Error
+                    - ''
+                    - Warning
+                    - Unmanaged
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: State
+          type: string
+          jsonPath: .status.state
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+  conversion:
+    strategy: None
+status:
+  conditions:
+    - type: NamesAccepted
+      status: 'True'
+      lastTransitionTime: '2025-02-28T11:14:56Z'
+      reason: NoConflicts
+      message: no conflicts found
+    - type: Established
+      status: 'True'
+      lastTransitionTime: '2025-02-28T11:14:56Z'
+      reason: InitialNamesAccepted
+      message: the initial names have been accepted
+  acceptedNames:
+    plural: kymas
+    singular: kyma
+    kind: Kyma
+    listKind: KymaList
+  storedVersions:
+    - v1beta2

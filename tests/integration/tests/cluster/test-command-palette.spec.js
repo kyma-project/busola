@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 function openCommandPalette() {
+  cy.wait(1000);
   cy.get('body').type(
     `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
     { force: true },

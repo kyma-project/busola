@@ -17,9 +17,11 @@ context('Accessibility test Cluster list and overview', () => {
       .contains('Preferences')
       .click({ force: true });
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === true) cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Performance panel',
       );
