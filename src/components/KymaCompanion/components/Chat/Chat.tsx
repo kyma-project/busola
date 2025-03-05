@@ -87,7 +87,7 @@ export default function Chat() {
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
       return prevMessages.slice(0, -1).concat({
-        author: 'ai',
+        ...latestMessage,
         messageChunks: latestMessage.messageChunks.concat(response),
         isLoading,
       });
