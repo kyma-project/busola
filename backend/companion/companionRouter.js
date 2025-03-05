@@ -1,6 +1,5 @@
 import express from 'express';
 import { TokenManager } from './TokenManager';
-import { isValidUUID } from '../utils/isValidUUID';
 
 const tokenManager = new TokenManager();
 
@@ -63,7 +62,6 @@ async function handlePromptSuggestions(req, res) {
       conversationId: data?.conversation_id,
     });
   } catch (error) {
-    console.error('Error in AI Chat proxy:', error);
     res.status(500).json({ error: 'Failed to fetch AI chat data' });
   }
 }
@@ -89,21 +87,16 @@ async function handleChatMessage(req, res) {
   const conversationId = sessionId;
 
   try {
-    if (!isValidUUID(sessionId)) {
-      return res.status(400).json({
-        error: 'Invalid session ID. Must be a valid UUID v4.',
-      });
+    const uuidPattern = /^[a-f0-9]{32}$/i;
+    if (!uuidPattern.test(conversationId)) {
+      throw new Error('Invalid session ID ');
     }
-
     const baseUrl =
       'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
-    let targetUrl;
-    try {
-      targetUrl = new URL(`${conversationId}/messages`, baseUrl);
-    } catch (urlError) {
-      console.error('Invalid URL construction:', urlError);
-      return res.status(400).json({ error: 'Invalid conversation ID' });
-    }
+    const targetUrl = new URL(
+      `${encodeURIComponent(conversationId)}/messages`,
+      baseUrl,
+    );
 
     const payload = {
       query,
@@ -145,10 +138,6 @@ async function handleChatMessage(req, res) {
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     if (!response.body) {
       throw new Error('Response body is null');
     }
@@ -169,7 +158,6 @@ async function handleChatMessage(req, res) {
 
     res.end();
   } catch (error) {
-    console.error('Error in AI Chat proxy:', error);
     res.status(500).json({ error: 'Failed to fetch AI chat data' });
   }
 }
