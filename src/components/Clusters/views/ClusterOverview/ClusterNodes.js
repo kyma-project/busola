@@ -45,8 +45,8 @@ export function ClusterNodes({ data, error, loading }) {
     t('cluster-overview.headers.memory'),
     t('common.headers.created'),
     t('common.headers.status'),
-    t('cluster-overview.headers.pool'),
-    'Machine Type',
+    t('node-details.pool'),
+    t('node-details.machine-type'),
     t('common.headers.zone'),
   ];
 
