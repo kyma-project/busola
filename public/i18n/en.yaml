@@ -9,6 +9,7 @@ cluster-overview:
     nodes: Nodes
     cluster-details: Cluster Details
     metadata: Metadata
+    pool: Pool
   statistics:
     cpu-usage: 'CPU Usage'
     memory-usage: 'Memory Usage'

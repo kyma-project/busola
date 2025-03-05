@@ -41,6 +41,7 @@ export function ClusterNodes({ data, error, loading }) {
 
   const headerRenderer = () => [
     t('common.headers.name'),
+    t('cluster-overview.headers.pool'),
     t('cluster-overview.headers.cpu'),
     t('cluster-overview.headers.memory'),
     t('common.headers.created'),
@@ -62,6 +63,8 @@ export function ClusterNodes({ data, error, loading }) {
       >
         {entry.metadata?.name}
       </Text>,
+      // Worker pool
+      entry.metadata?.labels?.['worker.gardener.cloud/pool'],
       cpu ? (
         <>
           <ProgressIndicatorWithPercentage
