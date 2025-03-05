@@ -13,42 +13,56 @@ export function MachineInfo({ nodeInfo, capacity, addresses, spec }) {
     <ResourceDetailsCard
       wrapperClassname="resource-overview__details-wrapper "
       className="machine-info"
-      titleText={t('machine-info.title')}
+      titleText={t('node-details.machine-info.title')}
       content={
         <>
           <DynamicPageComponent.Column
-            title={t('machine-info.operating-system')}
+            title={t('node-details.machine-info.operating-system')}
           >
             {`${nodeInfo.operatingSystem} (${nodeInfo.osImage})`}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('node-details.provider')}>
+          <DynamicPageComponent.Column
+            title={t('node-details.machine-info.provider')}
+          >
             {spec.providerID}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('machine-info.architecture')}>
+          <DynamicPageComponent.Column
+            title={t('node-details.machine-info.architecture')}
+          >
             {nodeInfo.architecture}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('machine-info.cpus')}>
+          <DynamicPageComponent.Column
+            title={t('node-details.machine-info.cpus')}
+          >
             {capacity.cpu}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('machine-info.memory')}>
-            {`${formattedMemory} ${t('machine-info.gib')}`}
+          <DynamicPageComponent.Column
+            title={t('node-details.machine-info.memory')}
+          >
+            {`${formattedMemory} ${t('node-details.machine-info.gib')}`}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('machine-info.pods-capacity')}>
+          <DynamicPageComponent.Column
+            title={t('node-details.machine-info.pods-capacity')}
+          >
             {capacity.pods}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column title={t('node-details.pod-cidr')}>
             {spec.podCIDRs.join(',')}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column
-            title={t('machine-info.kubelet-version')}
+            title={t('node-details.machine-info.kubelet-version')}
           >
             {nodeInfo.kubeletVersion}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={'InternalIP'}>
+          <DynamicPageComponent.Column
+            title={t('node-details.machine-info.internal-ip')}
+          >
             {addresses.find(a => a.type === 'InternalIP')?.address ||
               EMPTY_TEXT_PLACEHOLDER}
           </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={'HostName'}>
+          <DynamicPageComponent.Column
+            title={t('node-details.machine-info.hostname')}
+          >
             {addresses.find(a => a.type === 'Hostname').address ||
               EMPTY_TEXT_PLACEHOLDER}
           </DynamicPageComponent.Column>

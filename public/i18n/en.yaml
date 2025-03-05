@@ -828,16 +828,6 @@ limit-ranges:
     type: Type
   name_singular: LimitRange
   title: Limit Ranges
-machine-info:
-  architecture: Architecture
-  cpus: CPUs
-  gib: GiB
-  kube-proxy-version: Kube proxy version
-  kubelet-version: Kubelet version
-  memory: Memory
-  operating-system: Operating system
-  pods-capacity: Pods capacity
-  title: Machine info
 match-expressions:
   headers:
     key: Key
@@ -911,10 +901,25 @@ no-permissions:
 node-details:
   all: All messages
   information: Information
-  internal-ip: Internal IP
   pod-cidr: Pod CIDRs
-  provider: Provider
   warnings: Warnings
+  region: Region
+  zone: Zone
+  pool: Pool
+  machine-type: Machine Type
+  machine-info:
+    architecture: Architecture
+    provider: Provider
+    internal-ip: Internal IP
+    cpus: CPUs
+    gib: GiB
+    kube-proxy-version: Kube proxy version
+    kubelet-version: Kubelet version
+    memory: Memory
+    operating-system: Operating system
+    pods-capacity: Pods capacity
+    hostname: Hostname
+    title: Machine info
 nodes:
   title: Nodes
   title_details: Node {{nodeName}}

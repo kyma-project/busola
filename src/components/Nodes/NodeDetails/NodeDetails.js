@@ -47,23 +47,19 @@ export default function NodeDetails({ nodeName }) {
 
   const customColumns = [
     {
-      header: 'Region',
+      header: t('node-details.region'),
       value: node => node.metadata?.labels?.['topology.kubernetes.io/region'],
     },
     {
-      header: 'Zone',
+      header: t('node-details.zone'),
       value: node => node.metadata?.labels?.['topology.kubernetes.io/zone'],
     },
     {
-      header: 'Pool',
+      header: t('node-details.pool'),
       value: node => node.metadata?.labels?.['worker.gardener.cloud/pool'],
     },
     {
-      header: 'Architecture',
-      value: node => node.metadata?.labels?.['kubernetes.io/arch'],
-    },
-    {
-      header: 'Machine Type',
+      header: t('node-details.machine-type'),
       value: node =>
         node.metadata?.labels?.['node.kubernetes.io/instance-type'],
     },
@@ -95,7 +91,12 @@ export default function NodeDetails({ nodeName }) {
         }
         customComponents={customComponents}
         createResourceForm={() => (
-          <ResourceForm resource={node} initialResource={node} onlyYaml />
+          <ResourceForm
+            resource={node}
+            initialResource={node}
+            initialUnchangedResource={node}
+            onlyYaml
+          />
         )}
         disableEdit
         disableDelete

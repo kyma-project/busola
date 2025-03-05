@@ -52,7 +52,6 @@ export function ClusterNodes({ data, error, loading }) {
 
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
-    const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
     return [
       <Text
@@ -102,11 +101,14 @@ export function ClusterNodes({ data, error, loading }) {
       // Status
       getStatus(entry.status),
       // Worker pool
-      entry.metadata?.labels?.['worker.gardener.cloud/pool'],
+      entry.metadata?.labels?.['worker.gardener.cloud/pool'] ??
+        EMPTY_TEXT_PLACEHOLDER,
       // Machine Type
-      entry.metadata?.labels?.['node.kubernetes.io/instance-type'],
+      entry.metadata?.labels?.['node.kubernetes.io/instance-type'] ??
+        EMPTY_TEXT_PLACEHOLDER,
       // Zone
-      zone ?? EMPTY_TEXT_PLACEHOLDER,
+      entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
+        EMPTY_TEXT_PLACEHOLDER,
     ];
   };
 
