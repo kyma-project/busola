@@ -1,5 +1,4 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { parseWithNestedBrackets } from '../utils/parseNestedBrackets';
 import { MessageChunk } from '../components/Chat/messages/Message';
 
 interface ClusterAuth {
@@ -97,17 +96,12 @@ function readChunk(
       if (done) {
         return;
       }
-      // Also handles the rare case of two chunks being sent at once
       const receivedString = decoder.decode(value, { stream: true });
-      const chunks = parseWithNestedBrackets(receivedString).map(chunk => {
-        return JSON.parse(chunk);
-      });
-      chunks.forEach(chunk => {
-        if ('error' in chunk) {
-          throw new Error(chunk.error);
-        }
-        handleChatResponse(chunk);
-      });
+      const chunk = JSON.parse(receivedString);
+      if ('error' in chunk) {
+        throw new Error(chunk.error);
+      }
+      handleChatResponse(chunk);
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
     .catch(error => {
