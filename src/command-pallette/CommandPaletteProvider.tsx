@@ -35,7 +35,11 @@ export const CommandPaletteProvider = ({
       ?.startsWith('mac');
     const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
 
-    if ((key === 'k' || key === 'K') && modifierKeyPressed) {
+    if (
+      (key === 'k' || key === 'K') &&
+      modifierKeyPressed &&
+      window.location.pathname !== '/clusters'
+    ) {
       setShowDialog(!showDialog);
       // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
       e.preventDefault();
