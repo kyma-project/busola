@@ -84,6 +84,13 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         setIsFormOpen,
         () => {
           setLayoutColumn({
+            startColumn: {
+              resourceType: node?.resourceTypeCased,
+              resourceName: null,
+              namespaceId: namespaceId,
+              apiGroup: node?.apiGroup,
+              apiVersion: node?.apiVersion,
+            },
             midColumn: null,
             endColumn: null,
             layout: 'OneColumn',

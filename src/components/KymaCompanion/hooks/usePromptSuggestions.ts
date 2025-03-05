@@ -1,40 +1,74 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { sessionIDState } from '../../../state/companion/sessionIDAtom';
-import { clusterState } from 'state/clusterAtom';
 import getPromptSuggestions from '../api/getPromptSuggestions';
+import { ColumnLayoutState, columnLayoutState } from 'state/columnLayoutAtom';
+import { prettifyNameSingular } from 'shared/utils/helpers';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 
-export function usePromptSuggestions() {
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+const getResourceFromColumnnLayout = (columnLayout: ColumnLayoutState) => {
+  const column =
+    columnLayout?.endColumn ??
+    columnLayout?.midColumn ??
+    columnLayout?.startColumn;
+  return {
+    namespace: column?.namespaceId ?? '',
+    resourceType: prettifyNameSingular(column?.resourceType ?? ''),
+    apiGroup: column?.apiGroup ?? '',
+    apiVersion: column?.apiVersion ?? '',
+    resourceName: column?.resourceName ?? '',
+  };
+};
+
+export function usePromptSuggestions(options?: { skip?: boolean }) {
+  const post = usePost();
+  const [initialSuggestions, setInitialSuggestions] = useState<string[]>([]);
   const setSessionID = useSetRecoilState(sessionIDState);
-  const cluster = useRecoilValue(clusterState);
+  const columnLayout = useRecoilValue(columnLayoutState);
+  const [loading, setLoading] = useState(true);
+  const fetchedResourceRef = useRef('');
 
   useEffect(() => {
+    if (options?.skip) {
+      return;
+    }
+
+    const {
+      namespace,
+      resourceType,
+      apiGroup,
+      apiVersion,
+      resourceName,
+    } = getResourceFromColumnnLayout(columnLayout);
+    const groupVersion = apiGroup ? `${apiGroup}/${apiVersion}` : apiVersion;
+
+    const resourceKey = `${namespace}|${resourceType}|${groupVersion}|${resourceName}`.toLocaleLowerCase();
+
     async function fetchSuggestions() {
-      const sessionID = ''; // TODO
-      setSessionID(sessionID);
-      const promptSuggestions = await getPromptSuggestions({
-        namespace: 'default', // TODO
-        resourceType: 'deployment', // TODO
-        groupVersion: 'apps/v1', // TODO
-        resourceName: 'test-x', // TODO
-        sessionID,
-        clusterUrl: cluster?.currentContext.cluster.cluster.server ?? '',
-        token: '', // TODO
-        certificateAuthorityData:
-          cluster?.currentContext.cluster.cluster[
-            'certificate-authority-data'
-          ] ?? '',
-      });
-      if (promptSuggestions) {
-        setSuggestions(promptSuggestions);
+      setLoading(true);
+      setInitialSuggestions([]);
+      try {
+        const result = await getPromptSuggestions({
+          post,
+          namespace: namespace,
+          resourceType: resourceType,
+          groupVersion: groupVersion,
+          resourceName: resourceName,
+        });
+        if (result) {
+          setInitialSuggestions(result.promptSuggestions);
+          setSessionID(result.conversationId);
+        }
+      } finally {
+        setLoading(false);
       }
     }
 
-    if (cluster && suggestions.length === 0) {
+    if (resourceType && fetchedResourceRef.current !== resourceKey) {
+      fetchedResourceRef.current = resourceKey;
       fetchSuggestions();
     }
-  }, [cluster, suggestions, setSessionID]);
+  }, [columnLayout, options?.skip, post, setSessionID]);
 
-  return suggestions;
+  return { initialSuggestions, initialSuggestionsLoading: loading };
 }

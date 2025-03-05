@@ -170,14 +170,15 @@ export const fetchResourceCounts = async (
 ) => {
   const counts: Counts = {};
   for (const resource of resources) {
-    const resources = await getResources(
+    const count = await getResources(
       resource.kind,
       resource.group,
       resource.version,
       fetchFn,
     );
+
     const keyName = `${resource.kind}-${resource.group}-${resource.version}`;
-    counts[keyName] = resources.length;
+    counts[keyName] = count.length;
   }
   return counts;
 };

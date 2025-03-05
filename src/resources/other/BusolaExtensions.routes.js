@@ -34,7 +34,11 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const initialLayoutState = layout
     ? {
-        layout: layout ?? layoutState?.layout,
+        layout: layout,
+        startColumn: {
+          resourceType: 'Extensions',
+          namespaceId: namespace,
+        },
         midColumn: {
           resourceName: name,
           resourceType: 'Extensions',
@@ -42,12 +46,18 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
         },
         endColumn: null,
       }
-    : null;
+    : {
+        layout: layoutState?.layout,
+        startColumn: {
+          resourceType: 'Extensions',
+          namespaceId: namespace,
+        },
+        midColumn: null,
+        endColumn: null,
+      };
 
   useEffect(() => {
-    if (layout) {
-      setLayoutColumn(initialLayoutState);
-    }
+    setLayoutColumn(initialLayoutState);
   }, [layout, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const elementCreateProps = usePrepareCreateProps({

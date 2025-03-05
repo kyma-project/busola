@@ -71,7 +71,6 @@ ResourcesList.propTypes = {
   disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
-  handleRedirect: PropTypes.func,
   filterFn: PropTypes.func,
 };
 
@@ -232,7 +231,6 @@ export function ResourceListRenderer({
   simpleEmptyListMessage = false,
   disableHiding,
   displayArrow,
-  handleRedirect,
   accessibleName,
 }) {
   useVersionWarning({
@@ -346,6 +344,7 @@ export function ResourceListRenderer({
     setLayoutColumn(
       layoutNumber === 'MidColumn' && enableColumnLayout
         ? {
+            ...layoutState,
             midColumn: layoutState?.midColumn,
             endColumn: null,
             showCreate: {
@@ -356,6 +355,7 @@ export function ResourceListRenderer({
             layout: 'ThreeColumnsEndExpanded',
           }
         : {
+            ...layoutState,
             midColumn: null,
             endColumn: null,
             showCreate: {
@@ -437,6 +437,7 @@ export function ResourceListRenderer({
     setLayoutColumn(
       layoutNumber === 'MidColumn' && enableColumnLayout
         ? {
+            ...layoutState,
             midColumn: layoutState?.midColumn,
             endColumn: null,
             showCreate: {
@@ -446,6 +447,7 @@ export function ResourceListRenderer({
             layout: 'ThreeColumnsEndExpanded',
           }
         : {
+            ...layoutState,
             midColumn: null,
             endColumn: null,
             showCreate: {
@@ -562,7 +564,6 @@ export function ResourceListRenderer({
               ...emptyListProps,
               simpleEmptyListMessage: simpleEmptyListMessage,
             }}
-            handleRedirect={handleRedirect}
             nameColIndex={nameColIndex}
             namespaceColIndex={namespaceColIndex}
           />
