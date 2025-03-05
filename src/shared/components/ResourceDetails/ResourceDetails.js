@@ -163,6 +163,7 @@ function Resource({
   disableDelete = false,
   statusBadge,
   customStatusColumns,
+  customStatus,
   customHealthCards,
   showHealthCardsTitle,
   statusConditions,
@@ -268,69 +269,70 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
-  const resourceStatusCard =
-    customStatusColumns?.length ||
+  const resourceStatusCard = customStatus ? (
+    customStatus
+  ) : customStatusColumns?.length ||
     customConditionsComponents?.length ||
     statusConditions?.length ? (
-      <ResourceStatusCard
-        statusBadge={statusBadge ? statusBadge(resource) : null}
-        customColumns={
-          customStatusColumns?.length ? (
-            <>
-              {customStatusColumns
-                ?.filter(filterColumns)
-                .filter(col => !col?.conditionComponent)
-                ?.filter(col => !col?.fullWidth || col?.fullWidth === false)
-                ?.map(col => (
-                  <DynamicPageComponent.Column
-                    key={col.header}
-                    title={col.header}
-                  >
-                    {col.value(resource)}
-                  </DynamicPageComponent.Column>
-                ))}
-            </>
-          ) : null
-        }
-        customColumnsLong={
-          customStatusColumns?.length ? (
-            <>
-              {customStatusColumns
-                ?.filter(filterColumns)
-                .filter(col => !col?.conditionComponent)
-                ?.filter(col => col?.fullWidth && col?.fullWidth === true)
-                ?.map(col => (
-                  <DynamicPageComponent.Column
-                    key={col.header}
-                    title={col.header}
-                  >
-                    {col.value(resource)}
-                  </DynamicPageComponent.Column>
-                ))}
-            </>
-          ) : null
-        }
-        conditions={statusConditions ? statusConditions(resource) : null}
-        customConditionsComponent={
-          customConditionsComponents?.length ? (
-            <>
-              {customConditionsComponents
-                ?.filter(filterColumns)
-                ?.map((component, index) => (
-                  <React.Fragment
-                    key={`${component.header.replace(' ', '-')}-${index}`}
-                  >
-                    <div className="title bsl-has-color-status-4 sap-margin-x-small">
-                      {component.header}:
-                    </div>
-                    {component.value(resource)}
-                  </React.Fragment>
-                ))}
-            </>
-          ) : null
-        }
-      />
-    ) : null;
+    <ResourceStatusCard
+      statusBadge={statusBadge ? statusBadge(resource) : null}
+      customColumns={
+        customStatusColumns?.length ? (
+          <>
+            {customStatusColumns
+              ?.filter(filterColumns)
+              .filter(col => !col?.conditionComponent)
+              ?.filter(col => !col?.fullWidth || col?.fullWidth === false)
+              ?.map(col => (
+                <DynamicPageComponent.Column
+                  key={col.header}
+                  title={col.header}
+                >
+                  {col.value(resource)}
+                </DynamicPageComponent.Column>
+              ))}
+          </>
+        ) : null
+      }
+      customColumnsLong={
+        customStatusColumns?.length ? (
+          <>
+            {customStatusColumns
+              ?.filter(filterColumns)
+              .filter(col => !col?.conditionComponent)
+              ?.filter(col => col?.fullWidth && col?.fullWidth === true)
+              ?.map(col => (
+                <DynamicPageComponent.Column
+                  key={col.header}
+                  title={col.header}
+                >
+                  {col.value(resource)}
+                </DynamicPageComponent.Column>
+              ))}
+          </>
+        ) : null
+      }
+      conditions={statusConditions ? statusConditions(resource) : null}
+      customConditionsComponent={
+        customConditionsComponents?.length ? (
+          <>
+            {customConditionsComponents
+              ?.filter(filterColumns)
+              ?.map((component, index) => (
+                <React.Fragment
+                  key={`${component.header.replace(' ', '-')}-${index}`}
+                >
+                  <div className="title bsl-has-color-status-4 sap-margin-x-small">
+                    {component.header}:
+                  </div>
+                  {component.value(resource)}
+                </React.Fragment>
+              ))}
+          </>
+        ) : null
+      }
+    />
+  ) : null;
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
@@ -503,20 +505,30 @@ function Resource({
             protectedResourceWarning={protectedResourceWarning(resource, true)}
             readOnly={readOnly}
             disableEdit={disableEdit}
-            renderForm={props => (
-              <ErrorBoundary>
-                <CreateResourceForm
-                  resource={resource}
-                  resourceType={resourceType}
-                  resourceUrl={resourceUrl}
-                  namespace={namespace}
-                  resourceSchema={resourceSchema}
-                  editMode={true}
-                  stickyHeaderHeight={stickyHeaderHeight}
-                  {...props}
-                />
-              </ErrorBoundary>
-            )}
+            renderForm={props => {
+              console.log(
+                resource,
+                resourceType,
+                resourceUrl,
+                namespace,
+                resourceSchema,
+                props,
+              );
+              return (
+                <ErrorBoundary>
+                  <CreateResourceForm
+                    resource={resource}
+                    resourceType={resourceType}
+                    resourceUrl={`/api/v1/nodes/test-node`}
+                    namespace={namespace}
+                    resourceSchema={resourceSchema}
+                    editMode={true}
+                    stickyHeaderHeight={stickyHeaderHeight}
+                    {...props}
+                  />
+                </ErrorBoundary>
+              );
+            }}
           />
         )}
       ></DynamicPageComponent>
