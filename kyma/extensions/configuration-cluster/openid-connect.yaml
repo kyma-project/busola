@@ -47,26 +47,35 @@ data:
       source: spec.groupsClaim
     - name: Client ID
       source: spec.clientID
-    - name: Age
-      source: '$getElapsedTime(metadata.creationTimestamp)'
   form: |-
     - path: spec.issuerURL
-      widget: Text
+      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
+      overwrite: false
       placeholder: Issuer
     - path: spec.usernameClaim
+      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
+      overwrite: false
       widget: Text
       placeholder: Username Claim
     - path: spec.groupsClaim
+      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
+      overwrite: false
       widget: Text
       placeholder: Groups Claim
     - path: spec.clientID
+      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
+      overwrite: false
       widget: Text
       placeholder: Client ID
     - path: spec.jwks.distributedClaims
+      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
+      overwrite: false
       enum:
       - true
       - false
     - path: spec.supportedSigningAlgs
+      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
+      overwrite: false
       widget: SimpleList
       defaultExpanded: true
       children:
