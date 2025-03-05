@@ -1,20 +1,19 @@
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useTranslation } from 'react-i18next';
 import { useNodeQuery, useResourceByNode } from '../nodeQueries';
-import { NodeDetailsCard } from '../NodeDetailsCard';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { Title } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMemo } from 'react';
 import { Description } from 'shared/components/Description/Description';
+import { Text } from '@ui5/webcomponents-react';
 
 export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -25,6 +24,7 @@ export default function NodeDetails({ nodeName }) {
     nodeName,
   );
   if (loading) return <Spinner />;
+  if (error) return <Text>{error}</Text>;
 
   const filterByHost = e => e.source.host === nodeName;
 
@@ -58,6 +58,15 @@ export default function NodeDetails({ nodeName }) {
       header: 'Pool',
       value: node => node.metadata?.labels?.['worker.gardener.cloud/pool'],
     },
+    {
+      header: 'Architecture',
+      value: node => node.metadata?.labels?.['kubernetes.io/arch'],
+    },
+    {
+      header: 'Machine Type',
+      value: node =>
+        node.metadata?.labels?.['node.kubernetes.io/instance-type'],
+    },
   ];
 
   return (
@@ -83,36 +92,6 @@ export default function NodeDetails({ nodeName }) {
             addresses={node?.status.addresses}
             spec={node?.spec}
           />
-        }
-        customStatusColumns={
-          <>
-            {data && (
-              <>
-                <Title
-                  level="H3"
-                  size="H3"
-                  className="sap-margin-begin-medium sap-margin-y-medium"
-                >
-                  {t('common.headers.node-details')}
-                </Title>
-                <div className={'node-details-container'}>
-                  <NodeDetailsCard
-                    nodeName={nodeName}
-                    node={data?.node}
-                    error={error}
-                    loading={loading}
-                  />
-                </div>
-                <Title
-                  level="H3"
-                  size="H3"
-                  className="sap-margin-begin-medium sap-margin-top-medium sap-margin-bottom-small"
-                >
-                  {t('common.headers.nodeInfo')}
-                </Title>
-              </>
-            )}
-          </>
         }
         customComponents={customComponents}
         createResourceForm={() => (

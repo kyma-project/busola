@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import './MachineInfo.scss';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import './MachineInfo.scss';
 
 export function MachineInfo({ nodeInfo, capacity, addresses, spec }) {
   const formattedMemory =
@@ -11,8 +11,8 @@ export function MachineInfo({ nodeInfo, capacity, addresses, spec }) {
 
   return (
     <ResourceDetailsCard
-      wrapperClassname="resource-overview__details-wrapper"
-      className="machine-info__card "
+      wrapperClassname="resource-overview__details-wrapper "
+      className="machine-info"
       titleText={t('machine-info.title')}
       content={
         <>

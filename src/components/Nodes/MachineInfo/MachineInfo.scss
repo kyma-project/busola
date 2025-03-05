@@ -1,12 +1,3 @@
-.node-details-container {
-  display: grid;
-  grid-template-columns: 100%;
-  gap: 1rem;
-}
-
-@container (min-width: 900px) {
-  .node-details-container {
-    grid-template-columns: fit-content(100%) fit-content(100%);
-    gap: 0;
-  }
+.machine-info {
+  max-width: 700px;
 }
