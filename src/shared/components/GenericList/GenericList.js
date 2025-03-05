@@ -365,11 +365,13 @@ export const GenericList = ({
           columnLayout
             ? {
                 ...layoutState,
+                showCreate: null,
                 endColumn: customColumnLayout(selectedEntry),
                 layout: columnLayout,
               }
             : {
                 ...layoutState,
+                showCreate: null,
                 midColumn: {
                   resourceName:
                     selectedEntry?.metadata?.name ??
