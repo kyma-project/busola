@@ -38,30 +38,31 @@ export default function Message({
   isLoading,
 }: MessageProps): JSX.Element {
   if (isLoading) {
+    const chunksLength = messageChunks.length;
     return (
       <div className={'message loading ' + className}>
-        {messageChunks.length > 0 ? (
-          messageChunks.map((chunk, index) => {
-            const taskName =
-              chunk?.data?.answer?.tasks?.[index]?.task_name || '';
-            return (
-              <FlexBox
-                justifyContent="SpaceBetween"
-                alignItems="Center"
-                className="loading-item"
-                key={index}
-              >
-                <Text className="text">{taskName}</Text>
-                <div className="loading-status">
-                  {index !== messageChunks.length - 1 ? (
-                    <ObjectStatus state="Positive" showDefaultIcon />
-                  ) : (
-                    <BusyIndicator active size="S" delay={0} />
-                  )}
-                </div>
-              </FlexBox>
-            );
-          })
+        {chunksLength > 0 ? (
+          messageChunks[chunksLength - 1].data?.answer?.tasks?.map(
+            (task, index) => {
+              return (
+                <FlexBox
+                  justifyContent="SpaceBetween"
+                  alignItems="Center"
+                  className="loading-item"
+                  key={index}
+                >
+                  <Text className="text">{task?.task_name}</Text>
+                  <div className="loading-status">
+                    {task?.status === 'completed' ? (
+                      <ObjectStatus state="Positive" showDefaultIcon />
+                    ) : (
+                      <BusyIndicator active size="S" delay={0} />
+                    )}
+                  </div>
+                </FlexBox>
+              );
+            },
+          )
         ) : (
           <BusyIndicator active size="M" delay={0} />
         )}

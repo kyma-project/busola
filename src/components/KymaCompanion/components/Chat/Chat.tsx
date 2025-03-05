@@ -72,7 +72,7 @@ export default function Chat() {
   };
 
   const handleChatResponse = (response: MessageChunk) => {
-    const isLoading = response?.data?.answer.next !== '__end__';
+    const isLoading = response?.data?.answer?.next !== '__end__';
     if (!isLoading) {
       setFollowUpLoading();
       getFollowUpQuestions({
