@@ -42,7 +42,7 @@ export default function Chat() {
       suggestionsLoading: true,
     },
   ]);
-  const [errorOccured, setErrorOccured] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
@@ -95,7 +95,7 @@ export default function Chat() {
   };
 
   const setFollowUpLoading = () => {
-    setErrorOccured(false);
+    setError(null);
     updateLatestMessage({ suggestionsLoading: true });
   };
 
@@ -103,13 +103,13 @@ export default function Chat() {
     updateLatestMessage({ suggestions: questions, suggestionsLoading: false });
   };
 
-  const handleError = () => {
-    setErrorOccured(true);
+  const handleError = (error?: Error) => {
+    setError(error?.message ?? t('kyma-companion.error.subtitle'));
     setChatHistory(prevItems => prevItems.slice(0, -2));
   };
 
   const sendPrompt = (query: string) => {
-    setErrorOccured(false);
+    setError(null);
     addMessage({
       author: 'user',
       messageChunks: [
@@ -198,11 +198,11 @@ export default function Chat() {
   }, [initialSuggestions, initialSuggestionsLoading]);
 
   useEffect(() => {
-    const delay = errorOccured ? 500 : 0;
+    const delay = error ? 500 : 0;
     setTimeout(() => {
       scrollToBottom();
     }, delay);
-  }, [chatHistory, errorOccured]);
+  }, [chatHistory, error]);
 
   return (
     <FlexBox
@@ -239,8 +239,9 @@ export default function Chat() {
             />
           );
         })}
-        {errorOccured && (
+        {error && (
           <ErrorMessage
+            errorMessage={error}
             errorOnInitialMessage={chatHistory.length === 0}
             retryPrompt={() => {}}
           />

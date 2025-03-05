@@ -15,7 +15,7 @@ type GetChatResponseArgs = {
   resourceName?: string;
   sessionID: string;
   handleChatResponse: (chunk: MessageChunk) => void;
-  handleError: () => void;
+  handleError: (error?: Error) => void;
   clusterUrl: string;
   clusterAuth: ClusterAuth;
   certificateAuthorityData: string;
@@ -87,7 +87,7 @@ function readChunk(
   reader: ReadableStreamDefaultReader<Uint8Array>,
   decoder: TextDecoder,
   handleChatResponse: (chunk: any) => void,
-  handleError: () => void,
+  handleError: (error?: Error) => void,
   sessionID: string,
 ) {
   reader
@@ -98,8 +98,9 @@ function readChunk(
       }
       const receivedString = decoder.decode(value, { stream: true });
       const chunk = JSON.parse(receivedString);
-      if ('error' in chunk) {
-        throw new Error(chunk.error);
+      if (chunk?.data?.error) {
+        handleError(chunk.data.error);
+        return;
       }
       handleChatResponse(chunk);
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
