@@ -97,9 +97,7 @@ const getResources = async (
 
   try {
     const response = await fetchFn(url);
-    console.log(response);
     const json = await response.json();
-
     return json.items;
   } catch (e) {
     console.warn(e);
