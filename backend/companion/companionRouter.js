@@ -1,5 +1,6 @@
 import express from 'express';
 import { TokenManager } from './TokenManager';
+import { isValidUUID } from '../utils/isValidUUID';
 
 const tokenManager = new TokenManager();
 
@@ -88,8 +89,10 @@ async function handleChatMessage(req, res) {
   const conversationId = sessionId;
 
   try {
-    if (!conversationId || typeof conversationId !== 'string') {
-      return res.status(400).json({ error: 'Invalid conversation ID' });
+    if (!isValidUUID(sessionId)) {
+      return res.status(400).json({
+        error: 'Invalid session ID. Must be a valid UUID v4.',
+      });
     }
 
     const baseUrl =
