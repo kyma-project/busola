@@ -45,7 +45,8 @@ import { initTheme } from './initTheme';
 
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
-import { useSSOLogin } from '../../shared/utils/sso';
+import { useSSOLogin } from '../../state/ssoDataAtom';
+import { configurationAtom } from '../../state/configuration/configurationAtom';
 
 export default function App() {
   const theme = useRecoilValue(themeState);
@@ -64,11 +65,10 @@ export default function App() {
   const kubeconfigIdState = useLoginWithKubeconfigID();
   useResourceSchemas();
   useSidebarCondensed();
-
-  const ssoLogin = useSSOLogin();
-  ssoLogin();
-  const { isLoading } = useAuthHandler();
   useGetConfiguration();
+
+  useSSOLogin();
+  const { isLoading } = useAuthHandler();
   useGetExtensions();
   useGetExtensibilitySchemas();
   useGetValidationSchemas();

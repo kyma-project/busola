@@ -1,9 +1,12 @@
 import { JwtPayload, jwtDecode } from 'jwt-decode';
-import { setSSOAuthData } from 'shared/utils/sso';
+import { setSSOAuthData } from '../../../state/ssoDataAtom';
 
 const timeout = 30; // s
 
-export function checkForTokenExpiration(token?: string) {
+export function checkForTokenExpiration(
+  token?: string,
+  reasonData?: { reason: string; message: string },
+) {
   if (!token) return;
 
   try {

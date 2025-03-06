@@ -53,7 +53,7 @@ export const ClusterValidation = () => {
     });
     const post = createPostFn(fetch);
     return { fetch, post };
-  }, [authData, cluster]);
+  }, [authData, cluster, ssoData]);
   const resourceLoader = useMemo(
     () => new ResourceLoader(relativeUrl => fetch({ relativeUrl }), undefined),
     [fetch],
