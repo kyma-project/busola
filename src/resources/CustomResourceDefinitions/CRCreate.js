@@ -32,10 +32,7 @@ function CRCreate({
   const customUrl = useCustomResourceUrl(crd);
 
   const navigate = useNavigate();
-  const { nextQuery, currentQuery } = usePrepareLayout(layoutNumber);
-  const goToLayoutQuery = customUrl(cr).includes('customresources/')
-    ? nextQuery
-    : currentQuery;
+  const { nextQuery } = usePrepareLayout(layoutNumber);
 
   const currentVersion = crd.spec.versions?.find(ver => ver.storage).name;
   const namespace =
@@ -71,7 +68,7 @@ function CRCreate({
             resourceType: crd.spec.names.kind,
           }),
         });
-        navigate(`${customUrl(cr)}${goToLayoutQuery}`);
+        navigate(`${customUrl(cr)}${nextQuery}`);
       }}
     />
   );
