@@ -17,6 +17,9 @@ data:
     category: Configuration
     urlPath: openidconnects
     scope: cluster
+    features:
+      actions:
+        disableEdit: metadata.labels."operator.kyma-project.io/managed-by" = "infrastructure-manager"
     description: >-
       {{[OpenID Connect](https://gardener.cloud/docs/extensions/others/gardener-extension-shoot-oidc-service/openidconnects/)}}
       is an open standard authentication protocol built on top of the OAuth 2.0 framework. It provides a secure and flexible way to authenticate and authorize users within applications and systems.
@@ -49,34 +52,23 @@ data:
       source: spec.clientID
   form: |-
     - path: spec.issuerURL
-      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
-      overwrite: false
+      widget: Text
       placeholder: Issuer
     - path: spec.usernameClaim
-      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
-      overwrite: false
       widget: Text
       placeholder: Username Claim
     - path: spec.groupsClaim
-      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
-      overwrite: false
       widget: Text
       placeholder: Groups Claim
     - path: spec.clientID
-      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
-      overwrite: false
       widget: Text
       placeholder: Client ID
     - path: spec.jwks.distributedClaims
-      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
-      overwrite: false
       enum:
       - true
       - false
     - path: spec.supportedSigningAlgs
-      visibility: $not((metadata.labels."operator.kyma-project.io/managed-by") = "infrastructure-manager")
-      overwrite: false
       widget: SimpleList
-      defaultExpanded: true
       children:
         - path: '[]'
+          description: ''
