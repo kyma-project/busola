@@ -1,5 +1,9 @@
 import pluralize from 'pluralize';
-import { findModuleStatus } from './support';
+import {
+  findModuleStatus,
+  findModuleTemplate,
+  ModuleTemplateListType,
+} from './support';
 
 interface Counts {
   [key: string]: number;
@@ -13,9 +17,9 @@ type Resource = {
 
 export const getAssociatedResources = (
   chosenModuleIndex: number,
-  findModuleTemplate: Function,
   selectedModules: any,
   kymaResource: any,
+  moduleTemplates: ModuleTemplateListType,
 ) => {
   if (!chosenModuleIndex) {
     return [];
@@ -27,6 +31,7 @@ export const getAssociatedResources = (
     findModuleStatus(kymaResource, selectedModule?.name)?.version;
 
   const module = findModuleTemplate(
+    moduleTemplates,
     selectedModule?.name,
     moduleChannel,
     moduleVersion,
@@ -36,9 +41,9 @@ export const getAssociatedResources = (
 
 export const getCRResource = (
   chosenModuleIndex: number,
-  findModuleTemplate: Function,
   selectedModules: any,
   kymaResource: any,
+  moduleTemplates: ModuleTemplateListType,
 ) => {
   if (!chosenModuleIndex) {
     return [];
@@ -50,13 +55,14 @@ export const getCRResource = (
     findModuleStatus(kymaResource, selectedModule?.name)?.version;
 
   const module = findModuleTemplate(
+    moduleTemplates,
     selectedModule?.name,
     moduleChannel,
     moduleVersion,
   );
 
   let resource: Resource | null = null;
-  if (module.spec.data) {
+  if (module && module.spec.data) {
     resource = {
       group: module.spec.data.apiVersion.split('/')[0],
       version: module.spec.data.apiVersion.split('/')[1],
@@ -186,15 +192,15 @@ export const fetchResourceCounts = async (
 export const checkIfAssociatedResourceLeft = (
   resourceCounts: Counts,
   chosenModuleIndex: number,
-  findModuleTemplate: Function,
   selectedModules: any,
   kymaResource: any,
+  moduleTemplates: ModuleTemplateListType,
 ) => {
   const resources: Resource[] = getAssociatedResources(
     chosenModuleIndex,
-    findModuleTemplate,
     selectedModules,
     kymaResource,
+    moduleTemplates,
   );
 
   for (const resource of resources) {
