@@ -44,16 +44,14 @@ export function ClusterNodes({ data, error, loading }) {
     t('cluster-overview.headers.cpu'),
     t('cluster-overview.headers.memory'),
     t('common.headers.created'),
-    t('common.headers.version'),
     t('common.headers.status'),
-    t('common.headers.region'),
+    t('node-details.pool'),
+    t('node-details.machine-type'),
     t('common.headers.zone'),
   ];
 
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
-    const region = entry?.metadata?.labels?.['topology.kubernetes.io/region'];
-    const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
     return [
       <Text
@@ -62,6 +60,7 @@ export function ClusterNodes({ data, error, loading }) {
       >
         {entry.metadata?.name}
       </Text>,
+      // CPU Usage
       cpu ? (
         <>
           <ProgressIndicatorWithPercentage
@@ -79,6 +78,7 @@ export function ClusterNodes({ data, error, loading }) {
       ) : (
         EMPTY_TEXT_PLACEHOLDER
       ),
+      // Memory Usage
       memory ? (
         <ProgressIndicatorWithPercentage
           leftTitle={memory.percentage}
@@ -94,13 +94,21 @@ export function ClusterNodes({ data, error, loading }) {
       ) : (
         EMPTY_TEXT_PLACEHOLDER
       ),
+      // Creation timestamp
       <ReadableCreationTimestamp
         timestamp={entry.metadata?.creationTimestamp}
       />,
-      entry.status?.nodeInfo?.kubeletVersion || EMPTY_TEXT_PLACEHOLDER,
+      // Status
       getStatus(entry.status),
-      region ?? EMPTY_TEXT_PLACEHOLDER,
-      zone ?? EMPTY_TEXT_PLACEHOLDER,
+      // Worker pool
+      entry.metadata?.labels?.['worker.gardener.cloud/pool'] ??
+        EMPTY_TEXT_PLACEHOLDER,
+      // Machine Type
+      entry.metadata?.labels?.['node.kubernetes.io/instance-type'] ??
+        EMPTY_TEXT_PLACEHOLDER,
+      // Zone
+      entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
+        EMPTY_TEXT_PLACEHOLDER,
     ];
   };
 
