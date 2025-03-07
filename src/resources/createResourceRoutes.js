@@ -206,14 +206,14 @@ export const createResourceRoutes = ({
   List = null,
   Details = null,
   Create = null,
-  namespaced = true,
   resourceType = '',
   resourceI18Key = '',
+  customPath = null,
   ...props
 }) => {
   const pathSegment = resourceType.toLowerCase();
 
-  const path = createPath({ pathSegment, detailsView: true });
+  const path = customPath || createPath({ pathSegment, detailsView: true });
 
   return (
     <React.Fragment key={path}>

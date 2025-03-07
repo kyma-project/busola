@@ -8,21 +8,40 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
 import { Icon, ObjectStatus, Text } from '@ui5/webcomponents-react';
 import {
-  ResourceDescription,
   docsURL,
   i18nDescriptionKey,
+  ResourceDescription,
 } from 'resources/Events';
+
+function useEventUrl(resourceType, clusterView) {
+  const { namespaceUrl, clusterUrl } = useUrl();
+
+  if (clusterView) {
+    return resource => {
+      return clusterUrl(
+        `events/${resource.metadata.namespace}/${resource.metadata.name}?layout=TwoColumnsMidExpanded`,
+      );
+    };
+  }
+  return resource => {
+    return namespaceUrl(`${resourceType}/${resource.metadata.name}`, {
+      namespace: resource.metadata.namespace,
+    });
+  };
+}
 
 export function EventList({
   defaultType,
   hideInvolvedObjects,
   filter,
   isCompact,
+  isClusterView = false,
   ...props
 }) {
   const { t } = useTranslation();
-  const { namespaceUrl, namespace } = useUrl();
+  const { namespace } = useUrl();
   const resourceType = props.resourceType.toLowerCase();
+  const customUrl = useEventUrl(resourceType, isClusterView);
   const {
     EVENT_MESSAGE_TYPE,
     displayType,
@@ -149,11 +168,7 @@ export function EventList({
       searchSettings={{
         textSearchProperties,
       }}
-      customUrl={event =>
-        namespaceUrl(`${resourceType}/${event.metadata.name}`, {
-          namespace: event.metadata.namespace,
-        })
-      }
+      customUrl={customUrl}
       emptyListProps={{
         showButton: false,
         subtitleText: i18nDescriptionKey,
