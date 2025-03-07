@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
-import Message from './messages/Message';
+import Message, { MessageChunk } from './messages/Message';
 import Bubbles from './messages/Bubbles';
 import ErrorMessage from './messages/ErrorMessage';
 import { sessionIDState } from 'state/companion/sessionIDAtom';
@@ -15,7 +15,7 @@ import './Chat.scss';
 
 interface MessageType {
   author: 'user' | 'ai';
-  messageChunks: { step: string; result: string }[];
+  messageChunks: MessageChunk[];
   isLoading: boolean;
   suggestions?: string[];
   suggestionsLoading?: boolean;
@@ -29,13 +29,20 @@ export default function Chat() {
     {
       author: 'ai',
       messageChunks: [
-        { step: 'output', result: t('kyma-companion.introduction') },
+        {
+          data: {
+            answer: {
+              content: t('kyma-companion.introduction'),
+              next: '__end__',
+            },
+          },
+        },
       ],
       isLoading: false,
       suggestionsLoading: true,
     },
   ]);
-  const [errorOccured, setErrorOccured] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
@@ -43,6 +50,7 @@ export default function Chat() {
   const {
     initialSuggestions,
     initialSuggestionsLoading,
+    currentResource,
   } = usePromptSuggestions({ skip: chatHistory.length > 1 });
 
   const addMessage = ({ author, messageChunks, isLoading }: MessageType) => {
@@ -63,8 +71,8 @@ export default function Chat() {
     });
   };
 
-  const handleChatResponse = (response: any) => {
-    const isLoading = response?.step !== 'output';
+  const handleChatResponse = (response: MessageChunk) => {
+    const isLoading = response?.data?.answer?.next !== '__end__';
     if (!isLoading) {
       setFollowUpLoading();
       getFollowUpQuestions({
@@ -79,7 +87,7 @@ export default function Chat() {
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
       return prevMessages.slice(0, -1).concat({
-        author: 'ai',
+        ...latestMessage,
         messageChunks: latestMessage.messageChunks.concat(response),
         isLoading,
       });
@@ -87,7 +95,7 @@ export default function Chat() {
   };
 
   const setFollowUpLoading = () => {
-    setErrorOccured(false);
+    setError(null);
     updateLatestMessage({ suggestionsLoading: true });
   };
 
@@ -95,25 +103,42 @@ export default function Chat() {
     updateLatestMessage({ suggestions: questions, suggestionsLoading: false });
   };
 
-  const handleError = () => {
-    setErrorOccured(true);
+  const handleError = (error?: Error) => {
+    setError(error?.message ?? t('kyma-companion.error.subtitle'));
     setChatHistory(prevItems => prevItems.slice(0, -2));
   };
 
-  const sendPrompt = (prompt: string) => {
-    setErrorOccured(false);
+  const sendPrompt = (query: string) => {
+    setError(null);
     addMessage({
       author: 'user',
-      messageChunks: [{ step: 'output', result: prompt }],
+      messageChunks: [
+        {
+          data: {
+            answer: {
+              content: query,
+              next: '__end__',
+            },
+          },
+        },
+      ],
       isLoading: false,
     });
     getChatResponse({
-      prompt,
+      query,
+      namespace: currentResource?.namespace,
+      resourceType: currentResource?.resourceType,
+      groupVersion: currentResource?.groupVersion,
+      resourceName: currentResource?.resourceName,
       handleChatResponse,
       handleError,
       sessionID,
       clusterUrl: cluster.currentContext.cluster.cluster.server,
-      token: authData.token,
+      clusterAuth: {
+        token: authData?.token,
+        clientCertificateData: authData['client-certificate-data'],
+        clientKeyData: authData['client-key-data'],
+      },
       certificateAuthorityData:
         cluster.currentContext.cluster.cluster['certificate-authority-data'],
     });
@@ -140,7 +165,14 @@ export default function Chat() {
       if (initialSuggestionsLoading) {
         updateLatestMessage({
           messageChunks: [
-            { step: 'output', result: t('kyma-companion.introduction') },
+            {
+              data: {
+                answer: {
+                  content: t('kyma-companion.introduction'),
+                  next: '__end__',
+                },
+              },
+            },
           ],
         });
         setFollowUpLoading();
@@ -150,8 +182,12 @@ export default function Chat() {
           updateLatestMessage({
             messageChunks: [
               {
-                step: 'output',
-                result: t('kyma-companion.introduction-no-suggestions'),
+                data: {
+                  answer: {
+                    content: t('kyma-companion.introduction-no-suggestions'),
+                    next: '__end__',
+                  },
+                },
               },
             ],
           });
@@ -162,11 +198,11 @@ export default function Chat() {
   }, [initialSuggestions, initialSuggestionsLoading]);
 
   useEffect(() => {
-    const delay = errorOccured ? 500 : 0;
+    const delay = error ? 500 : 0;
     setTimeout(() => {
       scrollToBottom();
     }, delay);
-  }, [chatHistory, errorOccured]);
+  }, [chatHistory, error]);
 
   return (
     <FlexBox
@@ -203,8 +239,9 @@ export default function Chat() {
             />
           );
         })}
-        {errorOccured && (
+        {error && (
           <ErrorMessage
+            errorMessage={error}
             errorOnInitialMessage={chatHistory.length === 0}
             retryPrompt={() => {}}
           />

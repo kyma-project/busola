@@ -25,13 +25,13 @@
 
   .bold {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.925rem;
   }
 
   .highlighted {
     background-color: var(--sapContent_LabelColor);
     color: white;
-    padding: 0.2rem 0.25rem;
+    padding: 0.1rem 0.2rem;
     margin: 0.1rem 0;
     border-radius: 4px;
   }
@@ -39,5 +39,6 @@
   .text {
     line-height: 1.35;
     white-space: pre-line;
+    display: inline;
   }
 }

@@ -2,11 +2,13 @@ import { Button, Card, IllustratedMessage } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 interface ErrorMessageProps {
+  errorMessage: string;
   errorOnInitialMessage: boolean;
   retryPrompt: () => void;
 }
 
 export default function ErrorMessage({
+  errorMessage,
   errorOnInitialMessage,
   retryPrompt,
 }: ErrorMessageProps): JSX.Element {
@@ -19,7 +21,7 @@ export default function ErrorMessage({
           name="Connection"
           key="error-message"
           titleText={t('kyma-companion.error.title')}
-          subtitleText={t('kyma-companion.error.subtitle')}
+          subtitleText={errorMessage}
           className="sap-margin-top-small no-padding"
         >
           {errorOnInitialMessage && (
