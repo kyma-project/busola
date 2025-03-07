@@ -505,30 +505,20 @@ function Resource({
             protectedResourceWarning={protectedResourceWarning(resource, true)}
             readOnly={readOnly}
             disableEdit={disableEdit}
-            renderForm={props => {
-              console.log(
-                resource,
-                resourceType,
-                resourceUrl,
-                namespace,
-                resourceSchema,
-                props,
-              );
-              return (
-                <ErrorBoundary>
-                  <CreateResourceForm
-                    resource={resource}
-                    resourceType={resourceType}
-                    resourceUrl={`/api/v1/nodes/test-node`}
-                    namespace={namespace}
-                    resourceSchema={resourceSchema}
-                    editMode={true}
-                    stickyHeaderHeight={stickyHeaderHeight}
-                    {...props}
-                  />
-                </ErrorBoundary>
-              );
-            }}
+            renderForm={props => (
+              <ErrorBoundary>
+                <CreateResourceForm
+                  resource={resource}
+                  resourceType={resourceType}
+                  resourceUrl={`/api/v1/nodes/test-node`}
+                  namespace={namespace}
+                  resourceSchema={resourceSchema}
+                  editMode={true}
+                  stickyHeaderHeight={stickyHeaderHeight}
+                  {...props}
+                />
+              </ErrorBoundary>
+            )}
           />
         )}
       ></DynamicPageComponent>
