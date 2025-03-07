@@ -12,6 +12,7 @@ import {
   i18nDescriptionKey,
   ResourceDescription,
 } from 'resources/Events';
+import { pathSegment } from 'resources/ClusterEvents';
 
 function useEventUrl(resourceType, clusterView) {
   const { namespaceUrl, clusterUrl } = useUrl();
@@ -19,7 +20,7 @@ function useEventUrl(resourceType, clusterView) {
   if (clusterView) {
     return resource => {
       return clusterUrl(
-        `events/${resource.metadata.namespace}/${resource.metadata.name}?layout=TwoColumnsMidExpanded`,
+        `${pathSegment}/${resource.metadata.namespace}/${resource.metadata.name}?layout=TwoColumnsMidExpanded`,
       );
     };
   }

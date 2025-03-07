@@ -6,7 +6,8 @@ export const namespaced = false;
 export const apiGroup = '';
 export const apiVersion = 'v1';
 
-export const customPath = 'events/:namespace?/:resourceName?';
+export const pathSegment = 'clusterevents';
+export const customPath = `${pathSegment}/:namespace?/:resourceName?`;
 export const category = '';
 export const topLevelNode = true;
 export const icon = 'warning2';
