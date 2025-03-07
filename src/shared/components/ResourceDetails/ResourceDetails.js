@@ -30,7 +30,6 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
-import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -60,7 +59,7 @@ ResourceDetails.propTypes = {
   windowTitle: PropTypes.string,
   resourceGraphConfig: PropTypes.object,
   resourceSchema: PropTypes.object,
-  disableEdit: PropTypes.bool,
+  disableEdit: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   disableDelete: PropTypes.bool,
   showYamlTab: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.string,
@@ -81,7 +80,6 @@ export function ResourceDetails(props) {
 export const ResourceDetailContext = createContext(false);
 
 function ResourceDetailsRenderer(props) {
-  const jsonata = useJsonata({});
   const { loading = true, error, data: resource, silentRefetch } = useGet(
     props.resourceUrl,
     {
@@ -92,13 +90,6 @@ function ResourceDetailsRenderer(props) {
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
-  const prepareDisableEdit = () => {
-    if (props.disableEdit && typeof props.disableEdit === 'string') {
-      const [disableEdit] = jsonata(props.disableEdit, { resource });
-      return disableEdit ?? false;
-    }
-    return props.disableEdit;
-  };
 
   if (loading) return <Spinner />;
   if (error) {
@@ -134,7 +125,11 @@ function ResourceDetailsRenderer(props) {
           updateResourceMutation={updateResourceMutation}
           silentRefetch={silentRefetch}
           resource={resource}
-          disableEdit={prepareDisableEdit()}
+          disableEdit={
+            typeof props.disableEdit === 'function'
+              ? props.disableEdit(resource)
+              : props.disableEdit
+          }
         />
       )}
     </>

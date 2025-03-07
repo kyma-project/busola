@@ -69,6 +69,7 @@ data:
       - false
     - path: spec.supportedSigningAlgs
       widget: SimpleList
+      defaultExpanded: true
       children:
         - path: '[]'
           description: ''
