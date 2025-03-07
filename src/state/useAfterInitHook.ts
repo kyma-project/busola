@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { authDataState } from './authDataAtom';
 import { clusterState } from './clusterAtom';
+import { getSSOAuthToken, ssoDataState, useIsSSOEnabled } from './ssoDataAtom';
 
 const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
@@ -29,9 +30,11 @@ export function removePreviousPath() {
 export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
   const cluster = useRecoilValue(clusterState);
   const authData = useRecoilValue(authDataState);
+  const ssoData = useRecoilValue(ssoDataState);
   const [search] = useSearchParams();
   const navigate = useNavigate();
   const initDone = useRef(false);
+  const isSSOEnabled = useIsSSOEnabled();
 
   useEffect(() => {
     if (initDone.current === true) {
@@ -42,6 +45,9 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
       return;
     }
 
+    if (!ssoData && isSSOEnabled) {
+      return;
+    }
     // wait until gardener login is done
     if (window.location.pathname === '/gardener-login') {
       return;
@@ -77,5 +83,5 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
         }
       }
     }
-  }, [cluster, authData, search, navigate, handledKubeconfigId]);
+  }, [cluster, authData, search, navigate, handledKubeconfigId, ssoData]);
 }
