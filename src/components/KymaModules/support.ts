@@ -137,6 +137,51 @@ export const findModuleSpec = (
   );
 };
 
+type ModuleTemplateType = {
+  metadata: {
+    name: string;
+    namespace: string;
+    labels: Record<string, string>;
+  };
+  spec: {
+    associatedResources: any;
+    data: any;
+    channel: string;
+    version: string;
+  };
+};
+
+export type ModuleTemplateListType = {
+  items: ModuleTemplateType[];
+};
+
+export const findModuleTemplate = (
+  moduleTemplates: ModuleTemplateListType,
+  moduleName: string,
+  channel: string,
+  version: string,
+) => {
+  // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
+  const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
+    moduleTemplate =>
+      moduleName ===
+        moduleTemplate.metadata.labels[
+          'operator.kyma-project.io/module-name'
+        ] && moduleTemplate.spec.channel === channel,
+  );
+  const moduleWithInfo = moduleTemplates?.items?.find(
+    moduleTemplate =>
+      moduleName ===
+        moduleTemplate.metadata.labels[
+          'operator.kyma-project.io/module-name'
+        ] &&
+      !moduleTemplate.spec.channel &&
+      moduleTemplate.spec.version === version,
+  );
+
+  return moduleWithInfo ?? moduleTemplateWithoutInfo;
+};
+
 export const setChannel = (
   module: { name: string },
   channel: string,

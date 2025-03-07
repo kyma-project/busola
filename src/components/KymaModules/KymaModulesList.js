@@ -50,7 +50,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findModuleStatus } from './support';
+import { findModuleStatus, findModuleTemplate } from './support';
 import {
   checkIfAssociatedResourceLeft,
   deleteAssociatedResources,
@@ -140,28 +140,6 @@ export default function KymaModulesList({
   };
 
   const ModulesList = resource => {
-    const findModuleTemplate = (moduleName, channel, version) => {
-      // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
-      const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
-        moduleTemplate =>
-          moduleName ===
-            moduleTemplate.metadata.labels[
-              'operator.kyma-project.io/module-name'
-            ] && moduleTemplate.spec.channel === channel,
-      );
-      const moduleWithInfo = moduleTemplates?.items?.find(
-        moduleTemplate =>
-          moduleName ===
-            moduleTemplate.metadata.labels[
-              'operator.kyma-project.io/module-name'
-            ] &&
-          !moduleTemplate.spec.channel &&
-          moduleTemplate.spec.version === version,
-      );
-
-      return moduleWithInfo ?? moduleTemplateWithoutInfo;
-    };
-
     const findModuleReleaseMeta = moduleName => {
       return moduleReleaseMetas?.items.find(
         item => item.spec.moduleName === moduleName,
@@ -210,6 +188,7 @@ export default function KymaModulesList({
       const hasCrd = !!findCrd(resource?.resource?.kind);
 
       let hasModuleTpl = !!findModuleTemplate(
+        moduleTemplates,
         resource.name,
         resource.channel,
         resource.version,
@@ -230,6 +209,7 @@ export default function KymaModulesList({
       );
 
       const currentModuleTemplate = findModuleTemplate(
+        moduleTemplates,
         resource?.name,
         resource?.channel || kymaResource?.spec?.channel,
         resource?.version,
@@ -352,6 +332,7 @@ export default function KymaModulesList({
       // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
       if (!moduleStatus.resource) {
         const connectedModule = findModuleTemplate(
+          moduleTemplates,
           moduleName,
           moduleStatus.channel,
           moduleStatus.version,
@@ -433,9 +414,9 @@ export default function KymaModulesList({
       const fetchCounts = async () => {
         const resources = getAssociatedResources(
           chosenModuleIndex,
-          findModuleTemplate,
           selectedModules,
           kymaResource,
+          moduleTemplates,
         );
 
         const counts = await fetchResourceCounts(resources, fetchFn);
@@ -451,9 +432,9 @@ export default function KymaModulesList({
 
         const crUResources = getCRResource(
           chosenModuleIndex,
-          findModuleTemplate,
           selectedModules,
           kymaResource,
+          moduleTemplates,
         );
 
         const crUrl = await generateAssociatedResourcesUrls(
@@ -478,9 +459,9 @@ export default function KymaModulesList({
       const resourcesLeft = checkIfAssociatedResourceLeft(
         resourceCounts,
         chosenModuleIndex,
-        findModuleTemplate,
         selectedModules,
         kymaResource,
+        moduleTemplates,
       );
 
       setAssociatedResourceLeft(resourcesLeft);
@@ -527,9 +508,9 @@ export default function KymaModulesList({
                   </Text>
                   {getAssociatedResources(
                     chosenModuleIndex,
-                    findModuleTemplate,
                     selectedModules,
                     kymaResource,
+                    moduleTemplates,
                   ).length > 0 && (
                     <>
                       <MessageStrip
@@ -546,9 +527,9 @@ export default function KymaModulesList({
                       >
                         {getAssociatedResources(
                           chosenModuleIndex,
-                          findModuleTemplate,
                           selectedModules,
                           kymaResource,
+                          moduleTemplates,
                         ).map(assResource => {
                           const resourceCount =
                             resourceCounts[
