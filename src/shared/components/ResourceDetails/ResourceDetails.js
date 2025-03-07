@@ -59,7 +59,7 @@ ResourceDetails.propTypes = {
   windowTitle: PropTypes.string,
   resourceGraphConfig: PropTypes.object,
   resourceSchema: PropTypes.object,
-  disableEdit: PropTypes.bool,
+  disableEdit: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   disableDelete: PropTypes.bool,
   showYamlTab: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.string,
@@ -119,12 +119,17 @@ function ResourceDetailsRenderer(props) {
     <>
       {resource && (
         <Resource
+          {...props}
           key={resource.metadata.name}
           deleteResourceMutation={deleteResourceMutation}
           updateResourceMutation={updateResourceMutation}
           silentRefetch={silentRefetch}
           resource={resource}
-          {...props}
+          disableEdit={
+            typeof props.disableEdit === 'function'
+              ? props.disableEdit(resource)
+              : props.disableEdit
+          }
         />
       )}
     </>
