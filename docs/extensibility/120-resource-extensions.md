@@ -55,7 +55,7 @@ features:
   actions:
     disableCreate: true
     disableDelete: true
-    disableEdit: exampleResource.label = "read-only"
+    disableEdit: metadata.labels."operator.kyma-project.io/managed-by" = "infrastructure-manager"
 externalNodes:
   - category: My Category
     icon: course-book
