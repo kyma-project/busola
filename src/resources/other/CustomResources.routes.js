@@ -26,7 +26,7 @@ const CustomResource = React.lazy(() =>
   import('../CustomResourceDefinitions/CustomResources.details'),
 );
 
-export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
+export const ColumnWrapper = () => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -36,6 +36,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const { crdName, crName } = useParams();
   const { namespace, scopedUrl } = useUrl();
 
+  const defaultColumn = crName ? 'details' : 'list';
   const initialLayoutState = layout
     ? {
         layout: layout,
@@ -228,7 +229,7 @@ export const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
 export default (
   <Route
-    path="customresources"
+    path="customresources/:crdName?/:crName?"
     element={
       <Suspense fallback={<Spinner />}>
         <ColumnWrapper />

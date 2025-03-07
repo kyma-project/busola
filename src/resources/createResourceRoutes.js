@@ -24,18 +24,12 @@ export const createPath = (
 ) => {
   const { detailsView = false, pathSegment = '' } = config;
 
-  const details = detailsView ? '/:resourceName' : '';
+  const details = detailsView ? '/:resourceName?' : '';
 
   return `${pathSegment}${details}`;
 };
 
-const ColumnWrapper = ({
-  defaultColumn = 'list',
-  list,
-  details,
-  create,
-  ...props
-}) => {
+const ColumnWrapper = ({ list, details, create, ...props }) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
@@ -56,6 +50,8 @@ const ColumnWrapper = ({
     () => props.namespaceId ?? namespaceIdFromParams,
     [props.namespaceId, namespaceIdFromParams],
   );
+
+  const defaultColumn = resourceName ? 'details' : 'list';
 
   const initialLayoutState = layout
     ? {
@@ -210,22 +206,19 @@ export const createResourceRoutes = ({
   List = null,
   Details = null,
   Create = null,
-  namespaced = true,
   resourceType = '',
   resourceI18Key = '',
+  customPath = null,
   ...props
 }) => {
   const pathSegment = resourceType.toLowerCase();
 
-  const listPath = createPath({ pathSegment });
-  const detailsPath = Details
-    ? createPath({ pathSegment, detailsView: true })
-    : '';
+  const path = customPath || createPath({ pathSegment, detailsView: true });
 
   return (
-    <React.Fragment key={listPath}>
+    <React.Fragment key={path}>
       <Route
-        path={listPath}
+        path={path}
         exact
         element={
           <Suspense fallback={<Spinner />}>
@@ -243,27 +236,6 @@ export const createResourceRoutes = ({
           </Suspense>
         }
       />
-      {detailsPath ? (
-        <Route
-          path={detailsPath}
-          element={
-            <Suspense fallback={<Spinner />}>
-              <ColumnWrapper
-                resourceType={resourceType}
-                resourceI18Key={resourceI18Key}
-                hasDetailsView={true}
-                list={<List />}
-                details={<Details />}
-                create={Create ? <Create /> : null}
-                defaultColumn="details"
-                {...props}
-              >
-                <Details />
-              </ColumnWrapper>
-            </Suspense>
-          }
-        />
-      ) : null}
     </React.Fragment>
   );
 };
