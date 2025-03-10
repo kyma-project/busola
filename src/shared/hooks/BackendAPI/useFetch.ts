@@ -38,7 +38,7 @@ export const createFetchFn = ({
 }) => {
   const token = authData && 'token' in authData ? authData.token : undefined;
   checkForTokenExpiration(token);
-  checkForTokenExpiration(ssoData?.idToken, { reason: 'sso-expiration' });
+  checkForTokenExpiration(ssoData?.id_token);
 
   init = {
     ...init,

@@ -1,22 +1,24 @@
 import { jwtDecode } from 'jwt-decode';
-import { UserManager } from 'oidc-client-ts';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { User, UserManager } from 'oidc-client-ts';
+import {
+  atom,
+  RecoilState,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import { configurationAtom } from './configuration/configurationAtom';
 import { ConfigFeature } from './types';
 import { useEffect } from 'react';
 
-export type SsoDataState = {
-  idToken?: string;
-} | null;
+const SSO_KEY = 'SSO';
 
-const defaultValue: SsoDataState = getSSOAuthToken();
+const defaultValue: User = getSSOAuthData();
 
-export const ssoDataState: RecoilState<SsoDataState> = atom<SsoDataState>({
+export const ssoDataState: RecoilState<User> = atom<User>({
   key: 'ssoDataState',
   default: defaultValue,
 });
-
-const SSO_KEY = 'SSO';
 
 export function setSSOAuthData(data) {
   sessionStorage.setItem(SSO_KEY, JSON.stringify(data));
@@ -38,9 +40,8 @@ export function useSSOConfig() {
   return useRecoilValue(configurationAtom)?.features?.SSO_LOGIN;
 }
 
-export function useIsSSOEnabled() {
-  const ssoConfig = useRecoilValue(configurationAtom)?.features?.SSO_LOGIN;
-  return ssoConfig?.isEnabled === true;
+export function getIsSSOEnabled() {
+  return process.env.NODE_ENV !== 'development';
 }
 
 function createSSOAuth(ssoConfig: ConfigFeature) {
@@ -72,11 +73,10 @@ async function handleSSOLogin(ssoConfig, onAfterLogin, setSsoState) {
         ? storedUser
         : await userManager?.signinRedirectCallback(window.location.href);
 
-    console.log(user);
     userManager.events.addAccessTokenExpiring(async () => {
       const user = await userManager.signinSilent();
       setSSOAuthData(user);
-      setSsoState({ idToken: user?.id_token });
+      setSsoState(user);
     });
     userManager.events.addSilentRenewError(err => {
       console.warn('silent renew failed', err);
@@ -88,13 +88,13 @@ async function handleSSOLogin(ssoConfig, onAfterLogin, setSsoState) {
         if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
           const user = await userManager.signinSilent();
           setSSOAuthData(user);
-          setSsoState({ idToken: user?.id_token });
+          setSsoState(user);
         }
       }
     });
 
     setSSOAuthData(user);
-    setSsoState({ idToken: user?.id_token });
+    setSsoState(user);
 
     onAfterLogin(user);
   } catch (e) {
@@ -109,17 +109,17 @@ async function handleSSOLogin(ssoConfig, onAfterLogin, setSsoState) {
 
 export function useSSOLogin() {
   const ssoConfig = useSSOConfig();
-  const setSsoState = useSetRecoilState(ssoDataState);
-  const isSSOEnabled = useIsSSOEnabled();
+  const [ssoState, setSsoState] = useRecoilState(ssoDataState);
+  const isSSOEnabled = getIsSSOEnabled();
 
   useEffect(() => {
-    if (!isSSOEnabled || getSSOAuthData()?.idToken) {
+    if (!isSSOEnabled || getSSOAuthData()?.id_token || ssoState?.id_token) {
       return;
     }
 
     const onAfterLogin = user => {
       setSSOAuthData(user);
-      setSsoState({ idToken: user?.id_token });
+      setSsoState(user);
     };
 
     handleSSOLogin(ssoConfig, onAfterLogin, setSsoState);

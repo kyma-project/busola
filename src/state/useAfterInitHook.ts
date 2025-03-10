@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { authDataState } from './authDataAtom';
 import { clusterState } from './clusterAtom';
-import { getSSOAuthToken, ssoDataState, useIsSSOEnabled } from './ssoDataAtom';
+import { getSSOAuthToken, ssoDataState, getIsSSOEnabled } from './ssoDataAtom';
 
 const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
@@ -34,7 +34,7 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
   const [search] = useSearchParams();
   const navigate = useNavigate();
   const initDone = useRef(false);
-  const isSSOEnabled = useIsSSOEnabled();
+  const isSSOEnabled = getIsSSOEnabled();
 
   useEffect(() => {
     if (initDone.current === true) {
@@ -45,7 +45,7 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
       return;
     }
 
-    if (!ssoData && isSSOEnabled) {
+    if (isSSOEnabled && !ssoData) {
       return;
     }
     // wait until gardener login is done

@@ -22,7 +22,7 @@ import { clusterState } from 'state/clusterAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { ssoDataState } from '../../../state/ssoDataAtom';
+import { ssoDataState, getIsSSOEnabled } from '../../../state/ssoDataAtom';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
@@ -36,22 +36,23 @@ export const useResourceSchemas = () => {
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
   const { currentCluster } = clusterInfo;
-
+  const isSSOEnabled = getIsSSOEnabled();
   const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
   const [lastFetched, setLastFetched] = useRecoilState(openapiLastFetchedState);
 
   useEffect(() => {
     if (
       authData &&
-      ssoData &&
       activeClusterName === cluster?.contextName &&
       openApi?.state === 'hasError' &&
       !isClusterList
     ) {
-      notification.notifyError({
-        content: t('clusters.messages.connection-failed'),
-      });
-      navigate('/clusters');
+      if (!isSSOEnabled || ssoData) {
+        notification.notifyError({
+          content: t('clusters.messages.connection-failed'),
+        });
+        navigate('/clusters');
+      }
     }
   }, [
     activeClusterName,
@@ -62,6 +63,8 @@ export const useResourceSchemas = () => {
     navigate,
     t,
     notification,
+    ssoData,
+    isSSOEnabled,
   ]);
 
   useEffect(() => {

@@ -19,7 +19,7 @@ export function createAuthHeaders(auth: AuthDataState) {
 
 function createSSOHeader(ssoData: SsoDataState) {
   if (ssoData) {
-    return { Authorization: 'Bearer ' + ssoData.idToken };
+    return { Authorization: 'Bearer ' + ssoData.id_token };
   } else {
     return null;
   }
