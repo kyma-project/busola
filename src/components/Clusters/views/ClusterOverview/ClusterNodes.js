@@ -60,7 +60,6 @@ export function ClusterNodes({ data, error, loading }) {
       >
         {entry.metadata?.name}
       </Text>,
-      // CPU Usage
       cpu ? (
         <>
           <ProgressIndicatorWithPercentage
@@ -78,7 +77,6 @@ export function ClusterNodes({ data, error, loading }) {
       ) : (
         EMPTY_TEXT_PLACEHOLDER
       ),
-      // Memory Usage
       memory ? (
         <ProgressIndicatorWithPercentage
           leftTitle={memory.percentage}
@@ -94,19 +92,14 @@ export function ClusterNodes({ data, error, loading }) {
       ) : (
         EMPTY_TEXT_PLACEHOLDER
       ),
-      // Creation timestamp
       <ReadableCreationTimestamp
         timestamp={entry.metadata?.creationTimestamp}
       />,
-      // Status
       getStatus(entry.status),
-      // Worker pool
       entry.metadata?.labels?.['worker.gardener.cloud/pool'] ??
         EMPTY_TEXT_PLACEHOLDER,
-      // Machine Type
       entry.metadata?.labels?.['node.kubernetes.io/instance-type'] ??
         EMPTY_TEXT_PLACEHOLDER,
-      // Zone
       entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
         EMPTY_TEXT_PLACEHOLDER,
     ];
