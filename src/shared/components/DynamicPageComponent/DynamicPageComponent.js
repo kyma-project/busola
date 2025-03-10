@@ -22,6 +22,7 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import { useNavigate } from 'react-router-dom';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -110,6 +111,7 @@ export const DynamicPageComponent = ({
   className,
   customActionIfFormOpen,
 }) => {
+  const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { t } = useTranslation();
@@ -127,20 +129,16 @@ export const DynamicPageComponent = ({
   );
 
   const handleColumnClose = () => {
-    window.history.pushState(
-      window.history.state,
-      '',
-      layoutCloseUrl
-        ? layoutCloseUrl
-        : `${window.location.pathname.slice(
-            0,
-            window.location.pathname.lastIndexOf('/'),
-          )}${
-            layoutNumber === 'MidColumn' ||
-            layoutColumn?.showCreate?.resourceType
-              ? ''
-              : '?layout=TwoColumnsMidExpanded'
-          }`,
+    navigate(
+      layoutCloseUrl ??
+        `${window.location.pathname.slice(
+          0,
+          window.location.pathname.lastIndexOf('/'),
+        )}${
+          layoutNumber === 'MidColumn' || layoutColumn?.showCreate?.resourceType
+            ? ''
+            : '?layout=TwoColumnsMidExpanded'
+        }`,
     );
     layoutNumber === 'MidColumn'
       ? setLayoutColumn({
@@ -198,9 +196,7 @@ export const DynamicPageComponent = ({
                       ...layoutColumn,
                       layout: newLayout,
                     });
-                    window.history.pushState(
-                      window.history.state,
-                      '',
+                    navigate(
                       `${window.location.pathname}${
                         layoutColumn?.showCreate?.resourceType
                           ? ''
@@ -227,9 +223,7 @@ export const DynamicPageComponent = ({
                       ...layoutColumn,
                       layout: newLayout,
                     });
-                    window.history.pushState(
-                      window.history.state,
-                      '',
+                    navigate(
                       `${window.location.pathname}${
                         layoutColumn?.showCreate?.resourceType
                           ? ''

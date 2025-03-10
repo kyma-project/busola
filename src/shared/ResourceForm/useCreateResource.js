@@ -15,6 +15,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { useNavigate } from 'react-router-dom';
 
 export function useCreateResource({
   singularName,
@@ -30,6 +31,7 @@ export function useCreateResource({
   afterCreatedCustomMessage,
 }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const notification = useNotification();
   const getRequest = useSingleGet();
   const postRequest = usePost();
@@ -94,9 +96,7 @@ export function useCreateResource({
                 },
               },
         );
-        window.history.pushState(
-          window.history.state,
-          '',
+        navigate(
           `${scopedUrl(
             `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
               resource.metadata.name,

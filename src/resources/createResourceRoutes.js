@@ -1,7 +1,13 @@
 import React, { Suspense, useEffect, useMemo } from 'react';
 
 import { useRecoilState } from 'recoil';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
+import {
+  NavigationType,
+  Route,
+  useNavigationType,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -39,6 +45,7 @@ const ColumnWrapper = ({
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
+  const navigationType = useNavigationType();
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
@@ -57,40 +64,57 @@ const ColumnWrapper = ({
     [props.namespaceId, namespaceIdFromParams],
   );
 
-  const initialLayoutState = layout
-    ? {
-        layout: layout,
-        startColumn: {
-          resourceType: props.resourceType,
-          namespaceId: namespaceId,
-          apiGroup: props.apiGroup,
-          apiVersion: props.apiVersion,
-        },
-        midColumn: {
-          resourceName: resourceName,
-          resourceType: props.resourceType,
-          namespaceId: namespaceId,
-          apiGroup: props.apiGroup,
-          apiVersion: props.apiVersion,
-        },
-        endColumn: null,
-      }
-    : {
-        layout: layoutState?.layout,
-        startColumn: {
-          resourceType: props.resourceType,
-          namespaceId: namespaceId,
-          apiGroup: props.apiGroup,
-          apiVersion: props.apiVersion,
-        },
-        midColumn: null,
-        endColumn: null,
-      };
+  const newLayoutState = useMemo(() => {
+    return layout
+      ? {
+          layout: layout,
+          startColumn: {
+            resourceType: props.resourceType,
+            namespaceId: namespaceId,
+            apiGroup: props.apiGroup,
+            apiVersion: props.apiVersion,
+          },
+          midColumn: {
+            resourceName: resourceName,
+            resourceType: props.resourceType,
+            namespaceId: namespaceId,
+            apiGroup: props.apiGroup,
+            apiVersion: props.apiVersion,
+          },
+          endColumn: null,
+          showCreate: null,
+        }
+      : {
+          layout: 'OneColumn',
+          startColumn: {
+            resourceType: props.resourceType,
+            namespaceId: namespaceId,
+            apiGroup: props.apiGroup,
+            apiVersion: props.apiVersion,
+          },
+          midColumn: null,
+          endColumn: null,
+          showCreate: null,
+        };
+  }, [
+    layout,
+    props.resourceType,
+    namespaceId,
+    props.apiGroup,
+    props.apiVersion,
+    resourceName,
+  ]);
 
   useEffect(() => {
-    setLayoutColumn(initialLayoutState);
+    if (navigationType === NavigationType.Pop) {
+      setLayoutColumn(newLayoutState);
+    }
+  }, [newLayoutState, setLayoutColumn, navigationType]);
+
+  useEffect(() => {
+    setLayoutColumn(newLayoutState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [layout, namespaceId, resourceName, props.resourceType]);
+  }, []);
 
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,

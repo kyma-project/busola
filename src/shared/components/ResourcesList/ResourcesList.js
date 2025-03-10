@@ -26,6 +26,7 @@ import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
+import { useNavigate } from 'react-router-dom';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -243,6 +244,7 @@ export function ResourceListRenderer({
     protectedResourceWarning,
     protectedResourcePopover,
   } = useProtectedResources();
+  const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
@@ -367,12 +369,10 @@ export function ResourceListRenderer({
           },
     );
 
-    window.history.pushState(
-      window.history.state,
-      '',
-      `${
-        layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
-      }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
+    navigate(
+      `${layoutCloseCreateUrl ?? window.location.pathname}${
+        layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''
+      }`,
     );
   };
 
@@ -458,12 +458,12 @@ export function ResourceListRenderer({
           },
     );
 
-    window.history.pushState(
-      window.history.state,
-      '',
-      `${
-        layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
-      }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
+    navigate(
+      `${layoutCloseCreateUrl ?? window.location.pathname}${
+        layoutNumber === 'MidColumn'
+          ? '?layout=ThreeColumnsEndExpanded'
+          : '?layout=TwoColumnsMidExpanded'
+      }`,
     );
     setIsFormOpen({ formOpen: true });
   };

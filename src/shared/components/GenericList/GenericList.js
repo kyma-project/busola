@@ -385,9 +385,7 @@ export const GenericList = ({
                 layout: 'TwoColumnsMidExpanded',
               },
         );
-        window.history.pushState(
-          window.history.state,
-          '',
+        navigate(
           `${linkTo(selectedEntry)}?layout=${columnLayout ??
             'TwoColumnsMidExpanded'}`,
         );

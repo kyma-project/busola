@@ -416,11 +416,7 @@ export default function KymaModulesList({
         endColumn: null,
       });
 
-      window.history.pushState(
-        window.history.state,
-        '',
-        `${path}?layout=TwoColumnsMidExpanded`,
-      );
+      navigate(`${path}?layout=TwoColumnsMidExpanded`);
     };
 
     const [resourceCounts, setResourceCounts] = useState({});
