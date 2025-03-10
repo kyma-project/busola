@@ -510,7 +510,7 @@ function Resource({
                 <CreateResourceForm
                   resource={resource}
                   resourceType={resourceType}
-                  resourceUrl={`/api/v1/nodes/test-node`}
+                  resourceUrl={resourceUrl}
                   namespace={namespace}
                   resourceSchema={resourceSchema}
                   editMode={true}
