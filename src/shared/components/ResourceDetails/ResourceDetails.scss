@@ -39,7 +39,7 @@
   }
 }
 
-@container (min-width: 900px) {
+@container (min-width: 1100px) {
   .resource-details-container {
     grid-template-columns: fit-content(100%) max-content;
     gap: 0;
