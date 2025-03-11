@@ -46,6 +46,7 @@ export default function Chat() {
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     initialSuggestions,
@@ -221,6 +222,7 @@ export default function Chat() {
                 className="left-aligned sap-margin-begin-tiny"
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
+                setLoading={setLoading}
               />
               {index === chatHistory.length - 1 && !message.isLoading && (
                 <Bubbles
@@ -236,6 +238,7 @@ export default function Chat() {
               className="right-aligned sap-margin-end-tiny"
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}
+              setLoading={setLoading}
             />
           );
         })}
@@ -250,6 +253,7 @@ export default function Chat() {
       <div className="outer-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
         <div className="input-container">
           <TextArea
+            disabled={loading}
             className="full-width"
             growing
             growingMaxRows={10}
