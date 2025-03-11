@@ -84,6 +84,7 @@ export default function Chat() {
         certificateAuthorityData:
           cluster.currentContext.cluster.cluster['certificate-authority-data'],
       });
+      setLoading(false);
     }
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
@@ -111,6 +112,7 @@ export default function Chat() {
 
   const sendPrompt = (query: string) => {
     setError(null);
+    setLoading(true);
     addMessage({
       author: 'user',
       messageChunks: [
@@ -150,6 +152,7 @@ export default function Chat() {
     if (inputValue.length === 0) return;
     const prompt = inputValue;
     setInputValue('');
+    setLoading(true);
     sendPrompt(prompt);
   };
 
@@ -222,7 +225,6 @@ export default function Chat() {
                 className="left-aligned sap-margin-begin-tiny"
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
-                setLoading={setLoading}
               />
               {index === chatHistory.length - 1 && !message.isLoading && (
                 <Bubbles
@@ -238,7 +240,6 @@ export default function Chat() {
               className="right-aligned sap-margin-end-tiny"
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}
-              setLoading={setLoading}
             />
           );
         })}

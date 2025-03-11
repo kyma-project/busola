@@ -13,7 +13,6 @@ interface MessageProps {
   className: string;
   messageChunks: MessageChunk[];
   isLoading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface MessageChunk {
@@ -37,10 +36,8 @@ export default function Message({
   className,
   messageChunks,
   isLoading,
-  setLoading,
 }: MessageProps): JSX.Element {
   if (isLoading) {
-    setLoading(true);
     const chunksLength = messageChunks.length;
     return (
       <div className={'message loading ' + className}>
@@ -76,7 +73,7 @@ export default function Message({
   const segmentedText = segmentMarkdownText(
     messageChunks.slice(-1)[0]?.data?.answer?.content,
   );
-  setLoading(false);
+
   return (
     <div className={'message ' + className}>
       {segmentedText && (
