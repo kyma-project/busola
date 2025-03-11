@@ -16,7 +16,7 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import {
@@ -410,19 +410,24 @@ export default function KymaModulesList({
     const [allowForceDelete, setAllowForceDelete] = useState(false);
     const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
-    useEffect(() => {
-      const fetchCounts = async () => {
-        const resources = getAssociatedResources(
+    const associatedResources = useMemo(
+      () =>
+        getAssociatedResources(
           chosenModuleIndex,
           selectedModules,
           kymaResource,
           moduleTemplates,
-        );
+        ),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [chosenModuleIndex, moduleTemplates],
+    );
 
-        const counts = await fetchResourceCounts(resources, fetchFn);
+    useEffect(() => {
+      const fetchCounts = async () => {
+        const counts = await fetchResourceCounts(associatedResources, fetchFn);
 
         const urls = await generateAssociatedResourcesUrls(
-          resources,
+          associatedResources,
           fetchFn,
           clusterUrl,
           getScope,
@@ -453,21 +458,18 @@ export default function KymaModulesList({
 
       fetchCounts();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chosenModuleIndex]);
+    }, [associatedResources]);
 
     useEffect(() => {
       const resourcesLeft = checkIfAssociatedResourceLeft(
         resourceCounts,
-        chosenModuleIndex,
-        selectedModules,
-        kymaResource,
-        moduleTemplates,
+        associatedResources,
       );
 
       setAssociatedResourceLeft(resourcesLeft);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resourceCounts]);
+    }, [resourceCounts, associatedResources]);
 
     function getEntries(statusModules = [], specModules = []) {
       specModules.forEach(specItem => {
@@ -506,12 +508,7 @@ export default function KymaModulesList({
                       name: selectedModules[chosenModuleIndex]?.name,
                     })}
                   </Text>
-                  {getAssociatedResources(
-                    chosenModuleIndex,
-                    selectedModules,
-                    kymaResource,
-                    moduleTemplates,
-                  ).length > 0 && (
+                  {associatedResources.length > 0 && (
                     <>
                       <MessageStrip
                         design="Information"
@@ -525,12 +522,7 @@ export default function KymaModulesList({
                         mode="None"
                         separators="All"
                       >
-                        {getAssociatedResources(
-                          chosenModuleIndex,
-                          selectedModules,
-                          kymaResource,
-                          moduleTemplates,
-                        ).map(assResource => {
+                        {associatedResources.map(assResource => {
                           const resourceCount =
                             resourceCounts[
                               `${assResource.kind}-${assResource.group}-${assResource.version}`

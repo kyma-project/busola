@@ -191,19 +191,9 @@ export const fetchResourceCounts = async (
 
 export const checkIfAssociatedResourceLeft = (
   resourceCounts: Counts,
-  chosenModuleIndex: number,
-  selectedModules: any,
-  kymaResource: any,
-  moduleTemplates: ModuleTemplateListType,
+  associatedResources: Resource[],
 ) => {
-  const resources: Resource[] = getAssociatedResources(
-    chosenModuleIndex,
-    selectedModules,
-    kymaResource,
-    moduleTemplates,
-  );
-
-  for (const resource of resources) {
+  for (const resource of associatedResources) {
     if (
       resourceCounts[`${resource.kind}-${resource.group}-${resource.version}`] >
       0

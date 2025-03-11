@@ -8,7 +8,7 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { Route, useNavigate, useParams } from 'react-router-dom';
 
 import pluralize from 'pluralize';
@@ -148,17 +148,23 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
   const [allowForceDelete, setAllowForceDelete] = useState(false);
   const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
-  useEffect(() => {
-    const fetchCounts = async () => {
-      const resources = getAssociatedResources(
+  const associatedResources = useMemo(
+    () =>
+      getAssociatedResources(
         openedModuleIndex,
         activeKymaModules,
         kymaResource,
         moduleTemplates,
-      );
-      const counts = await fetchResourceCounts(resources, fetchFn);
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [openedModuleIndex, moduleTemplates],
+  );
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const counts = await fetchResourceCounts(associatedResources, fetchFn);
       const urls = await generateAssociatedResourcesUrls(
-        resources,
+        associatedResources,
         fetchFn,
         clusterUrl,
         getScope,
@@ -185,21 +191,18 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
     };
     fetchCounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openedModuleIndex]);
+  }, [associatedResources]);
 
   useEffect(() => {
     const resourcesLeft = checkIfAssociatedResourceLeft(
       resourceCounts,
-      openedModuleIndex,
-      activeKymaModules,
-      kymaResource,
-      moduleTemplates,
+      associatedResources,
     );
 
     setAssociatedResourceLeft(resourcesLeft);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resourceCounts]);
+  }, [resourceCounts, associatedResources]);
 
   let startColumnComponent = null;
 
@@ -228,12 +231,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
                   name: activeKymaModules[openedModuleIndex]?.name,
                 })}
               </Text>
-              {getAssociatedResources(
-                openedModuleIndex,
-                activeKymaModules,
-                kymaResource,
-                moduleTemplates,
-              ).length > 0 && (
+              {associatedResources.length > 0 && (
                 <>
                   <MessageStrip
                     design="Information"
@@ -247,12 +245,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
                     mode="None"
                     separators="All"
                   >
-                    {getAssociatedResources(
-                      openedModuleIndex,
-                      activeKymaModules,
-                      kymaResource,
-                      moduleTemplates,
-                    ).map(assResource => {
+                    {associatedResources.map(assResource => {
                       const resourceCount =
                         resourceCounts[
                           `${assResource.kind}-${assResource.group}-${assResource.version}`
