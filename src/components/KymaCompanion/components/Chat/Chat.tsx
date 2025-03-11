@@ -152,7 +152,6 @@ export default function Chat() {
     if (inputValue.length === 0) return;
     const prompt = inputValue;
     setInputValue('');
-    setLoading(true);
     sendPrompt(prompt);
   };
 
