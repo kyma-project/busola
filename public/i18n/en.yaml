@@ -913,7 +913,6 @@ node-details:
     internal-ip: Internal IP
     cpus: CPUs
     gib: GiB
-    kube-proxy-version: Kube proxy version
     kubelet-version: Kubelet version
     memory: Memory
     operating-system: Operating system
