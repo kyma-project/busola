@@ -199,7 +199,7 @@ export const DynamicPageComponent = ({
                     navigate(
                       `${window.location.pathname}${
                         layoutColumn?.showCreate?.resourceType
-                          ? ''
+                          ? '?layout=' + newLayout + '&showCreate=true'
                           : '?layout=' + newLayout
                       }`,
                     );
@@ -226,7 +226,7 @@ export const DynamicPageComponent = ({
                     navigate(
                       `${window.location.pathname}${
                         layoutColumn?.showCreate?.resourceType
-                          ? ''
+                          ? '?layout=' + newLayout + '&showCreate=true'
                           : '?layout=' + newLayout
                       }`,
                     );

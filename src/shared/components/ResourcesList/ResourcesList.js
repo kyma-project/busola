@@ -463,7 +463,7 @@ export function ResourceListRenderer({
         layoutNumber === 'MidColumn'
           ? '?layout=ThreeColumnsEndExpanded'
           : '?layout=TwoColumnsMidExpanded'
-      }`,
+      }&showCreate=true`,
     );
     setIsFormOpen({ formOpen: true });
   };

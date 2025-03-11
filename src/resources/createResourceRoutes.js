@@ -45,6 +45,7 @@ const ColumnWrapper = ({
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
+  const showCreate = searchParams.get('showCreate');
   const navigationType = useNavigationType();
   const { resourceListUrl } = useUrl();
 
@@ -74,15 +75,20 @@ const ColumnWrapper = ({
             apiGroup: props.apiGroup,
             apiVersion: props.apiVersion,
           },
-          midColumn: {
-            resourceName: resourceName,
-            resourceType: props.resourceType,
-            namespaceId: namespaceId,
-            apiGroup: props.apiGroup,
-            apiVersion: props.apiVersion,
-          },
+          midColumn:
+            !showCreate && resourceName
+              ? {
+                  resourceName: resourceName,
+                  resourceType: props.resourceType,
+                  namespaceId: namespaceId,
+                  apiGroup: props.apiGroup,
+                  apiVersion: props.apiVersion,
+                }
+              : null,
           endColumn: null,
-          showCreate: null,
+          showCreate: showCreate
+            ? { resourceType: props.resourceType, namespaceId: namespaceId }
+            : null,
         }
       : {
           layout: 'OneColumn',
@@ -98,6 +104,7 @@ const ColumnWrapper = ({
         };
   }, [
     layout,
+    showCreate,
     props.resourceType,
     namespaceId,
     props.apiGroup,

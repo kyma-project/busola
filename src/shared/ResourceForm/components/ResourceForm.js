@@ -117,6 +117,10 @@ export function ResourceForm({
         if (isResourceEdited.discardAction) isResourceEdited.discardAction();
       }
     }
+
+    return () => {
+      setIsFormOpen({ formOpen: false });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leavingForm]);
 
