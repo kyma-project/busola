@@ -46,6 +46,7 @@ export default function Chat() {
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     initialSuggestions,
@@ -83,6 +84,7 @@ export default function Chat() {
         certificateAuthorityData:
           cluster.currentContext.cluster.cluster['certificate-authority-data'],
       });
+      setLoading(false);
     }
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
@@ -110,6 +112,7 @@ export default function Chat() {
 
   const sendPrompt = (query: string) => {
     setError(null);
+    setLoading(true);
     addMessage({
       author: 'user',
       messageChunks: [
@@ -250,6 +253,7 @@ export default function Chat() {
       <div className="outer-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
         <div className="input-container">
           <TextArea
+            disabled={loading}
             className="full-width"
             growing
             growingMaxRows={10}
@@ -270,7 +274,8 @@ export default function Chat() {
           <Icon
             id="text-area-icon"
             name="paper-plane"
-            mode="Interactive"
+            mode={loading ? 'Image' : 'Interactive'}
+            design={loading ? 'NonInteractive' : 'Default'}
             onClick={onSubmitInput}
           />
         </div>
