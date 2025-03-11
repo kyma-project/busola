@@ -274,7 +274,8 @@ export default function Chat() {
           <Icon
             id="text-area-icon"
             name="paper-plane"
-            mode="Interactive"
+            mode={loading ? 'Image' : 'Interactive'}
+            design={loading ? 'NonInteractive' : 'Default'}
             onClick={onSubmitInput}
           />
         </div>
