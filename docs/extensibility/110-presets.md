@@ -13,25 +13,23 @@ The **presets** section contains a list of objects that define which preset and 
 ## Example
 
 ```yaml
-- name: template
+- name: Cash Delivery
   default: true
   value:
     metadata:
-      name: my-name
+      name: Delivery&Cash
     spec:
-      description: A set description
-- name: preset
+      description: Delivery with cash payment
+- name: Card Pickup
   value:
     metadata:
-      name: second-one
+      name: Card&Pickup
     spec:
       data: regex
-      description: A different description
-      items:
-        - name: item-1
-          value: 10
-        - name: item-2
-          value: 11
-        - name: item-3
-          value: 5
+      description: Self-pickup and card payment
+      orderDetails:
+        paymentMethod: CARD
+        realization: SELF-PICKUP
 ```
+
+<img src="./assets/Presets.png" alt="Example of a preset">
