@@ -79,6 +79,7 @@ export default function Chat() {
       getFollowUpQuestions({
         sessionID,
         handleFollowUpQuestions,
+        handleError,
         clusterUrl: cluster.currentContext.cluster.cluster.server,
         token: authData.token,
         certificateAuthorityData:
