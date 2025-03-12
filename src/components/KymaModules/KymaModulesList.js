@@ -136,6 +136,9 @@ export default function KymaModulesList({
       },
     });
 
+    navigate(
+      `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true`,
+    );
     setIsFormOpen({ formOpen: true });
   };
 

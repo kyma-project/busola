@@ -47,16 +47,16 @@ export function useCreateResource({
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
-      content: afterCreatedCustomMessage
-        ? afterCreatedCustomMessage
-        : t(
-            isEdit
-              ? 'common.create-form.messages.patch-success'
-              : 'common.create-form.messages.create-success',
-            {
-              resourceType: singularName,
-            },
-          ),
+      content:
+        afterCreatedCustomMessage ??
+        t(
+          isEdit
+            ? 'common.create-form.messages.patch-success'
+            : 'common.create-form.messages.create-success',
+          {
+            resourceType: singularName,
+          },
+        ),
     });
 
     if (!isEdit || resetLayout) {
@@ -68,6 +68,7 @@ export function useCreateResource({
           endColumn: null,
           showCreate: null,
         });
+        navigate(window.location.pathname, { replace: true });
       } else {
         const { group, version } = extractApiGroupVersion(resource?.apiVersion);
         setLayoutColumn(
@@ -96,6 +97,7 @@ export function useCreateResource({
                 },
               },
         );
+        console.log(nextQuery);
         navigate(
           `${scopedUrl(
             `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
