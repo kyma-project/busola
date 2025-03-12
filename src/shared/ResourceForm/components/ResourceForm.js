@@ -121,12 +121,6 @@ export function ResourceForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leavingForm]);
 
-  useEffect(() => {
-    return () => {
-      setIsFormOpen({ formOpen: false });
-    };
-  }, [setIsFormOpen]);
-
   const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,

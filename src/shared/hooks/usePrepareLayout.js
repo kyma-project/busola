@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 const switchToPrevLayout = layout => {
   switch (layout) {
@@ -90,6 +91,7 @@ export function usePrepareLayoutColumns({
   crName,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
@@ -180,11 +182,13 @@ export function usePrepareLayoutColumns({
   useEffect(() => {
     if (navigationType === NavigationType.Pop) {
       setLayoutColumn(newLayoutState);
+      setIsFormOpen({ formOpen: !!newLayoutState.showCreate });
     }
-  }, [newLayoutState, setLayoutColumn, navigationType]);
+  }, [newLayoutState, setLayoutColumn, setIsFormOpen, navigationType]);
 
   useEffect(() => {
     setLayoutColumn(newLayoutState);
+    setIsFormOpen({ formOpen: !!newLayoutState.showCreate });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
