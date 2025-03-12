@@ -44,6 +44,10 @@ if (gzipEnabled)
           // compression interferes with ReadableStreams. Small chunks are not transmitted for unknown reason
           return false;
         }
+        // Skip compression for streaming endpoint
+        if (req.originalUrl.startsWith('/backend/ai-chat/messages')) {
+          return false;
+        }
         // fallback to standard filter function
         return compression.filter(req, res);
       },

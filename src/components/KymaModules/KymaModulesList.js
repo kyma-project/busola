@@ -16,7 +16,7 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import {
@@ -50,7 +50,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findModuleStatus } from './support';
+import { findModuleStatus, findModuleTemplate } from './support';
 import {
   checkIfAssociatedResourceLeft,
   deleteAssociatedResources,
@@ -140,28 +140,6 @@ export default function KymaModulesList({
   };
 
   const ModulesList = resource => {
-    const findModuleTemplate = (moduleName, channel, version) => {
-      // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
-      const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
-        moduleTemplate =>
-          moduleName ===
-            moduleTemplate.metadata.labels[
-              'operator.kyma-project.io/module-name'
-            ] && moduleTemplate.spec.channel === channel,
-      );
-      const moduleWithInfo = moduleTemplates?.items?.find(
-        moduleTemplate =>
-          moduleName ===
-            moduleTemplate.metadata.labels[
-              'operator.kyma-project.io/module-name'
-            ] &&
-          !moduleTemplate.spec.channel &&
-          moduleTemplate.spec.version === version,
-      );
-
-      return moduleWithInfo ?? moduleTemplateWithoutInfo;
-    };
-
     const findModuleReleaseMeta = moduleName => {
       return moduleReleaseMetas?.items.find(
         item => item.spec.moduleName === moduleName,
@@ -210,6 +188,7 @@ export default function KymaModulesList({
       const hasCrd = !!findCrd(resource?.resource?.kind);
 
       let hasModuleTpl = !!findModuleTemplate(
+        moduleTemplates,
         resource.name,
         resource.channel,
         resource.version,
@@ -230,6 +209,7 @@ export default function KymaModulesList({
       );
 
       const currentModuleTemplate = findModuleTemplate(
+        moduleTemplates,
         resource?.name,
         resource?.channel || kymaResource?.spec?.channel,
         resource?.version,
@@ -352,6 +332,7 @@ export default function KymaModulesList({
       // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
       if (!moduleStatus.resource) {
         const connectedModule = findModuleTemplate(
+          moduleTemplates,
           moduleName,
           moduleStatus.channel,
           moduleStatus.version,
@@ -425,19 +406,24 @@ export default function KymaModulesList({
     const [allowForceDelete, setAllowForceDelete] = useState(false);
     const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
-    useEffect(() => {
-      const fetchCounts = async () => {
-        const resources = getAssociatedResources(
+    const associatedResources = useMemo(
+      () =>
+        getAssociatedResources(
           chosenModuleIndex,
-          findModuleTemplate,
           selectedModules,
           kymaResource,
-        );
+          moduleTemplates,
+        ),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [chosenModuleIndex, moduleTemplates],
+    );
 
-        const counts = await fetchResourceCounts(resources, fetchFn);
+    useEffect(() => {
+      const fetchCounts = async () => {
+        const counts = await fetchResourceCounts(associatedResources, fetchFn);
 
         const urls = await generateAssociatedResourcesUrls(
-          resources,
+          associatedResources,
           fetchFn,
           clusterUrl,
           getScope,
@@ -447,9 +433,9 @@ export default function KymaModulesList({
 
         const crUResources = getCRResource(
           chosenModuleIndex,
-          findModuleTemplate,
           selectedModules,
           kymaResource,
+          moduleTemplates,
         );
 
         const crUrl = await generateAssociatedResourcesUrls(
@@ -468,21 +454,18 @@ export default function KymaModulesList({
 
       fetchCounts();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chosenModuleIndex]);
+    }, [associatedResources]);
 
     useEffect(() => {
       const resourcesLeft = checkIfAssociatedResourceLeft(
         resourceCounts,
-        chosenModuleIndex,
-        findModuleTemplate,
-        selectedModules,
-        kymaResource,
+        associatedResources,
       );
 
       setAssociatedResourceLeft(resourcesLeft);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resourceCounts]);
+    }, [resourceCounts, associatedResources]);
 
     function getEntries(statusModules = [], specModules = []) {
       specModules.forEach(specItem => {
@@ -521,12 +504,7 @@ export default function KymaModulesList({
                       name: selectedModules[chosenModuleIndex]?.name,
                     })}
                   </Text>
-                  {getAssociatedResources(
-                    chosenModuleIndex,
-                    findModuleTemplate,
-                    selectedModules,
-                    kymaResource,
-                  ).length > 0 && (
+                  {associatedResources.length > 0 && (
                     <>
                       <MessageStrip
                         design="Information"
@@ -540,12 +518,7 @@ export default function KymaModulesList({
                         mode="None"
                         separators="All"
                       >
-                        {getAssociatedResources(
-                          chosenModuleIndex,
-                          findModuleTemplate,
-                          selectedModules,
-                          kymaResource,
-                        ).map(assResource => {
+                        {associatedResources.map(assResource => {
                           const resourceCount =
                             resourceCounts[
                               `${assResource.kind}-${assResource.group}-${assResource.version}`
