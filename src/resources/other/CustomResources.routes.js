@@ -33,7 +33,6 @@ export const ColumnWrapper = () => {
   const { t } = useTranslation();
 
   const { crdName, crName } = useParams();
-  console.log({ crdName, crName });
   const { namespace, scopedUrl } = useUrl();
 
   usePrepareLayoutColumns({

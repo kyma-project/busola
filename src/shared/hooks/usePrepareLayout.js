@@ -120,16 +120,15 @@ export function usePrepareLayoutColumns({
           apiGroup,
           apiVersion,
         },
-        midColumn:
-          !showCreate && resourceName
-            ? {
-                resourceName,
-                resourceType,
-                namespaceId,
-                apiGroup,
-                apiVersion,
-              }
-            : null,
+        midColumn: resourceName
+          ? {
+              resourceName,
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
         endColumn: crName
           ? {
               resourceName: crName,
@@ -139,7 +138,9 @@ export function usePrepareLayoutColumns({
               apiVersion,
             }
           : null,
-        showCreate: showCreate ? { resourceType, namespaceId } : null,
+        showCreate: showCreate
+          ? { resourceType: resourceName, namespaceId }
+          : null,
       };
     }
 
