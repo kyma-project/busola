@@ -44,16 +44,14 @@ export function ClusterNodes({ data, error, loading }) {
     t('cluster-overview.headers.cpu'),
     t('cluster-overview.headers.memory'),
     t('common.headers.created'),
-    t('common.headers.version'),
     t('common.headers.status'),
-    t('common.headers.region'),
+    t('node-details.pool'),
+    t('node-details.machine-type'),
     t('common.headers.zone'),
   ];
 
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
-    const region = entry?.metadata?.labels?.['topology.kubernetes.io/region'];
-    const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
     return [
       <Text
@@ -97,10 +95,13 @@ export function ClusterNodes({ data, error, loading }) {
       <ReadableCreationTimestamp
         timestamp={entry.metadata?.creationTimestamp}
       />,
-      entry.status?.nodeInfo?.kubeletVersion || EMPTY_TEXT_PLACEHOLDER,
       getStatus(entry.status),
-      region ?? EMPTY_TEXT_PLACEHOLDER,
-      zone ?? EMPTY_TEXT_PLACEHOLDER,
+      entry.metadata?.labels?.['worker.gardener.cloud/pool'] ??
+        EMPTY_TEXT_PLACEHOLDER,
+      entry.metadata?.labels?.['node.kubernetes.io/instance-type'] ??
+        EMPTY_TEXT_PLACEHOLDER,
+      entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
+        EMPTY_TEXT_PLACEHOLDER,
     ];
   };
 

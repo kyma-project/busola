@@ -86,10 +86,18 @@ export const ExtensibilityDetailsCore = ({
     return { visible, error };
   };
 
+  const prepareDisableEdit = resource => {
+    if (disableEdit && typeof disableEdit === 'string') {
+      const [isDisabled] = jsonata(disableEdit, { resource });
+      return typeof isDisabled === 'boolean' ? isDisabled : false;
+    }
+    return disableEdit;
+  };
+
   return (
     <ResourceDetails
       layoutCloseCreateUrl={layoutCloseCreateUrl}
-      disableEdit={disableEdit}
+      disableEdit={prepareDisableEdit}
       disableDelete={disableDelete}
       resourceTitle={resourceTitle}
       headerActions={headerActions}

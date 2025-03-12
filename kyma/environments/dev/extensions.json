@@ -12,6 +12,9 @@
     "source": "extensions/configuration"
   },
   {
+    "source": "extensions/configuration-cluster"
+  },
+  {
     "source": "https://raw.githubusercontent.com/kyma-project/eventing-manager/main/config/ui-extensions/subscriptions/subscriptions.yaml"
   },
   {
