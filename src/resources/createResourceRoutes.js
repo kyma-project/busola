@@ -1,13 +1,7 @@
-import React, { Suspense, useEffect, useMemo } from 'react';
+import React, { Suspense, useMemo } from 'react';
 
-import { useRecoilState } from 'recoil';
-import {
-  NavigationType,
-  Route,
-  useNavigationType,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { Route, useParams } from 'react-router-dom';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -24,6 +18,7 @@ import { useUrl } from 'hooks/useUrl';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { SchemaContext } from 'shared/helpers/schema';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
@@ -42,11 +37,7 @@ const ColumnWrapper = ({
   create,
   ...props
 }) => {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
-  const showCreate = searchParams.get('showCreate');
-  const navigationType = useNavigationType();
+  const layoutState = useRecoilValue(columnLayoutState);
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
@@ -65,63 +56,13 @@ const ColumnWrapper = ({
     [props.namespaceId, namespaceIdFromParams],
   );
 
-  const newLayoutState = useMemo(() => {
-    return layout
-      ? {
-          layout: layout,
-          startColumn: {
-            resourceType: props.resourceType,
-            namespaceId: namespaceId,
-            apiGroup: props.apiGroup,
-            apiVersion: props.apiVersion,
-          },
-          midColumn:
-            !showCreate && resourceName
-              ? {
-                  resourceName: resourceName,
-                  resourceType: props.resourceType,
-                  namespaceId: namespaceId,
-                  apiGroup: props.apiGroup,
-                  apiVersion: props.apiVersion,
-                }
-              : null,
-          endColumn: null,
-          showCreate: showCreate
-            ? { resourceType: props.resourceType, namespaceId: namespaceId }
-            : null,
-        }
-      : {
-          layout: 'OneColumn',
-          startColumn: {
-            resourceType: props.resourceType,
-            namespaceId: namespaceId,
-            apiGroup: props.apiGroup,
-            apiVersion: props.apiVersion,
-          },
-          midColumn: null,
-          endColumn: null,
-          showCreate: null,
-        };
-  }, [
-    layout,
-    showCreate,
-    props.resourceType,
-    namespaceId,
-    props.apiGroup,
-    props.apiVersion,
-    resourceName,
-  ]);
-
-  useEffect(() => {
-    if (navigationType === NavigationType.Pop) {
-      setLayoutColumn(newLayoutState);
-    }
-  }, [newLayoutState, setLayoutColumn, navigationType]);
-
-  useEffect(() => {
-    setLayoutColumn(newLayoutState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  usePrepareLayoutColumns({
+    resourceType: props.resourceType,
+    namespaceId: namespaceId,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
+    resourceName: resourceName,
+  });
 
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,
@@ -168,7 +109,7 @@ const ColumnWrapper = ({
 
   let startColumnComponent = null;
 
-  if (!layout && defaultColumn === 'details') {
+  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = detailsComponent;
   } else {
     startColumnComponent = listComponent;
@@ -216,18 +157,20 @@ const ColumnWrapper = ({
     <SchemaContext.Provider value={schema || null}>
       <FlexibleColumnLayout
         style={{ height: '100%' }}
-        layout={layoutState?.layout || 'OneColumn'}
+        layout={layoutState?.layout}
         startColumn={
           <div className="column-content">{startColumnComponent}</div>
         }
         midColumn={
           <>
             {!layoutState?.showCreate &&
-              (defaultColumn !== 'details' || layout) && (
+              (defaultColumn !== 'details' ||
+                layoutState.layout !== 'OneColumn') && (
                 <div className="column-content">{detailsMidColumn}</div>
               )}
             {!layoutState?.midColumn &&
-              (defaultColumn !== 'details' || layout) && (
+              (defaultColumn !== 'details' ||
+                layoutState.layout !== 'OneColumn') && (
                 <div className="column-content">{createMidColumn}</div>
               )}
           </>
