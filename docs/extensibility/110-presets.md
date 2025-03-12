@@ -32,4 +32,4 @@ The **presets** section contains a list of objects that define which preset and 
         realization: SELF-PICKUP
 ```
 
-<img src="./assets/Presets.png" alt="Example of a preset">
+<img src="./assets/Presets.png" alt="Example of a preset" width="40%">
