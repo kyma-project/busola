@@ -1,5 +1,4 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { PromptSuggestionsResponse } from './getPromptSuggestions';
 
 interface GetFollowUpQuestionsParams {
   sessionID?: string;
