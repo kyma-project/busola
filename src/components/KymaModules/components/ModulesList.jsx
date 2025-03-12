@@ -5,7 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import jsyaml from 'js-yaml';
 import { Button, Tag, Text } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
-import { findModuleStatus } from '../support';
+import { findModuleStatus, findModuleTemplate } from '../support';
 import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { ModulesListDeleteBox } from './ModulesListDeleteBox';
@@ -75,28 +75,6 @@ export const ModulesList = ({
     setIsFormOpen({ formOpen: true });
   };
 
-  const findModuleTemplate = (moduleName, channel, version) => {
-    // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
-    const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
-      moduleTemplate =>
-        moduleName ===
-          moduleTemplate.metadata.labels[
-            'operator.kyma-project.io/module-name'
-          ] && moduleTemplate.spec.channel === channel,
-    );
-    const moduleWithInfo = moduleTemplates?.items?.find(
-      moduleTemplate =>
-        moduleName ===
-          moduleTemplate.metadata.labels[
-            'operator.kyma-project.io/module-name'
-          ] &&
-        !moduleTemplate.spec.channel &&
-        moduleTemplate.spec.version === version,
-    );
-
-    return moduleWithInfo ?? moduleTemplateWithoutInfo;
-  };
-
   const findModuleReleaseMeta = moduleName => {
     return moduleReleaseMetas?.items.find(
       item => item.spec.moduleName === moduleName,
@@ -145,6 +123,7 @@ export const ModulesList = ({
     const hasCrd = !!findCrd(resource?.resource?.kind);
 
     let hasModuleTpl = !!findModuleTemplate(
+      moduleTemplates,
       resource.name,
       resource.channel,
       resource.version,
@@ -165,6 +144,7 @@ export const ModulesList = ({
     );
 
     const currentModuleTemplate = findModuleTemplate(
+      moduleTemplates,
       resource?.name,
       resource?.channel || kymaResource?.spec?.channel,
       resource?.version,
@@ -286,6 +266,7 @@ export const ModulesList = ({
     // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
     if (!moduleStatus.resource) {
       const connectedModule = findModuleTemplate(
+        moduleTemplates,
         moduleName,
         moduleStatus.channel,
         moduleStatus.version,
@@ -384,7 +365,7 @@ export const ModulesList = ({
             setKymaResourceState={setKymaResourceState}
             setInitialUnchangedResource={setInitialUnchangedResource}
             setChosenModuleIndex={setChosenModuleIndex}
-            findModuleTemplate={findModuleTemplate}
+            moduleTemplates={moduleTemplates}
           />,
           document.body,
         )}

@@ -35,7 +35,8 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') === true) cy.log('Skipping AMP submission for PR');
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
     else
       cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
@@ -52,7 +53,8 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') === true) cy.log('Skipping AMP submission for PR');
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
     else
       cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
@@ -136,7 +138,8 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') === true) cy.log('Skipping AMP submission for PR');
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
     else
       cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),

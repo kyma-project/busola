@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   CheckBox,
@@ -28,7 +28,7 @@ export const ModulesListDeleteBox = ({
   handleModuleUninstall,
   DeleteMessageBox,
   setChosenModuleIndex,
-  findModuleTemplate,
+  moduleTemplates,
   selectedModules,
   chosenModuleIndex,
   kymaResource,
@@ -49,19 +49,24 @@ export const ModulesListDeleteBox = ({
   const [allowForceDelete, setAllowForceDelete] = useState(false);
   const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
-  useEffect(() => {
-    const fetchCounts = async () => {
-      const resources = getAssociatedResources(
+  const associatedResources = useMemo(
+    () =>
+      getAssociatedResources(
         chosenModuleIndex,
-        findModuleTemplate,
         selectedModules,
         kymaResource,
-      );
+        moduleTemplates,
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chosenModuleIndex, moduleTemplates],
+  );
 
-      const counts = await fetchResourceCounts(resources, fetchFn);
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const counts = await fetchResourceCounts(associatedResources, fetchFn);
 
       const urls = await generateAssociatedResourcesUrls(
-        resources,
+        associatedResources,
         fetchFn,
         clusterUrl,
         getScope,
@@ -71,9 +76,9 @@ export const ModulesListDeleteBox = ({
 
       const crUResources = getCRResource(
         chosenModuleIndex,
-        findModuleTemplate,
         selectedModules,
         kymaResource,
+        moduleTemplates,
       );
 
       const crUrl = await generateAssociatedResourcesUrls(
@@ -92,21 +97,18 @@ export const ModulesListDeleteBox = ({
 
     fetchCounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chosenModuleIndex]);
+  }, [associatedResources]);
 
   useEffect(() => {
     const resourcesLeft = checkIfAssociatedResourceLeft(
       resourceCounts,
-      chosenModuleIndex,
-      findModuleTemplate,
-      selectedModules,
-      kymaResource,
+      associatedResources,
     );
 
     setAssociatedResourceLeft(resourcesLeft);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resourceCounts]);
+  }, [resourceCounts, associatedResources]);
 
   return (
     <DeleteMessageBox
@@ -127,12 +129,7 @@ export const ModulesListDeleteBox = ({
               name: selectedModules[chosenModuleIndex]?.name,
             })}
           </Text>
-          {getAssociatedResources(
-            chosenModuleIndex,
-            findModuleTemplate,
-            selectedModules,
-            kymaResource,
-          ).length > 0 && (
+          {associatedResources.length > 0 && (
             <>
               <MessageStrip
                 design="Information"
@@ -146,12 +143,7 @@ export const ModulesListDeleteBox = ({
                 mode="None"
                 separators="All"
               >
-                {getAssociatedResources(
-                  chosenModuleIndex,
-                  findModuleTemplate,
-                  selectedModules,
-                  kymaResource,
-                ).map(assResource => {
+                {associatedResources.map(assResource => {
                   const resourceCount =
                     resourceCounts[
                       `${assResource.kind}-${assResource.group}-${assResource.version}`
