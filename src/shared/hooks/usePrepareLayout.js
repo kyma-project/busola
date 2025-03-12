@@ -86,6 +86,8 @@ export function usePrepareLayoutColumns({
   apiGroup,
   apiVersion,
   resourceName,
+  isCustomResource,
+  crName,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const [searchParams] = useSearchParams();
@@ -94,40 +96,74 @@ export function usePrepareLayoutColumns({
   const navigationType = useNavigationType();
 
   const newLayoutState = useMemo(() => {
-    return layout
-      ? {
-          layout: layout,
-          startColumn: {
-            resourceType,
-            namespaceId,
-            apiGroup,
-            apiVersion,
-          },
-          midColumn:
-            !showCreate && resourceName
-              ? {
-                  resourceName,
-                  resourceType,
-                  namespaceId,
-                  apiGroup,
-                  apiVersion,
-                }
-              : null,
-          endColumn: null,
-          showCreate: showCreate ? { resourceType, namespaceId } : null,
-        }
-      : {
-          layout: 'OneColumn',
-          startColumn: {
-            resourceType,
-            namespaceId,
-            apiGroup,
-            apiVersion,
-          },
-          midColumn: null,
-          endColumn: null,
-          showCreate: null,
-        };
+    if (!layout) {
+      return {
+        layout: 'OneColumn',
+        startColumn: {
+          resourceType,
+          namespaceId,
+          apiGroup,
+          apiVersion,
+        },
+        midColumn: null,
+        endColumn: null,
+        showCreate: null,
+      };
+    }
+
+    if (isCustomResource) {
+      return {
+        layout: layout,
+        startColumn: {
+          resourceType,
+          namespaceId,
+          apiGroup,
+          apiVersion,
+        },
+        midColumn:
+          !showCreate && resourceName
+            ? {
+                resourceName,
+                resourceType,
+                namespaceId,
+                apiGroup,
+                apiVersion,
+              }
+            : null,
+        endColumn: crName
+          ? {
+              resourceName: crName,
+              resourceType: resourceName,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
+        showCreate: showCreate ? { resourceType, namespaceId } : null,
+      };
+    }
+
+    return {
+      layout: layout,
+      startColumn: {
+        resourceType,
+        namespaceId,
+        apiGroup,
+        apiVersion,
+      },
+      midColumn:
+        !showCreate && resourceName
+          ? {
+              resourceName,
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
+      endColumn: null,
+      showCreate: showCreate ? { resourceType, namespaceId } : null,
+    };
   }, [
     layout,
     showCreate,
@@ -136,6 +172,8 @@ export function usePrepareLayoutColumns({
     apiGroup,
     apiVersion,
     resourceName,
+    isCustomResource,
+    crName,
   ]);
 
   useEffect(() => {

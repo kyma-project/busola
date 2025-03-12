@@ -441,7 +441,7 @@ export function ResourceListRenderer({
             midColumn: layoutState?.midColumn,
             endColumn: null,
             showCreate: {
-              resourceType: resourceType,
+              resourceType: layoutState?.midColumn.resourceName,
               namespaceId: namespace,
             },
             layout: 'ThreeColumnsEndExpanded',

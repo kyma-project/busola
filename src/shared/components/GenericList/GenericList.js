@@ -385,10 +385,9 @@ export const GenericList = ({
                 layout: 'TwoColumnsMidExpanded',
               },
         );
-        navigate(
-          `${linkTo(selectedEntry)}?layout=${columnLayout ??
-            'TwoColumnsMidExpanded'}`,
-        );
+        const link = `${linkTo(selectedEntry)}?layout=${columnLayout ??
+          'TwoColumnsMidExpanded'}`;
+        navigate(link);
       }
     }
   };

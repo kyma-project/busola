@@ -76,22 +76,22 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         isFormOpen,
         setIsFormOpen,
         () => {
-          setLayoutColumn({
-            startColumn: {
-              resourceType: node?.resourceTypeCased,
-              resourceName: null,
-              namespaceId: namespaceId,
-              apiGroup: node?.apiGroup,
-              apiVersion: node?.apiVersion,
-            },
-            midColumn: null,
-            endColumn: null,
-            layout: 'OneColumn',
-          });
           const url = node.createUrlFn
             ? node.createUrlFn(urlGenerators)
             : scopedUrl(node.pathSegment);
           if (location?.pathname !== url) {
+            setLayoutColumn({
+              startColumn: {
+                resourceType: node?.resourceTypeCased,
+                resourceName: null,
+                namespaceId: namespaceId,
+                apiGroup: node?.apiGroup,
+                apiVersion: node?.apiVersion,
+              },
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
             navigate(url);
           }
         },
