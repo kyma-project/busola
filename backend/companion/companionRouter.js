@@ -163,8 +163,6 @@ async function handleChatMessage(req, res) {
 }
 
 async function handleFollowUpSuggestions(req, res) {
-  console.log('handleFollowUpSuggestions', req, res);
-
   const clusterUrl = req.headers['x-cluster-url'];
   const certificateAuthorityData =
     req.headers['x-cluster-certificate-authority-data'];
