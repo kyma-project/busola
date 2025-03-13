@@ -5,14 +5,26 @@ import { useSetRecoilState } from 'recoil';
 import jsyaml from 'js-yaml';
 import { Button, Tag, Text } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
-import { findModuleStatus, findModuleTemplate } from '../support';
+import {
+  findModuleStatus,
+  findModuleTemplate,
+  KymaResourceSpecModuleType,
+  KymaResourceStatusModuleType,
+  KymaResourceType,
+  ModuleTemplateListType,
+  ModuleTemplateType,
+} from '../support';
 import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { ModulesListDeleteBox } from './ModulesListDeleteBox';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import {
+  columnLayoutState,
+  ColumnState,
+  ShowCreate,
+} from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -20,9 +32,37 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
+type ModuleReleaseMetasType = {
+  items: { spec: { moduleName: string; beta: boolean } }[];
+};
+
+type CustomResourceDefinitionsType = {
+  items: {
+    metadata?: { name: string };
+    spec?: { names?: { kind?: string } };
+  }[];
+};
+
+type ModulesListProps = {
+  DeleteMessageBox: React.FC<any>;
+  resource: KymaResourceType;
+  moduleTemplates: ModuleTemplateListType;
+  resourceName: string;
+  selectedModules: { name: string }[];
+  kymaResource: KymaResourceType;
+  namespaced: boolean;
+  detailsOpen: boolean;
+  resourceUrl: string;
+  kymaResourceState: any;
+  setOpenedModuleIndex: any;
+  setKymaResourceState: any;
+  handleModuleUninstall: any;
+  setInitialUnchangedResource: any;
+  handleResourceDelete: (resourceData: any) => void;
+};
+
 export const ModulesList = ({
   DeleteMessageBox,
-  handleResourceDelete,
   resource,
   moduleTemplates,
   resourceName,
@@ -36,68 +76,77 @@ export const ModulesList = ({
   setKymaResourceState,
   handleModuleUninstall,
   setInitialUnchangedResource,
-}) => {
+  handleResourceDelete,
+}: ModulesListProps) => {
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
   });
   const { data: kymaExt } = useGetList(
-    ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
+    (ext: { metadata: { labels: Record<string, string> } }) =>
+      ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
   )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
     pollingInterval: 5000,
-  });
+  } as any);
   const { data: crds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
     {
       pollingInterval: 5000,
-    },
+    } as any,
   );
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-  const [chosenModuleIndex, setChosenModuleIndex] = useState(null);
+  const [chosenModuleIndex, setChosenModuleIndex] = useState<number | null>(
+    null,
+  );
 
   const handleShowAddModule = () => {
     setLayoutColumn({
       startColumn: {
         resourceType: 'kymamodules',
-      },
+      } as ColumnState,
       midColumn: null,
       endColumn: null,
       layout: 'TwoColumnsMidExpanded',
       showCreate: {
         resourceType: 'kymamodules',
         resourceUrl: resourceUrl,
-      },
+      } as ShowCreate,
     });
 
-    setIsFormOpen({ formOpen: true });
+    setIsFormOpen(state => ({ ...state, formOpen: true }));
   };
 
-  const findModuleReleaseMeta = moduleName => {
-    return moduleReleaseMetas?.items.find(
+  const findModuleReleaseMeta = (moduleName: string) => {
+    return (moduleReleaseMetas as ModuleReleaseMetasType | null)?.items.find(
       item => item.spec.moduleName === moduleName,
     );
   };
 
-  const findExtension = resourceKind => {
-    return kymaExt?.find(ext => {
+  const findExtension = (resourceKind: string) => {
+    return (kymaExt as { data: { general: string } }[] | null)?.find(ext => {
       const { resource: extensionResource } =
-        jsyaml.load(ext.data.general, { json: true }) || {};
+        jsyaml.load(ext.data.general, { json: true }) || ({} as any);
       return extensionResource.kind === resourceKind;
     });
   };
 
-  const checkBeta = (module, currentModuleReleaseMeta) => {
+  const checkBeta = (
+    module: ModuleTemplateType | undefined,
+    currentModuleReleaseMeta?: { spec: { moduleName: string; beta: boolean } },
+  ) => {
     return (
       module?.metadata.labels['operator.kyma-project.io/beta'] === 'true' ||
       currentModuleReleaseMeta?.spec?.beta === true
     );
   };
 
-  const findCrd = resourceKind => {
-    return crds?.items?.find(crd => crd.spec?.names?.kind === resourceKind);
+  const findCrd = (resourceKind: string) => {
+    return (crds as CustomResourceDefinitionsType | null)?.items?.find(
+      crd => crd.spec?.names?.kind === resourceKind,
+    );
   };
 
   const headerRenderer = () => [
@@ -110,7 +159,12 @@ export const ModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
-  const hasDetailsLink = resource => {
+  const hasDetailsLink = (resource: {
+    name: string;
+    channel: string;
+    version: string;
+    resource: { kind: string };
+  }) => {
     const isInstalled =
       selectedModules?.findIndex(kymaResourceModule => {
         return kymaResourceModule?.name === resource?.name;
@@ -134,7 +188,12 @@ export const ModulesList = ({
     );
   };
 
-  const rowRenderer = resource => {
+  const rowRenderer = (resource: {
+    name: string;
+    channel: string;
+    version: string;
+    resource: { kind: string };
+  }) => {
     const moduleStatus = findModuleStatus(kymaResource, resource.name);
     const showDetailsLink = hasDetailsLink(resource);
     const moduleIndex = kymaResource?.spec?.modules?.findIndex(
@@ -211,7 +270,7 @@ export const ModulesList = ({
       <StatusBadge
         key="installation-state"
         resourceKind="kymas"
-        type={resolveType(moduleStatus?.state)}
+        type={resolveType(moduleStatus?.state ?? '')}
         tooltipContent={moduleStatus?.message}
       >
         {moduleStatus?.state || 'Unknown'}
@@ -225,7 +284,7 @@ export const ModulesList = ({
     ];
   };
 
-  const customColumnLayout = resource => {
+  const customColumnLayout = (resource: { name: string }) => {
     return {
       resourceName: resource?.name,
       resourceType: pluralize(
@@ -242,13 +301,13 @@ export const ModulesList = ({
       name: t('common.buttons.delete'),
       tooltip: () => t('common.buttons.delete'),
       icon: 'delete',
-      disabledHandler: resource => {
+      disabledHandler: (resource: { name: string }) => {
         const index = selectedModules?.findIndex(kymaResourceModule => {
           return kymaResourceModule.name === resource.name;
         });
         return index < 0;
       },
-      handler: resource => {
+      handler: (resource: { name: string }) => {
         const index = selectedModules?.findIndex(kymaResourceModule => {
           return kymaResourceModule.name === resource.name;
         });
@@ -258,7 +317,19 @@ export const ModulesList = ({
     },
   ];
 
-  const handleClickResource = (moduleName, moduleStatus) => {
+  const handleClickResource = (
+    moduleName: string,
+    moduleStatus: {
+      name: string;
+      channel: string;
+      version: string;
+      resource: {
+        kind: string;
+        apiVersion: string;
+        metadata: { name: string; namespace: string };
+      };
+    },
+  ) => {
     setOpenedModuleIndex(
       selectedModules.findIndex(entry => entry.name === moduleName),
     );
@@ -271,13 +342,13 @@ export const ModulesList = ({
         moduleStatus.channel,
         moduleStatus.version,
       );
-      const moduleCr = connectedModule.spec.data;
+      const moduleCr = connectedModule?.spec?.data;
       moduleStatus.resource = {
-        kind: moduleCr.kind,
-        apiVersion: moduleCr.apiVersion,
+        kind: moduleCr?.kind,
+        apiVersion: moduleCr?.apiVersion,
         metadata: {
-          name: moduleCr.metadata.name,
-          namespace: moduleCr.metadata.namespace,
+          name: moduleCr?.metadata?.name,
+          namespace: moduleCr?.metadata?.namespace,
         },
       };
     }
@@ -317,7 +388,7 @@ export const ModulesList = ({
         namespaceId: moduleStatus?.resource?.metadata.namespace || '',
         apiGroup: group,
         apiVersion: version,
-      },
+      } as ColumnState,
       midColumn: {
         resourceType: hasExtension
           ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
@@ -326,7 +397,7 @@ export const ModulesList = ({
         namespaceId: moduleStatus?.resource?.metadata.namespace || '',
         apiGroup: group,
         apiVersion: version,
-      },
+      } as ColumnState,
       layout: 'TwoColumnsMidExpanded',
       endColumn: null,
     });
@@ -338,10 +409,13 @@ export const ModulesList = ({
     );
   };
 
-  function getEntries(statusModules = [], specModules = []) {
+  function getEntries(
+    statusModules: KymaResourceStatusModuleType[] = [],
+    specModules: KymaResourceSpecModuleType[] = [],
+  ) {
     specModules.forEach(specItem => {
       const exists = statusModules.some(
-        statusItem => statusItem.name === specItem.name,
+        statusItem => statusItem?.name === specItem?.name,
       );
 
       if (!exists) {
@@ -373,7 +447,8 @@ export const ModulesList = ({
         <UnmanagedModuleInfo kymaResource={kymaResource} />
       </div>
       <GenericList
-        actions={actions}
+        accessibleName={undefined}
+        actions={actions as any}
         customRowClick={handleClickResource}
         extraHeaderContent={[
           <Button
@@ -384,30 +459,35 @@ export const ModulesList = ({
             {t('common.buttons.add')}
           </Button>,
         ]}
-        customColumnLayout={customColumnLayout}
+        customColumnLayout={customColumnLayout as any}
         enableColumnLayout
         hasDetailsView
-        entries={getEntries(resource?.status?.modules, resource?.spec?.modules)}
+        entries={
+          getEntries(resource?.status?.modules, resource?.spec?.modules) as any
+        }
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         noHideFields={['Name', '', 'Namespace']}
         displayArrow
         title={'Modules'}
         sortBy={{
-          name: (a, b) => a.name?.localeCompare(b.name),
+          name: (a: { name: any }, b: { name: any }) =>
+            a.name?.localeCompare(b.name),
         }}
-        emptyListProps={{
-          image: 'TntComponents',
-          titleText: `${t('common.labels.no')} ${t(
-            'kyma-modules.title',
-          ).toLocaleLowerCase()}`,
-          subtitleText: t('kyma-modules.no-modules-description'),
-          url:
-            'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
-          buttonText: t('common.buttons.add'),
-          showButton: true,
-          onClick: handleShowAddModule,
-        }}
+        emptyListProps={
+          {
+            image: 'TntComponents',
+            titleText: `${t('common.labels.no')} ${t(
+              'kyma-modules.title',
+            ).toLocaleLowerCase()}`,
+            subtitleText: t('kyma-modules.no-modules-description'),
+            url:
+              'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
+            buttonText: t('common.buttons.add'),
+            showButton: true,
+            onClick: handleShowAddModule,
+          } as any
+        }
       />
     </React.Fragment>
   );

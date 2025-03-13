@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   CheckBox,
@@ -23,19 +23,33 @@ import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { cloneDeep } from 'lodash';
+import { ModuleTemplateListType } from '../support';
+
+type ModulesListDeleteBoxProps = {
+  DeleteMessageBox: React.FC<any>;
+  moduleTemplates: ModuleTemplateListType;
+  selectedModules: any;
+  chosenModuleIndex: number | null;
+  kymaResource: any;
+  kymaResourceState: any;
+  handleModuleUninstall: () => void;
+  setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setInitialUnchangedResource: React.Dispatch<React.SetStateAction<any>>;
+  setKymaResourceState: React.Dispatch<React.SetStateAction<any>>;
+};
 
 export const ModulesListDeleteBox = ({
-  handleModuleUninstall,
   DeleteMessageBox,
-  setChosenModuleIndex,
   moduleTemplates,
   selectedModules,
   chosenModuleIndex,
   kymaResource,
+  kymaResourceState,
+  handleModuleUninstall,
+  setChosenModuleIndex,
   setKymaResourceState,
   setInitialUnchangedResource,
-  kymaResourceState,
-}) => {
+}: ModulesListDeleteBoxProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const getScope = useGetScope();
