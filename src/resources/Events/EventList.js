@@ -20,7 +20,7 @@ function useEventUrl(resourceType, clusterView) {
   if (clusterView) {
     return resource => {
       return clusterUrl(
-        `${pathSegment}/${resource.metadata.namespace}/${resource.metadata.name}?layout=TwoColumnsMidExpanded`,
+        `${pathSegment}/${resource.metadata.namespace}/${resource.metadata.name}`,
       );
     };
   }
