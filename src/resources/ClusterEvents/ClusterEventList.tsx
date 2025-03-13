@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { EventsList } from 'shared/components/EventsList';
 import { ReactNode } from 'react';
 

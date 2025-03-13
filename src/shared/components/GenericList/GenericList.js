@@ -3,7 +3,7 @@ import { Table } from '../../../components/App/UI5Imports';
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +33,6 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
-import './GenericList.scss';
 
 const defaultSort = {
   name: nameLocaleSort,
