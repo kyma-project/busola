@@ -85,7 +85,6 @@ export default function Chat() {
         certificateAuthorityData:
           cluster.currentContext.cluster.cluster['certificate-authority-data'],
       });
-      setLoading(false);
     }
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
@@ -99,11 +98,13 @@ export default function Chat() {
 
   const setFollowUpLoading = () => {
     setError(null);
+    setLoading(true);
     updateLatestMessage({ suggestionsLoading: true });
   };
 
   const handleFollowUpQuestions = (questions: string[]) => {
     updateLatestMessage({ suggestions: questions, suggestionsLoading: false });
+    setLoading(false);
   };
 
   const handleError = (error?: Error) => {
