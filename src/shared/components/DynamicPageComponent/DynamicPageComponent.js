@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 import {
   Button,
-  FlexBox,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
-  Title,
-  TabContainer,
+  FlexBox,
   Tab,
+  TabContainer,
+  Title,
 } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -200,15 +200,12 @@ export const DynamicPageComponent = ({
                       ...layoutColumn,
                       layout: newLayout,
                     });
-                    window.history.pushState(
-                      window.history.state,
-                      '',
-                      `${window.location.pathname}${
-                        layoutColumn?.showCreate?.resourceType
-                          ? ''
-                          : '?layout=' + newLayout
-                      }`,
-                    );
+                    const link = `${window.location.pathname}${
+                      layoutColumn?.showCreate?.resourceType
+                        ? ''
+                        : '?layout=' + newLayout
+                    }`;
+                    navigate(link);
                   }}
                 />
               ) : null}
@@ -229,15 +226,12 @@ export const DynamicPageComponent = ({
                       ...layoutColumn,
                       layout: newLayout,
                     });
-                    window.history.pushState(
-                      window.history.state,
-                      '',
-                      `${window.location.pathname}${
-                        layoutColumn?.showCreate?.resourceType
-                          ? ''
-                          : '?layout=' + newLayout
-                      }`,
-                    );
+                    const link = `${window.location.pathname}${
+                      layoutColumn?.showCreate?.resourceType
+                        ? ''
+                        : '?layout=' + newLayout
+                    }`;
+                    navigate(link);
                   }}
                 />
               ) : null}
