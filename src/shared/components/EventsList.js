@@ -25,7 +25,6 @@ export function EventsList({
     isClusterView,
     updateTitle: false,
   };
-  console.log('list');
 
   return <EventListComponent {...eventsParams} />;
 }
