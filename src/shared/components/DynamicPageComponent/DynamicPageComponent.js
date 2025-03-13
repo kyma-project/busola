@@ -22,6 +22,7 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import { useNavigate } from 'react-router-dom';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -125,23 +126,9 @@ export const DynamicPageComponent = ({
     dynamicPageRef,
     tabContainerRef,
   );
+  const navigate = useNavigate();
 
   const handleColumnClose = () => {
-    window.history.pushState(
-      window.history.state,
-      '',
-      layoutCloseUrl
-        ? layoutCloseUrl
-        : `${window.location.pathname.slice(
-            0,
-            window.location.pathname.lastIndexOf('/'),
-          )}${
-            layoutNumber === 'MidColumn' ||
-            layoutColumn?.showCreate?.resourceType
-              ? ''
-              : '?layout=TwoColumnsMidExpanded'
-          }`,
-    );
     layoutNumber === 'MidColumn'
       ? setLayoutColumn({
           ...layoutColumn,
@@ -155,6 +142,21 @@ export const DynamicPageComponent = ({
           layout: 'TwoColumnsMidExpanded',
           showCreate: null,
         });
+
+    if (layoutCloseUrl) {
+      navigate(layoutCloseUrl);
+      return;
+    }
+
+    const link = `${window.location.pathname.slice(
+      0,
+      window.location.pathname.lastIndexOf('/'),
+    )}${
+      layoutNumber === 'MidColumn' || layoutColumn?.showCreate?.resourceType
+        ? ''
+        : '?layout=TwoColumnsMidExpanded'
+    }`;
+    navigate(link);
   };
 
   const actionsBar = (
