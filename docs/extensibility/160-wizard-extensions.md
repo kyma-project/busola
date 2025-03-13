@@ -12,15 +12,13 @@ The version is a string value that defines in which version the extension is con
 
 ## Available Parameters
 
-| Parameter                        | Required | Type                                         | Description                                                                                                                                          |
-| -------------------------------- | -------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **externalNodes**                | No       | string                                       | It is used to define optional links to external websites that appear in the navigation menu.                                                         |
-| **externalNodes.catagory**       | No       | string                                       | A name of the category.                                                                                                                              |
-| **externalNodes.scope**          | No       | string                                       | It can be `namespace` or `cluster`. It defaults to `cluster`.                                                                                        |
-| **externalNodes.icon**           | No       | string                                       | An icon that you can choose from the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview). |
-| **externalNodes.children**       | No       | string                                       | a list of child Nodes containing details about the links.                                                                                            |
-| **externalNodes.children.label** | No       | string                                       | a displayed label.                                                                                                                                   |
-| **externalNodes.children.link**  | No       | string, [JSONata](100-jsonata.md) expression | a link to an external website.                                                                                                                       |
+| Parameter             | Required | Type   | Description                                                                                                        |
+| --------------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------ |
+| **id**                | Yes      | string | An identifier used to reference the wizard to trigger its opening.                                                 |
+| **resources**         | Yes      | string | Provides information about the resources created by the wizard. This is a key value map with values consisting of: |
+| **resources.kind**    | Yes      | string | A Kubernetes resource kind.                                                                                        |
+| **resources.version** | No       | string | A Kubernetes resource version.                                                                                     |
+| **resources.group**   | No       | string | An API group used for all the requests. It's not provided for the Kubernetes resources in the core (legacy) group. |
 
 ### Example
 
