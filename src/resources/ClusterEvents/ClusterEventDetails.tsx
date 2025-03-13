@@ -1,7 +1,14 @@
 import { useParams } from 'react-router-dom';
 import EventDetails from 'resources/Events/EventDetails';
 
-export function ClusterEventDetails({ resourceName, ...props }) {
+export type ClusterEventDetailsProps = {
+  resourceName: string;
+};
+
+export default function ClusterEventDetails({
+  resourceName,
+  ...props
+}: ClusterEventDetailsProps) {
   const params = useParams();
   const namespace = params.namespace;
   const resourceUrl = `/api/v1/namespaces/${namespace}/events/${resourceName}`;

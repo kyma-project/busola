@@ -1,7 +1,6 @@
-import { ClusterEventList } from 'resources/ClusterEvents/ClusterEventList.js';
-import { ClusterEventDetails } from 'resources/ClusterEvents/ClusterEventDetails';
+import React from 'react';
 
-export { resourceType } from 'resources/Events';
+export { resourceType, ResourceDescription } from 'resources/Events';
 export const namespaced = false;
 export const apiGroup = '';
 export const apiVersion = 'v1';
@@ -12,5 +11,5 @@ export const category = '';
 export const topLevelNode = true;
 export const icon = 'warning2';
 
-export const List = ClusterEventList;
-export const Details = ClusterEventDetails;
+export const List = React.lazy(() => import('./ClusterEventList'));
+export const Details = React.lazy(() => import('./ClusterEventDetails'));
