@@ -12,6 +12,7 @@ export default function ClusterEventDetails({
   const params = useParams();
   const namespace = params.namespace;
   const resourceUrl = `/api/v1/namespaces/${namespace}/events/${resourceName}`;
+  console.log('details');
   return (
     <EventDetails
       {...props}

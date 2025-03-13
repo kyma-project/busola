@@ -2,7 +2,7 @@ import React from 'react';
 import { EventList as EventListComponent } from 'resources/Events/EventList';
 
 export function EventsList({
-  namespace,
+  namespace = null,
   filter,
   defaultType,
   hideInvolvedObjects,
@@ -25,6 +25,7 @@ export function EventsList({
     isClusterView,
     updateTitle: false,
   };
+  console.log('list');
 
   return <EventListComponent {...eventsParams} />;
 }

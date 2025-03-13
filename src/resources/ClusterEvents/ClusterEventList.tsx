@@ -13,11 +13,8 @@ export default function ClusterEventList({
   defaultType,
   hideInvolvedObjects,
 }: ListProps): ReactNode {
-  const params = useParams();
-  const namespace = params.namespace;
   return (
     <EventsList
-      namespace={namespace}
       isClusterView={true}
       filter={filter}
       defaultType={defaultType}
