@@ -17,13 +17,13 @@ The **presets** section contains a list of objects that define which preset and 
   default: true
   value:
     metadata:
-      name: Delivery&Cash
+      name: delivery-cash
     spec:
       description: Delivery with cash payment
 - name: Card Pickup
   value:
     metadata:
-      name: Card&Pickup
+      name: card-pickup
     spec:
       data: regex
       description: Self-pickup and card payment
@@ -32,4 +32,4 @@ The **presets** section contains a list of objects that define which preset and 
         realization: SELF-PICKUP
 ```
 
-<img src="./assets/Presets.png" alt="Example of a preset" style="width: 50%; border: 15px solid #D2D5D9;">
+<img src="./assets/Presets.png" alt="Example of a preset" width="50%">
