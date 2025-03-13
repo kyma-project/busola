@@ -354,7 +354,6 @@ export const GenericList = ({
           endColumn: null,
           layout: 'OneColumn',
         });
-
         navigate(linkTo(selectedEntry));
       } else {
         const { group, version } = extractApiGroupVersion(
