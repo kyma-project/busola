@@ -16,9 +16,6 @@ import { pathSegment } from 'resources/ClusterEvents';
 
 function useEventUrl(resourceType, clusterView) {
   const { namespaceUrl, clusterUrl } = useUrl();
-  // const resourceUrl = !clusterView
-  //   ? `/api/v1/namespaces/${namespace}/events`
-  //   : '/api/v1/events';
 
   if (clusterView) {
     return resource => {
