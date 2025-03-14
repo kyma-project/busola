@@ -53,11 +53,13 @@ type ModulesListProps = {
   namespaced: boolean;
   detailsOpen: boolean;
   resourceUrl: string;
-  kymaResourceState: any;
-  setOpenedModuleIndex: any;
-  setKymaResourceState: any;
-  handleModuleUninstall: any;
-  setInitialUnchangedResource: any;
+  kymaResourceState: KymaResourceType;
+  setOpenedModuleIndex: React.Dispatch<
+    React.SetStateAction<number | undefined>
+  >;
+  setKymaResourceState: React.Dispatch<React.SetStateAction<any>>;
+  handleModuleUninstall: () => void;
+  setInitialUnchangedResource: React.Dispatch<React.SetStateAction<any>>;
   handleResourceDelete: (resourceData: any) => void;
 };
 

@@ -23,15 +23,15 @@ import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { cloneDeep } from 'lodash';
-import { ModuleTemplateListType } from '../support';
+import { KymaResourceType, ModuleTemplateListType } from '../support';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
   moduleTemplates: ModuleTemplateListType;
-  selectedModules: any;
+  selectedModules: { name: string }[];
   chosenModuleIndex: number | null;
-  kymaResource: any;
-  kymaResourceState: any;
+  kymaResource: KymaResourceType;
+  kymaResourceState: KymaResourceType;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setInitialUnchangedResource: React.Dispatch<React.SetStateAction<any>>;
@@ -57,9 +57,9 @@ export const ModulesListDeleteBox = ({
   const deleteResourceMutation = useDelete();
   const fetchFn = useSingleGet();
 
-  const [resourceCounts, setResourceCounts] = useState({});
-  const [forceDeleteUrls, setForceDeleteUrls] = useState([]);
-  const [crUrls, setCrUrls] = useState([]);
+  const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});
+  const [forceDeleteUrls, setForceDeleteUrls] = useState<string[]>([]);
+  const [crUrls, setCrUrls] = useState<string[]>([]);
   const [allowForceDelete, setAllowForceDelete] = useState(false);
   const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
@@ -106,7 +106,7 @@ export const ModulesListDeleteBox = ({
 
       setResourceCounts(counts);
       setForceDeleteUrls(urls);
-      setCrUrls([crUrl]);
+      setCrUrls(crUrl);
     };
 
     fetchCounts();
@@ -140,7 +140,10 @@ export const ModulesListDeleteBox = ({
         <>
           <Text>
             {t('kyma-modules.delete-module', {
-              name: selectedModules[chosenModuleIndex]?.name,
+              name:
+                chosenModuleIndex != null
+                  ? selectedModules[chosenModuleIndex]?.name
+                  : '',
             })}
           </Text>
           {associatedResources.length > 0 && (
@@ -154,40 +157,43 @@ export const ModulesListDeleteBox = ({
               </MessageStrip>
               <List
                 headerText={t('kyma-modules.associated-resources')}
-                mode="None"
+                selectionMode="None"
                 separators="All"
               >
-                {associatedResources.map(assResource => {
-                  const resourceCount =
-                    resourceCounts[
-                      `${assResource.kind}-${assResource.group}-${assResource.version}`
-                    ];
-
-                  return (
-                    <ListItemStandard
-                      onClick={e => {
-                        e.preventDefault();
-                        handleItemClick(
-                          assResource.kind,
-                          assResource.group,
-                          assResource.version,
-                          clusterUrl,
-                          getScope,
-                          namespaceUrl,
-                          navigate,
-                        );
-                      }}
-                      type="Active"
-                      key={`${assResource.kind}-${assResource.group}-${assResource.version}`}
-                      additionalText={
-                        (resourceCount === 0 ? '0' : resourceCount) ||
-                        t('common.headers.loading')
-                      }
-                    >
-                      {pluralize(assResource?.kind)}
-                    </ListItemStandard>
-                  );
-                })}
+                {associatedResources.map(
+                  (associatedResource: {
+                    kind: string;
+                    group: string;
+                    version: string;
+                  }) => {
+                    const key = `${associatedResource.kind}-${associatedResource.group}-${associatedResource.version}`;
+                    const resourceCount = resourceCounts[key];
+                    return (
+                      <ListItemStandard
+                        onClick={e => {
+                          e.preventDefault();
+                          handleItemClick(
+                            associatedResource.kind,
+                            associatedResource.group,
+                            associatedResource.version,
+                            clusterUrl,
+                            getScope,
+                            namespaceUrl,
+                            navigate,
+                          );
+                        }}
+                        type="Active"
+                        key={key}
+                        additionalText={
+                          (resourceCount === 0 ? '0' : resourceCount) ||
+                          t('common.headers.loading')
+                        }
+                      >
+                        {pluralize(associatedResource?.kind)}
+                      </ListItemStandard>
+                    );
+                  },
+                )}
               </List>
               {associatedResourceLeft && (
                 <CheckBox
@@ -212,12 +218,18 @@ export const ModulesListDeleteBox = ({
           )}
         </>
       }
-      resourceTitle={selectedModules[chosenModuleIndex]?.name}
+      resourceTitle={
+        chosenModuleIndex != null
+          ? selectedModules[chosenModuleIndex]?.name
+          : ''
+      }
       deleteFn={() => {
         if (allowForceDelete && forceDeleteUrls.length > 0) {
           deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
         }
-        selectedModules.splice(chosenModuleIndex, 1);
+        if (chosenModuleIndex != null) {
+          selectedModules.splice(chosenModuleIndex, 1);
+        }
         setKymaResourceState({
           ...kymaResource,
           spec: {
