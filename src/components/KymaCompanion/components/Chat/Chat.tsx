@@ -31,7 +31,6 @@ type Props = {
   setParentLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export type RefreshRef = {
-  loading: () => boolean;
   refreshFn: () => void;
 };
 
@@ -68,35 +67,30 @@ export const Chat = forwardRef<RefreshRef, Props>((props, ref) => {
     currentResource,
   } = usePromptSuggestions({ skip: chatHistory.length > 1 });
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      loading: () => loading,
-      refreshFn: () => {
-        setChatHistory(() => {
-          return [
-            {
-              author: 'ai',
-              messageChunks: [
-                {
-                  data: {
-                    answer: {
-                      content: t('kyma-companion.introduction'),
-                      next: '__end__',
-                    },
+  useImperativeHandle(ref, () => ({
+    refreshFn: () => {
+      setChatHistory(() => {
+        return [
+          {
+            author: 'ai',
+            messageChunks: [
+              {
+                data: {
+                  answer: {
+                    content: t('kyma-companion.introduction'),
+                    next: '__end__',
                   },
                 },
-              ],
-              isLoading: false,
-              suggestionsLoading: true,
-            },
-          ];
-        });
-        handleFollowUpQuestions(initialSuggestions);
-      },
-    }),
-    [loading, initialSuggestions, t],
-  );
+              },
+            ],
+            isLoading: false,
+            suggestionsLoading: true,
+          },
+        ];
+      });
+      handleFollowUpQuestions(initialSuggestions);
+    },
+  }));
   const addMessage = ({ author, messageChunks, isLoading }: MessageType) => {
     setChatHistory(prevItems =>
       prevItems.concat({ author, messageChunks, isLoading }),
