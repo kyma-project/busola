@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
@@ -5,7 +6,7 @@ import {
   ShowKymaCompanion,
   showKymaCompanionState,
 } from 'state/companion/showKymaCompanionAtom';
-import Chat from './Chat/Chat';
+import { Chat, RefreshRef } from './Chat/Chat';
 import './KymaCompanion.scss';
 
 export default function KymaCompanion() {
@@ -13,6 +14,12 @@ export default function KymaCompanion() {
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
+  const ref = useRef<RefreshRef>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  function handleRefresh() {
+    ref.current?.refreshFn();
+  }
 
   return (
     <div id="companion_wrapper" className="sap-margin-tiny">
@@ -27,9 +34,10 @@ export default function KymaCompanion() {
               <Button
                 design="Transparent"
                 icon="restart"
+                disabled={loading}
                 tooltip={t('common.buttons.reset')}
                 className="action"
-                onClick={() => {}}
+                onClick={() => handleRefresh()}
               />
               <Button
                 design="Transparent"
@@ -57,7 +65,7 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <Chat />
+        <Chat ref={ref} setParentLoading={setLoading} />
       </Card>
     </div>
   );
