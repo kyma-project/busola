@@ -1,8 +1,8 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import pluralize from 'pluralize';
 import i18next from 'i18next';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { Route, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +13,7 @@ import { usePrepareCreateProps } from 'resources/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 const List = React.lazy(() => import('../Extensibility/ExtensibilityList'));
 const Details = React.lazy(() =>
@@ -20,55 +21,22 @@ const Details = React.lazy(() =>
 );
 const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
-const ColumnWrapper = ({
-  defaultColumn = 'list',
-  resourceType,
-  extension,
-  urlPath,
-}) => {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
+  const layoutState = useRecoilValue(columnLayoutState);
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
 
   const { namespaceId, resourceName } = useParams();
-  const initialLayoutState = layout
-    ? {
-        layout: layout,
-        startColumn: {
-          resourceName: null,
-          resourceType: urlPath ?? resourceType,
-          namespaceId: namespaceId,
-          apiGroup: extension?.general.resource.group,
-          apiVersion: extension?.general.resource.version,
-        },
-        midColumn: {
-          resourceName: resourceName,
-          resourceType: urlPath ?? resourceType,
-          namespaceId: namespaceId,
-          apiGroup: extension?.general.resource.group,
-          apiVersion: extension?.general.resource.version,
-        },
-        endColumn: null,
-      }
-    : {
-        layout: layoutState?.layout,
-        startColumn: {
-          resourceType: urlPath ?? resourceType,
-          namespaceId: namespaceId,
-          apiGroup: extension?.general.resource.group,
-          apiVersion: extension?.general.resource.version,
-        },
-        midColumn: null,
-        endColumn: null,
-      };
+  const defaultColumn = resourceName ? 'details' : 'list';
 
-  useEffect(() => {
-    setLayoutColumn(initialLayoutState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [layout, namespaceId, resourceName, resourceType]);
+  usePrepareLayoutColumns({
+    resourceType: urlPath ?? resourceType,
+    namespaceId: namespaceId,
+    apiGroup: extension?.general.resource.group,
+    apiVersion: extension?.general.resource.version,
+    resourceName: resourceName,
+  });
 
   const overrides = { resourceType: urlPath };
 
@@ -83,7 +51,7 @@ const ColumnWrapper = ({
   );
 
   let startColumnComponent = null;
-  if (!layout && defaultColumn === 'details') {
+  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
       <Details resourceName={resourceName} namespaceId={namespaceId} />
     );
@@ -171,7 +139,7 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
   return (
     <React.Fragment key={urlPath}>
       <Route
-        path={urlPath}
+        path={`${urlPath}/:resourceName?`}
         exact
         element={
           <Suspense fallback={<Spinner />}>
@@ -183,21 +151,6 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
           </Suspense>
         }
       />
-      {extension.details && (
-        <Route
-          path={`${urlPath}/:resourceName`}
-          exact
-          element={
-            <Suspense fallback={<Spinner />}>
-              <ColumnWrapper
-                defaultColumn="details"
-                resourceType={resourceType}
-                urlPath={urlPath}
-              />
-            </Suspense>
-          }
-        />
-      )}
     </React.Fragment>
   );
 };

@@ -15,6 +15,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { useNavigate } from 'react-router-dom';
 
 export function useCreateResource({
   singularName,
@@ -30,6 +31,7 @@ export function useCreateResource({
   afterCreatedCustomMessage,
 }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const notification = useNotification();
   const getRequest = useSingleGet();
   const postRequest = usePost();
@@ -45,16 +47,16 @@ export function useCreateResource({
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
-      content: afterCreatedCustomMessage
-        ? afterCreatedCustomMessage
-        : t(
-            isEdit
-              ? 'common.create-form.messages.patch-success'
-              : 'common.create-form.messages.create-success',
-            {
-              resourceType: singularName,
-            },
-          ),
+      content:
+        afterCreatedCustomMessage ??
+        t(
+          isEdit
+            ? 'common.create-form.messages.patch-success'
+            : 'common.create-form.messages.create-success',
+          {
+            resourceType: singularName,
+          },
+        ),
     });
 
     if (!isEdit || resetLayout) {
@@ -66,6 +68,7 @@ export function useCreateResource({
           endColumn: null,
           showCreate: null,
         });
+        navigate(window.location.pathname, { replace: true });
       } else {
         const { group, version } = extractApiGroupVersion(resource?.apiVersion);
         setLayoutColumn(
@@ -94,15 +97,12 @@ export function useCreateResource({
                 },
               },
         );
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${scopedUrl(
-            `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
-              resource.metadata.name,
-            )}`,
-          )}${nextQuery}`,
-        );
+        const link = `${scopedUrl(
+          `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+            resource.metadata.name,
+          )}`,
+        )}${nextQuery}`;
+        navigate(link);
       }
     }
   };

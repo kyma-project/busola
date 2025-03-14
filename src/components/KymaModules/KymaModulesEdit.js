@@ -36,6 +36,7 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
+import { useNavigate } from 'react-router-dom';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
@@ -106,6 +107,7 @@ const addChannelsToModules = moduleReleaseMetas => {
 
 export default function KymaModulesEdit({ resource, ...props }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
@@ -322,9 +324,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
         namespaceId: kymaResource.metadata.namespace,
       },
     });
-    window.history.pushState(
-      window.history.state,
-      '',
+    navigate(
       `${scopedUrl(`kymas/${encodeURIComponent(kymaResource.metadata.name)}`)}`,
     );
 

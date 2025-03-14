@@ -42,6 +42,7 @@ import {
   getCRResource,
   handleItemClick,
 } from 'components/KymaModules/deleteModulesHelpers';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -54,37 +55,19 @@ const KymaModulesAddModule = React.lazy(() =>
 const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { clusterUrl, namespaceUrl } = useUrl();
-  const layout = 'OneColumn';
   const url = namespaced
     ? namespaceUrl('kymamodules')
     : clusterUrl('kymamodules');
 
-  if (layoutState.layout === layout) {
-    window.history.pushState(window.history.state, '', url);
-  }
-
   const { resourceName, resourceType, namespace } = useParams();
 
-  const initialLayoutState = {
-    layout: layout,
-    startColumn: {
-      resourceType: resourceType,
-      namespaceId: namespace,
-    },
-    midColumn: {
-      resourceName: resourceName,
-      resourceType: resourceType,
-      namespaceId: namespace,
-    },
-    endColumn: null,
-  };
-
-  useEffect(() => {
-    if (layout && resourceName && resourceType) {
-      setLayoutColumn(initialLayoutState);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [layout, namespace, resourceName, resourceType]);
+  usePrepareLayoutColumns({
+    resourceType: resourceType,
+    namespaceId: namespace,
+    apiGroup: '',
+    apiVersion: 'v1',
+    resourceName: resourceName,
+  });
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceType: t('kyma-modules.title'),
@@ -334,7 +317,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
     </div>
   );
 
-  if (!layout && defaultColumn === 'details') {
+  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
       <ExtensibilityDetails
         layoutCloseCreateUrl={url}
@@ -418,16 +401,18 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
+      layout={layoutState?.layout}
       startColumn={<div className="column-content">{startColumnComponent}</div>}
       midColumn={
         <>
           {!layoutState?.showCreate &&
-            (defaultColumn !== 'details' || layout) && (
+            (defaultColumn !== 'details' ||
+              layoutState.layout !== 'OneColumn') && (
               <div className="column-content">{detailsMidColumn}</div>
             )}
           {!layoutState?.midColumn &&
-            (defaultColumn !== 'details' || layout) && (
+            (defaultColumn !== 'details' ||
+              layoutState.layout !== 'OneColumn') && (
               <div className="column-content">{createMidColumn}</div>
             )}
         </>

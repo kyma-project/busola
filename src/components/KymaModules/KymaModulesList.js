@@ -136,6 +136,9 @@ export default function KymaModulesList({
       },
     });
 
+    navigate(
+      `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true`,
+    );
     setIsFormOpen({ formOpen: true });
   };
 
@@ -397,11 +400,7 @@ export default function KymaModulesList({
         endColumn: null,
       });
 
-      window.history.pushState(
-        window.history.state,
-        '',
-        `${path}?layout=TwoColumnsMidExpanded`,
-      );
+      navigate(`${path}?layout=TwoColumnsMidExpanded`);
     };
 
     const [resourceCounts, setResourceCounts] = useState({});

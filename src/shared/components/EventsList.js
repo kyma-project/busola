@@ -6,6 +6,7 @@ export function EventsList({
   filter,
   defaultType,
   hideInvolvedObjects,
+  isClusterView,
 }) {
   const resourceUrl = namespace
     ? `/api/v1/namespaces/${namespace}/events`
@@ -21,6 +22,7 @@ export function EventsList({
     defaultType,
     hideInvolvedObjects,
     filter,
+    isClusterView,
     updateTitle: false,
   };
 

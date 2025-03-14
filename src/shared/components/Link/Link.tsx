@@ -27,12 +27,14 @@ export const Link = ({
   const navigate = useNavigate();
 
   function handleOnlick(resetLayout: any, url: any) {
-    if (resetLayout)
+    if (resetLayout) {
       setLayout({
+        startColumn: null,
         midColumn: null,
         endColumn: null,
         layout: 'OneColumn',
       });
+    }
     navigate(url);
   }
 
