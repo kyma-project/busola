@@ -5,24 +5,29 @@ import { useUrl } from 'hooks/useUrl';
 
 export type ClusterEventDetailsProps = {
   resourceName: string;
+  resourceUrl: string | undefined;
+  namespace: string | undefined;
 };
 
 export default function ClusterEventDetails({
   resourceName,
+  resourceUrl,
+  namespace,
   ...props
 }: ClusterEventDetailsProps) {
   const params = useParams();
-  const namespace = params.namespace;
-  const resourceUrl = `/api/v1/namespaces/${namespace}/events/${resourceName}`;
+  const overriddenNamespace = params.namespace ?? namespace;
+  const overriddenResourceUrl = resourceUrl
+    ? `/api/v1/namespaces/${overriddenNamespace}/events/${resourceName}`
+    : undefined;
   const { clusterUrl } = useUrl();
-
   return (
     <EventDetails
       {...props}
       layoutCloseCreateUrl={clusterUrl(pathSegment)}
-      isClusterView={true}
-      namespace={namespace}
-      resourceUrl={resourceUrl}
+      resourceName={resourceName}
+      namespace={overriddenNamespace}
+      resourceUrl={overriddenResourceUrl}
     />
   );
 }
