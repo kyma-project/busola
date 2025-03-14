@@ -278,7 +278,7 @@ export default function Chat() {
             name="paper-plane"
             mode={loading ? 'Image' : 'Interactive'}
             design={loading ? 'NonInteractive' : 'Default'}
-            onClick={onSubmitInput}
+            onClick={loading ? () => {} : onSubmitInput}
           />
         </div>
         <Text id="disclaimer">{t('kyma-companion.disclaimer')}</Text>
