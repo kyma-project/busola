@@ -15,7 +15,7 @@ export default function Bubbles({
   if (isLoading) {
     return (
       <BusyIndicator
-        className="suggestions-loading-indicator sap-margin-begin-tiny"
+        className="suggestions-loading-indicator sap-margin-begin-tiny ai-busy-indicator"
         active
         size="M"
         delay={0}

@@ -763,6 +763,7 @@ kyma-companion:
     suggestions: Suggestions
     input-placeholder: Ask about this resource
     error-message: Couldn't fetch suggestions. Please try again.
+    preparing-final-answer: Preparing the final answer
   error:
     title: Service is interrupted
     subtitle: A temporary interruption occured. Please try again.
