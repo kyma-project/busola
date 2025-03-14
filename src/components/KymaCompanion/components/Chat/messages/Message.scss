@@ -13,7 +13,7 @@
     gap: 16px;
 
     .loading-item {
-      gap: 8px;
+      gap: 0.5rem;
 
       .text {
         flex-grow: 1;
@@ -49,6 +49,5 @@
 }
 
 .ai-busy-indicator {
-  color: var(--sapAssistant_Color2);
   width: fit-content;
 }
