@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import {
+  NavigationType,
   useLocation,
   useNavigate,
   useNavigationType,
-  NavigationType,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
@@ -15,8 +15,8 @@ import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import {
-  SideNavigationSubItem,
   SideNavigationItem,
+  SideNavigationSubItem,
 } from '@ui5/webcomponents-react';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
@@ -83,22 +83,22 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
         isFormOpen,
         setIsFormOpen,
         () => {
-          setLayoutColumn({
-            startColumn: {
-              resourceType: node?.resourceTypeCased,
-              resourceName: null,
-              namespaceId: namespaceId,
-              apiGroup: node?.apiGroup,
-              apiVersion: node?.apiVersion,
-            },
-            midColumn: null,
-            endColumn: null,
-            layout: 'OneColumn',
-          });
           const url = node.createUrlFn
             ? node.createUrlFn(urlGenerators)
             : scopedUrl(node.pathSegment);
           if (location?.pathname !== url && isNavigatingForward) {
+            setLayoutColumn({
+              startColumn: {
+                resourceType: node?.resourceTypeCased,
+                resourceName: null,
+                namespaceId: namespaceId,
+                apiGroup: node?.apiGroup,
+                apiVersion: node?.apiVersion,
+              },
+              midColumn: null,
+              endColumn: null,
+              layout: 'OneColumn',
+            });
             navigate(url);
           }
         },

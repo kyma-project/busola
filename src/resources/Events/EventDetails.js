@@ -87,7 +87,9 @@ export default function EventDetails(props) {
       value: event => (
         <Link
           data-testid="details-link"
-          url={clusterUrl(`namespaces/${event.metadata.namespace}`)}
+          url={clusterUrl(
+            `namespaces/${event.metadata.namespace}/events/${props.resourceName}`,
+          )}
         >
           {event.metadata.namespace}
         </Link>
@@ -103,6 +105,7 @@ export default function EventDetails(props) {
 
   return (
     <ResourceDetails
+      {...props}
       customComponents={[Specification]}
       customColumns={customColumns}
       description={ResourceDescription}
@@ -112,7 +115,6 @@ export default function EventDetails(props) {
       hideLabels
       hideAnnotations
       hideLastUpdate
-      {...props}
     />
   );
 }

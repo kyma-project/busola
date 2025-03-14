@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 import {
   Button,
-  FlexBox,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
-  Title,
-  TabContainer,
+  FlexBox,
   Tab,
+  TabContainer,
+  Title,
 } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -22,6 +22,7 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import { useNavigate } from 'react-router-dom';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -125,23 +126,9 @@ export const DynamicPageComponent = ({
     dynamicPageRef,
     tabContainerRef,
   );
+  const navigate = useNavigate();
 
   const handleColumnClose = () => {
-    window.history.pushState(
-      window.history.state,
-      '',
-      layoutCloseUrl
-        ? layoutCloseUrl
-        : `${window.location.pathname.slice(
-            0,
-            window.location.pathname.lastIndexOf('/'),
-          )}${
-            layoutNumber === 'MidColumn' ||
-            layoutColumn?.showCreate?.resourceType
-              ? ''
-              : '?layout=TwoColumnsMidExpanded'
-          }`,
-    );
     layoutNumber === 'MidColumn'
       ? setLayoutColumn({
           ...layoutColumn,
@@ -155,6 +142,21 @@ export const DynamicPageComponent = ({
           layout: 'TwoColumnsMidExpanded',
           showCreate: null,
         });
+
+    if (layoutCloseUrl) {
+      navigate(layoutCloseUrl);
+      return;
+    }
+
+    const link = `${window.location.pathname.slice(
+      0,
+      window.location.pathname.lastIndexOf('/'),
+    )}${
+      layoutNumber === 'MidColumn' || layoutColumn?.showCreate?.resourceType
+        ? ''
+        : '?layout=TwoColumnsMidExpanded'
+    }`;
+    navigate(link);
   };
 
   const actionsBar = (
@@ -198,15 +200,12 @@ export const DynamicPageComponent = ({
                       ...layoutColumn,
                       layout: newLayout,
                     });
-                    window.history.pushState(
-                      window.history.state,
-                      '',
-                      `${window.location.pathname}${
-                        layoutColumn?.showCreate?.resourceType
-                          ? ''
-                          : '?layout=' + newLayout
-                      }`,
-                    );
+                    const link = `${window.location.pathname}${
+                      layoutColumn?.showCreate?.resourceType
+                        ? ''
+                        : '?layout=' + newLayout
+                    }`;
+                    navigate(link);
                   }}
                 />
               ) : null}
@@ -227,15 +226,12 @@ export const DynamicPageComponent = ({
                       ...layoutColumn,
                       layout: newLayout,
                     });
-                    window.history.pushState(
-                      window.history.state,
-                      '',
-                      `${window.location.pathname}${
-                        layoutColumn?.showCreate?.resourceType
-                          ? ''
-                          : '?layout=' + newLayout
-                      }`,
-                    );
+                    const link = `${window.location.pathname}${
+                      layoutColumn?.showCreate?.resourceType
+                        ? ''
+                        : '?layout=' + newLayout
+                    }`;
+                    navigate(link);
                   }}
                 />
               ) : null}
