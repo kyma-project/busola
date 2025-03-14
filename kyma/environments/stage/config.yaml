@@ -68,7 +68,7 @@ config:
     EXTENSIBILITY_CUSTOM_COMPONENTS:
       isEnabled: false
     EXTENSIBILITY_WIZARD:
-      isEnabled: true
+      isEnabled: false
     KYMA_COMPANION:
       isEnabled: false
     EVENTING:
