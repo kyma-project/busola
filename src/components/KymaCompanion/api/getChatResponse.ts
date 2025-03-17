@@ -1,39 +1,68 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { parseWithNestedBrackets } from '../utils/parseNestedBrackets';
+import { MessageChunk } from '../components/Chat/messages/Message';
+
+interface ClusterAuth {
+  token?: string;
+  clientCertificateData?: string;
+  clientKeyData?: string;
+}
 
 type GetChatResponseArgs = {
-  prompt: string;
-  handleChatResponse: (chunk: any) => void;
-  handleError: () => void;
+  query: string;
+  namespace?: string;
+  resourceType: string;
+  groupVersion?: string;
+  resourceName?: string;
   sessionID: string;
+  handleChatResponse: (chunk: MessageChunk) => void;
+  handleError: (error?: Error) => void;
   clusterUrl: string;
-  token: string;
+  clusterAuth: ClusterAuth;
   certificateAuthorityData: string;
 };
 
 export default async function getChatResponse({
-  prompt,
+  query,
+  namespace = '',
+  resourceType,
+  groupVersion = '',
+  resourceName = '',
+  sessionID,
   handleChatResponse,
   handleError,
-  sessionID,
   clusterUrl,
-  token,
+  clusterAuth,
   certificateAuthorityData,
 }: GetChatResponseArgs): Promise<void> {
   const { backendAddress } = getClusterConfig();
-  const url = `${backendAddress}/api/v1/namespaces/ai-core/services/http:ai-backend-clusterip:5000/proxy/api/v1/chat`;
-  const payload = { question: prompt, session_id: sessionID };
-  const k8sAuthorization = `Bearer ${token}`;
+  const url = `${backendAddress}/ai-chat/messages`;
+  const payload = {
+    query,
+    namespace,
+    resourceType,
+    groupVersion,
+    resourceName,
+  };
+
+  const headers: Record<string, string> = {
+    Accept: 'text/event-stream',
+    'Content-Type': 'application/json',
+    'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
+    'X-Cluster-Url': clusterUrl,
+    'Session-Id': sessionID,
+  };
+
+  if (clusterAuth?.token) {
+    headers['X-K8s-Authorization'] = clusterAuth?.token;
+  } else if (clusterAuth?.clientCertificateData && clusterAuth?.clientKeyData) {
+    headers['X-Client-Certificate-Data'] = clusterAuth?.clientCertificateData;
+    headers['X-Client-Key-Data'] = clusterAuth?.clientKeyData;
+  } else {
+    throw new Error('Missing authentication credentials');
+  }
 
   fetch(url, {
-    headers: {
-      accept: 'application/json',
-      'content-type': 'application/json',
-      'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-      'X-Cluster-Url': clusterUrl,
-      'X-K8s-Authorization': k8sAuthorization,
-      'X-User': sessionID,
-    },
+    headers,
     body: JSON.stringify(payload),
     method: 'POST',
   })
@@ -58,7 +87,7 @@ function readChunk(
   reader: ReadableStreamDefaultReader<Uint8Array>,
   decoder: TextDecoder,
   handleChatResponse: (chunk: any) => void,
-  handleError: () => void,
+  handleError: (error?: Error) => void,
   sessionID: string,
 ) {
   reader
@@ -67,17 +96,13 @@ function readChunk(
       if (done) {
         return;
       }
-      // Also handles the rare case of two chunks being sent at once
       const receivedString = decoder.decode(value, { stream: true });
-      const chunks = parseWithNestedBrackets(receivedString).map(chunk => {
-        return JSON.parse(chunk);
-      });
-      chunks.forEach(chunk => {
-        if ('error' in chunk) {
-          throw new Error(chunk.error);
-        }
-        handleChatResponse(chunk);
-      });
+      const chunk = JSON.parse(receivedString);
+      if (chunk?.data?.error) {
+        handleError(chunk.data.error);
+        return;
+      }
+      handleChatResponse(chunk);
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
     .catch(error => {

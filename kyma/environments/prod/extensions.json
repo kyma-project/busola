@@ -9,6 +9,9 @@
     "source": "extensions/configuration"
   },
   {
+    "source": "extensions/configuration-cluster"
+  },
+  {
     "source": "extensions/service-management"
   },
   {

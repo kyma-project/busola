@@ -8,7 +8,7 @@ interface GetPromptSuggestionsParams {
   resourceName?: string;
 }
 
-interface PromptSuggestionsResponse {
+export interface PromptSuggestionsResponse {
   promptSuggestions: string[];
   conversationId: string;
 }
