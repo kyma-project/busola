@@ -54,8 +54,8 @@ description: See the {{[docs](https://github.com/kyma-project/busola)}} for more
 filter: "$filter(data, function($data) {$data.type = 'Opaque'})"
 features:
   actions:
-    disableCreate: true
-    disableDelete: true
+    disableCreate: false
+    disableDelete: false
     disableEdit: metadata.labels."operator.kyma-project.io/managed-by" = "infrastructure-manager"
 externalNodes:
   - category: Pizza Recipes
