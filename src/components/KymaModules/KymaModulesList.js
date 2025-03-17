@@ -17,20 +17,14 @@ import { useModuleTemplatesQuery } from './kymaModulesQueries';
 import { ModulesList } from './components/ModulesList';
 
 export default function KymaModulesList({
-  DeleteMessageBox,
-  handleResourceDelete,
-  handleModuleUninstall,
-  setKymaResourceState,
-  setInitialUnchangedResource,
   resourceName,
   resourceUrl,
   kymaResource,
   kymaResourceLoading,
-  kymaResourceState,
   selectedModules,
-  setOpenedModuleIndex,
-  detailsOpen,
   namespaced,
+  setOpenedModuleIndex,
+  handleResourceDelete,
 }) {
   const { t } = useTranslation();
   const [
@@ -73,21 +67,15 @@ export default function KymaModulesList({
       customComponents={[
         resource => (
           <ModulesList
-            DeleteMessageBox={DeleteMessageBox}
-            handleResourceDelete={handleResourceDelete}
             resource={resource}
             moduleTemplates={moduleTemplates}
             resourceName={resourceName}
             selectedModules={selectedModules}
             kymaResource={kymaResource}
             namespaced={namespaced}
-            detailsOpen={detailsOpen}
             resourceUrl={resourceUrl}
-            kymaResourceState={kymaResourceState}
             setOpenedModuleIndex={setOpenedModuleIndex}
-            setKymaResourceState={setKymaResourceState}
-            handleModuleUninstall={handleModuleUninstall}
-            setInitialUnchangedResource={setInitialUnchangedResource}
+            handleResourceDelete={handleResourceDelete}
           />
         ),
       ]}

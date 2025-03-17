@@ -24,6 +24,8 @@ import pluralize from 'pluralize';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { cloneDeep } from 'lodash';
 import { KymaResourceType, ModuleTemplateListType } from '../support';
+import { SetterOrUpdater } from 'recoil';
+import { ColumnLayoutState } from 'state/columnLayoutAtom';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
@@ -32,19 +34,23 @@ type ModulesListDeleteBoxProps = {
   chosenModuleIndex: number | null;
   kymaResource: KymaResourceType;
   kymaResourceState: KymaResourceType;
+  detailsOpen: boolean;
+  setLayoutColumn: SetterOrUpdater<ColumnLayoutState>;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setInitialUnchangedResource: React.Dispatch<React.SetStateAction<any>>;
   setKymaResourceState: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const ModulesListDeleteBox = ({
+export const ModulesDeleteBox = ({
   DeleteMessageBox,
   moduleTemplates,
   selectedModules,
   chosenModuleIndex,
   kymaResource,
   kymaResourceState,
+  detailsOpen,
+  setLayoutColumn,
   handleModuleUninstall,
   setChosenModuleIndex,
   setKymaResourceState,
@@ -106,7 +112,7 @@ export const ModulesListDeleteBox = ({
 
       setResourceCounts(counts);
       setForceDeleteUrls(urls);
-      setCrUrls(crUrl);
+      setCrUrls(Array.isArray(crUrl) ? crUrl : [crUrl]);
     };
 
     fetchCounts();
@@ -239,6 +245,14 @@ export const ModulesListDeleteBox = ({
         });
         handleModuleUninstall();
         setInitialUnchangedResource(cloneDeep(kymaResourceState));
+        if (detailsOpen) {
+          setLayoutColumn({
+            layout: 'OneColumn',
+            startColumn: null,
+            midColumn: null,
+            endColumn: null,
+          });
+        }
         if (allowForceDelete && forceDeleteUrls.length > 0) {
           deleteCrResources(deleteResourceMutation, crUrls);
         }

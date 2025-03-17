@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import jsyaml from 'js-yaml';
@@ -16,7 +15,6 @@ import {
 } from '../support';
 import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
 import { ModuleStatus, resolveType } from './ModuleStatus';
-import { ModulesListDeleteBox } from './ModulesListDeleteBox';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
@@ -44,40 +42,28 @@ type CustomResourceDefinitionsType = {
 };
 
 type ModulesListProps = {
-  DeleteMessageBox: React.FC<any>;
   resource: KymaResourceType;
   moduleTemplates: ModuleTemplateListType;
   resourceName: string;
   selectedModules: { name: string }[];
   kymaResource: KymaResourceType;
   namespaced: boolean;
-  detailsOpen: boolean;
   resourceUrl: string;
-  kymaResourceState: KymaResourceType;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
   >;
-  setKymaResourceState: React.Dispatch<React.SetStateAction<any>>;
-  handleModuleUninstall: () => void;
-  setInitialUnchangedResource: React.Dispatch<React.SetStateAction<any>>;
   handleResourceDelete: (resourceData: any) => void;
 };
 
 export const ModulesList = ({
-  DeleteMessageBox,
   resource,
   moduleTemplates,
   resourceName,
   selectedModules,
   kymaResource,
   namespaced,
-  detailsOpen,
   resourceUrl,
-  kymaResourceState,
   setOpenedModuleIndex,
-  setKymaResourceState,
-  handleModuleUninstall,
-  setInitialUnchangedResource,
   handleResourceDelete,
 }: ModulesListProps) => {
   const { t } = useTranslation();
@@ -100,9 +86,6 @@ export const ModulesList = ({
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-  const [chosenModuleIndex, setChosenModuleIndex] = useState<number | null>(
-    null,
-  );
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -313,7 +296,7 @@ export const ModulesList = ({
         const index = selectedModules?.findIndex(kymaResourceModule => {
           return kymaResourceModule.name === resource.name;
         });
-        setChosenModuleIndex(index);
+        setOpenedModuleIndex(index);
         handleResourceDelete({});
       },
     },
@@ -429,22 +412,6 @@ export const ModulesList = ({
 
   return (
     <React.Fragment key="modules-list">
-      {!detailsOpen &&
-        createPortal(
-          <ModulesListDeleteBox
-            DeleteMessageBox={DeleteMessageBox}
-            handleModuleUninstall={handleModuleUninstall}
-            selectedModules={selectedModules}
-            chosenModuleIndex={chosenModuleIndex}
-            kymaResource={kymaResource}
-            kymaResourceState={kymaResourceState}
-            setKymaResourceState={setKymaResourceState}
-            setInitialUnchangedResource={setInitialUnchangedResource}
-            setChosenModuleIndex={setChosenModuleIndex}
-            moduleTemplates={moduleTemplates}
-          />,
-          document.body,
-        )}
       <div className="sap-margin-small">
         <UnmanagedModuleInfo kymaResource={kymaResource} />
       </div>
