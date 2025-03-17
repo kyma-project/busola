@@ -5,6 +5,7 @@ import {
   ObjectStatus,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import './TasksList.scss';
 
 export default function TasksList({
   className,
@@ -36,12 +37,7 @@ export default function TasksList({
                       large={true}
                     />
                   ) : (
-                    <BusyIndicator
-                      active
-                      size="S"
-                      delay={0}
-                      className="ai-busy-indicator"
-                    />
+                    <span className="ai-steps-loader" />
                   )}
                   <Label className="text">{task?.task_name}</Label>
                   <div className="loading-status"></div>
@@ -55,12 +51,7 @@ export default function TasksList({
               alignItems="Center"
               className="loading-item"
             >
-              <BusyIndicator
-                active
-                size="S"
-                delay={0}
-                className="ai-busy-indicator"
-              />
+              <span className="ai-steps-loader" />
               <Label className="text">
                 {t('kyma-companion.opener.preparing-final-answer')}
               </Label>
