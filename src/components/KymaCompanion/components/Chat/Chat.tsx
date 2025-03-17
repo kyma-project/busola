@@ -1,11 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
 import Message, { MessageChunk } from './messages/Message';
@@ -19,7 +13,7 @@ import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
 import './Chat.scss';
 
-interface MessageType {
+export interface MessageType {
   author: 'user' | 'ai';
   messageChunks: MessageChunk[];
   isLoading: boolean;
@@ -27,35 +21,29 @@ interface MessageType {
   suggestionsLoading?: boolean;
 }
 
-type Props = {
+type ChatProps = {
+  chatHistory: MessageType[];
+  setChatHistory: React.Dispatch<React.SetStateAction<MessageType[]>>;
   setParentLoading: React.Dispatch<React.SetStateAction<boolean>>;
-};
-export type RefreshRef = {
-  refreshFn: () => void;
+  isReset: boolean;
+  setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
+  error: string | null;
+  setError: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export const Chat = forwardRef<RefreshRef, Props>((props, ref) => {
+export const Chat = ({
+  chatHistory,
+  setChatHistory,
+  error,
+  setError,
+  setParentLoading,
+  isReset,
+  setIsReset,
+}: ChatProps) => {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
-  const [chatHistory, setChatHistory] = useState<MessageType[]>([
-    {
-      author: 'ai',
-      messageChunks: [
-        {
-          data: {
-            answer: {
-              content: t('kyma-companion.introduction'),
-              next: '__end__',
-            },
-          },
-        },
-      ],
-      isLoading: false,
-      suggestionsLoading: true,
-    },
-  ]);
-  const [error, setError] = useState<string | null>(null);
+
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
@@ -65,32 +53,10 @@ export const Chat = forwardRef<RefreshRef, Props>((props, ref) => {
     initialSuggestions,
     initialSuggestionsLoading,
     currentResource,
-  } = usePromptSuggestions({ skip: chatHistory.length > 1 });
+  } = usePromptSuggestions(isReset, setIsReset, {
+    skip: chatHistory.length > 1,
+  });
 
-  useImperativeHandle(ref, () => ({
-    refreshFn: () => {
-      setChatHistory(() => {
-        return [
-          {
-            author: 'ai',
-            messageChunks: [
-              {
-                data: {
-                  answer: {
-                    content: t('kyma-companion.introduction'),
-                    next: '__end__',
-                  },
-                },
-              },
-            ],
-            isLoading: false,
-            suggestionsLoading: true,
-          },
-        ];
-      });
-      handleFollowUpQuestions(initialSuggestions);
-    },
-  }));
   const addMessage = ({ author, messageChunks, isLoading }: MessageType) => {
     setChatHistory(prevItems =>
       prevItems.concat({ author, messageChunks, isLoading }),
@@ -136,14 +102,14 @@ export const Chat = forwardRef<RefreshRef, Props>((props, ref) => {
   const setFollowUpLoading = () => {
     setError(null);
     setLoading(true);
-    props.setParentLoading(true);
+    setParentLoading(true);
     updateLatestMessage({ suggestionsLoading: true });
   };
 
   const handleFollowUpQuestions = (questions: string[]) => {
     updateLatestMessage({ suggestions: questions, suggestionsLoading: false });
     setLoading(false);
-    props.setParentLoading(false);
+    setParentLoading(false);
   };
 
   const handleError = (error?: Error) => {
@@ -154,7 +120,7 @@ export const Chat = forwardRef<RefreshRef, Props>((props, ref) => {
   const sendPrompt = (query: string) => {
     setError(null);
     setLoading(true);
-    props.setParentLoading(true);
+    setParentLoading(true);
     addMessage({
       author: 'user',
       messageChunks: [
@@ -325,4 +291,4 @@ export const Chat = forwardRef<RefreshRef, Props>((props, ref) => {
       </div>
     </FlexBox>
   );
-});
+};

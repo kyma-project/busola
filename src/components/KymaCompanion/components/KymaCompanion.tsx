@@ -6,19 +6,46 @@ import {
   ShowKymaCompanion,
   showKymaCompanionState,
 } from 'state/companion/showKymaCompanionAtom';
-import { Chat, RefreshRef } from './Chat/Chat';
+import { Chat, MessageType } from './Chat/Chat';
 import './KymaCompanion.scss';
 
 export default function KymaCompanion() {
   const { t } = useTranslation();
+
+  const initialChatHistory: MessageType[] = [
+    {
+      author: 'ai',
+      messageChunks: [
+        {
+          data: {
+            answer: {
+              content: t('kyma-companion.introduction'),
+              next: '__end__',
+            },
+          },
+        },
+      ],
+      isLoading: false,
+      suggestionsLoading: true,
+    },
+  ];
+
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
-  const ref = useRef<RefreshRef>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isReset, setIsReset] = useState<boolean>(false);
+  const [chatHistory, setChatHistory] = useState<MessageType[]>(
+    initialChatHistory,
+  );
+  const [error, setError] = useState<string | null>(null);
 
   function handleRefresh() {
-    ref.current?.refreshFn();
+    setChatHistory(() => {
+      return initialChatHistory;
+    });
+    setError(null);
+    setIsReset(true);
   }
 
   return (
@@ -65,7 +92,15 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <Chat ref={ref} setParentLoading={setLoading} />
+        <Chat
+          setParentLoading={setLoading}
+          chatHistory={chatHistory}
+          setChatHistory={setChatHistory}
+          isReset={isReset}
+          setIsReset={setIsReset}
+          error={error}
+          setError={setError}
+        />
       </Card>
     </div>
   );
