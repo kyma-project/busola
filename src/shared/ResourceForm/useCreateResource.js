@@ -15,6 +15,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { useNavigate } from 'react-router-dom';
 
 export function useCreateResource({
   singularName,
@@ -33,6 +34,7 @@ export function useCreateResource({
   const notification = useNotification();
   const getRequest = useSingleGet();
   const postRequest = usePost();
+  const navigate = useNavigate();
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
@@ -94,15 +96,12 @@ export function useCreateResource({
                 },
               },
         );
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${scopedUrl(
-            `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
-              resource.metadata.name,
-            )}`,
-          )}${nextQuery}`,
-        );
+        const link = `${scopedUrl(
+          `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+            resource.metadata.name,
+          )}`,
+        )}${nextQuery}`;
+        navigate(link);
       }
     }
   };
