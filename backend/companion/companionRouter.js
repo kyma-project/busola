@@ -162,7 +162,64 @@ async function handleChatMessage(req, res) {
   }
 }
 
+async function handleFollowUpSuggestions(req, res) {
+  const clusterUrl = req.headers['x-cluster-url'];
+  const certificateAuthorityData =
+    req.headers['x-cluster-certificate-authority-data'];
+  const clusterToken = req.headers['x-k8s-authorization']?.replace(
+    /^Bearer\s+/i,
+    '',
+  );
+  const clientCertificateData = req.headers['x-client-certificate-data'];
+  const clientKeyData = req.headers['x-client-key-data'];
+  const sessionId = req.headers['session-id'];
+  const conversationId = sessionId;
+
+  try {
+    const baseUrl =
+      'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
+    const targetUrl = new URL(
+      `${encodeURIComponent(conversationId)}/questions`,
+      baseUrl,
+    );
+
+    const AUTH_TOKEN = await tokenManager.getToken();
+
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
+      'X-Cluster-Url': clusterUrl,
+      'Session-Id': sessionId,
+    };
+
+    if (clusterToken) {
+      headers['X-K8s-Authorization'] = clusterToken;
+    } else if (clientCertificateData && clientKeyData) {
+      headers['X-Client-Certificate-Data'] = clientCertificateData;
+      headers['X-Client-Key-Data'] = clientKeyData;
+    } else {
+      throw new Error('Missing authentication credentials');
+    }
+
+    const response = await fetch(targetUrl, {
+      method: 'GET',
+      headers,
+    });
+
+    const data = await response.json();
+    res.json({
+      promptSuggestions: data?.questions,
+      conversationId: data?.conversation_id,
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch AI chat data' });
+  }
+}
+
 router.post('/suggestions', handlePromptSuggestions);
 router.post('/messages', handleChatMessage);
+router.post('/followup', handleFollowUpSuggestions);
 
 export default router;

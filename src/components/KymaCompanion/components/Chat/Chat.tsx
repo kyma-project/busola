@@ -79,12 +79,12 @@ export default function Chat() {
       getFollowUpQuestions({
         sessionID,
         handleFollowUpQuestions,
+        handleError,
         clusterUrl: cluster.currentContext.cluster.cluster.server,
         token: authData.token,
         certificateAuthorityData:
           cluster.currentContext.cluster.cluster['certificate-authority-data'],
       });
-      setLoading(false);
     }
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
@@ -98,11 +98,13 @@ export default function Chat() {
 
   const setFollowUpLoading = () => {
     setError(null);
+    setLoading(true);
     updateLatestMessage({ suggestionsLoading: true });
   };
 
   const handleFollowUpQuestions = (questions: string[]) => {
     updateLatestMessage({ suggestions: questions, suggestionsLoading: false });
+    setLoading(false);
   };
 
   const handleError = (error?: Error) => {
@@ -276,7 +278,7 @@ export default function Chat() {
             name="paper-plane"
             mode={loading ? 'Image' : 'Interactive'}
             design={loading ? 'NonInteractive' : 'Default'}
-            onClick={onSubmitInput}
+            onClick={loading ? () => {} : onSubmitInput}
           />
         </div>
         <Text id="disclaimer">{t('kyma-companion.disclaimer')}</Text>
