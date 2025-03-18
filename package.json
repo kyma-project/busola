@@ -107,7 +107,7 @@
     "react-tippy": "^1.4.0",
     "recoil": "^0.7.7",
     "resize-observer-polyfill": "^1.5.1",
-    "rfc6902": "^5.0.1",
+    "rfc6902": "^5.1.2",
     "url": "^0.11.0"
   },
   "devDependencies": {
