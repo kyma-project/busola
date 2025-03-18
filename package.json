@@ -77,7 +77,7 @@
     "@ui5/webcomponents-react-compat": "^2.7.0",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.2.0",
-    "core-js": "^3.3.6",
+    "core-js": "^3.41.0",
     "cronstrue": "^2.56.0",
     "didyoumean": "^1.2.2",
     "file-saver": "^2.0.2",
