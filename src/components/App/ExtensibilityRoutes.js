@@ -21,18 +21,15 @@ const Details = React.lazy(() =>
 );
 const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
-const ColumnWrapper = ({
-  defaultColumn = 'list',
-  resourceType,
-  extension,
-  urlPath,
-}) => {
+const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
   const layoutState = useRecoilValue(columnLayoutState);
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
 
   const { namespaceId, resourceName } = useParams();
+
+  const defaultColumn = resourceName ? 'details' : 'list';
 
   usePrepareLayoutColumns({
     resourceType: urlPath ?? resourceType,
@@ -143,7 +140,7 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
   return (
     <React.Fragment key={urlPath}>
       <Route
-        path={urlPath}
+        path={`${urlPath}/:resourceName?`}
         exact
         element={
           <Suspense fallback={<Spinner />}>
@@ -155,21 +152,6 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
           </Suspense>
         }
       />
-      {extension.details && (
-        <Route
-          path={`${urlPath}/:resourceName`}
-          exact
-          element={
-            <Suspense fallback={<Spinner />}>
-              <ColumnWrapper
-                defaultColumn="details"
-                resourceType={resourceType}
-                urlPath={urlPath}
-              />
-            </Suspense>
-          }
-        />
-      )}
     </React.Fragment>
   );
 };

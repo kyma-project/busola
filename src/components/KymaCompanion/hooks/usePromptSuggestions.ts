@@ -30,7 +30,13 @@ const getResourceFromColumnnLayout = (
   };
 };
 
-export function usePromptSuggestions(options?: { skip?: boolean }) {
+export function usePromptSuggestions(
+  isReset: boolean,
+  setIsReset: React.Dispatch<React.SetStateAction<boolean>>,
+  options?: {
+    skip?: boolean;
+  },
+) {
   const post = usePost();
   const [initialSuggestions, setInitialSuggestions] = useState<string[]>([]);
   const setSessionID = useSetRecoilState(sessionIDState);
@@ -93,11 +99,15 @@ export function usePromptSuggestions(options?: { skip?: boolean }) {
       }
     }
 
-    if (resourceType && fetchedResourceRef.current !== resourceKey) {
+    if (
+      resourceType &&
+      (fetchedResourceRef.current !== resourceKey || isReset)
+    ) {
       fetchedResourceRef.current = resourceKey;
       fetchSuggestions();
+      setIsReset(false);
     }
-  }, [currentResource, options?.skip, post, setSessionID]);
+  }, [currentResource, options?.skip, post, setSessionID, isReset, setIsReset]);
 
   return {
     initialSuggestions,

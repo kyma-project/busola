@@ -97,14 +97,12 @@ export function useCreateResource({
                 },
               },
         );
-        console.log(nextQuery);
-        navigate(
-          `${scopedUrl(
-            `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
-              resource.metadata.name,
-            )}`,
-          )}${nextQuery}`,
-        );
+        const link = `${scopedUrl(
+          `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+            resource.metadata.name,
+          )}`,
+        )}${nextQuery}`;
+        navigate(link);
       }
     }
   };
