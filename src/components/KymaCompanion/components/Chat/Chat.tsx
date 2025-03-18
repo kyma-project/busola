@@ -24,7 +24,8 @@ export interface MessageType {
 type ChatProps = {
   chatHistory: MessageType[];
   setChatHistory: React.Dispatch<React.SetStateAction<MessageType[]>>;
-  setParentLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isReset: boolean;
   setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
   error: string | null;
@@ -36,7 +37,8 @@ export const Chat = ({
   setChatHistory,
   error,
   setError,
-  setParentLoading,
+  loading,
+  setLoading,
   isReset,
   setIsReset,
 }: ChatProps) => {
@@ -47,7 +49,6 @@ export const Chat = ({
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     initialSuggestions,
@@ -102,14 +103,12 @@ export const Chat = ({
   const setFollowUpLoading = () => {
     setError(null);
     setLoading(true);
-    setParentLoading(true);
     updateLatestMessage({ suggestionsLoading: true });
   };
 
   const handleFollowUpQuestions = (questions: string[]) => {
     updateLatestMessage({ suggestions: questions, suggestionsLoading: false });
     setLoading(false);
-    setParentLoading(false);
   };
 
   const handleError = (error?: Error) => {
@@ -120,7 +119,6 @@ export const Chat = ({
   const sendPrompt = (query: string) => {
     setError(null);
     setLoading(true);
-    setParentLoading(true);
     addMessage({
       author: 'user',
       messageChunks: [

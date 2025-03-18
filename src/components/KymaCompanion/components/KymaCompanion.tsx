@@ -93,7 +93,8 @@ export default function KymaCompanion() {
         }
       >
         <Chat
-          setParentLoading={setLoading}
+          loading={loading}
+          setLoading={setLoading}
           chatHistory={chatHistory}
           setChatHistory={setChatHistory}
           isReset={isReset}
