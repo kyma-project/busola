@@ -54,7 +54,7 @@
     "unsafe-perm": true
   },
   "dependencies": {
-    "@datasert/cronjs-parser": "^1.1.0",
+    "@datasert/cronjs-parser": "^1.4.0",
     "@openapi-contrib/openapi-schema-to-json-schema": "^3.1.1",
     "@peculiar/x509": "^1.12.3",
     "@sap-theming/theming-base-content": "^11.1.28",
