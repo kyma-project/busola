@@ -347,46 +347,43 @@ export const GenericList = ({
         selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
       );
       setEntrySelectedNamespace(selectedEntry?.metadata?.namespace ?? '');
-      if (!enableColumnLayout) {
-        setLayoutColumn({
-          startColumn: null,
-          midColumn: null,
-          endColumn: null,
-          layout: 'OneColumn',
-        });
-        navigate(linkTo(selectedEntry));
-      } else {
-        const { group, version } = extractApiGroupVersion(
-          selectedEntry?.apiVersion,
-        );
-        setLayoutColumn(
-          columnLayout
-            ? {
-                ...layoutState,
-                showCreate: null,
-                endColumn: customColumnLayout(selectedEntry),
-                layout: columnLayout,
-              }
-            : {
-                ...layoutState,
-                showCreate: null,
-                midColumn: {
-                  resourceName:
-                    selectedEntry?.metadata?.name ??
-                    e.target.children[0].innerText,
-                  resourceType: resourceType,
-                  namespaceId: selectedEntry?.metadata?.namespace,
-                  apiGroup: group,
-                  apiVersion: version,
-                },
-                endColumn: null,
-                layout: 'TwoColumnsMidExpanded',
+
+      const { group, version } = extractApiGroupVersion(
+        selectedEntry?.apiVersion,
+      );
+      const newLayout = enableColumnLayout
+        ? columnLayout ?? 'TwoColumnsMidExpanded'
+        : 'OneColumn';
+      setLayoutColumn(
+        columnLayout
+          ? {
+              ...layoutState,
+              showCreate: null,
+              endColumn: customColumnLayout(selectedEntry),
+              layout: newLayout,
+            }
+          : {
+              ...layoutState,
+              showCreate: null,
+              midColumn: {
+                resourceName:
+                  selectedEntry?.metadata?.name ??
+                  e.target.children[0].innerText,
+                resourceType: resourceType,
+                namespaceId: selectedEntry?.metadata?.namespace,
+                apiGroup: group,
+                apiVersion: version,
               },
-        );
-        const link = `${linkTo(selectedEntry)}?layout=${columnLayout ??
-          'TwoColumnsMidExpanded'}`;
-        navigate(link);
-      }
+              endColumn: null,
+              layout: newLayout,
+            },
+      );
+      const link = `${linkTo(selectedEntry)}${
+        enableColumnLayout
+          ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}`
+          : ''
+      }`;
+      navigate(link);
     }
   };
 

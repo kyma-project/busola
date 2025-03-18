@@ -118,9 +118,6 @@ export function ResourceForm({
       }
     }
 
-    return () => {
-      setIsFormOpen({ formOpen: false });
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leavingForm]);
 

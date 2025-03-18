@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { isFormOpenState } from 'state/formOpenAtom';
 
 const switchToPrevLayout = layout => {
   switch (layout) {
@@ -86,48 +87,86 @@ export function usePrepareLayoutColumns({
   apiGroup,
   apiVersion,
   resourceName,
+  isCustomResource,
+  crName,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
   const navigationType = useNavigationType();
 
   const newLayoutState = useMemo(() => {
-    return layout
-      ? {
-          layout: layout,
-          startColumn: {
-            resourceType,
-            namespaceId,
-            apiGroup,
-            apiVersion,
-          },
-          midColumn:
-            !showCreate && resourceName
-              ? {
-                  resourceName,
-                  resourceType,
-                  namespaceId,
-                  apiGroup,
-                  apiVersion,
-                }
-              : null,
-          endColumn: null,
-          showCreate: showCreate ? { resourceType, namespaceId } : null,
-        }
-      : {
-          layout: 'OneColumn',
-          startColumn: {
-            resourceType,
-            namespaceId,
-            apiGroup,
-            apiVersion,
-          },
-          midColumn: null,
-          endColumn: null,
-          showCreate: null,
-        };
+    if (!layout) {
+      return {
+        layout: 'OneColumn',
+        startColumn: {
+          resourceType,
+          namespaceId,
+          apiGroup,
+          apiVersion,
+        },
+        midColumn: null,
+        endColumn: null,
+        showCreate: null,
+      };
+    }
+
+    if (isCustomResource) {
+      return {
+        layout: layout,
+        startColumn: {
+          resourceType,
+          namespaceId,
+          apiGroup,
+          apiVersion,
+        },
+        midColumn: resourceName
+          ? {
+              resourceName,
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
+        endColumn: crName
+          ? {
+              resourceName: crName,
+              resourceType: resourceName,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
+        showCreate: showCreate
+          ? { resourceType: resourceName, namespaceId }
+          : null,
+      };
+    }
+
+    return {
+      layout: layout,
+      startColumn: {
+        resourceType,
+        namespaceId,
+        apiGroup,
+        apiVersion,
+      },
+      midColumn:
+        !showCreate && resourceName
+          ? {
+              resourceName,
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
+      endColumn: null,
+      showCreate: showCreate ? { resourceType, namespaceId } : null,
+    };
   }, [
     layout,
     showCreate,
@@ -136,16 +175,20 @@ export function usePrepareLayoutColumns({
     apiGroup,
     apiVersion,
     resourceName,
+    isCustomResource,
+    crName,
   ]);
 
   useEffect(() => {
     if (navigationType === NavigationType.Pop) {
       setLayoutColumn(newLayoutState);
+      setIsFormOpen({ formOpen: !!newLayoutState.showCreate });
     }
-  }, [newLayoutState, setLayoutColumn, navigationType]);
+  }, [newLayoutState, setLayoutColumn, setIsFormOpen, navigationType]);
 
   useEffect(() => {
     setLayoutColumn(newLayoutState);
+    setIsFormOpen({ formOpen: !!newLayoutState.showCreate });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
