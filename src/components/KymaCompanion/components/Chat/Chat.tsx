@@ -13,7 +13,7 @@ import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
 import './Chat.scss';
 
-interface MessageType {
+export interface MessageType {
   author: 'user' | 'ai';
   messageChunks: MessageChunk[];
   isLoading: boolean;
@@ -21,38 +21,42 @@ interface MessageType {
   suggestionsLoading?: boolean;
 }
 
-export default function Chat() {
+type ChatProps = {
+  chatHistory: MessageType[];
+  setChatHistory: React.Dispatch<React.SetStateAction<MessageType[]>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isReset: boolean;
+  setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
+  error: string | null;
+  setError: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+export const Chat = ({
+  chatHistory,
+  setChatHistory,
+  error,
+  setError,
+  loading,
+  setLoading,
+  isReset,
+  setIsReset,
+}: ChatProps) => {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
-  const [chatHistory, setChatHistory] = useState<MessageType[]>([
-    {
-      author: 'ai',
-      messageChunks: [
-        {
-          data: {
-            answer: {
-              content: t('kyma-companion.introduction'),
-              next: '__end__',
-            },
-          },
-        },
-      ],
-      isLoading: false,
-      suggestionsLoading: true,
-    },
-  ]);
-  const [error, setError] = useState<string | null>(null);
+
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     initialSuggestions,
     initialSuggestionsLoading,
     currentResource,
-  } = usePromptSuggestions({ skip: chatHistory.length > 1 });
+  } = usePromptSuggestions(isReset, setIsReset, {
+    skip: chatHistory.length > 1,
+  });
 
   const addMessage = ({ author, messageChunks, isLoading }: MessageType) => {
     setChatHistory(prevItems =>
@@ -285,4 +289,4 @@ export default function Chat() {
       </div>
     </FlexBox>
   );
-}
+};

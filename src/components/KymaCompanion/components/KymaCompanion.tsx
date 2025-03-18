@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
@@ -5,14 +6,47 @@ import {
   ShowKymaCompanion,
   showKymaCompanionState,
 } from 'state/companion/showKymaCompanionAtom';
-import Chat from './Chat/Chat';
+import { Chat, MessageType } from './Chat/Chat';
 import './KymaCompanion.scss';
 
 export default function KymaCompanion() {
   const { t } = useTranslation();
+
+  const initialChatHistory: MessageType[] = [
+    {
+      author: 'ai',
+      messageChunks: [
+        {
+          data: {
+            answer: {
+              content: t('kyma-companion.introduction'),
+              next: '__end__',
+            },
+          },
+        },
+      ],
+      isLoading: false,
+      suggestionsLoading: true,
+    },
+  ];
+
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isReset, setIsReset] = useState<boolean>(false);
+  const [chatHistory, setChatHistory] = useState<MessageType[]>(
+    initialChatHistory,
+  );
+  const [error, setError] = useState<string | null>(null);
+
+  function handleRefresh() {
+    setChatHistory(() => {
+      return initialChatHistory;
+    });
+    setError(null);
+    setIsReset(true);
+  }
 
   return (
     <div id="companion_wrapper" className="sap-margin-tiny">
@@ -27,9 +61,10 @@ export default function KymaCompanion() {
               <Button
                 design="Transparent"
                 icon="restart"
+                disabled={loading}
                 tooltip={t('common.buttons.reset')}
                 className="action"
-                onClick={() => {}}
+                onClick={() => handleRefresh()}
               />
               <Button
                 design="Transparent"
@@ -57,7 +92,16 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <Chat />
+        <Chat
+          loading={loading}
+          setLoading={setLoading}
+          chatHistory={chatHistory}
+          setChatHistory={setChatHistory}
+          isReset={isReset}
+          setIsReset={setIsReset}
+          error={error}
+          setError={setError}
+        />
       </Card>
     </div>
   );
