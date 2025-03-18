@@ -21,6 +21,7 @@ import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { isFormOpenState } from 'state/formOpenAtom';
+import './useDeleteResource.scss';
 
 export function useDeleteResource({
   resourceTitle,
@@ -193,6 +194,7 @@ export function useDeleteResource({
         )}
         open={showDeleteDialog}
         className="ui5-content-density-compact"
+        id="delete-message-box"
         actions={[
           <Button
             key="delete-confirmation"
