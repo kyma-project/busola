@@ -105,7 +105,7 @@
     "react-router-dom": "^7.3.0",
     "react-syntax-highlighter": "^15.6.1",
     "react-tippy": "^1.4.0",
-    "recoil": "^0.7.5",
+    "recoil": "^0.7.7",
     "resize-observer-polyfill": "^1.5.1",
     "rfc6902": "^5.0.1",
     "url": "^0.11.0"
