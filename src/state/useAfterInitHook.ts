@@ -8,10 +8,25 @@ import { clusterState } from './clusterAtom';
 const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
 export function savePreviousPath() {
-  const { pathname } = window.location;
+  const queryParams = new URLSearchParams(window.location.search);
 
-  if (pathname !== '/' && pathname !== '/clusters') {
-    localStorage.setItem(PREVIOUS_PATHNAME_KEY, pathname);
+  const layoutParam = queryParams.get('layout');
+  const showCreateParam = queryParams.get('showCreate');
+
+  let previousPath = window.location.pathname;
+
+  if (layoutParam || showCreateParam) {
+    previousPath += '?';
+    const params = [];
+
+    if (layoutParam) params.push(`layout=${layoutParam}`);
+    if (showCreateParam) params.push(`showCreate=${showCreateParam}`);
+
+    previousPath += params.join('&');
+  }
+
+  if (previousPath !== '/' && previousPath !== '/clusters') {
+    localStorage.setItem(PREVIOUS_PATHNAME_KEY, previousPath);
   }
 }
 
