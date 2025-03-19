@@ -113,7 +113,8 @@ export const Chat = ({
 
   const handleError = (error?: Error) => {
     setError(error?.message ?? t('kyma-companion.error.subtitle'));
-    setChatHistory(prevItems => prevItems.slice(0, -2));
+    setChatHistory(prevItems => prevItems.slice(0, -1));
+    setLoading(false);
   };
 
   const sendPrompt = (query: string) => {

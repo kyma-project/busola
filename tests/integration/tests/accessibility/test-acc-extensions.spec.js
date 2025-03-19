@@ -10,6 +10,8 @@ context('Accessibility test Extensions view', () => {
     cy.setUpContinuum('continuum/continuum.conf.js');
     cy.loginAndSelectCluster();
 
+    cy.wait(1000);
+
     cy.createNamespace('pizzas');
 
     cy.getLeftNav()
