@@ -7,6 +7,7 @@ import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
 import { useRecoilValue } from 'recoil';
 import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
 
@@ -26,9 +27,11 @@ export function CommandPaletteSearchBar({
   useRecoilValue(availableNodesSelector); // preload the values to prevent page rerenders
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
+  const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
+  const showCompanion = useRecoilValue(showKymaCompanionState);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const setShowDialog = (value: boolean) => {
@@ -42,6 +45,15 @@ export function CommandPaletteSearchBar({
   };
 
   useEffect(() => {
+    setShellbarWidth(
+      showCompanion.show
+        ? shellbarRef?.current?.offsetWidth || 0
+        : window.innerWidth,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCompanion, window.innerWidth, shellbarRef?.current?.offsetWidth]);
+
+  useEffect(() => {
     const shellbarCurr = shellbarRef?.current;
     const searchButton = shellbarCurr?.shadowRoot?.querySelector(
       '.ui5-shellbar-search-button',
@@ -53,7 +65,7 @@ export function CommandPaletteSearchBar({
     if (
       searchButton &&
       searchField &&
-      window.innerWidth > SCREEN_SIZE_BREAKPOINT_M
+      shellbarWidth > SCREEN_SIZE_BREAKPOINT_M
     ) {
       searchButton.style.display = 'none';
 
@@ -65,7 +77,7 @@ export function CommandPaletteSearchBar({
       shellbarCurr?.removeAttribute('show-search-field');
       searchField.style.display = 'none';
     }
-  }, [window.innerWidth, shellbarRef?.current]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shellbarRef?.current, shellbarWidth]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
