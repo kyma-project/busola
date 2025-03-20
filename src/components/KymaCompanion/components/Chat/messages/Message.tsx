@@ -42,7 +42,6 @@ export default function Message({
   const segmentedText = segmentMarkdownText(
     messageChunks.slice(-1)[0]?.data?.answer?.content,
   );
-  console.log(segmentedText);
   return (
     <div className={'message ' + className}>
       {segmentedText && (

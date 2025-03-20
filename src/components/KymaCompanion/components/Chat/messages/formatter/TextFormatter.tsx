@@ -62,11 +62,9 @@ export function TextFormatter({
       let matcherDone = false;
       matchers.forEach((matcher, key) => {
         const result = matcher.next(token);
-        // console.log('result:', result, '| token:', token);
         switch (result) {
           case MatchResult.DONE: {
             const result = matcher.render();
-            console.log('Finish: ', key);
             elements.push(result);
             matcherDone = true;
             matchers = new Map<string, Matcher>();
