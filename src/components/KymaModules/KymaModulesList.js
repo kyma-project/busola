@@ -67,6 +67,7 @@ export default function KymaModulesList({
       customComponents={[
         resource => (
           <ModulesList
+            key="kyma-modules-list"
             resource={resource}
             moduleTemplates={moduleTemplates}
             resourceName={resourceName}

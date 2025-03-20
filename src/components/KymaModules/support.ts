@@ -134,8 +134,7 @@ export const findModuleStatus = (
   moduleName: string,
 ) => {
   return kymaResource?.status?.modules?.find(
-    (module: { name: string; version?: string; state?: string }) =>
-      moduleName === module?.name,
+    (module: { name: string }) => moduleName === module?.name,
   );
 };
 

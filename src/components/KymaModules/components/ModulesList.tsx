@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import jsyaml from 'js-yaml';
-import { Button, Tag, Text } from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
 import {
   findModuleStatus,
@@ -11,11 +11,8 @@ import {
   KymaResourceStatusModuleType,
   KymaResourceType,
   ModuleTemplateListType,
-  ModuleTemplateType,
 } from '../support';
 import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
-import { ModuleStatus, resolveType } from './ModuleStatus';
-import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import {
@@ -24,15 +21,9 @@ import {
   ShowCreate,
 } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
-
-type ModuleReleaseMetasType = {
-  items: { spec: { moduleName: string; beta: boolean } }[];
-};
+import { ModulesListRows } from './ModulesListRows';
 
 type CustomResourceDefinitionsType = {
   items: {
@@ -67,9 +58,6 @@ export const ModulesList = ({
   handleResourceDelete,
 }: ModulesListProps) => {
   const { t } = useTranslation();
-  const { data: moduleReleaseMetas } = useModulesReleaseQuery({
-    skip: !resourceName,
-  });
   const { data: kymaExt } = useGetList(
     (ext: { metadata: { labels: Record<string, string> } }) =>
       ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
@@ -104,28 +92,12 @@ export const ModulesList = ({
     setIsFormOpen(state => ({ ...state, formOpen: true }));
   };
 
-  const findModuleReleaseMeta = (moduleName: string) => {
-    return (moduleReleaseMetas as ModuleReleaseMetasType | null)?.items.find(
-      item => item.spec.moduleName === moduleName,
-    );
-  };
-
   const findExtension = (resourceKind: string) => {
     return (kymaExt as { data: { general: string } }[] | null)?.find(ext => {
       const { resource: extensionResource } =
         jsyaml.load(ext.data.general, { json: true }) || ({} as any);
       return extensionResource.kind === resourceKind;
     });
-  };
-
-  const checkBeta = (
-    module: ModuleTemplateType | undefined,
-    currentModuleReleaseMeta?: { spec: { moduleName: string; beta: boolean } },
-  ) => {
-    return (
-      module?.metadata.labels['operator.kyma-project.io/beta'] === 'true' ||
-      currentModuleReleaseMeta?.spec?.beta === true
-    );
   };
 
   const findCrd = (resourceKind: string) => {
@@ -171,102 +143,6 @@ export const ModulesList = ({
       (isInstalled || isDeletionFailed || !isError) &&
       (hasCrd || hasExtension || hasModuleTpl)
     );
-  };
-
-  const rowRenderer = (resource: {
-    name: string;
-    channel: string;
-    version: string;
-    resource: { kind: string };
-  }) => {
-    const moduleStatus = findModuleStatus(kymaResource, resource.name);
-    const showDetailsLink = hasDetailsLink(resource);
-    const moduleIndex = kymaResource?.spec?.modules?.findIndex(
-      kymaResourceModule => {
-        return kymaResourceModule?.name === resource?.name;
-      },
-    );
-
-    const currentModuleTemplate = findModuleTemplate(
-      moduleTemplates,
-      resource?.name,
-      resource?.channel || kymaResource?.spec?.channel,
-      resource?.version,
-    );
-
-    const moduleDocs =
-      currentModuleTemplate?.spec?.info?.documentation ||
-      currentModuleTemplate?.metadata?.annotations[
-        'operator.kyma-project.io/doc-url'
-      ];
-
-    const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
-
-    const isChannelOverriden =
-      kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined;
-
-    return [
-      // Name
-      <>
-        {showDetailsLink ? (
-          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-            {resource.name}
-          </Text>
-        ) : (
-          resource.name
-        )}
-        {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
-          <Tag
-            className="sap-margin-begin-tiny"
-            hideStateIcon
-            colorScheme="3"
-            design="Set2"
-          >
-            {t('kyma-modules.beta')}
-          </Tag>
-        ) : null}
-      </>,
-      // Namespace
-      moduleStatus?.resource?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
-      // Channel
-      <>
-        {moduleStatus?.channel
-          ? moduleStatus?.channel
-          : kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
-            kymaResource?.spec?.channel}
-        {isChannelOverriden ? (
-          <Tag
-            hideStateIcon
-            design="Set2"
-            colorScheme="5"
-            className="sap-margin-begin-tiny"
-          >
-            {t('kyma-modules.channel-overridden')}
-          </Tag>
-        ) : (
-          ''
-        )}
-      </>,
-      // Version
-      moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
-      // Module State
-      <ModuleStatus key="module-state" resource={resource} />,
-      // Installation State
-      <StatusBadge
-        key="installation-state"
-        resourceKind="kymas"
-        type={resolveType(moduleStatus?.state ?? '')}
-        tooltipContent={moduleStatus?.message}
-      >
-        {moduleStatus?.state || 'Unknown'}
-      </StatusBadge>,
-      // Documentation
-      moduleDocs ? (
-        <ExternalLink url={moduleDocs}>{t('common.headers.link')}</ExternalLink>
-      ) : (
-        EMPTY_TEXT_PLACEHOLDER
-      ),
-    ];
   };
 
   const customColumnLayout = (resource: { name: string }) => {
@@ -329,11 +205,11 @@ export const ModulesList = ({
       );
       const moduleCr = connectedModule?.spec?.data;
       moduleStatus.resource = {
-        kind: moduleCr?.kind,
-        apiVersion: moduleCr?.apiVersion,
+        kind: moduleCr.kind,
+        apiVersion: moduleCr.apiVersion,
         metadata: {
-          name: moduleCr?.metadata?.name,
-          namespace: moduleCr?.metadata?.namespace,
+          name: moduleCr.metadata.name,
+          namespace: moduleCr.metadata.namespace,
         },
       };
     }
@@ -435,7 +311,15 @@ export const ModulesList = ({
           getEntries(resource?.status?.modules, resource?.spec?.modules) as any
         }
         headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
+        rowRenderer={resource =>
+          ModulesListRows({
+            resourceName,
+            resource,
+            kymaResource,
+            moduleTemplates,
+            hasDetailsLink,
+          })
+        }
         noHideFields={['Name', '', 'Namespace']}
         displayArrow
         title={'Modules'}
