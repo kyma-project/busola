@@ -3,11 +3,13 @@ import CodePanel from './CodePanel';
 import { segmentMarkdownText } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import './Message.scss';
+import { TextFormatter } from 'components/KymaCompanion/components/Chat/messages/formatter/TextFormatter';
 
 interface MessageProps {
   className: string;
   messageChunks: MessageChunk[];
   isLoading: boolean;
+  formatPlaintext?: boolean;
 }
 
 export interface MessageChunk {
@@ -31,6 +33,7 @@ export default function Message({
   className,
   messageChunks,
   isLoading,
+  formatPlaintext = true,
 }: MessageProps): JSX.Element {
   if (isLoading) {
     return <TasksList messageChunks={messageChunks} />;
@@ -39,7 +42,7 @@ export default function Message({
   const segmentedText = segmentMarkdownText(
     messageChunks.slice(-1)[0]?.data?.answer?.content,
   );
-
+  console.log(segmentedText);
   return (
     <div className={'message ' + className}>
       {segmentedText && (
@@ -60,7 +63,11 @@ export default function Message({
                 {segment.content.name}
               </Link>
             ) : (
-              segment.content
+              <TextFormatter
+                text={segment.content}
+                disabled={false}
+                // disabled={!formatPlaintext}
+              ></TextFormatter>
             ),
           )}
         </Text>
