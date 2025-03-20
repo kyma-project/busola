@@ -1,14 +1,14 @@
-import { HeaderParserFactory } from 'components/KymaCompanion/components/Chat/messages/formatter/HeaderMatcher';
+import { HeaderMatcherFactory } from 'components/KymaCompanion/components/Chat/messages/formatter/HeaderMatcher';
 import TitleLevel from '@ui5/webcomponents/dist/types/TitleLevel';
 
-export enum matchResult {
+export enum MatchResult {
   MATCHED,
   UNMATCHED,
   DONE,
 }
 
 export interface Matcher {
-  next(token: string): matchResult;
+  next(token: string): MatchResult;
 
   render(): JSX.Element;
 }
@@ -21,10 +21,10 @@ const registeredMatchersFactories: Map<string, MatcherFactory> = new Map<
   string,
   MatcherFactory
 >([
-  ['3-hash', new HeaderParserFactory({})],
+  ['3-hash', new HeaderMatcherFactory({})],
   [
     '4-hash',
-    new HeaderParserFactory({
+    new HeaderMatcherFactory({
       desiredStartTokens: 4,
       titleLevel: TitleLevel.H4,
       titleSize: TitleLevel.H4,
@@ -56,7 +56,6 @@ export function TextFormatter({
       if (!newMatcher) {
         return;
       }
-      console.log('register new matcher for: ', token, 'matcher', key);
       matchers.set(key, newMatcher);
     });
     if (matchers.size !== 0) {
@@ -65,7 +64,7 @@ export function TextFormatter({
         const result = matcher.next(token);
         // console.log('result:', result, '| token:', token);
         switch (result) {
-          case matchResult.DONE: {
+          case MatchResult.DONE: {
             const result = matcher.render();
             console.log('Finish: ', key);
             elements.push(result);
@@ -73,10 +72,7 @@ export function TextFormatter({
             matchers = new Map<string, Matcher>();
             break;
           }
-          case matchResult.MATCHED: {
-            break;
-          }
-          case matchResult.UNMATCHED: {
+          case MatchResult.UNMATCHED: {
             matchers.delete(key);
             break;
           }
@@ -89,37 +85,6 @@ export function TextFormatter({
     } else {
       content += token;
     }
-
-    const factory = new HeaderParserFactory({});
-    let matcher = null;
-
-    // matcher = factory.createIfMatch(token);
-    // if (matcher) {
-    //   const result = matcher.next(token);
-    //   // console.log('result:', result, '| token:', token);
-    //   switch (result) {
-    //     case matchResult.DONE: {
-    //       const result = matcher.render();
-    //       console.log(result);
-    //       elements.push(result);
-    //       content = '';
-    //       matcher = null;
-    //       break;
-    //     }
-    //     case matchResult.MATCHED: {
-    //       content += token;
-    //       break;
-    //     }
-    //     case matchResult.UNMATCHED: {
-    //       content += token;
-    //       elements.push(content);
-    //       matcher = null;
-    //       break;
-    //     }
-    //   }
-    // } else {
-    //   content += token;
-    // }
   }
   elements.push(content);
   return <>{elements}</>;

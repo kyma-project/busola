@@ -3,7 +3,7 @@ import { Title } from '@ui5/webcomponents-react';
 import {
   Matcher,
   MatcherFactory,
-  matchResult,
+  MatchResult,
 } from 'components/KymaCompanion/components/Chat/messages/formatter/TextFormatter';
 
 type MatcherFactoryProps = {
@@ -14,7 +14,7 @@ type MatcherFactoryProps = {
   titleSize?: TitleLevel;
 };
 
-export class HeaderParserFactory implements MatcherFactory {
+export class HeaderMatcherFactory implements MatcherFactory {
   startToken;
   stopToken;
   desiredStartTokens;
@@ -83,24 +83,33 @@ class HeadingParser implements Matcher {
   }
 
   next(token: string): any {
-    // Startowe tokeny zostały osiągniete
-    if (this.matchedTokens >= this.desiredStartTokens) {
-      //osiagnieto liczbe startowych tokenów, sprawdzmy czy to jest koniec
-      if (token === this.stopToken) {
-        return matchResult.DONE;
+    if (this.allStartedTokensAchieved()) {
+      if (this.isStopToken(token)) {
+        return MatchResult.DONE;
       }
-      if (token === this.startToken) {
-        return matchResult.UNMATCHED;
+      if (this.isStartToken(token)) {
+        return MatchResult.UNMATCHED;
       }
       this.content += token;
-      return matchResult.MATCHED;
+      return MatchResult.MATCHED;
     }
-    // Looking for start token
-    if (token === this.startToken) {
+    if (this.isStartToken(token)) {
       this.matchedTokens += 1;
-      return matchResult.MATCHED;
+      return MatchResult.MATCHED;
     }
 
-    return matchResult.UNMATCHED;
+    return MatchResult.UNMATCHED;
+  }
+
+  allStartedTokensAchieved(): boolean {
+    return this.matchedTokens >= this.desiredStartTokens;
+  }
+
+  isStopToken(token: string): boolean {
+    return this.stopToken === token;
+  }
+
+  isStartToken(token: string): boolean {
+    return this.startToken === token;
   }
 }
