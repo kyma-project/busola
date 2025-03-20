@@ -10,6 +10,7 @@ type ColumnState = {
 type ShowCreate = {
   resourceType: null | string;
   namespaceId: null | string;
+  resource?: null | object;
 };
 
 export type ColumnLayoutState = {
