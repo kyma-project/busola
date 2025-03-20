@@ -65,8 +65,7 @@ export default function Message({
             ) : (
               <TextFormatter
                 text={segment.content}
-                disabled={false}
-                // disabled={!formatPlaintext}
+                disabled={formatPlaintext}
               ></TextFormatter>
             ),
           )}
