@@ -10,8 +10,9 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 import { createTemplate } from './templates';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { BusyIndicator } from '@ui5/webcomponents-react';
 
-function CRCreate({
+function CRCreateForm({
   onChange,
   formElementRef,
   crd,
@@ -70,6 +71,37 @@ function CRCreate({
         });
         navigate(`${customUrl(cr)}${nextQuery}`);
       }}
+    />
+  );
+}
+
+function CRCreate({
+  onChange,
+  formElementRef,
+  crd,
+  layoutNumber,
+  resource: initialCustomResource,
+  ...props
+}) {
+  if (!crd) {
+    return (
+      <BusyIndicator
+        active
+        size="M"
+        delay={0}
+        className="sap-margin-top-small"
+      />
+    );
+  }
+
+  return (
+    <CRCreateForm
+      onChange={onChange}
+      formElementRef={formElementRef}
+      crd={crd}
+      layoutNumber={layoutNumber}
+      resource={initialCustomResource}
+      {...props}
     />
   );
 }
