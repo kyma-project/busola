@@ -94,7 +94,11 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
 
   // Fetching all Module Templates can be replaced with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
   const { data: moduleTemplates } = useModuleTemplatesQuery({
-    skip: !(layoutState?.midColumn?.resourceName || resourceName),
+    skip: !(
+      layoutState?.midColumn?.resourceName ||
+      resourceName ||
+      kymaResource?.metadata?.name
+    ),
   });
 
   let startColumnComponent = null;
