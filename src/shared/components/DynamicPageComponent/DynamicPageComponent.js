@@ -111,6 +111,7 @@ export const DynamicPageComponent = ({
   className,
   customActionIfFormOpen,
 }) => {
+  const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { t } = useTranslation();
@@ -126,7 +127,6 @@ export const DynamicPageComponent = ({
     dynamicPageRef,
     tabContainerRef,
   );
-  const navigate = useNavigate();
 
   const handleColumnClose = () => {
     layoutNumber === 'MidColumn'
@@ -202,7 +202,7 @@ export const DynamicPageComponent = ({
                     });
                     const link = `${window.location.pathname}${
                       layoutColumn?.showCreate?.resourceType
-                        ? ''
+                        ? '?layout=' + newLayout + '&showCreate=true'
                         : '?layout=' + newLayout
                     }`;
                     navigate(link);
@@ -228,7 +228,7 @@ export const DynamicPageComponent = ({
                     });
                     const link = `${window.location.pathname}${
                       layoutColumn?.showCreate?.resourceType
-                        ? ''
+                        ? '?layout=' + newLayout + '&showCreate=true'
                         : '?layout=' + newLayout
                     }`;
                     navigate(link);

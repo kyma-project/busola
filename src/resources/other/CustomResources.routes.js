@@ -1,6 +1,6 @@
-import React, { Suspense, useEffect, useMemo } from 'react';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import React, { Suspense, useMemo } from 'react';
+import { Route, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +13,7 @@ import { usePrepareCreateProps } from 'resources/helpers';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import CRCreate from '../CustomResourceDefinitions/CRCreate';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 const CustomResourcesByGroup = React.lazy(() =>
   import('../../components/CustomResources/CustomResourcesByGroup'),
@@ -27,50 +28,23 @@ const CustomResource = React.lazy(() =>
 );
 
 export const ColumnWrapper = () => {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+  const layoutState = useRecoilValue(columnLayoutState);
 
   const { t } = useTranslation();
 
   const { crdName, crName } = useParams();
   const { namespace, scopedUrl } = useUrl();
 
+  usePrepareLayoutColumns({
+    resourceType: 'CustomResourceDefinition',
+    namespaceId: '',
+    apiGroup: 'apiextensions.k8s.io',
+    apiVersion: 'v1',
+    resourceName: crdName,
+    isCustomResource: true,
+    crName: crName,
+  });
   const defaultColumn = crName ? 'details' : 'list';
-  const initialLayoutState = layout
-    ? {
-        layout: layout,
-        startColumn: {
-          resourceType: 'CustomResourceDefinition',
-        },
-        midColumn: crdName
-          ? {
-              resourceName: crdName,
-              resourceType: 'CustomResourceDefinition',
-              namespaceId: null,
-            }
-          : null,
-        endColumn:
-          crdName && crName
-            ? {
-                resourceName: crName,
-                resourceType: crdName,
-                namespaceId: namespace,
-              }
-            : null,
-      }
-    : {
-        layout: layoutState?.layout,
-        startColumn: {
-          resourceType: 'CustomResourceDefinition',
-        },
-        midColumn: null,
-        endColumn: null,
-      };
-
-  useEffect(() => {
-    setLayoutColumn(initialLayoutState);
-  }, [layout, crdName, crName, namespace]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const layoutCloseCreateUrl = scopedUrl(
     `customresources/${layoutState?.midColumn?.resourceName ?? crdName}`,
@@ -103,7 +77,7 @@ export const ColumnWrapper = () => {
   });
 
   let startColumnComponent = null;
-  if (!layout) {
+  if (layoutState.layout === 'OneColumn') {
     if (defaultColumn === 'details') {
       startColumnComponent = (
         <CustomResource
@@ -207,7 +181,7 @@ export const ColumnWrapper = () => {
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
+      layout={layoutState?.layout}
       startColumn={
         <div className="column-content">
           <Suspense fallback={<Spinner />}>{startColumnComponent}</Suspense>
