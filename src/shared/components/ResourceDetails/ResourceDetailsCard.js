@@ -8,7 +8,7 @@ export default function ResourceDetailsCard({
   className = '',
 }) {
   return (
-    <div className={`${wrapperClassname} sap-margin-x-small`}>
+    <div className={`${wrapperClassname}`}>
       <Card className={className} header={<CardHeader titleText={titleText} />}>
         <div className="cluster-overview__details-grid sap-margin-small sap-margin-top-tiny">
           {content}
