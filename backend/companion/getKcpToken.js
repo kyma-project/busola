@@ -1,10 +1,12 @@
-import { credentials } from 'backend/companion/credentials';
-
 export async function getKcpToken() {
   const tokenUrl = 'https://kymatest.accounts400.ondemand.com/oauth2/token';
   const grantType = 'client_credentials';
-  const clientId = credentials.clientId;
-  const clientSecret = credentials.clientSecret;
+  const clientId =
+    process.env.COMPANION_KCP_AUTH_CLIENT_SECRET ??
+    (await import('./credentials.js')).credentials.clientId;
+  const clientSecret =
+    process.env.COMPANION_KCP_AUTH_CLIENT_ID ??
+    (await import('./credentials.js')).credentials.clientSecret;
 
   if (!clientId) {
     throw new Error('COMPANION_KCP_AUTH_CLIENT_ID is not set');
