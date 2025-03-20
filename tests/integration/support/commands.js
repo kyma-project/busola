@@ -170,6 +170,7 @@ Cypress.Commands.add(
       selectSearchResult = false,
     } = options;
 
+    cy.wait(500);
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
