@@ -1,7 +1,9 @@
 import pluralize from 'pluralize';
 
 export const getExtensibilityPath = ({
+  urlPath,
   resource: { kind },
 }: {
+  urlPath?: string | undefined;
   resource: { kind: string };
-}) => pluralize((kind ?? '').toLowerCase());
+}) => urlPath ?? pluralize((kind ?? '').toLowerCase());
