@@ -77,7 +77,7 @@ export function CommandPaletteSearchBar({
       shellbarCurr?.removeAttribute('show-search-field');
       searchField.style.display = 'none';
     }
-  }, [shellbarRef?.current, shellbarWidth]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shellbarRef?.current, shellbarWidth, shouldShowDialog]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
