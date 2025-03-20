@@ -1,12 +1,7 @@
-import {
-  BusyIndicator,
-  FlexBox,
-  Link,
-  ObjectStatus,
-  Text,
-} from '@ui5/webcomponents-react';
+import { Link, Text } from '@ui5/webcomponents-react';
 import CodePanel from './CodePanel';
 import { segmentMarkdownText } from 'components/KymaCompanion/utils/formatMarkdown';
+import TasksList from './TasksList';
 import './Message.scss';
 
 interface MessageProps {
@@ -38,36 +33,7 @@ export default function Message({
   isLoading,
 }: MessageProps): JSX.Element {
   if (isLoading) {
-    const chunksLength = messageChunks.length;
-    return (
-      <div className={'message loading ' + className}>
-        {chunksLength > 0 ? (
-          messageChunks[chunksLength - 1].data?.answer?.tasks?.map(
-            (task, index) => {
-              return (
-                <FlexBox
-                  justifyContent="SpaceBetween"
-                  alignItems="Center"
-                  className="loading-item"
-                  key={index}
-                >
-                  <Text className="text">{task?.task_name}</Text>
-                  <div className="loading-status">
-                    {task?.status === 'completed' ? (
-                      <ObjectStatus state="Positive" showDefaultIcon />
-                    ) : (
-                      <BusyIndicator active size="S" delay={0} />
-                    )}
-                  </div>
-                </FlexBox>
-              );
-            },
-          )
-        ) : (
-          <BusyIndicator active size="M" delay={0} />
-        )}
-      </div>
-    );
+    return <TasksList messageChunks={messageChunks} />;
   }
 
   const segmentedText = segmentMarkdownText(

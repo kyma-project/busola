@@ -1,6 +1,11 @@
 .message {
   max-width: 80%;
   padding: 12px;
+  background-color: var(--sapAssistant_Answer_Background);
+
+  &.no-background {
+    background-color: var(--sapTile_Background);
+  }
 
   &.loading {
     display: flex;
@@ -8,7 +13,7 @@
     gap: 16px;
 
     .loading-item {
-      gap: 8px;
+      gap: 0.5rem;
 
       .text {
         flex-grow: 1;
@@ -41,4 +46,8 @@
     white-space: pre-line;
     display: inline;
   }
+}
+
+.ai-busy-indicator {
+  width: fit-content;
 }
