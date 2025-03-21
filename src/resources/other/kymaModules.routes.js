@@ -92,7 +92,10 @@ const ColumnWraper = ({
   });
 
   // Fetching all Module Templates can be replaced with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
-  const { data: moduleTemplates } = useModuleTemplatesQuery({
+  const {
+    data: moduleTemplates,
+    loading: moduleTemplatesLoading,
+  } = useModuleTemplatesQuery({
     skip: !(
       layoutState?.midColumn?.resourceName ||
       resourceName ||
@@ -188,20 +191,22 @@ const ColumnWraper = ({
   return (
     <>
       {createPortal(
-        <ModulesDeleteBox
-          DeleteMessageBox={DeleteMessageBox}
-          selectedModules={activeKymaModules}
-          chosenModuleIndex={openedModuleIndex}
-          kymaResource={kymaResource}
-          kymaResourceState={kymaResourceState}
-          moduleTemplates={moduleTemplates}
-          detailsOpen={detailsOpen}
-          setKymaResourceState={setKymaResourceState}
-          setInitialUnchangedResource={setInitialUnchangedResource}
-          setChosenModuleIndex={setOpenedModuleIndex}
-          handleModuleUninstall={handleModuleUninstall}
-          setLayoutColumn={setLayoutColumn}
-        />,
+        !kymaResourceLoading && !moduleTemplatesLoading && showDeleteDialog && (
+          <ModulesDeleteBox
+            DeleteMessageBox={DeleteMessageBox}
+            selectedModules={activeKymaModules}
+            chosenModuleIndex={openedModuleIndex}
+            kymaResource={kymaResource}
+            kymaResourceState={kymaResourceState}
+            moduleTemplates={moduleTemplates}
+            detailsOpen={detailsOpen}
+            setKymaResourceState={setKymaResourceState}
+            setInitialUnchangedResource={setInitialUnchangedResource}
+            setChosenModuleIndex={setOpenedModuleIndex}
+            handleModuleUninstall={handleModuleUninstall}
+            setLayoutColumn={setLayoutColumn}
+          />
+        ),
         document.body,
       )}
       <FlexibleColumnLayout
