@@ -21,7 +21,6 @@ import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { isFormOpenState } from 'state/formOpenAtom';
-import './useDeleteResource.scss';
 
 export function useDeleteResource({
   resourceTitle,
@@ -260,5 +259,5 @@ export function useDeleteResource({
     );
   };
 
-  return [DeleteMessageBox, handleResourceDelete];
+  return [DeleteMessageBox, handleResourceDelete, showDeleteDialog];
 }
