@@ -49,6 +49,9 @@ const convert = (arg, currentPath, spec) => {
 };
 
 export function createTemplate(crd) {
+  if (!crd) {
+    return {};
+  }
   const spec = {};
   const currentVersion = crd?.spec?.versions.find(ver => ver.storage);
 

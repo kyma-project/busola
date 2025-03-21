@@ -2,15 +2,13 @@ import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { createPatch } from 'rfc6902';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
-import { useUrl } from 'hooks/useUrl';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 
 import {
@@ -127,9 +125,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
     skip: !resourceName,
   });
 
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const notification = useNotification();
-  const { scopedUrl } = useUrl();
 
   const getRequest = useSingleGet();
   const patchRequest = useUpdate();
@@ -312,21 +308,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
         resourceType: t('kyma-modules.kyma'),
       }),
     });
-    setLayoutColumn({
-      ...layoutColumn,
-      layout: 'OneColumn',
-      showCreate: null,
-      endColumn: {
-        resourceName: kymaResource.metadata.name,
-        resourceType: kymaResource.kind,
-        namespaceId: kymaResource.metadata.namespace,
-      },
-    });
-    window.history.pushState(
-      window.history.state,
-      '',
-      `${scopedUrl(`kymas/${encodeURIComponent(kymaResource.metadata.name)}`)}`,
-    );
 
     setIsResourceEdited({
       isEdited: false,

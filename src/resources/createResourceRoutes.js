@@ -1,7 +1,7 @@
-import React, { Suspense, useEffect, useMemo } from 'react';
+import React, { Suspense, useMemo } from 'react';
 
-import { useRecoilState } from 'recoil';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { Route, useParams } from 'react-router-dom';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,6 +18,7 @@ import { useUrl } from 'hooks/useUrl';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { SchemaContext } from 'shared/helpers/schema';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
@@ -30,9 +31,7 @@ export const createPath = (
 };
 
 const ColumnWrapper = ({ list, details, create, ...props }) => {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+  const layoutState = useRecoilValue(columnLayoutState);
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
@@ -51,42 +50,15 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     [props.namespaceId, namespaceIdFromParams],
   );
 
+  usePrepareLayoutColumns({
+    resourceType: props.resourceType,
+    namespaceId: namespaceId,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
+    resourceName: resourceName,
+  });
+
   const defaultColumn = resourceName ? 'details' : 'list';
-
-  const initialLayoutState = layout
-    ? {
-        layout: layout,
-        startColumn: {
-          resourceType: props.resourceType,
-          namespaceId: namespaceId,
-          apiGroup: props.apiGroup,
-          apiVersion: props.apiVersion,
-        },
-        midColumn: {
-          resourceName: resourceName,
-          resourceType: props.resourceType,
-          namespaceId: namespaceId,
-          apiGroup: props.apiGroup,
-          apiVersion: props.apiVersion,
-        },
-        endColumn: null,
-      }
-    : {
-        layout: layoutState?.layout,
-        startColumn: {
-          resourceType: props.resourceType,
-          namespaceId: namespaceId,
-          apiGroup: props.apiGroup,
-          apiVersion: props.apiVersion,
-        },
-        midColumn: null,
-        endColumn: null,
-      };
-
-  useEffect(() => {
-    setLayoutColumn(initialLayoutState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [layout, namespaceId, resourceName, props.resourceType]);
 
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,
@@ -133,7 +105,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
 
   let startColumnComponent = null;
 
-  if (!layout && defaultColumn === 'details') {
+  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = detailsComponent;
   } else {
     startColumnComponent = listComponent;
@@ -181,18 +153,20 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     <SchemaContext.Provider value={schema || null}>
       <FlexibleColumnLayout
         style={{ height: '100%' }}
-        layout={layoutState?.layout || 'OneColumn'}
+        layout={layoutState?.layout}
         startColumn={
           <div className="column-content">{startColumnComponent}</div>
         }
         midColumn={
           <>
             {!layoutState?.showCreate &&
-              (defaultColumn !== 'details' || layout) && (
+              (defaultColumn !== 'details' ||
+                layoutState.layout !== 'OneColumn') && (
                 <div className="column-content">{detailsMidColumn}</div>
               )}
             {!layoutState?.midColumn &&
-              (defaultColumn !== 'details' || layout) && (
+              (defaultColumn !== 'details' ||
+                layoutState.layout !== 'OneColumn') && (
                 <div className="column-content">{createMidColumn}</div>
               )}
           </>

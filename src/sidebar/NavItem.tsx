@@ -1,10 +1,4 @@
-import { useEffect } from 'react';
-import {
-  NavigationType,
-  useLocation,
-  useNavigate,
-  useNavigationType,
-} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
@@ -35,7 +29,6 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
-  const navigationType = useNavigationType();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
@@ -63,7 +56,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     }
   };
 
-  const handleNavigation = (isNavigatingForward?: boolean) => {
+  const handleNavigation = () => {
     if (node.dataSources) {
       let link =
         !jsonataError && jsonataLink ? jsonataLink : node.externalUrl ?? '';
@@ -86,7 +79,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
           const url = node.createUrlFn
             ? node.createUrlFn(urlGenerators)
             : scopedUrl(node.pathSegment);
-          if (location?.pathname !== url && isNavigatingForward) {
+          if (location?.pathname !== url) {
             setLayoutColumn({
               startColumn: {
                 resourceType: node?.resourceTypeCased,
@@ -106,20 +99,13 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     }
   };
 
-  useEffect(() => {
-    if (navigationType === NavigationType.Pop) {
-      handleNavigation();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigationType]);
-
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
     text: t(node.label, { defaultValue: node.label }),
     selected: isNodeSelected(node),
     onClick: (e: Event) => {
       e.stopPropagation();
-      handleNavigation(true);
+      handleNavigation();
     },
   };
 

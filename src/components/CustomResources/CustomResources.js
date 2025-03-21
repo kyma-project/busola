@@ -6,6 +6,7 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
 
 export function CustomResources({
   crd,
@@ -61,10 +62,13 @@ export function CustomResources({
   if (customColumns?.length > 5) customColumns.length = 5;
 
   const customColumnLayout = resource => {
+    const { group, version } = extractApiGroupVersion(crd?.apiVersion);
     return {
       resourceName: resource?.metadata?.name,
       resourceType: crd?.metadata?.name,
       namespaceId: resource?.metadata?.namespace,
+      apiGroup: group,
+      apiVersion: version,
     };
   };
 

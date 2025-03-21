@@ -21,15 +21,21 @@ This table lists the available parameters of the **data.list** section in your r
 See the following example:
 
 ```yaml
-- source: spec.url
+- name: Description
+- source: spec.description
   search: true
   sort:
     default: true
     compareFunction: '$compareStrings($first, $second)'
-- source: spec.priority
+- name: State
+- source: status.messages[-1].state
   widget: Badge
-- source: "$join(spec.toppings.name, ', ')"
-- name: quantityIsMore
+- name: Toppings price
+  source: $sum(spec.toppings.price)
+  sort:
+    default: true
+    search: true
+- name: Toppings details
   source:
     '$filter(spec.toppings, function ($v, $i, $a) { $v.quantity > $average($a.quantity)
     })'
@@ -38,6 +44,8 @@ See the following example:
 - source: spec.volumes['configMap' in $keys($)] # This is the alternative way of listing the array of volume objects that have a ConfigMap
 - source: "$join(spec.volumes['configMap' in $keys($)].name, ', ')" # List volume names of volumes that have a ConfigMap
 ```
+
+<img src="./assets/listColumns.png" alt="Example of list column">
 
 ## Related Links
 

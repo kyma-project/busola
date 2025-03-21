@@ -117,6 +117,7 @@ export function ResourceForm({
         if (isResourceEdited.discardAction) isResourceEdited.discardAction();
       }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leavingForm]);
 

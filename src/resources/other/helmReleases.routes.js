@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import React from 'react';
+import { Route, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 const HelmReleasesList = React.lazy(() =>
   import('../../components/HelmReleases/HelmReleasesList'),
@@ -14,42 +15,19 @@ const HelmReleaseDetails = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+  const layoutState = useRecoilValue(columnLayoutState);
   const { namespaceId, releaseName } = useParams();
 
-  const initialLayoutState = layout
-    ? {
-        layout: layout,
-        startColumn: {
-          resourceType: 'HelmReleases',
-          namespaceId,
-        },
-        midColumn: {
-          resourceName: releaseName,
-          resourceType: 'HelmReleases',
-          namespaceId,
-        },
-        endColumn: null,
-      }
-    : {
-        layout: layoutState?.layout,
-        startColumn: {
-          resourceType: 'HelmReleases',
-          namespaceId,
-        },
-        midColumn: null,
-        endColumn: null,
-      };
-
-  useEffect(() => {
-    setLayoutColumn(initialLayoutState);
-  }, [layout, namespaceId, releaseName]); // eslint-disable-line react-hooks/exhaustive-deps
+  usePrepareLayoutColumns({
+    resourceType: 'HelmReleases',
+    namespaceId: namespaceId,
+    apiGroup: '',
+    apiVersion: 'v1',
+    resourceName: releaseName,
+  });
 
   let startColumnComponent = null;
-
-  if (!layout && defaultColumn === 'details') {
+  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}

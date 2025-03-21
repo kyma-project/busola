@@ -10,9 +10,21 @@ const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 export function savePreviousPath() {
   const queryParams = new URLSearchParams(window.location.search);
 
-  const previousPath = queryParams.get('layout')
-    ? `${window.location.pathname}?layout=${queryParams.get('layout')}`
-    : window.location.pathname;
+  const layoutParam = queryParams.get('layout');
+  const showCreateParam = queryParams.get('showCreate');
+
+  let previousPath = window.location.pathname;
+
+  if (layoutParam || showCreateParam) {
+    previousPath += '?';
+    const params = [];
+
+    if (layoutParam) params.push(`layout=${layoutParam}`);
+    if (showCreateParam) params.push(`showCreate=${showCreateParam}`);
+
+    previousPath += params.join('&');
+  }
+
   if (previousPath !== '/' && previousPath !== '/clusters') {
     localStorage.setItem(PREVIOUS_PATHNAME_KEY, previousPath);
   }

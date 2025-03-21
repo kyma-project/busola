@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -38,6 +39,7 @@ export const ResourceCreate = ({
     revalidate,
   } = useCustomFormValidator();
   const notificationManager = useNotification();
+  const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
@@ -87,9 +89,7 @@ export const ResourceCreate = ({
 
   function navigateAfterClose() {
     setIsResourceEdited({ isEdited: false });
-    window.history.pushState(
-      window.history.state,
-      '',
+    navigate(
       layoutCloseCreateUrl
         ? layoutCloseCreateUrl
         : `${window.location.pathname.slice(
