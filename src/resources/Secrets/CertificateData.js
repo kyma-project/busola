@@ -1,4 +1,3 @@
-import React from 'react';
 import { X509Certificate } from '@peculiar/x509';
 import { CertificatePanel } from './CertificatePanel';
 import { base64Decode } from 'shared/helpers';

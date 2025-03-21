@@ -52,7 +52,9 @@ export const ExtensibilityListCore = ({
   });
 
   const listProps = usePrepareListProps({
-    resourceCustomType: getExtensibilityPath(resMetaData?.general),
+    resourceCustomType: getExtensibilityPath(
+      resMetaData?.general || { resource: { kind: '' } },
+    ),
     resourceI18Key: 'name',
     apiGroup: resource?.group,
     apiVersion: resource?.version,
@@ -187,7 +189,9 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: getExtensibilityPath(resMetaData?.general),
+        translationBundle: getExtensibilityPath(
+          resMetaData?.general?.kind || { resource: { kind: '' } },
+        ),
         defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >

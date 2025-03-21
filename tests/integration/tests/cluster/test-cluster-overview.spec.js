@@ -71,6 +71,7 @@ context('Test Cluster Overview', () => {
     cy.getLeftNav()
       .contains('Back To Cluster Details')
       .click();
+    cy.wait(500);
     cy.navigateTo('Configuration', 'Extensions');
     cy.deleteFromGenericList('Extension', 'hpatest');
 
