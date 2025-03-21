@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
+import { useEventListener } from 'hooks/useEventListener';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
 import { useRecoilValue } from 'recoil';
@@ -43,6 +44,29 @@ export function CommandPaletteSearchBar({
       setOpen(value);
     }
   };
+
+  const onKeyPress = (e: Event) => {
+    const { key, metaKey, ctrlKey } = e as KeyboardEvent;
+    // for (Edge, Chrome) || (Firefox, Safari)
+    const isMac = (
+      (navigator as any).userAgentData?.platform || navigator.platform
+    )
+      ?.toLowerCase()
+      ?.startsWith('mac');
+    const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
+
+    if (
+      (key === 'k' || key === 'K') &&
+      modifierKeyPressed &&
+      window.location.pathname !== '/clusters'
+    ) {
+      setShowDialog(!shouldShowDialog);
+      // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
+      e.preventDefault();
+    }
+  };
+
+  useEventListener('keydown', onKeyPress, [shouldShowDialog]);
 
   useEffect(() => {
     setShellbarWidth(
