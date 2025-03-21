@@ -258,5 +258,5 @@ export function useDeleteResource({
     );
   };
 
-  return [DeleteMessageBox, handleResourceDelete];
+  return [DeleteMessageBox, handleResourceDelete, showDeleteDialog];
 }
