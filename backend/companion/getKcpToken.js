@@ -3,10 +3,10 @@ export async function getKcpToken() {
   const grantType = 'client_credentials';
   const clientId =
     process.env.COMPANION_KCP_AUTH_CLIENT_SECRET ??
-    (await import('./credentials.js'))?.credentials?.clientId;
+    require('./credentials.js')?.credentials?.clientId;
   const clientSecret =
     process.env.COMPANION_KCP_AUTH_CLIENT_ID ??
-    (await import('./credentials.js'))?.credentials?.clientSecret;
+    require('./credentials.js')?.credentials?.clientSecret;
 
   if (!clientId) {
     throw new Error('COMPANION_KCP_AUTH_CLIENT_ID is not set');
@@ -43,4 +43,8 @@ export async function getKcpToken() {
   } catch (error) {
     throw new Error(`Failed to fetch token: ${error.message}`);
   }
+}
+
+function loadLocalCredentials() {
+  const credentials = require('backend/companion/credentials.js');
 }
