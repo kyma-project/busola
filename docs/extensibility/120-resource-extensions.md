@@ -63,7 +63,7 @@ externalNodes:
     scope: namespace
     children:
       - label: Pizza Recipe
-        link: 'https://https://mypizzarecipes.com/'
+        link: 'https://mypizzarecipes.com/'
   - category: History of Pizza
     icon: education
     scope: namespace
