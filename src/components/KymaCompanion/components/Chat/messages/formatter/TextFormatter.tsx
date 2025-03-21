@@ -34,56 +34,99 @@ const registeredMatchersFactories: Map<string, MatcherFactory> = new Map<
 
 export function TextFormatter({
   text,
-  disabled,
+  disable,
 }: {
   text: string;
-  disabled?: boolean;
+  disable?: boolean;
 }): JSX.Element {
-  if (disabled) {
+  console.log(text);
+  if (disable) {
     return <>{text}</>;
   }
+  const formatter = new textFormatter();
+  const elements = formatter.parseText(text);
 
-  const elements = [];
-  let matchers = new Map<string, Matcher>();
-  let content = '';
-  for (let token of text) {
-    registeredMatchersFactories.forEach((factory, key) => {
-      if (matchers.has(key)) {
-        return;
-      }
+  return <>{elements}</>;
+}
 
-      const newMatcher = factory.createIfMatch(token);
-      if (!newMatcher) {
-        return;
-      }
-      matchers.set(key, newMatcher);
-    });
-    if (matchers.size !== 0) {
-      let matcherDone = false;
-      matchers.forEach((matcher, key) => {
-        const result = matcher.next(token);
-        switch (result) {
-          case MatchResult.DONE: {
-            const result = matcher.render();
-            elements.push(result);
-            matcherDone = true;
-            matchers = new Map<string, Matcher>();
-            break;
-          }
-          case MatchResult.UNMATCHED: {
-            matchers.delete(key);
-            break;
-          }
-        }
+class textFormatter {
+  elements: any[];
+  matchers: Map<string, Matcher>;
+  content: string;
+
+  constructor() {
+    this.elements = [];
+    this.matchers = new Map();
+    this.content = '';
+  }
+
+  parseText(text: string): any[] {
+    for (let token of text) {
+      registeredMatchersFactories.forEach((factory, key) => {
+        this.addMatcherIfTokenMatch(factory, key, token);
       });
-      content += token;
-      if (matcherDone) {
-        content = '';
+      let matched = false;
+      if (this.matchers.size !== 0) {
+        this.matchers.forEach((matcher, key) => {
+          const result = matcher.next(token);
+          switch (result) {
+            case MatchResult.DONE: {
+              this.handleDone(matcher);
+              matched = true;
+              break;
+            }
+            case MatchResult.UNMATCHED: {
+              this.handleUnmatched(key, token);
+              break;
+            }
+          }
+        });
       }
-    } else {
-      content += token;
+      if (!matched) {
+        this.content += token;
+      }
+    }
+    this.pushContent();
+    return this.elements;
+  }
+
+  addMatcherIfTokenMatch(
+    factory: MatcherFactory,
+    matcherKey: string,
+    token: string,
+  ) {
+    if (this.matchers.has(matcherKey)) {
+      return;
+    }
+
+    const newMatcher = factory.createIfMatch(token);
+    if (!newMatcher) {
+      return;
+    }
+    this.pushContent();
+    this.matchers.set(matcherKey, newMatcher);
+  }
+
+  handleDone(matcher: Matcher) {
+    const result = matcher.render();
+    this.elements.push(result);
+    this.matchers = new Map<string, Matcher>();
+    this.content = '';
+  }
+
+  handleUnmatched(matcherToDelete: string, token: string) {
+    this.matchers.delete(matcherToDelete);
+    if (this.matchers.size === 0) {
+      this.content += token;
+      this.pushContent();
     }
   }
-  elements.push(content);
-  return <>{elements}</>;
+
+  pushContent() {
+    if (this.content === '') {
+      return;
+    }
+    this.elements.push(this.content);
+    this.content = '';
+  }
 }
