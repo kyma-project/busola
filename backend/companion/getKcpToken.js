@@ -3,10 +3,10 @@ export async function getKcpToken() {
   const grantType = 'client_credentials';
   const clientId =
     process.env.COMPANION_KCP_AUTH_CLIENT_SECRET ??
-    getLocalCredentials?.credentials?.clientId;
+    getLocalCredentials()?.clientId;
   const clientSecret =
     process.env.COMPANION_KCP_AUTH_CLIENT_ID ??
-    getLocalCredentials.credentials?.clientSecret;
+    getLocalCredentials()?.clientSecret;
 
   if (!clientId) {
     throw new Error('COMPANION_KCP_AUTH_CLIENT_ID is not set');
@@ -47,5 +47,5 @@ export async function getKcpToken() {
 
 function getLocalCredentials() {
   const fs = require('fs');
-  return JSON.parse(fs.readFileSync('./credentials.json').toString());
+  return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
 }
