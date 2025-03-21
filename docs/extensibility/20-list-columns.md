@@ -35,6 +35,14 @@ See the following example:
   sort:
     default: true
     search: true
+- name: Toppings details
+  source:
+    '$filter(spec.toppings, function ($v, $i, $a) { $v.quantity > $average($a.quantity)
+    })'
+- source: "$join(spec.volumes.name, ', ')"
+- source: "$filter(spec.volumes, function ($v, $i, $a) {'configMap' in $keys($v)})" # List the array of volume objects that have a ConfigMap
+- source: spec.volumes['configMap' in $keys($)] # This is the alternative way of listing the array of volume objects that have a ConfigMap
+- source: "$join(spec.volumes['configMap' in $keys($)].name, ', ')" # List volume names of volumes that have a ConfigMap
 ```
 
 <img src="./assets/listColumns.png" alt="Example of list column">
