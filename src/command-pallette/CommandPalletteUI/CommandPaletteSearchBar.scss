@@ -6,7 +6,7 @@
   flex-grow: 1;
 }
 
-@media (max-width: 1040px) {
+@container (max-width: 1040px) {
   .command-palette-search-bar {
     width: 100% !important;
   }
