@@ -1,12 +1,12 @@
 import { useEffect, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
+import { useRecoilValue } from 'recoil';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
 import { useEventListener } from 'hooks/useEventListener';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
-import { useRecoilValue } from 'recoil';
 import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
@@ -103,6 +103,8 @@ export function CommandPaletteSearchBar({
     }
   }, [shellbarRef?.current, shellbarWidth, shouldShowDialog]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const htmlWrapEl = document.getElementById('html-wrap');
+
   return (
     <>
       <Input
@@ -126,8 +128,9 @@ export function CommandPaletteSearchBar({
             }}
             resourceCache={resourceCache}
             updateResourceCache={updateResourceCache}
+            shellbarWidth={shellbarWidth}
           />,
-          document.body,
+          htmlWrapEl || document.body,
         )}
     </>
   );
