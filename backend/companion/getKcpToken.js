@@ -44,7 +44,3 @@ export async function getKcpToken() {
     throw new Error(`Failed to fetch token: ${error.message}`);
   }
 }
-
-function loadLocalCredentials() {
-  const credentials = require('backend/companion/credentials.js');
-}
