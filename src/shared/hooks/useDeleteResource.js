@@ -191,7 +191,6 @@ export function useDeleteResource({
         )}
         open={showDeleteDialog}
         className="ui5-content-density-compact"
-        id="delete-message-box"
         actions={[
           <Button
             key="delete-confirmation"
