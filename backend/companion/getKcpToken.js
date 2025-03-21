@@ -1,8 +1,12 @@
 export async function getKcpToken() {
   const tokenUrl = 'https://kymatest.accounts400.ondemand.com/oauth2/token';
   const grantType = 'client_credentials';
-  const clientId = process.env.COMPANION_KCP_AUTH_CLIENT_ID;
-  const clientSecret = process.env.COMPANION_KCP_AUTH_CLIENT_SECRET;
+  const clientId =
+    process.env.COMPANION_KCP_AUTH_CLIENT_SECRET ??
+    getLocalCredentials()?.clientId;
+  const clientSecret =
+    process.env.COMPANION_KCP_AUTH_CLIENT_ID ??
+    getLocalCredentials()?.clientSecret;
 
   if (!clientId) {
     throw new Error('COMPANION_KCP_AUTH_CLIENT_ID is not set');
@@ -39,4 +43,9 @@ export async function getKcpToken() {
   } catch (error) {
     throw new Error(`Failed to fetch token: ${error.message}`);
   }
+}
+
+function getLocalCredentials() {
+  const fs = require('fs');
+  return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
 }

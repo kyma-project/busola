@@ -16,12 +16,12 @@ type Resource = {
 };
 
 export const getAssociatedResources = (
-  chosenModuleIndex: number,
+  chosenModuleIndex: number | null,
   selectedModules: any,
   kymaResource: any,
   moduleTemplates: ModuleTemplateListType,
 ) => {
-  if (!chosenModuleIndex) {
+  if (chosenModuleIndex == null) {
     return [];
   }
   const selectedModule = selectedModules[chosenModuleIndex];
@@ -40,12 +40,12 @@ export const getAssociatedResources = (
 };
 
 export const getCRResource = (
-  chosenModuleIndex: number,
+  chosenModuleIndex: number | null,
   selectedModules: any,
   kymaResource: any,
   moduleTemplates: ModuleTemplateListType,
 ) => {
-  if (!chosenModuleIndex) {
+  if (chosenModuleIndex == null) {
     return [];
   }
   const selectedModule = selectedModules[chosenModuleIndex];
@@ -62,7 +62,7 @@ export const getCRResource = (
   );
 
   let resource: Resource | null = null;
-  if (module && module.spec.data) {
+  if (module?.spec?.data) {
     resource = {
       group: module.spec.data.apiVersion.split('/')[0],
       version: module.spec.data.apiVersion.split('/')[1],

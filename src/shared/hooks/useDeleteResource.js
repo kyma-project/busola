@@ -105,9 +105,7 @@ export function useDeleteResource({
                 )}/busolaextensions`,
               );
             } else {
-              window.history.pushState(
-                window.history.state,
-                '',
+              navigate(
                 `${window.location.pathname.slice(
                   0,
                   window.location.pathname.lastIndexOf('/'),

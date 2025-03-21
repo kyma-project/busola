@@ -3,7 +3,21 @@ import React, { useEffect, useState } from 'react';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
-type KymaResourceType = {
+export type KymaResourceSpecModuleType = {
+  name: string;
+  channel?: string;
+};
+
+export type KymaResourceStatusModuleType = {
+  name: string;
+  channel?: string;
+  version?: string;
+  state?: string;
+  resource?: { metadata?: { namespace?: string }; kind?: string };
+  message?: string;
+};
+
+export type KymaResourceType = {
   apiVersion: string;
   kind: string;
   metadata: {
@@ -11,15 +25,11 @@ type KymaResourceType = {
     namespace: string;
   };
   spec: {
-    modules: {
-      name: string;
-    }[];
+    channel: string;
+    modules: KymaResourceSpecModuleType[];
   };
   status: {
-    modules: {
-      name: string;
-      version: string;
-    }[];
+    modules: KymaResourceStatusModuleType[];
   };
 };
 
@@ -124,7 +134,7 @@ export const findModuleStatus = (
   moduleName: string,
 ) => {
   return kymaResource?.status?.modules?.find(
-    (module: { name: string; version: string }) => moduleName === module?.name,
+    (module: { name: string }) => moduleName === module?.name,
   );
 };
 
@@ -137,17 +147,21 @@ export const findModuleSpec = (
   );
 };
 
-type ModuleTemplateType = {
+export type ModuleTemplateType = {
   metadata: {
     name: string;
     namespace: string;
     labels: Record<string, string>;
+    annotations: Record<string, string>;
   };
   spec: {
     associatedResources: any;
     data: any;
     channel: string;
     version: string;
+    info?: {
+      documentation?: string;
+    };
   };
 };
 

@@ -16,6 +16,7 @@ import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from '../../state/formOpenAtom';
 import { isResourceEditedState } from '../../state/resourceEditedAtom';
+import { useNavigate } from 'react-router-dom';
 
 export default function BusolaExtensionCreate({
   formElementRef,
@@ -23,6 +24,7 @@ export default function BusolaExtensionCreate({
   layoutNumber,
 }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const notificationManager = useNotification();
   const upsert = useUpsert();
   const cluster = useRecoilValue(clusterState);
@@ -75,9 +77,7 @@ export default function BusolaExtensionCreate({
               },
               endColumn: null,
             });
-            window.history.pushState(
-              window.history.state,
-              '',
+            navigate(
               `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}${nextQuery}`,
             );
           };
