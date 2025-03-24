@@ -83,7 +83,6 @@ function CRCreateForm({
         navigate(`${customUrl(cr)}${nextQuery}`);
         setLayoutColumn({
           ...layoutColumn,
-          layout: 'ThreeColumnsEndExpanded',
           showCreate: null,
           endColumn: {
             resourceName: cr.metadata.name,
