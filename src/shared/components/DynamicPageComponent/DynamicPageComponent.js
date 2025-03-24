@@ -121,12 +121,13 @@ export const DynamicPageComponent = ({
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const [searchParams] = useSearchParams();
   const showEdit = searchParams.get('showEdit');
-  const currColumnInfo =
-    layoutNumber === 'EndColumn'
-      ? layoutColumn.endColumn
-      : layoutNumber === 'MidColumn'
-      ? layoutColumn.midColumn
-      : layoutColumn.startColumn;
+  const editColumn = searchParams.get('editColumn');
+  const currColumnInfo = layoutNumber
+    ? layoutColumn[
+        layoutNumber.charAt(0)?.toLowerCase() + layoutNumber.slice(1)
+      ] || layoutColumn.startColumn
+    : layoutColumn.startColumn;
+
   const [selectedSectionIdState, setSelectedSectionIdState] = useState(
     showEdit &&
       currColumnInfo?.resourceName === layoutColumn?.showEdit?.resourceName
@@ -159,7 +160,7 @@ export const DynamicPageComponent = ({
         });
 
     if (layoutCloseUrl) {
-      navigate(layoutCloseUrl);
+      navigate(layoutCloseUrl + (editColumn ? `?showEdit=${showEdit}` : ''));
       return;
     }
 
@@ -385,6 +386,15 @@ export const DynamicPageComponent = ({
             );
 
             if (e.detail.tab.getAttribute('data-mode') === 'edit') {
+              const params = new URLSearchParams();
+              if (layoutColumn.layout !== 'OneColumn') {
+                params.set('layout', layoutColumn.layout);
+                if (title === 'Modules') {
+                  params.set('editColumn', 'StartColumn');
+                }
+              }
+              params.set('showEdit', 'true');
+
               setLayoutColumn({
                 ...layoutColumn,
                 showEdit: {
@@ -393,13 +403,7 @@ export const DynamicPageComponent = ({
                 },
               });
               setIsFormOpen({ formOpen: true });
-              navigate(
-                `${window.location.pathname}${
-                  layoutColumn.layout === 'OneColumn'
-                    ? '?showEdit=true'
-                    : '?layout=' + layoutColumn.layout + '&showEdit=true'
-                }`,
-              );
+              navigate(`${window.location.pathname}?${params.toString()}`);
             } else {
               setLayoutColumn({
                 ...layoutColumn,
