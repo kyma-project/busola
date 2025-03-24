@@ -372,9 +372,11 @@ export const DynamicPageComponent = ({
               setLayoutColumn({
                 ...layoutColumn,
                 showEdit: {
-                  ...(layoutColumn.endColumn ??
-                    layoutColumn.midColumn ??
-                    layoutColumn.startColumn),
+                  ...(layoutNumber === 'EndColumn'
+                    ? layoutColumn.endColumn
+                    : layoutNumber === 'MidColumn'
+                    ? layoutColumn.midColumn
+                    : layoutColumn.startColumn),
                   resource: null,
                 },
               });

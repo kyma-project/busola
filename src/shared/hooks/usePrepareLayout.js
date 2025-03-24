@@ -4,7 +4,7 @@ import {
   useNavigationType,
   useSearchParams,
 } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 
@@ -92,6 +92,7 @@ export function usePrepareLayoutColumns({
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const isFormOpen = useRecoilValue(isFormOpenState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
@@ -204,13 +205,17 @@ export function usePrepareLayoutColumns({
   useEffect(() => {
     if (navigationType === NavigationType.Pop) {
       setLayoutColumn(newLayoutState);
-      setIsFormOpen({ formOpen: !!newLayoutState.showCreate });
+      setIsFormOpen({
+        formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+      });
     }
   }, [newLayoutState, setLayoutColumn, setIsFormOpen, navigationType]);
 
   useEffect(() => {
     setLayoutColumn(newLayoutState);
-    setIsFormOpen({ formOpen: !!newLayoutState.showCreate });
+    setIsFormOpen({
+      formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

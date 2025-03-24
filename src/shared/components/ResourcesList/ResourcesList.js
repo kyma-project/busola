@@ -354,6 +354,7 @@ export function ResourceListRenderer({
               namespaceId: namespace,
               resource: activeResource,
             },
+            showEdit: null,
             layout: 'ThreeColumnsEndExpanded',
           }
         : {
@@ -365,6 +366,7 @@ export function ResourceListRenderer({
               namespaceId: namespace,
               resource: activeResource,
             },
+            showEdit: null,
             layout: 'TwoColumnsMidExpanded',
           },
     );
@@ -444,6 +446,7 @@ export function ResourceListRenderer({
               resourceType: layoutState?.midColumn.resourceName,
               namespaceId: namespace,
             },
+            showEdit: null,
             layout: 'ThreeColumnsEndExpanded',
           }
         : {
@@ -454,6 +457,7 @@ export function ResourceListRenderer({
               resourceType: resourceType,
               namespaceId: namespace,
             },
+            showEdit: null,
             layout: 'TwoColumnsMidExpanded',
           },
     );
