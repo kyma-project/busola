@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -11,6 +11,8 @@ import { createTemplate } from './templates';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { BusyIndicator } from '@ui5/webcomponents-react';
+import { useRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function CRCreateForm({
   onChange,
@@ -20,6 +22,8 @@ function CRCreateForm({
   resource: initialCustomResource,
   ...props
 }) {
+  const { crdName } = useParams();
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { t } = useTranslation();
   const notification = useNotification();
   const [cr, setCr] = useState(
@@ -29,6 +33,8 @@ function CRCreateForm({
   const [initialResource] = useState(
     initialCustomResource || createTemplate(crd),
   );
+
+  const isEdit = !!initialUnchangedResource?.metadata?.name;
 
   const customUrl = useCustomResourceUrl(crd);
 
@@ -65,11 +71,26 @@ function CRCreateForm({
       layoutNumber={layoutNumber}
       afterCreatedFn={() => {
         notification.notifySuccess({
-          content: t('common.create-form.messages.patch-success', {
-            resourceType: crd.spec.names.kind,
-          }),
+          content: t(
+            isEdit
+              ? 'common.create-form.messages.patch-success'
+              : 'common.create-form.messages.create-success',
+            {
+              resourceType: crd.spec.names.kind,
+            },
+          ),
         });
         navigate(`${customUrl(cr)}${nextQuery}`);
+        setLayoutColumn({
+          ...layoutColumn,
+          layout: 'ThreeColumnsEndExpanded',
+          showCreate: null,
+          endColumn: {
+            resourceName: cr.metadata.name,
+            resourceType: crdName,
+            namespaceId: cr.metadata.namespace,
+          },
+        });
       }}
     />
   );
