@@ -224,3 +224,20 @@ export const setChannel = (
   }
   setSelectedModules(modulesToUpdate);
 };
+
+export const findIndexOfSelectedModule = (
+  module: { name: string },
+  layoutState: { midColumn: { resourceType: string } },
+) => {
+  // Checking index for modules like btp-operator on refresh.
+  if (window.location.href.includes('kymamodules') && layoutState?.midColumn) {
+    const resourceType = layoutState.midColumn.resourceType;
+    const resourceTypeDotIndex = resourceType.indexOf('.');
+    const resourceTypeBase =
+      resourceTypeDotIndex !== -1
+        ? resourceType.substring(0, resourceTypeDotIndex)
+        : resourceType;
+    return pluralize(module?.name?.replace('-', '') || '') === resourceTypeBase;
+  }
+  return false;
+};

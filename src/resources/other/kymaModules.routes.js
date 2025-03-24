@@ -20,6 +20,7 @@ import {
 } from 'components/KymaModules/kymaModulesQueries';
 import { ModulesDeleteBox } from 'components/KymaModules/components/ModulesDeleteBox';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
+import { findIndexOfSelectedModule } from 'components/KymaModules/support';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -195,7 +196,12 @@ const ColumnWraper = ({
           <ModulesDeleteBox
             DeleteMessageBox={DeleteMessageBox}
             selectedModules={activeKymaModules}
-            chosenModuleIndex={openedModuleIndex}
+            chosenModuleIndex={
+              openedModuleIndex ??
+              activeKymaModules.findIndex(module =>
+                findIndexOfSelectedModule(module, layoutState),
+              )
+            }
             kymaResource={kymaResource}
             kymaResourceState={kymaResourceState}
             moduleTemplates={moduleTemplates}
