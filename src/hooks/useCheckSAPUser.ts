@@ -4,6 +4,9 @@ import { AuthDataState, authDataState } from 'state/authDataAtom';
 
 export function useCheckSAPUser() {
   const authData: AuthDataState = useRecoilValue(authDataState);
+  if (window.location.host.includes('localhost')) {
+    return true;
+  }
   try {
     if (authData && 'token' in authData) {
       const decoded = jwtDecode(authData?.token);

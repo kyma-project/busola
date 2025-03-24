@@ -1,16 +1,17 @@
 import { atom, RecoilState } from 'recoil';
 
-type ColumnState = {
+export type ColumnState = {
   resourceName: null | string;
   resourceType: null | string;
   namespaceId: null | string;
   apiGroup: null | string;
   apiVersion: null | string;
 };
-type ShowCreate = {
+export type ShowCreate = {
   resourceType: null | string;
   namespaceId: null | string;
   resource?: null | object;
+  resourceUrl: null | string;
 };
 
 export type ColumnLayoutState = {
