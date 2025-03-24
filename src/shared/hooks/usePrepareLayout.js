@@ -197,6 +197,7 @@ export function usePrepareLayoutColumns({
     layout,
     showCreate,
     showEdit,
+    editColumn,
     resourceType,
     namespaceId,
     apiGroup,
