@@ -382,41 +382,41 @@ export const DynamicPageComponent = ({
                 setIsResourceEdited({
                   isEdited: false,
                 });
+
+                if (e.detail.tab.getAttribute('data-mode') === 'edit') {
+                  const params = new URLSearchParams();
+                  if (layoutColumn.layout !== 'OneColumn') {
+                    params.set('layout', layoutColumn.layout);
+                    if (title === 'Modules') {
+                      params.set('editColumn', 'StartColumn');
+                    }
+                  }
+                  params.set('showEdit', 'true');
+
+                  setLayoutColumn({
+                    ...layoutColumn,
+                    showEdit: {
+                      ...currColumnInfo,
+                      resource: null,
+                    },
+                  });
+                  setIsFormOpen({ formOpen: true });
+                  navigate(`${window.location.pathname}?${params.toString()}`);
+                } else {
+                  setLayoutColumn({
+                    ...layoutColumn,
+                    showEdit: null,
+                  });
+                  navigate(
+                    `${window.location.pathname}${
+                      layoutColumn.layout === 'OneColumn'
+                        ? ''
+                        : '?layout=' + layoutColumn.layout
+                    }`,
+                  );
+                }
               },
             );
-
-            if (e.detail.tab.getAttribute('data-mode') === 'edit') {
-              const params = new URLSearchParams();
-              if (layoutColumn.layout !== 'OneColumn') {
-                params.set('layout', layoutColumn.layout);
-                if (title === 'Modules') {
-                  params.set('editColumn', 'StartColumn');
-                }
-              }
-              params.set('showEdit', 'true');
-
-              setLayoutColumn({
-                ...layoutColumn,
-                showEdit: {
-                  ...currColumnInfo,
-                  resource: null,
-                },
-              });
-              setIsFormOpen({ formOpen: true });
-              navigate(`${window.location.pathname}?${params.toString()}`);
-            } else {
-              setLayoutColumn({
-                ...layoutColumn,
-                showEdit: null,
-              });
-              navigate(
-                `${window.location.pathname}${
-                  layoutColumn.layout === 'OneColumn'
-                    ? ''
-                    : '?layout=' + layoutColumn.layout
-                }`,
-              );
-            }
           }}
         >
           <Tab
