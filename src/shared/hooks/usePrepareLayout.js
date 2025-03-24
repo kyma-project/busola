@@ -92,7 +92,6 @@ export function usePrepareLayoutColumns({
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-  const isFormOpen = useRecoilValue(isFormOpenState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
