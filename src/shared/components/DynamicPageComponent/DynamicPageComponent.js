@@ -121,8 +121,17 @@ export const DynamicPageComponent = ({
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
   const [searchParams] = useSearchParams();
   const showEdit = searchParams.get('showEdit');
+  const currColumnInfo =
+    layoutNumber === 'EndColumn'
+      ? layoutColumn.endColumn
+      : layoutNumber === 'MidColumn'
+      ? layoutColumn.midColumn
+      : layoutColumn.startColumn;
   const [selectedSectionIdState, setSelectedSectionIdState] = useState(
-    showEdit ? 'edit' : 'view',
+    showEdit &&
+      currColumnInfo.resourceName === layoutColumn.showEdit.resourceName
+      ? 'edit'
+      : 'view',
   );
 
   const dynamicPageRef = useRef(null);
@@ -352,6 +361,12 @@ export const DynamicPageComponent = ({
             if (isFormOpen.formOpen) {
               e.preventDefault();
             }
+            if (
+              showEdit &&
+              currColumnInfo.resourceName !== layoutColumn.showEdit.resourceName
+            ) {
+              return;
+            }
 
             handleActionIfFormOpen(
               isResourceEdited,
@@ -372,11 +387,7 @@ export const DynamicPageComponent = ({
               setLayoutColumn({
                 ...layoutColumn,
                 showEdit: {
-                  ...(layoutNumber === 'EndColumn'
-                    ? layoutColumn.endColumn
-                    : layoutNumber === 'MidColumn'
-                    ? layoutColumn.midColumn
-                    : layoutColumn.startColumn),
+                  ...currColumnInfo,
                   resource: null,
                 },
               });
