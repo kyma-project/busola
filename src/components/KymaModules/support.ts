@@ -225,11 +225,11 @@ export const setChannel = (
   setSelectedModules(modulesToUpdate);
 };
 
-export const findIndexOfSelectedModule = (
+export const checkSelectedModule = (
   module: { name: string },
   layoutState: { midColumn: { resourceType: string } },
 ) => {
-  // Checking index for modules like btp-operator on refresh.
+  // Checking if this is the selected module after a refresh or other case after which we have undefined.
   if (window.location.href.includes('kymamodules') && layoutState?.midColumn) {
     const resourceType = layoutState.midColumn.resourceType;
     const resourceTypeDotIndex = resourceType.indexOf('.');

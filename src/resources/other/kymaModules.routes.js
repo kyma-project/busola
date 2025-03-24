@@ -20,7 +20,7 @@ import {
 } from 'components/KymaModules/kymaModulesQueries';
 import { ModulesDeleteBox } from 'components/KymaModules/components/ModulesDeleteBox';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
-import { findIndexOfSelectedModule } from 'components/KymaModules/support';
+import { checkSelectedModule } from 'components/KymaModules/support';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -198,8 +198,9 @@ const ColumnWraper = ({
             selectedModules={activeKymaModules}
             chosenModuleIndex={
               openedModuleIndex ??
+              // Find index of the selected module after a refresh or other case after which we have undefined.
               activeKymaModules.findIndex(module =>
-                findIndexOfSelectedModule(module, layoutState),
+                checkSelectedModule(module, layoutState),
               )
             }
             kymaResource={kymaResource}
