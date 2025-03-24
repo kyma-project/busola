@@ -95,6 +95,7 @@ export function usePrepareLayoutColumns({
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
+  const showEdit = searchParams.get('showEdit');
   const navigationType = useNavigationType();
 
   const newLayoutState = useMemo(() => {
@@ -143,6 +144,16 @@ export function usePrepareLayoutColumns({
         showCreate: showCreate
           ? { resourceType: resourceName, namespaceId }
           : null,
+        showEdit: showEdit
+          ? {
+              resourceName: crName,
+              resourceType: resourceName,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+              resource: null,
+            }
+          : null,
       };
     }
 
@@ -166,10 +177,21 @@ export function usePrepareLayoutColumns({
           : null,
       endColumn: null,
       showCreate: showCreate ? { resourceType, namespaceId } : null,
+      showEdit: showEdit
+        ? {
+            resourceName,
+            resourceType,
+            namespaceId,
+            apiGroup,
+            apiVersion,
+            resource: null,
+          }
+        : null,
     };
   }, [
     layout,
     showCreate,
+    showEdit,
     resourceType,
     namespaceId,
     apiGroup,

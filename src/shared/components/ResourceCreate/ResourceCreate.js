@@ -108,12 +108,14 @@ export const ResourceCreate = ({
           midColumn: null,
           layout: 'OneColumn',
           showCreate: null,
+          showEdit: null,
         })
       : setLayoutColumn({
           ...layoutColumn,
           endColumn: null,
           layout: 'TwoColumnsMidExpanded',
           showCreate: null,
+          showEdit: null,
         });
   }
 

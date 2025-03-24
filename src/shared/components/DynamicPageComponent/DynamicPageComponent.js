@@ -22,7 +22,7 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -119,7 +119,11 @@ export const DynamicPageComponent = ({
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
+  const [searchParams] = useSearchParams();
+  const showEdit = searchParams.get('showEdit');
+  const [selectedSectionIdState, setSelectedSectionIdState] = useState(
+    showEdit ? 'edit' : 'view',
+  );
 
   const dynamicPageRef = useRef(null);
   const tabContainerRef = useRef(null);
@@ -135,12 +139,14 @@ export const DynamicPageComponent = ({
           midColumn: null,
           layout: 'OneColumn',
           showCreate: null,
+          showEdit: null,
         })
       : setLayoutColumn({
           ...layoutColumn,
           endColumn: null,
           layout: 'TwoColumnsMidExpanded',
           showCreate: null,
+          showEdit: null,
         });
 
     if (layoutCloseUrl) {
@@ -363,7 +369,35 @@ export const DynamicPageComponent = ({
             );
 
             if (e.detail.tab.getAttribute('data-mode') === 'edit') {
+              setLayoutColumn({
+                ...layoutColumn,
+                showEdit: {
+                  ...(layoutColumn.endColumn ??
+                    layoutColumn.midColumn ??
+                    layoutColumn.startColumn),
+                  resource: null,
+                },
+              });
               setIsFormOpen({ formOpen: true });
+              navigate(
+                `${window.location.pathname}${
+                  layoutColumn.layout === 'OneColumn'
+                    ? '?showEdit=true'
+                    : '?layout=' + layoutColumn.layout + '&showEdit=true'
+                }`,
+              );
+            } else {
+              setLayoutColumn({
+                ...layoutColumn,
+                showEdit: null,
+              });
+              navigate(
+                `${window.location.pathname}${
+                  layoutColumn.layout === 'OneColumn'
+                    ? ''
+                    : '?layout=' + layoutColumn.layout
+                }`,
+              );
             }
           }}
         >
