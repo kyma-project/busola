@@ -59,7 +59,7 @@ See the following example:
   description: status.message
 ```
 
-<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="50%">
 <br/><br/>
 
 ### `ControlledBy`
@@ -81,7 +81,7 @@ This is an example of kind and name link:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%">
 
 This is an exaple of kind only:
 
@@ -92,7 +92,7 @@ This is an exaple of kind only:
   kindOnly: true
 ```
 
-<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%">
 
 ### `ConditionList`
 
@@ -112,7 +112,7 @@ status:
       source: status.conditions
 ```
 
-<img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget">
 
 This is an example of `ConditionList` with overriden statuses:
 
@@ -139,7 +139,7 @@ status:
             - unknown
 ```
 
-<img src="./assets/display-widgets/ConditionListHighlights.png" alt="Example of a condition list widget with overriden statuses" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ConditionListHighlights.png" alt="Example of a condition list widget with overriden statuses">
 
 ### `ExternalLink`
 
@@ -169,7 +169,7 @@ This is an example of source only usage:
   name: spec.servers.hosts
 ```
 
-<img src="./assets/display-widgets/ExternalLinks.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ExternalLinks.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="40%">
 
 ### `ExternalLinkButton`
 
@@ -190,7 +190,7 @@ See the following example:
   link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
 ```
 
-<img src="./assets/display-widgets/ExternalLinkButton.png" alt="Example of a ExternalLinkButton widget" width="30%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ExternalLinkButton.png" alt="Example of a ExternalLinkButton widget" width="30%">
 
 ### `JoinedArray`
 
@@ -213,7 +213,7 @@ See the following example:
   separator: ' || '
 ```
 
-<img src="./assets/display-widgets/JoinedArray1.png" alt="Example of a joined array widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/JoinedArray1.png" alt="Example of a joined array widget" width="40%">
 
 ```yaml
 - name: Toppings
@@ -224,7 +224,7 @@ See the following example:
       widget: Badge
 ```
 
-<img src="./assets/display-widgets/JoinedArray2.png" alt="Example of a joined array widget" width="30%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/JoinedArray2.png" alt="Example of a joined array widget" width="30%">
 
 ### `Labels`
 
@@ -245,7 +245,7 @@ See the following example:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/Lables.png" alt="Example of a Labels widget" width="30%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Lables.png" alt="Example of a Labels widget" width="30%">
 
 ### `ResourceButton`
 
@@ -272,7 +272,7 @@ This is an example for widget usage in the details section:
   icon: right-arrow
 ```
 
-<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="30%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="30%">
 
 ### `ResourceLink`
 
@@ -299,7 +299,7 @@ This is an example of the `ResourceLink` widget usage in the details section:
     kind: $item.spec.ownerReferences[0].kind
 ```
 
-<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%">
 
 ### `Text`
 
@@ -320,7 +320,7 @@ See the following example:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%">
 
 ## Block Widgets
 
@@ -349,7 +349,7 @@ See the following example:
   disableMargin: true
 ```
 
-<img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="70%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="70%">
 
 ### `CodeViewer`
 
@@ -369,7 +369,7 @@ See the following example:
   language: "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 ```
 
-<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget">
 
 ### `Columns`
 
@@ -398,7 +398,7 @@ See the following example:
         - source: spec.other-value
 ```
 
-<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget">
 
 ### `EventList`
 
@@ -422,7 +422,7 @@ See the following examples:
   defaultType: information
 ```
 
-<img src="./assets/display-widgets/EventList-InvolvedObject.png" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/EventList-InvolvedObject.png" alt="Example of a EventList widget">
 
 ---
 
@@ -434,7 +434,7 @@ See the following examples:
   hideInvolvedObjects: true
 ```
 
-<img src="./assets/display-widgets/EventList-Hidden.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/EventList-Hidden.png" alt="Example of a EventList widget with hidden involved objects">
 
 ### `FeaturedCard`
 
@@ -480,7 +480,7 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget">
 
 ### `Panel`
 
@@ -512,7 +512,7 @@ See the following example:
     - source: '$parent.entry2'
 ```
 
-<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget">
 
 See the following example:
 
@@ -577,7 +577,7 @@ See the following examples"
       searchFunction: '$filter(spec.containers, function($c){ $contains($c.image, $input) })'
 ```
 
-<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget">
 
 ---
 
@@ -601,7 +601,7 @@ See the following examples"
         default: true
 ```
 
-<img src="./assets/display-widgets/ResourceListChildren.png" alt="Example of a ResourceList widget with children" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceListChildren.png" alt="Example of a ResourceList widget with children">
 
 ### `ResourceRefs`
 
@@ -621,7 +621,7 @@ See the following example:
   kind: Secret
 ```
 
-<img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget">
 
 ### `StatisticalCard`
 
@@ -678,7 +678,7 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="50%">
+<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" width="50%">
 
 ### `Table`
 
@@ -715,7 +715,7 @@ See the following example:
         searchFunction: '$filter($item.price, function($p){ $p > $number($input) }'
 ```
 
-<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9" width="40%">
+<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" width="40%">
 
 ### `Tabs`
 
@@ -737,7 +737,7 @@ See the following example:
           source: '...'
 ```
 
-<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget">
 
 ## Radial Chart
 
@@ -779,4 +779,4 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="30%">
+<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" width="30%">

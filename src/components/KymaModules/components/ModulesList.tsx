@@ -24,6 +24,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ModulesListRows } from './ModulesListRows';
+import { useNavigate } from 'react-router-dom';
 
 type CustomResourceDefinitionsType = {
   items: {
@@ -71,6 +72,7 @@ export const ModulesList = ({
     } as any,
   );
 
+  const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
@@ -89,6 +91,9 @@ export const ModulesList = ({
       } as ShowCreate,
     });
 
+    navigate(
+      `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true`,
+    );
     setIsFormOpen(state => ({ ...state, formOpen: true }));
   };
 
@@ -263,11 +268,7 @@ export const ModulesList = ({
       endColumn: null,
     });
 
-    window.history.pushState(
-      window.history.state,
-      '',
-      `${path}?layout=TwoColumnsMidExpanded`,
-    );
+    navigate(`${path}?layout=TwoColumnsMidExpanded`);
   };
 
   function getEntries(
