@@ -120,7 +120,6 @@ export const makeHandleRequest = () => {
         'Content-Type': contentType,
         'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
         'X-Content-Type-Options': 'nosniff',
-        'X-XSS-Protection': '1; mode=block',
       });
       k8sResponse.pipe(res);
     });
@@ -128,11 +127,6 @@ export const makeHandleRequest = () => {
 
     if (Buffer.isBuffer(req.body)) {
       k8sRequest.end(req.body);
-    } else if (typeof req.body === 'string') {
-      k8sRequest.end(req.body);
-    } else if (req.body) {
-      const jsonBody = JSON.stringify(req.body);
-      k8sRequest.end(jsonBody);
     } else {
       // If there's no body, pipe the request (for streaming)
       req.pipe(k8sRequest);
