@@ -129,7 +129,7 @@ export const DynamicPageComponent = ({
       : layoutColumn.startColumn;
   const [selectedSectionIdState, setSelectedSectionIdState] = useState(
     showEdit &&
-      currColumnInfo.resourceName === layoutColumn.showEdit.resourceName
+      currColumnInfo?.resourceName === layoutColumn?.showEdit?.resourceName
       ? 'edit'
       : 'view',
   );
@@ -363,7 +363,8 @@ export const DynamicPageComponent = ({
             }
             if (
               showEdit &&
-              currColumnInfo.resourceName !== layoutColumn.showEdit.resourceName
+              currColumnInfo?.resourceName !==
+                layoutColumn?.showEdit?.resourceName
             ) {
               return;
             }
