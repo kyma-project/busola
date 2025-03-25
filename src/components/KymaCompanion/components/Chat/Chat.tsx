@@ -11,6 +11,7 @@ import { authDataState } from 'state/authDataAtom';
 import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuestions';
 import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
+import { AIError } from '../KymaCompanion';
 import './Chat.scss';
 
 export interface MessageType {
@@ -28,8 +29,8 @@ type ChatProps = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isReset: boolean;
   setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
-  error: string | null;
-  setError: React.Dispatch<React.SetStateAction<string | null>>;
+  error: AIError;
+  setError: React.Dispatch<React.SetStateAction<AIError>>;
 };
 
 export const Chat = ({
@@ -78,18 +79,33 @@ export const Chat = ({
 
   const handleChatResponse = (response: MessageChunk) => {
     const isLoading = response?.data?.answer?.next !== '__end__';
+
     if (!isLoading) {
-      setFollowUpLoading();
-      getFollowUpQuestions({
-        sessionID,
-        handleFollowUpQuestions,
-        handleError,
-        clusterUrl: cluster.currentContext.cluster.cluster.server,
-        token: authData.token,
-        certificateAuthorityData:
-          cluster.currentContext.cluster.cluster['certificate-authority-data'],
-      });
+      const finalTask = response.data.answer?.tasks?.at(-1);
+      const hasError = finalTask?.status === 'error';
+
+      if (hasError) {
+        const allTasksError =
+          response.data.answer?.tasks?.every(task => task.status === 'error') ??
+          false;
+        const displayRetry = response.data.error !== null || allTasksError;
+        handleError(response.data.answer.content, displayRetry);
+      } else {
+        setFollowUpLoading();
+        getFollowUpQuestions({
+          sessionID,
+          handleFollowUpQuestions,
+          handleError,
+          clusterUrl: cluster.currentContext.cluster.cluster.server,
+          token: authData.token,
+          certificateAuthorityData:
+            cluster.currentContext.cluster.cluster[
+              'certificate-authority-data'
+            ],
+        });
+      }
     }
+
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
       return prevMessages.slice(0, -1).concat({
@@ -101,7 +117,7 @@ export const Chat = ({
   };
 
   const setFollowUpLoading = () => {
-    setError(null);
+    setError({ message: null, displayRetry: false });
     setLoading(true);
     updateLatestMessage({ suggestionsLoading: true });
   };
@@ -111,14 +127,17 @@ export const Chat = ({
     setLoading(false);
   };
 
-  const handleError = (error?: Error) => {
-    setError(error?.message ?? t('kyma-companion.error.subtitle'));
+  const handleError = (error?: string, displayRetry?: boolean) => {
+    setError({
+      message: error ?? t('kyma-companion.error.subtitle'),
+      displayRetry: displayRetry ?? false,
+    });
     setChatHistory(prevItems => prevItems.slice(0, -1));
     setLoading(false);
   };
 
   const sendPrompt = (query: string) => {
-    setError(null);
+    setError({ message: null, displayRetry: false });
     setLoading(true);
     addMessage({
       author: 'user',
@@ -249,11 +268,11 @@ export const Chat = ({
             />
           );
         })}
-        {error && (
+        {error.message && (
           <ErrorMessage
-            errorMessage={error}
-            errorOnInitialMessage={chatHistory.length === 0}
+            errorMessage={error.message ?? t('kyma-companion.error.subtitle')}
             retryPrompt={() => {}}
+            displayRetry={error.displayRetry}
           />
         )}
       </div>

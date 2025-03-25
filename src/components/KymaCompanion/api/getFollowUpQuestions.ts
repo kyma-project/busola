@@ -3,7 +3,7 @@ import { getClusterConfig } from 'state/utils/getBackendInfo';
 interface GetFollowUpQuestionsParams {
   sessionID?: string;
   handleFollowUpQuestions: (results: any) => void;
-  handleError: (error?: Error) => void;
+  handleError: (error?: string) => void;
   clusterUrl: string;
   token: string;
   certificateAuthorityData: string;

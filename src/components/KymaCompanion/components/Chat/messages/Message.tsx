@@ -24,6 +24,7 @@ export interface MessageChunk {
       }[];
       next: string;
     };
+    error?: string | null;
   };
 }
 

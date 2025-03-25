@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 interface ErrorMessageProps {
   errorMessage: string;
-  errorOnInitialMessage: boolean;
+  displayRetry: boolean;
   retryPrompt: () => void;
 }
 
 export default function ErrorMessage({
   errorMessage,
-  errorOnInitialMessage,
+  displayRetry,
   retryPrompt,
 }: ErrorMessageProps): JSX.Element {
   const { t } = useTranslation();
@@ -19,12 +19,13 @@ export default function ErrorMessage({
       <Card>
         <IllustratedMessage
           name="Connection"
+          design="Spot"
           key="error-message"
           titleText={t('kyma-companion.error.title')}
           subtitleText={errorMessage}
           className="sap-margin-top-small no-padding"
         >
-          {errorOnInitialMessage && (
+          {displayRetry && (
             <Button
               onClick={retryPrompt}
               design="Emphasized"
