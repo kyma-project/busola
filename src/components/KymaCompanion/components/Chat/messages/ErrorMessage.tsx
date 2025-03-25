@@ -1,4 +1,9 @@
-import { Button, Card, IllustratedMessage } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Card,
+  IllustratedMessage,
+  Text,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 interface ErrorMessageProps {
@@ -22,7 +27,9 @@ export default function ErrorMessage({
           design="Spot"
           key="error-message"
           titleText={t('kyma-companion.error.title')}
-          subtitleText={errorMessage}
+          subtitle={
+            <Text className="sap-margin-bottom-tiny">{errorMessage}</Text>
+          }
           className="sap-margin-top-small no-padding"
         >
           {displayRetry && (
