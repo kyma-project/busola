@@ -238,6 +238,7 @@ export function CommandPaletteUI({
     },
     [isHistoryMode, activeResultIndex, query, results],
   );
+
   return (
     <Background hide={hide}>
       <div

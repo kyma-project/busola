@@ -35,6 +35,8 @@ export function CommandPaletteSearchBar({
   const showCompanion = useRecoilValue(showKymaCompanionState);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
+  const htmlWrapEl = document.getElementById('html-wrap');
+
   const setShowDialog = (value: boolean) => {
     const modalPresent =
       document.querySelector('ui5-dialog[open]') ||
@@ -68,14 +70,34 @@ export function CommandPaletteSearchBar({
 
   useEventListener('keydown', onKeyPress, [shouldShowDialog]);
 
+  let timer: ReturnType<typeof setTimeout>;
+  function handleChangedWidth() {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      setShellbarWidth(
+        showCompanion.show
+          ? shellbarRef?.current?.getBoundingClientRect().width || 0
+          : window.innerWidth,
+      );
+    }, 0);
+  }
+
   useEffect(() => {
-    setShellbarWidth(
-      showCompanion.show
-        ? shellbarRef?.current?.offsetWidth || 0
-        : window.innerWidth,
-    );
+    const elementObserver = new ResizeObserver(() => {
+      handleChangedWidth();
+    });
+
+    if (htmlWrapEl) {
+      // elementObserver.observe(shellbarRef.current);
+      elementObserver.observe(htmlWrapEl);
+    }
+    return () => {
+      console.log('disconnect');
+      elementObserver.disconnect();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showCompanion, window.innerWidth, shellbarRef?.current?.offsetWidth]);
+  }, [showCompanion]);
 
   useEffect(() => {
     const shellbarCurr = shellbarRef?.current;
@@ -102,8 +124,6 @@ export function CommandPaletteSearchBar({
       searchField.style.display = 'none';
     }
   }, [shellbarRef?.current, shellbarWidth, shouldShowDialog]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const htmlWrapEl = document.getElementById('html-wrap');
 
   return (
     <>
