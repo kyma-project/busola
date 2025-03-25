@@ -9,7 +9,6 @@ import { savePreviousPath } from 'state/useAfterInitHook';
 
 import App from './components/App/App';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
 import { NotificationProvider } from 'shared/contexts/NotificationContext';
 
 import { ThemeProvider } from '@ui5/webcomponents-react';
@@ -65,9 +64,7 @@ root.render(
       <BrowserRouter>
         <Suspense fallback={<Spinner />}>
           <NotificationProvider>
-            <CommandPaletteProvider>
-              <App />
-            </CommandPaletteProvider>
+            <App />
           </NotificationProvider>
         </Suspense>
       </BrowserRouter>
