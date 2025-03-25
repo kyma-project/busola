@@ -142,6 +142,10 @@ export const DynamicPageComponent = ({
     tabContainerRef,
   );
 
+  useEffect(() => {
+    if (showEdit) setSelectedSectionIdState('edit');
+  }, [showEdit]);
+
   const handleColumnClose = () => {
     layoutNumber === 'MidColumn'
       ? setLayoutColumn({

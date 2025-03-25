@@ -68,13 +68,11 @@ export function handleResponseFormatting(text: string) {
   );
 
   formattedContent = formattedContent.concat(segmentMarkdownText(text));
-  console.log(formattedContent);
 
   // Step 3: Reinsert YAML blocks at their placeholders
   for (let i = 0; i < formattedContent.length; i++) {
-    console.log(formattedContent[i].content);
     const match = formattedContent[i].content.match(/YAML_PLACEHOLDER_(\d+)/);
-    console.log(match);
+
     if (match) {
       const yamlIndex = parseInt(match[1], 10);
       formattedContent[i] = {

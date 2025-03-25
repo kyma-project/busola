@@ -41,12 +41,6 @@ export default function Message({
   messageChunks,
   isLoading,
 }: MessageProps): JSX.Element {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const currUrl = useUrl();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const cluster = useRecoilValue(clusterState);
-
   if (isLoading) {
     return <TasksList messageChunks={messageChunks} />;
   }
@@ -60,51 +54,6 @@ export default function Message({
   console.log(segmentedText);
   console.log(test);
 
-  const createUrl = url => {};
-  console.log(layoutState);
-  const handleSetupInEditor = (url, resource) => {
-    // const resourceUrl = usePrepareResourceUrl({
-    //   apiGroup: '',
-    //   apiVersion: '',
-    //   resourceType: pluralize(resource?.kind || '').toLowerCase(),
-    // })
-    setLayoutColumn({
-      ...layoutState,
-      showCreate: {
-        ...layoutState.showCreate,
-        resource: resource,
-        resourceType: '',
-        namespaceId: '',
-      },
-    });
-    const parts = url.split('/');
-    parts.shift();
-    let resType = '';
-    let namespace;
-    console.log(parts);
-    if (parts[0] === 'namespaces') {
-      resType = parts[2];
-      namespace = parts[1];
-      navigate(
-        `/cluster/${cluster?.contextName}/namespaces/${namespace}/${pluralize(
-          resType,
-        ).toLowerCase()}/${parts[3]}`,
-      );
-    } else {
-      resType = parts[0];
-      resType = parts[2];
-      namespace = parts[1];
-      navigate(
-        `/cluster/${cluster?.contextName}/${pluralize(resType).toLowerCase()}/${
-          parts[1]
-        }`,
-      );
-    }
-    console.log(resType);
-  };
-
-  console.log(window.location.pathname);
-
   return (
     <div className={'message ' + className}>
       {segmentedText && (
@@ -115,24 +64,13 @@ export default function Message({
                 <Text key={index} className="text bold">
                   {segment.content}
                 </Text>
-              ) : segment.type === 'code' ? (
-                <CodePanel key={index} text={segment.content} />
+              ) : segment.type === 'code' ||
+                segment.type === 'codeWithAction' ? (
+                <CodePanel key={index} segment={segment} />
               ) : segment.type === 'highlighted' ? (
                 <Text key={index} className="text highlighted">
                   {segment.content}
                 </Text>
-              ) : segment.type === 'codeWithAction' ? (
-                <>
-                  <CodePanel key={index} text={segment.content} />
-                  <Link
-                    key={index}
-                    onClick={() =>
-                      handleSetupInEditor(segment.link.address, segment.content)
-                    }
-                  >
-                    {segment.link.name}
-                  </Link>
-                </>
               ) : (
                 segment.content
               )
