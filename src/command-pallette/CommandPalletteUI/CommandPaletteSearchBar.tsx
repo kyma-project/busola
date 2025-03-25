@@ -89,7 +89,6 @@ export function CommandPaletteSearchBar({
     });
 
     if (htmlWrapEl) {
-      // elementObserver.observe(shellbarRef.current);
       elementObserver.observe(htmlWrapEl);
     }
     return () => {
