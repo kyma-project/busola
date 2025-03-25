@@ -20,6 +20,7 @@ export interface MessageType {
   isLoading: boolean;
   suggestions?: string[];
   suggestionsLoading?: boolean;
+  error?: string | undefined;
 }
 
 type ChatProps = {
@@ -96,7 +97,6 @@ export const Chat = ({
         getFollowUpQuestions({
           sessionID,
           handleFollowUpQuestions,
-          handleError,
           clusterUrl: cluster.currentContext.cluster.cluster.server,
           token: authData.token,
           certificateAuthorityData:
@@ -129,11 +129,13 @@ export const Chat = ({
   };
 
   const handleError = (error?: string, displayRetry?: boolean) => {
+    const errorMessage = error ?? t('kyma-companion.error.subtitle') ?? '';
     setError({
-      message: error ?? t('kyma-companion.error.subtitle'),
+      message: errorMessage,
       displayRetry: displayRetry ?? false,
     });
     setChatHistory(prevItems => prevItems.slice(0, -1));
+    updateLatestMessage({ error: errorMessage });
     setLoading(false);
   };
 
@@ -254,12 +256,17 @@ export const Chat = ({
         ref={containerRef}
       >
         {chatHistory.map((message, index) => {
+          const isLast = index === chatHistory.length - 1;
           return message.author === 'ai' ? (
             <React.Fragment key={index}>
               <Message
-                className="left-aligned sap-margin-begin-tiny"
+                author="ai"
+                className="left-aligned"
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
+                errorNotice={message?.error || null}
+                index={index}
+                isLatestMessage={isLast}
               />
               {index === chatHistory.length - 1 && !message.isLoading && (
                 <Bubbles
@@ -271,10 +278,14 @@ export const Chat = ({
             </React.Fragment>
           ) : (
             <Message
+              author="user"
               key={index}
-              className="right-aligned sap-margin-end-tiny"
+              className="right-aligned"
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}
+              errorNotice={message?.error || null}
+              index={index}
+              isLatestMessage={isLast}
             />
           );
         })}

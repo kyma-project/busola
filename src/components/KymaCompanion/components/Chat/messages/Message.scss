@@ -1,50 +1,49 @@
-.message {
-  max-width: 80%;
-  padding: 12px;
-  background-color: var(--sapAssistant_Answer_Background);
+.message-container {
+  margin-inline: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
-  &.no-background {
-    background-color: var(--sapTile_Background);
+  &.left-aligned {
+    justify-content: start;
   }
 
-  &.loading {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  &.right-aligned {
+    justify-content: end;
+  }
 
-    .loading-item {
-      gap: 0.5rem;
+  .message {
+    max-width: 80%;
+    padding: 12px;
+    background-color: var(--sapAssistant_Answer_Background);
 
-      .text {
-        flex-grow: 1;
-      }
-
-      .loading-status {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 35px;
-      }
+    &.right-aligned {
+      border-radius: 8px 8px 0 8px;
+      background-color: var(--sapAssistant_Question_Background);
     }
-  }
 
-  .bold {
-    font-weight: bold;
-    font-size: 0.925rem;
-  }
+    &.left-aligned {
+      border-radius: 8px 8px 8px 0;
+    }
 
-  .highlighted {
-    background-color: var(--sapContent_LabelColor);
-    color: white;
-    padding: 0.1rem 0.2rem;
-    margin: 0.1rem 0;
-    border-radius: 4px;
-  }
+    .bold {
+      font-weight: bold;
+      font-size: 0.925rem;
+    }
 
-  .text {
-    line-height: 1.35;
-    white-space: pre-line;
-    display: inline;
+    .highlighted {
+      background-color: var(--sapContent_LabelColor);
+      color: white;
+      padding: 0.1rem 0.2rem;
+      margin: 0.1rem 0;
+      border-radius: 4px;
+    }
+
+    .text {
+      line-height: 1.35;
+      white-space: pre-line;
+      display: inline;
+    }
   }
 }
 

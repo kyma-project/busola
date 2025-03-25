@@ -20,7 +20,7 @@ export default function ErrorMessage({
   const { t } = useTranslation();
 
   return (
-    <div className="sap-margin-x-tiny sap-margin-y-small">
+    <div className="sap-margin-x-tiny sap-margin-bottom-small">
       <Card>
         <IllustratedMessage
           name="Connection"
