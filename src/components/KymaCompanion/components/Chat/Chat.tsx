@@ -90,6 +90,7 @@ export const Chat = ({
           false;
         const displayRetry = response.data.error !== null || allTasksError;
         handleError(response.data.answer.content, displayRetry);
+        return;
       } else {
         setFollowUpLoading();
         getFollowUpQuestions({
@@ -134,6 +135,15 @@ export const Chat = ({
     });
     setChatHistory(prevItems => prevItems.slice(0, -1));
     setLoading(false);
+  };
+
+  const retryPreviousPrompt = () => {
+    const previousPrompt = chatHistory.at(-1)?.messageChunks[0].data.answer
+      .content;
+    if (previousPrompt) {
+      setChatHistory(prevItems => prevItems.slice(0, -1));
+      sendPrompt(previousPrompt);
+    }
   };
 
   const sendPrompt = (query: string) => {
@@ -271,7 +281,7 @@ export const Chat = ({
         {error.message && (
           <ErrorMessage
             errorMessage={error.message ?? t('kyma-companion.error.subtitle')}
-            retryPrompt={() => {}}
+            retryPrompt={() => retryPreviousPrompt()}
             displayRetry={error.displayRetry}
           />
         )}
