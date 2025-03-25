@@ -1,4 +1,9 @@
-import { HeaderMatcherFactory } from 'components/KymaCompanion/components/Chat/messages/formatter/HeaderMatcher';
+import {
+  BoldMatcherFactory,
+  TickMatcherFactory,
+  HeaderMatcherFactory,
+  HighlightMatcher,
+} from 'components/KymaCompanion/components/Chat/messages/formatter/HeaderMatcher';
 import TitleLevel from '@ui5/webcomponents/dist/types/TitleLevel';
 
 export enum MatchResult {
@@ -30,6 +35,9 @@ const registeredMatchersFactories: Map<string, MatcherFactory> = new Map<
       titleSize: TitleLevel.H4,
     }),
   ],
+  ['bold', new BoldMatcherFactory()],
+  // ['highlight', new HighlightMatcher()],
+  ['tickMatcher', new TickMatcherFactory()],
 ]);
 
 export function TextFormatter({
@@ -39,7 +47,6 @@ export function TextFormatter({
   text: string;
   disable?: boolean;
 }): JSX.Element {
-  console.log(text);
   if (disable) {
     return <>{text}</>;
   }
@@ -62,6 +69,7 @@ class textFormatter {
 
   parseText(text: string): any[] {
     for (let token of text) {
+      console.log('token', token, 'matchery', this.matchers);
       registeredMatchersFactories.forEach((factory, key) => {
         this.addMatcherIfTokenMatch(factory, key, token);
       });
@@ -72,6 +80,8 @@ class textFormatter {
           switch (result) {
             case MatchResult.DONE: {
               this.handleDone(matcher);
+              this.matchers = new Map();
+              console.log('DONE', this.matchers);
               matched = true;
               break;
             }
@@ -103,6 +113,7 @@ class textFormatter {
     if (!newMatcher) {
       return;
     }
+    console.log('New matcher');
     this.pushContent();
     this.matchers.set(matcherKey, newMatcher);
   }

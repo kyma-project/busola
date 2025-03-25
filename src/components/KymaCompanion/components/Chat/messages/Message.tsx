@@ -1,4 +1,4 @@
-import { Link, Text } from '@ui5/webcomponents-react';
+import { Link, Text, Title } from '@ui5/webcomponents-react';
 import CodePanel from './CodePanel';
 import { segmentMarkdownText } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
@@ -41,6 +41,65 @@ export default function Message({
 
   const segmentedText = segmentMarkdownText(
     messageChunks.slice(-1)[0]?.data?.answer?.content,
+  );
+
+  const simpleTest = `\`test\` -> nazwa ktora zostala zjedzona, a nie powinna
+  \`test\` -> nowa linia 
+  `;
+
+  const fixedMsg = `\`tEST\`  dadasda \`dasdadadsada\`
+  zwykly tekst
+  dasdsahjhjdkaskj
+  dasdakjhd **blabla**
+  ### dasdasd das
+  #### dasdas daskjdal
+  \`\`\`
+  \n\n
+  Tutaj jest jakis yaml
+  dasda
+  
+  dsada
+  
+  \`\`\`
+  a tutaj zaraz drugi
+  \`\`\`
+  matko bosko spaghetti 
+  ozylo
+  \`\`\`
+  \`\`\`
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: nginx-deployment
+    labels:
+      app: nginx
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: nginx
+    template:
+      metadata:
+        labels:
+          app: nginx
+      spec:
+        containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+          - containerPort: 80
+  \`\`\``;
+  // console.log(messageChunks.slice(-1)[0]?.data?.answer?.content);
+  return (
+    <div className={'message ' + className}>
+      <Text className="text">
+        <TextFormatter
+          // text={messageChunks.slice(-1)[0]?.data?.answer?.content}
+          text={fixedMsg}
+          disable={!formatPlaintext}
+        />
+      </Text>
+    </div>
   );
   return (
     <div className={'message ' + className}>
