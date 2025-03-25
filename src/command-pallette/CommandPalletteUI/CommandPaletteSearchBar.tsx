@@ -93,7 +93,6 @@ export function CommandPaletteSearchBar({
       elementObserver.observe(htmlWrapEl);
     }
     return () => {
-      console.log('disconnect');
       elementObserver.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
