@@ -22,7 +22,7 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -119,7 +119,21 @@ export const DynamicPageComponent = ({
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
+  const [searchParams] = useSearchParams();
+  const showEdit = searchParams.get('showEdit');
+  const editColumn = searchParams.get('editColumn');
+  const currColumnInfo = layoutNumber
+    ? layoutColumn[
+        layoutNumber.charAt(0)?.toLowerCase() + layoutNumber.slice(1)
+      ] || layoutColumn.startColumn
+    : layoutColumn.startColumn;
+
+  const [selectedSectionIdState, setSelectedSectionIdState] = useState(
+    showEdit &&
+      currColumnInfo?.resourceName === layoutColumn?.showEdit?.resourceName
+      ? 'edit'
+      : 'view',
+  );
 
   const dynamicPageRef = useRef(null);
   const tabContainerRef = useRef(null);
@@ -135,16 +149,18 @@ export const DynamicPageComponent = ({
           midColumn: null,
           layout: 'OneColumn',
           showCreate: null,
+          showEdit: null,
         })
       : setLayoutColumn({
           ...layoutColumn,
           endColumn: null,
           layout: 'TwoColumnsMidExpanded',
           showCreate: null,
+          showEdit: null,
         });
 
     if (layoutCloseUrl) {
-      navigate(layoutCloseUrl);
+      navigate(layoutCloseUrl + (editColumn ? `?showEdit=${showEdit}` : ''));
       return;
     }
 
@@ -346,6 +362,13 @@ export const DynamicPageComponent = ({
             if (isFormOpen.formOpen) {
               e.preventDefault();
             }
+            if (
+              showEdit &&
+              currColumnInfo?.resourceName !==
+                layoutColumn?.showEdit?.resourceName
+            ) {
+              return;
+            }
 
             handleActionIfFormOpen(
               isResourceEdited,
@@ -359,12 +382,41 @@ export const DynamicPageComponent = ({
                 setIsResourceEdited({
                   isEdited: false,
                 });
+
+                if (e.detail.tab.getAttribute('data-mode') === 'edit') {
+                  const params = new URLSearchParams();
+                  if (layoutColumn.layout !== 'OneColumn') {
+                    params.set('layout', layoutColumn.layout);
+                    if (title === 'Modules') {
+                      params.set('editColumn', 'StartColumn');
+                    }
+                  }
+                  params.set('showEdit', 'true');
+
+                  setLayoutColumn({
+                    ...layoutColumn,
+                    showEdit: {
+                      ...currColumnInfo,
+                      resource: null,
+                    },
+                  });
+                  setIsFormOpen({ formOpen: true });
+                  navigate(`${window.location.pathname}?${params.toString()}`);
+                } else {
+                  setLayoutColumn({
+                    ...layoutColumn,
+                    showEdit: null,
+                  });
+                  navigate(
+                    `${window.location.pathname}${
+                      layoutColumn.layout === 'OneColumn'
+                        ? ''
+                        : '?layout=' + layoutColumn.layout
+                    }`,
+                  );
+                }
               },
             );
-
-            if (e.detail.tab.getAttribute('data-mode') === 'edit') {
-              setIsFormOpen({ formOpen: true });
-            }
           }}
         >
           <Tab

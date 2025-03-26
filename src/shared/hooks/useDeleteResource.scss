@@ -1,0 +1,9 @@
+#delete-message-box {
+  position: fixed;
+  top: 50% !important;
+  left: 50% !important;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
