@@ -47,5 +47,10 @@ export async function getKcpToken() {
 
 function getLocalCredentials() {
   const fs = require('fs');
-  return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
+  try {
+    return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
+  } catch (error) {
+    console.warn('Local credentials file not found or could not be read');
+    return null;
+  }
 }
