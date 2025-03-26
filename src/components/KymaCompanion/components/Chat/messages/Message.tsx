@@ -1,6 +1,5 @@
-import { Link, Text } from '@ui5/webcomponents-react';
-import CodePanel from './CodePanel';
-import { segmentMarkdownText } from 'components/KymaCompanion/utils/formatMarkdown';
+import { Text } from '@ui5/webcomponents-react';
+import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import './Message.scss';
 
@@ -8,6 +7,7 @@ interface MessageProps {
   className: string;
   messageChunks: MessageChunk[];
   isLoading: boolean;
+  disableFormatting?: boolean;
 }
 
 export interface MessageChunk {
@@ -31,40 +31,24 @@ export default function Message({
   className,
   messageChunks,
   isLoading,
+  disableFormatting = false,
 }: MessageProps): JSX.Element {
   if (isLoading) {
     return <TasksList messageChunks={messageChunks} />;
   }
+  const text = messageChunks.slice(-1)[0]?.data?.answer?.content;
 
-  const segmentedText = segmentMarkdownText(
-    messageChunks.slice(-1)[0]?.data?.answer?.content,
-  );
+  let segmentedText = null;
+  if (disableFormatting) {
+    segmentedText = text;
+  } else {
+    segmentedText = formatMessage(text);
+  }
 
+  console.log(messageChunks.slice(-1)[0]?.data?.answer?.content);
   return (
     <div className={'message ' + className}>
-      {segmentedText && (
-        <Text className="text">
-          {segmentedText.map((segment, index) =>
-            segment.type === 'bold' ? (
-              <Text key={index} className="text bold">
-                {segment.content}
-              </Text>
-            ) : segment.type === 'code' ? (
-              <CodePanel key={index} text={segment.content} />
-            ) : segment.type === 'highlighted' ? (
-              <Text key={index} className="text highlighted">
-                {segment.content}
-              </Text>
-            ) : segment.type === 'link' ? (
-              <Link key={index} href={segment.content.address} target="_blank">
-                {segment.content.name}
-              </Link>
-            ) : (
-              segment.content
-            ),
-          )}
-        </Text>
-      )}
+      <Text className="text">{segmentedText}</Text>
     </div>
   );
 }

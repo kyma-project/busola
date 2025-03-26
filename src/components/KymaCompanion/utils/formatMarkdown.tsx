@@ -1,0 +1,57 @@
+import Markdown from 'marked-react';
+import { UI5Renderer } from 'components/KymaCompanion/components/Chat/messages/markedExtension';
+
+export function formatCodeSegment(
+  text: string,
+): { language: string | undefined; code: string } {
+  const lines = text.split('\n');
+  const language = lines.shift();
+  const nonEmptyLines = lines.filter(line => line.trim() !== '');
+  const code = nonEmptyLines.join('\n');
+  return { language, code };
+}
+
+export function formatMessage(text: string): JSX.Element[] {
+  const elements: JSX.Element[] = [];
+  let currentText: string = '';
+  let divs = 0;
+  let idx = 0;
+  let codeSection: boolean = false;
+  text.split('\n').forEach(line => {
+    if (line.trim().startsWith('<div')) {
+      divs += 1;
+      if (codeSection) {
+        return;
+      }
+      elements.push(MarkdownText(currentText + '\n', idx));
+      currentText = line + '\n';
+      codeSection = true;
+      return;
+    }
+
+    if (codeSection && line.trim().startsWith('</div>')) {
+      divs -= 1;
+      currentText += line;
+      if (divs === 0) {
+        // TODO: Will be implemented in https://github.com/kyma-project/busola/issues/3604
+        elements.push(<>{`---\n${currentText}\n---`}</>);
+        codeSection = false;
+        currentText = '';
+      }
+      return;
+    }
+    currentText += line + '\n';
+  });
+
+  elements.push(MarkdownText(currentText + '\n', idx));
+
+  return elements;
+}
+
+function MarkdownText(text: string, idx: number): JSX.Element {
+  return (
+    <div id={`msg-${idx}`}>
+      <Markdown renderer={UI5Renderer}>{text}</Markdown>
+    </div>
+  );
+}
