@@ -1,4 +1,4 @@
-import { Link, Text } from '@ui5/webcomponents-react';
+import { Text } from '@ui5/webcomponents-react';
 import CodePanel from './CodePanel';
 import TasksList from './TasksList';
 import {
@@ -6,12 +6,6 @@ import {
   segmentMarkdownText,
 } from 'components/KymaCompanion/utils/formatMarkdown';
 import './Message.scss';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useUrl } from 'hooks/useUrl';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { clusterState } from 'state/clusterAtom';
-import pluralize from 'pluralize';
 
 interface MessageProps {
   className: string;
@@ -45,14 +39,9 @@ export default function Message({
     return <TasksList messageChunks={messageChunks} />;
   }
 
-  const test = segmentMarkdownText(
-    messageChunks.slice(-1)[0]?.data?.answer?.content,
-  );
   const segmentedText = handleResponseFormatting(
     messageChunks.slice(-1)[0]?.data?.answer?.content,
   );
-  console.log(segmentedText);
-  console.log(test);
 
   return (
     <div className={'message ' + className}>

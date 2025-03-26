@@ -44,6 +44,10 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: resourceName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({

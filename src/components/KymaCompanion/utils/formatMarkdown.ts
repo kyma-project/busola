@@ -1,13 +1,19 @@
+export interface CodeSegmentLink {
+  address: string;
+  actionType: string;
+  name: string;
+}
+export interface CodeSegment {
+  content: string;
+  type: 'codeWithAction' | 'code';
+  link: CodeSegmentLink;
+}
 export type Segment =
   | { type: 'bold'; content: string }
   | { type: 'code'; content: string }
   | { type: 'highlighted'; content: string }
   | { type: 'normal'; content: string }
-  | {
-      type: 'codeWithAction';
-      content: string;
-      link: { name: string; type: string; address: string };
-    };
+  | CodeSegment;
 
 export function segmentMarkdownText(text: string): Segment[] {
   if (!text) return [];
@@ -49,30 +55,71 @@ export function formatCodeSegment(
   return { language, code };
 }
 
+function extractYamlBlocks(text: string) {
+  const yamlMatches = [];
+
+  function findClosingDiv(text: string, startIndex: number) {
+    let openDivs = 0;
+    let i = startIndex;
+    while (i < text.length) {
+      if (text.startsWith('<div', i)) openDivs++;
+      if (text.startsWith('</div>', i)) {
+        openDivs--;
+        if (openDivs === 0) return i + 6; // End of matching closing div
+      }
+      i++;
+    }
+    return -1;
+  }
+
+  while (true) {
+    const blockStart = text.indexOf('<div class="yaml-block');
+    if (blockStart === -1) break;
+
+    const blockEnd = findClosingDiv(text, blockStart);
+    if (blockEnd === -1) break;
+
+    const block = text.substring(blockStart, blockEnd);
+
+    const yamlStart = block.indexOf('```') + 3;
+    const yamlEnd = block.indexOf('```', yamlStart);
+    if (yamlStart === -1 || yamlEnd === -1) break;
+    const yamlContent = block.substring(yamlStart, yamlEnd).trim();
+
+    const linkMatch = block.match(
+      /<div class="link" link-type="(.*?)">\s*\[(.*?)\]\((.*?)\)\s*<\/div>/,
+    );
+
+    if (!linkMatch) break;
+
+    yamlMatches.push({
+      content: yamlContent,
+      link: {
+        name: linkMatch[2].trim(),
+        address: linkMatch[3].trim(),
+        actionType: linkMatch[1].trim(),
+      },
+    });
+
+    text =
+      text.substring(0, blockStart) +
+      `[YAML_PLACEHOLDER_${yamlMatches.length - 1}]` +
+      text.substring(blockEnd);
+  }
+
+  return { text, yamlMatches };
+}
+
 export function handleResponseFormatting(text: string) {
   if (!text) return [];
 
   let formattedContent: Segment[] = [];
+  const { text: updatedText, yamlMatches } = extractYamlBlocks(text);
 
-  // Step 1: Extract YAML blocks & links
-  const yamlMatches: { content: string; link: string }[] = [];
-  text = text.replace(
-    /<div class="yaml-block>\s*<div class="yaml">\s*```([\s\S]*?)\n```\s*<\/div>\s*<div class="link" link-type="(.*?)">\s*\[(.*?)\]\((.*?)\)\s*<\/div>\s*<\/div>/g,
-    (_, yamlContent, yamlLinkType, yamlLinkName, yamlLinkUrl) => {
-      yamlMatches.push({
-        content: yamlContent.trim(),
-        link: { name: yamlLinkName, address: yamlLinkUrl, type: yamlLinkType },
-      });
-      return `[YAML_PLACEHOLDER_${yamlMatches.length - 1}]`; // Placeholder for reinsertion
-    },
-  );
+  formattedContent = formattedContent.concat(segmentMarkdownText(updatedText));
 
-  formattedContent = formattedContent.concat(segmentMarkdownText(text));
-
-  // Step 3: Reinsert YAML blocks at their placeholders
   for (let i = 0; i < formattedContent.length; i++) {
     const match = formattedContent[i].content.match(/YAML_PLACEHOLDER_(\d+)/);
-
     if (match) {
       const yamlIndex = parseInt(match[1], 10);
       formattedContent[i] = {

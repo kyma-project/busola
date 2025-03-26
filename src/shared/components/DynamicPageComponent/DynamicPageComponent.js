@@ -124,7 +124,7 @@ export const DynamicPageComponent = ({
   const editColumn = searchParams.get('editColumn');
   const currColumnInfo = layoutNumber
     ? layoutColumn[
-        layoutNumber.charAt(0)?.toLowerCase() + layoutNumber.slice(1)
+        layoutNumber[0]?.toLowerCase() + layoutNumber.slice(1) // Property names begin with lower case letter, where layoutNumber begins with capital letter
       ] || layoutColumn.startColumn
     : layoutColumn.startColumn;
 

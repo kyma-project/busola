@@ -24,6 +24,10 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: releaseName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   let startColumnComponent = null;

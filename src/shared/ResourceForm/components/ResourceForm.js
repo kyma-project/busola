@@ -75,9 +75,15 @@ export function ResourceForm({
   formWithoutPanel,
 }) {
   const layoutState = useRecoilValue(columnLayoutState);
-  if (layoutState?.showCreate?.resource)
-    resource = layoutState.showCreate.resource;
-  if (layoutState?.showEdit?.resource) resource = layoutState.showEdit.resource;
+
+  useEffect(() => {
+    if (layoutState?.showCreate?.resource) {
+      setResource(layoutState.showCreate.resource);
+    } else if (layoutState?.showEdit?.resource) {
+      setResource(layoutState.showEdit.resource);
+    }
+  }, [layoutState?.showCreate?.resource, layoutState?.showEdit?.resource]);
+
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
     () => resource?.apiVersion + '/' + resource?.kind,

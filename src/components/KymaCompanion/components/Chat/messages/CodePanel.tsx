@@ -4,10 +4,12 @@ import {
   Title,
   Icon,
   FlexBox,
-  Link,
   Button,
 } from '@ui5/webcomponents-react';
-import { formatCodeSegment } from 'components/KymaCompanion/utils/formatMarkdown';
+import {
+  Segment,
+  formatCodeSegment,
+} from 'components/KymaCompanion/utils/formatMarkdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -18,7 +20,6 @@ import {
 import copyToCliboard from 'copy-to-clipboard';
 import './CodePanel.scss';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useUrl } from 'hooks/useUrl';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { clusterState } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
@@ -65,15 +66,16 @@ function getCustomTheme(theme: Theme) {
 }
 
 interface CodePanelProps {
-  segment: object;
+  segment: CodeSegment;
 }
 
-export default function CodePanel({ segment }: CodePanelProps): JSX.Element {
+export default function CodePanel({
+  segment,
+}: CodePanelProps | Segment): JSX.Element {
   const theme = useRecoilValue(themeState);
   const syntaxTheme = getCustomTheme(theme);
   const { language, code } = formatCodeSegment(segment?.content ?? segment);
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const currUrl = useUrl();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const cluster = useRecoilValue(clusterState);
@@ -83,20 +85,27 @@ export default function CodePanel({ segment }: CodePanelProps): JSX.Element {
     const resourcePath = `${
       namespace ? `/namespaces/${namespace}` : ''
     }/${pluralize(resType).toLowerCase()}${resName ? '/' + resName : ''}`;
-    // const layoutParam = searchParams.get('layout')
-    //   ? `?layout=${searchParams.get('layout')}`
-    //   : '';
-    const createParams =
-      type === 'Update'
-        ? '?layout=TwoColumnsMidExpanded&showEdit=true'
-        : '?layout=TwoColumnsMidExpanded&showCreate=true';
 
-    return `${basePath}${resourcePath}${createParams}`;
+    const params = new URLSearchParams();
+    if (layoutState.layout !== 'OneColumn') {
+      params.set('layout', layoutState.layout);
+    }
+    if (type === 'Update') {
+      params.set('showEdit', 'true');
+    } else {
+      params.set('showCreate', 'true');
+    }
+
+    return `${basePath}${resourcePath}?${params}`;
   };
 
   const handleSetupInEditor = (url, resource, type) => {
     const parts = url.split('/').slice(1); // Remove the leading empty string from split
     let [namespace, resType, resName] = [null, '', ''];
+    const parsedResource = jsyaml.load(resource.replace('yaml', '')) as
+      | object
+      | null;
+
     if (parts[0] === 'namespaces') {
       [namespace, resType, resName] = [parts[1], parts[2], parts[3]];
 
@@ -107,7 +116,7 @@ export default function CodePanel({ segment }: CodePanelProps): JSX.Element {
           type === 'New'
             ? {
                 ...layoutState.showCreate,
-                resource: jsyaml.load(resource.replace('yaml', '')),
+                resource: parsedResource,
                 resourceType: resType,
                 namespaceId: namespace,
               }
@@ -116,9 +125,10 @@ export default function CodePanel({ segment }: CodePanelProps): JSX.Element {
           type === 'Update'
             ? {
                 ...layoutState.showEdit,
-                resource: jsyaml.load(resource.replace('yaml', '')),
+                resource: parsedResource,
                 resourceType: resType,
                 namespaceId: namespace,
+                resourceName: resName,
               }
             : null,
       });
@@ -148,17 +158,22 @@ export default function CodePanel({ segment }: CodePanelProps): JSX.Element {
           <Title level="H6" size="H6">
             {language}
           </Title>
-          <Button icon="copy" onClick={() => copyToCliboard(code)}>
-            {segment?.link?.name}
+          <Button
+            design="Transparent"
+            icon="copy"
+            onClick={() => copyToCliboard(code)}
+          >
+            Copy
           </Button>
           {segment?.type === 'codeWithAction' && (
             <Button
+              design="Transparent"
               icon="sys-add"
               onClick={() =>
                 handleSetupInEditor(
                   segment?.link?.address,
                   segment?.content,
-                  segment?.link?.type,
+                  segment?.link?.actionType,
                 )
               }
             >
