@@ -64,7 +64,7 @@ export const makeHandleRequest = () => {
       headersData = extractHeadersData(req);
     } catch (e) {
       req.log.error('Headers error:' + e.message);
-      res.contentType('text/plain');
+      res.contentType('text/plain; charset=utf-8');
       res.status(400).send('Headers are missing or in a wrong format.');
       return;
     }
@@ -73,7 +73,7 @@ export const makeHandleRequest = () => {
       filters.forEach(filter => filter(req, headersData));
     } catch (e) {
       req.log.error('Filters rejected the request: ' + e.message);
-      res.contentType('text/plain');
+      res.contentType('text/plain; charset=utf-8');
       res.status(400).send('Request ID: ' + escape(req.id));
       return;
     }
@@ -88,7 +88,6 @@ export const makeHandleRequest = () => {
       hostname: targetApiServer.hostname,
       path: req.originalUrl.replace(/^\/backend/, ''),
       headers,
-      body: req.body,
       method: req.method,
       port: targetApiServer.port || 443,
       ca,
@@ -111,19 +110,31 @@ export const makeHandleRequest = () => {
       const statusCode =
         k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
 
+      // Ensure charset is specified in content type
+      let contentType = k8sResponse.headers['Content-Type'] || 'text/json';
+      if (!contentType.includes('charset=')) {
+        contentType += '; charset=utf-8';
+      }
+
       res.writeHead(statusCode, {
-        'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
+        'Content-Type': contentType,
         'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
+        'X-Content-Type-Options': 'nosniff',
       });
       k8sResponse.pipe(res);
     });
     k8sRequest.on('error', throwInternalServerError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
-    k8sRequest.end(Buffer.isBuffer(req.body) ? req.body : undefined);
-    req.pipe(k8sRequest);
+
+    if (Buffer.isBuffer(req.body)) {
+      k8sRequest.end(req.body);
+    } else {
+      // If there's no body, pipe the request (for streaming)
+      req.pipe(k8sRequest);
+    }
 
     function throwInternalServerError(originalError) {
       req.log.warn(originalError);
-      res.contentType('text/plain');
+      res.contentType('text/plain; charset=utf-8');
       res
         .status(502)
         .send('Internal server error. Request ID: ' + escape(req.id));
