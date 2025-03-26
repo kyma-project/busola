@@ -1,5 +1,10 @@
 #companion_wrapper {
-  width: 100%;
+  width: calc(100% - 1rem);
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.5rem;
 
   .kyma-companion {
     height: 100%;

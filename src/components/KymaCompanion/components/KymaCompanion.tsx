@@ -60,7 +60,7 @@ export default function KymaCompanion() {
   }
 
   return (
-    <div id="companion_wrapper" className="sap-margin-tiny">
+    <div id="companion_wrapper">
       <Card
         className="kyma-companion"
         header={
