@@ -11,10 +11,10 @@ export async function getKcpToken() {
     secretManagerCredentials?.clientSecret ?? localCredentials?.clientSecret;
 
   if (!clientId) {
-    throw new Error('COMPANION_KCP_AUTH_CLIENT_ID is not set');
+    throw new Error('Client ID is not configured.');
   }
   if (!clientSecret) {
-    throw new Error('COMPANION_KCP_AUTH_CLIENT_SECRET is not set');
+    throw new Error('Client Secret is not configured.');
   }
 
   // Prepare request data
@@ -52,6 +52,7 @@ function getLocalCredentials() {
   try {
     return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
   } catch (error) {
+    console.warn('Local credentials file not found or could not be read');
     return null;
   }
 }
@@ -68,6 +69,7 @@ function getSecretManagerCredentials() {
         .trim(),
     };
   } catch (error) {
+    console.warn('Secret Manager credentials could not be read');
     return null;
   }
 }
