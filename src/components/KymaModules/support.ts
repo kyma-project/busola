@@ -2,6 +2,7 @@ import pluralize from 'pluralize';
 import React, { useEffect, useState } from 'react';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { ColumnLayoutState } from 'state/columnLayoutAtom';
 
 export type KymaResourceSpecModuleType = {
   name: string;
@@ -227,16 +228,14 @@ export const setChannel = (
 
 export const checkSelectedModule = (
   module: { name: string },
-  layoutState: { midColumn: { resourceType: string } },
+  layoutState: ColumnLayoutState,
 ) => {
   // Checking if this is the selected module after a refresh or other case after which we have undefined.
-  if (window.location.href.includes('kymamodules') && layoutState?.midColumn) {
-    const resourceType = layoutState.midColumn.resourceType;
-    const resourceTypeDotIndex = resourceType.indexOf('.');
-    const resourceTypeBase =
-      resourceTypeDotIndex !== -1
-        ? resourceType.substring(0, resourceTypeDotIndex)
-        : resourceType;
+  if (
+    window.location.href.includes('kymamodules') &&
+    layoutState?.midColumn?.resourceType
+  ) {
+    const [resourceTypeBase] = layoutState.midColumn.resourceType.split('.');
     return pluralize(module?.name?.replace('-', '') || '') === resourceTypeBase;
   }
   return false;
