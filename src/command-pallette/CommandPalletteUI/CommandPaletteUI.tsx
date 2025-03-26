@@ -16,6 +16,7 @@ import { Button, Icon, Input } from '@ui5/webcomponents-react';
 import './CommandPaletteUI.scss';
 import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 
@@ -46,6 +47,7 @@ type CommandPaletteProps = {
   hide: () => void;
   resourceCache: Record<string, K8sResource[]>;
   updateResourceCache: (key: string, resources: K8sResource[]) => void;
+  shellbarWidth: number;
 };
 
 export function CommandPaletteUI({
@@ -53,6 +55,7 @@ export function CommandPaletteUI({
   hide,
   resourceCache,
   updateResourceCache,
+  shellbarWidth,
 }: CommandPaletteProps) {
   const namespace = useRecoilValue(activeNamespaceIdState);
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
@@ -69,6 +72,7 @@ export function CommandPaletteUI({
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const showCompanion = useRecoilValue(showKymaCompanionState);
 
   const commandPaletteRef = useRef<HTMLDivElement | null>(null);
 
@@ -110,18 +114,19 @@ export function CommandPaletteUI({
 
     //position Command Palette
     if (
-      window.innerWidth > SCREEN_SIZE_BREAKPOINT_M &&
+      shellbarWidth > SCREEN_SIZE_BREAKPOINT_M &&
       headerInput &&
       paletteCurrent
     ) {
       const shellbarRect = headerInput.getBoundingClientRect();
-      paletteCurrent.style.right = `${window.innerWidth -
-        shellbarRect.right}px`;
+      paletteCurrent.style.right = `${shellbarWidth - shellbarRect.right}px`;
+      paletteCurrent.style.left = 'unset';
       paletteCurrent.style.opacity = '100%'; //prevent visually jumping
     } else if (paletteCurrent) {
       paletteCurrent.style.right = '0px';
+      paletteCurrent.style.left = '0px';
     }
-  }, [showCommandPalette, window.innerWidth]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [showCommandPalette, shellbarWidth]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const commandPaletteInput = document.getElementById('command-palette-search');
 
@@ -237,7 +242,11 @@ export function CommandPaletteUI({
   return (
     <Background hide={hide}>
       <div
-        className="command-palette-ui__wrapper"
+        className={`command-palette-ui__wrapper ${
+          showCompanion.show && shellbarWidth < SCREEN_SIZE_BREAKPOINT_M
+            ? 'full-size'
+            : ''
+        }`}
         role="dialog"
         ref={commandPaletteRef}
       >

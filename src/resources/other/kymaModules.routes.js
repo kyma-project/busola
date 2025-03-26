@@ -20,6 +20,7 @@ import {
 } from 'components/KymaModules/kymaModulesQueries';
 import { ModulesDeleteBox } from 'components/KymaModules/components/ModulesDeleteBox';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
+import { checkSelectedModule } from 'components/KymaModules/support';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -29,7 +30,13 @@ const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
 
-const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
+const ColumnWraper = ({
+  defaultColumn = 'list',
+  namespaced = false,
+  DeleteMessageBox,
+  handleResourceDelete,
+  showDeleteDialog,
+}) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { clusterUrl, namespaceUrl } = useUrl();
   const url = namespaced
@@ -48,11 +55,6 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
-  });
-
-  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    resourceType: t('kyma-modules.title'),
-    forceConfirmDelete: true,
   });
 
   const {
@@ -94,11 +96,16 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       }),
   });
 
-  // Force delete functionality
-
   // Fetching all Module Templates can be replaced with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
-  const { data: moduleTemplates } = useModuleTemplatesQuery({
-    skip: !(layoutState?.midColumn?.resourceName || resourceName),
+  const {
+    data: moduleTemplates,
+    loading: moduleTemplatesLoading,
+  } = useModuleTemplatesQuery({
+    skip: !(
+      layoutState?.midColumn?.resourceName ||
+      resourceName ||
+      showDeleteDialog
+    ),
   });
 
   let startColumnComponent = null;
@@ -189,20 +196,28 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
   return (
     <>
       {createPortal(
-        <ModulesDeleteBox
-          DeleteMessageBox={DeleteMessageBox}
-          selectedModules={activeKymaModules}
-          chosenModuleIndex={openedModuleIndex}
-          kymaResource={kymaResource}
-          kymaResourceState={kymaResourceState}
-          moduleTemplates={moduleTemplates}
-          detailsOpen={detailsOpen}
-          setKymaResourceState={setKymaResourceState}
-          setInitialUnchangedResource={setInitialUnchangedResource}
-          setChosenModuleIndex={setOpenedModuleIndex}
-          handleModuleUninstall={handleModuleUninstall}
-          setLayoutColumn={setLayoutColumn}
-        />,
+        !kymaResourceLoading && !moduleTemplatesLoading && showDeleteDialog && (
+          <ModulesDeleteBox
+            DeleteMessageBox={DeleteMessageBox}
+            selectedModules={activeKymaModules}
+            chosenModuleIndex={
+              openedModuleIndex ??
+              // Find index of the selected module after a refresh or other case after which we have undefined.
+              activeKymaModules.findIndex(module =>
+                checkSelectedModule(module, layoutState),
+              )
+            }
+            kymaResource={kymaResource}
+            kymaResourceState={kymaResourceState}
+            moduleTemplates={moduleTemplates}
+            detailsOpen={detailsOpen}
+            setKymaResourceState={setKymaResourceState}
+            setInitialUnchangedResource={setInitialUnchangedResource}
+            setChosenModuleIndex={setOpenedModuleIndex}
+            handleModuleUninstall={handleModuleUninstall}
+            setLayoutColumn={setLayoutColumn}
+          />
+        ),
         document.body,
       )}
       <FlexibleColumnLayout
@@ -230,39 +245,59 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
   );
 };
 
+const KymaModules = ({ defaultColumn, namespaced }) => {
+  const [
+    DeleteMessageBox,
+    handleResourceDelete,
+    showDeleteDialog,
+  ] = useDeleteResource({
+    resourceType: t('kyma-modules.title'),
+    forceConfirmDelete: true,
+  });
+  return (
+    <ColumnWraper
+      defaultColumn={defaultColumn}
+      namespaced={namespaced}
+      DeleteMessageBox={DeleteMessageBox}
+      handleResourceDelete={handleResourceDelete}
+      showDeleteDialog={showDeleteDialog}
+    />
+  );
+};
+
 export default (
   <>
     <Route
       path={'kymamodules'}
       element={
         <Suspense fallback={<Spinner />}>
-          <ColumnWraper />
+          <KymaModules />
         </Suspense>
       }
     />
     <Route
       path="kymamodules/namespaces/:namespace/:resourceType/:resourceName"
-      element={<ColumnWraper defaultColumn="details" />}
+      element={<KymaModules defaultColumn="details" />}
     />
     <Route
       path="kymamodules/:resourceType/:resourceName"
-      element={<ColumnWraper defaultColumn="details" />}
+      element={<KymaModules defaultColumn="details" />}
     />
     <Route
       path={'namespaces/:globalnamespace/kymamodules'}
       element={
         <Suspense fallback={<Spinner />}>
-          <ColumnWraper namespaced={true} />
+          <KymaModules namespaced={true} />
         </Suspense>
       }
     />
     <Route
       path="namespaces/:globalnamespace/kymamodules/namespaces/:namespace/:resourceType/:resourceName"
-      element={<ColumnWraper defaultColumn="details" namespaced={true} />}
+      element={<KymaModules defaultColumn="details" namespaced={true} />}
     />
     <Route
       path="namespaces/:globalnamespace/kymamodules/:resourceType/:resourceName"
-      element={<ColumnWraper defaultColumn="details" namespaced={true} />}
+      element={<KymaModules defaultColumn="details" namespaced={true} />}
     />
   </>
 );

@@ -15,8 +15,9 @@
 }
 
 .resource-details-container {
-  display: grid;
-  grid-template-columns: 100%;
+  margin-inline: 1rem;
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
@@ -36,23 +37,5 @@
   .resource-overview__details-wrapper {
     max-width: fit-content;
     min-width: 300px;
-  }
-}
-
-@container (min-width: 1100px) {
-  .resource-details-container {
-    grid-template-columns: fit-content(100%) max-content;
-    gap: 0;
-
-    &.column-view {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 1rem;
-
-      & > * {
-        flex-grow: 1;
-      }
-    }
   }
 }

@@ -1,12 +1,14 @@
 import { useEffect, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
+import { useRecoilValue } from 'recoil';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
+import { useEventListener } from 'hooks/useEventListener';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
-import { useRecoilValue } from 'recoil';
 import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
 
@@ -26,10 +28,14 @@ export function CommandPaletteSearchBar({
   useRecoilValue(availableNodesSelector); // preload the values to prevent page rerenders
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
+  const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
+  const showCompanion = useRecoilValue(showKymaCompanionState);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
+
+  const htmlWrapEl = document.getElementById('html-wrap');
 
   const setShowDialog = (value: boolean) => {
     const modalPresent =
@@ -40,6 +46,56 @@ export function CommandPaletteSearchBar({
       setOpen(value);
     }
   };
+
+  const onKeyPress = (e: Event) => {
+    const { key, metaKey, ctrlKey } = e as KeyboardEvent;
+    // for (Edge, Chrome) || (Firefox, Safari)
+    const isMac = (
+      (navigator as any).userAgentData?.platform || navigator.platform
+    )
+      ?.toLowerCase()
+      ?.startsWith('mac');
+    const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
+
+    if (
+      (key === 'k' || key === 'K') &&
+      modifierKeyPressed &&
+      window.location.pathname !== '/clusters'
+    ) {
+      setShowDialog(!shouldShowDialog);
+      // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
+      e.preventDefault();
+    }
+  };
+
+  useEventListener('keydown', onKeyPress, [shouldShowDialog]);
+
+  let timer: ReturnType<typeof setTimeout>;
+  function handleChangedWidth() {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      setShellbarWidth(
+        showCompanion.show
+          ? shellbarRef?.current?.getBoundingClientRect().width || 0
+          : window.innerWidth,
+      );
+    }, 0);
+  }
+
+  useEffect(() => {
+    const elementObserver = new ResizeObserver(() => {
+      handleChangedWidth();
+    });
+
+    if (htmlWrapEl) {
+      elementObserver.observe(htmlWrapEl);
+    }
+    return () => {
+      elementObserver.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCompanion]);
 
   useEffect(() => {
     const shellbarCurr = shellbarRef?.current;
@@ -53,7 +109,7 @@ export function CommandPaletteSearchBar({
     if (
       searchButton &&
       searchField &&
-      window.innerWidth > SCREEN_SIZE_BREAKPOINT_M
+      shellbarWidth > SCREEN_SIZE_BREAKPOINT_M
     ) {
       searchButton.style.display = 'none';
 
@@ -65,7 +121,7 @@ export function CommandPaletteSearchBar({
       shellbarCurr?.removeAttribute('show-search-field');
       searchField.style.display = 'none';
     }
-  }, [window.innerWidth, shellbarRef?.current]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shellbarRef?.current, shellbarWidth, shouldShowDialog]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -90,8 +146,9 @@ export function CommandPaletteSearchBar({
             }}
             resourceCache={resourceCache}
             updateResourceCache={updateResourceCache}
+            shellbarWidth={shellbarWidth}
           />,
-          document.body,
+          htmlWrapEl || document.body,
         )}
     </>
   );

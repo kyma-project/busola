@@ -10,6 +10,7 @@ on:
       - 'nginx/**'
       - 'src/**'
       - 'backend/**'
+      - 'package.json'
 
 jobs:
   run-namespace-test:
