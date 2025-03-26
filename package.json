@@ -59,7 +59,7 @@
     "@peculiar/x509": "^1.12.3",
     "@sap-theming/theming-base-content": "^11.1.28",
     "@sap-ui/common-css": "^0.38.0",
-    "@sentry/react": "^9.1.0",
+    "@sentry/react": "^9.9.0",
     "@stoplight/json-ref-resolver": "^3.1.6",
     "@types/jsonpath": "^0.2.4",
     "@types/pluralize": "^0.0.29",
