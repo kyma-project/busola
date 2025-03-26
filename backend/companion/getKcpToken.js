@@ -1,12 +1,14 @@
 export async function getKcpToken() {
   const tokenUrl = 'https://kymatest.accounts400.ondemand.com/oauth2/token';
   const grantType = 'client_credentials';
+
+  const localCredentials = getLocalCredentials();
+  const secretManagerCredentials = getSecretManagerCredentials();
+
   const clientId =
-    process.env.COMPANION_KCP_AUTH_CLIENT_SECRET ??
-    getLocalCredentials()?.clientId;
+    secretManagerCredentials?.clientId ?? localCredentials?.clientId;
   const clientSecret =
-    process.env.COMPANION_KCP_AUTH_CLIENT_ID ??
-    getLocalCredentials()?.clientSecret;
+    secretManagerCredentials?.clientSecret ?? localCredentials?.clientSecret;
 
   if (!clientId) {
     throw new Error('COMPANION_KCP_AUTH_CLIENT_ID is not set');
@@ -47,5 +49,25 @@ export async function getKcpToken() {
 
 function getLocalCredentials() {
   const fs = require('fs');
-  return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
+  try {
+    return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
+  } catch (error) {
+    return null;
+  }
+}
+
+function getSecretManagerCredentials() {
+  const fs = require('fs');
+  try {
+    return {
+      clientId: fs
+        .readFileSync('/secrets/companion_kcp_auth_client_id', 'utf8')
+        .trim(),
+      clientSecret: fs
+        .readFileSync('/secrets/companion_kcp_auth_client_secret', 'utf8')
+        .trim(),
+    };
+  } catch (error) {
+    return null;
+  }
 }
