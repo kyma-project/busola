@@ -12,6 +12,7 @@ on:
       - 'backend/**'
       - 'kyma/**'
       - 'Dockerfile*'
+      - 'package.json'
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
