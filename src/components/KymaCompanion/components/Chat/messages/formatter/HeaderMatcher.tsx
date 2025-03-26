@@ -9,30 +9,18 @@ import { JSX } from '@ui5/webcomponents-base';
 import React from 'react';
 import CodePanel from 'components/KymaCompanion/components/Chat/messages/CodePanel';
 
-type MatcherFactoryProps = {
-  startToken?: string;
-  desiredStartTokens?: number;
-  stopToken?: string;
-  desiredStopTokens?: number;
-  titleLevel?: TitleLevel;
-  titleSize?: TitleLevel;
-  // jsxElement: JSX.Element;
-};
-
 type MatcherProps = {
   startToken?: string;
   desiredStartTokens?: number;
   stopToken?: string;
   desiredStopTokens?: number;
-  // titleLevel?: TitleLevel;
-  // titleSize?: TitleLevel;
   renderFn: (text: string) => JSX.Element;
 };
 
 export class BoldMatcherFactory implements MatcherFactory {
   createIfMatch(token: string): Matcher | null {
     if (token === '*') {
-      return new TokenParser({
+      return new SingleTokenParser({
         startToken: '*',
         desiredStartTokens: 2,
         stopToken: '*',
@@ -44,17 +32,34 @@ export class BoldMatcherFactory implements MatcherFactory {
   }
 }
 
-export class HighlightMatcher implements MatcherFactory {
+export class HeadersMatcherFactory implements MatcherFactory {
   createIfMatch(token: string): Matcher | null {
-    if (token === '`') {
-      return new TokenParser({
-        startToken: '`',
-        desiredStartTokens: 1,
-        stopToken: '`',
-        desiredStopTokens: 1,
-        renderFn: content => (
-          <Text className={'text highlighted'}>{content}</Text>
-        ),
+    if (token === '#') {
+      return new MultiTokenParser({
+        startToken: '#',
+        stopToken: '\n',
+        flavours: [
+          {
+            name: 'H3',
+            desiredStartTokens: 3,
+            desiredStopTokens: 1,
+            renderFn: content => (
+              <Title level={TitleLevel.H3} size={TitleLevel.H3}>
+                {content}
+              </Title>
+            ),
+          },
+          {
+            name: 'H4',
+            desiredStartTokens: 4,
+            desiredStopTokens: 1,
+            renderFn: content => (
+              <Title level={TitleLevel.H4} size={TitleLevel.H4}>
+                {content}
+              </Title>
+            ),
+          },
+        ],
       });
     }
     return null;
@@ -64,7 +69,7 @@ export class HighlightMatcher implements MatcherFactory {
 export class TickMatcherFactory implements MatcherFactory {
   createIfMatch(token: string): Matcher | null {
     if (token === '`') {
-      return new MultiLevelParser({
+      return new MultiTokenParser({
         startToken: '`',
         stopToken: '`',
         flavours: [
@@ -83,45 +88,6 @@ export class TickMatcherFactory implements MatcherFactory {
             ),
           },
         ],
-      });
-    }
-    return null;
-  }
-}
-
-export class HeaderMatcherFactory implements MatcherFactory {
-  startToken;
-  stopToken;
-  desiredStartTokens;
-  titleLevel: TitleLevel;
-  titleSize: TitleLevel;
-
-  constructor({
-    startToken = '#',
-    desiredStartTokens = 3,
-    stopToken = `\n`,
-    titleLevel = TitleLevel.H3,
-    titleSize = TitleLevel.H3,
-  }: MatcherFactoryProps) {
-    this.startToken = startToken;
-    this.stopToken = stopToken;
-    this.desiredStartTokens = desiredStartTokens;
-    this.titleLevel = titleLevel;
-    this.titleSize = titleSize;
-  }
-
-  createIfMatch(token: string): any | null {
-    if (token === '#') {
-      return new TokenParser({
-        startToken: this.startToken,
-        stopToken: this.stopToken,
-        desiredStartTokens: this.desiredStartTokens,
-        desiredStopTokens: 1,
-        renderFn: content => (
-          <Title level={this.titleLevel} size={this.titleSize}>
-            {content}
-          </Title>
-        ),
       });
     }
     return null;
@@ -152,7 +118,7 @@ type flavour = {
   state?: MatchResult;
 };
 
-class MultiLevelParser implements Matcher {
+class MultiTokenParser implements Matcher {
   startToken: string;
   stopToken;
   content = '';
@@ -247,7 +213,7 @@ class MultiLevelParser implements Matcher {
   }
 }
 
-class TokenParser implements Matcher {
+class SingleTokenParser implements Matcher {
   startToken;
   matchedStartTokens = 0;
   desiredStartTokens;

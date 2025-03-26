@@ -1,10 +1,8 @@
 import {
   BoldMatcherFactory,
+  HeadersMatcherFactory,
   TickMatcherFactory,
-  HeaderMatcherFactory,
-  HighlightMatcher,
 } from 'components/KymaCompanion/components/Chat/messages/formatter/HeaderMatcher';
-import TitleLevel from '@ui5/webcomponents/dist/types/TitleLevel';
 
 export enum MatchResult {
   MATCHED,
@@ -26,17 +24,8 @@ const registeredMatchersFactories: Map<string, MatcherFactory> = new Map<
   string,
   MatcherFactory
 >([
-  ['3-hash', new HeaderMatcherFactory({})],
-  [
-    '4-hash',
-    new HeaderMatcherFactory({
-      desiredStartTokens: 4,
-      titleLevel: TitleLevel.H4,
-      titleSize: TitleLevel.H4,
-    }),
-  ],
+  ['headers', new HeadersMatcherFactory()],
   ['bold', new BoldMatcherFactory()],
-  // ['highlight', new HighlightMatcher()],
   ['tickMatcher', new TickMatcherFactory()],
 ]);
 

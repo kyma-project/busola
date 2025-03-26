@@ -51,8 +51,9 @@ export default function Message({
   zwykly tekst
   dasdsahjhjdkaskj
   dasdakjhd **blabla**
-  ### dasdasd das
-  #### dasdas daskjdal
+  ### h3 heading
+  #### H4 heading
+  #### another H4
   \`\`\`
   \n\n
   Tutaj jest jakis yaml
