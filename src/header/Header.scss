@@ -6,6 +6,7 @@
 ui5-shellbar.header {
   padding: 0 !important;
   border-radius: 0.5rem;
+  container-type: inline-size;
 
   &::part(root) {
     padding-inline-start: 0.75rem;

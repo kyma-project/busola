@@ -77,6 +77,7 @@ export function useCreateResource({
                 ...layoutColumn,
                 layout: nextLayout,
                 showCreate: null,
+                showEdit: null,
                 midColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
@@ -90,6 +91,7 @@ export function useCreateResource({
                 ...layoutColumn,
                 layout: nextLayout,
                 showCreate: null,
+                showEdit: null,
                 endColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,

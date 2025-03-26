@@ -361,6 +361,7 @@ export const GenericList = ({
               showCreate: null,
               endColumn: customColumnLayout(selectedEntry),
               layout: newLayout,
+              showEdit: null,
             }
           : {
               ...layoutState,
@@ -376,6 +377,7 @@ export const GenericList = ({
               },
               endColumn: null,
               layout: newLayout,
+              showEdit: null,
             },
       );
       const link = `${linkTo(selectedEntry)}${

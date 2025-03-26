@@ -13,7 +13,7 @@ export function ResourceStatusCard({
   const { t } = useTranslation();
 
   return (
-    <div className="sap-margin-x-small">
+    <div>
       <Card
         header={
           <div className="resource-status-card__header">

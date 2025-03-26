@@ -12,15 +12,19 @@ export function savePreviousPath() {
 
   const layoutParam = queryParams.get('layout');
   const showCreateParam = queryParams.get('showCreate');
+  const showEditParam = queryParams.get('showEdit');
+  const editColumnParam = queryParams.get('editColumn');
 
   let previousPath = window.location.pathname;
 
-  if (layoutParam || showCreateParam) {
+  if (layoutParam || showCreateParam || showEditParam) {
     previousPath += '?';
     const params = [];
 
     if (layoutParam) params.push(`layout=${layoutParam}`);
     if (showCreateParam) params.push(`showCreate=${showCreateParam}`);
+    if (showEditParam) params.push(`showEdit=${showEditParam}`);
+    if (editColumnParam) params.push(`editColumn=${editColumnParam}`);
 
     previousPath += params.join('&');
   }

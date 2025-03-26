@@ -95,6 +95,8 @@ export function usePrepareLayoutColumns({
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
+  const showEdit = searchParams.get('showEdit');
+  const editColumn = searchParams.get('editColumn');
   const navigationType = useNavigationType();
 
   const newLayoutState = useMemo(() => {
@@ -109,7 +111,9 @@ export function usePrepareLayoutColumns({
         },
         midColumn: null,
         endColumn: null,
-        showCreate: null,
+        showEdit: showEdit
+          ? { resourceType, namespaceId, apiGroup, apiVersion }
+          : null,
       };
     }
 
@@ -143,6 +147,16 @@ export function usePrepareLayoutColumns({
         showCreate: showCreate
           ? { resourceType: resourceName, namespaceId }
           : null,
+        showEdit: showEdit
+          ? {
+              resourceName: crName,
+              resourceType: resourceName,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+              resource: null,
+            }
+          : null,
       };
     }
 
@@ -166,10 +180,24 @@ export function usePrepareLayoutColumns({
           : null,
       endColumn: null,
       showCreate: showCreate ? { resourceType, namespaceId } : null,
+      showEdit: showEdit
+        ? editColumn === 'StartColumn'
+          ? { resourceType, namespaceId, apiGroup, apiVersion }
+          : {
+              resourceName,
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+              resource: null,
+            }
+        : null,
     };
   }, [
     layout,
     showCreate,
+    showEdit,
+    editColumn,
     resourceType,
     namespaceId,
     apiGroup,
@@ -182,13 +210,17 @@ export function usePrepareLayoutColumns({
   useEffect(() => {
     if (navigationType === NavigationType.Pop) {
       setLayoutColumn(newLayoutState);
-      setIsFormOpen({ formOpen: !!newLayoutState.showCreate });
+      setIsFormOpen({
+        formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+      });
     }
   }, [newLayoutState, setLayoutColumn, setIsFormOpen, navigationType]);
 
   useEffect(() => {
     setLayoutColumn(newLayoutState);
-    setIsFormOpen({ formOpen: !!newLayoutState.showCreate });
+    setIsFormOpen({
+      formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
