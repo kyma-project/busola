@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 

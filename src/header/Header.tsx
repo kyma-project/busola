@@ -8,7 +8,7 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';

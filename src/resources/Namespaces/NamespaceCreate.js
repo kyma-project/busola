@@ -16,7 +16,7 @@ import { LimitPresets, MemoryPresets } from './Presets';
 import { useSidecar } from 'shared/hooks/useSidecarInjection';
 import { CONFIG } from './config';
 import { useUrl } from 'hooks/useUrl';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import './NamespaceCreate.scss';
 import { useSetRecoilState } from 'recoil';

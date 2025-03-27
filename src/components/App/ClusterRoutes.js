@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useSearchParams } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useSearchParams,
+  useNavigate,
+  useParams,
+} from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { useNavigate, useParams } from 'react-router-dom';
 
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
@@ -91,7 +96,9 @@ export default function ClusterRoutes() {
       {extensibilityRoutes}
       {resourceRoutes}
       {otherRoutes}
-      <Route path="namespaces/:namespaceId/*" element={<NamespaceRoutes />} />
+      <Route path="namespaces/:namespaceId">
+        <Route path="*" element={<NamespaceRoutes />} />
+      </Route>
     </Routes>
   );
 }

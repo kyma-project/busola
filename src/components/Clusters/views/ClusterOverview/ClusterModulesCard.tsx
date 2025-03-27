@@ -3,7 +3,7 @@ import { Button } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useGetAllModulesStatuses } from 'components/KymaModules/support';
 import { useMemo } from 'react';
 

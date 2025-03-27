@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -121,10 +121,9 @@ export default function App() {
                   path="cluster/:currentClusterName"
                   element={<Navigate to="overview" />}
                 />
-                <Route
-                  path="cluster/:currentClusterName/*"
-                  element={<ClusterRoutes />}
-                />
+                <Route path="cluster/:currentClusterName">
+                  <Route path="*" element={<ClusterRoutes />} />
+                </Route>
                 {makeGardenerLoginRoute()}
               </Routes>
               <Preferences />

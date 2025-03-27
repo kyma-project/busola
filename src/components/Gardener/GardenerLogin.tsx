@@ -2,7 +2,7 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { createUserManager } from 'state/authDataAtom';
 import { KubeconfigOIDCAuth } from 'types';
 import { GardenerLoginFeature } from './GardenerLoginFeature';

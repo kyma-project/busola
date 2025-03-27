@@ -2,7 +2,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useTranslation } from 'react-i18next';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
 import { Button } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -59,12 +59,17 @@ export function ResourceQuotasList(props: any) {
       showCreate: {
         resourceType: props.resourceType,
         namespaceId: props.namespace,
+        resourceUrl: props.resourceUrl,
       },
       layout: 'TwoColumnsMidExpanded',
     });
     setIsFormOpen({ formOpen: true, leavingForm: false });
     navigate(
-      namespaceUrl(`${pluralize(props.resourceType.toLowerCase() || '')}`),
+      namespaceUrl(
+        `${pluralize(
+          props.resourceType.toLowerCase() || '',
+        )}?layout=TwoColumnsMidExpanded&showCreate=true`,
+      ),
     );
   };
 
