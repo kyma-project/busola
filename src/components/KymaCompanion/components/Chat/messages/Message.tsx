@@ -45,7 +45,6 @@ export default function Message({
     segmentedText = formatMessage(text);
   }
 
-  console.log(messageChunks.slice(-1)[0]?.data?.answer?.content);
   return (
     <div className={'message ' + className}>
       <Text className="text">{segmentedText}</Text>

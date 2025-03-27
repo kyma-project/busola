@@ -1,5 +1,4 @@
 import { Text, Panel, Title, Icon, FlexBox } from '@ui5/webcomponents-react';
-import { formatCodeSegment } from 'components/KymaCompanion/utils/formatMarkdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useRecoilValue } from 'recoil';
 import {
@@ -48,6 +47,16 @@ function getCustomTheme(theme: Theme) {
       color: 'var(--sapChart_OrderedColor_4)',
     },
   };
+}
+
+function formatCodeSegment(
+  text: string,
+): { language: string | undefined; code: string } {
+  const lines = text.split('\n');
+  const language = lines.shift();
+  const nonEmptyLines = lines.filter(line => line.trim() !== '');
+  const code = nonEmptyLines.join('\n');
+  return { language, code };
 }
 
 interface CodePanelProps {

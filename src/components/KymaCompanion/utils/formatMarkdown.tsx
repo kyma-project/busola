@@ -1,15 +1,6 @@
-import Markdown from 'marked-react';
 import { UI5Renderer } from 'components/KymaCompanion/components/Chat/messages/markedExtension';
 
-export function formatCodeSegment(
-  text: string,
-): { language: string | undefined; code: string } {
-  const lines = text.split('\n');
-  const language = lines.shift();
-  const nonEmptyLines = lines.filter(line => line.trim() !== '');
-  const code = nonEmptyLines.join('\n');
-  return { language, code };
-}
+import Markdown from 'marked-react';
 
 export function formatMessage(text: string): JSX.Element[] {
   const elements: JSX.Element[] = [];
