@@ -3,7 +3,7 @@
 context('Create Namespace', () => {
   Cypress.skipAfterFail({ skipAllSuits: true });
 
-  before(cy.loginAndSelectCluster);
+  before(() => cy.loginAndSelectCluster());
 
   it('Create Namespace', () => {
     cy.getLeftNav()
