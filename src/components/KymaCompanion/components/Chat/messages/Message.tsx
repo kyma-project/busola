@@ -1,10 +1,9 @@
-import { Icon, Link, Popover, Text } from '@ui5/webcomponents-react';
+import { Icon, Link, Text } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 import CodePanel from './CodePanel';
 import { segmentMarkdownText } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import './Message.scss';
-import { createPortal } from 'react-dom';
-import { useState } from 'react';
 
 export interface MessageChunk {
   event?: string;
@@ -26,62 +25,39 @@ export interface MessageChunk {
 
 interface MessageProps {
   author: 'user' | 'ai';
-  className: string;
   messageChunks: MessageChunk[];
   isLoading: boolean;
-  index: number;
-  errorNotice: string | null;
+  hasError: boolean;
   isLatestMessage: boolean;
 }
 
 export default function Message({
   author,
-  className,
   messageChunks,
   isLoading,
-  errorNotice,
-  index,
+  hasError,
   isLatestMessage,
 }: MessageProps): JSX.Element {
-  const [popoverOpen, setPopoverOpen] = useState(false);
-
+  const { t } = useTranslation();
   if (isLoading) {
     return <TasksList messageChunks={messageChunks} />;
   }
 
-  const displayErrorNotice =
-    errorNotice && author === 'user' && !isLatestMessage;
+  const displayError =
+    hasError &&
+    ((author === 'user' && !isLatestMessage) ||
+      (author === 'ai' && isLatestMessage));
 
   const finalChunk = messageChunks.at(-1);
   const segmentedText = segmentMarkdownText(
     finalChunk?.data?.answer?.content ?? '',
   );
 
+  const className = author === 'user' ? 'right-aligned' : 'left-aligned';
+
   return (
     <div className={'message-container ' + className}>
-      {displayErrorNotice && (
-        <>
-          <Icon
-            id={`errorNoticOpener-${index}`}
-            onClick={() => setPopoverOpen(true)}
-            name="information"
-            design="Negative"
-            mode="Interactive"
-          />
-          {createPortal(
-            <Popover
-              opener={`errorNoticOpener-${index}`}
-              open={popoverOpen}
-              onClose={() => setPopoverOpen(false)}
-              placement="Bottom"
-            >
-              <Text className="description">{errorNotice}</Text>
-            </Popover>,
-            document.body,
-          )}
-        </>
-      )}
-      <div className={'message ' + className}>
+      <div className={`message ${className}${displayError ? ' error' : ''}`}>
         {segmentedText && (
           <Text className="text">
             {segmentedText.map((segment, index) =>
@@ -110,6 +86,16 @@ export default function Message({
           </Text>
         )}
       </div>
+      {displayError && (
+        <div className={'message-error ' + className}>
+          <Text className="error-text">
+            {author === 'user'
+              ? t('kyma-companion.error.chat-error')
+              : t('kyma-companion.error.suggestions-error')}
+          </Text>
+          <Icon name="error" design="Negative" className="error-icon" />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,15 +1,37 @@
 .message-container {
   margin-inline: 0.5rem;
+  width: calc(100% - 1rem);
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.25rem;
 
   &.left-aligned {
-    justify-content: start;
+    align-items: start;
   }
 
   &.right-aligned {
-    justify-content: end;
+    align-items: end;
+  }
+
+  .message-error {
+    max-width: 80%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+
+    .error-text {
+      color: var(--sapNegativeTextColor);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+    }
+
+    .error-icon {
+      flex-shrink: 0;
+      color: var(--sapNegativeTextColor);
+    }
   }
 
   .message {
@@ -20,6 +42,11 @@
     &.right-aligned {
       border-radius: 8px 8px 0 8px;
       background-color: var(--sapAssistant_Question_Background);
+
+      &.error {
+        border: 1px solid var(--sapErrorBorderColor);
+        background-color: var(--sapErrorBackground);
+      }
     }
 
     &.left-aligned {

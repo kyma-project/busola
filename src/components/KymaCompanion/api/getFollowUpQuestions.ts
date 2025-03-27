@@ -3,6 +3,7 @@ import { getClusterConfig } from 'state/utils/getBackendInfo';
 interface GetFollowUpQuestionsParams {
   sessionID?: string;
   handleFollowUpQuestions: (results: any) => void;
+  handleFollowUpError: () => void;
   clusterUrl: string;
   token: string;
   certificateAuthorityData: string;
@@ -11,6 +12,7 @@ interface GetFollowUpQuestionsParams {
 export default async function getFollowUpQuestions({
   sessionID = '',
   handleFollowUpQuestions,
+  handleFollowUpError,
   clusterUrl,
   token,
   certificateAuthorityData,
@@ -32,10 +34,14 @@ export default async function getFollowUpQuestions({
       method: 'POST',
     });
 
-    const promptSuggestions = (await response.json()).promptSuggestions ?? [];
+    const promptSuggestions = (await response.json()).promptSuggestions;
+    if (!promptSuggestions) {
+      throw new Error('No follow-up qeustions available');
+    }
 
     handleFollowUpQuestions(promptSuggestions);
   } catch (error) {
+    handleFollowUpError();
     console.error('Error fetching data:', error);
   }
 }

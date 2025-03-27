@@ -20,7 +20,7 @@ export interface MessageType {
   isLoading: boolean;
   suggestions?: string[];
   suggestionsLoading?: boolean;
-  error?: string | undefined;
+  hasError?: boolean | undefined;
 }
 
 type ChatProps = {
@@ -97,6 +97,7 @@ export const Chat = ({
         getFollowUpQuestions({
           sessionID,
           handleFollowUpQuestions,
+          handleFollowUpError,
           clusterUrl: cluster.currentContext.cluster.cluster.server,
           token: authData.token,
           certificateAuthorityData:
@@ -128,6 +129,14 @@ export const Chat = ({
     setLoading(false);
   };
 
+  const handleFollowUpError = () => {
+    updateLatestMessage({
+      hasError: true,
+      suggestionsLoading: false,
+    });
+    setLoading(false);
+  };
+
   const handleError = (error?: string, displayRetry?: boolean) => {
     const errorMessage = error ?? t('kyma-companion.error.subtitle') ?? '';
     setError({
@@ -135,7 +144,7 @@ export const Chat = ({
       displayRetry: displayRetry ?? false,
     });
     setChatHistory(prevItems => prevItems.slice(0, -1));
-    updateLatestMessage({ error: errorMessage });
+    updateLatestMessage({ hasError: true });
     setLoading(false);
   };
 
@@ -261,11 +270,9 @@ export const Chat = ({
             <React.Fragment key={index}>
               <Message
                 author="ai"
-                className="left-aligned"
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
-                errorNotice={message?.error || null}
-                index={index}
+                hasError={message?.hasError ?? false}
                 isLatestMessage={isLast}
               />
               {index === chatHistory.length - 1 && !message.isLoading && (
@@ -280,11 +287,9 @@ export const Chat = ({
             <Message
               author="user"
               key={index}
-              className="right-aligned"
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}
-              errorNotice={message?.error || null}
-              index={index}
+              hasError={message?.hasError ?? false}
               isLatestMessage={isLast}
             />
           );
