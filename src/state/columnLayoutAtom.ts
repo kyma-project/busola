@@ -11,7 +11,7 @@ export type ShowCreate = {
   resourceType: null | string;
   namespaceId: null | string;
   resource?: null | object;
-  resourceUrl: null | string;
+  resourceUrl?: null | string;
 };
 export type ShowEdit = ColumnState & {
   resource?: object | null;

@@ -1,10 +1,7 @@
 import { Text } from '@ui5/webcomponents-react';
 import CodePanel from './CodePanel';
 import TasksList from './TasksList';
-import {
-  handleResponseFormatting,
-  segmentMarkdownText,
-} from 'components/KymaCompanion/utils/formatMarkdown';
+import { handleResponseFormatting } from 'components/KymaCompanion/utils/formatMarkdown';
 import './Message.scss';
 
 interface MessageProps {

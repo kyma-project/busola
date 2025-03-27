@@ -7,6 +7,7 @@ import {
   Button,
 } from '@ui5/webcomponents-react';
 import {
+  CodeSegment,
   Segment,
   formatCodeSegment,
 } from 'components/KymaCompanion/utils/formatMarkdown';
@@ -77,68 +78,65 @@ export default function CodePanel({
   const { language, code } = formatCodeSegment(segment?.content ?? segment);
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const cluster = useRecoilValue(clusterState);
 
   const createUrl = (namespace, resType, type, resName) => {
     const basePath = `/cluster/${cluster?.contextName}`;
-    const resourcePath = `${
-      namespace ? `/namespaces/${namespace}` : ''
-    }/${pluralize(resType).toLowerCase()}${resName ? '/' + resName : ''}`;
+    const resourcePath = namespace
+      ? `/namespaces/${namespace}/${pluralize(resType).toLowerCase()}`
+      : `/${pluralize(resType).toLowerCase()}`;
+    const fullResourcePath = resName
+      ? `${resourcePath}/${resName}`
+      : resourcePath;
 
-    const params = new URLSearchParams();
-    if (layoutState.layout !== 'OneColumn') {
-      params.set('layout', layoutState.layout);
-    }
-    if (type === 'Update') {
-      params.set('showEdit', 'true');
-    } else {
-      params.set('showCreate', 'true');
-    }
+    const params = new URLSearchParams({
+      layout: layoutState.layout !== 'OneColumn' ? layoutState.layout : '',
+      showEdit: type === 'Update' ? 'true' : '',
+      showCreate: type === 'New' ? 'true' : '',
+    });
 
-    return `${basePath}${resourcePath}?${params}`;
+    return `${basePath}${fullResourcePath}?${params.toString()}`;
   };
 
   const handleSetupInEditor = (url, resource, type) => {
-    const parts = url.split('/').slice(1); // Remove the leading empty string from split
+    const parts = url.split('/').filter(Boolean); // Remove empty strings from split
     let [namespace, resType, resName] = [null, '', ''];
-    const parsedResource = jsyaml.load(resource.replace('yaml', '')) as
-      | object
-      | null;
+    const parsedResource = jsyaml.load(resource.replace('yaml', '')) || {};
 
     if (parts[0] === 'namespaces') {
       [namespace, resType, resName] = [parts[1], parts[2], parts[3]];
-
-      setLayoutColumn({
-        ...layoutState,
-        layout: 'TwoColumnsMidExpanded',
-        showCreate:
-          type === 'New'
-            ? {
-                ...layoutState.showCreate,
-                resource: parsedResource,
-                resourceType: resType,
-                namespaceId: namespace,
-              }
-            : null,
-        showEdit:
-          type === 'Update'
-            ? {
-                ...layoutState.showEdit,
-                resource: parsedResource,
-                resourceType: resType,
-                namespaceId: namespace,
-                resourceName: resName,
-              }
-            : null,
-      });
     } else {
       [resType, resName] = [parts[0], parts[1]];
     }
 
+    setLayoutColumn({
+      ...layoutState,
+      layout: 'TwoColumnsMidExpanded',
+      showCreate:
+        type === 'New'
+          ? {
+              ...layoutState.showCreate,
+              resource: parsedResource,
+              resourceType: resType,
+              namespaceId: namespace,
+            }
+          : null,
+      showEdit:
+        type === 'Update'
+          ? {
+              ...layoutState.showEdit,
+              resource: parsedResource,
+              resourceType: resType,
+              namespaceId: namespace,
+              resourceName: resName,
+              apiGroup: null,
+              apiVersion: null,
+            }
+          : null,
+    });
+
     navigate(createUrl(namespace, resType, type, resName));
   };
-
   return !language ? (
     <div className="code-response sap-margin-y-small">
       <Icon
