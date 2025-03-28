@@ -37,6 +37,10 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: name,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   const elementCreateProps = usePrepareCreateProps({

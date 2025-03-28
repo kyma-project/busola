@@ -10,7 +10,8 @@ export type ColumnState = {
 export type ShowCreate = {
   resourceType: null | string;
   namespaceId: null | string;
-  resourceUrl: null | string;
+  resource?: null | object;
+  resourceUrl?: null | string;
 };
 export type ShowEdit = ColumnState & {
   resource?: object | null;

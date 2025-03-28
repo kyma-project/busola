@@ -1,7 +1,18 @@
-import { Text, Panel, Title, Icon, FlexBox } from '@ui5/webcomponents-react';
-import { formatCodeSegment } from 'components/KymaCompanion/utils/formatMarkdown';
+import {
+  Text,
+  Panel,
+  Title,
+  Icon,
+  FlexBox,
+  Button,
+} from '@ui5/webcomponents-react';
+import {
+  CodeSegment,
+  Segment,
+  formatCodeSegment,
+} from 'components/KymaCompanion/utils/formatMarkdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   isCurrentThemeDark,
   Theme,
@@ -9,6 +20,11 @@ import {
 } from 'state/preferences/themeAtom';
 import copyToCliboard from 'copy-to-clipboard';
 import './CodePanel.scss';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { clusterState } from 'state/clusterAtom';
+import jsyaml from 'js-yaml';
+import pluralize from 'pluralize';
 
 function getCustomTheme(theme: Theme) {
   const isDark = isCurrentThemeDark(theme);
@@ -51,13 +67,76 @@ function getCustomTheme(theme: Theme) {
 }
 
 interface CodePanelProps {
-  text: string;
+  segment: CodeSegment;
 }
 
-export default function CodePanel({ text }: CodePanelProps): JSX.Element {
+export default function CodePanel({
+  segment,
+}: CodePanelProps | Segment): JSX.Element {
   const theme = useRecoilValue(themeState);
   const syntaxTheme = getCustomTheme(theme);
-  const { language, code } = formatCodeSegment(text);
+  const { language, code } = formatCodeSegment(segment?.content ?? segment);
+  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const navigate = useNavigate();
+  const cluster = useRecoilValue(clusterState);
+
+  const createUrl = (namespace, resType, type, resName) => {
+    const basePath = `/cluster/${cluster?.contextName}`;
+    const resourcePath = namespace
+      ? `/namespaces/${namespace}/${pluralize(resType).toLowerCase()}`
+      : `/${pluralize(resType).toLowerCase()}`;
+    const fullResourcePath = resName
+      ? `${resourcePath}/${resName}`
+      : resourcePath;
+
+    const params = new URLSearchParams({
+      layout: layoutState.layout !== 'OneColumn' ? layoutState.layout : '',
+      showEdit: type === 'Update' ? 'true' : '',
+      showCreate: type === 'New' ? 'true' : '',
+    });
+
+    return `${basePath}${fullResourcePath}?${params.toString()}`;
+  };
+
+  const handleSetupInEditor = (url, resource, type) => {
+    const parts = url.split('/').filter(Boolean); // Remove empty strings from split
+    let [namespace, resType, resName] = [null, '', ''];
+    const parsedResource = jsyaml.load(resource.replace('yaml', '')) || {};
+
+    if (parts[0] === 'namespaces') {
+      [namespace, resType, resName] = [parts[1], parts[2], parts[3]];
+    } else {
+      [resType, resName] = [parts[0], parts[1]];
+    }
+
+    setLayoutColumn({
+      ...layoutState,
+      layout: 'TwoColumnsMidExpanded',
+      showCreate:
+        type === 'New'
+          ? {
+              ...layoutState.showCreate,
+              resource: parsedResource,
+              resourceType: resType,
+              namespaceId: namespace,
+            }
+          : null,
+      showEdit:
+        type === 'Update'
+          ? {
+              ...layoutState.showEdit,
+              resource: parsedResource,
+              resourceType: resType,
+              namespaceId: namespace,
+              resourceName: resName,
+              apiGroup: null,
+              apiVersion: null,
+            }
+          : null,
+    });
+
+    navigate(createUrl(namespace, resType, type, resName));
+  };
   return !language ? (
     <div className="code-response sap-margin-y-small">
       <Icon
@@ -77,12 +156,28 @@ export default function CodePanel({ text }: CodePanelProps): JSX.Element {
           <Title level="H6" size="H6">
             {language}
           </Title>
-          <Icon
-            mode="Interactive"
-            name="copy"
-            design="Information"
+          <Button
+            design="Transparent"
+            icon="copy"
             onClick={() => copyToCliboard(code)}
-          />
+          >
+            Copy
+          </Button>
+          {segment?.type === 'codeWithAction' && (
+            <Button
+              design="Transparent"
+              icon="sys-add"
+              onClick={() =>
+                handleSetupInEditor(
+                  segment?.link?.address,
+                  segment?.content,
+                  segment?.link?.actionType,
+                )
+              }
+            >
+              {segment?.link?.name}
+            </Button>
+          )}
         </FlexBox>
       }
       fixed

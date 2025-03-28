@@ -1,7 +1,7 @@
-import { Link, Text } from '@ui5/webcomponents-react';
+import { Text } from '@ui5/webcomponents-react';
 import CodePanel from './CodePanel';
-import { segmentMarkdownText } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
+import { handleResponseFormatting } from 'components/KymaCompanion/utils/formatMarkdown';
 import './Message.scss';
 
 interface MessageProps {
@@ -36,7 +36,7 @@ export default function Message({
     return <TasksList messageChunks={messageChunks} />;
   }
 
-  const segmentedText = segmentMarkdownText(
+  const segmentedText = handleResponseFormatting(
     messageChunks.slice(-1)[0]?.data?.answer?.content,
   );
 
@@ -45,23 +45,22 @@ export default function Message({
       {segmentedText && (
         <Text className="text">
           {segmentedText.map((segment, index) =>
-            segment.type === 'bold' ? (
-              <Text key={index} className="text bold">
-                {segment.content}
-              </Text>
-            ) : segment.type === 'code' ? (
-              <CodePanel key={index} text={segment.content} />
-            ) : segment.type === 'highlighted' ? (
-              <Text key={index} className="text highlighted">
-                {segment.content}
-              </Text>
-            ) : segment.type === 'link' ? (
-              <Link key={index} href={segment.content.address} target="_blank">
-                {segment.content.name}
-              </Link>
-            ) : (
-              segment.content
-            ),
+            segment ? (
+              segment.type === 'bold' ? (
+                <Text key={index} className="text bold">
+                  {segment.content}
+                </Text>
+              ) : segment.type === 'code' ||
+                segment.type === 'codeWithAction' ? (
+                <CodePanel key={index} segment={segment} />
+              ) : segment.type === 'highlighted' ? (
+                <Text key={index} className="text highlighted">
+                  {segment.content}
+                </Text>
+              ) : (
+                segment.content
+              )
+            ) : null,
           )}
         </Text>
       )}

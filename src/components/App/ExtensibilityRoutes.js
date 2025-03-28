@@ -37,6 +37,10 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
     apiGroup: extension?.general.resource.group,
     apiVersion: extension?.general.resource.version,
     resourceName: resourceName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   const overrides = { resourceType: urlPath };
