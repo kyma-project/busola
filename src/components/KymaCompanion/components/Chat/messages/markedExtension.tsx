@@ -4,7 +4,7 @@ import TitleLevel from '@ui5/webcomponents/dist/types/TitleLevel';
 
 export const UI5Renderer = {
   code(tokens: string, lang: string) {
-    return <CodePanel text={tokens} />;
+    return <CodePanel text={tokens} lang={lang} />;
   },
 
   blockquote(tokens: string) {

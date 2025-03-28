@@ -1,4 +1,4 @@
-import { Text, Panel, Title, Icon, FlexBox } from '@ui5/webcomponents-react';
+import { FlexBox, Icon, Panel, Text, Title } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useRecoilValue } from 'recoil';
 import {
@@ -61,12 +61,14 @@ function formatCodeSegment(
 
 interface CodePanelProps {
   text: string;
+  lang?: string;
 }
 
-export default function CodePanel({ text }: CodePanelProps): JSX.Element {
+export default function CodePanel({ text, lang }: CodePanelProps): JSX.Element {
   const theme = useRecoilValue(themeState);
   const syntaxTheme = getCustomTheme(theme);
-  const { language, code } = formatCodeSegment(text);
+  const { language: inferredLang, code } = formatCodeSegment(text);
+  const language = lang ?? inferredLang;
   return !language ? (
     <div className="code-response sap-margin-y-small">
       <Icon
