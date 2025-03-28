@@ -51,7 +51,7 @@ function getCustomTheme(theme: Theme) {
 
 interface CodePanelProps {
   code: string;
-  language?: string;
+  language: string;
 }
 
 export default function CodePanel({
