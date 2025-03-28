@@ -62,14 +62,20 @@ function getSecretManagerCredentials() {
   try {
     return {
       clientId: fs
-        .readFileSync('/secrets/companion_kcp_auth_client_id', 'utf8')
+        .readFileSync(
+          '/secrets/companion_kcp_auth_client_id/companion_kcp_auth_client_id',
+          'utf8',
+        )
         .trim(),
       clientSecret: fs
-        .readFileSync('/secrets/companion_kcp_auth_client_secret', 'utf8')
+        .readFileSync(
+          '/secrets/companion_kcp_auth_client_secret/companion_kcp_auth_client_secret',
+          'utf8',
+        )
         .trim(),
     };
   } catch (error) {
-    console.warn('Secret Manager credentials could not be read');
+    console.warn('Secret Manager credentials could not be read:', error);
     return null;
   }
 }
