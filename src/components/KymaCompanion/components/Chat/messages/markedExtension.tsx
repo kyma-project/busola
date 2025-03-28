@@ -50,15 +50,6 @@ export const UI5Renderer = {
     return <Text className="text bold">{tokens}</Text>;
   },
 
-  heading(tokens: string, depth: number) {
-    const level = `H${depth}` as TitleLevel;
-    return (
-      <Title level={level} size={level}>
-        {tokens}
-      </Title>
-    );
-  },
-
   link(href: string, title: string) {
     return (
       <Link href={href} target="_blank">
