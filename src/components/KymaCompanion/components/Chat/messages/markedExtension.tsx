@@ -3,8 +3,8 @@ import { Link, Text, Title } from '@ui5/webcomponents-react';
 import TitleLevel from '@ui5/webcomponents/dist/types/TitleLevel';
 
 export const UI5Renderer = {
-  code(tokens: string, lang: string) {
-    return <CodePanel text={tokens} lang={lang} />;
+  code(text: string, lang: string) {
+    return <CodePanel code={text} language={lang} />;
   },
 
   blockquote(tokens: string) {

@@ -49,26 +49,17 @@ function getCustomTheme(theme: Theme) {
   };
 }
 
-function formatCodeSegment(
-  text: string,
-): { language: string | undefined; code: string } {
-  const lines = text.split('\n');
-  const language = lines.shift();
-  const nonEmptyLines = lines.filter(line => line.trim() !== '');
-  const code = nonEmptyLines.join('\n');
-  return { language, code };
-}
-
 interface CodePanelProps {
-  text: string;
-  lang?: string;
+  code: string;
+  language?: string;
 }
 
-export default function CodePanel({ text, lang }: CodePanelProps): JSX.Element {
+export default function CodePanel({
+  code,
+  language,
+}: CodePanelProps): JSX.Element {
   const theme = useRecoilValue(themeState);
   const syntaxTheme = getCustomTheme(theme);
-  const { language: inferredLang, code } = formatCodeSegment(text);
-  const language = lang ?? inferredLang;
   return !language ? (
     <div className="code-response sap-margin-y-small">
       <Icon
