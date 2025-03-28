@@ -1,5 +1,4 @@
-import { Text, Panel, Title, Icon, FlexBox } from '@ui5/webcomponents-react';
-import { formatCodeSegment } from 'components/KymaCompanion/utils/formatMarkdown';
+import { FlexBox, Icon, Panel, Text, Title } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useRecoilValue } from 'recoil';
 import {
@@ -51,13 +50,16 @@ function getCustomTheme(theme: Theme) {
 }
 
 interface CodePanelProps {
-  text: string;
+  code: string;
+  language: string;
 }
 
-export default function CodePanel({ text }: CodePanelProps): JSX.Element {
+export default function CodePanel({
+  code,
+  language,
+}: CodePanelProps): JSX.Element {
   const theme = useRecoilValue(themeState);
   const syntaxTheme = getCustomTheme(theme);
-  const { language, code } = formatCodeSegment(text);
   return !language ? (
     <div className="code-response sap-margin-y-small">
       <Icon

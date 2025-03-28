@@ -246,6 +246,7 @@ export const Chat = ({
               className="right-aligned sap-margin-end-tiny"
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}
+              disableFormatting={true}
             />
           );
         })}
