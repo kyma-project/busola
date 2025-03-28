@@ -2,13 +2,13 @@ export async function getKcpToken() {
   const tokenUrl = 'https://kymatest.accounts400.ondemand.com/oauth2/token';
   const grantType = 'client_credentials';
 
-  const localCredentials = getLocalCredentials();
   const secretManagerCredentials = getSecretManagerCredentials();
 
   const clientId =
-    secretManagerCredentials?.clientId ?? localCredentials?.clientId;
+    secretManagerCredentials?.clientId ?? getLocalCredentials()?.clientId;
   const clientSecret =
-    secretManagerCredentials?.clientSecret ?? localCredentials?.clientSecret;
+    secretManagerCredentials?.clientSecret ??
+    getLocalCredentials()?.clientSecret;
 
   if (!clientId) {
     throw new Error('Client ID is not configured.');
