@@ -1,6 +1,5 @@
 import CodePanel from 'components/KymaCompanion/components/Chat/messages/CodePanel';
-import { Link, Text, Title } from '@ui5/webcomponents-react';
-import TitleLevel from '@ui5/webcomponents/dist/types/TitleLevel';
+import { Link, Text } from '@ui5/webcomponents-react';
 
 export const UI5Renderer = {
   code(text: string, lang: string) {
