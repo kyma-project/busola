@@ -36,7 +36,7 @@ export default async function getFollowUpQuestions({
 
     const promptSuggestions = (await response.json()).promptSuggestions;
     if (!promptSuggestions) {
-      throw new Error('No follow-up qeustions available');
+      throw new Error('No follow-up questions available');
     }
 
     handleFollowUpQuestions(promptSuggestions);
