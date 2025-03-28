@@ -26,7 +26,7 @@ export const createPath = (
   const { detailsView = false, pathSegment = '' } = config;
 
   const details = detailsView ? '/:resourceName?' : '';
-
+  console.log(`${pathSegment}${details}`);
   return `${pathSegment}${details}`;
 };
 
