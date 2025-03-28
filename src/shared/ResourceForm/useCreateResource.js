@@ -15,7 +15,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 export function useCreateResource({
   singularName,

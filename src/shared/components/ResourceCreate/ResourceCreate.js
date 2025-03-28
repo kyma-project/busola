@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';

@@ -3,7 +3,7 @@ import yaml from 'js-yaml';
 import { Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
 import { initReactI18next } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
 import { savePreviousPath } from 'state/useAfterInitHook';
 

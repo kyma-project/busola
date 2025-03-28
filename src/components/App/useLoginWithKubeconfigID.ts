@@ -2,7 +2,7 @@ import { addByContext } from 'components/Clusters/shared';
 import { ClustersState, clustersState } from 'state/clustersAtom';
 import { useRecoilValue } from 'recoil';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { ValidKubeconfig } from 'types';

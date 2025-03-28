@@ -1,7 +1,7 @@
 import React, { Suspense, useMemo } from 'react';
 
 import { useRecoilValue } from 'recoil';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,7 +26,7 @@ export const createPath = (
   const { detailsView = false, pathSegment = '' } = config;
 
   const details = detailsView ? '/:resourceName?' : '';
-
+  console.log(`${pathSegment}${details}`);
   return `${pathSegment}${details}`;
 };
 

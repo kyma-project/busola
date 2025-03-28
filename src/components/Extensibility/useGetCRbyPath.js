@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
 import { useMemo } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { clusterState } from 'state/clusterAtom';
 import pluralize from 'pluralize';
 import { allExtensionsState } from 'state/navigation/extensionsAtom';

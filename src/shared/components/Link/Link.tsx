@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Link as UI5Link } from '@ui5/webcomponents-react';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 type LinkProps = {
   url: string;

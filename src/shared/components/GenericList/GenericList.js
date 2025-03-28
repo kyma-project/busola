@@ -6,7 +6,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import {
   BodyFallback,
   HeaderRenderer,
