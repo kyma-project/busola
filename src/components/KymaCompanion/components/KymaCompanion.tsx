@@ -9,6 +9,11 @@ import {
 import { Chat, MessageType } from './Chat/Chat';
 import './KymaCompanion.scss';
 
+export interface AIError {
+  message: string | null;
+  displayRetry: boolean;
+}
+
 export default function KymaCompanion() {
   const { t } = useTranslation();
 
@@ -38,13 +43,19 @@ export default function KymaCompanion() {
   const [chatHistory, setChatHistory] = useState<MessageType[]>(
     initialChatHistory,
   );
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<AIError>({
+    message: null,
+    displayRetry: false,
+  });
 
   function handleRefresh() {
     setChatHistory(() => {
       return initialChatHistory;
     });
-    setError(null);
+    setError({
+      message: null,
+      displayRetry: false,
+    });
     setIsReset(true);
   }
 

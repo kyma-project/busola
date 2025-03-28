@@ -1,3 +1,31 @@
+.tasks-list {
+  max-width: 80%;
+  padding: 12px;
+  background-color: var(--sapTile_Background);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .loading-item {
+    gap: 0.5rem;
+
+    .text {
+      flex-grow: 1;
+    }
+
+    .loading-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 35px;
+    }
+  }
+}
+
+.ai-busy-indicator {
+  width: fit-content;
+}
+
 .ai-steps-loader {
   position: relative;
   min-width: 24px;

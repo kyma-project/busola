@@ -3,7 +3,7 @@ import { getClusterConfig } from 'state/utils/getBackendInfo';
 interface GetFollowUpQuestionsParams {
   sessionID?: string;
   handleFollowUpQuestions: (results: any) => void;
-  handleError: (error?: Error) => void;
+  handleFollowUpError: () => void;
   clusterUrl: string;
   token: string;
   certificateAuthorityData: string;
@@ -12,7 +12,7 @@ interface GetFollowUpQuestionsParams {
 export default async function getFollowUpQuestions({
   sessionID = '',
   handleFollowUpQuestions,
-  handleError,
+  handleFollowUpError,
   clusterUrl,
   token,
   certificateAuthorityData,
@@ -35,10 +35,13 @@ export default async function getFollowUpQuestions({
     });
 
     const promptSuggestions = (await response.json()).promptSuggestions;
+    if (!promptSuggestions) {
+      throw new Error('No follow-up questions available');
+    }
 
     handleFollowUpQuestions(promptSuggestions);
   } catch (error) {
-    handleError();
+    handleFollowUpError();
     console.error('Error fetching data:', error);
   }
 }

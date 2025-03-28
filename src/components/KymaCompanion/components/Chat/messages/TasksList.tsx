@@ -5,20 +5,27 @@ import {
   ObjectStatus,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import { MessageChunk } from './Message';
 import './TasksList.scss';
 
+interface TaskListProps {
+  messageChunks: MessageChunk[];
+}
+
 export default function TasksList({
-  className,
   messageChunks,
-}: MessageProps): JSX.Element {
+}: TaskListProps): JSX.Element {
   const { t } = useTranslation();
   const chunksLength = messageChunks?.length;
-  const checkIfAllCompleted = () =>
+
+  const allTasksCompleted =
+    chunksLength > 0 &&
     messageChunks[chunksLength - 1]?.data?.answer?.tasks?.every(
       task => task?.status === 'completed',
     );
+
   return (
-    <div className={'message loading no-background ' + className}>
+    <div className="tasks-list">
       {chunksLength > 0 ? (
         <>
           {messageChunks[chunksLength - 1]?.data?.answer?.tasks?.map(
@@ -45,7 +52,7 @@ export default function TasksList({
               );
             },
           )}
-          {checkIfAllCompleted() && (
+          {allTasksCompleted && (
             <FlexBox
               justifyContent="SpaceBetween"
               alignItems="Center"
