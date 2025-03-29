@@ -100,10 +100,12 @@ export function usePrepareLayoutColumns({
   const navigationType = useNavigationType();
 
   const newLayoutState = useMemo(() => {
-    if (!layout) {
+    if (!layout || layout === 'OneColumn') {
       return {
         layout: 'OneColumn',
         startColumn: {
+          resourceName:
+            resourceType === 'Namespaces' ? resourceName : undefined,
           resourceType,
           namespaceId,
           apiGroup,
