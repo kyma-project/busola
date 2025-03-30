@@ -291,6 +291,7 @@ export const Chat = ({
               isLoading={message.isLoading}
               hasError={message?.hasError ?? false}
               isLatestMessage={isLast}
+              disableFormatting={true}
             />
           );
         })}

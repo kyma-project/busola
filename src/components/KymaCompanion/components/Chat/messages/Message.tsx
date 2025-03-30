@@ -1,7 +1,6 @@
-import { Icon, Link, Text } from '@ui5/webcomponents-react';
+import { Icon, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import CodePanel from './CodePanel';
-import { segmentMarkdownText } from 'components/KymaCompanion/utils/formatMarkdown';
+import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import './Message.scss';
 
@@ -29,6 +28,7 @@ interface MessageProps {
   isLoading: boolean;
   hasError: boolean;
   isLatestMessage: boolean;
+  disableFormatting?: boolean;
 }
 
 export default function Message({
@@ -37,6 +37,7 @@ export default function Message({
   isLoading,
   hasError,
   isLatestMessage,
+  disableFormatting = false,
 }: MessageProps): JSX.Element {
   const { t } = useTranslation();
   if (isLoading) {
@@ -49,42 +50,15 @@ export default function Message({
       (author === 'ai' && isLatestMessage));
 
   const finalChunk = messageChunks.at(-1);
-  const segmentedText = segmentMarkdownText(
-    finalChunk?.data?.answer?.content ?? '',
-  );
+  const text = finalChunk?.data?.answer?.content ?? '';
+  const segmentedText = disableFormatting ? text : formatMessage(text);
 
   const className = author === 'user' ? 'right-aligned' : 'left-aligned';
 
   return (
     <div className={'message-container ' + className}>
       <div className={`message ${className}${displayError ? ' error' : ''}`}>
-        {segmentedText && (
-          <Text className="text">
-            {segmentedText.map((segment, index) =>
-              segment.type === 'bold' ? (
-                <Text key={index} className="text bold">
-                  {segment.content}
-                </Text>
-              ) : segment.type === 'code' ? (
-                <CodePanel key={index} text={segment.content} />
-              ) : segment.type === 'highlighted' ? (
-                <Text key={index} className="text highlighted">
-                  {segment.content}
-                </Text>
-              ) : segment.type === 'link' ? (
-                <Link
-                  key={index}
-                  href={segment.content.address}
-                  target="_blank"
-                >
-                  {segment.content.name}
-                </Link>
-              ) : (
-                segment.content
-              ),
-            )}
-          </Text>
-        )}
+        <Text className="text">{segmentedText}</Text>
       </div>
       {displayError && (
         <div className={'message-error ' + className}>
