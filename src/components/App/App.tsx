@@ -5,7 +5,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 // this import is necessary for the V1 Tables to work properly,
 // it can be removed after https://github.com/kyma-project/busola/issues/3489 is resolved
-import './UI5Imports';
+// import './UI5Imports';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
