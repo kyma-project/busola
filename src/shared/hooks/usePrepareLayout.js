@@ -100,7 +100,8 @@ export function usePrepareLayoutColumns({
   const navigationType = useNavigationType();
 
   const newLayoutState = useMemo(() => {
-    if (!layout || layout === 'OneColumn') {
+    const isAllNamespacs = namespaceId === '-all-';
+    if (!layout || layout === 'OneColumn' || isAllNamespacs) {
       return {
         layout: 'OneColumn',
         startColumn: {
@@ -221,7 +222,9 @@ export function usePrepareLayoutColumns({
   useEffect(() => {
     setLayoutColumn(newLayoutState);
     setIsFormOpen({
-      formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+      formOpen:
+        namespaceId !== '-all-' &&
+        (!!newLayoutState.showCreate || !!newLayoutState.showEdit),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
