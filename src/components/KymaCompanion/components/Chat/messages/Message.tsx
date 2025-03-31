@@ -1,4 +1,3 @@
-import { Text } from '@ui5/webcomponents-react';
 import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import './Message.scss';
@@ -53,8 +52,6 @@ export default function Message({
   }
 
   return (
-    <div id={'some-random-id'} className={'message ' + className + ' markdown'}>
-      <Text className="text">{segmentedText}</Text>
-    </div>
+    <div className={'message ' + className + ' markdown'}>{segmentedText}</div>
   );
 }
