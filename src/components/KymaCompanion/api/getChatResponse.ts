@@ -98,6 +98,10 @@ function readChunk(
       }
       const receivedString = decoder.decode(value, { stream: true });
       const chunk = JSON.parse(receivedString);
+      // custom error provided by busola backend during streaming, not by companion backend
+      if (chunk?.error) {
+        throw new Error(chunk?.error);
+      }
       handleChatResponse(chunk);
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
