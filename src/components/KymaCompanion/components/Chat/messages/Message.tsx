@@ -2,6 +2,9 @@ import { Text } from '@ui5/webcomponents-react';
 import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import './Message.scss';
+import './marked.scss';
+import { isCurrentThemeDark, themeState } from 'state/preferences/themeAtom';
+import { useRecoilValue } from 'recoil';
 
 interface MessageProps {
   className: string;
@@ -33,20 +36,24 @@ export default function Message({
   isLoading,
   disableFormatting = false,
 }: MessageProps): JSX.Element {
+  const currentTheme = useRecoilValue(themeState);
+  const isThemeDark = isCurrentThemeDark(currentTheme);
+  const predefinedMarkdownThemeClass = isThemeDark ? 'dark' : 'light';
+
   if (isLoading) {
     return <TasksList messageChunks={messageChunks} />;
   }
-  const text = messageChunks.slice(-1)[0]?.data?.answer?.content;
 
+  const text = messageChunks.slice(-1)[0]?.data?.answer?.content;
   let segmentedText = null;
   if (disableFormatting) {
     segmentedText = text;
   } else {
-    segmentedText = formatMessage(text);
+    segmentedText = formatMessage(text, predefinedMarkdownThemeClass);
   }
 
   return (
-    <div className={'message ' + className}>
+    <div id={'some-random-id'} className={'message ' + className + ' markdown'}>
       <Text className="text">{segmentedText}</Text>
     </div>
   );
