@@ -10,6 +10,7 @@ context('Create Namespace', () => {
 
     cy.getLeftNav()
       .contains('Namespaces')
+      .should('be.visible')
       .click();
 
     cy.openCreate();
