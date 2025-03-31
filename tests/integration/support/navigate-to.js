@@ -9,4 +9,6 @@ Cypress.Commands.add('navigateTo', (leftNav, resource) => {
     .get(`ui5-side-navigation-sub-item[text="${resource}"]`)
     .should('be.visible')
     .click();
+
+  cy.wait(500);
 });
