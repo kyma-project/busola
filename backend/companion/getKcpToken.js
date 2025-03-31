@@ -75,7 +75,7 @@ function getSecretManagerCredentials() {
         .trim(),
     };
   } catch (error) {
-    console.warn('Secret Manager credentials could not be read:', error);
+    console.warn('Secret Manager credentials could not be read');
     return null;
   }
 }
