@@ -193,7 +193,6 @@ export const createResourceRoutes = ({
     <React.Fragment key={path}>
       <Route
         path={path}
-        exact
         element={
           <Suspense fallback={<Spinner />}>
             <ColumnWrapper

@@ -141,7 +141,6 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
     <React.Fragment key={urlPath}>
       <Route
         path={`${urlPath}/:resourceName?`}
-        exact
         element={
           <Suspense fallback={<Spinner />}>
             <ColumnWrapper
