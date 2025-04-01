@@ -115,7 +115,14 @@ export function usePrepareLayoutColumns({
         midColumn: null,
         endColumn: null,
         showEdit: showEdit
-          ? { resourceType, namespaceId, apiGroup, apiVersion }
+          ? {
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+              resourceName:
+                resourceType === 'Namespaces' ? resourceName : undefined,
+            }
           : null,
       };
     }
