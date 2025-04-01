@@ -225,6 +225,7 @@ common:
   buttons:
     add: Add
     add-all: Add all
+    apply: Apply
     button-disabled: Disabled
     cancel: Cancel
     clone: Clone
