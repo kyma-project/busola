@@ -100,8 +100,8 @@ export function usePrepareLayoutColumns({
   const navigationType = useNavigationType();
 
   const newLayoutState = useMemo(() => {
-    const isAllNamespacs = namespaceId === '-all-';
-    if (!layout || layout === 'OneColumn' || isAllNamespacs) {
+    const isAllNamespaces = namespaceId === '-all-';
+    if (!layout || layout === 'OneColumn' || isAllNamespaces) {
       return {
         layout: 'OneColumn',
         startColumn: {
