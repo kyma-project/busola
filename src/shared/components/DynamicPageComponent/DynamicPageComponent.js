@@ -370,20 +370,19 @@ export const DynamicPageComponent = ({
               return;
             }
 
+            const newTabName = e.detail.tab.getAttribute('data-mode');
             handleActionIfFormOpen(
               isResourceEdited,
               setIsResourceEdited,
               isFormOpen,
               setIsFormOpen,
               () => {
-                setSelectedSectionIdState(
-                  e.detail.tab.getAttribute('data-mode'),
-                );
+                setSelectedSectionIdState(newTabName);
                 setIsResourceEdited({
                   isEdited: false,
                 });
 
-                if (e.detail.tab.getAttribute('data-mode') === 'edit') {
+                if (newTabName === 'edit') {
                   const params = new URLSearchParams();
                   if (layoutColumn.layout !== 'OneColumn') {
                     params.set('layout', layoutColumn.layout);
