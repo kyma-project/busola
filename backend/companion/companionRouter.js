@@ -158,7 +158,18 @@ async function handleChatMessage(req, res) {
 
     res.end();
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch AI chat data' });
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Failed to fetch AI chat data' });
+    } else {
+      setTimeout(() => {
+        res.write(
+          JSON.stringify({
+            error: 'Failed to fetch AI chat data',
+          }),
+        );
+        res.end();
+      }, 500);
+    }
   }
 }
 
