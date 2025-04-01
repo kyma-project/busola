@@ -58,7 +58,8 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     resourceName: resourceName,
   });
 
-  const defaultColumn = resourceName ? 'details' : 'list';
+  const defaultColumn =
+    resourceName && namespaceId !== '-all-' ? 'details' : 'list';
 
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,

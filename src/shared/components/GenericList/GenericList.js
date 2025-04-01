@@ -310,11 +310,12 @@ export const GenericList = ({
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  const { resourceUrl: resourceUrlFn } = useUrl();
+  const { resourceUrl: resourceUrlFn, namespace } = useUrl();
   const linkTo = entry => {
+    const overrides = namespace === '-all-' ? { namespace } : {};
     return customUrl
       ? customUrl(entry)
-      : resourceUrlFn(entry, { resourceType });
+      : resourceUrlFn(entry, { resourceType, ...overrides });
   };
 
   const handleRowClick = e => {
