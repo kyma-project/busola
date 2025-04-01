@@ -91,12 +91,6 @@
     text-decoration: line-through;
   }
 
-  .code-border {
-    padding: 0.25em;
-    border-radius: 0.25em;
-    border: solid 0.25px var(--border);
-  }
-
   code,
   pre {
     font-family: monospace;
@@ -170,15 +164,30 @@
     margin: 1em 0;
   }
 
-  //  Overrides for `reset.css`
+  //  Overrides for `reset.css` or customization of predefined styles
   ol,
   ul {
     list-style-type: initial;
   }
 
+  table {
+    height: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  td {
+    background: var(--code);
+  }
+
   p {
-    margin-top: 1em;
-    padding: initial;
-    border: initial;
+    margin-top: 0.3rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .code-border {
+    padding: 0.25rem;
+    border-radius: 0.25em;
+    border: solid 0.25px var(--border);
   }
 }
