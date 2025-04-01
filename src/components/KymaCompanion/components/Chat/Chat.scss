@@ -4,9 +4,8 @@
   .chat-list {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
     gap: 8px;
+    overflow-y: auto;
 
     &::-webkit-scrollbar {
       display: none;
