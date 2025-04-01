@@ -1,5 +1,6 @@
 import { Text } from '@ui5/webcomponents-react';
 import CodePanel from './CodePanel';
+import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import { handleResponseFormatting } from 'components/KymaCompanion/utils/formatMarkdown';
 import './Message.scss';
@@ -8,6 +9,7 @@ interface MessageProps {
   className: string;
   messageChunks: MessageChunk[];
   isLoading: boolean;
+  disableFormatting?: boolean;
 }
 
 export interface MessageChunk {
@@ -31,39 +33,23 @@ export default function Message({
   className,
   messageChunks,
   isLoading,
+  disableFormatting = false,
 }: MessageProps): JSX.Element {
   if (isLoading) {
     return <TasksList messageChunks={messageChunks} />;
   }
+  const text = messageChunks.slice(-1)[0]?.data?.answer?.content;
 
-  const segmentedText = handleResponseFormatting(
-    messageChunks.slice(-1)[0]?.data?.answer?.content,
-  );
+  let segmentedText = null;
+  if (disableFormatting) {
+    segmentedText = text;
+  } else {
+    segmentedText = formatMessage(text);
+  }
 
   return (
     <div className={'message ' + className}>
-      {segmentedText && (
-        <Text className="text">
-          {segmentedText.map((segment, index) =>
-            segment ? (
-              segment.type === 'bold' ? (
-                <Text key={index} className="text bold">
-                  {segment.content}
-                </Text>
-              ) : segment.type === 'code' ||
-                segment.type === 'codeWithAction' ? (
-                <CodePanel key={index} segment={segment} />
-              ) : segment.type === 'highlighted' ? (
-                <Text key={index} className="text highlighted">
-                  {segment.content}
-                </Text>
-              ) : (
-                segment.content
-              )
-            ) : null,
-          )}
-        </Text>
-      )}
+      <Text className="text">{segmentedText}</Text>
     </div>
   );
 }
