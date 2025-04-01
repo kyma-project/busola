@@ -101,7 +101,7 @@ function ResourceDetailsRenderer(props) {
             props.resourceType,
           )}
           layoutCloseUrl={props.layoutCloseCreateUrl}
-          layoutNumber={props.layoutNumber ?? 'MidColumn'}
+          layoutNumber={props.layoutNumber ?? 'midColumn'}
         />
       );
     }
@@ -110,7 +110,7 @@ function ResourceDetailsRenderer(props) {
         resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
         customMessage={getErrorMessage(error)}
         layoutCloseUrl={props.layoutCloseCreateUrl}
-        layoutNumber={props.layoutNumber ?? 'MidColumn'}
+        layoutNumber={props.layoutNumber ?? 'midColumn'}
       />
     );
   }
@@ -142,7 +142,7 @@ function Resource({
   hideLabels = false,
   hideAnnotations = false,
   hideLastUpdate = false,
-  layoutNumber = 'MidColumn',
+  layoutNumber = 'midColumn',
   layoutCloseCreateUrl,
   children,
   createResourceForm: CreateResourceForm,
@@ -423,7 +423,7 @@ function Resource({
         className={className}
         headerContent={headerContent}
         showYamlTab={showYamlTab || disableEdit}
-        layoutNumber={layoutNumber ?? 'MidColumn'}
+        layoutNumber={layoutNumber ?? 'midColumn'}
         layoutCloseUrl={layoutCloseCreateUrl}
         title={customTitle ?? resource.metadata.name}
         description={headerDescription}

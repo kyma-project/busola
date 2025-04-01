@@ -84,7 +84,7 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <Create
               resourceSchema={extension}
-              layoutNumber="StartColumn"
+              layoutNumber="startColumn"
               {...elementCreateProps}
               {...renderProps}
             />
