@@ -15,7 +15,7 @@ type GetChatResponseArgs = {
   resourceName?: string;
   sessionID: string;
   handleChatResponse: (chunk: MessageChunk) => void;
-  handleError: (error?: Error) => void;
+  handleError: (error?: string) => void;
   clusterUrl: string;
   clusterAuth: ClusterAuth;
   certificateAuthorityData: string;
@@ -87,7 +87,7 @@ function readChunk(
   reader: ReadableStreamDefaultReader<Uint8Array>,
   decoder: TextDecoder,
   handleChatResponse: (chunk: any) => void,
-  handleError: (error?: Error) => void,
+  handleError: (error?: string) => void,
   sessionID: string,
 ) {
   reader

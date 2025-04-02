@@ -1,16 +1,11 @@
+import { Icon, Text } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import './Message.scss';
 import './marked.scss';
 import { isCurrentThemeDark, themeState } from 'state/preferences/themeAtom';
 import { useRecoilValue } from 'recoil';
-
-interface MessageProps {
-  className: string;
-  messageChunks: MessageChunk[];
-  isLoading: boolean;
-  disableFormatting?: boolean;
-}
 
 export interface MessageChunk {
   event?: string;
@@ -26,32 +21,68 @@ export interface MessageChunk {
       }[];
       next: string;
     };
+    error?: string | null;
   };
 }
 
+interface MessageProps {
+  author: 'user' | 'ai';
+  messageChunks: MessageChunk[];
+  isLoading: boolean;
+  hasError: boolean;
+  isLatestMessage: boolean;
+  disableFormatting?: boolean;
+}
+
 export default function Message({
-  className,
+  author,
   messageChunks,
   isLoading,
+  hasError,
+  isLatestMessage,
   disableFormatting = false,
 }: MessageProps): JSX.Element {
   const currentTheme = useRecoilValue(themeState);
   const isThemeDark = isCurrentThemeDark(currentTheme);
   const predefinedMarkdownThemeClass = isThemeDark ? 'dark' : 'light';
 
+  const { t } = useTranslation();
   if (isLoading) {
     return <TasksList messageChunks={messageChunks} />;
   }
 
-  const text = messageChunks.slice(-1)[0]?.data?.answer?.content;
-  let segmentedText = null;
-  if (disableFormatting) {
-    segmentedText = text;
-  } else {
-    segmentedText = formatMessage(text, predefinedMarkdownThemeClass);
-  }
+  const displayError =
+    hasError &&
+    ((author === 'user' && !isLatestMessage) ||
+      (author === 'ai' && isLatestMessage));
+
+  const finalChunk = messageChunks.at(-1);
+  const text = finalChunk?.data?.answer?.content ?? '';
+  const segmentedText = disableFormatting
+    ? text
+    : formatMessage(text, predefinedMarkdownThemeClass);
+
+  const className = author === 'user' ? 'right-aligned' : 'left-aligned';
 
   return (
-    <div className={'message ' + className + ' markdown'}>{segmentedText}</div>
+    <div className={'message-container ' + className}>
+      <div
+        className={`markdown message ${className}${
+          displayError ? ' error' : ''
+        }`}
+      >
+        {segmentedText}
+      </div>
+      {displayError && (
+        <div className={'message-error ' + className}>
+          <Text className="error-text">
+            {author === 'user'
+              ? t('kyma-companion.error.chat-error')
+              : t('kyma-companion.error.suggestions-error')}
+          </Text>
+          <Icon name="error" design="Negative" className="error-icon" />
+        </div>
+      )}
+    </div>
   );
 }
