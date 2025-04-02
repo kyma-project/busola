@@ -35,18 +35,20 @@ export function FormField({
       direction="Column"
       style={style}
     >
-      <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
-        {!isListItem && <Label required={required && !disabled}>{label}</Label>}
-        {tooltipContent && (
-          <HintButton
-            setShowTitleDescription={setOpenPopover}
-            showTitleDescription={openPopover}
-            description={tooltipContent}
-            className="sap-margin-begin-tiny"
-            ariaTitle={!isListItem ? label : ''}
-          />
-        )}
-      </FlexBox>
+      {!isListItem && label && (
+        <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
+          <Label required={required && !disabled}>{label}</Label>
+          {tooltipContent && (
+            <HintButton
+              setShowTitleDescription={setOpenPopover}
+              showTitleDescription={openPopover}
+              description={tooltipContent}
+              className="sap-margin-begin-tiny"
+              ariaTitle={!isListItem ? label : ''}
+            />
+          )}
+        </FlexBox>
+      )}
       <FlexBox wrap="Wrap" alignItems="Center" className="full-width">
         {messageStrip
           ? messageStrip

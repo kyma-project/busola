@@ -138,6 +138,10 @@ export function SidebarNavigation() {
                     isFormOpen,
                     setIsFormOpen,
                     () => {
+                      const newNamespace =
+                        e.target.value === t('navigation.all-namespaces')
+                          ? '-all-'
+                          : e.target.value;
                       setLayoutColumn(prevState => ({
                         startColumn: {
                           resourceType:
@@ -146,23 +150,17 @@ export function SidebarNavigation() {
                             prevState.startColumn?.resourceName ?? null,
                           apiGroup: prevState.startColumn?.apiGroup ?? null,
                           apiVersion: prevState.startColumn?.apiVersion ?? null,
-                          namespaceId: e.target.value,
+                          namespaceId: newNamespace,
                         },
                         midColumn: null,
                         endColumn: null,
                         layout: 'OneColumn',
                       }));
-                      return e.target.value === t('navigation.all-namespaces')
-                        ? navigate(
-                            namespaceUrl(resourceType, {
-                              namespace: '-all-',
-                            }),
-                          )
-                        : navigate(
-                            namespaceUrl(resourceType, {
-                              namespace: e.target.value ?? undefined,
-                            }),
-                          );
+                      return navigate(
+                        namespaceUrl(resourceType, {
+                          namespace: newNamespace,
+                        }),
+                      );
                     },
                   );
                 }}
