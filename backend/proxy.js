@@ -2,6 +2,7 @@ import rateLimit from 'express-rate-limit';
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import net from 'net';
+import dns from 'dns/promises';
 
 function isLocalDomain(hostname) {
   const localDomains = ['localhost', '127.0.0.1', '::1'];
@@ -23,10 +24,17 @@ function isPrivateIp(ip) {
     if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return true;
     // 192.168.0.0/16
     if (parts[0] === 192 && parts[1] === 168) return true;
+    // 127.0.0.0/8 (localhost)
+    if (parts[0] === 127) return true;
   }
   if (net.isIPv6(ip)) {
     const lowerIp = ip.toLowerCase();
+    // fc00::/7 (unique local addresses)
     if (lowerIp.startsWith('fc') || lowerIp.startsWith('fd')) return true;
+    // fe80::/10 (link-local addresses)
+    if (lowerIp.startsWith('fe80:')) return true;
+    // ::1/128 (localhost)
+    if (lowerIp === '::1') return true;
   }
   return false;
 }
@@ -58,6 +66,19 @@ async function proxyHandler(req, res) {
     }
 
     if (net.isIP(parsedUrl.hostname) !== 0) {
+      return res.status(403).send('Request Forbidden');
+    }
+
+    // Perform DNS resolution to check for private IPs
+    try {
+      const addresses = await dns.lookup(parsedUrl.hostname, { all: true });
+      for (const addr of addresses) {
+        if (isPrivateIp(addr.address)) {
+          return res.status(403).send('Request Forbidden');
+        }
+      }
+    } catch (dnsError) {
+      // If DNS lookup fails, we block the request for safety.
       return res.status(403).send('Request Forbidden');
     }
 
