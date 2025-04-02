@@ -2,33 +2,45 @@ import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import net from 'net';
 
+function isLocalDomain(hostname) {
+  const localDomains = ['localhost', '127.0.0.1', '::1'];
+  const localSuffixes = ['.localhost', '.local', '.internal'];
+
+  if (localDomains.includes(hostname.toLowerCase())) {
+    return true;
+  }
+
+  return localSuffixes.some(suffix => hostname.endsWith(suffix));
+}
+
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
   if (!targetUrl) {
-    return res.status(400).send('Target URL is required as a query parameter');
+    return res.status(400).send('Bad Request');
   }
 
   try {
     const parsedUrl = new URL(targetUrl);
 
     if (parsedUrl.protocol !== 'https:') {
-      return res.status(400).send('Only HTTPS protocol is allowed');
+      return res.status(403).send('Request Forbidden');
     }
 
-    if (parsedUrl.hostname === 'localhost') {
-      return res.status(400).send('Local URLs are not allowed');
+    if (isLocalDomain(parsedUrl.hostname)) {
+      return res.status(403).send('Request Forbidden');
     }
 
     if (net.isIP(parsedUrl.hostname) !== 0) {
-      return res.status(400).send('IP addresses are not allowed');
+      return res.status(403).send('Request Forbidden');
     }
 
     const options = {
       hostname: parsedUrl.hostname,
-      port: parsedUrl.port || 443, // Default to 443 for HTTPS
+      port: parsedUrl.port || 443,
       path: parsedUrl.pathname + parsedUrl.search,
       method: req.method,
       headers: { ...req.headers, host: parsedUrl.host },
+      timeout: 30000,
     };
 
     const proxyReq = httpsRequest(options, proxyRes => {
@@ -37,16 +49,16 @@ async function proxyHandler(req, res) {
     });
 
     proxyReq.on('error', () => {
-      res.status(500).send('An error occurred while making the proxy request.');
+      res.status(502).send('An error occurred while making the proxy request.');
     });
 
     if (Buffer.isBuffer(req.body)) {
-      proxyReq.end(req.body); // Buffered body
+      proxyReq.end(req.body);
     } else {
-      req.pipe(proxyReq); // Streamed or chunked body
+      req.pipe(proxyReq);
     }
   } catch (error) {
-    res.status(400).send('Invalid target URL');
+    res.status(400).send('Bad Request');
   }
 }
 
