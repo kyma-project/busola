@@ -1,6 +1,6 @@
 import { request as httpsRequest } from 'https';
-import { request as httpRequest } from 'http';
 import { URL } from 'url';
+import net from 'net';
 
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
@@ -10,21 +10,29 @@ async function proxyHandler(req, res) {
 
   try {
     const parsedUrl = new URL(targetUrl);
-    const isHttps = parsedUrl.protocol === 'https:';
-    const libRequest = isHttps ? httpsRequest : httpRequest;
+
+    if (parsedUrl.protocol !== 'https:') {
+      return res.status(400).send('Only HTTPS protocol is allowed');
+    }
+
+    if (parsedUrl.hostname === 'localhost') {
+      return res.status(400).send('Local URLs are not allowed');
+    }
+
+    if (net.isIP(parsedUrl.hostname) !== 0) {
+      return res.status(400).send('IP addresses are not allowed');
+    }
 
     const options = {
       hostname: parsedUrl.hostname,
-      port: parsedUrl.port || (isHttps ? 443 : 80),
+      port: parsedUrl.port || 443, // Default to 443 for HTTPS
       path: parsedUrl.pathname + parsedUrl.search,
       method: req.method,
       headers: { ...req.headers, host: parsedUrl.host },
     };
 
-    const proxyReq = libRequest(options, proxyRes => {
-      // Forward status and headers from the target response
+    const proxyReq = httpsRequest(options, proxyRes => {
       res.writeHead(proxyRes.statusCode, proxyRes.headers);
-      // Pipe the response data from the target back to the client
       proxyRes.pipe(res);
     });
 
@@ -33,12 +41,12 @@ async function proxyHandler(req, res) {
     });
 
     if (Buffer.isBuffer(req.body)) {
-      proxyReq.end(req.body); // If the body is already buffered, use it directly.
+      proxyReq.end(req.body); // Buffered body
     } else {
-      req.pipe(proxyReq); // Otherwise, pipe the request for streamed or chunked data.
+      req.pipe(proxyReq); // Streamed or chunked body
     }
   } catch (error) {
-    res.status(500).send('An error occurred while processing the request.');
+    res.status(400).send('Invalid target URL');
   }
 }
 
