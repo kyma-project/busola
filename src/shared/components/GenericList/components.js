@@ -51,13 +51,15 @@ export const HeaderRenderer = ({
       return 0;
     }
   };
-  const setCellMinWidth = h => {
+  const setCellMinWidth = (h, columnsLength) => {
     if (Array.isArray(noHideFields) && noHideFields.length !== 0) {
-      return noHideFields.find(field => field === h) ? '200px' : '100px';
+      return noHideFields.find(field => field === h)
+        ? `${100 / noHideFields.length}%`
+        : '100px';
     } else if (h === 'Popin') {
-      return '15000px';
+      return '100%';
     } else if (disableHiding) {
-      return 'auto';
+      return `${100 / columnsLength}%`;
     } else if (h !== 'Name' && h !== '') {
       return '100px';
     } else {
@@ -66,14 +68,14 @@ export const HeaderRenderer = ({
   };
   const Header = (
     <TableHeaderRow slot="headerRow">
-      {headerRenderer().map((h, index) => {
+      {headerRenderer().map((h, index, arr) => {
         return (
           <TableHeaderCell
             key={typeof h === 'object' ? index : h}
             popinText={h === 'Popin' ? t('common.headers.specification') : h}
             popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
             importance={checkCellImportance(h)}
-            minWidth={setCellMinWidth(h)}
+            minWidth={setCellMinWidth(h, arr.length)}
             aria-label={`${typeof h === 'object' ? index : h}-column`}
           >
             <Text>{h}</Text>
