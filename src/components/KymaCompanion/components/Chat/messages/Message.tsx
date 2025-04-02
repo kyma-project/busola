@@ -40,7 +40,6 @@ export default function Message({
   isLoading,
   hasError,
   isLatestMessage,
-  disableFormatting = false,
 }: MessageProps): JSX.Element {
   const currentTheme = useRecoilValue(themeState);
   const isThemeDark = isCurrentThemeDark(currentTheme);
@@ -58,9 +57,7 @@ export default function Message({
 
   const finalChunk = messageChunks.at(-1);
   const text = finalChunk?.data?.answer?.content ?? '';
-  const segmentedText = disableFormatting
-    ? text
-    : formatMessage(text, predefinedMarkdownThemeClass);
+  const segmentedText = formatMessage(text, predefinedMarkdownThemeClass);
 
   const className = author === 'user' ? 'right-aligned' : 'left-aligned';
 
