@@ -1,50 +1,76 @@
-.message {
-  max-width: 80%;
-  padding: 12px;
-  background-color: var(--sapAssistant_Answer_Background);
+.message-container {
+  margin-inline: 0.5rem;
+  width: calc(100% - 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 
-  &.no-background {
-    background-color: var(--sapTile_Background);
+  &.left-aligned {
+    align-items: start;
   }
 
-  &.loading {
+  &.right-aligned {
+    align-items: end;
+  }
+
+  .message-error {
+    max-width: 80%;
     display: flex;
-    flex-direction: column;
-    gap: 16px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
 
-    .loading-item {
-      gap: 0.5rem;
+    .error-text {
+      color: var(--sapNegativeTextColor);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+    }
 
-      .text {
-        flex-grow: 1;
-      }
-
-      .loading-status {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 35px;
-      }
+    .error-icon {
+      flex-shrink: 0;
+      color: var(--sapNegativeTextColor);
     }
   }
 
-  .bold {
-    font-weight: bold;
-    font-size: 0.925rem;
-  }
+  .message {
+    max-width: 80%;
+    padding: 12px;
+    background-color: var(--sapAssistant_Answer_Background);
 
-  .highlighted {
-    background-color: var(--sapContent_LabelColor);
-    color: white;
-    padding: 0.1rem 0.2rem;
-    margin: 0.1rem 0;
-    border-radius: 4px;
-  }
+    &.right-aligned {
+      border-radius: 8px 8px 0 8px;
+      background-color: var(--sapAssistant_Question_Background);
 
-  .text {
-    line-height: 1.35;
-    white-space: pre-line;
-    display: inline;
+      &.error {
+        border: 1px solid var(--sapErrorBorderColor);
+        background-color: var(--sapErrorBackground);
+      }
+    }
+
+    &.left-aligned {
+      border-radius: 8px 8px 8px 0;
+    }
+
+    .bold {
+      font-weight: bold;
+      font-size: 0.925rem;
+    }
+
+    .highlighted {
+      background-color: var(--sapContent_LabelColor);
+      color: white;
+      padding: 0.1rem 0.2rem;
+      margin: 0.1rem 0;
+      border-radius: 4px;
+    }
+
+    .text {
+      line-height: 1.35;
+      white-space: pre-line;
+      display: inline;
+    }
   }
 }
 
