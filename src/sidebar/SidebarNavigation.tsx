@@ -114,64 +114,64 @@ export function SidebarNavigation() {
             </SideNavigation>
           )}
           {(!namespace || isSidebarCondensed) && <div className="space-top" />}
-          <div
-            className="namespace-combobox"
-            style={namespace ? { zIndex: '0' } : { display: 'none' }}
-          >
-            <Label
-              for="NamespaceComboBox"
-              className="sap-margin-bottom-tiny sap-margin-begin-small"
-            >
-              {t('common.headers.namespaces')}
-            </Label>
-            <FlexBox
-              alignItems="Center"
-              className="sap-margin-bottom-small sap-margin-x-tiny"
-            >
-              <ComboBox
-                id="NamespaceComboBox"
-                className="combobox-with-dimension-icon"
-                onSelectionChange={e => {
-                  handleActionIfFormOpen(
-                    isResourceEdited,
-                    setIsResourceEdited,
-                    isFormOpen,
-                    setIsFormOpen,
-                    () => {
-                      setLayoutColumn(prevState => ({
-                        startColumn: {
-                          resourceType:
-                            prevState.startColumn?.resourceType ?? null,
-                          resourceName:
-                            prevState.startColumn?.resourceName ?? null,
-                          apiGroup: prevState.startColumn?.apiGroup ?? null,
-                          apiVersion: prevState.startColumn?.apiVersion ?? null,
-                          namespaceId: e.target.value,
-                        },
-                        midColumn: null,
-                        endColumn: null,
-                        layout: 'OneColumn',
-                      }));
-                      return e.target.value === t('navigation.all-namespaces')
-                        ? navigate(
-                            namespaceUrl(resourceType, {
-                              namespace: '-all-',
-                            }),
-                          )
-                        : navigate(
-                            namespaceUrl(resourceType, {
-                              namespace: e.target.value ?? undefined,
-                            }),
-                          );
-                    },
-                  );
-                }}
-                value={getNamespaceLabel()}
+          {namespace && (
+            <div className="namespace-combobox" style={{ zIndex: '0' }}>
+              <Label
+                for="NamespaceComboBox"
+                className="sap-margin-bottom-tiny sap-margin-begin-small"
               >
-                {NamespaceDropdown()}
-              </ComboBox>
-            </FlexBox>
-          </div>
+                {t('common.headers.namespaces')}
+              </Label>
+              <FlexBox
+                alignItems="Center"
+                className="sap-margin-bottom-small sap-margin-x-tiny"
+              >
+                <ComboBox
+                  id="NamespaceComboBox"
+                  className="combobox-with-dimension-icon"
+                  onSelectionChange={e => {
+                    handleActionIfFormOpen(
+                      isResourceEdited,
+                      setIsResourceEdited,
+                      isFormOpen,
+                      setIsFormOpen,
+                      () => {
+                        setLayoutColumn(prevState => ({
+                          startColumn: {
+                            resourceType:
+                              prevState.startColumn?.resourceType ?? null,
+                            resourceName:
+                              prevState.startColumn?.resourceName ?? null,
+                            apiGroup: prevState.startColumn?.apiGroup ?? null,
+                            apiVersion:
+                              prevState.startColumn?.apiVersion ?? null,
+                            namespaceId: e.target.value,
+                          },
+                          midColumn: null,
+                          endColumn: null,
+                          layout: 'OneColumn',
+                        }));
+                        return e.target.value === t('navigation.all-namespaces')
+                          ? navigate(
+                              namespaceUrl(resourceType, {
+                                namespace: '-all-',
+                              }),
+                            )
+                          : navigate(
+                              namespaceUrl(resourceType, {
+                                namespace: e.target.value ?? undefined,
+                              }),
+                            );
+                      },
+                    );
+                  }}
+                  value={getNamespaceLabel()}
+                >
+                  <NamespaceDropdown />
+                </ComboBox>
+              </FlexBox>
+            </div>
+          )}
         </>
       }
     >
