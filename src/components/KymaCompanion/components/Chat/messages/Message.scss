@@ -1,4 +1,5 @@
 .message-container {
+  padding: 0.5rem 0.75rem;
   margin-inline: 0.5rem;
   width: calc(100% - 1rem);
   display: flex;
@@ -36,7 +37,7 @@
 
   .message {
     max-width: 80%;
-    padding: 12px;
+    padding: 0.5rem 0.75rem;
     background-color: var(--sapAssistant_Answer_Background);
 
     &.right-aligned {
