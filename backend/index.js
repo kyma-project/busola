@@ -1,7 +1,7 @@
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
-import { proxyHandler } from './proxy.js';
+import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
@@ -60,7 +60,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
 
-app.use('/proxy', proxyHandler);
+app.use('/proxy', proxyRateLimiter, proxyHandler);
 
 let server = null;
 

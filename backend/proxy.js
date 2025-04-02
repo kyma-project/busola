@@ -1,3 +1,4 @@
+import rateLimit from 'express-rate-limit';
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import net from 'net';
@@ -12,6 +13,15 @@ function isLocalDomain(hostname) {
 
   return localSuffixes.some(suffix => hostname.endsWith(suffix));
 }
+
+// Rate limiter: Max 100 requests per 1 minutes per IP
+const proxyRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
@@ -62,4 +72,4 @@ async function proxyHandler(req, res) {
   }
 }
 
-export { proxyHandler };
+export { proxyHandler, proxyRateLimiter };
