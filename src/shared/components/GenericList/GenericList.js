@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -102,9 +102,10 @@ export const GenericList = ({
   };
 
   const globalPageSize = useRecoilValue(pageSizeState);
-  const [pageSize, setLocalPageSize] = useState(globalPageSize);
+  const [pageSize, setPageSize] = useState(globalPageSize);
+
   useEffect(() => {
-    setLocalPageSize(globalPageSize);
+    setPageSize(globalPageSize);
   }, [globalPageSize]);
 
   pagination = useMemo(() => {
@@ -145,7 +146,7 @@ export const GenericList = ({
     sort,
   ]);
 
-  React.useEffect(() => setCurrentPage(1), [searchQuery]);
+  useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
     const selected = entries.find(entry => {
@@ -439,7 +440,7 @@ export const GenericList = ({
             currentPage={currentPage}
             itemsPerPage={pagination.itemsPerPage}
             onChangePage={setCurrentPage}
-            setLocalPageSize={setLocalPageSize}
+            setLocalPageSize={setPageSize}
           />
         )}
     </UI5Panel>

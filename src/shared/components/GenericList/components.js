@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   FlexBox,
@@ -14,11 +15,9 @@ import {
 import ListActions from 'shared/components/ListActions/ListActions';
 
 export const BodyFallback = ({ children }) => (
-  <TableRow>
-    <TableCell style={{ width: '100%' }}>
-      <div className="body-fallback">{children}</div>
-    </TableCell>
-  </TableRow>
+  <TableCell slot="nodata" style={{ width: '100%' }}>
+    <div className="body-fallback">{children}</div>
+  </TableCell>
 );
 
 export const HeaderRenderer = ({
@@ -27,8 +26,9 @@ export const HeaderRenderer = ({
   disableHiding = true,
   noHideFields,
 }) => {
+  const { t } = useTranslation();
   let emptyColumn = null;
-  if (actions.length) {
+  if (actions?.length) {
     emptyColumn = (
       <TableHeaderCell
         importance={-1}
@@ -70,6 +70,7 @@ export const HeaderRenderer = ({
         return (
           <TableHeaderCell
             key={typeof h === 'object' ? index : h}
+            popinText={h === 'Popin' ? t('common.headers.specification') : h}
             popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
             importance={checkCellImportance(h)}
             minWidth={setCellMinWidth(h)}
@@ -93,7 +94,7 @@ export const RowRenderer = ({
   index,
   ...others
 }) => {
-  const filteredActions = actions.filter(a =>
+  const filteredActions = actions?.filter(a =>
     a.skipAction ? !a.skipAction(entry) : true,
   );
   const resolvedRowRenderer = rowRenderer(entry, index);
@@ -146,12 +147,13 @@ const DefaultRowRenderer = ({
 
   return (
     <TableRow
+      className={isSelected ? 'row-selected' : 'row'}
       interactive={true}
       navigated={isSelected}
       actions={displayArrow && <TableRowActionNavigation />}
     >
       {cells}
-      {!!actions.length && actionsCell}
+      {!!actions?.length && actionsCell}
     </TableRow>
   );
 };
