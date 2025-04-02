@@ -221,7 +221,7 @@ describe('GenericList', () => {
       />,
     );
 
-    cy.get('tr').should('have.length', 1);
+    cy.get('ui5-table-header-row').should('have.length', 1);
     cy.contains(defaultNotFoundText).should('exist');
   });
 
