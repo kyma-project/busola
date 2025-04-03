@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';

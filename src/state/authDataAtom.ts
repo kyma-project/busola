@@ -1,7 +1,7 @@
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 import { UserManager, User } from 'oidc-client-ts';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { atom, useSetRecoilState, useRecoilValue, RecoilState } from 'recoil';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { clusterState } from './clusterAtom';

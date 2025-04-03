@@ -7,6 +7,7 @@ context('Create Namespace', () => {
 
   it('Create Namespace', () => {
     cy.getLeftNav()
+      .find('ui5-side-navigation-item')
       .contains('Namespaces')
       .click();
 
@@ -31,7 +32,7 @@ context('Create Namespace', () => {
       .click({ force: true });
 
     cy.get('.create-form')
-      .find('[accessible-name="Namespace name"]:visible')
+      .find('ui5-input[accessible-name="Namespace name"]:visible')
       .find('input')
       .type(Cypress.env('NAMESPACE_NAME'));
 

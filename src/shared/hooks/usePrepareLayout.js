@@ -3,7 +3,7 @@ import {
   NavigationType,
   useNavigationType,
   useSearchParams,
-} from 'react-router-dom';
+} from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';

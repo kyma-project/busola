@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { MutableSnapshot, RecoilRoot } from 'recoil';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 type CustomRenderOptions = Omit<RenderOptions, 'wrapper'> & {
   initializeState: (snapshot: MutableSnapshot) => void;

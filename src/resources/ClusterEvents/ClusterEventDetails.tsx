@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import EventDetails from 'resources/Events/EventDetails';
 import { pathSegment } from 'resources/ClusterEvents/index';
 import { useUrl } from 'hooks/useUrl';

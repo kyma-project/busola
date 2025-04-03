@@ -3,7 +3,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import LimitRangeCreate from './LimitRangeCreate';
 import LimitRangeSpecification from './LimitRangeSpecification';
 import { Button } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -37,12 +37,17 @@ export function LimitRangesList(props) {
       showCreate: {
         resourceType: props.resourceType,
         namespaceId: props.namespace,
+        resourceUrl: props.resourceUrl,
       },
       layout: 'TwoColumnsMidExpanded',
     });
     setIsFormOpen({ formOpen: true });
     navigate(
-      namespaceUrl(`${pluralize(props.resourceType.toLowerCase() || '')}`),
+      namespaceUrl(
+        `${pluralize(
+          props.resourceType.toLowerCase() || '',
+        )}?layout=TwoColumnsMidExpanded&showCreate=true`,
+      ),
     );
   };
 

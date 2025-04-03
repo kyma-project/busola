@@ -1,6 +1,6 @@
 import { Button, MessageBox, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 

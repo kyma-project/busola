@@ -1,6 +1,6 @@
 import { KubeconfigIdHandleState } from 'components/App/useLoginWithKubeconfigID';
 import { useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { authDataState } from './authDataAtom';
 import { clusterState } from './clusterAtom';

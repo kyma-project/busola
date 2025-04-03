@@ -1,6 +1,6 @@
 import { useFeature } from 'hooks/useFeature';
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route } from 'react-router';
 
 const GardenerLogin = React.lazy(() => import('./GardenerLogin'));
 

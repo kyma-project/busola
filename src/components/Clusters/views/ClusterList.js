@@ -20,7 +20,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 
 import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 import { useFeature } from 'hooks/useFeature';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { createPortal } from 'react-dom';
 
 import './ClusterList.scss';

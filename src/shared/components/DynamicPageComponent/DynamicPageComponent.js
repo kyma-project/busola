@@ -22,7 +22,7 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
