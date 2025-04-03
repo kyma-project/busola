@@ -108,7 +108,7 @@ export function GroupingListPage({
           />
         }
         content={lists}
-        layoutNumber="StartColumn"
+        layoutNumber="startColumn"
       />
 
       {createPortal(<YamlUploadDialog />, document.body)}

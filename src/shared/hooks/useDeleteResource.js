@@ -78,11 +78,11 @@ export function useDeleteResource({
         layoutColumn.endColumn?.resourceName === resource?.metadata?.name &&
         layoutColumn.endColumn?.namespaceId === resource?.metadata?.namespace);
     const goToLayout =
-      redirectBack || (forceRedirect && layoutNumber !== 'MidColumn')
+      redirectBack || (forceRedirect && layoutNumber !== 'midColumn')
         ? prevLayout
         : currentLayout;
     const goToLayoutQuery =
-      redirectBack || (forceRedirect && layoutNumber !== 'MidColumn')
+      redirectBack || (forceRedirect && layoutNumber !== 'midColumn')
         ? prevQuery
         : currentQuery;
 

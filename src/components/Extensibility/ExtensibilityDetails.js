@@ -236,7 +236,7 @@ const ExtensibilityDetails = ({
           resourceName,
           resourceNamespace: namespaceId,
           layoutCloseCreateUrl,
-          layoutNumber: 'MidColumn',
+          layoutNumber: 'midColumn',
           headerActions,
           isModule,
         }}
