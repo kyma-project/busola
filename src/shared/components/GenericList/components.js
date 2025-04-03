@@ -73,27 +73,28 @@ export const HeaderRenderer = ({
       return 'auto';
     }
   };
-  const Header = headerRenderer()?.length ? (
-    <TableHeaderRow slot="headerRow">
-      {headerRenderer().map((h, index) => {
-        return (
-          <TableHeaderCell
-            key={typeof h === 'object' ? index : h}
-            popinText={h === 'Popin' ? t('common.headers.specification') : h}
-            popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
-            importance={checkCellImportance(h)}
-            minWidth={setCellMinWidth(h)}
-            aria-label={`${typeof h === 'object' ? index : h}-column`}
-          >
-            <Text>{h}</Text>
-          </TableHeaderCell>
-        );
-      })}
-      {emptyColumn}
-    </TableHeaderRow>
-  ) : (
-    <></>
-  );
+  const Header =
+    headerRenderer()?.length || emptyColumn ? (
+      <TableHeaderRow slot="headerRow">
+        {headerRenderer()?.map((h, index) => {
+          return (
+            <TableHeaderCell
+              key={typeof h === 'object' ? index : h}
+              popinText={h === 'Popin' ? t('common.headers.specification') : h}
+              popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
+              importance={checkCellImportance(h)}
+              minWidth={setCellMinWidth(h)}
+              aria-label={`${typeof h === 'object' ? index : h}-column`}
+            >
+              <Text>{h}</Text>
+            </TableHeaderCell>
+          );
+        })}
+        {emptyColumn}
+      </TableHeaderRow>
+    ) : (
+      <></>
+    );
 
   return Header;
 };
