@@ -85,7 +85,7 @@ export function CustomResources({
     omitColumnsIds,
     hideCreateOption,
     createResourceForm: props => (
-      <CRCreate {...props} crd={crd} layoutNumber="MidColumn" />
+      <CRCreate {...props} crd={crd} layoutNumber="midColumn" />
     ),
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
     searchSettings: {
@@ -97,7 +97,7 @@ export function CustomResources({
     layoutCloseCreateUrl: layoutCloseCreateUrl,
     columnLayout: 'ThreeColumnsEndExpanded',
     customColumnLayout,
-    layoutNumber: 'MidColumn',
+    layoutNumber: 'midColumn',
     parentCrdName: crd.metadata.name,
     simpleEmptyListMessage,
   };
