@@ -2,7 +2,7 @@ import { UI5Renderer } from 'components/KymaCompanion/components/Chat/messages/m
 
 import Markdown from 'marked-react';
 
-export function formatMessage(text: string): JSX.Element[] {
+export function formatMessage(text: string, themeClass: string): JSX.Element[] {
   const elements: JSX.Element[] = [];
   let currentText: string = '';
   let divs = 0;
@@ -14,7 +14,7 @@ export function formatMessage(text: string): JSX.Element[] {
       if (codeSection) {
         return;
       }
-      elements.push(MarkdownText(currentText + '\n', idx));
+      elements.push(MarkdownText(currentText + '\n', idx, themeClass));
       currentText = line + '\n';
       codeSection = true;
       return;
@@ -34,14 +34,18 @@ export function formatMessage(text: string): JSX.Element[] {
     currentText += line + '\n';
   });
 
-  elements.push(MarkdownText(currentText + '\n', idx));
+  elements.push(MarkdownText(currentText + '\n', idx, themeClass));
 
   return elements;
 }
 
-function MarkdownText(text: string, idx: number): JSX.Element {
+function MarkdownText(
+  text: string,
+  idx: number,
+  themeClass: string,
+): JSX.Element {
   return (
-    <div id={`msg-${idx}`}>
+    <div id={`msg-${idx}`} className={themeClass}>
       <Markdown renderer={UI5Renderer}>{text}</Markdown>
     </div>
   );

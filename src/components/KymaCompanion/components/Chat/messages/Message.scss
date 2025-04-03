@@ -36,7 +36,7 @@
 
   .message {
     max-width: 80%;
-    padding: 12px;
+    padding: 0.5rem 0.75rem;
     background-color: var(--sapAssistant_Answer_Background);
 
     &.right-aligned {
@@ -51,25 +51,6 @@
 
     &.left-aligned {
       border-radius: 8px 8px 8px 0;
-    }
-
-    .bold {
-      font-weight: bold;
-      font-size: 0.925rem;
-    }
-
-    .highlighted {
-      background-color: var(--sapContent_LabelColor);
-      color: white;
-      padding: 0.1rem 0.2rem;
-      margin: 0.1rem 0;
-      border-radius: 4px;
-    }
-
-    .text {
-      line-height: 1.35;
-      white-space: pre-line;
-      display: inline;
     }
   }
 }
