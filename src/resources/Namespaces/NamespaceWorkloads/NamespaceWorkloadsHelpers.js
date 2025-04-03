@@ -63,3 +63,20 @@ export function getHealthyDaemonsets(daemonsets) {
       ds.status.numberMisscheduled === 0,
   )?.length;
 }
+
+export function getAvailableGPUs(nodesData) {
+  if (!nodesData) {
+    return 0;
+  }
+  return nodesData
+    .map(node => node.status.allocatable)
+    .reduce((partialSum, item) => {
+      const nvidiaGpus = item['nvidia.com/gpu'];
+      if (nvidiaGpus) {
+        const value = parseInt(nvidiaGpus);
+        partialSum += value;
+        return partialSum;
+      }
+      return 0;
+    });
+}

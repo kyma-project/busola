@@ -11,6 +11,7 @@ import {
   getBytes,
 } from 'resources/Namespaces/ResourcesUsage';
 import {
+  getAvailableGPUs,
   getHealthyDaemonsets,
   getHealthyReplicasCount,
   getStatusesPodCount,
@@ -105,6 +106,8 @@ export default function ClusterStats({ nodesData }) {
   const healthyDaemonsets = getHealthyDaemonsets(daemonsetsData);
   const healthyStatefulsets = getHealthyReplicasCount(statefulsetsData);
 
+  const gpu = getAvailableGPUs(nodesData);
+
   return (
     <>
       <Title
@@ -173,6 +176,15 @@ export default function ClusterStats({ nodesData }) {
               className="item"
               value={nodesData?.length}
               title={t('cluster-overview.statistics.nodes')}
+            />
+          </div>
+        )}
+        {gpu !== 0 && (
+          <div className="item-wrapper card-small">
+            <CountingCard
+              className="item"
+              value={gpu}
+              title={t('cluster-overview.statistics.gpus')}
             />
           </div>
         )}
