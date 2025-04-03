@@ -73,7 +73,7 @@ export const HeaderRenderer = ({
       return 'auto';
     }
   };
-  const Header = (
+  const Header = headerRenderer()?.length ? (
     <TableHeaderRow slot="headerRow">
       {headerRenderer().map((h, index) => {
         return (
@@ -91,6 +91,8 @@ export const HeaderRenderer = ({
       })}
       {emptyColumn}
     </TableHeaderRow>
+  ) : (
+    <></>
   );
 
   return Header;
