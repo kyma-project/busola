@@ -82,7 +82,11 @@ export function ResourceForm({
     } else if (layoutState?.showEdit?.resource) {
       setResource(layoutState.showEdit.resource);
     }
-  }, [layoutState?.showCreate?.resource, layoutState?.showEdit?.resource]);
+  }, [
+    layoutState?.showCreate?.resource,
+    layoutState?.showEdit?.resource,
+    setResource,
+  ]);
 
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
