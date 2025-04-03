@@ -56,6 +56,10 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     apiGroup: props.apiGroup,
     apiVersion: props.apiVersion,
     resourceName: resourceName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   const defaultColumn =

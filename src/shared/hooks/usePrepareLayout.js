@@ -89,6 +89,7 @@ export function usePrepareLayoutColumns({
   resourceName,
   isCustomResource,
   crName,
+  resource,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
@@ -115,7 +116,7 @@ export function usePrepareLayoutColumns({
         midColumn: null,
         endColumn: null,
         showEdit: showEdit
-          ? { resourceType, namespaceId, apiGroup, apiVersion }
+          ? { resourceType, namespaceId, apiGroup, apiVersion, resource }
           : null,
       };
     }
@@ -148,7 +149,7 @@ export function usePrepareLayoutColumns({
             }
           : null,
         showCreate: showCreate
-          ? { resourceType: resourceName, namespaceId }
+          ? { resourceType: resourceName, namespaceId, resource }
           : null,
         showEdit: showEdit
           ? {
@@ -157,7 +158,7 @@ export function usePrepareLayoutColumns({
               namespaceId,
               apiGroup,
               apiVersion,
-              resource: null,
+              resource,
             }
           : null,
       };
@@ -182,7 +183,7 @@ export function usePrepareLayoutColumns({
             }
           : null,
       endColumn: null,
-      showCreate: showCreate ? { resourceType, namespaceId } : null,
+      showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
       showEdit: showEdit
         ? editColumn === 'StartColumn'
           ? { resourceType, namespaceId, apiGroup, apiVersion }
@@ -192,7 +193,7 @@ export function usePrepareLayoutColumns({
               namespaceId,
               apiGroup,
               apiVersion,
-              resource: null,
+              resource,
             }
         : null,
     };
@@ -208,6 +209,7 @@ export function usePrepareLayoutColumns({
     resourceName,
     isCustomResource,
     crName,
+    resource,
   ]);
 
   useEffect(() => {
