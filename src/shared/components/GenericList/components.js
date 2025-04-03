@@ -28,14 +28,21 @@ export const HeaderRenderer = ({
 }) => {
   const { t } = useTranslation();
   let emptyColumn = null;
+  const getColumnsLength = () => {
+    let columnsLength = headerRenderer().length;
+    if (actions?.length) {
+      columnsLength += 1;
+    }
+    return columnsLength;
+  };
   if (actions?.length) {
     emptyColumn = (
       <TableHeaderCell
-        importance={-1}
+        importance={0}
         popinHidden={true}
         key="actions-column"
         aria-label="actions-column"
-        minWidth={'auto'}
+        minWidth={`${30 * actions.length}px`}
       >
         <Text />
       </TableHeaderCell>
@@ -51,15 +58,15 @@ export const HeaderRenderer = ({
       return 0;
     }
   };
-  const setCellMinWidth = (h, columnsLength) => {
+  const setCellMinWidth = h => {
     if (Array.isArray(noHideFields) && noHideFields.length !== 0) {
       return noHideFields.find(field => field === h)
-        ? `${100 / noHideFields.length}%`
+        ? `calc(100%/${getColumnsLength()})`
         : '100px';
     } else if (h === 'Popin') {
       return '100%';
     } else if (disableHiding) {
-      return `${100 / columnsLength}%`;
+      return `calc(100%/${getColumnsLength()})`;
     } else if (h !== 'Name' && h !== '') {
       return '100px';
     } else {
@@ -68,14 +75,14 @@ export const HeaderRenderer = ({
   };
   const Header = (
     <TableHeaderRow slot="headerRow">
-      {headerRenderer().map((h, index, arr) => {
+      {headerRenderer().map((h, index) => {
         return (
           <TableHeaderCell
             key={typeof h === 'object' ? index : h}
             popinText={h === 'Popin' ? t('common.headers.specification') : h}
             popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
             importance={checkCellImportance(h)}
-            minWidth={setCellMinWidth(h, arr.length)}
+            minWidth={setCellMinWidth(h)}
             aria-label={`${typeof h === 'object' ? index : h}-column`}
           >
             <Text>{h}</Text>

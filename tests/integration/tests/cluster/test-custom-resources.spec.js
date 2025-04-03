@@ -47,7 +47,7 @@ context('Test Custom Resources', () => {
         force: true,
       });
 
-    cy.get('table').should('have.length', 1);
+    cy.get('ui5-table').should('have.length', 1);
 
     cy.get('ui5-table-row')
       .contains('Tclusters')
