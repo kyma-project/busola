@@ -11,7 +11,8 @@ export interface CodeSegmentLink {
 interface YamlBlock {
   codeWithAction: true;
   content: string;
-  link: CodeSegmentLink;
+  link: CodeSegmentLink | null;
+  language: string;
 }
 
 export interface MarkdownText {
@@ -52,62 +53,55 @@ function findClosingDiv(lines: string[], startIndex: number): number {
   return -1;
 }
 
-function extractYamlBlocks(text: string) {
+function extractYamlBlocks(lines: string[], i: number) {
+  const start = i;
+  const end = findClosingDiv(lines, start);
+
+  const block = lines.slice(start, end + 1).join('\n');
+  const content = extractYamlContent(block);
+  const link = extractLink(block);
+
+  return { content, link, end };
+}
+
+function getLanguage(text: string) {
   const lines = text.split('\n');
-  const yamlMatches: YamlBlock[] = [];
+  const language = lines.shift();
+
+  return { language: language ?? '', code: lines.join('\n') };
+}
+
+function parseMessage(text: string): MessagePart[] {
+  const lines = text.split('\n');
+  const parts: MessagePart[] = [];
+  let currentText = '';
   let i = 0;
 
   while (i < lines.length) {
     if (lines[i].includes('<div class="yaml-block')) {
-      const start = i;
-      const end = findClosingDiv(lines, start);
-      if (end === -1) break;
+      if (currentText) {
+        parts.push({ codeWithAction: false, content: currentText });
+        currentText = '';
+      }
+      const { content, link, end } = extractYamlBlocks(lines, i);
+      const { code, language } = getLanguage(content);
+      parts.push({ codeWithAction: true, content: code, link, language });
 
-      const block = lines.slice(start, end + 1).join('\n');
-      const content = extractYamlContent(block);
-      const link = extractLink(block);
-      if (!link) break;
-
-      yamlMatches.push({ codeWithAction: true, content, link });
-      lines.splice(
-        start,
-        end - start + 1,
-        `[YAML_PLACEHOLDER_${yamlMatches.length - 1}]`,
-      );
-      i = start + 1;
+      i = end + 1;
     } else {
+      if (currentText) {
+        currentText += '\n' + lines[i];
+      } else {
+        currentText = lines[i];
+      }
       i++;
     }
   }
 
-  return { text: lines.join('\n'), yamlMatches };
-}
+  if (currentText) {
+    parts.push({ codeWithAction: false, content: currentText });
+  }
 
-function getLanguage(text: string): string {
-  const lines = text.split('\n');
-  const language = lines.shift();
-  return language ?? '';
-}
-
-function parseMessage(text: string): MessagePart[] {
-  const parts: MessagePart[] = [];
-  const { text: updatedText, yamlMatches } = extractYamlBlocks(text);
-  let currentText = '';
-
-  updatedText.split('\n').forEach(line => {
-    const match = line.match(/YAML_PLACEHOLDER_(\d+)/);
-    if (match) {
-      if (currentText) {
-        parts.push({ codeWithAction: false, content: currentText });
-      }
-      currentText = '';
-      parts.push(yamlMatches[parseInt(match[1], 10)]);
-    } else {
-      currentText += (currentText ? '\n' : '') + line;
-    }
-  });
-
-  if (currentText) parts.push({ codeWithAction: false, content: currentText });
   return parts;
 }
 
@@ -117,9 +111,9 @@ export function formatMessage(text: string): JSX.Element[] {
       <CodePanel
         key={`yaml-${index}`}
         withAction
+        language={part.language}
         code={part.content}
         link={part.link}
-        language={getLanguage(part.content)}
       />
     ) : (
       <div key={`msg-${index}`}>

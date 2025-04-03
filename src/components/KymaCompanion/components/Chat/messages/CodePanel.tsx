@@ -67,7 +67,7 @@ interface CodePanelProps {
   code: string;
   language: string;
   withAction?: boolean;
-  link?: CodeSegmentLink;
+  link?: CodeSegmentLink | null;
 }
 
 export default function CodePanel({
@@ -98,9 +98,7 @@ export default function CodePanel({
       : resourcePath;
 
     const params = new URLSearchParams();
-    if (layoutState.layout !== 'OneColumn') {
-      params.set('layout', layoutState.layout);
-    }
+    params.set('layout', 'TwoColumnsMidExpanded');
     if (type === 'Update') {
       params.set('showEdit', 'true');
     } else {
@@ -128,13 +126,16 @@ export default function CodePanel({
     setLayoutColumn({
       ...layoutState,
       layout: 'TwoColumnsMidExpanded',
-      midColumn: {
-        resourceType: resType,
-        namespaceId: namespace,
-        resourceName: resName,
-        apiGroup: null,
-        apiVersion: null,
-      },
+      midColumn:
+        type === 'Update'
+          ? {
+              resourceType: resType,
+              namespaceId: namespace,
+              resourceName: resName,
+              apiGroup: null,
+              apiVersion: null,
+            }
+          : null,
       showCreate:
         type === 'New'
           ? {
@@ -201,7 +202,7 @@ export default function CodePanel({
               >
                 {t('common.buttons.apply')}
               </Button>
-            )}{' '}
+            )}
           </FlexBox>
         </FlexBox>
       }
