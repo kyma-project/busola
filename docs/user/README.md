@@ -16,4 +16,4 @@ You can use Kyma dashboard to perform the following actions:
 - Generate access tokens based on service accounts and Kubernetes RoleBindings and ClusterRoleBindings, which regulate access using Role-based access control (RBAC).
 - Have a quick look at the basic cluster condition.
 
-![Cluster overview](assets/dashboard.png)
+  ![Cluster overview](assets/dashboard.png)
