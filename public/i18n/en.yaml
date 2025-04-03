@@ -225,7 +225,6 @@ common:
   buttons:
     add: Add
     add-all: Add all
-    apply: Apply
     button-disabled: Disabled
     cancel: Cancel
     clone: Clone
@@ -241,6 +240,7 @@ common:
     cascade-delete: Cascade Delete
     learn-more: Learn More
     ok: OK
+    place: Place
     remove-all: Remove all
     reset: Reset
     restart: Restart

@@ -198,9 +198,9 @@ export default function CodePanel({
                 onClick={() =>
                   handleSetupInEditor(link.address, code, link.actionType)
                 }
-                accessibleName={t('common.buttons.apply')}
+                accessibleName={t('common.buttons.place')}
               >
-                {t('common.buttons.apply')}
+                {t('common.buttons.place')}
               </Button>
             )}
           </FlexBox>
