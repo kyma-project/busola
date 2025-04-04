@@ -11,11 +11,11 @@ You can use command palette to perform the following actions:
 
   ![Quick navigation](assets/quick-navi.png)
 
-- Enter `?` to see all navigation options and the resources' aliases. For example, if you want to see your namespaces, it's enough to type `ns`.
+- To see all navigation options and the resources' aliases, enter `?`. For example, if you want to see your namespaces, it's enough to type `ns`.
 
   ![Namespaces in navigation](assets/navigation-ns.png)
 
-- See the history of your actions by using the up or down arrow. Pressing the right arrow autocompletes your search.
+- See the history of your actions by using the up or down arrow. To autocomplete your search, press the right arrow.
 
 - See the list of all resources available in the given namespace by entering the resource name and pressing the tab key.
 
