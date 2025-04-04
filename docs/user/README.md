@@ -13,7 +13,7 @@ You can use Kyma dashboard to perform the following actions:
 - Add, manage, and delete Kyma modules.
 - Manage your namespaces.
 - Manage your Kubernetes and Kyma resources.
-- Generate access tokens based on service accounts and Kubernetes RoleBindings and ClusterRoleBindings, which regulate access using Role-based access control (RBAC).
+- Generate access tokens based on service accounts and Kubernetes RoleBindings and ClusterRoleBindings, which regulate access using role-based access control (RBAC).
 - Have a quick look at the basic cluster condition.
 
   ![Cluster overview](assets/dashboard.png)
