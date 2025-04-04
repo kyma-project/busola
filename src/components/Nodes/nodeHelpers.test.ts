@@ -1,4 +1,4 @@
-import { getAvailableNvidiaGPUs } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
+import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 
 describe('GPU counter tests', () => {
   test('Available GPUs is 0', () => {

@@ -14,7 +14,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { useMemo } from 'react';
 import { Description } from 'shared/components/Description/Description';
 import { Text } from '@ui5/webcomponents-react';
-import { getAvailableNvidiaGPUs } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
+import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 
 export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
