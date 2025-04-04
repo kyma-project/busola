@@ -21,6 +21,6 @@ You can use command palette to perform the following actions:
 
   ![Listing all resources](assets/navigation-resources.png)
 
-- Switch contexts between your resources. For example, if you're viewing your available Pods on the `default` namespace, and you want to check the Pods on a different one, type `ns/{NAME_OF_YOUR_NAMESPACE}` and choose the first option. It takes you to the list of Pods in the selected namespace.
+- Switch contexts between your resources. For example, if you're viewing your available Pods on the `default` namespace, and you want to check the Pods on a different one, type `ns/{NAME_OF_YOUR_NAMESPACE}` and choose the `Switch Context` option. It takes you to the list of Pods in the selected namespace.
 
   ![Switch context](assets/switch-context.png)
