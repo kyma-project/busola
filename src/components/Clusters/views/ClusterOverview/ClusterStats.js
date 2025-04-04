@@ -106,7 +106,7 @@ export default function ClusterStats({ nodesData }) {
   const healthyDaemonsets = getHealthyDaemonsets(daemonsetsData);
   const healthyStatefulsets = getHealthyReplicasCount(statefulsetsData);
 
-  const gpu = getAvailableGPUs(nodesData);
+  const gpus = getAvailableGPUs(nodesData);
 
   return (
     <>
@@ -179,11 +179,11 @@ export default function ClusterStats({ nodesData }) {
             />
           </div>
         )}
-        {gpu !== 0 && (
+        {gpus !== 0 && (
           <div className="item-wrapper card-small">
             <CountingCard
               className="item"
-              value={gpu}
+              value={gpus}
               title={t('cluster-overview.statistics.gpus')}
             />
           </div>

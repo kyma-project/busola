@@ -74,9 +74,8 @@ export function getAvailableGPUs(nodesData) {
       const nvidiaGpus = item['nvidia.com/gpu'];
       if (nvidiaGpus) {
         const value = parseInt(nvidiaGpus);
-        partialSum += value;
-        return partialSum;
+        return partialSum + value;
       }
-      return 0;
-    });
+      return partialSum;
+    }, 0);
 }
