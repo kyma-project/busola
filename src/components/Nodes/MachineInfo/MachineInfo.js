@@ -4,7 +4,7 @@ import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetai
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import './MachineInfo.scss';
 
-export function MachineInfo({ nodeInfo, capacity, addresses, spec }) {
+export function MachineInfo({ nodeInfo, capacity, addresses, spec, gpus }) {
   const formattedMemory =
     Math.round((parseInt(capacity.memory) / 1024 / 1024) * 10) / 10;
   const { t } = useTranslation();
@@ -36,6 +36,13 @@ export function MachineInfo({ nodeInfo, capacity, addresses, spec }) {
           >
             {capacity.cpu}
           </DynamicPageComponent.Column>
+          {gpus !== 0 && (
+            <DynamicPageComponent.Column
+              title={t('node-details.machine-info.gpus')}
+            >
+              {gpus}
+            </DynamicPageComponent.Column>
+          )}
           <DynamicPageComponent.Column
             title={t('node-details.machine-info.memory')}
           >

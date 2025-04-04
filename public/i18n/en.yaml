@@ -916,6 +916,7 @@ node-details:
     provider: Provider
     internal-ip: Internal IP
     cpus: CPUs
+    gpus: GPUs
     gib: GiB
     kubelet-version: Kubelet version
     memory: Memory
