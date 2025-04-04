@@ -87,7 +87,7 @@ describe('Table Component', () => {
 
         cy.get('ui5-table').should('have.length', 1);
         cy.get('ui5-table').within(() => {
-          cy.get('ui5-table-row').should('have.length', 0);
+          cy.get('ui5-table-header-row').should('have.length', 0);
         });
       });
 

@@ -163,7 +163,10 @@ describe('GenericList', () => {
 
     cy.get('[data-testid="collapse-button-close"]').should('have.length', 1);
     cy.get('[data-testid="collapse-button-open"]').should('have.length', 1);
-    cy.get('tr[data-testid="collapse-content"]').should('have.length', 1);
+    cy.get('ui5-table-row[data-testid="collapse-content"]').should(
+      'have.length',
+      1,
+    );
   });
 
   it('Renders collapse entries without collapse control', () => {
@@ -188,7 +191,10 @@ describe('GenericList', () => {
     cy.get('[data-testid="collapse-button-close"]').should('have.length', 0);
     cy.get('[data-testid="collapse-button-open"]').should('have.length', 0);
 
-    cy.get('tr[data-testid="collapse-content"]').should('have.length', 3);
+    cy.get('ui5-table-row[data-testid="collapse-content"]').should(
+      'have.length',
+      3,
+    );
   });
 
   it('Renders headers', () => {
@@ -215,7 +221,7 @@ describe('GenericList', () => {
       />,
     );
 
-    cy.get('tr').should('have.length', 1);
+    cy.get('ui5-table-header-row').should('have.length', 1);
     cy.contains(defaultNotFoundText).should('exist');
   });
 

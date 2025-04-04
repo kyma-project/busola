@@ -1,79 +1,100 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  TableColumn,
+  Button,
+  FlexBox,
+  Icon,
   TableCell,
   TableRow,
-} from '../../../components/App/UI5Imports';
-import { useState } from 'react';
-import { Button, FlexBox, Icon, Text } from '@ui5/webcomponents-react';
+  TableHeaderRow,
+  Text,
+  TableHeaderCell,
+  TableRowActionNavigation,
+} from '@ui5/webcomponents-react';
 
 import ListActions from 'shared/components/ListActions/ListActions';
 
 export const BodyFallback = ({ children }) => (
-  // TODO replace once new Table component is available in ui5-webcomponents-react
-  <tr>
-    <td colSpan="100%">
-      <div className="body-fallback">{children}</div>
-    </td>
-  </tr>
+  <TableCell slot="nodata" style={{ width: '100%' }}>
+    <div className="body-fallback">{children}</div>
+  </TableCell>
 );
 
 export const HeaderRenderer = ({
-  slot,
   actions,
   headerRenderer,
   disableHiding = true,
-  displayArrow = false,
   noHideFields,
 }) => {
+  const { t } = useTranslation();
   let emptyColumn = null;
-  if (actions.length) {
+  const getColumnsLength = () => {
+    let columnsLength = headerRenderer().length;
+    if (actions?.length) {
+      columnsLength += 1;
+    }
+    return columnsLength;
+  };
+  if (actions?.length) {
     emptyColumn = (
-      <TableColumn
-        slot={slot}
+      <TableHeaderCell
+        importance={0}
+        popinHidden={true}
         key="actions-column"
         aria-label="actions-column"
-        minWidth={850}
+        minWidth={`${30 * actions.length}px`}
       >
         <Text />
-      </TableColumn>
+      </TableHeaderCell>
     );
   }
-  const Header = (
-    <>
-      {headerRenderer().map((h, index) => {
-        return (
-          <TableColumn
-            slot={`${slot}-${index}`}
-            key={typeof h === 'object' ? index : h}
-            popinDisplay="Block"
-            demandPopin={h === 'Popin' ? true : false}
-            minWidth={
-              Array.isArray(noHideFields) && noHideFields.length !== 0
-                ? noHideFields.find(field => field === h)
-                  ? ''
-                  : 850
-                : h === 'Popin'
-                ? 15000
-                : disableHiding
-                ? ''
-                : h !== 'Name' && h !== ''
-                ? 850
-                : ''
-            }
-            aria-label={`${typeof h === 'object' ? index : h}-column`}
-          >
-            <Text>{h}</Text>
-          </TableColumn>
-        );
-      })}
-      {emptyColumn}
-      {displayArrow && (
-        <TableColumn slot={slot} key="arrow-column" aria-label="arrow-column">
-          <Text />
-        </TableColumn>
-      )}
-    </>
-  );
+  const checkCellImportance = h => {
+    if (h === 'Popin') {
+      return -1;
+    }
+    if (Array.isArray(noHideFields) && noHideFields.includes(h)) {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+  const setCellMinWidth = h => {
+    if (Array.isArray(noHideFields) && noHideFields.length !== 0) {
+      return noHideFields.find(field => field === h)
+        ? `calc(100%/${getColumnsLength()})`
+        : '100px';
+    } else if (h === 'Popin') {
+      return '100%';
+    } else if (disableHiding) {
+      return `calc(100%/${getColumnsLength()})`;
+    } else if (h !== 'Name' && h !== '') {
+      return '100px';
+    } else {
+      return 'auto';
+    }
+  };
+  const Header =
+    headerRenderer()?.length || emptyColumn ? (
+      <TableHeaderRow slot="headerRow">
+        {headerRenderer()?.map((h, index) => {
+          return (
+            <TableHeaderCell
+              key={typeof h === 'object' ? index : h}
+              popinText={h === 'Popin' ? t('common.headers.specification') : h}
+              popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
+              importance={checkCellImportance(h)}
+              minWidth={setCellMinWidth(h)}
+              aria-label={`${typeof h === 'object' ? index : h}-column`}
+            >
+              <Text>{h}</Text>
+            </TableHeaderCell>
+          );
+        })}
+        {emptyColumn}
+      </TableHeaderRow>
+    ) : (
+      <></>
+    );
 
   return Header;
 };
@@ -85,7 +106,7 @@ export const RowRenderer = ({
   index,
   ...others
 }) => {
-  const filteredActions = actions.filter(a =>
+  const filteredActions = actions?.filter(a =>
     a.skipAction ? !a.skipAction(entry) : true,
   );
   const resolvedRowRenderer = rowRenderer(entry, index);
@@ -137,21 +158,14 @@ const DefaultRowRenderer = ({
   );
 
   return (
-    <TableRow type="Active" selected={isSelected} navigated={isSelected}>
+    <TableRow
+      className={isSelected ? 'row-selected' : 'row'}
+      interactive={true}
+      navigated={isSelected}
+      actions={displayArrow && <TableRowActionNavigation />}
+    >
       {cells}
-      {!!actions.length && actionsCell}
-      {displayArrow && (
-        <TableCell
-          style={{
-            padding: 0,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}
-        >
-          <Icon name="slim-arrow-right" design="Neutral" />
-        </TableCell>
-      )}
+      {!!actions?.length && actionsCell}
     </TableRow>
   );
 };
@@ -166,7 +180,7 @@ const CollapsedRowRenderer = ({
   },
   ...props
 }) => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   let rowRenderer = cells;
   if (withCollapseControl) {
@@ -177,7 +191,7 @@ const CollapsedRowRenderer = ({
             isOpen ? 'collapse-button-open' : 'collapse-button-close'
           }
           design="Transparent"
-          onClick={() => setOpen(!isOpen)}
+          onClick={() => setIsOpen(!isOpen)}
         >
           <FlexBox>
             <Icon
@@ -199,10 +213,13 @@ const CollapsedRowRenderer = ({
   );
 
   let collapseRow = collapseContent && (
-    // TODO replace once new Table component is available in ui5-webcomponents-react
-    <tr role="row" className="collapse-content" data-testid="collapse-content">
+    <TableRow
+      role="row"
+      className="collapse-content"
+      data-testid="collapse-content"
+    >
       {collapseContent}
-    </tr>
+    </TableRow>
   );
   if (withCollapseControl) {
     collapseRow = isOpen ? collapseRow : null;
