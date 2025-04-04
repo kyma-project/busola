@@ -14,7 +14,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { useMemo } from 'react';
 import { Description } from 'shared/components/Description/Description';
 import { Text } from '@ui5/webcomponents-react';
-import { getAvailableGPUs } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
+import { getAvailableNvidiaGPUs } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 
 export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -27,7 +27,7 @@ export default function NodeDetails({ nodeName }) {
   if (loading) return <Spinner />;
   if (error) return <Text>{error}</Text>;
 
-  const gpus = node ? getAvailableGPUs([node]) : 0;
+  const gpus = node ? getAvailableNvidiaGPUs([node]) : 0;
 
   const filterByHost = e => e.source.host === nodeName;
 

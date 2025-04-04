@@ -64,7 +64,7 @@ export function getHealthyDaemonsets(daemonsets) {
   )?.length;
 }
 
-export function getAvailableGPUs(nodesData) {
+export function getAvailableNvidiaGPUs(nodesData) {
   if (!nodesData) {
     return 0;
   }

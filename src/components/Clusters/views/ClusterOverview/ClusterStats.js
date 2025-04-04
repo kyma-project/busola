@@ -11,7 +11,7 @@ import {
   getBytes,
 } from 'resources/Namespaces/ResourcesUsage';
 import {
-  getAvailableGPUs,
+  getAvailableNvidiaGPUs,
   getHealthyDaemonsets,
   getHealthyReplicasCount,
   getStatusesPodCount,
@@ -106,7 +106,7 @@ export default function ClusterStats({ nodesData }) {
   const healthyDaemonsets = getHealthyDaemonsets(daemonsetsData);
   const healthyStatefulsets = getHealthyReplicasCount(statefulsetsData);
 
-  const gpus = getAvailableGPUs(nodesData);
+  const gpus = getAvailableNvidiaGPUs(nodesData);
 
   return (
     <>
@@ -184,7 +184,7 @@ export default function ClusterStats({ nodesData }) {
             <CountingCard
               className="item"
               value={gpus}
-              title={t('cluster-overview.statistics.gpus')}
+              title={t('cluster-overview.statistics.nvidia-gpus')}
             />
           </div>
         )}

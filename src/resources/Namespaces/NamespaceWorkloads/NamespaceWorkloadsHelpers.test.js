@@ -1,10 +1,10 @@
-import { getAvailableGPUs } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
+import { getAvailableNvidiaGPUs } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 
 describe('GPU counter tests', () => {
   test('Available GPUs is 0', () => {
     const nodes = [fixNode(), fixNode(), fixNode()];
 
-    const gpusNumber = getAvailableGPUs(nodes);
+    const gpusNumber = getAvailableNvidiaGPUs(nodes);
     expect(gpusNumber).toEqual(0);
   });
 
@@ -18,7 +18,7 @@ describe('GPU counter tests', () => {
       fixNode(),
     ];
 
-    const gpusNumber = getAvailableGPUs(nodes);
+    const gpusNumber = getAvailableNvidiaGPUs(nodes);
     expect(gpusNumber).toEqual(2);
   });
 });

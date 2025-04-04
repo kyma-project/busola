@@ -38,7 +38,7 @@ export function MachineInfo({ nodeInfo, capacity, addresses, spec, gpus }) {
           </DynamicPageComponent.Column>
           {gpus !== 0 && (
             <DynamicPageComponent.Column
-              title={t('node-details.machine-info.gpus')}
+              title={t('node-details.machine-info.nvidia-gpus')}
             >
               {gpus}
             </DynamicPageComponent.Column>
