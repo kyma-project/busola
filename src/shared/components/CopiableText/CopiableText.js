@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Button } from '@ui5/webcomponents-react';
-import copyToCliboard from 'copy-to-clipboard';
+import copyToClipboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 
 import './CopiableText.scss';
@@ -29,7 +29,7 @@ export function CopiableText({
         design="Transparent"
         className="sap-margin-begin-tiny"
         disabled={disabled}
-        onClick={() => copyToCliboard(textToCopy)}
+        onClick={() => copyToClipboard(textToCopy)}
         tooltip={t('common.tooltips.copy-to-clipboard')}
       >
         {buttonText ? buttonText : null}

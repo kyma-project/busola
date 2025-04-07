@@ -44,7 +44,7 @@ function extractLink(block: string): CodeSegmentLink | null {
     : null;
 }
 
-function findClosingDiv(lines: string[], startIndex: number): number {
+function findClosingDivIndex(lines: string[], startIndex: number): number {
   let openDivs = 0;
   for (let i = startIndex; i < lines.length; i++) {
     if (lines[i].includes('<div')) openDivs++;
@@ -55,7 +55,7 @@ function findClosingDiv(lines: string[], startIndex: number): number {
 
 function extractYamlBlocks(lines: string[], i: number) {
   const start = i;
-  const end = findClosingDiv(lines, start);
+  const end = findClosingDivIndex(lines, start);
 
   const block = lines.slice(start, end + 1).join('\n');
   const content = extractYamlContent(block);
@@ -106,31 +106,18 @@ function parseMessage(text: string): MessagePart[] {
 }
 
 export function formatMessage(text: string, themeClass: string): JSX.Element[] {
-  return parseMessage(text).map((part, index) =>
-    part.codeWithAction ? (
-      <CodePanel
-        key={`yaml-${index}`}
-        withAction
-        language={part.language}
-        code={part.content}
-        link={part.link}
-      />
-    ) : (
-      <div key={`msg-${index}`} className={themeClass}>
+  return parseMessage(text).map((part, index) => (
+    <div key={`msg-${index}`} className={themeClass}>
+      {part.codeWithAction ? (
+        <CodePanel
+          withAction
+          language={part.language}
+          code={part.content}
+          link={part.link}
+        />
+      ) : (
         <Markdown renderer={UI5Renderer}>{part.content}</Markdown>
-      </div>
-    ),
-  );
-}
-
-function MarkdownText(
-  text: string,
-  idx: number,
-  themeClass: string,
-): JSX.Element {
-  return (
-    <div id={`msg-${idx}`} className={themeClass}>
-      <Markdown renderer={UI5Renderer}>{text}</Markdown>
+      )}
     </div>
-  );
+  ));
 }

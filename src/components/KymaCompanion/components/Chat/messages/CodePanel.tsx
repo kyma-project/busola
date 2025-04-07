@@ -14,7 +14,7 @@ import {
   Theme,
   themeState,
 } from 'state/preferences/themeAtom';
-import copyToCliboard from 'copy-to-clipboard';
+import copyToClipboard from 'copy-to-clipboard';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router-dom';
 import { clusterState } from 'state/clusterAtom';
@@ -168,7 +168,7 @@ export default function CodePanel({
         mode="Interactive"
         name="copy"
         design="Information"
-        onClick={() => copyToCliboard(code)}
+        onClick={() => copyToClipboard(code)}
       />
       <Text id="code-text">{code}</Text>
     </div>
@@ -185,7 +185,7 @@ export default function CodePanel({
               className="action-button"
               design="Transparent"
               icon="copy"
-              onClick={() => copyToCliboard(code)}
+              onClick={() => copyToClipboard(code)}
               accessibleName={t('common.buttons.copy')}
             >
               {t('common.buttons.copy')}
