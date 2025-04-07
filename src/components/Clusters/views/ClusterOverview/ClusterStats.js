@@ -18,6 +18,7 @@ import {
 } from 'resources/Namespaces/NamespaceWorkloads/NamespaceWorkloadsHelpers';
 
 import './ClusterStats.scss';
+import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -104,6 +105,7 @@ export default function ClusterStats({ nodesData }) {
   const healthyDeployments = getHealthyReplicasCount(deploymentsData);
   const healthyDaemonsets = getHealthyDaemonsets(daemonsetsData);
   const healthyStatefulsets = getHealthyReplicasCount(statefulsetsData);
+  const gpus = getAvailableNvidiaGPUs(nodesData);
 
   return (
     <>
@@ -173,6 +175,14 @@ export default function ClusterStats({ nodesData }) {
               className="item"
               value={nodesData?.length}
               title={t('cluster-overview.statistics.nodes')}
+              extraInfo={[
+                gpus > 0
+                  ? {
+                      title: t('cluster-overview.statistics.nvidia-gpus'),
+                      value: gpus,
+                    }
+                  : null,
+              ]}
             />
           </div>
         )}
