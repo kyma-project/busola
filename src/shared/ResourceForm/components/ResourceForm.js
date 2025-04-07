@@ -203,6 +203,7 @@ export function ResourceForm({
       schemaId={resourceSchemaId}
       updateValueOnParentChange={true}
       setEditorError={setEditorError}
+      schema={schema}
     />
   );
   editor = renderEditor

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
@@ -29,7 +29,7 @@ export function Editor({
   onFocus,
   options = {}, // IEditorOptions, check Monaco API for the list of options
   placeholder = null,
-  ...rest
+  schema,
 }) {
   const { t } = useTranslation();
   const prevValueRef = useRef(value);
@@ -45,6 +45,7 @@ export function Editor({
     autocompletionDisabled,
     readOnly,
     language,
+    schema,
   });
 
   // set autocompletion global context to the current editor and initialize an editor instance
@@ -90,11 +91,11 @@ export function Editor({
       className="resource-form__wrapper"
       style={{ height, minHeight: height }}
     >
-      {loading ? (
+      {loading && (
         <div className="resource-form__overlay">
           <Spinner />
         </div>
-      ) : null}
+      )}
       <div ref={divRef} className="resource-form__editor" />
       {placeholder && !!!value && (
         <div className="resource-form__placeholder">{placeholder}</div>
