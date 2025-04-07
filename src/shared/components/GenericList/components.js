@@ -59,18 +59,16 @@ export const HeaderRenderer = ({
     }
   };
   const setCellMinWidth = h => {
-    if (Array.isArray(noHideFields) && noHideFields.length !== 0) {
+    if (Array.isArray(noHideFields) && noHideFields?.length) {
       return noHideFields.find(field => field === h)
         ? `calc(100%/${getColumnsLength()})`
         : '100px';
     } else if (h === 'Popin') {
       return '100%';
     } else if (disableHiding) {
-      return `calc(100%/${getColumnsLength()})`;
-    } else if (h !== 'Name' && h !== '') {
-      return '100px';
+      return h === 'Name' || h === '' ? '120px' : 'auto';
     } else {
-      return 'auto';
+      return '100px';
     }
   };
   const Header =
@@ -186,21 +184,23 @@ const CollapsedRowRenderer = ({
   if (withCollapseControl) {
     rowRenderer = [
       showCollapseControl ? (
-        <Button
-          data-testid={
-            isOpen ? 'collapse-button-open' : 'collapse-button-close'
-          }
-          design="Transparent"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <FlexBox>
-            <Icon
-              className="sap-margin-end-tiny"
-              name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
-            />
-            {title}
-          </FlexBox>
-        </Button>
+        <div style={{ display: 'flex' }}>
+          <Button
+            data-testid={
+              isOpen ? 'collapse-button-open' : 'collapse-button-close'
+            }
+            design="Transparent"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <FlexBox>
+              <Icon
+                className="sap-margin-end-tiny"
+                name={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
+              />
+              {title}
+            </FlexBox>
+          </Button>
+        </div>
       ) : (
         <></>
       ),

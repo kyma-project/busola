@@ -119,8 +119,7 @@ export function Table({
       cells,
       title: makeTitle(),
       collapseContent: (
-        // TODO replace once new Table component is available in ui5-webcomponents-react
-        <td colSpan="100%" className={tdClassNames}>
+        <div className={tdClassNames}>
           {structure.collapsible.map((child, cellIndex) => (
             <Widget
               {...props}
@@ -136,7 +135,7 @@ export function Table({
               index={index}
             />
           ))}
-        </td>
+        </div>
       ),
     };
   };

@@ -401,7 +401,7 @@ export const GenericList = ({
       className={className}
     >
       <Table
-        overflowMode="Popin"
+        overflowMode={!noHideFields && disableHiding ? 'Scroll' : 'Popin'}
         accessibleName={accessibleName ?? title}
         rowActionCount={displayArrow ? 1 : 0}
         className={`ui5-generic-list ${
