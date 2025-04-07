@@ -32,11 +32,11 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
   }, [schemaId]);
 
   useEffect(() => {
-    if (!areSchemasComputed) return;
     if (schema || skip || !isWorkerOkay) {
       setLoading(false);
       return;
     }
+    if (!areSchemasComputed) return;
     sendWorkerMessage('getSchema', schemaId);
 
     addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {
