@@ -35,7 +35,7 @@ export default function CustomResourcesOfType({
   return (
     <>
       <DynamicPageComponent
-        layoutNumber="MidColumn"
+        layoutNumber="midColumn"
         title={pluralize(crd.spec.names.kind)}
         content={
           <CustomResources

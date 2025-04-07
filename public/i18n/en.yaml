@@ -42,6 +42,7 @@ cluster-overview:
     total-persistentvolumes: 'Total Persistent Volumes'
     persistent-volumes-total-capacity: 'Total Capacity'
     nodes: 'Nodes'
+    nvidia-gpus: 'Nvidia GPUs'
     modules-overview: 'Modules Overview'
   tooltips:
       cpu-used-percentage: 'CPU used: {{percentage}}'
@@ -916,6 +917,7 @@ node-details:
     provider: Provider
     internal-ip: Internal IP
     cpus: CPUs
+    nvidia-gpus: Nvidia GPUs
     gib: GiB
     kubelet-version: Kubelet version
     memory: Memory

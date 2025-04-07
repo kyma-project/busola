@@ -268,7 +268,7 @@ export default function KymaModulesAddModule({
       disableDefaultFields
       formElementRef={props.formElementRef}
       onChange={props.onChange}
-      layoutNumber={'StartColumn'}
+      layoutNumber="startColumn"
       resetLayout
       initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}

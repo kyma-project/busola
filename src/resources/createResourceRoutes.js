@@ -146,7 +146,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
             ...elementCreateProps,
             ...renderProps,
             enableColumnLayout: true,
-            layoutNumber: 'StartColumn',
+            layoutNumber: 'startColumn',
             resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
           });
         return <ErrorBoundary>{createComponent}</ErrorBoundary>;

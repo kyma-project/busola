@@ -121,7 +121,7 @@ export const ColumnWrapper = () => {
               {...renderProps}
               {...elementCreateProps}
               crd={crd}
-              layoutNumber="MidColumn"
+              layoutNumber="midColumn"
             />
           );
 
@@ -148,7 +148,7 @@ export const ColumnWrapper = () => {
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
-        layoutNumber="EndColumn"
+        layoutNumber="endColumn"
         layoutCloseCreateUrl={layoutCloseCreateUrl}
         renderForm={renderProps => {
           const createComponent = layoutState?.showCreate?.resourceType && (
@@ -156,7 +156,7 @@ export const ColumnWrapper = () => {
               {...renderProps}
               {...elementCreateProps}
               crd={crd}
-              layoutNumber="MidColumn"
+              layoutNumber="midColumn"
             />
           );
 

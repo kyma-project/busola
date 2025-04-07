@@ -1,0 +1,192 @@
+.markdown {
+  /* Theming */
+  .light {
+    --panel-background: #ebebeb;
+    --panel-text: #333;
+    --formatted-text: #000;
+    --link: #004bfa;
+    --border: #777;
+    --code: rgba(255, 255, 255, 0.8);
+    --table: var(--code);
+    --table-header: rgba(128, 128, 128, 0.2);
+  }
+
+  .dark {
+    --panel-background: #252525;
+    --panel-text: #ccc;
+    --formatted-text: #fff;
+    --link: #7b9ff2;
+    --border: #777;
+    --code: rgba(0, 0, 0, 0.3);
+    --table: var(--code);
+    --table-header: #000;
+  }
+
+  /* Headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    color: var(--formatted-text);
+  }
+
+  h1 {
+    /* 20px */
+    font-size: 1.66em;
+    margin: 0.7em 0;
+  }
+
+  h2 {
+    /* 18px */
+    font-size: 1.5em;
+    margin: 0.8em 0;
+  }
+
+  h3 {
+    /* 16px */
+    font-size: 1.33em;
+    margin: 0.9em 0;
+  }
+
+  h4 {
+    /* 14px */
+    font-size: 1.16em;
+    margin: 1em 0;
+  }
+
+  h5 {
+    /* 12px */
+    font-size: 1em;
+    margin: 1.1em 0;
+  }
+
+  h6 {
+    /* 10px */
+    font-size: 0.83em;
+    margin: 1.2em 0;
+    text-transform: uppercase;
+    letter-spacing: 2%;
+  }
+
+  /* Text Formatting */
+  strong,
+  em,
+  del,
+  code {
+    color: var(--formatted-text);
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  del {
+    text-decoration: line-through;
+  }
+
+  code,
+  pre {
+    font-family: monospace;
+    line-height: 1.5;
+    font-weight: 500;
+    background: var(--code);
+  }
+
+  a {
+    color: var(--link);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  blockquote {
+    font-style: italic;
+    border-left: 1px dashed var(--border);
+    padding-left: 1em;
+    margin: 1em 0;
+  }
+
+  /* Lists */
+  ol,
+  ul {
+    line-height: 1.5;
+    padding-left: 2em;
+    margin: 0.5em 0;
+  }
+
+  ol ol,
+  ul ul {
+    list-style-type: lower-alpha;
+    padding-left: 2em;
+  }
+
+  ul ul {
+    list-style-type: circle;
+  }
+
+  ol li,
+  ul li {
+    margin: 0.1em 0;
+  }
+
+  /* Tables and Dividers */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--table);
+  }
+
+  td,
+  th {
+    border: 0.5px solid var(--border);
+    text-align: left;
+    padding: 0.75em;
+  }
+
+  th {
+    background: var(--table-header);
+    color: var(--formatted-text);
+    font-weight: 500;
+  }
+
+  hr {
+    border: 0.25px solid var(--border);
+    margin: 1em 0;
+  }
+
+  //  Overrides for `reset.css` or customization of predefined styles
+  ol,
+  ul {
+    list-style-type: initial;
+  }
+
+  table {
+    height: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  td {
+    background: var(--sapBaseColor);
+  }
+
+  p {
+    line-height: 1.375rem;
+  }
+
+  .code-border {
+    padding: 0.25rem;
+    border-radius: 0.25em;
+    border: solid 0.25px var(--border);
+  }
+}

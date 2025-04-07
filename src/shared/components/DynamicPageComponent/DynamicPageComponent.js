@@ -122,11 +122,7 @@ export const DynamicPageComponent = ({
   const [searchParams] = useSearchParams();
   const showEdit = searchParams.get('showEdit');
   const editColumn = searchParams.get('editColumn');
-  const currColumnInfo = layoutNumber
-    ? layoutColumn[
-        layoutNumber[0]?.toLowerCase() + layoutNumber.slice(1) // Property names begin with lower case letter, where layoutNumber begins with capital letter
-      ] || layoutColumn.startColumn
-    : layoutColumn.startColumn;
+  const currColumnInfo = layoutColumn[layoutNumber] ?? layoutColumn.startColumn;
 
   const [selectedSectionIdState, setSelectedSectionIdState] = useState(
     showEdit &&
@@ -147,7 +143,7 @@ export const DynamicPageComponent = ({
   }, [showEdit]);
 
   const handleColumnClose = () => {
-    layoutNumber === 'MidColumn'
+    layoutNumber === 'midColumn'
       ? setLayoutColumn({
           ...layoutColumn,
           midColumn: null,
@@ -172,7 +168,7 @@ export const DynamicPageComponent = ({
       0,
       window.location.pathname.lastIndexOf('/'),
     )}${
-      layoutNumber === 'MidColumn' || layoutColumn?.showCreate?.resourceType
+      layoutNumber === 'midColumn' || layoutColumn?.showCreate?.resourceType
         ? ''
         : '?layout=TwoColumnsMidExpanded'
     }`;
@@ -192,7 +188,7 @@ export const DynamicPageComponent = ({
           {(window.location.search.includes('layout') ||
             (!window.location.search.includes('layout') &&
               layoutColumn?.showCreate?.resourceType)) &&
-          layoutNumber !== 'StartColumn' ? (
+          layoutNumber !== 'startColumn' ? (
             <ToolbarSeparator />
           ) : null}
         </>
@@ -201,19 +197,19 @@ export const DynamicPageComponent = ({
       (!window.location.search.includes('layout') &&
         layoutColumn?.showCreate?.resourceType) ? (
         layoutColumn.layout !== 'OneColumn' ? (
-          layoutNumber !== 'StartColumn' ? (
+          layoutNumber !== 'startColumn' ? (
             <>
               {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
               ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
                 layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-                layoutNumber !== 'MidColumn') ? (
+                layoutNumber !== 'midColumn') ? (
                 <Button
                   accessibleName="enter-full-screen"
                   design="Transparent"
                   icon="full-screen"
                   onClick={() => {
                     const newLayout =
-                      layoutNumber === 'MidColumn'
+                      layoutNumber === 'midColumn'
                         ? 'MidColumnFullScreen'
                         : 'EndColumnFullScreen';
                     setLayoutColumn({
@@ -237,7 +233,7 @@ export const DynamicPageComponent = ({
                   icon="exit-full-screen"
                   onClick={() => {
                     const newLayout =
-                      layoutNumber === 'MidColumn'
+                      layoutNumber === 'midColumn'
                         ? layoutColumn.endColumn === null
                           ? 'TwoColumnsMidExpanded'
                           : 'ThreeColumnsMidExpanded'
@@ -374,25 +370,24 @@ export const DynamicPageComponent = ({
               return;
             }
 
+            const newTabName = e.detail.tab.getAttribute('data-mode');
             handleActionIfFormOpen(
               isResourceEdited,
               setIsResourceEdited,
               isFormOpen,
               setIsFormOpen,
               () => {
-                setSelectedSectionIdState(
-                  e.detail.tab.getAttribute('data-mode'),
-                );
+                setSelectedSectionIdState(newTabName);
                 setIsResourceEdited({
                   isEdited: false,
                 });
 
-                if (e.detail.tab.getAttribute('data-mode') === 'edit') {
+                if (newTabName === 'edit') {
                   const params = new URLSearchParams();
                   if (layoutColumn.layout !== 'OneColumn') {
                     params.set('layout', layoutColumn.layout);
                     if (title === 'Modules') {
-                      params.set('editColumn', 'StartColumn');
+                      params.set('editColumn', 'startColumn');
                     }
                   }
                   params.set('showEdit', 'true');

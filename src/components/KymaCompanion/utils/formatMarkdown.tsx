@@ -105,7 +105,7 @@ function parseMessage(text: string): MessagePart[] {
   return parts;
 }
 
-export function formatMessage(text: string): JSX.Element[] {
+export function formatMessage(text: string, themeClass: string): JSX.Element[] {
   return parseMessage(text).map((part, index) =>
     part.codeWithAction ? (
       <CodePanel
@@ -116,9 +116,21 @@ export function formatMessage(text: string): JSX.Element[] {
         link={part.link}
       />
     ) : (
-      <div key={`msg-${index}`}>
+      <div key={`msg-${index}`} className={themeClass}>
         <Markdown renderer={UI5Renderer}>{part.content}</Markdown>
       </div>
     ),
+  );
+}
+
+function MarkdownText(
+  text: string,
+  idx: number,
+  themeClass: string,
+): JSX.Element {
+  return (
+    <div id={`msg-${idx}`} className={themeClass}>
+      <Markdown renderer={UI5Renderer}>{text}</Markdown>
+    </div>
   );
 }
