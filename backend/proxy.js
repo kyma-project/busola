@@ -15,6 +15,10 @@ function isLocalDomain(hostname) {
   return localSuffixes.some(suffix => hostname.endsWith(suffix));
 }
 
+function isValidHost(hostname) {
+  return !isLocalDomain(hostname) && net.isIP(hostname) === 0;
+}
+
 function isPrivateIp(ip) {
   if (net.isIPv4(ip)) {
     const parts = ip.split('.').map(Number);
@@ -39,6 +43,21 @@ function isPrivateIp(ip) {
   return false;
 }
 
+// Perform DNS resolution to check for private IPs
+async function isPrivateAddress(hostname) {
+  try {
+    const addresses = await dns.lookup(hostname, { all: true });
+    for (const addr of addresses) {
+      if (isPrivateIp(addr.address)) {
+        return true;
+      }
+    }
+    return false;
+  } catch (err) {
+    return true;
+  }
+}
+
 // Rate limiter: Max 100 requests per 1 minutes per IP
 const proxyRateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
@@ -61,24 +80,11 @@ async function proxyHandler(req, res) {
       return res.status(403).send('Request Forbidden');
     }
 
-    if (isLocalDomain(parsedUrl.hostname)) {
+    if (isValidHost(parsedUrl.hostname)) {
       return res.status(403).send('Request Forbidden');
     }
 
-    if (net.isIP(parsedUrl.hostname) !== 0) {
-      return res.status(403).send('Request Forbidden');
-    }
-
-    // Perform DNS resolution to check for private IPs
-    try {
-      const addresses = await dns.lookup(parsedUrl.hostname, { all: true });
-      for (const addr of addresses) {
-        if (isPrivateIp(addr.address)) {
-          return res.status(403).send('Request Forbidden');
-        }
-      }
-    } catch (dnsError) {
-      // If DNS lookup fails, we block the request for safety.
+    if (await isPrivateAddress(parsedUrl.hostname)) {
       return res.status(403).send('Request Forbidden');
     }
 
