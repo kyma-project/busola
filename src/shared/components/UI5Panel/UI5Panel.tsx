@@ -64,7 +64,6 @@ export const UI5Panel = ({
             height: '100%',
             paddingTop: '0.5rem',
             paddingBottom: '0.5rem',
-            paddingLeft: modeActions ? 0 : '1rem',
           }}
         >
           {icon && icon}
