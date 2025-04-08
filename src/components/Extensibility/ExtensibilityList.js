@@ -12,12 +12,12 @@ import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtens
 import { useGetCRbyPath } from './useGetCRbyPath';
 import ExtensibilityCreate from './ExtensibilityCreate';
 import {
-  useCreateResourceDescription,
-  TranslationBundleContext,
-  useGetTranslation,
   applyFormula,
-  getTextSearchProperties,
   getResourceDescAndUrl,
+  getTextSearchProperties,
+  TranslationBundleContext,
+  useCreateResourceDescription,
+  useGetTranslation,
 } from './helpers';
 import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
@@ -198,6 +198,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
           {isExtensibilityCustomComponentsEnabled && resMetaData.customHtml ? (
             <>
               <div
+                id="custom-html"
                 dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
               ></div>
               {createPortal(<YamlUploadDialog />, document.body)}

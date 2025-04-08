@@ -24,6 +24,7 @@ function createWebComponent(
     connectedCallback() {
       if (!this.reactRoot) {
         this.reactRoot = document.createElement('div');
+        this.reactRoot.setAttribute('id', 'component-root');
         this.appendChild(this.reactRoot);
         this.reactRootInstance = createRoot(this.reactRoot); // Initialize root
       }
