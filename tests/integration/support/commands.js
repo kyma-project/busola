@@ -172,7 +172,7 @@ Cypress.Commands.add(
 
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
-      .wait(1000)
+      .should('be.visible')
       .type(resourceName);
 
     cy.wait(1000);
