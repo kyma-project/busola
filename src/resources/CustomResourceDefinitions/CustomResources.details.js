@@ -31,7 +31,7 @@ export default function CustomResource({ params }) {
   );
 
   const CRCreateWrapper = useCallback(
-    props => <CRCreate {...props} crd={data} layoutNumber="MidColumn" />,
+    props => <CRCreate {...props} crd={data} layoutNumber="midColumn" />,
     [data],
   );
 
@@ -79,7 +79,7 @@ export default function CustomResource({ params }) {
 
   return (
     <ResourceDetails
-      layoutNumber={params.layoutNumber ?? 'EndColumn'}
+      layoutNumber={params.layoutNumber ?? 'endColumn'}
       resourceUrl={resourceUrl}
       resourceType={crdName}
       resourceName={resourceName}

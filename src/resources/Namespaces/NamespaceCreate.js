@@ -110,9 +110,10 @@ export default function NamespaceCreate({
   }, [namespace.metadata?.name]);
 
   async function afterNamespaceCreated() {
-    setLayoutColumn({
+    setLayoutColumn(prevState => ({
       layout: 'OneColumn',
       showCreate: null,
+      showEdit: prevState.showEdit,
       startColumn: {
         resourceType: 'Namespace',
         resourceName: namespace.metadata?.name,
@@ -121,7 +122,7 @@ export default function NamespaceCreate({
       },
       midColumn: null,
       endColumn: null,
-    });
+    }));
 
     if (!initialUnchangedResource) {
       navigate(clusterUrl(`namespaces/${namespace.metadata?.name}`));

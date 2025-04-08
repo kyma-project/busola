@@ -26,7 +26,7 @@ export const ResourceCreate = ({
   readOnly = false,
   disableEdit = false,
   layoutCloseCreateUrl,
-  layoutNumber = 'MidColumn',
+  layoutNumber = 'midColumn',
   onlyYaml = false,
   protectedResource = false,
   protectedResourceWarning = null,
@@ -96,13 +96,13 @@ export const ResourceCreate = ({
             0,
             window.location.pathname.lastIndexOf('/'),
           )}${
-            layoutNumber === 'MidColumn' ||
+            layoutNumber === 'midColumn' ||
             layoutCloseCreateUrl?.showCreate?.resourceType
               ? ''
               : '?layout=TwoColumnsMidExpanded'
           }`,
     );
-    layoutNumber === 'MidColumn'
+    layoutNumber === 'midColumn'
       ? setLayoutColumn({
           ...layoutColumn,
           midColumn: null,
@@ -160,7 +160,7 @@ export const ResourceCreate = ({
           title={title}
           layoutNumber={layoutNumber}
           layoutCloseUrl={`${layoutCloseCreateUrl}${
-            layoutNumber === 'EndColumn' ? '?layout=TwoColumnsMidExpanded' : ''
+            layoutNumber === 'endColumn' ? '?layout=TwoColumnsMidExpanded' : ''
           }`}
           showYamlTab={disableEdit && onlyYaml}
           content={stickyHeaderHeight => (

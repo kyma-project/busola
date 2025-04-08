@@ -83,7 +83,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
           <BusolaExtensionCreate
             {...renderProps}
             {...elementCreateProps}
-            layoutNumber="StartColumn" // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+            layoutNumber="startColumn" // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
           />
         );
 
