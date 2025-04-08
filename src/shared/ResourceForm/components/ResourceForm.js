@@ -78,9 +78,9 @@ export function ResourceForm({
 
   useEffect(() => {
     if (layoutState?.showCreate?.resource) {
-      setResource(layoutState.showCreate.resource);
+      setResource(JSON.parse(JSON.stringify(layoutState.showCreate.resource)));
     } else if (layoutState?.showEdit?.resource) {
-      setResource(layoutState.showEdit.resource);
+      setResource(JSON.parse(JSON.stringify(layoutState.showEdit.resource)));
     }
   }, [
     layoutState?.showCreate?.resource,
