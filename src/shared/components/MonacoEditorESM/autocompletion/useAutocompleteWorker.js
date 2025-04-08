@@ -34,7 +34,9 @@ export function useAutocompleteWorker({
   language,
   schema: predefinedSchema,
 }) {
-  const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
+  const [schemaId] = useState(
+    predefinedSchema ? predefinedSchemaId || Math.random().toString() : null,
+  );
 
   if (!autocompletionDisabled && !predefinedSchemaId) {
     console.warn(
@@ -43,9 +45,9 @@ export function useAutocompleteWorker({
     autocompletionDisabled = true;
   }
 
-  const { fetchedSchema, loading, error } = useGetSchema({
+  const { schemas: fetchedSchema, loading, error } = useGetSchema({
     schemaId,
-    skip: autocompletionDisabled | !!predefinedSchema,
+    skip: autocompletionDisabled || !!predefinedSchema,
   });
 
   const schema = predefinedSchema || fetchedSchema;
