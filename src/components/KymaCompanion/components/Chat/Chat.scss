@@ -1,12 +1,11 @@
 .chat-container {
   height: calc(100vh - 60px - 1rem);
-  overflow: hidden;
 
   .chat-list {
     display: flex;
     flex-direction: column;
-    overflow: auto;
     gap: 8px;
+    overflow-y: auto;
 
     &::-webkit-scrollbar {
       display: none;

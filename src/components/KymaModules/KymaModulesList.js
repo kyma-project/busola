@@ -46,7 +46,7 @@ export default function KymaModulesList({
   return (
     <ResourceDetails
       className="kyma-modules"
-      layoutNumber="StartColumn"
+      layoutNumber="startColumn"
       windowTitle={t('kyma-modules.title')}
       headerContent={
         <DynamicPageHeader className="no-shadow">

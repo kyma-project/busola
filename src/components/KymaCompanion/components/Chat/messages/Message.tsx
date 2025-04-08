@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from './TasksList';
 import './Message.scss';
+import './marked.scss';
+import { isCurrentThemeDark, themeState } from 'state/preferences/themeAtom';
+import { useRecoilValue } from 'recoil';
 
 export interface MessageChunk {
   event?: string;
@@ -37,8 +40,11 @@ export default function Message({
   isLoading,
   hasError,
   isLatestMessage,
-  disableFormatting = false,
 }: MessageProps): JSX.Element {
+  const currentTheme = useRecoilValue(themeState);
+  const isThemeDark = isCurrentThemeDark(currentTheme);
+  const predefinedMarkdownThemeClass = isThemeDark ? 'dark' : 'light';
+
   const { t } = useTranslation();
   if (isLoading) {
     return <TasksList messageChunks={messageChunks} />;
@@ -51,14 +57,18 @@ export default function Message({
 
   const finalChunk = messageChunks.at(-1);
   const text = finalChunk?.data?.answer?.content ?? '';
-  const segmentedText = disableFormatting ? text : formatMessage(text);
+  const segmentedText = formatMessage(text, predefinedMarkdownThemeClass);
 
   const className = author === 'user' ? 'right-aligned' : 'left-aligned';
 
   return (
     <div className={'message-container ' + className}>
-      <div className={`message ${className}${displayError ? ' error' : ''}`}>
-        <Text className="text">{segmentedText}</Text>
+      <div
+        className={`markdown message ${className}${
+          displayError ? ' error' : ''
+        }`}
+      >
+        {segmentedText}
       </div>
       {displayError && (
         <div className={'message-error ' + className}>

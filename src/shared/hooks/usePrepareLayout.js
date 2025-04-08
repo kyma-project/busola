@@ -10,10 +10,10 @@ import { isFormOpenState } from 'state/formOpenAtom';
 
 const switchToPrevLayout = layout => {
   switch (layout) {
-    case 'EndColumn':
+    case 'endColumn':
       return 'TwoColumnsMidExpanded';
-    case 'MidColumn':
-    case 'StartColumn':
+    case 'midColumn':
+    case 'startColumn':
     default: {
       return 'OneColumn';
     }
@@ -22,11 +22,11 @@ const switchToPrevLayout = layout => {
 
 const switchToCurrentLayout = layout => {
   switch (layout) {
-    case 'StartColumn':
+    case 'startColumn':
       return 'OneColumn';
-    case 'MidColumn':
+    case 'midColumn':
       return 'TwoColumnsMidExpanded';
-    case 'EndColumn':
+    case 'endColumn':
     default: {
       return 'ThreeColumnsEndExpanded';
     }
@@ -35,11 +35,11 @@ const switchToCurrentLayout = layout => {
 
 const switchToNextLayout = layout => {
   switch (layout) {
-    case 'StartColumn': {
+    case 'startColumn': {
       return 'TwoColumnsMidExpanded';
     }
-    case 'MidColumn':
-    case 'EndColumn':
+    case 'midColumn':
+    case 'endColumn':
     default: {
       return 'ThreeColumnsEndExpanded';
     }
@@ -115,7 +115,14 @@ export function usePrepareLayoutColumns({
         midColumn: null,
         endColumn: null,
         showEdit: showEdit
-          ? { resourceType, namespaceId, apiGroup, apiVersion }
+          ? {
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+              resourceName:
+                resourceType === 'Namespaces' ? resourceName : undefined,
+            }
           : null,
       };
     }
@@ -184,7 +191,7 @@ export function usePrepareLayoutColumns({
       endColumn: null,
       showCreate: showCreate ? { resourceType, namespaceId } : null,
       showEdit: showEdit
-        ? editColumn === 'StartColumn'
+        ? editColumn === 'startColumn'
           ? { resourceType, namespaceId, apiGroup, apiVersion }
           : {
               resourceName,

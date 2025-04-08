@@ -82,7 +82,7 @@ export function ResourcesList({
   resourceTitle,
   isCompact,
   description,
-  layoutNumber = 'StartColumn',
+  layoutNumber = 'startColumn',
   resources,
   filterFn = () => true,
   ...props
@@ -220,7 +220,7 @@ export function ResourceListRenderer({
   columnLayout,
   customColumnLayout,
   layoutCloseCreateUrl,
-  layoutNumber = 'StartColumn',
+  layoutNumber = 'startColumn',
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -344,7 +344,7 @@ export function ResourceListRenderer({
     setActiveResource(activeResource);
 
     setLayoutColumn(
-      layoutNumber === 'MidColumn' && enableColumnLayout
+      layoutNumber === 'midColumn' && enableColumnLayout
         ? {
             ...layoutState,
             midColumn: layoutState?.midColumn,
@@ -373,7 +373,7 @@ export function ResourceListRenderer({
 
     navigate(
       `${layoutCloseCreateUrl ?? window.location.pathname}${
-        layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''
+        layoutNumber === 'midColumn' ? '?layout=TwoColumnsMidExpanded' : ''
       }`,
     );
   };
@@ -437,7 +437,7 @@ export function ResourceListRenderer({
   const handleShowCreate = () => {
     setActiveResource(undefined);
     setLayoutColumn(
-      layoutNumber === 'MidColumn' && enableColumnLayout
+      layoutNumber === 'midColumn' && enableColumnLayout
         ? {
             ...layoutState,
             midColumn: layoutState?.midColumn,
@@ -464,7 +464,7 @@ export function ResourceListRenderer({
 
     navigate(
       `${layoutCloseCreateUrl ?? window.location.pathname}${
-        layoutNumber === 'MidColumn'
+        layoutNumber === 'midColumn'
           ? '?layout=ThreeColumnsEndExpanded'
           : '?layout=TwoColumnsMidExpanded'
       }&showCreate=true`,
