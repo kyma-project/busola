@@ -15,5 +15,8 @@
     display: flex;
     gap: 8px;
     flex-wrap: nowrap;
+    padding-bottom: 1px;
+    min-width: -webkit-fill-available;
+    overflow: auto;
   }
 }
