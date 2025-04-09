@@ -16,7 +16,7 @@ import {
 } from 'state/preferences/themeAtom';
 import copyToClipboard from 'copy-to-clipboard';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { clusterState } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
