@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@ui5/webcomponents-react';
-import copyToCliboard from 'copy-to-clipboard';
+import copyToClipboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
@@ -108,7 +108,7 @@ export function EditorActions({
       <Button
         design="Transparent"
         icon="copy"
-        onClick={() => copyToCliboard(val)}
+        onClick={() => copyToClipboard(val)}
         className="action-button"
         tooltip={t('common.tooltips.copy-to-clipboard')}
       />

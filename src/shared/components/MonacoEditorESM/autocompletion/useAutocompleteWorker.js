@@ -32,6 +32,7 @@ export function useAutocompleteWorker({
   autocompletionDisabled,
   readOnly,
   language,
+  schema: predefinedSchema,
 }) {
   const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
 
@@ -42,11 +43,12 @@ export function useAutocompleteWorker({
     autocompletionDisabled = true;
   }
 
-  const { schema, loading, error } = useGetSchema({
+  const { schemas: fetchedSchema, loading, error } = useGetSchema({
     schemaId,
-    skip: autocompletionDisabled,
+    skip: autocompletionDisabled || !!predefinedSchema,
   });
 
+  const schema = predefinedSchema || fetchedSchema;
   /**
    * Call this before initializing Monaco. This function alters Monaco global config to set up JSON-based
    * autocompletion.

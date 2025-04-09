@@ -11,6 +11,7 @@ export function Editor({
   convert = true,
   schemaId,
   setEditorError,
+  schema,
   ...props
 }) {
   const { t } = useTranslation();
@@ -85,6 +86,7 @@ export function Editor({
       error={error}
       schemaId={schemaId}
       placeholder={t('clusters.wizard.editor-placeholder')}
+      schema={schema}
     />
   );
 }

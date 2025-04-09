@@ -23,19 +23,20 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
   const isWorkerOkay = isWorkerAvailable && !schemasError;
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(!isWorkerOkay ? false : !skip);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     setSchema(null);
     setError(null);
-    setLoading(!isWorkerOkay ? false : !skip);
+    setLoading(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schemaId]);
 
   useEffect(() => {
-    if (!areSchemasComputed || schema || skip || !isWorkerOkay) {
+    if (schema || skip || !isWorkerOkay) {
+      setLoading(false);
       return;
     }
+    if (!areSchemasComputed) return;
     sendWorkerMessage('getSchema', schemaId);
 
     addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {

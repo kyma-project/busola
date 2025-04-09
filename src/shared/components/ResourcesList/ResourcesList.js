@@ -372,9 +372,9 @@ export function ResourceListRenderer({
     );
 
     navigate(
-      `${layoutCloseCreateUrl ?? window.location.pathname}${
-        layoutNumber === 'midColumn' ? '?layout=TwoColumnsMidExpanded' : ''
-      }`,
+      `${layoutCloseCreateUrl ?? window.location.pathname}?${
+        layoutNumber === 'midColumn' ? 'layout=TwoColumnsMidExpanded&' : ''
+      }showCreate=true`,
     );
   };
 
