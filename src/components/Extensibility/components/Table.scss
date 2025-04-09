@@ -9,4 +9,11 @@
 .collapsible-panel {
   min-width: -webkit-fill-available;
   position: absolute;
+  display: inherit;
+
+  > :first-child {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
 }
