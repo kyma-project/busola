@@ -30,6 +30,7 @@ export function CategoryItem({
 
     if (!isSidebarCondensed) {
       if (categoryName === e.target.parentElement?.getAttribute('text')) {
+        return;
       } else if (expanded) {
         handleExpandedCategories(
           expandedCategories.filter(el => el !== category.key),
@@ -40,14 +41,22 @@ export function CategoryItem({
     }
   };
 
-  const children = category.items?.map(nn => (
-    <React.Fragment key={nn.pathSegment}>
+  const children = category.items?.map((nn, i) => (
+    <React.Fragment key={`${nn.pathSegment}-fragment-${i}`}>
       {nn.dataSources ? (
         <DataSourcesContextProvider dataSources={nn.dataSources}>
-          <NavItem node={nn} key={nn.pathSegment} subItem={true} />
+          <NavItem
+            node={nn}
+            key={`${nn.pathSegment}-nav-item-${i}`}
+            subItem={true}
+          />
         </DataSourcesContextProvider>
       ) : (
-        <NavItem node={nn} key={nn.pathSegment} subItem={true} />
+        <NavItem
+          node={nn}
+          key={`${nn.pathSegment}-nav-item-${i}`}
+          subItem={true}
+        />
       )}
     </React.Fragment>
   ));
