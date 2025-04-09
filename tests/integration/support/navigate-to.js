@@ -1,5 +1,5 @@
 Cypress.Commands.add('navigateTo', (leftNav, resource) => {
-  cy.wait(500)
+  cy.wait(1500)
     .getLeftNav()
     .get(`ui5-side-navigation-item[text="${leftNav}"]`)
     .as('btn-1')
