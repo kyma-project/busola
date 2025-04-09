@@ -392,6 +392,14 @@ export const GenericList = ({
     }
   };
 
+  const setOverflowMode = () => {
+    const anyPopinHidden = headerRenderer().some(h => h === 'Popin');
+    if (!anyPopinHidden && !noHideFields && disableHiding) {
+      return 'Scroll';
+    }
+    return 'Popin';
+  };
+
   return (
     <UI5Panel
       title={title}
@@ -401,7 +409,7 @@ export const GenericList = ({
       className={className}
     >
       <Table
-        overflowMode={!noHideFields && disableHiding ? 'Scroll' : 'Popin'}
+        overflowMode={setOverflowMode()}
         accessibleName={accessibleName ?? title}
         rowActionCount={displayArrow ? 1 : 0}
         className={`ui5-generic-list ${

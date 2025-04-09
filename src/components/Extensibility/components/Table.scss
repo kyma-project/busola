@@ -6,17 +6,31 @@
   }
 }
 
+ui5-table-row.collapse-content {
+  overflow-x: auto;
+}
+
 .collapsible-panel {
-  min-width: -webkit-fill-available;
+  min-width: max-content;
   position: absolute;
   display: inherit;
 
   > :first-child {
-    display: flex;
-    gap: 8px;
-    flex-wrap: nowrap;
-    padding-bottom: 1px;
-    min-width: -webkit-fill-available;
+    display: contents;
+    min-width: max-content;
     overflow: auto;
+
+    ui5-text {
+      margin-bottom: 0.5rem;
+      margin-top: 0.5rem;
+
+      &:first-child {
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  ui5-table {
+    min-width: max-content;
   }
 }
