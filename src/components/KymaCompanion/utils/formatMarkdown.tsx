@@ -1,52 +1,123 @@
 import { UI5Renderer } from 'components/KymaCompanion/components/Chat/messages/markedExtension';
-
 import Markdown from 'marked-react';
+import CodePanel from '../components/Chat/messages/CodePanel';
 
-export function formatMessage(text: string, themeClass: string): JSX.Element[] {
-  const elements: JSX.Element[] = [];
-  let currentText: string = '';
-  let divs = 0;
-  let idx = 0;
-  let codeSection: boolean = false;
-  text.split('\n').forEach(line => {
-    if (line.trim().startsWith('<div')) {
-      divs += 1;
-      if (codeSection) {
-        return;
-      }
-      elements.push(MarkdownText(currentText + '\n', idx, themeClass));
-      currentText = line + '\n';
-      codeSection = true;
-      return;
-    }
-
-    if (codeSection && line.trim().startsWith('</div>')) {
-      divs -= 1;
-      currentText += line;
-      if (divs === 0) {
-        // TODO: Will be implemented in https://github.com/kyma-project/busola/issues/3604
-        elements.push(<>{`---\n${currentText}\n---`}</>);
-        codeSection = false;
-        currentText = '';
-      }
-      return;
-    }
-    currentText += line + '\n';
-  });
-
-  elements.push(MarkdownText(currentText + '\n', idx, themeClass));
-
-  return elements;
+export interface CodeSegmentLink {
+  address: string;
+  actionType: string;
+  name: string;
 }
 
-function MarkdownText(
-  text: string,
-  idx: number,
-  themeClass: string,
-): JSX.Element {
-  return (
-    <div id={`msg-${idx}`} className={themeClass}>
-      <Markdown renderer={UI5Renderer}>{text}</Markdown>
-    </div>
+interface YamlBlock {
+  codeWithAction: true;
+  content: string;
+  link: CodeSegmentLink | null;
+  language: string;
+}
+
+export interface MarkdownText {
+  codeWithAction: false;
+  content: string;
+}
+
+type MessagePart = YamlBlock | MarkdownText;
+
+export function formatCodeSegment(text: string) {
+  const [language, ...lines] = text.split('\n');
+  return { language, code: lines.filter(line => line.trim()).join('\n') };
+}
+
+function extractYamlContent(block: string): string {
+  return block.match(/```([\s\S]*?)```/)?.[1]?.trim() || '';
+}
+
+function extractLink(block: string): CodeSegmentLink | null {
+  const match = block.match(
+    /<div class="link" link-type="(.*?)">\s*\[(.*?)\]\((.*?)\)\s*<\/div>/,
   );
+  return match
+    ? {
+        name: match[2].trim(),
+        address: match[3].trim(),
+        actionType: match[1].trim(),
+      }
+    : null;
+}
+
+function findClosingDivIndex(lines: string[], startIndex: number): number {
+  let openDivs = 0;
+  for (let i = startIndex; i < lines.length; i++) {
+    if (lines[i].includes('<div')) openDivs++;
+    if (lines[i].includes('</div>') && --openDivs === 0) return i;
+  }
+  return -1;
+}
+
+function extractYamlBlocks(lines: string[], i: number) {
+  const start = i;
+  const end = findClosingDivIndex(lines, start);
+
+  const block = lines.slice(start, end + 1).join('\n');
+  const content = extractYamlContent(block);
+  const link = extractLink(block);
+
+  return { content, link, end };
+}
+
+function getLanguage(text: string) {
+  const lines = text.split('\n');
+  const language = lines.shift();
+
+  return { language: language ?? '', code: lines.join('\n') };
+}
+
+function parseMessage(text: string): MessagePart[] {
+  const lines = text.split('\n');
+  const parts: MessagePart[] = [];
+  let currentText = '';
+  let i = 0;
+
+  while (i < lines.length) {
+    if (lines[i].includes('<div class="yaml-block')) {
+      if (currentText) {
+        parts.push({ codeWithAction: false, content: currentText });
+        currentText = '';
+      }
+      const { content, link, end } = extractYamlBlocks(lines, i);
+      const { code, language } = getLanguage(content);
+      parts.push({ codeWithAction: true, content: code, link, language });
+
+      i = end + 1;
+    } else {
+      if (currentText) {
+        currentText += '\n' + lines[i];
+      } else {
+        currentText = lines[i];
+      }
+      i++;
+    }
+  }
+
+  if (currentText) {
+    parts.push({ codeWithAction: false, content: currentText });
+  }
+
+  return parts;
+}
+
+export function formatMessage(text: string, themeClass: string): JSX.Element[] {
+  return parseMessage(text).map((part, index) => (
+    <div key={`msg-${index}`} className={themeClass}>
+      {part.codeWithAction ? (
+        <CodePanel
+          withAction
+          language={part.language}
+          code={part.content}
+          link={part.link}
+        />
+      ) : (
+        <Markdown renderer={UI5Renderer}>{part.content}</Markdown>
+      )}
+    </div>
+  ));
 }

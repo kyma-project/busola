@@ -15,6 +15,12 @@
   }
 }
 
+.code-panel {
+  .action-button {
+    color: var(--sapTextColor);
+  }
+}
+
 .code-panel::part(header) {
   background-color: var(--sapBaseColor);
   border-radius: 4px 4px 0 0;

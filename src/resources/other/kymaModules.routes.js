@@ -51,6 +51,10 @@ const ColumnWraper = ({
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: resourceName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   const {
