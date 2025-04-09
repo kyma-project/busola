@@ -23,7 +23,7 @@ export default function Bubbles({
     );
   }
 
-  return suggestions ? (
+  return suggestions?.length ? (
     <FlexBox
       wrap="Wrap"
       justifyContent="Start"
