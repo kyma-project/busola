@@ -25,6 +25,8 @@ function createWebComponent(
       if (!this.reactRoot) {
         this.reactRoot = document.createElement('div');
         this.reactRoot.setAttribute('id', 'component-root');
+        // TODO: This is workaround for ui5 bump https://github.com/kyma-project/busola/pull/3657 which force this component height to 0
+        this.reactRoot.style['height'] = '80vh';
         this.appendChild(this.reactRoot);
         this.reactRootInstance = createRoot(this.reactRoot); // Initialize root
       }
