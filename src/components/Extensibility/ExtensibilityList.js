@@ -199,6 +199,14 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
             <>
               <div
                 id="custom-html"
+                // TODO: This is workaround for ui5 bump https://github.com/kyma-project/busola/issues/3812#issuecomment-2793974410 which force this component height to 0
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                }}
                 dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
               ></div>
               {createPortal(<YamlUploadDialog />, document.body)}

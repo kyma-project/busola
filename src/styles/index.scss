@@ -31,6 +31,8 @@ body {
 
 .column-content {
   height: 100%;
+  // TODO: This is workaround for ui5 bump https://github.com/kyma-project/busola/issues/3812#issuecomment-2793974410 which force this component height to 0
+  position: relative;
 }
 
 .card-shadow {
