@@ -165,7 +165,7 @@ export function SidebarNavigation() {
                   }}
                   value={getNamespaceLabel()}
                 >
-                  {NamespaceDropdown()}
+                  <NamespaceDropdown />
                 </ComboBox>
               </FlexBox>
             </div>
