@@ -8,7 +8,7 @@ import {
 } from './formatMarkdown';
 import Markdown from 'marked-react';
 import CodePanel from '../components/Chat/messages/CodePanel';
-import { UI5Renderer } from 'components/KymaCompanion/components/Chat/messages/markedExtension';
+import { UI5Renderer } from 'components/KymaCompanion/components/Chat/Message/markedExtension';
 
 describe('extractYamlContent', () => {
   it('returns empty string when no code block is present', () => {

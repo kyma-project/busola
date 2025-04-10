@@ -1,4 +1,4 @@
-import { UI5Renderer } from 'components/KymaCompanion/components/Chat/messages/markedExtension';
+import { UI5Renderer } from 'components/KymaCompanion/components/Chat/Message/markedExtension';
 import Markdown from 'marked-react';
 import CodePanel from '../components/Chat/messages/CodePanel';
 

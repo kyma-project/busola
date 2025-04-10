@@ -10,15 +10,6 @@ export const UI5Renderer = {
   },
 
   table(table: JSX.Element[]) {
-    return (
-      <div
-        className={'markdown'}
-        style={{
-          overflowX: 'auto',
-        }}
-      >
-        {table}
-      </div>
-    );
+    return <div className="table">{table}</div>;
   },
 };
