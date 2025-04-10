@@ -422,7 +422,14 @@ export function ResourceListRenderer({
     const rowColumns = customColumns?.map((col, index) => {
       if (col?.value && index === nameColIndex) {
         return (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              wordBreak: 'break-word',
+            }}
+          >
             {col.value(entry)}
             {protectedResourceWarning(entry)}
           </div>
