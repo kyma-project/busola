@@ -241,6 +241,7 @@ common:
     cascade-delete: Cascade Delete
     learn-more: Learn More
     ok: OK
+    place: Place
     remove-all: Remove all
     reset: Reset
     restart: Restart
