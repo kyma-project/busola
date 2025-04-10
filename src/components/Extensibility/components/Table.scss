@@ -8,7 +8,7 @@
 
 ui5-table-row.collapse-content {
   overflow-x: auto;
-  display: flex;
+  display: block;
 }
 
 .collapsible-panel {
@@ -20,6 +20,10 @@ ui5-table-row.collapse-content {
     display: contents;
     min-width: max-content;
     overflow: auto;
+
+    &:not(ui5-panel) {
+      display: flex;
+    }
 
     ui5-text {
       margin: 0.5rem 1rem;
