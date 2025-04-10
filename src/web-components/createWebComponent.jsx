@@ -141,7 +141,9 @@ function createWebComponent(
     }
   }
 
-  customElements.define(tagName, GenericWebComponent);
+  if (!customElements.get(tagName)) {
+    customElements.define(tagName, GenericWebComponent);
+  }
 }
 
 export default createWebComponent;
