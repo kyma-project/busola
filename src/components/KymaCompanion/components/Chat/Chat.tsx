@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
 import Message, { MessageChunk } from './Message/Message';
 import Bubbles from './Bubbles/Bubbles';
-import ErrorMessage from './messages/ErrorMessage';
+import ErrorMessage from './ErrorMessage/ErrorMessage';
 import { sessionIDState } from 'state/companion/sessionIDAtom';
 import { clusterState } from 'state/clusterAtom';
 import { authDataState } from 'state/authDataAtom';

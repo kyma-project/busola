@@ -7,7 +7,7 @@ import {
   extractYamlBlock,
 } from './formatMarkdown';
 import Markdown from 'marked-react';
-import CodePanel from '../components/Chat/messages/CodePanel';
+import CodePanel from '../components/Chat/CodePanel/CodePanel';
 import { UI5Renderer } from 'components/KymaCompanion/components/Chat/Message/markedExtension';
 
 describe('extractYamlContent', () => {

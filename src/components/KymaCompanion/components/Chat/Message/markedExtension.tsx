@@ -1,4 +1,4 @@
-import CodePanel from 'components/KymaCompanion/components/Chat/messages/CodePanel';
+import CodePanel from 'components/KymaCompanion/components/Chat/CodePanel/CodePanel';
 
 export const UI5Renderer = {
   code(text: string, lang: string) {
