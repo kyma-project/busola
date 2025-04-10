@@ -115,7 +115,7 @@ export function SidebarNavigation() {
           )}
           {(!namespace || isSidebarCondensed) && <div className="space-top" />}
           {namespace && (
-            <div className="namespace-combobox" style={{ zIndex: '0' }}>
+            <div className="namespace-combobox">
               <Label
                 for="NamespaceComboBox"
                 className="sap-margin-bottom-tiny sap-margin-begin-small"
