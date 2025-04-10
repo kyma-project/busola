@@ -1,8 +1,6 @@
-import { Table } from '../../../components/App/UI5Imports';
-
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -19,11 +17,9 @@ import ListActions from 'shared/components/ListActions/ListActions';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { SortModalPanel } from './SortModalPanel';
-
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeState } from 'state/preferences/pageSizeAtom';
-import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
@@ -33,6 +29,8 @@ import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { Table } from '@ui5/webcomponents-react';
+import './GenericList.scss';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -104,9 +102,10 @@ export const GenericList = ({
   };
 
   const globalPageSize = useRecoilValue(pageSizeState);
-  const [pageSize, setLocalPageSize] = useState(globalPageSize);
+  const [pageSize, setPageSize] = useState(globalPageSize);
+
   useEffect(() => {
-    setLocalPageSize(globalPageSize);
+    setPageSize(globalPageSize);
   }, [globalPageSize]);
 
   pagination = useMemo(() => {
@@ -147,7 +146,7 @@ export const GenericList = ({
     sort,
   ]);
 
-  React.useEffect(() => setCurrentPage(1), [searchQuery]);
+  useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
     const selected = entries.find(entry => {
@@ -319,15 +318,18 @@ export const GenericList = ({
   };
 
   const handleRowClick = e => {
+    const arrowColumnCount = displayArrow ? 1 : 0;
     const item = (
-      e.target.children[nameColIndex].children[0].innerText ??
-      e.target.children[nameColIndex].innerText
+      e.detail.row.children[nameColIndex + arrowColumnCount].children[0]
+        .innerText ??
+      e.detail.row.children[nameColIndex + arrowColumnCount].innerText
     )?.trimEnd();
 
     const hasNamepace = namespaceColIndex !== -1;
     const itemNamespace = hasNamepace
-      ? e?.target?.children[namespaceColIndex]?.children[0]?.innerText ??
-        e?.target?.children[namespaceColIndex]?.innerText
+      ? e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
+          ?.children[0]?.innerText ??
+        e?.detail?.row.children[namespaceColIndex + arrowColumnCount]?.innerText
       : '';
 
     const selectedEntry = entries.find(entry => {
@@ -390,6 +392,14 @@ export const GenericList = ({
     }
   };
 
+  const setOverflowMode = () => {
+    const anyPopinHidden = headerRenderer().some(h => h === 'Popin');
+    if (!anyPopinHidden && !noHideFields && disableHiding) {
+      return 'Scroll';
+    }
+    return 'Popin';
+  };
+
   return (
     <UI5Panel
       title={title}
@@ -399,7 +409,9 @@ export const GenericList = ({
       className={className}
     >
       <Table
+        overflowMode={setOverflowMode()}
         accessibleName={accessibleName ?? title}
+        rowActionCount={displayArrow ? 1 : 0}
         className={`ui5-generic-list ${
           hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
         }`}
@@ -417,13 +429,12 @@ export const GenericList = ({
             () => handleRowClick(e),
           );
         }}
-        columns={
+        headerRow={
           <HeaderRenderer
             entries={entries}
             actions={actions}
             headerRenderer={headerRenderer}
             disableHiding={disableHiding}
-            displayArrow={displayArrow}
             noHideFields={noHideFields}
           />
         }
@@ -438,7 +449,7 @@ export const GenericList = ({
             currentPage={currentPage}
             itemsPerPage={pagination.itemsPerPage}
             onChangePage={setCurrentPage}
-            setLocalPageSize={setLocalPageSize}
+            setLocalPageSize={setPageSize}
           />
         )}
     </UI5Panel>

@@ -7,32 +7,39 @@ import {
   Text,
   Title,
   ListItemGroup,
+  Table,
+  TableHeaderRow,
+  TableRow,
+  TableCell,
+  TableHeaderCell,
 } from '@ui5/webcomponents-react';
-import { Table as UI5Table } from '@ui5/webcomponents-react-compat/dist/components/Table/index.js';
-import { TableColumn } from '@ui5/webcomponents-react-compat/dist/components/TableColumn/index.js';
-import { TableRow } from '@ui5/webcomponents-react-compat/dist/components/TableRow/index.js';
-import { TableCell } from '@ui5/webcomponents-react-compat/dist/components/TableCell/index.js';
 import { Labels } from '../Labels/Labels';
 import { PodTemplateRow } from './PodTemplateRow';
 import { Link } from '../Link/Link';
 
-function Table({ items, columns, rowRenderer }) {
+function PodTemplateTable({ className, items, columns, rowRenderer }) {
   if (!items?.length) {
     return <></>;
   }
 
   return (
-    <UI5Table
-      columns={columns.map(column => (
-        <TableColumn style={{ width: '50%' }}>
-          <Title level="H5">{column}</Title>
-        </TableColumn>
-      ))}
+    <Table
+      overflowMode="Popin"
+      className={className}
+      headerRow={
+        <TableHeaderRow style={{ width: '50%' }}>
+          {columns.map(column => (
+            <TableHeaderCell>
+              <Title level="H5">{column}</Title>
+            </TableHeaderCell>
+          ))}
+        </TableHeaderRow>
+      }
     >
       {items.map((item, index) => (
         <TableRow key={index}>{rowRenderer(item)}</TableRow>
       ))}
-    </UI5Table>
+    </Table>
   );
 }
 
@@ -76,7 +83,7 @@ function ContainerComponent({ container }) {
         <PodTemplateRow
           label={t('pods.labels.env')}
           component={
-            <Table
+            <PodTemplateTable
               className="card-shadow"
               items={container.env}
               columns={[t('common.headers.name'), t('common.headers.value')]}
@@ -100,7 +107,7 @@ function ContainerComponent({ container }) {
         <PodTemplateRow
           label={t('pods.labels.volume-mounts')}
           component={
-            <Table
+            <PodTemplateTable
               items={container.volumeMounts}
               columns={[t('common.headers.name'), t('pods.labels.mount-path')]}
               rowRenderer={mount => (
@@ -193,7 +200,7 @@ function VolumeComponent({ volume }) {
         <PodTemplateRow
           label={t('common.headers.items')}
           component={
-            <Table
+            <PodTemplateTable
               items={k8sResource.items}
               columns={[t('common.headers.key'), t('common.labels.path')]}
               rowRenderer={mount => (

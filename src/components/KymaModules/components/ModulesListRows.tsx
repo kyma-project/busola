@@ -74,6 +74,23 @@ export const ModulesListRows = ({
     resource?.version,
   );
 
+  if (
+    moduleStatus &&
+    !moduleStatus.resource &&
+    currentModuleTemplate?.spec?.data
+  ) {
+    const moduleCr = currentModuleTemplate?.spec?.data;
+
+    moduleStatus.resource = {
+      kind: moduleCr.kind,
+      apiVersion: moduleCr.apiVersion,
+      metadata: {
+        name: moduleCr.metadata.name,
+        namespace: moduleCr.metadata.namespace,
+      },
+    };
+  }
+
   const moduleDocs =
     currentModuleTemplate?.spec?.info?.documentation ||
     currentModuleTemplate?.metadata?.annotations[
@@ -130,7 +147,7 @@ export const ModulesListRows = ({
     // Version
     moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
     // Module State
-    <ModuleStatus key="module-state" resource={resource} />,
+    <ModuleStatus key="module-state" resource={moduleStatus} />,
     // Installation State
     <StatusBadge
       key="installation-state"

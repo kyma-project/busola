@@ -173,7 +173,7 @@ export const ModalWithForm = ({
 };
 
 ModalWithForm.propTypes = {
-  performRefetch: PropTypes.func.isRequired,
+  performRefetch: PropTypes.func,
   title: PropTypes.string.isRequired,
   renderForm: PropTypes.func.isRequired,
   item: PropTypes.object,
