@@ -84,7 +84,9 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests variables', () => {
-    cy.get('.create-form').as('form');
+    cy.wait(500)
+      .get('.create-form')
+      .as('form');
 
     // test vars with no default value
     cy.get('@form')
