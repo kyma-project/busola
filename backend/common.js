@@ -102,7 +102,7 @@ export const makeHandleRequest = () => {
         (k8sResponse.headers['Content-Type']?.includes('\\') ||
           k8sResponse.headers['content-encoding']?.includes('\\'))
       )
-        return throwInternalServerError(
+        return respondWithInternalError(
           'Response headers are potentially dangerous',
         );
 
@@ -123,16 +123,15 @@ export const makeHandleRequest = () => {
       });
       k8sResponse.pipe(res);
     });
-    k8sRequest.on('error', throwInternalServerError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
-
+    k8sRequest.on('error', respondWithInternalError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
     if (Buffer.isBuffer(req.body)) {
-      k8sRequest.end(req.body);
+      // If body is buffer it means it's not a json, don't pass it further.
+      k8sRequest.end('');
     } else {
-      // If there's no body, pipe the request (for streaming)
-      req.pipe(k8sRequest);
+      k8sRequest.end(JSON.stringify(req.body));
     }
 
-    function throwInternalServerError(originalError) {
+    function respondWithInternalError(originalError) {
       req.log.warn(originalError);
       res.contentType('text/plain; charset=utf-8');
       res
