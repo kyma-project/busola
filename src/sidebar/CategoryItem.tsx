@@ -54,6 +54,7 @@ export function CategoryItem({
 
   return (
     <SideNavigationItem
+      unselectable
       key={expanded + category.key}
       expanded={expanded}
       selected={false}
