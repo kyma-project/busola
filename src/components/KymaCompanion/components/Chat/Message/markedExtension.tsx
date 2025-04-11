@@ -1,4 +1,4 @@
-import CodePanel from 'components/KymaCompanion/components/Chat/messages/CodePanel';
+import CodePanel from 'components/KymaCompanion/components/Chat/CodePanel/CodePanel';
 
 export const UI5Renderer = {
   code(text: string, lang: string) {
@@ -10,15 +10,6 @@ export const UI5Renderer = {
   },
 
   table(table: JSX.Element[]) {
-    return (
-      <div
-        className={'markdown'}
-        style={{
-          overflowX: 'auto',
-        }}
-      >
-        {table}
-      </div>
-    );
+    return <div className="table">{table}</div>;
   },
 };

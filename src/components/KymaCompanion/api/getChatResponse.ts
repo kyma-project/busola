@@ -1,5 +1,5 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { MessageChunk } from '../components/Chat/messages/Message';
+import { MessageChunk } from '../components/Chat/Message/Message';
 
 interface ClusterAuth {
   token?: string;

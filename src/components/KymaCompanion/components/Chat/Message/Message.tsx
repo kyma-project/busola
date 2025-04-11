@@ -1,11 +1,11 @@
 import { Icon, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
-import TasksList from './TasksList';
-import './Message.scss';
-import './marked.scss';
+import TasksList from '../TaskList/TasksList';
 import { isCurrentThemeDark, themeState } from 'state/preferences/themeAtom';
 import { useRecoilValue } from 'recoil';
+import './Message.scss';
+import './marked.scss';
 
 export interface MessageChunk {
   event?: string;
