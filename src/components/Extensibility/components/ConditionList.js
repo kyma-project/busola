@@ -2,6 +2,7 @@ import { ConditionList as ConditionListComponent } from 'shared/components/Condi
 import { useJsonata } from '../hooks/useJsonata';
 import { useTranslation } from 'react-i18next';
 import { getBadgeType } from 'components/Extensibility/helpers';
+import { Widget } from './Widget';
 
 export const ConditionList = ({
   value,
@@ -28,6 +29,27 @@ export const ConditionList = ({
 
   const conditions = value.map(v => {
     const override = structure?.highlights?.find(o => o.type === v.type);
+    const customContent = structure?.customContent
+      ?.map(c => {
+        return {
+          ...c,
+          value:
+            typeof c.value === 'object' ? (
+              <Widget
+                value={originalResource}
+                structure={c.value}
+                originalResource={originalResource}
+                scope={scope}
+                singleRootResource={singleRootResource}
+                embedResource={embedResource}
+              />
+            ) : (
+              jsonata(c.value)
+            ),
+        };
+      })
+      .filter(c => c.type === v.type);
+
     const badgeType = override
       ? getBadgeType(override, v.status, jsonata, t)
       : undefined;
@@ -38,6 +60,7 @@ export const ConditionList = ({
         overrideStatusType: badgeType,
       },
       message: v.message,
+      customContent: customContent ?? [],
     };
   });
 
