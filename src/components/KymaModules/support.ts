@@ -14,7 +14,11 @@ export type KymaResourceStatusModuleType = {
   channel?: string;
   version?: string;
   state?: string;
-  resource?: { metadata?: { namespace?: string }; kind?: string };
+  resource?: {
+    apiVersion?: string;
+    metadata?: { name: string; namespace?: string };
+    kind?: string;
+  };
   message?: string;
 };
 
