@@ -11,7 +11,6 @@ describe('Bubbles Component', () => {
       />,
     );
 
-    cy.get('.suggestions-loading-indicator').should('exist');
     cy.get('.ai-busy-indicator').should('exist');
     cy.get('ui5-busy-indicator').should('have.attr', 'active');
     cy.get('ui5-busy-indicator').should('have.attr', 'size', 'M');
@@ -28,7 +27,7 @@ describe('Bubbles Component', () => {
     );
 
     cy.get('.bubbles-container').should('not.exist');
-    cy.get('.suggestions-loading-indicator').should('not.exist');
+    cy.get('.ai-busy-indicator').should('not.exist');
   });
 
   it('Renders suggestion buttons when isLoading is false and suggestions are provided', () => {
