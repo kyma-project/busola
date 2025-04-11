@@ -136,7 +136,10 @@ export const DataSourcesContextProvider: FC<Props> = ({
     }
 
     const apiGroup = group ? `apis/${group}` : 'api';
-    let url = `/${apiGroup}/${version}${namespacePart}/${resourceType}`;
+    let url =
+      namespace === '-all-'
+        ? `/${apiGroup}/${version}/${resourceType}`
+        : `/${apiGroup}/${version}${namespacePart}/${resourceType}`;
     if (labelSelector) {
       url += labelSelector;
     } else if (name) {
