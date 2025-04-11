@@ -17,7 +17,7 @@ import {
   getCRResource,
   handleItemClick,
 } from '../deleteModulesHelpers';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useGetScope, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';

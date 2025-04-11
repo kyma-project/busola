@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import pluralize from 'pluralize';
 import i18next from 'i18next';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -145,7 +145,6 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
     <React.Fragment key={urlPath}>
       <Route
         path={`${urlPath}/:resourceName?`}
-        exact
         element={
           <Suspense fallback={<Spinner />}>
             <ColumnWrapper

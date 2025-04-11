@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useMatch } from 'react-router';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import {
   sendWorkerMessage,
   addWorkerListener,

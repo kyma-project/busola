@@ -2,7 +2,7 @@
 import React from 'react';
 import { mount } from 'cypress/react18';
 import { ThemeProvider } from '@ui5/webcomponents-react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { RecoilRoot } from 'recoil';
 
 import i18n from 'i18next';

@@ -3,10 +3,10 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { DynamicPageHeader, FlexBox, Text } from '@ui5/webcomponents-react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { useState } from 'react';
-import KymaModulesEdit from 'components/KymaModules/KymaModulesEdit.js';
 import {
   apiGroup,
   apiVersion,
+  Create,
   ReleaseChannelDescription,
   ResourceDescription,
   resourceType,
@@ -88,7 +88,7 @@ export default function KymaModulesList({
       namespace={namespace}
       customTitle={t('kyma-modules.title')}
       headerDescription={ResourceDescription}
-      createResourceForm={KymaModulesEdit}
+      createResourceForm={Create}
       disableResourceDetailsCard
       disableDelete
     />

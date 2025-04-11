@@ -21,9 +21,9 @@ export function NamespaceDropdown() {
     );
   }
 
-  allNamespaces?.map(ns =>
+  allNamespaces?.forEach(ns =>
     namespaces.push(<ComboBoxItem text={ns} key={ns} data-key={ns} />),
   );
 
-  return namespaces;
+  return <>{namespaces}</>;
 }
