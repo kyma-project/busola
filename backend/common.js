@@ -31,6 +31,34 @@ const workaroundForNodeMetrics = req => {
   }
 };
 
+function k8sResponse(k8sResponse) {
+  if (
+    k8sResponse.headers &&
+    (k8sResponse.headers['Content-Type']?.includes('\\') ||
+      k8sResponse.headers['content-encoding']?.includes('\\'))
+  )
+    return throwInternalServerError(
+      'Response headers are potentially dangerous',
+    );
+
+  // change all 503 into 502
+  const statusCode =
+    k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
+
+  // Ensure charset is specified in content type
+  let contentType = k8sResponse.headers['Content-Type'] || 'text/json';
+  if (!contentType.includes('charset=')) {
+    contentType += '; charset=utf-8';
+  }
+
+  res.writeHead(statusCode, {
+    'Content-Type': contentType,
+    'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
+    'X-Content-Type-Options': 'nosniff',
+  });
+  k8sResponse.pipe(res);
+}
+
 export const makeHandleRequest = () => {
   const isDev = process.env.NODE_ENV !== 'production';
   const isTrackingEnabled =
@@ -102,7 +130,7 @@ export const makeHandleRequest = () => {
         (k8sResponse.headers['Content-Type']?.includes('\\') ||
           k8sResponse.headers['content-encoding']?.includes('\\'))
       )
-        return throwInternalServerError(
+        return respondWithInternalError(
           'Response headers are potentially dangerous',
         );
 
@@ -123,16 +151,15 @@ export const makeHandleRequest = () => {
       });
       k8sResponse.pipe(res);
     });
-    k8sRequest.on('error', throwInternalServerError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
-
+    k8sRequest.on('error', respondWithInternalError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
     if (Buffer.isBuffer(req.body)) {
-      k8sRequest.end(req.body);
+      // If body is buffer it means it's not a json, don't pass it further.
+      k8sRequest.end('');
     } else {
-      // If there's no body, pipe the request (for streaming)
-      req.pipe(k8sRequest);
+      k8sRequest.end(JSON.stringify(req.body));
     }
 
-    function throwInternalServerError(originalError) {
+    function respondWithInternalError(originalError) {
       req.log.warn(originalError);
       res.contentType('text/plain; charset=utf-8');
       res

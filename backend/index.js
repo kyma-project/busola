@@ -1,4 +1,4 @@
-import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
+import { makeHandleRequest, serveMonaco, serveStaticApp } from './common';
 import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
@@ -34,6 +34,9 @@ try {
 
 const app = express();
 app.disable('x-powered-by');
+app.use(
+  express.json({ type: ['application/json-patch+json', 'application/json'] }),
+);
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
 
 const gzipEnabled = global.config.features?.GZIP?.isEnabled;
