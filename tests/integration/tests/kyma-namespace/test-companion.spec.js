@@ -4,6 +4,7 @@ context('Test Companion', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('KYMA_COMPANION', true);
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
