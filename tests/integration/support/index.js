@@ -1,5 +1,6 @@
 import './exceptions';
 import './commands';
+import './companion-commands';
 import './create-edit-support';
 import './login-commands';
 import './navigate-to';

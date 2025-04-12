@@ -30,19 +30,7 @@ context('Test Companion', () => {
         });
       }).as('getPromptSuggestions');
 
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 100,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
+      cy.mockChatResponse();
 
       cy.intercept('POST', '/backend/ai-chat/followup', req => {
         req.reply({
@@ -55,11 +43,7 @@ context('Test Companion', () => {
     });
 
     it('loads initial suggestions and sessionID correctly', () => {
-      cy.get('ui5-shellbar')
-        .find('ui5-button[icon="da"]')
-        .should('be.visible')
-        .click();
-
+      cy.openCompanion();
       cy.get('.kyma-companion').as('companion');
 
       cy.get('@companion')
@@ -85,11 +69,7 @@ context('Test Companion', () => {
             .should('contain.text', `suggestion1.${index + 1}`);
         });
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(0)
-        .click();
+      cy.clickSuggestion(0);
 
       cy.wait('@getChatResponse').then(interception => {
         expect(interception.request.body).to.deep.equal({
@@ -105,9 +85,7 @@ context('Test Companion', () => {
 
     it('reloads suggestions after reset', () => {
       cy.get('.kyma-companion').as('companion');
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Reset"]')
-        .click();
+      cy.resetCompanion();
 
       cy.get('@companion')
         .find('.ai-busy-indicator')
@@ -191,11 +169,7 @@ context('Test Companion', () => {
 
     it('does not update suggestions if conversation has started, uses up-to-date sessionID', () => {
       cy.get('.kyma-companion').as('companion');
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(0)
-        .click();
+      cy.clickSuggestion(0);
 
       cy.wait('@getChatResponse').then(interception => {
         expect(interception.request.body).to.deep.equal({
@@ -224,31 +198,10 @@ context('Test Companion', () => {
 
   describe('error handling of initial suggestions', () => {
     it('default introductory message remains after suggestions are fetched', () => {
-      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [
-              'suggestion1',
-              'suggestion2',
-              'suggestion3',
-              'suggestion4',
-              'suggestion5',
-            ],
-            conversationId: 'id-1',
-          },
-        });
-      }).as('getPromptSuggestions');
-
+      cy.mockPromptSuggestions();
+      cy.closeCompanion();
+      cy.openCompanion();
       cy.get('.kyma-companion').as('companion');
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Close"]')
-        .click();
-
-      cy.get('ui5-shellbar')
-        .find('ui5-button[icon="da"]')
-        .should('be.visible')
-        .click();
 
       cy.get('@companion')
         .find('.chat-list')
@@ -280,14 +233,8 @@ context('Test Companion', () => {
       }).as('getPromptSuggestions');
 
       cy.get('.kyma-companion').as('companion');
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Close"]')
-        .click();
-
-      cy.get('ui5-shellbar')
-        .find('ui5-button[icon="da"]')
-        .should('be.visible')
-        .click();
+      cy.closeCompanion();
+      cy.openCompanion();
 
       cy.get('@companion')
         .find('.chat-list')
@@ -313,19 +260,7 @@ context('Test Companion', () => {
     });
 
     it('companion remains functional after error of fetching initial suggestions', () => {
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 100,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
+      cy.mockChatResponse();
       cy.intercept('POST', '/backend/ai-chat/followup', req => {
         req.reply({
           delay: 100,
@@ -342,12 +277,7 @@ context('Test Companion', () => {
         .find('.message-container')
         .should('have.length', 1);
 
-      cy.get('@companion')
-        .find('ui5-textarea[placeholder="Message Joule"]')
-        .find('textarea')
-        .should('be.visible')
-        .should('not.be.disabled')
-        .type('Test{enter}');
+      cy.sendPrompt('Test');
 
       cy.get('@companion')
         .find('.chat-list')
@@ -361,66 +291,22 @@ context('Test Companion', () => {
         .find('.message-container')
         .should('have.length', 3);
 
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Close"]')
-        .click();
+      cy.closeCompanion();
     });
   });
 
   describe('default chat behavior', () => {
     it('core chat functionality works correctly', () => {
-      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [
-              'suggestion1',
-              'suggestion2',
-              'suggestion3',
-              'suggestion4',
-              'suggestion5',
-            ],
-            conversationId: 'id-1',
-          },
-        });
-      }).as('getPromptSuggestions');
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
-      cy.intercept('POST', '/backend/ai-chat/followup', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [
-              'followup1',
-              'followup2',
-              'followup3',
-              'followup4',
-              'followup5',
-            ],
-          },
-        });
-      }).as('getFollowUpSuggestions');
+      cy.mockPromptSuggestions();
+      cy.mockChatResponse();
+      cy.mockFollowups();
 
       cy.navigateTo('Namespace Overview');
       cy.get('ui5-dynamic-page-title')
         .contains(Cypress.env('NAMESPACE_NAME'))
         .should('be.visible');
 
-      cy.get('ui5-shellbar')
-        .find('ui5-button[icon="da"]')
-        .should('be.visible')
-        .click();
+      cy.openCompanion();
       cy.get('.kyma-companion').as('companion');
 
       cy.get('@companion')
@@ -471,11 +357,7 @@ context('Test Companion', () => {
             .should('contain.text', `suggestion${index + 1}`);
         });
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(0)
-        .click();
+      cy.clickSuggestion(0);
 
       cy.get('@companion')
         .find('.chat-list > *')
@@ -501,7 +383,7 @@ context('Test Companion', () => {
           namespace: '',
           query: 'suggestion1',
         });
-        expect(interception.request.headers['session-id']).to.equal('id-1');
+        expect(interception.request.headers['session-id']).to.equal('test-id');
       });
       cy.wait(1000);
 
@@ -521,7 +403,7 @@ context('Test Companion', () => {
         .should('have.class', 'ai-busy-indicator');
 
       cy.wait('@getFollowUpSuggestions').then(interception => {
-        expect(interception.request.headers['session-id']).to.equal('id-1');
+        expect(interception.request.headers['session-id']).to.equal('test-id');
       });
       cy.wait(2500);
 
@@ -538,11 +420,7 @@ context('Test Companion', () => {
             .should('contain.text', `followup${index + 1}`);
         });
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(2)
-        .click();
+      cy.clickSuggestion(2);
 
       cy.get('@companion')
         .find('.chat-list > *')
@@ -568,7 +446,7 @@ context('Test Companion', () => {
           namespace: '',
           query: 'followup3',
         });
-        expect(interception.request.headers['session-id']).to.equal('id-1');
+        expect(interception.request.headers['session-id']).to.equal('test-id');
       });
       cy.wait(1000);
 
@@ -588,7 +466,7 @@ context('Test Companion', () => {
         .should('have.class', 'ai-busy-indicator');
 
       cy.wait('@getFollowUpSuggestions').then(interception => {
-        expect(interception.request.headers['session-id']).to.equal('id-1');
+        expect(interception.request.headers['session-id']).to.equal('test-id');
       });
       cy.wait(2500);
 
@@ -607,33 +485,8 @@ context('Test Companion', () => {
     });
 
     it('chat history remains when navigating', () => {
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
-      cy.intercept('POST', '/backend/ai-chat/followup', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [
-              'followup1',
-              'followup2',
-              'followup3',
-              'followup4',
-              'followup5',
-            ],
-          },
-        });
-      }).as('getFollowUpSuggestions');
+      cy.mockChatResponse();
+      cy.mockFollowups();
       cy.get('.kyma-companion').as('companion');
 
       cy.navigateTo('Configuration', 'Service Accounts');
@@ -693,40 +546,11 @@ context('Test Companion', () => {
     });
 
     it('context of requests updates after navigation', () => {
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
-      cy.intercept('POST', '/backend/ai-chat/followup', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [
-              'followup1',
-              'followup2',
-              'followup3',
-              'followup4',
-              'followup5',
-            ],
-          },
-        });
-      }).as('getFollowUpSuggestions');
+      cy.mockChatResponse();
+      cy.mockFollowups();
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(4)
-        .click();
+      cy.clickSuggestion(4);
 
       cy.get('@companion')
         .find('.chat-list > *')
@@ -751,7 +575,7 @@ context('Test Companion', () => {
           namespace: Cypress.env('NAMESPACE_NAME'),
           query: 'followup5',
         });
-        expect(interception.request.headers['session-id']).to.equal('id-1');
+        expect(interception.request.headers['session-id']).to.equal('test-id');
       });
       cy.wait(1000);
     });
@@ -774,9 +598,7 @@ context('Test Companion', () => {
       }).as('getPromptSuggestions');
 
       cy.get('.kyma-companion').as('companion');
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Reset"]')
-        .click();
+      cy.resetCompanion();
 
       cy.get('@companion')
         .find('.chat-list > *')
@@ -818,53 +640,12 @@ context('Test Companion', () => {
     });
 
     it('disables input and reset button while loading', () => {
-      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [
-              `suggestion1`,
-              `suggestion2`,
-              `suggestion3`,
-              `suggestion4`,
-              `suggestion5`,
-            ],
-            conversationId: `test-id`,
-          },
-        });
-      }).as('getPromptSuggestions');
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
-      cy.intercept('POST', '/backend/ai-chat/followup', req => {
-        req.reply({
-          delay: 1500,
-          body: {
-            promptSuggestions: [
-              'followup1',
-              'followup2',
-              'followup3',
-              'followup4',
-              'followup5',
-            ],
-          },
-        });
-      }).as('getFollowUpSuggestions');
+      cy.mockPromptSuggestions();
+      cy.mockChatResponse();
+      cy.mockFollowups();
 
       cy.get('.kyma-companion').as('companion');
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Reset"]')
-        .click();
+      cy.resetCompanion();
 
       cy.get('@companion')
         .find('ui5-textarea[placeholder="Message Joule"]')
@@ -891,14 +672,8 @@ context('Test Companion', () => {
         .should('be.visible')
         .should('not.be.disabled');
 
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Close"]')
-        .click();
-
-      cy.get('ui5-shellbar')
-        .find('ui5-button[icon="da"]')
-        .should('be.visible')
-        .click();
+      cy.closeCompanion();
+      cy.openCompanion();
 
       cy.get('@companion')
         .find('ui5-textarea[placeholder="Message Joule"]')
@@ -925,11 +700,7 @@ context('Test Companion', () => {
         .should('be.visible')
         .should('not.be.disabled');
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(3)
-        .click();
+      cy.clickSuggestion(3);
 
       cy.get('@companion')
         .find('ui5-textarea[placeholder="Message Joule"]')
@@ -974,15 +745,7 @@ context('Test Companion', () => {
 
   describe('streaming behavior', () => {
     it('two pending tasks', () => {
-      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [`suggestion1`, `suggestion2`, `suggestion3`],
-            conversationId: `test-id`,
-          },
-        });
-      }).as('getPromptSuggestions');
+      cy.mockPromptSuggestions();
       cy.intercept('POST', '/backend/ai-chat/messages', req => {
         req.reply({
           delay: 500,
@@ -1023,11 +786,7 @@ context('Test Companion', () => {
       }).as('getFollowUpSuggestions');
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(0)
-        .click();
+      cy.clickSuggestion(0);
 
       cy.get('@companion')
         .find('.tasks-list')
@@ -1055,29 +814,15 @@ context('Test Companion', () => {
 
       cy.wrap(followupCallCount).should('eq', 0);
 
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Close"]')
-        .click();
-
-      cy.get('ui5-shellbar')
-        .find('ui5-button[icon="da"]')
-        .should('be.visible')
-        .click();
+      cy.closeCompanion();
+      cy.openCompanion();
 
       cy.wait('@getPromptSuggestions');
       cy.wait(1000);
     });
 
     it('one pending task, one completed task', () => {
-      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [`suggestion1`, `suggestion2`, `suggestion3`],
-            conversationId: `test-id`,
-          },
-        });
-      }).as('getPromptSuggestions');
+      cy.mockPromptSuggestions();
       cy.intercept('POST', '/backend/ai-chat/messages', req => {
         req.reply({
           delay: 500,
@@ -1118,11 +863,7 @@ context('Test Companion', () => {
       }).as('getFollowUpSuggestions');
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(0)
-        .click();
+      cy.clickSuggestion(0);
 
       cy.get('@companion')
         .find('.tasks-list')
@@ -1157,29 +898,15 @@ context('Test Companion', () => {
 
       cy.wrap(followupCallCount).should('eq', 0);
 
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Close"]')
-        .click();
-
-      cy.get('ui5-shellbar')
-        .find('ui5-button[icon="da"]')
-        .should('be.visible')
-        .click();
+      cy.closeCompanion();
+      cy.openCompanion();
 
       cy.wait('@getPromptSuggestions');
       cy.wait(1000);
     });
 
     it('two completed tasks', () => {
-      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [`suggestion1`, `suggestion2`, `suggestion3`],
-            conversationId: `test-id`,
-          },
-        });
-      }).as('getPromptSuggestions');
+      cy.mockPromptSuggestions();
       cy.intercept('POST', '/backend/ai-chat/messages', req => {
         req.reply({
           delay: 500,
@@ -1220,11 +947,7 @@ context('Test Companion', () => {
       }).as('getFollowUpSuggestions');
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(0)
-        .click();
+      cy.clickSuggestion(0);
 
       cy.get('@companion')
         .find('.tasks-list')
@@ -1272,28 +995,8 @@ context('Test Companion', () => {
 
   describe('error handling of messages and followups', () => {
     it('error handling of followups', () => {
-      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [`suggestion1`, `suggestion2`, `suggestion3`],
-            conversationId: `test-id`,
-          },
-        });
-      }).as('getPromptSuggestions');
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
+      cy.mockPromptSuggestions();
+      cy.mockChatResponse();
       cy.intercept('POST', '/backend/ai-chat/followup', req => {
         req.reply({
           statusCode: 500,
@@ -1304,21 +1007,11 @@ context('Test Companion', () => {
       }).as('getFollowUpSuggestions');
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Close"]')
-        .click();
-
-      cy.get('ui5-shellbar')
-        .find('ui5-button[icon="da"]')
-        .should('be.visible')
-        .click();
+      cy.closeCompanion();
+      cy.openCompanion();
       cy.wait('@getPromptSuggestions');
 
-      cy.get('@companion')
-        .find('.bubbles-container')
-        .find('ui5-button.bubble-button')
-        .eq(0)
-        .click();
+      cy.clickSuggestion(0);
 
       cy.wait('@getChatResponse');
       cy.wait('@getFollowUpSuggestions');
@@ -1335,12 +1028,7 @@ context('Test Companion', () => {
         .find('ui5-icon[name="error"]')
         .should('be.visible');
 
-      cy.get('@companion')
-        .find('ui5-textarea[placeholder="Message Joule"]')
-        .find('textarea')
-        .should('be.visible')
-        .should('not.be.disabled')
-        .type('Test{enter}');
+      cy.sendPrompt('Test');
 
       cy.wait('@getChatResponse');
       cy.wait('@getFollowUpSuggestions');
@@ -1355,15 +1043,7 @@ context('Test Companion', () => {
     });
 
     it('error handling of messages', () => {
-      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: [`suggestion1`, `suggestion2`, `suggestion3`],
-            conversationId: `test-id`,
-          },
-        });
-      }).as('getPromptSuggestions');
+      cy.mockPromptSuggestions();
       cy.intercept('POST', '/backend/ai-chat/messages', req => {
         req.reply({
           statusCode: 500,
@@ -1372,28 +1052,14 @@ context('Test Companion', () => {
           },
         });
       }).as('getChatResponse');
-      cy.intercept('POST', '/backend/ai-chat/followup', req => {
-        req.reply({
-          delay: 500,
-          body: {
-            promptSuggestions: ['followup1', 'followup2', 'followup3'],
-          },
-        });
-      }).as('getFollowUpSuggestions');
+      cy.mockFollowups();
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Reset"]')
-        .click();
+      cy.resetCompanion();
       cy.wait('@getPromptSuggestions');
       cy.wait(1000);
 
-      cy.get('@companion')
-        .find('ui5-textarea[placeholder="Message Joule"]')
-        .find('textarea')
-        .should('be.visible')
-        .should('not.be.disabled')
-        .type('Test{enter}');
+      cy.sendPrompt('Test');
 
       cy.wait('@getChatResponse');
       cy.wait(1000);
@@ -1413,26 +1079,9 @@ context('Test Companion', () => {
         .find('ui5-button[design="Emphasized"]')
         .should('not.exist');
 
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 100,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
+      cy.mockChatResponse();
 
-      cy.get('@companion')
-        .find('ui5-textarea[placeholder="Message Joule"]')
-        .find('textarea')
-        .should('be.visible')
-        .should('not.be.disabled')
-        .type('Test{enter}');
+      cy.sendPrompt('Test');
 
       cy.get('@companion')
         .find('.message-error')
@@ -1470,18 +1119,11 @@ context('Test Companion', () => {
           },
         });
       }).as('getChatResponse');
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Reset"]')
-        .click();
+      cy.resetCompanion();
       cy.wait('@getPromptSuggestions');
       cy.wait(1000);
 
-      cy.get('@companion')
-        .find('ui5-textarea[placeholder="Message Joule"]')
-        .find('textarea')
-        .should('be.visible')
-        .should('not.be.disabled')
-        .type('Test{enter}');
+      cy.sendPrompt('Test');
 
       cy.wait('@getChatResponse');
       cy.wait(1000);
@@ -1527,18 +1169,11 @@ context('Test Companion', () => {
           },
         });
       }).as('getChatResponse');
-      cy.get('@companion')
-        .find('ui5-button[tooltip="Reset"]')
-        .click();
+      cy.resetCompanion();
       cy.wait('@getPromptSuggestions');
       cy.wait(1000);
 
-      cy.get('@companion')
-        .find('ui5-textarea[placeholder="Message Joule"]')
-        .find('textarea')
-        .should('be.visible')
-        .should('not.be.disabled')
-        .type('Test{enter}');
+      cy.sendPrompt('Test');
 
       cy.wait('@getChatResponse');
       cy.wait(1000);
@@ -1547,19 +1182,7 @@ context('Test Companion', () => {
         .find('.chat-list > .message-container')
         .should('have.length', 2);
 
-      cy.intercept('POST', '/backend/ai-chat/messages', req => {
-        req.reply({
-          delay: 100,
-          body: {
-            data: {
-              answer: {
-                content: 'Hello, this is an AI response',
-                next: '__end__',
-              },
-            },
-          },
-        });
-      }).as('getChatResponse');
+      cy.mockChatResponse();
 
       cy.get('@companion')
         .find('.chat-list')
