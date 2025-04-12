@@ -128,17 +128,17 @@ describe('extractYamlBlocks', () => {
     expect(result.end).toEqual(10);
   });
 });
-/*
+
 describe('formatMessage', () => {
   it('formats plain markdown text', () => {
     const text = 'Hello, **world**!';
-    const themeClass = 'light-theme';
+    const themeClass = 'light';
     const result = formatMessage(text, themeClass);
 
     expect(result).toHaveLength(1);
     const div = result[0];
     expect(div.type).toBe('div');
-    expect(div.props.className).toBe('light-theme');
+    expect(div.props.className).toBe('light');
     const markdown = div.props.children;
     expect(markdown.type).toBe(Markdown);
     expect(markdown.props.renderer).toBe(UI5Renderer);
@@ -154,13 +154,13 @@ kind: Pod
 \`\`\`
 </div>
     `.trim();
-    const themeClass = 'dark-theme';
+    const themeClass = 'dark';
     const result = formatMessage(text, themeClass);
 
     expect(result).toHaveLength(1);
     const div = result[0];
     expect(div.type).toBe('div');
-    expect(div.props.className).toBe('dark-theme');
+    expect(div.props.className).toBe('dark');
     const codePanel = div.props.children;
     expect(codePanel.type).toBe(CodePanel);
     expect(codePanel.props).toEqual({
@@ -181,13 +181,13 @@ kind: Pod
 <div class="link" link-type="Update">[Update Pod](http://example.com)</div>
 </div>
     `.trim();
-    const themeClass = 'dark-theme';
+    const themeClass = 'dark';
     const result = formatMessage(text, themeClass);
 
     expect(result).toHaveLength(1);
     const div = result[0];
     expect(div.type).toBe('div');
-    expect(div.props.className).toBe('dark-theme');
+    expect(div.props.className).toBe('dark');
     const codePanel = div.props.children;
     expect(codePanel.type).toBe(CodePanel);
     expect(codePanel.props).toEqual({
@@ -215,7 +215,7 @@ kind: Pod
 
 And some text after.
     `.trim();
-    const themeClass = 'light-theme';
+    const themeClass = 'light';
     const result = formatMessage(text, themeClass);
 
     expect(result).toHaveLength(3);
@@ -223,7 +223,7 @@ And some text after.
     // First part: markdown text
     const div1 = result[0];
     expect(div1.type).toBe('div');
-    expect(div1.props.className).toBe('light-theme');
+    expect(div1.props.className).toBe('light');
     const markdown1 = div1.props.children;
     expect(markdown1.type).toBe(Markdown);
     expect(markdown1.props.renderer).toBe(UI5Renderer);
@@ -232,7 +232,7 @@ And some text after.
     // Second part: YAML block
     const div2 = result[1];
     expect(div2.type).toBe('div');
-    expect(div2.props.className).toBe('light-theme');
+    expect(div2.props.className).toBe('light');
     const codePanel = div2.props.children;
     expect(codePanel.type).toBe(CodePanel);
     expect(codePanel.props).toEqual({
@@ -245,7 +245,7 @@ And some text after.
     // Third part: markdown text
     const div3 = result[2];
     expect(div3.type).toBe('div');
-    expect(div3.props.className).toBe('light-theme');
+    expect(div3.props.className).toBe('light');
     const markdown2 = div3.props.children;
     expect(markdown2.type).toBe(Markdown);
     expect(markdown2.props.renderer).toBe(UI5Renderer);
@@ -254,9 +254,9 @@ And some text after.
 
   it('handles empty string', () => {
     const text = '';
-    const themeClass = 'light-theme';
+    const themeClass = 'light';
     const result = formatMessage(text, themeClass);
 
     expect(result).toHaveLength(0);
   });
-});*/
+});
