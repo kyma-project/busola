@@ -1270,6 +1270,337 @@ context('Test Companion', () => {
     });
   });
 
+  describe('error handling of messages and followups', () => {
+    it('error handling of followups', () => {
+      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
+        req.reply({
+          delay: 500,
+          body: {
+            promptSuggestions: [`suggestion1`, `suggestion2`, `suggestion3`],
+            conversationId: `test-id`,
+          },
+        });
+      }).as('getPromptSuggestions');
+      cy.intercept('POST', '/backend/ai-chat/messages', req => {
+        req.reply({
+          delay: 500,
+          body: {
+            data: {
+              answer: {
+                content: 'Hello, this is an AI response',
+                next: '__end__',
+              },
+            },
+          },
+        });
+      }).as('getChatResponse');
+      cy.intercept('POST', '/backend/ai-chat/followup', req => {
+        req.reply({
+          statusCode: 500,
+          body: {
+            error: 'Internal Server Error',
+          },
+        });
+      }).as('getFollowUpSuggestions');
+      cy.get('.kyma-companion').as('companion');
+
+      cy.get('@companion')
+        .find('ui5-button[tooltip="Close"]')
+        .click();
+
+      cy.get('ui5-shellbar')
+        .find('ui5-button[icon="da"]')
+        .should('be.visible')
+        .click();
+      cy.wait('@getPromptSuggestions');
+
+      cy.get('@companion')
+        .find('.bubbles-container')
+        .find('ui5-button.bubble-button')
+        .eq(0)
+        .click();
+
+      cy.wait('@getChatResponse');
+      cy.wait('@getFollowUpSuggestions');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('.chat-list > .message-container')
+        .should('have.length', 3)
+        .eq(2)
+        .find('.message-error')
+        .should('be.visible')
+        .should('have.class', 'left-aligned')
+        .should('contain.text', 'No suggestions available')
+        .find('ui5-icon[name="error"]')
+        .should('be.visible');
+
+      cy.get('@companion')
+        .find('ui5-textarea[placeholder="Message Joule"]')
+        .find('textarea')
+        .should('be.visible')
+        .should('not.be.disabled')
+        .type('Test{enter}');
+
+      cy.wait('@getChatResponse');
+      cy.wait('@getFollowUpSuggestions');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('.chat-list > .message-container')
+        .should('have.length', 5)
+        .eq(2)
+        .find('.message-error')
+        .should('not.exist');
+    });
+
+    it('error handling of messages', () => {
+      cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
+        req.reply({
+          delay: 500,
+          body: {
+            promptSuggestions: [`suggestion1`, `suggestion2`, `suggestion3`],
+            conversationId: `test-id`,
+          },
+        });
+      }).as('getPromptSuggestions');
+      cy.intercept('POST', '/backend/ai-chat/messages', req => {
+        req.reply({
+          statusCode: 500,
+          body: {
+            error: 'Internal Server Error',
+          },
+        });
+      }).as('getChatResponse');
+      cy.intercept('POST', '/backend/ai-chat/followup', req => {
+        req.reply({
+          delay: 500,
+          body: {
+            promptSuggestions: ['followup1', 'followup2', 'followup3'],
+          },
+        });
+      }).as('getFollowUpSuggestions');
+      cy.get('.kyma-companion').as('companion');
+
+      cy.get('@companion')
+        .find('ui5-button[tooltip="Reset"]')
+        .click();
+      cy.wait('@getPromptSuggestions');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('ui5-textarea[placeholder="Message Joule"]')
+        .find('textarea')
+        .should('be.visible')
+        .should('not.be.disabled')
+        .type('Test{enter}');
+
+      cy.wait('@getChatResponse');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('.chat-list > .message-container')
+        .should('have.length', 2);
+
+      cy.get('@companion')
+        .find('.chat-list')
+        .find('ui5-illustrated-message')
+        .should(
+          'contain.text',
+          'A temporary interruption occured. Please try again.',
+        )
+        .should('be.visible')
+        .find('ui5-button[design="Emphasized"]')
+        .should('not.exist');
+
+      cy.intercept('POST', '/backend/ai-chat/messages', req => {
+        req.reply({
+          delay: 100,
+          body: {
+            data: {
+              answer: {
+                content: 'Hello, this is an AI response',
+                next: '__end__',
+              },
+            },
+          },
+        });
+      }).as('getChatResponse');
+
+      cy.get('@companion')
+        .find('ui5-textarea[placeholder="Message Joule"]')
+        .find('textarea')
+        .should('be.visible')
+        .should('not.be.disabled')
+        .type('Test{enter}');
+
+      cy.get('@companion')
+        .find('.message-error')
+        .should('have.length', 1);
+      cy.get('@companion')
+        .find('.chat-list > .message-container')
+        .should('have.length', 4)
+        .eq(1)
+        .find('.message-error')
+        .should('be.visible')
+        .should('have.class', 'right-aligned')
+        .should('contain.text', 'An error occurred')
+        .find('ui5-icon[name="error"]')
+        .should('be.visible');
+
+      cy.intercept('POST', '/backend/ai-chat/messages', req => {
+        req.reply({
+          delay: 100,
+          body: {
+            data: {
+              answer: {
+                content: 'This is a custom error message',
+                tasks: [
+                  {
+                    task_id: 0,
+                    task_name: 'Performing step 1',
+                    status: 'error',
+                    agent: 'agent1',
+                  },
+                ],
+                next: '__end__',
+              },
+              error: 'error',
+            },
+          },
+        });
+      }).as('getChatResponse');
+      cy.get('@companion')
+        .find('ui5-button[tooltip="Reset"]')
+        .click();
+      cy.wait('@getPromptSuggestions');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('ui5-textarea[placeholder="Message Joule"]')
+        .find('textarea')
+        .should('be.visible')
+        .should('not.be.disabled')
+        .type('Test{enter}');
+
+      cy.wait('@getChatResponse');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('.chat-list > .message-container')
+        .should('have.length', 2);
+
+      cy.get('@companion')
+        .find('.chat-list')
+        .find('ui5-illustrated-message')
+        .should('contain.text', 'This is a custom error message')
+        .should('be.visible')
+        .find('ui5-button[design="Emphasized"]')
+        .should('contain.text', 'Retry')
+        .should('be.visible');
+
+      cy.intercept('POST', '/backend/ai-chat/messages', req => {
+        req.reply({
+          delay: 100,
+          body: {
+            data: {
+              answer: {
+                content: 'This is a custom error message',
+                tasks: [
+                  {
+                    task_id: 0,
+                    task_name: 'Performing step 1',
+                    status: 'error',
+                    agent: 'agent1',
+                  },
+                  {
+                    task_id: 1,
+                    task_name: 'Performing step 2',
+                    status: 'error',
+                    agent: 'agent2',
+                  },
+                ],
+                next: '__end__',
+              },
+              error: null,
+            },
+          },
+        });
+      }).as('getChatResponse');
+      cy.get('@companion')
+        .find('ui5-button[tooltip="Reset"]')
+        .click();
+      cy.wait('@getPromptSuggestions');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('ui5-textarea[placeholder="Message Joule"]')
+        .find('textarea')
+        .should('be.visible')
+        .should('not.be.disabled')
+        .type('Test{enter}');
+
+      cy.wait('@getChatResponse');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('.chat-list > .message-container')
+        .should('have.length', 2);
+
+      cy.intercept('POST', '/backend/ai-chat/messages', req => {
+        req.reply({
+          delay: 100,
+          body: {
+            data: {
+              answer: {
+                content: 'Hello, this is an AI response',
+                next: '__end__',
+              },
+            },
+          },
+        });
+      }).as('getChatResponse');
+
+      cy.get('@companion')
+        .find('.chat-list')
+        .find('ui5-illustrated-message')
+        .should('contain.text', 'This is a custom error message')
+        .should('be.visible')
+        .find('ui5-button[design="Emphasized"]')
+        .should('contain.text', 'Retry')
+        .click();
+
+      cy.wait('@getChatResponse').then(interception => {
+        expect(interception.request.body.query).to.equal('Test');
+      });
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('.chat-list > .message-container')
+        .should('have.length', 3);
+
+      cy.get('@companion')
+        .find('.chat-list > .message-container')
+        .eq(1)
+        .should('be.visible')
+        .should('have.class', 'message-container')
+        .should('have.class', 'right-aligned')
+        .should('contain.text', 'Test');
+
+      cy.get('@companion')
+        .find('.chat-list > *')
+        .eq(2)
+        .should('be.visible')
+        .should('have.class', 'left-aligned')
+        .should('contain.text', 'Hello, this is an AI response');
+
+      cy.get('@companion')
+        .find('.chat-list')
+        .find('ui5-illustrated-message')
+        .should('not.exist');
+    });
+  });
+
   describe('fullscreen button', () => {
     it('enters fullscreen correctly', () => {
       cy.get('.kyma-companion').as('companion');
