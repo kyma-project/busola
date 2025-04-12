@@ -197,7 +197,7 @@ context('Test Companion', () => {
   });
 
   describe('error handling of initial suggestions', () => {
-    it('default introductory message remains after suggestions are fetched', () => {
+    it('default introductory message remains the same after suggestions are fetched', () => {
       cy.mockPromptSuggestions();
       cy.closeCompanion();
       cy.openCompanion();
@@ -272,24 +272,15 @@ context('Test Companion', () => {
 
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('@companion')
-        .find('.chat-list')
-        .find('.message-container')
-        .should('have.length', 1);
+      cy.testChatLength(1);
 
       cy.sendPrompt('Test');
 
-      cy.get('@companion')
-        .find('.chat-list')
-        .find('.message-container')
-        .should('have.length', 2);
+      cy.testChatLength(2);
 
       cy.wait('@getChatResponse');
 
-      cy.get('@companion')
-        .find('.chat-list')
-        .find('.message-container')
-        .should('have.length', 3);
+      cy.testChatLength(3);
 
       cy.closeCompanion();
     });
@@ -1064,9 +1055,7 @@ context('Test Companion', () => {
       cy.wait('@getChatResponse');
       cy.wait(1000);
 
-      cy.get('@companion')
-        .find('.chat-list > .message-container')
-        .should('have.length', 2);
+      cy.testChatLength(2);
 
       cy.get('@companion')
         .find('.chat-list')
@@ -1128,9 +1117,7 @@ context('Test Companion', () => {
       cy.wait('@getChatResponse');
       cy.wait(1000);
 
-      cy.get('@companion')
-        .find('.chat-list > .message-container')
-        .should('have.length', 2);
+      cy.testChatLength(2);
 
       cy.get('@companion')
         .find('.chat-list')
@@ -1178,9 +1165,7 @@ context('Test Companion', () => {
       cy.wait('@getChatResponse');
       cy.wait(1000);
 
-      cy.get('@companion')
-        .find('.chat-list > .message-container')
-        .should('have.length', 2);
+      cy.testChatLength(2);
 
       cy.mockChatResponse();
 
@@ -1198,9 +1183,7 @@ context('Test Companion', () => {
       });
       cy.wait(1000);
 
-      cy.get('@companion')
-        .find('.chat-list > .message-container')
-        .should('have.length', 3);
+      cy.testChatLength(3);
 
       cy.get('@companion')
         .find('.chat-list > .message-container')

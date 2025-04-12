@@ -33,6 +33,13 @@ Cypress.Commands.add('clickSuggestion', index => {
     .click();
 });
 
+Cypress.Commands.add('testChatLength', length => {
+  cy.get('.kyma-companion')
+    .find('.chat-list')
+    .find('.message-container')
+    .should('have.length', length);
+});
+
 Cypress.Commands.add('mockPromptSuggestions', () => {
   cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
     req.reply({
