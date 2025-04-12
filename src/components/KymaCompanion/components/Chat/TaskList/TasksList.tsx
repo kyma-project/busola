@@ -47,7 +47,6 @@ export default function TasksList({
                     <span className="ai-steps-loader" />
                   )}
                   <Label className="text">{task?.task_name}</Label>
-                  <div className="loading-status" />
                 </FlexBox>
               );
             },
@@ -62,7 +61,6 @@ export default function TasksList({
               <Label className="text">
                 {t('kyma-companion.opener.preparing-final-answer')}
               </Label>
-              <div className="loading-status" />
             </FlexBox>
           )}
         </>

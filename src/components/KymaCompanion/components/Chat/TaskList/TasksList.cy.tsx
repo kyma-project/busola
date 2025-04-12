@@ -233,7 +233,7 @@ describe('TasksList Component', () => {
     );
     cy.get('.loading-item').should('have.css', 'align-items', 'center');
     cy.get('.text').should('exist');
-    cy.get('.loading-status').should('exist');
+    cy.get('.ai-steps-loader').should('exist');
   });
 
   it('handles undefined tasks gracefully', () => {
