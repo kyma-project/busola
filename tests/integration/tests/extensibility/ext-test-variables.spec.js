@@ -65,20 +65,14 @@ context('Test extensibility variables', () => {
       .contains('Namespaces')
       .click();
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.wait(500)
+      .get('ui5-input[id="search-input"]:visible')
       .find('input')
-      .wait(1000)
       .type(NAMESPACE);
 
     cy.clickGenericListLink(NAMESPACE);
 
-    cy.getLeftNav()
-      .contains('Testin')
-      .click();
-
-    cy.getLeftNav()
-      .contains(/^Test Resources$/)
-      .click();
+    cy.navigateTo('Testin', 'Test Resources');
 
     cy.openCreate();
   });
