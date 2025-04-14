@@ -24,7 +24,7 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ModulesListRows } from './ModulesListRows';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 type CustomResourceDefinitionsType = {
   items: {

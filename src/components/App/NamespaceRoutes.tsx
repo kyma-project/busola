@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, useParams } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 

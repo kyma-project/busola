@@ -16,7 +16,7 @@ import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from '../../state/formOpenAtom';
 import { isResourceEditedState } from '../../state/resourceEditedAtom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 export default function BusolaExtensionCreate({
   formElementRef,

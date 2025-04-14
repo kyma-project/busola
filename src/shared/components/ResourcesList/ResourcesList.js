@@ -26,7 +26,7 @@ import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),

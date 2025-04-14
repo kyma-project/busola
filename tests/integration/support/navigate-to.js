@@ -1,13 +1,19 @@
 Cypress.Commands.add('navigateTo', (leftNav, resource) => {
-  cy.getLeftNav()
+  cy.wait(1500)
+    .getLeftNav()
     .get(`ui5-side-navigation-item[text="${leftNav}"]`)
-    .should('be.visible')
-    .click();
+    .as('btn-1')
+    .should('be.visible');
+
+  cy.get('@btn-1').click();
 
   if (resource) {
     cy.getLeftNav()
       .get(`ui5-side-navigation-sub-item[text="${resource}"]`)
-      .should('be.visible')
-      .click();
+      .as('btn-2')
+      .should('be.visible');
+
+    cy.get('@btn-2').click();
   }
+  cy.wait(500);
 });
