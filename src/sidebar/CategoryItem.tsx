@@ -7,7 +7,11 @@ import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAto
 
 import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { NavItem } from './NavItem';
-import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
+import {
+  DataSources,
+  DataSourcesContextProvider,
+} from 'components/Extensibility/contexts/DataSources';
+import { cloneDeep } from 'lodash';
 
 type CategoryItemProps = {
   category: Category;
@@ -41,10 +45,26 @@ export function CategoryItem({
     }
   };
 
+  const handleEmptyNamespace = (dataSources: DataSources) => {
+    // Some data is available only on a certain namespace. If we don't have a given namespace, we can still get it on all namespaces.
+    let clonedDataSources = cloneDeep(dataSources);
+    Object.keys(clonedDataSources).forEach(key => {
+      if (clonedDataSources?.[key]?.resource) {
+        clonedDataSources[key].resource = {
+          ...clonedDataSources[key]?.resource,
+          namespace: clonedDataSources[key]?.resource?.namespace ?? '-all-',
+        };
+      }
+    });
+    return clonedDataSources;
+  };
+
   const children = category.items?.map((nn, i) => (
     <React.Fragment key={`${nn.pathSegment}-fragment-${i}`}>
       {nn.dataSources ? (
-        <DataSourcesContextProvider dataSources={nn.dataSources}>
+        <DataSourcesContextProvider
+          dataSources={handleEmptyNamespace(nn.dataSources)}
+        >
           <NavItem
             node={nn}
             key={`${nn.pathSegment}-nav-item-${i}`}
