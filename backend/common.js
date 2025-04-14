@@ -144,7 +144,7 @@ export const makeHandleRequest = () => {
 function respondWithBadContent(res, id) {
   res.contentType('text/plain; charset=utf-8');
   res
-    .status(400)
+    .status(415)
     .send('Bad request. Invalid content type. Request ID: ' + escape(id));
 }
 
