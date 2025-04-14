@@ -62,6 +62,7 @@ jobs:
           path: tests/integration/cypress
           retention-days: 90
       - name: Fetch busola k3d logs
+        if: ${{ always() }}
         run: |
           kubectl logs deployments/busola > busola-deploy.log
       - name: Upload Kyma Dashboard logs
