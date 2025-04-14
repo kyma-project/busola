@@ -11,7 +11,7 @@ import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { hasNonOidcAuth } from 'state/authDataAtom';
 import { createUserManager } from 'state/authDataAtom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';

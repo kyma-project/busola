@@ -59,30 +59,23 @@ export function CategoryItem({
     return clonedDataSources;
   };
 
-  const children = category.items?.map((nn, i) => (
-    <React.Fragment key={`${nn.pathSegment}-fragment-${i}`}>
+  const children = category.items?.map((nn, index) => (
+    <React.Fragment key={`${nn.pathSegment}-${index}`}>
       {nn.dataSources ? (
         <DataSourcesContextProvider
           dataSources={handleEmptyNamespace(nn.dataSources)}
         >
-          <NavItem
-            node={nn}
-            key={`${nn.pathSegment}-nav-item-${i}`}
-            subItem={true}
-          />
+          <NavItem node={nn} key={nn.pathSegment} subItem={true} />
         </DataSourcesContextProvider>
       ) : (
-        <NavItem
-          node={nn}
-          key={`${nn.pathSegment}-nav-item-${i}`}
-          subItem={true}
-        />
+        <NavItem node={nn} key={nn.pathSegment} subItem={true} />
       )}
     </React.Fragment>
   ));
 
   return (
     <SideNavigationItem
+      unselectable
       key={expanded + category.key}
       expanded={expanded}
       selected={false}

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const CRDetails = React.lazy(() =>
