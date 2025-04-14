@@ -1,12 +1,12 @@
-const fetch = require('node-fetch');
-const URL = require('url').URL;
-const fs = require('fs');
-const jsyaml = require('js-yaml');
+import fetch from 'node-fetch';
+import { URL } from 'url';
+import { readFile, lstatSync, readdirSync } from 'fs';
+import { load, dump } from 'js-yaml';
 
-const gulp = require('gulp');
-const through2 = require('through2');
-const concat = require('gulp-concat');
-const clean = require('gulp-clean');
+import { task, src, dest } from 'gulp';
+import { obj as _obj } from 'through2';
+import concat from 'gulp-concat';
+import clean from 'gulp-clean';
 
 const mapValues = (obj, fn) =>
   Object.fromEntries(
@@ -21,12 +21,12 @@ const isUrl = str => {
   }
 };
 
-const loadExtensions = through2.obj(async function(extensionsFile, _, cb) {
+const loadExtensions = _obj(async function(extensionsFile, _, cb) {
   const list = JSON.parse(extensionsFile.contents.toString());
 
   const readLocalFile = filePath =>
     new Promise((resolve, reject) =>
-      fs.readFile(filePath, (err, data) => {
+      readFile(filePath, (err, data) => {
         if (err) {
           reject(err);
         } else {
@@ -50,9 +50,8 @@ const loadExtensions = through2.obj(async function(extensionsFile, _, cb) {
     if (isUrl(source)) {
       return readExternalFile(source);
     } else {
-      if (fs.lstatSync(source).isDirectory()) {
-        return fs
-          .readdirSync(source)
+      if (lstatSync(source).isDirectory()) {
+        return readdirSync(source)
           .map(name => readLocalFile(source + '/' + name));
       } else {
         return readLocalFile(source);
@@ -71,9 +70,9 @@ const loadExtensions = through2.obj(async function(extensionsFile, _, cb) {
   cb();
 });
 
-const loadPreparedExtensions = through2.obj((file, _, cb) => {
+const loadPreparedExtensions = _obj((file, _, cb) => {
   const convertYamlToObject = yamlString => {
-    return jsyaml.load(yamlString, { json: true });
+    return load(yamlString, { json: true });
   };
 
   const checkExtensionVersion = metadata => {
@@ -87,102 +86,93 @@ const loadPreparedExtensions = through2.obj((file, _, cb) => {
     }
   };
 
-  const { data, metadata } = jsyaml.load(file.contents.toString());
+  const { data, metadata } = load(file.contents.toString());
 
   checkExtensionVersion(metadata);
 
   file.contents = Buffer.from(
-    jsyaml.dump(mapValues(data, convertYamlToObject)),
+    dump(mapValues(data, convertYamlToObject)),
   );
   cb(null, file);
 });
 
-gulp.task('clean-extensions', () => {
+task('clean-extensions', () => {
   const env = process.env.ENV;
-  return gulp
-    .src(`environments/temp/${env}/extensions-local`, {
+  return src(`environments/temp/${env}/extensions-local`, {
       read: false,
       allowEmpty: true,
     })
     .pipe(clean({ force: true }));
 });
 
-gulp.task('get-extensions', () => {
-  return gulp
-    .src(`environments/${process.env.ENV}/extensions.json`)
+task('get-extensions', () => {
+  return src(`environments/${process.env.ENV}/extensions.json`)
     .pipe(loadExtensions)
-    .pipe(gulp.dest(`temp/${process.env.ENV}/extensions-local/-/-`)); // gulp strips the 2 last path components?
+    .pipe(dest(`temp/${process.env.ENV}/extensions-local/-/-`)); // gulp strips the 2 last path components?
 });
 
-gulp.task('pack-extensions', () => {
+task('pack-extensions', () => {
   const env = process.env.ENV;
-  return gulp
-    .src(`temp/${env}/extensions-local/**/*.yaml`)
+  return src(`temp/${env}/extensions-local/**/*.yaml`)
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('extensions.yaml', {
         newLine: '---\n',
       }),
     )
-    .pipe(gulp.dest(`build/${env}/extensions`));
+    .pipe(dest(`build/${env}/extensions`));
 });
 
-gulp.task('clean-statics', () => {
+task('clean-statics', () => {
   const env = process.env.ENV;
-  return gulp
-    .src(`environments/temp/${env}/extensions/statics-local`, {
+  return src(`environments/temp/${env}/extensions/statics-local`, {
       read: false,
       allowEmpty: true,
     })
     .pipe(clean());
 });
 
-gulp.task('get-statics', () => {
-  return gulp
-    .src(`environments/${process.env.ENV}/statics.json`)
+task('get-statics', () => {
+  return src(`environments/${process.env.ENV}/statics.json`)
     .pipe(loadExtensions)
-    .pipe(gulp.dest(`temp/${process.env.ENV}/statics-local/-/-`)); // gulp strips the 2 last path components?
+    .pipe(dest(`temp/${process.env.ENV}/statics-local/-/-`)); // gulp strips the 2 last path components?
 });
 
-gulp.task('pack-statics', () => {
+task('pack-statics', () => {
   const env = process.env.ENV;
-  return gulp
-    .src(`temp/${env}/statics-local/**/*.yaml`)
+  return src(`temp/${env}/statics-local/**/*.yaml`)
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('statics.yaml', {
         newLine: '---\n',
       }),
     )
-    .pipe(gulp.dest(`build${env}/extensions`));
+    .pipe(dest(`build${env}/extensions`));
 });
 
-gulp.task('clean-wizards', () => {
+task('clean-wizards', () => {
   const env = process.env.ENV;
-  return gulp
-    .src(`environments/temp/${env}/extensions/wizards-local`, {
+  return src(`environments/temp/${env}/extensions/wizards-local`, {
       read: false,
       allowEmpty: true,
     })
     .pipe(clean());
 });
 
-gulp.task('get-wizards', () => {
-  return gulp
-    .src(`environments/${process.env.ENV}/wizards.json`)
+task('get-wizards', () => {
+  return src(`environments/${process.env.ENV}/wizards.json`)
     .pipe(loadExtensions)
-    .pipe(gulp.dest(`temp/${process.env.ENV}/wizards-local/-/-`)); // gulp strips the 2 last path components?
+    .pipe(dest(`temp/${process.env.ENV}/wizards-local/-/-`)); // gulp strips the 2 last path components?
 });
 
-gulp.task('pack-wizards', () => {
+task('pack-wizards', () => {
   const env = process.env.ENV;
-  return gulp
-    .src(`temp/${env}/wizards-local/**/*.yaml`)
+  return src(`temp/${env}/wizards-local/**/*.yaml`)
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('wizards.yaml', {
         newLine: '---\n',
       }),
     )
-    .pipe(gulp.dest(`build/${env}/extensions`));
+    .pipe(dest(`build/${env}/extensions`));
 });
