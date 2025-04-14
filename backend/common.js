@@ -125,8 +125,8 @@ export const makeHandleRequest = () => {
     });
     k8sRequest.on('error', respondWithInternalError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
     if (Buffer.isBuffer(req.body)) {
-      // If body is buffer it means it's not a json, don't pass it further.
-      k8sRequest.end('');
+      // If body is buffer it means it's not a json.
+      respondWithBadContent(res, req.id);
     } else {
       k8sRequest.end(JSON.stringify(req.body));
     }
@@ -140,6 +140,13 @@ export const makeHandleRequest = () => {
     }
   };
 };
+
+function respondWithBadContent(res, id) {
+  res.contentType('text/plain; charset=utf-8');
+  res
+    .status(400)
+    .send('Bad request. Invalid content type. Request ID: ' + escape(id));
+}
 
 export const serveStaticApp = (app, requestPath, directoryPath) => {
   app.use(requestPath, express.static(path.join(__dirname, directoryPath)));
