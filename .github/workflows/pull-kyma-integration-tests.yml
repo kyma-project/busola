@@ -61,12 +61,16 @@ jobs:
           name: cypress-${{ github.job }}
           path: tests/integration/cypress
           retention-days: 90
+      - name: Fetch busola k3d logs
+        run: |
+          kubectl logs deployments/busola > busola-deploy.log
       - name: Upload Kyma Dashboard logs
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: kyma-dashboard-logs-${{ github.job }}
           path: |
+            busola-deploy.log
             kyma-alpha-deploy.log
             kyma-provision.log
             busola-build.log

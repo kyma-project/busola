@@ -35,7 +35,10 @@ try {
 const app = express();
 app.disable('x-powered-by');
 app.use(
-  express.json({ type: ['application/json-patch+json', 'application/json'] }),
+  express.json({
+    type: ['application/json-patch+json', 'application/json'],
+    limit: '100mb',
+  }),
 );
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
 
