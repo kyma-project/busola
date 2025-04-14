@@ -127,8 +127,6 @@ export const makeHandleRequest = () => {
     if (Buffer.isBuffer(req.body)) {
       console.log('Got buffer requests');
       // If body is buffer it means it's not a json.
-      // TODO: remove it
-      k8sRequest.end(req.body);
       respondWithBadContent(res, req.id);
     } else {
       k8sRequest.end(JSON.stringify(req.body));
