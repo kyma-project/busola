@@ -25,7 +25,7 @@ export default async function getFollowUpQuestions({
     const response = await fetch(url, {
       headers: {
         accept: 'application/json',
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
         'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
         'X-Cluster-Url': clusterUrl,
         'X-K8s-Authorization': k8sAuthorization,

@@ -125,7 +125,10 @@ export const makeHandleRequest = () => {
     });
     k8sRequest.on('error', respondWithInternalError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
     if (Buffer.isBuffer(req.body)) {
+      console.log('Got buffer requests');
       // If body is buffer it means it's not a json.
+      // TODO: remove it
+      k8sRequest.end(req.body);
       respondWithBadContent(res, req.id);
     } else {
       k8sRequest.end(JSON.stringify(req.body));
