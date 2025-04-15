@@ -376,7 +376,7 @@ context('Test Companion', () => {
         });
         expect(interception.request.headers['session-id']).to.equal('test-id');
       });
-      cy.wait(1000);
+      cy.wait(250);
 
       cy.get('@companion')
         .find('.chat-list > *')
