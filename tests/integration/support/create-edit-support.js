@@ -14,6 +14,7 @@ Cypress.Commands.add('saveChanges', (action = 'Create') => {
 });
 
 Cypress.Commands.add('checkUnsavedDialog', () => {
+  cy.wait(500); // because updates of isResourceEdited are debounced
   cy.getLeftNav()
     .contains('Events')
     .click();
