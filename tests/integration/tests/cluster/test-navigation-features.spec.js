@@ -31,9 +31,9 @@ context('Test navigation features', () => {
     // visual resources
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.wait(500)
+      .get('ui5-input[id="search-input"]:visible')
       .find('input')
-      .wait(1000)
       .type('cronjob-controller');
 
     cy.get('ui5-suggestion-item:visible')
