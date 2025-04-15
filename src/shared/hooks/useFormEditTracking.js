@@ -2,6 +2,7 @@ import { cloneDeep, isEqual } from 'lodash';
 import { useEffect, useMemo, useRef } from 'react';
 
 const excludeStatus = resource => {
+  if (!resource) return null;
   const modifiedResource = cloneDeep(resource);
   delete modifiedResource.status;
   delete modifiedResource.metadata?.resourceVersion;
@@ -9,12 +10,12 @@ const excludeStatus = resource => {
   return modifiedResource;
 };
 
-export const useFormEditTracking = (
+export function useFormEditTracking(
   resource,
   initialResource,
   setIsResourceEdited,
   editorError = false,
-) => {
+) {
   // timeout ID for debouncing
   const timeoutRef = useRef(null);
 
@@ -48,4 +49,4 @@ export const useFormEditTracking = (
       }
     };
   }, [isEdited, setIsResourceEdited]);
-};
+}
