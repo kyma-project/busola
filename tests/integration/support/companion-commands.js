@@ -43,7 +43,7 @@ Cypress.Commands.add('testChatLength', length => {
 Cypress.Commands.add('mockPromptSuggestions', () => {
   cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
     req.reply({
-      delay: 500,
+      delay: 750,
       body: {
         promptSuggestions: [
           'suggestion1',
@@ -61,7 +61,7 @@ Cypress.Commands.add('mockPromptSuggestions', () => {
 Cypress.Commands.add('mockChatResponse', () => {
   cy.intercept('POST', '/backend/ai-chat/messages', req => {
     req.reply({
-      delay: 500,
+      delay: 750,
       body: {
         data: {
           answer: {
@@ -77,7 +77,7 @@ Cypress.Commands.add('mockChatResponse', () => {
 Cypress.Commands.add('mockFollowups', () => {
   cy.intercept('POST', '/backend/ai-chat/followup', req => {
     req.reply({
-      delay: 500,
+      delay: 750,
       body: {
         promptSuggestions: [
           'followup1',

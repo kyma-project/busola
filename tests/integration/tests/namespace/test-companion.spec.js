@@ -705,7 +705,7 @@ context('Test Companion', () => {
         .should('be.disabled');
 
       cy.wait('@getChatResponse');
-      cy.wait(1000);
+      cy.wait(250);
 
       cy.get('@companion')
         .find('ui5-textarea[placeholder="Message Joule"]')
