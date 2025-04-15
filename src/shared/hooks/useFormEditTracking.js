@@ -26,6 +26,7 @@ export function useFormEditTracking(
   );
 
   const isEdited = useMemo(() => {
+    if (!excludedResource || !excludedInitialResource) return false;
     return !isEqual(excludedResource, excludedInitialResource) || editorError;
   }, [excludedResource, excludedInitialResource, editorError]);
 
