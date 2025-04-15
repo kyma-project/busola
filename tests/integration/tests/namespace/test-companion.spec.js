@@ -303,18 +303,18 @@ context('Test Companion', () => {
       cy.get('@companion')
         .find('.chat-list > *')
         .should('have.length', 2)
+        .eq(1)
+        .should('be.visible')
+        .should('have.class', 'ai-busy-indicator');
+
+      cy.get('@companion')
+        .find('.chat-list > *')
+        .should('have.length', 2)
         .eq(0)
         .should('be.visible')
         .should('have.class', 'message-container')
         .should('have.class', 'left-aligned')
         .should('contain.text', 'Hi, I am your Kyma assistant!');
-
-      cy.get('@companion')
-        .find('.chat-list > *')
-        .should('have.length', 2)
-        .eq(1)
-        .should('be.visible')
-        .should('have.class', 'ai-busy-indicator');
 
       cy.wait('@getPromptSuggestions').then(interception => {
         expect(interception.request.body).to.deep.equal({
@@ -381,17 +381,17 @@ context('Test Companion', () => {
       cy.get('@companion')
         .find('.chat-list > *')
         .should('have.length', 4)
-        .eq(2)
+        .eq(3)
         .should('be.visible')
-        .should('have.class', 'left-aligned')
-        .should('contain.text', 'Hello, this is an AI response');
+        .should('have.class', 'ai-busy-indicator');
 
       cy.get('@companion')
         .find('.chat-list > *')
         .should('have.length', 4)
-        .eq(3)
+        .eq(2)
         .should('be.visible')
-        .should('have.class', 'ai-busy-indicator');
+        .should('have.class', 'left-aligned')
+        .should('contain.text', 'Hello, this is an AI response');
 
       cy.wait('@getFollowUpSuggestions').then(interception => {
         expect(interception.request.headers['session-id']).to.equal('test-id');
@@ -439,7 +439,14 @@ context('Test Companion', () => {
         });
         expect(interception.request.headers['session-id']).to.equal('test-id');
       });
-      cy.wait(1000);
+      cy.wait(250);
+
+      cy.get('@companion')
+        .find('.chat-list > *')
+        .should('have.length', 6)
+        .eq(5)
+        .should('be.visible')
+        .should('have.class', 'ai-busy-indicator');
 
       cy.get('@companion')
         .find('.chat-list > *')
@@ -448,13 +455,6 @@ context('Test Companion', () => {
         .should('be.visible')
         .should('have.class', 'left-aligned')
         .should('contain.text', 'Hello, this is an AI response');
-
-      cy.get('@companion')
-        .find('.chat-list > *')
-        .should('have.length', 6)
-        .eq(5)
-        .should('be.visible')
-        .should('have.class', 'ai-busy-indicator');
 
       cy.wait('@getFollowUpSuggestions').then(interception => {
         expect(interception.request.headers['session-id']).to.equal('test-id');
@@ -593,18 +593,18 @@ context('Test Companion', () => {
 
       cy.get('@companion')
         .find('.chat-list > *')
+        .eq(1)
+        .should('be.visible')
+        .should('have.class', 'ai-busy-indicator');
+
+      cy.get('@companion')
+        .find('.chat-list > *')
         .should('have.length', 2)
         .eq(0)
         .should('be.visible')
         .should('have.class', 'message-container')
         .should('have.class', 'left-aligned')
         .should('contain.text', 'Hi, I am your Kyma assistant!');
-
-      cy.get('@companion')
-        .find('.chat-list > *')
-        .eq(1)
-        .should('be.visible')
-        .should('have.class', 'ai-busy-indicator');
 
       cy.wait('@getPromptSuggestions').then(interception => {
         expect(interception.request.body).to.deep.equal({
