@@ -11,7 +11,7 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
 import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
 import { Text } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 export function ClusterNodes({ data, error, loading }) {
   const { clusterUrl } = useUrl();

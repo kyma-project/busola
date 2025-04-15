@@ -1,5 +1,5 @@
 import React, { Suspense, useMemo } from 'react';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -43,6 +43,10 @@ export const ColumnWrapper = () => {
     resourceName: crdName,
     isCustomResource: true,
     crName: crName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
   const defaultColumn = crName ? 'details' : 'list';
 

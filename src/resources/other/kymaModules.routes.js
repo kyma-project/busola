@@ -1,6 +1,6 @@
 import { Button, FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import React, { Suspense, useEffect, useState } from 'react';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
@@ -51,6 +51,10 @@ const ColumnWraper = ({
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: resourceName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   const {

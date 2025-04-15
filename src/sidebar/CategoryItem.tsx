@@ -40,8 +40,8 @@ export function CategoryItem({
     }
   };
 
-  const children = category.items?.map(nn => (
-    <React.Fragment key={nn.pathSegment}>
+  const children = category.items?.map((nn, index) => (
+    <React.Fragment key={index}>
       {nn.dataSources ? (
         <DataSourcesContextProvider dataSources={nn.dataSources}>
           <NavItem node={nn} key={nn.pathSegment} subItem={true} />
@@ -54,6 +54,7 @@ export function CategoryItem({
 
   return (
     <SideNavigationItem
+      unselectable
       key={expanded + category.key}
       expanded={expanded}
       selected={false}

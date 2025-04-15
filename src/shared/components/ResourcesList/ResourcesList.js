@@ -26,7 +26,7 @@ import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -372,9 +372,9 @@ export function ResourceListRenderer({
     );
 
     navigate(
-      `${layoutCloseCreateUrl ?? window.location.pathname}${
-        layoutNumber === 'midColumn' ? '?layout=TwoColumnsMidExpanded' : ''
-      }`,
+      `${layoutCloseCreateUrl ?? window.location.pathname}?${
+        layoutNumber === 'midColumn' ? 'layout=TwoColumnsMidExpanded&' : ''
+      }showCreate=true`,
     );
   };
 
@@ -422,7 +422,14 @@ export function ResourceListRenderer({
     const rowColumns = customColumns?.map((col, index) => {
       if (col?.value && index === nameColIndex) {
         return (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              wordBreak: 'break-word',
+            }}
+          >
             {col.value(entry)}
             {protectedResourceWarning(entry)}
           </div>

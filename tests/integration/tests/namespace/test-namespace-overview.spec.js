@@ -19,7 +19,12 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('Container').should('be.visible');
+      cy.get('ui5-panel')
+        .get('ui5-table-row')
+        .find('ui5-table-cell')
+        .contains('Container')
+        .scrollIntoView()
+        .should('be.visible');
 
       cy.contains('ui5-text', QUOTA_NAME)
         .scrollIntoView()

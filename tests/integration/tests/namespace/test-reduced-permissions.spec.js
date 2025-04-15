@@ -95,9 +95,7 @@ context('Test reduced permissions', () => {
     cy.openCreate();
 
     // subject type - select it first so the list starts loading
-    cy.get('ui5-dialog')
-      .get('ui5-select:visible')
-      .click();
+    cy.get('[data-testid="role-binding-kind"]').click();
 
     cy.get('ui5-option:visible')
       .contains('ServiceAccount')

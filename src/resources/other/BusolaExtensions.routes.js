@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -37,6 +37,10 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: name,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   const elementCreateProps = usePrepareCreateProps({

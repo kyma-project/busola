@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router';
 import { namespacesState } from 'state/namespacesAtom';
 
 import { SideNavigationSubItem } from '@ui5/webcomponents-react';

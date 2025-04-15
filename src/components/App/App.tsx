@@ -1,11 +1,7 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-// this import is necessary for the V1 Tables to work properly,
-// it can be removed after https://github.com/kyma-project/busola/issues/3489 is resolved
-import './UI5Imports';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
@@ -115,16 +111,14 @@ export default function App() {
                     />
                   }
                 />
-                <Route path="/" />
                 <Route path="clusters" element={<ClusterList />} />
                 <Route
                   path="cluster/:currentClusterName"
                   element={<Navigate to="overview" />}
                 />
-                <Route
-                  path="cluster/:currentClusterName/*"
-                  element={<ClusterRoutes />}
-                />
+                <Route path="cluster/:currentClusterName">
+                  <Route path="*" element={<ClusterRoutes />} />
+                </Route>
                 {makeGardenerLoginRoute()}
               </Routes>
               <Preferences />

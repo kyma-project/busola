@@ -2,11 +2,22 @@
   display: block;
 
   .body-fallback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
     font-size: 18px;
     padding: 20px;
     margin: 0 auto;
     text-align: center;
     color: var(--sapList_TextColor);
+  }
+
+  .row-selected {
+    background-color: var(--sapList_SelectionBackgroundColor);
+    border-bottom: var(--sapList_BorderWidth) solid
+      var(--sapList_SelectionBorderColor);
   }
 }
 

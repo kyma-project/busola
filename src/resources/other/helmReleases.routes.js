@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
@@ -24,6 +24,10 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: releaseName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   let startColumnComponent = null;

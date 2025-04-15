@@ -5,3 +5,32 @@
     }
   }
 }
+
+ui5-table-row.collapse-content {
+  overflow-x: auto;
+  display: block;
+}
+
+.collapsible-panel {
+  min-width: max-content;
+  position: absolute;
+  display: inherit;
+
+  > :first-child {
+    display: contents;
+    min-width: max-content;
+    overflow: auto;
+
+    &:not(ui5-panel) {
+      display: flex;
+    }
+
+    ui5-text {
+      margin: 0.5rem 1rem;
+    }
+  }
+
+  ui5-table {
+    min-width: max-content;
+  }
+}

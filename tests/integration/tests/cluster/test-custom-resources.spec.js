@@ -47,7 +47,7 @@ context('Test Custom Resources', () => {
         force: true,
       });
 
-    cy.get('table').should('have.length', 1);
+    cy.get('ui5-table').should('have.length', 1);
 
     cy.get('ui5-table-row')
       .contains('Tclusters')
@@ -73,11 +73,12 @@ context('Test Custom Resources', () => {
       .contains('Custom Resources')
       .click();
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.wait(500)
+      .get('ui5-input[id="search-input"]:visible')
       .find('input')
-      .wait(1000)
       .type('cypress');
-    cy.clickGenericListLink('Tclusters');
+
+    cy.wait(500).clickGenericListLink('Tclusters');
 
     cy.contains('ui5-button', 'Create').click();
 

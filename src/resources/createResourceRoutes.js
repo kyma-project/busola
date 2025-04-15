@@ -1,7 +1,7 @@
 import React, { Suspense, useMemo } from 'react';
 
 import { useRecoilValue } from 'recoil';
-import { Route, useParams } from 'react-router-dom';
+import { Route, useParams } from 'react-router';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -56,6 +56,10 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     apiGroup: props.apiGroup,
     apiVersion: props.apiVersion,
     resourceName: resourceName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
   });
 
   const defaultColumn =
@@ -194,7 +198,6 @@ export const createResourceRoutes = ({
     <React.Fragment key={path}>
       <Route
         path={path}
-        exact
         element={
           <Suspense fallback={<Spinner />}>
             <ColumnWrapper

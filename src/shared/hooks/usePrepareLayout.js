@@ -3,7 +3,7 @@ import {
   NavigationType,
   useNavigationType,
   useSearchParams,
-} from 'react-router-dom';
+} from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -89,6 +89,7 @@ export function usePrepareLayoutColumns({
   resourceName,
   isCustomResource,
   crName,
+  resource,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
@@ -122,6 +123,7 @@ export function usePrepareLayoutColumns({
               apiVersion,
               resourceName:
                 resourceType === 'Namespaces' ? resourceName : undefined,
+              resource,
             }
           : null,
       };
@@ -155,7 +157,7 @@ export function usePrepareLayoutColumns({
             }
           : null,
         showCreate: showCreate
-          ? { resourceType: resourceName, namespaceId }
+          ? { resourceType: resourceName, namespaceId, resource }
           : null,
         showEdit: showEdit
           ? {
@@ -164,7 +166,7 @@ export function usePrepareLayoutColumns({
               namespaceId,
               apiGroup,
               apiVersion,
-              resource: null,
+              resource,
             }
           : null,
       };
@@ -189,7 +191,7 @@ export function usePrepareLayoutColumns({
             }
           : null,
       endColumn: null,
-      showCreate: showCreate ? { resourceType, namespaceId } : null,
+      showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
       showEdit: showEdit
         ? editColumn === 'startColumn'
           ? { resourceType, namespaceId, apiGroup, apiVersion }
@@ -199,7 +201,7 @@ export function usePrepareLayoutColumns({
               namespaceId,
               apiGroup,
               apiVersion,
-              resource: null,
+              resource,
             }
         : null,
     };
@@ -215,6 +217,7 @@ export function usePrepareLayoutColumns({
     resourceName,
     isCustomResource,
     crName,
+    resource,
   ]);
 
   useEffect(() => {

@@ -22,7 +22,7 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -137,6 +137,10 @@ export const DynamicPageComponent = ({
     dynamicPageRef,
     tabContainerRef,
   );
+
+  useEffect(() => {
+    if (showEdit) setSelectedSectionIdState('edit');
+  }, [showEdit]);
 
   const handleColumnClose = () => {
     layoutNumber === 'midColumn'

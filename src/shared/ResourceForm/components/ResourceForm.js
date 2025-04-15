@@ -24,6 +24,7 @@ import { cloneDeep } from 'lodash';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 import './ResourceForm.scss';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export const excludeStatus = resource => {
   const modifiedResource = cloneDeep(resource);
@@ -73,6 +74,20 @@ export function ResourceForm({
   resetLayout,
   formWithoutPanel,
 }) {
+  const layoutState = useRecoilValue(columnLayoutState);
+
+  useEffect(() => {
+    if (layoutState?.showCreate?.resource) {
+      setResource(JSON.parse(JSON.stringify(layoutState.showCreate.resource)));
+    } else if (layoutState?.showEdit?.resource) {
+      setResource(JSON.parse(JSON.stringify(layoutState.showEdit.resource)));
+    }
+  }, [
+    layoutState?.showCreate?.resource,
+    layoutState?.showEdit?.resource,
+    setResource,
+  ]);
+
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
     () => resource?.apiVersion + '/' + resource?.kind,
@@ -203,6 +218,7 @@ export function ResourceForm({
       schemaId={resourceSchemaId}
       updateValueOnParentChange={true}
       setEditorError={setEditorError}
+      schema={schema}
     />
   );
   editor = renderEditor
