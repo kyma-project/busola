@@ -2,6 +2,10 @@
 import PodRestarts from '../PodRestarts';
 
 describe('PodRestarts', () => {
+  beforeEach(() => {
+    cy.wait(250);
+  });
+
   it('Shows 0 for no statuses', () => {
     cy.mount(<PodRestarts statuses={[]} />);
 
