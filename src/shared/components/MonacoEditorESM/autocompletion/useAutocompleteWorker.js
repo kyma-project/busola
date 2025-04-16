@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Uri } from 'monaco-editor';
-import { setDiagnosticsOptions } from 'monaco-yaml';
+import * as monaco from 'monaco-editor';
+import { configureMonacoYaml } from 'monaco-yaml';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { v4 as uuid } from 'uuid';
 import YamlWorker from './yaml.worker.js?worker';
@@ -65,7 +66,7 @@ export function useAutocompleteWorker({
       });
     }
 
-    setDiagnosticsOptions({
+    configureMonacoYaml(monaco, {
       enableSchemaRequest: false,
       hover: true,
       completion: !!schema && !readOnly,
