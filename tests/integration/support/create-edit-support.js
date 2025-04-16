@@ -10,11 +10,10 @@ Cypress.Commands.add('saveChanges', (action = 'Create') => {
     .contains('ui5-button:visible', isCreate ? 'Create' : 'Save')
     .click();
 
-  cy.wait(1500);
+  cy.wait(1000);
 });
 
 Cypress.Commands.add('checkUnsavedDialog', () => {
-  cy.wait(500); // because updates of isResourceEdited are debounced
   cy.getLeftNav()
     .contains('Events')
     .click();
