@@ -43,7 +43,7 @@ export function useAutocompleteWorker({
     autocompletionDisabled = true;
   }
 
-  const { schemas: fetchedSchema, loading, error } = useGetSchema({
+  const { schema: fetchedSchema, loading, error } = useGetSchema({
     schemaId,
     skip: autocompletionDisabled || !!predefinedSchema,
   });
