@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
-import 'babel-polyfill';
 import 'jsdom-worker-fix';
 import { act, cleanup } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
