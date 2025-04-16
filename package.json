@@ -113,7 +113,6 @@
     "url": "^0.11.4"
   },
   "devDependencies": {
-    "@babel/plugin-transform-private-property-in-object": "^7.25.9",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^16.0.1",
     "@types/didyoumean": "^1.2.0",
