@@ -3,6 +3,8 @@ import { Navigate, Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
+import 'core-js/stable';
+
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
 import { useAppTracking } from 'hooks/tracking';
