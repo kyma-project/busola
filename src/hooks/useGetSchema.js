@@ -61,7 +61,15 @@ export const useGetSchema = ({
       setError(err);
       setLoading(false);
     });
-  }, [areSchemasComputed, schemaId, setSchema, schema, skip, isWorkerOkay]);
+  }, [
+    areSchemasComputed,
+    schemaId,
+    setSchema,
+    schema,
+    skip,
+    isWorkerOkay,
+    additionalId,
+  ]);
 
   return { schema, error, loading };
 };
