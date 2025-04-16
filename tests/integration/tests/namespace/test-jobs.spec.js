@@ -173,7 +173,7 @@ context('Test Jobs', () => {
 
     cy.inspectTab('View');
 
-    cy.contains('a=b', { timeout: 15000 });
+    cy.contains('a=b');
   });
 
   it('Inspect list', () => {

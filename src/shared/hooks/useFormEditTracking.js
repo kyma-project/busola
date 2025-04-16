@@ -21,11 +21,15 @@ export function useFormEditTracking(
   // timeout ID for debouncing
   const timeoutRef = useRef(null);
 
-  const excludedResource = useMemo(() => excludeStatus(resource), [resource]);
-  const excludedInitialResource = useMemo(
-    () => excludeStatus(initialResource),
-    [initialResource],
-  );
+  const excludedResource = useMemo(() => {
+    console.log(excludeStatus(resource));
+    return excludeStatus(resource);
+  }, [resource]);
+
+  const excludedInitialResource = useMemo(() => {
+    console.log(excludeStatus(initialResource));
+    return excludeStatus(initialResource);
+  }, [initialResource]);
 
   const isEdited = useMemo(() => {
     if (!excludedResource || !excludedInitialResource) return false;
