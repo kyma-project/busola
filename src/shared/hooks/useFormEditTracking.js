@@ -1,5 +1,7 @@
 import { cloneDeep, isEqual } from 'lodash';
 import { useEffect, useMemo, useRef } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 const excludeStatus = resource => {
   if (!resource) return null;
@@ -13,9 +15,9 @@ const excludeStatus = resource => {
 export function useFormEditTracking(
   resource,
   initialResource,
-  setIsResourceEdited,
   editorError = false,
 ) {
+  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
   // timeout ID for debouncing
   const timeoutRef = useRef(null);
 

@@ -10,7 +10,7 @@ Cypress.Commands.add('saveChanges', (action = 'Create') => {
     .contains('ui5-button:visible', isCreate ? 'Create' : 'Save')
     .click();
 
-  cy.wait(1000);
+  cy.wait(1500);
 });
 
 Cypress.Commands.add('checkUnsavedDialog', () => {

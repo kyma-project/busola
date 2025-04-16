@@ -14,16 +14,15 @@ import jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
-import './ResourceForm.scss';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFormEditTracking } from 'shared/hooks/useFormEditTracking';
+import './ResourceForm.scss';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -95,15 +94,9 @@ export function ResourceForm({
   }
 
   const editViewMode = useRecoilValue(editViewModeState);
-  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
   const [editorError, setEditorError] = useState(null);
 
-  useFormEditTracking(
-    resource,
-    initialResource,
-    setIsResourceEdited,
-    editorError,
-  );
+  useFormEditTracking(resource, initialResource, editorError);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
