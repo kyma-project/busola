@@ -1,8 +1,11 @@
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { DynamicPageHeader, FlexBox, Text } from '@ui5/webcomponents-react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { useState } from 'react';
+import KymaModulesEdit from 'components/KymaModules/KymaModulesEdit.js';
+
 import {
   apiGroup,
   apiVersion,
@@ -15,16 +18,21 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Label } from 'shared/ResourceForm/components/Label';
 import { useModuleTemplatesQuery } from './kymaModulesQueries';
 import { ModulesList } from './components/ModulesList';
+import { KymaModuleContext } from './providers/KymaModuleProvider';
+import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 
 export default function KymaModulesList({
-  resourceName,
-  resourceUrl,
-  kymaResource,
-  kymaResourceLoading,
-  selectedModules,
+  // resourceName,
+  // resourceUrl,
+  // kymaResource,
+  // kymaResourceLoading,
+  // selectedModules,
   namespaced,
-  setOpenedModuleIndex,
-  handleResourceDelete,
+  // setOpenedModuleIndex,
+  // handleResourceDelete,
 }) {
   const { t } = useTranslation();
   const [
@@ -32,7 +40,19 @@ export default function KymaModulesList({
     setShowReleaseChannelTitleDescription,
   ] = useState(false);
 
+  const {
+    resourceName,
+    resourceUrl,
+    kymaResource,
+    kymaResourceLoading,
+    selectedModules,
+
+    setOpenedModuleIndex,
+    handleResourceDelete,
+  } = useContext(KymaModuleContext);
   const namespace = 'kyma-system';
+
+  const { isProtected, protectedResourceWarning } = useProtectedResources();
 
   // Fetching all Module Templates can be replcaed with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
   const {
@@ -44,31 +64,17 @@ export default function KymaModulesList({
   }
 
   return (
-    <ResourceDetails
+    <DynamicPageComponent
       className="kyma-modules"
+      showYamlTab={false}
       layoutNumber="startColumn"
-      windowTitle={t('kyma-modules.title')}
-      headerContent={
-        <DynamicPageHeader className="no-shadow">
-          <FlexBox alignItems="Center">
-            <Label showColon>{t('kyma-modules.release-channel')}</Label>
-            <Text style={{ marginRight: '0.2rem' }}> </Text>
-            <Text>{kymaResource?.spec.channel}</Text>
-            <HintButton
-              className="sap-margin-begin-tiny"
-              setShowTitleDescription={setShowReleaseChannelTitleDescription}
-              showTitleDescription={showReleaseChannelTitleDescription}
-              description={ReleaseChannelDescription}
-              ariaTitle={t('kyma-modules.release-channel')}
-            />
-          </FlexBox>
-        </DynamicPageHeader>
-      }
-      customComponents={[
-        resource => (
+      title={t('kyma-modules.title')}
+      description={ResourceDescription}
+      content={
+        <>
           <ModulesList
             key="kyma-modules-list"
-            resource={resource}
+            resource={kymaResource}
             moduleTemplates={moduleTemplates}
             resourceName={resourceName}
             selectedModules={selectedModules}
@@ -78,19 +84,28 @@ export default function KymaModulesList({
             setOpenedModuleIndex={setOpenedModuleIndex}
             handleResourceDelete={handleResourceDelete}
           />
-        ),
-      ]}
-      apiGroup={apiGroup}
-      apiVersion={apiVersion}
-      resourceUrl={resourceUrl}
-      resourceType={resourceType}
-      resourceName={resourceName}
-      namespace={namespace}
-      customTitle={t('kyma-modules.title')}
-      headerDescription={ResourceDescription}
-      createResourceForm={Create}
-      disableResourceDetailsCard
-      disableDelete
+        </>
+      }
+      inlineEditForm={() => (
+        <ResourceCreate
+          isEdit={true}
+          confirmText={t('common.buttons.save')}
+          protectedResource={isProtected(kymaResource)}
+          protectedResourceWarning={protectedResourceWarning(
+            kymaResource,
+            true,
+          )}
+          renderForm={props => (
+            <ErrorBoundary>
+              <Create
+                resource={kymaResource}
+                resourceUrl={resourceUrl}
+                {...props}
+              />
+            </ErrorBoundary>
+          )}
+        />
+      )}
     />
   );
 }

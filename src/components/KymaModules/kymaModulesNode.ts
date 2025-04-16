@@ -7,7 +7,7 @@ export const kymaModulesNavNode: NavNode = {
   pathSegment: 'kymamodules',
   label: 'Modules',
   namespaced: false,
-  requiredFeatures: [configFeaturesNames.EXTENSIBILITY],
+  requiredFeatures: [],
   apiGroup: '',
   apiVersion: 'v1',
 };
