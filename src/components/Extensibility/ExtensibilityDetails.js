@@ -1,4 +1,5 @@
 import pluralize from 'pluralize';
+import { useContext } from 'react';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -20,6 +21,7 @@ import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
 import { useSetRecoilState } from 'recoil';
 import { resourcesConditions } from 'state/resourceConditionsAtom';
+import { KymaModuleContext } from 'components/KymaModules/providers/KymaModuleProvider';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
@@ -223,10 +225,11 @@ const ExtensibilityDetails = ({
   layoutCloseCreateUrl,
   namespaceId,
   isModule = false,
-  headerActions,
 }) => {
   const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+
+  const { deleteModuleButton: headerActions } = useContext(KymaModuleContext);
 
   if (!resMetaData) {
     return (
