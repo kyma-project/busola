@@ -14,6 +14,15 @@ export const enum ModuleTemplateStatus {
   Error = 'Error',
 }
 
+type ConditionType = {
+  lastTransitionTime: string;
+  lastUpdateTime: string;
+  message: string;
+  reason: string;
+  status: string;
+  type: string;
+};
+
 export type KymaResourceSpecModuleType = {
   name: string;
   channel?: string;
@@ -279,11 +288,23 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
           namespace: manager?.namespace,
         },
       } as KymaResourceType);
-      async function fetchModule() {
+      async function fetchResource() {
         try {
           const response = await fetch({ relativeUrl: path });
           const status = (await response.json())?.status;
-          setData(status?.conditions?.[0]?.type);
+          const latest = status?.conditions
+            ?.filter((condition: ConditionType) => condition?.status === 'True')
+            ?.reduce(
+              (acc: ConditionType, condition: ConditionType) =>
+                new Date(acc?.lastUpdateTime).getTime() >
+                new Date(condition?.lastUpdateTime).getTime()
+                  ? acc
+                  : condition,
+              {},
+            );
+          if (latest?.type) {
+            setData(latest.type);
+          }
         } catch (error) {
           if (error instanceof Error) {
             setError(error);
@@ -291,7 +312,7 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
         }
       }
 
-      fetchModule();
+      fetchResource();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [manager]);
