@@ -98,9 +98,10 @@ This is an exaple of kind only:
 
 The `ConditionList` widget renders the conditions as an expandable list with condition details. This widget is primarily designed for the overview section **data.details.status** or **data.details.status.body**
 
-| Parameter      | Required | Type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| -------------- | -------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **highlights** | No       |      | A map of highlight rules that will only be applied to the `condition` matching `type`. Key refers to the type of highlight, while the rule can be a plain array of values ​​or a string containing the [JSONata](100-jsonata.md) rule. Allowed keys are `informative`, `positive`, `negative`, `critical`, and `type`. <br><br> With the `type` key (required), you can specify which condition the highlighting must be applied to. It must contain one of the `types` of the source condition. <br><br> If no highlighting is provided, the following values ​​are automatically supported: <br> - rendered as informational: `Unknown`. <br> - rendered as positive: `True`. <br> - rendered as critical: `False`. |
+| Parameter         | Required | Type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------------- | -------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **highlights**    | No       |      | A map of highlight rules that will only be applied to the `condition` matching `type`. Key refers to the type of highlight, while the rule can be a plain array of values ​​or a string containing the [JSONata](100-jsonata.md) rule. Allowed keys are `informative`, `positive`, `negative`, `critical`, and `type`. <br><br> With the `type` key (required), you can specify which condition the highlighting must be applied to. It must contain one of the `types` of the source condition. <br><br> If no highlighting is provided, the following values ​​are automatically supported: <br> - rendered as informational: `Unknown`. <br> - rendered as positive: `True`. <br> - rendered as critical: `False`. |
+| **customContent** | No       |      | Allows adding custom content to specific condition types. Each object contains: <br> - `type` (required): The condition type to match <br> - `value` (required): A string, JSONata expression, or a widget definition to render custom content <br> - `header`: Optional header text for the custom content section <br><br> The custom content is rendered above the condition's default message.                                                                                                                                                                                                                                                                                                                    |
 
 See the following example of the standard `ConditionList`:
 
@@ -140,6 +141,24 @@ status:
 ```
 
 <img src="./assets/display-widgets/ConditionListHighlights.png" alt="Example of a condition list widget with overriden statuses">
+
+This is an example of `ConditionList` with added custom content:
+
+```yaml
+status:
+  body:
+    - name: Condition details
+      widget: ConditionList
+      source: status.conditions
+      customContent:
+        - value:
+            widget: Badge
+            source: $filter(status.conditions, function($c){$c.type = 'AbleToScale'}).reason
+          type: AbleToScale
+          header: Reason
+```
+
+<img src="./assets/display-widgets/ConditionListContent.png" alt="Example of a condition list widget with custom content" width="30%">
 
 ### `ExternalLink`
 

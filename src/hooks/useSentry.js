@@ -3,18 +3,22 @@ import * as Sentry from '@sentry/react';
 import { useFeature } from './useFeature';
 
 const initSentry = dsn => {
-  Sentry.init({
-    dsn,
-    release: 'busola',
-    integrations: [
-      new Sentry.browserTracingIntegration(),
-      new Sentry.replayIntegration(),
-    ],
-    tracesSampleRate: 1.0,
-    // Session Replay
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
-  });
+  try {
+    Sentry.init({
+      dsn,
+      release: 'busola',
+      integrations: [
+        Sentry.browserTracingIntegration(),
+        Sentry.replayIntegration(),
+      ],
+      tracesSampleRate: 1.0,
+      // Session Replay
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
+    });
+  } catch (e) {
+    console.warn('Sentry not enabled due to error', e);
+  }
 };
 
 export function useSentry() {

@@ -72,11 +72,8 @@ export function ResourceForm({
     } else if (layoutState?.showEdit?.resource) {
       setResource(JSON.parse(JSON.stringify(layoutState.showEdit.resource)));
     }
-  }, [
-    layoutState?.showCreate?.resource,
-    layoutState?.showEdit?.resource,
-    setResource,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layoutState?.showCreate?.resource, layoutState?.showEdit?.resource]);
 
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(

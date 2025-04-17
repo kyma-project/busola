@@ -9,7 +9,12 @@ import {
 import { useRecoilValue } from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 
-export const useGetSchema = ({ schemaId, skip, resource }) => {
+export const useGetSchema = ({
+  schemaId,
+  skip,
+  resource,
+  additionalId = '',
+}) => {
   if (!schemaId && resource) {
     const { group, version, kind } = resource;
     if (!group) schemaId = `${version}/${kind}`;
@@ -37,13 +42,17 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
       return;
     }
     if (!areSchemasComputed) return;
-    sendWorkerMessage('getSchema', schemaId);
 
-    addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {
-      setSchema(schema);
-      setError(null);
-      setLoading(false);
-    });
+    sendWorkerMessage('getSchema', schemaId, additionalId);
+
+    addWorkerListener(
+      `schemaComputed:${schemaId}${additionalId}`,
+      ({ schema }) => {
+        setSchema(schema);
+        setError(null);
+        setLoading(false);
+      },
+    );
     addWorkerListener('customError', err => {
       setError(err);
       setLoading(false);
@@ -52,7 +61,15 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
       setError(err);
       setLoading(false);
     });
-  }, [areSchemasComputed, schemaId, setSchema, schema, skip, isWorkerOkay]);
+  }, [
+    areSchemasComputed,
+    schemaId,
+    setSchema,
+    schema,
+    skip,
+    isWorkerOkay,
+    additionalId,
+  ]);
 
   return { schema, error, loading };
 };
