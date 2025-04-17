@@ -4,6 +4,16 @@ import React, { useEffect, useState } from 'react';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 
+export const enum ModuleTemplateStatus {
+  Ready = 'Ready',
+  Processing = 'Processing',
+  Deleting = 'Deleting',
+  Unknown = 'Unknown',
+  Unmanaged = 'Unmanaged',
+  Warning = 'Warning',
+  Error = 'Error',
+}
+
 export type KymaResourceSpecModuleType = {
   name: string;
   channel?: string;
@@ -105,7 +115,7 @@ export function useGetAllModulesStatuses(modules: any[]) {
               const status = (await response.json())?.status;
               return {
                 key: resource?.metadata?.name ?? resource?.name,
-                status: status?.state || 'Unknown',
+                status: status?.state || ModuleTemplateStatus.Unknown,
               };
             } catch (e) {
               return {
@@ -152,6 +162,14 @@ export const findModuleSpec = (
   );
 };
 
+type ModuleManagerType = {
+  name: string;
+  namespace: string;
+  group: string;
+  version: string;
+  kind: string;
+};
+
 export type ModuleTemplateType = {
   metadata: {
     name: string;
@@ -167,6 +185,7 @@ export type ModuleTemplateType = {
     info?: {
       documentation?: string;
     };
+    manager: ModuleManagerType;
   };
 };
 
@@ -243,4 +262,58 @@ export const checkSelectedModule = (
     return pluralize(module?.name?.replace('-', '') || '') === resourceTypeBase;
   }
   return false;
+};
+
+export function useGetManagerStatus(manager?: ModuleManagerType) {
+  const fetch = useFetch();
+  const [data, setData] = useState<any>(ModuleTemplateStatus.Unknown);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (manager) {
+      const path = getResourcePath({
+        apiVersion: `${manager?.group}/${manager?.version}`,
+        kind: manager?.kind,
+        metadata: {
+          name: manager?.name,
+          namespace: manager?.namespace,
+        },
+      } as KymaResourceType);
+      async function fetchModule() {
+        try {
+          const response = await fetch({ relativeUrl: path });
+          const status = (await response.json())?.status;
+          setData(status?.conditions?.[0]?.type);
+        } catch (error) {
+          if (error instanceof Error) {
+            setError(error);
+          }
+        }
+      }
+
+      fetchModule();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [manager]);
+
+  return { data, error };
+}
+
+export const resolveInstallationStateName = (
+  state?: string,
+  managerExists?: boolean,
+  managerResourceState?: string,
+) => {
+  if (state === ModuleTemplateStatus.Unmanaged && !managerExists) {
+    return 'Not installed';
+  }
+
+  if (state === ModuleTemplateStatus.Unmanaged && managerExists) {
+    if (state !== managerResourceState) {
+      return ModuleTemplateStatus.Processing;
+    }
+    return managerResourceState || ModuleTemplateStatus.Unknown;
+  }
+
+  return state || ModuleTemplateStatus.Unknown;
 };
