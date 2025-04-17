@@ -1,4 +1,4 @@
-import { configFeaturesNames, NavNode } from 'state/types';
+import { NavNode } from 'state/types';
 
 export const kymaModulesNavNode: NavNode = {
   category: 'Configuration',

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Create, ResourceDescription } from 'components/KymaModules';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useModuleTemplatesQuery } from './kymaModulesQueries';
 import { ModulesList } from './components/ModulesList';
 import { KymaModuleContext } from './providers/KymaModuleProvider';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -20,18 +19,14 @@ export default function KymaModulesList({ namespaced }) {
     kymaResource,
     kymaResourceLoading,
     selectedModules,
-
+    moduleTemplates,
+    moduleTemplatesLoading,
     setOpenedModuleIndex,
     handleResourceDelete,
   } = useContext(KymaModuleContext);
   const { isProtected, protectedResourceWarning } = useProtectedResources();
 
-  // Fetching all Module Templates can be replcaed with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
-  const {
-    data: moduleTemplates,
-    loading: moduleTemplateLoading,
-  } = useModuleTemplatesQuery({ skip: !resourceName });
-  if (moduleTemplateLoading || kymaResourceLoading) {
+  if (moduleTemplatesLoading || kymaResourceLoading) {
     return <Spinner />;
   }
 
