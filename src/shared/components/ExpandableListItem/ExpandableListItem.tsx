@@ -79,14 +79,6 @@ export const ExpandableListItem = ({
       </ListItemStandard>
       {expanded && (
         <>
-          {content && (
-            <div className="expandable-item__message sap-margin-x-small sap-margin-y-tiny">
-              <div className="title bsl-has-color-status-4 ">
-                {`${t('common.headers.message')}:`}
-              </div>
-              {content}
-            </div>
-          )}
           {customContent &&
             customContent.map((element, index) => (
               <div
@@ -103,6 +95,14 @@ export const ExpandableListItem = ({
                 {element?.value}
               </div>
             ))}
+          {content && (
+            <div className="expandable-item__message sap-margin-x-small sap-margin-y-tiny">
+              <div className="title bsl-has-color-status-4 ">
+                {`${t('common.headers.message')}:`}
+              </div>
+              {content}
+            </div>
+          )}
         </>
       )}
     </>

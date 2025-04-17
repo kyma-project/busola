@@ -71,9 +71,9 @@ context('Test Pizzas', () => {
       .contains('Namespaces')
       .click();
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.wait(500)
+      .get('ui5-input[id="search-input"]:visible')
       .find('input')
-      .wait(1000)
       .type('pizzas');
 
     cy.clickGenericListLink('pizzas');

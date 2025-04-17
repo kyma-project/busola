@@ -100,6 +100,7 @@ export function ExtensibilityCreateCore({
     loading: loadingOpenAPISchema,
   } = useGetSchema({
     resource: api,
+    additionalId: 'Create',
   });
 
   const formRules = useMemo(() => {
