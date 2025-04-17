@@ -6,7 +6,6 @@ context('Test Companion UI', () => {
   before(() => {
     cy.setBusolaFeature('KYMA_COMPANION', true);
     cy.loginAndSelectCluster();
-    cy.goToNamespaceDetails();
     cy.openCompanion();
   });
 
@@ -14,8 +13,8 @@ context('Test Companion UI', () => {
     it('enters fullscreen correctly', () => {
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('ui5-dynamic-page-title')
-        .contains(Cypress.env('NAMESPACE_NAME'))
+      cy.get('ui5-title')
+        .contains('Cluster Details')
         .should('be.visible');
       cy.get('#companion_wrapper')
         .parent()
@@ -25,8 +24,8 @@ context('Test Companion UI', () => {
         .find('ui5-button[icon="full-screen"]')
         .click();
 
-      cy.get('ui5-dynamic-page-title')
-        .contains(Cypress.env('NAMESPACE_NAME'))
+      cy.get('ui5-title')
+        .contains('Cluster Details')
         .should('not.be.visible');
       cy.get('#companion_wrapper')
         .parent()
@@ -40,8 +39,8 @@ context('Test Companion UI', () => {
         .find('ui5-button[icon="exit-full-screen"]')
         .click();
 
-      cy.get('ui5-dynamic-page-title')
-        .contains(Cypress.env('NAMESPACE_NAME'))
+      cy.get('ui5-title')
+        .contains('Cluster Details')
         .should('be.visible');
       cy.get('#companion_wrapper')
         .parent()

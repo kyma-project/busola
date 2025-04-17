@@ -6,7 +6,7 @@ context('Test Companion Initial Suggestions', () => {
   before(() => {
     cy.setBusolaFeature('KYMA_COMPANION', true);
     cy.loginAndSelectCluster();
-    cy.goToNamespaceDetails();
+    cy.goToNamespaceDetails('default');
   });
 
   let callCount = 0;
@@ -51,7 +51,7 @@ context('Test Companion Initial Suggestions', () => {
 
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
-        resourceName: Cypress.env('NAMESPACE_NAME'),
+        resourceName: 'default',
         resourceType: 'Namespace',
         groupVersion: 'v1',
         namespace: '',
@@ -72,7 +72,7 @@ context('Test Companion Initial Suggestions', () => {
 
     cy.wait('@getChatResponse').then(interception => {
       expect(interception.request.body).to.deep.equal({
-        resourceName: Cypress.env('NAMESPACE_NAME'),
+        resourceName: 'default',
         resourceType: 'Namespace',
         groupVersion: 'v1',
         namespace: '',
@@ -92,7 +92,7 @@ context('Test Companion Initial Suggestions', () => {
 
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
-        resourceName: Cypress.env('NAMESPACE_NAME'),
+        resourceName: 'default',
         resourceType: 'Namespace',
         groupVersion: 'v1',
         namespace: '',
@@ -123,7 +123,7 @@ context('Test Companion Initial Suggestions', () => {
         resourceName: '',
         resourceType: 'Deployment',
         groupVersion: 'apps/v1',
-        namespace: Cypress.env('NAMESPACE_NAME'),
+        namespace: 'default',
       });
     });
 
@@ -148,7 +148,7 @@ context('Test Companion Initial Suggestions', () => {
 
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
-        resourceName: Cypress.env('NAMESPACE_NAME'),
+        resourceName: 'default',
         resourceType: 'Namespace',
         groupVersion: 'v1',
         namespace: '',
@@ -172,7 +172,7 @@ context('Test Companion Initial Suggestions', () => {
 
     cy.wait('@getChatResponse').then(interception => {
       expect(interception.request.body).to.deep.equal({
-        resourceName: Cypress.env('NAMESPACE_NAME'),
+        resourceName: 'default',
         resourceType: 'Namespace',
         groupVersion: 'v1',
         namespace: '',

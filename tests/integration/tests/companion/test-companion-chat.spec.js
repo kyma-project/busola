@@ -6,7 +6,7 @@ context('Test Companion Chat Behavior', () => {
   before(() => {
     cy.setBusolaFeature('KYMA_COMPANION', true);
     cy.loginAndSelectCluster();
-    cy.goToNamespaceDetails();
+    cy.goToNamespaceDetails('default');
   });
 
   beforeEach(() => {
@@ -37,7 +37,7 @@ context('Test Companion Chat Behavior', () => {
 
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
-        resourceName: Cypress.env('NAMESPACE_NAME'),
+        resourceName: 'default',
         resourceType: 'Namespace',
         groupVersion: 'v1',
         namespace: '',
@@ -87,7 +87,7 @@ context('Test Companion Chat Behavior', () => {
 
     cy.wait('@getChatResponse').then(interception => {
       expect(interception.request.body).to.deep.equal({
-        resourceName: Cypress.env('NAMESPACE_NAME'),
+        resourceName: 'default',
         resourceType: 'Namespace',
         groupVersion: 'v1',
         namespace: '',
@@ -150,7 +150,7 @@ context('Test Companion Chat Behavior', () => {
 
     cy.wait('@getChatResponse').then(interception => {
       expect(interception.request.body).to.deep.equal({
-        resourceName: Cypress.env('NAMESPACE_NAME'),
+        resourceName: 'default',
         resourceType: 'Namespace',
         groupVersion: 'v1',
         namespace: '',
@@ -278,7 +278,7 @@ context('Test Companion Chat Behavior', () => {
         resourceName: '',
         resourceType: 'ServiceAccount',
         groupVersion: 'v1',
-        namespace: Cypress.env('NAMESPACE_NAME'),
+        namespace: 'default',
         query: 'followup5',
       });
       expect(interception.request.headers['session-id']).to.equal('test-id');
@@ -326,7 +326,7 @@ context('Test Companion Chat Behavior', () => {
         resourceName: '',
         resourceType: 'ServiceAccount',
         groupVersion: 'v1',
-        namespace: Cypress.env('NAMESPACE_NAME'),
+        namespace: 'default',
       });
     });
     cy.wait(1000);

@@ -58,14 +58,14 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
   $elements.filter((_, e) => !e.value),
 );
 
-Cypress.Commands.add('goToNamespaceDetails', () => {
+Cypress.Commands.add('goToNamespaceDetails', namespace => {
   // Go to the details of namespace
   cy.getLeftNav()
     .find('ui5-side-navigation-item')
     .contains('Namespaces')
     .click();
 
-  cy.clickGenericListLink(Cypress.env('NAMESPACE_NAME'));
+  cy.clickGenericListLink(namespace ?? Cypress.env('NAMESPACE_NAME'));
 
   return cy.end();
 });
