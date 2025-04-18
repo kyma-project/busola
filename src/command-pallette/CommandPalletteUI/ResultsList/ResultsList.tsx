@@ -6,10 +6,7 @@ import { addHistoryEntry } from '../search-history';
 import './ResultsList.scss';
 import { useTranslation } from 'react-i18next';
 import { LOADING_INDICATOR } from '../types';
-import { useRecoilState } from 'recoil';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 function scrollInto(element: Element) {
   element.scrollIntoView({
@@ -36,10 +33,7 @@ export function ResultsList({
 }: ResultsListProps) {
   const listRef = useRef<HTMLUListElement | null>(null);
   const { t } = useTranslation();
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { navigateSafely } = useFormNavigation();
 
   //todo 2
   const isLoading = results.find((r: any) => r.type === LOADING_INDICATOR);
@@ -71,16 +65,10 @@ export function ResultsList({
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
         e.preventDefault();
-        handleActionIfFormOpen(
-          isResourceEdited,
-          setIsResourceEdited,
-          isFormOpen,
-          setIsFormOpen,
-          () => {
-            addHistoryEntry(results[activeIndex].query);
-            results[activeIndex].onActivate();
-          },
-        );
+        navigateSafely(() => {
+          addHistoryEntry(results[activeIndex].query);
+          results[activeIndex].onActivate();
+        });
       }
     },
     [activeIndex, results, isHistoryMode],
@@ -97,16 +85,10 @@ export function ResultsList({
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              handleActionIfFormOpen(
-                isResourceEdited,
-                setIsResourceEdited,
-                isFormOpen,
-                setIsFormOpen,
-                () => {
-                  addHistoryEntry(result.query);
-                  result.onActivate();
-                },
-              );
+              navigateSafely(() => {
+                addHistoryEntry(result.query);
+                result.onActivate();
+              });
             }}
           />
         ))

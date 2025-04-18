@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Avatar,
   ShellBar,
@@ -9,6 +9,7 @@ import {
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
@@ -16,8 +17,6 @@ import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 
 import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
@@ -25,7 +24,6 @@ import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
 
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { configFeaturesNames } from 'state/types';
 import './Header.scss';
 
@@ -38,16 +36,13 @@ export function Header() {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { navigateSafely } = useFormNavigation();
   const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
     configFeaturesNames.FEEDBACK,
   );
 
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
@@ -83,13 +78,7 @@ export function Header() {
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
         onLogoClick={() => {
-          handleActionIfFormOpen(
-            isResourceEdited,
-            setIsResourceEdited,
-            isFormOpen,
-            setIsFormOpen,
-            () => navigate('/clusters'),
-          );
+          navigateSafely(() => navigate('/clusters'));
           setShowCompanion({
             show: false,
             fullScreen: false,
@@ -103,22 +92,16 @@ export function Header() {
         }
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={e => {
-          handleActionIfFormOpen(
-            isResourceEdited,
-            setIsResourceEdited,
-            isFormOpen,
-            setIsFormOpen,
-            () => {
-              e.detail.item.textContent ===
-              t('clusters.overview.title-all-clusters')
-                ? navigate('/clusters')
-                : navigate(
-                    `/cluster/${encodeURIComponent(
-                      e.detail.item?.textContent ?? '',
-                    )}`,
-                  );
-            },
-          );
+          navigateSafely(() => {
+            e.detail.item.textContent ===
+            t('clusters.overview.title-all-clusters')
+              ? navigate('/clusters')
+              : navigate(
+                  `/cluster/${encodeURIComponent(
+                    e.detail.item?.textContent ?? '',
+                  )}`,
+                );
+          });
           setShowCompanion({
             show: false,
             fullScreen: false,
