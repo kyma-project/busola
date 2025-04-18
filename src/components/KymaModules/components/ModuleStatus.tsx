@@ -3,7 +3,17 @@ import { useModuleStatus } from '../support';
 
 export const resolveType = (status: string) => {
   switch (status) {
+    case 'Initial':
+    case 'Pending':
+    case 'Available':
+    case 'Released':
+      return 'Information';
     case 'Ready':
+    case 'Bound':
+    case 'Running':
+    case 'Success':
+    case 'Succeeded':
+    case 'Ok':
       return 'Positive';
     case 'Processing':
     case 'Deleting':
@@ -12,7 +22,10 @@ export const resolveType = (status: string) => {
       return 'None';
     case 'Warning':
       return 'Critical';
+    case 'Failed':
     case 'Error':
+    case 'Failure':
+    case 'Invalid':
       return 'Negative';
     default:
       return 'None';

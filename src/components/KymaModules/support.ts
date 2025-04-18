@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
+import { resolveType } from './components/ModuleStatus';
 
 export const enum ModuleTemplateStatus {
   Ready = 'Ready',
@@ -12,6 +13,7 @@ export const enum ModuleTemplateStatus {
   Unmanaged = 'Unmanaged',
   Warning = 'Warning',
   Error = 'Error',
+  NotInstalled = 'Not installed',
 }
 
 type ConditionType = {
@@ -326,11 +328,11 @@ export const resolveInstallationStateName = (
   managerResourceState?: string,
 ) => {
   if (state === ModuleTemplateStatus.Unmanaged && !managerExists) {
-    return 'Not installed';
+    return ModuleTemplateStatus.NotInstalled;
   }
 
   if (state === ModuleTemplateStatus.Unmanaged && managerExists) {
-    if (state !== managerResourceState) {
+    if (resolveType(state) !== resolveType(managerResourceState ?? '')) {
       return ModuleTemplateStatus.Processing;
     }
     return managerResourceState || ModuleTemplateStatus.Unknown;
