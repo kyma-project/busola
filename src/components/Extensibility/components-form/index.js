@@ -63,7 +63,7 @@ export const widgets = {
     return WidgetRenderer({ schema, required, ...props });
   },
   pluginStack,
-  pluginSimpleStack: validators,
+  pluginSimpleStack: validators.filter(Boolean),
   types: {
     string: StringRenderer,
     boolean: SwitchRenderer,
@@ -111,6 +111,7 @@ export const widgets = {
 export default widgets;
 export const limitedWidgets = {
   ...widgets,
+  pluginSimpleStack: widgets.pluginSimpleStack.filter(Boolean),
   pluginStack: [
     ReferencingHandler,
     ExtractStorePlugin,

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState, useContext } from 'react';
-import Immutable from 'immutable';
+import { fromJS } from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
@@ -73,7 +73,7 @@ export function ExtensibilityCreateCore({
 
   const updateStore = res => {
     readVars(res);
-    const newStore = Immutable.fromJS(res);
+    const newStore = fromJS(res);
     setStore(prevStore => prevStore.set('values', newStore));
   };
 
