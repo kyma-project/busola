@@ -6,6 +6,10 @@
   position: relative;
 }
 
+.minimap {
+  z-index: 0 !important;
+}
+
 .resource-form__overlay {
   position: absolute;
   top: 0;
