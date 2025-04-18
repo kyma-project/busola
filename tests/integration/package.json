@@ -5,7 +5,7 @@
     "start": "cypress open",
     "start:local": "CYPRESS_LOCAL_DEV=true cypress open",
     "start:local-smoke": "CYPRESS_LOCAL_DEV=true cypress open -C cypress-smoke.js",
-    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
+    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js,tests/companion/*.spec.js\" --browser chrome",
     "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
     "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
     "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",

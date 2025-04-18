@@ -5,7 +5,7 @@ import {
   ObjectStatus,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { MessageChunk } from './Message';
+import { MessageChunk } from '../Message/Message';
 import './TasksList.scss';
 
 interface TaskListProps {
@@ -47,7 +47,6 @@ export default function TasksList({
                     <span className="ai-steps-loader" />
                   )}
                   <Label className="text">{task?.task_name}</Label>
-                  <div className="loading-status" />
                 </FlexBox>
               );
             },
@@ -62,7 +61,6 @@ export default function TasksList({
               <Label className="text">
                 {t('kyma-companion.opener.preparing-final-answer')}
               </Label>
-              <div className="loading-status" />
             </FlexBox>
           )}
         </>
