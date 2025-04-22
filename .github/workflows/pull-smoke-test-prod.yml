@@ -47,10 +47,10 @@ jobs:
       - name: Run Busola in docker
         shell: bash
         run: |
-          set -o pipefail
           ./.github/scripts/run_kyma_dashboard_image.sh | tee busola-run.log
         env:
           IMG: kyma-dashboard:local-pr-${{github.sha}}
+          ENV: prod
       - name: Run tests
         shell: bash
         run: |
