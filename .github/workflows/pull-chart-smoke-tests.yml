@@ -42,12 +42,12 @@ jobs:
         shell: bash
         run: ./.github/scripts/build_kyma_dashboard_local_image.sh | tee busola-build.log
         env:
-          IMG: kyma-dashboard:local-pr-${github.sha}
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Import Kyma Dashbaord image to k3d
         shell: bash
         run: k3d import image ${IMG}
         env:
-          IMG: kyma-dashboard:local-pr-${github.sha}
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Deploy Busola
         id: deploy_busola
         shell: bash
