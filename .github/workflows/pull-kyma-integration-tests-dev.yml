@@ -39,11 +39,17 @@ jobs:
         name: Setup node
         with:
           node-version: 22
-      - name: Setup Busola
+      - name: Build Busola Docker Image
+        shell: bash
+        run: ./.github/scripts/build_kyma_dashboard_local_image.sh | tee busola-build.log
+        env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
+      - name: Run Busola in docker
         shell: bash
         run: |
-          ./.github/scripts/setup_kyma_dashboard.sh | tee busola-build.log
+          ./.github/scripts/run_kyma_dashboard_image.sh | tee busola-run.log
         env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
           ENV: dev
       - name: Run tests
         shell: bash

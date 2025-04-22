@@ -63,7 +63,7 @@ jobs:
         run: |
           export CYPRESS_DOMAIN=http://${{ steps.deploy_busola.outputs.IP }}
           cd tests/integration
-          npm ci && npm run "test:kyma-e2e"
+          npm ci && npm run "test:smoke-simple"
       - name: Uploads artifacts
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
