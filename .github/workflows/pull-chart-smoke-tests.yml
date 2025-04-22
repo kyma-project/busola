@@ -40,7 +40,7 @@ jobs:
           node-version: 22
       - name: Build Busola Docker Image
         shell: bash
-        run: ./.github/scripts/build_busola_local_image.sh | tee busola-build.log
+        run: ./.github/scripts/build_kyma_dashboard_local_image.sh | tee busola-build.log
         env:
           IMG: kyma-dashboard:local-pr-${github.sha}
       - name: Import Kyma Dashbaord image to k3d
