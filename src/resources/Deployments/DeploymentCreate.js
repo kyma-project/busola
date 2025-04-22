@@ -33,10 +33,19 @@ export default function DeploymentCreate({
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
-  const [initialUnchangedResource] = useState(initialDeployment);
-  const [initialResource] = useState(
-    initialDeployment || createDeploymentTemplate(namespace),
-  );
+  const [initialResource, setInitialResource] = useState(initialDeployment);
+
+  useEffect(() => {
+    setDeployment(
+      initialDeployment
+        ? _.cloneDeep(initialDeployment)
+        : createDeploymentTemplate(namespace),
+    );
+  }, [initialDeployment, namespace]);
+
+  useEffect(() => {
+    setInitialResource(initialDeployment);
+  }, [initialDeployment]);
 
   const {
     isIstioFeatureOn,
@@ -44,7 +53,7 @@ export default function DeploymentCreate({
     setSidecarEnabled,
     setIsChanged,
   } = useSidecar({
-    initialRes: initialUnchangedResource,
+    initialRes: initialResource,
     res: deployment,
     setRes: setDeployment,
     path: '$.spec.template.metadata.labels',
@@ -79,14 +88,14 @@ export default function DeploymentCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialUnchangedResource && createPresets(namespace, t)}
+      presets={!initialResource && createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
       }}
       // create modal on a namespace details doesn't have the resourceUrl
       createUrl={resourceUrl}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       handleNameChange={handleNameChange}
     >
       <ResourceForm.FormField

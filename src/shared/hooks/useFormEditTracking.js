@@ -9,6 +9,7 @@ const excludeStatus = resource => {
   delete modifiedResource.status;
   delete modifiedResource.metadata?.resourceVersion;
   delete modifiedResource.metadata?.managedFields;
+  delete modifiedResource.metadata?.generation;
   return modifiedResource;
 };
 

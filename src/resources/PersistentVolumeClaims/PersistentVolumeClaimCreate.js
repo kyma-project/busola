@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as _ from 'lodash';
@@ -20,11 +20,21 @@ export default function PersistentVolumeClaimCreate({
     _.cloneDeep(initialPersistentVolumeClaim) ||
       createPersistentVolumeClaimTemplate(namespace),
   );
-  const [initialResource] = useState(
-    initialPersistentVolumeClaim ||
-      createPersistentVolumeClaimTemplate(namespace),
+
+  const [initialResource, setInitialResource] = useState(
+    initialPersistentVolumeClaim,
   );
-  const [initialUnchangedResource] = useState(initialPersistentVolumeClaim);
+
+  useEffect(() => {
+    setPersistentVolumeClaim(
+      _.cloneDeep(initialPersistentVolumeClaim) ||
+        createPersistentVolumeClaimTemplate(namespace),
+    );
+  }, [initialPersistentVolumeClaim, namespace]);
+
+  useEffect(() => {
+    setInitialResource(initialPersistentVolumeClaim);
+  }, [initialPersistentVolumeClaim]);
 
   return (
     <ResourceForm
@@ -33,7 +43,7 @@ export default function PersistentVolumeClaimCreate({
       singularName={t('persistent-volume-claims.name_singular')}
       resource={persistentVolumeClaim}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setPersistentVolumeClaim}
       onChange={onChange}
       formElementRef={formElementRef}

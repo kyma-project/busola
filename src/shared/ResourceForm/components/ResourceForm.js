@@ -29,7 +29,7 @@ export function ResourceForm({
   singularName,
   resource,
   initialResource,
-  initialUnchangedResource,
+  updateInitialResource,
   setResource,
   setCustomValid,
   onChange,
@@ -100,13 +100,13 @@ export function ResourceForm({
     singularName,
     pluralKind,
     resource,
-    initialUnchangedResource,
+    initialResource,
+    updateInitialResource,
     createUrl,
     skipCreateFn,
     afterCreatedFn,
     urlPath,
     layoutNumber,
-    setResource,
     resetLayout,
     afterCreatedCustomMessage,
   });
@@ -214,7 +214,7 @@ export function ResourceForm({
                   <K8sNameField
                     propertyPath="$.metadata.name"
                     kind={singularName}
-                    readOnly={readOnly || !!initialUnchangedResource}
+                    readOnly={readOnly || !!initialResource}
                     setValue={handleNameChange}
                     tooltipContent={nameDesc}
                     {...nameProps}
