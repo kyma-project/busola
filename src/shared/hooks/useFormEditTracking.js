@@ -1,6 +1,7 @@
 import { cloneDeep, isEqual } from 'lodash';
 import { useEffect, useMemo } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 const excludeStatus = resource => {
@@ -18,6 +19,7 @@ export function useFormEditTracking(
   initialResource,
   editorError = false,
 ) {
+  const { formOpen } = useRecoilValue(isFormOpenState);
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
 
   const excludedResource = useMemo(() => excludeStatus(resource), [resource]);
@@ -28,15 +30,14 @@ export function useFormEditTracking(
   );
 
   const isEdited = useMemo(() => {
-    if (!excludedResource || !excludedInitialResource) return false;
     return !isEqual(excludedResource, excludedInitialResource) || editorError;
   }, [excludedResource, excludedInitialResource, editorError]);
 
   useEffect(() => {
-    if (isEdited) {
+    if (formOpen && isEdited) {
       setIsResourceEdited(prevState => ({ ...prevState, isEdited: true }));
     } else {
       setIsResourceEdited({ isEdited: false });
     }
-  }, [isEdited, setIsResourceEdited]);
+  }, [formOpen, isEdited, setIsResourceEdited]);
 }

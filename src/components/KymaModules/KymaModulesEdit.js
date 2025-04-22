@@ -25,7 +25,6 @@ import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { ManagedWarnings } from 'components/KymaModules/components/ManagedWarnings';
 import { ChannelWarning } from 'components/KymaModules/components/ChannelWarning';
 import { UnmanagedModuleInfo } from 'components/KymaModules/components/UnmanagedModuleInfo';
@@ -107,7 +106,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
-  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
@@ -307,10 +305,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
       content: t('common.create-form.messages.patch-success', {
         resourceType: t('kyma-modules.kyma'),
       }),
-    });
-
-    setIsResourceEdited({
-      isEdited: false,
     });
 
     setIsManagedChanged(false);
