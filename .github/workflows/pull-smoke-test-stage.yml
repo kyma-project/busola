@@ -38,11 +38,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Setup Busola
+      - name: Setup Kyma
+        run: |
+          set -o pipefail
+          ./.github/scripts/provision_kyma_k3d.sh | tee kyma-provision.log
+          ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build Busola Docker Image
+        shell: bash
+        run: ./.github/scripts/build_kyma_dashboard_local_image.sh | tee busola-build.log
+        env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
+      - name: Run Busola in docker
         shell: bash
         run: |
-          ./.github/scripts/setup_kyma_dashboard.sh | tee busola-build.log
+          ./.github/scripts/run_kyma_dashboard_image.sh | tee busola-run.log
         env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
           ENV: stage
       - name: Run tests
         shell: bash
