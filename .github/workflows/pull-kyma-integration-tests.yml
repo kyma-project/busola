@@ -5,6 +5,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/pull-kyma-intergation-tests.yml'
+      - '.github/scripts/**'
       - 'resources/**'
       - 'tests/integration/**'
       - 'nginx/**'

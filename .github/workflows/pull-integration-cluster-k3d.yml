@@ -5,6 +5,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/pull-integration-cluster-k3d.yml'
+      - '.github/scripts/**'
       - 'resources/**'
       - 'tests/**'
       - 'nginx/**'

@@ -5,6 +5,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/pull-smoke-test-stage.yml'
+      - '.github/scripts/**'
       - 'resources/**'
       - 'tests/kyma/**'
       - 'nginx/**'
