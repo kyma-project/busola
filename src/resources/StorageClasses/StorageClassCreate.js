@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as _ from 'lodash';
 
@@ -15,13 +15,22 @@ export default function StorageClassCreate({
   ...props
 }) {
   const { t } = useTranslation();
+
   const [storageClass, setStorageClass] = useState(
     _.cloneDeep(initialStorageClass) || createStorageClassTemplate(),
   );
-  const [initialResource] = useState(
-    initialStorageClass || createStorageClassTemplate(),
-  );
-  const [initialUnchangedResource] = useState(_.cloneDeep(initialStorageClass));
+
+  const [initialResource, setInitialResource] = useState(initialStorageClass);
+
+  useEffect(() => {
+    setStorageClass(
+      _.cloneDeep(initialStorageClass) || createStorageClassTemplate(),
+    );
+  }, [initialStorageClass]);
+
+  useEffect(() => {
+    setInitialResource(initialStorageClass);
+  }, [initialStorageClass]);
 
   return (
     <ResourceForm
@@ -30,7 +39,7 @@ export default function StorageClassCreate({
       singularName={t('storage-classes.name_singular')}
       resource={storageClass}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setStorageClass}
       onChange={onChange}
       formElementRef={formElementRef}

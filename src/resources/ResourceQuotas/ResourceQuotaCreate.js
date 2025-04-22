@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import * as _ from 'lodash';
@@ -23,14 +23,18 @@ export default function ResourceQuotaCreate({
     _.cloneDeep(initialResourceQuota) ||
       createResourceQuotaTemplate({ namespaceName: namespaceId }),
   );
-  const [initialResource] = useState(
-    initialResourceQuota ||
-      createResourceQuotaTemplate({ namespaceName: namespaceId }),
-  );
+  const [initialResource, setInitialResource] = useState(initialResourceQuota);
 
-  const [initialUnchangedResource] = useState(
-    _.cloneDeep(initialResourceQuota),
-  );
+  useEffect(() => {
+    setResourceQuota(
+      _.cloneDeep(initialResourceQuota) ||
+        createResourceQuotaTemplate({ namespaceName: namespaceId }),
+    );
+  }, [initialResourceQuota, namespaceId]);
+
+  useEffect(() => {
+    setInitialResource(initialResourceQuota);
+  }, [initialResourceQuota]);
 
   return (
     <ResourceForm
@@ -39,7 +43,7 @@ export default function ResourceQuotaCreate({
       singularName={t('resource-quotas.name_singular')}
       resource={resourceQuota}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setResourceQuota}
       onChange={onChange}
       formElementRef={formElementRef}

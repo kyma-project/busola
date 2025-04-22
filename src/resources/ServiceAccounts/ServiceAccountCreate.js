@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -43,10 +43,18 @@ export default function ServiceAccountCreate({
   const [serviceAccount, setServiceAccount] = useState(
     cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),
   );
-  const [initialUnchangedResource] = useState(initialServiceAccount);
-  const [initialResource] = useState(
-    initialServiceAccount || createServiceAccountTemplate(namespace),
-  );
+  const [initialResource, setInitialResource] = useState(initialServiceAccount);
+
+  useEffect(() => {
+    setServiceAccount(
+      cloneDeep(initialServiceAccount) ||
+        createServiceAccountTemplate(namespace),
+    );
+  }, [initialServiceAccount, namespace]);
+
+  useEffect(() => {
+    setInitialResource(initialServiceAccount);
+  }, [initialServiceAccount]);
 
   const [shouldCreateSecret, setShouldCreateSecret] = useState(false);
 
@@ -56,7 +64,6 @@ export default function ServiceAccountCreate({
     singularName: 'Secret',
     pluralKind: 'Secrets',
     resource: createDefaultSecret(serviceAccount.metadata.name),
-    initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${serviceAccount.metadata.namespace}/secrets`,
     afterCreatedFn: () => {},
   });
@@ -77,7 +84,7 @@ export default function ServiceAccountCreate({
   };
 
   async function afterServiceAccountCreate(defaultAfterCreateFn) {
-    if (initialUnchangedResource || !shouldCreateSecret) {
+    if (initialResource || !shouldCreateSecret) {
       defaultAfterCreateFn();
       return;
     }
@@ -106,7 +113,7 @@ export default function ServiceAccountCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       afterCreatedFn={afterServiceAccountCreate}
     >
       <ComboboxArrayInput
@@ -148,7 +155,7 @@ export default function ServiceAccountCreate({
           t('service-accounts.create-modal.tooltips.associated-secret'),
         )}
         input={Inputs.Switch}
-        disabled={!!initialUnchangedResource}
+        disabled={!!initialResource}
         onChange={() =>
           setShouldCreateSecret(shouldCreateSecret => !shouldCreateSecret)
         }
