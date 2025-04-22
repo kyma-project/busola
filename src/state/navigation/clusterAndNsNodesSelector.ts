@@ -8,7 +8,7 @@ import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
-import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
+import { moduleTemplatesAtom } from 'state/moduleTemplatesAtom';
 
 export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
   NavNode[]
@@ -20,7 +20,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const openapiPathIdList = get(openapiPathIdListSelector);
     const permissionSet = get(permissionSetsSelector);
     const configuration = get(configurationAtom);
-    const kymaResources = get(kymaResourcesAtom);
+    const moduleTemplatesCount = get(moduleTemplatesAtom);
 
     const features = configuration?.features || {};
 
@@ -54,7 +54,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
       navNodes,
       scope,
       features!,
-      kymaResources,
+      moduleTemplatesCount,
     );
 
     return navNodesWithAddons;

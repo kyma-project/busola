@@ -3,12 +3,12 @@ import { getFetchFn } from './utils/getFetchFn';
 import { useEffect, useState } from 'react';
 import { clusterState } from './clusterAtom';
 
-export async function useGetKymaResources() {
-  const setKymaResources = useSetRecoilState(kymaResourcesAtom);
+export async function useGetModuleTemplatesCount() {
+  const setModuleTemplates = useSetRecoilState(moduleTemplatesAtom);
   const [fetched, setFetched] = useState(false);
   const cluster = useRecoilValue(clusterState);
 
-  let kymas;
+  let moduleTemplates;
   const fetchFn = getFetchFn(useRecoilValue);
 
   useEffect(() => {
@@ -22,20 +22,19 @@ export async function useGetKymaResources() {
   if (fetchFn) {
     try {
       const response = await fetchFn({
-        relativeUrl:
-          '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
+        relativeUrl: '/apis/operator.kyma-project.io/v1beta2/moduletemplates',
       });
-      kymas = await response.json();
+      moduleTemplates = await response.json();
     } catch (e) {
       console.warn('Cannot load cluster params from the target cluster: ', e);
     } finally {
       setFetched(true);
     }
   }
-  setKymaResources(kymas);
+  setModuleTemplates(moduleTemplates?.items.length || 0);
 }
 
-export const kymaResourcesAtom = atom({
-  key: 'kymaResourcesAtom',
+export const moduleTemplatesAtom = atom({
+  key: 'moduleTemplatesAtom',
   default: null,
 });
