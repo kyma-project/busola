@@ -23,14 +23,19 @@ export default function SecretCreate({
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
-    initialSecret
-      ? { ...initialSecret }
-      : createSecretTemplate(namespace || ''),
+    initialSecret ? initialSecret : createSecretTemplate(namespace || ''),
   );
-  const [initialUnchangedResource] = useState(initialSecret);
-  const [initialResource] = useState(
-    initialSecret || createSecretTemplate(namespace || ''),
-  );
+  const [initialResource, setInitialResource] = useState(initialSecret);
+
+  useEffect(() => {
+    setSecret(
+      initialSecret ? initialSecret : createSecretTemplate(namespace || ''),
+    );
+  }, [initialSecret, namespace]);
+
+  useEffect(() => {
+    setInitialResource(initialSecret);
+  }, [initialSecret]);
 
   const [lockedKeys, setLockedKeys] = useState([]);
 
@@ -77,14 +82,13 @@ export default function SecretCreate({
       singularName={t('secrets.name_singular')}
       resource={secret}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setSecret}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       presets={
-        !initialUnchangedResource &&
-        createPresets(secretDefs, namespace || '', t)
+        !initialResource && createPresets(secretDefs, namespace || '', t)
       }
       setCustomValid={setCustomValid}
     >
@@ -98,7 +102,7 @@ export default function SecretCreate({
             accessibleName="Secret's type's Combobox"
             placeholder={t('secrets.placeholders.type')}
             value={options.find(o => o.key === value)?.text ?? value}
-            disabled={!!initialUnchangedResource || !options?.length}
+            disabled={!!initialResource || !options?.length}
             onChange={event => onChangeInput(event, setValue)}
             onInput={event => onChangeInput(event, setValue)}
           >

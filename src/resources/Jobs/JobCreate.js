@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
@@ -34,19 +34,29 @@ export default function JobCreate({
 }) {
   const { t } = useTranslation();
 
-  const defaultSidecarAnnotations = initialJob
-    ? initialJob?.spec?.template?.metadata?.annotations
-    : {};
-  const [initialUnchangedResource] = useState(initialJob);
-  const [initialResource] = useState(
-    initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
-  );
+  const defaultSidecarAnnotations = useMemo(() => {
+    return initialJob?.spec?.template?.metadata?.annotations || {};
+  }, [initialJob]);
 
   const [job, setJob] = useState(
     initialJob
       ? cloneDeep(initialJob)
       : createJobTemplate(namespace, defaultSidecarAnnotations),
   );
+
+  const [initialResource, setInitialResource] = useState(initialJob);
+
+  useEffect(() => {
+    setJob(
+      initialJob
+        ? cloneDeep(initialJob)
+        : createJobTemplate(namespace, defaultSidecarAnnotations),
+    );
+  }, [initialJob, namespace, defaultSidecarAnnotations]);
+
+  useEffect(() => {
+    setInitialResource(initialJob);
+  }, [initialJob]);
 
   useEffect(() => {
     setCustomValid(isJobValid(job));
@@ -66,23 +76,20 @@ export default function JobCreate({
       resource={job}
       setResource={setJob}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={
-        !initialUnchangedResource &&
+        !initialResource &&
         createJobPresets(namespace, t, defaultSidecarAnnotations)
       }
       createUrl={resourceUrl}
     >
-      <JobSpecSection
-        propertyPath="$.spec"
-        readOnly={!!initialUnchangedResource}
-      />
+      <JobSpecSection propertyPath="$.spec" readOnly={!!initialResource} />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
         tooltipContent={t(containersDesc)}
-        readOnly={!!initialUnchangedResource}
+        readOnly={!!initialResource}
       />
       <MessageStrip design="Information" hideCloseButton>
         {t('jobs.create-modal.containers-readonly-in-edit')}

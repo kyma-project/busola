@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -14,20 +14,26 @@ export default function LimitRangeCreate({
   resource: initialLimitRange,
   ...props
 }) {
+  const { t } = useTranslation();
+
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [limitRange, setLimitRange] = useState(
     _.cloneDeep(initialLimitRange) ||
       createLimitRangeTemplate({ namespaceName: namespaceId }),
   );
-  const { t } = useTranslation();
-  const [initialResource] = useState(
-    initialLimitRange ||
-      createLimitRangeTemplate({
-        namespaceName: namespaceId,
-      }),
-  );
 
-  const [initialUnchangedResource] = useState(initialLimitRange);
+  const [initialResource, setInitialResource] = useState(initialLimitRange);
+
+  useEffect(() => {
+    setLimitRange(
+      _.cloneDeep(initialLimitRange) ||
+        createLimitRangeTemplate({ namespaceName: namespaceId }),
+    );
+  }, [initialLimitRange, namespaceId]);
+
+  useEffect(() => {
+    setInitialResource(initialLimitRange);
+  }, [initialLimitRange]);
 
   return (
     <ResourceForm
@@ -36,7 +42,7 @@ export default function LimitRangeCreate({
       singularName={t('limit-ranges.name_singular')}
       resource={limitRange}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setLimitRange}
       onChange={onChange}
       formElementRef={formElementRef}

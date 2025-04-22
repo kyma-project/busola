@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -20,13 +20,20 @@ export default function CustomResourceDefinitionCreate({
     _.cloneDeep(initialCustomResourceDefinition) ||
       createCustomResourceDefinitionsTemplate(namespace),
   );
-  const [initialResource] = useState(
-    initialCustomResourceDefinition ||
-      createCustomResourceDefinitionsTemplate(namespace),
+  const [initialResource, setInitialResource] = useState(
+    initialCustomResourceDefinition,
   );
-  const [initialUnchangedResource] = useState(
-    _.cloneDeep(initialCustomResourceDefinition),
-  );
+
+  useEffect(() => {
+    setCustomResourceDefinitions(
+      _.cloneDeep(initialCustomResourceDefinition) ||
+        createCustomResourceDefinitionsTemplate(namespace),
+    );
+  }, [initialCustomResourceDefinition, namespace]);
+
+  useEffect(() => {
+    setInitialResource(initialCustomResourceDefinition);
+  }, [initialCustomResourceDefinition]);
 
   return (
     <ResourceForm
@@ -35,7 +42,7 @@ export default function CustomResourceDefinitionCreate({
       singularName={t('custom-resource-definitions.name_singular')}
       resource={customResourceDefinitions}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setCustomResourceDefinitions}
       onChange={onChange}
       formElementRef={formElementRef}

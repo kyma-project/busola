@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useContext } from 'react';
+import { useCallback, useMemo, useState, useContext, useEffect } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -66,10 +66,20 @@ export function ExtensibilityCreateCore({
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-  const [initialUnchangedResource] = useState(initialExtensibilityResource);
-  const [initialResource] = useState(
-    initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
+
+  const [initialResource, setInitialResource] = useState(
+    initialExtensibilityResource,
   );
+
+  useEffect(() => {
+    setStore(
+      initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
+    );
+  }, [initialExtensibilityResource, defaultPreset.value, emptyTemplate]);
+
+  useEffect(() => {
+    setInitialResource(initialExtensibilityResource);
+  }, [initialExtensibilityResource]);
 
   const updateStore = res => {
     readVars(res);
@@ -83,7 +93,7 @@ export function ExtensibilityCreateCore({
     } else {
       notification.notifySuccess({
         content: t(
-          initialUnchangedResource
+          initialResource
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
@@ -168,7 +178,7 @@ export function ExtensibilityCreateCore({
       onlyYaml={!schema}
       presets={initialResource && presets}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
       urlPath={general?.urlPath}

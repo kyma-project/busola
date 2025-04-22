@@ -23,8 +23,15 @@ export function GenericRoleCreate({
 }) {
   const { t } = useTranslation();
   const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
-  const [initialUnchangedResource] = useState(initialRole);
-  const [initialResource] = useState(initialRole || createTemplate());
+  const [initialResource, setInitialResource] = useState(initialRole);
+
+  useEffect(() => {
+    setRole(cloneDeep(initialRole) || createTemplate());
+  }, [initialRole, createTemplate]);
+
+  useEffect(() => {
+    setInitialResource(initialRole);
+  }, [initialRole]);
 
   useEffect(() => {
     setCustomValid(validateRole(role));
@@ -40,13 +47,13 @@ export function GenericRoleCreate({
       singularName={singularName}
       resource={role}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setRole}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      presets={!initialUnchangedResource && presets}
+      presets={!initialResource && presets}
       nameProps={{ readOnly: !!initialRole?.metadata?.name }}
     >
       <ItemArray

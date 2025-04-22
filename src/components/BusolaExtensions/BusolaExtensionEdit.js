@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -19,17 +19,26 @@ export function BusolaExtensionEdit({
   resourceUrl,
   ...props
 }) {
+  const { t } = useTranslation();
+
   const [extension, setExtension] = useState(
     initialExtension
       ? cloneDeep(initialExtension)
       : createConfigMapTemplate(namespace || ''),
   );
+  const [initialResource, setInitialResource] = useState(initialExtension);
 
-  const [initialUnchangedResource] = useState(initialExtension);
-  const [initialResource] = useState(
-    initialExtension || createConfigMapTemplate(namespace || ''),
-  );
-  const { t } = useTranslation();
+  useEffect(() => {
+    setExtension(
+      initialExtension
+        ? cloneDeep(initialExtension)
+        : createConfigMapTemplate(namespace || ''),
+    );
+  }, [initialExtension, namespace]);
+
+  useEffect(() => {
+    setInitialResource(initialExtension);
+  }, [initialExtension]);
 
   return (
     <ResourceForm
@@ -38,7 +47,7 @@ export function BusolaExtensionEdit({
       singularName={t('config-maps.name_singular')}
       resource={extension}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setExtension}
       onChange={onChange}
       formElementRef={formElementRef}

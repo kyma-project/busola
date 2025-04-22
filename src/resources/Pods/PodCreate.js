@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import * as _ from 'lodash';
@@ -16,15 +16,21 @@ export default function PodCreate({
   resourceUrl,
   ...props
 }) {
+  const { t } = useTranslation();
+
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [pod, setPod] = useState(
     _.cloneDeep(initialPod) || createPodTemplate(namespaceId),
   );
-  const [initialResource] = useState(
-    initialPod || createPodTemplate(namespaceId),
-  );
-  const [initialUnchangedResource] = useState(_.cloneDeep(initialPod));
-  const { t } = useTranslation();
+  const [initialResource, setInitialResource] = useState(initialPod);
+
+  useEffect(() => {
+    setPod(_.cloneDeep(initialPod) || createPodTemplate(namespaceId));
+  }, [initialPod, namespaceId]);
+
+  useEffect(() => {
+    setInitialResource(initialPod);
+  }, [initialPod]);
 
   return (
     <ResourceForm
@@ -33,7 +39,7 @@ export default function PodCreate({
       singularName={t('pods.name_singular')}
       resource={pod}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setPod}
       onChange={onChange}
       formElementRef={formElementRef}

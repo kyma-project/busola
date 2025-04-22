@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as _ from 'lodash';
 
@@ -15,17 +15,23 @@ export default function IngressCreate({
   resource: initialIngress,
   ...props
 }) {
+  const { t } = useTranslation();
+
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [ingress, setIngress] = useState(
     _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
   );
-  const [initialUnchangedResource] = useState(
-    initialIngress || createIngressTemplate(namespaceId),
-  );
-  const [initialResource] = useState(
-    initialIngress || createIngressTemplate(namespaceId),
-  );
-  const { t } = useTranslation();
+  const [initialResource, setInitialResource] = useState(initialIngress);
+
+  useEffect(() => {
+    setIngress(
+      _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
+    );
+  }, [initialIngress, namespaceId]);
+
+  useEffect(() => {
+    setInitialResource(initialIngress);
+  }, [initialIngress]);
 
   return (
     <ResourceForm
@@ -34,7 +40,7 @@ export default function IngressCreate({
       singularName={t('ingresses.name_singular')}
       resource={ingress}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setIngress}
       onlyYaml
       onChange={onChange}

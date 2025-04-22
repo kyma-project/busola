@@ -23,10 +23,17 @@ export default function ReplicaSetCreate({
   const [replicaset, setReplicaSet] = useState(
     _.cloneDeep(initialReplicaSet) || createReplicaSetTemplate(namespace),
   );
-  const [initialUnchangedResource] = useState(initialReplicaSet);
-  const [initialResource] = useState(
-    initialReplicaSet || createReplicaSetTemplate(namespace),
-  );
+  const [initialResource, setInitialResource] = useState(initialReplicaSet);
+
+  useEffect(() => {
+    setReplicaSet(
+      _.cloneDeep(initialReplicaSet) || createReplicaSetTemplate(namespace),
+    );
+  }, [initialReplicaSet, namespace]);
+
+  useEffect(() => {
+    setInitialResource(initialReplicaSet);
+  }, [initialReplicaSet]);
 
   useEffect(() => {
     const hasAnyContainers = !!(
@@ -56,7 +63,7 @@ export default function ReplicaSetCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       handleNameChange={handleNameChange}
     >
       <ResourceForm.FormField

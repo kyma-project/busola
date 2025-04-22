@@ -39,10 +39,15 @@ export default function CronJobCreate({
   const [cronJob, setCronJob] = useState(
     cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
-  const [initialUnchangedResource] = useState(initialCronJob);
-  const [initialResource] = useState(
-    initialCronJob || createCronJobTemplate(namespace),
-  );
+  const [initialResource, setInitialResource] = useState(initialCronJob);
+
+  useEffect(() => {
+    setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
+  }, [initialCronJob, namespace]);
+
+  useEffect(() => {
+    setInitialResource(initialCronJob);
+  }, [initialCronJob]);
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
@@ -61,12 +66,12 @@ export default function CronJobCreate({
       pluralKind="cronjobs"
       singularName={t(`cron-jobs.name_singular`)}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       resource={cronJob}
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialUnchangedResource && createCronJobPresets(namespace)}
+      presets={!initialResource && createCronJobPresets(namespace)}
       createUrl={resourceUrl}
     >
       <CronJobSpecSection propertyPath="$.spec" />
