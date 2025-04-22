@@ -23,18 +23,21 @@ export default function ResourceQuotaCreate({
     _.cloneDeep(initialResourceQuota) ||
       createResourceQuotaTemplate({ namespaceName: namespaceId }),
   );
-  const [initialResource, setInitialResource] = useState(initialResourceQuota);
+  const [initialResource, setInitialResource] = useState(
+    initialResourceQuota ||
+      createResourceQuotaTemplate({ namespaceName: namespaceId }),
+  );
 
   useEffect(() => {
     setResourceQuota(
       _.cloneDeep(initialResourceQuota) ||
         createResourceQuotaTemplate({ namespaceName: namespaceId }),
     );
+    setInitialResource(
+      initialResourceQuota ||
+        createResourceQuotaTemplate({ namespaceName: namespaceId }),
+    );
   }, [initialResourceQuota, namespaceId]);
-
-  useEffect(() => {
-    setInitialResource(initialResourceQuota);
-  }, [initialResourceQuota]);
 
   return (
     <ResourceForm

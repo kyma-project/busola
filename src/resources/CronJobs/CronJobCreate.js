@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
@@ -39,19 +39,22 @@ export default function CronJobCreate({
   const [cronJob, setCronJob] = useState(
     cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
-  const [initialResource, setInitialResource] = useState(initialCronJob);
+  const [initialResource, setInitialResource] = useState(
+    initialCronJob || createCronJobTemplate(namespace),
+  );
 
   useEffect(() => {
     setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
+    setInitialResource(initialCronJob || createCronJobTemplate(namespace));
   }, [initialCronJob, namespace]);
-
-  useEffect(() => {
-    setInitialResource(initialCronJob);
-  }, [initialCronJob]);
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
+
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const schema = useContext(SchemaContext);
   const scheduleDesc = getDescription(schema, 'spec.schedule');
@@ -71,7 +74,7 @@ export default function CronJobCreate({
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialResource && createCronJobPresets(namespace)}
+      presets={!isEdit && createCronJobPresets(namespace)}
       createUrl={resourceUrl}
     >
       <CronJobSpecSection propertyPath="$.spec" />

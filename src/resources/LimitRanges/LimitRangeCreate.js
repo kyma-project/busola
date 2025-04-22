@@ -22,18 +22,25 @@ export default function LimitRangeCreate({
       createLimitRangeTemplate({ namespaceName: namespaceId }),
   );
 
-  const [initialResource, setInitialResource] = useState(initialLimitRange);
+  const [initialResource, setInitialResource] = useState(
+    initialLimitRange ||
+      createLimitRangeTemplate({
+        namespaceName: namespaceId,
+      }),
+  );
 
   useEffect(() => {
     setLimitRange(
       _.cloneDeep(initialLimitRange) ||
         createLimitRangeTemplate({ namespaceName: namespaceId }),
     );
+    setInitialResource(
+      initialLimitRange ||
+        createLimitRangeTemplate({
+          namespaceName: namespaceId,
+        }),
+    );
   }, [initialLimitRange, namespaceId]);
-
-  useEffect(() => {
-    setInitialResource(initialLimitRange);
-  }, [initialLimitRange]);
 
   return (
     <ResourceForm

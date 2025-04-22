@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { cloneDeep } from 'lodash';
 
@@ -29,17 +29,18 @@ function CRCreateForm({
   const [cr, setCr] = useState(
     cloneDeep(initialCustomResource) || createTemplate(crd),
   );
-  const [initialResource, setInitialResource] = useState(initialCustomResource);
+  const [initialResource, setInitialResource] = useState(
+    initialCustomResource || createTemplate(crd),
+  );
 
   useEffect(() => {
     setCr(cloneDeep(initialCustomResource) || createTemplate(crd));
+    setInitialResource(initialCustomResource || createTemplate(crd));
   }, [initialCustomResource, crd]);
 
-  useEffect(() => {
-    setInitialResource(initialCustomResource);
-  }, [initialCustomResource]);
-
-  const isEdit = !!initialResource?.metadata?.name;
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const customUrl = useCustomResourceUrl(crd);
 

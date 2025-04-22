@@ -21,17 +21,16 @@ export default function IngressCreate({
   const [ingress, setIngress] = useState(
     _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
   );
-  const [initialResource, setInitialResource] = useState(initialIngress);
+  const [initialResource, setInitialResource] = useState(
+    initialIngress || createIngressTemplate(namespaceId),
+  );
 
   useEffect(() => {
     setIngress(
       _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
     );
+    setInitialResource(initialIngress || createIngressTemplate(namespaceId));
   }, [initialIngress, namespaceId]);
-
-  useEffect(() => {
-    setInitialResource(initialIngress);
-  }, [initialIngress]);
 
   return (
     <ResourceForm

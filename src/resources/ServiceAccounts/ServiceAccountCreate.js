@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -43,18 +43,23 @@ export default function ServiceAccountCreate({
   const [serviceAccount, setServiceAccount] = useState(
     cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),
   );
-  const [initialResource, setInitialResource] = useState(initialServiceAccount);
+  const [initialResource, setInitialResource] = useState(
+    initialServiceAccount || createServiceAccountTemplate(namespace),
+  );
 
   useEffect(() => {
     setServiceAccount(
       cloneDeep(initialServiceAccount) ||
         createServiceAccountTemplate(namespace),
     );
+    setInitialResource(
+      initialServiceAccount || createServiceAccountTemplate(namespace),
+    );
   }, [initialServiceAccount, namespace]);
 
-  useEffect(() => {
-    setInitialResource(initialServiceAccount);
-  }, [initialServiceAccount]);
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const [shouldCreateSecret, setShouldCreateSecret] = useState(false);
 
@@ -84,7 +89,7 @@ export default function ServiceAccountCreate({
   };
 
   async function afterServiceAccountCreate(defaultAfterCreateFn) {
-    if (initialResource || !shouldCreateSecret) {
+    if (isEdit || !shouldCreateSecret) {
       defaultAfterCreateFn();
       return;
     }
@@ -155,7 +160,7 @@ export default function ServiceAccountCreate({
           t('service-accounts.create-modal.tooltips.associated-secret'),
         )}
         input={Inputs.Switch}
-        disabled={!!initialResource}
+        disabled={isEdit}
         onChange={() =>
           setShouldCreateSecret(shouldCreateSecret => !shouldCreateSecret)
         }

@@ -2,7 +2,6 @@ import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { createPatch } from 'rfc6902';
-import { useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -24,7 +23,6 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { ManagedWarnings } from 'components/KymaModules/components/ManagedWarnings';
 import { ChannelWarning } from 'components/KymaModules/components/ChannelWarning';
 import { UnmanagedModuleInfo } from 'components/KymaModules/components/UnmanagedModuleInfo';
@@ -106,7 +104,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
 
@@ -308,10 +305,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
     });
 
     setIsManagedChanged(false);
-
-    setIsFormOpen({
-      formOpen: false,
-    });
   };
   const handleCreate = async () => {
     try {

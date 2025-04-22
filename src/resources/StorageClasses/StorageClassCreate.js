@@ -20,16 +20,15 @@ export default function StorageClassCreate({
     _.cloneDeep(initialStorageClass) || createStorageClassTemplate(),
   );
 
-  const [initialResource, setInitialResource] = useState(initialStorageClass);
+  const [initialResource, setInitialResource] = useState(
+    initialStorageClass || createStorageClassTemplate(),
+  );
 
   useEffect(() => {
     setStorageClass(
       _.cloneDeep(initialStorageClass) || createStorageClassTemplate(),
     );
-  }, [initialStorageClass]);
-
-  useEffect(() => {
-    setInitialResource(initialStorageClass);
+    setInitialResource(initialStorageClass || createStorageClassTemplate());
   }, [initialStorageClass]);
 
   return (

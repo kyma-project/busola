@@ -44,7 +44,9 @@ export default function JobCreate({
       : createJobTemplate(namespace, defaultSidecarAnnotations),
   );
 
-  const [initialResource, setInitialResource] = useState(initialJob);
+  const [initialResource, setInitialResource] = useState(
+    initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+  );
 
   useEffect(() => {
     setJob(
@@ -52,11 +54,14 @@ export default function JobCreate({
         ? cloneDeep(initialJob)
         : createJobTemplate(namespace, defaultSidecarAnnotations),
     );
+    setInitialResource(
+      initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+    );
   }, [initialJob, namespace, defaultSidecarAnnotations]);
 
-  useEffect(() => {
-    setInitialResource(initialJob);
-  }, [initialJob]);
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   useEffect(() => {
     setCustomValid(isJobValid(job));
@@ -80,16 +85,15 @@ export default function JobCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       presets={
-        !initialResource &&
-        createJobPresets(namespace, t, defaultSidecarAnnotations)
+        !isEdit && createJobPresets(namespace, t, defaultSidecarAnnotations)
       }
       createUrl={resourceUrl}
     >
-      <JobSpecSection propertyPath="$.spec" readOnly={!!initialResource} />
+      <JobSpecSection propertyPath="$.spec" readOnly={isEdit} />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
         tooltipContent={t(containersDesc)}
-        readOnly={!!initialResource}
+        readOnly={isEdit}
       />
       <MessageStrip design="Information" hideCloseButton>
         {t('jobs.create-modal.containers-readonly-in-edit')}

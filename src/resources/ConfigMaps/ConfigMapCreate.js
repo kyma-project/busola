@@ -25,7 +25,9 @@ export default function ConfigMapCreate({
       : createConfigMapTemplate(namespace || ''),
   );
 
-  const [initialResource, setInitialResource] = useState(initialConfigMap);
+  const [initialResource, setInitialResource] = useState(
+    initialConfigMap || createConfigMapTemplate(namespace || ''),
+  );
 
   useEffect(() => {
     setConfigMap(
@@ -33,11 +35,10 @@ export default function ConfigMapCreate({
         ? cloneDeep(initialConfigMap)
         : createConfigMapTemplate(namespace || ''),
     );
+    setInitialResource(
+      initialConfigMap || createConfigMapTemplate(namespace || ''),
+    );
   }, [initialConfigMap, namespace]);
-
-  useEffect(() => {
-    setInitialResource(initialConfigMap);
-  }, [initialConfigMap]);
 
   const schema = useContext(SchemaContext);
   const dataDesc = getDescription(schema, 'data');

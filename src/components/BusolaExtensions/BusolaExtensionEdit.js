@@ -26,7 +26,9 @@ export function BusolaExtensionEdit({
       ? cloneDeep(initialExtension)
       : createConfigMapTemplate(namespace || ''),
   );
-  const [initialResource, setInitialResource] = useState(initialExtension);
+  const [initialResource, setInitialResource] = useState(
+    initialExtension || createConfigMapTemplate(namespace || ''),
+  );
 
   useEffect(() => {
     setExtension(
@@ -34,11 +36,10 @@ export function BusolaExtensionEdit({
         ? cloneDeep(initialExtension)
         : createConfigMapTemplate(namespace || ''),
     );
+    setInitialResource(
+      initialExtension || createConfigMapTemplate(namespace || ''),
+    );
   }, [initialExtension, namespace]);
-
-  useEffect(() => {
-    setInitialResource(initialExtension);
-  }, [initialExtension]);
 
   return (
     <ResourceForm

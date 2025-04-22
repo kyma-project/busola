@@ -23,17 +23,18 @@ export default function StatefulSetCreate({
     _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
   );
 
-  const [initialResource, setInitialResource] = useState(initialStatefulSet);
+  const [initialResource, setInitialResource] = useState(
+    initialStatefulSet || createStatefulSetTemplate(namespaceId),
+  );
 
   useEffect(() => {
     setStatefulSet(
       _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
     );
+    setInitialResource(
+      initialStatefulSet || createStatefulSetTemplate(namespaceId),
+    );
   }, [initialStatefulSet, namespaceId]);
-
-  useEffect(() => {
-    setInitialResource(initialStatefulSet);
-  }, [initialStatefulSet]);
 
   return (
     <ResourceForm

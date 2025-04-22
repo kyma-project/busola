@@ -39,15 +39,14 @@ export function GenericRoleBindingCreate({
   const [binding, setBinding] = useState(
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace),
   );
-  const [initialResource, setInitialResource] = useState(initialRoleBinding);
+  const [initialResource, setInitialResource] = useState(
+    initialRoleBinding || createBindingTemplate(namespace),
+  );
 
   useEffect(() => {
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace);
+    setInitialResource(initialRoleBinding || createBindingTemplate(namespace));
   }, [initialRoleBinding, namespace]);
-
-  useEffect(() => {
-    setInitialResource(initialRoleBinding);
-  }, [initialRoleBinding]);
 
   useEffect(() => {
     setCustomValid(validateBinding(binding));

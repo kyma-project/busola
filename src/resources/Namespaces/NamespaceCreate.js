@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -45,7 +45,9 @@ export default function NamespaceCreate({
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
-  const [initialResource, setInitialResource] = useState(initialNamespace);
+  const [initialResource, setInitialResource] = useState(
+    initialNamespace || createNamespaceTemplate(),
+  );
 
   useEffect(() => {
     setNamespace(
@@ -53,11 +55,12 @@ export default function NamespaceCreate({
         ? cloneDeep(initialNamespace)
         : createNamespaceTemplate(),
     );
+    setInitialResource(initialNamespace || createNamespaceTemplate());
   }, [initialNamespace]);
 
-  useEffect(() => {
-    setInitialResource(initialNamespace);
-  }, [initialNamespace]);
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const {
     isIstioFeatureOn,
@@ -131,7 +134,7 @@ export default function NamespaceCreate({
       endColumn: null,
     }));
 
-    if (!initialResource) {
+    if (!isEdit) {
       navigate(clusterUrl(`namespaces/${namespace.metadata?.name}`));
     }
 
@@ -150,9 +153,7 @@ export default function NamespaceCreate({
 
     if (!rejectedRequest) {
       onCompleted(
-        `Namespace ${namespace.metadata.name} ${
-          initialResource ? 'edited' : 'created'
-        }`,
+        `Namespace ${namespace.metadata.name} ${isEdit ? 'edited' : 'created'}`,
       );
     } else {
       onError(
@@ -174,7 +175,7 @@ export default function NamespaceCreate({
       >
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
-      {!initialResource && withLimits ? (
+      {!isEdit && withLimits ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.container-limits')}
           tooltipContent={LimitRangeDescription}
@@ -187,7 +188,7 @@ export default function NamespaceCreate({
           />
         </ResourceForm.CollapsibleSection>
       ) : null}
-      {!initialResource && withMemory ? (
+      {!isEdit && withMemory ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.memory-quotas')}
           tooltipContent={ResourceQuotaDescription}
@@ -208,7 +209,7 @@ export default function NamespaceCreate({
       {...props}
       pluralKind="namespaces"
       singularName={t('namespaces.name_singular')}
-      renderEditor={!initialResource ? renderEditor : null}
+      renderEditor={!isEdit ? renderEditor : null}
       resource={namespace}
       setResource={setNamespace}
       onChange={onChange}
@@ -236,7 +237,7 @@ export default function NamespaceCreate({
         />
       ) : null}
 
-      {!initialResource ? (
+      {!isEdit ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-memory-quotas')}
           tooltipContent={ResourceQuotaDescription}
@@ -279,7 +280,7 @@ export default function NamespaceCreate({
           </FlexBox>
         </ResourceForm.CollapsibleSection>
       ) : null}
-      {!initialResource ? (
+      {!isEdit ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-limits')}
           tooltipContent={LimitRangeDescription}

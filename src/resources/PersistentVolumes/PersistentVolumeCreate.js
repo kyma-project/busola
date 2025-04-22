@@ -21,17 +21,16 @@ export default function PersistentVolumeCreate({
   );
 
   const [initialResource, setInitialResource] = useState(
-    initialPersistentVolume,
+    initialPersistentVolume || createPersistentVolumeTemplate(),
   );
 
   useEffect(() => {
     setPv(
       _.cloneDeep(initialPersistentVolume) || createPersistentVolumeTemplate(),
     );
-  }, [initialPersistentVolume]);
-
-  useEffect(() => {
-    setInitialResource(initialPersistentVolume);
+    setInitialResource(
+      initialPersistentVolume || createPersistentVolumeTemplate(),
+    );
   }, [initialPersistentVolume]);
 
   return (

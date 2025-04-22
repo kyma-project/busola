@@ -22,7 +22,8 @@ export default function PersistentVolumeClaimCreate({
   );
 
   const [initialResource, setInitialResource] = useState(
-    initialPersistentVolumeClaim,
+    initialPersistentVolumeClaim ||
+      createPersistentVolumeClaimTemplate(namespace),
   );
 
   useEffect(() => {
@@ -30,11 +31,11 @@ export default function PersistentVolumeClaimCreate({
       _.cloneDeep(initialPersistentVolumeClaim) ||
         createPersistentVolumeClaimTemplate(namespace),
     );
+    setInitialResource(
+      initialPersistentVolumeClaim ||
+        createPersistentVolumeClaimTemplate(namespace),
+    );
   }, [initialPersistentVolumeClaim, namespace]);
-
-  useEffect(() => {
-    setInitialResource(initialPersistentVolumeClaim);
-  }, [initialPersistentVolumeClaim]);
 
   return (
     <ResourceForm

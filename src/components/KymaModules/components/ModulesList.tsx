@@ -20,7 +20,6 @@ import {
   ColumnState,
   ShowCreate,
 } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ModulesListRows } from './ModulesListRows';
@@ -75,7 +74,6 @@ export const ModulesList = ({
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -94,7 +92,6 @@ export const ModulesList = ({
     navigate(
       `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true`,
     );
-    setIsFormOpen(state => ({ ...state, formOpen: true }));
   };
 
   const findExtension = (resourceKind: string) => {

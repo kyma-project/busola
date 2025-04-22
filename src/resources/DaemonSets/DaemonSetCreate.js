@@ -22,17 +22,18 @@ export default function DaemonSetCreate({
   const [daemonSet, setDaemonSet] = useState(
     _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
   );
-  const [initialResource, setInitialResource] = useState(initialDaemonSet);
+  const [initialResource, setInitialResource] = useState(
+    initialDaemonSet || createDaemonSetTemplate(namespaceId),
+  );
 
   useEffect(() => {
     setDaemonSet(
       _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
     );
+    setInitialResource(
+      initialDaemonSet || createDaemonSetTemplate(namespaceId),
+    );
   }, [initialDaemonSet, namespaceId]);
-
-  useEffect(() => {
-    setInitialResource(initialDaemonSet);
-  }, [initialDaemonSet]);
 
   return (
     <ResourceForm

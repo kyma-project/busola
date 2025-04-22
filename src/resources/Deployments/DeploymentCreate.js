@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -33,7 +33,9 @@ export default function DeploymentCreate({
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
-  const [initialResource, setInitialResource] = useState(initialDeployment);
+  const [initialResource, setInitialResource] = useState(
+    initialDeployment || createDeploymentTemplate(namespace),
+  );
 
   useEffect(() => {
     setDeployment(
@@ -41,11 +43,14 @@ export default function DeploymentCreate({
         ? _.cloneDeep(initialDeployment)
         : createDeploymentTemplate(namespace),
     );
+    setInitialResource(
+      initialDeployment || createDeploymentTemplate(namespace),
+    );
   }, [initialDeployment, namespace]);
 
-  useEffect(() => {
-    setInitialResource(initialDeployment);
-  }, [initialDeployment]);
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const {
     isIstioFeatureOn,
@@ -88,7 +93,7 @@ export default function DeploymentCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialResource && createPresets(namespace, t)}
+      presets={!isEdit && createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
       }}

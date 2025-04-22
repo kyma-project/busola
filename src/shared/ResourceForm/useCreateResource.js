@@ -14,6 +14,7 @@ import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
+import { useMemo } from 'react';
 
 export function useCreateResource({
   singularName,
@@ -40,7 +41,9 @@ export function useCreateResource({
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
-  const isEdit = !!initialResource?.metadata?.name;
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({

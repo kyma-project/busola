@@ -21,7 +21,8 @@ export default function CustomResourceDefinitionCreate({
       createCustomResourceDefinitionsTemplate(namespace),
   );
   const [initialResource, setInitialResource] = useState(
-    initialCustomResourceDefinition,
+    initialCustomResourceDefinition ||
+      createCustomResourceDefinitionsTemplate(namespace),
   );
 
   useEffect(() => {
@@ -29,11 +30,11 @@ export default function CustomResourceDefinitionCreate({
       _.cloneDeep(initialCustomResourceDefinition) ||
         createCustomResourceDefinitionsTemplate(namespace),
     );
+    setInitialResource(
+      initialCustomResourceDefinition ||
+        createCustomResourceDefinitionsTemplate(namespace),
+    );
   }, [initialCustomResourceDefinition, namespace]);
-
-  useEffect(() => {
-    setInitialResource(initialCustomResourceDefinition);
-  }, [initialCustomResourceDefinition]);
 
   return (
     <ResourceForm

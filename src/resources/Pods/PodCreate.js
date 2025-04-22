@@ -22,15 +22,14 @@ export default function PodCreate({
   const [pod, setPod] = useState(
     _.cloneDeep(initialPod) || createPodTemplate(namespaceId),
   );
-  const [initialResource, setInitialResource] = useState(initialPod);
+  const [initialResource, setInitialResource] = useState(
+    initialPod || createPodTemplate(namespaceId),
+  );
 
   useEffect(() => {
     setPod(_.cloneDeep(initialPod) || createPodTemplate(namespaceId));
+    setInitialResource(initialPod || createPodTemplate(namespaceId));
   }, [initialPod, namespaceId]);
-
-  useEffect(() => {
-    setInitialResource(initialPod);
-  }, [initialPod]);
 
   return (
     <ResourceForm

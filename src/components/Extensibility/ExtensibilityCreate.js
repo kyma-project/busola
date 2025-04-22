@@ -68,18 +68,21 @@ export function ExtensibilityCreateCore({
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const [initialResource, setInitialResource] = useState(
-    initialExtensibilityResource,
+    initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
   );
 
   useEffect(() => {
     setStore(
       initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
     );
+    setInitialResource(
+      initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
+    );
   }, [initialExtensibilityResource, defaultPreset.value, emptyTemplate]);
 
-  useEffect(() => {
-    setInitialResource(initialExtensibilityResource);
-  }, [initialExtensibilityResource]);
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const updateStore = res => {
     readVars(res);
@@ -93,7 +96,7 @@ export function ExtensibilityCreateCore({
     } else {
       notification.notifySuccess({
         content: t(
-          initialResource
+          isEdit
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {

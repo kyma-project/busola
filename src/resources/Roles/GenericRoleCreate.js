@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -23,15 +23,18 @@ export function GenericRoleCreate({
 }) {
   const { t } = useTranslation();
   const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
-  const [initialResource, setInitialResource] = useState(initialRole);
+  const [initialResource, setInitialResource] = useState(
+    initialRole || createTemplate(),
+  );
 
   useEffect(() => {
     setRole(cloneDeep(initialRole) || createTemplate());
+    setInitialResource(initialRole || createTemplate());
   }, [initialRole, createTemplate]);
 
-  useEffect(() => {
-    setInitialResource(initialRole);
-  }, [initialRole]);
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   useEffect(() => {
     setCustomValid(validateRole(role));
@@ -53,7 +56,7 @@ export function GenericRoleCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      presets={!initialResource && presets}
+      presets={!isEdit && presets}
       nameProps={{ readOnly: !!initialRole?.metadata?.name }}
     >
       <ItemArray
