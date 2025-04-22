@@ -40,7 +40,7 @@ jobs:
       - name: Setup Busola
         shell: bash
         run: |
-          ./.github/scripts/setup-busola.sh | tee busola-build.log
+          ./.github/scripts/setup_kyma_dashboard.sh | tee busola-build.log
         env:
           ENV: stage
       - name: Run tests

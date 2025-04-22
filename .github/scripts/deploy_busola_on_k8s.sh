@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script install busola on k8s
+#  Installs busola on k8s
 
 # standard bash error handling
 set -o nounset  # treat unset variables as an error and exit immediately.

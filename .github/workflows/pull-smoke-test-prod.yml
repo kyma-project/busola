@@ -38,11 +38,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: setup_busola
+      - name: Setup Busola
         shell: bash
         run: |
           set -o pipefail
-          ./.github/scripts/setup-busola.sh | tee busola-build.log
+          ./.github/scripts/setup_kyma_dashboard.sh | tee busola-build.log
         env:
           ENV: prod
       - name: Run tests
@@ -50,7 +50,6 @@ jobs:
         run: |
           k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3001
-
           cd tests/integration
           npm ci && npm run "test:smoke-extensions"
       - name: Uploads artifacts

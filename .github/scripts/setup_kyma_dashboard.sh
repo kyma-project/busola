@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Builds and runs Kyma dashboard docker image with desired ENV
+
 set -e
 export KYMA_DASHBOARD_IMG="k3d-registry.localhost:5000/kyma-dashboard"
 
