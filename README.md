@@ -276,7 +276,7 @@ You are experiencing connectivity problems with Busola in Docker against a k3d c
 
 When the k3d cluster's API Server is exposed on the `0.0.0.0` address on your machine, Busola in Docker interprets `0.0.0.0` as its internal Docker address, routing the requests to the wrong endpoint.
 
-#### Remedy
+#### Solution
 
 - For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup. This way, `0.0.0.0` is automatically replaced with `host.docker.internal`, which is resolved to 'routable' IP address of a Docker Desktop virtual machine.
 
@@ -308,7 +308,7 @@ Furthermore, this behavior has changed in the recent k3d versions, which is a re
 
 Clusters created by [k3d](https://k3d.io/) use a [listener](https://github.com/rancher/dynamiclistener) that extracts [SNI](https://en.wikipedia.org/wiki/Server_Name_Indication) host names from requests sent to the API server. If a new host name is requested, then the SSL certificate is regenerated, and the new host name is added to the list of Subject Alternative Names. Unfortunately, the security fix limits this mechanism only to the expected host names, like those related to Kubernetes nodes. This makes it useless for the `host.docker.internal` case.
 
-#### Remedy
+#### Solution
 
 Provide the `host.docker.internal` host name upfront during [k3d](https://k3d.io/) cluster creation:
 
