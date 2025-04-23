@@ -55,7 +55,9 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   const { debounced } = useLoadingDebounce(resource, 500);
 
   const warnings = [
-    useValidateResourceBySchema(debounced, validationSchema),
+    useValidateResourceBySchema(debounced, validationSchema, {
+      base: 'https://dashboard.kyma.cloud.sap', // Workaround for jsonschema 1.5.0 - https://github.com/tdegrunt/jsonschema/issues/407
+    }),
     useNamespaceWarning(debounced),
   ];
 
@@ -108,7 +110,9 @@ export const ResourceValidationResult = ({ resource }) => {
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
   const { debounced } = useLoadingDebounce(resource, 500);
   const warnings = [
-    useValidateResourceBySchema(debounced, validationSchemas),
+    useValidateResourceBySchema(debounced, validationSchemas, {
+      base: 'https://dashboard.kyma.cloud.sap',
+    }),
     useNamespaceWarning(debounced),
   ];
   const statusIcon = validateResources.isEnabled ? (
