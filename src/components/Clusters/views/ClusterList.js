@@ -54,7 +54,7 @@ function ClusterList() {
       show: false,
       fullScreen: false,
     });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps,
 
   useEffect(() => {
     setLayoutColumn({
