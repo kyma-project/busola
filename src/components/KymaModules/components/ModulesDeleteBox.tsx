@@ -38,7 +38,7 @@ type ModulesListDeleteBoxProps = {
   setLayoutColumn: SetterOrUpdater<ColumnLayoutState>;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  setInitialResource: React.Dispatch<React.SetStateAction<any>>;
+  setInitialUnchangedResource: React.Dispatch<React.SetStateAction<any>>;
   setKymaResourceState: React.Dispatch<React.SetStateAction<any>>;
 };
 
@@ -54,7 +54,7 @@ export const ModulesDeleteBox = ({
   handleModuleUninstall,
   setChosenModuleIndex,
   setKymaResourceState,
-  setInitialResource,
+  setInitialUnchangedResource,
 }: ModulesListDeleteBoxProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -244,7 +244,7 @@ export const ModulesDeleteBox = ({
           },
         });
         handleModuleUninstall();
-        setInitialResource(cloneDeep(kymaResourceState));
+        setInitialUnchangedResource(cloneDeep(kymaResourceState));
         if (detailsOpen) {
           setLayoutColumn({
             layout: 'OneColumn',

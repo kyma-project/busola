@@ -1,7 +1,8 @@
 import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createPatch } from 'rfc6902';
+import { useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -23,6 +24,8 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { ManagedWarnings } from 'components/KymaModules/components/ManagedWarnings';
 import { ChannelWarning } from 'components/KymaModules/components/ChannelWarning';
 import { UnmanagedModuleInfo } from 'components/KymaModules/components/UnmanagedModuleInfo';
@@ -102,12 +105,10 @@ const addChannelsToModules = moduleReleaseMetas => {
 export default function KymaModulesEdit({ resource, ...props }) {
   const { t } = useTranslation();
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
-  const [initialResource, setInitialResource] = useState(resource);
-
-  useEffect(() => {
-    setKymaResource(cloneDeep(resource));
-    setInitialResource(resource);
-  }, [resource]);
+  const [initialResource] = useState(resource);
+  const [initialUnchangedResource] = useState(cloneDeep(resource));
+  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
 
@@ -308,11 +309,18 @@ export default function KymaModulesEdit({ resource, ...props }) {
       }),
     });
 
+    setIsResourceEdited({
+      isEdited: false,
+    });
     setIsManagedChanged(false);
+
+    setIsFormOpen({
+      formOpen: false,
+    });
   };
   const handleCreate = async () => {
     try {
-      const diff = createPatch(initialResource, kymaResource);
+      const diff = createPatch(initialUnchangedResource, kymaResource);
       await patchRequest(props.resourceUrl, diff);
 
       onSuccess();
@@ -325,11 +333,11 @@ export default function KymaModulesEdit({ resource, ...props }) {
         const makeForceUpdateFn = closeModal => {
           return async () => {
             kymaResource.metadata.resourceVersion =
-              initialResource?.metadata.resourceVersion;
+              initialUnchangedResource?.metadata.resourceVersion;
             try {
               await patchRequest(
                 props.resourceUrl,
-                createPatch(initialResource, kymaResource),
+                createPatch(initialUnchangedResource, kymaResource),
               );
               closeModal();
               onSuccess();
@@ -407,7 +415,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
         singularName={t('kyma-modules.kyma')}
         resource={kymaResource}
         initialResource={initialResource}
-        updateInitialResource={setInitialResource}
+        updateInitialResource={() => {}}
         setResource={setKymaResource}
         createUrl={props.resourceUrl}
         disableDefaultFields
