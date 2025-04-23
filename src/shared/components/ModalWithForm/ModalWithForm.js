@@ -7,10 +7,9 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';
-import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
-import { useRecoilState } from 'recoil';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { useSetRecoilState } from 'recoil';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 export const ModalWithForm = ({
   performRefetch = () => {},
@@ -27,10 +26,8 @@ export const ModalWithForm = ({
 }) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const { navigateSafely } = useFormNavigation();
 
   const {
     isValid,
@@ -132,13 +129,7 @@ export const ModalWithForm = ({
                   </Button>
                   <Button
                     onClick={() => {
-                      handleActionIfFormOpen(
-                        isResourceEdited,
-                        setIsResourceEdited,
-                        isFormOpen,
-                        setIsFormOpen,
-                        () => setOpenStatus(false),
-                      );
+                      navigateSafely(() => setOpenStatus(false));
                     }}
                     design="Transparent"
                   >

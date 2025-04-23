@@ -13,7 +13,6 @@ import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 
@@ -39,7 +38,6 @@ export function useCreateResource({
   const { scopedUrl } = useUrl();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
@@ -132,10 +130,6 @@ export function useCreateResource({
     }
     setIsResourceEdited({
       isEdited: false,
-    });
-
-    setIsFormOpen({
-      formOpen: false,
     });
   };
 
