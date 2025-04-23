@@ -40,7 +40,7 @@ jobs:
           node-version: 22
       - name: Build Busola Docker Image
         shell: bash
-        run: ./.github/scripts/build_kyma_dashboard_local_image.sh | tee busola-build.log
+        run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
         env:
           IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Run Busola in docker

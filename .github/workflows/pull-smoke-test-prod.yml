@@ -6,13 +6,16 @@ on:
     paths:
       - '.github/workflows/pull-smoke-test-prod.yml'
       - '.github/scripts/**'
+      - "kyma/**"
+      - "backend/**"
+      - "public/**"
+      - "src/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile*"
+      - "nginx/**"
       - 'resources/**'
-      - 'tests/kyma/**'
-      - 'nginx/**'
-      - 'src/**'
-      - 'kyma/**'
-      - 'Dockerfile*'
-      - 'package.json'
+      - 'tests/integration/**'
 
 jobs:
   run-smoke-test-prod:
@@ -41,7 +44,7 @@ jobs:
           node-version: 22
       - name: Build Busola Docker Image
         shell: bash
-        run: ./.github/scripts/build_kyma_dashboard_local_image.sh | tee busola-build.log
+        run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
         env:
           IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Run Busola in docker
