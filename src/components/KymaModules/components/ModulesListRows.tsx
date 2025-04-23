@@ -133,8 +133,8 @@ export const ModulesListRows = ({
         <Tag
           className="sap-margin-begin-tiny"
           hideStateIcon
-          colorScheme="3"
-          design="Neutral"
+          colorScheme="5"
+          design="Set2"
         >
           {moduleStatus.state}
         </Tag>
