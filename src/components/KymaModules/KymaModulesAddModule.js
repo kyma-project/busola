@@ -19,6 +19,7 @@ export default function KymaModulesAddModule({
   loading,
   activeKymaModules,
   initialResource,
+  setInitialResource,
   kymaResource,
   setKymaResource,
   props,
@@ -265,6 +266,7 @@ export default function KymaModulesAddModule({
       resource={resource}
       setResource={setResource}
       initialResource={initialResource}
+      updateInitialResource={setInitialResource}
       disableDefaultFields
       formElementRef={props.formElementRef}
       onChange={props.onChange}

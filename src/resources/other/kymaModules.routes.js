@@ -183,6 +183,7 @@ const ColumnWraper = ({
               loading={kymaResourceLoading}
               activeKymaModules={activeKymaModules}
               initialResource={initialResource}
+              setInitialResource={setInitialResource}
               kymaResource={kymaResourceState}
               setKymaResource={setKymaResourceState}
               props={renderProps}

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import {
@@ -74,8 +75,8 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
 
   return (
     <>
-      {warnings.flat().map(warning => (
-        <>
+      {warnings.flat().map((warning, idx) => (
+        <React.Fragment key={idx}>
           <FlexBox alignItems={'Begin'}>
             <ObjectStatus
               showDefaultIcon
@@ -95,7 +96,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
               marginRight: '-1rem',
             }}
           />
-        </>
+        </React.Fragment>
       ))}
     </>
   );
