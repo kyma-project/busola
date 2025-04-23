@@ -1,5 +1,5 @@
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense } from 'react';
 import { Route, useParams } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -10,8 +10,6 @@ import { useUrl } from 'hooks/useUrl';
 import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails';
 import { t } from 'i18next';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
-import { cloneDeep } from 'lodash';
-import { useKymaQuery } from 'components/KymaModules/kymaModulesQueries';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
 
@@ -43,27 +41,6 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       layoutState?.showEdit?.resource ||
       null,
   });
-
-  const {
-    data: kymaResource,
-    loading: kymaResourceLoading,
-    resourceUrl,
-  } = useKymaQuery();
-
-  const [activeKymaModules, setActiveKymaModules] = useState(
-    kymaResource?.spec?.modules ?? [],
-  );
-
-  useEffect(() => {
-    if (kymaResource) {
-      setActiveKymaModules(kymaResource?.spec?.modules || []);
-      setKymaResourceState(kymaResource);
-      setInitialUnchangedResource(cloneDeep(kymaResource));
-    }
-  }, [kymaResource]);
-
-  const [initialUnchangedResource, setInitialUnchangedResource] = useState();
-  const [kymaResourceState, setKymaResourceState] = useState();
 
   let startColumnComponent = null;
 
@@ -112,17 +89,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       renderForm={renderProps => {
         return (
           <ErrorBoundary>
-            <KymaModulesAddModule
-              resourceName={kymaResource}
-              kymaResourceUrl={resourceUrl}
-              initialKymaResource={kymaResource}
-              loading={kymaResourceLoading}
-              activeKymaModules={activeKymaModules}
-              initialUnchangedResource={initialUnchangedResource}
-              kymaResource={kymaResourceState}
-              setKymaResource={setKymaResourceState}
-              props={renderProps}
-            />
+            <KymaModulesAddModule props={renderProps} />
           </ErrorBoundary>
         );
       }}
@@ -134,9 +101,6 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       <KymaModuleContextProvider
         setLayoutColumn={setLayoutColumn}
         layoutState={layoutState}
-        skipModuleTemplateQuery={
-          layoutState?.midColumn?.resourceName || resourceName
-        }
       >
         <FlexibleColumnLayout
           style={{ height: '100%' }}

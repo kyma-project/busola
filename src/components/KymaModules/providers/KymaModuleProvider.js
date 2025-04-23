@@ -17,6 +17,9 @@ export const KymaModuleContext = createContext({
   resourceUrl: null,
   kymaResource: null,
   kymaResourceLoading: false,
+  initialUnchangedResource: null,
+  kymaResourceState: null,
+  setKymaResourceState: () => {},
   moduleTemplates: null,
   moduleTemplatesLoading: false,
   selectedModules: {},
@@ -29,7 +32,6 @@ export function KymaModuleContextProvider({
   children,
   setLayoutColumn,
   layoutState,
-  skipModuleTemplateQuery,
 }) {
   const {
     data: kymaResource,
@@ -87,7 +89,7 @@ export function KymaModuleContextProvider({
     data: moduleTemplates,
     loading: moduleTemplatesLoading,
   } = useModuleTemplatesQuery({
-    skip: !(skipModuleTemplateQuery || showDeleteDialog),
+    skip: !kymaResource?.metadata?.name,
   });
 
   const deleteModuleButton = (
@@ -105,6 +107,9 @@ export function KymaModuleContextProvider({
         resourceUrl: resourceUrl,
         kymaResource: kymaResource,
         kymaResourceLoading: kymaResourceLoading,
+        initialUnchangedResource: initialUnchangedResource,
+        kymaResourceState: kymaResourceState,
+        setKymaResourceState: setKymaResourceState,
         moduleTemplates: moduleTemplates,
         moduleTemplatesLoading: moduleTemplatesLoading,
         selectedModules: activeKymaModules,
