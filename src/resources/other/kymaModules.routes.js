@@ -71,7 +71,7 @@ const ColumnWraper = ({
     if (kymaResource) {
       setActiveKymaModules(kymaResource?.spec?.modules || []);
       setKymaResourceState(kymaResource);
-      setInitialUnchangedResource(cloneDeep(kymaResource));
+      setInitialResource(cloneDeep(kymaResource));
     }
   }, [kymaResource]);
 
@@ -81,14 +81,14 @@ const ColumnWraper = ({
     }
   }, [layoutState]);
 
-  const [initialUnchangedResource, setInitialUnchangedResource] = useState();
+  const [initialResource, setInitialResource] = useState();
   const [kymaResourceState, setKymaResourceState] = useState();
   const notification = useNotification();
   const handleModuleUninstall = useCreateResource({
     singularName: 'Kyma',
     pluralKind: 'Kymas',
     resource: kymaResourceState,
-    initialUnchangedResource: initialUnchangedResource,
+    initialResource: initialResource,
     createUrl: resourceUrl,
     afterCreatedFn: () =>
       notification.notifySuccess({
@@ -182,7 +182,7 @@ const ColumnWraper = ({
               initialKymaResource={kymaResource}
               loading={kymaResourceLoading}
               activeKymaModules={activeKymaModules}
-              initialUnchangedResource={initialUnchangedResource}
+              initialResource={initialResource}
               kymaResource={kymaResourceState}
               setKymaResource={setKymaResourceState}
               props={renderProps}
@@ -212,7 +212,7 @@ const ColumnWraper = ({
             moduleTemplates={moduleTemplates}
             detailsOpen={detailsOpen}
             setKymaResourceState={setKymaResourceState}
-            setInitialUnchangedResource={setInitialUnchangedResource}
+            setInitialResource={setInitialResource}
             setChosenModuleIndex={setOpenedModuleIndex}
             handleModuleUninstall={handleModuleUninstall}
             setLayoutColumn={setLayoutColumn}

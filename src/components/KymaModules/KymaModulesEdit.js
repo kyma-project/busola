@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPatch } from 'rfc6902';
 import { useTranslation } from 'react-i18next';
 
@@ -102,8 +102,12 @@ const addChannelsToModules = moduleReleaseMetas => {
 export default function KymaModulesEdit({ resource, ...props }) {
   const { t } = useTranslation();
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
-  const [initialResource] = useState(resource);
-  const [initialUnchangedResource] = useState(cloneDeep(resource));
+  const [initialResource, setInitialResource] = useState(resource);
+
+  useEffect(() => {
+    setKymaResource(cloneDeep(resource));
+    setInitialResource(resource);
+  }, [resource]);
 
   const resourceName = kymaResource?.metadata.name;
 
@@ -308,7 +312,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
   };
   const handleCreate = async () => {
     try {
-      const diff = createPatch(initialUnchangedResource, kymaResource);
+      const diff = createPatch(initialResource, kymaResource);
       await patchRequest(props.resourceUrl, diff);
 
       onSuccess();
@@ -321,11 +325,11 @@ export default function KymaModulesEdit({ resource, ...props }) {
         const makeForceUpdateFn = closeModal => {
           return async () => {
             kymaResource.metadata.resourceVersion =
-              initialUnchangedResource?.metadata.resourceVersion;
+              initialResource?.metadata.resourceVersion;
             try {
               await patchRequest(
                 props.resourceUrl,
-                createPatch(initialUnchangedResource, kymaResource),
+                createPatch(initialResource, kymaResource),
               );
               closeModal();
               onSuccess();
@@ -403,7 +407,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
         singularName={t('kyma-modules.kyma')}
         resource={kymaResource}
         initialResource={initialResource}
-        initialUnchangedResource={initialUnchangedResource}
+        updateInitialResource={setInitialResource}
         setResource={setKymaResource}
         createUrl={props.resourceUrl}
         disableDefaultFields

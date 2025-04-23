@@ -73,12 +73,14 @@ export function ExtensibilityCreateCore({
 
   useEffect(() => {
     setStore(
-      initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
+      getUIStoreFromResourceObj(
+        initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
+      ),
     );
     setInitialResource(
       initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
     );
-  }, [initialExtensibilityResource, defaultPreset.value, emptyTemplate]);
+  }, [initialExtensibilityResource, defaultPreset?.value, emptyTemplate]);
 
   const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
     initialResource,

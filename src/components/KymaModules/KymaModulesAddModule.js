@@ -18,7 +18,7 @@ export default function KymaModulesAddModule({
   kymaResourceUrl,
   loading,
   activeKymaModules,
-  initialUnchangedResource,
+  initialResource,
   kymaResource,
   setKymaResource,
   props,
@@ -99,7 +99,7 @@ export default function KymaModulesAddModule({
   const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
     const name = module.metadata.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => item.name === name);
-    const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
+    const isAlreadyInstalled = initialResource?.spec?.modules?.find(
       installedModule => installedModule.name === name,
     );
     const moduleMetaRelase = moduleReleaseMetas?.items.find(
@@ -264,13 +264,12 @@ export default function KymaModulesAddModule({
       singularName={'Kyma'}
       resource={resource}
       setResource={setResource}
-      initialResource={initialUnchangedResource}
+      initialResource={initialResource}
       disableDefaultFields
       formElementRef={props.formElementRef}
       onChange={props.onChange}
       layoutNumber="startColumn"
       resetLayout
-      initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
       formWithoutPanel
       className="add-modules-form"
