@@ -6,12 +6,15 @@ on:
     paths:
       - '.github/workflows/pull-integration-namespace-k3d.yml'
       - '.github/scripts/**'
+      - "backend/**"
+      - "public/**"
+      - "src/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile*"
+      - "nginx/**"
       - 'resources/**'
-      - 'tests/**'
-      - 'nginx/**'
-      - 'src/**'
-      - 'backend/**'
-      - 'package.json'
+      - 'tests/integration/**'
 
 jobs:
   run-namespace-test:
