@@ -12,6 +12,7 @@
     "test:kyma-e2e": "cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
     "test:kyma-e2e:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
     "test:smoke-extensions": "cypress run --browser chromium -C cypress-smoke.js",
+    "test:smoke-simple": "cypress run --browser chromium --spec \"tests/namespace/a-run-before.spec.js\" ",
     "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome",
     "run-docker": "docker run --rm -it -e DOCKER_DESKTOP_CLUSTER=true --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT=$ENV europe-docker.pkg.dev/kyma-project/dev/busola:PR-$PR_NUMBER",
     "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome",
