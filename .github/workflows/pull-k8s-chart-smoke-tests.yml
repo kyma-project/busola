@@ -54,7 +54,7 @@ jobs:
         env:
           ENV: dev
         run: |
-          .github/scripts/deploy_busola_on_k8s.sh kyma-dashboard:local-pr-${github.sha} | tee busola-deploy.log
+          .github/scripts/deploy_busola_on_k8s.sh kyma-dashboard:local-pr-${{github.sha}} | tee busola-deploy.log
       - name: Prepare kubeconfig
         run: |
           .github/scripts/prepare_kubeconfig.sh
