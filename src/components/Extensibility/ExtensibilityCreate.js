@@ -68,7 +68,7 @@ export function ExtensibilityCreateCore({
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const [initialResource, setInitialResource] = useState(
-    initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
+    initialExtensibilityResource,
   );
 
   useEffect(() => {
@@ -77,9 +77,7 @@ export function ExtensibilityCreateCore({
         initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
       ),
     );
-    setInitialResource(
-      initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
-    );
+    setInitialResource(initialExtensibilityResource);
   }, [initialExtensibilityResource, defaultPreset?.value, emptyTemplate]);
 
   const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
@@ -181,7 +179,7 @@ export function ExtensibilityCreateCore({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
-      presets={initialResource && presets}
+      presets={!isEdit && presets}
       initialResource={initialResource}
       updateInitialResource={setInitialResource}
       afterCreatedFn={afterCreatedFn}
