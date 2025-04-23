@@ -73,5 +73,6 @@ jobs:
           path: |
             kyma-alpha-deploy.log
             busola-build.log
+            busola-run.log
             kyma-provision.log
           retention-days: 90
