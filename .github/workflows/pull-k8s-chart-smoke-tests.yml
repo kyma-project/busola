@@ -45,7 +45,7 @@ jobs:
           IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Import Kyma Dashbaord image to k3d
         shell: bash
-        run: k3d image import ${IMG}
+        run: k3d image import ${IMG} -c kyma
         env:
           IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Deploy Busola
