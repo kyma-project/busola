@@ -54,7 +54,7 @@ export function K8sResourceSelect({
   const pluralResourceType = pluralize(resourceType);
 
   const resourceNames = (data || []).map(s => s.metadata.name);
-  const options = resourceNames.map(name => ({ key: name, text: name }));
+  const options = resourceNames.map((name, idx) => ({ key: idx, text: name }));
 
   const getValidationState = () => {
     if (error) {
@@ -113,7 +113,7 @@ export function K8sResourceSelect({
       pattern={k8sNamePattern}
     >
       {options.map(option => (
-        <ComboBoxItem id={option.key} text={option.text} />
+        <ComboBoxItem key={option.key} text={option.text} />
       ))}
     </ComboBox>
   );
