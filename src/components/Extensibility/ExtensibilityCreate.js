@@ -64,9 +64,6 @@ export function ExtensibilityCreateCore({
     ),
   );
 
-  const presets = usePreparePresets(createResource?.presets, emptyTemplate);
-  const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-
   const [initialResource, setInitialResource] = useState(
     initialExtensibilityResource,
   );
@@ -77,11 +74,12 @@ export function ExtensibilityCreateCore({
         initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
       ),
     );
-  }, [initialExtensibilityResource, defaultPreset?.value, emptyTemplate]);
-
-  useEffect(() => {
     setInitialResource(initialExtensibilityResource);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialExtensibilityResource]);
+
+  const presets = usePreparePresets(createResource?.presets, emptyTemplate);
+  const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
     initialResource,
@@ -204,7 +202,7 @@ export function ExtensibilityCreateCore({
   );
 }
 
-export function ExtensibilityCreate(props) {
+export default function ExtensibilityCreate(props) {
   const resMetaData = useGetCRbyPath();
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
@@ -227,5 +225,3 @@ export function ExtensibilityCreate(props) {
     </TranslationBundleContext.Provider>
   );
 }
-
-export default ExtensibilityCreate;
