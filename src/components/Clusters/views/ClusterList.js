@@ -28,6 +28,7 @@ import { useSetRecoilState } from 'recoil';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -46,6 +47,14 @@ function ClusterList() {
   const [chosenCluster, setChosenCluster] = useState(null);
   const setShowAdd = useSetRecoilState(showAddClusterWizard);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
+
+  useEffect(() => {
+    setShowCompanion({
+      show: false,
+      fullScreen: false,
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps,
 
   useEffect(() => {
     setLayoutColumn({
