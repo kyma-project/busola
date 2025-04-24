@@ -68,99 +68,99 @@ Whenever data sources are provided, they are available as corresponding variable
 
 ## Examples
 
-* Filtering and displaying APIRUles with the `Error` status.
+- Filtering and displaying APIRUles with the `Error` status.
 
-   ```yaml
-   ...
+  ```yaml
+  ...
   - name: Failing API Rules
-    widget: Table
-    source: $root
-    targets:
-      - slot: details-top
-        location: ClusterOverview
-      - slot: details-bottom
-        location: ClusterOverview
-        filter: '$item.status.APIRuleStatus.code="Ok"'
-    filter: '$item.status.APIRuleStatus.code="Error"'
-    order: 2
-    children: 
-      - name: Name
-        source: metadata.name
-        widget: Text
-      - name: Namespace
-        source: metadata.namespace
-        widget: Text
-      - name: status
-        widget: Badge
-        highlights: 
-          positive:
-            - 'Ok'
-          critical:
-            - 'Error'
-            - 'Skipped'
-        source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "Unknown"'
-        description: status.APIRuleStatus.desc
-    ```
+   widget: Table
+   source: $root
+   targets:
+     - slot: details-top
+       location: ClusterOverview
+     - slot: details-bottom
+       location: ClusterOverview
+       filter: '$item.status.APIRuleStatus.code="Ok"'
+   filter: '$item.status.APIRuleStatus.code="Error"'
+   order: 2
+   children:
+     - name: Name
+       source: metadata.name
+       widget: Text
+     - name: Namespace
+       source: metadata.namespace
+       widget: Text
+     - name: status
+       widget: Badge
+       highlights:
+         positive:
+           - 'Ok'
+         critical:
+           - 'Error'
+           - 'Skipped'
+       source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "Unknown"'
+       description: status.APIRuleStatus.desc
+  ```
 
-   ![Failing APIs](assets/failing_apis.png)
+  ![Failing APIs](assets/failing_apis.png)
 
-* Counting resource components.
+- Counting resource components.
 
-   ```yaml
+  ```yaml
+  ...
+  - name: HPAs Statistical Injection Example
+     widget: StatisticalCard
+     source: status
+     mainValue:
+       name: Test1
+       source: $count($item)
+     children:
+       - name: Test2
+         source: "2"
+       - name: Test3
+         source: "3"
+     targets:
+       - location: ClusterOverview
+         slot: health
+   - name: MyTitle
+     widget: RadialChart
+     source: "22"
+     maxValue: "44"
+     color: var(--sapChart_OrderedColor_5)
+     targets:
+       - slot: health
+         location: ClusterOverview
+  ```
+
+  ![Counting resources](assets/counting.png)
+
+- Converting String into a readable date.
+
+  ```yaml
+  ...
+  status:
+     header:
+       - name: status
+         source: 'status.state ? status.state : "UNKNOWN"'
+         highlights:
+           unknown:
+           - UNKNOWN
+         widget: Badge
+         description: status.message
+     body:
+       - name: conditions
+         source: status.conditions
+         widget: ConditionList
+       - name: status.expirationDate
+         source: '$readableTimestamp(status.expirationDate)'
+       - name: issuer
+         source: status.issuerRef.name
+       - name: Observed Generation
+         source: status.observedGeneration
    ...
-   - name: HPAs Statistical Injection Example
-      widget: StatisticalCard
-      source: status
-      mainValue:
-        name: Test1
-        source: $count($item)
-      children:
-        - name: Test2
-          source: "2"
-        - name: Test3
-          source: "3"
-      targets:
-        - location: ClusterOverview
-          slot: health
-    - name: MyTitle
-      widget: RadialChart
-      source: "22"
-      maxValue: "44"
-      color: var(--sapChart_OrderedColor_5)
-      targets:
-        - slot: health
-          location: ClusterOverview
-    ```
+  ```
 
-   ![Counting resources](assets/counting.png)
-
-* Converting String into a readable date.
-
-   ```yaml
-   ...
-   status:
-      header:
-        - name: status
-          source: 'status.state ? status.state : "UNKNOWN"'
-          highlights:
-            unknown:
-            - UNKNOWN
-          widget: Badge
-          description: status.message
-      body:
-        - name: conditions
-          source: status.conditions
-          widget: ConditionList
-        - name: status.expirationDate
-          source: '$readableTimestamp(status.expirationDate)'
-        - name: issuer
-          source: status.issuerRef.name
-        - name: Observed Generation
-          source: status.observedGeneration
-    ...
-    ```
-
-   ![Readable date](assets/readable_date.png)
+  ![Readable date](assets/readable_date.png)
 
 ## Related Information
 
