@@ -134,7 +134,7 @@ Whenever data sources are provided, they are available as corresponding variable
 
    ![Counting resources](assets/counting.png)
 
-* Converting String into a readable date
+* Converting String into a readable date.
 
    ```yaml
    ...
