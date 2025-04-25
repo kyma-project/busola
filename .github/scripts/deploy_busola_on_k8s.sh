@@ -14,6 +14,7 @@ print_k8s_resources()
 {
   kubectl get all
   kubectl get deployment -oyaml
+  kubectl get pod -oyaml
 }
 
 ENV=${ENV?"env is not set"}
