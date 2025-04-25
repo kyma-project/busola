@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { cloneDeep } from 'lodash';
 
@@ -29,12 +29,18 @@ function CRCreateForm({
   const [cr, setCr] = useState(
     cloneDeep(initialCustomResource) || createTemplate(crd),
   );
-  const [initialUnchangedResource] = useState(initialCustomResource);
-  const [initialResource] = useState(
+  const [initialResource, setInitialResource] = useState(
     initialCustomResource || createTemplate(crd),
   );
 
-  const isEdit = !!initialUnchangedResource?.metadata?.name;
+  useEffect(() => {
+    setCr(cloneDeep(initialCustomResource) || createTemplate(crd));
+    setInitialResource(initialCustomResource || createTemplate(crd));
+  }, [initialCustomResource, crd]);
+
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const customUrl = useCustomResourceUrl(crd);
 
@@ -62,7 +68,7 @@ function CRCreateForm({
       singularName={crd.spec.names.kind}
       resource={cr}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setCr}
       onChange={onChange}
       formElementRef={formElementRef}

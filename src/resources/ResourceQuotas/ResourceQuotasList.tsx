@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
 import { Button } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import { ResourceQuota } from './ResourceQuotaDetails';
@@ -15,7 +14,6 @@ export function ResourceQuotasList(props: any) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { namespaceUrl } = useUrl();
 
   const customColumns = [
@@ -63,7 +61,6 @@ export function ResourceQuotasList(props: any) {
       },
       layout: 'TwoColumnsMidExpanded',
     });
-    setIsFormOpen({ formOpen: true, leavingForm: false });
     navigate(
       namespaceUrl(
         `${pluralize(

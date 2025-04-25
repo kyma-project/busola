@@ -87,6 +87,7 @@ export function GenericList({
               defaultOpen={
                 defaultOpen || index === newItemIndex ? true : undefined
               }
+              key={index}
               title={pluralize(tFromStoreKeys(ownKeys, schema), 1)}
               nestingLevel={nestingLevel + 1}
               actions={

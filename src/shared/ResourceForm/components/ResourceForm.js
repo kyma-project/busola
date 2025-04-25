@@ -29,7 +29,7 @@ export function ResourceForm({
   singularName,
   resource,
   initialResource,
-  initialUnchangedResource,
+  updateInitialResource = () => {},
   setResource,
   setCustomValid,
   onChange,
@@ -59,12 +59,15 @@ export function ResourceForm({
   initialMode,
   yamlSearchDisabled,
   yamlHideDisabled,
-  isEdit,
   stickyHeaderHeight,
   resetLayout,
   formWithoutPanel,
 }) {
   const layoutState = useRecoilValue(columnLayoutState);
+
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   useEffect(() => {
     if (layoutState?.showCreate?.resource) {
@@ -100,13 +103,13 @@ export function ResourceForm({
     singularName,
     pluralKind,
     resource,
-    initialUnchangedResource,
+    initialResource,
+    updateInitialResource,
     createUrl,
     skipCreateFn,
     afterCreatedFn,
     urlPath,
     layoutNumber,
-    setResource,
     resetLayout,
     afterCreatedCustomMessage,
   });
@@ -214,7 +217,7 @@ export function ResourceForm({
                   <K8sNameField
                     propertyPath="$.metadata.name"
                     kind={singularName}
-                    readOnly={readOnly || !!initialUnchangedResource}
+                    readOnly={readOnly || isEdit}
                     setValue={handleNameChange}
                     tooltipContent={nameDesc}
                     {...nameProps}
@@ -283,7 +286,7 @@ export function ResourceForm({
                     setMode(newMode);
                     if (onModeChange) onModeChange(mode, newMode);
                   }}
-                  isEditing={!!isEdit}
+                  isEditing={isEdit}
                   isDisabled={modeSelectorDisabled}
                 />
               )}

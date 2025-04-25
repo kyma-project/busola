@@ -10,7 +10,7 @@ type UnsavedMessageBoxProps = {
 
 export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
   const { t } = useTranslation();
-  const isFormOpen = useRecoilValue(isFormOpenState);
+  const { formOpen, leavingForm } = useRecoilValue(isFormOpenState);
   const { confirmDiscard, cancelDiscard } = useFormNavigation();
 
   const handleClose = (
@@ -27,7 +27,7 @@ export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
   return (
     <MessageBox
       type="Warning"
-      open={isOpen ?? (isFormOpen.formOpen && isFormOpen.leavingForm)}
+      open={isOpen ?? (formOpen && leavingForm)}
       onClose={handleClose}
       titleText={t('common.headers.discard-changes')}
       actions={[

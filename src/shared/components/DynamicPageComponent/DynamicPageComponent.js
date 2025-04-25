@@ -386,7 +386,6 @@ export const DynamicPageComponent = ({
                     resource: null,
                   },
                 });
-                setIsFormOpen({ formOpen: true });
                 navigate(`${window.location.pathname}?${params.toString()}`);
               } else {
                 setLayoutColumn({

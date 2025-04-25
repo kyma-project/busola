@@ -223,11 +223,14 @@ export function usePrepareLayoutColumns({
   useEffect(() => {
     if (navigationType === NavigationType.Pop) {
       setLayoutColumn(newLayoutState);
-      setIsFormOpen({
-        formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
-      });
     }
-  }, [newLayoutState, setLayoutColumn, setIsFormOpen, navigationType]);
+  }, [newLayoutState, setLayoutColumn, navigationType]);
+
+  useEffect(() => {
+    setIsFormOpen({
+      formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+    });
+  }, [newLayoutState.showCreate, newLayoutState.showEdit, setIsFormOpen]);
 
   useEffect(() => {
     setLayoutColumn(newLayoutState);

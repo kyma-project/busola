@@ -7,27 +7,24 @@ export function useFormNavigation() {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const [{ formOpen }, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const navigateSafely = useCallback(
     (action: Function) => {
-      // Store the navigation action for later use if the user confirms
-      setIsResourceEdited(prevState => ({
-        ...prevState,
-        discardAction: () => action(),
-      }));
-
       // Check if we should show the confirmation dialog
-      if (isFormOpen.formOpen && isResourceEdited.isEdited) {
+      if (formOpen && isResourceEdited.isEdited) {
+        // Store the navigation action for later use if the user confirms
+        setIsResourceEdited(prevState => ({
+          ...prevState,
+          discardAction: () => action(),
+        }));
         setIsFormOpen({ formOpen: true, leavingForm: true });
         return;
       }
 
-      // Otherwise, perform the action immediately
-      setIsResourceEdited({ isEdited: false });
       action();
     },
-    [isFormOpen, isResourceEdited, setIsFormOpen, setIsResourceEdited],
+    [formOpen, isResourceEdited, setIsFormOpen, setIsResourceEdited],
   );
 
   const confirmDiscard = useCallback(() => {
@@ -41,7 +38,7 @@ export function useFormNavigation() {
   }, [isResourceEdited, setIsFormOpen, setIsResourceEdited]);
 
   const cancelDiscard = useCallback(() => {
-    setIsFormOpen(prev => ({ ...prev, leavingForm: false }));
+    setIsFormOpen({ formOpen: true, leavingForm: false });
   }, [setIsFormOpen]);
 
   return {

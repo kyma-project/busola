@@ -270,7 +270,6 @@ export default function KymaModulesAddModule({
       onChange={props.onChange}
       layoutNumber="startColumn"
       resetLayout
-      initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
       formWithoutPanel
       className="add-modules-form"
