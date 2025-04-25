@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
 import { useFeature } from 'hooks/useFeature';
-import { kymaResourcesAtom } from '../../../../state/kymaResourcesAtom';
+import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
 import { Text } from '@ui5/webcomponents-react';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
