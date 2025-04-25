@@ -5,7 +5,8 @@ import { clusterState } from './clusterAtom';
 const kymaResourcesQuery = selector({
   key: 'kymaResourcesQuery',
   get: async ({ get }) => {
-    const _cluster = get(clusterState); // We need to track if cluster changes
+    // We need to track if cluster changes
+    const _cluster = get(clusterState); // eslint-disable-line @typescript-eslint/no-unused-vars
     const fetchFn = getFetchFn(get);
 
     if (!fetchFn) return null;

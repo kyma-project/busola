@@ -9,7 +9,6 @@ import { Text } from '@ui5/webcomponents-react';
 import ClusterModulesCard from './ClusterModulesCard';
 import { useRecoilValue } from 'recoil';
 import { kymaResourcesAtom } from '../../../../state/kymaResourcesAtom';
-import { useKymaQuery } from '../../../KymaModules/kymaModulesQueries';
 import { useMemo } from 'react';
 
 const GardenerProvider = () => {
