@@ -5,6 +5,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/pull-smoke-test-stage.yml'
+      - '.github/scripts/**'
       - 'resources/**'
       - 'tests/kyma/**'
       - 'nginx/**'
@@ -37,11 +38,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Setup Busola
+      - name: Build Busola Docker Image
+        shell: bash
+        run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
+        env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
+      - name: Run Busola in docker
         shell: bash
         run: |
-          ./.github/scripts/setup-busola.sh | tee busola-build.log
+          ./.github/scripts/run_kyma_dashboard_image.sh | tee busola-run.log
         env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
           ENV: stage
       - name: Run tests
         shell: bash
@@ -66,5 +73,6 @@ jobs:
           path: |
             kyma-alpha-deploy.log
             busola-build.log
+            busola-run.log
             kyma-provision.log
           retention-days: 90

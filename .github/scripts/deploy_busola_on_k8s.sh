@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script install busola on k8s
+#  Installs busola on k8s
 
 # standard bash error handling
 set -o nounset  # treat unset variables as an error and exit immediately.
@@ -17,15 +17,14 @@ print_k8s_resources()
 }
 
 ENV=${ENV?"env is not set"}
-IMG_TAG=$1
-IMG_DIR=${IMG_DIR:-"dev"}
+IMG=$1
 
 kubectl delete configmap environment --ignore-not-found=true
 kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}"
-echo "### Deploying busola from: ${IMG_DIR}/${IMG_TAG}"
+echo "### Deploying busola from: ${IMG}"
 
 cd resources
-(cd base && kustomize edit set image busola=europe-docker.pkg.dev/kyma-project/"${IMG_DIR}"/busola:"${IMG_TAG}")
+(cd base && kustomize edit set image busola="${IMG}")
 kustomize build base/ | kubectl apply -f-
 
 kubectl apply -f ingress/ingress.yaml
