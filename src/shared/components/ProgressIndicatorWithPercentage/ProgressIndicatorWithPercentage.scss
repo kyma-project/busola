@@ -1,4 +1,7 @@
 .progress-indicator-percentage {
+  width: 100%;
+  min-width: 6rem;
+
   &__percents {
     text-align: end;
     position: relative;

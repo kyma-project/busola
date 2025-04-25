@@ -150,7 +150,7 @@ const DefaultRowRenderer = ({
     }
   });
   const actionsCell = (
-    <TableCell>
+    <TableCell horizontalAlign="Right">
       <ListActions actions={actions} entry={entry} />
     </TableCell>
   );
