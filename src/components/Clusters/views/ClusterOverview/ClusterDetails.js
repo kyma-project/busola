@@ -7,6 +7,10 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import { Text } from '@ui5/webcomponents-react';
 import ClusterModulesCard from './ClusterModulesCard';
+import { useRecoilValue } from 'recoil';
+import { kymaResourcesAtom } from '../../../../state/kymaResourcesAtom';
+import { useKymaQuery } from '../../../KymaModules/kymaModulesQueries';
+import { useMemo } from 'react';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -29,7 +33,14 @@ const GardenerProvider = () => {
 export default function ClusterDetails({ currentCluster }) {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
+  const kymaResources = useRecoilValue(kymaResourcesAtom);
   const config = currentCluster?.config;
+  const kymaResourceLabels = useMemo(
+    () =>
+      kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
+        .labels || kymaResources?.items[0]?.metadata?.labels,
+    [kymaResources],
+  );
 
   return (
     <div className="resource-details-container">
@@ -63,6 +74,20 @@ export default function ClusterDetails({ currentCluster }) {
               </Text>
             </DynamicPageComponent.Column>
             <GardenerProvider />
+            {kymaResourceLabels && (
+              <>
+                <DynamicPageComponent.Column
+                  title={t('clusters.overview.global-account-id')}
+                >
+                  {kymaResourceLabels['kyma-project.io/global-account-id']}
+                </DynamicPageComponent.Column>
+                <DynamicPageComponent.Column
+                  title={t('clusters.overview.subaccount-id')}
+                >
+                  {kymaResourceLabels['kyma-project.io/subaccount-id']}
+                </DynamicPageComponent.Column>
+              </>
+            )}
           </>
         }
       />

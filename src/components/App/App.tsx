@@ -22,7 +22,6 @@ import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
-import { useGetKymaResources } from 'state/kymaResourcesAtom';
 
 import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
@@ -74,7 +73,6 @@ export default function App() {
   useSentry();
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
-  useGetKymaResources();
 
   const showCompanion = useRecoilValue(showKymaCompanionState);
 
