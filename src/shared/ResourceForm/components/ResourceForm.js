@@ -29,7 +29,7 @@ export function ResourceForm({
   singularName,
   resource,
   initialResource,
-  updateInitialResource,
+  updateInitialResource = () => {},
   setResource,
   setCustomValid,
   onChange,

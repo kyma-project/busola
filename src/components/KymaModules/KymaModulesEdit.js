@@ -415,7 +415,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
         singularName={t('kyma-modules.kyma')}
         resource={kymaResource}
         initialResource={initialResource}
-        updateInitialResource={() => {}}
         setResource={setKymaResource}
         createUrl={props.resourceUrl}
         disableDefaultFields
