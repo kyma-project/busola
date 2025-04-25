@@ -1,72 +1,103 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Select, Option, Title } from '@ui5/webcomponents-react';
-
+import {
+  MessageBox,
+  Button,
+  FlexBox,
+  Text,
+  RadioButton,
+  Title,
+} from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
-
 import './ContextChooser.scss';
 
 export function ContextChooser(params) {
   const kubeconfig = params.resource;
   const { t } = useTranslation();
+  const [chosenContext, setChosenContext] = useState('');
+  const [isOpen, setIsOpen] = useState(params.isOpen);
+
+  useEffect(() => {
+    if (params.isOpen && Array.isArray(kubeconfig.contexts) && !chosenContext) {
+      setIsOpen(true);
+    }
+  }, [params.isOpen, kubeconfig.contexts, chosenContext]);
 
   if (!Array.isArray(kubeconfig.contexts)) {
     return '';
   }
 
-  const contexts = kubeconfig.contexts.map(({ name }) => ({
-    key: name,
-    text: name,
-  }));
-  contexts.push({
-    key: '-all-',
-    text: t('clusters.wizard.all-contexts'),
-  });
-
-  const onChange = (event, setValue) => {
-    const selectedContext = event.detail.selectedOption.value;
-    setValue(selectedContext);
-  };
-
   return (
-    <div className="add-cluster__content-container sap-margin-bottom-medium">
-      <ResourceForm.Wrapper {...params} className="sap-margin-bottom-medium">
-        <Title level="H5">{'Provide Context'}</Title>
-        <ResourceForm.FormField
-          required
-          propertyPath='$["current-context"]'
-          label={t('clusters.wizard.context')}
-          validate={value => !!value}
-          input={({ value, setValue }) => (
-            <Select
-              id="context-chooser"
-              onChange={event => {
-                onChange(event, setValue);
-              }}
-            >
-              {contexts.map(context => (
-                <Option
-                  key={context.key}
-                  value={context.key}
-                  selected={value === context.key}
-                >
-                  {context.text}
-                </Option>
-              ))}
-            </Select>
-          )}
-        />
-        {kubeconfig['current-context'] === '-all-' && (
-          <MessageStrip
-            design="Information"
-            hideCloseButton
-            className="sap-margin-y-small"
+    <ResourceForm.Wrapper {...params}>
+      {chosenContext && (
+        <div className="add-cluster__content-container">
+          <Title level="H5">
+            {chosenContext}
+            <Button
+              design="Transparent"
+              className="sap-margin-begin-tiny"
+              icon="edit"
+              tooltip={t('clusters.edit-cluster')}
+              onClick={() => setIsOpen(true)}
+            />
+          </Title>
+        </div>
+      )}
+      <ResourceForm.FormField
+        required
+        propertyPath='$["current-context"]'
+        validate={value => !!value}
+        input={({ setValue }) => (
+          <MessageBox
+            style={{ width: '478px', height: '210px' }}
+            type={undefined}
+            titleText={'Choose cluster'}
+            open={isOpen}
+            className="ui5-content-density-compact"
+            actions={[
+              <Button
+                key="confirmation"
+                design="Emphasized"
+                onClick={() => {
+                  setValue(chosenContext);
+                  setIsOpen(false);
+                }}
+                disabled={!chosenContext}
+              >
+                {t('common.buttons.choose')}
+              </Button>,
+              <Button
+                key="cancel"
+                design="Transparent"
+                onClick={params.onCancel}
+              >
+                {t('common.buttons.cancel')}
+              </Button>,
+            ]}
           >
-            {t('clusters.wizard.multi-context-info', {
-              context: kubeconfig.contexts[0]?.name,
-            })}
-          </MessageStrip>
+            <FlexBox direction="Column">
+              <Text style={{ paddingLeft: '7.5px' }}>
+                {t('clusters.wizard.several-context-info')}
+                <br />
+                {t('clusters.wizard.several-context-question')}
+              </Text>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {kubeconfig.contexts.map(context => (
+                  <RadioButton
+                    id={'context-chooser' + context.name}
+                    key={context.name}
+                    name={context.name}
+                    value={context.name}
+                    checked={chosenContext === context.name}
+                    text={context.name}
+                    onChange={() => setChosenContext(context.name)}
+                  />
+                ))}
+              </div>
+            </FlexBox>
+          </MessageBox>
         )}
-      </ResourceForm.Wrapper>
-    </div>
+      />
+    </ResourceForm.Wrapper>
   );
 }
