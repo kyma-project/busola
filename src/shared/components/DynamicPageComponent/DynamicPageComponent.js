@@ -123,12 +123,12 @@ export const DynamicPageComponent = ({
   const [searchParams] = useSearchParams();
   const editColumn = searchParams.get('editColumn');
 
-  const [selectedSectionIdState, setSelectedSectionIdState] = useState(
+  const [selectedTab, setSelectedTab] = useState(
     layoutColumn?.showEdit ? 'edit' : 'view',
   );
 
   useEffect(() => {
-    setSelectedSectionIdState(layoutColumn?.showEdit ? 'edit' : 'view');
+    setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
   }, [layoutColumn]);
 
   const dynamicPageRef = useRef(null);
@@ -349,7 +349,7 @@ export const DynamicPageComponent = ({
                 isFormOpen,
                 setIsFormOpen,
               );
-              setSelectedSectionIdState(e.detail.tab.getAttribute('data-mode'));
+              setSelectedTab(e.detail.tab.getAttribute('data-mode'));
               return;
             }
             if (isFormOpen.formOpen) {
@@ -358,7 +358,7 @@ export const DynamicPageComponent = ({
 
             const newTabName = e.detail.tab.getAttribute('data-mode');
             navigateSafely(() => {
-              setSelectedSectionIdState(newTabName);
+              setSelectedTab(newTabName);
 
               if (newTabName === 'edit') {
                 const params = new URLSearchParams();
@@ -396,18 +396,18 @@ export const DynamicPageComponent = ({
           <Tab
             data-mode="view"
             text={t('common.tabs.view')}
-            selected={selectedSectionIdState === 'view'}
+            selected={selectedTab === 'view'}
           ></Tab>
           <Tab
             data-mode="edit"
             text={showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')}
-            selected={selectedSectionIdState === 'edit'}
+            selected={selectedTab === 'edit'}
           ></Tab>
         </TabContainer>
 
-        {selectedSectionIdState === 'view' && content}
+        {selectedTab === 'view' && content}
 
-        {selectedSectionIdState === 'edit' &&
+        {selectedTab === 'edit' &&
           inlineEditForm(headerHeight + tabContainerHeight)}
       </DynamicPage>
     );
