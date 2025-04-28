@@ -168,6 +168,7 @@ context('Test Jobs', () => {
       .find('input')
       .filterWithNoValue()
       .first()
+      .click()
       .type('b', { force: true });
 
     cy.saveChanges('Edit');

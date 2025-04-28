@@ -12,6 +12,7 @@ export const Tooltip = ({
   trigger = 'mouseenter',
   tippyProps,
   delay = [200, 0],
+  style,
 }) => {
   return (
     <TippyTooltip
@@ -20,6 +21,7 @@ export const Tooltip = ({
       trigger={trigger}
       distance={0}
       delay={delay}
+      style={style}
       {...tippyProps}
     >
       {children}

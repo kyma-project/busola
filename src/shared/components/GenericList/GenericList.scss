@@ -19,6 +19,10 @@
     border-bottom: var(--sapList_BorderWidth) solid
       var(--sapList_SelectionBorderColor);
   }
+
+  ui5-table-cell {
+    width: 100%;
+  }
 }
 
 .cursor-pointer {
