@@ -6,6 +6,7 @@ set -o nounset  # treat unset variables as an error and exit immediately.
 set -o errexit  # exit immediately when a command fails.
 set -E          # needs to be set if we want the ERR trap
 set -o pipefail # prevents errors in a pipeline from being masked
+
 echo "Provisioning k3d cluster for Kyma"
 k3d registry create kyma-registry.localhost --port 5000
 
