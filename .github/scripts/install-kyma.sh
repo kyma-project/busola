@@ -1,24 +1,15 @@
 #!/bin/bash
 
-set -e
+# Deploys all Kyma related resources
 
-APPLICATION_CONNECTOR_VERSION="1.1.3"
-OS="$(uname -s | tr 'A-Z' 'a-z')"
-echo "Using OS:" "${OS}"
-
-if [ ! -f "./bin/kyma" ]; then
-  echo "Kyma CLI Download is starting"
-  mkdir -p ./bin
-  curl -Lo ./bin/kyma https://storage.googleapis.com/kyma-cli-unstable/kyma-"${OS}"
-  chmod +x ./bin/kyma
-  echo "Kyma CLI Download finished"
-fi
+set -o nounset  # treat unset variables as an error and exit immediately.
+set -o errexit  # exit immediately when a command fails.
+set -E          # needs to be set if we want the ERR trap
+set -o pipefail # prevents errors in a pipeline from being masked
 
 # Create if not exist
 kubectl get ns kyma-system || kubectl create ns kyma-system
 kubectl get ns kcp-system || kubectl create ns kcp-system
-
-# ./bin/kyma alpha deploy
 
 echo "Apply and enable keda module"
 kubectl apply -f https://github.com/kyma-project/keda-manager/releases/latest/download/keda-manager.yaml
@@ -37,6 +28,7 @@ kubectl apply -f https://github.com/kyma-project/istio/releases/latest/download/
 kubectl apply -f https://github.com/kyma-project/istio/releases/latest/download/istio-default-cr.yaml
 
 echo "Apply application connector"
+APPLICATION_CONNECTOR_VERSION="1.1.3"
 kubectl apply -f https://github.com/kyma-project/application-connector-manager/releases/download/${APPLICATION_CONNECTOR_VERSION}/application-connector-manager.yaml
 kubectl apply -f https://github.com/kyma-project/application-connector-manager/releases/download/${APPLICATION_CONNECTOR_VERSION}/default_application_connector_cr.yaml
 

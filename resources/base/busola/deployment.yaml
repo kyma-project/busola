@@ -30,8 +30,8 @@ spec:
               mountPath: /app/core-ui/config
           resources:
             requests:
-              cpu: 100m
-              memory: 21Mi
+              cpu: 500m
+              memory: 100Mi
           ports:
             - containerPort: 3001
           startupProbe:
