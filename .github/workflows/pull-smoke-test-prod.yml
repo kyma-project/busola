@@ -5,13 +5,17 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/pull-smoke-test-prod.yml'
+      - '.github/scripts/**'
+      - "kyma/**"
+      - "backend/**"
+      - "public/**"
+      - "src/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile*"
+      - "nginx/**"
       - 'resources/**'
-      - 'tests/kyma/**'
-      - 'nginx/**'
-      - 'src/**'
-      - 'kyma/**'
-      - 'Dockerfile*'
-      - 'package.json'
+      - 'tests/integration/**'
 
 jobs:
   run-smoke-test-prod:
@@ -38,19 +42,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: setup_busola
+      - name: Build Busola Docker Image
+        shell: bash
+        run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
+        env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
+      - name: Run Busola in docker
         shell: bash
         run: |
-          set -o pipefail
-          ./.github/scripts/setup-busola.sh | tee busola-build.log
+          ./.github/scripts/run_kyma_dashboard_image.sh | tee busola-run.log
         env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
           ENV: prod
       - name: Run tests
         shell: bash
         run: |
           k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3001
-
           cd tests/integration
           npm ci && npm run "test:smoke-extensions"
       - name: Uploads artifacts
@@ -68,5 +76,6 @@ jobs:
           path: |
             kyma-alpha-deploy.log
             busola-build.log
+            busola-run.log
             kyma-provision.log
           retention-days: 90

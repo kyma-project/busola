@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import * as _ from 'lodash';
@@ -16,15 +16,25 @@ export default function StatefulSetCreate({
   resourceUrl,
   ...props
 }) {
+  const { t } = useTranslation();
+
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [statefulSet, setStatefulSet] = useState(
     _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
   );
-  const [initialResource] = useState(
+
+  const [initialResource, setInitialResource] = useState(
     initialStatefulSet || createStatefulSetTemplate(namespaceId),
   );
-  const [initialUnchangedResource] = useState(_.cloneDeep(initialStatefulSet));
-  const { t } = useTranslation();
+
+  useEffect(() => {
+    setStatefulSet(
+      _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
+    );
+    setInitialResource(
+      initialStatefulSet || createStatefulSetTemplate(namespaceId),
+    );
+  }, [initialStatefulSet, namespaceId]);
 
   return (
     <ResourceForm
@@ -33,7 +43,7 @@ export default function StatefulSetCreate({
       singularName={t('stateful-sets.name_singular')}
       resource={statefulSet}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setStatefulSet}
       onChange={onChange}
       formElementRef={formElementRef}

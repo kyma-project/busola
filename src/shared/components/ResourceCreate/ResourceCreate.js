@@ -9,11 +9,8 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
 import { useRecoilState } from 'recoil';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
-
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import './ResourceCreate.scss';
 
 export const ResourceCreate = ({
@@ -41,10 +38,7 @@ export const ResourceCreate = ({
   const notificationManager = useNotification();
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { navigateSafely } = useFormNavigation();
 
   confirmText = confirmText || t('common.buttons.create');
 
@@ -88,7 +82,6 @@ export const ResourceCreate = ({
   }
 
   function navigateAfterClose() {
-    setIsResourceEdited({ isEdited: false });
     navigate(
       layoutCloseCreateUrl
         ? layoutCloseCreateUrl
@@ -138,13 +131,7 @@ export const ResourceCreate = ({
     return (
       <Button
         onClick={() => {
-          handleActionIfFormOpen(
-            isResourceEdited,
-            setIsResourceEdited,
-            isFormOpen,
-            setIsFormOpen,
-            () => navigateAfterClose(),
-          );
+          navigateSafely(() => navigateAfterClose());
         }}
         design="Transparent"
       >

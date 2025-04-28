@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useNavigate } from 'react-router';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import {
   BodyFallback,
   HeaderRenderer,
@@ -25,9 +26,6 @@ import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { Table } from '@ui5/webcomponents-react';
 import './GenericList.scss';
@@ -305,10 +303,7 @@ export const GenericList = ({
   };
 
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
   const linkTo = entry => {
     const overrides = namespace === '-all-' ? { namespace } : {};
@@ -421,13 +416,7 @@ export const GenericList = ({
         onRowClick={e => {
           const selection = window.getSelection().toString();
           if (!hasDetailsView || selection.length > 0) return;
-          handleActionIfFormOpen(
-            isResourceEdited,
-            setIsResourceEdited,
-            isFormOpen,
-            setIsFormOpen,
-            () => handleRowClick(e),
-          );
+          navigateSafely(() => handleRowClick(e));
         }}
         headerRow={
           <HeaderRenderer

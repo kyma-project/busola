@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState, useContext } from 'react';
-import Immutable from 'immutable';
+import { useCallback, useMemo, useState, useContext, useEffect } from 'react';
+import { fromJS } from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
@@ -64,16 +64,30 @@ export function ExtensibilityCreateCore({
     ),
   );
 
+  const [initialResource, setInitialResource] = useState(
+    initialExtensibilityResource,
+  );
+
+  useEffect(() => {
+    setStore(
+      getUIStoreFromResourceObj(
+        initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
+      ),
+    );
+    setInitialResource(initialExtensibilityResource);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialExtensibilityResource]);
+
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-  const [initialUnchangedResource] = useState(initialExtensibilityResource);
-  const [initialResource] = useState(
-    initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
-  );
+
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const updateStore = res => {
     readVars(res);
-    const newStore = Immutable.fromJS(res);
+    const newStore = fromJS(res);
     setStore(prevStore => prevStore.set('values', newStore));
   };
 
@@ -83,7 +97,7 @@ export function ExtensibilityCreateCore({
     } else {
       notification.notifySuccess({
         content: t(
-          initialUnchangedResource
+          isEdit
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
@@ -100,6 +114,7 @@ export function ExtensibilityCreateCore({
     loading: loadingOpenAPISchema,
   } = useGetSchema({
     resource: api,
+    additionalId: 'Create',
   });
 
   const formRules = useMemo(() => {
@@ -165,9 +180,9 @@ export function ExtensibilityCreateCore({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
-      presets={initialResource && presets}
+      presets={!isEdit && presets}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
       urlPath={general?.urlPath}
@@ -187,7 +202,7 @@ export function ExtensibilityCreateCore({
   );
 }
 
-export function ExtensibilityCreate(props) {
+export default function ExtensibilityCreate(props) {
   const resMetaData = useGetCRbyPath();
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
@@ -210,5 +225,3 @@ export function ExtensibilityCreate(props) {
     </TranslationBundleContext.Provider>
   );
 }
-
-export default ExtensibilityCreate;

@@ -99,7 +99,7 @@ context('Test HPA', () => {
   it('Check Edit HPA', () => {
     cy.clickGenericListLink(HPA_NAME);
 
-    cy.inspectTab('Edit');
+    cy.wait(500).inspectTab('Edit');
 
     cy.getMidColumn()
       .get('[data-testid="spec.minReplicas"]:visible')

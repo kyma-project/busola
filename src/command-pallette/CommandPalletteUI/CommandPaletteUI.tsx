@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { useEventListener } from 'hooks/useEventListener';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -14,11 +14,9 @@ import { useSearchResults } from './useSearchResults';
 import { K8sResource } from 'types';
 import { Button, Icon, Input } from '@ui5/webcomponents-react';
 import './CommandPaletteUI.scss';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 function Background({
   hide,
@@ -58,10 +56,7 @@ export function CommandPaletteUI({
   shellbarWidth,
 }: CommandPaletteProps) {
   const namespace = useRecoilValue(activeNamespaceIdState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { navigateSafely } = useFormNavigation();
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
@@ -153,17 +148,10 @@ export function CommandPaletteUI({
     if (key === 'Enter' && results[0]) {
       // choose current entry
       e.preventDefault();
-
-      handleActionIfFormOpen(
-        isResourceEdited,
-        setIsResourceEdited,
-        isFormOpen,
-        setIsFormOpen,
-        () => {
-          addHistoryEntry(results[0].query);
-          results[0].onActivate();
-        },
-      );
+      navigateSafely(() => {
+        addHistoryEntry(results[0].query);
+        results[0].onActivate();
+      });
     } else if (key === 'Tab') {
       e.preventDefault();
       // fill search with active history entry

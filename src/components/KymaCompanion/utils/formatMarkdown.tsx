@@ -1,6 +1,6 @@
-import { UI5Renderer } from 'components/KymaCompanion/components/Chat/messages/markedExtension';
+import { UI5Renderer } from 'components/KymaCompanion/components/Chat/Message/markedExtension';
 import Markdown from 'marked-react';
-import CodePanel from '../components/Chat/messages/CodePanel';
+import CodePanel from '../components/Chat/CodePanel/CodePanel';
 
 export interface CodeSegmentLink {
   address: string;
@@ -22,16 +22,11 @@ export interface MarkdownText {
 
 type MessagePart = YamlBlock | MarkdownText;
 
-export function formatCodeSegment(text: string) {
-  const [language, ...lines] = text.split('\n');
-  return { language, code: lines.filter(line => line.trim()).join('\n') };
-}
-
-function extractYamlContent(block: string): string {
+export function extractYamlContent(block: string): string {
   return block.match(/```([\s\S]*?)```/)?.[1]?.trim() || '';
 }
 
-function extractLink(block: string): CodeSegmentLink | null {
+export function extractLink(block: string): CodeSegmentLink | null {
   const match = block.match(
     /<div class="link" link-type="(.*?)">\s*\[(.*?)\]\((.*?)\)\s*<\/div>/,
   );
@@ -44,7 +39,10 @@ function extractLink(block: string): CodeSegmentLink | null {
     : null;
 }
 
-function findClosingDivIndex(lines: string[], startIndex: number): number {
+export function findClosingDivIndex(
+  lines: string[],
+  startIndex: number,
+): number {
   let openDivs = 0;
   for (let i = startIndex; i < lines.length; i++) {
     if (lines[i].includes('<div')) openDivs++;
@@ -53,7 +51,7 @@ function findClosingDivIndex(lines: string[], startIndex: number): number {
   return -1;
 }
 
-function extractYamlBlocks(lines: string[], i: number) {
+export function extractYamlBlock(lines: string[], i: number) {
   const start = i;
   const end = findClosingDivIndex(lines, start);
 
@@ -83,7 +81,7 @@ function parseMessage(text: string): MessagePart[] {
         parts.push({ codeWithAction: false, content: currentText });
         currentText = '';
       }
-      const { content, link, end } = extractYamlBlocks(lines, i);
+      const { content, link, end } = extractYamlBlock(lines, i);
       const { code, language } = getLanguage(content);
       parts.push({ codeWithAction: true, content: code, link, language });
 

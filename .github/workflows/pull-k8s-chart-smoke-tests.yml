@@ -1,18 +1,21 @@
-name: PR Kyma Dashboard Integration Tests Dev
+name: PR Kyma Dashboard K8s Chart test
 
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/pull-kyma-intergation-tests.yml'
+      - '.github/scripts/**'
+      - "kyma/**"
+      - "backend/**"
+      - "public/**"
+      - "src/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile*"
+      - "nginx/**"
       - 'resources/**'
       - 'tests/integration/**'
-      - 'nginx/**'
-      - 'src/**'
-      - 'backend/**'
-      - 'kyma/**'
-      - 'Dockerfile*'
-      - 'package.json'
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
@@ -38,13 +41,23 @@ jobs:
         name: Setup node
         with:
           node-version: 22
+      - name: Build Busola Docker Image
+        shell: bash
+        run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
+        env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
+      - name: Import Kyma Dashbaord image to k3d
+        shell: bash
+        run: k3d image import "${IMG}" -c kyma
+        env:
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Deploy Busola
         id: deploy_busola
         shell: bash
+        run: .github/scripts/deploy_busola_on_k8s.sh "${IMG}" | tee busola-deploy.log
         env:
           ENV: dev
-        run: |
-          .github/scripts/deploy_busola.sh PR-${{ github.event.number }} | tee busola-deploy.log
+          IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Prepare kubeconfig
         run: |
           .github/scripts/prepare_kubeconfig.sh
@@ -53,7 +66,7 @@ jobs:
         run: |
           export CYPRESS_DOMAIN=http://${{ steps.deploy_busola.outputs.IP }}
           cd tests/integration
-          npm ci && npm run "test:kyma-e2e"
+          npm ci && npm run "test:smoke-simple"
       - name: Uploads artifacts
         uses: actions/upload-artifact@v4
         if: ${{ always() }}

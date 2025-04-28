@@ -21,8 +21,8 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 import { useNavigate, useSearchParams } from 'react-router';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -119,6 +119,7 @@ export const DynamicPageComponent = ({
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { navigateSafely } = useFormNavigation();
   const [searchParams] = useSearchParams();
   const showEdit = searchParams.get('showEdit');
   const editColumn = searchParams.get('editColumn');
@@ -256,13 +257,7 @@ export const DynamicPageComponent = ({
                 design="Transparent"
                 icon="decline"
                 onClick={() => {
-                  handleActionIfFormOpen(
-                    isResourceEdited,
-                    setIsResourceEdited,
-                    isFormOpen,
-                    setIsFormOpen,
-                    () => handleColumnClose(),
-                  );
+                  navigateSafely(() => handleColumnClose());
                 }}
               />
             </>
@@ -371,51 +366,41 @@ export const DynamicPageComponent = ({
             }
 
             const newTabName = e.detail.tab.getAttribute('data-mode');
-            handleActionIfFormOpen(
-              isResourceEdited,
-              setIsResourceEdited,
-              isFormOpen,
-              setIsFormOpen,
-              () => {
-                setSelectedSectionIdState(newTabName);
-                setIsResourceEdited({
-                  isEdited: false,
-                });
+            navigateSafely(() => {
+              setSelectedSectionIdState(newTabName);
 
-                if (newTabName === 'edit') {
-                  const params = new URLSearchParams();
-                  if (layoutColumn.layout !== 'OneColumn') {
-                    params.set('layout', layoutColumn.layout);
-                    if (title === 'Modules') {
-                      params.set('editColumn', 'startColumn');
-                    }
+              if (newTabName === 'edit') {
+                const params = new URLSearchParams();
+                if (layoutColumn.layout !== 'OneColumn') {
+                  params.set('layout', layoutColumn.layout);
+                  if (title === 'Modules') {
+                    params.set('editColumn', 'startColumn');
                   }
-                  params.set('showEdit', 'true');
-
-                  setLayoutColumn({
-                    ...layoutColumn,
-                    showEdit: {
-                      ...currColumnInfo,
-                      resource: null,
-                    },
-                  });
-                  setIsFormOpen({ formOpen: true });
-                  navigate(`${window.location.pathname}?${params.toString()}`);
-                } else {
-                  setLayoutColumn({
-                    ...layoutColumn,
-                    showEdit: null,
-                  });
-                  navigate(
-                    `${window.location.pathname}${
-                      layoutColumn.layout === 'OneColumn'
-                        ? ''
-                        : '?layout=' + layoutColumn.layout
-                    }`,
-                  );
                 }
-              },
-            );
+                params.set('showEdit', 'true');
+
+                setLayoutColumn({
+                  ...layoutColumn,
+                  showEdit: {
+                    ...currColumnInfo,
+                    resource: null,
+                  },
+                });
+                navigate(`${window.location.pathname}?${params.toString()}`);
+              } else {
+                setLayoutColumn({
+                  ...layoutColumn,
+                  showEdit: null,
+                });
+                navigate(
+                  `${window.location.pathname}${
+                    layoutColumn.layout === 'OneColumn'
+                      ? ''
+                      : '?layout=' + layoutColumn.layout
+                  }`,
+                );
+              }
+            });
           }}
         >
           <Tab

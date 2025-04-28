@@ -40,6 +40,7 @@ export const ExtensibilityDetailsCore = ({
 
   const { schema } = useGetSchema({
     resource,
+    additionalId: 'Details',
   });
 
   const jsonata = useJsonata({});

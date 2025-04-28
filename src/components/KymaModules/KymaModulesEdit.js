@@ -312,7 +312,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
     setIsResourceEdited({
       isEdited: false,
     });
-
     setIsManagedChanged(false);
 
     setIsFormOpen({
@@ -417,7 +416,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
           singularName={t('kyma-modules.kyma')}
           resource={kymaResource}
           initialResource={initialResource}
-          initialUnchangedResource={initialUnchangedResource}
           setResource={setKymaResource}
           createUrl={props.resourceUrl}
           disableDefaultFields

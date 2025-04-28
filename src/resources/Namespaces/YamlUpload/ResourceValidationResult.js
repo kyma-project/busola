@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import {
@@ -55,7 +56,9 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   const { debounced } = useLoadingDebounce(resource, 500);
 
   const warnings = [
-    useValidateResourceBySchema(debounced, validationSchema),
+    useValidateResourceBySchema(debounced, validationSchema, {
+      base: 'https://dashboard.kyma.cloud.sap', // Workaround for jsonschema 1.5.0 - https://github.com/tdegrunt/jsonschema/issues/407
+    }),
     useNamespaceWarning(debounced),
   ];
 
@@ -74,8 +77,8 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
 
   return (
     <>
-      {warnings.flat().map(warning => (
-        <>
+      {warnings.flat().map((warning, idx) => (
+        <React.Fragment key={idx}>
           <FlexBox alignItems={'Begin'}>
             <ObjectStatus
               showDefaultIcon
@@ -95,7 +98,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
               marginRight: '-1rem',
             }}
           />
-        </>
+        </React.Fragment>
       ))}
     </>
   );
@@ -108,7 +111,9 @@ export const ResourceValidationResult = ({ resource }) => {
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
   const { debounced } = useLoadingDebounce(resource, 500);
   const warnings = [
-    useValidateResourceBySchema(debounced, validationSchemas),
+    useValidateResourceBySchema(debounced, validationSchemas, {
+      base: 'https://dashboard.kyma.cloud.sap',
+    }),
     useNamespaceWarning(debounced),
   ];
   const statusIcon = validateResources.isEnabled ? (

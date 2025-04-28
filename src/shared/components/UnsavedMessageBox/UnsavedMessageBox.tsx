@@ -1,8 +1,8 @@
 import { Button, MessageBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { useRecoilValue } from 'recoil';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 type UnsavedMessageBoxProps = {
   isOpen?: boolean;
@@ -10,46 +10,33 @@ type UnsavedMessageBoxProps = {
 
 export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
   const { t } = useTranslation();
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { formOpen, leavingForm } = useRecoilValue(isFormOpenState);
+  const { confirmDiscard, cancelDiscard } = useFormNavigation();
 
   const handleClose = (
     action: string | undefined,
     escapedPressed?: true | undefined,
   ) => {
     if (action === '0: custom action') {
-      if (isResourceEdited.discardAction) {
-        isResourceEdited.discardAction();
-      }
-      setIsFormOpen({ formOpen: false, leavingForm: false });
+      confirmDiscard();
     } else if (action === '1: custom action' || escapedPressed) {
-      setIsResourceEdited({ isEdited: true });
-      setIsFormOpen({ formOpen: true, leavingForm: false });
-      return;
+      cancelDiscard();
     }
-    setIsResourceEdited({ isEdited: false });
   };
 
   return (
     <MessageBox
       type="Warning"
-      open={
-        isOpen ??
-        (isResourceEdited.isEdited &&
-          isFormOpen.formOpen &&
-          isFormOpen.leavingForm)
-      }
+      open={isOpen ?? (formOpen && leavingForm)}
       onClose={handleClose}
       titleText={t('common.headers.discard-changes')}
       actions={[
         <Button design="Emphasized" key="discard">
           {t('common.buttons.discard')}
         </Button>,
-        <Button design="Transparent" key="cancel">{`${t(
-          'common.buttons.cancel',
-        )}`}</Button>,
+        <Button design="Transparent" key="cancel">
+          {t('common.buttons.cancel')}
+        </Button>,
       ]}
     >
       {t('common.messages.discard-changes-warning')}
