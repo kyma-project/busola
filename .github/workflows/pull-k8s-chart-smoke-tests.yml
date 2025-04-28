@@ -36,7 +36,6 @@ jobs:
       - name: Setup Kyma
         run: |
           ./.github/scripts/provision_kyma_k3d.sh | tee kyma-provision.log
-          docker ps
       - uses: actions/setup-node@v4
         name: Setup node
         with:
