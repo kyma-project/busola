@@ -19,6 +19,8 @@ on:
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
+    env:
+      IMG: kyma-dashboard:local-pr-${{github.sha}}
     if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -43,20 +45,15 @@ jobs:
       - name: Build Busola Docker Image
         shell: bash
         run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
-        env:
-          IMG: k3d-kyma-registry.localhost:5000/kyma-dashboard:local-pr-${{github.sha}}
       - name: Import Kyma Dashbaord image to k3d
         shell: bash
-        run: docker push "${IMG}"
-        env:
-          IMG: k3d-kyma-registry.localhost:5000/kyma-dashboard:local-pr-${{github.sha}}
+        run: k3d image import "${IMG}" -c kyma
       - name: Deploy Busola
         id: deploy_busola
         shell: bash
         run: .github/scripts/deploy_busola_on_k8s.sh "${IMG}" | tee busola-deploy.log
         env:
           ENV: dev
-          IMG: k3d-kyma-registry.localhost:5000/kyma-dashboard:local-pr-${{github.sha}}
       - name: Prepare kubeconfig
         run: |
           .github/scripts/prepare_kubeconfig.sh
