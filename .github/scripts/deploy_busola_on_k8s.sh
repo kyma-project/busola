@@ -16,6 +16,7 @@ print_k8s_resources()
   kubectl get deployment -oyaml
   kubectl get pod -oyaml
   kubectl logs deployments/busola
+  kubectl describe pod --selector app=busola
 }
 
 ENV=${ENV?"env is not set"}

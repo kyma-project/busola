@@ -45,12 +45,12 @@ jobs:
         shell: bash
         run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
         env:
-          IMG: kyma-dashboard:local-pr-${{github.sha}}
+          IMG: localhost:5000/kyma-dashboard:local-pr-${{github.sha}}
       - name: Import Kyma Dashbaord image to k3d
         shell: bash
-        run: docker push localhost:5000/"${IMG}"
+        run: docker push "${IMG}"
         env:
-          IMG: kyma-dashboard:local-pr-${{github.sha}}
+          IMG: localhost:5000/kyma-dashboard:local-pr-${{github.sha}}
       - name: Deploy Busola
         id: deploy_busola
         shell: bash
