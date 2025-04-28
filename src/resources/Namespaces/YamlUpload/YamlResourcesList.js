@@ -115,8 +115,8 @@ export function YamlResourcesList({ resourcesData }) {
                   <span style={{ fontWeight: 'bold' }}></span>
                 </Trans>
               </Text>
-              {resources.map(r => (
-                <ResourceValidationResult resource={r.value} />
+              {resources.map((r, idx) => (
+                <ResourceValidationResult resource={r.value} key={idx} />
               ))}
             </FlexBox>
           </div>
@@ -158,9 +158,9 @@ export function YamlResourcesList({ resourcesData }) {
                 />
               </Card>
               <List>
-                {resources.map(r => (
-                  <ListItemCustom type={'Inactive'}>
-                    <FlexBox alignItems={'Center'}>
+                {resources.map((r, idx) => (
+                  <ListItemCustom key={idx} type="Inactive">
+                    <FlexBox alignItems="Center">
                       <Icon
                         className={`status status-${getIcon(r?.status)}`}
                         name={getIcon(r?.status)}

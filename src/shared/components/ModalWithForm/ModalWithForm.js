@@ -7,8 +7,6 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';
-import { useSetRecoilState } from 'recoil';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 export const ModalWithForm = ({
@@ -26,7 +24,6 @@ export const ModalWithForm = ({
 }) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { navigateSafely } = useFormNavigation();
 
   const {
@@ -83,7 +80,6 @@ export const ModalWithForm = ({
       if (!getToggleFormFn) {
         setOpenStatus(false);
       }
-      setIsFormOpen({ formOpen: false });
     }
   }
 

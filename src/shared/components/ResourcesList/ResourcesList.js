@@ -5,7 +5,7 @@ import { Button, Text } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import jp from 'jsonpath';
 import pluralize from 'pluralize';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
@@ -24,7 +24,6 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
 import { useNavigate } from 'react-router';
 
@@ -246,7 +245,6 @@ export function ResourceListRenderer({
   } = useProtectedResources();
   const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -476,7 +474,6 @@ export function ResourceListRenderer({
           : '?layout=TwoColumnsMidExpanded'
       }&showCreate=true`,
     );
-    setIsFormOpen({ formOpen: true });
   };
 
   const extraHeaderContent = listHeaderActions || [

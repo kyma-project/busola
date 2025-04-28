@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { MessageStrip } from '@ui5/webcomponents-react';
@@ -39,12 +39,16 @@ export function GenericRoleBindingCreate({
   const [binding, setBinding] = useState(
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace),
   );
-  const [initialUnchangedResource] = useState(initialRoleBinding);
-  const [initialResource] = useState(
+  const [initialResource, setInitialResource] = useState(
     initialRoleBinding || createBindingTemplate(namespace),
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
+    cloneDeep(initialRoleBinding) || createBindingTemplate(namespace);
+    setInitialResource(initialRoleBinding || createBindingTemplate(namespace));
+  }, [initialRoleBinding, namespace]);
+
+  useEffect(() => {
     setCustomValid(validateBinding(binding));
   }, [binding, setCustomValid]);
 
@@ -88,7 +92,7 @@ export function GenericRoleBindingCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       nameProps={{ pattern: '.*', showHelp: false }}
       handleNameChange={name => {
         jp.value(binding, '$.metadata.name', name);

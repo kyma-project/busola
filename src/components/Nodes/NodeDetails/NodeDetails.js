@@ -95,12 +95,7 @@ export default function NodeDetails({ nodeName }) {
         }
         customComponents={customComponents}
         createResourceForm={() => (
-          <ResourceForm
-            resource={node}
-            initialResource={node}
-            initialUnchangedResource={node}
-            onlyYaml
-          />
+          <ResourceForm resource={node} initialResource={node} onlyYaml />
         )}
         disableEdit
         disableDelete
