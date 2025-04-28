@@ -4,5 +4,5 @@ resources:
   - busola
 images:
   - name: busola
-    newName: europe-docker.pkg.dev/kyma-project/prod/busola
-    newTag: latest
+    newName: k3d-kyma-registry.localhost:45249/local-busola
+    newTag: local-linux
