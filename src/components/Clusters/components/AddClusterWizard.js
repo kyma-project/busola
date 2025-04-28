@@ -183,12 +183,7 @@ export function AddClusterWizard({
                 }}
                 className="cluster-wizard__auth-form"
               >
-                {!hasOneContext && (
-                  <ContextChooser
-                    isOpen={selected === 2}
-                    onCancel={() => setShowWizard(false)}
-                  />
-                )}
+                {!hasOneContext && <ContextChooser />}
                 {!hasAuth && <AuthForm revalidate={revalidate} />}
               </ResourceForm.Single>
             </div>

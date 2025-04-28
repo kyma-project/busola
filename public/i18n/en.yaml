@@ -149,6 +149,7 @@ clusters:
       token: Token
       using-oidc: OIDC provider
     context: Context to connect
+    provide-context: Provide Context
     kubeconfig-upload: Drop a .kubeconfig file or click to 
     editor-placeholder: Paste .kubeconfig here
     incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.

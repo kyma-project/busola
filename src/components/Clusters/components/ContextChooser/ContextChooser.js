@@ -1,17 +1,60 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Title,
+  RadioButton,
+  FlexBox,
   MessageBox,
   Button,
-  FlexBox,
   Text,
-  RadioButton,
-  Title,
 } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import './ContextChooser.scss';
 
 export function ContextChooser(params) {
+  const kubeconfig = params.resource;
+  const { t } = useTranslation();
+
+  if (!Array.isArray(kubeconfig.contexts)) {
+    return '';
+  }
+
+  return (
+    <div className="add-cluster__content-container">
+      <ResourceForm.Wrapper {...params}>
+        <Title className="sap-margin-bottom-small" level="H5">
+          {t('clusters.wizard.provide-context')}
+        </Title>
+        <ResourceForm.FormField
+          required
+          propertyPath='$["current-context"]'
+          label={t('clusters.wizard.context')}
+          validate={value => !!value}
+          input={({ value, setValue }) => (
+            <FlexBox
+              direction="Column"
+              id="context-chooser"
+              className="sap-margin-top-tiny"
+            >
+              {kubeconfig.contexts.map(context => (
+                <RadioButton
+                  key={context.name}
+                  name={context.name}
+                  value={context.name}
+                  checked={value === context.name}
+                  text={context.name}
+                  onChange={() => setValue(context.name)}
+                />
+              ))}
+            </FlexBox>
+          )}
+        />
+      </ResourceForm.Wrapper>
+    </div>
+  );
+}
+
+export function ContextChooserPopup(params) {
   const kubeconfig = params.resource;
   const { t } = useTranslation();
   const [chosenContext, setChosenContext] = useState('');
@@ -26,7 +69,6 @@ export function ContextChooser(params) {
   if (!Array.isArray(kubeconfig.contexts)) {
     return '';
   }
-
   return (
     <ResourceForm.Wrapper {...params}>
       {chosenContext && (
@@ -81,7 +123,7 @@ export function ContextChooser(params) {
                 <br />
                 {t('clusters.wizard.several-context-question')}
               </Text>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <FlexBox direction="Column">
                 {kubeconfig.contexts.map(context => (
                   <RadioButton
                     id={'context-chooser' + context.name}
@@ -93,7 +135,7 @@ export function ContextChooser(params) {
                     onChange={() => setChosenContext(context.name)}
                   />
                 ))}
-              </div>
+              </FlexBox>
             </FlexBox>
           </MessageBox>
         )}
