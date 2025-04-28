@@ -1,6 +1,6 @@
 # Use JSONata Expressions with Resource-Based Extensions
 
-[JSONata](https://docs.jsonata.org/overview.html) is a user-friendly language (inspired by on XPath 3.1) designed for querying and transforming JSON data. JSONata includes a variety of built-in operators and functions for manipulating data. You can format the results into any JSON structure you need, and create your own functions to handle complex tasks.
+[JSONata](https://docs.jsonata.org/overview.html) is a user-friendly language (inspired by XPath 3.1) designed for querying and transforming JSON data. JSONata includes a variety of built-in operators and functions for manipulating data. You can format the results into any JSON structure you need, and create your own functions to handle complex tasks.
 
 JSONata comes with Kyma dashboard, so you don't need to install any additional components.
 
