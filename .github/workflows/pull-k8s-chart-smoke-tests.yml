@@ -36,7 +36,7 @@ jobs:
       - name: Setup Kyma
         run: |
           ./.github/scripts/provision_kyma_k3d.sh | tee kyma-provision.log
-          ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
+          docker ps
       - uses: actions/setup-node@v4
         name: Setup node
         with:
@@ -45,19 +45,19 @@ jobs:
         shell: bash
         run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
         env:
-          IMG: localhost:5000/kyma-dashboard:local-pr-${{github.sha}}
+          IMG: localhost:5001/kyma-dashboard:local-pr-${{github.sha}}
       - name: Import Kyma Dashbaord image to k3d
         shell: bash
         run: docker push "${IMG}"
         env:
-          IMG: localhost:5000/kyma-dashboard:local-pr-${{github.sha}}
+          IMG: localhost:5001/kyma-dashboard:local-pr-${{github.sha}}
       - name: Deploy Busola
         id: deploy_busola
         shell: bash
         run: .github/scripts/deploy_busola_on_k8s.sh "${IMG}" | tee busola-deploy.log
         env:
           ENV: dev
-          IMG: localhost:5000/kyma-dashboard:local-pr-${{github.sha}}
+          IMG: localhost:5001/kyma-dashboard:local-pr-${{github.sha}}
       - name: Prepare kubeconfig
         run: |
           .github/scripts/prepare_kubeconfig.sh
