@@ -300,6 +300,7 @@ export const ModulesList = ({
           <Button
             key="add-module"
             design="Emphasized"
+            disabled={!resource}
             onClick={handleShowAddModule}
           >
             {t('common.buttons.add')}
