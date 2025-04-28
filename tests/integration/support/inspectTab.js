@@ -2,7 +2,7 @@ Cypress.Commands.add(
   'inspectTab',
   { prevSubject: ['optional', 'element'] },
   (subject, tabName) => {
-    return (subject
+    (subject
       ? cy.wrap(subject).find('ui5-tabcontainer')
       : cy.get('ui5-tabcontainer')
     )
@@ -10,6 +10,8 @@ Cypress.Commands.add(
       .find('[role="tab"]')
       .contains(tabName)
       .should('be.visible')
-      .click();
+      .as('tabButton');
+
+    return cy.get('@tabButton').click();
   },
 );
