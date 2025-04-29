@@ -19,6 +19,8 @@ on:
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
+    env:
+      IMG: kyma-dashboard:local-pr-${{github.sha}}
     if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -33,10 +35,9 @@ jobs:
         env:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
         run: curl --silent --fail $K3D_URL | bash
-      - name: Setup Kyma
+      - name: Setup K3d cluster
         run: |
-          ./.github/scripts/provision_kyma_k3d.sh | tee kyma-provision.log
-          ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
+          ./.github/scripts/provision_k3d_for_kyma.sh | tee kyma-provision.log
       - uses: actions/setup-node@v4
         name: Setup node
         with:
@@ -44,20 +45,15 @@ jobs:
       - name: Build Busola Docker Image
         shell: bash
         run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
-        env:
-          IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Import Kyma Dashbaord image to k3d
         shell: bash
         run: k3d image import "${IMG}" -c kyma
-        env:
-          IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Deploy Busola
         id: deploy_busola
         shell: bash
         run: .github/scripts/deploy_busola_on_k8s.sh "${IMG}" | tee busola-deploy.log
         env:
           ENV: dev
-          IMG: kyma-dashboard:local-pr-${{github.sha}}
       - name: Prepare kubeconfig
         run: |
           .github/scripts/prepare_kubeconfig.sh
