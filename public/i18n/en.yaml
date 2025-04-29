@@ -117,6 +117,8 @@ clusters:
     title-current-cluster: Cluster Details
     kyma-version: Kyma Version
     kubernetes-version: Kubernetes Version
+    global-account-id: Global Account ID
+    subaccount-id: Subaccount ID
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
