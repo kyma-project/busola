@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Title,
@@ -54,92 +54,55 @@ export function ContextChooser(params) {
   );
 }
 
-export function ContextChooserPopup(params) {
-  const kubeconfig = params.resource;
+export function ContextChooserMessage({ contexts, setValue, onCancel }) {
   const { t } = useTranslation();
   const [chosenContext, setChosenContext] = useState('');
-  const [isOpen, setIsOpen] = useState(params.isOpen);
 
-  useEffect(() => {
-    if (params.isOpen && Array.isArray(kubeconfig.contexts) && !chosenContext) {
-      setIsOpen(true);
-    }
-  }, [params.isOpen, kubeconfig.contexts, chosenContext]);
-
-  if (!Array.isArray(kubeconfig.contexts)) {
-    return '';
+  if (!Array.isArray(contexts)) {
+    return null;
   }
   return (
-    <ResourceForm.Wrapper {...params}>
-      {chosenContext && (
-        <div className="add-cluster__content-container">
-          <Title level="H5">
-            {chosenContext}
-            <Button
-              design="Transparent"
-              className="sap-margin-begin-tiny"
-              icon="edit"
-              tooltip={t('clusters.edit-cluster')}
-              onClick={() => setIsOpen(true)}
+    <MessageBox
+      style={{ width: '478px', height: '210px' }}
+      type={undefined}
+      icon={<></>}
+      titleText={t('clusters.messages.choose-cluster')}
+      open={true}
+      className="ui5-content-density-compact context-chooser-message"
+      actions={[
+        <Button
+          key="confirmation"
+          design="Emphasized"
+          onClick={() => setValue(chosenContext)}
+          disabled={!chosenContext}
+        >
+          {t('common.buttons.choose')}
+        </Button>,
+        <Button key="cancel" design="Transparent" onClick={onCancel}>
+          {t('common.buttons.cancel')}
+        </Button>,
+      ]}
+    >
+      <FlexBox direction="Column">
+        <Text style={{ paddingLeft: '7.5px' }}>
+          {t('clusters.wizard.several-context-info')}
+          <br />
+          {t('clusters.wizard.several-context-question')}
+        </Text>
+        <FlexBox direction="Column">
+          {contexts.map(context => (
+            <RadioButton
+              id={'context-chooser' + context.name}
+              key={context.name}
+              name={context.name}
+              value={context.name}
+              checked={chosenContext === context.name}
+              text={context.name}
+              onChange={() => setChosenContext(context.name)}
             />
-          </Title>
-        </div>
-      )}
-      <ResourceForm.FormField
-        required
-        propertyPath='$["current-context"]'
-        validate={value => !!value}
-        input={({ setValue }) => (
-          <MessageBox
-            style={{ width: '478px', height: '210px' }}
-            type={undefined}
-            titleText={'Choose cluster'}
-            open={isOpen}
-            className="ui5-content-density-compact"
-            actions={[
-              <Button
-                key="confirmation"
-                design="Emphasized"
-                onClick={() => {
-                  setValue(chosenContext);
-                  setIsOpen(false);
-                }}
-                disabled={!chosenContext}
-              >
-                {t('common.buttons.choose')}
-              </Button>,
-              <Button
-                key="cancel"
-                design="Transparent"
-                onClick={params.onCancel}
-              >
-                {t('common.buttons.cancel')}
-              </Button>,
-            ]}
-          >
-            <FlexBox direction="Column">
-              <Text style={{ paddingLeft: '7.5px' }}>
-                {t('clusters.wizard.several-context-info')}
-                <br />
-                {t('clusters.wizard.several-context-question')}
-              </Text>
-              <FlexBox direction="Column">
-                {kubeconfig.contexts.map(context => (
-                  <RadioButton
-                    id={'context-chooser' + context.name}
-                    key={context.name}
-                    name={context.name}
-                    value={context.name}
-                    checked={chosenContext === context.name}
-                    text={context.name}
-                    onChange={() => setChosenContext(context.name)}
-                  />
-                ))}
-              </FlexBox>
-            </FlexBox>
-          </MessageBox>
-        )}
-      />
-    </ResourceForm.Wrapper>
+          ))}
+        </FlexBox>
+      </FlexBox>
+    </MessageBox>
   );
 }

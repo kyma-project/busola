@@ -108,6 +108,7 @@ clusters:
   list:
     no-clusters-found: No clusters found
   messages:
+    choose-cluster: Choose cluster
     wrong-configuration: Cannot apply the configuration
     connection-failed: Error connecting to cluster. Check your configuration and make sure the cluster is online.
   name_singular: Cluster

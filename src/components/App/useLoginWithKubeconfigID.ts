@@ -1,6 +1,6 @@
 import { addByContext } from 'components/Clusters/shared';
 import { ClustersState, clustersState } from 'state/clustersAtom';
-import { useRecoilValue } from 'recoil';
+import { SetterOrUpdater, useRecoilState, useRecoilValue } from 'recoil';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,10 @@ import { ConfigFeature } from 'state/types';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { ClusterStorage } from 'state/types';
+import {
+  KubeConfigMultipleState,
+  multipleContexts,
+} from 'state/multipleContextsAtom';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -54,12 +58,47 @@ export async function loadKubeconfigById(
   return payload;
 }
 
+const addClusters = (
+  kubeconfig: ValidKubeconfig,
+  clusters: ClustersState,
+  clusterInfo: useClustersInfoType,
+  kubeconfigIdFeature: KubeconfigIdFeature,
+) => {
+  const isOnlyOneCluster = kubeconfig.contexts.length === 1;
+  const currentContext = kubeconfig['current-context'];
+  const showClustersOverview = kubeconfigIdFeature.config?.showClustersOverview;
+  const isK8CurrentCluster = (name: string) =>
+    !!currentContext && currentContext === name;
+  const shouldRedirectToCluster = (name: string) =>
+    !showClustersOverview && (isOnlyOneCluster || isK8CurrentCluster(name));
+
+  kubeconfig.contexts.forEach(context => {
+    const previousStorageMethod: ClusterStorage =
+      clusters![context.name]?.config?.storage || 'sessionStorage';
+    addByContext(
+      {
+        kubeconfig,
+        context,
+        switchCluster: shouldRedirectToCluster(context.name),
+        storage: previousStorageMethod, // todo move it to config?
+        config: {},
+      },
+      clusterInfo,
+    );
+  });
+
+  if (showClustersOverview) {
+    window.location.href = window.location.origin + '/clusters';
+  }
+};
+
 const loadKubeconfigIdCluster = async (
   kubeconfigId: string,
   kubeconfigIdFeature: KubeconfigIdFeature,
   clusters: ClustersState,
   clusterInfo: useClustersInfoType,
   t: TFunction,
+  setContextsState?: SetterOrUpdater<KubeConfigMultipleState>,
 ) => {
   try {
     const kubeconfig = await loadKubeconfigById(
@@ -68,40 +107,18 @@ const loadKubeconfigIdCluster = async (
       t,
     );
 
-    if (!kubeconfig.contexts.length) {
+    if (!kubeconfig?.contexts?.length) {
       return;
     }
 
-    const isOnlyOneCluster = kubeconfig.contexts.length === 1;
-    const currentContext = kubeconfig['current-context'];
-    const showClustersOverview =
-      kubeconfigIdFeature.config?.showClustersOverview;
-
-    const isK8CurrentCluster = (name: string) =>
-      !!currentContext && currentContext === name;
-
-    const shouldRedirectToCluster = (name: string) =>
-      !showClustersOverview && (isOnlyOneCluster || isK8CurrentCluster(name));
-
-    // add the clusters
-    kubeconfig.contexts.forEach(context => {
-      const previousStorageMethod: ClusterStorage =
-        clusters![context.name]?.config?.storage || 'sessionStorage';
-
-      addByContext(
-        {
-          kubeconfig,
-          context,
-          switchCluster: shouldRedirectToCluster(context.name),
-          storage: previousStorageMethod, // todo move it to config?
-          config: {},
-        },
-        clusterInfo,
-      );
-    });
-
-    if (showClustersOverview) {
-      window.location.href = window.location.origin + '/clusters';
+    if (kubeconfig.contexts.length > 1 && setContextsState) {
+      setContextsState(state => ({
+        ...state,
+        ...kubeconfig,
+      }));
+    } else {
+      addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature);
+      return 'done';
     }
   } catch (e) {
     if (e instanceof Error) {
@@ -121,6 +138,7 @@ export function useLoginWithKubeconfigID() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>('KUBECONFIG_ID');
   const configuration = useRecoilValue(configurationAtom);
   const clusters = useRecoilValue(clustersState);
+  const [contextsState, setContextsState] = useRecoilState(multipleContexts);
   const [search] = useSearchParams();
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
@@ -128,6 +146,21 @@ export function useLoginWithKubeconfigID() {
   const [handledKubeconfigId, setHandledKubeconfigId] = useState<
     KubeconfigIdHandleState
   >('not started');
+
+  useEffect(() => {
+    if (contextsState?.chosenContext) {
+      const kubeconfig = {
+        ...contextsState,
+        contexts: contextsState.contexts.filter(
+          context => context.name === contextsState.chosenContext,
+        ),
+        'current-context': contextsState.chosenContext,
+      };
+      addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature);
+      setHandledKubeconfigId('done');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextsState]);
 
   useEffect(() => {
     const dependenciesReady = !!configuration?.features && !!clusters;
@@ -154,8 +187,14 @@ export function useLoginWithKubeconfigID() {
       clusters,
       clusterInfo,
       t,
-    ).then(() => setHandledKubeconfigId('done'));
+      setContextsState,
+    ).then(val => {
+      if (val === 'done') {
+        setHandledKubeconfigId('done');
+      }
+    });
   }, [
+    contextsState,
     search,
     clusters,
     kubeconfigIdFeature,
@@ -164,6 +203,7 @@ export function useLoginWithKubeconfigID() {
     handledKubeconfigId,
     configuration,
     setCurrentCluster,
+    setContextsState,
   ]);
 
   return handledKubeconfigId;
