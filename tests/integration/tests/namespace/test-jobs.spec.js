@@ -10,6 +10,7 @@ const JOB_NAME =
 const SECOND_CONTAINER_NAME = JOB_NAME + '-node';
 
 function checkJobLogs({ showLogsSelector, expectedLogs }) {
+  cy.wait(10_000);
   cy.get(showLogsSelector).click({ force: true });
 
   cy.contains(expectedLogs);
@@ -167,6 +168,7 @@ context('Test Jobs', () => {
       .find('input')
       .filterWithNoValue()
       .first()
+      .click()
       .type('b', { force: true });
 
     cy.saveChanges('Edit');

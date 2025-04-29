@@ -20,7 +20,6 @@ import { useUrl } from 'hooks/useUrl';
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
-import { isFormOpenState } from 'state/formOpenAtom';
 import './useDeleteResource.scss';
 
 export function useDeleteResource({
@@ -43,7 +42,6 @@ export function useDeleteResource({
   const { resourceListUrl } = useUrl();
   const cluster = useRecoilValue(clusterState);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -161,9 +159,6 @@ export function useDeleteResource({
       performDelete(resource, resourceUrl, deleteFn);
     } else {
       setShowDeleteDialog(true);
-    }
-    if (isFormOpen.formOpen) {
-      setIsFormOpen({ formOpen: false });
     }
   };
 

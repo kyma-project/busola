@@ -1,6 +1,6 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -12,15 +12,16 @@ import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
+import { useMemo } from 'react';
 
 export function useCreateResource({
   singularName,
   pluralKind,
   resource,
-  initialUnchangedResource,
+  initialResource,
+  updateInitialResource,
   createUrl,
   skipCreateFn,
   afterCreatedFn,
@@ -37,11 +38,12 @@ export function useCreateResource({
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
-  const isEdit = !!initialUnchangedResource?.metadata?.name;
+  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
+    initialResource,
+  ]);
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
@@ -56,6 +58,7 @@ export function useCreateResource({
           },
         ),
     });
+    updateInitialResource(resource);
 
     if (!isEdit || resetLayout) {
       if (resetLayout) {
@@ -128,15 +131,12 @@ export function useCreateResource({
     } else {
       defaultAfterCreatedFn();
     }
-    setIsResourceEdited({
-      isEdited: false,
-    });
   };
 
   const handleCreate = async () => {
     try {
       if (isEdit) {
-        const diff = createPatch(initialUnchangedResource, resource);
+        const diff = createPatch(initialResource, resource);
         await patchRequest(createUrl, diff);
       } else {
         await postRequest(createUrl, resource);
@@ -152,11 +152,11 @@ export function useCreateResource({
         const makeForceUpdateFn = closeModal => {
           return async () => {
             resource.metadata.resourceVersion =
-              initialUnchangedResource?.metadata.resourceVersion;
+              initialResource?.metadata.resourceVersion;
             try {
               await patchRequest(
                 createUrl,
-                createPatch(initialUnchangedResource, resource),
+                createPatch(initialResource, resource),
               );
               closeModal();
               onSuccess();

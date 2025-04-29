@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import * as _ from 'lodash';
@@ -16,15 +16,25 @@ export default function NetworkPolicyCreate({
   resource: initialNetworkPolicy,
   ...props
 }) {
+  const { t } = useTranslation();
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [networkPolicy, setNetworkPolicy] = useState(
     _.cloneDeep(initialNetworkPolicy) ||
       createNetworkPolicyTemplate(namespaceId),
   );
-  const [initialResource] = useState(
+  const [initialResource, setInitialResource] = useState(
     initialNetworkPolicy || createNetworkPolicyTemplate(namespaceId),
   );
-  const { t } = useTranslation();
+
+  useEffect(() => {
+    setNetworkPolicy(
+      _.cloneDeep(initialNetworkPolicy) ||
+        createNetworkPolicyTemplate(namespaceId),
+    );
+    setInitialResource(
+      initialNetworkPolicy || createNetworkPolicyTemplate(namespaceId),
+    );
+  }, [initialNetworkPolicy, namespaceId]);
 
   return (
     <ResourceForm
@@ -33,6 +43,7 @@ export default function NetworkPolicyCreate({
       singularName={t('network-policies.name_singular')}
       resource={networkPolicy}
       initialResource={initialResource}
+      updateInitialResource={setNetworkPolicy}
       setResource={setNetworkPolicy}
       onlyYaml
       onChange={onChange}
