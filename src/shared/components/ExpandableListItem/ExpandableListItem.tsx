@@ -27,7 +27,7 @@ export const ExpandableListItem = ({
   customContent,
 }: ExpandableListItemProps) => {
   const { t } = useTranslation();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(status !== 'True');
 
   let statusType;
   switch (status) {
