@@ -184,7 +184,7 @@ export const addByContext = (
 
     addCluster(clusterParams, clustersInfo, switchCluster);
   } catch (e) {
-    throw Error("Cannot 'addByContext': " + e);
+    throw Error(`Unable to add context. ${e}`);
   }
 };
 

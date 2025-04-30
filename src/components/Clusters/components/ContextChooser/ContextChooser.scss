@@ -6,3 +6,11 @@
     align-self: center;
   }
 }
+
+.context-chooser-message {
+  .radio-box-container {
+    * {
+      margin: -4px 0;
+    }
+  }
+}

@@ -2,7 +2,7 @@ import { addByContext } from 'components/Clusters/shared';
 import { ClustersState, clustersState } from 'state/clustersAtom';
 import { SetterOrUpdater, useRecoilState, useRecoilValue } from 'recoil';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { NavigateFunction, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { ValidKubeconfig } from 'types';
@@ -20,6 +20,7 @@ import {
   KubeConfigMultipleState,
   multipleContexts,
 } from 'state/multipleContextsAtom';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -58,11 +59,14 @@ export async function loadKubeconfigById(
   return payload;
 }
 
-const addClusters = (
+const addClusters = async (
   kubeconfig: ValidKubeconfig,
   clusters: ClustersState,
   clusterInfo: useClustersInfoType,
   kubeconfigIdFeature: KubeconfigIdFeature,
+  t: TFunction,
+  notification?: any,
+  navigate?: NavigateFunction,
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
   const currentContext = kubeconfig['current-context'];
@@ -72,23 +76,38 @@ const addClusters = (
   const shouldRedirectToCluster = (name: string) =>
     !showClustersOverview && (isOnlyOneCluster || isK8CurrentCluster(name));
 
-  kubeconfig.contexts.forEach(context => {
-    const previousStorageMethod: ClusterStorage =
-      clusters![context.name]?.config?.storage || 'sessionStorage';
-    addByContext(
-      {
-        kubeconfig,
-        context,
-        switchCluster: shouldRedirectToCluster(context.name),
-        storage: previousStorageMethod, // todo move it to config?
-        config: {},
-      },
-      clusterInfo,
-    );
-  });
+  try {
+    kubeconfig.contexts.forEach(context => {
+      const previousStorageMethod: ClusterStorage =
+        clusters![context.name]?.config?.storage || 'sessionStorage';
+      addByContext(
+        {
+          kubeconfig,
+          context,
+          switchCluster: shouldRedirectToCluster(context.name),
+          storage: previousStorageMethod, // todo move it to config?
+          config: {},
+        },
+        clusterInfo,
+      );
+    });
 
-  if (showClustersOverview) {
-    window.location.href = window.location.origin + '/clusters';
+    if (showClustersOverview) {
+      window.location.href = window.location.origin + '/clusters';
+    }
+  } catch (e) {
+    if (notification) {
+      notification.notifyError({
+        content: `${t('clusters.messages.wrong-configuration')}. ${
+          e instanceof Error && e?.message ? e.message : ''
+        }`,
+      });
+    }
+    if (navigate) {
+      navigate('/clusters');
+      removePreviousPath();
+    }
+    console.warn(e);
   }
 };
 
@@ -117,7 +136,7 @@ const loadKubeconfigIdCluster = async (
         ...kubeconfig,
       }));
     } else {
-      addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature);
+      addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature, t);
       return 'done';
     }
   } catch (e) {
@@ -139,6 +158,8 @@ export function useLoginWithKubeconfigID() {
   const configuration = useRecoilValue(configurationAtom);
   const clusters = useRecoilValue(clustersState);
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
+  const notification = useNotification();
+  const navigate = useNavigate();
   const [search] = useSearchParams();
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
@@ -156,7 +177,15 @@ export function useLoginWithKubeconfigID() {
         ),
         'current-context': contextsState.chosenContext,
       };
-      addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature);
+      addClusters(
+        kubeconfig,
+        clusters,
+        clusterInfo,
+        kubeconfigIdFeature,
+        t,
+        notification,
+        navigate,
+      );
       setHandledKubeconfigId('done');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

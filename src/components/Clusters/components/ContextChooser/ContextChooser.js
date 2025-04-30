@@ -83,13 +83,13 @@ export function ContextChooserMessage({ contexts, setValue, onCancel }) {
         </Button>,
       ]}
     >
-      <FlexBox direction="Column">
+      <FlexBox direction="Column" style={{ gap: '16px' }}>
         <Text style={{ paddingLeft: '7.5px' }}>
           {t('clusters.wizard.several-context-info')}
           <br />
           {t('clusters.wizard.several-context-question')}
         </Text>
-        <FlexBox direction="Column">
+        <FlexBox direction="Column" className="radio-box-container">
           {contexts.map(context => (
             <RadioButton
               id={'context-chooser' + context.name}

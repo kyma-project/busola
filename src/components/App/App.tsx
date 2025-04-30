@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes, useSearchParams } from 'react-router';
+import { createPortal } from 'react-dom';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+  useSearchParams,
+} from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -19,7 +26,7 @@ import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigI
 import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLoginRoute';
 import { useHandleResetEndpoint } from 'components/Clusters/shared';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
-import { useAfterInitHook } from 'state/useAfterInitHook';
+import { removePreviousPath, useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { multipleContexts } from 'state/multipleContextsAtom';
@@ -51,6 +58,7 @@ export default function App() {
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [search] = useSearchParams();
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
 
@@ -104,7 +112,8 @@ export default function App() {
             <Sidebar key={cluster?.name} />
             {search.get('kubeconfigID') &&
               !!contextsState?.contexts?.length &&
-              kubeconfigIdState === 'loading' && (
+              kubeconfigIdState === 'loading' &&
+              createPortal(
                 <ContextChooserMessage
                   contexts={contextsState?.contexts}
                   setValue={(value: string) =>
@@ -114,25 +123,29 @@ export default function App() {
                     }))
                   }
                   onCancel={() => {
-                    // TODO: handle cancel
+                    setContextsState({} as any);
+                    removePreviousPath();
+                    navigate('/clusters');
                   }}
-                />
+                />,
+                document.body,
               )}
             <ContentWrapper>
               <Routes key={cluster?.name}>
-                {kubeconfigIdState !== 'loading' && (
-                  <Route
-                    path="*"
-                    element={
-                      <IncorrectPath
-                        to="clusters"
-                        message={t(
-                          'components.incorrect-path.message.clusters',
-                        )}
-                      />
-                    }
-                  />
-                )}
+                {kubeconfigIdState !== 'loading' &&
+                  !search.get('kubeconfigID') && (
+                    <Route
+                      path="*"
+                      element={
+                        <IncorrectPath
+                          to="clusters"
+                          message={t(
+                            'components.incorrect-path.message.clusters',
+                          )}
+                        />
+                      }
+                    />
+                  )}
                 <Route path="clusters" element={<ClusterList />} />
                 <Route
                   path="cluster/:currentClusterName"
