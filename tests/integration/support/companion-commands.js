@@ -1,6 +1,6 @@
 Cypress.Commands.add('openCompanion', () => {
   cy.get('ui5-shellbar')
-    .find('ui5-button[icon="da"]')
+    .find('ui5-toggle-button[icon="da"]')
     .should('be.visible')
     .click();
 });
