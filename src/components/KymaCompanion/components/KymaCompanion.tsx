@@ -65,7 +65,7 @@ export default function KymaCompanion() {
         className="kyma-companion"
         header={
           <div className="kyma-companion__header">
-            <Title level="H4" size="H4" className="title">
+            <Title level="H5" size="H5" className="title">
               {t('kyma-companion.name')}
             </Title>
             <div className="actions-container">
