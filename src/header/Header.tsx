@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   Avatar,
   ShellBar,
   ShellBarItem,
   ListItemStandard,
+  ToggleButton,
 } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
@@ -45,7 +46,9 @@ export function Header() {
   const clusters = useRecoilValue(clustersState);
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
-  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
+  const [showCompanion, setShowCompanion] = useRecoilState(
+    showKymaCompanionState,
+  );
   const shellbarRef = useRef(null);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
@@ -148,16 +151,18 @@ export function Header() {
         {isKymaCompanionEnabled &&
           isSAPUser &&
           window.location.pathname !== '/clusters' && (
-            <ShellBarItem
-              onClick={() =>
+            <ToggleButton
+              accessibleName="Kyma Companion"
+              icon={showCompanion.show ? 'da-2' : 'da'}
+              onClick={e => {
+                e.preventDefault();
                 setShowCompanion({
                   show: true,
                   fullScreen: false,
-                })
-              }
-              icon="da"
-              text={t('kyma-companion.name')}
-              title={t('kyma-companion.name')}
+                });
+              }}
+              pressed={showCompanion.show}
+              slot="assistant"
             />
           )}
       </ShellBar>
