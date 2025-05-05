@@ -408,50 +408,52 @@ export default function KymaModulesEdit({ resource, ...props }) {
         />,
         document.body,
       )}
-      <ResourceForm
-        {...props}
-        className="kyma-modules-create"
-        pluralKind="kymas"
-        singularName={t('kyma-modules.kyma')}
-        resource={kymaResource}
-        initialResource={initialResource}
-        setResource={setKymaResource}
-        createUrl={props.resourceUrl}
-        disableDefaultFields
-        skipCreateFn={skipModuleFn}
-      >
-        <ResourceForm.CollapsibleSection
-          defaultOpen
-          defaultTitleType
-          className="collapsible-margins"
-          title={t('kyma-modules.modules-channel')}
+      {kymaResource && (
+        <ResourceForm
+          {...props}
+          className="kyma-modules-create"
+          pluralKind="kymas"
+          singularName={t('kyma-modules.kyma')}
+          resource={kymaResource}
+          initialResource={initialResource}
+          setResource={setKymaResource}
+          createUrl={props.resourceUrl}
+          disableDefaultFields
+          skipCreateFn={skipModuleFn}
         >
-          <UnmanagedModuleInfo kymaResource={kymaResource} />
-          {modulesEditData?.length !== 0 ? (
-            <>
-              {checkIfSelectedModuleIsBeta() ? (
-                <MessageStrip
-                  key={'beta'}
-                  design="Critical"
-                  hideCloseButton
-                  className="sap-margin-top-tiny"
-                >
-                  {t('kyma-modules.beta-alert')}
-                </MessageStrip>
-              ) : null}
-              {renderModules()}
-            </>
-          ) : (
-            <MessageStrip
-              design="Critical"
-              hideCloseButton
-              className="sap-margin-top-small"
-            >
-              {t('extensibility.widgets.modules.no-modules-installed')}
-            </MessageStrip>
-          )}
-        </ResourceForm.CollapsibleSection>
-      </ResourceForm>
+          <ResourceForm.CollapsibleSection
+            defaultOpen
+            defaultTitleType
+            className="collapsible-margins"
+            title={t('kyma-modules.modules-channel')}
+          >
+            <UnmanagedModuleInfo kymaResource={kymaResource} />
+            {modulesEditData?.length !== 0 ? (
+              <>
+                {checkIfSelectedModuleIsBeta() ? (
+                  <MessageStrip
+                    key={'beta'}
+                    design="Critical"
+                    hideCloseButton
+                    className="sap-margin-top-tiny"
+                  >
+                    {t('kyma-modules.beta-alert')}
+                  </MessageStrip>
+                ) : null}
+                {renderModules()}
+              </>
+            ) : (
+              <MessageStrip
+                design="Critical"
+                hideCloseButton
+                className="sap-margin-top-small"
+              >
+                {t('extensibility.widgets.modules.no-modules-installed')}
+              </MessageStrip>
+            )}
+          </ResourceForm.CollapsibleSection>
+        </ResourceForm>
+      )}
     </>
   );
 }
