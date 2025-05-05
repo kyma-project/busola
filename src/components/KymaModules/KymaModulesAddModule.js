@@ -1,29 +1,29 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import ModulesCard from 'components/KymaModules/components/ModulesCard';
 import { cloneDeep } from 'lodash';
-import {
-  useModulesReleaseQuery,
-  useModuleTemplatesQuery,
-} from './kymaModulesQueries';
+import { useModulesReleaseQuery } from './kymaModulesQueries';
+import { KymaModuleContext } from './providers/KymaModuleProvider';
 
 import './KymaModulesAddModule.scss';
 import { findModuleStatus } from './support';
 
-export default function KymaModulesAddModule({
-  resourceName,
-  kymaResourceUrl,
-  loading,
-  activeKymaModules,
-  initialUnchangedResource,
-  kymaResource,
-  setKymaResource,
-  props,
-}) {
+export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
+
+  const {
+    kymaResource: resourceName,
+    resourceUrl: kymaResourceUrl,
+    kymaResourceState: kymaResource,
+    setKymaResourceState: setKymaResource,
+    kymaResourceLoading: loading,
+    selectedModules: activeKymaModules,
+    moduleTemplates,
+    initialUnchangedResource,
+  } = useContext(KymaModuleContext);
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
@@ -49,9 +49,6 @@ export default function KymaModulesAddModule({
   }, [setKymaResource, kymaResource, selectedModules, activeKymaModules]);
 
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
-    skip: !resourceName,
-  });
-  const { data: moduleTemplates } = useModuleTemplatesQuery({
     skip: !resourceName,
   });
 

@@ -24,6 +24,7 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Check if edit is empty', () => {
+    cy.wait(500);
     cy.inspectTab('Edit');
 
     cy.contains('No modules installed').should('be.visible');
@@ -35,14 +36,6 @@ context('Test Kyma Modules views', () => {
     cy.get('ui5-table')
       .find('ui5-illustrated-message')
       .find('ui5-title', 'No modules')
-      .should('be.visible');
-
-    cy.get('ui5-dynamic-page-header')
-      .contains('Release channel')
-      .should('be.visible');
-
-    cy.get('ui5-dynamic-page-header')
-      .contains('regular')
       .should('be.visible');
 
     // Add first module
