@@ -11,7 +11,7 @@ import { KymaModuleContext } from './providers/KymaModuleProvider';
 import './KymaModulesAddModule.scss';
 import { findModuleStatus } from './support';
 
-export default function KymaModulesAddModule({ props }) {
+export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
 
   const {

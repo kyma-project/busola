@@ -9,7 +9,6 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails';
 import { t } from 'i18next';
-import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
 
@@ -89,7 +88,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       renderForm={renderProps => {
         return (
           <ErrorBoundary>
-            <KymaModulesAddModule props={renderProps} />
+            <KymaModulesAddModule {...renderProps} />
           </ErrorBoundary>
         );
       }}
@@ -129,24 +128,7 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
 };
 
 const KymaModules = ({ defaultColumn, namespaced }) => {
-  const [
-    DeleteMessageBox,
-    handleResourceDelete,
-    showDeleteDialog,
-  ] = useDeleteResource({
-    resourceType: t('kyma-modules.title'),
-    forceConfirmDelete: true,
-  });
-
-  return (
-    <ColumnWraper
-      defaultColumn={defaultColumn}
-      namespaced={namespaced}
-      DeleteMessageBox={DeleteMessageBox}
-      handleResourceDelete={handleResourceDelete}
-      showDeleteDialog={showDeleteDialog}
-    />
-  );
+  return <ColumnWraper defaultColumn={defaultColumn} namespaced={namespaced} />;
 };
 
 export default (
