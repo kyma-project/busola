@@ -27,10 +27,11 @@ export function ContextChooser(params) {
         </Title>
         <ResourceForm.FormField
           required
+          value={params.chosenContext}
           propertyPath='$["current-context"]'
           label={t('clusters.wizard.context')}
           validate={value => !!value}
-          input={({ value, setValue }) => (
+          input={({ setValue }) => (
             <FlexBox
               direction="Column"
               id="context-chooser"
@@ -41,9 +42,12 @@ export function ContextChooser(params) {
                   key={context.name}
                   name={context.name}
                   value={context.name}
-                  checked={value === context.name}
+                  checked={params.chosenContext === context.name}
                   text={context.name}
-                  onChange={() => setValue(context.name)}
+                  onChange={() => {
+                    setValue(context.name);
+                    params.setChosenContext(context.name);
+                  }}
                 />
               ))}
             </FlexBox>
