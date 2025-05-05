@@ -144,7 +144,7 @@ export const makeHandleRequest = () => {
 
 export const serveStaticApp = (app, requestPath, directoryPath) => {
   app.use(requestPath, express.static(path.join(__dirname, directoryPath)));
-  app.get(requestPath + '*', (_, res) =>
+  app.get(requestPath + '*splat', (_, res) =>
     res.sendFile(path.join(__dirname + directoryPath + '/index.html')),
   );
 };
