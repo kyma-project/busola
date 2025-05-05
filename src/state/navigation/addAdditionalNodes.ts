@@ -18,7 +18,7 @@ export const addAdditionalNodes = (
   navNodes: NavNode[],
   scope: Scope,
   configFeatures: ConfigFeatureList,
-  moduleTemplatesCount: any,
+  moduleTemplatesCount: number | null,
 ) => {
   const extNavList = [...navNodes];
 
@@ -36,7 +36,7 @@ export const addAdditionalNodes = (
     if (scope === 'cluster') {
       addResource(extensionsNavNode, extNavList.length, extNavList);
     }
-    if (moduleTemplatesCount > 0) {
+    if (moduleTemplatesCount && moduleTemplatesCount > 0) {
       addResource(
         scope === 'cluster'
           ? kymaModulesNavNode

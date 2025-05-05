@@ -8,7 +8,7 @@ import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
-import { moduleTemplatesAtom } from 'state/moduleTemplatesAtom';
+import { moduleTemplatesCountSelector } from 'state/moduleTemplatesCountSelector';
 
 export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
   NavNode[]
@@ -20,7 +20,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const openapiPathIdList = get(openapiPathIdListSelector);
     const permissionSet = get(permissionSetsSelector);
     const configuration = get(configurationAtom);
-    const moduleTemplatesCount = get(moduleTemplatesAtom);
+    const moduleTemplatesCount = get(moduleTemplatesCountSelector);
 
     const features = configuration?.features || {};
 
