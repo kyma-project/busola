@@ -242,6 +242,6 @@ context('Test reduced permissions', () => {
       clearSearch: false,
     });
 
-    cy.contains(/No clusters found/).should('exist');
+    cy.contains(/no clusters/).should('exist');
   });
 });

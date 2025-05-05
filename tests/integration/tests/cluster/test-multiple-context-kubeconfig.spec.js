@@ -62,7 +62,7 @@ context('Test multiple context kubeconfig', () => {
 
       cy.get('ui5-radio-button')
         .contains(kubeconfig['current-context'])
-        .click();
+        .click({ force: true });
 
       cy.get('ui5-radio-button').contains(kubeconfig.contexts[1].name);
 
