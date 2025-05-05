@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 
-import toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
+import openapiSchemaToJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import jp from 'jsonpath';
 
@@ -59,7 +59,7 @@ async function createJSONSchemas(openAPISchemas, clusterName) {
   activeClusterName = clusterName;
 
   const resolved = await new Resolver().resolve(openAPISchemas);
-  const schema = toJsonSchema(resolved);
+  const schema = openapiSchemaToJsonSchema(resolved, { cloneSchema: false });
   jsonSchemas[clusterName] = {};
 
   Object.values(schema.result.definitions).forEach(definition => {
