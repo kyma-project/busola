@@ -8,7 +8,6 @@ import { t } from 'i18next';
 import { useKymaQuery, useModuleTemplatesQuery } from '../kymaModulesQueries';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
-import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { checkSelectedModule } from '../support';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 
@@ -32,6 +31,9 @@ export function KymaModuleContextProvider({
   children,
   setLayoutColumn,
   layoutState,
+  DeleteMessageBox,
+  handleResourceDelete,
+  showDeleteDialog,
 }) {
   const {
     data: kymaResource,
@@ -73,15 +75,6 @@ export function KymaModuleContextProvider({
       notification.notifySuccess({
         content: t('kyma-modules.module-uninstall'),
       }),
-  });
-
-  const [
-    DeleteMessageBox,
-    handleResourceDelete,
-    showDeleteDialog,
-  ] = useDeleteResource({
-    resourceType: t('kyma-modules.title'),
-    forceConfirmDelete: true,
   });
 
   // Fetching all Module Templates can be replaced with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232

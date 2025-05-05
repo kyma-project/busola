@@ -9,6 +9,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails';
 import { t } from 'i18next';
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
 
@@ -20,7 +21,13 @@ const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
 
-const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
+const ColumnWraper = ({
+  defaultColumn = 'list',
+  namespaced = false,
+  DeleteMessageBox,
+  handleResourceDelete,
+  showDeleteDialog,
+}) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { clusterUrl, namespaceUrl } = useUrl();
   const url = namespaced
@@ -100,6 +107,9 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
       <KymaModuleContextProvider
         setLayoutColumn={setLayoutColumn}
         layoutState={layoutState}
+        DeleteMessageBox={DeleteMessageBox}
+        handleResourceDelete={handleResourceDelete}
+        showDeleteDialog={showDeleteDialog}
       >
         <FlexibleColumnLayout
           style={{ height: '100%' }}
@@ -128,7 +138,23 @@ const ColumnWraper = ({ defaultColumn = 'list', namespaced = false }) => {
 };
 
 const KymaModules = ({ defaultColumn, namespaced }) => {
-  return <ColumnWraper defaultColumn={defaultColumn} namespaced={namespaced} />;
+  const [
+    DeleteMessageBox,
+    handleResourceDelete,
+    showDeleteDialog,
+  ] = useDeleteResource({
+    resourceType: t('kyma-modules.title'),
+    forceConfirmDelete: true,
+  });
+  return (
+    <ColumnWraper
+      defaultColumn={defaultColumn}
+      namespaced={namespaced}
+      DeleteMessageBox={DeleteMessageBox}
+      handleResourceDelete={handleResourceDelete}
+      showDeleteDialog={showDeleteDialog}
+    />
+  );
 };
 
 export default (
