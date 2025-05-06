@@ -15,6 +15,9 @@ interface ClusterAuth {
   clientKeyData?: string;
 }
 
+type handleChatResponseFn = (chunk: MessageChunk) => void;
+type handleChatErrorResponseFn = (errResponse: ErrResponse) => void;
+
 type GetChatResponseArgs = {
   query: string;
   namespace?: string;
@@ -22,13 +25,40 @@ type GetChatResponseArgs = {
   groupVersion?: string;
   resourceName?: string;
   sessionID: string;
-  handleChatResponse: (chunk: MessageChunk) => void;
-  handleError: (errResponse: ErrResponse) => void;
+  handleChatResponse: handleChatResponseFn;
+  handleError: handleChatErrorResponseFn;
   clusterUrl: string;
   clusterAuth: ClusterAuth;
   certificateAuthorityData: string;
 };
 
+const fillAuthHeaders = (
+  headers: Record<string, string>,
+  clusterAuth: ClusterAuth,
+) => {
+  if (clusterAuth?.token) {
+    headers['X-K8s-Authorization'] = clusterAuth?.token;
+  } else if (clusterAuth?.clientCertificateData && clusterAuth?.clientKeyData) {
+    headers['X-Client-Certificate-Data'] = clusterAuth?.clientCertificateData;
+    headers['X-Client-Key-Data'] = clusterAuth?.clientKeyData;
+  } else {
+    throw new Error('Missing authentication credentials');
+  }
+};
+const prepareBasicHeaders = (
+  certificateAuthorityData: string,
+  clusterUrl: string,
+  sessionID: string,
+) => {
+  const headers: Record<string, string> = {
+    Accept: 'text/event-stream',
+    'Content-Type': 'application/json',
+    'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
+    'X-Cluster-Url': clusterUrl,
+    'Session-Id': sessionID,
+  };
+  return headers;
+};
 export default async function getChatResponse({
   query,
   namespace = '',
@@ -51,24 +81,40 @@ export default async function getChatResponse({
     groupVersion,
     resourceName,
   };
+  const headers = prepareBasicHeaders(
+    certificateAuthorityData,
+    clusterUrl,
+    sessionID,
+  );
+  fillAuthHeaders(headers, clusterAuth);
 
-  const headers: Record<string, string> = {
-    Accept: 'text/event-stream',
-    'Content-Type': 'application/json',
-    'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-    'X-Cluster-Url': clusterUrl,
-    'Session-Id': sessionID,
+  const fetchWrapper = async function(
+    handleResponse: handleChatResponseFn,
+    handleError: handleChatErrorResponseFn,
+  ): Promise<boolean> {
+    return fetchResponse(
+      url,
+      headers,
+      JSON.stringify(payload),
+      sessionID,
+      handleResponse,
+      handleError,
+    );
   };
 
-  if (clusterAuth?.token) {
-    headers['X-K8s-Authorization'] = clusterAuth?.token;
-  } else if (clusterAuth?.clientCertificateData && clusterAuth?.clientKeyData) {
-    headers['X-Client-Certificate-Data'] = clusterAuth?.clientCertificateData;
-    headers['X-Client-Key-Data'] = clusterAuth?.clientKeyData;
-  } else {
-    throw new Error('Missing authentication credentials');
-  }
+  await retryFetch(fetchWrapper, handleChatResponse, handleError);
+}
 
+async function retryFetch(
+  fetchFn: {
+    (
+      handleResponse: handleChatResponseFn,
+      handleError: handleChatErrorResponseFn,
+    ): Promise<boolean>;
+  },
+  handleChatResponse: handleChatResponseFn,
+  handleError: handleChatErrorResponseFn,
+) {
   let finished = false;
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
     const handleErrWrapper = (errResponse: ErrResponse) => {
@@ -79,24 +125,17 @@ export default async function getChatResponse({
     };
     const handleChatResponseWrapper = (chunk: MessageChunk) => {
       handleChatResponse(chunk);
-      finished = true;
       console.debug('2: Finished reading the answer');
     };
 
-    await fetchResponse(
-      url,
-      headers,
-      JSON.stringify(payload),
-      sessionID,
-      handleChatResponseWrapper,
-      handleErrWrapper,
-    );
+    finished = await fetchFn(handleChatResponseWrapper, handleErrWrapper);
 
     console.debug('3: Fetch Done');
     if (!finished) {
       await new Promise(resolve => setTimeout(resolve, ERROR_RETRY_TIMEOUT));
     } else {
       console.debug('DONE');
+      finished = true;
       break;
     }
   }
@@ -116,7 +155,7 @@ async function fetchResponse(
   sessionID: string,
   handleChatResponse: { (chunk: MessageChunk): void },
   handleError: { (errResponse: ErrResponse): void },
-): Promise<void> {
+): Promise<boolean> {
   console.debug('1: Fetch Response', new Date());
   return fetch(url, {
     headers,
@@ -139,6 +178,7 @@ async function fetchResponse(
         handleError,
         sessionID,
       );
+      return true;
     })
     .catch(error => {
       if (error instanceof HttpError) {
@@ -154,6 +194,7 @@ async function fetchResponse(
         });
       }
       console.error('Error fetching data:', error);
+      return false;
     });
 }
 
