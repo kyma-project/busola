@@ -127,8 +127,9 @@ export function AddClusterWizard({
       setIsFormOpen({ formOpen: false });
     } catch (e) {
       notification.notifyError({
-        title: t('clusters.messages.wrong-configuration'),
-        content: t('common.tooltips.error') + e.message,
+        content: `${t('clusters.messages.wrong-configuration')}. ${
+          e instanceof Error && e?.message ? e.message : ''
+        }`,
       });
       console.warn(e);
     }
