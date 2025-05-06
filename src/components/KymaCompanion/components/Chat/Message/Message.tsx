@@ -7,6 +7,19 @@ import { useRecoilValue } from 'recoil';
 import './Message.scss';
 import './marked.scss';
 
+export enum ErrorType {
+  FATAL,
+  RETRYABLE,
+}
+
+export interface ErrResponse {
+  type: ErrorType;
+  message: string;
+  statusCode?: number;
+  attempt?: number;
+  maxAttempts?: number;
+}
+
 export interface MessageChunk {
   event?: string;
   data: {

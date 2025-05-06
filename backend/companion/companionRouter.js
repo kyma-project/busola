@@ -74,6 +74,10 @@ async function handleChatMessage(req, res) {
     groupVersion,
     resourceName,
   } = JSON.parse(req.body.toString());
+
+  randomResponse(res);
+  return;
+
   const clusterUrl = req.headers['x-cluster-url'];
   const certificateAuthorityData =
     req.headers['x-cluster-certificate-authority-data'];
@@ -234,3 +238,27 @@ router.post('/messages', handleChatMessage);
 router.post('/followup', handleFollowUpSuggestions);
 
 export default router;
+
+// TODO: this code is only for testing
+const randomResponse = res => {
+  let randomResp = Math.floor(Math.random() * 4);
+
+  // Set up headers for streaming response
+  // res.setHeader('Content-Type', 'text/event-stream');
+  // res.setHeader('Transfer-Encoding', 'chunked');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  if (randomResp !== 0) {
+    res.status(400).end();
+  } else {
+    res.send({
+      data: {
+        answer: {
+          content: 'okay',
+          next: '__end__',
+        },
+      },
+    });
+  }
+};

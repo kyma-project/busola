@@ -1,5 +1,13 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { MessageChunk } from '../components/Chat/Message/Message';
+import {
+  ErrorType,
+  ErrResponse,
+  MessageChunk,
+} from '../components/Chat/Message/Message';
+import { HttpError } from './error';
+
+const ERROR_RETRY_TIMEOUT = 1_000;
+const MAX_ATTEMPTS = 3;
 
 interface ClusterAuth {
   token?: string;
@@ -15,7 +23,7 @@ type GetChatResponseArgs = {
   resourceName?: string;
   sessionID: string;
   handleChatResponse: (chunk: MessageChunk) => void;
-  handleError: (error?: string) => void;
+  handleError: (errResponse: ErrResponse) => void;
   clusterUrl: string;
   clusterAuth: ClusterAuth;
   certificateAuthorityData: string;
@@ -61,36 +69,102 @@ export default async function getChatResponse({
     throw new Error('Missing authentication credentials');
   }
 
-  fetch(url, {
+  let finished = false;
+  for (let i = 0; i < MAX_ATTEMPTS; i++) {
+    const handleErrWrapper = (errResponse: ErrResponse) => {
+      errResponse.maxAttempts = MAX_ATTEMPTS;
+      errResponse.attempt = i + 1;
+      handleError(errResponse);
+      console.debug('2: Finished handling the error', errResponse);
+    };
+    const handleChatResponseWrapper = (chunk: MessageChunk) => {
+      handleChatResponse(chunk);
+      finished = true;
+      console.debug('2: Finished reading the answer');
+    };
+
+    await fetchResponse(
+      url,
+      headers,
+      JSON.stringify(payload),
+      sessionID,
+      handleChatResponseWrapper,
+      handleErrWrapper,
+    );
+
+    console.debug('3: Fetch Done');
+    if (!finished) {
+      await new Promise(resolve => setTimeout(resolve, ERROR_RETRY_TIMEOUT));
+    } else {
+      console.debug('DONE');
+      break;
+    }
+  }
+  if (!finished) {
+    handleError({
+      message:
+        "Couldn't fetch response from Kyma Companion because of network errors.",
+      type: ErrorType.FATAL,
+    });
+  }
+}
+
+async function fetchResponse(
+  url: RequestInfo | URL,
+  headers: Record<string, string>,
+  body: string,
+  sessionID: string,
+  handleChatResponse: { (chunk: MessageChunk): void },
+  handleError: { (errResponse: ErrResponse): void },
+): Promise<void> {
+  console.debug('1: Fetch Response', new Date());
+  return fetch(url, {
     headers,
-    body: JSON.stringify(payload),
+    body,
     method: 'POST',
   })
-    .then(response => {
+    .then(async response => {
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new HttpError('Network response was not ok', response.status);
       }
       const reader = response.body?.getReader();
       if (!reader) {
         throw new Error('Failed to get reader from response body');
       }
       const decoder = new TextDecoder();
-      readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
+      await readChunk(
+        reader,
+        decoder,
+        handleChatResponse,
+        handleError,
+        sessionID,
+      );
     })
     .catch(error => {
-      handleError();
+      if (error instanceof HttpError) {
+        handleError({
+          message: error.message,
+          statusCode: error.statusCode,
+          type: ErrorType.RETRYABLE,
+        });
+      } else {
+        handleError({
+          message: error.message,
+          type: ErrorType.FATAL,
+        });
+      }
       console.error('Error fetching data:', error);
     });
 }
 
-function readChunk(
+async function readChunk(
   reader: ReadableStreamDefaultReader<Uint8Array>,
   decoder: TextDecoder,
-  handleChatResponse: (chunk: any) => void,
-  handleError: (error?: string) => void,
+  handleChatResponse: (chunk: MessageChunk) => void,
+  handleError: (errResponse: ErrResponse) => void,
   sessionID: string,
-) {
-  reader
+): Promise<void> {
+  return reader
     .read()
     .then(({ done, value }) => {
       if (done) {
@@ -106,7 +180,10 @@ function readChunk(
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
     .catch(error => {
-      handleError();
+      handleError({
+        message: error.message,
+        type: ErrorType.FATAL,
+      });
       console.error('Error reading stream:', error);
     });
 }

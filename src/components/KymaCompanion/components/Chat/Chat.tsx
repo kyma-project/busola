@@ -2,7 +2,11 @@ import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
-import Message, { MessageChunk } from './Message/Message';
+import Message, {
+  ErrorType,
+  ErrResponse,
+  MessageChunk,
+} from './Message/Message';
 import Bubbles from './Bubbles/Bubbles';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
 import { sessionIDState } from 'state/companion/sessionIDAtom';
@@ -78,6 +82,26 @@ export const Chat = ({
     });
   };
 
+  const concatMsgToLatestMessage = (
+    response: MessageChunk,
+    isLoading: boolean,
+  ) => {
+    setChatHistory(prevMessages => {
+      const [latestMessage] = prevMessages.slice(-1);
+      const a = prevMessages.slice(0, -1).concat({
+        ...latestMessage,
+        messageChunks: latestMessage.messageChunks.concat(response),
+        isLoading,
+      });
+      console.log(a);
+      return a;
+    });
+  };
+
+  const removeLastMessage = () => {
+    setChatHistory(prevItems => prevItems.slice(0, -1));
+  };
+
   const handleChatResponse = (response: MessageChunk) => {
     const isLoading = response?.data?.answer?.next !== '__end__';
 
@@ -90,7 +114,13 @@ export const Chat = ({
           response.data.answer?.tasks?.every(task => task.status === 'error') ??
           false;
         const displayRetry = response.data.error !== null || allTasksError;
-        handleError(response.data.answer.content, displayRetry);
+        handleError(
+          {
+            type: ErrorType.RETRYABLE,
+            message: response.data.answer.content,
+          },
+          displayRetry,
+        );
         return;
       } else {
         setFollowUpLoading();
@@ -107,15 +137,7 @@ export const Chat = ({
         });
       }
     }
-
-    setChatHistory(prevMessages => {
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        ...latestMessage,
-        messageChunks: latestMessage.messageChunks.concat(response),
-        isLoading,
-      });
-    });
+    concatMsgToLatestMessage(response, isLoading);
   };
 
   const setFollowUpLoading = () => {
@@ -137,22 +159,48 @@ export const Chat = ({
     setLoading(false);
   };
 
-  const handleError = (error?: string, displayRetry?: boolean) => {
-    const errorMessage = error ?? t('kyma-companion.error.subtitle') ?? '';
-    setError({
-      message: errorMessage,
-      displayRetry: displayRetry ?? false,
-    });
-    setChatHistory(prevItems => prevItems.slice(0, -1));
-    updateLatestMessage({ hasError: true });
-    setLoading(false);
+  const handleError = (errResponse: ErrResponse, displayRetry?: boolean) => {
+    switch (errResponse.type) {
+      case ErrorType.FATAL: {
+        setError({
+          message:
+            errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
+          displayRetry: displayRetry ?? false,
+        });
+        updateLatestMessage({ hasError: true });
+        setLoading(false);
+        break;
+      }
+      case ErrorType.RETRYABLE: {
+        const errMsg = t('kyma-companion.error.http-error', {
+          attempt: `${errResponse.attempt}/${errResponse.maxAttempts}`,
+          statusCode: errResponse.statusCode,
+        });
+        setLoading(true);
+        updateLatestMessage({
+          author: 'ai',
+          messageChunks: [
+            {
+              data: {
+                answer: {
+                  content: errMsg,
+                  next: '__end__',
+                },
+              },
+            },
+          ],
+          isLoading: false,
+        });
+        break;
+      }
+    }
   };
 
   const retryPreviousPrompt = () => {
     const previousPrompt = chatHistory.at(-1)?.messageChunks[0].data.answer
       .content;
     if (previousPrompt) {
-      setChatHistory(prevItems => prevItems.slice(0, -1));
+      removeLastMessage();
       sendPrompt(previousPrompt);
     }
   };
@@ -269,13 +317,13 @@ export const Chat = ({
           return message.author === 'ai' ? (
             <React.Fragment key={index}>
               <Message
-                author="ai"
+                author={message.author}
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
                 hasError={message?.hasError ?? false}
                 isLatestMessage={isLast}
               />
-              {index === chatHistory.length - 1 && !message.isLoading && (
+              {isLast && !message.isLoading && (
                 <Bubbles
                   onClick={sendPrompt}
                   suggestions={message.suggestions}
