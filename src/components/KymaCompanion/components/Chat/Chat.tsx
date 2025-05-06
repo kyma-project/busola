@@ -99,7 +99,26 @@ export const Chat = ({
   };
 
   const removeLastMessage = () => {
-    setChatHistory(prevItems => prevItems.slice(0, -1));
+    setChatHistory(prevMessages => prevMessages.slice(0, -1));
+  };
+
+  const setErrorOnLastUserMsg = () => {
+    setChatHistory(prevMessages => {
+      const lastUserMsgIdx = prevMessages.findLastIndex(msg => {
+        return msg.author === 'user';
+      });
+      if (lastUserMsgIdx === -1) {
+        return prevMessages;
+      }
+
+      return prevMessages.map((msg, idx) => {
+        if (idx === lastUserMsgIdx) {
+          msg.hasError = true;
+          msg.isLoading = false;
+        }
+        return msg;
+      });
+    });
   };
 
   const handleChatResponse = (response: MessageChunk) => {
@@ -167,7 +186,7 @@ export const Chat = ({
             errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
           displayRetry: displayRetry ?? false,
         });
-        updateLatestMessage({ hasError: true });
+        setErrorOnLastUserMsg();
         setLoading(false);
         break;
       }
