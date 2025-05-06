@@ -236,8 +236,12 @@ context('Test reduced permissions', () => {
     // remove cluster
     cy.changeCluster('all-clusters');
 
-    cy.get('[accessible-name="Delete"]:visible').click();
+    cy.deleteFromGenericList('Cluster', SA_NAME, {
+      confirmationEnabled: true,
+      deletedVisible: false,
+      clearSearch: false,
+    });
 
-    cy.contains(/no clusters/).should('exist');
+    cy.contains(/No clusters found/).should('exist');
   });
 });
