@@ -16,7 +16,7 @@
     "@babel/runtime": "^7.26.10",
     "compression": "^1.8.0",
     "cors": "^2.8.5",
-    "express": "^4.21.2",
+    "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
     "https": "^1.0.0",
     "jose": "^6.0.10",
