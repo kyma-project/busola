@@ -4,34 +4,51 @@ import {
   MessageChunk,
 } from 'components/KymaCompanion/components/Chat/Message/Message';
 
-// export function retry(fn, handleSuccess, handleError, retries, timegap) {
-//   let finished = false;
-//   for (let i = 0; i < retries; i++) {
-//     const handleErrWrapper = (errResponse: ErrResponse) => {
-//       console.log('Got status code', errResponse.statusCode);
-//       errResponse.message =
-//         errResponse.type === ErrorType.NOT_FATAL
-//           ? errResponse.message +
-//             `. Response status code was ${
-//               errResponse.statusCode
-//             } and it wasn't ok. Retrying ${i + 1}/${retries}`
-//           : errResponse.message;
-//       handleError(errResponse);
-//       console.log('2: Finished handling the error');
-//     };
-//     const handleChatResponseWrapper = (chunk: MessageChunk) => {
-//       handleSuccess(chunk);
-//       finished = true;
-//       console.log('2: Finished reading the answer');
-//     };
-//     await fn();
-//
-//     console.log('3: Fetch Done. Finished:', finished);
-//     if (!finished) {
-//       await new Promise(resolve => setTimeout(resolve, retries));
-//     } else {
-//       console.log('DONE');
-//       break;
-//     }
-//   }
-// }
+const ERROR_RETRY_TIMEOUT = 1_000;
+const MAX_ATTEMPTS = 3;
+
+export type handleChatResponseFn = (chunk: MessageChunk) => void;
+export type handleChatErrorResponseFn = (errResponse: ErrResponse) => void;
+
+export async function retryFetch(
+  fetchFn: {
+    (
+      handleResponse: handleChatResponseFn,
+      handleError: handleChatErrorResponseFn,
+    ): Promise<boolean>;
+  },
+  handleChatResponse: handleChatResponseFn,
+  handleError: handleChatErrorResponseFn,
+): Promise<void> {
+  let finished = false;
+  for (let i = 0; i < MAX_ATTEMPTS; i++) {
+    const handleErrWrapper = (errResponse: ErrResponse) => {
+      errResponse.maxAttempts = MAX_ATTEMPTS;
+      errResponse.attempt = i + 1;
+      handleError(errResponse);
+      console.debug('2: Finished handling the error', errResponse);
+    };
+    const handleChatResponseWrapper = (chunk: MessageChunk) => {
+      handleChatResponse(chunk);
+      console.debug('2: Finished reading the answer');
+    };
+
+    finished = await fetchFn(handleChatResponseWrapper, handleErrWrapper);
+
+    console.debug('3: Fetch Done');
+    if (!finished) {
+      await new Promise(resolve => setTimeout(resolve, ERROR_RETRY_TIMEOUT));
+    } else {
+      console.debug('DONE');
+      finished = true;
+      break;
+    }
+  }
+  if (!finished) {
+    handleError({
+      message:
+        "Couldn't fetch response from Kyma Companion because of network errors.",
+      type: ErrorType.FATAL,
+    });
+  }
+}
