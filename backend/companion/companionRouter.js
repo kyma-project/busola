@@ -75,9 +75,6 @@ async function handleChatMessage(req, res) {
     resourceName,
   } = JSON.parse(req.body.toString());
 
-  randomResponse(res);
-  return;
-
   const clusterUrl = req.headers['x-cluster-url'];
   const certificateAuthorityData =
     req.headers['x-cluster-certificate-authority-data'];
