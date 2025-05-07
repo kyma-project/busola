@@ -190,8 +190,8 @@ export default async function getChatResponse({
     fetchWrapper,
     handleChatResponse,
     handleError,
-    RETRY_DELAY,
     MAX_ATTEMPTS,
+    RETRY_DELAY,
   );
   if (!result) {
     handleError({
