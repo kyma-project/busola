@@ -1,29 +1,26 @@
 import {
-  ErrorType,
   ErrResponse,
   MessageChunk,
 } from 'components/KymaCompanion/components/Chat/Message/Message';
 
-const ERROR_RETRY_TIMEOUT = 1_000;
-const MAX_ATTEMPTS = 3;
-
 export type handleChatResponseFn = (chunk: MessageChunk) => void;
 export type handleChatErrorResponseFn = (errResponse: ErrResponse) => void;
+export type fetchFn = (
+  handleResponse: handleChatResponseFn,
+  handleError: handleChatErrorResponseFn,
+) => Promise<boolean>;
 
 export async function retryFetch(
-  fetchFn: {
-    (
-      handleResponse: handleChatResponseFn,
-      handleError: handleChatErrorResponseFn,
-    ): Promise<boolean>;
-  },
+  fetchFn: fetchFn,
   handleChatResponse: handleChatResponseFn,
   handleError: handleChatErrorResponseFn,
-): Promise<void> {
+  maxAttempts: number,
+  retryDelay: number,
+): Promise<boolean> {
   let finished = false;
-  for (let i = 0; i < MAX_ATTEMPTS; i++) {
+  for (let i = 0; i < maxAttempts; i++) {
     const handleErrWrapper = (errResponse: ErrResponse) => {
-      errResponse.maxAttempts = MAX_ATTEMPTS;
+      errResponse.maxAttempts = maxAttempts;
       errResponse.attempt = i + 1;
       handleError(errResponse);
       console.debug('2: Finished handling the error', errResponse);
@@ -35,20 +32,14 @@ export async function retryFetch(
 
     finished = await fetchFn(handleChatResponseWrapper, handleErrWrapper);
 
-    console.debug('3: Fetch Done');
+    console.debug(`3: Fetch Done. Result: ${finished}`);
     if (!finished) {
-      await new Promise(resolve => setTimeout(resolve, ERROR_RETRY_TIMEOUT));
+      await new Promise(resolve => setTimeout(resolve, retryDelay));
     } else {
       console.debug('DONE');
       finished = true;
       break;
     }
   }
-  if (!finished) {
-    handleError({
-      message:
-        "Couldn't fetch response from Kyma Companion because of network errors.",
-      type: ErrorType.FATAL,
-    });
-  }
+  return finished;
 }

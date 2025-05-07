@@ -11,6 +11,9 @@ import {
   retryFetch,
 } from 'components/KymaCompanion/api/retry';
 
+const MAX_ATTEMPTS = 3;
+const RETRY_DELAY = 1_000;
+
 interface ClusterAuth {
   token?: string;
   clientCertificateData?: string;
@@ -67,7 +70,7 @@ async function fetchResponse(
   handleChatResponse: { (chunk: MessageChunk): void },
   handleError: { (errResponse: ErrResponse): void },
 ): Promise<boolean> {
-  console.debug('1: Fetch Response', new Date());
+  console.debug('1: Fetch called');
   return fetch(url, {
     headers,
     body,
@@ -183,5 +186,18 @@ export default async function getChatResponse({
     );
   };
 
-  await retryFetch(fetchWrapper, handleChatResponse, handleError);
+  const result = await retryFetch(
+    fetchWrapper,
+    handleChatResponse,
+    handleError,
+    RETRY_DELAY,
+    MAX_ATTEMPTS,
+  );
+  if (!result) {
+    handleError({
+      message:
+        "Couldn't fetch response from Kyma Companion because of network errors.",
+      type: ErrorType.FATAL,
+    });
+  }
 }
