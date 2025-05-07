@@ -18,8 +18,13 @@ import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSu
 import { AIError } from '../KymaCompanion';
 import './Chat.scss';
 
+enum Author {
+  USER = 'user',
+  AI = 'ai',
+}
+
 export interface MessageType {
-  author: 'user' | 'ai';
+  author: Author;
   messageChunks: MessageChunk[];
   isLoading: boolean;
   suggestions?: string[];
@@ -88,13 +93,11 @@ export const Chat = ({
   ) => {
     setChatHistory(prevMessages => {
       const [latestMessage] = prevMessages.slice(-1);
-      const a = prevMessages.slice(0, -1).concat({
+      return prevMessages.slice(0, -1).concat({
         ...latestMessage,
         messageChunks: latestMessage.messageChunks.concat(response),
         isLoading,
       });
-      console.log(a);
-      return a;
     });
   };
 
@@ -133,9 +136,10 @@ export const Chat = ({
           response.data.answer?.tasks?.every(task => task.status === 'error') ??
           false;
         const displayRetry = response.data.error !== null || allTasksError;
+        removeLastMessage();
         handleError(
           {
-            type: ErrorType.RETRYABLE,
+            type: ErrorType.FATAL,
             message: response.data.answer.content,
           },
           displayRetry,
@@ -181,13 +185,13 @@ export const Chat = ({
   const handleError = (errResponse: ErrResponse, displayRetry?: boolean) => {
     switch (errResponse.type) {
       case ErrorType.FATAL: {
+        setErrorOnLastUserMsg();
+        setLoading(false);
         setError({
           message:
             errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
           displayRetry: displayRetry ?? false,
         });
-        setErrorOnLastUserMsg();
-        setLoading(false);
         break;
       }
       case ErrorType.RETRYABLE: {
@@ -197,7 +201,7 @@ export const Chat = ({
         });
         setLoading(true);
         updateLatestMessage({
-          author: 'ai',
+          author: Author.AI,
           messageChunks: [
             {
               data: {
@@ -216,8 +220,11 @@ export const Chat = ({
   };
 
   const retryPreviousPrompt = () => {
-    const previousPrompt = chatHistory.at(-1)?.messageChunks[0].data.answer
-      .content;
+    const lastUserMsgIdx = chatHistory.findLastIndex(
+      v => v.author === Author.USER,
+    );
+    const previousPrompt = chatHistory.at(lastUserMsgIdx)?.messageChunks[0].data
+      .answer.content;
     if (previousPrompt) {
       removeLastMessage();
       sendPrompt(previousPrompt);
@@ -228,7 +235,7 @@ export const Chat = ({
     setError({ message: null, displayRetry: false });
     setLoading(true);
     addMessage({
-      author: 'user',
+      author: Author.USER,
       messageChunks: [
         {
           data: {
@@ -259,7 +266,7 @@ export const Chat = ({
       certificateAuthorityData:
         cluster.currentContext.cluster.cluster['certificate-authority-data'],
     });
-    addMessage({ author: 'ai', messageChunks: [], isLoading: true });
+    addMessage({ author: Author.AI, messageChunks: [], isLoading: true });
   };
 
   const onSubmitInput = () => {
@@ -321,6 +328,8 @@ export const Chat = ({
     }, delay);
   }, [chatHistory, error]);
 
+  console.log(chatHistory);
+
   return (
     <FlexBox
       direction="Column"
@@ -333,7 +342,7 @@ export const Chat = ({
       >
         {chatHistory.map((message, index) => {
           const isLast = index === chatHistory.length - 1;
-          return message.author === 'ai' ? (
+          return message.author === Author.AI ? (
             <React.Fragment key={index}>
               <Message
                 author={message.author}
@@ -352,7 +361,7 @@ export const Chat = ({
             </React.Fragment>
           ) : (
             <Message
-              author="user"
+              author={Author.USER}
               key={index}
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}

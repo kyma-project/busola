@@ -135,11 +135,11 @@ async function readChunk(
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
     .catch(error => {
+      console.error('Error reading stream:', error);
       handleError({
         message: error.message,
         type: ErrorType.FATAL,
       });
-      console.error('Error reading stream:', error);
     });
 }
 
