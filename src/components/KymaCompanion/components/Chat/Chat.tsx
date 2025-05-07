@@ -328,8 +328,6 @@ export const Chat = ({
     }, delay);
   }, [chatHistory, error]);
 
-  console.log(chatHistory);
-
   return (
     <FlexBox
       direction="Column"
