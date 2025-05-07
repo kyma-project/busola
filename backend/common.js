@@ -1,4 +1,5 @@
 import PinoHttp from 'pino-http';
+import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
 
@@ -142,9 +143,18 @@ export const makeHandleRequest = () => {
   };
 };
 
+// Rate limiter: Max 100 requests per 1 minutes per IP
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 export const serveStaticApp = (app, requestPath, directoryPath) => {
   app.use(requestPath, express.static(path.join(__dirname, directoryPath)));
-  app.get(requestPath + '*', (_, res) =>
+  app.get(requestPath + '*splat', limiter, (_, res) =>
     res.sendFile(path.join(__dirname + directoryPath + '/index.html')),
   );
 };
