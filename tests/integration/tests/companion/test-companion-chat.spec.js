@@ -449,7 +449,11 @@ context('Test Companion Chat Behavior', () => {
     cy.resetCompanion();
     cy.get('.kyma-companion').as('companion');
 
-    cy.clickSuggestion(0);
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('textarea')
+      .click()
+      .type('Create Deployment{enter}');
     cy.wait(1000);
 
     cy.get('@companion')
@@ -475,7 +479,11 @@ context('Test Companion Chat Behavior', () => {
     cy.resetCompanion();
     cy.get('.kyma-companion').as('companion');
 
-    cy.clickSuggestion(0);
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('textarea')
+      .click()
+      .type('Create Deployment{enter}');
     cy.wait(1000);
 
     cy.get('@companion')
@@ -488,6 +496,8 @@ context('Test Companion Chat Behavior', () => {
     );
 
     cy.saveChanges('Edit');
+    cy.wait(1000);
+
     cy.contains('Deployment updated').should('be.visible');
 
     cy.inspectTab('View');
