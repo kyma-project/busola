@@ -11,6 +11,8 @@ import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
 import { MessageStrip } from '@ui5/webcomponents-react';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const createDefaultSecret = serviceAccountName => {
   return {
@@ -46,8 +48,11 @@ export default function ServiceAccountCreate({
   const [initialResource, setInitialResource] = useState(
     initialServiceAccount || createServiceAccountTemplate(namespace),
   );
+  const layoutState = useRecoilValue(columnLayoutState);
 
   useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
     setServiceAccount(
       cloneDeep(initialServiceAccount) ||
         createServiceAccountTemplate(namespace),
@@ -55,11 +60,13 @@ export default function ServiceAccountCreate({
     setInitialResource(
       initialServiceAccount || createServiceAccountTemplate(namespace),
     );
-  }, [initialServiceAccount, namespace]);
+  }, [initialServiceAccount, namespace, layoutState?.showEdit?.resource]);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const [shouldCreateSecret, setShouldCreateSecret] = useState(false);
 

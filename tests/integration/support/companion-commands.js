@@ -1,3 +1,8 @@
+import {
+  responseWithPlaceEdit,
+  responseWithPlaceNew,
+} from '../fixtures/test-companion-place-resource';
+
 Cypress.Commands.add('openCompanion', () => {
   cy.get('ui5-shellbar')
     .find('ui5-toggle-button[icon="da"]')
@@ -72,6 +77,38 @@ Cypress.Commands.add('mockChatResponse', () => {
       },
     });
   }).as('getChatResponse');
+});
+
+Cypress.Commands.add('mockChatResponseWithPlaceNew', () => {
+  cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    req.reply({
+      delay: 750,
+      body: {
+        data: {
+          answer: {
+            content: responseWithPlaceNew,
+            next: '__end__',
+          },
+        },
+      },
+    });
+  }).as('getChatResponseWithPlaceNew');
+});
+
+Cypress.Commands.add('mockChatResponseWithPlaceEdit', () => {
+  cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    req.reply({
+      delay: 750,
+      body: {
+        data: {
+          answer: {
+            content: responseWithPlaceEdit,
+            next: '__end__',
+          },
+        },
+      },
+    });
+  }).as('getChatResponseWithPlaceEdit');
 });
 
 Cypress.Commands.add('mockFollowups', () => {

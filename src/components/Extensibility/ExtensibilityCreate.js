@@ -29,6 +29,7 @@ import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { TranslationBundleContext } from './helpers';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -43,6 +44,7 @@ export function ExtensibilityCreateCore({
 }) {
   const { prepareVars, readVars } = useVariables();
   const namespace = useRecoilValue(activeNamespaceIdState);
+  const layoutState = useRecoilValue(columnLayoutState);
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;
@@ -69,6 +71,8 @@ export function ExtensibilityCreateCore({
   );
 
   useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
     setStore(
       getUIStoreFromResourceObj(
         initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
@@ -76,14 +80,16 @@ export function ExtensibilityCreateCore({
     );
     setInitialResource(initialExtensibilityResource);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialExtensibilityResource]);
+  }, [initialExtensibilityResource, layoutState?.showEdit?.resource]);
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const updateStore = res => {
     readVars(res);

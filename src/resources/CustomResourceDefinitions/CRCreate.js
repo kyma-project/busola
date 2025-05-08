@@ -34,13 +34,18 @@ function CRCreateForm({
   );
 
   useEffect(() => {
+    if (layoutColumn?.showEdit?.resource) return;
+
     setCr(cloneDeep(initialCustomResource) || createTemplate(crd));
     setInitialResource(initialCustomResource || createTemplate(crd));
-  }, [initialCustomResource, crd]);
+  }, [initialCustomResource, crd, layoutColumn?.showEdit?.resource]);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name &&
+      !!!layoutColumn?.showCreate?.resource,
+    [initialResource, layoutColumn?.showCreate?.resource],
+  );
 
   const customUrl = useCustomResourceUrl(crd);
 
