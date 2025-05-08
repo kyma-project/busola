@@ -67,9 +67,6 @@ export function ContextChooserMessage({ contexts, setValue, onCancel }) {
   }
   return (
     <MessageBox
-      style={{ width: '478px', height: '210px' }}
-      type={undefined}
-      icon={<></>}
       titleText={t('clusters.messages.choose-cluster')}
       open={true}
       className="ui5-content-density-compact context-chooser-message"
@@ -87,8 +84,8 @@ export function ContextChooserMessage({ contexts, setValue, onCancel }) {
         </Button>,
       ]}
     >
-      <FlexBox direction="Column" style={{ gap: '16px' }}>
-        <Text style={{ paddingLeft: '7.5px' }}>
+      <FlexBox direction="Column" gap={16}>
+        <Text className="context-chooser-content-text">
           {t('clusters.wizard.several-context-info')}
           <br />
           {t('clusters.wizard.several-context-question')}
