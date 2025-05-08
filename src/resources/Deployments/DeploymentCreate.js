@@ -12,6 +12,8 @@ import {
   createDeploymentTemplate,
   createPresets,
 } from './templates';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
@@ -36,8 +38,11 @@ export default function DeploymentCreate({
   const [initialResource, setInitialResource] = useState(
     initialDeployment || createDeploymentTemplate(namespace),
   );
+  const layoutState = useRecoilValue(columnLayoutState);
 
   useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
     setDeployment(
       initialDeployment
         ? _.cloneDeep(initialDeployment)
@@ -46,11 +51,13 @@ export default function DeploymentCreate({
     setInitialResource(
       initialDeployment || createDeploymentTemplate(namespace),
     );
-  }, [initialDeployment, namespace]);
+  }, [initialDeployment, namespace, layoutState?.showEdit?.resource]);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const {
     isIstioFeatureOn,

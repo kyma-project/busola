@@ -19,7 +19,7 @@ import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router';
 
 import './NamespaceCreate.scss';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
 import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
@@ -41,6 +41,7 @@ export default function NamespaceCreate({
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
@@ -50,17 +51,22 @@ export default function NamespaceCreate({
   );
 
   useEffect(() => {
+    if (layoutColumn?.showEdit?.resource) return;
+
     setNamespace(
       initialNamespace
         ? cloneDeep(initialNamespace)
         : createNamespaceTemplate(),
     );
     setInitialResource(initialNamespace || createNamespaceTemplate());
-  }, [initialNamespace]);
+  }, [initialNamespace, layoutColumn?.showEdit?.resource]);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name &&
+      !!!layoutColumn?.showCreate?.resource,
+    [initialResource, layoutColumn?.showCreate?.resource],
+  );
 
   const {
     isIstioFeatureOn,
@@ -83,8 +89,6 @@ export default function NamespaceCreate({
   // memory quotas
   const [withMemory, setWithMemory] = useState(false);
   const [memory, setMemory] = useState(createResourceQuotaTemplate({}));
-
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
 
   const createLimitResource = useCreateResource({
     singularName: 'LimitRange',

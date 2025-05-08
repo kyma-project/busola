@@ -11,6 +11,8 @@ import { JobSpecSection } from './SpecSection';
 import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -47,8 +49,11 @@ export default function JobCreate({
   const [initialResource, setInitialResource] = useState(
     initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
   );
+  const layoutState = useRecoilValue(columnLayoutState);
 
   useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
     setJob(
       initialJob
         ? cloneDeep(initialJob)
@@ -57,11 +62,18 @@ export default function JobCreate({
     setInitialResource(
       initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
     );
-  }, [initialJob, namespace, defaultSidecarAnnotations]);
-
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
+  }, [
+    initialJob,
+    namespace,
+    defaultSidecarAnnotations,
+    layoutState?.showEdit?.resource,
   ]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   useEffect(() => {
     setCustomValid(isJobValid(job));

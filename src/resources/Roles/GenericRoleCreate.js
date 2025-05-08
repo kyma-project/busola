@@ -8,6 +8,8 @@ import { createRuleTemplate, validateRole } from './helpers';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useRecoilValue } from 'recoil';
 
 export function GenericRoleCreate({
   onChange,
@@ -26,15 +28,20 @@ export function GenericRoleCreate({
   const [initialResource, setInitialResource] = useState(
     initialRole || createTemplate(),
   );
+  const layoutState = useRecoilValue(columnLayoutState);
 
   useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
     setRole(cloneDeep(initialRole) || createTemplate());
     setInitialResource(initialRole || createTemplate());
-  }, [initialRole, createTemplate]);
+  }, [initialRole, createTemplate, layoutState?.showEdit?.resource]);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   useEffect(() => {
     setCustomValid(validateRole(role));
