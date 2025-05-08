@@ -446,7 +446,7 @@ context('Test Companion Chat Behavior', () => {
 
   it('place button works correctly for create', () => {
     cy.mockChatResponseWithPlaceNew();
-    cy.openCompanion();
+    cy.resetCompanion();
     cy.get('.kyma-companion').as('companion');
 
     cy.clickSuggestion(0);
