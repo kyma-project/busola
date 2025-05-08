@@ -1,4 +1,59 @@
-export const responseWithPlaceNew =
-  'Deployment:\n        <div class="yaml-block>\n            <div class="yaml">\n            ```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: test-deployment\n  namespace: default\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: test\n  template:\n    metadata:\n      labels:\n        app: test\n    spec:\n      containers:\n      - name: test\n        image: test:latest\n```\n            </div>\n            <div class="link" link-type="New">\n                [Apply](/namespaces/default/Deployment)\n            </div>\n        </div>\n';
-export const responseWithPlaceEdit =
-  'Deployment:\n        <div class="yaml-block>\n            <div class="yaml">\n            ```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: test-deployment\n  namespace: default\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: test\n  template:\n    metadata:\n      labels:\n        app: test\n    spec:\n      containers:\n      - name: test\n        image: test:latest\n```\n            </div>\n            <div class="link" link-type="Update">\n                [Apply](/namespaces/default/Deployment/test-deployment)\n            </div>\n        </div>\n';
+export const responseWithPlaceNew = `Deployment:
+        <div class="yaml-block>
+            <div class="yaml">
+            \`\`\`yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:  
+  name: test-deployment  
+  namespace: default
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test
+        image: test:latest
+\`\`\`
+            </div>
+            <div class="link" link-type="New">
+                [Apply](/namespaces/default/Deployment)
+            </div>
+        </div>
+`;
+
+export const responseWithPlaceEdit = `Deployment:
+        <div class="yaml-block>
+            <div class="yaml">
+            \`\`\`yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test
+        image: test:latest
+\`\`\`
+            </div>
+            <div class="link" link-type="Update">
+                [Apply](/namespaces/default/Deployment/test-deployment)
+            </div>
+        </div>
+`;
