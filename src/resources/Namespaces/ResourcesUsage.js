@@ -126,8 +126,8 @@ export const ResourcesUsage = ({ namespace }) => {
         >
           <UI5RadialChart
             color="var(--sapChart_OrderedColor_6)"
-            value={memory.usage}
-            max={memory.capacity}
+            value={bytesToHumanReadable(memory.usage).value}
+            max={bytesToHumanReadable(memory.capacity).value}
             additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
               bytesToHumanReadable(memory.capacity).string
             }`}
