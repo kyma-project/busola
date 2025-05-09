@@ -58,10 +58,10 @@ async function isPrivateAddress(hostname) {
   }
 }
 
-// Rate limiter: Max 500 requests per 1 minutes per IP
+// Rate limiter: Max 100 requests per 1 minutes per IP
 const proxyRateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 500,
+  max: 100,
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
