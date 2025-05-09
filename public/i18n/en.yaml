@@ -108,6 +108,7 @@ clusters:
   list:
     no-clusters-found: No clusters found
   messages:
+    choose-cluster: Choose cluster
     wrong-configuration: Cannot apply the configuration
     connection-failed: Error connecting to cluster. Check your configuration and make sure the cluster is online.
   name_singular: Cluster
@@ -143,7 +144,6 @@ clusters:
     title: Storage Type
   token: Token
   wizard:
-    all-contexts: All contexts
     auth:
       client-id: Client ID
       client-secret: Client Secret
@@ -152,12 +152,14 @@ clusters:
       token: Token
       using-oidc: OIDC provider
     context: Context to connect
+    provide-context: Provide Context
     kubeconfig-upload: Drop a .kubeconfig file or click to 
     editor-placeholder: Paste .kubeconfig here
     incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
-    multi-context-info: All contexts will be connected. Be aware that only {{context}} is validated. The remaining contexts are connected without validation.
+    several-context-info: You have more than one cluster in your SAP BTP account.
+    several-context-question: Which one do you want to open?
     not-an-object: kubeconfig is not an object
     storage: Privacy
     token-info: If you don't know how to get your token, ask your authentication provider.
@@ -230,6 +232,7 @@ common:
     add-all: Add all
     button-disabled: Disabled
     cancel: Cancel
+    choose: Choose
     clone: Clone
     close: Close
     connect: Connect

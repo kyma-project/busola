@@ -51,6 +51,7 @@ export function AddClusterWizard({
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const [chosenContext, setChosenContext] = useState(undefined);
 
   const {
     isValid: authValid,
@@ -126,8 +127,9 @@ export function AddClusterWizard({
       setIsFormOpen({ formOpen: false });
     } catch (e) {
       notification.notifyError({
-        title: t('clusters.messages.wrong-configuration'),
-        content: t('common.tooltips.error') + e.message,
+        content: `${t('clusters.messages.wrong-configuration')}. ${
+          e instanceof Error && e?.message ? e.message : ''
+        }`,
       });
       console.warn(e);
     }
@@ -139,11 +141,14 @@ export function AddClusterWizard({
   };
 
   const isCurrentStepInvalid = step => {
+    const invalidMultipleContexts = !hasOneContext && !chosenContext;
     switch (step) {
       case 1:
         return !kubeconfig;
       case 2:
-        return kubeconfig && (!hasAuth || !hasOneContext) ? !authValid : false;
+        return kubeconfig && (!hasAuth || !hasOneContext)
+          ? !authValid || invalidMultipleContexts
+          : false;
       default:
         return false;
     }
@@ -183,7 +188,12 @@ export function AddClusterWizard({
                 }}
                 className="cluster-wizard__auth-form"
               >
-                {!hasOneContext && <ContextChooser />}
+                {!hasOneContext && (
+                  <ContextChooser
+                    chosenContext={chosenContext}
+                    setChosenContext={setChosenContext}
+                  />
+                )}
                 {!hasAuth && <AuthForm revalidate={revalidate} />}
               </ResourceForm.Single>
             </div>

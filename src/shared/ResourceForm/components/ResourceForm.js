@@ -65,9 +65,11 @@ export function ResourceForm({
 }) {
   const layoutState = useRecoilValue(columnLayoutState);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   useEffect(() => {
     if (layoutState?.showCreate?.resource) {

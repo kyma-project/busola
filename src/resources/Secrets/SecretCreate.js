@@ -10,6 +10,7 @@ import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 import { useRecoilValue } from 'recoil';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export default function SecretCreate({
   namespace,
@@ -28,15 +29,20 @@ export default function SecretCreate({
   const [initialResource, setInitialResource] = useState(
     initialSecret || createSecretTemplate(namespace || ''),
   );
+  const layoutState = useRecoilValue(columnLayoutState);
 
   useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
     setSecret(initialSecret || createSecretTemplate(namespace || ''));
     setInitialResource(initialSecret || createSecretTemplate(namespace || ''));
-  }, [initialSecret, namespace]);
+  }, [initialSecret, namespace, layoutState?.showEdit?.resource]);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const [lockedKeys, setLockedKeys] = useState([]);
 

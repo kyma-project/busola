@@ -233,14 +233,14 @@ context('Test reduced permissions', () => {
       selectSearchResult: true,
     });
 
-    // remove cluster
     cy.changeCluster('all-clusters');
 
-    cy.deleteFromGenericList('Cluster', SA_NAME, {
-      confirmationEnabled: true,
-      deletedVisible: false,
-      clearSearch: false,
-    });
+    cy.wait(500)
+      .get('ui5-input[id="search-input"]:visible')
+      .find('input')
+      .type(SA_NAME);
+
+    cy.wait(1000);
 
     cy.contains(/No clusters found/).should('exist');
   });

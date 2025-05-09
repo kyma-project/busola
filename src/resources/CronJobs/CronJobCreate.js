@@ -15,6 +15,8 @@ import {
   createCronJobPresets,
 } from 'resources/Jobs/templates';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -42,19 +44,24 @@ export default function CronJobCreate({
   const [initialResource, setInitialResource] = useState(
     initialCronJob || createCronJobTemplate(namespace),
   );
+  const layoutState = useRecoilValue(columnLayoutState);
 
   useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
     setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
     setInitialResource(initialCronJob || createCronJobTemplate(namespace));
-  }, [initialCronJob, namespace]);
+  }, [initialCronJob, namespace, layoutState?.showEdit?.resource]);
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
-  const isEdit = useMemo(() => !!initialResource?.metadata?.name, [
-    initialResource,
-  ]);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const schema = useContext(SchemaContext);
   const scheduleDesc = getDescription(schema, 'spec.schedule');
