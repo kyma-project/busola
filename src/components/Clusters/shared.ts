@@ -43,7 +43,7 @@ export function addCluster(
   switchCluster = true,
 ) {
   const { setClusters } = clustersInfo;
-  setClusters(prev => ({ ...prev, [params.contextName]: params }));
+  setClusters({ [params.contextName]: params });
   if (switchCluster) {
     addCurrentCluster(params, clustersInfo);
   }
@@ -98,7 +98,7 @@ export function getContext(
       return { cluster, user, namespace: context.namespace };
     }
   } catch (e) {
-    throw Error("Cannot 'getContext': " + e);
+    throw Error(`Unable to add context. ${e}`);
   }
 }
 
@@ -184,7 +184,7 @@ export const addByContext = (
 
     addCluster(clusterParams, clustersInfo, switchCluster);
   } catch (e) {
-    throw Error("Cannot 'addByContext': " + e);
+    throw Error(`Unable to add context. ${e}`);
   }
 };
 

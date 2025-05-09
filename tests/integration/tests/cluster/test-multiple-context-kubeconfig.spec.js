@@ -60,15 +60,13 @@ context('Test multiple context kubeconfig', () => {
 
       cy.contains('Next').click();
 
-      cy.get('[role=combobox]')
+      cy.get('ui5-radio-button')
         .contains(kubeconfig['current-context'])
-        .click();
+        .click({ force: true });
 
-      cy.get('ui5-option:visible').contains(kubeconfig.contexts[1].name);
-
-      cy.get('ui5-option:visible')
-        .contains('All contexts')
-        .click();
+      cy.get('ui5-radio-button')
+        .contains(kubeconfig.contexts[1].name)
+        .click({ force: true });
 
       cy.contains('Next').click({ force: true });
 
@@ -82,8 +80,6 @@ context('Test multiple context kubeconfig', () => {
 
       cy.contains('Cluster Details').should('exist');
 
-      cy.changeCluster(kubeconfig.contexts[1].name);
-
       cy.url().should(
         'match',
         new RegExp(`${kubeconfig.contexts[1].name}/overview$`),
@@ -92,8 +88,6 @@ context('Test multiple context kubeconfig', () => {
       cy.changeCluster('all-clusters');
 
       cy.url().should('match', new RegExp(`/clusters$`));
-
-      cy.contains(kubeconfig.contexts[0].name).should('exist');
 
       cy.contains(kubeconfig.contexts[1].name).should('exist');
     });
