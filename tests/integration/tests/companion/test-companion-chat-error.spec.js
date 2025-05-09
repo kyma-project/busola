@@ -86,7 +86,7 @@ context('Test Companion Chat Error Handling', () => {
       .find('.chat-list > .message-container')
       .should(
         'contain.text',
-        `Response status code was 500 and it wasn't ok. Retrying 3/3.`,
+        `Response status code is 500 and it wasn't ok. Retrying 3/3.`,
       );
 
     cy.get('@companion')
