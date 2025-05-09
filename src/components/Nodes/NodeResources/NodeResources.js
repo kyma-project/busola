@@ -44,8 +44,8 @@ export function NodeResources({ metrics, resources }) {
       >
         <UI5RadialChart
           color="var(--sapChart_OrderedColor_6)"
-          value={bytesToHumanReadable(memory.usage).value}
-          max={bytesToHumanReadable(memory.capacity).value}
+          value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}
+          max={bytesToHumanReadable(memory.capacity, { unit: 'Mi' }).value}
           additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
             bytesToHumanReadable(memory.capacity).string
           }`}
