@@ -77,16 +77,21 @@ context('Test Companion Chat Error Handling', () => {
     cy.sendPrompt('Test');
 
     cy.wait('@getChatResponse');
-    cy.wait(1000);
 
-    cy.testChatLength(2);
+    cy.wait(4000);
+
+    cy.testChatLength(3);
+
+    cy.get('@companion')
+      .find('.chat-list > .message-container')
+      .should('contain.text', `Response status code is 500. Retrying 3/3.`);
 
     cy.get('@companion')
       .find('.chat-list')
       .find('ui5-illustrated-message')
       .should(
         'contain.text',
-        'A temporary interruption occured. Please try again.',
+        `Couldn't fetch response from Kyma Companion because of network errors.`,
       )
       .should('be.visible')
       .find('ui5-button[design="Emphasized"]')

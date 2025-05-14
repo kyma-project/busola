@@ -143,10 +143,10 @@ export const makeHandleRequest = () => {
   };
 };
 
-// Rate limiter: Max 100 requests per 1 minutes per IP
+// Rate limiter: Max 200 requests per 1 minutes per IP
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 100,
+  max: 200,
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
