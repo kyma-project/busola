@@ -8,11 +8,11 @@
     "test": "npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0",
-    "lighthouse": "^12.6.0",
-    "playwright": "^1.52.0",
+    "@playwright/test": "^1.51.1",
+    "lighthouse": "^12.5.1",
+    "playwright": "^1.51.1",
     "playwright-lighthouse": "^4.0.0",
-    "@playwright/browser-chromium": "1.52.0"
+    "@playwright/browser-chromium": "1.51.1"
   },
   "author": "",
   "license": "ISC"
