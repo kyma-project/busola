@@ -230,6 +230,7 @@ Cypress.Commands.add(
     cy.getMidColumn()
       .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.get('ui5-table-row')
       .find('ui5-table-cell')
