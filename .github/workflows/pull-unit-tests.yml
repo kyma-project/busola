@@ -37,6 +37,8 @@ jobs:
         shell: bash
         run: |
           npm run test
+      - name: Clear Vite cache
+        run: rm -rf node_modules/.vite
       - name: run_component_tests
         shell: bash
         run: |
