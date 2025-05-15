@@ -15,6 +15,12 @@ export default defineConfig({
   },
   server: {
     port: 8080,
+    warmup: {
+      clientFiles: [
+        'cypress/support/component.jsx',
+        'src/**/*.cy.{js,jsx,ts,tsx}',
+      ]
+    },
     proxy: {
       // with options
       '^/backend/.*': {
