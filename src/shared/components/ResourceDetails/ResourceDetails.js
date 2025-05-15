@@ -80,6 +80,7 @@ export function ResourceDetails(props) {
 export const ResourceDetailContext = createContext(false);
 
 function ResourceDetailsRenderer(props) {
+  console.log(props.resourceUrl);
   const { loading = true, error, data: resource, silentRefetch } = useGet(
     props.resourceUrl,
     {

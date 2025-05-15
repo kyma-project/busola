@@ -1,18 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import jsyaml from 'js-yaml';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
-import {
-  findModuleStatus,
-  findModuleTemplate,
-  KymaResourceSpecModuleType,
-  KymaResourceStatusModuleType,
-  KymaResourceType,
-  ModuleTemplateListType,
-} from '../support';
-import { UnmanagedModuleInfo } from './UnmanagedModuleInfo';
+import { findModuleTemplate, ModuleTemplateListType } from '../support';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import {
@@ -23,8 +15,10 @@ import {
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { ModulesListRows } from './ModulesListRows';
 import { useNavigate } from 'react-router';
+import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { CommunityModulesListRows } from './CommunityModulesListRows';
+import { version } from 'os';
 
 type CustomResourceDefinitionsType = {
   items: {
@@ -34,27 +28,19 @@ type CustomResourceDefinitionsType = {
 };
 
 type ModulesListProps = {
-  resource: KymaResourceType;
   moduleTemplates: ModuleTemplateListType;
-  resourceName: string;
   selectedModules: { name: string }[];
-  kymaResource: KymaResourceType;
   namespaced: boolean;
-  resourceUrl: string;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
   >;
   handleResourceDelete: (resourceData: any) => void;
 };
 
-export const ModulesList = ({
-  resource,
+export const CommunityModulesList = ({
   moduleTemplates,
-  resourceName,
   selectedModules,
-  kymaResource,
   namespaced,
-  resourceUrl,
   setOpenedModuleIndex,
   handleResourceDelete,
 }: ModulesListProps) => {
@@ -76,6 +62,7 @@ export const ModulesList = ({
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const [communityModules, setCommunityModules] = useState([]);
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -87,7 +74,6 @@ export const ModulesList = ({
       layout: 'TwoColumnsMidExpanded',
       showCreate: {
         resourceType: 'kymamodules',
-        resourceUrl: resourceUrl,
       } as ShowCreate,
     });
 
@@ -121,23 +107,44 @@ export const ModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
-  const hasDetailsLink = (resource: {
+  const fetch = useFetch();
+
+  const getManager = async (name: string) => {
+    const foundModule = moduleTemplates?.find(module => {
+      return module?.metadata.name === name;
+    });
+    if (!!!foundModule) return;
+    const manager = foundModule.spec.manager;
+
+    try {
+      const response = await fetch({
+        relativeUrl: `/apis/${manager.group}/v1/namespaces/${
+          foundModule.metadata.namespace
+        }/${pluralize(manager.kind).toLocaleLowerCase()}/${manager.name}`,
+      });
+      const fetchedManager = await response.json();
+
+      if (!!!fetchedManager) return;
+      return fetchedManager;
+    } catch (e) {
+      console.log(e); ///TODO
+    }
+  };
+  console.log(moduleTemplates);
+  const hasDetailsLink = async (resource: {
     name: string;
     channel: string;
     version: string;
     resource: { kind: string };
   }) => {
-    const isInstalled =
-      selectedModules?.findIndex(kymaResourceModule => {
-        return kymaResourceModule?.name === resource?.name;
-      }) >= 0;
-    const moduleStatus = findModuleStatus(kymaResource, resource.name);
+    const isInstalled = (await getManager(resource.name)) ? true : false;
+    const moduleStatus = moduleTemplates.find(
+      template => template.name === resource.name,
+    ).spec.data.status; //TODO?????????????
     const isDeletionFailed = moduleStatus?.state === 'Warning';
     const isError = moduleStatus?.state === 'Error';
-
     const hasExtension = !!findExtension(resource?.resource?.kind);
     const hasCrd = !!findCrd(resource?.resource?.kind);
-
     let hasModuleTpl = !!findModuleTemplate(
       moduleTemplates,
       resource.name,
@@ -153,12 +160,8 @@ export const ModulesList = ({
   const customColumnLayout = (resource: { name: string }) => {
     return {
       resourceName: resource?.name,
-      resourceType: pluralize(
-        findModuleStatus(kymaResource, resource.name)?.resource?.kind || '',
-      ),
-      namespaceId:
-        findModuleStatus(kymaResource, resource.name)?.resource?.metadata
-          ?.namespace || '',
+      resourceType: pluralize(resource.name?.kind || ''),
+      namespaceId: resource?.metadata?.namespace || '',
     };
   };
 
@@ -271,27 +274,30 @@ export const ModulesList = ({
     navigate(`${path}?layout=TwoColumnsMidExpanded`);
   };
 
-  function getEntries(
-    statusModules: KymaResourceStatusModuleType[] = [],
-    specModules: KymaResourceSpecModuleType[] = [],
-  ) {
-    specModules.forEach(specItem => {
-      const exists = statusModules.some(
-        statusItem => statusItem?.name === specItem?.name,
-      );
+  React.useEffect(() => {
+    getEntries();
+  }, [moduleTemplates]);
 
-      if (!exists) {
-        statusModules.push({ name: specItem.name });
+  const getEntries = async () => {
+    const communityModules = [];
+
+    for (const module of moduleTemplates) {
+      const manager = await getManager(module.metadata.name);
+      if (manager) {
+        console.log(module);
+        communityModules.push({
+          name: module?.metadata?.name,
+          version: module?.spec?.version,
+          resource: module?.spec?.data,
+        });
       }
-    });
-    return statusModules;
-  }
-  console.log(getEntries(resource?.status?.modules, resource?.spec?.modules));
+    }
+
+    setCommunityModules(communityModules);
+  };
+
   return (
     <React.Fragment key="modules-list">
-      <div className="sap-margin-small">
-        <UnmanagedModuleInfo kymaResource={kymaResource} />
-      </div>
       <GenericList
         accessibleName={undefined}
         actions={actions as any}
@@ -300,8 +306,7 @@ export const ModulesList = ({
           <Button
             key="add-module"
             design="Emphasized"
-            disabled={!resource}
-            onClick={handleShowAddModule}
+            //onClick={handleShowAddModule}
           >
             {t('common.buttons.add')}
           </Button>,
@@ -309,22 +314,19 @@ export const ModulesList = ({
         customColumnLayout={customColumnLayout as any}
         enableColumnLayout
         hasDetailsView
-        entries={
-          getEntries(resource?.status?.modules, resource?.spec?.modules) as any
-        }
+        entries={communityModules}
         headerRenderer={headerRenderer}
         rowRenderer={resource =>
-          ModulesListRows({
-            resourceName,
+          CommunityModulesListRows({
+            resourceName: resource.name,
             resource,
-            kymaResource,
             moduleTemplates,
             hasDetailsLink,
           })
         }
         noHideFields={['Name', '', 'Namespace']}
         displayArrow
-        title={'Modules'}
+        title={'Community Modules'}
         sortBy={{
           name: (a: { name: any }, b: { name: any }) =>
             a.name?.localeCompare(b.name),
