@@ -3,7 +3,8 @@ import PodRestarts from '../PodRestarts';
 
 describe('PodRestarts', () => {
   beforeEach(() => {
-    cy.wait(2000);
+    // Wait for app to be fully loaded
+    cy.window().should('have.property', 'Cypress');
   });
   it('Shows 0 for no statuses', () => {
     cy.mount(<PodRestarts statuses={[]} />);
