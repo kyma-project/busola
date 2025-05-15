@@ -81,10 +81,6 @@ export default defineConfig({
       '@stoplight/json-ref-resolver',
       'monaco-yaml/yaml.worker.js'
     ],
-    entries: [
-      'cypress/support/component.jsx',
-      'src/**/*.cy.{js,jsx,ts,tsx}'
-    ]
   },
   define: {
     'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER || false),
