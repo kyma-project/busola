@@ -193,6 +193,7 @@ Cypress.Commands.add(
       cy.get(`[header-text="Delete ${resourceType}"]:visible`)
         .find('[data-testid="delete-confirmation"]')
         .click();
+      cy.wait(1000);
 
       if (deletedVisible) {
         cy.contains('ui5-toast', /deleted/).should('be.visible');

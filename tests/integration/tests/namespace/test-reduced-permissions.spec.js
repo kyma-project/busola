@@ -5,7 +5,7 @@ import { chooseComboboxOption } from '../../support/helpers';
 
 const id = Math.random()
   .toString()
-  .substr(2, 8);
+  .substring(2, 10);
 
 const SA_NAME = 'test-sa-' + id;
 const CR_NAME = 'test-cr-' + id;

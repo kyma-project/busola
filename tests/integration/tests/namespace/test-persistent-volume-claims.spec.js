@@ -8,7 +8,7 @@ const PVC_NAME =
   'test-' +
   Math.random()
     .toString()
-    .substr(2, 8);
+    .substring(2, 10);
 
 const CAPACITY_VALUE = '1Gi';
 const ACCESS_MODES_VALUE = 'ReadWriteOnce';

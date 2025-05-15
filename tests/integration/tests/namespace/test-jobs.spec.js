@@ -5,7 +5,7 @@ const JOB_NAME =
   'test-job-' +
   Math.random()
     .toString()
-    .substr(2, 8);
+    .substring(2, 10);
 
 const SECOND_CONTAINER_NAME = JOB_NAME + '-node';
 

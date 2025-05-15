@@ -8,7 +8,7 @@ const DS_NAME =
   'test-' +
   Math.random()
     .toString()
-    .substr(2, 8);
+    .substring(2, 10);
 
 async function loadDS(name, namespace, fileName) {
   const resource = await loadFile(fileName);
