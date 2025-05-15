@@ -1,0 +1,90 @@
+apiVersion: operator.kyma-project.io/v1beta2
+kind: ModuleTemplate
+metadata:
+  name: cluster-ip-029
+  namespace: kyma-system
+  labels:
+    'operator.kyma-project.io/module-name': 'cluster-ip'
+  annotations:
+    'operator.kyma-project.io/is-cluster-scoped': 'false'
+spec:
+  moduleName: cluster-ips
+  version: 0.0.29
+  mandatory: false
+  requiresDowntime: false
+  info:
+    repository: https://github.com/pbochynski/cluster-ip.git
+    documentation: https://github.com/pbochynski
+    icons:
+      - name: module-icon
+        link: https://raw.githubusercontent.com/pbochynski/cluster-ip/refs/heads/main/logo.png
+  associatedResources:
+    - group: operator.kyma-project.io
+      version: v1alpha2
+      kind: ClusterIP
+  data:
+    apiVersion: operator.kyma-project.io/v1alpha1
+    kind: ClusterIP
+    metadata:
+      name: cluster-ip-zones
+    spec:
+      nodeSpreadLabel: topology.kubernetes.io/zone
+  manager:
+    name: cluster-ip-controller-manager
+    group: apps
+    version: v1
+    kind: Deployment
+  descriptor:
+    component:
+      componentReferences: []
+      name: kyma-project.io/module/cluster-ip
+      provider: '{"name":"kyma-project.io","labels":[{"name":"kyma-project.io/built-by","value":"modulectl","version":"v1"}]}'
+      repositoryContexts:
+        - baseUrl: http://k3d-oci.localhost:5001
+          componentNameMapping: urlPath
+          type: OCIRegistry
+      resources:
+        - access:
+            localReference: sha256:b88d172173d41c7b0799512718e598efa5643e9eb3aeebbf88fd8e5e6e18098f
+            mediaType: application/x-tar
+            referenceName: raw-manifest
+            type: localBlob
+          digest:
+            hashAlgorithm: SHA-256
+            normalisationAlgorithm: genericBlobDigest/v1
+            value: b88d172173d41c7b0799512718e598efa5643e9eb3aeebbf88fd8e5e6e18098f
+          name: raw-manifest
+          relation: local
+          type: directory
+          version: 0.0.29
+        - access:
+            localReference: sha256:633d91a28e03e1bcb495095e92430a2d996e13faaa15ead90cc180514cf5a2c3
+            mediaType: application/x-tar
+            referenceName: default-cr
+            type: localBlob
+          digest:
+            hashAlgorithm: SHA-256
+            normalisationAlgorithm: genericBlobDigest/v1
+            value: 633d91a28e03e1bcb495095e92430a2d996e13faaa15ead90cc180514cf5a2c3
+          name: default-cr
+          relation: local
+          type: directory
+          version: 0.0.29
+      sources:
+        - access:
+            commit: 106643ead24aff8da197fc89a46ce546193ea8f1
+            repoUrl: https://github.com/pbochynski/cluster-ip.git
+            type: gitHub
+          labels:
+            - name: git.kyma-project.io/ref
+              value: HEAD
+              version: v1
+          name: module-sources
+          type: Github
+          version: 0.0.29
+      version: 0.0.29
+    meta:
+      schemaVersion: v2
+  resources:
+    - name: rawManifest
+      link: https://github.com/pbochynski/cluster-ip/releases/download/0.0.29/cluster-ip-operator.yaml

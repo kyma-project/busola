@@ -33,32 +33,32 @@ export function DeploymentDetails(props) {
       value: deployment =>
         getLastTransitionTime(deployment?.status?.conditions),
     },
-    {
-      header: t('deployments.status.replicas'),
-      value: deployment => <div>{deployment?.status?.replicas ?? 0}</div>,
-    },
-    {
-      header: t('deployments.status.updated-replicas'),
-      value: deployment => (
-        <div>{deployment?.status?.updatedReplicas ?? 0}</div>
-      ),
-    },
-    {
-      header: t('deployments.status.available-replicas'),
-      value: deployment => (
-        <div>{deployment?.status?.availableReplicas ?? 0}</div>
-      ),
-    },
-    {
-      header: t('deployments.status.unavailable-replicas'),
-      value: deployment => (
-        <div>{deployment?.status?.unavailableReplicas ?? 0}</div>
-      ),
-    },
-    {
-      header: t('deployments.status.collision-count'),
-      value: deployment => <div>{deployment?.status?.collisionCount ?? 0}</div>,
-    },
+    // {
+    //   header: t('deployments.status.replicas'),
+    //   value: deployment => <div>{deployment?.status?.replicas ?? 0}</div>,
+    // },
+    // {
+    //   header: t('deployments.status.updated-replicas'),
+    //   value: deployment => (
+    //     <div>{deployment?.status?.updatedReplicas ?? 0}</div>
+    //   ),
+    // },
+    // {
+    //   header: t('deployments.status.available-replicas'),
+    //   value: deployment => (
+    //     <div>{deployment?.status?.availableReplicas ?? 0}</div>
+    //   ),
+    // },
+    // {
+    //   header: t('deployments.status.unavailable-replicas'),
+    //   value: deployment => (
+    //     <div>{deployment?.status?.unavailableReplicas ?? 0}</div>
+    //   ),
+    // },
+    // {
+    //   header: t('deployments.status.collision-count'),
+    //   value: deployment => <div>{deployment?.status?.collisionCount ?? 0}</div>,
+    // },
   ];
 
   const statusConditions = deployment => {
@@ -114,7 +114,7 @@ export function DeploymentDetails(props) {
       createResourceForm={DeploymentCreate}
       statusBadge={deployment => <DeploymentStatus deployment={deployment} />}
       customStatusColumns={customStatusColumns}
-      statusConditions={statusConditions}
+      //statusConditions={statusConditions}
       description={ResourceDescription}
       {...props}
     />
