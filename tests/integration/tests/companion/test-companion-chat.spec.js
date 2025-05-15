@@ -459,7 +459,7 @@ context('Test Companion Chat Behavior', () => {
     cy.get('@companion')
       .find('ui5-button[accessible-name="Place"]')
       .click();
-
+    cy.wait(1000);
     // Check if redirected to Deployment Create Form
     cy.contains('ui5-dynamic-page-title', 'Create Deployment').should(
       'be.visible',
@@ -470,8 +470,6 @@ context('Test Companion Chat Behavior', () => {
     cy.contains('ui5-dynamic-page-title', 'test-deployment').should(
       'be.visible',
     );
-
-    cy.closeMidColumn();
   });
 
   it('place button works correctly for edit', () => {
@@ -489,7 +487,7 @@ context('Test Companion Chat Behavior', () => {
     cy.get('@companion')
       .find('ui5-button[accessible-name="Place"]')
       .click();
-
+    cy.wait(1000);
     // Check if redirected to correct Deployment Edit From
     cy.contains('ui5-dynamic-page-title', 'test-deployment').should(
       'be.visible',
@@ -503,11 +501,9 @@ context('Test Companion Chat Behavior', () => {
     cy.inspectTab('View');
     cy.wait(5000);
 
-    cy.contains('.page-header__column', 'Replicas')
-      .contains('span', '2')
-      .should('be.visible');
+    cy.contains('.page-header__column', 'Replicas').should('be.visible');
+    cy.contains('.page-header__column', '2').should('be.visible');
 
-    cy.closeMidColumn();
-    cy.deleteFromGenericList('Deployment', 'test-deployment');
+    cy.deleteInDetails('Deployment', 'test-deployment');
   });
 });

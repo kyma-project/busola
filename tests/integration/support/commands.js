@@ -240,6 +240,7 @@ Cypress.Commands.add(
     cy.getMidColumn()
       .find('ui5-button[accessible-name="close-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.checkItemOnGenericListLink(resourceName);
 
@@ -253,6 +254,7 @@ Cypress.Commands.add(
     cy.getEndColumn()
       .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.get('ui5-table-row')
       .find('ui5-table-cell')
@@ -262,6 +264,7 @@ Cypress.Commands.add(
     cy.getEndColumn()
       .find('ui5-button[accessible-name="close-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.checkItemOnGenericListLink(resourceName);
 

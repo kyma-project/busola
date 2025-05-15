@@ -121,6 +121,7 @@ context('Test Custom Resources', () => {
       .click();
 
     cy.testEndColumnLayout('tcluster-test', false);
+    cy.wait(1000);
 
     cy.getMidColumn()
       .get('ui5-table-row')
