@@ -74,6 +74,10 @@ export default defineConfig({
       '@openapi-contrib/openapi-schema-to-json-schema',
       '@stoplight/json-ref-resolver',
       'monaco-yaml/yaml.worker.js'
+    ],
+    entries: [
+      'cypress/support/component.jsx',
+      'src/**/*.cy.{js,jsx,ts,tsx}'
     ]
   },
   define: {
