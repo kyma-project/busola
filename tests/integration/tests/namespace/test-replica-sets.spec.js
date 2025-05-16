@@ -58,6 +58,7 @@ context('Test Replica Sets', () => {
     cy.getLeftNav()
       .contains('Replica Sets')
       .click();
+    cy.wait(1000);
 
     cy.clickGenericListLink(REPLICA_SET_NAME);
 
@@ -84,6 +85,7 @@ context('Test Replica Sets', () => {
       .should('have.value', EDITED_REPLICAS_AMOUNT);
 
     cy.saveChanges('Edit');
+    cy.wait(1000);
   });
 
   it('Checks the new amount of Replicas and the new Docker image', () => {

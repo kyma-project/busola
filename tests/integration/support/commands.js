@@ -186,6 +186,7 @@ Cypress.Commands.add(
     cy.checkItemOnGenericListLink(resourceName);
 
     cy.get('ui5-button[data-testid="delete"]').click();
+    cy.wait(1000);
 
     if (confirmationEnabled) {
       cy.contains(`delete ${resourceType} ${resourceName}`);

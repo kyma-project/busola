@@ -75,6 +75,7 @@ context('Test Persistent Volume Claims', () => {
     cy.getMidColumn()
       .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.getMidColumn()
       .contains('Events')
@@ -86,6 +87,7 @@ context('Test Persistent Volume Claims', () => {
     cy.getLeftNav()
       .contains('Persistent Volume Claims')
       .click();
+    cy.wait(1000);
 
     cy.contains(CAPACITY_VALUE);
 

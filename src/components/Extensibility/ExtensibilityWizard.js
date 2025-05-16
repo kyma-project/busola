@@ -164,7 +164,7 @@ export function ExtensibilityWizardCore({
         setError(null);
       }
     } catch ({ message }) {
-      setError(message.substr(0, message.indexOf('\n')));
+      setError(message.substring(0, message.indexOf('\n')));
       setResourcesWithStatuses([]);
     }
   }, [yaml, t, resourceInitial]);

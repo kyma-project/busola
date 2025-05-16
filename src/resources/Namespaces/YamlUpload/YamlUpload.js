@@ -44,7 +44,7 @@ function YamlUpload({
         }
       } catch ({ message }) {
         // get the message until the newline
-        setError(message.substr(0, message.indexOf('\n')));
+        setError(message.substring(0, message.indexOf('\n')));
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

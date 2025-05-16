@@ -68,9 +68,9 @@ export function Editor({
         if (typeof setEditorError === 'function') setEditorError(null);
       } catch ({ message }) {
         // get the message until the newline
-        setError(message.substr(0, message.indexOf('\n')));
+        setError(message.substring(0, message.indexOf('\n')));
         if (typeof setEditorError === 'function')
-          setEditorError(message.substr(0, message.indexOf('\n')));
+          setEditorError(message.substring(0, message.indexOf('\n')));
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
