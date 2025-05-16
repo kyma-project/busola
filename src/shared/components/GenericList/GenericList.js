@@ -196,7 +196,7 @@ export const GenericList = ({
     if (serverDataError) {
       return (
         <BodyFallback key="tableErrorMessage">
-          <p>{getErrorMessage(serverDataError)}</p>
+          <p role="text">{getErrorMessage(serverDataError)}</p>
         </BodyFallback>
       );
     }
@@ -212,7 +212,7 @@ export const GenericList = ({
       if (searchQuery) {
         return (
           <BodyFallback>
-            <p>
+            <p role="text">
               {i18n.exists(searchSettings.noSearchResultMessage)
                 ? t(searchSettings.noSearchResultMessage)
                 : searchSettings.noSearchResultMessage}
@@ -236,7 +236,7 @@ export const GenericList = ({
                 image={emptyListProps?.image}
               />
             ) : (
-              <p>
+              <p role="text">
                 {emptyListProps?.titleText ? (
                   <Trans i18nKey={emptyListProps?.titleText} />
                 ) : i18n.exists(notFoundMessage) ? (
