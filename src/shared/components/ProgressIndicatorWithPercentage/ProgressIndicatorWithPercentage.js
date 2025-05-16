@@ -47,6 +47,7 @@ export const ProgressIndicatorWithPercentage = ({
           value={value}
           ref={progress => applyColors(progress)}
           className="progress-indicator"
+          accessible-name="progress-indicator-percentage"
           style={{ position: 'relative', zIndex: '0' }}
         />
       </div>

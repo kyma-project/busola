@@ -15,9 +15,9 @@ import {
 import ListActions from 'shared/components/ListActions/ListActions';
 
 export const BodyFallback = ({ children }) => (
-  <div slot="noData" style={{ width: '100%' }}>
+  <TableCell slot="noData" style={{ width: '100%' }}>
     <div className="body-fallback">{children}</div>
-  </div>
+  </TableCell>
 );
 
 export const HeaderRenderer = ({

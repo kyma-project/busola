@@ -149,6 +149,7 @@ export function YamlResourcesList({ resourcesData }) {
               >
                 <ProgressIndicator
                   value={getPercentage()}
+                  accessible-name="progress-indicator-upload"
                   valueState={
                     resources?.length === uploadedResources?.length
                       ? 'Positive'
