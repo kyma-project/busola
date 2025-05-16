@@ -15,5 +15,5 @@ Cypress.Commands.add('navigateTo', (leftNav, resource) => {
 
     cy.get('@btn-2').click();
   }
-  cy.wait(500);
+  cy.wait(1500);
 });

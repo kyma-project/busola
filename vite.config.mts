@@ -15,6 +15,12 @@ export default defineConfig({
   },
   server: {
     port: 8080,
+    warmup: {
+      clientFiles: [
+        'cypress/support/component.jsx',
+        'src/**/*.cy.{js,jsx,ts,tsx}',
+      ]
+    },
     proxy: {
       // with options
       '^/backend/.*': {
@@ -74,7 +80,7 @@ export default defineConfig({
       '@openapi-contrib/openapi-schema-to-json-schema',
       '@stoplight/json-ref-resolver',
       'monaco-yaml/yaml.worker.js'
-    ]
+    ],
   },
   define: {
     'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER || false),
