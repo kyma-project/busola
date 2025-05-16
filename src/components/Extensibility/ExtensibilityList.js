@@ -79,7 +79,7 @@ export const ExtensibilityListCore = ({
         header: widgetT(column),
         value: resource => (
           <Widget
-            key={i}
+            key={`${resource}-${i}`}
             value={resource}
             structure={column}
             schema={schema}

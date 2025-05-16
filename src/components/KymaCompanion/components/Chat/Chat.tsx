@@ -341,7 +341,7 @@ export const Chat = ({
         {chatHistory.map((message, index) => {
           const isLast = index === chatHistory.length - 1;
           return message.author === Author.AI ? (
-            <React.Fragment key={index}>
+            <React.Fragment key={`${message.author}-${index}`}>
               <Message
                 author={message.author}
                 messageChunks={message.messageChunks}
@@ -360,7 +360,7 @@ export const Chat = ({
           ) : (
             <Message
               author={Author.USER}
-              key={index}
+              key={`${message.author}-${index}`}
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}
               hasError={message?.hasError ?? false}

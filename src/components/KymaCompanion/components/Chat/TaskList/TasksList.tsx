@@ -35,7 +35,7 @@ export default function TasksList({
                   justifyContent="SpaceBetween"
                   alignItems="Center"
                   className="loading-item"
-                  key={index}
+                  key={`${task?.task_name}-box-${index}`}
                 >
                   {task?.status === 'completed' ? (
                     <ObjectStatus

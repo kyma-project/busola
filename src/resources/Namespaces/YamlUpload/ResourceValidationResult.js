@@ -78,7 +78,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   return (
     <>
       {warnings.flat().map((warning, idx) => (
-        <React.Fragment key={idx}>
+        <React.Fragment key={`${warning.message}-${idx}`}>
           <FlexBox alignItems={'Begin'}>
             <ObjectStatus
               showDefaultIcon

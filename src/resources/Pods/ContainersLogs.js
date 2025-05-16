@@ -58,7 +58,7 @@ const ContainersLogs = ({ params }) => {
         <span>
           {logArray.map((part, idx) =>
             part?.toLowerCase() === searchText?.toLowerCase() ? (
-              <b key={idx} className="logs-highlighted">
+              <b key={`${part}-${idx}`} className="logs-highlighted">
                 {part}
               </b>
             ) : (
@@ -154,7 +154,7 @@ const ContainersLogs = ({ params }) => {
       const log = showTimestamps ? `${timestamp} ${stream}` : stream;
       const highlightedLog = highlightSearch(log, searchQuery);
       return (
-        <div className="logs" key={idx}>
+        <div className="logs" key={`${log}-${idx}`}>
           {highlightedLog}
         </div>
       );

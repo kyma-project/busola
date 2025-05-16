@@ -59,7 +59,11 @@ export function ComboboxInput({
       {...props}
     >
       {options.map((option, index) => (
-        <ComboBoxItem key={index} id={option.key} text={option.text} />
+        <ComboBoxItem
+          key={`${option.text}-${index}`}
+          id={option.key}
+          text={option.text}
+        />
       ))}
     </ComboBox>
   );

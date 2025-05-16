@@ -85,7 +85,7 @@ export const ExpandableListItem = ({
                 className={`expandable-item__message ${
                   element?.className ? element.className : ''
                 } sap-margin-x-small sap-margin-y-tiny`}
-                key={index}
+                key={`${element?.value}-${index}`}
               >
                 {element?.header && (
                   <div className="title bsl-has-color-status-4 ">

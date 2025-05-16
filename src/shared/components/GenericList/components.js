@@ -77,7 +77,7 @@ export const HeaderRenderer = ({
         {headerRenderer()?.map((h, index) => {
           return (
             <TableHeaderCell
-              key={typeof h === 'object' ? index : h}
+              key={`${typeof h === 'object' ? index : h}-column`}
               popinText={h === 'Popin' ? t('common.headers.specification') : h}
               popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
               importance={checkCellImportance(h)}
@@ -141,12 +141,12 @@ const DefaultRowRenderer = ({
     if (cell?.content) {
       const { content, ...props } = cell;
       return (
-        <TableCell key={id} {...props}>
+        <TableCell key={`${cell}-${id}`} {...props}>
           {content}
         </TableCell>
       );
     } else {
-      return <TableCell key={id}>{cell}</TableCell>;
+      return <TableCell key={`${cell}-${id}`}>{cell}</TableCell>;
     }
   });
   const actionsCell = (

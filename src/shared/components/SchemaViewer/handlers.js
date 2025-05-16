@@ -23,7 +23,9 @@ export const Schema = ({ val }) => <JSONSchema {...val} />;
 Schema.fullWidth = true;
 
 export const SchemaArray = ({ val }) =>
-  val.map((schema, index) => <JSONSchema key={index} {...schema} />);
+  val.map((schema, index) => (
+    <JSONSchema key={`${schema}-${index}`} {...schema} />
+  ));
 SchemaArray.fullWidth = true;
 
 export const SchemaMap = ({ val, required }) => {

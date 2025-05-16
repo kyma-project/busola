@@ -194,12 +194,14 @@ export function SidebarNavigation() {
         />
       )}
       {topLevelNodes.map(node =>
-        node.items?.map((item, index) => <NavItem node={item} key={index} />),
+        node.items?.map((item, index) => (
+          <NavItem node={item} key={`${item.label}-nav-${index}`} />
+        )),
       )}
       {categoryNodes.map((category, index) => (
         <CategoryItem
           category={category}
-          key={index}
+          key={`${category.label}-category-${index}`}
           expandedCategories={expandedCategories}
           handleExpandedCategories={setExpandedCategories}
         />

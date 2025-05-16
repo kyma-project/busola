@@ -98,7 +98,7 @@ export function Table({
       return (
         <Widget
           {...props}
-          key={cellIndex}
+          key={`${entry}-${cellIndex}`}
           value={entry}
           scope={entry}
           arrayItems={[...arrayItems, entry]}
@@ -123,7 +123,7 @@ export function Table({
           {structure.collapsible.map((child, cellIndex) => (
             <Widget
               {...props}
-              key={cellIndex}
+              key={`${entry}-${cellIndex}`}
               value={entry}
               scope={entry}
               arrayItems={[...arrayItems, entry]}
@@ -149,7 +149,7 @@ export function Table({
       return (
         <Widget
           {...props}
-          key={index}
+          key={`${value}-${index}`}
           value={value}
           structure={content}
           schema={schema}

@@ -116,7 +116,10 @@ export function YamlResourcesList({ resourcesData }) {
                 </Trans>
               </Text>
               {resources.map((r, idx) => (
-                <ResourceValidationResult resource={r.value} key={idx} />
+                <ResourceValidationResult
+                  resource={r.value}
+                  key={`${r.value}-${idx}`}
+                />
               ))}
             </FlexBox>
           </div>
@@ -159,7 +162,7 @@ export function YamlResourcesList({ resourcesData }) {
               </Card>
               <List>
                 {resources.map((r, idx) => (
-                  <ListItemCustom key={idx} type="Inactive">
+                  <ListItemCustom key={`${r?.message}-${idx}`} type="Inactive">
                     <FlexBox alignItems="Center">
                       <Icon
                         className={`status status-${getIcon(r?.status)}`}

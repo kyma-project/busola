@@ -28,10 +28,15 @@ export function JoinedArray({
     <div>
       {separator === 'break'
         ? value.map((val, i) => (
-            <div key={i}>
+            <div key={`${val}-${i}`}>
               {structure?.children
                 ? structure?.children?.map((def, idx) => (
-                    <Widget structure={def} value={val} key={idx} {...props} />
+                    <Widget
+                      structure={def}
+                      value={val}
+                      key={`${def}-${idx}`}
+                      {...props}
+                    />
                   ))
                 : val}
             </div>
@@ -44,7 +49,7 @@ export function JoinedArray({
                   structure={def}
                   arrayItems={[...arrayItems, val]}
                   value={val}
-                  key={idx}
+                  key={`${def}-${idx}`}
                   {...props}
                 />
               ))}

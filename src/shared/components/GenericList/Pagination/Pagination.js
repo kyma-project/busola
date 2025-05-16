@@ -135,7 +135,7 @@ export const Pagination = ({
               direction="Row"
               alignItems="Center"
               style={{ gap: '0.5rem' }}
-              key={i}
+              key={`${current}-${i}`}
             >
               <Text className="page-input-text bsl-has-color-status-4">
                 {t('settings.other.page')}
@@ -156,7 +156,7 @@ export const Pagination = ({
             </FlexBox>
           ) : (
             <Link
-              key={i}
+              key={`${current}-link-${i}`}
               isInteractable={current !== '...'}
               isCurrent={current === currentPage}
               onClick={() => onChangePage(current)}

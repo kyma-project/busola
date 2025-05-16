@@ -104,7 +104,7 @@ export function FeaturedCard({ value, structure, schema, ...props }) {
               <div className="button-container sap-margin-top-small">
                 {structure.children?.slice(0, 2).map((def, idx) => (
                   <Widget
-                    key={idx}
+                    key={`${value}-${idx}`}
                     value={value}
                     structure={def}
                     schema={schema}

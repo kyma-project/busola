@@ -44,7 +44,7 @@ export function insert18nLinks(text: string): ProcessedTranslation {
     (link, idx): React.ReactElement => {
       const i18NLink = createI18nLink(link.urlText, idx);
       processedText = processedText.replace(link.matchedText, i18NLink);
-      return <ExternalLink url={link.url} key={idx} />;
+      return <ExternalLink url={link.url} key={`${link.urlText}-${idx}`} />;
     },
   );
 

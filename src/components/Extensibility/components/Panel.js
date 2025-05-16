@@ -46,7 +46,7 @@ export function Panel({
           {Array.isArray(header)
             ? header.map((def, idx) => (
                 <Widget
-                  key={idx}
+                  key={`${def}-${idx}`}
                   structure={def}
                   schema={schema}
                   inlineContext={true}
@@ -77,7 +77,7 @@ export function Panel({
         <div className={bodyClassNames}>
           {structure.children.map((def, idx) => (
             <Widget
-              key={idx}
+              key={`${value}-${idx}`}
               value={value}
               structure={def}
               schema={schema}
