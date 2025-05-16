@@ -29,7 +29,7 @@ function PodTemplateTable({ className, items, columns, rowRenderer }) {
       headerRow={
         <TableHeaderRow style={{ width: '50%' }}>
           {columns.map(column => (
-            <TableHeaderCell scope="col" key={column}>
+            <TableHeaderCell key={column}>
               <Title level="H5">{column}</Title>
             </TableHeaderCell>
           ))}

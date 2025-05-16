@@ -110,7 +110,6 @@ export const Pagination = ({
           isInteractable={currentPage !== 1}
           onClick={() => onChangePage(1)}
           accessibleName="First page"
-          accesskey="first-page-link"
         >
           <Icon
             accessibleName="first page icon"
@@ -123,7 +122,6 @@ export const Pagination = ({
           isInteractable={currentPage !== 1}
           onClick={() => onChangePage(currentPage - 1)}
           accessibleName="Previous page"
-          accesskey="previous-page-link"
         >
           <Icon
             accessibleName="previous page icon"
@@ -172,7 +170,6 @@ export const Pagination = ({
           isInteractable={currentPage !== pagesCount}
           onClick={() => onChangePage(currentPage + 1)}
           accessibleName="Next page"
-          accesskey="next-page-link"
         >
           <Icon
             accessibleName="next page icon"
@@ -185,7 +182,6 @@ export const Pagination = ({
           isInteractable={currentPage !== pagesCount}
           onClick={() => onChangePage(pagesCount)}
           accessibleName="Last page"
-          accesskey="last-page-link"
         >
           <Icon
             accessibleName="last page icon"
