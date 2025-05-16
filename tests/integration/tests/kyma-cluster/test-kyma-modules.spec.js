@@ -239,29 +239,31 @@ context('Test Kyma Modules views', () => {
       .should('not.be.exist');
   });
 
-  // Uncomment after adding local KLM
-  // it('Test deleting Modules from List and Details', { retries: 3 }, () => {
-  //   cy.deleteFromGenericList('Module', 'eventing');
+  it('Test deleting Modules from List and Details', { retries: 3 }, () => {
+    cy.deleteFromGenericList('Module', 'eventing', {
+      searchInPlainTableText: true,
+    });
 
-  //   cy.get('ui5-input[id="search-input"]:visible')
-  //     .find('input')
-  //     .wait(1000)
-  //     .type('api-gateway');
-
-  //   cy.get('ui5-table-row')
-  //     .contains('api-gateway')
-  //     .click();
-
-  //   cy.deleteInDetails('Module', 'api-gateway', true);
-
-  //   cy.wait(20000);
-
-  //   cy.get('ui5-input[id="search-input"]:visible')
-  //     .find('input')
-  //     .clear();
-
-  //   cy.get('ui5-table')
-  //     .contains('ui5-illustrated-message', 'No modules')
-  //     .should('be.visible');
-  // });
+    // Uncomment after adding local KLM
+    // cy.get('ui5-input[id="search-input"]:visible')
+    //   .find('input')
+    //   .wait(1000)
+    //   .type('api-gateway');
+    //
+    // cy.get('ui5-table-row')
+    //   .contains('api-gateway')
+    //   .click();
+    //
+    // cy.deleteInDetails('Module', 'api-gateway', true);
+    //
+    // cy.wait(20000);
+    //
+    // cy.get('ui5-input[id="search-input"]:visible')
+    //   .find('input')
+    //   .clear();
+    //
+    // cy.get('ui5-table')
+    //   .contains('ui5-illustrated-message', 'No modules')
+    //   .should('be.visible');
+  });
 });
