@@ -76,6 +76,7 @@ const ListActions = ({ actions, entry }) => {
               <MenuItem
                 onClick={() => a.handler(entry)}
                 key={a.name}
+                accessible-name={a.name}
                 text={a.name}
                 accessibleName={a.name}
               />

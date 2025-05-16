@@ -78,22 +78,26 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
       <MenuItem
         onClick={() => setPreferencesOpen(true)}
         key="preferences"
+        accessible-name="preferences"
         text={t('navigation.preferences.title')}
         icon="wrench"
       />
       <MenuItem
         key="give-feedback"
+        accessible-name="give-feedback"
         text={t('navigation.menu.give-feedback')}
         icon="feedback"
       />
       <MenuItem
         key="get-help"
+        accessible-name="get-help"
         text={t('navigation.menu.get-help')}
         icon="sys-help"
       >
         {getHelpLinks.map((getHelpLint: GetHelpLink) => (
           <MenuItem
             key={getHelpLint.link}
+            accessible-name="get-help-link"
             text={getHelpLint.label}
             icon="inspect"
           />
@@ -101,6 +105,7 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
       </MenuItem>
       <MenuItem
         key="legal-information"
+        accessible-name="legal-information"
         text={t('navigation.menu.legal-information') + nonBreakableSpaces(6)}
         icon="official-service"
       >
@@ -108,6 +113,7 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
           <MenuItem
             key={legalLink.link}
             text={legalLink.label}
+            accessible-name="legal-information-link"
             icon="inspect"
           />
         ))}
@@ -117,6 +123,7 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
           }}
           text={t('common.labels.version')}
           additionalText={busolaVersion}
+          accessible-name="legal-information-version"
           icon="inspect"
         />
       </MenuItem>
