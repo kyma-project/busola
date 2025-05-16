@@ -90,8 +90,8 @@ export function CommandPalletteHelp({
       <table className="help-text">
         <thead>
           <tr>
-            <th scope="col">{t('common.headers.name')}</th>
-            <th scope="col">{t('common.headers.description')}</th>
+            <th>{t('common.headers.name')}</th>
+            <th>{t('common.headers.description')}</th>
           </tr>
         </thead>
         <tbody>

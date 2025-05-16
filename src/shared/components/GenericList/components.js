@@ -41,6 +41,7 @@ export const HeaderRenderer = ({
         importance={0}
         popinHidden={true}
         key="actions-column"
+        scope="col"
         aria-label="actions-column"
         minWidth={`${30 * actions.length}px`}
       >
@@ -77,6 +78,7 @@ export const HeaderRenderer = ({
         {headerRenderer()?.map((h, index) => {
           return (
             <TableHeaderCell
+              scope="col"
               key={`${typeof h === 'object' ? index : h}-column`}
               popinText={h === 'Popin' ? t('common.headers.specification') : h}
               popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
