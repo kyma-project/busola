@@ -88,6 +88,8 @@ export function usePrepareLayoutColumns({
   apiVersion,
   resourceName,
   isCustomResource,
+  isModule,
+  additionalResource,
   crName,
   resource,
 }) {
@@ -126,6 +128,22 @@ export function usePrepareLayoutColumns({
               resource,
             }
           : null,
+      };
+    }
+
+    if (isModule) {
+      return {
+        layout: layout,
+        startColumn: {
+          ...additionalResource,
+        },
+        midColumn: {
+          resourceName,
+          resourceType,
+          namespaceId,
+          apiGroup,
+          apiVersion,
+        },
       };
     }
 
@@ -218,6 +236,8 @@ export function usePrepareLayoutColumns({
     isCustomResource,
     crName,
     resource,
+    additionalResource,
+    isModule,
   ]);
 
   useEffect(() => {

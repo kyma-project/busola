@@ -2,6 +2,8 @@ import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import React, { Suspense } from 'react';
 import { Route, useParams } from 'react-router';
 import { useRecoilState } from 'recoil';
+import pluralize from 'pluralize';
+
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -12,6 +14,8 @@ import { t } from 'i18next';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
+import { useGetCRbyPath } from 'components/Extensibility/useGetCRbyPath';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -36,12 +40,54 @@ const ColumnWraper = ({
 
   const { resourceName, resourceType, namespace } = useParams();
 
-  usePrepareLayoutColumns({
+  // Get extension config map or custom resource definition
+  const extensionResource = useGetCRbyPath(resourceType);
+  const { data: crd } = useGet(
+    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${resourceType}`,
+    {
+      pollingInterval: null,
+      skip: !resourceType,
+    },
+  );
+
+  let resource = {
     resourceType: resourceType,
     namespaceId: namespace,
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: resourceName,
+  };
+
+  // Set resource data from extension config map or custom resource definition
+  if (crd?.spec) {
+    resource = {
+      resourceType: crd.spec.names.kind,
+      namespaceId: namespace,
+      apiGroup: crd.spec.group,
+      apiVersion: crd.spec.names.kind[0].name,
+      resourceName: resourceName,
+    };
+  }
+
+  if (extensionResource?.general?.resource) {
+    resource = {
+      resourceType: extensionResource.general.resource.kind,
+      namespaceId: namespace,
+      apiGroup: extensionResource.general.resource.group,
+      apiVersion: extensionResource.general.resource.version,
+      resourceName: resourceName,
+    };
+  }
+
+  usePrepareLayoutColumns({
+    ...resource,
+    additionalResource: {
+      resourceType: 'kymas',
+      namespace: 'kyma-system',
+      apiGroup: 'operator.kyma-project.io',
+      apiVersion: 'v1beta2',
+    },
+    isModule: true,
     resource:
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
@@ -55,7 +101,9 @@ const ColumnWraper = ({
       <ExtensibilityDetails
         layoutCloseCreateUrl={url}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
-        resourceType={layoutState?.midColumn?.resourceType || resourceType}
+        resourceType={pluralize(
+          layoutState?.midColumn?.resourceType || resourceType,
+        ).toLowerCase()}
         namespaceId={
           layoutState?.midColumn?.namespaceId ||
           layoutState?.midColumn?.namespaceId === ''
@@ -75,7 +123,9 @@ const ColumnWraper = ({
       <ExtensibilityDetails
         layoutCloseCreateUrl={url}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
-        resourceType={layoutState?.midColumn?.resourceType || resourceType}
+        resourceType={pluralize(
+          layoutState?.midColumn?.resourceType || resourceType,
+        ).toLowerCase()}
         namespaceId={
           layoutState?.midColumn?.namespaceId ||
           layoutState?.midColumn?.namespaceId === ''
