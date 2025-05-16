@@ -53,7 +53,7 @@ export function ComboboxArrayInput({
           return (
             <Inputs.ComboboxInput
               updatesOnInput={false}
-              key={index}
+              key={`${value}-${index}`}
               placeholder={placeholder}
               _ref={ref}
               value={value}

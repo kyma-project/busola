@@ -8,7 +8,7 @@ const PVC_NAME =
   'test-' +
   Math.random()
     .toString()
-    .substr(2, 8);
+    .substring(2, 10);
 
 const CAPACITY_VALUE = '1Gi';
 const ACCESS_MODES_VALUE = 'ReadWriteOnce';
@@ -75,6 +75,7 @@ context('Test Persistent Volume Claims', () => {
     cy.getMidColumn()
       .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.getMidColumn()
       .contains('Events')
@@ -86,6 +87,7 @@ context('Test Persistent Volume Claims', () => {
     cy.getLeftNav()
       .contains('Persistent Volume Claims')
       .click();
+    cy.wait(1000);
 
     cy.contains(CAPACITY_VALUE);
 

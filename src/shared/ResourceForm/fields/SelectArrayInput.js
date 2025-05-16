@@ -26,7 +26,7 @@ export function SelectArrayInput({
       inputs={[
         ({ value, setValue, ref, updateValue, focus, index }) => (
           <Inputs.Dropdown
-            key={index}
+            key={`${value}-${index}`}
             placeholder={placeholder}
             _ref={ref}
             value={value}

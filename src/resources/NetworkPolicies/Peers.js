@@ -12,7 +12,7 @@ export const NetworkPolicyPeers = ({ peers, title }) => {
 
   return peers.map((peer, idx) => {
     return (
-      <div key={idx}>
+      <div key={`${peer.ipBlock.cidr}-${idx}`}>
         {peer.ipBlock ? (
           <UI5Panel title={title || t('network-policies.headers.ip-block')}>
             <LayoutPanelRow

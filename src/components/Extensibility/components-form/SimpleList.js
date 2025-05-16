@@ -89,7 +89,7 @@ export function SimpleList({
           .map((_val, index) => {
             const ownKeys = storeKeys.push(index);
             return (
-              <li key={index}>
+              <li key={`${_val}-${index}`}>
                 <FlexBox alignItems="Center">
                   <div className="bsl-col-md--11 simple-list">
                     <PluginStack

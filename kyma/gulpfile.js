@@ -32,7 +32,7 @@ const loadExtensions = _obj(async function(extensionsFile, _, cb) {
         } else {
           resolve({
             contents: data.toString(),
-            name: filePath.substr(filePath.lastIndexOf('/') + 1),
+            name: filePath.substring(filePath.lastIndexOf('/') + 1),
           });
         }
       }),
@@ -43,7 +43,7 @@ const loadExtensions = _obj(async function(extensionsFile, _, cb) {
       .then(res => res.text())
       .then(contents => ({
         contents,
-        name: fileAddress.substr(fileAddress.lastIndexOf('/') + 1),
+        name: fileAddress.substring(fileAddress.lastIndexOf('/') + 1),
       }));
 
   const requests = list.map(({ source }) => {

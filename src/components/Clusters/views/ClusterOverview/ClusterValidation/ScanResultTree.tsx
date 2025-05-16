@@ -100,7 +100,7 @@ const ScanResultResourceTree = ({
   return (
     <TreeItem key={resource.endpoint} text={resource.kind} {...warningState}>
       {resource.items?.map((item, i) => (
-        <ScanResultItemTree key={i} item={item} />
+        <ScanResultItemTree key={`${item?.name}-${i}`} item={item} />
       ))}
     </TreeItem>
   );
@@ -117,7 +117,10 @@ const ScanResultResourcesTree = ({
   return (
     <>
       {filteredResources?.map((resource, i) => (
-        <ScanResultResourceTree key={i} resource={resource} />
+        <ScanResultResourceTree
+          key={`${resource?.kind}-${i}`}
+          resource={resource}
+        />
       ))}
     </>
   );
@@ -170,7 +173,10 @@ const ScanResultNamespacesTree = ({
     >
       {scanResult.namespaces &&
         Object.values(scanResult.namespaces).map((namespace, i) => (
-          <ScanResultNamespaceTree key={i} namespace={namespace} />
+          <ScanResultNamespaceTree
+            key={`${namespace.name}-${i}`}
+            namespace={namespace}
+          />
         ))}
     </TreeItem>
   );
