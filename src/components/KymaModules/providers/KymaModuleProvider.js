@@ -69,7 +69,8 @@ export function KymaModuleContextProvider({
     singularName: 'Kyma',
     pluralKind: 'Kymas',
     resource: kymaResourceState,
-    initialUnchangedResource: initialUnchangedResource,
+    initialResource: initialUnchangedResource,
+    updateInitialResource: setInitialUnchangedResource,
     createUrl: resourceUrl,
     afterCreatedFn: () =>
       notification.notifySuccess({
