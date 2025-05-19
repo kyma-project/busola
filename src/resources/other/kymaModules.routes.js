@@ -91,8 +91,8 @@ const ColumnWraper = ({
   if (!layoutResourceData) {
     return <>loading</>;
   }
-  const plurarizedResourceType = extensionResource
-    ? pluralize(extensionResource?.resourceType || '')
+  const plurarizedResourceType = extensionResource?.general?.resource?.kind
+    ? pluralize(extensionResource.general.resource.kind).toLowerCase()
     : crd?.metadata?.name;
   console.log(
     'plurarizedResourceType',
