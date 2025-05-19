@@ -101,5 +101,11 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     return <SideNavigationSubItem key={node.pathSegment} {...propsForNav} />;
   }
 
-  return <SideNavigationItem key={node.pathSegment} {...propsForNav} />;
+  return (
+    <SideNavigationItem
+      accessible-name={propsForNav.text}
+      key={node.pathSegment}
+      {...propsForNav}
+    />
+  );
 }
