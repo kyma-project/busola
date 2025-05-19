@@ -89,7 +89,6 @@ export function usePrepareLayoutColumns({
   resourceName,
   isCustomResource,
   isModule,
-  additionalResource,
   crName,
   resource,
 }) {
@@ -135,15 +134,33 @@ export function usePrepareLayoutColumns({
       return {
         layout: layout,
         startColumn: {
-          ...additionalResource,
+          resourceType: 'kymas',
+          namespace: 'kyma-system',
+          apiGroup: 'operator.kyma-project.io',
+          apiVersion: 'v1beta2',
         },
-        midColumn: {
-          resourceName,
-          resourceType,
-          namespaceId,
-          apiGroup,
-          apiVersion,
-        },
+        midColumn: resourceName
+          ? {
+              resourceName,
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
+        showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
+        showEdit: showEdit
+          ? editColumn === 'startColumn'
+            ? { resourceType, namespaceId, apiGroup, apiVersion }
+            : {
+                resourceName,
+                resourceType,
+                namespaceId,
+                apiGroup,
+                apiVersion,
+                resource,
+              }
+          : null,
       };
     }
 
@@ -236,7 +253,6 @@ export function usePrepareLayoutColumns({
     isCustomResource,
     crName,
     resource,
-    additionalResource,
     isModule,
   ]);
 

@@ -1,5 +1,5 @@
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { Route, useParams } from 'react-router';
 import { useRecoilState } from 'recoil';
 import pluralize from 'pluralize';
@@ -31,6 +31,8 @@ const ColumnWraper = ({
   DeleteMessageBox,
   handleResourceDelete,
   showDeleteDialog,
+  extensionResource,
+  crd,
 }) => {
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { clusterUrl, namespaceUrl } = useUrl();
@@ -40,70 +42,69 @@ const ColumnWraper = ({
 
   const { resourceName, resourceType, namespace } = useParams();
 
-  // Get extension config map or custom resource definition
-  const extensionResource = useGetCRbyPath(resourceType);
-  const { data: crd } = useGet(
-    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${resourceType}`,
-    {
-      pollingInterval: null,
-      skip: !resourceType,
-    },
-  );
+  const layoutResourceData = useMemo(() => {
+    let resource = {};
 
-  let resource = {
-    resourceType: resourceType,
-    namespaceId: namespace,
-    apiGroup: '',
-    apiVersion: 'v1',
-    resourceName: resourceName,
-  };
+    // Set resource data from extension config map or custom resource definition
+    if (crd?.spec) {
+      resource = {
+        resourceType: crd.spec.names.kind,
+        namespaceId: namespace,
+        apiGroup: crd.spec.group,
+        apiVersion: crd.spec.names.kind[0].name,
+        resourceName: resourceName,
+      };
+    }
 
-  // Set resource data from extension config map or custom resource definition
-  if (crd?.spec) {
-    resource = {
-      resourceType: crd.spec.names.kind,
-      namespaceId: namespace,
-      apiGroup: crd.spec.group,
-      apiVersion: crd.spec.names.kind[0].name,
-      resourceName: resourceName,
-    };
-  }
+    if (extensionResource?.general?.resource) {
+      resource = {
+        resourceType: extensionResource.general.resource.kind,
+        namespaceId: namespace,
+        apiGroup: extensionResource.general.resource.group,
+        apiVersion: extensionResource.general.resource.version,
+        resourceName: resourceName,
+      };
+    }
 
-  if (extensionResource?.general?.resource) {
-    resource = {
-      resourceType: extensionResource.general.resource.kind,
-      namespaceId: namespace,
-      apiGroup: extensionResource.general.resource.group,
-      apiVersion: extensionResource.general.resource.version,
-      resourceName: resourceName,
-    };
-  }
+    console.log('resource', resource);
+    return resource;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    resourceType,
+    resourceName,
+    namespace,
+    layoutState,
+    crd,
+    extensionResource,
+  ]);
+
+  let startColumnComponent = null;
 
   usePrepareLayoutColumns({
-    ...resource,
-    additionalResource: {
-      resourceType: 'kymas',
-      namespace: 'kyma-system',
-      apiGroup: 'operator.kyma-project.io',
-      apiVersion: 'v1beta2',
-    },
+    ...layoutResourceData,
     isModule: true,
     resource:
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
   });
-
-  let startColumnComponent = null;
-
+  if (!layoutResourceData) {
+    return <>loading</>;
+  }
+  const plurarizedResourceType = extensionResource
+    ? pluralize(extensionResource?.resourceType || '')
+    : crd?.metadata?.name;
+  console.log(
+    'plurarizedResourceType',
+    plurarizedResourceType,
+    extensionResource?.resourceType,
+  );
   if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
       <ExtensibilityDetails
         layoutCloseCreateUrl={url}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
-        resourceType={pluralize(
-          layoutState?.midColumn?.resourceType || resourceType,
-        ).toLowerCase()}
+        resourceType={plurarizedResourceType || resourceType}
         namespaceId={
           layoutState?.midColumn?.namespaceId ||
           layoutState?.midColumn?.namespaceId === ''
@@ -123,9 +124,7 @@ const ColumnWraper = ({
       <ExtensibilityDetails
         layoutCloseCreateUrl={url}
         resourceName={layoutState?.midColumn?.resourceName || resourceName}
-        resourceType={pluralize(
-          layoutState?.midColumn?.resourceType || resourceType,
-        ).toLowerCase()}
+        resourceType={plurarizedResourceType || resourceType}
         namespaceId={
           layoutState?.midColumn?.namespaceId ||
           layoutState?.midColumn?.namespaceId === ''
@@ -196,6 +195,17 @@ const KymaModules = ({ defaultColumn, namespaced }) => {
     resourceType: t('kyma-modules.title'),
     forceConfirmDelete: true,
   });
+  const { resourceType } = useParams();
+
+  // Get extension config map or custom resource definition
+  const extensionResource = useGetCRbyPath(resourceType);
+  const { data: crd } = useGet(
+    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${resourceType}`,
+    {
+      pollingInterval: null,
+    },
+  );
+  console.log(extensionResource, crd);
   return (
     <ColumnWraper
       defaultColumn={defaultColumn}
@@ -203,6 +213,8 @@ const KymaModules = ({ defaultColumn, namespaced }) => {
       DeleteMessageBox={DeleteMessageBox}
       handleResourceDelete={handleResourceDelete}
       showDeleteDialog={showDeleteDialog}
+      extensionResource={extensionResource}
+      crd={crd}
     />
   );
 };
