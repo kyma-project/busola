@@ -1,5 +1,4 @@
 /* global Cypress */
-import React from 'react';
 import { mount } from 'cypress/react18';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import { MemoryRouter } from 'react-router';
