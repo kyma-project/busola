@@ -3,6 +3,7 @@ import React, { Suspense, useMemo } from 'react';
 import { Route, useParams } from 'react-router';
 import { useRecoilState } from 'recoil';
 import pluralize from 'pluralize';
+import jsyaml from 'js-yaml';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
@@ -14,8 +15,7 @@ import { t } from 'i18next';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
-import { useGetCRbyPath } from 'components/Extensibility/useGetCRbyPath';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -56,17 +56,16 @@ const ColumnWraper = ({
       };
     }
 
-    if (extensionResource?.general?.resource) {
+    if (extensionResource?.resource) {
       resource = {
-        resourceType: extensionResource.general.resource.kind,
+        resourceType: extensionResource.resource.kind,
         namespaceId: namespace,
-        apiGroup: extensionResource.general.resource.group,
-        apiVersion: extensionResource.general.resource.version,
+        apiGroup: extensionResource.resource.group,
+        apiVersion: extensionResource.resource.version,
         resourceName: resourceName,
       };
     }
 
-    console.log('resource', resource);
     return resource;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -91,14 +90,10 @@ const ColumnWraper = ({
   if (!layoutResourceData) {
     return <>loading</>;
   }
-  const plurarizedResourceType = extensionResource?.general?.resource?.kind
-    ? pluralize(extensionResource.general.resource.kind).toLowerCase()
+  const plurarizedResourceType = extensionResource?.resource?.kind
+    ? pluralize(extensionResource.resource.kind).toLowerCase()
     : crd?.metadata?.name;
-  console.log(
-    'plurarizedResourceType',
-    plurarizedResourceType,
-    extensionResource?.resourceType,
-  );
+
   if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
       <ExtensibilityDetails
@@ -197,15 +192,30 @@ const KymaModules = ({ defaultColumn, namespaced }) => {
   });
   const { resourceType } = useParams();
 
-  // Get extension config map or custom resource definition
-  const extensionResource = useGetCRbyPath(resourceType);
+  // Get  custom resource definition
   const { data: crd } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${resourceType}`,
     {
       pollingInterval: null,
     },
   );
-  console.log(extensionResource, crd);
+
+  // Get extension general info
+  const { data: kymaExt } = useGetList(
+    ext => ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
+  )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
+    pollingInterval: 5000,
+  });
+  const findExtension = resourceType => {
+    return kymaExt?.find(ext => {
+      const { resource: extensionResource } =
+        jsyaml.load(ext.data.general, { json: true }) || {};
+      return pluralize(extensionResource.kind).toLowerCase() === resourceType;
+    });
+  };
+  const hasExtension = findExtension(resourceType)?.data?.general;
+  const extensionResource = jsyaml.load(hasExtension, { json: true }) || {};
+
   return (
     <ColumnWraper
       defaultColumn={defaultColumn}
