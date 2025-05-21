@@ -90,7 +90,8 @@ jobs:
       - name: Checkout busola-deploy repo
         uses: actions/checkout@v4
         with:
-          repository: github.tools.sap/kyma/busola-deploy
+          repository: kyma/busola-deploy
+          github-server-url: 'https://github.tools.sap'
           ref: dev
           token: ${{ secrets.BUSOLA_DEPLOY_PAT }} # Needs write access
 
