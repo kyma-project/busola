@@ -11,6 +11,7 @@ import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
+import { useMemo } from 'react';
 
 type RowResourceType = {
   name: string;
@@ -40,12 +41,23 @@ export const CommunityModulesListRows = ({
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
   });
-  console.log(moduleReleaseMetas);
   const findModuleReleaseMeta = (moduleName: string) => {
     return (moduleReleaseMetas as ModuleReleaseMetasType | null)?.items.find(
       item => item.spec.moduleName === moduleName,
     );
   };
+
+  const moduleTemplate = useMemo(
+    () =>
+      moduleTemplates.items.find(
+        template => template.metadata.name === resource.name,
+      ),
+    [moduleTemplates],
+  );
+
+  const { data: moduleStatus } = 'Unknown'; //useGetManagerStatus({
+  // ...moduleTemplate?.spec?.data,
+  //});
 
   const checkBeta = (
     module: ModuleTemplateType | undefined,
@@ -57,45 +69,40 @@ export const CommunityModulesListRows = ({
     );
   };
 
-  //const moduleStatus = findModuleStatus(kymaResource, resource.name);
-  const moduleStatus = moduleTemplates.find(
-    template => template.name === resource.name,
-  )?.spec?.data?.status; //TODO?????????????
   const showDetailsLink = hasDetailsLink(resource);
 
-  const currentModuleTemplate = moduleTemplates.find(
+  const currentModuleTemplate = moduleTemplates.items.find(
     moduleTemplate => moduleTemplate.metadata.name === resource.name,
   );
 
   const { data: managerResourceState } = useGetManagerStatus(
     currentModuleTemplate?.spec?.manager,
   );
+  // console.log(managerResourceState);
+  // if (
+  //   moduleStatus &&
+  //   !moduleStatus.resource &&
+  //   currentModuleTemplate?.spec?.data
+  // ) {
+  //   const moduleCr = currentModuleTemplate?.spec?.data;
 
-  if (
-    moduleStatus &&
-    !moduleStatus.resource &&
-    currentModuleTemplate?.spec?.data
-  ) {
-    const moduleCr = currentModuleTemplate?.spec?.data;
+  //   moduleStatus.resource = {
+  //     kind: moduleCr.kind,
+  //     apiVersion: moduleCr.apiVersion,
+  //     metadata: {
+  //       name: moduleCr.metadata.name,
+  //       namespace: moduleCr.metadata.namespace,
+  //     },
+  //   };
+  // }
 
-    moduleStatus.resource = {
-      kind: moduleCr.kind,
-      apiVersion: moduleCr.apiVersion,
-      metadata: {
-        name: moduleCr.metadata.name,
-        namespace: moduleCr.metadata.namespace,
-      },
-    };
-  }
-  console.log(currentModuleTemplate);
   const moduleDocs =
     currentModuleTemplate?.spec?.info?.documentation ||
     currentModuleTemplate?.metadata?.annotations[
       'operator.kyma-project.io/doc-url'
     ];
 
-  const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
-  console.log(currentModuleReleaseMeta);
+  //const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
   return [
     // Name
     <>
@@ -106,7 +113,7 @@ export const CommunityModulesListRows = ({
       ) : (
         resource.name
       )}
-      {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
+      {/* {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
         <Tag
           className="sap-margin-begin-tiny"
           hideStateIcon
@@ -115,7 +122,7 @@ export const CommunityModulesListRows = ({
         >
           {t('kyma-modules.beta')}
         </Tag>
-      ) : null}
+      ) : null} */}
       {moduleStatus?.state === ModuleTemplateStatus.Unmanaged && (
         <Tag
           className="sap-margin-begin-tiny"
@@ -134,7 +141,14 @@ export const CommunityModulesListRows = ({
     // Version
     currentModuleTemplate?.spec?.version || EMPTY_TEXT_PLACEHOLDER,
     // Module State
-    <ModuleStatus key="module-state" resource={moduleStatus} />,
+    <ModuleStatus
+      key="module-state"
+      resource={{
+        resource: {
+          ...moduleTemplate?.spec?.data,
+        },
+      }}
+    />,
     // Installation State
     <StatusBadge
       key="installation-state"

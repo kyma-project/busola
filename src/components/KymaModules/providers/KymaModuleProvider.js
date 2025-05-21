@@ -40,7 +40,6 @@ export function KymaModuleContextProvider({
     loading: kymaResourceLoading,
     resourceUrl,
   } = useKymaQuery();
-
   const [activeKymaModules, setActiveKymaModules] = useState(
     kymaResource?.spec?.modules ?? [],
   );

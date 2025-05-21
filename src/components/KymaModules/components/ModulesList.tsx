@@ -286,7 +286,7 @@ export const ModulesList = ({
     });
     return statusModules;
   }
-  console.log(getEntries(resource?.status?.modules, resource?.spec?.modules));
+
   return (
     <React.Fragment key="modules-list">
       <div className="sap-margin-small">

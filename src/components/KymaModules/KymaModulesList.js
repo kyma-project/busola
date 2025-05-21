@@ -19,7 +19,7 @@ export default function KymaModulesList({ namespaced }) {
     resourceUrl,
     kymaResource,
     kymaResourceLoading,
-    selectedModules,
+    selectedKymaModules,
     moduleTemplates,
     moduleTemplatesLoading,
     setOpenedModuleIndex,
@@ -33,14 +33,14 @@ export default function KymaModulesList({ namespaced }) {
   } = useMemo(() => {
     if (!moduleTemplates?.items) return { managed: [], unmanaged: [] };
 
-    const managed = [];
-    const unmanaged = [];
+    const managed = { items: [] };
+    const unmanaged = { items: [] };
 
     moduleTemplates.items.forEach(item => {
       if (item.metadata?.labels?.['operator.kyma-project.io/managed-by']) {
-        managed.push(item);
+        managed.items.push(item);
       } else {
-        unmanaged.push(item);
+        unmanaged.items.push(item);
       }
     });
 
@@ -66,7 +66,7 @@ export default function KymaModulesList({ namespaced }) {
               resource={kymaResource}
               moduleTemplates={managedModuleTemplates}
               resourceName={resourceName}
-              selectedModules={selectedModules}
+              selectedModules={selectedKymaModules}
               kymaResource={kymaResource}
               namespaced={namespaced}
               resourceUrl={resourceUrl}
@@ -78,7 +78,7 @@ export default function KymaModulesList({ namespaced }) {
             <CommunityModulesList
               key="kyma-community-modules-list"
               moduleTemplates={communityModuleTemplates}
-              selectedModules={[{ name: 'cluster-ip-029' }]}
+              //selectedModules={[{ name: 'cluster-ip-029' }, { name: 'cluster-ip-1' }]}
               namespaced={namespaced}
               setOpenedModuleIndex={setOpenedModuleIndex}
               handleResourceDelete={handleResourceDelete}

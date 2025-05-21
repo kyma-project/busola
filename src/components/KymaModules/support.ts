@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
@@ -77,9 +77,7 @@ export function useModuleStatus(resource: KymaResourceType) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-
   const path = getResourcePath(resource);
-
   useEffect(() => {
     async function fetchModule() {
       if (!resource) return;
@@ -273,6 +271,77 @@ export const checkSelectedModule = (
     return pluralize(module?.name?.replace('-', '') || '') === resourceTypeBase;
   }
   return false;
+};
+
+export const useGetManager = moduleTemplates => {
+  const managerCacheRef = useRef({});
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const fetch = useFetch();
+
+  useEffect(() => {
+    const fetchManagers = async () => {
+      setLoading(true);
+
+      if (!moduleTemplates?.items?.length) {
+        setLoading(false);
+        return;
+      }
+
+      const cache = {};
+
+      await Promise.all(
+        moduleTemplates.items.map(async module => {
+          const name = module?.metadata?.name;
+          const manager = module?.spec?.manager;
+
+          if (!manager || !name) return;
+
+          try {
+            const url = `/apis/${manager.group}/v1/namespaces/${
+              module.metadata.namespace
+            }/${pluralize(manager.kind).toLowerCase()}/${manager.name}`;
+            const response = await fetch({ relativeUrl: url });
+            const data = await response.json();
+
+            if (data) {
+              cache[name] = data;
+            }
+          } catch (e) {
+            setError(`Error fetching manager for module "${name}":`, e);
+          }
+        }),
+      );
+      managerCacheRef.current = cache;
+      setLoading(false);
+    };
+
+    fetchManagers();
+  }, [moduleTemplates]);
+
+  const getManager = useCallback(name => {
+    return managerCacheRef.current[name];
+  }, []);
+
+  return { getManager, loading, error, managerCacheRef };
+};
+
+export const useGetInstalledModules = moduleTemplates => {
+  const { managerCacheRef, loading, error } = useGetManager(moduleTemplates);
+
+  const filtered = moduleTemplates?.items?.filter(
+    module => !!managerCacheRef?.current[module.metadata.name],
+  );
+  const installed =
+    filtered?.map(module => {
+      return {
+        name: module?.metadata?.name,
+        version: module?.spec?.version,
+        resource: module?.spec?.data,
+      };
+    }) ?? [];
+
+  return { installed, loading, error };
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {
