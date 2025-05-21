@@ -93,26 +93,26 @@ export const CommunityModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
-  const hasDetailsLink = (resource: {
-    name: string;
-    channel: string;
-    version: string;
-    resource: { kind: string };
-  }) => {
-    const moduleStatus = moduleTemplates?.items?.find(
-      template => template.name === resource.name,
-    )?.spec?.data?.resource?.status; //TODO!!!!!!!
-
+  const hasDetailsLink = (
+    resource: {
+      name: string;
+      channel: string;
+      version: string;
+      resource: { kind: string };
+    },
+    moduleStatus,
+  ) => {
     const isDeletionFailed = moduleStatus?.state === 'Warning';
     const isError = moduleStatus?.state === 'Error';
 
-    let hasModuleTpl = !!findModuleTemplate(
-      moduleTemplates,
-      resource.name,
-      resource.channel,
-      resource.version,
-    );
-    return (isDeletionFailed || !isError) && hasModuleTpl;
+    // let hasModuleTpl = !!findModuleTemplate(
+    //   moduleTemplates,
+    //   resource.name,
+    //   resource.channel,
+    //   resource.version,
+    // );
+    // TODO: hasResource???
+    return isDeletionFailed || !isError;
   };
 
   const customColumnLayout = (resource: { name: string }) => {
@@ -180,54 +180,50 @@ export const CommunityModulesList = ({
       };
     }
 
-    const skipRedirect = !hasDetailsLink(moduleStatus);
+    const skipRedirect = !hasDetailsLink(moduleStatus, null); //TODO
 
     if (skipRedirect) {
       return;
     }
 
-    // const pathName = `${
-    //   hasExtension
-    //     ? `${pluralize(moduleStatus?.resource?.kind || '').toLowerCase()}/${
-    //         moduleStatus?.resource?.metadata?.name
-    //       }`
-    //     : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
-    // }`;
+    const pathName = `${pluralize(
+      moduleStatus?.resource?.kind || '',
+    ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`;
 
-    // const partialPath = moduleStatus?.resource?.metadata?.namespace
-    //   ? `kymamodules/namespaces/${moduleStatus?.resource?.metadata?.namespace}/${pathName}`
-    //   : `kymamodules/${pathName}`;
+    const partialPath = moduleStatus?.resource?.metadata?.namespace
+      ? `kymamodules/namespaces/${moduleStatus?.resource?.metadata?.namespace}/${pathName}`
+      : `kymamodules/${pathName}`;
 
-    // const path = namespaced
-    //   ? namespaceUrl(partialPath)
-    //   : clusterUrl(partialPath);
+    const path = namespaced
+      ? namespaceUrl(partialPath)
+      : clusterUrl(partialPath);
 
-    // const { group, version } = extractApiGroupVersion(
-    //   moduleStatus?.resource?.apiVersion,
-    // );
-    // setLayoutColumn({
-    //   startColumn: {
-    //     resourceType: hasExtension
-    //       ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
-    //       : moduleCrd?.metadata?.name,
-    //     namespaceId: moduleStatus?.resource?.metadata.namespace || '',
-    //     apiGroup: group,
-    //     apiVersion: version,
-    //   } as ColumnState,
-    //   midColumn: {
-    //     resourceType: hasExtension
-    //       ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
-    //       : moduleCrd?.metadata?.name,
-    //     resourceName: moduleStatus?.resource?.metadata?.name,
-    //     namespaceId: moduleStatus?.resource?.metadata.namespace || '',
-    //     apiGroup: group,
-    //     apiVersion: version,
-    //   } as ColumnState,
-    //   layout: 'TwoColumnsMidExpanded',
-    //   endColumn: null,
-    // });
+    const { group, version } = extractApiGroupVersion(
+      moduleStatus?.resource?.apiVersion,
+    );
+    setLayoutColumn({
+      startColumn: {
+        resourceType: pluralize(
+          moduleStatus?.resource?.kind || '',
+        ).toLowerCase(),
+        namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+        apiGroup: group,
+        apiVersion: version,
+      } as ColumnState,
+      midColumn: {
+        resourceType: pluralize(
+          moduleStatus?.resource?.kind || '',
+        ).toLowerCase(),
+        resourceName: moduleStatus?.resource?.metadata?.name,
+        namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+        apiGroup: group,
+        apiVersion: version,
+      } as ColumnState,
+      layout: 'TwoColumnsMidExpanded',
+      endColumn: null,
+    });
 
-    // navigate(`${path}?layout=TwoColumnsMidExpanded`);
+    navigate(`${path}?layout=TwoColumnsMidExpanded`);
   };
 
   return (
@@ -240,7 +236,7 @@ export const CommunityModulesList = ({
           <Button
             key="add-module"
             design="Emphasized"
-            //onClick={handleShowAddModule}
+            onClick={handleShowAddModule}
           >
             {t('common.buttons.add')}
           </Button>,

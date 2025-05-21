@@ -19,7 +19,7 @@ export default function KymaModulesList({ namespaced }) {
     resourceUrl,
     kymaResource,
     kymaResourceLoading,
-    selectedKymaModules,
+    selectedModules,
     moduleTemplates,
     moduleTemplatesLoading,
     setOpenedModuleIndex,
@@ -66,7 +66,7 @@ export default function KymaModulesList({ namespaced }) {
               resource={kymaResource}
               moduleTemplates={managedModuleTemplates}
               resourceName={resourceName}
-              selectedModules={selectedKymaModules}
+              selectedModules={selectedModules}
               kymaResource={kymaResource}
               namespaced={namespaced}
               resourceUrl={resourceUrl}
@@ -78,7 +78,6 @@ export default function KymaModulesList({ namespaced }) {
             <CommunityModulesList
               key="kyma-community-modules-list"
               moduleTemplates={communityModuleTemplates}
-              //selectedModules={[{ name: 'cluster-ip-029' }, { name: 'cluster-ip-1' }]}
               namespaced={namespaced}
               setOpenedModuleIndex={setOpenedModuleIndex}
               handleResourceDelete={handleResourceDelete}
