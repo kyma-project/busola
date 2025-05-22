@@ -98,11 +98,14 @@ export function usePrepareLayoutColumns({
   const showCreate = searchParams.get('showCreate');
   const showEdit = searchParams.get('showEdit');
   const editColumn = searchParams.get('editColumn');
+  const resourceNamespace =
+    namespaceId === '-all-'
+      ? searchParams.get('resourceNamespace')
+      : namespaceId;
   const navigationType = useNavigationType();
 
   const newLayoutState = useMemo(() => {
-    const isAllNamespaces = namespaceId === '-all-';
-    if (!layout || layout === 'OneColumn' || isAllNamespaces) {
+    if (!layout || layout === 'OneColumn') {
       return {
         layout: 'OneColumn',
         startColumn: {
@@ -118,7 +121,7 @@ export function usePrepareLayoutColumns({
         showEdit: showEdit
           ? {
               resourceType,
-              namespaceId,
+              namespaceId: resourceNamespace,
               apiGroup,
               apiVersion,
               resourceName:
@@ -142,7 +145,7 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName,
               resourceType,
-              namespaceId,
+              namespaceId: resourceNamespace,
               apiGroup,
               apiVersion,
             }
@@ -151,19 +154,23 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName: crName,
               resourceType: resourceName,
-              namespaceId,
+              namespaceId: resourceNamespace,
               apiGroup,
               apiVersion,
             }
           : null,
         showCreate: showCreate
-          ? { resourceType: resourceName, namespaceId, resource }
+          ? {
+              resourceType: resourceName,
+              namespaceId,
+              resource,
+            }
           : null,
         showEdit: showEdit
           ? {
               resourceName: crName,
               resourceType: resourceName,
-              namespaceId,
+              namespaceId: resourceNamespace,
               apiGroup,
               apiVersion,
               resource,
@@ -185,7 +192,7 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName,
               resourceType,
-              namespaceId,
+              namespaceId: resourceNamespace,
               apiGroup,
               apiVersion,
             }
@@ -194,11 +201,16 @@ export function usePrepareLayoutColumns({
       showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
       showEdit: showEdit
         ? editColumn === 'startColumn'
-          ? { resourceType, namespaceId, apiGroup, apiVersion }
+          ? {
+              resourceType,
+              namespaceId: resourceNamespace,
+              apiGroup,
+              apiVersion,
+            }
           : {
               resourceName,
               resourceType,
-              namespaceId,
+              namespaceId: resourceNamespace,
               apiGroup,
               apiVersion,
               resource,
@@ -210,6 +222,7 @@ export function usePrepareLayoutColumns({
     showCreate,
     showEdit,
     editColumn,
+    resourceNamespace,
     resourceType,
     namespaceId,
     apiGroup,
@@ -235,9 +248,7 @@ export function usePrepareLayoutColumns({
   useEffect(() => {
     setLayoutColumn(newLayoutState);
     setIsFormOpen({
-      formOpen:
-        namespaceId !== '-all-' &&
-        (!!newLayoutState.showCreate || !!newLayoutState.showEdit),
+      formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
