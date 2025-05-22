@@ -98,8 +98,8 @@ jobs:
       # Update the version part of the image tags in dev/main.tf
       - name: Update image versions in main.tf
         run: |
-          sed -i -E 's|(busola_backend_image\s*=\s*".*:)[^"]+|\1v${{ github.event.inputs.name }}|' dev/main.tf
-          sed -i -E 's|(busola_web_image\s*=\s*".*:)[^"]+|\1v${{ github.event.inputs.name }}|' dev/main.tf
+          sed -i -E 's|(busola_backend_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
+          sed -i -E 's|(busola_web_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
 
       # Open a pull request to the dev branch with the updated image versions
       - name: Create Pull Request
