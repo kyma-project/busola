@@ -90,6 +90,7 @@ export function usePrepareLayoutColumns({
   isCustomResource,
   crName,
   resource,
+  isModule,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
@@ -102,6 +103,41 @@ export function usePrepareLayoutColumns({
 
   const newLayoutState = useMemo(() => {
     const isAllNamespaces = namespaceId === '-all-';
+
+    if (isModule) {
+      return {
+        layout: layout || 'OneColumn',
+        startColumn: {
+          resourceType: 'kymas',
+          namespaceId: 'kyma-system',
+          apiGroup: 'operator.kyma-project.io',
+          apiVersion: 'v1beta2',
+        },
+        midColumn: resourceName
+          ? {
+              resourceName,
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
+        showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
+        showEdit: showEdit
+          ? editColumn === 'startColumn'
+            ? { resourceType, namespaceId, apiGroup, apiVersion }
+            : {
+                resourceName,
+                resourceType,
+                namespaceId,
+                apiGroup,
+                apiVersion,
+                resource,
+              }
+          : null,
+      };
+    }
+
     if (!layout || layout === 'OneColumn' || isAllNamespaces) {
       return {
         layout: 'OneColumn',
@@ -218,6 +254,7 @@ export function usePrepareLayoutColumns({
     isCustomResource,
     crName,
     resource,
+    isModule,
   ]);
 
   useEffect(() => {
