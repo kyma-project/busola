@@ -44,7 +44,7 @@ export function ItemArray({
       const name = typeof entryTitle === 'function' && entryTitle(current, i);
       return (
         <ResourceForm.CollapsibleSection
-          key={i}
+          key={`${name}-${i}`}
           nestingLevel={nestingLevel + 1}
           title={
             <>

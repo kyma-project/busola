@@ -50,7 +50,7 @@ export const Labels = ({
         {separatedLabels.map((label, id) => (
           <Tag
             aria-label={label}
-            key={id}
+            key={`${label}-${id}`}
             colorScheme="10"
             design="Set2"
             className={`sap-margin-end-tiny ${

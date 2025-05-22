@@ -6,7 +6,7 @@ const SS_NAME =
   'test-' +
   Math.random()
     .toString()
-    .substr(2, 8);
+    .substring(2, 10);
 
 async function loadSS(name, namespace, fileName) {
   const resource = await loadFile(fileName);

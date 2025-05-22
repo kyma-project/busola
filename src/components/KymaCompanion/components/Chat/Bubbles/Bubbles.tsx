@@ -31,7 +31,7 @@ export default function Bubbles({
     >
       {suggestions.map((suggestion, index) => (
         <Button
-          key={index}
+          key={`${suggestion}-${index}`}
           design="Default"
           className="bubble-button"
           onClick={() => onClick(suggestion)}

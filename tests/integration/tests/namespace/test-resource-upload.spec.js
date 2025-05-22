@@ -5,7 +5,7 @@ import jsyaml from 'js-yaml';
 
 const SC_NAME = `sc-upload-yaml-${Math.random()
   .toString()
-  .substr(2, 8)}`;
+  .substring(2, 10)}`;
 
 async function loadValidResources(namespaceName) {
   const resources = await loadFile('yaml-upload--valid.yaml', false);

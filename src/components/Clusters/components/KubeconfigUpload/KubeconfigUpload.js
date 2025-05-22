@@ -26,7 +26,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
         }
       } catch ({ message }) {
         // get the message until the newline
-        setError(message.substr(0, message.indexOf('\n')));
+        setError(message.substring(0, message.indexOf('\n')));
       }
     },
     [t, setError, setKubeconfig],

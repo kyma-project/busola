@@ -81,6 +81,7 @@ export function CategoryItem({
       selected={false}
       icon={category.icon}
       text={categoryName}
+      accessible-name={categoryName}
       onClick={handleAddExpandedCategory}
     >
       {children}
