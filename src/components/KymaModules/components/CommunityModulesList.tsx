@@ -31,7 +31,7 @@ type CustomResourceDefinitionsType = {
 
 type ModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
-  selectedModules: { name: string }[];
+  selectedModules: any[]; //TODO
   namespaced: boolean;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
@@ -41,28 +41,16 @@ type ModulesListProps = {
 
 export const CommunityModulesList = ({
   moduleTemplates,
-  // selectedModules,
+  selectedModules: installed,
   namespaced,
   setOpenedModuleIndex,
   handleResourceDelete,
 }: ModulesListProps) => {
   const { t } = useTranslation();
-  const { data: crds } = useGet(
-    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
-    {
-      pollingInterval: 5000,
-    } as any,
-  );
-
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-  const {
-    installed,
-    loading: installedModulesLoading,
-    error,
-  } = useGetInstalledModules(moduleTemplates);
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -93,26 +81,15 @@ export const CommunityModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
-  const hasDetailsLink = (
-    resource: {
-      name: string;
-      channel: string;
-      version: string;
-      resource: { kind: string };
-    },
-    moduleStatus,
-  ) => {
+  const hasDetailsLink = moduleResource => {
+    //TODO where to put it
+    const moduleStatus = moduleResource?.status?.state; //TODO??????????????????????
     const isDeletionFailed = moduleStatus?.state === 'Warning';
     const isError = moduleStatus?.state === 'Error';
 
-    // let hasModuleTpl = !!findModuleTemplate(
-    //   moduleTemplates,
-    //   resource.name,
-    //   resource.channel,
-    //   resource.version,
-    // );
-    // TODO: hasResource???
-    return isDeletionFailed || !isError;
+    const hasResource = !!moduleResource;
+
+    return isDeletionFailed || !isError || hasResource;
   };
 
   const customColumnLayout = (resource: { name: string }) => {
@@ -130,13 +107,13 @@ export const CommunityModulesList = ({
       icon: 'delete',
       disabledHandler: (resource: { name: string }) => {
         const index = moduleTemplates?.items?.findIndex(module => {
-          return module.metadata.name === resource.name;
+          return module.metadata.name === resource.name; //TODO have to check if resource is being deleted & if its installed
         });
         return index < 0;
       },
       handler: (resource: { name: string }) => {
         const index = moduleTemplates?.items?.findIndex(module => {
-          return module.metadata.name === resource.name;
+          return module.metadata.name === resource.name; //TODO
         });
         setOpenedModuleIndex(index);
         handleResourceDelete({});
@@ -180,7 +157,7 @@ export const CommunityModulesList = ({
       };
     }
 
-    const skipRedirect = !hasDetailsLink(moduleStatus, null); //TODO
+    const skipRedirect = !hasDetailsLink(moduleStatus); //TODO
 
     if (skipRedirect) {
       return;

@@ -346,7 +346,10 @@ export const useGetInstalledModules = moduleTemplates => {
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {
   const fetch = useFetch();
-  const [data, setData] = useState<any>(ModuleTemplateStatus.Unknown);
+  const [data, setData] = useState<any>({
+    state: ModuleTemplateStatus.Unknown,
+    message: null,
+  });
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -363,6 +366,12 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
         try {
           const response = await fetch({ relativeUrl: path });
           const status = (await response.json())?.status;
+
+          if (status.state) {
+            setData({ state: status.state, message: status?.message });
+            return;
+          }
+
           const latest = status?.conditions
             ?.filter((condition: ConditionType) => condition?.status === 'True')
             ?.reduce(
@@ -374,7 +383,7 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
               {},
             );
           if (latest?.type) {
-            setData(latest.type);
+            setData({ state: latest.type, message: latest.message });
           }
         } catch (error) {
           if (error instanceof Error) {
@@ -408,4 +417,34 @@ export const resolveInstallationStateName = (
   }
 
   return state || ModuleTemplateStatus.Unknown;
+};
+
+export const useGetModuleResource = resource => {
+  const fetch = useFetch();
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const path = getResourcePath(resource);
+
+  useEffect(() => {
+    async function fetchResource() {
+      if (!resource) return;
+      try {
+        const response = await fetch({ relativeUrl: path });
+        const moduleResource = await response.json();
+        setData(moduleResource.data);
+      } catch (e) {
+        if (e instanceof Error) {
+          setError(e);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchResource();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path]);
+
+  return { data, loading, error };
 };

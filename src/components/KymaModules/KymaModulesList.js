@@ -24,6 +24,7 @@ export default function KymaModulesList({ namespaced }) {
     moduleTemplatesLoading,
     setOpenedModuleIndex,
     handleResourceDelete,
+    installedCommunityModules,
   } = useContext(KymaModuleContext);
   const { isProtected, protectedResourceWarning } = useProtectedResources();
 
@@ -78,6 +79,7 @@ export default function KymaModulesList({ namespaced }) {
             <CommunityModulesList
               key="kyma-community-modules-list"
               moduleTemplates={communityModuleTemplates}
+              selectedModules={installedCommunityModules}
               namespaced={namespaced}
               setOpenedModuleIndex={setOpenedModuleIndex}
               handleResourceDelete={handleResourceDelete}

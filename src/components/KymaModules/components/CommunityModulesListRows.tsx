@@ -4,6 +4,7 @@ import {
   ModuleTemplateStatus,
   ModuleTemplateType,
   useGetManagerStatus,
+  useGetModuleResource,
 } from '../support';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
@@ -47,17 +48,16 @@ export const CommunityModulesListRows = ({
     );
   };
 
-  const moduleTemplate = useMemo(
+  const currentModuleTemplate = useMemo(
     () =>
       moduleTemplates.items.find(
         template => template.metadata.name === resource.name,
       ),
-    [moduleTemplates],
+    [moduleTemplates, resource.name],
   );
 
-  const { data: moduleStatus } = 'Unknown'; //useGetManagerStatus({
-  // ...moduleTemplate?.spec?.data,
-  //});
+  const moduleResource = useGetModuleResource(currentModuleTemplate?.spec.data);
+  const moduleStatus = moduleResource?.status;
 
   const checkBeta = (
     module: ModuleTemplateType | undefined,
@@ -69,32 +69,11 @@ export const CommunityModulesListRows = ({
     );
   };
 
-  const showDetailsLink = hasDetailsLink(resource);
-
-  const currentModuleTemplate = moduleTemplates.items.find(
-    moduleTemplate => moduleTemplate.metadata.name === resource.name,
-  );
+  const showDetailsLink = hasDetailsLink(moduleResource);
 
   const { data: managerResourceState } = useGetManagerStatus(
     currentModuleTemplate?.spec?.manager,
   );
-  // console.log(managerResourceState);
-  // if (
-  //   moduleStatus &&
-  //   !moduleStatus.resource &&
-  //   currentModuleTemplate?.spec?.data
-  // ) {
-  //   const moduleCr = currentModuleTemplate?.spec?.data;
-
-  //   moduleStatus.resource = {
-  //     kind: moduleCr.kind,
-  //     apiVersion: moduleCr.apiVersion,
-  //     metadata: {
-  //       name: moduleCr.metadata.name,
-  //       namespace: moduleCr.metadata.namespace,
-  //     },
-  //   };
-  // }
 
   const moduleDocs =
     currentModuleTemplate?.spec?.info?.documentation ||
@@ -102,7 +81,7 @@ export const CommunityModulesListRows = ({
       'operator.kyma-project.io/doc-url'
     ];
 
-  //const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
+  const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
   return [
     // Name
     <>
@@ -113,7 +92,7 @@ export const CommunityModulesListRows = ({
       ) : (
         resource.name
       )}
-      {/* {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
+      {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
         <Tag
           className="sap-margin-begin-tiny"
           hideStateIcon
@@ -122,7 +101,7 @@ export const CommunityModulesListRows = ({
         >
           {t('kyma-modules.beta')}
         </Tag>
-      ) : null} */}
+      ) : null}
       {moduleStatus?.state === ModuleTemplateStatus.Unmanaged && (
         <Tag
           className="sap-margin-begin-tiny"
@@ -130,33 +109,31 @@ export const CommunityModulesListRows = ({
           colorScheme="5"
           design="Set2"
         >
-          {moduleStatus.state}
+          {moduleStatus?.state}
         </Tag>
       )}
     </>,
     // Namespace
     currentModuleTemplate?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
     // Channel
-    <>{moduleStatus?.channel}</>,
+    <>{currentModuleTemplate?.metadata?.channel ?? EMPTY_TEXT_PLACEHOLDER}</>,
     // Version
     currentModuleTemplate?.spec?.version || EMPTY_TEXT_PLACEHOLDER,
     // Module State
     <ModuleStatus
       key="module-state"
       resource={{
-        resource: {
-          ...moduleTemplate?.spec?.data,
-        },
+        resource: moduleResource,
       }}
     />,
     // Installation State
     <StatusBadge
       key="installation-state"
       resourceKind="kymas"
-      type={resolveType(moduleStatus?.state ?? '')}
-      tooltipContent={moduleStatus?.message}
+      type={resolveType(managerResourceState.state ?? '')}
+      tooltipContent={managerResourceState?.message}
     >
-      {managerResourceState}
+      {managerResourceState?.state}
     </StatusBadge>,
     // Documentation
     moduleDocs ? (

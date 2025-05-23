@@ -8,7 +8,7 @@ import { t } from 'i18next';
 import { useKymaQuery, useModuleTemplatesQuery } from '../kymaModulesQueries';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
-import { checkSelectedModule } from '../support';
+import { checkSelectedModule, useGetInstalledModules } from '../support';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 
 export const KymaModuleContext = createContext({
@@ -25,6 +25,7 @@ export const KymaModuleContext = createContext({
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
   deleteModuleButton: () => <></>,
+  installedCommunityModules: {},
 });
 
 export function KymaModuleContextProvider({
@@ -85,6 +86,11 @@ export function KymaModuleContextProvider({
     skip: !kymaResource?.metadata?.name,
   });
 
+  const {
+    installed: installedCommunityModules,
+    loading: installedModulesLoading,
+  } = useGetInstalledModules(moduleTemplates);
+
   const deleteModuleButton = (
     <div>
       <Button onClick={() => handleResourceDelete({})} design="Transparent">
@@ -111,6 +117,7 @@ export function KymaModuleContextProvider({
         handleResourceDelete: handleResourceDelete,
         showDeleteDialog: showDeleteDialog,
         deleteModuleButton: deleteModuleButton,
+        installedCommunityModules: installedCommunityModules,
       }}
     >
       {createPortal(

@@ -175,7 +175,7 @@ export const ModulesListRows = ({
       {resolveInstallationStateName(
         moduleStatus?.state,
         !!currentModuleTemplate?.spec?.manager,
-        managerResourceState,
+        managerResourceState?.state,
       )}
     </StatusBadge>,
     // Documentation
