@@ -26,6 +26,7 @@ export function LimitRangesList(props) {
     setLayoutColumn({
       startColumn: {
         resourceType: 'LimitRange',
+        rawResourceTypeName: 'LimitRange',
         namespaceId: props.namespace,
         apiGroup: '',
         apiVersion: 'v1',
@@ -34,6 +35,7 @@ export function LimitRangesList(props) {
       endColumn: null,
       showCreate: {
         resourceType: props.resourceType,
+        rawResourceTypeName: props.resourceType,
         namespaceId: props.namespace,
         resourceUrl: props.resourceUrl,
       },
