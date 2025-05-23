@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Create, ResourceDescription } from 'components/KymaModules';
@@ -9,6 +9,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
+import { CommunityModulesList } from './components/CommunityModulesList';
 
 export default function KymaModulesList({ namespaced }) {
   const { t } = useTranslation();
@@ -23,8 +24,29 @@ export default function KymaModulesList({ namespaced }) {
     moduleTemplatesLoading,
     setOpenedModuleIndex,
     handleResourceDelete,
+    installedCommunityModules,
   } = useContext(KymaModuleContext);
   const { isProtected, protectedResourceWarning } = useProtectedResources();
+
+  const {
+    managed: managedModuleTemplates,
+    unmanaged: communityModuleTemplates,
+  } = useMemo(() => {
+    if (!moduleTemplates?.items) return { managed: [], unmanaged: [] };
+
+    const managed = { items: [] };
+    const unmanaged = { items: [] };
+
+    moduleTemplates.items.forEach(item => {
+      if (item.metadata?.labels?.['operator.kyma-project.io/managed-by']) {
+        managed.items.push(item);
+      } else {
+        unmanaged.items.push(item);
+      }
+    });
+
+    return { managed, unmanaged };
+  }, [moduleTemplates]);
 
   if (moduleTemplatesLoading || kymaResourceLoading) {
     return <Spinner />;
@@ -43,12 +65,22 @@ export default function KymaModulesList({ namespaced }) {
             <ModulesList
               key="kyma-modules-list"
               resource={kymaResource}
-              moduleTemplates={moduleTemplates}
+              moduleTemplates={managedModuleTemplates}
               resourceName={resourceName}
               selectedModules={selectedModules}
               kymaResource={kymaResource}
               namespaced={namespaced}
               resourceUrl={resourceUrl}
+              setOpenedModuleIndex={setOpenedModuleIndex}
+              handleResourceDelete={handleResourceDelete}
+            />
+          )}
+          {kymaResource && (
+            <CommunityModulesList
+              key="kyma-community-modules-list"
+              moduleTemplates={communityModuleTemplates}
+              selectedModules={installedCommunityModules}
+              namespaced={namespaced}
               setOpenedModuleIndex={setOpenedModuleIndex}
               handleResourceDelete={handleResourceDelete}
             />

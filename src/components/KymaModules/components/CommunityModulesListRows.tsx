@@ -1,13 +1,10 @@
 import { Tag, Text } from '@ui5/webcomponents-react';
 import {
-  findModuleStatus,
-  findModuleTemplate,
-  KymaResourceType,
   ModuleTemplateListType,
   ModuleTemplateStatus,
   ModuleTemplateType,
-  resolveInstallationStateName,
   useGetManagerStatus,
+  useGetModuleResource,
 } from '../support';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +12,7 @@ import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
+import { useMemo } from 'react';
 
 type RowResourceType = {
   name: string;
@@ -30,15 +28,13 @@ type ModuleReleaseMetasType = {
 type ModulesListRowsProps = {
   resourceName: string;
   resource: RowResourceType;
-  kymaResource: KymaResourceType;
   moduleTemplates: ModuleTemplateListType;
   hasDetailsLink: (resource: RowResourceType) => boolean;
 };
 
-export const ModulesListRows = ({
+export const CommunityModulesListRows = ({
   resourceName,
   resource,
-  kymaResource,
   moduleTemplates,
   hasDetailsLink,
 }: ModulesListRowsProps) => {
@@ -52,6 +48,17 @@ export const ModulesListRows = ({
     );
   };
 
+  const currentModuleTemplate = useMemo(
+    () =>
+      moduleTemplates.items.find(
+        template => template.metadata.name === resource.name,
+      ),
+    [moduleTemplates, resource.name],
+  );
+
+  const moduleResource = useGetModuleResource(currentModuleTemplate?.spec.data);
+  const moduleStatus = moduleResource?.status;
+
   const checkBeta = (
     module: ModuleTemplateType | undefined,
     currentModuleReleaseMeta?: { spec: { moduleName: string; beta: boolean } },
@@ -62,41 +69,11 @@ export const ModulesListRows = ({
     );
   };
 
-  const moduleStatus = findModuleStatus(kymaResource, resource.name);
-  const showDetailsLink = hasDetailsLink(resource);
-  const moduleIndex = kymaResource?.spec?.modules?.findIndex(
-    kymaResourceModule => {
-      return kymaResourceModule?.name === resource?.name;
-    },
-  );
-
-  const currentModuleTemplate = findModuleTemplate(
-    moduleTemplates,
-    resource?.name,
-    resource?.channel || kymaResource?.spec?.channel,
-    resource?.version,
-  );
+  const showDetailsLink = hasDetailsLink(moduleResource);
 
   const { data: managerResourceState } = useGetManagerStatus(
     currentModuleTemplate?.spec?.manager,
   );
-
-  if (
-    moduleStatus &&
-    !moduleStatus.resource &&
-    currentModuleTemplate?.spec?.data
-  ) {
-    const moduleCr = currentModuleTemplate?.spec?.data;
-
-    moduleStatus.resource = {
-      kind: moduleCr.kind,
-      apiVersion: moduleCr.apiVersion,
-      metadata: {
-        name: moduleCr.metadata.name,
-        namespace: moduleCr.metadata.namespace,
-      },
-    };
-  }
 
   const moduleDocs =
     currentModuleTemplate?.spec?.info?.documentation ||
@@ -105,10 +82,6 @@ export const ModulesListRows = ({
     ];
 
   const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
-
-  const isChannelOverridden =
-    kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined;
-
   return [
     // Name
     <>
@@ -136,47 +109,31 @@ export const ModulesListRows = ({
           colorScheme="5"
           design="Set2"
         >
-          {moduleStatus.state}
+          {moduleStatus?.state}
         </Tag>
       )}
     </>,
     // Namespace
-    moduleStatus?.resource?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
+    currentModuleTemplate?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
     // Channel
-    <>
-      {moduleStatus?.channel
-        ? moduleStatus?.channel
-        : kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
-          kymaResource?.spec?.channel}
-      {isChannelOverridden ? (
-        <Tag
-          hideStateIcon
-          design="Set2"
-          colorScheme="5"
-          className="sap-margin-begin-tiny"
-        >
-          {t('kyma-modules.channel-overridden')}
-        </Tag>
-      ) : (
-        ''
-      )}
-    </>,
+    <>{currentModuleTemplate?.metadata?.channel ?? EMPTY_TEXT_PLACEHOLDER}</>,
     // Version
-    moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
+    currentModuleTemplate?.spec?.version || EMPTY_TEXT_PLACEHOLDER,
     // Module State
-    <ModuleStatus key="module-state" resource={moduleStatus} />,
+    <ModuleStatus
+      key="module-state"
+      resource={{
+        resource: moduleResource,
+      }}
+    />,
     // Installation State
     <StatusBadge
       key="installation-state"
       resourceKind="kymas"
-      type={resolveType(moduleStatus?.state ?? '')}
-      tooltipContent={moduleStatus?.message}
+      type={resolveType(managerResourceState.state ?? '')}
+      tooltipContent={managerResourceState?.message}
     >
-      {resolveInstallationStateName(
-        moduleStatus?.state,
-        !!currentModuleTemplate?.spec?.manager,
-        managerResourceState?.state,
-      )}
+      {managerResourceState?.state}
     </StatusBadge>,
     // Documentation
     moduleDocs ? (
