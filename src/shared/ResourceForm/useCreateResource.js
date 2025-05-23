@@ -85,6 +85,7 @@ export function useCreateResource({
                 midColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
+                  rawResourceTypeName: resource.kind,
                   namespaceId: resource.metadata.namespace,
                   apiGroup: group,
                   apiVersion: version,
@@ -99,6 +100,7 @@ export function useCreateResource({
                 endColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
+                  rawResourceTypeName: resource.kind,
                   namespaceId: resource.metadata.namespace,
                 },
               },

@@ -81,12 +81,14 @@ export const ModulesList = ({
     setLayoutColumn({
       startColumn: {
         resourceType: 'kymamodules',
+        rawResourceTypeName: 'Kyma',
       } as ColumnState,
       midColumn: null,
       endColumn: null,
       layout: 'TwoColumnsMidExpanded',
       showCreate: {
         resourceType: 'kymamodules',
+        rawResourceTypeName: 'Kyma',
         resourceUrl: resourceUrl,
       } as ShowCreate,
     });
@@ -156,6 +158,8 @@ export const ModulesList = ({
       resourceType: pluralize(
         findModuleStatus(kymaResource, resource.name)?.resource?.kind || '',
       ),
+      rawResourceTypeName: findModuleStatus(kymaResource, resource.name)
+        ?.resource?.kind,
       namespaceId:
         findModuleStatus(kymaResource, resource.name)?.resource?.metadata
           ?.namespace || '',
@@ -246,11 +250,13 @@ export const ModulesList = ({
     const { group, version } = extractApiGroupVersion(
       moduleStatus?.resource?.apiVersion,
     );
+
     setLayoutColumn({
       startColumn: {
         resourceType: hasExtension
           ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
           : moduleCrd?.metadata?.name,
+        rawResourceTypeName: moduleStatus?.resource?.kind,
         namespaceId: moduleStatus?.resource?.metadata.namespace || '',
         apiGroup: group,
         apiVersion: version,
@@ -259,6 +265,7 @@ export const ModulesList = ({
         resourceType: hasExtension
           ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
           : moduleCrd?.metadata?.name,
+        rawResourceTypeName: moduleStatus?.resource?.kind,
         resourceName: moduleStatus?.resource?.metadata?.name,
         namespaceId: moduleStatus?.resource?.metadata.namespace || '',
         apiGroup: group,

@@ -46,6 +46,7 @@ export function ClusterOverview() {
       layout: 'OneColumn',
       startColumn: {
         resourceType: 'Cluster',
+        rawResourceTypeName: 'Cluster',
       },
       midColumn: null,
       endColumn: null,

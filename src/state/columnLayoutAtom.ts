@@ -3,12 +3,14 @@ import { atom, RecoilState } from 'recoil';
 export type ColumnState = {
   resourceName: null | string;
   resourceType: null | string;
+  rawResourceTypeName?: null | string;
   namespaceId: null | string;
   apiGroup: null | string;
   apiVersion: null | string;
 };
 export type ShowCreate = {
   resourceType: null | string;
+  rawResourceTypeName?: null | string;
   namespaceId: null | string;
   resource?: null | object;
   resourceUrl?: null | string;

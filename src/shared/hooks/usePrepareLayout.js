@@ -109,6 +109,7 @@ export function usePrepareLayoutColumns({
           resourceName:
             resourceType === 'Namespaces' ? resourceName : undefined,
           resourceType,
+          rawResourceTypeName: resourceName ?? resourceType,
           namespaceId,
           apiGroup,
           apiVersion,
@@ -118,6 +119,7 @@ export function usePrepareLayoutColumns({
         showEdit: showEdit
           ? {
               resourceType,
+              rawResourceTypeName: resourceName ?? resourceType,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -134,6 +136,7 @@ export function usePrepareLayoutColumns({
         layout: layout,
         startColumn: {
           resourceType,
+          rawResourceTypeName: resourceName ?? resourceType,
           namespaceId,
           apiGroup,
           apiVersion,
@@ -142,6 +145,7 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName,
               resourceType,
+              rawResourceTypeName: resourceName ?? resourceType,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -151,18 +155,25 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName: crName,
               resourceType: resourceName,
+              rawResourceTypeName: resourceName ?? resourceType,
               namespaceId,
               apiGroup,
               apiVersion,
             }
           : null,
         showCreate: showCreate
-          ? { resourceType: resourceName, namespaceId, resource }
+          ? {
+              resourceType: resourceName,
+              rawResourceTypeName: resourceName,
+              namespaceId,
+              resource,
+            }
           : null,
         showEdit: showEdit
           ? {
               resourceName: crName,
               resourceType: resourceName,
+              rawResourceTypeName: resourceName ?? resourceType,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -176,6 +187,7 @@ export function usePrepareLayoutColumns({
       layout: layout,
       startColumn: {
         resourceType,
+        rawResourceTypeName: resourceName ?? resourceType,
         namespaceId,
         apiGroup,
         apiVersion,
@@ -185,16 +197,30 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName,
               resourceType,
+              rawResourceTypeName: resourceName ?? resourceType,
               namespaceId,
               apiGroup,
               apiVersion,
             }
           : null,
       endColumn: null,
-      showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
+      showCreate: showCreate
+        ? {
+            resourceType,
+            rawResourceTypeName: resourceName ?? resourceType,
+            namespaceId,
+            resource,
+          }
+        : null,
       showEdit: showEdit
         ? editColumn === 'startColumn'
-          ? { resourceType, namespaceId, apiGroup, apiVersion }
+          ? {
+              resourceType,
+              rawResourceTypeName: resourceName ?? resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
           : {
               resourceName,
               resourceType,

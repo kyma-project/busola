@@ -349,6 +349,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
+              rawResourceTypeName: resourceType,
               namespaceId: namespace,
               resource: activeResource,
             },
@@ -449,6 +450,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: layoutState?.midColumn.resourceName,
+              rawResourceTypeName: layoutState?.midColumn.resourceName,
               namespaceId: namespace,
             },
             showEdit: null,

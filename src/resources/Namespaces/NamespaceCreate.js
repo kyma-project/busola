@@ -130,6 +130,7 @@ export default function NamespaceCreate({
       showEdit: prevState.showEdit,
       startColumn: {
         resourceType: 'Namespace',
+        rawResourceTypeName: 'Namespace',
         resourceName: namespace.metadata?.name,
         apiGroup: '',
         apiVersion: 'v1',

@@ -369,6 +369,7 @@ export const GenericList = ({
                   selectedEntry?.metadata?.name ??
                   e.target.children[0].innerText,
                 resourceType: resourceType,
+                rawResourceTypeName: resourceType,
                 namespaceId: selectedEntry?.metadata?.namespace,
                 apiGroup: group,
                 apiVersion: version,
