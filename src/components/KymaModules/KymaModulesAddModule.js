@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -24,26 +24,6 @@ export default function KymaModulesAddModule(props) {
     moduleTemplates,
     initialUnchangedResource,
   } = useContext(KymaModuleContext);
-
-  const {
-    managed: managedModuleTemplates,
-    unmanaged: communityModuleTemplates,
-  } = useMemo(() => {
-    if (!moduleTemplates?.items) return { managed: [], unmanaged: [] };
-
-    const managed = [];
-    const unmanaged = [];
-
-    moduleTemplates.items.forEach(item => {
-      if (item.metadata?.labels?.['operator.kyma-project.io/managed-by']) {
-        managed.push(item);
-      } else {
-        unmanaged.push(item);
-      }
-    });
-
-    return { managed, unmanaged };
-  }, [moduleTemplates]);
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
