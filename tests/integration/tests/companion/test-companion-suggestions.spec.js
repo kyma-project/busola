@@ -15,7 +15,7 @@ context('Test Companion Initial Suggestions', () => {
     cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
       callCount++;
       req.reply({
-        delay: 500,
+        delay: 2000,
         body: {
           promptSuggestions: [
             `suggestion${callCount}.1`,

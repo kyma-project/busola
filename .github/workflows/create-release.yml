@@ -79,3 +79,37 @@ jobs:
         run: ./.github/scripts/publish_release.sh
     outputs:
       release_id: ${{ steps.create-draft.outputs.release_id }}
+
+  promote-to-busola-deploy:
+    name: Promote image versions to busola-deploy/dev
+    needs: create-release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.name != '' }}
+    steps:
+      # Checkout the target busola-deploy repository on the dev branch
+      - name: Checkout busola-deploy repo
+        uses: actions/checkout@v4
+        with:
+          repository: kyma/busola-deploy
+          github-server-url: 'https://github.tools.sap'
+          ref: dev
+          token: ${{ secrets.BUSOLA_DEPLOY_PAT }} # Needs write access
+
+      # Update the version part of the image tags in dev/main.tf
+      - name: Update image versions in main.tf
+        run: |
+          sed -i -E 's|(busola_backend_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
+          sed -i -E 's|(busola_web_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
+
+      # Open a pull request to the dev branch with the updated image versions
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
+          commit-message: "chore: promote busola images to ${{ github.event.inputs.name }}"
+          branch: promote-busola-images-${{ github.event.inputs.name }}
+          title: "chore: promote busola images to ${{ github.event.inputs.name }}"
+          labels: promote-to-dev-pending
+          body: |
+            This PR updates the Busola image versions in dev/main.tf to ${{ github.event.inputs.name }}.
+          base: dev

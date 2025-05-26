@@ -168,6 +168,7 @@ Cypress.Commands.add(
       clearSearch = true,
       checkIfResourceIsRemoved = true,
       selectSearchResult = false,
+      searchInPlainTableText = false,
     } = options;
 
     cy.wait(500)
@@ -183,7 +184,15 @@ Cypress.Commands.add(
         .click();
     }
 
-    cy.checkItemOnGenericListLink(resourceName);
+    if (searchInPlainTableText) {
+      //  TODO: Modules in tests are unmannaged and text is not in ui5-text component
+      cy.get('ui5-table-row')
+        .find('ui5-table-cell')
+        .contains(resourceName)
+        .should('be.visible');
+    } else {
+      cy.checkItemOnGenericListLink(resourceName);
+    }
 
     cy.get('ui5-button[data-testid="delete"]').click();
 
@@ -198,18 +207,18 @@ Cypress.Commands.add(
         cy.contains('ui5-toast', /deleted/).should('be.visible');
       }
 
-      if (clearSearch) {
-        cy.get('ui5-input[id="search-input"]:visible')
-          .find('input')
-          .wait(1000)
-          .clear();
-      }
-
       if (checkIfResourceIsRemoved) {
         cy.get('ui5-table')
           .contains(resourceName)
           .should('not.exist');
       }
+    }
+
+    if (clearSearch) {
+      cy.get('ui5-input[id="search-input"]:visible')
+        .find('input')
+        .wait(1000)
+        .clear();
     }
   },
 );
