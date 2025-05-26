@@ -381,7 +381,7 @@ export const GenericList = ({
       const link = `${linkTo(selectedEntry)}${
         enableColumnLayout
           ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
-              namespace === '-all-'
+              namespace === '-all-' && selectedEntry?.metadata?.namespace
                 ? `&resourceNamespace=${selectedEntry?.metadata?.namespace}`
                 : ''
             }`
