@@ -42,10 +42,12 @@ const ColumnWraper = ({
     apiGroup: '',
     apiVersion: 'v1',
     resourceName: resourceName,
+    isModule: true,
     resource:
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
+    rawResourceTypeName: 'Kyma',
   });
 
   let startColumnComponent = null;

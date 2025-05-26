@@ -80,14 +80,17 @@ export const ModulesList = ({
   const handleShowAddModule = () => {
     setLayoutColumn({
       startColumn: {
-        resourceType: 'kymamodules',
+        resourceType: 'kymas',
         rawResourceTypeName: 'Kyma',
+        namespaceId: 'kyma-system',
+        apiGroup: 'operator.kyma-project.io',
+        apiVersion: 'v1beta2',
       } as ColumnState,
       midColumn: null,
       endColumn: null,
       layout: 'TwoColumnsMidExpanded',
       showCreate: {
-        resourceType: 'kymamodules',
+        resourceType: 'kymas',
         rawResourceTypeName: 'Kyma',
         resourceUrl: resourceUrl,
       } as ShowCreate,

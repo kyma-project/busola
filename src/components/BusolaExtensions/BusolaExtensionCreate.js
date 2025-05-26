@@ -64,13 +64,13 @@ export default function BusolaExtensionCreate({
               startColumn: {
                 resourceName: null,
                 resourceType: 'Extensions',
-                rawResourceTypeName: 'Extensions',
+                rawResourceTypeName: 'ConfigMap',
                 namespaceId: 'kube-public',
               },
               midColumn: {
-                resourceName: crd.metadata.name,
+                resourceName: crd?.metadata?.name,
                 resourceType: 'Extensions',
-                rawResourceTypeName: 'Extensions',
+                rawResourceTypeName: 'ConfigMap',
                 namespaceId: 'kube-public',
               },
               endColumn: null,

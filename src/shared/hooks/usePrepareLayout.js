@@ -90,6 +90,8 @@ export function usePrepareLayoutColumns({
   isCustomResource,
   crName,
   resource,
+  isModule,
+  rawResourceTypeName,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
@@ -102,6 +104,48 @@ export function usePrepareLayoutColumns({
 
   const newLayoutState = useMemo(() => {
     const isAllNamespaces = namespaceId === '-all-';
+    console.log(
+      'TEST-OneColumn',
+      resourceName,
+      resourceType,
+      resource,
+      rawResourceTypeName,
+    );
+    if (isModule) {
+      return {
+        layout: layout || 'OneColumn',
+        startColumn: {
+          resourceType: 'kymas',
+          rawResourceTypeName: 'Kyma',
+          namespaceId: 'kyma-system',
+          apiGroup: 'operator.kyma-project.io',
+          apiVersion: 'v1beta2',
+        },
+        midColumn: resourceName
+          ? {
+              resourceName,
+              resourceType,
+              namespaceId,
+              apiGroup,
+              apiVersion,
+            }
+          : null,
+        showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
+        showEdit: showEdit
+          ? editColumn === 'startColumn'
+            ? { resourceType, namespaceId, apiGroup, apiVersion }
+            : {
+                resourceName,
+                resourceType,
+                namespaceId,
+                apiGroup,
+                apiVersion,
+                resource,
+              }
+          : null,
+      };
+    }
+
     if (!layout || layout === 'OneColumn' || isAllNamespaces) {
       return {
         layout: 'OneColumn',
@@ -109,7 +153,7 @@ export function usePrepareLayoutColumns({
           resourceName:
             resourceType === 'Namespaces' ? resourceName : undefined,
           resourceType,
-          rawResourceTypeName: resourceName ?? resourceType,
+          rawResourceTypeName,
           namespaceId,
           apiGroup,
           apiVersion,
@@ -119,7 +163,7 @@ export function usePrepareLayoutColumns({
         showEdit: showEdit
           ? {
               resourceType,
-              rawResourceTypeName: resourceName ?? resourceType,
+              rawResourceTypeName,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -136,7 +180,7 @@ export function usePrepareLayoutColumns({
         layout: layout,
         startColumn: {
           resourceType,
-          rawResourceTypeName: resourceName ?? resourceType,
+          rawResourceTypeName,
           namespaceId,
           apiGroup,
           apiVersion,
@@ -145,7 +189,7 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName,
               resourceType,
-              rawResourceTypeName: resourceName ?? resourceType,
+              rawResourceTypeName,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -155,7 +199,7 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName: crName,
               resourceType: resourceName,
-              rawResourceTypeName: resourceName ?? resourceType,
+              rawResourceTypeName: resourceName ?? rawResourceTypeName,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -173,7 +217,7 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName: crName,
               resourceType: resourceName,
-              rawResourceTypeName: resourceName ?? resourceType,
+              rawResourceTypeName: resourceName ?? rawResourceTypeName,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -187,7 +231,7 @@ export function usePrepareLayoutColumns({
       layout: layout,
       startColumn: {
         resourceType,
-        rawResourceTypeName: resourceName ?? resourceType,
+        rawResourceTypeName,
         namespaceId,
         apiGroup,
         apiVersion,
@@ -197,7 +241,7 @@ export function usePrepareLayoutColumns({
           ? {
               resourceName,
               resourceType,
-              rawResourceTypeName: resourceName ?? resourceType,
+              rawResourceTypeName,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -207,7 +251,7 @@ export function usePrepareLayoutColumns({
       showCreate: showCreate
         ? {
             resourceType,
-            rawResourceTypeName: resourceName ?? resourceType,
+            rawResourceTypeName,
             namespaceId,
             resource,
           }
@@ -216,7 +260,7 @@ export function usePrepareLayoutColumns({
         ? editColumn === 'startColumn'
           ? {
               resourceType,
-              rawResourceTypeName: resourceName ?? resourceType,
+              rawResourceTypeName,
               namespaceId,
               apiGroup,
               apiVersion,
@@ -244,6 +288,7 @@ export function usePrepareLayoutColumns({
     isCustomResource,
     crName,
     resource,
+    isModule,
   ]);
 
   useEffect(() => {

@@ -60,6 +60,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
+    rawResourceTypeName: props.resourceType,
   });
 
   const defaultColumn =
