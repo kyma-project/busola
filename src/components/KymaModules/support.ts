@@ -87,17 +87,22 @@ export type ModuleTemplateListType = {
   items: ModuleTemplateType[];
 };
 
-export const getResourcePath = (resource: KymaResourceType) => {
+export const getResourcePath = (resource: any) => {
   if (!resource) return '';
-  return resource?.metadata?.namespace
-    ? `/apis/${resource?.apiVersion}/namespaces/${
-        resource?.metadata?.namespace
-      }/${pluralize(resource?.kind || '').toLowerCase()}/${
-        resource?.metadata?.name
-      }`
-    : `/apis/${resource?.apiVersion}/${pluralize(
-        resource?.kind || '',
-      ).toLowerCase()}/${resource?.metadata?.name}`;
+
+  const apiVersion =
+    resource?.apiVersion || `${resource?.group}/${resource?.version}`;
+  const resourceName = resource?.metadata?.name || resource?.name;
+  const resourceNamespace =
+    resource?.metadata?.namespace || resource?.namespace;
+
+  return resourceNamespace
+    ? `/apis/${apiVersion}/namespaces/${resourceNamespace}/${pluralize(
+        resource.kind,
+      ).toLowerCase()}/${resourceName}`
+    : `/apis/${apiVersion}/${pluralize(
+        resource.kind || '',
+      ).toLowerCase()}/${resourceName}`;
 };
 
 export const findModuleStatus = (
@@ -208,11 +213,13 @@ export const resolveInstallationStateName = (
   return state || ModuleTemplateStatus.Unknown;
 };
 
-export const splitModuleTemplates = moduleTemplates => {
+export const splitModuleTemplates = (
+  moduleTemplates: ModuleTemplateListType,
+) => {
   if (!moduleTemplates?.items) return { managed: [], unmanaged: [] };
 
-  const managed = { items: [] };
-  const unmanaged = { items: [] };
+  const managed: ModuleTemplateListType = { items: [] };
+  const unmanaged: ModuleTemplateListType = { items: [] };
 
   moduleTemplates.items.forEach(item => {
     if (item.metadata?.labels?.['operator.kyma-project.io/managed-by']) {

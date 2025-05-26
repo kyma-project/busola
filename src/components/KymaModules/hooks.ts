@@ -5,9 +5,10 @@ import {
   getResourcePath,
   KymaResourceType,
   ModuleManagerType,
+  ModuleTemplateListType,
   ModuleTemplateStatus,
+  ModuleTemplateType,
 } from './support';
-import pluralize from 'pluralize';
 import { isEqual } from 'lodash';
 
 export function useModuleStatus(resource: KymaResourceType) {
@@ -91,13 +92,17 @@ export function useGetAllModulesStatuses(modules: any[]) {
   return { data, loading, error };
 }
 
-export const useGetManagers = moduleTemplates => {
-  const [managerCache, setManagerCache] = useState({});
-  const [error, setError] = useState(null);
+export const useFetchModuleData = (
+  moduleTemplates: ModuleTemplateListType,
+  selector: Function,
+  label: string,
+) => {
+  const [data, setData] = useState<Record<string, any>>({});
+  const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(true);
   const fetch = useFetch();
 
-  const prevTemplateNamesRef = useRef([]);
+  const prevTemplateNamesRef = useRef<string[]>([]);
 
   useEffect(() => {
     const items = moduleTemplates?.items ?? [];
@@ -105,66 +110,90 @@ export const useGetManagers = moduleTemplates => {
     const currentNames = items.map(m => m?.metadata?.name).sort();
 
     if (isEqual(prevTemplateNamesRef.current, currentNames)) {
-      return; // No need to refetch
+      return;
     }
 
     prevTemplateNamesRef.current = currentNames;
 
     if (!items.length) {
-      setManagerCache({});
+      setData({});
       setLoading(false);
       return;
     }
 
-    const fetchManagers = async () => {
+    const fetchAll = async () => {
       setLoading(true);
-      const cache = {};
+      setError(null);
+      const cache: Record<string, any> = {};
+      const errors: string[] = [];
 
-      await Promise.all(
+      const results = await Promise.allSettled(
         items.map(async module => {
           const name = module?.metadata?.name;
-          const manager = module?.spec?.manager;
-          if (!name || !manager) return;
+          const resource = selector(module);
+
+          if (!name || !resource) {
+            return { name, data: null };
+          }
 
           try {
-            const url = `/apis/${manager.group}/v1/namespaces/${
-              module.metadata.namespace
-            }/${pluralize(manager.kind).toLowerCase()}/${manager.name}`;
+            const url = getResourcePath(resource);
+
             const response = await fetch({ relativeUrl: url });
             const data = await response.json();
-            if (data) {
-              cache[name] = data;
-            }
+
+            return { name, data };
           } catch (e) {
-            console.error(e);
-            setError(
-              `Error fetching manager for module "${name}": ${e.message}`,
+            errors.push(
+              `Error fetching ${label} for module "${name}": ${
+                e instanceof Error ? e.message : 'Unknown error'
+              }`,
             );
+            return { name, data: null };
           }
         }),
       );
 
-      setManagerCache(cache);
+      for (const result of results) {
+        if (result.status === 'fulfilled') {
+          const { name, data } = result.value || {};
+          if (name && data) {
+            cache[name] = data;
+          }
+        }
+      }
+
+      setData(cache);
+      if (errors.length) setError(errors.join('\n'));
       setLoading(false);
     };
 
-    fetchManagers();
+    fetchAll();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moduleTemplates]);
 
-  const getManager = useCallback(name => managerCache[name], [managerCache]);
+  const getItem = useCallback((name: string) => data[name], [data]);
 
-  return { getManager, loading, error, managerCacheRef: managerCache };
+  return { loading, error, data, getItem };
 };
 
-export const useGetInstalledModules = (moduleTemplates, skip) => {
-  const { managerCacheRef, loading, error } = useGetManagers(moduleTemplates);
+export const useGetInstalledModules = (
+  moduleTemplates: ModuleTemplateListType,
+  skip?: boolean,
+) => {
+  const { data: managers, loading, error } = useFetchModuleData(
+    moduleTemplates,
+    (module: ModuleTemplateType) => module?.spec?.manager ?? null,
+    'manager',
+  );
 
   if (skip || !moduleTemplates) {
     return { installed: [], loading: true, error: null };
   }
 
   const filtered = moduleTemplates.items?.filter(
-    module => !!managerCacheRef[module.metadata.name],
+    module => !!managers[module.metadata.name],
   );
 
   const installed =
@@ -233,7 +262,7 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
   return { data, error };
 }
 
-export const useGetModuleResource = resource => {
+export const useGetModuleResource = (resource: any) => {
   const fetch = useFetch();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);

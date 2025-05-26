@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
-import { findModuleTemplate, ModuleTemplateListType } from '../support';
+import { ModuleTemplateListType, ModuleTemplateType } from '../support';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import {
@@ -15,10 +15,11 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
 import { CommunityModulesListRows } from './CommunityModulesListRows';
+import { useFetchModuleData } from '../hooks';
 
 type ModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
-  selectedModules: any[]; //TODO
+  selectedModules: any[];
   modulesLoading: boolean;
   namespaced: boolean;
   setOpenedModuleIndex: React.Dispatch<
@@ -44,6 +45,11 @@ export const CommunityModulesList = ({
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const { getItem: getModuleResource } = useFetchModuleData(
+    moduleTemplates,
+    (module: ModuleTemplateType) => module?.spec?.data ?? null,
+    'resource',
+  );
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -74,22 +80,23 @@ export const CommunityModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
-  const hasDetailsLink = moduleResource => {
-    //TODO where to put it
-    const moduleStatus = moduleResource?.status?.state; //TODO??????????????????????
+  const hasDetailsLink = (moduleResource: any) => {
+    const moduleStatus = moduleResource?.status;
     const isDeletionFailed = moduleStatus?.state === 'Warning';
     const isError = moduleStatus?.state === 'Error';
 
     const hasResource = !!moduleResource;
 
-    return isDeletionFailed || !isError || hasResource;
+    return hasResource && (isDeletionFailed || !isError);
   };
 
   const customColumnLayout = (resource: { name: string }) => {
+    const moduleResource = getModuleResource(resource.name);
+
     return {
       resourceName: resource?.name,
-      resourceType: pluralize(resource.name?.kind || ''),
-      namespaceId: resource?.metadata?.namespace || '',
+      resourceType: pluralize(moduleResource?.kind || ''),
+      namespaceId: moduleResource?.metadata?.namespace || '',
     };
   };
 
@@ -127,32 +134,26 @@ export const CommunityModulesList = ({
       };
     },
   ) => {
+    const moduleResource = getModuleResource(moduleName);
+
     setOpenedModuleIndex(
-      moduleTemplates?.items?.findIndex(entry => entry.name === moduleName),
+      installed?.findIndex(entry => entry.name === moduleName),
     );
 
     setSelectedEntry?.(moduleName);
 
-    // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
     if (!moduleStatus.resource) {
-      const connectedModule = findModuleTemplate(
-        moduleTemplates,
-        moduleName,
-        moduleStatus.channel,
-        moduleStatus.version,
-      );
-      const moduleCr = connectedModule?.spec?.data;
       moduleStatus.resource = {
-        kind: moduleCr.kind,
-        apiVersion: moduleCr.apiVersion,
+        kind: moduleResource.kind,
+        apiVersion: moduleResource.apiVersion,
         metadata: {
-          name: moduleCr.metadata.name,
-          namespace: moduleCr.metadata.namespace,
+          name: moduleResource.metadata.name,
+          namespace: moduleResource.metadata.namespace,
         },
       };
     }
 
-    const skipRedirect = !hasDetailsLink(moduleStatus); //TODO
+    const skipRedirect = !hasDetailsLink(moduleResource);
 
     if (skipRedirect) {
       return;
