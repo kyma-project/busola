@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Create, ResourceDescription } from 'components/KymaModules';
@@ -10,9 +10,11 @@ import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate'
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { CommunityModulesList } from './components/CommunityModulesList';
+import { splitModuleTemplates } from './support';
 
 export default function KymaModulesList({ namespaced }) {
   const { t } = useTranslation();
+  const [selectedEntry, setSelectedEntry] = useState(null);
 
   const {
     resourceName,
@@ -25,28 +27,14 @@ export default function KymaModulesList({ namespaced }) {
     setOpenedModuleIndex,
     handleResourceDelete,
     installedCommunityModules,
+    communityModulesLoading,
   } = useContext(KymaModuleContext);
   const { isProtected, protectedResourceWarning } = useProtectedResources();
 
   const {
     managed: managedModuleTemplates,
     unmanaged: communityModuleTemplates,
-  } = useMemo(() => {
-    if (!moduleTemplates?.items) return { managed: [], unmanaged: [] };
-
-    const managed = { items: [] };
-    const unmanaged = { items: [] };
-
-    moduleTemplates.items.forEach(item => {
-      if (item.metadata?.labels?.['operator.kyma-project.io/managed-by']) {
-        managed.items.push(item);
-      } else {
-        unmanaged.items.push(item);
-      }
-    });
-
-    return { managed, unmanaged };
-  }, [moduleTemplates]);
+  } = splitModuleTemplates(moduleTemplates);
 
   if (moduleTemplatesLoading || kymaResourceLoading) {
     return <Spinner />;
@@ -73,6 +61,8 @@ export default function KymaModulesList({ namespaced }) {
               resourceUrl={resourceUrl}
               setOpenedModuleIndex={setOpenedModuleIndex}
               handleResourceDelete={handleResourceDelete}
+              customSelectedEntry={selectedEntry}
+              setSelectedEntry={setSelectedEntry}
             />
           )}
           {kymaResource && (
@@ -80,9 +70,12 @@ export default function KymaModulesList({ namespaced }) {
               key="kyma-community-modules-list"
               moduleTemplates={communityModuleTemplates}
               selectedModules={installedCommunityModules}
+              modulesLoading={communityModulesLoading}
               namespaced={namespaced}
               setOpenedModuleIndex={setOpenedModuleIndex}
               handleResourceDelete={handleResourceDelete}
+              customSelectedEntry={selectedEntry}
+              setSelectedEntry={setSelectedEntry}
             />
           )}
         </>

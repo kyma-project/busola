@@ -45,6 +45,8 @@ type ModulesListProps = {
     React.SetStateAction<number | undefined>
   >;
   handleResourceDelete: (resourceData: any) => void;
+  customSelectedEntry?: string;
+  setSelectedEntry?: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export const ModulesList = ({
@@ -57,6 +59,8 @@ export const ModulesList = ({
   resourceUrl,
   setOpenedModuleIndex,
   handleResourceDelete,
+  customSelectedEntry,
+  setSelectedEntry,
 }: ModulesListProps) => {
   const { t } = useTranslation();
   const { data: kymaExt } = useGetList(
@@ -199,6 +203,8 @@ export const ModulesList = ({
     setOpenedModuleIndex(
       selectedModules.findIndex(entry => entry.name === moduleName),
     );
+
+    setSelectedEntry?.(moduleName);
 
     // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
     if (!moduleStatus.resource) {
@@ -343,6 +349,7 @@ export const ModulesList = ({
             onClick: handleShowAddModule,
           } as any
         }
+        customSelectedEntry={customSelectedEntry}
       />
     </React.Fragment>
   );

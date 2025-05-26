@@ -3,9 +3,8 @@ import {
   ModuleTemplateListType,
   ModuleTemplateStatus,
   ModuleTemplateType,
-  useGetManagerStatus,
-  useGetModuleResource,
 } from '../support';
+import { useGetManagerStatus, useGetModuleResource } from '../hooks';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
@@ -56,7 +55,9 @@ export const CommunityModulesListRows = ({
     [moduleTemplates, resource.name],
   );
 
-  const moduleResource = useGetModuleResource(currentModuleTemplate?.spec.data);
+  const { data: moduleResource } = useGetModuleResource(
+    currentModuleTemplate?.spec.data,
+  );
   const moduleStatus = moduleResource?.status;
 
   const checkBeta = (

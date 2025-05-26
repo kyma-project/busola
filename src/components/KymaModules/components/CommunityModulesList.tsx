@@ -1,14 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
-import jsyaml from 'js-yaml';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
-import {
-  findModuleTemplate,
-  ModuleTemplateListType,
-  useGetInstalledModules,
-} from '../support';
+import { findModuleTemplate, ModuleTemplateListType } from '../support';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import {
@@ -17,34 +12,32 @@ import {
   ShowCreate,
 } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
 import { CommunityModulesListRows } from './CommunityModulesListRows';
 
-type CustomResourceDefinitionsType = {
-  items: {
-    metadata?: { name: string };
-    spec?: { names?: { kind?: string } };
-  }[];
-};
-
 type ModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
   selectedModules: any[]; //TODO
+  modulesLoading: boolean;
   namespaced: boolean;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
   >;
   handleResourceDelete: (resourceData: any) => void;
+  customSelectedEntry?: string;
+  setSelectedEntry?: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export const CommunityModulesList = ({
   moduleTemplates,
   selectedModules: installed,
+  modulesLoading,
   namespaced,
   setOpenedModuleIndex,
   handleResourceDelete,
+  customSelectedEntry,
+  setSelectedEntry,
 }: ModulesListProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -106,14 +99,14 @@ export const CommunityModulesList = ({
       tooltip: () => t('common.buttons.delete'),
       icon: 'delete',
       disabledHandler: (resource: { name: string }) => {
-        const index = moduleTemplates?.items?.findIndex(module => {
-          return module.metadata.name === resource.name; //TODO have to check if resource is being deleted & if its installed
+        const index = installed?.findIndex(module => {
+          return module.name === resource.name; //TODO have to check if resource is being deleted
         });
         return index < 0;
       },
       handler: (resource: { name: string }) => {
-        const index = moduleTemplates?.items?.findIndex(module => {
-          return module.metadata.name === resource.name; //TODO
+        const index = installed?.findIndex(module => {
+          return module.name === resource.name; //TODO
         });
         setOpenedModuleIndex(index);
         handleResourceDelete({});
@@ -137,6 +130,8 @@ export const CommunityModulesList = ({
     setOpenedModuleIndex(
       moduleTemplates?.items?.findIndex(entry => entry.name === moduleName),
     );
+
+    setSelectedEntry?.(moduleName);
 
     // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
     if (!moduleStatus.resource) {
@@ -222,6 +217,7 @@ export const CommunityModulesList = ({
         enableColumnLayout
         hasDetailsView
         entries={installed ?? []}
+        serverDataLoading={modulesLoading}
         headerRenderer={headerRenderer}
         rowRenderer={resource =>
           CommunityModulesListRows({
@@ -252,6 +248,7 @@ export const CommunityModulesList = ({
             onClick: handleShowAddModule,
           } as any
         }
+        customSelectedEntry={customSelectedEntry}
       />
     </React.Fragment>
   );

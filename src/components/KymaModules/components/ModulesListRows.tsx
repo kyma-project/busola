@@ -7,8 +7,8 @@ import {
   ModuleTemplateStatus,
   ModuleTemplateType,
   resolveInstallationStateName,
-  useGetManagerStatus,
 } from '../support';
+import { useGetManagerStatus } from '../hooks';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
