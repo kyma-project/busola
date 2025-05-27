@@ -19,7 +19,7 @@ const isARequiredFeatureDisabled = (
   node: NavNode,
   configFeatures: ConfigFeatureList,
 ) => {
-  return node.requiredFeatures.find(
+  return node.requiredFeatures?.find(
     resourceRequiredFeatureKey =>
       configFeatures[resourceRequiredFeatureKey]?.isEnabled === false,
   );

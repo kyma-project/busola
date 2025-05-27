@@ -1,41 +1,29 @@
-import { atom, useRecoilValue, useSetRecoilState } from 'recoil';
+import { atom, selector } from 'recoil';
 import { getFetchFn } from './utils/getFetchFn';
-import { useEffect, useState } from 'react';
 import { clusterState } from './clusterAtom';
 
-export async function useGetKymaResources() {
-  const setKymaResources = useSetRecoilState(kymaResourcesAtom);
-  const [fetched, setFetched] = useState(false);
-  const cluster = useRecoilValue(clusterState);
+const kymaResourcesQuery = selector({
+  key: 'kymaResourcesQuery',
+  get: async ({ get }) => {
+    // We need to track if cluster changes
+    const _cluster = get(clusterState); // eslint-disable-line @typescript-eslint/no-unused-vars
+    const fetchFn = getFetchFn(get);
 
-  let kymas;
-  const fetchFn = getFetchFn(useRecoilValue);
+    if (!fetchFn) return null;
 
-  useEffect(() => {
-    setFetched(false);
-  }, [cluster?.name]);
-
-  if (fetched || !fetchFn) {
-    return;
-  }
-
-  if (fetchFn) {
     try {
       const response = await fetchFn({
         relativeUrl:
           '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
       });
-      kymas = await response.json();
+      return await response.json();
     } catch (e) {
-      console.warn('Cannot load cluster params from the target cluster: ', e);
-    } finally {
-      setFetched(true);
+      return null;
     }
-  }
-  setKymaResources(kymas);
-}
+  },
+});
 
 export const kymaResourcesAtom = atom({
   key: 'kymaResourcesAtom',
-  default: null,
+  default: kymaResourcesQuery,
 });

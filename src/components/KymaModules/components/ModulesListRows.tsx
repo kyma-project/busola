@@ -4,7 +4,10 @@ import {
   findModuleTemplate,
   KymaResourceType,
   ModuleTemplateListType,
+  ModuleTemplateStatus,
   ModuleTemplateType,
+  resolveInstallationStateName,
+  useGetManagerStatus,
 } from '../support';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
@@ -74,6 +77,10 @@ export const ModulesListRows = ({
     resource?.version,
   );
 
+  const { data: managerResourceState } = useGetManagerStatus(
+    currentModuleTemplate?.spec?.manager,
+  );
+
   if (
     moduleStatus &&
     !moduleStatus.resource &&
@@ -99,7 +106,7 @@ export const ModulesListRows = ({
 
   const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
 
-  const isChannelOverriden =
+  const isChannelOverridden =
     kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined;
 
   return [
@@ -122,6 +129,16 @@ export const ModulesListRows = ({
           {t('kyma-modules.beta')}
         </Tag>
       ) : null}
+      {moduleStatus?.state === ModuleTemplateStatus.Unmanaged && (
+        <Tag
+          className="sap-margin-begin-tiny"
+          hideStateIcon
+          colorScheme="5"
+          design="Set2"
+        >
+          {moduleStatus.state}
+        </Tag>
+      )}
     </>,
     // Namespace
     moduleStatus?.resource?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
@@ -131,7 +148,7 @@ export const ModulesListRows = ({
         ? moduleStatus?.channel
         : kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
           kymaResource?.spec?.channel}
-      {isChannelOverriden ? (
+      {isChannelOverridden ? (
         <Tag
           hideStateIcon
           design="Set2"
@@ -155,7 +172,11 @@ export const ModulesListRows = ({
       type={resolveType(moduleStatus?.state ?? '')}
       tooltipContent={moduleStatus?.message}
     >
-      {moduleStatus?.state || 'Unknown'}
+      {resolveInstallationStateName(
+        moduleStatus?.state,
+        !!currentModuleTemplate?.spec?.manager,
+        managerResourceState,
+      )}
     </StatusBadge>,
     // Documentation
     moduleDocs ? (

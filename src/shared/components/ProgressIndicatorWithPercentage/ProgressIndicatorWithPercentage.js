@@ -32,8 +32,10 @@ export const ProgressIndicatorWithPercentage = ({
     }
   };
 
+  const tooltipProps = { ...tooltip, style: { width: '100%' } };
+
   return (
-    <TooltipWrapper tooltipProps={tooltip}>
+    <TooltipWrapper tooltipProps={tooltipProps}>
       <div className="progress-indicator-percentage">
         {rightTitle && (
           <p className="progress-indicator-percentage__percents">

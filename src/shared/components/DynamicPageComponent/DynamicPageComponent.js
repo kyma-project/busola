@@ -21,8 +21,8 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
 import { useNavigate, useSearchParams } from 'react-router';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -119,17 +119,17 @@ export const DynamicPageComponent = ({
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { navigateSafely } = useFormNavigation();
   const [searchParams] = useSearchParams();
-  const showEdit = searchParams.get('showEdit');
   const editColumn = searchParams.get('editColumn');
-  const currColumnInfo = layoutColumn[layoutNumber] ?? layoutColumn.startColumn;
 
-  const [selectedSectionIdState, setSelectedSectionIdState] = useState(
-    showEdit &&
-      currColumnInfo?.resourceName === layoutColumn?.showEdit?.resourceName
-      ? 'edit'
-      : 'view',
+  const [selectedTab, setSelectedTab] = useState(
+    layoutColumn?.showEdit ? 'edit' : 'view',
   );
+
+  useEffect(() => {
+    setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
+  }, [layoutColumn]);
 
   const dynamicPageRef = useRef(null);
   const tabContainerRef = useRef(null);
@@ -137,10 +137,6 @@ export const DynamicPageComponent = ({
     dynamicPageRef,
     tabContainerRef,
   );
-
-  useEffect(() => {
-    if (showEdit) setSelectedSectionIdState('edit');
-  }, [showEdit]);
 
   const handleColumnClose = () => {
     layoutNumber === 'midColumn'
@@ -160,7 +156,10 @@ export const DynamicPageComponent = ({
         });
 
     if (layoutCloseUrl) {
-      navigate(layoutCloseUrl + (editColumn ? `?showEdit=${showEdit}` : ''));
+      navigate(
+        layoutCloseUrl +
+          (editColumn ? `?showEdit=${!!layoutColumn.showEdit}` : ''),
+      );
       return;
     }
 
@@ -256,13 +255,7 @@ export const DynamicPageComponent = ({
                 design="Transparent"
                 icon="decline"
                 onClick={() => {
-                  handleActionIfFormOpen(
-                    isResourceEdited,
-                    setIsResourceEdited,
-                    isFormOpen,
-                    setIsFormOpen,
-                    () => handleColumnClose(),
-                  );
+                  navigateSafely(() => handleColumnClose());
                 }}
               />
             </>
@@ -356,83 +349,65 @@ export const DynamicPageComponent = ({
                 isFormOpen,
                 setIsFormOpen,
               );
-              setSelectedSectionIdState(e.detail.tab.getAttribute('data-mode'));
+              setSelectedTab(e.detail.tab.getAttribute('data-mode'));
               return;
             }
             if (isFormOpen.formOpen) {
               e.preventDefault();
             }
-            if (
-              showEdit &&
-              currColumnInfo?.resourceName !==
-                layoutColumn?.showEdit?.resourceName
-            ) {
-              return;
-            }
 
             const newTabName = e.detail.tab.getAttribute('data-mode');
-            handleActionIfFormOpen(
-              isResourceEdited,
-              setIsResourceEdited,
-              isFormOpen,
-              setIsFormOpen,
-              () => {
-                setSelectedSectionIdState(newTabName);
-                setIsResourceEdited({
-                  isEdited: false,
-                });
+            navigateSafely(() => {
+              setSelectedTab(newTabName);
 
-                if (newTabName === 'edit') {
-                  const params = new URLSearchParams();
-                  if (layoutColumn.layout !== 'OneColumn') {
-                    params.set('layout', layoutColumn.layout);
-                    if (title === 'Modules') {
-                      params.set('editColumn', 'startColumn');
-                    }
+              if (newTabName === 'edit') {
+                const params = new URLSearchParams();
+                if (layoutColumn.layout !== 'OneColumn') {
+                  params.set('layout', layoutColumn.layout);
+                  if (title === 'Modules') {
+                    params.set('editColumn', 'startColumn');
                   }
-                  params.set('showEdit', 'true');
-
-                  setLayoutColumn({
-                    ...layoutColumn,
-                    showEdit: {
-                      ...currColumnInfo,
-                      resource: null,
-                    },
-                  });
-                  setIsFormOpen({ formOpen: true });
-                  navigate(`${window.location.pathname}?${params.toString()}`);
-                } else {
-                  setLayoutColumn({
-                    ...layoutColumn,
-                    showEdit: null,
-                  });
-                  navigate(
-                    `${window.location.pathname}${
-                      layoutColumn.layout === 'OneColumn'
-                        ? ''
-                        : '?layout=' + layoutColumn.layout
-                    }`,
-                  );
                 }
-              },
-            );
+                params.set('showEdit', 'true');
+
+                setLayoutColumn({
+                  ...layoutColumn,
+                  showEdit: {
+                    resource: null,
+                  },
+                });
+                navigate(`${window.location.pathname}?${params.toString()}`);
+              } else {
+                setLayoutColumn({
+                  ...layoutColumn,
+                  showEdit: null,
+                });
+                navigate(
+                  `${window.location.pathname}${
+                    layoutColumn.layout === 'OneColumn'
+                      ? ''
+                      : '?layout=' + layoutColumn.layout
+                  }`,
+                );
+              }
+            });
           }}
         >
           <Tab
             data-mode="view"
             text={t('common.tabs.view')}
-            selected={selectedSectionIdState === 'view'}
+            selected={selectedTab === 'view'}
           ></Tab>
           <Tab
             data-mode="edit"
             text={showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')}
-            selected={selectedSectionIdState === 'edit'}
+            selected={selectedTab === 'edit'}
           ></Tab>
         </TabContainer>
 
-        {selectedSectionIdState === 'view' && content}
+        {selectedTab === 'view' && content}
 
-        {selectedSectionIdState === 'edit' &&
+        {selectedTab === 'edit' &&
           inlineEditForm(headerHeight + tabContainerHeight)}
       </DynamicPage>
     );

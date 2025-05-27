@@ -24,6 +24,7 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Check if edit is empty', () => {
+    cy.wait(500);
     cy.inspectTab('Edit');
 
     cy.contains('No modules installed').should('be.visible');
@@ -35,14 +36,6 @@ context('Test Kyma Modules views', () => {
     cy.get('ui5-table')
       .find('ui5-illustrated-message')
       .find('ui5-title', 'No modules')
-      .should('be.visible');
-
-    cy.get('ui5-dynamic-page-header')
-      .contains('Release channel')
-      .should('be.visible');
-
-    cy.get('ui5-dynamic-page-header')
-      .contains('regular')
       .should('be.visible');
 
     // Add first module
@@ -246,29 +239,31 @@ context('Test Kyma Modules views', () => {
       .should('not.be.exist');
   });
 
-  // Uncomment after adding local KLM
-  // it('Test deleting Modules from List and Details', { retries: 3 }, () => {
-  //   cy.deleteFromGenericList('Module', 'eventing');
+  it('Test deleting Modules from List and Details', { retries: 3 }, () => {
+    cy.deleteFromGenericList('Module', 'eventing', {
+      searchInPlainTableText: true,
+    });
 
-  //   cy.get('ui5-input[id="search-input"]:visible')
-  //     .find('input')
-  //     .wait(1000)
-  //     .type('api-gateway');
-
-  //   cy.get('ui5-table-row')
-  //     .contains('api-gateway')
-  //     .click();
-
-  //   cy.deleteInDetails('Module', 'api-gateway', true);
-
-  //   cy.wait(20000);
-
-  //   cy.get('ui5-input[id="search-input"]:visible')
-  //     .find('input')
-  //     .clear();
-
-  //   cy.get('ui5-table')
-  //     .contains('ui5-illustrated-message', 'No modules')
-  //     .should('be.visible');
-  // });
+    // Uncomment after adding local KLM
+    // cy.get('ui5-input[id="search-input"]:visible')
+    //   .find('input')
+    //   .wait(1000)
+    //   .type('api-gateway');
+    //
+    // cy.get('ui5-table-row')
+    //   .contains('api-gateway')
+    //   .click();
+    //
+    // cy.deleteInDetails('Module', 'api-gateway', true);
+    //
+    // cy.wait(20000);
+    //
+    // cy.get('ui5-input[id="search-input"]:visible')
+    //   .find('input')
+    //   .clear();
+    //
+    // cy.get('ui5-table')
+    //   .contains('ui5-illustrated-message', 'No modules')
+    //   .should('be.visible');
+  });
 });

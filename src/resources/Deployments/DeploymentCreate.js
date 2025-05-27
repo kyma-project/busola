@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -12,6 +12,8 @@ import {
   createDeploymentTemplate,
   createPresets,
 } from './templates';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
@@ -33,9 +35,28 @@ export default function DeploymentCreate({
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
-  const [initialUnchangedResource] = useState(initialDeployment);
-  const [initialResource] = useState(
+  const [initialResource, setInitialResource] = useState(
     initialDeployment || createDeploymentTemplate(namespace),
+  );
+  const layoutState = useRecoilValue(columnLayoutState);
+
+  useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
+    setDeployment(
+      initialDeployment
+        ? _.cloneDeep(initialDeployment)
+        : createDeploymentTemplate(namespace),
+    );
+    setInitialResource(
+      initialDeployment || createDeploymentTemplate(namespace),
+    );
+  }, [initialDeployment, namespace, layoutState?.showEdit?.resource]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
   );
 
   const {
@@ -44,7 +65,7 @@ export default function DeploymentCreate({
     setSidecarEnabled,
     setIsChanged,
   } = useSidecar({
-    initialRes: initialUnchangedResource,
+    initialRes: initialResource,
     res: deployment,
     setRes: setDeployment,
     path: '$.spec.template.metadata.labels',
@@ -79,14 +100,14 @@ export default function DeploymentCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialUnchangedResource && createPresets(namespace, t)}
+      presets={!isEdit && createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
       }}
       // create modal on a namespace details doesn't have the resourceUrl
       createUrl={resourceUrl}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       handleNameChange={handleNameChange}
     >
       <ResourceForm.FormField

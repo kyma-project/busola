@@ -7,6 +7,7 @@ on:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/accessibility-tests.yml'
+      - '.github/scripts/**'
       - 'resources/**'
       - 'tests/integration/**'
       - 'nginx/**'
@@ -33,7 +34,7 @@ jobs:
       - name: Setup Kyma
         run: |
           set -o pipefail
-          ./.github/scripts/provision_kyma_k3d.sh | tee kyma-provision.log
+          ./.github/scripts/provision_k3d_for_kyma.sh | tee kyma-provision.log
           ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
         with:
@@ -41,7 +42,7 @@ jobs:
       - name: Setup busola
         shell: bash
         run: |
-          .github/scripts/setup_local_busola.sh
+          .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Run tests
         shell: bash
         env:

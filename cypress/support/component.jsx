@@ -1,13 +1,11 @@
 /* global Cypress */
-import React from 'react';
 import { mount } from 'cypress/react18';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import { MemoryRouter } from 'react-router';
 import { RecoilRoot } from 'recoil';
 
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
 
 i18n.use(initReactI18next).init({
   lng: 'en',

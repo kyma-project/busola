@@ -2,9 +2,13 @@ import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
-import Message, { MessageChunk } from './messages/Message';
-import Bubbles from './messages/Bubbles';
-import ErrorMessage from './messages/ErrorMessage';
+import Message, {
+  ErrorType,
+  ErrResponse,
+  MessageChunk,
+} from './Message/Message';
+import Bubbles from './Bubbles/Bubbles';
+import ErrorMessage from './ErrorMessage/ErrorMessage';
 import { sessionIDState } from 'state/companion/sessionIDAtom';
 import { clusterState } from 'state/clusterAtom';
 import { authDataState } from 'state/authDataAtom';
@@ -14,8 +18,13 @@ import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSu
 import { AIError } from '../KymaCompanion';
 import './Chat.scss';
 
+enum Author {
+  USER = 'user',
+  AI = 'ai',
+}
+
 export interface MessageType {
-  author: 'user' | 'ai';
+  author: Author;
   messageChunks: MessageChunk[];
   isLoading: boolean;
   suggestions?: string[];
@@ -78,6 +87,43 @@ export const Chat = ({
     });
   };
 
+  const concatMsgToLatestMessage = (
+    response: MessageChunk,
+    isLoading: boolean,
+  ) => {
+    setChatHistory(prevMessages => {
+      const [latestMessage] = prevMessages.slice(-1);
+      return prevMessages.slice(0, -1).concat({
+        ...latestMessage,
+        messageChunks: latestMessage.messageChunks.concat(response),
+        isLoading,
+      });
+    });
+  };
+
+  const removeLastMessage = () => {
+    setChatHistory(prevMessages => prevMessages.slice(0, -1));
+  };
+
+  const setErrorOnLastUserMsg = () => {
+    setChatHistory(prevMessages => {
+      const lastUserMsgIdx = prevMessages.findLastIndex(msg => {
+        return msg.author === 'user';
+      });
+      if (lastUserMsgIdx === -1) {
+        return prevMessages;
+      }
+
+      return prevMessages.map((msg, idx) => {
+        if (idx === lastUserMsgIdx) {
+          msg.hasError = true;
+          msg.isLoading = false;
+        }
+        return msg;
+      });
+    });
+  };
+
   const handleChatResponse = (response: MessageChunk) => {
     const isLoading = response?.data?.answer?.next !== '__end__';
 
@@ -90,7 +136,14 @@ export const Chat = ({
           response.data.answer?.tasks?.every(task => task.status === 'error') ??
           false;
         const displayRetry = response.data.error !== null || allTasksError;
-        handleError(response.data.answer.content, displayRetry);
+        removeLastMessage();
+        handleError(
+          {
+            type: ErrorType.FATAL,
+            message: response.data.answer.content,
+          },
+          displayRetry,
+        );
         return;
       } else {
         setFollowUpLoading();
@@ -107,15 +160,7 @@ export const Chat = ({
         });
       }
     }
-
-    setChatHistory(prevMessages => {
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        ...latestMessage,
-        messageChunks: latestMessage.messageChunks.concat(response),
-        isLoading,
-      });
-    });
+    concatMsgToLatestMessage(response, isLoading);
   };
 
   const setFollowUpLoading = () => {
@@ -137,22 +182,51 @@ export const Chat = ({
     setLoading(false);
   };
 
-  const handleError = (error?: string, displayRetry?: boolean) => {
-    const errorMessage = error ?? t('kyma-companion.error.subtitle') ?? '';
-    setError({
-      message: errorMessage,
-      displayRetry: displayRetry ?? false,
-    });
-    setChatHistory(prevItems => prevItems.slice(0, -1));
-    updateLatestMessage({ hasError: true });
-    setLoading(false);
+  const handleError = (errResponse: ErrResponse, displayRetry?: boolean) => {
+    switch (errResponse.type) {
+      case ErrorType.FATAL: {
+        setErrorOnLastUserMsg();
+        setLoading(false);
+        setError({
+          message:
+            errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
+          displayRetry: displayRetry ?? false,
+        });
+        break;
+      }
+      case ErrorType.RETRYABLE: {
+        const errMsg = t('kyma-companion.error.http-error', {
+          attempt: `${errResponse.attempt}/${errResponse.maxAttempts}`,
+          statusCode: errResponse.statusCode,
+        });
+        setLoading(true);
+        updateLatestMessage({
+          author: Author.AI,
+          messageChunks: [
+            {
+              data: {
+                answer: {
+                  content: errMsg,
+                  next: '__end__',
+                },
+              },
+            },
+          ],
+          isLoading: false,
+        });
+        break;
+      }
+    }
   };
 
   const retryPreviousPrompt = () => {
-    const previousPrompt = chatHistory.at(-1)?.messageChunks[0].data.answer
-      .content;
+    const lastUserMsgIdx = chatHistory.findLastIndex(
+      v => v.author === Author.USER,
+    );
+    const previousPrompt = chatHistory.at(lastUserMsgIdx)?.messageChunks[0].data
+      .answer.content;
     if (previousPrompt) {
-      setChatHistory(prevItems => prevItems.slice(0, -1));
+      removeLastMessage();
       sendPrompt(previousPrompt);
     }
   };
@@ -161,7 +235,7 @@ export const Chat = ({
     setError({ message: null, displayRetry: false });
     setLoading(true);
     addMessage({
-      author: 'user',
+      author: Author.USER,
       messageChunks: [
         {
           data: {
@@ -192,7 +266,7 @@ export const Chat = ({
       certificateAuthorityData:
         cluster.currentContext.cluster.cluster['certificate-authority-data'],
     });
-    addMessage({ author: 'ai', messageChunks: [], isLoading: true });
+    addMessage({ author: Author.AI, messageChunks: [], isLoading: true });
   };
 
   const onSubmitInput = () => {
@@ -266,16 +340,16 @@ export const Chat = ({
       >
         {chatHistory.map((message, index) => {
           const isLast = index === chatHistory.length - 1;
-          return message.author === 'ai' ? (
+          return message.author === Author.AI ? (
             <React.Fragment key={index}>
               <Message
-                author="ai"
+                author={message.author}
                 messageChunks={message.messageChunks}
                 isLoading={message.isLoading}
                 hasError={message?.hasError ?? false}
                 isLatestMessage={isLast}
               />
-              {index === chatHistory.length - 1 && !message.isLoading && (
+              {isLast && !message.isLoading && (
                 <Bubbles
                   onClick={sendPrompt}
                   suggestions={message.suggestions}
@@ -285,7 +359,7 @@ export const Chat = ({
             </React.Fragment>
           ) : (
             <Message
-              author="user"
+              author={Author.USER}
               key={index}
               messageChunks={message.messageChunks}
               isLoading={message.isLoading}

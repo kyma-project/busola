@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
@@ -16,15 +16,24 @@ export default function DaemonSetCreate({
   resource: initialDaemonSet,
   ...props
 }) {
+  const { t } = useTranslation();
+
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [daemonSet, setDaemonSet] = useState(
     _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
   );
-  const [initialResource] = useState(
+  const [initialResource, setInitialResource] = useState(
     initialDaemonSet || createDaemonSetTemplate(namespaceId),
   );
-  const [initialUnchangedResource] = useState(_.cloneDeep(initialDaemonSet));
-  const { t } = useTranslation();
+
+  useEffect(() => {
+    setDaemonSet(
+      _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
+    );
+    setInitialResource(
+      initialDaemonSet || createDaemonSetTemplate(namespaceId),
+    );
+  }, [initialDaemonSet, namespaceId]);
 
   return (
     <ResourceForm
@@ -33,7 +42,7 @@ export default function DaemonSetCreate({
       singularName={t('daemon-sets.name_singular')}
       resource={daemonSet}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setDaemonSet}
       onChange={onChange}
       formElementRef={formElementRef}

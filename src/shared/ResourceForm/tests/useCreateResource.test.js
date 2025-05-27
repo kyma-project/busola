@@ -83,11 +83,7 @@ describe('useCreateResource', () => {
       Promise.resolve({ json: () => Promise.resolve({}) }),
     );
     const { getByText } = render(
-      <Testbed
-        {...props}
-        initialResource={initialResource}
-        initialUnchangedResource={initialResource}
-      />,
+      <Testbed {...props} initialResource={initialResource} />,
     );
 
     fireEvent.click(getByText('Act'));

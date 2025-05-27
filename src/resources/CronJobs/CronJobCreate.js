@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
@@ -15,6 +15,8 @@ import {
   createCronJobPresets,
 } from 'resources/Jobs/templates';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -39,14 +41,27 @@ export default function CronJobCreate({
   const [cronJob, setCronJob] = useState(
     cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
-  const [initialUnchangedResource] = useState(initialCronJob);
-  const [initialResource] = useState(
+  const [initialResource, setInitialResource] = useState(
     initialCronJob || createCronJobTemplate(namespace),
   );
+  const layoutState = useRecoilValue(columnLayoutState);
+
+  useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
+    setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
+    setInitialResource(initialCronJob || createCronJobTemplate(namespace));
+  }, [initialCronJob, namespace, layoutState?.showEdit?.resource]);
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const schema = useContext(SchemaContext);
   const scheduleDesc = getDescription(schema, 'spec.schedule');
@@ -61,12 +76,12 @@ export default function CronJobCreate({
       pluralKind="cronjobs"
       singularName={t(`cron-jobs.name_singular`)}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       resource={cronJob}
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialUnchangedResource && createCronJobPresets(namespace)}
+      presets={!isEdit && createCronJobPresets(namespace)}
       createUrl={resourceUrl}
     >
       <CronJobSpecSection propertyPath="$.spec" />
