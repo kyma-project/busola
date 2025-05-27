@@ -104,13 +104,6 @@ export function usePrepareLayoutColumns({
 
   const newLayoutState = useMemo(() => {
     const isAllNamespaces = namespaceId === '-all-';
-    console.log(
-      'TEST-OneColumn',
-      resourceName,
-      resourceType,
-      resource,
-      rawResourceTypeName,
-    );
     if (isModule) {
       return {
         layout: layout || 'OneColumn',
