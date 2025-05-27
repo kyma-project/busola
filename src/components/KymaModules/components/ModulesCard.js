@@ -60,6 +60,13 @@ export default function ModulesCard({
     checkImage();
   }, [module]);
 
+  const getNameForVersion = version => {
+    if (typeof version === 'string' && version.startsWith('v')) {
+      return version;
+    }
+    return `v${version}`;
+  };
+
   return (
     <Card key={module.name} className="addModuleCard">
       <ListItemStandard
@@ -145,10 +152,17 @@ export default function ModulesCard({
                 'kyma-modules.predefined-channel',
               )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
                 1,
-              )} v${
+              )} ${
                 module.channels?.filter(
                   channel => channel.channel === kymaResource?.spec?.channel,
                 )[0]?.version
+                  ? getNameForVersion(
+                      module.channels?.filter(
+                        channel =>
+                          channel.channel === kymaResource?.spec?.channel,
+                      )[0]?.version,
+                    )
+                  : '- ' + t('kyma-modules.no-version')
               })`}
             </Option>
             {module.channels?.map(channel => (
@@ -165,9 +179,9 @@ export default function ModulesCard({
               >
                 {`${(
                   channel?.channel[0] || ''
-                ).toUpperCase()}${channel.channel.slice(1)} (v${
-                  channel.version
-                })`}{' '}
+                ).toUpperCase()}${channel.channel.slice(
+                  1,
+                )} (${getNameForVersion(channel.version)})`}{' '}
               </Option>
             ))}
           </Select>
