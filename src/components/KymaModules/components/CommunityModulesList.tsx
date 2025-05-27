@@ -32,7 +32,7 @@ type ModulesListProps = {
 
 export const CommunityModulesList = ({
   moduleTemplates,
-  selectedModules: installed,
+  selectedModules: installedModules,
   modulesLoading,
   namespaced,
   setOpenedModuleIndex,
@@ -106,14 +106,14 @@ export const CommunityModulesList = ({
       tooltip: () => t('common.buttons.delete'),
       icon: 'delete',
       disabledHandler: (resource: { name: string }) => {
-        const index = installed?.findIndex(module => {
-          return module.name === resource.name; //TODO have to check if resource is being deleted
+        const index = installedModules?.findIndex(module => {
+          return module.name === resource.name;
         });
         return index < 0;
       },
       handler: (resource: { name: string }) => {
-        const index = installed?.findIndex(module => {
-          return module.name === resource.name; //TODO
+        const index = installedModules?.findIndex(module => {
+          return module.name === resource.name;
         });
         setOpenedModuleIndex(index);
         handleResourceDelete({});
@@ -137,7 +137,7 @@ export const CommunityModulesList = ({
     const moduleResource = getModuleResource(moduleName);
 
     setOpenedModuleIndex(
-      installed?.findIndex(entry => entry.name === moduleName),
+      installedModules?.findIndex(entry => entry.name === moduleName),
     );
 
     setSelectedEntry?.(moduleName);
@@ -200,14 +200,14 @@ export const CommunityModulesList = ({
   };
 
   return (
-    <React.Fragment key="modules-list">
+    <React.Fragment key="commmunity-modules-list">
       <GenericList
         accessibleName={undefined}
         actions={actions as any}
         customRowClick={handleClickResource}
         extraHeaderContent={[
           <Button
-            key="add-module"
+            key="add-community-module"
             design="Emphasized"
             onClick={handleShowAddModule}
           >
@@ -217,7 +217,7 @@ export const CommunityModulesList = ({
         customColumnLayout={customColumnLayout as any}
         enableColumnLayout
         hasDetailsView
-        entries={installed ?? []}
+        entries={installedModules as any}
         serverDataLoading={modulesLoading}
         headerRenderer={headerRenderer}
         rowRenderer={resource =>

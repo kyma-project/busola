@@ -83,6 +83,7 @@ export const CommunityModulesListRows = ({
     ];
 
   const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
+
   return [
     // Name
     <>
@@ -117,7 +118,7 @@ export const CommunityModulesListRows = ({
     // Namespace
     currentModuleTemplate?.metadata?.namespace || EMPTY_TEXT_PLACEHOLDER,
     // Channel
-    <>{currentModuleTemplate?.metadata?.channel ?? EMPTY_TEXT_PLACEHOLDER}</>,
+    <>{currentModuleTemplate?.spec?.channel ?? EMPTY_TEXT_PLACEHOLDER}</>,
     // Version
     currentModuleTemplate?.spec?.version || EMPTY_TEXT_PLACEHOLDER,
     // Module State
