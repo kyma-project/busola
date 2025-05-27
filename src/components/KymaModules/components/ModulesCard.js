@@ -138,33 +138,30 @@ export default function ModulesCard({
             }
             className="channel-select"
           >
-            <Option
-              selected={
-                !module.channels?.filter(
-                  channel =>
-                    channel.channel ===
-                    findModuleSpec(kymaResource, module.name)?.channel,
-                )
-              }
-              value={'predefined'}
-            >
-              {`${t(
-                'kyma-modules.predefined-channel',
-              )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
-                1,
-              )} ${
-                module.channels?.filter(
-                  channel => channel.channel === kymaResource?.spec?.channel,
-                )[0]?.version
-                  ? getNameForVersion(
-                      module.channels?.filter(
-                        channel =>
-                          channel.channel === kymaResource?.spec?.channel,
-                      )[0]?.version,
-                    )
-                  : '- ' + t('kyma-modules.no-version')
-              })`}
-            </Option>
+            {module.channels?.filter(
+              channel => channel.channel === kymaResource?.spec?.channel,
+            )[0]?.version && (
+              <Option
+                selected={
+                  !module.channels?.filter(
+                    channel =>
+                      channel.channel ===
+                      findModuleSpec(kymaResource, module.name)?.channel,
+                  )
+                }
+                value={'predefined'}
+              >
+                {`${t(
+                  'kyma-modules.predefined-channel',
+                )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
+                  1,
+                )} ${getNameForVersion(
+                  module.channels?.filter(
+                    channel => channel.channel === kymaResource?.spec?.channel,
+                  )[0]?.version,
+                )})`}
+              </Option>
+            )}
             {module.channels?.map(channel => (
               <Option
                 selected={
