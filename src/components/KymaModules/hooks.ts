@@ -101,12 +101,10 @@ export const useFetchModuleData = (
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(true);
   const fetch = useFetch();
-
   const prevTemplateNamesRef = useRef<string[]>([]);
 
   useEffect(() => {
     const items = moduleTemplates?.items ?? [];
-
     const currentNames = items.map(m => m?.metadata?.name).sort();
 
     if (isEqual(prevTemplateNamesRef.current, currentNames)) {
@@ -128,9 +126,9 @@ export const useFetchModuleData = (
       const errors: string[] = [];
 
       const results = await Promise.allSettled(
-        items.map(async module => {
-          const name = module?.metadata?.name;
-          const resource = selector(module);
+        items.map(async moduleTemplate => {
+          const name = moduleTemplate?.metadata?.name;
+          const resource = selector(moduleTemplate);
 
           if (!name || !resource) {
             return { name, data: null };
@@ -198,7 +196,7 @@ export const useGetInstalledModules = (
 
   const installed =
     filtered?.map(module => ({
-      name: module.metadata.name,
+      name: module.metadata?.labels['operator.kyma-project.io/module-name'],
       version: module.spec.version,
       resource: module.spec.data,
     })) ?? [];

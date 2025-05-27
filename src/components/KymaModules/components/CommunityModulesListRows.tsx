@@ -1,5 +1,6 @@
 import { Tag, Text } from '@ui5/webcomponents-react';
 import {
+  findModuleTemplate,
   ModuleTemplateListType,
   ModuleTemplateStatus,
   ModuleTemplateType,
@@ -11,7 +12,6 @@ import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
-import { useMemo } from 'react';
 
 type RowResourceType = {
   name: string;
@@ -28,7 +28,7 @@ type ModulesListRowsProps = {
   resourceName: string;
   resource: RowResourceType;
   moduleTemplates: ModuleTemplateListType;
-  hasDetailsLink: (resource: RowResourceType) => boolean;
+  hasDetailsLink: (moduleTemplateName: string) => boolean;
 };
 
 export const CommunityModulesListRows = ({
@@ -47,12 +47,11 @@ export const CommunityModulesListRows = ({
     );
   };
 
-  const currentModuleTemplate = useMemo(
-    () =>
-      moduleTemplates.items.find(
-        template => template.metadata.name === resource.name,
-      ),
-    [moduleTemplates, resource.name],
+  const currentModuleTemplate = findModuleTemplate(
+    moduleTemplates,
+    resource.name,
+    resource.channel,
+    resource.version,
   );
 
   const { data: moduleResource } = useGetModuleResource(
@@ -70,7 +69,9 @@ export const CommunityModulesListRows = ({
     );
   };
 
-  const showDetailsLink = hasDetailsLink(moduleResource);
+  const showDetailsLink = hasDetailsLink(
+    currentModuleTemplate?.metadata.name || '',
+  );
 
   const { data: managerResourceState } = useGetManagerStatus(
     currentModuleTemplate?.spec?.manager,

@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
-import { ModuleTemplateListType, ModuleTemplateType } from '../support';
+import {
+  findModuleTemplate,
+  ModuleTemplateListType,
+  ModuleTemplateType,
+} from '../support';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import {
@@ -80,14 +84,16 @@ export const CommunityModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
-  const hasDetailsLink = (moduleResource: any) => {
+  const hasDetailsLink = (moduleTemplateName: string) => {
+    const moduleResource = getModuleResource(moduleTemplateName);
+
     const moduleStatus = moduleResource?.status;
     const isDeletionFailed = moduleStatus?.state === 'Warning';
     const isError = moduleStatus?.state === 'Error';
 
     const hasResource = !!moduleResource;
 
-    return hasResource && (isDeletionFailed || !isError);
+    return hasResource && (!isDeletionFailed || !isError);
   };
 
   const customColumnLayout = (resource: { name: string }) => {
@@ -134,15 +140,20 @@ export const CommunityModulesList = ({
       };
     },
   ) => {
-    const moduleResource = getModuleResource(moduleName);
-
     setOpenedModuleIndex(
       installedModules?.findIndex(entry => entry.name === moduleName),
     );
 
     setSelectedEntry?.(moduleName);
 
+    const moduleTemplate = findModuleTemplate(
+      moduleTemplates,
+      moduleName,
+      moduleStatus.channel,
+      moduleStatus.version,
+    );
     if (!moduleStatus.resource) {
+      const moduleResource = moduleTemplate?.spec?.data;
       moduleStatus.resource = {
         kind: moduleResource.kind,
         apiVersion: moduleResource.apiVersion,
@@ -153,7 +164,7 @@ export const CommunityModulesList = ({
       };
     }
 
-    const skipRedirect = !hasDetailsLink(moduleResource);
+    const skipRedirect = !hasDetailsLink(moduleTemplate?.metadata?.name || '');
 
     if (skipRedirect) {
       return;
