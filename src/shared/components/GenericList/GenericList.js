@@ -381,7 +381,11 @@ export const GenericList = ({
       );
       const link = `${linkTo(selectedEntry)}${
         enableColumnLayout
-          ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}`
+          ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
+              namespace === '-all-' && selectedEntry?.metadata?.namespace
+                ? `&resourceNamespace=${selectedEntry?.metadata?.namespace}`
+                : ''
+            }`
           : ''
       }`;
       navigate(link);
