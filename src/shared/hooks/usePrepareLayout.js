@@ -282,6 +282,7 @@ export function usePrepareLayoutColumns({
     crName,
     resource,
     isModule,
+    rawResourceTypeName,
   ]);
 
   useEffect(() => {
