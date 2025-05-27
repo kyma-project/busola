@@ -63,6 +63,7 @@ export function SidebarNavigation() {
     setLayoutColumn({
       startColumn: {
         resourceType: 'Cluster',
+        rawResourceTypeName: 'Cluster',
         resourceName: null,
         namespaceId: null,
         apiGroup: null,
@@ -127,6 +128,8 @@ export function SidebarNavigation() {
                       setLayoutColumn(prevState => ({
                         startColumn: {
                           resourceType:
+                            prevState.startColumn?.resourceType ?? null,
+                          rawResourceTypeName:
                             prevState.startColumn?.resourceType ?? null,
                           resourceName:
                             prevState.startColumn?.resourceName ?? null,

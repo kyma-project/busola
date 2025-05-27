@@ -47,6 +47,7 @@ export const ColumnWrapper = () => {
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
+    rawResourceTypeName: 'CustomResourceDefinition',
   });
   const defaultColumn = crName ? 'details' : 'list';
 

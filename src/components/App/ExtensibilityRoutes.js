@@ -41,6 +41,7 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
+    rawResourceTypeName: extension?.general?.resource?.kind,
   });
 
   const overrides = { resourceType: urlPath };
