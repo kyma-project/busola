@@ -98,6 +98,7 @@ function CRCreateForm({
           endColumn: {
             resourceName: cr.metadata.name,
             resourceType: crdName,
+            rawResourceTypeName: crd.spec.names.kind,
             namespaceId: cr.metadata.namespace,
           },
         });

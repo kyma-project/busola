@@ -60,10 +60,10 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
+    rawResourceTypeName: props.resourceType,
   });
 
-  const defaultColumn =
-    resourceName && namespaceId !== '-all-' ? 'details' : 'list';
+  const defaultColumn = resourceName ? 'details' : 'list';
 
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,

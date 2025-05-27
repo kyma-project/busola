@@ -41,6 +41,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
+    rawResourceTypeName: 'ConfigMap',
   });
 
   const elementCreateProps = usePrepareCreateProps({

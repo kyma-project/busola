@@ -369,6 +369,7 @@ export const GenericList = ({
                   selectedEntry?.metadata?.name ??
                   e.target.children[0].innerText,
                 resourceType: resourceType,
+                rawResourceTypeName: resourceType,
                 namespaceId: selectedEntry?.metadata?.namespace,
                 apiGroup: group,
                 apiVersion: version,
@@ -380,7 +381,11 @@ export const GenericList = ({
       );
       const link = `${linkTo(selectedEntry)}${
         enableColumnLayout
-          ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}`
+          ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
+              namespace === '-all-' && selectedEntry?.metadata?.namespace
+                ? `&resourceNamespace=${selectedEntry?.metadata?.namespace}`
+                : ''
+            }`
           : ''
       }`;
       navigate(link);
