@@ -22,7 +22,9 @@ const getResourceFromColumnnLayout = (
     columnLayout?.startColumn;
   return {
     namespace: column?.namespaceId ?? '',
-    resourceType: prettifyNameSingular(column?.resourceType ?? ''),
+    resourceType:
+      prettifyNameSingular(column?.rawResourceTypeName ?? '') ||
+      prettifyNameSingular(column?.resourceType ?? ''),
     groupVersion: column?.apiGroup
       ? `${column?.apiGroup}/${column?.apiVersion}`
       : column?.apiVersion ?? '',

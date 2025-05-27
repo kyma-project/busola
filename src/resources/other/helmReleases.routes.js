@@ -28,6 +28,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
+    rawResourceTypeName: 'HelmReleases',
   });
 
   let startColumnComponent = null;

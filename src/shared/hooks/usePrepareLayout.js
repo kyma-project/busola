@@ -91,6 +91,7 @@ export function usePrepareLayoutColumns({
   crName,
   resource,
   isModule,
+  rawResourceTypeName,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
@@ -111,6 +112,7 @@ export function usePrepareLayoutColumns({
         layout: layout || 'OneColumn',
         startColumn: {
           resourceType: 'kymas',
+          rawResourceTypeName: 'Kyma',
           namespaceId: 'kyma-system',
           apiGroup: 'operator.kyma-project.io',
           apiVersion: 'v1beta2',
@@ -147,6 +149,7 @@ export function usePrepareLayoutColumns({
           resourceName:
             resourceType === 'Namespaces' ? resourceName : undefined,
           resourceType,
+          rawResourceTypeName,
           namespaceId,
           apiGroup,
           apiVersion,
@@ -157,6 +160,7 @@ export function usePrepareLayoutColumns({
           ? {
               resourceType,
               namespaceId: resourceNamespace,
+              rawResourceTypeName,
               apiGroup,
               apiVersion,
               resourceName:
@@ -172,6 +176,7 @@ export function usePrepareLayoutColumns({
         layout: layout,
         startColumn: {
           resourceType,
+          rawResourceTypeName,
           namespaceId,
           apiGroup,
           apiVersion,
@@ -181,6 +186,7 @@ export function usePrepareLayoutColumns({
               resourceName,
               resourceType,
               namespaceId: resourceNamespace,
+              rawResourceTypeName,
               apiGroup,
               apiVersion,
             }
@@ -190,6 +196,7 @@ export function usePrepareLayoutColumns({
               resourceName: crName,
               resourceType: resourceName,
               namespaceId: resourceNamespace,
+              rawResourceTypeName: resourceName ?? rawResourceTypeName,
               apiGroup,
               apiVersion,
             }
@@ -197,6 +204,7 @@ export function usePrepareLayoutColumns({
         showCreate: showCreate
           ? {
               resourceType: resourceName,
+              rawResourceTypeName: resourceName,
               namespaceId,
               resource,
             }
@@ -206,6 +214,7 @@ export function usePrepareLayoutColumns({
               resourceName: crName,
               resourceType: resourceName,
               namespaceId: resourceNamespace,
+              rawResourceTypeName: resourceName ?? rawResourceTypeName,
               apiGroup,
               apiVersion,
               resource,
@@ -218,6 +227,7 @@ export function usePrepareLayoutColumns({
       layout: layout,
       startColumn: {
         resourceType,
+        rawResourceTypeName,
         namespaceId,
         apiGroup,
         apiVersion,
@@ -228,17 +238,26 @@ export function usePrepareLayoutColumns({
               resourceName,
               resourceType,
               namespaceId: resourceNamespace,
+              rawResourceTypeName,
               apiGroup,
               apiVersion,
             }
           : null,
       endColumn: null,
-      showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
+      showCreate: showCreate
+        ? {
+            resourceType,
+            rawResourceTypeName,
+            namespaceId,
+            resource,
+          }
+        : null,
       showEdit: showEdit
         ? editColumn === 'startColumn'
           ? {
               resourceType,
               namespaceId: resourceNamespace,
+              rawResourceTypeName,
               apiGroup,
               apiVersion,
             }
@@ -267,6 +286,7 @@ export function usePrepareLayoutColumns({
     crName,
     resource,
     isModule,
+    rawResourceTypeName,
   ]);
 
   useEffect(() => {
