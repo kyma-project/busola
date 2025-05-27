@@ -18,8 +18,8 @@ import {
 import { isFormOpenState } from 'state/formOpenAtom';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
-import { CommunityModulesListRows } from './CommunityModulesListRows';
 import { useFetchModuleData } from '../hooks';
+import { ModulesListRows } from './ModulesListRows';
 
 type ModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -84,8 +84,19 @@ export const CommunityModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
-  const hasDetailsLink = (moduleTemplateName: string) => {
-    const moduleResource = getModuleResource(moduleTemplateName);
+  const hasDetailsLink = (resource: {
+    name: string;
+    channel: string;
+    version: string;
+    resource: { kind: string };
+  }) => {
+    const moduleTemplateName = findModuleTemplate(
+      moduleTemplates,
+      resource.name,
+      resource.channel,
+      resource.version,
+    )?.metadata?.name;
+    const moduleResource = getModuleResource(moduleTemplateName ?? '');
 
     const moduleStatus = moduleResource?.status;
     const isDeletionFailed = moduleStatus?.state === 'Warning';
@@ -164,7 +175,7 @@ export const CommunityModulesList = ({
       };
     }
 
-    const skipRedirect = !hasDetailsLink(moduleTemplate?.metadata?.name || '');
+    const skipRedirect = !hasDetailsLink(moduleStatus);
 
     if (skipRedirect) {
       return;
@@ -232,7 +243,7 @@ export const CommunityModulesList = ({
         serverDataLoading={modulesLoading}
         headerRenderer={headerRenderer}
         rowRenderer={resource =>
-          CommunityModulesListRows({
+          ModulesListRows({
             resourceName: resource.name,
             resource,
             moduleTemplates,
