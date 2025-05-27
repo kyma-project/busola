@@ -224,6 +224,7 @@ export const CommunityModulesList = ({
   return (
     <React.Fragment key="commmunity-modules-list">
       <GenericList
+        className={'community-modules-list'}
         accessibleName={undefined}
         actions={actions as any}
         customRowClick={handleClickResource}

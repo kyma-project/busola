@@ -134,7 +134,8 @@ context('Test Kyma Modules views', () => {
 
     // cy.closeMidColumn();
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.get('.modules-list')
+      .find('ui5-input[id="search-input"]:visible')
       .find('input')
       .clearInput();
 
@@ -240,7 +241,7 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Test deleting Modules from List and Details', { retries: 3 }, () => {
-    cy.deleteFromGenericList('Module', 'eventing', {
+    cy.get('.modules-list').deleteFromGenericList('Module', 'eventing', {
       searchInPlainTableText: true,
     });
 
