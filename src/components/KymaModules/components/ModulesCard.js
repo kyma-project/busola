@@ -60,6 +60,24 @@ export default function ModulesCard({
     checkImage();
   }, [module]);
 
+  // Check if the module version from kymaResource exists and set the channel if not.
+  const checkIfVersionExistsAndSet = () => {
+    if (
+      !module?.channels?.find(
+        channel => channel.channel === kymaResource?.spec?.channel,
+      )?.version &&
+      module?.channels?.[0]?.channel
+    ) {
+      setChannel(
+        module,
+        module.channels[0].channel,
+        index,
+        selectedModules,
+        setSelectedModules,
+      );
+    }
+  };
+
   const getNameForVersion = version => {
     if (typeof version === 'string' && version.startsWith('v')) {
       return version;
@@ -67,11 +85,27 @@ export default function ModulesCard({
     return `v${version}`;
   };
 
+  const getSelectedValue = () => {
+    const defaultValue = module?.channels?.find(
+      channel => channel.channel === kymaResource?.spec?.channel,
+    )?.version
+      ? 'predefined'
+      : module?.channels?.[0]?.channel;
+    return (
+      findModuleSpec(kymaResource, module.name)?.channel ||
+      findModuleStatus(kymaResource, module.name)?.channel ||
+      defaultValue
+    );
+  };
+
   return (
     <Card key={module.name} className="addModuleCard">
       <ListItemStandard
         className="moduleCardHeader"
-        onClick={() => setCheckbox(module, !isChecked(module.name), index)}
+        onClick={() => {
+          setCheckbox(module, !isChecked(module.name), index);
+          checkIfVersionExistsAndSet();
+        }}
       >
         <CheckBox className="checkbox" checked={isChecked(module.name)} />
         <div className="titles">
@@ -131,24 +165,18 @@ export default function ModulesCard({
                 setSelectedModules,
               );
             }}
-            value={
-              findModuleSpec(kymaResource, module.name)?.channel ||
-              findModuleStatus(kymaResource, module.name)?.channel ||
-              'predefined'
-            }
+            value={getSelectedValue()}
             className="channel-select"
           >
-            {module.channels?.filter(
+            {module?.channels?.find(
               channel => channel.channel === kymaResource?.spec?.channel,
-            )[0]?.version && (
+            )?.version && (
               <Option
-                selected={
-                  !module.channels?.filter(
-                    channel =>
-                      channel.channel ===
-                      findModuleSpec(kymaResource, module.name)?.channel,
-                  )
-                }
+                selected={module?.channels?.find(
+                  channel =>
+                    channel.channel ===
+                    findModuleSpec(kymaResource, module.name)?.channel,
+                )}
                 value={'predefined'}
               >
                 {`${t(
@@ -156,9 +184,9 @@ export default function ModulesCard({
                 )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
                   1,
                 )} ${getNameForVersion(
-                  module.channels?.filter(
+                  module?.channels?.find(
                     channel => channel.channel === kymaResource?.spec?.channel,
-                  )[0]?.version,
+                  )?.version,
                 )})`}
               </Option>
             )}
