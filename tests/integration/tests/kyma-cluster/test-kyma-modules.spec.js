@@ -242,8 +242,9 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Test deleting Modules from List and Details', { retries: 3 }, () => {
-    cy.get('.modules-list').deleteFromGenericList('Module', 'eventing', {
+    cy.deleteFromGenericList('Module', 'eventing', {
       searchInPlainTableText: true,
+      parentSelector: '.modules-list',
     });
 
     // Uncomment after adding local KLM

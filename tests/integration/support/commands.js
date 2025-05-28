@@ -169,10 +169,18 @@ Cypress.Commands.add(
       checkIfResourceIsRemoved = true,
       selectSearchResult = false,
       searchInPlainTableText = false,
+      parentSelector = null,
     } = options;
 
-    cy.wait(500)
-      .get('ui5-input[id="search-input"]:visible')
+    cy.wait(500);
+    if (parentSelector) {
+      cy.get(parentSelector)
+        .find('ui5-input[id="search-input"]:visible')
+        .find('input')
+        .type(resourceName);
+    }
+
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .type(resourceName);
 
