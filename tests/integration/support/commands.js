@@ -178,11 +178,11 @@ Cypress.Commands.add(
         .find('ui5-input[id="search-input"]:visible')
         .find('input')
         .type(resourceName);
+    } else {
+      cy.get('ui5-input[id="search-input"]:visible')
+        .find('input')
+        .type(resourceName);
     }
-
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .type(resourceName);
 
     cy.wait(1000);
 
