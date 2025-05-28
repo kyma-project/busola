@@ -218,16 +218,16 @@ export const splitModuleTemplates = (
 ) => {
   if (!moduleTemplates?.items) return { managed: [], unmanaged: [] };
 
-  const managed: ModuleTemplateListType = { items: [] };
-  const unmanaged: ModuleTemplateListType = { items: [] };
+  const communityTemplates: ModuleTemplateListType = { items: [] };
+  const kymaTemplates: ModuleTemplateListType = { items: [] };
 
   moduleTemplates.items.forEach(item => {
     if (item.metadata?.labels?.['operator.kyma-project.io/managed-by']) {
-      managed.items.push(item);
+      kymaTemplates.items.push(item);
     } else {
-      unmanaged.items.push(item);
+      communityTemplates.items.push(item);
     }
   });
 
-  return { managed, unmanaged };
+  return { kymaTemplates, communityTemplates };
 };

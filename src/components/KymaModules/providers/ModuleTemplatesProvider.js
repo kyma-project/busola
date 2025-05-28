@@ -18,8 +18,8 @@ export function ModuleTemplatesContextProvider({ children }) {
   } = useModuleTemplatesQuery({});
 
   const {
-    unmanaged: communityModuleTemplates,
-    managed: moduleTemplates,
+    communityTemplates: communityModuleTemplates,
+    kymaTemplates: moduleTemplates,
   } = splitModuleTemplates(allModuleTemplates);
 
   return (

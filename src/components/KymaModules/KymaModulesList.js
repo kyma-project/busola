@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Create, ResourceDescription } from 'components/KymaModules';
@@ -10,13 +10,15 @@ import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate'
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { CommunityModulesList } from './components/CommunityModulesList';
-import { splitModuleTemplates } from './support';
 import { CommunityModuleContext } from './providers/CommunityModuleProvider';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
+import { checkSelectedModule } from './support';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export default function KymaModulesList({ namespaced }) {
   const { t } = useTranslation();
-  const [selectedEntry, setSelectedEntry] = useState(null);
+  const layoutState = useRecoilValue(columnLayoutState);
 
   const {
     resourceName,
@@ -25,18 +27,30 @@ export default function KymaModulesList({ namespaced }) {
     kymaResourceLoading,
     selectedModules,
     moduleTemplatesLoading,
-    setOpenedModuleIndex,
+    setOpenedModuleIndex: setOpenedManagedModuleIndex,
     handleResourceDelete,
   } = useContext(KymaModuleContext);
-
   const { moduleTemplates, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
+  const {
+    installedCommunityModules,
+    communityModulesLoading,
+    setOpenedModuleIndex: setOpenedCommunityModuleIndex,
+  } = useContext(CommunityModuleContext);
 
-  const { installedCommunityModules, communityModulesLoading } = useContext(
-    CommunityModuleContext,
-  );
+  const [selectedEntry, setSelectedEntry] = useState(null);
   const { isProtected, protectedResourceWarning } = useProtectedResources();
+
+  useEffect(() => {
+    if (!communityModulesLoading && installedCommunityModules.length) {
+      setSelectedEntry(
+        installedCommunityModules.find(module =>
+          checkSelectedModule(module, layoutState),
+        )?.name,
+      );
+    }
+  }, [communityModulesLoading, installedCommunityModules, layoutState]);
 
   if (moduleTemplatesLoading || kymaResourceLoading) {
     return <Spinner />;
@@ -61,7 +75,7 @@ export default function KymaModulesList({ namespaced }) {
               kymaResource={kymaResource}
               namespaced={namespaced}
               resourceUrl={resourceUrl}
-              setOpenedModuleIndex={setOpenedModuleIndex}
+              setOpenedModuleIndex={setOpenedManagedModuleIndex}
               handleResourceDelete={handleResourceDelete}
               customSelectedEntry={selectedEntry}
               setSelectedEntry={setSelectedEntry}
@@ -73,7 +87,7 @@ export default function KymaModulesList({ namespaced }) {
             selectedModules={installedCommunityModules}
             modulesLoading={communityModulesLoading}
             namespaced={namespaced}
-            setOpenedModuleIndex={setOpenedModuleIndex}
+            setOpenedModuleIndex={setOpenedCommunityModuleIndex}
             handleResourceDelete={handleResourceDelete}
             customSelectedEntry={selectedEntry}
             setSelectedEntry={setSelectedEntry}
