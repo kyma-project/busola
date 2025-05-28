@@ -11,6 +11,8 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { CommunityModulesList } from './components/CommunityModulesList';
 import { splitModuleTemplates } from './support';
+import { CommunityModuleContext } from './providers/CommunityModuleProvider';
+import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 
 export default function KymaModulesList({ namespaced }) {
   const { t } = useTranslation();
@@ -22,19 +24,19 @@ export default function KymaModulesList({ namespaced }) {
     kymaResource,
     kymaResourceLoading,
     selectedModules,
-    moduleTemplates,
     moduleTemplatesLoading,
     setOpenedModuleIndex,
     handleResourceDelete,
-    installedCommunityModules,
-    communityModulesLoading,
   } = useContext(KymaModuleContext);
-  const { isProtected, protectedResourceWarning } = useProtectedResources();
 
-  const {
-    managed: managedModuleTemplates,
-    unmanaged: communityModuleTemplates,
-  } = splitModuleTemplates(moduleTemplates);
+  const { moduleTemplates, communityModuleTemplates } = useContext(
+    ModuleTemplatesContext,
+  );
+
+  const { installedCommunityModules, communityModulesLoading } = useContext(
+    CommunityModuleContext,
+  );
+  const { isProtected, protectedResourceWarning } = useProtectedResources();
 
   if (moduleTemplatesLoading || kymaResourceLoading) {
     return <Spinner />;
@@ -53,7 +55,7 @@ export default function KymaModulesList({ namespaced }) {
             <ModulesList
               key="kyma-modules-list"
               resource={kymaResource}
-              moduleTemplates={managedModuleTemplates}
+              moduleTemplates={moduleTemplates}
               resourceName={resourceName}
               selectedModules={selectedModules}
               kymaResource={kymaResource}
@@ -65,19 +67,17 @@ export default function KymaModulesList({ namespaced }) {
               setSelectedEntry={setSelectedEntry}
             />
           )}
-          {kymaResource && (
-            <CommunityModulesList
-              key="kyma-community-modules-list"
-              moduleTemplates={communityModuleTemplates}
-              selectedModules={installedCommunityModules}
-              modulesLoading={communityModulesLoading}
-              namespaced={namespaced}
-              setOpenedModuleIndex={setOpenedModuleIndex}
-              handleResourceDelete={handleResourceDelete}
-              customSelectedEntry={selectedEntry}
-              setSelectedEntry={setSelectedEntry}
-            />
-          )}
+          <CommunityModulesList
+            key="community-modules-list"
+            moduleTemplates={communityModuleTemplates}
+            selectedModules={installedCommunityModules}
+            modulesLoading={communityModulesLoading}
+            namespaced={namespaced}
+            setOpenedModuleIndex={setOpenedModuleIndex}
+            handleResourceDelete={handleResourceDelete}
+            customSelectedEntry={selectedEntry}
+            setSelectedEntry={setSelectedEntry}
+          />
         </>
       }
       inlineEditForm={() => (

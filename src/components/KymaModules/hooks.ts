@@ -96,28 +96,30 @@ export const useFetchModuleData = (
   moduleTemplates: ModuleTemplateListType,
   selector: Function,
   label: string,
+  skip: boolean = false,
 ) => {
   const [data, setData] = useState<Record<string, any>>({});
   const [error, setError] = useState<null | string>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!skip);
   const fetch = useFetch();
   const prevTemplateNamesRef = useRef<string[]>([]);
 
   useEffect(() => {
+    if (skip) {
+      return;
+    }
     const items = moduleTemplates?.items ?? [];
     const currentNames = items.map(m => m?.metadata?.name).sort();
 
     if (isEqual(prevTemplateNamesRef.current, currentNames)) {
       return;
     }
-
-    prevTemplateNamesRef.current = currentNames;
-
     if (!items.length) {
       setData({});
       setLoading(false);
       return;
     }
+    prevTemplateNamesRef.current = currentNames;
 
     const fetchAll = async () => {
       setLoading(true);
@@ -184,10 +186,14 @@ export const useGetInstalledModules = (
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.manager ?? null,
     'manager',
+    skip,
   );
 
-  if (skip || !moduleTemplates) {
+  if (skip) {
     return { installed: [], loading: true, error: null };
+  }
+  if (!moduleTemplates) {
+    return { installed: [], loading: false, error: null };
   }
 
   const filtered = moduleTemplates.items?.filter(

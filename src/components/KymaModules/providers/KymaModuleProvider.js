@@ -1,16 +1,16 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from '@ui5/webcomponents-react';
 
 import { cloneDeep } from 'lodash';
 import { t } from 'i18next';
 
-import { useKymaQuery, useModuleTemplatesQuery } from '../kymaModulesQueries';
+import { useKymaQuery } from '../kymaModulesQueries';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { checkSelectedModule } from '../support';
-import { useGetInstalledModules } from '../hooks';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
+import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
 
 export const KymaModuleContext = createContext({
   resourceName: null,
@@ -20,14 +20,10 @@ export const KymaModuleContext = createContext({
   initialUnchangedResource: null,
   kymaResourceState: null,
   setKymaResourceState: () => {},
-  moduleTemplates: null,
-  moduleTemplatesLoading: false,
   selectedModules: {},
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
   deleteModuleButton: () => <></>,
-  installedCommunityModules: {},
-  communityModulesLoading: false,
 });
 
 export function KymaModuleContextProvider({
@@ -43,6 +39,7 @@ export function KymaModuleContextProvider({
     loading: kymaResourceLoading,
     resourceUrl,
   } = useKymaQuery();
+
   const [activeKymaModules, setActiveKymaModules] = useState(
     kymaResource?.spec?.modules ?? [],
   );
@@ -80,20 +77,8 @@ export function KymaModuleContextProvider({
       }),
   });
 
-  // Fetching all Module Templates can be replaced with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
-  const {
-    data: moduleTemplates,
-    loading: moduleTemplatesLoading,
-  } = useModuleTemplatesQuery({
-    skip: !kymaResource?.metadata?.name,
-  });
-
-  const {
-    installed: installedCommunityModules,
-    loading: communityModulesLoading,
-  } = useGetInstalledModules(
-    moduleTemplates,
-    !kymaResource?.metadata?.name || !!!moduleTemplates,
+  const { kymaModuleTemplates, moduleTemplatesLoading } = useContext(
+    ModuleTemplatesContext,
   );
 
   const deleteModuleButton = (
@@ -114,16 +99,12 @@ export function KymaModuleContextProvider({
         initialUnchangedResource: initialUnchangedResource,
         kymaResourceState: kymaResourceState,
         setKymaResourceState: setKymaResourceState,
-        moduleTemplates: moduleTemplates,
-        moduleTemplatesLoading: moduleTemplatesLoading,
         selectedModules: activeKymaModules,
         setOpenedModuleIndex: setOpenedModuleIndex,
         DeleteMessageBox: DeleteMessageBox,
         handleResourceDelete: handleResourceDelete,
         showDeleteDialog: showDeleteDialog,
         deleteModuleButton: deleteModuleButton,
-        installedCommunityModules: installedCommunityModules,
-        communityModulesLoading: communityModulesLoading,
       }}
     >
       {createPortal(
@@ -140,7 +121,7 @@ export function KymaModuleContextProvider({
             }
             kymaResource={kymaResource}
             kymaResourceState={kymaResourceState}
-            moduleTemplates={moduleTemplates}
+            moduleTemplates={kymaModuleTemplates}
             detailsOpen={detailsOpen}
             setKymaResourceState={setKymaResourceState}
             setInitialUnchangedResource={setInitialUnchangedResource}

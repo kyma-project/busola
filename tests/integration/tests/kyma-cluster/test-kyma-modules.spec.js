@@ -114,7 +114,8 @@ context('Test Kyma Modules views', () => {
   it('Test Modules list and details', () => {
     cy.wait(1000);
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.get('.modules-list')
+      .find('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('api-gateway');
