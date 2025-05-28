@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import {
   ConditionType,
@@ -9,7 +9,6 @@ import {
   ModuleTemplateStatus,
   ModuleTemplateType,
 } from './support';
-import { isEqual } from 'lodash';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
@@ -96,37 +95,26 @@ export const useFetchModuleData = (
   moduleTemplates: ModuleTemplateListType,
   selector: Function,
   label: string,
-  skip: boolean = false,
+  moduleTemplatesLoading?: boolean,
 ) => {
   const [data, setData] = useState<Record<string, any>>({});
   const [error, setError] = useState<null | string>(null);
-  const [loading, setLoading] = useState(!skip);
+  const [loading, setLoading] = useState(true);
   const fetch = useFetch();
-  const prevTemplateRef = useRef<{ name: string; version: string }[]>([]);
 
   useEffect(() => {
-    if (skip) {
+    if (moduleTemplatesLoading) {
       return;
     }
     const items = moduleTemplates?.items ?? [];
-    const currentTemplates = items
-      .map(m => {
-        return { name: m?.metadata?.name, version: m?.spec?.version };
-      })
-      .sort();
 
-    if (isEqual(prevTemplateRef.current, currentTemplates)) {
-      return;
-    }
     if (!items.length) {
       setData({});
       setLoading(false);
       return;
     }
-    prevTemplateRef.current = currentTemplates;
 
     const fetchAll = async () => {
-      setLoading(true);
       setError(null);
       const cache: Record<string, any> = {};
       const errors: string[] = [];
@@ -184,16 +172,16 @@ export const useFetchModuleData = (
 
 export const useGetInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
-  skip?: boolean,
+  moduleTemplatesLoading?: boolean,
 ) => {
   const { data: managers, loading, error } = useFetchModuleData(
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.manager ?? null,
     'manager',
-    skip,
+    moduleTemplatesLoading,
   );
 
-  if (skip) {
+  if (moduleTemplatesLoading) {
     return { installed: [], loading: true, error: null };
   }
   if (!moduleTemplates) {
