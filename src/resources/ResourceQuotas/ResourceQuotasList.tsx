@@ -48,6 +48,7 @@ export function ResourceQuotasList(props: any) {
       startColumn: {
         resourceName: null,
         resourceType: 'ResourceQuota',
+        rawResourceTypeName: 'ResourceQuota',
         namespaceId: props.namespace,
         apiGroup: '',
         apiVersion: 'v1',
@@ -56,6 +57,7 @@ export function ResourceQuotasList(props: any) {
       endColumn: null,
       showCreate: {
         resourceType: props.resourceType,
+        rawResourceTypeName: props.resourceType,
         namespaceId: props.namespace,
         resourceUrl: props.resourceUrl,
       },

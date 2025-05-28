@@ -130,6 +130,7 @@ export default function CodePanel({
         type === 'Update'
           ? {
               resourceType: resType,
+              rawResourceTypeName: resType,
               namespaceId: namespace,
               resourceName: resName,
               apiGroup: null,
