@@ -6,7 +6,7 @@ import {
   ShowKymaCompanion,
   showKymaCompanionState,
 } from 'state/companion/showKymaCompanionAtom';
-import { Chat, MessageType } from './Chat/Chat';
+import { Author, Chat, ChatItem, ChatItemType } from './Chat/Chat';
 import './KymaCompanion.scss';
 
 export interface AIError {
@@ -17,9 +17,10 @@ export interface AIError {
 export default function KymaCompanion() {
   const { t } = useTranslation();
 
-  const initialChatHistory: MessageType[] = [
+  const initialChatHistory: ChatItem[] = [
     {
-      author: 'ai',
+      type: ChatItemType.MESSAGE,
+      author: Author.AI,
       messageChunks: [
         {
           data: {
@@ -40,7 +41,7 @@ export default function KymaCompanion() {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [isReset, setIsReset] = useState<boolean>(false);
-  const [chatHistory, setChatHistory] = useState<MessageType[]>(
+  const [chatHistory, setChatHistory] = useState<ChatItem[]>(
     initialChatHistory,
   );
   const [error, setError] = useState<AIError>({
