@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import {
   Card,
   CheckBox,
@@ -11,7 +12,6 @@ import {
 } from '@ui5/webcomponents-react';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
 import {
   findModuleSpec,
   findModuleStatus,
@@ -60,14 +60,17 @@ export default function ModulesCard({
     checkImage();
   }, [module]);
 
+  const defaultVersion = useMemo(
+    () =>
+      module?.channels?.find(
+        channel => channel?.channel === kymaResource?.spec?.channel,
+      )?.version,
+    [kymaResource?.spec?.channel, module?.channels],
+  );
+
   // Check if the module version from kymaResource exists and set the channel if not.
   const checkIfVersionExistsAndSet = () => {
-    if (
-      !module?.channels?.find(
-        channel => channel.channel === kymaResource?.spec?.channel,
-      )?.version &&
-      module?.channels?.[0]?.channel
-    ) {
+    if (!defaultVersion && module?.channels?.[0]?.channel) {
       setChannel(
         module,
         module.channels[0].channel,
@@ -86,9 +89,7 @@ export default function ModulesCard({
   };
 
   const getSelectedValue = () => {
-    const defaultValue = module?.channels?.find(
-      channel => channel.channel === kymaResource?.spec?.channel,
-    )?.version
+    const defaultValue = defaultVersion
       ? 'predefined'
       : module?.channels?.[0]?.channel;
     return (
@@ -168,9 +169,7 @@ export default function ModulesCard({
             value={getSelectedValue()}
             className="channel-select"
           >
-            {module?.channels?.find(
-              channel => channel.channel === kymaResource?.spec?.channel,
-            )?.version && (
+            {defaultVersion && (
               <Option
                 selected={module?.channels?.find(
                   channel =>
@@ -183,11 +182,7 @@ export default function ModulesCard({
                   'kyma-modules.predefined-channel',
                 )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
                   1,
-                )} ${getNameForVersion(
-                  module?.channels?.find(
-                    channel => channel.channel === kymaResource?.spec?.channel,
-                  )?.version,
-                )})`}
+                )} ${getNameForVersion(defaultVersion)})`}
               </Option>
             )}
             {module.channels?.map(channel => (
