@@ -3,7 +3,7 @@
 You can use list and details widgets in the lists and details pages in the user interface component of your resource.
 You can distinguish the following widget types:
 
-- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.detail.bodies**
+- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.details.body**
   - [`Bagde`](#badge)
   - [`ControlledBy`](#controlledby)
   - [`ConditionList`](#conditionlist) - used only in **data.details.status** or **data.details.status.body**
@@ -14,6 +14,7 @@ You can distinguish the following widget types:
   - [`ResourceButton`](#resourcebutton)
   - [`ResourceLink`](#resourcelink)
   - [`Text`](#text)
+  - [`TimeFromNow`](#timefromnow)
 - [Block widgets](#block-widgets) for more complex layouts used only in **data.details.body**
   - [`Alert`](#alert)
   - [`CodeViewer`](#codeviewer)
@@ -340,6 +341,20 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%">
+
+### `TimeFromNow`
+
+The `TimeFromNow` widgets calculates time difference between date provided in **source** and current time and display it in a format: X days ago.
+
+See the following example:
+
+```yaml
+- name: Last Scale Time
+  source: status.lastScaleTime
+  widget: TimeFromNow
+```
+
+<img src="./assets/display-widgets/TimeFromNow.png" alt="Example of a TimeFromNow widget" width="40%">
 
 ## Block Widgets
 
