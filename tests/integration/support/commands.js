@@ -223,10 +223,18 @@ Cypress.Commands.add(
     }
 
     if (clearSearch) {
-      cy.get('ui5-input[id="search-input"]:visible')
-        .find('input')
-        .wait(1000)
-        .clear();
+      if (parentSelector) {
+        cy.get(parentSelector)
+          .find('ui5-input[id="search-input"]:visible')
+          .find('input')
+          .wait(1000)
+          .clear();
+      } else {
+        cy.get('ui5-input[id="search-input"]:visible')
+          .find('input')
+          .wait(1000)
+          .clear();
+      }
     }
   },
 );

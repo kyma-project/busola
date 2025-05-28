@@ -80,6 +80,7 @@ export type ModuleTemplateType = {
       documentation?: string;
     };
     manager: ModuleManagerType;
+    moduleName?: string;
   };
 };
 
