@@ -10,6 +10,7 @@ import { KymaModuleContext } from './providers/KymaModuleProvider';
 
 import './KymaModulesAddModule.scss';
 import { findModuleStatus } from './support';
+import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 
 export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
@@ -21,9 +22,10 @@ export default function KymaModulesAddModule(props) {
     setKymaResourceState: setKymaResource,
     kymaResourceLoading: loading,
     selectedModules: activeKymaModules,
-    moduleTemplates,
     initialUnchangedResource,
   } = useContext(KymaModuleContext);
+
+  const { moduleTemplates } = useContext(ModuleTemplatesContext);
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 

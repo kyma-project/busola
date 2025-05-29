@@ -1,5 +1,5 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { useModuleStatus } from '../support';
+import { useModuleStatus } from '../hooks';
 
 export const resolveType = (status: string) => {
   if (typeof status !== 'string') {
