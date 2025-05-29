@@ -23,7 +23,10 @@ Extra parameters might be available for specific widgets.
 
 #### Status Body
 
-The **data.details.status.body** is an array of objects. By default listed values are displayed in two columns. Adding parameter **fullWidth: true** will display values in one column. The **data.details.status.body** accepts one widget (for example [ConditionList](./50-list-and-details-widgets.md#conditionList))
+The **data.details.status.body** is an array of objects. By default listed values are displayed in two columns. Adding parameter **fullWidth: true** will display values in one column. The **data.details.status.body** accepts one widget (for example [ConditionList](./50-list-and-details-widgets.md#conditionList)).
+
+> [!NOTE]
+> The **data.details.status.body** field is required for the **data.details.status** to render properly.
 
 See the following examples:
 
