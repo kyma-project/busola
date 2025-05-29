@@ -12,6 +12,8 @@ import { t } from 'i18next';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
+import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
+import { ModuleTemplatesContextProvider } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -106,35 +108,45 @@ const ColumnWraper = ({
 
   return (
     <>
-      <KymaModuleContextProvider
-        setLayoutColumn={setLayoutColumn}
-        layoutState={layoutState}
-        DeleteMessageBox={DeleteMessageBox}
-        handleResourceDelete={handleResourceDelete}
-        showDeleteDialog={showDeleteDialog}
-      >
-        <FlexibleColumnLayout
-          style={{ height: '100%' }}
-          layout={layoutState?.layout}
-          startColumn={
-            <div className="column-content">{startColumnComponent}</div>
-          }
-          midColumn={
-            <>
-              {!layoutState?.showCreate &&
-                (defaultColumn !== 'details' ||
-                  layoutState.layout !== 'OneColumn') && (
-                  <div className="column-content">{detailsMidColumn}</div>
-                )}
-              {!layoutState?.midColumn &&
-                (defaultColumn !== 'details' ||
-                  layoutState.layout !== 'OneColumn') && (
-                  <div className="column-content">{createMidColumn}</div>
-                )}
-            </>
-          }
-        />
-      </KymaModuleContextProvider>
+      <ModuleTemplatesContextProvider>
+        <KymaModuleContextProvider
+          setLayoutColumn={setLayoutColumn}
+          layoutState={layoutState}
+          DeleteMessageBox={DeleteMessageBox}
+          handleResourceDelete={handleResourceDelete}
+          showDeleteDialog={showDeleteDialog}
+        >
+          <CommunityModuleContextProvider
+            setLayoutColumn={setLayoutColumn}
+            layoutState={layoutState}
+            DeleteMessageBox={DeleteMessageBox}
+            handleResourceDelete={handleResourceDelete}
+            showDeleteDialog={showDeleteDialog}
+          >
+            <FlexibleColumnLayout
+              style={{ height: '100%' }}
+              layout={layoutState?.layout}
+              startColumn={
+                <div className="column-content">{startColumnComponent}</div>
+              }
+              midColumn={
+                <>
+                  {!layoutState?.showCreate &&
+                    (defaultColumn !== 'details' ||
+                      layoutState.layout !== 'OneColumn') && (
+                      <div className="column-content">{detailsMidColumn}</div>
+                    )}
+                  {!layoutState?.midColumn &&
+                    (defaultColumn !== 'details' ||
+                      layoutState.layout !== 'OneColumn') && (
+                      <div className="column-content">{createMidColumn}</div>
+                    )}
+                </>
+              }
+            />
+          </CommunityModuleContextProvider>
+        </KymaModuleContextProvider>
+      </ModuleTemplatesContextProvider>
     </>
   );
 };
