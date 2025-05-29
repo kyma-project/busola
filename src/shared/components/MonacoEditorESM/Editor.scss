@@ -29,7 +29,7 @@
   flex-grow: 1;
   border: 1px solid var(--sapNeutralBackground);
 
-  .monaco-hover {
+  .monaco-editor {
     z-index: 100;
   }
 }
@@ -65,6 +65,9 @@
   pointer-events: none;
 }
 
-.monaco-hover-content .hover-contents p:last-of-type {
-  display: none;
+.monaco-hover-content {
+  .hover-row:not(:first-of-type),
+  p:last-of-type {
+    display: none;
+  }
 }
