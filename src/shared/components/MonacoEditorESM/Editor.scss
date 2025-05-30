@@ -30,6 +30,10 @@
   border: 1px solid var(--sapNeutralBackground);
 
   .monaco-editor {
+    .inputarea {
+      z-index: 0;
+    }
+
     .overflowingContentWidgets {
       z-index: 100;
       position: absolute;
