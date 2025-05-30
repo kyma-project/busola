@@ -126,6 +126,8 @@ export default function ModulesCard({
                     channel => kymaResource?.spec?.channel === channel.channel,
                   )?.version
                 } ${checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''}`
+              : module?.channels?.[0]?.version
+              ? `v${module?.channels?.[0]?.version}`
               : t('kyma-modules.no-version')}
           </Text>
         </div>
