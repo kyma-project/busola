@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
 import Message, {
@@ -16,14 +16,25 @@ import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuesti
 import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
 import { AIError } from '../KymaCompanion';
+import ContextLabel from './ContextLabel/ContextLabel';
 import './Chat.scss';
 
-enum Author {
+export enum Author {
   USER = 'user',
   AI = 'ai',
 }
 
-export interface MessageType {
+export enum ChatItemType {
+  MESSAGE = 'message',
+  CONTEXT = 'context',
+}
+
+interface BaseChatItem {
+  type: ChatItemType;
+}
+
+interface MessageChatItem extends BaseChatItem {
+  type: ChatItemType.MESSAGE;
   author: Author;
   messageChunks: MessageChunk[];
   isLoading: boolean;
@@ -32,9 +43,16 @@ export interface MessageType {
   hasError?: boolean | undefined;
 }
 
+interface ContextChatItem extends BaseChatItem {
+  type: ChatItemType.CONTEXT;
+  labelText: string;
+}
+
+export type ChatItem = MessageChatItem | ContextChatItem;
+
 type ChatProps = {
-  chatHistory: MessageType[];
-  setChatHistory: React.Dispatch<React.SetStateAction<MessageType[]>>;
+  chatHistory: ChatItem[];
+  setChatHistory: React.Dispatch<React.SetStateAction<ChatItem[]>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isReset: boolean;
@@ -66,22 +84,54 @@ export const Chat = ({
     initialSuggestionsLoading,
     currentResource,
   } = usePromptSuggestions(isReset, setIsReset, {
-    skip: chatHistory.length > 1,
+    skip:
+      chatHistory.filter(item => item.type === ChatItemType.MESSAGE).length > 1,
   });
 
-  const addMessage = ({ author, messageChunks, isLoading }: MessageType) => {
-    setChatHistory(prevItems =>
-      prevItems.concat({ author, messageChunks, isLoading }),
-    );
+  const handleContextChange = useCallback(() => {
+    const newContext = currentResource.resourceName
+      ? `${currentResource.resourceType} > ${currentResource.resourceName}`
+      : currentResource.resourceType;
+
+    const lastContextItem = chatHistory
+      .slice()
+      .reverse()
+      .find(
+        (item): item is ContextChatItem => item.type === ChatItemType.CONTEXT,
+      );
+
+    if (!lastContextItem || lastContextItem.labelText !== newContext) {
+      const contextItem: ContextChatItem = {
+        type: ChatItemType.CONTEXT,
+        labelText: newContext,
+      };
+      setChatHistory(prevItems => prevItems.concat(contextItem));
+    }
+  }, [currentResource, chatHistory, setChatHistory]);
+
+  const addMessage = ({
+    author,
+    messageChunks,
+    isLoading,
+  }: Omit<MessageChatItem, 'type'>) => {
+    const messageItem: MessageChatItem = {
+      type: ChatItemType.MESSAGE,
+      author,
+      messageChunks,
+      isLoading,
+    };
+    setChatHistory(prevItems => prevItems.concat(messageItem));
   };
 
-  const updateLatestMessage = (updates: Partial<MessageType>) => {
-    setChatHistory(prevMessages => {
-      if (prevMessages.length === 0) return prevMessages;
+  const updateLatestMessage = (updates: Partial<MessageChatItem>) => {
+    setChatHistory(prevItems => {
+      if (prevItems.length === 0) return prevItems;
 
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        ...latestMessage,
+      const [latestItem] = prevItems.slice(-1);
+      if (latestItem.type !== ChatItemType.MESSAGE) return prevItems;
+
+      return prevItems.slice(0, -1).concat({
+        ...latestItem,
         ...updates,
       });
     });
@@ -91,35 +141,42 @@ export const Chat = ({
     response: MessageChunk,
     isLoading: boolean,
   ) => {
-    setChatHistory(prevMessages => {
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        ...latestMessage,
-        messageChunks: latestMessage.messageChunks.concat(response),
+    setChatHistory(prevItems => {
+      const [latestItem] = prevItems.slice(-1);
+      if (latestItem.type !== ChatItemType.MESSAGE) return prevItems;
+
+      return prevItems.slice(0, -1).concat({
+        ...latestItem,
+        messageChunks: latestItem.messageChunks.concat(response),
         isLoading,
       });
     });
   };
 
   const removeLastMessage = () => {
-    setChatHistory(prevMessages => prevMessages.slice(0, -1));
+    setChatHistory(prevItems => prevItems.slice(0, -1));
   };
 
   const setErrorOnLastUserMsg = () => {
-    setChatHistory(prevMessages => {
-      const lastUserMsgIdx = prevMessages.findLastIndex(msg => {
-        return msg.author === 'user';
-      });
+    setChatHistory(prevItems => {
+      const lastUserMsgIdx = prevItems.findLastIndex(
+        item =>
+          item.type === ChatItemType.MESSAGE && item.author === Author.USER,
+      );
+
       if (lastUserMsgIdx === -1) {
-        return prevMessages;
+        return prevItems;
       }
 
-      return prevMessages.map((msg, idx) => {
-        if (idx === lastUserMsgIdx) {
-          msg.hasError = true;
-          msg.isLoading = false;
+      return prevItems.map((item, idx) => {
+        if (idx === lastUserMsgIdx && item.type === ChatItemType.MESSAGE) {
+          return {
+            ...item,
+            hasError: true,
+            isLoading: false,
+          };
         }
-        return msg;
+        return item;
       });
     });
   };
@@ -220,11 +277,14 @@ export const Chat = ({
   };
 
   const retryPreviousPrompt = () => {
-    const lastUserMsgIdx = chatHistory.findLastIndex(
-      v => v.author === Author.USER,
+    const messageItems = chatHistory.filter(
+      (item): item is MessageChatItem => item.type === ChatItemType.MESSAGE,
     );
-    const previousPrompt = chatHistory.at(lastUserMsgIdx)?.messageChunks[0].data
-      .answer.content;
+    const lastUserMsg = messageItems.findLast(
+      msg => msg.author === Author.USER,
+    );
+    const previousPrompt = lastUserMsg?.messageChunks[0].data.answer.content;
+
     if (previousPrompt) {
       removeLastMessage();
       sendPrompt(previousPrompt);
@@ -234,6 +294,9 @@ export const Chat = ({
   const sendPrompt = (query: string) => {
     setError({ message: null, displayRetry: false });
     setLoading(true);
+
+    handleContextChange();
+
     addMessage({
       author: Author.USER,
       messageChunks: [
@@ -285,7 +348,11 @@ export const Chat = ({
   };
 
   useEffect(() => {
-    if (chatHistory.length === 1) {
+    const messageCount = chatHistory.filter(
+      item => item.type === ChatItemType.MESSAGE,
+    ).length;
+
+    if (messageCount === 1) {
       if (initialSuggestionsLoading) {
         updateLatestMessage({
           messageChunks: [
@@ -338,22 +405,26 @@ export const Chat = ({
         className="chat-list sap-margin-x-tiny sap-margin-top-small"
         ref={containerRef}
       >
-        {chatHistory.map((message, index) => {
+        {chatHistory.map((item, index) => {
+          if (item.type === ChatItemType.CONTEXT) {
+            return <ContextLabel key={index} labelText={item.labelText} />;
+          }
+
           const isLast = index === chatHistory.length - 1;
-          return message.author === Author.AI ? (
+          return item.author === Author.AI ? (
             <React.Fragment key={index}>
               <Message
-                author={message.author}
-                messageChunks={message.messageChunks}
-                isLoading={message.isLoading}
-                hasError={message?.hasError ?? false}
+                author={item.author}
+                messageChunks={item.messageChunks}
+                isLoading={item.isLoading}
+                hasError={item?.hasError ?? false}
                 isLatestMessage={isLast}
               />
-              {isLast && !message.isLoading && (
+              {isLast && !item.isLoading && (
                 <Bubbles
                   onClick={sendPrompt}
-                  suggestions={message.suggestions}
-                  isLoading={message.suggestionsLoading ?? false}
+                  suggestions={item.suggestions}
+                  isLoading={item.suggestionsLoading ?? false}
                 />
               )}
             </React.Fragment>
@@ -361,9 +432,9 @@ export const Chat = ({
             <Message
               author={Author.USER}
               key={index}
-              messageChunks={message.messageChunks}
-              isLoading={message.isLoading}
-              hasError={message?.hasError ?? false}
+              messageChunks={item.messageChunks}
+              isLoading={item.isLoading}
+              hasError={item?.hasError ?? false}
               isLatestMessage={isLast}
             />
           );
