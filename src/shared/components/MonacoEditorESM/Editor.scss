@@ -30,7 +30,10 @@
   border: 1px solid var(--sapNeutralBackground);
 
   .monaco-editor {
-    z-index: 100;
+    .overflowingContentWidgets {
+      z-index: 100;
+      position: absolute;
+    }
   }
 }
 
