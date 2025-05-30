@@ -6,6 +6,10 @@
   position: relative;
 }
 
+.minimap {
+  z-index: 0 !important;
+}
+
 .resource-form__overlay {
   position: absolute;
   top: 0;
@@ -25,8 +29,15 @@
   flex-grow: 1;
   border: 1px solid var(--sapNeutralBackground);
 
-  .monaco-hover {
-    z-index: 100;
+  .monaco-editor {
+    textarea.inputarea {
+      z-index: unset;
+    }
+
+    .overflowingContentWidgets {
+      z-index: 100;
+      position: absolute;
+    }
   }
 }
 
@@ -61,6 +72,9 @@
   pointer-events: none;
 }
 
-.monaco-hover-content .hover-contents p:last-of-type {
-  display: none;
+.monaco-hover-content {
+  .hover-row:not(:first-of-type),
+  p:last-of-type {
+    display: none;
+  }
 }
