@@ -51,19 +51,6 @@ details:
         source: status.conditions
 ```
 
-```yaml
-details:
-  status:
-    - name: Replicas
-      source: status.replicas
-    - name: Containers
-      source: status.containers
-      fullWidth: true
-    - name: Condition details
-      widget: ConditionList
-      source: status.conditions
-```
-
 #### Status Header
 
 The **data.details.status.header** accepts one widget (for example [Badge](./50-list-and-details-widgets.md#badge)), displayed on the right side of the **Status** section header. This widget is used to summarize the status of the resource.
