@@ -344,7 +344,7 @@ See the following example:
 
 ### `TimeFromNow`
 
-The `TimeFromNow` widgets calculates time difference between date provided in **source** and current time and display it in a format: X days ago.
+The `TimeFromNow` widget calculates the time difference between the date provided in **source** and the current time and displays it in the format X days ago.
 
 See the following example:
 
