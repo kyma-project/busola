@@ -7,8 +7,8 @@ import {
   ModuleTemplateStatus,
   ModuleTemplateType,
   resolveInstallationStateName,
-  useGetManagerStatus,
 } from '../support';
+import { useGetManagerStatus, useGetModuleResource } from '../hooks';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
@@ -30,7 +30,7 @@ type ModuleReleaseMetasType = {
 type ModulesListRowsProps = {
   resourceName: string;
   resource: RowResourceType;
-  kymaResource: KymaResourceType;
+  kymaResource?: KymaResourceType;
   moduleTemplates: ModuleTemplateListType;
   hasDetailsLink: (resource: RowResourceType) => boolean;
 };
@@ -38,9 +38,9 @@ type ModulesListRowsProps = {
 export const ModulesListRows = ({
   resourceName,
   resource,
-  kymaResource,
   moduleTemplates,
   hasDetailsLink,
+  kymaResource,
 }: ModulesListRowsProps) => {
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
@@ -62,20 +62,33 @@ export const ModulesListRows = ({
     );
   };
 
-  const moduleStatus = findModuleStatus(kymaResource, resource.name);
-  const showDetailsLink = hasDetailsLink(resource);
-  const moduleIndex = kymaResource?.spec?.modules?.findIndex(
-    kymaResourceModule => {
-      return kymaResourceModule?.name === resource?.name;
-    },
-  );
-
   const currentModuleTemplate = findModuleTemplate(
     moduleTemplates,
     resource?.name,
-    resource?.channel || kymaResource?.spec?.channel,
+    resource?.channel || kymaResource?.spec?.channel || '',
     resource?.version,
   );
+
+  const { data: moduleResource } = useGetModuleResource(
+    currentModuleTemplate?.spec.data,
+  );
+
+  const moduleStatus = kymaResource
+    ? findModuleStatus(kymaResource, resource.name)
+    : {
+        name: resource.name,
+        resource: moduleResource,
+        version: resource.version,
+        channel: resource.channel,
+        state: moduleResource?.status?.state,
+        message: moduleResource?.status?.message,
+      };
+
+  const showDetailsLink = hasDetailsLink(resource);
+  const moduleIndex =
+    kymaResource?.spec?.modules?.findIndex(kymaResourceModule => {
+      return kymaResourceModule?.name === resource?.name;
+    }) ?? -1;
 
   const { data: managerResourceState } = useGetManagerStatus(
     currentModuleTemplate?.spec?.manager,
@@ -106,8 +119,9 @@ export const ModulesListRows = ({
 
   const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
 
-  const isChannelOverridden =
-    kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined;
+  const isChannelOverridden = moduleIndex
+    ? kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined
+    : false;
 
   return [
     // Name
@@ -146,8 +160,10 @@ export const ModulesListRows = ({
     <>
       {moduleStatus?.channel
         ? moduleStatus?.channel
-        : kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
-          kymaResource?.spec?.channel}
+        : (kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
+            kymaResource?.spec?.channel ||
+            currentModuleTemplate?.spec?.channel) ??
+          EMPTY_TEXT_PLACEHOLDER}
       {isChannelOverridden ? (
         <Tag
           hideStateIcon
@@ -169,14 +185,20 @@ export const ModulesListRows = ({
     <StatusBadge
       key="installation-state"
       resourceKind="kymas"
-      type={resolveType(moduleStatus?.state ?? '')}
-      tooltipContent={moduleStatus?.message}
-    >
-      {resolveInstallationStateName(
-        moduleStatus?.state,
-        !!currentModuleTemplate?.spec?.manager,
-        managerResourceState,
+      type={resolveType(
+        kymaResource ? moduleStatus?.state : managerResourceState?.state ?? '',
       )}
+      tooltipContent={
+        kymaResource ? moduleStatus?.message : managerResourceState?.message
+      }
+    >
+      {kymaResource
+        ? resolveInstallationStateName(
+            moduleStatus?.state,
+            !!currentModuleTemplate?.spec?.manager,
+            managerResourceState?.state,
+          )
+        : managerResourceState?.state}
     </StatusBadge>,
     // Documentation
     moduleDocs ? (

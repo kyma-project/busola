@@ -73,10 +73,11 @@ export const GenericList = ({
   customRowClick,
   className = '',
   accessibleName,
+  customSelectedEntry = '',
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
-  const [entrySelected, setEntrySelected] = useState('');
+  const [entrySelected, setEntrySelected] = useState(customSelectedEntry || '');
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
@@ -84,6 +85,10 @@ export const GenericList = ({
     name: sortBy && Object.keys(sortBy)[0],
     order: 'ASC',
   });
+
+  useEffect(() => {
+    setEntrySelected(customSelectedEntry || '');
+  }, [customSelectedEntry]);
 
   const sorting = (sort, resources) => {
     if (!sortBy || isEmpty(sortBy)) return resources;
