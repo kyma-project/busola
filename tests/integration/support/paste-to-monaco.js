@@ -3,10 +3,10 @@ Cypress.Commands.add(
   { prevSubject: false },
   (monacoCount = 0) => {
     return cy
-      .get('.resource-form__editor')
-      .find('.monaco-editor:visible')
+      .get('div.monaco-editor')
+      .find('textarea[aria-roledescription="editor"]:visible')
       .eq(monacoCount)
-      .focus({ force: true });
+      .focus();
   },
 );
 
