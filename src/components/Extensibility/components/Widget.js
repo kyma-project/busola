@@ -170,7 +170,7 @@ export function Widget({
   return Array.isArray(sanitizedValue) && !Renderer.array ? (
     sanitizedValue.map((valueItem, index) => (
       <SingleWidget
-        key={index}
+        key={`${valueItem}-${index}`}
         {...props}
         inlineRenderer={inlineRenderer}
         Renderer={Renderer}

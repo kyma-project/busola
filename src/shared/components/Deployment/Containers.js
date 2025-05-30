@@ -84,7 +84,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
   return containers.map((container, i) => (
     <ResourceForm.CollapsibleSection
       nestingLevel={1}
-      key={i}
+      key={`${container?.name}-${i}`}
       title={t('deployments.create-modal.container-header', {
         name: container?.name || i + 1,
       })}

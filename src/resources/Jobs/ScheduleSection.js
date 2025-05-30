@@ -75,7 +75,7 @@ function ScheduleEditor({ schedule, setSchedule }) {
         <TimeInput
           entries={entries}
           index={i}
-          key={i}
+          key={`${name}-${i}`}
           name={name}
           setSchedule={setSchedule}
         />

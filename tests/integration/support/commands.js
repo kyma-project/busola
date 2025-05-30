@@ -203,6 +203,7 @@ Cypress.Commands.add(
     }
 
     cy.get('ui5-button[data-testid="delete"]').click();
+    cy.wait(1000);
 
     if (confirmationEnabled) {
       cy.contains(`delete ${resourceType} ${resourceName}`);
@@ -210,6 +211,7 @@ Cypress.Commands.add(
       cy.get(`[header-text="Delete ${resourceType}"]:visible`)
         .find('[data-testid="delete-confirmation"]')
         .click();
+      cy.wait(1000);
 
       if (deletedVisible) {
         cy.contains('ui5-toast', /deleted/).should('be.visible');
@@ -255,6 +257,7 @@ Cypress.Commands.add(
     cy.getMidColumn()
       .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.get('ui5-table-row')
       .find('ui5-table-cell')
@@ -264,6 +267,7 @@ Cypress.Commands.add(
     cy.getMidColumn()
       .find('ui5-button[accessible-name="close-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.checkItemOnGenericListLink(resourceName);
 
@@ -277,6 +281,7 @@ Cypress.Commands.add(
     cy.getEndColumn()
       .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.get('ui5-table-row')
       .find('ui5-table-cell')
@@ -286,6 +291,7 @@ Cypress.Commands.add(
     cy.getEndColumn()
       .find('ui5-button[accessible-name="close-full-screen"]')
       .click();
+    cy.wait(1000);
 
     cy.checkItemOnGenericListLink(resourceName);
 

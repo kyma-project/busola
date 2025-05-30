@@ -77,7 +77,7 @@ const ExtensibilityInjections = ({ destination, slot, root }) => {
       <ExtensibilityInjection
         resMetaData={injection}
         root={root}
-        key={index}
+        key={`${injection}-${index}`}
       />,
     );
   });

@@ -61,7 +61,7 @@ export const CountingCard = ({
             <NumericSideIndicator
               number={info?.value}
               titleText={info?.title}
-              key={index}
+              key={`${info?.value}-${index}`}
             />
           ))}
         </AnalyticalCardHeader>

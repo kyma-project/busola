@@ -93,6 +93,7 @@ export function SidebarNavigation() {
               <SideNavigationItem
                 icon={'slim-arrow-left'}
                 text={'Back To Cluster Details'}
+                accessible-name={'Back To Cluster Details'}
                 onClick={() => {
                   navigateSafely(() => {
                     setDefaultColumnLayout();
@@ -167,6 +168,9 @@ export function SidebarNavigation() {
           <SideNavigationItem
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
             text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
+            accessible-name={
+              namespace ? 'Back To Cluster Details' : 'Cluster Details'
+            }
             onClick={() => {
               navigateSafely(() => navigate(clusterUrl(`overview`)));
             }}
@@ -176,6 +180,7 @@ export function SidebarNavigation() {
             <SideNavigationItem
               icon={'dimension'}
               text={t('common.headers.namespaces')}
+              accessible-name={t('common.headers.namespaces')}
               selected={false}
             >
               <NamespaceChooser />
@@ -187,6 +192,7 @@ export function SidebarNavigation() {
         <SideNavigationItem
           icon={'bbyd-dashboard'}
           text={'Cluster Details'}
+          accessible-name={'Cluster Details'}
           onClick={() => {
             navigateSafely(() => {
               setDefaultColumnLayout();
@@ -197,12 +203,14 @@ export function SidebarNavigation() {
         />
       )}
       {topLevelNodes.map(node =>
-        node.items?.map((item, index) => <NavItem node={item} key={index} />),
+        node.items?.map((item, index) => (
+          <NavItem node={item} key={`${item.label}-nav-${index}`} />
+        )),
       )}
       {categoryNodes.map((category, index) => (
         <CategoryItem
           category={category}
-          key={index}
+          key={`${category.label}-category-${index}`}
           expandedCategories={expandedCategories}
           handleExpandedCategories={setExpandedCategories}
         />

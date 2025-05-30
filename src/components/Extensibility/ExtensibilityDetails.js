@@ -111,7 +111,7 @@ export const ExtensibilityDetailsCore = ({
               visibility: resource => prepareVisibility(def, resource),
               value: resource => (
                 <Widget
-                  key={i}
+                  key={`${resource}-${i}`}
                   value={resource}
                   structure={def}
                   schema={schema}
@@ -128,7 +128,7 @@ export const ExtensibilityDetailsCore = ({
           ? [
               (resource, i) => (
                 <Widget
-                  key={i}
+                  key={`${resource}-${i}`}
                   value={resource}
                   structure={body}
                   schema={schema}
@@ -149,7 +149,7 @@ export const ExtensibilityDetailsCore = ({
                 visibility: resource => prepareVisibility(def, resource),
                 value: resource => (
                   <Widget
-                    key={i}
+                    key={`${resource}-${i}`}
                     structure={def}
                     value={resource}
                     schema={schema}
@@ -169,7 +169,7 @@ export const ExtensibilityDetailsCore = ({
                 visibility: resource => prepareVisibility(def, resource),
                 value: resource => (
                   <Widget
-                    key={i}
+                    key={`${resource}-${i}`}
                     structure={def}
                     value={resource}
                     schema={schema}
@@ -198,7 +198,7 @@ export const ExtensibilityDetailsCore = ({
           ? [
               (resource, i) => (
                 <Widget
-                  key={i}
+                  key={`${resource}-${i}`}
                   value={resource}
                   structure={health}
                   schema={schema}

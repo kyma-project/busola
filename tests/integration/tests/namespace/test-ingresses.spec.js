@@ -4,7 +4,7 @@ import { loadFile } from '../../support/loadFile';
 
 const RANDOM_NUMBER = Math.random()
   .toString()
-  .substr(2, 8);
+  .substring(2, 10);
 
 const NAME = 'test-' + RANDOM_NUMBER;
 async function loadIngress(name, namespace) {

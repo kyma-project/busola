@@ -27,7 +27,7 @@ export function TextArrayInput({
         ({ value, setValue, ref, updateValue, index }) => (
           <Input
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
-            key={index}
+            key={`${value}-${index}`}
             value={value || ''}
             ref={ref}
             onInput={e => {

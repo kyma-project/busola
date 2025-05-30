@@ -4,11 +4,11 @@ import { loadFile } from '../../support/loadFile';
 
 const PV_NFS_NAME = `test-pv-${Math.random()
   .toString()
-  .substr(2, 8)}`;
+  .substring(2, 10)}`;
 
 const PV_CSI_NAME = `test-pv-${Math.random()
   .toString()
-  .substr(2, 8)}`;
+  .substring(2, 10)}`;
 
 async function loadPV(pvName, fileName) {
   const PV = await loadFile(fileName);

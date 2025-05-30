@@ -44,8 +44,12 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       }}
       placeholder={t('components.rich-editor-data-field.language-placeholder')}
     >
-      {getAvailableLanguages().map(language => (
-        <ComboBoxItem id={language.key} text={language.text} />
+      {getAvailableLanguages().map((language, i) => (
+        <ComboBoxItem
+          key={`${language.key}-${i}`}
+          id={language.key}
+          text={language.text}
+        />
       ))}
     </ComboBox>
   );

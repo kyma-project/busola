@@ -32,7 +32,7 @@ export const ConditionList = ({
     <List className={className}>
       {conditions?.map((cond, index) => (
         <ExpandableListItem
-          key={index}
+          key={`${cond.message}-${index}`}
           header={cond.header?.titleText}
           status={cond.header?.status}
           overrideStatusType={cond.header?.overrideStatusType}
