@@ -6,7 +6,7 @@ Cypress.Commands.add(
       .get('.resource-form__editor')
       .find('.monaco-editor:visible')
       .eq(monacoCount)
-      .focus();
+      .focus({ force: true });
   },
 );
 
