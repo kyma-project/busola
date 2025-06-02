@@ -326,7 +326,7 @@ export const Chat = ({
       className="chat-container"
     >
       <div
-        className="chat-list sap-margin-x-tiny sap-margin-top-small"
+        className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
         ref={containerRef}
       >
         {chatHistory.map((group, groupIndex) => {
