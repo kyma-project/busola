@@ -34,7 +34,9 @@ Cypress.Commands.add('handleExceptions', () => {
       err.message.includes(
         "Cannot read properties of undefined (reading 'showAt')",
       ) ||
-      err.message.includes('items is not iterable')
+      // Exceptions due to reported issues to monaco editor.
+      err.message.includes('items is not iterable') ||
+      err.message.includes('Canceled')
     )
       return false;
   });
