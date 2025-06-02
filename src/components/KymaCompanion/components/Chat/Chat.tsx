@@ -89,8 +89,9 @@ export const Chat = ({
   });
 
   const handleContextChange = useCallback(() => {
+    if (!currentResource.resourceType) return;
     const newContext = currentResource.resourceName
-      ? `${currentResource.resourceType} > ${currentResource.resourceName}`
+      ? `${currentResource.resourceType} - ${currentResource.resourceName}`
       : currentResource.resourceType;
 
     const lastContextItem = chatHistory
@@ -100,12 +101,14 @@ export const Chat = ({
         (item): item is ContextChatItem => item.type === ChatItemType.CONTEXT,
       );
 
-    if (!lastContextItem || lastContextItem.labelText !== newContext) {
-      const contextItem: ContextChatItem = {
-        type: ChatItemType.CONTEXT,
-        labelText: newContext,
-      };
-      setChatHistory(prevItems => prevItems.concat(contextItem));
+    const newContextItem: ContextChatItem = {
+      type: ChatItemType.CONTEXT,
+      labelText: newContext,
+    };
+    if (!lastContextItem) {
+      setChatHistory(prevItems => [newContextItem, ...prevItems]);
+    } else if (lastContextItem.labelText !== newContext) {
+      setChatHistory(prevItems => prevItems.concat(newContextItem));
     }
   }, [currentResource, chatHistory, setChatHistory]);
 
@@ -354,6 +357,7 @@ export const Chat = ({
 
     if (messageCount === 1) {
       if (initialSuggestionsLoading) {
+        handleContextChange();
         updateLatestMessage({
           messageChunks: [
             {
