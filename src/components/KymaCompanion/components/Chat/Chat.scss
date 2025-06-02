@@ -11,14 +11,30 @@
       display: none;
     }
 
-    .message-container.left-aligned {
-      position: relative;
-      align-self: flex-start;
-    }
+    .context-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
 
-    .message-container.right-aligned {
-      position: relative;
-      align-self: flex-end;
+      &:not(:first-child) {
+        margin-top: 8px;
+      }
+
+      .messages-in-context {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .message-container.left-aligned {
+          position: relative;
+          align-self: flex-start;
+        }
+
+        .message-container.right-aligned {
+          position: relative;
+          align-self: flex-end;
+        }
+      }
     }
   }
 

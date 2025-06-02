@@ -6,11 +6,7 @@ import {
   handleChatResponseFn,
   retryFetch,
 } from 'components/KymaCompanion/api/retry';
-import {
-  ErrorType,
-  ErrResponse,
-  MessageChunk,
-} from 'components/KymaCompanion/components/Chat/Message/Message';
+import { ErrorType, ErrResponse, MessageChunk } from '../components/Chat/types';
 
 const successCall = 'Success';
 const errorCall = 'Attempt Failed';
