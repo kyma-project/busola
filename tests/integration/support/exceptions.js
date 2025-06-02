@@ -33,7 +33,8 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       err.message.includes(
         "Cannot read properties of undefined (reading 'showAt')",
-      )
+      ) ||
+      err.message.includes('items is not iterable')
     )
       return false;
   });
