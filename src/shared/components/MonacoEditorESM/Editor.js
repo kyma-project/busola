@@ -97,7 +97,7 @@ export function Editor({
         </div>
       )}
       <div ref={divRef} className="resource-form__editor" />
-      {placeholder && !!!value && (
+      {placeholder && !value && (
         <div className="resource-form__placeholder">{placeholder}</div>
       )}
       <div className="resource-form__legend">

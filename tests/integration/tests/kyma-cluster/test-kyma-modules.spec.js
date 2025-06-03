@@ -114,7 +114,8 @@ context('Test Kyma Modules views', () => {
   it('Test Modules list and details', () => {
     cy.wait(1000);
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.get('.modules-list')
+      .find('ui5-input[id="search-input"]:visible')
       .find('input')
       .wait(1000)
       .type('api-gateway');
@@ -134,7 +135,8 @@ context('Test Kyma Modules views', () => {
 
     // cy.closeMidColumn();
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.get('.modules-list')
+      .find('ui5-input[id="search-input"]:visible')
       .find('input')
       .clearInput();
 
@@ -242,6 +244,7 @@ context('Test Kyma Modules views', () => {
   it('Test deleting Modules from List and Details', { retries: 3 }, () => {
     cy.deleteFromGenericList('Module', 'eventing', {
       searchInPlainTableText: true,
+      parentSelector: '.modules-list',
     });
 
     // Uncomment after adding local KLM

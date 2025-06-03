@@ -1,7 +1,4 @@
 import pluralize from 'pluralize';
-import React, { useEffect, useState } from 'react';
-
-import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { resolveType } from './components/ModuleStatus';
 
@@ -16,7 +13,7 @@ export const enum ModuleTemplateStatus {
   NotInstalled = 'Not installed',
 }
 
-type ConditionType = {
+export type ConditionType = {
   lastTransitionTime: string;
   lastUpdateTime: string;
   message: string;
@@ -59,121 +56,7 @@ export type KymaResourceType = {
   };
 };
 
-const getResourcePath = (resource: KymaResourceType) => {
-  if (!resource) return '';
-  return resource?.metadata?.namespace
-    ? `/apis/${resource?.apiVersion}/namespaces/${
-        resource?.metadata?.namespace
-      }/${pluralize(resource?.kind || '').toLowerCase()}/${
-        resource?.metadata?.name
-      }`
-    : `/apis/${resource?.apiVersion}/${pluralize(
-        resource?.kind || '',
-      ).toLowerCase()}/${resource?.metadata?.name}`;
-};
-
-export function useModuleStatus(resource: KymaResourceType) {
-  const fetch = useFetch();
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  const path = getResourcePath(resource);
-
-  useEffect(() => {
-    async function fetchModule() {
-      if (!resource) return;
-      try {
-        const response = await fetch({ relativeUrl: path });
-        const status = (await response.json())?.status;
-        setData(status);
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e);
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchModule();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
-
-  return { data, loading, error };
-}
-
-export function useGetAllModulesStatuses(modules: any[]) {
-  const fetch = useFetch();
-  const [data, setData] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    async function fetchModules() {
-      if (!modules || modules.length === 0) return;
-      setLoading(true);
-      try {
-        const results = await Promise.all(
-          modules.map(async module => {
-            const resource = module?.resource ?? module;
-
-            if (!resource) return null;
-            const path = getResourcePath(resource);
-
-            try {
-              const response = await fetch({ relativeUrl: path });
-              const status = (await response.json())?.status;
-              return {
-                key: resource?.metadata?.name ?? resource?.name,
-                status: status?.state || ModuleTemplateStatus.Unknown,
-              };
-            } catch (e) {
-              return {
-                key: resource?.metadata?.name ?? resource?.name,
-                status: null,
-                error: e,
-              };
-            }
-          }),
-        );
-
-        setData(results);
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e);
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchModules();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(modules)]);
-
-  return { data, loading, error };
-}
-
-export const findModuleStatus = (
-  kymaResource: KymaResourceType,
-  moduleName: string,
-) => {
-  return kymaResource?.status?.modules?.find(
-    (module: { name: string }) => moduleName === module?.name,
-  );
-};
-
-export const findModuleSpec = (
-  kymaResource: KymaResourceType,
-  moduleName: string,
-) => {
-  return kymaResource?.spec.modules?.find(
-    (module: { name: string }) => moduleName === module?.name,
-  );
-};
-
-type ModuleManagerType = {
+export type ModuleManagerType = {
   name: string;
   namespace: string;
   group: string;
@@ -197,11 +80,48 @@ export type ModuleTemplateType = {
       documentation?: string;
     };
     manager: ModuleManagerType;
+    moduleName?: string;
   };
 };
 
 export type ModuleTemplateListType = {
   items: ModuleTemplateType[];
+};
+
+export const getResourcePath = (resource: any) => {
+  if (!resource) return '';
+
+  const apiVersion =
+    resource?.apiVersion || `${resource?.group}/${resource?.version}`;
+  const resourceName = resource?.metadata?.name || resource?.name;
+  const resourceNamespace =
+    resource?.metadata?.namespace || resource?.namespace;
+
+  return resourceNamespace
+    ? `/apis/${apiVersion}/namespaces/${resourceNamespace}/${pluralize(
+        resource.kind,
+      ).toLowerCase()}/${resourceName}`
+    : `/apis/${apiVersion}/${pluralize(
+        resource.kind || '',
+      ).toLowerCase()}/${resourceName}`;
+};
+
+export const findModuleStatus = (
+  kymaResource: KymaResourceType,
+  moduleName: string,
+) => {
+  return kymaResource?.status?.modules?.find(
+    (module: { name: string }) => moduleName === module?.name,
+  );
+};
+
+export const findModuleSpec = (
+  kymaResource: KymaResourceType,
+  moduleName: string,
+) => {
+  return kymaResource?.spec.modules?.find(
+    (module: { name: string }) => moduleName === module?.name,
+  );
 };
 
 export const findModuleTemplate = (
@@ -275,53 +195,6 @@ export const checkSelectedModule = (
   return false;
 };
 
-export function useGetManagerStatus(manager?: ModuleManagerType) {
-  const fetch = useFetch();
-  const [data, setData] = useState<any>(ModuleTemplateStatus.Unknown);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    if (manager) {
-      const path = getResourcePath({
-        apiVersion: `${manager?.group}/${manager?.version}`,
-        kind: manager?.kind,
-        metadata: {
-          name: manager?.name,
-          namespace: manager?.namespace,
-        },
-      } as KymaResourceType);
-      async function fetchResource() {
-        try {
-          const response = await fetch({ relativeUrl: path });
-          const status = (await response.json())?.status;
-          const latest = status?.conditions
-            ?.filter((condition: ConditionType) => condition?.status === 'True')
-            ?.reduce(
-              (acc: ConditionType, condition: ConditionType) =>
-                new Date(acc?.lastUpdateTime).getTime() >
-                new Date(condition?.lastUpdateTime).getTime()
-                  ? acc
-                  : condition,
-              {},
-            );
-          if (latest?.type) {
-            setData(latest.type);
-          }
-        } catch (error) {
-          if (error instanceof Error) {
-            setError(error);
-          }
-        }
-      }
-
-      fetchResource();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [manager]);
-
-  return { data, error };
-}
-
 export const resolveInstallationStateName = (
   state?: string,
   managerExists?: boolean,
@@ -339,4 +212,23 @@ export const resolveInstallationStateName = (
   }
 
   return state || ModuleTemplateStatus.Unknown;
+};
+
+export const splitModuleTemplates = (
+  moduleTemplates: ModuleTemplateListType,
+) => {
+  if (!moduleTemplates?.items) return { managed: [], unmanaged: [] };
+
+  const communityTemplates: ModuleTemplateListType = { items: [] };
+  const kymaTemplates: ModuleTemplateListType = { items: [] };
+
+  moduleTemplates.items.forEach(item => {
+    if (item.metadata?.labels?.['operator.kyma-project.io/managed-by']) {
+      kymaTemplates.items.push(item);
+    } else {
+      communityTemplates.items.push(item);
+    }
+  });
+
+  return { kymaTemplates, communityTemplates };
 };

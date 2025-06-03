@@ -5,6 +5,7 @@ metadata:
   namespace: kcp-system
   labels:
     'operator.kyma-project.io/module-name': 'eventing'
+    'operator.kyma-project.io/managed-by': 'kyma'
   annotations:
     'operator.kyma-project.io/doc-url': 'https://kyma-project.io/#/eventing-manager/user/README'
     'operator.kyma-project.io/is-cluster-scoped': 'false'

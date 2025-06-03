@@ -169,12 +169,20 @@ Cypress.Commands.add(
       checkIfResourceIsRemoved = true,
       selectSearchResult = false,
       searchInPlainTableText = false,
+      parentSelector = null,
     } = options;
 
-    cy.wait(500)
-      .get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .type(resourceName);
+    cy.wait(500);
+    if (parentSelector) {
+      cy.get(parentSelector)
+        .find('ui5-input[id="search-input"]:visible')
+        .find('input')
+        .type(resourceName);
+    } else {
+      cy.get('ui5-input[id="search-input"]:visible')
+        .find('input')
+        .type(resourceName);
+    }
 
     cy.wait(1000);
 
@@ -215,10 +223,18 @@ Cypress.Commands.add(
     }
 
     if (clearSearch) {
-      cy.get('ui5-input[id="search-input"]:visible')
-        .find('input')
-        .wait(1000)
-        .clear();
+      if (parentSelector) {
+        cy.get(parentSelector)
+          .find('ui5-input[id="search-input"]:visible')
+          .find('input')
+          .wait(1000)
+          .clear();
+      } else {
+        cy.get('ui5-input[id="search-input"]:visible')
+          .find('input')
+          .wait(1000)
+          .clear();
+      }
     }
   },
 );

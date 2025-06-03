@@ -4,7 +4,7 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router';
-import { useGetAllModulesStatuses } from 'components/KymaModules/support';
+import { useGetAllModulesStatuses } from 'components/KymaModules/hooks';
 import { useMemo } from 'react';
 
 export default function ClusterModulesCard() {
