@@ -337,7 +337,7 @@ export const Chat = ({
               {group.context && (
                 <ContextLabel labelText={group.context.labelText} />
               )}
-              <div className="messages-in-context">
+              <div className="message-context">
                 {group.messages.map((message, messageIndex) => {
                   const isLastMessage =
                     isLastGroup && messageIndex === group.messages.length - 1;
