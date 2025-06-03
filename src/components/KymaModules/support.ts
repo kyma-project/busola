@@ -1,4 +1,5 @@
 import pluralize from 'pluralize';
+import jsyaml from 'js-yaml';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { resolveType } from './components/ModuleStatus';
 
@@ -20,6 +21,13 @@ export type ConditionType = {
   reason: string;
   status: string;
   type: string;
+};
+
+export type CustomResourceDefinitionsType = {
+  items: {
+    metadata?: { name: string };
+    spec?: { names?: { kind?: string } };
+  }[];
 };
 
 export type KymaResourceSpecModuleType = {
@@ -104,6 +112,20 @@ export const getResourcePath = (resource: any) => {
     : `/apis/${apiVersion}/${pluralize(
         resource.kind || '',
       ).toLowerCase()}/${resourceName}`;
+};
+
+export const findCrd = (resourceKind: string, crds: any) => {
+  return (crds as CustomResourceDefinitionsType | null)?.items?.find(
+    crd => crd.spec?.names?.kind === resourceKind,
+  );
+};
+
+export const findExtension = (resourceKind: string, extensions: any) => {
+  return (extensions as { data: { general: string } }[] | null)?.find(ext => {
+    const { resource: extensionResource } =
+      jsyaml.load(ext.data.general, { json: true }) || ({} as any);
+    return extensionResource.kind === resourceKind;
+  });
 };
 
 export const findModuleStatus = (
@@ -193,6 +215,31 @@ export const checkSelectedModule = (
     return pluralize(module?.name?.replace('-', '') || '') === resourceTypeBase;
   }
   return false;
+};
+
+export const createModulePartialPath = (
+  hasExtension: boolean,
+  moduleStatusResource: {
+    kind: string;
+    apiVersion: string;
+    metadata: { name: string; namespace: string };
+  },
+  moduleCrd?: { metadata?: { name: string } },
+) => {
+  // Taking info for path from extension or crd
+  const pathName = `${
+    hasExtension
+      ? `${pluralize(moduleStatusResource?.kind || '').toLowerCase()}/${
+          moduleStatusResource?.metadata?.name
+        }`
+      : `${moduleCrd?.metadata?.name}/${moduleStatusResource?.metadata?.name}`
+  }`;
+
+  const partialPath = moduleStatusResource?.metadata?.namespace
+    ? `kymamodules/namespaces/${moduleStatusResource?.metadata?.namespace}/${pathName}`
+    : `kymamodules/${pathName}`;
+
+  return partialPath;
 };
 
 export const resolveInstallationStateName = (
