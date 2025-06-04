@@ -22,6 +22,9 @@ const KymaModulesList = React.lazy(() =>
 const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
+const CommunityModulesAddModule = React.lazy(() =>
+  import('../../components/KymaModules/CommunityModulesAddModule'),
+);
 
 const ColumnWraper = ({
   defaultColumn = 'list',
@@ -50,6 +53,7 @@ const ColumnWraper = ({
       layoutState?.showEdit?.resource ||
       null,
     rawResourceTypeName: 'Kyma',
+    // TODO check why after F5 createType is lost
   });
 
   let startColumnComponent = null;
@@ -92,18 +96,36 @@ const ColumnWraper = ({
   }
 
   const createMidColumn = (
-    <ResourceCreate
-      title={t('kyma-modules.add-module')}
-      confirmText={t('common.buttons.add')}
-      layoutCloseCreateUrl={url}
-      renderForm={renderProps => {
-        return (
-          <ErrorBoundary>
-            <KymaModulesAddModule {...renderProps} />
-          </ErrorBoundary>
-        );
-      }}
-    />
+    <>
+      {layoutState?.showCreate?.createType === 'kyma' && (
+        <ResourceCreate
+          title={t('kyma-modules.add-module')}
+          confirmText={t('common.buttons.add')}
+          layoutCloseCreateUrl={url}
+          renderForm={renderProps => {
+            return (
+              <ErrorBoundary>
+                <KymaModulesAddModule {...renderProps} />
+              </ErrorBoundary>
+            );
+          }}
+        />
+      )}
+      {layoutState?.showCreate?.createType === 'community' && (
+        <ResourceCreate
+          title={t('kyma-modules.add-community-module')}
+          confirmText={t('common.buttons.add')}
+          layoutCloseCreateUrl={url}
+          renderForm={renderProps => {
+            return (
+              <ErrorBoundary>
+                <CommunityModulesAddModule {...renderProps} />
+              </ErrorBoundary>
+            );
+          }}
+        />
+      )}
+    </>
   );
 
   return (
