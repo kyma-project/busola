@@ -24,7 +24,7 @@ enum Author {
 }
 
 export interface MessageType {
-  author: Author;
+  author: 'user' | 'ai';
   messageChunks: MessageChunk[];
   isLoading: boolean;
   suggestions?: string[];
