@@ -128,8 +128,24 @@ export const DynamicPageComponent = ({
   );
 
   useEffect(() => {
-    setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
-  }, [layoutColumn]);
+    const editStartColumn =
+      layoutColumn?.layout === 'OneColumn' || editColumn === 'startColumn';
+    switch (layoutNumber) {
+      case 'startColumn':
+        setSelectedTab(
+          layoutColumn?.showEdit && editStartColumn ? 'edit' : 'view',
+        );
+        break;
+      case 'midColumn':
+        setSelectedTab(
+          layoutColumn?.showEdit && !editStartColumn ? 'edit' : 'view',
+        );
+        break;
+      default:
+        setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
+        break;
+    }
+  }, [editColumn, layoutNumber, layoutColumn?.layout, layoutColumn?.showEdit]);
 
   const dynamicPageRef = useRef(null);
   const tabContainerRef = useRef(null);
