@@ -4,6 +4,9 @@ import { useSetRecoilState } from 'recoil';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
 import {
+  createModulePartialPath,
+  findCrd,
+  findExtension,
   findModuleTemplate,
   ModuleTemplateListType,
   ModuleTemplateType,
@@ -16,12 +19,13 @@ import {
   ShowCreate,
 } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
 import { useFetchModuleData } from '../hooks';
 import { ModulesListRows } from './ModulesListRows';
 
-type ModulesListProps = {
+type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
   selectedModules: any[];
   modulesLoading: boolean;
@@ -43,8 +47,23 @@ export const CommunityModulesList = ({
   handleResourceDelete,
   customSelectedEntry,
   setSelectedEntry,
-}: ModulesListProps) => {
+}: CommunityModulesListProps) => {
   const { t } = useTranslation();
+
+  const { data: communityExtentions } = useGetList(
+    (ext: { metadata: { labels: Record<string, string> } }) =>
+      ext.metadata.labels['app.kubernetes.io/part-of'] !== 'Kyma',
+  )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
+    pollingInterval: 5000,
+  } as any);
+
+  const { data: crds } = useGet(
+    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
+    {
+      pollingInterval: 5000,
+    } as any,
+  );
+
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
@@ -175,20 +194,22 @@ export const CommunityModulesList = ({
       };
     }
 
+    const hasExtension = !!findExtension(
+      moduleStatus?.resource?.kind,
+      communityExtentions,
+    );
+    const moduleCrd = findCrd(moduleStatus?.resource?.kind, crds);
     const skipRedirect = !hasDetailsLink(moduleStatus);
 
     if (skipRedirect) {
       return;
     }
 
-    const pathName = `${pluralize(
-      moduleStatus?.resource?.kind || '',
-    ).toLowerCase()}/${moduleStatus?.resource?.metadata?.name}`;
-
-    const partialPath = moduleStatus?.resource?.metadata?.namespace
-      ? `kymamodules/namespaces/${moduleStatus?.resource?.metadata?.namespace}/${pathName}`
-      : `kymamodules/${pathName}`;
-
+    const partialPath = createModulePartialPath(
+      hasExtension,
+      moduleStatus.resource,
+      moduleCrd,
+    );
     const path = namespaced
       ? namespaceUrl(partialPath)
       : clusterUrl(partialPath);
@@ -196,19 +217,20 @@ export const CommunityModulesList = ({
     const { group, version } = extractApiGroupVersion(
       moduleStatus?.resource?.apiVersion,
     );
+
     setLayoutColumn({
       startColumn: {
-        resourceType: pluralize(
-          moduleStatus?.resource?.kind || '',
-        ).toLowerCase(),
+        resourceType: hasExtension
+          ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
+          : moduleCrd?.metadata?.name,
         namespaceId: moduleStatus?.resource?.metadata.namespace || '',
         apiGroup: group,
         apiVersion: version,
       } as ColumnState,
       midColumn: {
-        resourceType: pluralize(
-          moduleStatus?.resource?.kind || '',
-        ).toLowerCase(),
+        resourceType: hasExtension
+          ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
+          : moduleCrd?.metadata?.name,
         resourceName: moduleStatus?.resource?.metadata?.name,
         namespaceId: moduleStatus?.resource?.metadata.namespace || '',
         apiGroup: group,
