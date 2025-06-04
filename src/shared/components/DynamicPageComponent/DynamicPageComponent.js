@@ -128,22 +128,13 @@ export const DynamicPageComponent = ({
   );
 
   useEffect(() => {
-    const editStartColumn =
-      layoutColumn?.layout === 'OneColumn' || editColumn === 'startColumn';
-    switch (layoutNumber) {
-      case 'startColumn':
-        setSelectedTab(
-          layoutColumn?.showEdit && editStartColumn ? 'edit' : 'view',
-        );
-        break;
-      case 'midColumn':
-        setSelectedTab(
-          layoutColumn?.showEdit && !editStartColumn ? 'edit' : 'view',
-        );
-        break;
-      default:
-        setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
-        break;
+    if (
+      layoutColumn?.layout !== 'OneColumn' &&
+      layoutNumber === 'startColumn'
+    ) {
+      setSelectedTab(editColumn === 'startColumn' ? 'edit' : 'view');
+    } else {
+      setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
     }
   }, [editColumn, layoutNumber, layoutColumn?.layout, layoutColumn?.showEdit]);
 
@@ -378,19 +369,24 @@ export const DynamicPageComponent = ({
 
               if (newTabName === 'edit') {
                 const params = new URLSearchParams();
+                let showEdit = {
+                  resource: null,
+                };
                 if (layoutColumn.layout !== 'OneColumn') {
                   params.set('layout', layoutColumn.layout);
                   if (title === 'Modules') {
                     params.set('editColumn', 'startColumn');
+                    showEdit = null;
+                  } else {
+                    params.set('showEdit', 'true');
                   }
+                } else {
+                  params.set('showEdit', 'true');
                 }
-                params.set('showEdit', 'true');
 
                 setLayoutColumn({
                   ...layoutColumn,
-                  showEdit: {
-                    resource: null,
-                  },
+                  showEdit,
                 });
                 navigate(`${window.location.pathname}?${params.toString()}`);
               } else {
