@@ -1,10 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
-import jsyaml from 'js-yaml';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
 import {
+  createModulePartialPath,
+  findCrd,
+  findExtension,
   findModuleStatus,
   findModuleTemplate,
   KymaResourceSpecModuleType,
@@ -25,13 +27,6 @@ import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ModulesListRows } from './ModulesListRows';
 import { useNavigate } from 'react-router';
-
-type CustomResourceDefinitionsType = {
-  items: {
-    metadata?: { name: string };
-    spec?: { names?: { kind?: string } };
-  }[];
-};
 
 type ModulesListProps = {
   resource: KymaResourceType;
@@ -63,12 +58,14 @@ export const ModulesList = ({
   setSelectedEntry,
 }: ModulesListProps) => {
   const { t } = useTranslation();
+
   const { data: kymaExt } = useGetList(
     (ext: { metadata: { labels: Record<string, string> } }) =>
       ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
   )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
     pollingInterval: 5000,
   } as any);
+
   const { data: crds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
     {
@@ -106,20 +103,6 @@ export const ModulesList = ({
     setIsFormOpen(state => ({ ...state, formOpen: true }));
   };
 
-  const findExtension = (resourceKind: string) => {
-    return (kymaExt as { data: { general: string } }[] | null)?.find(ext => {
-      const { resource: extensionResource } =
-        jsyaml.load(ext.data.general, { json: true }) || ({} as any);
-      return extensionResource.kind === resourceKind;
-    });
-  };
-
-  const findCrd = (resourceKind: string) => {
-    return (crds as CustomResourceDefinitionsType | null)?.items?.find(
-      crd => crd.spec?.names?.kind === resourceKind,
-    );
-  };
-
   const headerRenderer = () => [
     t('common.headers.name'),
     t('kyma-modules.namespaces'),
@@ -144,8 +127,8 @@ export const ModulesList = ({
     const isDeletionFailed = moduleStatus?.state === 'Warning';
     const isError = moduleStatus?.state === 'Error';
 
-    const hasExtension = !!findExtension(resource?.resource?.kind);
-    const hasCrd = !!findCrd(resource?.resource?.kind);
+    const hasExtension = !!findExtension(resource?.resource?.kind, kymaExt);
+    const hasCrd = !!findCrd(resource?.resource?.kind, crds);
 
     let hasModuleTpl = !!findModuleTemplate(
       moduleTemplates,
@@ -232,25 +215,19 @@ export const ModulesList = ({
       };
     }
 
-    const hasExtension = !!findExtension(moduleStatus?.resource?.kind);
-    const moduleCrd = findCrd(moduleStatus?.resource?.kind);
+    const hasExtension = !!findExtension(moduleStatus?.resource?.kind, kymaExt);
+    const moduleCrd = findCrd(moduleStatus?.resource?.kind, crds);
     const skipRedirect = !hasDetailsLink(moduleStatus);
 
     if (skipRedirect) {
       return;
     }
 
-    const pathName = `${
-      hasExtension
-        ? `${pluralize(moduleStatus?.resource?.kind || '').toLowerCase()}/${
-            moduleStatus?.resource?.metadata?.name
-          }`
-        : `${moduleCrd?.metadata?.name}/${moduleStatus?.resource?.metadata?.name}`
-    }`;
-
-    const partialPath = moduleStatus?.resource?.metadata?.namespace
-      ? `kymamodules/namespaces/${moduleStatus?.resource?.metadata?.namespace}/${pathName}`
-      : `kymamodules/${pathName}`;
+    const partialPath = createModulePartialPath(
+      hasExtension,
+      moduleStatus.resource,
+      moduleCrd,
+    );
 
     const path = namespaced
       ? namespaceUrl(partialPath)
