@@ -15,10 +15,14 @@ import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 import { checkSelectedModule } from './support';
 import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useFeature } from 'hooks/useFeature';
 
 export default function KymaModulesList({ namespaced }) {
   const { t } = useTranslation();
   const layoutState = useRecoilValue(columnLayoutState);
+  const { isEnabled: isCommunityModulesEnabled } = useFeature(
+    'COMMUNITY_MODULES',
+  );
 
   const {
     resourceName,
@@ -81,18 +85,20 @@ export default function KymaModulesList({ namespaced }) {
               setSelectedEntry={setSelectedEntry}
             />
           )}
-          <CommunityModulesList
-            key="community-modules-list"
-            moduleTemplates={communityModuleTemplates}
-            selectedModules={installedCommunityModules}
-            modulesLoading={communityModulesLoading}
-            namespaced={namespaced}
-            resourceUrl={resourceUrl}
-            setOpenedModuleIndex={setOpenedCommunityModuleIndex}
-            handleResourceDelete={handleResourceDelete}
-            customSelectedEntry={selectedEntry}
-            setSelectedEntry={setSelectedEntry}
-          />
+          {isCommunityModulesEnabled && (
+            <CommunityModulesList
+              key="community-modules-list"
+              moduleTemplates={communityModuleTemplates}
+              selectedModules={installedCommunityModules}
+              modulesLoading={communityModulesLoading}
+              namespaced={namespaced}
+              resourceUrl={resourceUrl}
+              setOpenedModuleIndex={setOpenedCommunityModuleIndex}
+              handleResourceDelete={handleResourceDelete}
+              customSelectedEntry={selectedEntry}
+              setSelectedEntry={setSelectedEntry}
+            />
+          )}
         </>
       }
       inlineEditForm={() => (
