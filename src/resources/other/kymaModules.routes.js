@@ -97,20 +97,6 @@ const ColumnWraper = ({
 
   const createMidColumn = (
     <>
-      {layoutState?.showCreate?.createType === 'kyma' && (
-        <ResourceCreate
-          title={t('kyma-modules.add-module')}
-          confirmText={t('common.buttons.add')}
-          layoutCloseCreateUrl={url}
-          renderForm={renderProps => {
-            return (
-              <ErrorBoundary>
-                <KymaModulesAddModule {...renderProps} />
-              </ErrorBoundary>
-            );
-          }}
-        />
-      )}
       {layoutState?.showCreate?.createType === 'community' && (
         <ResourceCreate
           title={t('kyma-modules.add-community-module')}
@@ -120,6 +106,20 @@ const ColumnWraper = ({
             return (
               <ErrorBoundary>
                 <CommunityModulesAddModule {...renderProps} />
+              </ErrorBoundary>
+            );
+          }}
+        />
+      )}
+      {layoutState?.showCreate?.createType !== 'community' && (
+        <ResourceCreate
+          title={t('kyma-modules.add-module')}
+          confirmText={t('common.buttons.add')}
+          layoutCloseCreateUrl={url}
+          renderForm={renderProps => {
+            return (
+              <ErrorBoundary>
+                <KymaModulesAddModule {...renderProps} />
               </ErrorBoundary>
             );
           }}
