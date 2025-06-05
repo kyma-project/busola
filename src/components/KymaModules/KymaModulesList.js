@@ -63,6 +63,7 @@ export default function KymaModulesList({ namespaced }) {
       layoutNumber="startColumn"
       title={t('kyma-modules.title')}
       description={ResourceDescription}
+      isFirstColumnWithEdit={true}
       content={
         <>
           {kymaResource && (

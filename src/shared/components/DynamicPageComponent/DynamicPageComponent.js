@@ -110,6 +110,7 @@ export const DynamicPageComponent = ({
   protectedResourceWarning,
   className,
   customActionIfFormOpen,
+  isFirstColumnWithEdit = false,
 }) => {
   const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
@@ -374,9 +375,12 @@ export const DynamicPageComponent = ({
                 };
                 if (layoutColumn.layout !== 'OneColumn') {
                   params.set('layout', layoutColumn.layout);
-                  if (title === 'Modules') {
+                  if (isFirstColumnWithEdit) {
                     params.set('editColumn', 'startColumn');
-                    showEdit = null;
+                    showEdit = layoutColumn?.showEdit;
+                  } else if (editColumn === 'startColumn') {
+                    params.set('editColumn', 'startColumn');
+                    params.set('showEdit', 'true');
                   } else {
                     params.set('showEdit', 'true');
                   }
@@ -390,15 +394,24 @@ export const DynamicPageComponent = ({
                 });
                 navigate(`${window.location.pathname}?${params.toString()}`);
               } else {
+                let showEdit = null;
+                const params = new URLSearchParams();
+                if (isFirstColumnWithEdit) {
+                  showEdit = layoutColumn?.showEdit;
+                } else if (editColumn === 'startColumn') {
+                  params.set('editColumn', 'startColumn');
+                }
                 setLayoutColumn({
                   ...layoutColumn,
-                  showEdit: null,
+                  showEdit,
                 });
                 navigate(
                   `${window.location.pathname}${
                     layoutColumn.layout === 'OneColumn'
                       ? ''
-                      : '?layout=' + layoutColumn.layout
+                      : '?layout=' +
+                        layoutColumn.layout +
+                        `${params ? '&' + params.toString() : ''}`
                   }`,
                 );
               }
