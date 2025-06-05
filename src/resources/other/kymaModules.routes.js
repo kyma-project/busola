@@ -23,7 +23,7 @@ const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
 
-const ColumnWraper = ({
+const ColumnWrapper = ({
   defaultColumn = 'list',
   namespaced = false,
   DeleteMessageBox,
@@ -107,47 +107,49 @@ const ColumnWraper = ({
   );
 
   return (
-    <>
-      <ModuleTemplatesContextProvider>
-        <KymaModuleContextProvider
+    <ModuleTemplatesContextProvider>
+      <KymaModuleContextProvider
+        setLayoutColumn={setLayoutColumn}
+        layoutState={layoutState}
+        DeleteMessageBox={DeleteMessageBox}
+        handleResourceDelete={handleResourceDelete}
+        showDeleteDialog={showDeleteDialog}
+      >
+        <CommunityModuleContextProvider
           setLayoutColumn={setLayoutColumn}
           layoutState={layoutState}
           DeleteMessageBox={DeleteMessageBox}
           handleResourceDelete={handleResourceDelete}
           showDeleteDialog={showDeleteDialog}
         >
-          <CommunityModuleContextProvider
-            setLayoutColumn={setLayoutColumn}
-            layoutState={layoutState}
-            DeleteMessageBox={DeleteMessageBox}
-            handleResourceDelete={handleResourceDelete}
-            showDeleteDialog={showDeleteDialog}
-          >
-            <FlexibleColumnLayout
-              style={{ height: '100%' }}
-              layout={layoutState?.layout}
-              startColumn={
-                <div className="column-content">{startColumnComponent}</div>
-              }
-              midColumn={
-                <>
-                  {!layoutState?.showCreate &&
-                    (defaultColumn !== 'details' ||
-                      layoutState.layout !== 'OneColumn') && (
-                      <div className="column-content">{detailsMidColumn}</div>
-                    )}
-                  {!layoutState?.midColumn &&
-                    (defaultColumn !== 'details' ||
-                      layoutState.layout !== 'OneColumn') && (
-                      <div className="column-content">{createMidColumn}</div>
-                    )}
-                </>
-              }
-            />
-          </CommunityModuleContextProvider>
-        </KymaModuleContextProvider>
-      </ModuleTemplatesContextProvider>
-    </>
+          <FlexibleColumnLayout
+            style={{ height: '100%' }}
+            layout={layoutState?.layout}
+            startColumn={
+              <div className="column-content">
+                <Suspense fallback={<Spinner />}>
+                  {startColumnComponent}
+                </Suspense>
+              </div>
+            }
+            midColumn={
+              <>
+                {!layoutState?.showCreate &&
+                  (defaultColumn !== 'details' ||
+                    layoutState.layout !== 'OneColumn') && (
+                    <div className="column-content">{detailsMidColumn}</div>
+                  )}
+                {!layoutState?.midColumn &&
+                  (defaultColumn !== 'details' ||
+                    layoutState.layout !== 'OneColumn') && (
+                    <div className="column-content">{createMidColumn}</div>
+                  )}
+              </>
+            }
+          />
+        </CommunityModuleContextProvider>
+      </KymaModuleContextProvider>
+    </ModuleTemplatesContextProvider>
   );
 };
 
@@ -161,26 +163,21 @@ const KymaModules = ({ defaultColumn, namespaced }) => {
     forceConfirmDelete: true,
   });
   return (
-    <ColumnWraper
-      defaultColumn={defaultColumn}
-      namespaced={namespaced}
-      DeleteMessageBox={DeleteMessageBox}
-      handleResourceDelete={handleResourceDelete}
-      showDeleteDialog={showDeleteDialog}
-    />
+    <Suspense fallback={<Spinner />}>
+      <ColumnWrapper
+        defaultColumn={defaultColumn}
+        namespaced={namespaced}
+        DeleteMessageBox={DeleteMessageBox}
+        handleResourceDelete={handleResourceDelete}
+        showDeleteDialog={showDeleteDialog}
+      />
+    </Suspense>
   );
 };
 
 export default (
   <>
-    <Route
-      path={'kymamodules'}
-      element={
-        <Suspense fallback={<Spinner />}>
-          <KymaModules />
-        </Suspense>
-      }
-    />
+    <Route path={'kymamodules'} element={<KymaModules />} />
     <Route
       path="kymamodules/namespaces/:namespace/:resourceType/:resourceName"
       element={<KymaModules defaultColumn="details" />}
@@ -191,11 +188,7 @@ export default (
     />
     <Route
       path={'namespaces/:globalnamespace/kymamodules'}
-      element={
-        <Suspense fallback={<Spinner />}>
-          <KymaModules namespaced={true} />
-        </Suspense>
-      }
+      element={<KymaModules namespaced={true} />}
     />
     <Route
       path="namespaces/:globalnamespace/kymamodules/namespaces/:namespace/:resourceType/:resourceName"
