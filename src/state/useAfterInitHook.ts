@@ -12,6 +12,7 @@ export function savePreviousPath() {
 
   const layoutParam = queryParams.get('layout');
   const showCreateParam = queryParams.get('showCreate');
+  const createTypeParam = queryParams.get('createType');
   const showEditParam = queryParams.get('showEdit');
   const editColumnParam = queryParams.get('editColumn');
 
@@ -23,6 +24,7 @@ export function savePreviousPath() {
 
     if (layoutParam) params.push(`layout=${layoutParam}`);
     if (showCreateParam) params.push(`showCreate=${showCreateParam}`);
+    if (createTypeParam) params.push(`createType=${createTypeParam}`);
     if (showEditParam) params.push(`showEdit=${showEditParam}`);
     if (editColumnParam) params.push(`editColumn=${editColumnParam}`);
 

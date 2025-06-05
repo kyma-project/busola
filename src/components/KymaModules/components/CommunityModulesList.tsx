@@ -30,6 +30,7 @@ type CommunityModulesListProps = {
   selectedModules: any[];
   modulesLoading: boolean;
   namespaced: boolean;
+  resourceUrl: string;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
   >;
@@ -43,6 +44,7 @@ export const CommunityModulesList = ({
   selectedModules: installedModules,
   modulesLoading,
   namespaced,
+  resourceUrl,
   setOpenedModuleIndex,
   handleResourceDelete,
   customSelectedEntry,
@@ -77,18 +79,25 @@ export const CommunityModulesList = ({
   const handleShowAddModule = () => {
     setLayoutColumn({
       startColumn: {
-        resourceType: 'kymamodules',
+        resourceType: 'kymas',
+        rawResourceTypeName: 'Kyma',
+        namespaceId: 'kyma-system',
+        apiGroup: 'operator.kyma-project.io',
+        apiVersion: 'v1beta2',
       } as ColumnState,
       midColumn: null,
       endColumn: null,
       layout: 'TwoColumnsMidExpanded',
       showCreate: {
-        resourceType: 'kymamodules',
+        resourceType: 'kymas',
+        rawResourceTypeName: 'Kyma',
+        createType: 'community',
+        resourceUrl: resourceUrl,
       } as ShowCreate,
     });
 
     navigate(
-      `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true`,
+      `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true&createType=community`,
     );
     setIsFormOpen(state => ({ ...state, formOpen: true }));
   };
