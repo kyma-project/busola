@@ -33,6 +33,7 @@ export const configFeaturesNames = {
   CLUSTER_VALIDATION: 'CLUSTER_VALIDATION',
   FEEDBACK: 'FEEDBACK',
   SNOW: 'SNOW',
+  COMMUNITY_MODULES: 'COMMUNITY_MODULES',
 } as const;
 
 export type ConfigFeatureList = {
