@@ -1,5 +1,5 @@
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
-import React, { Suspense } from 'react';
+import React, { Suspense, useDeferredValue } from 'react';
 import { Route, useParams } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -52,78 +52,72 @@ const ColumnWrapper = ({
     rawResourceTypeName: 'Kyma',
   });
 
-  const startColumnComponent = () => {
-    return (
-      <div className="column-content">
-        {layoutState.layout === 'OneColumn' && defaultColumn === 'details' ? (
-          <ExtensibilityDetails
-            layoutCloseCreateUrl={url}
-            resourceName={layoutState?.midColumn?.resourceName || resourceName}
-            resourceType={layoutState?.midColumn?.resourceType || resourceType}
-            namespaceId={
-              layoutState?.midColumn?.namespaceId ||
-              layoutState?.midColumn?.namespaceId === ''
-                ? layoutState?.midColumn?.namespaceId
-                : namespace
-            }
-            isModule={true}
-          />
-        ) : (
-          <KymaModulesList namespaced={namespaced} />
-        )}
-      </div>
-    );
-  };
+  const startColumnComponent = useDeferredValue(
+    <div className="column-content">
+      {layoutState.layout === 'OneColumn' && defaultColumn === 'details' ? (
+        <ExtensibilityDetails
+          layoutCloseCreateUrl={url}
+          resourceName={layoutState?.midColumn?.resourceName || resourceName}
+          resourceType={layoutState?.midColumn?.resourceType || resourceType}
+          namespaceId={
+            layoutState?.midColumn?.namespaceId ||
+            layoutState?.midColumn?.namespaceId === ''
+              ? layoutState?.midColumn?.namespaceId
+              : namespace
+          }
+          isModule={true}
+        />
+      ) : (
+        <KymaModulesList namespaced={namespaced} />
+      )}
+    </div>,
+  );
 
-  const midColumnComponent = () => {
-    return (
-      <>
-        {/* details */}
-        {!layoutState?.showCreate &&
-          layoutState?.midColumn &&
-          (defaultColumn !== 'details' ||
-            layoutState.layout !== 'OneColumn') && (
-            <div className="column-content">
-              <ExtensibilityDetails
-                layoutCloseCreateUrl={url}
-                resourceName={
-                  layoutState?.midColumn?.resourceName || resourceName
-                }
-                resourceType={
-                  layoutState?.midColumn?.resourceType || resourceType
-                }
-                namespaceId={
-                  layoutState?.midColumn?.namespaceId ||
-                  layoutState?.midColumn?.namespaceId === ''
-                    ? layoutState?.midColumn?.namespaceId
-                    : namespace
-                }
-                isModule={true}
-              />
-            </div>
-          )}
-        {/* create */}
-        {!layoutState?.midColumn &&
-          (defaultColumn !== 'details' ||
-            layoutState.layout !== 'OneColumn') && (
-            <div className="column-content">
-              <ResourceCreate
-                title={t('kyma-modules.add-module')}
-                confirmText={t('common.buttons.add')}
-                layoutCloseCreateUrl={url}
-                renderForm={renderProps => {
-                  return (
-                    <ErrorBoundary>
-                      <KymaModulesAddModule {...renderProps} />
-                    </ErrorBoundary>
-                  );
-                }}
-              />
-            </div>
-          )}
-      </>
-    );
-  };
+  const midColumnComponent = (
+    <>
+      {/* details */}
+      {!layoutState?.showCreate &&
+        layoutState?.midColumn &&
+        (defaultColumn !== 'details' || layoutState.layout !== 'OneColumn') && (
+          <div className="column-content">
+            <ExtensibilityDetails
+              layoutCloseCreateUrl={url}
+              resourceName={
+                layoutState?.midColumn?.resourceName || resourceName
+              }
+              resourceType={
+                layoutState?.midColumn?.resourceType || resourceType
+              }
+              namespaceId={
+                layoutState?.midColumn?.namespaceId ||
+                layoutState?.midColumn?.namespaceId === ''
+                  ? layoutState?.midColumn?.namespaceId
+                  : namespace
+              }
+              isModule={true}
+            />
+          </div>
+        )}
+      {/* create */}
+      {!layoutState?.midColumn &&
+        (defaultColumn !== 'details' || layoutState.layout !== 'OneColumn') && (
+          <div className="column-content">
+            <ResourceCreate
+              title={t('kyma-modules.add-module')}
+              confirmText={t('common.buttons.add')}
+              layoutCloseCreateUrl={url}
+              renderForm={renderProps => {
+                return (
+                  <ErrorBoundary>
+                    <KymaModulesAddModule {...renderProps} />
+                  </ErrorBoundary>
+                );
+              }}
+            />
+          </div>
+        )}
+    </>
+  );
 
   return (
     <ModuleTemplatesContextProvider>
@@ -141,12 +135,14 @@ const ColumnWrapper = ({
           handleResourceDelete={handleResourceDelete}
           showDeleteDialog={showDeleteDialog}
         >
-          <FlexibleColumnLayout
-            style={{ height: '100%' }}
-            layout={layoutState?.layout}
-            startColumn={startColumnComponent()}
-            midColumn={midColumnComponent()}
-          />
+          <Suspense fallback={<Spinner />}>
+            <FlexibleColumnLayout
+              style={{ height: '100%' }}
+              layout={layoutState?.layout}
+              startColumn={startColumnComponent}
+              midColumn={midColumnComponent}
+            />
+          </Suspense>
         </CommunityModuleContextProvider>
       </KymaModuleContextProvider>
     </ModuleTemplatesContextProvider>
