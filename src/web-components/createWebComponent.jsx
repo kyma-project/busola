@@ -24,6 +24,7 @@ function createWebComponent(
     connectedCallback() {
       if (!this.reactRoot) {
         this.reactRoot = document.createElement('div');
+        this.reactRoot.setAttribute('id', 'component-root');
         this.appendChild(this.reactRoot);
         this.reactRootInstance = createRoot(this.reactRoot); // Initialize root
       }
@@ -138,7 +139,9 @@ function createWebComponent(
     }
   }
 
-  customElements.define(tagName, GenericWebComponent);
+  if (!customElements.get(tagName)) {
+    customElements.define(tagName, GenericWebComponent);
+  }
 }
 
 export default createWebComponent;
