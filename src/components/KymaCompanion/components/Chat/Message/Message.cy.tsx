@@ -1,6 +1,7 @@
 /* global cy */
 import { t } from 'i18next';
 import Message from './Message';
+import { Author } from '../types';
 
 describe('Message Component', () => {
   it('renders user message correctly', () => {
@@ -17,7 +18,7 @@ describe('Message Component', () => {
 
     cy.mount(
       <Message
-        author="user"
+        author={Author.USER}
         messageChunks={messageChunks}
         isLoading={false}
         hasError={false}
@@ -45,7 +46,7 @@ describe('Message Component', () => {
 
     cy.mount(
       <Message
-        author="ai"
+        author={Author.AI}
         messageChunks={messageChunks}
         isLoading={false}
         hasError={false}
@@ -81,7 +82,7 @@ describe('Message Component', () => {
 
     cy.mount(
       <Message
-        author="ai"
+        author={Author.AI}
         messageChunks={messageChunks}
         isLoading={true}
         hasError={false}
@@ -107,7 +108,7 @@ describe('Message Component', () => {
 
     cy.mount(
       <Message
-        author="user"
+        author={Author.USER}
         messageChunks={messageChunks}
         isLoading={false}
         hasError={true}
@@ -138,7 +139,7 @@ describe('Message Component', () => {
 
     cy.mount(
       <Message
-        author="ai"
+        author={Author.AI}
         messageChunks={messageChunks}
         isLoading={false}
         hasError={true}
@@ -169,7 +170,7 @@ describe('Message Component', () => {
 
     cy.mount(
       <Message
-        author="ai"
+        author={Author.AI}
         messageChunks={messageChunks}
         isLoading={false}
         hasError={true}
@@ -211,7 +212,7 @@ describe('Message Component', () => {
 
     cy.mount(
       <Message
-        author="ai"
+        author={Author.AI}
         messageChunks={messageChunks}
         isLoading={false}
         hasError={false}

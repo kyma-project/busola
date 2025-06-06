@@ -35,7 +35,10 @@ context('Test Companion Chat Error Handling', () => {
     cy.wait(1000);
 
     cy.get('@companion')
-      .find('.chat-list > .message-container')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > .message-container')
       .should('have.length', 3)
       .eq(2)
       .find('.message-error')
@@ -52,7 +55,10 @@ context('Test Companion Chat Error Handling', () => {
     cy.wait(1000);
 
     cy.get('@companion')
-      .find('.chat-list > .message-container')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > .message-container')
       .should('have.length', 5)
       .eq(2)
       .find('.message-error')
@@ -83,7 +89,9 @@ context('Test Companion Chat Error Handling', () => {
     cy.testChatLength(3);
 
     cy.get('@companion')
-      .find('.chat-list > .message-container')
+      .find('.chat-list > .context-group')
+      .eq(0)
+      .find('.message-container')
       .should('contain.text', `Response status code is 500. Retrying 3/3.`);
 
     cy.get('@companion')
@@ -105,7 +113,10 @@ context('Test Companion Chat Error Handling', () => {
       .find('.message-error')
       .should('have.length', 1);
     cy.get('@companion')
-      .find('.chat-list > .message-container')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > .message-container')
       .should('have.length', 4)
       .eq(1)
       .find('.message-error')
@@ -215,7 +226,10 @@ context('Test Companion Chat Error Handling', () => {
     cy.testChatLength(3);
 
     cy.get('@companion')
-      .find('.chat-list > .message-container')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > .message-container')
       .eq(1)
       .should('be.visible')
       .should('have.class', 'message-container')
@@ -224,6 +238,8 @@ context('Test Companion Chat Error Handling', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .eq(0)
+      .find('.message-context > .message-container')
       .eq(2)
       .should('be.visible')
       .should('have.class', 'left-aligned')

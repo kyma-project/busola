@@ -7,6 +7,7 @@ context('Test Companion Chat Behavior', () => {
     cy.setBusolaFeature('KYMA_COMPANION', true);
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails('default');
+    cy.wait(500);
   });
 
   beforeEach(() => {
@@ -20,7 +21,17 @@ context('Test Companion Chat Behavior', () => {
     cy.get('.kyma-companion').as('companion');
 
     cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.context-label')
+      .contains('Namespace - default');
+
+    cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 2)
       .eq(1)
       .should('be.visible')
@@ -28,6 +39,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 2)
       .eq(0)
       .should('be.visible')
@@ -47,6 +61,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 2)
       .eq(0)
       .should('be.visible')
@@ -56,6 +73,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 2)
       .eq(1)
       .should('have.class', 'bubbles-container')
@@ -71,6 +91,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 3)
       .eq(1)
       .should('be.visible')
@@ -80,6 +103,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 3)
       .eq(2)
       .should('be.visible')
@@ -99,6 +125,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 4)
       .eq(3)
       .should('be.visible')
@@ -106,6 +135,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 4)
       .eq(2)
       .should('be.visible')
@@ -119,6 +151,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 4)
       .eq(3)
       .should('have.class', 'bubbles-container')
@@ -134,6 +169,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 5)
       .eq(3)
       .should('be.visible')
@@ -143,6 +181,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 5)
       .eq(4)
       .should('be.visible')
@@ -162,6 +203,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 6)
       .eq(5)
       .should('be.visible')
@@ -169,6 +213,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 6)
       .eq(4)
       .should('be.visible')
@@ -182,6 +229,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 6)
       .eq(5)
       .should('have.class', 'bubbles-container')
@@ -197,13 +247,26 @@ context('Test Companion Chat Behavior', () => {
   it('chat history remains when navigating', () => {
     cy.get('.kyma-companion').as('companion');
 
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.context-label')
+      .contains('Namespace - default');
+
     cy.navigateTo('Configuration', 'Service Accounts');
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 6);
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .eq(0)
       .should('be.visible')
       .should('have.class', 'message-container')
@@ -212,6 +275,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .eq(1)
       .should('be.visible')
       .should('have.class', 'message-container')
@@ -220,6 +286,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .eq(2)
       .should('be.visible')
       .should('have.class', 'left-aligned')
@@ -227,6 +296,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .eq(3)
       .should('be.visible')
       .should('have.class', 'message-container')
@@ -235,6 +307,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .eq(4)
       .should('be.visible')
       .should('have.class', 'left-aligned')
@@ -242,6 +317,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .eq(5)
       .should('have.class', 'bubbles-container')
       .find('ui5-button.bubble-button')
@@ -256,12 +334,29 @@ context('Test Companion Chat Behavior', () => {
   it('context of requests updates after navigation', () => {
     cy.get('.kyma-companion').as('companion');
 
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.context-label')
+      .contains('Namespace - default');
+
     cy.clickSuggestion(4);
 
     cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .should('have.length', 2)
+      .eq(1)
+      .find('.context-label')
+      .contains('ServiceAccount');
+
+    cy.get('@companion')
       .find('.chat-list > *')
-      .should('have.length', 7)
-      .eq(5)
+      .should('have.length', 2)
+      .eq(1)
+      .find('.message-context > *')
+      .should('have.length', 2)
+      .eq(0)
       .should('be.visible')
       .should('have.class', 'message-container')
       .should('have.class', 'right-aligned')
@@ -269,7 +364,10 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
-      .eq(6)
+      .should('have.length', 2)
+      .eq(1)
+      .find('.message-context > *')
+      .eq(1)
       .should('be.visible')
       .should('have.class', 'tasks-list');
 
@@ -307,13 +405,26 @@ context('Test Companion Chat Behavior', () => {
     cy.resetCompanion();
 
     cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.context-label')
+      .contains('ServiceAccount');
+
+    cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .eq(1)
       .should('be.visible')
       .should('have.class', 'ai-busy-indicator');
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 2)
       .eq(0)
       .should('be.visible')
@@ -333,6 +444,9 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > *')
       .should('have.length', 2)
       .eq(1)
       .should('have.class', 'bubbles-container')

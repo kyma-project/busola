@@ -1,15 +1,11 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import {
-  ErrorType,
-  ErrResponse,
-  MessageChunk,
-} from '../components/Chat/Message/Message';
 import { HttpError } from './error';
 import {
   handleChatErrorResponseFn,
   handleChatResponseFn,
   retryFetch,
 } from 'components/KymaCompanion/api/retry';
+import { ErrorType, ErrResponse, MessageChunk } from '../components/Chat/types';
 
 const MAX_ATTEMPTS = 3;
 const RETRY_DELAY = 1_000;

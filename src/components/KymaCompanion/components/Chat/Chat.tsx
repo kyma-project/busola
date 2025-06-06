@@ -1,12 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
-import Message, {
-  ErrorType,
-  ErrResponse,
-  MessageChunk,
-} from './Message/Message';
+import Message from './Message/Message';
 import Bubbles from './Bubbles/Bubbles';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
 import { sessionIDState } from 'state/companion/sessionIDAtom';
@@ -16,25 +12,21 @@ import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuesti
 import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
 import { AIError } from '../KymaCompanion';
+import ContextLabel from './ContextLabel/ContextLabel';
+import {
+  Author,
+  ChatGroup,
+  ErrResponse,
+  ErrorType,
+  MessageChunk,
+  Message as MessageType,
+  chatGroupHelpers,
+} from './types';
 import './Chat.scss';
 
-enum Author {
-  USER = 'user',
-  AI = 'ai',
-}
-
-export interface MessageType {
-  author: Author;
-  messageChunks: MessageChunk[];
-  isLoading: boolean;
-  suggestions?: string[];
-  suggestionsLoading?: boolean;
-  hasError?: boolean | undefined;
-}
-
 type ChatProps = {
-  chatHistory: MessageType[];
-  setChatHistory: React.Dispatch<React.SetStateAction<MessageType[]>>;
+  chatHistory: ChatGroup[];
+  setChatHistory: React.Dispatch<React.SetStateAction<ChatGroup[]>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isReset: boolean;
@@ -66,62 +58,54 @@ export const Chat = ({
     initialSuggestionsLoading,
     currentResource,
   } = usePromptSuggestions(isReset, setIsReset, {
-    skip: chatHistory.length > 1,
+    skip:
+      chatHistory.reduce((count, group) => count + group.messages.length, 0) >
+      1,
   });
 
-  const addMessage = ({ author, messageChunks, isLoading }: MessageType) => {
-    setChatHistory(prevItems =>
-      prevItems.concat({ author, messageChunks, isLoading }),
+  const getCurrentContext = useCallback(() => {
+    if (!currentResource.resourceType) return undefined;
+    return currentResource.resourceName
+      ? `${currentResource.resourceType} - ${currentResource.resourceName}`
+      : currentResource.resourceType;
+  }, [currentResource]);
+
+  const addMessage = (message: MessageType) => {
+    const currentContext = getCurrentContext();
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.addMessage(prevGroups, message, currentContext),
     );
   };
 
   const updateLatestMessage = (updates: Partial<MessageType>) => {
-    setChatHistory(prevMessages => {
-      if (prevMessages.length === 0) return prevMessages;
-
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        ...latestMessage,
-        ...updates,
-      });
-    });
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.updateLatestMessage(prevGroups, updates),
+    );
   };
 
   const concatMsgToLatestMessage = (
     response: MessageChunk,
     isLoading: boolean,
   ) => {
-    setChatHistory(prevMessages => {
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        ...latestMessage,
-        messageChunks: latestMessage.messageChunks.concat(response),
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.concatMsgToLatestMessage(
+        prevGroups,
+        response,
         isLoading,
-      });
-    });
+      ),
+    );
   };
 
   const removeLastMessage = () => {
-    setChatHistory(prevMessages => prevMessages.slice(0, -1));
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.removeLastMessage(prevGroups),
+    );
   };
 
   const setErrorOnLastUserMsg = () => {
-    setChatHistory(prevMessages => {
-      const lastUserMsgIdx = prevMessages.findLastIndex(msg => {
-        return msg.author === 'user';
-      });
-      if (lastUserMsgIdx === -1) {
-        return prevMessages;
-      }
-
-      return prevMessages.map((msg, idx) => {
-        if (idx === lastUserMsgIdx) {
-          msg.hasError = true;
-          msg.isLoading = false;
-        }
-        return msg;
-      });
-    });
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.setErrorOnLastUserMsg(prevGroups),
+    );
   };
 
   const handleChatResponse = (response: MessageChunk) => {
@@ -220,11 +204,7 @@ export const Chat = ({
   };
 
   const retryPreviousPrompt = () => {
-    const lastUserMsgIdx = chatHistory.findLastIndex(
-      v => v.author === Author.USER,
-    );
-    const previousPrompt = chatHistory.at(lastUserMsgIdx)?.messageChunks[0].data
-      .answer.content;
+    const previousPrompt = chatGroupHelpers.findLastUserPrompt(chatHistory);
     if (previousPrompt) {
       removeLastMessage();
       sendPrompt(previousPrompt);
@@ -234,6 +214,7 @@ export const Chat = ({
   const sendPrompt = (query: string) => {
     setError({ message: null, displayRetry: false });
     setLoading(true);
+
     addMessage({
       author: Author.USER,
       messageChunks: [
@@ -285,8 +266,18 @@ export const Chat = ({
   };
 
   useEffect(() => {
-    if (chatHistory.length === 1) {
+    const totalMessageCount = chatHistory.reduce(
+      (count, group) => count + group.messages.length,
+      0,
+    );
+
+    if (totalMessageCount === 1) {
       if (initialSuggestionsLoading) {
+        // Update the context of the first group
+        const currentContext = getCurrentContext();
+        setChatHistory(prevGroups =>
+          chatGroupHelpers.updateFirstGroupContext(prevGroups, currentContext),
+        );
         updateLatestMessage({
           messageChunks: [
             {
@@ -335,37 +326,52 @@ export const Chat = ({
       className="chat-container"
     >
       <div
-        className="chat-list sap-margin-x-tiny sap-margin-top-small"
+        className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
         ref={containerRef}
       >
-        {chatHistory.map((message, index) => {
-          const isLast = index === chatHistory.length - 1;
-          return message.author === Author.AI ? (
-            <React.Fragment key={index}>
-              <Message
-                author={message.author}
-                messageChunks={message.messageChunks}
-                isLoading={message.isLoading}
-                hasError={message?.hasError ?? false}
-                isLatestMessage={isLast}
-              />
-              {isLast && !message.isLoading && (
-                <Bubbles
-                  onClick={sendPrompt}
-                  suggestions={message.suggestions}
-                  isLoading={message.suggestionsLoading ?? false}
-                />
+        {chatHistory.map((group, groupIndex) => {
+          const isLastGroup = groupIndex === chatHistory.length - 1;
+
+          return (
+            <div key={groupIndex} className="context-group">
+              {group.context && (
+                <ContextLabel labelText={group.context.labelText} />
               )}
-            </React.Fragment>
-          ) : (
-            <Message
-              author={Author.USER}
-              key={index}
-              messageChunks={message.messageChunks}
-              isLoading={message.isLoading}
-              hasError={message?.hasError ?? false}
-              isLatestMessage={isLast}
-            />
+              <div className="message-context">
+                {group.messages.map((message, messageIndex) => {
+                  const isLastMessage =
+                    isLastGroup && messageIndex === group.messages.length - 1;
+
+                  return message.author === Author.AI ? (
+                    <React.Fragment key={`${groupIndex}-${messageIndex}`}>
+                      <Message
+                        author={message.author}
+                        messageChunks={message.messageChunks}
+                        isLoading={message.isLoading}
+                        hasError={message.hasError ?? false}
+                        isLatestMessage={isLastMessage}
+                      />
+                      {isLastMessage && !message.isLoading && (
+                        <Bubbles
+                          onClick={sendPrompt}
+                          suggestions={message.suggestions}
+                          isLoading={message.suggestionsLoading ?? false}
+                        />
+                      )}
+                    </React.Fragment>
+                  ) : (
+                    <Message
+                      author={Author.USER}
+                      key={`${groupIndex}-${messageIndex}`}
+                      messageChunks={message.messageChunks}
+                      isLoading={message.isLoading}
+                      hasError={message.hasError ?? false}
+                      isLatestMessage={isLastMessage}
+                    />
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
         {error.message && (

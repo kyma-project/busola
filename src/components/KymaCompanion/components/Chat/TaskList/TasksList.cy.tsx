@@ -1,6 +1,6 @@
 /* global cy */
+import { MessageChunk } from '../types';
 import TasksList from './TasksList';
-import { MessageChunk } from '../Message/Message';
 
 describe('TasksList Component', () => {
   it('displays a busy indicator when messageChunks is empty', () => {
