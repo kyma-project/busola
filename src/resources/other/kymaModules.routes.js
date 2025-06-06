@@ -52,59 +52,78 @@ const ColumnWrapper = ({
     rawResourceTypeName: 'Kyma',
   });
 
-  let startColumnComponent = null;
-
-  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
-    startColumnComponent = (
-      <ExtensibilityDetails
-        layoutCloseCreateUrl={url}
-        resourceName={layoutState?.midColumn?.resourceName || resourceName}
-        resourceType={layoutState?.midColumn?.resourceType || resourceType}
-        namespaceId={
-          layoutState?.midColumn?.namespaceId ||
-          layoutState?.midColumn?.namespaceId === ''
-            ? layoutState?.midColumn?.namespaceId
-            : namespace
-        }
-        isModule={true}
-      />
+  const startColumnComponent = () => {
+    return (
+      <div className="column-content">
+        {layoutState.layout === 'OneColumn' && defaultColumn === 'details' ? (
+          <ExtensibilityDetails
+            layoutCloseCreateUrl={url}
+            resourceName={layoutState?.midColumn?.resourceName || resourceName}
+            resourceType={layoutState?.midColumn?.resourceType || resourceType}
+            namespaceId={
+              layoutState?.midColumn?.namespaceId ||
+              layoutState?.midColumn?.namespaceId === ''
+                ? layoutState?.midColumn?.namespaceId
+                : namespace
+            }
+            isModule={true}
+          />
+        ) : (
+          <KymaModulesList namespaced={namespaced} />
+        )}
+      </div>
     );
-  } else {
-    startColumnComponent = <KymaModulesList namespaced={namespaced} />;
-  }
+  };
 
-  let detailsMidColumn = null;
-  if (!layoutState?.showCreate && layoutState?.midColumn) {
-    detailsMidColumn = (
-      <ExtensibilityDetails
-        layoutCloseCreateUrl={url}
-        resourceName={layoutState?.midColumn?.resourceName || resourceName}
-        resourceType={layoutState?.midColumn?.resourceType || resourceType}
-        namespaceId={
-          layoutState?.midColumn?.namespaceId ||
-          layoutState?.midColumn?.namespaceId === ''
-            ? layoutState?.midColumn?.namespaceId
-            : namespace
-        }
-        isModule={true}
-      />
+  const midColumnComponent = () => {
+    return (
+      <>
+        {/* details */}
+        {!layoutState?.showCreate &&
+          layoutState?.midColumn &&
+          (defaultColumn !== 'details' ||
+            layoutState.layout !== 'OneColumn') && (
+            <div className="column-content">
+              <ExtensibilityDetails
+                layoutCloseCreateUrl={url}
+                resourceName={
+                  layoutState?.midColumn?.resourceName || resourceName
+                }
+                resourceType={
+                  layoutState?.midColumn?.resourceType || resourceType
+                }
+                namespaceId={
+                  layoutState?.midColumn?.namespaceId ||
+                  layoutState?.midColumn?.namespaceId === ''
+                    ? layoutState?.midColumn?.namespaceId
+                    : namespace
+                }
+                isModule={true}
+              />
+            </div>
+          )}
+        {/* create */}
+        {!layoutState?.midColumn &&
+          (defaultColumn !== 'details' ||
+            layoutState.layout !== 'OneColumn') && (
+            <div className="column-content">
+              <ResourceCreate
+                title={t('kyma-modules.add-module')}
+                confirmText={t('common.buttons.add')}
+                layoutCloseCreateUrl={url}
+                renderForm={renderProps => {
+                  return (
+                    <ErrorBoundary>
+                      <KymaModulesAddModule {...renderProps} />
+                    </ErrorBoundary>
+                  );
+                }}
+              />
+            </div>
+          )}
+      </>
     );
-  }
-
-  const createMidColumn = (
-    <ResourceCreate
-      title={t('kyma-modules.add-module')}
-      confirmText={t('common.buttons.add')}
-      layoutCloseCreateUrl={url}
-      renderForm={renderProps => {
-        return (
-          <ErrorBoundary>
-            <KymaModulesAddModule {...renderProps} />
-          </ErrorBoundary>
-        );
-      }}
-    />
-  );
+  };
 
   return (
     <ModuleTemplatesContextProvider>
@@ -125,27 +144,8 @@ const ColumnWrapper = ({
           <FlexibleColumnLayout
             style={{ height: '100%' }}
             layout={layoutState?.layout}
-            startColumn={
-              <div className="column-content">
-                <Suspense fallback={<Spinner />}>
-                  {startColumnComponent}
-                </Suspense>
-              </div>
-            }
-            midColumn={
-              <>
-                {!layoutState?.showCreate &&
-                  (defaultColumn !== 'details' ||
-                    layoutState.layout !== 'OneColumn') && (
-                    <div className="column-content">{detailsMidColumn}</div>
-                  )}
-                {!layoutState?.midColumn &&
-                  (defaultColumn !== 'details' ||
-                    layoutState.layout !== 'OneColumn') && (
-                    <div className="column-content">{createMidColumn}</div>
-                  )}
-              </>
-            }
+            startColumn={startColumnComponent()}
+            midColumn={midColumnComponent()}
           />
         </CommunityModuleContextProvider>
       </KymaModuleContextProvider>
