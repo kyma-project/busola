@@ -101,6 +101,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
 
   const listComponent = React.cloneElement(list, {
     ...elementListProps,
+    rawResourceType: props.resourceType,
     layoutCloseCreateUrl,
     enableColumnLayout: elementListProps.resourceType !== 'Namespaces',
   });

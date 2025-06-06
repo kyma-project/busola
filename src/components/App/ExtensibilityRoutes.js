@@ -64,6 +64,7 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
   } else {
     startColumnComponent = (
       <List
+        rawResourceType={extension?.general?.resource?.kind}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
         enableColumnLayout={true}
       />

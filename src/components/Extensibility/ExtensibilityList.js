@@ -32,6 +32,7 @@ import '../../web-components/eventListenerTracker';
 export const ExtensibilityListCore = ({
   resMetaData,
   filterFunction,
+  rawResourceType,
   ...props
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
@@ -123,6 +124,7 @@ export const ExtensibilityListCore = ({
     <ResourcesList
       {...listProps}
       {...props}
+      rawResourceType={rawResourceType}
       displayLabelForLabels
       disableCreate={disableCreate}
       disableDelete={disableDelete}

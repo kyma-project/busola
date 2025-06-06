@@ -53,6 +53,7 @@ ResourcesList.propTypes = {
   createActionLabel: PropTypes.string,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
+  rawResourceType: PropTypes.string.isRequired,
   resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
@@ -191,6 +192,7 @@ function Resources(props) {
 export function ResourceListRenderer({
   resourceUrl,
   resourceType,
+  rawResourceType,
   resourceTitle,
   namespace,
   customColumns = [],
@@ -349,7 +351,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
-              rawResourceTypeName: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
               resource: activeResource,
             },
@@ -362,6 +364,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
               resource: activeResource,
             },
@@ -450,7 +453,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: layoutState?.midColumn.resourceName,
-              rawResourceTypeName: layoutState?.midColumn.resourceName,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
             },
             showEdit: null,
@@ -462,6 +465,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
             },
             showEdit: null,
@@ -543,6 +547,7 @@ export function ResourceListRenderer({
             hasDetailsView={hasDetailsView}
             customUrl={customUrl}
             resourceType={resourceType}
+            rawResourceType={rawResourceType}
             customColumnLayout={customColumnLayout}
             columnLayout={columnLayout}
             enableColumnLayout={enableColumnLayout}

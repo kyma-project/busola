@@ -1,6 +1,6 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -12,6 +12,7 @@ import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { useMemo } from 'react';
@@ -38,6 +39,7 @@ export function useCreateResource({
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const activeNamespace = useRecoilValue(activeNamespaceIdState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
@@ -86,7 +88,7 @@ export function useCreateResource({
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
                   rawResourceTypeName: resource.kind,
-                  namespaceId: resource.metadata.namespace,
+                  namespaceId: resource.metadata.namespace ?? activeNamespace,
                   apiGroup: group,
                   apiVersion: version,
                 },
@@ -101,7 +103,7 @@ export function useCreateResource({
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
                   rawResourceTypeName: resource.kind,
-                  namespaceId: resource.metadata.namespace,
+                  namespaceId: resource.metadata.namespace ?? activeNamespace,
                 },
               },
         );
