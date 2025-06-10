@@ -63,6 +63,7 @@ export const GenericList = ({
   customColumnLayout = null,
   enableColumnLayout,
   resourceType = '',
+  rawResourceType = '',
   customUrl,
   hasDetailsView,
   disableHiding = true,
@@ -374,7 +375,7 @@ export const GenericList = ({
                   selectedEntry?.metadata?.name ??
                   e.target.children[0].innerText,
                 resourceType: resourceType,
-                rawResourceTypeName: resourceType,
+                rawResourceTypeName: rawResourceType,
                 namespaceId: selectedEntry?.metadata?.namespace,
                 apiGroup: group,
                 apiVersion: version,
