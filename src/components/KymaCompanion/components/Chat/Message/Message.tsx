@@ -6,40 +6,10 @@ import { isCurrentThemeDark, themeState } from 'state/preferences/themeAtom';
 import { useRecoilValue } from 'recoil';
 import './Message.scss';
 import './marked.scss';
-
-export enum ErrorType {
-  FATAL,
-  RETRYABLE,
-}
-
-export interface ErrResponse {
-  type: ErrorType;
-  message: string;
-  statusCode?: number;
-  attempt?: number;
-  maxAttempts?: number;
-}
-
-export interface MessageChunk {
-  event?: string;
-  data: {
-    agent?: string;
-    answer: {
-      content: string;
-      tasks?: {
-        task_id: number;
-        task_name: string;
-        status: string;
-        agent: string;
-      }[];
-      next: string;
-    };
-    error?: string | null;
-  };
-}
+import { Author, MessageChunk } from '../types';
 
 interface MessageProps {
-  author: 'user' | 'ai';
+  author: Author;
   messageChunks: MessageChunk[];
   isLoading: boolean;
   hasError: boolean;

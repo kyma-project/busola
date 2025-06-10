@@ -6,7 +6,8 @@ import {
   ShowKymaCompanion,
   showKymaCompanionState,
 } from 'state/companion/showKymaCompanionAtom';
-import { Chat, MessageType } from './Chat/Chat';
+import { Chat } from './Chat/Chat';
+import { ChatGroup, chatGroupHelpers } from './Chat/types';
 import './KymaCompanion.scss';
 
 export interface AIError {
@@ -17,31 +18,13 @@ export interface AIError {
 export default function KymaCompanion() {
   const { t } = useTranslation();
 
-  const initialChatHistory: MessageType[] = [
-    {
-      author: 'ai',
-      messageChunks: [
-        {
-          data: {
-            answer: {
-              content: t('kyma-companion.introduction'),
-              next: '__end__',
-            },
-          },
-        },
-      ],
-      isLoading: false,
-      suggestionsLoading: true,
-    },
-  ];
-
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [isReset, setIsReset] = useState<boolean>(false);
-  const [chatHistory, setChatHistory] = useState<MessageType[]>(
-    initialChatHistory,
+  const [chatHistory, setChatHistory] = useState<ChatGroup[]>(
+    chatGroupHelpers.createInitialState(t('kyma-companion.introduction')),
   );
   const [error, setError] = useState<AIError>({
     message: null,
@@ -49,9 +32,9 @@ export default function KymaCompanion() {
   });
 
   function handleRefresh() {
-    setChatHistory(() => {
-      return initialChatHistory;
-    });
+    setChatHistory(
+      chatGroupHelpers.createInitialState(t('kyma-companion.introduction')),
+    );
     setError({
       message: null,
       displayRetry: false,

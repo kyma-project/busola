@@ -5,8 +5,8 @@ import {
   ObjectStatus,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { MessageChunk } from '../Message/Message';
 import './TasksList.scss';
+import { MessageChunk } from '../types';
 
 interface TaskListProps {
   messageChunks: MessageChunk[];
