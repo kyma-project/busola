@@ -645,6 +645,8 @@ extensibility:
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
     modules:
+      no-community-modules: No community modules available
+      no-community-modules-installed: No community modules installed
       no-modules: No modules available
       no-modules-installed: No modules installed
       all-modules-added: You have added all the modules
