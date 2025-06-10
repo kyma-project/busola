@@ -43,7 +43,7 @@ export function addCluster(
   switchCluster = true,
 ) {
   const { setClusters } = clustersInfo;
-  setClusters({ [params.contextName]: params });
+  setClusters(prev => ({ ...prev, [params.contextName]: params }));
   if (switchCluster) {
     addCurrentCluster(params, clustersInfo);
   }
