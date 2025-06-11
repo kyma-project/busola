@@ -33,7 +33,7 @@ export const createPath = (
 const ColumnWrapper = ({ list, details, create, ...props }) => {
   const layoutState = useRecoilValue(columnLayoutState);
   const { resourceListUrl } = useUrl();
-
+  console.log(layoutState);
   const { t } = useTranslation();
 
   const {

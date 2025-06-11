@@ -303,6 +303,7 @@ export const GenericList = ({
           rowRenderer={rowRenderer}
           displayArrow={displayArrow}
           hasDetailsView={hasDetailsView}
+          enableColumnLayout={enableColumnLayout}
         />
       );
     });
@@ -415,11 +416,43 @@ export const GenericList = ({
       className={className}
     >
       <Table
+        noData={
+          <div>
+            {!serverDataError && !serverDataLoading && !entries?.length ? (
+              emptyListProps?.simpleEmptyListMessage === false ||
+              (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
+                <EmptyListComponent
+                  titleText={emptyListProps.titleText}
+                  subtitleText={emptyListProps.subtitleText}
+                  showButton={emptyListProps.showButton}
+                  buttonText={emptyListProps.buttonText}
+                  url={emptyListProps.url}
+                  onClick={emptyListProps.onClick}
+                  image={emptyListProps?.image}
+                />
+              ) : (
+                <p>
+                  {emptyListProps?.titleText ? (
+                    <Trans i18nKey={emptyListProps?.titleText} />
+                  ) : i18n.exists(notFoundMessage) ? (
+                    t(notFoundMessage)
+                  ) : (
+                    notFoundMessage
+                  )}
+                </p>
+              )
+            ) : (
+              <Spinner />
+            )}
+          </div>
+        }
         overflowMode={setOverflowMode()}
         accessibleName={accessibleName ?? title}
         rowActionCount={displayArrow ? 1 : 0}
         className={`ui5-generic-list ${
-          hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
+          hasDetailsView && filteredEntries.length && enableColumnLayout
+            ? 'cursor-pointer'
+            : ''
         }`}
         onMouseDown={() => {
           window.getSelection().removeAllRanges();

@@ -136,6 +136,7 @@ const DefaultRowRenderer = ({
   isSelected = false,
   displayArrow = false,
   hasDetailsView,
+  enableColumnLayout = true,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {
@@ -158,7 +159,7 @@ const DefaultRowRenderer = ({
   return (
     <TableRow
       className={isSelected ? 'row-selected' : 'row'}
-      interactive={true}
+      interactive={enableColumnLayout}
       navigated={isSelected}
       actions={displayArrow && <TableRowActionNavigation />}
     >

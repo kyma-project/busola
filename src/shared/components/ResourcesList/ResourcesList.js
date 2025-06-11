@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Button, Text } from '@ui5/webcomponents-react';
+import { Button, Link, Text } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import jp from 'jsonpath';
 import pluralize from 'pluralize';
@@ -26,6 +26,8 @@ import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
 import { useNavigate } from 'react-router';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { useUrl } from 'hooks/useUrl';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -232,7 +234,7 @@ export function ResourceListRenderer({
   emptyListProps = null,
   simpleEmptyListMessage = false,
   disableHiding,
-  displayArrow,
+  displayArrow = enableColumnLayout,
   accessibleName,
 }) {
   useVersionWarning({
@@ -262,15 +264,68 @@ export function ResourceListRenderer({
     resourceTitle,
     resourceType,
   );
+  const { resourceUrl: resourceUrlFn } = useUrl();
+
+  const linkTo = entry => {
+    const overrides = namespace === '-all-' ? { namespace } : {};
+    return customUrl
+      ? customUrl(entry)
+      : resourceUrlFn(entry, { resourceType, ...overrides });
+  };
+
+  const handleLinkClick = (entry, e) => {
+    e.preventDefault();
+
+    const { group, version } = extractApiGroupVersion(entry?.apiVersion);
+
+    setLayoutColumn(
+      columnLayout
+        ? {
+            ...layoutState,
+            showCreate: null,
+            endColumn: customColumnLayout(entry),
+            layout: 'OneColumn',
+            showEdit: null,
+          }
+        : {
+            ...layoutState,
+            showCreate: null,
+            midColumn: {
+              resourceName:
+                entry?.metadata?.name ?? e.target.children[0].innerText,
+              resourceType: resourceType,
+              rawResourceTypeName: rawResourceType,
+              namespaceId: entry?.metadata?.namespace,
+              apiGroup: group,
+              apiVersion: version,
+            },
+            endColumn: null,
+            layout: 'OneColumn',
+            showEdit: null,
+          },
+    );
+
+    navigate(linkTo(entry));
+  };
 
   const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-            {nameSelector(entry)}
-          </Text>
+          enableColumnLayout ? (
+            <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
+              {nameSelector(entry)}
+            </Text>
+          ) : (
+            <Link
+              href={`${linkTo(entry)}`}
+              onClick={e => handleLinkClick(entry, e)}
+              style={{ fontWeight: 'bold' }}
+            >
+              {nameSelector(entry)}
+            </Link>
+          )
         ) : (
           <b>{nameSelector(entry)}</b>
         ),
