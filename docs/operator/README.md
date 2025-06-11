@@ -26,9 +26,9 @@ You can use Kyma dashboard to perform the following actions:
 2. Busola returns all elements required to run the Busola web application (scripts, HTML, styles, and images) in a user web browser.
 3. Busola uses extensions to run Kyma components.
 4. User performs operations using the Busola web application on a remote Kubernetes cluster by providing cluster connection details. These are typical Kubernetes CRUD operations or questions for Kyma Companion.
-   5a. Busola backend proxies operations to a remote Kubernetes cluster.
+5. 5a. Busola backend proxies operations to a remote Kubernetes cluster.
    5b. Busola backend proxies questions to Kyma Companion.
-5. The backend sends back a response to the Busola web application, which displays the returned information.
+6. The backend sends back a response to the Busola web application, which displays the returned information.
 
 ## Related Information
 
