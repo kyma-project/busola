@@ -35,6 +35,7 @@ type ModulesListDeleteBoxProps = {
   kymaResource: KymaResourceType;
   kymaResourceState: KymaResourceType;
   detailsOpen: boolean;
+  isCommunity?: boolean;
   setLayoutColumn: SetterOrUpdater<ColumnLayoutState>;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
@@ -50,6 +51,7 @@ export const ModulesDeleteBox = ({
   kymaResource,
   kymaResourceState,
   detailsOpen,
+  isCommunity,
   setLayoutColumn,
   handleModuleUninstall,
   setChosenModuleIndex,

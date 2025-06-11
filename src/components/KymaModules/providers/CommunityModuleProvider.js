@@ -9,6 +9,7 @@ import { Button } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
+import { useKymaQuery } from '../kymaModulesQueries';
 
 export const CommunityModuleContext = createContext({
   setOpenedModuleIndex: () => {},
@@ -38,6 +39,12 @@ export function CommunityModuleContextProvider({
   );
 
   const {
+    data: kymaResource,
+    loading: kymaResourceLoading,
+    resourceUrl,
+  } = useKymaQuery();
+
+  const {
     installed: installedCommunityModules,
     loading: communityModulesLoading,
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
@@ -48,8 +55,7 @@ export function CommunityModuleContextProvider({
     resource: kymaResourceState,
     initialResource: initialUnchangedResource,
     updateInitialResource: setInitialUnchangedResource,
-    createUrl:
-      ' /apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default',
+    createUrl: resourceUrl,
     afterCreatedFn: () =>
       notification.notifySuccess({
         content: t('kyma-modules.module-uninstall'),
@@ -63,16 +69,21 @@ export function CommunityModuleContextProvider({
   }, [layoutState]);
 
   useEffect(() => {
-    /////////////////////////// TODO: Is it proper for KymaResource and KymaResourceState?
-    if (installedCommunityModules?.[openedModuleIndex]?.resource) {
-      setKymaResourceState(
-        installedCommunityModules[openedModuleIndex].resource,
-      );
-      setInitialUnchangedResource(
-        cloneDeep(installedCommunityModules[openedModuleIndex].resource),
-      );
+    if (kymaResource) {
+      setKymaResourceState(kymaResource);
+      setInitialUnchangedResource(cloneDeep(kymaResource));
     }
-  }, [installedCommunityModules, openedModuleIndex]);
+  }, [kymaResource]);
+
+  const getOpenedModuleIndex = (moduleIndex, activeModules) => {
+    const index =
+      moduleIndex ??
+      // Find index of the selected module after a refresh or other case after which we have undefined.
+      activeModules.findIndex(module =>
+        checkSelectedModule(module, layoutState),
+      );
+    return index > -1 ? index : undefined;
+  };
 
   const deleteModuleButton = (
     <div>
@@ -95,19 +106,19 @@ export function CommunityModuleContextProvider({
       }}
     >
       {createPortal(
-        !communityModulesLoading &&
+        getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !=
+          undefined &&
+          !communityModulesLoading &&
+          !kymaResourceLoading &&
           !moduleTemplatesLoading &&
           showDeleteDialog && (
             <ModulesDeleteBox
               DeleteMessageBox={DeleteMessageBox}
               selectedModules={installedCommunityModules}
-              chosenModuleIndex={
-                openedModuleIndex ??
-                // Find index of the selected module after a refresh or other case after which we have undefined.
-                installedCommunityModules.findIndex(module =>
-                  checkSelectedModule(module, layoutState),
-                )
-              }
+              chosenModuleIndex={getOpenedModuleIndex(
+                openedModuleIndex,
+                installedCommunityModules,
+              )}
               kymaResource={kymaResourceState}
               kymaResourceState={kymaResourceState}
               moduleTemplates={communityModuleTemplates}
@@ -117,6 +128,7 @@ export function CommunityModuleContextProvider({
               setChosenModuleIndex={setOpenedModuleIndex}
               handleModuleUninstall={handleModuleUninstall}
               setLayoutColumn={setLayoutColumn}
+              isCommunity={true}
             />
           ),
         document.body,
