@@ -34,6 +34,11 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
+import CommunityModulesEdit from 'components/KymaModules/KymaCommunityModulesEdit';
+import {
+  getAvailableCommunityModules,
+  getCommunityModules,
+} from 'components/KymaModules/components/CommunityModulesHelpers';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
@@ -115,6 +120,8 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
+  const [communityModulesToApply, setCommunityModulesToApply] = useState([]);
+
   const resourceName = kymaResource?.metadata.name;
 
   const {
@@ -125,7 +132,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
   });
   const {
     data: moduleTemplates,
-    loading: lodingModuleTemplates,
+    loading: loadingModuleTemplates,
   } = useModuleTemplatesQuery({
     skip: !resourceName,
   });
@@ -149,7 +156,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
     onSave: false,
   });
 
-  if (lodingModuleTemplates || loadingModulesReleaseMetas) {
+  if (loadingModuleTemplates || loadingModulesReleaseMetas) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />
@@ -201,6 +208,43 @@ export default function KymaModulesEdit({ resource, ...props }) {
         : false;
     });
   };
+
+  const installedCommunityModules = getCommunityModules(moduleTemplates);
+  const availableCommunityModules = getAvailableCommunityModules(
+    installedCommunityModules,
+    moduleReleaseMetas,
+  );
+
+  const communityModulesToDisplay = Array.from(
+    availableCommunityModules,
+    ([key, versionInfo]) => {
+      return {
+        name: key,
+        versions: versionInfo.map(v => ({
+          version: v.version,
+          channel: v.channel,
+          key: v.moduleTemplate,
+        })),
+      };
+    },
+  );
+
+  // TODO: detect if version return to the old one
+  const onCommunityChange = (module, value) => {
+    console.log(module, value);
+    const modules = [...communityModulesToApply];
+    const moduleToUpdateIdx = modules.findIndex(m => m.moduleName === module);
+    if (moduleToUpdateIdx < 0) {
+      modules.push({ moduleName: module, moduleTempplate: value });
+    } else {
+      modules[moduleToUpdateIdx].moduleTemplate = value;
+    }
+    console.log('Modules to Update', modules);
+    setCommunityModulesToApply([...modules]);
+  };
+
+  // console.log('Available modules with version', availableCommunityModules);
+  // console.log('Data to Display', communityModulesToDisplay);
 
   const onChange = (module, value, index) => {
     setChannel(module, value, index, selectedModules, setSelectedModules);
@@ -459,6 +503,10 @@ export default function KymaModulesEdit({ resource, ...props }) {
           </ResourceForm.CollapsibleSection>
         </ResourceForm>
       )}
+      <CommunityModulesEdit
+        communityModulesToDisplay={communityModulesToDisplay}
+        onChange={onCommunityChange}
+      ></CommunityModulesEdit>
     </>
   );
 }
