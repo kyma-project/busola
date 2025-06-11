@@ -32,8 +32,8 @@ type ModulesListDeleteBoxProps = {
   moduleTemplates: ModuleTemplateListType;
   selectedModules: { name: string }[];
   chosenModuleIndex: number | null;
-  kymaResource: KymaResourceType;
-  kymaResourceState: KymaResourceType;
+  kymaResource?: KymaResourceType;
+  kymaResourceState?: KymaResourceType;
   detailsOpen: boolean;
   isCommunity?: boolean;
   setLayoutColumn: SetterOrUpdater<ColumnLayoutState>;
@@ -238,15 +238,18 @@ export const ModulesDeleteBox = ({
         if (chosenModuleIndex != null) {
           selectedModules.splice(chosenModuleIndex, 1);
         }
-        setKymaResourceState({
-          ...kymaResource,
-          spec: {
-            ...kymaResource.spec,
-            modules: selectedModules,
-          },
-        });
-        handleModuleUninstall();
-        setInitialUnchangedResource(cloneDeep(kymaResourceState));
+        if (!isCommunity && kymaResource) {
+          setKymaResourceState({
+            ...kymaResource,
+            spec: {
+              ...kymaResource.spec,
+              modules: selectedModules,
+            },
+          });
+          handleModuleUninstall();
+          setInitialUnchangedResource(cloneDeep(kymaResourceState));
+        }
+
         if (detailsOpen) {
           setLayoutColumn({
             layout: 'OneColumn',

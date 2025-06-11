@@ -6,10 +6,8 @@ import { createPortal } from 'react-dom';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 import { checkSelectedModule } from '../support';
 import { Button } from '@ui5/webcomponents-react';
-import { cloneDeep } from 'lodash';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
-import { useKymaQuery } from '../kymaModulesQueries';
 
 export const CommunityModuleContext = createContext({
   setOpenedModuleIndex: () => {},
@@ -30,6 +28,7 @@ export function CommunityModuleContextProvider({
 }) {
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   const [detailsOpen, setDetailsOpen] = useState(false);
+  // TODO: Is this two needed in community modules?:
   const [initialUnchangedResource, setInitialUnchangedResource] = useState();
   const [kymaResourceState, setKymaResourceState] = useState();
 
@@ -37,12 +36,6 @@ export function CommunityModuleContextProvider({
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
-
-  const {
-    data: kymaResource,
-    loading: kymaResourceLoading,
-    resourceUrl,
-  } = useKymaQuery();
 
   const {
     installed: installedCommunityModules,
@@ -55,7 +48,9 @@ export function CommunityModuleContextProvider({
     resource: kymaResourceState,
     initialResource: initialUnchangedResource,
     updateInitialResource: setInitialUnchangedResource,
-    createUrl: resourceUrl,
+    // TODO: resourceUrl
+    createUrl:
+      '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default',
     afterCreatedFn: () =>
       notification.notifySuccess({
         content: t('kyma-modules.module-uninstall'),
@@ -68,12 +63,12 @@ export function CommunityModuleContextProvider({
     }
   }, [layoutState]);
 
-  useEffect(() => {
-    if (kymaResource) {
-      setKymaResourceState(kymaResource);
-      setInitialUnchangedResource(cloneDeep(kymaResource));
-    }
-  }, [kymaResource]);
+  // useEffect(() => {
+  //   if (installedCommunityModules?.length) {
+  //     setKymaResourceState(installedCommunityModules);
+  //     setInitialUnchangedResource(cloneDeep(installedCommunityModules));
+  //   }
+  // }, [installedCommunityModules]);
 
   const getOpenedModuleIndex = (moduleIndex, activeModules) => {
     const index =
@@ -109,7 +104,6 @@ export function CommunityModuleContextProvider({
         getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !=
           undefined &&
           !communityModulesLoading &&
-          !kymaResourceLoading &&
           !moduleTemplatesLoading &&
           showDeleteDialog && (
             <ModulesDeleteBox
@@ -119,8 +113,6 @@ export function CommunityModuleContextProvider({
                 openedModuleIndex,
                 installedCommunityModules,
               )}
-              kymaResource={kymaResourceState}
-              kymaResourceState={kymaResourceState}
               moduleTemplates={communityModuleTemplates}
               detailsOpen={detailsOpen}
               setKymaResourceState={setKymaResourceState}
