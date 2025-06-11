@@ -29,3 +29,7 @@ You can use Kyma dashboard to perform the following actions:
    5a. Busola backend proxies operations to a remote Kubernetes cluster.
    5b. Busola backend proxies questions to Kyma Companion.
 5. The backend sends back a response to the Busola web application, which displays the returned information.
+
+## Related Information
+
+- [Command Palette feature](../user/01-20-command-palette.md)
