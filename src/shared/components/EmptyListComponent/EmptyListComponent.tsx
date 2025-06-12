@@ -44,8 +44,9 @@ export const EmptyListComponent = ({
 
   return (
     <IllustratedMessage
+      className="emptyListComponent"
       name={image}
-      design="Auto" //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      design="Auto"
       title={
         <Title level="H2" size="H2">
           {titleText}
