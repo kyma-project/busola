@@ -22,8 +22,35 @@ export default function CommunityModulesAddModule(props) {
   const { communityModuleTemplates: moduleTemplates } = useContext(
     ModuleTemplatesContext,
   );
-
   const [selectedModules, setSelectedModules] = useState([]);
+  const [resourcesToAply, setResourcesToAply] = useState([]);
+
+  let modulesAddData;
+
+  useEffect(() => {
+    const getModuleResourcesLinks = (selectedModules, modulesAddData) => {
+      const resources = [];
+
+      selectedModules.forEach(({ name, channel, version }) => {
+        const moduleData = modulesAddData?.find(module => module.name === name);
+
+        if (moduleData) {
+          moduleData.channels.forEach(
+            ({ channel: ch, version: v, resources: r }) => {
+              const resource = r.find(res => v === version && ch === channel);
+              if (resource?.link) {
+                resources.push(resource.link);
+              }
+            },
+          );
+        }
+      });
+
+      return resources;
+    };
+
+    setResourcesToAply(getModuleResourcesLinks());
+  }, [selectedModules, modulesAddData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({});
 
@@ -68,82 +95,87 @@ export default function CommunityModulesAddModule(props) {
     );
   }
 
-  const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
+  modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
     const name = module.metadata.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => {
       return item.metadata.name === name;
     });
-    const isAlreadyInstalled = installedCommunityModules?.spec?.modules?.find(
+    const isAlreadyInstalled = installedCommunityModules.find(
       installedModule => installedModule.name === name,
     );
 
     const moduleMetaRelase = moduleReleaseMetas?.items.find(
       item => item.spec.moduleName === name,
     );
+    //TODO probably not needed
+    // if (module.spec.channel) {
+    //   console.log('if module.spec.channel');
+    //   if (!existingModule && !isAlreadyInstalled) {
+    //     acc.push({
+    //       name: name,
+    //       channels: [
+    //         {
+    //           channel: module.spec.channel,
+    //           version: module.spec.descriptor.component.version,
+    //           isBeta:
+    //             module.metadata.labels['operator.kyma-project.io/beta'] ===
+    //             'true',
+    //         },
+    //       ],
+    //       docsUrl:
+    //         module.metadata.annotations['operator.kyma-project.io/doc-url'],
+    //       icon: {
+    //         link: module.spec?.info?.icons[0]?.link,
+    //         name: module.spec?.info?.icons[0]?.name,
+    //       },
+    //       isMetaRelease: false,
+    //     });
+    //   } else if (existingModule) {
+    //     existingModule.channels?.push({
+    //       channel: module.spec.channel,
+    //       version: module.spec.descriptor.component.version,
+    //       isBeta:
+    //         module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
+    //       isMetaRelease: false,
+    //     });
+    //   }
+    // } else {
 
-    if (module.spec.channel) {
-      if (!existingModule && !isAlreadyInstalled) {
-        acc.push({
-          name: name,
-          channels: [
-            {
-              channel: module.spec.channel,
-              version: module.spec.descriptor.component.version,
-              isBeta:
-                module.metadata.labels['operator.kyma-project.io/beta'] ===
-                'true',
-            },
-          ],
-          docsUrl:
-            module.metadata.annotations['operator.kyma-project.io/doc-url'],
-          icon: {
-            link: module.spec?.info?.icons[0]?.link,
-            name: module.spec?.info?.icons[0]?.name,
-          },
-          isMetaRelease: false,
-        });
-      } else if (existingModule) {
-        existingModule.channels?.push({
-          channel: module.spec.channel,
-          version: module.spec.descriptor.component.version,
-          isBeta:
-            module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
-          isMetaRelease: false,
-        });
-      }
-    } else {
-      if (!existingModule && !isAlreadyInstalled) {
-        moduleMetaRelase?.spec.channels.forEach(channel => {
-          if (!acc.find(item => item.name === name)) {
-            acc.push({
-              name: name,
-              channels: [
-                {
-                  channel: channel.channel,
-                  version: channel.version,
-                  isBeta: moduleMetaRelase.spec.beta ?? false,
-                  isMetaRelease: true,
-                },
-              ],
-              docsUrl: module.spec.info.documentation,
-              icon: {
-                link: module.spec?.info?.icons[0]?.link,
-                name: module.spec?.info?.icons[0]?.name,
-              },
-            });
-          } else {
-            acc
-              .find(item => item.name === name)
-              .channels.push({
+    if (!existingModule && !isAlreadyInstalled) {
+      moduleMetaRelase?.spec.channels.forEach(channel => {
+        if (!acc.find(item => item.name === name)) {
+          acc.push({
+            name: name,
+            channels: [
+              {
                 channel: channel.channel,
                 version: channel.version,
                 isBeta: moduleMetaRelase.spec.beta ?? false,
                 isMetaRelease: true,
-              });
-          }
-        });
-      }
+                resources: module.spec.resources,
+              },
+            ],
+            docsUrl: module.spec.info.documentation,
+            icon: {
+              link: module.spec?.info?.icons[0]?.link,
+              name: module.spec?.info?.icons[0]?.name,
+            },
+          });
+        } else {
+          acc
+            .find(item => item.name === name)
+            .channels.push({
+              channel: channel.channel,
+              version: channel.version,
+              isBeta: moduleMetaRelase.spec.beta ?? false,
+              isMetaRelease: true,
+              resources: module.spec.resources,
+            });
+        }
+      });
     }
+    //TODO probably not needed
+    // }
 
     return acc ?? [];
   }, []);
@@ -153,14 +185,18 @@ export default function CommunityModulesAddModule(props) {
   };
 
   const setCheckbox = (module, checked, index) => {
+    console.log('setCheckbox');
+
     const newSelectedModules = [...selectedModules];
     if (checked) {
+      console.log('checked');
       newSelectedModules.push({
         name: module.name,
       });
     } else {
       newSelectedModules.splice(index, 1);
     }
+    console.log('newSelectedModules', newSelectedModules);
     setSelectedModules(newSelectedModules);
   };
 
@@ -238,7 +274,32 @@ export default function CommunityModulesAddModule(props) {
       className="add-modules-form"
       // onSubmit={ handleSubmit}
       onSubmit={newData => {
-        console.log('handling Install Community module', selectedModules);
+        console.log(
+          'handling Install Community module',
+          selectedModules,
+          'modulesAddData',
+          modulesAddData,
+        );
+        const newModules = selectedModules.filter(
+          newModules =>
+            !installedCommunityModules.find(
+              activeModules => activeModules.name === newModules.name,
+            ),
+        );
+        const selectedModulesData1 = modulesAddData.filter(
+          newModules =>
+            !selectedModules.find(
+              activeModules => activeModules.name === newModules.name,
+            ),
+        );
+        const selectedModulesData = modulesAddData.filter(newModules => {
+          return !selectedModules.find(activeModules => {
+            console.log('activeModules', activeModules, newModules);
+            return activeModules.name === newModules.name;
+          });
+        });
+
+        console.log('selectedModulesData', selectedModulesData);
       }}
     >
       <>
