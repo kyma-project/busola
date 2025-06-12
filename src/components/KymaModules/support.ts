@@ -114,6 +114,14 @@ export const getResourcePath = (resource: any) => {
       ).toLowerCase()}/${resourceName}`;
 };
 
+export const findChannel = (
+  module: { name: string; channels: [{ version: string; channel: string }] },
+  channel: string,
+) => {
+  return module.channels.find(
+    (ch: { version: string; channel: string }) => ch.channel === channel,
+  );
+};
 export const findCrd = (resourceKind: string, crds: any) => {
   return (crds as CustomResourceDefinitionsType | null)?.items?.find(
     crd => crd.spec?.names?.kind === resourceKind,
@@ -174,16 +182,18 @@ export const findModuleTemplate = (
 };
 
 export const setChannel = (
-  module: { name: string },
+  module: { name: string; channels: [{ version: string; channel: string }] },
   channel: string,
   index: number,
   selectedModules: {
     name: string;
     channel?: string;
+    version?: string;
   }[],
   setSelectedModules: React.Dispatch<React.SetStateAction<any[]>>,
 ) => {
   const modulesToUpdate = [...selectedModules];
+  const channelData = findChannel(module, channel);
   if (
     selectedModules.find(
       (selectedModule: { name: string }) => selectedModule.name === module.name,
@@ -192,12 +202,19 @@ export const setChannel = (
     if (channel === 'predefined') {
       delete modulesToUpdate[index].channel;
     } else modulesToUpdate[index].channel = channel;
+    if (channelData?.version && modulesToUpdate[index]) {
+      modulesToUpdate[index].version = channelData.version;
+    }
   } else {
     modulesToUpdate.push({
       name: module.name,
     });
     if (channel !== 'predefined')
       modulesToUpdate[modulesToUpdate?.length - 1].channel = channel;
+    if (channelData?.version) {
+      modulesToUpdate[modulesToUpdate?.length - 1].version =
+        channelData.version;
+    }
   }
   setSelectedModules(modulesToUpdate);
 };
