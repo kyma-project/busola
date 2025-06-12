@@ -7,7 +7,6 @@ import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 import { checkSelectedModule } from '../support';
 import { Button } from '@ui5/webcomponents-react';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 
 export const CommunityModuleContext = createContext({
   setOpenedModuleIndex: () => {},
@@ -28,47 +27,27 @@ export function CommunityModuleContextProvider({
 }) {
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   const [detailsOpen, setDetailsOpen] = useState(false);
-  // TODO: Is this two needed in community modules?:
-  const [initialUnchangedResource, setInitialUnchangedResource] = useState();
-  const [kymaResourceState, setKymaResourceState] = useState();
 
   const notification = useNotification();
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
-
   const {
     installed: installedCommunityModules,
     loading: communityModulesLoading,
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
-  /////////////////////////// TODO: Is it necessary? KymaResource? resourceUrl?
-  const handleModuleUninstall = useCreateResource({
-    singularName: 'Kyma',
-    pluralKind: 'Kymas',
-    resource: kymaResourceState,
-    initialResource: initialUnchangedResource,
-    updateInitialResource: setInitialUnchangedResource,
-    // TODO: resourceUrl
-    createUrl:
-      '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/default',
-    afterCreatedFn: () =>
-      notification.notifySuccess({
-        content: t('kyma-modules.module-uninstall'),
-      }),
-  });
+
+  const handleModuleUninstall = () =>
+    // TODO: Add logic to handle module uninstallation.
+    notification.notifySuccess({
+      content: t('kyma-modules.module-uninstall'),
+    });
 
   useEffect(() => {
     if (layoutState?.layout) {
       setDetailsOpen(layoutState?.layout !== 'OneColumn');
     }
   }, [layoutState]);
-
-  // useEffect(() => {
-  //   if (installedCommunityModules?.length) {
-  //     setKymaResourceState(installedCommunityModules);
-  //     setInitialUnchangedResource(cloneDeep(installedCommunityModules));
-  //   }
-  // }, [installedCommunityModules]);
 
   const getOpenedModuleIndex = (moduleIndex, activeModules) => {
     const index =
@@ -115,8 +94,6 @@ export function CommunityModuleContextProvider({
               )}
               moduleTemplates={communityModuleTemplates}
               detailsOpen={detailsOpen}
-              setKymaResourceState={setKymaResourceState}
-              setInitialUnchangedResource={setInitialUnchangedResource}
               setChosenModuleIndex={setOpenedModuleIndex}
               handleModuleUninstall={handleModuleUninstall}
               setLayoutColumn={setLayoutColumn}

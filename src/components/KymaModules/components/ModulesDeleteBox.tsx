@@ -246,7 +246,9 @@ export const ModulesDeleteBox = ({
               modules: selectedModules,
             },
           });
-          handleModuleUninstall();
+        }
+        handleModuleUninstall();
+        if (!isCommunity) {
           setInitialUnchangedResource(cloneDeep(kymaResourceState));
         }
 
