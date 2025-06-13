@@ -151,7 +151,12 @@ const DefaultRowRenderer = ({
     }
   });
   const actionsCell = (
-    <TableCell horizontalAlign="Right">
+    <TableCell
+      horizontalAlign="Right"
+      style={{
+        paddingRight: enableColumnLayout ? '0' : '0.5rem',
+      }}
+    >
       <ListActions actions={actions} entry={entry} />
     </TableCell>
   );
