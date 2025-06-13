@@ -43,6 +43,7 @@ const addChannelsToModules = moduleReleaseMetas => {
     const moduleMetaRelase = moduleReleaseMetas?.items.find(
       item => item.spec.moduleName === name,
     );
+
     const isModuleMetaRelease = acc.find(
       item => item.name === moduleMetaRelase?.spec?.moduleName,
     );
