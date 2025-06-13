@@ -105,7 +105,11 @@ export default function KymaModulesAddModule(props) {
       item => item.spec.moduleName === name,
     );
 
-    if (module.spec.channel) {
+    const isModuleMetaRelease = acc.find(
+      item => item.name === moduleMetaRelase?.spec?.moduleName,
+    );
+
+    if (module.spec.channel && !isModuleMetaRelease) {
       if (!existingModule && !isAlreadyInstalled) {
         acc.push({
           name: name,
