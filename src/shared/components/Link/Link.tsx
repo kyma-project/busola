@@ -12,6 +12,7 @@ type LinkProps = {
   design?: 'Default' | 'Subtle' | 'Emphasized';
   resetLayout?: boolean;
   onClick?: any;
+  style: React.CSSProperties;
 };
 
 export const Link = ({
@@ -22,11 +23,14 @@ export const Link = ({
   design = 'Emphasized',
   resetLayout = true,
   onClick,
+  style,
 }: LinkProps) => {
   const setLayout = useSetRecoilState(columnLayoutState);
   const navigate = useNavigate();
 
-  function handleOnlick(resetLayout: any, url: any) {
+  function handleOnlick(resetLayout: any, url: any, e: any) {
+    e.preventDefault();
+
     if (resetLayout) {
       setLayout({
         startColumn: null,
@@ -44,7 +48,9 @@ export const Link = ({
       design={design}
       className={className}
       data-testid={dataTestId}
-      onClick={() => (onClick ? onClick() : handleOnlick(resetLayout, url))}
+      onClick={e => (onClick ? onClick() : handleOnlick(resetLayout, url, e))}
+      href={url}
+      style={style}
     >
       {children}
     </UI5Link>

@@ -103,7 +103,7 @@ export function EventList({
     {
       header: t('common.headers.name'),
       value: entry => (
-        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+        <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
           {entry.metadata?.name}
         </Text>
       ),
