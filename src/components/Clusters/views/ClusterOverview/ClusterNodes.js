@@ -71,6 +71,7 @@ export function ClusterNodes({ data, error, loading }) {
               }),
               position: 'bottom',
             }}
+            accessibleName="CPU usage"
           />
         </>
       ) : (
@@ -87,6 +88,7 @@ export function ClusterNodes({ data, error, loading }) {
             position: 'bottom',
           }}
           dataBarColor="var(--sapChart_Good)"
+          accessibleName="Memory usage"
         />
       ) : (
         EMPTY_TEXT_PLACEHOLDER

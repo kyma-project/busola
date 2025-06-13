@@ -97,7 +97,7 @@ context('Test HPA', () => {
   });
 
   it('Check Edit HPA', () => {
-    cy.clickGenericListLink(HPA_NAME);
+    cy.clickListLink(HPA_NAME);
 
     cy.wait(500).inspectTab('Edit');
 
