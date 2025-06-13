@@ -50,7 +50,7 @@ Cypress.Commands.add('checkItemOnGenericListLink', resourceName => {
 Cypress.Commands.add('clickGenericListLink', resourceName => {
   cy.get('ui5-table-row')
     .find('ui5-table-cell')
-    .contains('ui5-text', resourceName)
+    .contains('ui5-link', resourceName)
     .click();
 });
 
