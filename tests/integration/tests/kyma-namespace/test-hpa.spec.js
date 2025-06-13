@@ -107,6 +107,7 @@ context('Test HPA', () => {
       .find('input')
       .click()
       .clear()
+      .wait(1000)
       .type(MIN_REPLICAS);
 
     cy.saveChanges('Edit');
