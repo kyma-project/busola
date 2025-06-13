@@ -26,7 +26,6 @@ import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
 import { useNavigate } from 'react-router';
-import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from '../Link/Link';
 
