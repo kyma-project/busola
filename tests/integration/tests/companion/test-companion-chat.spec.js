@@ -20,6 +20,8 @@ context('Test Companion Chat Behavior', () => {
     cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
 
+    cy.wait(5000);
+
     cy.get('@companion')
       .find('.chat-list > .context-group')
       .should('have.length', 1)

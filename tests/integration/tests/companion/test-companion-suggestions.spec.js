@@ -49,6 +49,8 @@ context('Test Companion Initial Suggestions', () => {
       .find('.ai-busy-indicator')
       .should('be.visible');
 
+    cy.wait(5000);
+
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',

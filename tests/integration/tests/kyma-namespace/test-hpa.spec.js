@@ -101,13 +101,14 @@ context('Test HPA', () => {
 
     cy.wait(500).inspectTab('Edit');
 
+    cy.wait(2000);
+
     cy.getMidColumn()
       .get('[data-testid="spec.minReplicas"]:visible')
       .eq(0)
       .find('input')
       .click()
       .clear()
-      .wait(1000)
       .type(MIN_REPLICAS);
 
     cy.saveChanges('Edit');
