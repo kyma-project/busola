@@ -138,7 +138,7 @@ export default function App() {
                       path="*"
                       element={
                         <IncorrectPath
-                          to="clusters"
+                          to="/clusters"
                           message={t(
                             'components.incorrect-path.message.clusters',
                           )}
