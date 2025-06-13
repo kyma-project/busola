@@ -81,6 +81,16 @@ export function KymaModuleContextProvider({
     ModuleTemplatesContext,
   );
 
+  const getOpenedModuleIndex = (moduleIndex, activeModules) => {
+    const index =
+      moduleIndex ??
+      // Find index of the selected module after a refresh or other case after which we have undefined.
+      activeModules.findIndex(module =>
+        checkSelectedModule(module, layoutState),
+      );
+    return index > -1 ? index : undefined;
+  };
+
   const deleteModuleButton = (
     <div>
       <Button onClick={() => handleResourceDelete({})} design="Transparent">
@@ -108,28 +118,29 @@ export function KymaModuleContextProvider({
       }}
     >
       {createPortal(
-        !kymaResourceLoading && !moduleTemplatesLoading && showDeleteDialog && (
-          <ModulesDeleteBox
-            DeleteMessageBox={DeleteMessageBox}
-            selectedModules={activeKymaModules}
-            chosenModuleIndex={
-              openedModuleIndex ??
-              // Find index of the selected module after a refresh or other case after which we have undefined.
-              activeKymaModules.findIndex(module =>
-                checkSelectedModule(module, layoutState),
-              )
-            }
-            kymaResource={kymaResource}
-            kymaResourceState={kymaResourceState}
-            moduleTemplates={kymaModuleTemplates}
-            detailsOpen={detailsOpen}
-            setKymaResourceState={setKymaResourceState}
-            setInitialUnchangedResource={setInitialUnchangedResource}
-            setChosenModuleIndex={setOpenedModuleIndex}
-            handleModuleUninstall={handleModuleUninstall}
-            setLayoutColumn={setLayoutColumn}
-          />
-        ),
+        getOpenedModuleIndex(openedModuleIndex, activeKymaModules) !=
+          undefined &&
+          !kymaResourceLoading &&
+          !moduleTemplatesLoading &&
+          showDeleteDialog && (
+            <ModulesDeleteBox
+              DeleteMessageBox={DeleteMessageBox}
+              selectedModules={activeKymaModules}
+              chosenModuleIndex={getOpenedModuleIndex(
+                openedModuleIndex,
+                activeKymaModules,
+              )}
+              kymaResource={kymaResource}
+              kymaResourceState={kymaResourceState}
+              moduleTemplates={kymaModuleTemplates}
+              detailsOpen={detailsOpen}
+              setKymaResourceState={setKymaResourceState}
+              setInitialUnchangedResource={setInitialUnchangedResource}
+              setChosenModuleIndex={setOpenedModuleIndex}
+              handleModuleUninstall={handleModuleUninstall}
+              setLayoutColumn={setLayoutColumn}
+            />
+          ),
         document.body,
       )}
       {children}

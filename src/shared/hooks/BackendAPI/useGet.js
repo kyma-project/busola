@@ -367,6 +367,6 @@ export const useGetScope = () => {
     });
     const openApiSpec = await response.json();
 
-    return openApiSpec.resources.find(r => r.kind === kind).namespaced;
+    return openApiSpec.resources.find(r => r.kind === kind)?.namespaced;
   };
 };
