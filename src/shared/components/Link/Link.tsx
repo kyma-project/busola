@@ -50,6 +50,7 @@ export const Link = ({
       data-testid={dataTestId}
       onClick={e => (onClick ? onClick() : handleOnlick(resetLayout, url, e))}
       href={url}
+      target="_blank"
       style={style}
     >
       {children}

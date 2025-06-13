@@ -228,32 +228,7 @@ export const GenericList = ({
       }
 
       if (!entries.length) {
-        return (
-          <BodyFallback>
-            {emptyListProps?.simpleEmptyListMessage === false ||
-            (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
-              <EmptyListComponent
-                titleText={emptyListProps.titleText}
-                subtitleText={emptyListProps.subtitleText}
-                showButton={emptyListProps.showButton}
-                buttonText={emptyListProps.buttonText}
-                url={emptyListProps.url}
-                onClick={emptyListProps.onClick}
-                image={emptyListProps?.image}
-              />
-            ) : (
-              <p>
-                {emptyListProps?.titleText ? (
-                  <Trans i18nKey={emptyListProps?.titleText} />
-                ) : i18n.exists(notFoundMessage) ? (
-                  t(notFoundMessage)
-                ) : (
-                  notFoundMessage
-                )}
-              </p>
-            )}
-          </BodyFallback>
-        );
+        return;
       }
     }
 

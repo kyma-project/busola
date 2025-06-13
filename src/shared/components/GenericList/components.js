@@ -136,7 +136,7 @@ const DefaultRowRenderer = ({
   isSelected = false,
   displayArrow = false,
   hasDetailsView,
-  enableColumnLayout = true,
+  enableColumnLayout = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {

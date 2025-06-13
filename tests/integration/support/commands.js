@@ -50,6 +50,13 @@ Cypress.Commands.add('checkItemOnGenericListLink', resourceName => {
 Cypress.Commands.add('clickGenericListLink', resourceName => {
   cy.get('ui5-table-row')
     .find('ui5-table-cell')
+    .contains('ui5-text', resourceName)
+    .click();
+});
+
+Cypress.Commands.add('clickListLink', resourceName => {
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
     .contains('ui5-link', resourceName)
     .click();
 });
@@ -65,7 +72,7 @@ Cypress.Commands.add('goToNamespaceDetails', namespace => {
     .contains('Namespaces')
     .click();
 
-  cy.clickGenericListLink(namespace ?? Cypress.env('NAMESPACE_NAME'));
+  cy.clickListLink(namespace ?? Cypress.env('NAMESPACE_NAME'));
 
   return cy.end();
 });

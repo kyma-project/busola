@@ -13,6 +13,7 @@ import {
   ResourceDescription,
 } from 'resources/Events';
 import { pathSegment } from 'resources/ClusterEvents';
+import { Link } from 'shared/components/Link/Link';
 
 function useEventUrl(resourceType, clusterView) {
   const { namespaceUrl, clusterUrl } = useUrl();
@@ -102,11 +103,16 @@ export function EventList({
     },
     {
       header: t('common.headers.name'),
-      value: entry => (
-        <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
-          {entry.metadata?.name}
-        </Text>
-      ),
+      value: entry =>
+        isCompact && !props.displayArrow ? (
+          <Link url={`${customUrl(entry)}`} style={{ fontWeight: 'bold' }}>
+            {entry.metadata?.name}
+          </Link>
+        ) : (
+          <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
+            {entry.metadata?.name}
+          </Text>
+        ),
       id: 'name',
     },
     namespace === '-all-'
