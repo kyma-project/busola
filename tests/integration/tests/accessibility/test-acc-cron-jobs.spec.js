@@ -27,7 +27,7 @@ context('Accessibility test Cron Jobs', () => {
       .wait(1000)
       .type(NAMESPACE_NAME);
 
-    cy.clickGenericListLink(NAMESPACE_NAME);
+    cy.clickListLink(NAMESPACE_NAME);
 
     cy.navigateTo('Workloads', 'Cron Jobs');
 
