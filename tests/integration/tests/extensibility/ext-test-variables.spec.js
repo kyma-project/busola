@@ -70,7 +70,7 @@ context('Test extensibility variables', () => {
       .find('input')
       .type(NAMESPACE);
 
-    cy.clickGenericListLink(NAMESPACE);
+    cy.clickListLink(NAMESPACE);
 
     cy.navigateTo('Testin', 'Test Resources');
 

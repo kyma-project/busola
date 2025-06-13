@@ -10,12 +10,10 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
 import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
-import { Text } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router';
+import { Link } from 'shared/components/Link/Link';
 
 export function ClusterNodes({ data, error, loading }) {
   const { clusterUrl } = useUrl();
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const getStatusType = status => {
@@ -54,12 +52,13 @@ export function ClusterNodes({ data, error, loading }) {
     const { cpu, memory } = entry?.metrics || {};
 
     return [
-      <Text
-        style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}
+      <Link
+        style={{ fontWeight: 'bold' }}
         data-testid={`node-details-link-${entry.metadata?.name}`}
+        url={clusterUrl(`overview/nodes/${entry.metadata?.name}`)}
       >
         {entry.metadata?.name}
-      </Text>,
+      </Link>,
       cpu ? (
         <>
           <ProgressIndicatorWithPercentage
@@ -72,6 +71,7 @@ export function ClusterNodes({ data, error, loading }) {
               }),
               position: 'bottom',
             }}
+            accessibleName="CPU usage"
           />
         </>
       ) : (
@@ -88,6 +88,7 @@ export function ClusterNodes({ data, error, loading }) {
             position: 'bottom',
           }}
           dataBarColor="var(--sapChart_Good)"
+          accessibleName="Memory usage"
         />
       ) : (
         EMPTY_TEXT_PLACEHOLDER
@@ -114,10 +115,6 @@ export function ClusterNodes({ data, error, loading }) {
     data?.[0]?.status?.nodeInfo?.kubeletVersion,
   );
 
-  const handleClickResource = resourceName => {
-    navigate(clusterUrl(`overview/nodes/${resourceName}`));
-  };
-
   return (
     <>
       {!(error && error.toString().includes('Error: nodes is forbidden')) && (
@@ -135,7 +132,6 @@ export function ClusterNodes({ data, error, loading }) {
             showSearchField: false,
             allowSlashShortcut: false,
           }}
-          customRowClick={handleClickResource}
           hasDetailsView
         />
       )}

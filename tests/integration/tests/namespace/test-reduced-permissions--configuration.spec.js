@@ -115,7 +115,7 @@ context('Test reduced permissions 2', () => {
       .find('input')
       .type('kube-public');
 
-    cy.clickGenericListLink('kube-public');
+    cy.clickListLink('kube-public');
 
     cy.getLeftNav()
       .contains('Pods')

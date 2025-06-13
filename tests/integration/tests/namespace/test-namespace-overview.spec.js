@@ -15,7 +15,7 @@ context(
     });
 
     it('Check sections of namespace details', () => {
-      cy.contains('ui5-text', LIMIT_NAME)
+      cy.contains('ui5-link', LIMIT_NAME)
         .scrollIntoView()
         .should('be.visible');
 
@@ -26,7 +26,7 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('ui5-text', QUOTA_NAME)
+      cy.contains('ui5-link', QUOTA_NAME)
         .scrollIntoView()
         .should('be.visible');
 

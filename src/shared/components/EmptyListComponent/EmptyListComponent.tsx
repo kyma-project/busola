@@ -44,6 +44,7 @@ export const EmptyListComponent = ({
 
   return (
     <IllustratedMessage
+      className="emptyListComponent"
       name={image}
       design="Auto"
       title={

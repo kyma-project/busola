@@ -17,6 +17,7 @@ export const ProgressIndicatorWithPercentage = ({
   tooltip,
   leftTitle,
   rightTitle,
+  accessibleName = 'Progress indicator',
 }) => {
   const applyColors = progressRef => {
     const dataBar = progressRef?.shadowRoot?.querySelector(
@@ -43,6 +44,7 @@ export const ProgressIndicatorWithPercentage = ({
           </p>
         )}
         <ProgressIndicator
+          accessibleName={accessibleName}
           displayValue={leftTitle}
           value={value}
           ref={progress => applyColors(progress)}

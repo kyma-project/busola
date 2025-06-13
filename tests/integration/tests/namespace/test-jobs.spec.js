@@ -101,7 +101,7 @@ context('Test Jobs', () => {
       .find('ui5-panel')
       .find('ui5-table-row')
       .find('ui5-table-cell')
-      .contains('ui5-text', JOB_NAME)
+      .contains('ui5-link', JOB_NAME)
       .click();
 
     cy.wait(1000);

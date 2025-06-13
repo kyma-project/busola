@@ -67,7 +67,7 @@ context('Accessibility test Pizza Orders', () => {
       .find('input')
       .type('pizzas');
 
-    cy.clickGenericListLink('pizzas');
+    cy.clickListLink('pizzas');
 
     cy.getLeftNav()
       .contains('Lunch')
