@@ -38,7 +38,7 @@ export function CommunityModuleContextProvider({
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
 
   const handleModuleUninstall = () =>
-    // TODO: Add logic to handle module uninstallation.
+    // TODO: Add logic to handle module uninstallation if it's needed for community case.
     notification.notifySuccess({
       content: t('kyma-modules.module-uninstall'),
     });
