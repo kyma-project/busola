@@ -14,6 +14,7 @@ import {
   fetchResourceCounts,
   generateAssociatedResourcesUrls,
   getAssociatedResources,
+  getCommunityResources,
   getCRResource,
   handleItemClick,
 } from '../deleteModulesHelpers';
@@ -26,6 +27,7 @@ import { cloneDeep } from 'lodash';
 import { KymaResourceType, ModuleTemplateListType } from '../support';
 import { SetterOrUpdater } from 'recoil';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
@@ -64,10 +66,12 @@ export const ModulesDeleteBox = ({
   const { clusterUrl, namespaceUrl } = useUrl();
   const deleteResourceMutation = useDelete();
   const fetchFn = useSingleGet();
+  const post = usePost();
 
   const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});
   const [forceDeleteUrls, setForceDeleteUrls] = useState<string[]>([]);
   const [crUrls, setCrUrls] = useState<string[]>([]);
+  const [communityUrls, setCommunityUrls] = useState<string[]>([]);
   const [allowForceDelete, setAllowForceDelete] = useState(false);
   const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
@@ -111,6 +115,19 @@ export const ModulesDeleteBox = ({
         namespaceUrl,
         navigate,
       );
+
+      if (isCommunity) {
+        const communityResources = await getCommunityResources(
+          chosenModuleIndex,
+          selectedModules,
+          kymaResource,
+          moduleTemplates,
+          post,
+        );
+        console.log('TEST-communityResources:', communityResources.flat());
+        // TODO: Get Community Urls.
+        // setCommunityUrls(communityUrl);
+      }
 
       setResourceCounts(counts);
       setForceDeleteUrls(urls);
@@ -246,9 +263,7 @@ export const ModulesDeleteBox = ({
               modules: selectedModules,
             },
           });
-        }
-        handleModuleUninstall();
-        if (!isCommunity) {
+          handleModuleUninstall();
           setInitialUnchangedResource(cloneDeep(kymaResourceState));
         }
 

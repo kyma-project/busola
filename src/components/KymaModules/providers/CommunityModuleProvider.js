@@ -6,7 +6,6 @@ import { createPortal } from 'react-dom';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 import { checkSelectedModule } from '../support';
 import { Button } from '@ui5/webcomponents-react';
-import { useNotification } from 'shared/contexts/NotificationContext';
 
 export const CommunityModuleContext = createContext({
   setOpenedModuleIndex: () => {},
@@ -28,7 +27,6 @@ export function CommunityModuleContextProvider({
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   const [detailsOpen, setDetailsOpen] = useState(false);
 
-  const notification = useNotification();
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
@@ -36,12 +34,6 @@ export function CommunityModuleContextProvider({
     installed: installedCommunityModules,
     loading: communityModulesLoading,
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
-
-  const handleModuleUninstall = () =>
-    // TODO: Add logic to handle module uninstallation if it's needed for community case.
-    notification.notifySuccess({
-      content: t('kyma-modules.module-uninstall'),
-    });
 
   useEffect(() => {
     if (layoutState?.layout) {
@@ -53,7 +45,7 @@ export function CommunityModuleContextProvider({
     const index =
       moduleIndex ??
       // Find index of the selected module after a refresh or other case after which we have undefined.
-      activeModules.findIndex(module =>
+      activeModules?.findIndex(module =>
         checkSelectedModule(module, layoutState),
       );
     return index > -1 ? index : undefined;
@@ -80,7 +72,7 @@ export function CommunityModuleContextProvider({
       }}
     >
       {createPortal(
-        getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !=
+        getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !==
           undefined &&
           !communityModulesLoading &&
           !moduleTemplatesLoading &&
@@ -95,7 +87,6 @@ export function CommunityModuleContextProvider({
               moduleTemplates={communityModuleTemplates}
               detailsOpen={detailsOpen}
               setChosenModuleIndex={setOpenedModuleIndex}
-              handleModuleUninstall={handleModuleUninstall}
               setLayoutColumn={setLayoutColumn}
               isCommunity={true}
             />

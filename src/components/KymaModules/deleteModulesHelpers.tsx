@@ -4,6 +4,8 @@ import {
   findModuleTemplate,
   ModuleTemplateListType,
 } from './support';
+import jsyaml from 'js-yaml';
+import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 interface Counts {
   [key: string]: number;
@@ -70,6 +72,41 @@ export const getCRResource = (
     };
   }
   return resource ? [resource] : [];
+};
+
+export const getCommunityResources = async (
+  chosenModuleIndex: number | null,
+  selectedModules: any,
+  kymaResource: any,
+  moduleTemplates: ModuleTemplateListType,
+  post: PostFn,
+) => {
+  if (chosenModuleIndex == null) {
+    return [];
+  }
+  const selectedModule = selectedModules[chosenModuleIndex];
+  const moduleChannel = selectedModule?.channel || kymaResource?.spec?.channel;
+  const moduleVersion =
+    selectedModule?.version ||
+    findModuleStatus(kymaResource, selectedModule?.name)?.version;
+
+  const module = findModuleTemplate(
+    moduleTemplates,
+    selectedModule?.name,
+    moduleChannel,
+    moduleVersion,
+  );
+
+  const resources = (module?.spec as any)?.resources;
+  if (resources?.length) {
+    const test = resources.map(async (res: any) => {
+      if (res.link) {
+        return await postForCommunityResources(post, res.link);
+      }
+    });
+    return await Promise.all(test);
+  }
+  return [];
 };
 
 export const handleItemClick = async (
@@ -235,3 +272,27 @@ export const deleteCrResources = async (
     return 'Error while deleting Custom Resource';
   }
 };
+
+export default async function postForCommunityResources(
+  post: PostFn,
+  link: string,
+) {
+  if (!link) {
+    console.error('No link provided for community resource');
+    return false;
+  }
+
+  try {
+    const response = await post('/community/resource', { link });
+
+    if (response && typeof response === 'string') {
+      return jsyaml.loadAll(response);
+    }
+
+    console.error('Invalid response format:', response);
+    return false;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return false;
+  }
+}
