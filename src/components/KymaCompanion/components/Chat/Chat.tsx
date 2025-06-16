@@ -261,7 +261,7 @@ export const Chat = ({
     if (containerRef?.current?.lastChild)
       (containerRef.current.lastChild as HTMLElement).scrollIntoView({
         behavior: 'smooth',
-        block: 'start',
+        block: 'end',
       });
   };
 
