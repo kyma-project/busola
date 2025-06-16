@@ -277,7 +277,7 @@ export function ResourceListRenderer({
     e.preventDefault();
 
     setLayoutColumn({
-      ...layoutState,
+      midColumn: null,
       showCreate: null,
       endColumn: null,
       layout: 'OneColumn',
