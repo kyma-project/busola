@@ -21,7 +21,7 @@ export const Link = ({
   children,
   dataTestId,
   design = 'Emphasized',
-  resetLayout = false,
+  resetLayout = true,
   onClick,
   style,
 }: LinkProps) => {

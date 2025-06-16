@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { Button, Text } from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
@@ -29,6 +29,7 @@ import { showAddClusterWizard } from 'state/showAddClusterWizard';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { Link } from 'shared/components/Link/Link';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
@@ -69,10 +70,6 @@ function ClusterList() {
   const [editedCluster, setEditedCluster] = useState(null);
 
   const { clusters, currentCluster } = clustersInfo;
-
-  const handleClickResource = (_, selectedEntry) => {
-    navigate(`/cluster/${encodeURIComponent(selectedEntry.contextName)}`);
-  };
 
   const isClusterActive = entry => {
     return (
@@ -119,14 +116,12 @@ function ClusterList() {
   ];
 
   const rowRenderer = entry => [
-    <Text
-      style={{
-        fontWeight: isClusterActive(entry) ? 'bold' : 'normal',
-        color: 'var(--sapLinkColor)',
-      }}
+    <Link
+      design={isClusterActive(entry) ? 'Emphasized' : 'Default'}
+      url={`/cluster/${encodeURIComponent(entry.contextName)}`}
     >
       {entry.name}
-    </Text>,
+    </Link>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
     entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
@@ -258,7 +253,6 @@ function ClusterList() {
                 showSearchSuggestion: false,
                 noSearchResultMessage: t('clusters.list.no-clusters-found'),
               }}
-              customRowClick={handleClickResource}
               hasDetailsView
             />
             {createPortal(
