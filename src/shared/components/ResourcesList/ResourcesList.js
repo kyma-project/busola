@@ -273,6 +273,28 @@ export function ResourceListRenderer({
       : resourceUrlFn(entry, { resourceType, ...overrides });
   };
 
+  const onLinkClick = (entry, e) => {
+    e.preventDefault();
+
+    setLayoutColumn({
+      ...layoutState,
+      showCreate: null,
+      endColumn: null,
+      layout: 'OneColumn',
+      showEdit: null,
+      startColumn: {
+        resourceName: entry?.metadata?.name ?? e.target.innerText,
+        resourceType: resourceType,
+        rawResourceTypeName: rawResourceType,
+        namespaceId: entry?.metadata?.namespace,
+        apiGroup: entry.metadata.group,
+        apiVersion: entry.apiVersion,
+      },
+    });
+
+    navigate(`${linkTo(entry)}`);
+  };
+
   const defaultColumns = [
     {
       header: t('common.headers.name'),
@@ -283,7 +305,11 @@ export function ResourceListRenderer({
               {nameSelector(entry)}
             </Text>
           ) : (
-            <Link url={`${linkTo(entry)}`} style={{ fontWeight: 'bold' }}>
+            <Link
+              url={`${linkTo(entry)}`}
+              onClick={e => onLinkClick(entry, e)}
+              style={{ fontWeight: 'bold' }}
+            >
               {nameSelector(entry)}
             </Link>
           )

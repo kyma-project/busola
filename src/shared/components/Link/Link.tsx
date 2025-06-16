@@ -21,7 +21,7 @@ export const Link = ({
   children,
   dataTestId,
   design = 'Emphasized',
-  resetLayout = true,
+  resetLayout = false,
   onClick,
   style,
 }: LinkProps) => {
@@ -48,7 +48,7 @@ export const Link = ({
       design={design}
       className={className}
       data-testid={dataTestId}
-      onClick={e => (onClick ? onClick() : handleOnlick(resetLayout, url, e))}
+      onClick={e => (onClick ? onClick(e) : handleOnlick(resetLayout, url, e))}
       href={url}
       target="_blank"
       style={style}
