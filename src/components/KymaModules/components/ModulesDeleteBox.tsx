@@ -128,8 +128,8 @@ export const ModulesDeleteBox = ({
           moduleTemplates,
           post,
         );
-
         const communityUrl = communityResources.map(cr => getResourcePath(cr));
+        console.log('TEST-COMMUNITY-URL', communityUrl);
         setCommunityUrls(communityUrl);
       }
 

@@ -3,7 +3,7 @@ import { handleTracking } from './tracking.js';
 import jsyaml from 'js-yaml';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
-import communityRouter from './companion/communityRouter';
+import communityRouter from './modules/communityRouter';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');
@@ -95,14 +95,14 @@ if (isDocker) {
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend/ai-chat', companionRouter);
-  app.use('/backend/community', communityRouter);
+  app.use('/backend/modules', communityRouter);
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
   handleTracking(app);
   app.use('/backend/ai-chat', companionRouter);
-  app.use('/backend/community', communityRouter);
+  app.use('/backend/modules', communityRouter);
   app.use('/backend', handleRequest);
 }
 

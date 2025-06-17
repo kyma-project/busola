@@ -4,7 +4,6 @@ import {
   findModuleTemplate,
   ModuleTemplateListType,
 } from './support';
-import jsyaml from 'js-yaml';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 interface Counts {
@@ -285,13 +284,11 @@ export default async function postForCommunityResources(
   }
 
   try {
-    const response = await post('/community/resource', { link });
-
-    if (response && typeof response === 'string') {
-      return jsyaml.loadAll(response);
+    const response = await post('/modules/community-resource', { link });
+    if (response?.length) {
+      return response;
     }
-
-    console.error('Empty or invalid response format:', response);
+    console.error('Empty or invalid response:', response);
     return false;
   } catch (error) {
     console.error('Error fetching data:', error);
