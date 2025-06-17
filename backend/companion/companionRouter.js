@@ -1,5 +1,7 @@
 import express from 'express';
 import { TokenManager } from './TokenManager';
+import { pipeline } from 'stream/promises';
+import { Readable } from 'stream';
 
 const tokenManager = new TokenManager();
 
@@ -111,7 +113,6 @@ async function handleChatMessage(req, res) {
 
     // Set up headers for streaming response
     res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
@@ -139,25 +140,12 @@ async function handleChatMessage(req, res) {
       body: JSON.stringify(payload),
     });
 
-    if (!response.body) {
-      throw new Error('Response body is null');
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { done, value } = await reader.read();
-
-      if (done) {
-        break;
-      }
-
-      const chunk = decoder.decode(value, { stream: true });
-      res.write(chunk);
-    }
-
-    res.end();
+    const stream = Readable.fromWeb(response.body);
+    await pipeline(stream, res);
   } catch (error) {
     if (!res.headersSent) {
       res.status(500).json({ error: 'Failed to fetch AI chat data' });
