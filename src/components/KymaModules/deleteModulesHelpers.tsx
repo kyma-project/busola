@@ -99,12 +99,14 @@ export const getCommunityResources = async (
 
   const resources = (module?.spec as any)?.resources;
   if (resources?.length) {
-    const test = resources.map(async (res: any) => {
-      if (res.link) {
-        return await postForCommunityResources(post, res.link);
-      }
-    });
-    return await Promise.all(test);
+    const yamlRes = await Promise.all(
+      resources.map(async (res: any) => {
+        if (res.link) {
+          return await postForCommunityResources(post, res.link);
+        }
+      }),
+    );
+    return yamlRes.flat();
   }
   return [];
 };
@@ -289,7 +291,7 @@ export default async function postForCommunityResources(
       return jsyaml.loadAll(response);
     }
 
-    console.error('Invalid response format:', response);
+    console.error('Empty or invalid response format:', response);
     return false;
   } catch (error) {
     console.error('Error fetching data:', error);

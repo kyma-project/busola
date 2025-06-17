@@ -24,7 +24,11 @@ import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { cloneDeep } from 'lodash';
-import { KymaResourceType, ModuleTemplateListType } from '../support';
+import {
+  getResourcePath,
+  KymaResourceType,
+  ModuleTemplateListType,
+} from '../support';
 import { SetterOrUpdater } from 'recoil';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -124,9 +128,9 @@ export const ModulesDeleteBox = ({
           moduleTemplates,
           post,
         );
-        console.log('TEST-communityResources:', communityResources.flat());
-        // TODO: Get Community Urls.
-        // setCommunityUrls(communityUrl);
+
+        const communityUrl = communityResources.map(cr => getResourcePath(cr));
+        setCommunityUrls(communityUrl);
       }
 
       setResourceCounts(counts);
@@ -277,6 +281,9 @@ export const ModulesDeleteBox = ({
         }
         if (allowForceDelete && forceDeleteUrls.length > 0) {
           deleteCrResources(deleteResourceMutation, crUrls);
+        }
+        if (isCommunity && allowForceDelete && communityUrls?.length > 0) {
+          deleteCrResources(deleteResourceMutation, communityUrls);
         }
       }}
     />
