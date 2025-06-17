@@ -75,7 +75,9 @@ export const ModulesDeleteBox = ({
   const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});
   const [forceDeleteUrls, setForceDeleteUrls] = useState<string[]>([]);
   const [crUrls, setCrUrls] = useState<string[]>([]);
-  const [communityUrls, setCommunityUrls] = useState<string[]>([]);
+  const [communityResourcesUrls, setCommunityResourcesUrls] = useState<
+    string[]
+  >([]);
   const [allowForceDelete, setAllowForceDelete] = useState(false);
   const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
@@ -128,9 +130,8 @@ export const ModulesDeleteBox = ({
           moduleTemplates,
           post,
         );
-        const communityUrl = communityResources.map(cr => getResourcePath(cr));
-        console.log('TEST-COMMUNITY-URL', communityUrl);
-        setCommunityUrls(communityUrl);
+        const communityUrls = communityResources.map(cr => getResourcePath(cr));
+        setCommunityResourcesUrls(communityUrls);
       }
 
       setResourceCounts(counts);
@@ -152,6 +153,57 @@ export const ModulesDeleteBox = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourceCounts, associatedResources]);
+
+  const deleteAllResources = () => {
+    if (allowForceDelete && forceDeleteUrls.length > 0) {
+      deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
+    }
+    if (chosenModuleIndex != null) {
+      selectedModules.splice(chosenModuleIndex, 1);
+    }
+    if (!isCommunity && kymaResource) {
+      setKymaResourceState({
+        ...kymaResource,
+        spec: {
+          ...kymaResource.spec,
+          modules: selectedModules,
+        },
+      });
+      handleModuleUninstall();
+      setInitialUnchangedResource(cloneDeep(kymaResourceState));
+    }
+
+    if (detailsOpen) {
+      setLayoutColumn({
+        layout: 'OneColumn',
+        startColumn: null,
+        midColumn: null,
+        endColumn: null,
+      });
+    }
+    if (allowForceDelete && forceDeleteUrls.length > 0) {
+      deleteCrResources(deleteResourceMutation, crUrls);
+    }
+  };
+
+  const deleteCommunityResources = async () => {
+    if (allowForceDelete && forceDeleteUrls.length > 0) {
+      // Delete associated resources.
+      await deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
+      // Delete spec.data.
+      await deleteCrResources(deleteResourceMutation, crUrls);
+      // Delete community resources.
+      deleteCrResources(deleteResourceMutation, communityResourcesUrls);
+    }
+    if (detailsOpen) {
+      setLayoutColumn({
+        layout: 'OneColumn',
+        startColumn: null,
+        midColumn: null,
+        endColumn: null,
+      });
+    }
+  };
 
   return (
     <DeleteMessageBox
@@ -253,37 +305,10 @@ export const ModulesDeleteBox = ({
           : ''
       }
       deleteFn={() => {
-        if (allowForceDelete && forceDeleteUrls.length > 0) {
-          deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
-        }
-        if (chosenModuleIndex != null) {
-          selectedModules.splice(chosenModuleIndex, 1);
-        }
         if (!isCommunity && kymaResource) {
-          setKymaResourceState({
-            ...kymaResource,
-            spec: {
-              ...kymaResource.spec,
-              modules: selectedModules,
-            },
-          });
-          handleModuleUninstall();
-          setInitialUnchangedResource(cloneDeep(kymaResourceState));
-        }
-
-        if (detailsOpen) {
-          setLayoutColumn({
-            layout: 'OneColumn',
-            startColumn: null,
-            midColumn: null,
-            endColumn: null,
-          });
-        }
-        if (allowForceDelete && forceDeleteUrls.length > 0) {
-          deleteCrResources(deleteResourceMutation, crUrls);
-        }
-        if (isCommunity && allowForceDelete && communityUrls?.length > 0) {
-          deleteCrResources(deleteResourceMutation, communityUrls);
+          deleteAllResources();
+        } else if (isCommunity) {
+          deleteCommunityResources();
         }
       }}
     />
