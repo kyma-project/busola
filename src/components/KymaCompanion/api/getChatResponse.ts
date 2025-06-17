@@ -122,12 +122,20 @@ async function readChunk(
         return;
       }
       const receivedString = decoder.decode(value, { stream: true });
-      const chunk = JSON.parse(receivedString);
-      // custom error provided by busola backend during streaming, not by companion backend
-      if (chunk?.error) {
-        throw new Error(chunk?.error);
-      }
-      handleChatResponse(chunk);
+      // Split by newlines to handle multiple JSON objects in one chunk
+      const messages = receivedString
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+      messages.forEach(message => {
+        const chunk = JSON.parse(message);
+        // Custom error provided by busola backend during streaming, not by companion backend
+        if (chunk?.error) {
+          throw new Error(chunk?.error);
+        }
+        handleChatResponse(chunk);
+      });
       readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
     })
     .catch(error => {
