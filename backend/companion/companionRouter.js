@@ -4,6 +4,8 @@ import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 
 const tokenManager = new TokenManager();
+const COMPANION_API_BASE_URL =
+  'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
 
 const router = express.Router();
 
@@ -24,7 +26,7 @@ async function handlePromptSuggestions(req, res) {
   const clientKeyData = req.headers['x-client-key-data'];
 
   try {
-    const url = 'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
+    const endpointUrl = COMPANION_API_BASE_URL;
     const payload = {
       resource_kind: resourceType,
       resource_api_version: groupVersion,
@@ -51,7 +53,7 @@ async function handlePromptSuggestions(req, res) {
       throw new Error('Missing authentication credentials');
     }
 
-    const response = await fetch(url, {
+    const response = await fetch(endpointUrl, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
@@ -94,11 +96,10 @@ async function handleChatMessage(req, res) {
     if (!uuidPattern.test(conversationId)) {
       throw new Error('Invalid session ID ');
     }
-    const baseUrl =
-      'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
-    const targetUrl = new URL(
+
+    const endpointUrl = new URL(
       `${encodeURIComponent(conversationId)}/messages`,
-      baseUrl,
+      COMPANION_API_BASE_URL,
     );
 
     const payload = {
@@ -134,7 +135,7 @@ async function handleChatMessage(req, res) {
       throw new Error('Missing authentication credentials');
     }
 
-    const response = await fetch(targetUrl, {
+    const response = await fetch(endpointUrl, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
@@ -176,11 +177,9 @@ async function handleFollowUpSuggestions(req, res) {
   const conversationId = sessionId;
 
   try {
-    const baseUrl =
-      'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
-    const targetUrl = new URL(
+    const endpointUrl = new URL(
       `${encodeURIComponent(conversationId)}/questions`,
-      baseUrl,
+      COMPANION_API_BASE_URL,
     );
 
     const AUTH_TOKEN = await tokenManager.getToken();
@@ -203,7 +202,7 @@ async function handleFollowUpSuggestions(req, res) {
       throw new Error('Missing authentication credentials');
     }
 
-    const response = await fetch(targetUrl, {
+    const response = await fetch(endpointUrl, {
       method: 'GET',
       headers,
     });
