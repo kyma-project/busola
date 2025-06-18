@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+import { search } from 'core-js/fn/symbol';
 import jsyaml from 'js-yaml';
 
 context('Accessibility test Extensions view', () => {
@@ -103,6 +104,7 @@ context('Accessibility test Extensions view', () => {
       clearSearch: false,
       checkIfResourceIsRemoved: false,
       selectSearchResult: true,
+      searchInPlainTableText: true,
     });
 
     cy.get('ui5-table-row')

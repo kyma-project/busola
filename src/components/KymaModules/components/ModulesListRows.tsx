@@ -127,7 +127,7 @@ export const ModulesListRows = ({
     // Name
     <>
       {showDetailsLink ? (
-        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
+        <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
           {resource.name}
         </Text>
       ) : (
