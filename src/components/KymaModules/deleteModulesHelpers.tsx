@@ -45,6 +45,7 @@ export const getCRResource = (
   selectedModules: any,
   kymaResource: any,
   moduleTemplates: ModuleTemplateListType,
+  isCommunity: boolean = false,
 ) => {
   if (chosenModuleIndex == null) {
     return [];
@@ -64,11 +65,13 @@ export const getCRResource = (
 
   let resource: Resource | null = null;
   if (module?.spec?.data) {
-    resource = {
-      group: module.spec.data.apiVersion.split('/')[0],
-      version: module.spec.data.apiVersion.split('/')[1],
-      kind: module.spec.data.kind,
-    };
+    resource = isCommunity
+      ? module?.spec?.data
+      : {
+          group: module.spec.data.apiVersion.split('/')[0],
+          version: module.spec.data.apiVersion.split('/')[1],
+          kind: module.spec.data.kind,
+        };
   }
   return resource ? [resource] : [];
 };
@@ -295,3 +298,26 @@ export default async function postForCommunityResources(
     return false;
   }
 }
+
+export const getCommunityResourceUrls = (resources: any) => {
+  if (!resources?.length) return [];
+
+  return resources.map((resource: any) => {
+    if (!resource) return '';
+
+    const apiVersion =
+      resource?.apiVersion || `${resource?.group}/${resource?.version}`;
+    const resourceName = resource?.metadata?.name || resource?.name;
+    const resourceNamespace =
+      resource?.metadata?.namespace || resource?.namespace;
+    const api = apiVersion === 'v1' ? 'api' : 'apis';
+
+    return resourceNamespace
+      ? `/${api}/${apiVersion}/namespaces/${resourceNamespace}/${pluralize(
+          resource.kind,
+        ).toLowerCase()}/${resourceName}`
+      : `/${api}/${apiVersion}/${pluralize(
+          resource.kind || '',
+        ).toLowerCase()}/${resourceName}`;
+  });
+};
