@@ -63,7 +63,7 @@ context('Test Services', () => {
       .wait(1000)
       .type('services');
 
-    cy.clickGenericListLink('services');
+    cy.clickListLink('services');
 
     cy.getLeftNav()
       .contains('Examples')
