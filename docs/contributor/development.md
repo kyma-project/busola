@@ -36,4 +36,4 @@ When developing new features in Busola, adhere to the following rules. This will
 
 ### Run Tests
 
-For the information on how to run tests and configure them, go to the [`tests`](tests) directory.
+For the information on how to run tests and configure them, go to the [`tests`](../../tests) directory.

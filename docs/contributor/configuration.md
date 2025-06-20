@@ -17,18 +17,18 @@ Busola configuration is the product of gathering and merging the configurations 
 
 **Backend:**
 
-- Busola backend default cluster configuration, acquired from the [defaultConfig.yaml](backend/settings/defaultConfig.yaml) file.
+- Busola backend default cluster configuration, acquired from the [defaultConfig.yaml](../../backend/settings/defaultConfig.yaml) file.
 - Busola cluster configuration, available on the Busola cluster in the ConfigMap "busola/busola-config" under the key "config".
   This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
-  the [defaultConfig.yaml](backend/settings/defaultConfig.yaml) file is used.
+  the [defaultConfig.yaml](../../backend/settings/defaultConfig.yaml) file is used.
 
 **Frontend:**
 
 - Built-in, hardcoded defaults.
-- Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](public/defaultConfig.yaml) file.
+- Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](../../public/defaultConfig.yaml) file.
 - Busola cluster configuration, available on the Busola cluster in the ConfigMap "busola/busola-config" under the key "config".
   This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
-  the [defaultConfig.yaml](public/defaultConfig.yaml) file is used.
+  the [defaultConfig.yaml](../../public/defaultConfig.yaml) file is used.
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
 - Custom configuration with `extensibility` and `config` located in **public/environments**, [read more](#environment-specific-settings).
 
@@ -44,7 +44,7 @@ Features comprise the following elements:
 - `isEnabled`: Activates or deactivates the feature, overwriting the status set by `selector`
 - `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
 
-See the available Busola [feature flags](docs/features.md) for more information.
+See the available Busola [feature flags](../features.md) for more information.
 
 ### Environment-Specific Settings
 
@@ -63,7 +63,7 @@ custom-env/
 > [!WARNING]
 > The `extensions.yaml`, `statics.yaml`, `wizards.yaml`, and `config.yaml` files are necessary for Busola to work properly.
 
-To activate your environment configuration, create or edit the `active.env` file in the [public directory](./public).
+To activate your environment configuration, create or edit the `active.env` file in the [public directory](../../public).
 Follow this example of the `active.env` file:
 
 ```dotenv
@@ -71,6 +71,6 @@ ENVIRONMENT=your-environment-name
 ```
 
 When **ENVIRONMENT** is set to `my-env`, Busola looks for your custom configuration in `public/environemnt/my-env`.
-If **ENVIRONMENT** is not set, Busola fetches the default configuration with the same structure as the custom configuration located in the [public directory](./public).
+If **ENVIRONMENT** is not set, Busola fetches the default configuration with the same structure as the custom configuration located in the [public directory](../../public).
 
 In the case of the Docker image, the `active.env` file is created at the startup of the image from the environment specified in the **ENVIRONMENT** variable.
