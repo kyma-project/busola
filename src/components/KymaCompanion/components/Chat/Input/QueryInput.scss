@@ -1,0 +1,29 @@
+.chat-container {
+  .outer-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .input-container {
+      position: relative;
+
+      --_ui5-v2-11-0_textarea_padding_top: 8px !important;
+      --_ui5-v2-11-0_textarea_padding_bottom: 8px !important;
+
+      #text-area-icon {
+        position: absolute;
+        right: 0.5rem;
+        bottom: 0.5rem;
+        min-height: 1.75rem;
+        height: 1.75rem;
+        min-width: 1.75rem;
+        width: 1.75rem;
+        border-radius: 50%;
+      }
+    }
+
+    #disclaimer {
+      font-size: 0.65rem;
+    }
+  }
+}
