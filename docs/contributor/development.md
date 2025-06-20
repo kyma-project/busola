@@ -1,6 +1,6 @@
 # Development
 
-## Start All Views
+## Starting All Views
 
 Use the following command to run Busola locally:
 
@@ -34,6 +34,6 @@ When developing new features in Busola, adhere to the following rules. This will
    - Get familiar with the most common [XSS bypasses and potential dangers](https://stackoverflow.com/questions/33644499/what-does-it-mean-when-they-say-react-is-xss-protected). Keep them in mind when writing or reviewing the code.
    - Enable the `Content-security-policy` header for all new micro frontends to ensure in-depth XSS prevention. Do not allow for `unsafe-eval` policy.
 
-### Run Tests
+### Running Tests
 
 For the information on how to run tests and configure them, go to the [`tests`](../../tests) directory.

@@ -1,6 +1,6 @@
-# Deploy and Access Busola in the Kubernetes Cluster
+# Deploying and Accessing Busola in the Kubernetes Cluster
 
-## Deploy Busola in the Kubernetes Cluster
+## Deploying Busola in the Kubernetes Cluster
 
 To install Busola from release in the Kubernetes cluster set `VERSION` shell environment variable with desired release and run:
 
@@ -20,7 +20,7 @@ To install Busola using a specific environment configuration, set the `ENVIRONME
 (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply -f- )
 ```
 
-## Access Busola Installed on Kubernetes
+## Accessing Busola Installed on Kubernetes
 
 ### kubectl
 
@@ -46,7 +46,7 @@ Prerequisites:
 
 2. Visit `localhost`
 
-#### Connect to the k3d Cluster with Busola Installed.
+#### Connecting to the k3d Cluster with Busola Installed.
 
 To connect to the same k3d cluster with Busola installed, download kubeconfig and change the cluster server address to `https://kubernetes.default.svc:443`.
 

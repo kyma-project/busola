@@ -32,7 +32,7 @@ Busola configuration is the product of gathering and merging the configurations 
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
 - Custom configuration with `extensibility` and `config` located in **public/environments**, [read more](#environment-specific-settings).
 
-## Change the Configuration
+## Changing the Configuration
 
 If you have the required authorizations and access to the kubeconfig, you can change the settings for the Busola cluster configuration and the target cluster configuration.
 

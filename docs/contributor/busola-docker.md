@@ -10,7 +10,7 @@
 
 2. When you open Busola in your browser, visit `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola tries to download that file and adds it for your Busola instance.
 
-### Set Active Environment
+### Setting Active Environment
 
 1. To use one of the built-in environments in the `busola` image (dev, stage, prod), pass env `ENVIRONMENT` to the Docker container.
 
