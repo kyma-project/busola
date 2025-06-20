@@ -1,5 +1,11 @@
-import { Button, Text, TextArea } from '@ui5/webcomponents-react';
-import { useState } from 'react';
+import {
+  Button,
+  Icon,
+  Text,
+  TextArea,
+  TextAreaDomRef,
+} from '@ui5/webcomponents-react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './QueryInput.scss';
 
@@ -10,6 +16,25 @@ type QueryInputProps = {
 
 export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
   const { t } = useTranslation();
+  const textareaRef = useRef<TextAreaDomRef>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const textarea = textareaRef.current;
+
+      const mirrorElement = textarea?.shadowRoot?.querySelector(
+        '.ui5-textarea-mirror',
+      ) as HTMLElement;
+      const innerElement = textarea?.shadowRoot?.querySelector(
+        '.ui5-textarea-inner',
+      ) as HTMLElement;
+
+      if (mirrorElement && innerElement) {
+        mirrorElement.style.paddingRight = '70px';
+        innerElement.style.paddingRight = '70px';
+      }
+    }, 500);
+  }, []);
 
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -21,13 +46,13 @@ export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
   };
 
   return (
-    <div className="outer-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
-      <div className="input-container">
+    <div className="outer-query-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
+      <div className="query-input-container">
         <TextArea
-          id="query-input"
+          ref={textareaRef}
           disabled={loading}
           growing
-          growingMaxRows={50}
+          growingMaxRows={20}
           rows={1}
           placeholder={t('kyma-companion.placeholder')}
           value={inputValue}
@@ -42,13 +67,24 @@ export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
           }}
           valueState="None"
         />
-        <Button
-          id="text-area-icon"
-          icon="paper-plane"
-          design="Emphasized"
-          disabled={loading || inputValue.length === 0}
-          onClick={loading ? () => {} : onSubmitInput}
-        />
+        <div className="query-input-actions">
+          <Icon
+            id={`cancel-icon${
+              loading || inputValue.length === 0 ? '-hidden' : ''
+            }`}
+            name="decline"
+            mode="Interactive"
+            design="Default"
+            onClick={() => setInputValue('')}
+          />
+          <Button
+            id="submit-icon"
+            icon="paper-plane"
+            design="Emphasized"
+            disabled={loading || inputValue.length === 0}
+            onClick={onSubmitInput}
+          />
+        </div>
       </div>
       <Text id="disclaimer">{t('kyma-companion.disclaimer')}</Text>
     </div>
