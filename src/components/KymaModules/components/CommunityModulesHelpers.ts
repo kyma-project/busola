@@ -7,6 +7,7 @@ export type VersionInfo = {
   version: string;
   channel?: string;
   moduleTemplate: string;
+  installed?: boolean;
 };
 
 export function getAvailableCommunityModules(
@@ -18,12 +19,26 @@ export function getAvailableCommunityModules(
       const moduleName = module.spec.moduleName ?? 'not-found';
       const moduleTplName = module.metadata.name;
       const version = module.spec.version;
+      const channel = module.spec.channel;
       const foundModule = acc.get(moduleName);
       if (foundModule) {
-        foundModule.push({ version: version, moduleTemplate: moduleTplName });
+        const newVersionCandidate = {
+          version: version,
+          channel: channel,
+          moduleTemplate: moduleTplName,
+        };
+        const foundVersion = foundModule.find(module => {
+          return (
+            module.channel === newVersionCandidate.channel &&
+            module.version === newVersionCandidate.version
+          );
+        });
+        if (foundVersion) {
+          foundModule.push(newVersionCandidate);
+        }
       } else {
         acc.set(moduleName, [
-          { version: version, moduleTemplate: moduleTplName },
+          { version: version, channel: channel, moduleTemplate: moduleTplName },
         ]);
       }
       return acc;
@@ -31,19 +46,25 @@ export function getAvailableCommunityModules(
     new Map<string, VersionInfo[]>(),
   );
 
+  console.log('MODULE TEMPLATES VERSIONS', availableCommunityModules);
+
   moduleReleaseMetas.items.forEach(releaseMeta => {
-    const foundVersions = availableCommunityModules.get(
+    const foundModuleVersions = availableCommunityModules.get(
       releaseMeta.spec.moduleName,
     );
-    if (foundVersions) {
+    if (foundModuleVersions) {
+      // foundModuleVersions.fin
+      // releaseMeta.spec.channels.forEach( channel => {
+      //   if (channel.channel === foundVersions.)
+      // })
       const availableChannels = releaseMeta.spec.channels.map(channel => {
         return {
-          moduleTemplate: `${releaseMeta.metadata.name}-${channel.channel}`, //TODO: this is probably the name of moduleTempalte, might not exist | channel or version!
+          moduleTemplate: `${releaseMeta.metadata.name}-${channel.channel}`, //TODO: we should found the moduleTempalte with given spec.channel+spec.version, if not found I don't know
           channel: channel.channel,
           version: channel.version,
         };
       });
-      foundVersions.push(...availableChannels);
+      foundModuleVersions.push(...availableChannels);
     }
   });
 
@@ -60,14 +81,4 @@ export function getCommunityModules(
       );
     }),
   };
-}
-
-// TODO: use it later
-// What set community module template manager?
-export function getInstalledCommunityModules(
-  moduleTemplates: ModuleTemplateListType,
-) {
-  return getCommunityModules(moduleTemplates).items.find(moduleTemplate => {
-    return moduleTemplate.spec.manager;
-  });
 }

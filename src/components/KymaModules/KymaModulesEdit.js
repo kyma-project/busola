@@ -209,25 +209,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
     });
   };
 
-  const installedCommunityModules = getCommunityModules(moduleTemplates);
-  const availableCommunityModules = getAvailableCommunityModules(
-    installedCommunityModules,
-    moduleReleaseMetas,
-  );
-
-  const communityModulesToDisplay = Array.from(
-    availableCommunityModules,
-    ([key, versionInfo]) => {
-      return {
-        name: key,
-        versions: versionInfo.map(v => ({
-          version: v.version,
-          channel: v.channel,
-          key: v.moduleTemplate,
-        })),
-      };
-    },
-  );
+  const communityModules = getCommunityModules(moduleTemplates);
 
   // TODO: detect if version return to the old one
   const onCommunityChange = (module, value) => {
@@ -504,7 +486,9 @@ export default function KymaModulesEdit({ resource, ...props }) {
         </ResourceForm>
       )}
       <CommunityModulesEdit
-        communityModulesToDisplay={communityModulesToDisplay}
+        communityModules={communityModules}
+        moduleReleaseMetas={moduleReleaseMetas}
+        loadingModuleTemplates={loadingModuleTemplates}
         onChange={onCommunityChange}
       ></CommunityModulesEdit>
     </>

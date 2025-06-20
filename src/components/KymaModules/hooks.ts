@@ -187,11 +187,13 @@ export const useGetInstalledModules = (
   if (!moduleTemplates) {
     return { installed: [], loading: false, error: null };
   }
+  // console.log('managers', managers)
 
   const filtered = moduleTemplates.items?.filter(
     module => !!managers[module.metadata.name],
   );
 
+  // TODO: add check for deployment image version
   const installed =
     filtered?.map(module => ({
       name:

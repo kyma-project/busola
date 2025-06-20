@@ -2,22 +2,22 @@ import { FlexBox, Label, Option, Select } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
-type ModuleInfoProps = {
+export type ModuleInfoProps = {
   module: ModuleInfo;
   onChange: any;
 };
 
-type ModuleInfo = {
+export type ModuleInfo = {
   name: string;
   versions: VersionInfo[];
 };
 
-type VersionInfo = {
+export type VersionInfo = {
   key: string;
   version: string;
   channel: string;
-  installed?: boolean; //TODO: Implement it
-  predefined?: boolean;
+  installed: boolean;
+  textToDisplay: string;
 };
 
 // TODO: this component should only display Module Edit -> Channel, optional -> ManagedBox, it shouldn't do any filtration and so on, it should be prepared earlier.
@@ -73,12 +73,12 @@ export default function CommunityModuleEdit({
         {/*</Option>*/}
         {module.versions?.map(version => (
           <Option
-            selected={false}
+            selected={version.installed}
             key={version.key}
             value={`${version.key}`}
             // additionalText={channel?.isBeta ? 'Beta' : ''}
           >
-            {`${version.channel ?? ''} ${version.version}`}
+            {version.textToDisplay}
           </Option>
         ))}
       </Select>
