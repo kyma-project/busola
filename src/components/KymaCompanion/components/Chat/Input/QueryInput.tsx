@@ -17,6 +17,31 @@ type QueryInputProps = {
 export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
   const { t } = useTranslation();
   const textareaRef = useRef<TextAreaDomRef>(null);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isMultiLine, setIsMultiLine] = useState(false);
+
+  const onSubmitInput = () => {
+    if (inputValue.length === 0) return;
+    const prompt = inputValue;
+    setInputValue('');
+    sendPrompt(prompt);
+  };
+
+  const checkLineCount = () => {
+    if (!textareaRef.current) return;
+
+    const paddingBlock = 8;
+    const borderSize = 1;
+    const lineHeight = 21;
+
+    const textarea = textareaRef.current;
+    // Check if content height exceeds single line
+    const contentHeight =
+      textarea.scrollHeight - 2 * paddingBlock - 2 * borderSize;
+    const isSingleLine = contentHeight <= lineHeight * 1.2; // Small tolerance
+
+    setIsMultiLine(!isSingleLine);
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -30,20 +55,38 @@ export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
       ) as HTMLElement;
 
       if (mirrorElement && innerElement) {
-        mirrorElement.style.paddingRight = '70px';
-        innerElement.style.paddingRight = '70px';
+        mirrorElement.style.paddingRight = '4rem';
+        innerElement.style.paddingRight = '4rem';
       }
     }, 500);
   }, []);
 
-  const [inputValue, setInputValue] = useState<string>('');
+  useEffect(() => {
+    const textarea = textareaRef.current;
 
-  const onSubmitInput = () => {
-    if (inputValue.length === 0) return;
-    const prompt = inputValue;
-    setInputValue('');
-    sendPrompt(prompt);
-  };
+    const mirrorElement = textarea?.shadowRoot?.querySelector(
+      '.ui5-textarea-mirror',
+    ) as HTMLElement;
+    const innerElement = textarea?.shadowRoot?.querySelector(
+      '.ui5-textarea-inner',
+    ) as HTMLElement;
+
+    if (mirrorElement && innerElement) {
+      if (isMultiLine) {
+        mirrorElement.style.paddingRight = '2.75rem';
+        innerElement.style.paddingRight = '2.75rem';
+      } else {
+        mirrorElement.style.paddingRight = '4rem';
+        innerElement.style.paddingRight = '4rem';
+      }
+    }
+  }, [isMultiLine]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      checkLineCount();
+    }, 50);
+  }, [inputValue]);
 
   return (
     <div className="outer-query-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
@@ -67,7 +110,7 @@ export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
           }}
           valueState="None"
         />
-        <div className="query-input-actions">
+        <div className={`query-input-actions${isMultiLine ? '__column' : ''}`}>
           <Icon
             id={`cancel-icon${
               loading || inputValue.length === 0 ? '-hidden' : ''

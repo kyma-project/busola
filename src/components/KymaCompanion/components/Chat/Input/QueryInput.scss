@@ -27,8 +27,13 @@
           height: 1.75rem;
           min-width: 1.75rem;
           width: 1.75rem;
-          border-radius: 50%;
+          border-radius: 75%;
         }
+      }
+
+      .query-input-actions__column {
+        @extend .query-input-actions;
+        flex-direction: column;
       }
     }
 
