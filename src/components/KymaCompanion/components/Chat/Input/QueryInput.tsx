@@ -45,6 +45,14 @@ export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
   };
 
   useEffect(() => {
+    if (!loading && textareaRef.current) {
+      setTimeout(() => {
+        textareaRef.current?.focus();
+      }, 100);
+    }
+  }, [loading]);
+
+  useEffect(() => {
     const textarea = textareaRef.current;
 
     const mirrorElement = textarea?.shadowRoot?.querySelector(
