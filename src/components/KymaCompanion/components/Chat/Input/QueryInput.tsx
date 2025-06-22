@@ -9,6 +9,18 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import './QueryInput.scss';
 
+// Layout constants
+const PADDING_BLOCK = 8;
+const BORDER_SIZE = 1;
+const LINE_HEIGHT = 21;
+const MAX_HEIGHT_RATIO = 0.65; // 65% of conversation canvas height
+const FALLBACK_MAX_ROWS = 50;
+
+// Padding constants for different row counts
+const PADDING_MULTI_ROW = '2.75rem';
+const PADDING_SINGLE_ROW = '4rem';
+const ROW_THRESHOLD = 2;
+
 type QueryInputProps = {
   loading: boolean;
   sendPrompt: (prompt: string) => void;
@@ -24,42 +36,33 @@ export default function QueryInput({
   const textareaRef = useRef<TextAreaDomRef>(null);
   const [inputValue, setInputValue] = useState<string>('');
   const [rowCount, setRowCount] = useState(0);
-  const [maxRows, setMaxRows] = useState(20); // Default fallback
+  const [maxRows, setMaxRows] = useState(0);
 
   const checkLineCount = useCallback(() => {
     if (!textareaRef.current) return;
 
-    const paddingBlock = 8;
-    const borderSize = 1;
-    const lineHeight = 21;
-
     const textarea = textareaRef.current;
-    // Calculate content height
     const contentHeight =
-      textarea.scrollHeight - 2 * paddingBlock - 2 * borderSize;
-    // Calculate number of rows, ensuring at least 1 row
-    const numberOfRows = Math.max(1, Math.round(contentHeight / lineHeight));
+      textarea.scrollHeight - 2 * PADDING_BLOCK - 2 * BORDER_SIZE;
 
+    const numberOfRows = Math.max(1, Math.round(contentHeight / LINE_HEIGHT));
     setRowCount(numberOfRows);
   }, []);
 
   const calculateMaxRows = useCallback(() => {
     if (!containerRef.current) return;
 
-    const lineHeight = 21;
-    const paddingBlock = 8;
-    const borderSize = 1;
-
     const canvasHeight = containerRef.current.clientHeight;
-    console.log(canvasHeight);
-    const maxAllowedHeight = canvasHeight * 0.65; // 65% of conversation canvas height
+    const maxAllowedHeight = canvasHeight * MAX_HEIGHT_RATIO;
 
     const availableContentHeight =
-      maxAllowedHeight - 2 * paddingBlock - 2 * borderSize;
-    const calculatedMaxRows = Math.floor(availableContentHeight / lineHeight);
+      maxAllowedHeight - 2 * PADDING_BLOCK - 2 * BORDER_SIZE;
+    const calculatedMaxRows = Math.floor(availableContentHeight / LINE_HEIGHT);
 
-    // Ensure minimum of 1 row and maximum of 20 rows as fallback
-    const finalMaxRows = Math.max(1, Math.min(calculatedMaxRows, 50));
+    const finalMaxRows = Math.max(
+      1,
+      Math.min(calculatedMaxRows, FALLBACK_MAX_ROWS),
+    );
     setMaxRows(finalMaxRows);
   }, [containerRef]);
 
@@ -100,12 +103,12 @@ export default function QueryInput({
     ) as HTMLElement;
 
     if (mirrorElement && innerElement) {
-      if (rowCount > 2) {
-        mirrorElement.style.paddingRight = '2.75rem';
-        innerElement.style.paddingRight = '2.75rem';
-      } else if (rowCount <= 2) {
-        mirrorElement.style.paddingRight = '4rem';
-        innerElement.style.paddingRight = '4rem';
+      if (rowCount > ROW_THRESHOLD) {
+        mirrorElement.style.paddingRight = PADDING_MULTI_ROW;
+        innerElement.style.paddingRight = PADDING_MULTI_ROW;
+      } else if (rowCount <= ROW_THRESHOLD) {
+        mirrorElement.style.paddingRight = PADDING_SINGLE_ROW;
+        innerElement.style.paddingRight = PADDING_SINGLE_ROW;
       }
     }
   }, [rowCount]);
@@ -138,7 +141,11 @@ export default function QueryInput({
           }}
           valueState="None"
         />
-        <div className={`query-input-actions${rowCount > 2 ? '__column' : ''}`}>
+        <div
+          className={`query-input-actions${
+            rowCount > ROW_THRESHOLD ? '__column' : ''
+          }`}
+        >
           <Icon
             id={`cancel-icon${
               loading || inputValue.length === 0 ? '-hidden' : ''
