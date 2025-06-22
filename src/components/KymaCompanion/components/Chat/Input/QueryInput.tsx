@@ -12,13 +12,19 @@ import './QueryInput.scss';
 type QueryInputProps = {
   loading: boolean;
   sendPrompt: (prompt: string) => void;
+  containerRef: React.MutableRefObject<HTMLDivElement | null>;
 };
 
-export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
+export default function QueryInput({
+  loading,
+  sendPrompt,
+  containerRef,
+}: QueryInputProps) {
   const { t } = useTranslation();
   const textareaRef = useRef<TextAreaDomRef>(null);
   const [inputValue, setInputValue] = useState<string>('');
   const [rowCount, setRowCount] = useState(0);
+  const [maxRows, setMaxRows] = useState(20); // Default fallback
 
   const checkLineCount = useCallback(() => {
     if (!textareaRef.current) return;
@@ -37,6 +43,26 @@ export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
     setRowCount(numberOfRows);
   }, []);
 
+  const calculateMaxRows = useCallback(() => {
+    if (!containerRef.current) return;
+
+    const lineHeight = 21;
+    const paddingBlock = 8;
+    const borderSize = 1;
+
+    const canvasHeight = containerRef.current.clientHeight;
+    console.log(canvasHeight);
+    const maxAllowedHeight = canvasHeight * 0.65; // 65% of conversation canvas height
+
+    const availableContentHeight =
+      maxAllowedHeight - 2 * paddingBlock - 2 * borderSize;
+    const calculatedMaxRows = Math.floor(availableContentHeight / lineHeight);
+
+    // Ensure minimum of 1 row and maximum of 20 rows as fallback
+    const finalMaxRows = Math.max(1, Math.min(calculatedMaxRows, 50));
+    setMaxRows(finalMaxRows);
+  }, [containerRef]);
+
   const onSubmitInput = () => {
     if (inputValue.length === 0) return;
     const prompt = inputValue;
@@ -46,11 +72,22 @@ export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
 
   useEffect(() => {
     if (!loading && textareaRef.current) {
-      setTimeout(() => {
-        textareaRef.current?.focus();
-      }, 100);
+      textareaRef.current?.focus();
     }
   }, [loading]);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      calculateMaxRows();
+    });
+
+    const handleWindowResize = () => calculateMaxRows();
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [calculateMaxRows]);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -86,7 +123,7 @@ export default function QueryInput({ loading, sendPrompt }: QueryInputProps) {
           ref={textareaRef}
           disabled={loading}
           growing
-          growingMaxRows={20}
+          growingMaxRows={maxRows}
           rows={1}
           placeholder={t('kyma-companion.placeholder')}
           value={inputValue}

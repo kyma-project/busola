@@ -47,6 +47,7 @@ export const Chat = ({
   setIsReset,
 }: ChatProps) => {
   const { t } = useTranslation();
+  const chatRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const sessionID = useRecoilValue<string>(sessionIDState);
@@ -251,8 +252,8 @@ export const Chat = ({
   };
 
   const scrollToBottom = () => {
-    if (containerRef?.current?.lastChild)
-      (containerRef.current.lastChild as HTMLElement).scrollIntoView({
+    if (chatRef?.current?.lastChild)
+      (chatRef.current.lastChild as HTMLElement).scrollIntoView({
         behavior: 'smooth',
         block: 'end',
       });
@@ -317,10 +318,11 @@ export const Chat = ({
       direction="Column"
       justifyContent="SpaceBetween"
       className="chat-container"
+      ref={containerRef}
     >
       <div
         className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
-        ref={containerRef}
+        ref={chatRef}
       >
         {chatHistory.map((group, groupIndex) => {
           const isLastGroup = groupIndex === chatHistory.length - 1;
@@ -375,7 +377,11 @@ export const Chat = ({
           />
         )}
       </div>
-      <QueryInput loading={loading} sendPrompt={sendPrompt} />
+      <QueryInput
+        loading={loading}
+        sendPrompt={sendPrompt}
+        containerRef={containerRef}
+      />
     </FlexBox>
   );
 };
