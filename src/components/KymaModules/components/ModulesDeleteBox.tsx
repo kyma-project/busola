@@ -35,7 +35,7 @@ type ModulesListDeleteBoxProps = {
   moduleTemplates: ModuleTemplateListType;
   selectedModules: { name: string }[];
   chosenModuleIndex: number | null;
-  kymaResource?: KymaResourceType;
+  kymaResource: KymaResourceType;
   kymaResourceState?: KymaResourceType;
   detailsOpen: boolean;
   isCommunity?: boolean;
@@ -187,6 +187,13 @@ export const ModulesDeleteBox = ({
   };
 
   const deleteCommunityResources = async () => {
+    // TODO: Something wrong with these URLs? After deleting the module is still visible in the list.
+    console.log(
+      'TEST-Delete-URLs:',
+      forceDeleteUrls,
+      crUrls,
+      communityResourcesUrls,
+    );
     if (allowForceDelete && forceDeleteUrls.length) {
       // Delete associated resources.
       await deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);

@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 import { checkSelectedModule } from '../support';
 import { Button } from '@ui5/webcomponents-react';
+import { KymaModuleContext } from './KymaModuleProvider';
 
 export const CommunityModuleContext = createContext({
   setOpenedModuleIndex: () => {},
@@ -27,6 +28,7 @@ export function CommunityModuleContextProvider({
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   const [detailsOpen, setDetailsOpen] = useState(false);
 
+  const { kymaResource } = useContext(KymaModuleContext);
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
@@ -78,6 +80,7 @@ export function CommunityModuleContextProvider({
           !moduleTemplatesLoading &&
           showDeleteDialog && (
             <ModulesDeleteBox
+              kymaResource={kymaResource}
               DeleteMessageBox={DeleteMessageBox}
               selectedModules={installedCommunityModules}
               chosenModuleIndex={getOpenedModuleIndex(
