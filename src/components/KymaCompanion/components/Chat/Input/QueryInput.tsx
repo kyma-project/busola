@@ -38,7 +38,7 @@ export default function QueryInput({
   const [rowCount, setRowCount] = useState(0);
   const [maxRows, setMaxRows] = useState(0);
 
-  const checkLineCount = useCallback(() => {
+  const checkRowCount = useCallback(() => {
     if (!textareaRef.current) return;
 
     const textarea = textareaRef.current;
@@ -93,6 +93,21 @@ export default function QueryInput({
   }, [calculateMaxRows]);
 
   useEffect(() => {
+    if (!textareaRef.current) return;
+
+    const textarea = textareaRef.current;
+    const resizeObserver = new ResizeObserver(() => {
+      checkRowCount();
+    });
+
+    resizeObserver.observe(textarea);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [checkRowCount]);
+
+  useEffect(() => {
     const textarea = textareaRef.current;
 
     const mirrorElement = textarea?.shadowRoot?.querySelector(
@@ -112,12 +127,6 @@ export default function QueryInput({
       }
     }
   }, [rowCount]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      checkLineCount();
-    }, 250);
-  }, [inputValue, checkLineCount]);
 
   return (
     <div className="outer-query-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
