@@ -23,15 +23,11 @@ async function handleGetCommunityResource(req, res) {
       !allowedDomains.some(domain => url.hostname.endsWith(domain))
     ) {
       return res.status(400).json('Invalid or untrusted link provided.');
+    } else {
+      const response = await fetch(link);
+      const data = await response.text();
+      res.json(jsyaml.loadAll(data));
     }
-  } catch (e) {
-    return res.status(400).json('Invalid URL format.', e);
-  }
-
-  try {
-    const response = await fetch(link);
-    const data = await response.text();
-    res.json(jsyaml.loadAll(data));
   } catch (error) {
     res.status(500).json(`Failed to fetch community resource. ${error}`);
   }
