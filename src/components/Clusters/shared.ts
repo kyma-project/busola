@@ -44,11 +44,11 @@ export function addCluster(
 ) {
   console.log(params, 'addCluster params', clustersInfo, 'clustersInfo');
 
-  // const { setClusters } = clustersInfo;
-  // setClusters(prev => ({ ...prev, [params.contextName]: params }));
-  // if (switchCluster) {
-  //   addCurrentCluster(params, clustersInfo);
-  // }
+  const { setClusters } = clustersInfo;
+  setClusters(prev => ({ ...prev, [params.contextName]: params }));
+  if (switchCluster) {
+    addCurrentCluster(params, clustersInfo);
+  }
 }
 
 export function deleteCluster(
