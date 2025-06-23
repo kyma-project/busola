@@ -3,7 +3,7 @@ import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 
-const config = require('../loadConfig.js');
+const config = require('../config.js');
 
 const tokenManager = new TokenManager();
 const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.link ??

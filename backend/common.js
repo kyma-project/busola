@@ -9,7 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid').v4;
 const escape = require('lodash.escape');
-const config = require('./loadConfig.js');
+const config = require('./config.js');
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');

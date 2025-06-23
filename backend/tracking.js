@@ -1,4 +1,4 @@
-const config = require('./loadConfig.js');
+const config = require('./config.js');
 
 export function handleTracking(app) {
   const { isEnabled } = config.features?.TRACKING || {};

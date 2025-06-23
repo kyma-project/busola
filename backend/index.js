@@ -8,7 +8,7 @@ const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
-const config = require('./loadConfig.js');
+const config = require('./config.js');
 
 const app = express();
 app.disable('x-powered-by');
