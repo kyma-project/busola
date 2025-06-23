@@ -1,5 +1,12 @@
 # Deploying and Accessing Busola in the Kubernetes Cluster
 
+## Architecture
+
+![Busola Kubernetes architecture](assets/busola_kubernetes_3.svg)
+
+To expose Busola, you can use [VirtualService](https://github.com/kyma-project/busola/tree/main/resources/istio), [Ingress](https://github.com/kyma-project/busola/tree/main/resources/ingress) or create your own exposing mechanism.
+For more details about configuration, see [Configuration](configuration.md).
+
 ## Deploying Busola in the Kubernetes Cluster
 
 To install Busola from release in the Kubernetes cluster set `VERSION` shell environment variable with desired release and run:
@@ -46,7 +53,7 @@ Prerequisites:
 
 2. Visit `localhost`
 
-#### Connecting to the k3d Cluster with Busola Installed.
+#### Connecting to the k3d Cluster with Busola Installed
 
 To connect to the same k3d cluster with Busola installed, download kubeconfig and change the cluster server address to `https://kubernetes.default.svc:443`.
 
