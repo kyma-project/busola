@@ -19,7 +19,8 @@ const FALLBACK_MAX_ROWS = 50;
 // Padding constants for different row counts
 const PADDING_MULTI_ROW = '2.75rem';
 const PADDING_SINGLE_ROW = '4rem';
-const ROW_THRESHOLD = 2;
+const EXPAND_THRESHOLD = 4;
+const CONTRACT_THRESHOLD = 3;
 
 type QueryInputProps = {
   loading: boolean;
@@ -35,8 +36,8 @@ export default function QueryInput({
   const { t } = useTranslation();
   const textareaRef = useRef<TextAreaDomRef>(null);
   const [inputValue, setInputValue] = useState<string>('');
-  const [rowCount, setRowCount] = useState(0);
   const [maxRows, setMaxRows] = useState(0);
+  const [isMultiRowMode, setIsMultiRowMode] = useState(false);
 
   const checkRowCount = useCallback(() => {
     if (!textareaRef.current) return;
@@ -44,10 +45,14 @@ export default function QueryInput({
     const textarea = textareaRef.current;
     const contentHeight =
       textarea.scrollHeight - 2 * PADDING_BLOCK - 2 * BORDER_SIZE;
-
     const numberOfRows = Math.max(1, Math.round(contentHeight / LINE_HEIGHT));
-    setRowCount(numberOfRows);
-  }, []);
+
+    if (!isMultiRowMode && numberOfRows >= EXPAND_THRESHOLD) {
+      setIsMultiRowMode(true);
+    } else if (isMultiRowMode && numberOfRows < CONTRACT_THRESHOLD) {
+      setIsMultiRowMode(false);
+    }
+  }, [isMultiRowMode]);
 
   const calculateMaxRows = useCallback(() => {
     if (!containerRef.current) return;
@@ -108,25 +113,23 @@ export default function QueryInput({
   }, [checkRowCount]);
 
   useEffect(() => {
-    const textarea = textareaRef.current;
+    requestAnimationFrame(() => {
+      const textarea = textareaRef.current;
 
-    const mirrorElement = textarea?.shadowRoot?.querySelector(
-      '.ui5-textarea-mirror',
-    ) as HTMLElement;
-    const innerElement = textarea?.shadowRoot?.querySelector(
-      '.ui5-textarea-inner',
-    ) as HTMLElement;
+      const mirrorElement = textarea?.shadowRoot?.querySelector(
+        '.ui5-textarea-mirror',
+      ) as HTMLElement;
+      const innerElement = textarea?.shadowRoot?.querySelector(
+        '.ui5-textarea-inner',
+      ) as HTMLElement;
 
-    if (mirrorElement && innerElement) {
-      if (rowCount > ROW_THRESHOLD) {
-        mirrorElement.style.paddingRight = PADDING_MULTI_ROW;
-        innerElement.style.paddingRight = PADDING_MULTI_ROW;
-      } else if (rowCount <= ROW_THRESHOLD) {
-        mirrorElement.style.paddingRight = PADDING_SINGLE_ROW;
-        innerElement.style.paddingRight = PADDING_SINGLE_ROW;
+      if (mirrorElement && innerElement) {
+        const padding = isMultiRowMode ? PADDING_MULTI_ROW : PADDING_SINGLE_ROW;
+        mirrorElement.style.paddingRight = padding;
+        innerElement.style.paddingRight = padding;
       }
-    }
-  }, [rowCount]);
+    });
+  }, [isMultiRowMode]);
 
   return (
     <div className="outer-query-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
@@ -151,9 +154,7 @@ export default function QueryInput({
           valueState="None"
         />
         <div
-          className={`query-input-actions${
-            rowCount > ROW_THRESHOLD ? '__column' : ''
-          }`}
+          className={`query-input-actions${isMultiRowMode ? '__column' : ''}`}
         >
           <Icon
             id={`cancel-icon${
