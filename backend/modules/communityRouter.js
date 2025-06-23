@@ -25,7 +25,7 @@ async function handleGetCommunityResource(req, res) {
       return res.status(400).json('Invalid or untrusted link provided.');
     }
   } catch (e) {
-    return res.status(400).json('Invalid URL format.');
+    return res.status(400).json('Invalid URL format.', e);
   }
 
   try {
