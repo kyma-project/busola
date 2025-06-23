@@ -3,9 +3,11 @@ import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 
+const config = require('../loadConfig.js');
+
 const tokenManager = new TokenManager();
-const COMPANION_API_BASE_URL =
-  'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
+const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.link ??
+  ''}/api/conversations/`;
 
 const router = express.Router();
 

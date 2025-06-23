@@ -9,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid').v4;
 const escape = require('lodash.escape');
+const config = require('./loadConfig.js');
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
@@ -35,8 +36,7 @@ const workaroundForNodeMetrics = req => {
 export const makeHandleRequest = () => {
   const isDev = process.env.NODE_ENV !== 'production';
   const isTrackingEnabled =
-    global.config?.features?.TRACKING?.isEnabled &&
-    process.env.IS_DOCKER !== 'true';
+    config?.features?.TRACKING?.isEnabled && process.env.IS_DOCKER !== 'true';
 
   const logger = PinoHttp({
     autoLogging: !!(isDev || isTrackingEnabled), //to disable the automatic "request completed" and "request errored" logging.
