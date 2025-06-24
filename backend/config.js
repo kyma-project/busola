@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 const fs = require('fs');
 const jsyaml = require('js-yaml');
 const merge = require('lodash.merge');
@@ -11,6 +12,27 @@ function getConfigDir() {
   return '';
 }
 
+function getEnvConfig() {
+  const envConfigDir = getConfigDir();
+  let configYaml = {};
+  if (envConfigDir) {
+    configYaml = jsyaml.load(
+      fs.readFileSync('./' + envConfigDir + '/config.yaml'),
+    );
+  }
+
+  return configYaml || {};
+}
+
+function getConfigFromMap() {
+  let configFromMap = {};
+  if (fs.existsSync('./config/config.yaml')) {
+    configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
+  }
+
+  return configFromMap || {};
+}
+
 function loadConfig() {
   let config = {};
 
@@ -21,22 +43,11 @@ function loadConfig() {
 
     config = defaultConfig.config;
 
-    const configDir = getConfigDir();
-    let configYaml = {};
-    if (configDir) {
-      configYaml = jsyaml.load(
-        fs.readFileSync('./' + configDir + '/config.yaml'),
-      );
+    const envConfig = getEnvConfig();
+    if (!isEmpty(envConfig)) config = merge(config, envConfig).config;
 
-      config = merge(config, configYaml).config;
-    }
-
-    if (fs.existsSync('./config/config.yaml')) {
-      const configFromMap = jsyaml.load(
-        fs.readFileSync('./config/config.yaml'),
-      );
-      config = merge(config, configFromMap).config;
-    }
+    const configFromMap = getConfigFromMap();
+    if (!isEmpty(configFromMap)) config = merge(config, configFromMap).config;
   } catch (e) {
     console.warn('Error loading config:', e?.message || e);
   }
