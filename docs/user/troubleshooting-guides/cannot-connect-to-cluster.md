@@ -1,4 +1,4 @@
-# Cannot connect to cluster
+# Cannot Connect to Cluster
 
 ## Symptom
 
