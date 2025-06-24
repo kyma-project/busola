@@ -1,8 +1,8 @@
-import { isEmpty } from 'lodash';
 const fs = require('fs');
 const jsyaml = require('js-yaml');
 const merge = require('lodash.merge');
 const path = require('path');
+var isEmpty = require('lodash.isempty');
 
 function getConfigDir() {
   const environment = process.env.ENVIRONMENT;
