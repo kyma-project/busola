@@ -18,6 +18,10 @@
         align-items: center;
         gap: 0.5rem;
 
+        #cancel-icon {
+          color: var(--sapShell_InteractiveBorderColor);
+        }
+
         #cancel-icon-hidden {
           display: none;
         }

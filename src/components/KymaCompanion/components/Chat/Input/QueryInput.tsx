@@ -20,7 +20,7 @@ const FALLBACK_MAX_ROWS = 50;
 const PADDING_MULTI_ROW = '2.75rem';
 const PADDING_SINGLE_ROW = '4rem';
 const EXPAND_THRESHOLD = 4;
-const CONTRACT_THRESHOLD = 3;
+const CONTRACT_THRESHOLD = 2;
 
 type QueryInputProps = {
   loading: boolean;
@@ -49,7 +49,7 @@ export default function QueryInput({
 
     if (!isMultiRowMode && numberOfRows >= EXPAND_THRESHOLD) {
       setIsMultiRowMode(true);
-    } else if (isMultiRowMode && numberOfRows < CONTRACT_THRESHOLD) {
+    } else if (isMultiRowMode && numberOfRows <= CONTRACT_THRESHOLD) {
       setIsMultiRowMode(false);
     }
   }, [isMultiRowMode]);
