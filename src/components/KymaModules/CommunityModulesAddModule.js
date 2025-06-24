@@ -1,9 +1,13 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
+import jsyaml from 'js-yaml';
+
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import ModulesCard from 'components/KymaModules/components/ModulesCard';
+
 // import { cloneDeep } from 'lodash';
 import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { CommunityModuleContext } from './providers/CommunityModuleProvider';
@@ -13,7 +17,7 @@ import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 
 export default function CommunityModulesAddModule(props) {
   const { t } = useTranslation();
-
+  const post = usePost();
   const {
     installedCommunityModules,
     communityModulesLoading,
@@ -25,15 +29,73 @@ export default function CommunityModulesAddModule(props) {
   const [selectedModules, setSelectedModules] = useState([]);
   const [resourcesToAply, setResourcesToAply] = useState([]);
 
-  let modulesAddData;
+  // let modulesAddData;
+
+  const { data: moduleReleaseMetas } = useModulesReleaseQuery({});
+
+  const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
+    const name = module.metadata.labels['operator.kyma-project.io/module-name'];
+    const existingModule = acc.find(item => {
+      return item.metadata.name === name;
+    });
+    const isAlreadyInstalled = installedCommunityModules.find(
+      installedModule => installedModule.name === name,
+    );
+
+    const moduleMetaRelase = moduleReleaseMetas?.items.find(
+      item => item.spec.moduleName === name,
+    );
+
+    if (!existingModule && !isAlreadyInstalled) {
+      moduleMetaRelase?.spec.channels.forEach(channel => {
+        if (!acc.find(item => item.name === name)) {
+          acc.push({
+            name: name,
+            channels: [
+              {
+                channel: channel.channel,
+                version: channel.version,
+                isBeta: moduleMetaRelase.spec.beta ?? false,
+                isMetaRelease: true,
+                resources: module.spec.resources,
+              },
+            ],
+            docsUrl: module.spec.info.documentation,
+            icon: {
+              link: module.spec?.info?.icons[0]?.link,
+              name: module.spec?.info?.icons[0]?.name,
+            },
+          });
+        } else {
+          acc
+            .find(item => item.name === name)
+            .channels.push({
+              channel: channel.channel,
+              version: channel.version,
+              isBeta: moduleMetaRelase.spec.beta ?? false,
+              isMetaRelease: true,
+              resources: module.spec.resources,
+            });
+        }
+      });
+    }
+
+    return acc ?? [];
+  }, []);
 
   useEffect(() => {
-    const getModuleResourcesLinks = (selectedModules, modulesAddData) => {
+    const getModuleResourcesLinks = () => {
       const resources = [];
+      console.log(
+        'modulesAddData',
+        modulesAddData,
+        'selectedModules',
+        selectedModules,
+      );
 
-      selectedModules.forEach(({ name, channel, version }) => {
+      (selectedModules || []).forEach(({ name, channel, version }) => {
+        console.log('selectedModules[].forEach', name, channel, version);
         const moduleData = modulesAddData?.find(module => module.name === name);
-
         if (moduleData) {
           moduleData.channels.forEach(
             ({ channel: ch, version: v, resources: r }) => {
@@ -45,14 +107,14 @@ export default function CommunityModulesAddModule(props) {
           );
         }
       });
+      console.log('resourcesToAply', resources);
 
       return resources;
     };
+    console.log('selectedModules', modulesAddData);
 
     setResourcesToAply(getModuleResourcesLinks());
-  }, [selectedModules, modulesAddData]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const { data: moduleReleaseMetas } = useModulesReleaseQuery({});
+  }, [selectedModules]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [columnsCount, setColumnsCount] = useState(2);
   const [cardsContainerRef, setCardsContainerRef] = useState(null);
@@ -95,91 +157,6 @@ export default function CommunityModulesAddModule(props) {
     );
   }
 
-  modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
-    const name = module.metadata.labels['operator.kyma-project.io/module-name'];
-    const existingModule = acc.find(item => {
-      return item.metadata.name === name;
-    });
-    const isAlreadyInstalled = installedCommunityModules.find(
-      installedModule => installedModule.name === name,
-    );
-
-    const moduleMetaRelase = moduleReleaseMetas?.items.find(
-      item => item.spec.moduleName === name,
-    );
-    //TODO probably not needed
-    // if (module.spec.channel) {
-    //   console.log('if module.spec.channel');
-    //   if (!existingModule && !isAlreadyInstalled) {
-    //     acc.push({
-    //       name: name,
-    //       channels: [
-    //         {
-    //           channel: module.spec.channel,
-    //           version: module.spec.descriptor.component.version,
-    //           isBeta:
-    //             module.metadata.labels['operator.kyma-project.io/beta'] ===
-    //             'true',
-    //         },
-    //       ],
-    //       docsUrl:
-    //         module.metadata.annotations['operator.kyma-project.io/doc-url'],
-    //       icon: {
-    //         link: module.spec?.info?.icons[0]?.link,
-    //         name: module.spec?.info?.icons[0]?.name,
-    //       },
-    //       isMetaRelease: false,
-    //     });
-    //   } else if (existingModule) {
-    //     existingModule.channels?.push({
-    //       channel: module.spec.channel,
-    //       version: module.spec.descriptor.component.version,
-    //       isBeta:
-    //         module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
-    //       isMetaRelease: false,
-    //     });
-    //   }
-    // } else {
-
-    if (!existingModule && !isAlreadyInstalled) {
-      moduleMetaRelase?.spec.channels.forEach(channel => {
-        if (!acc.find(item => item.name === name)) {
-          acc.push({
-            name: name,
-            channels: [
-              {
-                channel: channel.channel,
-                version: channel.version,
-                isBeta: moduleMetaRelase.spec.beta ?? false,
-                isMetaRelease: true,
-                resources: module.spec.resources,
-              },
-            ],
-            docsUrl: module.spec.info.documentation,
-            icon: {
-              link: module.spec?.info?.icons[0]?.link,
-              name: module.spec?.info?.icons[0]?.name,
-            },
-          });
-        } else {
-          acc
-            .find(item => item.name === name)
-            .channels.push({
-              channel: channel.channel,
-              version: channel.version,
-              isBeta: moduleMetaRelase.spec.beta ?? false,
-              isMetaRelease: true,
-              resources: module.spec.resources,
-            });
-        }
-      });
-    }
-    //TODO probably not needed
-    // }
-
-    return acc ?? [];
-  }, []);
-
   const isChecked = name => {
     return !!selectedModules?.find(module => module.name === name);
   };
@@ -220,6 +197,44 @@ export default function CommunityModulesAddModule(props) {
       ?.find(mod => mod.name === moduleName)
       ?.channels.some(({ channel: ch, isBeta }) => ch && isBeta);
   };
+  async function getResourcesYamls(link) {
+    console.log('post', post, 'link', link);
+    if (!link) {
+      console.error('No link provided for community resource');
+      return false;
+    }
+
+    try {
+      const response = await post('/modules/community-resource', { link });
+      if (response?.length) {
+        console.log('yamlFile2', response.flat());
+        return response;
+      }
+      console.error('Empty or invalid response:', response);
+      return false;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return false;
+    }
+  }
+
+  // async function getResourcesYamls(yamlUrl) {
+  //   console.log('getResourcesYamls yamlUrl', yamlUrl);
+  //   return await fetch(yamlUrl)
+  //     .then(response => {
+  //       console.log('response');
+  //       return response.text();
+  //     })
+  //     .then(text => {
+  //       const yamlFile = jsyaml.load(text);
+  //       console.log('yamlFile', yamlFile);
+  //       return yamlFile.version;
+  //     })
+  //     .catch(e => {
+  //       console.warn(e);
+  //       return; //t('common.statuses.unknown');
+  //     });
+  // }
 
   const renderCards = () => {
     const columns = Array.from({ length: columnsCount }, () => []);
@@ -273,33 +288,49 @@ export default function CommunityModulesAddModule(props) {
       formWithoutPanel
       className="add-modules-form"
       // onSubmit={ handleSubmit}
-      onSubmit={newData => {
+      onSubmit={async newData => {
         console.log(
           'handling Install Community module',
           selectedModules,
           'modulesAddData',
           modulesAddData,
         );
-        const newModules = selectedModules.filter(
-          newModules =>
-            !installedCommunityModules.find(
-              activeModules => activeModules.name === newModules.name,
-            ),
-        );
-        const selectedModulesData1 = modulesAddData.filter(
-          newModules =>
-            !selectedModules.find(
-              activeModules => activeModules.name === newModules.name,
-            ),
-        );
-        const selectedModulesData = modulesAddData.filter(newModules => {
-          return !selectedModules.find(activeModules => {
-            console.log('activeModules', activeModules, newModules);
-            return activeModules.name === newModules.name;
-          });
-        });
+        console.log('resourcesToAply', resourcesToAply);
+        // await getResourcesYamls(resourcesToAply[0]);
+        await getResourcesYamls(resourcesToAply[0]);
 
-        console.log('selectedModulesData', selectedModulesData);
+        //
+        if (resourcesToAply?.length) {
+          const yamlRes = await Promise.all(
+            resourcesToAply.map(async res => {
+              if (res) {
+                return await getResourcesYamls(res);
+              }
+            }),
+          );
+          console.log('yamlRes', yamlRes.flat());
+          // return yamlRes.flat();
+        }
+        // const newModules = selectedModules.filter(
+        //   newModules =>
+        //     !installedCommunityModules.find(
+        //       activeModules => activeModules.name === newModules.name,
+        //     ),
+        // );
+        // const selectedModulesData1 = modulesAddData.filter(
+        //   newModules =>
+        //     !selectedModules.find(
+        //       activeModules => activeModules.name === newModules.name,
+        //     ),
+        // );
+        // const selectedModulesData = modulesAddData.filter(newModules => {
+        //   return !selectedModules.find(activeModules => {
+        //     console.log('activeModules', activeModules, newModules);
+        //     return activeModules.name === newModules.name;
+        //   });
+        // });
+
+        // console.log('selectedModulesData', selectedModulesData);
       }}
     >
       <>
