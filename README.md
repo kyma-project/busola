@@ -8,9 +8,9 @@ Busola is a web-based UI for managing resources within a Kubernetes cluster. It'
 
 ### Subcomponents
 
-Busola project contains additional sub-projects:
+The Busola project contains additional sub-projects:
 
-- [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
+- [`Backend`](./backend) - A kind of proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance, regression and integration tests
 - [`Kyma`](./kyma) - Kyma specific configuration for Busola
 
@@ -27,15 +27,31 @@ To install dependencies for the root and backend projects, and to prepare symlin
 npm install
 ```
 
-Read [Install Kyma Dashboard manually](docs/install-kyma-dashboard-manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
-
-## Configuration
-
-For more information on the Busola configuration, see [Configuration](docs/contributor/configuration.md)
+Read [Install Kyma Dashboard manually](docs/install-kyma-dashboard-manually.md) to learn how to install the Dashboard with Istio Ingress and install it on a Kyma cluster.
 
 ## Usage
 
 Run the `npm start` command.
+
+## Configuration
+
+For more information on the Busola configuration, see [Configuration](docs/contributor/configuration.md).
+
+## Development
+
+For more information on using Busola for development, see [Development](docs/contributor/development.md).
+
+## Busola in Docker
+
+To learn how to run Busola in Docker, see [Busola in Docker](docs/contributor/busola-docker.md).
+
+## Deploying and Accessing Busola in the Kubernetes Cluster
+
+To learn how to deploy and access Busola in the Kubernetes cluster, see [Deploying and Accessing Busola in the Kubernetes Cluster](docs/contributor/deploy-access-kubernetes.md).
+
+## Troubleshooting
+
+For more information on troubleshooting Busola, see [Troubleshooting](docs/contributor/troubleshooting.md)
 
 ## Contributing
 
