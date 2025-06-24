@@ -42,8 +42,6 @@ export function addCluster(
   clustersInfo: useClustersInfoType,
   switchCluster = true,
 ) {
-  console.log(params, 'addCluster params', clustersInfo, 'clustersInfo');
-
   const { setClusters } = clustersInfo;
   setClusters(prev => ({ ...prev, [params.contextName]: params }));
   if (switchCluster) {
@@ -159,7 +157,6 @@ export const addByContext = (
   clustersInfo: useClustersInfoType,
 ) => {
   const kubeconfig = userKubeconfig as ValidKubeconfig;
-  console.log('addByContext', kubeconfig, context, storage, switchCluster);
   try {
     const cluster = kubeconfig.clusters?.find(
       c => c.name === context.context.cluster,

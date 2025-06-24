@@ -37,7 +37,6 @@ function ClusterList() {
   const loadDefaultKubeconfigId = useLoadDefaultKubeconfigId();
 
   const clustersInfo = useClustersInfo();
-  // console.log(clustersInfo);
   const notification = useNotification();
   const navigate = useNavigate();
   const { t } = useTranslation();

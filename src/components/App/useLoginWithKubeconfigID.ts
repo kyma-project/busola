@@ -69,7 +69,6 @@ const addClusters = async (
   navigate?: NavigateFunction,
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
-  console.log('addClusters', kubeconfig, clusters, kubeconfigIdFeature);
   const currentContext = kubeconfig['current-context'];
   const showClustersOverview = kubeconfigIdFeature.config?.showClustersOverview;
   const isK8CurrentCluster = (name: string) =>
@@ -128,8 +127,6 @@ const loadKubeconfigIdCluster = async (
       t,
     );
 
-    console.log('kubeconfig', kubeconfig);
-
     if (!kubeconfig?.contexts?.length) {
       return;
     }
@@ -174,7 +171,6 @@ export function useLoginWithKubeconfigID() {
 
   useEffect(() => {
     if (contextsState?.chosenContext) {
-      console.log('contextsState', contextsState);
       const kubeconfig = {
         ...contextsState,
         contexts: contextsState.contexts,
