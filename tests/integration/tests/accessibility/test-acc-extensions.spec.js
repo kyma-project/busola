@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 
-import { search } from 'core-js/fn/symbol';
 import jsyaml from 'js-yaml';
 
 context('Accessibility test Extensions view', () => {
