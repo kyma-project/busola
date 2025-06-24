@@ -1,6 +1,4 @@
----
-title: Cannot connect to cluster
----
+# Cannot connect to cluster
 
 ## Symptom
 
