@@ -29,6 +29,10 @@ npm install
 
 Read [Install Kyma Dashboard manually](docs/install-kyma-dashboard-manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
 
+## Configuration
+
+For more information on the Busola configuration, see [Configuration](docs/contributor/configuration.md)
+
 ## Usage
 
 Run the `npm start` command.

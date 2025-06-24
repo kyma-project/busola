@@ -1,6 +1,6 @@
 # Configuration
 
-Learn about the [default configuration](#default-configuration) in Busola and [how to change it](#change-the-configuration).
+Learn about the [default configuration](#default-configuration) in Busola and [how to change it](#changing-the-configuration).
 
 ## Default Configuration
 
