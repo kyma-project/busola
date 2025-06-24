@@ -69,7 +69,6 @@ const addClusters = async (
   navigate?: NavigateFunction,
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
-  const untouchedKubeconfig = kubeconfig;
   console.log('addClusters', kubeconfig, clusters, kubeconfigIdFeature);
   const currentContext = kubeconfig['current-context'];
   const showClustersOverview = kubeconfigIdFeature.config?.showClustersOverview;
@@ -82,16 +81,17 @@ const addClusters = async (
     kubeconfig.contexts.forEach(context => {
       const previousStorageMethod: ClusterStorage =
         clusters![context.name]?.config?.storage || 'sessionStorage';
-      addByContext(
-        {
-          kubeconfig: untouchedKubeconfig,
-          context,
-          switchCluster: shouldRedirectToCluster(context.name),
-          storage: previousStorageMethod, // todo move it to config?
-          config: {},
-        },
-        clusterInfo,
-      );
+      if (currentContext === context.name)
+        addByContext(
+          {
+            kubeconfig,
+            context,
+            switchCluster: shouldRedirectToCluster(context.name),
+            storage: previousStorageMethod, // todo move it to config?
+            config: {},
+          },
+          clusterInfo,
+        );
     });
 
     if (showClustersOverview) {
@@ -139,13 +139,8 @@ const loadKubeconfigIdCluster = async (
         ...state,
         ...kubeconfig,
       }));
-      console.log('Multiple contexts found, setting state', kubeconfig);
-      // addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature, t);
-      // return 'done';
     } else {
       addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature, t);
-      console.log('Solo context found, adding clusters', kubeconfig);
-
       return 'done';
     }
   } catch (e) {
