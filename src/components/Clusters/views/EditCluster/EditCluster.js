@@ -13,7 +13,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { authDataState } from 'state/authDataAtom';
-import { Title } from '@ui5/webcomponents-react';
+import { FlexBox, RadioButton, Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { getUserIndex } from '../../shared';
@@ -65,7 +65,10 @@ export const ClusterDataForm = ({
   const [authenticationType, setAuthenticationType] = useState(
     kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
   );
-
+  const hasOneContext = kubeconfig?.contexts?.length === 1;
+  const [chosenContext, setChosenContext] = useState(
+    kubeconfig?.['current-context'],
+  );
   const issuerUrl = findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex);
   const clientId = findInitialValue(kubeconfig, 'oidc-client-id', userIndex);
   const clientSecret = findInitialValue(
@@ -190,6 +193,40 @@ export const ClusterDataForm = ({
             }
           }}
         />
+        {!hasOneContext && (
+          <ResourceForm.FormField
+            required
+            value={chosenContext}
+            propertyPath='$["current-context"]'
+            label={t('clusters.labels.context')}
+            validate={value => !!value}
+            setValue={context => {
+              jp.value(kubeconfig, '$["current-context"]', context);
+              setChosenContext(context);
+              setResource({ ...kubeconfig });
+            }}
+            input={({ setValue }) => (
+              <FlexBox
+                direction="Column"
+                id="context-chooser"
+                className="sap-margin-top-tiny"
+              >
+                {kubeconfig?.contexts.map(context => (
+                  <RadioButton
+                    key={context.name}
+                    name={context.name}
+                    value={context.name}
+                    checked={chosenContext === context.name}
+                    text={context.name}
+                    onChange={() => {
+                      setValue(context.name);
+                    }}
+                  />
+                ))}
+              </FlexBox>
+            )}
+          />
+        )}
         <ResourceForm.FormField
           label={t('clusters.auth-type')}
           key={t('clusters.auth-type')}
