@@ -15,14 +15,14 @@ Busola is delivered with the following default settings:
 
 Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence:
 
-**Backend:**
+### Backend
 
 - Busola backend default cluster configuration, acquired from the [defaultConfig.yaml](../../backend/settings/defaultConfig.yaml) file.
 - Busola cluster configuration, available on the Busola cluster in the ConfigMap "busola/busola-config" under the key "config".
   This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
   the [defaultConfig.yaml](../../backend/settings/defaultConfig.yaml) file is used.
 
-**Frontend:**
+### Frontend
 
 - Built-in, hardcoded defaults.
 - Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](../../public/defaultConfig.yaml) file.
@@ -70,7 +70,7 @@ Follow this example of the `active.env` file:
 ENVIRONMENT=your-environment-name
 ```
 
-When **ENVIRONMENT** is set to `my-env`, Busola looks for your custom configuration in `public/environemnt/my-env`.
+When **ENVIRONMENT** is set to `my-env`, Busola looks for your custom configuration in `public/environments/my-env`.
 If **ENVIRONMENT** is not set, Busola fetches the default configuration with the same structure as the custom configuration located in the [public directory](../../public).
 
 In the case of the Docker image, the `active.env` file is created at the startup of the image from the environment specified in the **ENVIRONMENT** variable.

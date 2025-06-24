@@ -4,8 +4,8 @@
 
 ![Busola Kubernetes architecture](assets/busola_kubernetes_3.svg)
 
-To expose Busola, you can use [VirtualService](https://github.com/kyma-project/busola/tree/main/resources/istio), [Ingress](https://github.com/kyma-project/busola/tree/main/resources/ingress) or create your own exposing mechanism.
-For more details about configuration, see [Configuration](configuration.md).
+To expose Busola, you can use [APIRule](https://github.com/kyma-project/busola/tree/main/resources/istio), [Ingress](https://github.com/kyma-project/busola/tree/main/resources/ingress) or create your own exposing mechanism.
+For more details about environment configuration, see [Environment-Specific Settings](configuration.md#environment-specific-settings).
 
 ## Deploying Busola in the Kubernetes Cluster
 
@@ -41,7 +41,7 @@ kubectl port-forward services/busola 3001:3001
 
 Prerequisites:
 
-- K3d with exposed loadbalancer on port 80.
+- k3d with exposed loadbalancer on port 80.
   > **TIP:** To create K3d with exposed load balancer run: `k3d cluster create -p "80:80@loadbalancer"`.
   > See [Exposing Services](https://k3d.io/v5.6.3/usage/exposing_services/) for more details.
 
