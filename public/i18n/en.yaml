@@ -105,6 +105,7 @@ clusters:
     issuer-url: Issuer URL
     name: Clusters
     scopes: Scopes
+    context: Context
   list:
     no-clusters-found: No clusters found
   messages:

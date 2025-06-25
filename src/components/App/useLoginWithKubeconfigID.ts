@@ -80,16 +80,17 @@ const addClusters = async (
     kubeconfig.contexts.forEach(context => {
       const previousStorageMethod: ClusterStorage =
         clusters![context.name]?.config?.storage || 'sessionStorage';
-      addByContext(
-        {
-          kubeconfig,
-          context,
-          switchCluster: shouldRedirectToCluster(context.name),
-          storage: previousStorageMethod, // todo move it to config?
-          config: {},
-        },
-        clusterInfo,
-      );
+      if (currentContext === context.name)
+        addByContext(
+          {
+            kubeconfig,
+            context,
+            switchCluster: shouldRedirectToCluster(context.name),
+            storage: previousStorageMethod, // todo move it to config?
+            config: {},
+          },
+          clusterInfo,
+        );
     });
 
     if (showClustersOverview) {
@@ -172,9 +173,7 @@ export function useLoginWithKubeconfigID() {
     if (contextsState?.chosenContext) {
       const kubeconfig = {
         ...contextsState,
-        contexts: contextsState.contexts.filter(
-          context => context.name === contextsState.chosenContext,
-        ),
+        contexts: contextsState.contexts,
         'current-context': contextsState.chosenContext,
       };
       addClusters(
