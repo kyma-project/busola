@@ -25,35 +25,36 @@ function getEnvConfig() {
   return configYaml || {};
 }
 
-function getConfigFromMap() {
-  let configFromMap = {};
+function getConfig() {
+  let config = {};
   if (fs.existsSync('./config/config.yaml')) {
-    configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
+    config = jsyaml.load(fs.readFileSync('./config/config.yaml'));
   }
 
-  return configFromMap || {};
+  return config || {};
 }
 
 function loadConfig() {
-  let config = {};
+  let mergedConfig = {};
 
   try {
     const defaultConfig = jsyaml.load(
       fs.readFileSync('./settings/defaultConfig.yaml'),
     );
 
-    config = defaultConfig.config;
+    mergedConfig = defaultConfig.config;
 
     const envConfig = getEnvConfig();
-    if (!isEmpty(envConfig)) config = merge(config, envConfig).config;
+    if (!isEmpty(envConfig))
+      mergedConfig = merge(mergedConfig, envConfig).config;
 
-    const configFromMap = getConfigFromMap();
-    if (!isEmpty(configFromMap)) config = merge(config, configFromMap).config;
+    const config = getConfig();
+    if (!isEmpty(config)) mergedConfig = merge(mergedConfig, config).config;
   } catch (e) {
     console.warn('Error loading config:', e?.message || e);
   }
 
-  return config;
+  return mergedConfig;
 }
 
 module.exports = loadConfig();
