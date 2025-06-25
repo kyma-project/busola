@@ -80,7 +80,10 @@ export default function QueryInput({
 
   useEffect(() => {
     if (!loading && textareaRef.current) {
-      textareaRef.current?.focus();
+      const innerTextarea = textareaRef.current?.shadowRoot?.querySelector(
+        '.ui5-textarea-inner',
+      ) as HTMLElement;
+      innerTextarea.focus();
     }
   }, [loading]);
 
@@ -135,6 +138,7 @@ export default function QueryInput({
     <div className="outer-query-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
       <div className="query-input-container">
         <TextArea
+          id="query-input"
           ref={textareaRef}
           disabled={loading}
           growing
