@@ -783,7 +783,7 @@ kyma-companion:
   disclaimer:
     tooltip: Disclaimer
     title: AI Notice
-    text: Joule is powered by generative AI and all output should be reviewed before use. Please do not enter any sensitive personal data, and avoid entering any other personal data you do not wish to be processed. Learn more in the Joule Data Protection and Privacy.
+    text: "Joule is powered by generative AI and all output should be reviewed before use. Please do not enter any sensitive personal data, and avoid entering any other personal data you do not wish to be processed. Learn more in the <0>Joule Data Protection and Privacy</0>."
     hint: Joule uses AI. Verify results.
     back-conversation: Back to Conversation
   tabs:

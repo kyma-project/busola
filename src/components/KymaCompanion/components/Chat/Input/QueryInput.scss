@@ -10,7 +10,7 @@
       --_ui5-v2-11-0_textarea_padding_bottom: 8px !important;
 
       #query-input:focus::part(textarea) {
-        box-shadow: 0px 1px 3px var(--sapLinkColor);
+        box-shadow: 0px 1px 4px var(--sapLinkColor);
       }
 
       .query-input-actions {
