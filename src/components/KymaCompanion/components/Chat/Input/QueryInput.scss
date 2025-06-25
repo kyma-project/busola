@@ -42,7 +42,9 @@
     }
 
     #disclaimer {
-      font-size: 0.65rem;
+      font-size: 11px;
+      text-align: center;
+      color: var(--sapContent_LabelColor);
     }
   }
 }

@@ -174,7 +174,7 @@ export default function QueryInput({
           />
         </div>
       </div>
-      <Text id="disclaimer">{t('kyma-companion.disclaimer')}</Text>
+      <Text id="disclaimer">{t('kyma-companion.disclaimer.hint')}</Text>
     </div>
   );
 }
