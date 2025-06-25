@@ -5,4 +5,4 @@ config:
     TRACKING:
       isEnabled: false
     KYMA_COMPANION:
-      link: 'https://companion.cp.dev.kyma.cloud.sap'
+      link: ''
