@@ -22,11 +22,12 @@ import {
   ColumnState,
   ShowCreate,
 } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ModulesListRows } from './ModulesListRows';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { setIsFormOpenState } from 'state/formOpenSlice';
 
 type ModulesListProps = {
   resource: KymaResourceType;
@@ -76,7 +77,7 @@ export const ModulesList = ({
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const dispatch = useDispatch();
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -100,7 +101,7 @@ export const ModulesList = ({
     navigate(
       `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true`,
     );
-    setIsFormOpen(state => ({ ...state, formOpen: true }));
+    dispatch(setIsFormOpenState({ formOpen: true }));
   };
 
   const headerRenderer = () => [

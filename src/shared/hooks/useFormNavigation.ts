@@ -1,13 +1,15 @@
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsFormOpenState, setIsFormOpenState } from 'state/formOpenSlice';
 
 export function useFormNavigation() {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
-  const [{ formOpen }, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { formOpen } = useSelector(getIsFormOpenState);
+  const dispatch = useDispatch();
 
   const navigateSafely = useCallback(
     (action: Function) => {
@@ -18,13 +20,13 @@ export function useFormNavigation() {
           ...prevState,
           discardAction: () => action(),
         }));
-        setIsFormOpen({ formOpen: true, leavingForm: true });
+        dispatch(setIsFormOpenState({ formOpen: true, leavingForm: true }));
         return;
       }
 
       action();
     },
-    [formOpen, isResourceEdited, setIsFormOpen, setIsResourceEdited],
+    [formOpen, isResourceEdited, dispatch, setIsResourceEdited],
   );
 
   const confirmDiscard = useCallback(() => {
@@ -33,13 +35,13 @@ export function useFormNavigation() {
     }
 
     // Reset states
-    setIsFormOpen({ formOpen: false, leavingForm: false });
+    dispatch(setIsFormOpenState({ formOpen: false, leavingForm: false }));
     setIsResourceEdited({ isEdited: false });
-  }, [isResourceEdited, setIsFormOpen, setIsResourceEdited]);
+  }, [isResourceEdited, dispatch, setIsResourceEdited]);
 
   const cancelDiscard = useCallback(() => {
-    setIsFormOpen({ formOpen: true, leavingForm: false });
-  }, [setIsFormOpen]);
+    dispatch(setIsFormOpenState({ formOpen: true, leavingForm: false }));
+  }, [dispatch]);
 
   return {
     navigateSafely,

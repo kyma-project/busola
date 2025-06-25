@@ -1,8 +1,8 @@
 import { Button, MessageBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { useSelector } from 'react-redux';
+import { getIsFormOpenState } from 'state/formOpenSlice';
 
 type UnsavedMessageBoxProps = {
   isOpen?: boolean;
@@ -10,7 +10,7 @@ type UnsavedMessageBoxProps = {
 
 export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
   const { t } = useTranslation();
-  const { formOpen, leavingForm } = useRecoilValue(isFormOpenState);
+  const { formOpen, leavingForm } = useSelector(getIsFormOpenState);
   const { confirmDiscard, cancelDiscard } = useFormNavigation();
 
   const handleClose = (

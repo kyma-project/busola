@@ -20,9 +20,10 @@ import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsFormOpenState, setIsFormOpenState } from 'state/formOpenSlice';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -119,7 +120,8 @@ export const DynamicPageComponent = ({
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const dispatch = useDispatch();
+  const isFormOpen = useSelector(getIsFormOpenState);
   const { navigateSafely } = useFormNavigation();
   const [searchParams] = useSearchParams();
   const editColumn = searchParams.get('editColumn');
@@ -355,7 +357,7 @@ export const DynamicPageComponent = ({
                 isResourceEdited,
                 setIsResourceEdited,
                 isFormOpen,
-                setIsFormOpen,
+                state => dispatch(setIsFormOpenState(state)),
               );
               setSelectedTab(e.detail.tab.getAttribute('data-mode'));
               return;

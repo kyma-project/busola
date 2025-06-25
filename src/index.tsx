@@ -26,6 +26,8 @@ import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
 import { createRoot } from 'react-dom/client';
+import { store } from './state/store';
+import { Provider } from 'react-redux';
 
 i18next
   .use(initReactI18next)
@@ -59,15 +61,17 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-  <RecoilRoot>
-    <ThemeProvider>
-      <BrowserRouter>
-        <Suspense fallback={<Spinner />}>
-          <NotificationProvider>
-            <App />
-          </NotificationProvider>
-        </Suspense>
-      </BrowserRouter>
-    </ThemeProvider>
-  </RecoilRoot>,
+  <Provider store={store}>
+    <RecoilRoot>
+      <ThemeProvider>
+        <BrowserRouter>
+          <Suspense fallback={<Spinner />}>
+            <NotificationProvider>
+              <App />
+            </NotificationProvider>
+          </Suspense>
+        </BrowserRouter>
+      </ThemeProvider>
+    </RecoilRoot>
+  </Provider>,
 );

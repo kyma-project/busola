@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   NavigationType,
   useNavigationType,
@@ -6,7 +7,7 @@ import {
 } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { setIsFormOpenState } from 'state/formOpenSlice';
 
 const switchToPrevLayout = layout => {
   switch (layout) {
@@ -94,7 +95,7 @@ export function usePrepareLayoutColumns({
   rawResourceTypeName,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
@@ -297,16 +298,20 @@ export function usePrepareLayoutColumns({
   }, [newLayoutState, setLayoutColumn, navigationType]);
 
   useEffect(() => {
-    setIsFormOpen({
-      formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
-    });
-  }, [newLayoutState.showCreate, newLayoutState.showEdit, setIsFormOpen]);
+    dispatch(
+      setIsFormOpenState({
+        formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+      }),
+    );
+  }, [newLayoutState.showCreate, newLayoutState.showEdit, dispatch]);
 
   useEffect(() => {
     setLayoutColumn(newLayoutState);
-    setIsFormOpen({
-      formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
-    });
+    dispatch(
+      setIsFormOpenState({
+        formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

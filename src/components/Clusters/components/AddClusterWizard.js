@@ -28,7 +28,8 @@ import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
 
 import './AddClusterWizard.scss';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { useDispatch } from 'react-redux';
+import { setIsFormOpenState } from 'state/formOpenSlice';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -50,8 +51,8 @@ export function AddClusterWizard({
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const [chosenContext, setChosenContext] = useState(undefined);
+  const dispatch = useDispatch();
 
   const {
     isValid: authValid,
@@ -124,7 +125,7 @@ export function AddClusterWizard({
         );
         addByContext({ kubeconfig, context, storage, config }, clustersInfo);
       }
-      setIsFormOpen({ formOpen: false });
+      dispatch(setIsFormOpenState({ formOpen: false }));
     } catch (e) {
       notification.notifyError({
         content: `${t('clusters.messages.wrong-configuration')}. ${
