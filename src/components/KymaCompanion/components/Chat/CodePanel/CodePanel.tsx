@@ -232,7 +232,7 @@ export default function CodePanel({
               <Button
                 className="action-button"
                 design="Transparent"
-                icon="sys-add"
+                icon="repost"
                 onClick={() =>
                   handleUpdateInEditor(link.address, code, link.actionType)
                 }
