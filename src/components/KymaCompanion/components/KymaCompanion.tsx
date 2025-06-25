@@ -49,7 +49,11 @@ export default function KymaCompanion() {
       <Card
         className="kyma-companion"
         header={
-          <div className="kyma-companion__header">
+          <div
+            className={`kyma-companion__${
+              showDisclaimer ? 'disclaimer-' : ''
+            }header`}
+          >
             <Title level="H5" size="H5" className="title">
               {t('kyma-companion.name')}
             </Title>

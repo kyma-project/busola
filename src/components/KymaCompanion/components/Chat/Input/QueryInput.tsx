@@ -80,10 +80,12 @@ export default function QueryInput({
 
   useEffect(() => {
     if (!loading && textareaRef.current) {
-      const innerTextarea = textareaRef.current?.shadowRoot?.querySelector(
-        '.ui5-textarea-inner',
-      ) as HTMLElement;
-      innerTextarea.focus();
+      requestAnimationFrame(() => {
+        const innerTextarea = textareaRef.current?.shadowRoot?.querySelector(
+          '.ui5-textarea-inner',
+        ) as HTMLElement;
+        innerTextarea?.focus();
+      });
     }
   }, [loading]);
 
