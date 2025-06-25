@@ -37,24 +37,4 @@
       }
     }
   }
-
-  .outer-input-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    .input-container {
-      position: relative;
-
-      #text-area-icon {
-        position: absolute;
-        right: 0.5rem;
-        bottom: 0.6rem;
-      }
-    }
-
-    #disclaimer {
-      font-size: 0.65rem;
-    }
-  }
 }

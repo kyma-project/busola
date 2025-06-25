@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { FlexBox, Icon, Text, TextArea } from '@ui5/webcomponents-react';
+import { FlexBox } from '@ui5/webcomponents-react';
 import Message from './Message/Message';
 import Bubbles from './Bubbles/Bubbles';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
@@ -13,6 +13,7 @@ import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
 import { AIError } from '../KymaCompanion';
 import ContextLabel from './ContextLabel/ContextLabel';
+import QueryInput from './Input/QueryInput';
 import {
   Author,
   ChatGroup,
@@ -46,8 +47,8 @@ export const Chat = ({
   setIsReset,
 }: ChatProps) => {
   const { t } = useTranslation();
+  const chatRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [inputValue, setInputValue] = useState<string>('');
 
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
@@ -250,16 +251,9 @@ export const Chat = ({
     addMessage({ author: Author.AI, messageChunks: [], isLoading: true });
   };
 
-  const onSubmitInput = () => {
-    if (inputValue.length === 0) return;
-    const prompt = inputValue;
-    setInputValue('');
-    sendPrompt(prompt);
-  };
-
   const scrollToBottom = () => {
-    if (containerRef?.current?.lastChild)
-      (containerRef.current.lastChild as HTMLElement).scrollIntoView({
+    if (chatRef?.current?.lastChild)
+      (chatRef.current.lastChild as HTMLElement).scrollIntoView({
         behavior: 'smooth',
         block: 'end',
       });
@@ -324,10 +318,11 @@ export const Chat = ({
       direction="Column"
       justifyContent="SpaceBetween"
       className="chat-container"
+      ref={containerRef}
     >
       <div
         className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
-        ref={containerRef}
+        ref={chatRef}
       >
         {chatHistory.map((group, groupIndex) => {
           const isLastGroup = groupIndex === chatHistory.length - 1;
@@ -382,37 +377,11 @@ export const Chat = ({
           />
         )}
       </div>
-      <div className="outer-input-container sap-margin-x-small sap-margin-bottom-small sap-margin-top-tiny">
-        <div className="input-container">
-          <TextArea
-            disabled={loading}
-            className="full-width"
-            growing
-            growingMaxRows={10}
-            rows={1}
-            placeholder={t('kyma-companion.placeholder')}
-            value={inputValue}
-            onKeyDown={e => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                onSubmitInput();
-              }
-            }}
-            onInput={e => {
-              setInputValue(e.target.value);
-            }}
-            valueState="None"
-          />
-          <Icon
-            id="text-area-icon"
-            name="paper-plane"
-            mode={loading ? 'Image' : 'Interactive'}
-            design={loading ? 'NonInteractive' : 'Default'}
-            onClick={loading ? () => {} : onSubmitInput}
-          />
-        </div>
-        <Text id="disclaimer">{t('kyma-companion.disclaimer')}</Text>
-      </div>
+      <QueryInput
+        loading={loading}
+        sendPrompt={sendPrompt}
+        containerRef={containerRef}
+      />
     </FlexBox>
   );
 };

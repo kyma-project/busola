@@ -464,7 +464,7 @@ context('Test Companion Chat Behavior', () => {
     cy.resetCompanion();
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .should('be.visible')
       .should('be.disabled');
@@ -478,7 +478,7 @@ context('Test Companion Chat Behavior', () => {
     cy.wait(1000);
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .should('be.visible')
       .should('not.be.disabled');
@@ -492,7 +492,7 @@ context('Test Companion Chat Behavior', () => {
     cy.openCompanion();
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .should('be.visible')
       .should('be.disabled');
@@ -506,7 +506,7 @@ context('Test Companion Chat Behavior', () => {
     cy.wait(1000);
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .should('be.visible')
       .should('not.be.disabled');
@@ -519,7 +519,7 @@ context('Test Companion Chat Behavior', () => {
     cy.clickSuggestion(3);
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .should('be.visible')
       .should('be.disabled');
@@ -533,7 +533,7 @@ context('Test Companion Chat Behavior', () => {
     cy.wait(250);
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .should('be.visible')
       .should('be.disabled');
@@ -547,7 +547,7 @@ context('Test Companion Chat Behavior', () => {
     cy.wait(2500);
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .should('be.visible')
       .should('not.be.disabled');
@@ -564,7 +564,7 @@ context('Test Companion Chat Behavior', () => {
     cy.get('.kyma-companion').as('companion');
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .click()
       .type('Create Deployment{enter}');
@@ -594,7 +594,7 @@ context('Test Companion Chat Behavior', () => {
     cy.get('.kyma-companion').as('companion');
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule"]')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .click()
       .type('Create Deployment{enter}');
