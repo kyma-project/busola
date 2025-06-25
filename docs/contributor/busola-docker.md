@@ -2,7 +2,7 @@
 
 ### Adding a Cluster Using Kubeconfig ID
 
-1. If you run Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container. Prepare `KUBECONFIG` shell environment variable and execute the following command:
+1. If you run Busola in Docker, you can mount your kubeconfig as a bind mount for the Busola container. Prepare the `KUBECONFIG` shell environment variable and execute the following command:
 
    ```bash
    docker run --rm -it -p 3001:3001 -v "${KUBECONFIG}":/app/core-ui/kubeconfig/$(basename "${KUBECONFIG}") --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest

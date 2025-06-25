@@ -9,7 +9,7 @@ For more details about environment configuration, see [Environment-Specific Sett
 
 ## Deploying Busola in the Kubernetes Cluster
 
-To install Busola from release in the Kubernetes cluster set `NAMESPACE` and `VERSION` shell environment variable with desired release and run:
+To install Busola from the release in the Kubernetes cluster, set the `NAMESPACE` and `VERSION` shell environment variables with the desired release and run:
 
 ```shell
 kubectl apply --namespace "${NAMESPACE}" -f https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml
