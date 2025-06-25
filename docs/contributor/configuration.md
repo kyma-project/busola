@@ -21,7 +21,7 @@ Busola configuration is the product of gathering and merging the configurations 
   This data is mounted to the `busola` Pods, and during the local development,
   the [defaultConfig.yaml](../../public/defaultConfig.yaml) file is used.
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
-- Busola active environment, [active.env](../../public/active.env) file is used.
+- Busola active environment, `active.env` file is used.
 - Custom configuration with `extensibility` and `config` located in **public/environments**, [read more](#environment-specific-settings).
 
 ## Changing the Configuration
