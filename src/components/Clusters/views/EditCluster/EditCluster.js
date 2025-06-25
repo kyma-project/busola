@@ -13,10 +13,11 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { authDataState } from 'state/authDataAtom';
-import { FlexBox, RadioButton, Title } from '@ui5/webcomponents-react';
+import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { getUserIndex } from '../../shared';
+import { ContextButtons } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
 export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
   const elementsWithId =
@@ -206,24 +207,12 @@ export const ClusterDataForm = ({
               setResource({ ...kubeconfig });
             }}
             input={({ setValue }) => (
-              <FlexBox
-                direction="Column"
-                id="context-chooser"
-                className="sap-margin-top-tiny"
-              >
-                {kubeconfig?.contexts.map(context => (
-                  <RadioButton
-                    key={context.name}
-                    name={context.name}
-                    value={context.name}
-                    checked={chosenContext === context.name}
-                    text={context.name}
-                    onChange={() => {
-                      setValue(context.name);
-                    }}
-                  />
-                ))}
-              </FlexBox>
+              <ContextButtons
+                contexts={kubeconfig?.contexts || []}
+                setValue={setValue}
+                chosenContext={chosenContext}
+                setChosenContext={setChosenContext}
+              />
             )}
           />
         )}
