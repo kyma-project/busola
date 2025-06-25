@@ -9,22 +9,22 @@ For more details about environment configuration, see [Environment-Specific Sett
 
 ## Deploying Busola in the Kubernetes Cluster
 
-To install Busola from release in the Kubernetes cluster set `VERSION` shell environment variable with desired release and run:
+To install Busola from release in the Kubernetes cluster set `NAMESPACE` and `VERSION` shell environment variable with desired release and run:
 
 ```shell
-kubectl apply -f https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml
+kubectl apply --namespace "${NAMESPACE}" -f https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml
 ```
 
 To install Busola from main branch in the Kubernetes cluster, run:
 
 ```shell
-(cd resources && kustomize build base/ | kubectl apply -f- )
+(cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
 ```
 
 To install Busola using a specific environment configuration, set the `ENVIRONMENT` shell environment variable and run:
 
 ```shell
-(cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply -f- )
+(cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
 ```
 
 ## Accessing Busola Installed on Kubernetes
@@ -34,7 +34,7 @@ To install Busola using a specific environment configuration, set the `ENVIRONME
 The simplest method that always works is to use the capabilities of kubectl.
 
 ```shell
-kubectl port-forward services/busola 3001:3001
+kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
 ```
 
 ### k3d
@@ -48,7 +48,7 @@ Prerequisites:
 1. Install Ingress resources:
 
 ```shell
-(cd resources && kubectl apply -f ingress/ingress.yaml)
+(cd resources && kubectl apply --namespace "${NAMESPACE}" -f ingress/ingress.yaml)
 ```
 
 2. Visit `localhost`
@@ -80,13 +80,13 @@ Prerequisites:
 1. Install the Istio required resources:
 
 ```shell
-(cd resources && kubectl apply -k istio)
+(cd resources && kubectl apply --namespace "${NAMESPACE}" -k istio)
 ```
 
 2. To get the Busola address, run:
 
 ```shell
-kubectl get virtualservices.networking.istio.io
+kubectl get --namespace "${NAMESPACE}" virtualservices.networking.istio.io
 ```
 
 and find the `busola-***` virtual service. Under `HOSTS,` there is an address where you can access the Busola page.
