@@ -108,60 +108,81 @@ export default function CodePanel({
     return `${basePath}${fullResourcePath}?${params}`;
   };
 
-  const handleSetupInEditor = (url: string, resource: string, type: string) => {
+  const parseParams = (url: string, resource: string) => {
     const parts = url.split('/').filter(Boolean); // Remove empty strings from split
     let [namespace, resType, resName]: [string | null, string, string] = [
       null,
       '',
       '',
     ];
-    const parsedResource = jsyaml.load(resource.replace('yaml', '')) || {};
-
     if (parts[0] === 'namespaces') {
       [namespace, resType, resName] = [parts[1], parts[2], parts[3]];
     } else {
       [resType, resName] = [parts[0], parts[1]];
     }
 
+    const parsedResource = jsyaml.load(resource.replace('yaml', '')) || {};
+    return { namespace, resType, resName, parsedResource };
+  };
+
+  const handlePlaceInEditor = (url: string, resource: string, type: string) => {
+    const { namespace, resType, resName, parsedResource } = parseParams(
+      url,
+      resource,
+    );
+
     setLayoutColumn({
       ...layoutState,
       layout: 'TwoColumnsMidExpanded',
-      midColumn:
-        type === 'Update'
-          ? {
-              resourceType: resType,
-              rawResourceTypeName: resType,
-              namespaceId: namespace,
-              resourceName: resName,
-              apiGroup: null,
-              apiVersion: null,
-            }
-          : null,
-      showCreate:
-        type === 'New'
-          ? {
-              ...layoutState.showCreate,
-              resource: parsedResource,
-              resourceType: resType,
-              namespaceId: namespace,
-            }
-          : null,
-      showEdit:
-        type === 'Update'
-          ? {
-              ...layoutState.showEdit,
-              resource: parsedResource,
-              resourceType: resType,
-              namespaceId: namespace,
-              resourceName: resName,
-              apiGroup: null,
-              apiVersion: null,
-            }
-          : null,
+      midColumn: null,
+      showCreate: {
+        ...layoutState.showCreate,
+        resource: parsedResource,
+        resourceType: resType,
+        namespaceId: namespace,
+      },
+      showEdit: null,
     });
 
     navigate(createUrl(namespace, resType, type, resName));
   };
+
+  const handleUpdateInEditor = (
+    url: string,
+    resource: string,
+    type: string,
+  ) => {
+    const { namespace, resType, resName, parsedResource } = parseParams(
+      url,
+      resource,
+    );
+
+    setLayoutColumn({
+      ...layoutState,
+      layout: 'TwoColumnsMidExpanded',
+      midColumn: {
+        resourceType: resType,
+        rawResourceTypeName: resType,
+        namespaceId: namespace,
+        resourceName: resName,
+        apiGroup: null,
+        apiVersion: null,
+      },
+      showCreate: null,
+      showEdit: {
+        ...layoutState.showEdit,
+        resource: parsedResource,
+        resourceType: resType,
+        namespaceId: namespace,
+        resourceName: resName,
+        apiGroup: null,
+        apiVersion: null,
+      },
+    });
+
+    navigate(createUrl(namespace, resType, type, resName));
+  };
+
   return !language ? (
     <div className="code-response sap-margin-y-small">
       <Icon
@@ -175,11 +196,14 @@ export default function CodePanel({
     </div>
   ) : (
     <Panel
+      // the height is 20 lines times 21px per line (14px font size x 1.5 line height) plus header height
+      style={{ maxHeight: 'calc(420px + 3.5rem)', overflowY: 'scroll' }}
       className="code-panel sap-margin-y-small"
+      stickyHeader
       header={
         <FlexBox alignItems="Center" fitContainer justifyContent="SpaceBetween">
           <Title level="H6" size="H6">
-            {language}
+            {language.toLocaleUpperCase()}
           </Title>
           <FlexBox justifyContent="End" alignItems="Center">
             <Button
@@ -191,17 +215,30 @@ export default function CodePanel({
             >
               {t('common.buttons.copy')}
             </Button>
-            {withAction && link && (
+            {withAction && link?.actionType === 'New' && (
               <Button
                 className="action-button"
                 design="Transparent"
                 icon="sys-add"
                 onClick={() =>
-                  handleSetupInEditor(link.address, code, link.actionType)
+                  handlePlaceInEditor(link.address, code, link.actionType)
                 }
                 accessibleName={t('common.buttons.place')}
               >
                 {t('common.buttons.place')}
+              </Button>
+            )}
+            {withAction && link?.actionType === 'Update' && (
+              <Button
+                className="action-button"
+                design="Transparent"
+                icon="sys-add"
+                onClick={() =>
+                  handleUpdateInEditor(link.address, code, link.actionType)
+                }
+                accessibleName={t('common.buttons.replace')}
+              >
+                {t('common.buttons.replace')}
               </Button>
             )}
           </FlexBox>
@@ -209,7 +246,7 @@ export default function CodePanel({
       }
       fixed
     >
-      <SyntaxHighlighter language={language} style={syntaxTheme} wrapLongLines>
+      <SyntaxHighlighter language={language} style={syntaxTheme}>
         {code}
       </SyntaxHighlighter>
     </Panel>
