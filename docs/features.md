@@ -293,7 +293,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     isEnabled: false
   ```
 
-- **SNOW** - determines if snow feature is enabled in busola
+- **SNOW** - determines if the snow animation is enabled in Busola
 
   Default settings:
 
