@@ -4,6 +4,7 @@ import {
   findModuleTemplate,
   ModuleTemplateListType,
 } from './support';
+import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 interface Counts {
   [key: string]: number;
@@ -44,6 +45,7 @@ export const getCRResource = (
   selectedModules: any,
   kymaResource: any,
   moduleTemplates: ModuleTemplateListType,
+  isCommunity: boolean = false,
 ) => {
   if (chosenModuleIndex == null) {
     return [];
@@ -63,13 +65,52 @@ export const getCRResource = (
 
   let resource: Resource | null = null;
   if (module?.spec?.data) {
-    resource = {
-      group: module.spec.data.apiVersion.split('/')[0],
-      version: module.spec.data.apiVersion.split('/')[1],
-      kind: module.spec.data.kind,
-    };
+    resource = isCommunity
+      ? module?.spec?.data
+      : {
+          group: module.spec.data.apiVersion.split('/')[0],
+          version: module.spec.data.apiVersion.split('/')[1],
+          kind: module.spec.data.kind,
+        };
   }
   return resource ? [resource] : [];
+};
+
+export const getCommunityResources = async (
+  chosenModuleIndex: number | null,
+  selectedModules: any,
+  kymaResource: any,
+  moduleTemplates: ModuleTemplateListType,
+  post: PostFn,
+) => {
+  if (chosenModuleIndex == null) {
+    return [];
+  }
+  const selectedModule = selectedModules[chosenModuleIndex];
+  const moduleChannel = selectedModule?.channel || kymaResource?.spec?.channel;
+  const moduleVersion =
+    selectedModule?.version ||
+    findModuleStatus(kymaResource, selectedModule?.name)?.version;
+
+  const module = findModuleTemplate(
+    moduleTemplates,
+    selectedModule?.name,
+    moduleChannel,
+    moduleVersion,
+  );
+
+  const resources = (module?.spec as any)?.resources;
+  if (resources?.length) {
+    const yamlRes = await Promise.all(
+      resources.map(async (res: any) => {
+        if (res.link) {
+          return await postForCommunityResources(post, res.link);
+        }
+      }),
+    );
+    return yamlRes.flat();
+  }
+  return [];
 };
 
 export const handleItemClick = async (
@@ -234,4 +275,49 @@ export const deleteCrResources = async (
     console.warn(e);
     return 'Error while deleting Custom Resource';
   }
+};
+
+export default async function postForCommunityResources(
+  post: PostFn,
+  link: string,
+) {
+  if (!link) {
+    console.error('No link provided for community resource');
+    return false;
+  }
+
+  try {
+    const response = await post('/modules/community-resource', { link });
+    if (response?.length) {
+      return response;
+    }
+    console.error('Empty or invalid response:', response);
+    return false;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return false;
+  }
+}
+
+export const getCommunityResourceUrls = (resources: any) => {
+  if (!resources?.length) return [];
+
+  return resources.map((resource: any) => {
+    if (!resource) return '';
+
+    const apiVersion =
+      resource?.apiVersion || `${resource?.group}/${resource?.version}`;
+    const resourceName = resource?.metadata?.name || resource?.name;
+    const resourceNamespace =
+      resource?.metadata?.namespace || resource?.namespace;
+    const api = apiVersion === 'v1' ? 'api' : 'apis';
+
+    return resourceNamespace
+      ? `/${api}/${apiVersion}/namespaces/${resourceNamespace}/${pluralize(
+          resource.kind,
+        ).toLowerCase()}/${resourceName}`
+      : `/${api}/${apiVersion}/${pluralize(
+          resource.kind || '',
+        ).toLowerCase()}/${resourceName}`;
+  });
 };

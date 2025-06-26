@@ -41,6 +41,7 @@ export default function KymaModulesList({ namespaced }) {
     installedCommunityModules,
     communityModulesLoading,
     setOpenedModuleIndex: setOpenedCommunityModuleIndex,
+    handleResourceDelete: handleCommunityModuleDelete,
   } = useContext(CommunityModuleContext);
 
   const [selectedEntry, setSelectedEntry] = useState(null);
@@ -94,7 +95,7 @@ export default function KymaModulesList({ namespaced }) {
               modulesLoading={communityModulesLoading}
               namespaced={namespaced}
               setOpenedModuleIndex={setOpenedCommunityModuleIndex}
-              handleResourceDelete={handleResourceDelete}
+              handleResourceDelete={handleCommunityModuleDelete}
               customSelectedEntry={selectedEntry}
               setSelectedEntry={setSelectedEntry}
             />

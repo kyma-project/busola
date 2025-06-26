@@ -272,7 +272,7 @@ export const GenericList = ({
             isModuleSelected
           }
           index={index}
-          key={e.metadata?.uid || e.name || e.metadata?.name || index}
+          key={`${e.metadata?.uid || e.name || e.metadata?.name}-${index}`}
           entry={e}
           actions={actions}
           rowRenderer={rowRenderer}
