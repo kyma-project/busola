@@ -28,6 +28,7 @@ import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
 
 import './AddClusterWizard.scss';
+import { useSetAtom } from 'jotai';
 import { isFormOpenState } from 'state/formOpenAtom';
 
 export function AddClusterWizard({
@@ -50,7 +51,7 @@ export function AddClusterWizard({
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetRecoilState(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
   const [chosenContext, setChosenContext] = useState(undefined);
 
   const {

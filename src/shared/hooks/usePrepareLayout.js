@@ -1,3 +1,4 @@
+import { useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 import {
   NavigationType,
@@ -94,7 +95,7 @@ export function usePrepareLayoutColumns({
   rawResourceTypeName,
 }) {
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
