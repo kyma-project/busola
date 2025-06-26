@@ -15,7 +15,7 @@ If the stage is not set, the feature is loaded only on-demand, most often by the
 
 Note that some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
 
-#### Features list for Web
+#### Features list for Frontend
 
 > **TIP:** The list is ordered alphabetically.
 
@@ -283,14 +283,13 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **EXTENSIBILITY_INJECTIONS**
 
-- **EXTENSIBILITY_WIZARD**
 
-- **KYMA_COMPANION** - determines if the kyma companion chat window is available in busola
+- **KYMA_COMPANION** - determines if the Kyma Companion chat window is available in Busola
 
   Default settings:
 
   ```yaml
-  FEEDBACK:
+  KYMA_COMPANION:
     isEnabled: false
   ```
 
@@ -299,7 +298,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   Default settings:
 
   ```yaml
-  FEEDBACK:
+  SNOW:
     isEnabled: false
   ```
 
