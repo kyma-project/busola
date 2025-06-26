@@ -3,6 +3,15 @@
 > [!TIP]
 > To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
 
+## HTTP Status Codes
+
+All HTTP response codes are forwarded directly from the Kubernetes API.
+The only exceptions are:
+
+- Invalid request when the backend returns `400` with reason
+- `502` when the backend gets the `503` response code from the Kubernetes API
+- `502` when something unexpected happened when forwarding the request. The response contains the request ID, which can help you find the root cause in the backend logs.
+
 ## Connectivity Issues with Busola Against a k3d Cluster
 
 ### Symptom
