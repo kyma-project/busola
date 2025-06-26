@@ -80,7 +80,7 @@ export default function CommunityModulesEdit({
       return {
         name: key,
         versions: versionInfo.map(v => ({
-          key: v.moduleTemplate,
+          key: v.moduleTemplateName,
           version: v.version,
           channel: v.channel ?? '',
           installed: v.installed ?? false,

@@ -6,7 +6,7 @@ import {
 export type VersionInfo = {
   version: string;
   channel?: string;
-  moduleTemplate: string;
+  moduleTemplateName: string;
   installed?: boolean;
 };
 
@@ -14,6 +14,7 @@ export function getAvailableCommunityModules(
   communityModulesTemplates: ModuleTemplateListType,
   moduleReleaseMetas: ModuleReleaseMetaListType,
 ): Map<string, VersionInfo[]> {
+  //This part is responsible for creating moduleName with all Version from ModuleTemplates
   const availableCommunityModules = communityModulesTemplates.items.reduce(
     (acc, module): Map<string, VersionInfo[]> => {
       const moduleName = module.spec.moduleName ?? 'not-found';
@@ -25,7 +26,7 @@ export function getAvailableCommunityModules(
         const newVersionCandidate = {
           version: version,
           channel: channel,
-          moduleTemplate: moduleTplName,
+          moduleTemplateName: moduleTplName,
         };
         const foundVersion = foundModule.find(module => {
           return (
@@ -33,12 +34,16 @@ export function getAvailableCommunityModules(
             module.version === newVersionCandidate.version
           );
         });
-        if (foundVersion) {
+        if (!foundVersion) {
           foundModule.push(newVersionCandidate);
         }
       } else {
         acc.set(moduleName, [
-          { version: version, channel: channel, moduleTemplate: moduleTplName },
+          {
+            version: version,
+            channel: channel,
+            moduleTemplateName: moduleTplName,
+          },
         ]);
       }
       return acc;
@@ -46,29 +51,43 @@ export function getAvailableCommunityModules(
     new Map<string, VersionInfo[]>(),
   );
 
-  console.log('MODULE TEMPLATES VERSIONS', availableCommunityModules);
-
-  moduleReleaseMetas.items.forEach(releaseMeta => {
-    const foundModuleVersions = availableCommunityModules.get(
-      releaseMeta.spec.moduleName,
-    );
-    if (foundModuleVersions) {
-      // foundModuleVersions.fin
-      // releaseMeta.spec.channels.forEach( channel => {
-      //   if (channel.channel === foundVersions.)
-      // })
-      const availableChannels = releaseMeta.spec.channels.map(channel => {
-        return {
-          moduleTemplate: `${releaseMeta.metadata.name}-${channel.channel}`, //TODO: we should found the moduleTempalte with given spec.channel+spec.version, if not found I don't know
-          channel: channel.channel,
-          version: channel.version,
-        };
-      });
-      foundModuleVersions.push(...availableChannels);
-    }
-  });
+  // TODO: do sth with that later
+  //
+  // moduleReleaseMetas.items.forEach(releaseMeta => {
+  //   const foundModuleVersions = availableCommunityModules.get(
+  //     releaseMeta.spec.moduleName,
+  //   );
+  //   if (foundModuleVersions) {
+  //     // foundModuleVersions.fin
+  //     // releaseMeta.spec.channels.forEach( channel => {
+  //     //   if (channel.channel === foundVersions.)
+  //     // })
+  //     const availableChannels = releaseMeta.spec.channels.map(channel => {
+  //       return {
+  //         moduleTemplate: findProperModuleTemplate( TUTAJ TRZEBA COŚ CIEKAWEGO DAĆ ,channel.channel, channel.version)
+  //         channel: channel.channel,
+  //         version: channel.version,
+  //       };
+  //     });
+  //     foundModuleVersions.push(...availableChannels);
+  //   }
+  // });
 
   return availableCommunityModules;
+}
+
+function findProperModuleTemplate(
+  modulesTpls: ModuleTemplateListType,
+  channel: string,
+  version: string,
+) {
+  const foundModule = modulesTpls.items.find(moduleTpl => {
+    return moduleTpl.spec.channel === channel;
+  });
+  if (foundModule) {
+    return foundModule.metadata.name;
+  }
+  return '';
 }
 
 export function getCommunityModules(

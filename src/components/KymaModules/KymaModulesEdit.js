@@ -225,9 +225,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
     setCommunityModulesToApply([...modules]);
   };
 
-  // console.log('Available modules with version', availableCommunityModules);
-  // console.log('Data to Display', communityModulesToDisplay);
-
   const onChange = (module, value, index) => {
     setChannel(module, value, index, selectedModules, setSelectedModules);
     setKymaResource({

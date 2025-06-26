@@ -187,15 +187,31 @@ export const useGetInstalledModules = (
   if (!moduleTemplates) {
     return { installed: [], loading: false, error: null };
   }
-  // console.log('managers', managers)
+  console.log('managers', managers);
 
-  const filtered = moduleTemplates.items?.filter(
-    module => !!managers[module.metadata.name],
-  );
+  // TODO: extract it as find version match in manager images
+  const filtered2 = moduleTemplates.items?.filter(module => {
+    const foundManager = managers[module.metadata.name];
+    if (!foundManager) {
+      return false;
+    }
+    console.log('found manager', foundManager);
+    const managerVersion = foundManager.spec?.template?.spec.containers
+      .map(container => {
+        const imgName = container.image.split(':');
+        const imgTag = imgName[imgName.length - 1];
+        console.log(imgName, imgTag);
+        return imgTag;
+      })
+      .find((imgTag: string) => imgTag === 'v' + module.spec.version);
+    console.log(managerVersion, module.spec.version);
+    return !!managerVersion;
+  });
+  console.log('after filtered', filtered2);
 
   // TODO: add check for deployment image version
   const installed =
-    filtered?.map(module => ({
+    filtered2?.map(module => ({
       name:
         module.metadata?.labels['operator.kyma-project.io/module-name'] ??
         module.spec.moduleName,
@@ -224,6 +240,7 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
           namespace: manager?.namespace,
         },
       } as KymaResourceType);
+
       async function fetchResource() {
         try {
           const response = await fetch({ relativeUrl: path });
