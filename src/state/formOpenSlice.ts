@@ -13,12 +13,8 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {
     setIsFormOpenState: (state, action: PayloadAction<IsFormOpenState>) => {
-      if (action.payload.formOpen !== undefined) {
-        state.formOpen = action.payload.formOpen;
-      }
-      if (action.payload.leavingForm !== undefined) {
-        state.leavingForm = action.payload.leavingForm;
-      }
+      state.formOpen = action.payload.formOpen;
+      state.leavingForm = action.payload.leavingForm;
     },
   },
 });
