@@ -15,7 +15,7 @@ If the stage is not set, the feature is loaded only on-demand, most often by the
 
 Note that some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
 
-#### Features list
+#### Features list for Web
 
 > **TIP:** The list is ordered alphabetically.
 
@@ -105,17 +105,6 @@ GARDENER_LOGIN:
       help-sap-com:
         default: https://help.sap.com
   ```
-
-* **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
-
-> **NOTE:** It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
-
-Default settings:
-
-```yaml
-GZIP:
-  isEnabled: true
-```
 
 - **HIDDEN_NAMESPACES** – is used to define a list of Namespaces that are considered system, and are hidden by default.
 
@@ -290,4 +279,48 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   FEEDBACK:
     isEnabled: true
     link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  ```
+
+- **EXTENSIBILITY_INJECTIONS**
+
+- **EXTENSIBILITY_WIZARD**
+
+- **KYMA_COMPANION** - determines if the kyma companion chat window is available in busola
+
+  Default settings:
+
+  ```yaml
+  FEEDBACK:
+    isEnabled: false
+  ```
+
+- **SNOW** - determines if snow feature is enabled in busola
+
+  Default settings:
+
+  ```yaml
+  FEEDBACK:
+    isEnabled: false
+  ```
+
+#### Features list for Backend
+
+- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
+
+> **NOTE:** It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
+
+Default settings:
+
+```yaml
+GZIP:
+  isEnabled: true
+```
+
+- **KYMA_COMPANION** - is used to configure location of Kyma companion API.
+
+  Default settings:
+
+  ```yaml
+  FEEDBACK:
+    link: ''
   ```
