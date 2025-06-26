@@ -2,7 +2,7 @@
 
 The document explains the usage of feature flags in Busola, lists and describes all the available feature flags, and provides their configuration examples:
 
-#### Features priority
+## Features priority
 
 Initialisation of the Busola features is based on the `stage` property, which can take one of the following values:
 
@@ -11,9 +11,10 @@ Initialisation of the Busola features is based on the `stage` property, which ca
 
 If the stage is not set, the feature is loaded only on-demand, most often by the iframe. Use the `useFeature` hook to request usage of such feature.
 
-Note that some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
+> [!NOTE]
+> Some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
 
-#### Features list
+## Features list for Frontend
 
 > **TIP:** The list is ordered alphabetically.
 
@@ -29,6 +30,15 @@ Note that some features must be run before the application starts the bootstrap 
     selectors:
       - type: apiGroup
         apiGroup: gateway.kyma-project.io
+  ```
+
+- **CLUSTER_VALIDATION** - determines whether the Cluster Validation panel for scanning the cluster should be enabled in the Cluster Overview page. The scan uses the [resource validation](resource-validation/README.md) rules.
+
+  Default settings:
+
+  ```yaml
+  CLUSTER_VALIDATION:
+    isEnabled: false
   ```
 
 - **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
@@ -72,15 +82,6 @@ EXTENSIBILITY_INJECTIONS:
   isEnabled: true
 ```
 
-- **EXTENSIBILITY_WIZARD** -
-
-Default settings:
-
-```yaml
-EXTENSIBILITY_WIZARD:
-  isEnabled: false
-```
-
 - **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `scope`: either `namespace` or `cluster` (defaults to `cluster`), `children`: a list of pairs (label and link).
 
   Default settings:
@@ -96,6 +97,16 @@ EXTENSIBILITY_WIZARD:
         children:
           - label: Example Node Label
             link: https://github.com/kyma-project/busola
+  ```
+
+- **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar
+
+  Default settings:
+
+  ```yaml
+  FEEDBACK:
+    isEnabled: true
+    link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   ```
 
 - **GARDENER_LOGIN** - is used to enable or disable the option of logging in with the Gardener kubeconfig. If enabled, you must set the **kubeconfig** parameter to a valid kubeconfig object.
@@ -122,17 +133,6 @@ GARDENER_LOGIN:
         default: https://help.sap.com
   ```
 
-- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
-
-> **NOTE:** It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
-
-Default settings:
-
-```yaml
-GZIP:
-  isEnabled: true
-```
-
 - **HIDDEN_NAMESPACES** – is used to define a list of Namespaces that are considered system, and are hidden by default.
 
 Default settings:
@@ -158,7 +158,7 @@ HIDDEN_NAMESPACES:
         apiGroup: networking.istio.io
   ```
 
-- **KYMA_COMPANION** -
+- **KYMA_COMPANION** - determines if the Kyma Companion chat window is available in Busola
 
 Default settings:
 
@@ -244,6 +244,18 @@ KYMA_COMPANION:
 
 The **match** keys and **messageSrc** must use the format described in the [`jsonpath` repository](https://github.com/dchester/jsonpath).
 
+- **RESOURCE_VALIDATION** - determines the selected policies for [resource validation](resource-validation/README.md). They can be overwritten in the user preferences.
+
+  Default settings:
+
+  ```yaml
+  RESOURCE_VALIDATION:
+    isEnabled: true
+    config:
+      policies:
+        - Default
+  ```
+
 - **SENTRY** – is used to enable monitoring of uncaught exceptions, which then are analyzed and repaired. The address to which you send the information is located under the **dsn** key.
 
   Default settings:
@@ -270,7 +282,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     isEnabled: true
   ```
 
-- **SNOW** -
+- **SNOW** - determines if the snow animation is enabled in Busola.
 
 Default settings:
 
@@ -286,7 +298,8 @@ SNOW:
     isEnabled: false
   ```
 
-  > NOTE: Enable this feature on the frontend and backend.
+  > [!NOTE]
+  > Enable this feature on the frontend and backend.
 
 * **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at the resource details view.
 
@@ -295,33 +308,35 @@ SNOW:
     isEnabled: true
   ```
 
-- **RESOURCE_VALIDATION** - determines the selected policies for [resource validation](resource-validation/README.md). They can be overwritten in the user preferences.
+## Features List for Backend
+
+- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
+
+> [!NOTE]
+> It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
+
+Default settings:
+
+```yaml
+GZIP:
+  isEnabled: true
+```
+
+- **KYMA_COMPANION** - is used to configure location of Kyma companion API.
 
   Default settings:
 
   ```yaml
-  RESOURCE_VALIDATION:
-    isEnabled: true
-    config:
-      policies:
-        - Default
+  KYMA_COMPANION:
+    link: ''
   ```
 
-- **CLUSTER_VALIDATION** - determines whether the Cluster Validation panel for scanning the cluster should be enabled in the Cluster Overview page. The scan uses the [resource validation](resource-validation/README.md) rules.
-
-  Default settings:
+  - **TRACKING** - determines if simple application usage tracking is enabled.
 
   ```yaml
-  CLUSTER_VALIDATION:
+  TRACKING:
     isEnabled: false
   ```
 
-- **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar
-
-  Default settings:
-
-  ```yaml
-  FEEDBACK:
-    isEnabled: true
-    link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
-  ```
+  > [!NOTE]
+  > Enable this feature on the frontend and backend.
