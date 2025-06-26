@@ -2,10 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from 'state/types';
 
 export function useGetVersions() {
   const { t } = useTranslation();
-  const showKymaVersion = useFeature('SHOW_KYMA_VERSION')?.isEnabled;
+  const showKymaVersion = useFeature(configFeaturesNames.SHOW_KYMA_VERSION)
+    ?.isEnabled;
 
   const {
     data: k8sVersion,

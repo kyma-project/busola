@@ -13,10 +13,13 @@ import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetai
 import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { configFeaturesNames } from 'state/types';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
-  const showGardenerMetadata = useFeature('SHOW_GARDENER_METADATA')?.isEnabled;
+  const showGardenerMetadata = useFeature(
+    configFeaturesNames.SHOW_GARDENER_METADATA,
+  )?.isEnabled;
 
   const provider = useGetGardenerProvider({
     skip: !showGardenerMetadata,
