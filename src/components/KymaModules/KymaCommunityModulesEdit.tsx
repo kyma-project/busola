@@ -44,8 +44,8 @@ export default function CommunityModulesEdit({
     moduleReleaseMetas,
   );
 
-  console.log('installed community modules', installedCommunityModules);
-  console.log('available community modules', availableCommunityModules);
+  // console.log('installed community modules', installedCommunityModules);
+  // console.log('available community modules', availableCommunityModules);
 
   // TODO: extract it as a separte method -> markInstalledVersion
   installedCommunityModules.forEach(installedModule => {
@@ -80,7 +80,10 @@ export default function CommunityModulesEdit({
       return {
         name: key,
         versions: versionInfo.map(v => ({
-          key: v.moduleTemplateName,
+          moduleTemplate: {
+            name: v.moduleTemplate?.metadata.name,
+            namespace: v.moduleTemplate?.metadata.namespace
+          },
           version: v.version,
           channel: v.channel ?? '',
           installed: v.installed ?? false,

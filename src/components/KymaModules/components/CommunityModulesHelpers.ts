@@ -1,12 +1,13 @@
 import {
   ModuleReleaseMetaListType,
   ModuleTemplateListType,
+  ModuleTemplateType,
 } from 'components/KymaModules/support';
 
 export type VersionInfo = {
   version: string;
   channel?: string;
-  moduleTemplateName: string;
+  moduleTemplate?: ModuleTemplateType;
   installed?: boolean;
 };
 
@@ -18,7 +19,6 @@ export function getAvailableCommunityModules(
   const availableCommunityModules = communityModulesTemplates.items.reduce(
     (acc, module): Map<string, VersionInfo[]> => {
       const moduleName = module.spec.moduleName ?? 'not-found';
-      const moduleTplName = module.metadata.name;
       const version = module.spec.version;
       const channel = module.spec.channel;
       const foundModule = acc.get(moduleName);
@@ -26,7 +26,7 @@ export function getAvailableCommunityModules(
         const newVersionCandidate = {
           version: version,
           channel: channel,
-          moduleTemplateName: moduleTplName,
+          moduleTemplate: module,
         };
         const foundVersion = foundModule.find(module => {
           return (
@@ -42,7 +42,7 @@ export function getAvailableCommunityModules(
           {
             version: version,
             channel: channel,
-            moduleTemplateName: moduleTplName,
+            moduleTemplate: module,
           },
         ]);
       }

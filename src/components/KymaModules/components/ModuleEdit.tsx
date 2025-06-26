@@ -12,6 +12,10 @@ export type ModuleInfo = {
 };
 
 export type VersionInfo = {
+  moduleTemplate: {
+    name: string;
+    namespace: string;
+  };
   key: string;
   version: string;
   channel: string;
@@ -25,12 +29,13 @@ export default function CommunityModuleEdit({
 }: ModuleInfoProps) {
   const { t } = useTranslation();
 
-  const installedModule = module.versions.find(v => v.installed);
-  if (!installedModule) {
+  const installedVersion = module.versions.find(v => v.installed);
+  if (!installedVersion) {
     return <></>;
   }
 
-  // console.log('MODULE', module);
+  console.log('MODULE', module);
+  console.log('Installed Version', installedVersion);
 
   return (
     <FlexBox direction="Column" style={{ gap: '0.5rem' }} key={module?.name}>
@@ -40,19 +45,14 @@ export default function CommunityModuleEdit({
         onChange={event => {
           onChange(module.name, event.detail.selectedOption.value);
         }}
-        value={
-          installedModule?.key
-          // TODO: it's look like a default value, which should point to option
-          // findModuleSpec(kymaResource, module.name)?.channel ||
-          // findModuleStatus(kymaResource, module.name)?.channel ||
-        }
+        value={`${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}
         className="channel-select"
       >
-        {module.versions?.map(version => (
+        {module.versions?.map((version, idx) => (
           <Option
             selected={version.installed}
-            key={version.key}
-            value={`${version.key}`}
+            key={`${idx}-${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}
+            value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
           >
             {version.textToDisplay}
           </Option>
