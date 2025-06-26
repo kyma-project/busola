@@ -1,5 +1,4 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import jsyaml from 'js-yaml';
 
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -8,13 +7,16 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import ModulesCard from 'components/KymaModules/components/ModulesCard';
 
-// import { cloneDeep } from 'lodash';
 import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { CommunityModuleContext } from './providers/CommunityModuleProvider';
+import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
 import './KymaModulesAddModule.scss';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
-
+import {
+  OPERATION_STATE_INITIAL,
+  OPERATION_STATE_SUCCEEDED,
+} from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 export default function CommunityModulesAddModule(props) {
   const { t } = useTranslation();
   const post = usePost();
@@ -28,8 +30,14 @@ export default function CommunityModulesAddModule(props) {
   );
   const [selectedModules, setSelectedModules] = useState([]);
   const [resourcesToAply, setResourcesToAply] = useState([]);
+  const [uploadState, setUploadState] = useState(OPERATION_STATE_INITIAL);
 
-  // let modulesAddData;
+  const uploadResources = useUploadResources(
+    resourcesToAply,
+    setResourcesToAply,
+    setUploadState,
+    'default',
+  );
 
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({});
 
@@ -86,12 +94,6 @@ export default function CommunityModulesAddModule(props) {
   useEffect(() => {
     const getModuleResourcesLinks = () => {
       const resources = [];
-      console.log(
-        'modulesAddData',
-        modulesAddData,
-        'selectedModules',
-        selectedModules,
-      );
 
       (selectedModules || []).forEach(({ name, channel, version }) => {
         console.log('selectedModules[].forEach', name, channel, version);
@@ -107,13 +109,24 @@ export default function CommunityModulesAddModule(props) {
           );
         }
       });
-      console.log('resourcesToAply', resources);
 
       return resources;
     };
-    console.log('selectedModules', modulesAddData);
 
-    setResourcesToAply(getModuleResourcesLinks());
+    const resourcesLinks = getModuleResourcesLinks();
+    (async function() {
+      try {
+        const yamls = await getAllResourcesYamls(resourcesLinks);
+
+        setResourcesToAply(
+          yamls.map(resource => {
+            return { value: resource };
+          }),
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    })();
   }, [selectedModules]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [columnsCount, setColumnsCount] = useState(2);
@@ -198,7 +211,6 @@ export default function CommunityModulesAddModule(props) {
       ?.channels.some(({ channel: ch, isBeta }) => ch && isBeta);
   };
   async function getResourcesYamls(link) {
-    console.log('post', post, 'link', link);
     if (!link) {
       console.error('No link provided for community resource');
       return false;
@@ -217,24 +229,19 @@ export default function CommunityModulesAddModule(props) {
       return false;
     }
   }
-
-  // async function getResourcesYamls(yamlUrl) {
-  //   console.log('getResourcesYamls yamlUrl', yamlUrl);
-  //   return await fetch(yamlUrl)
-  //     .then(response => {
-  //       console.log('response');
-  //       return response.text();
-  //     })
-  //     .then(text => {
-  //       const yamlFile = jsyaml.load(text);
-  //       console.log('yamlFile', yamlFile);
-  //       return yamlFile.version;
-  //     })
-  //     .catch(e => {
-  //       console.warn(e);
-  //       return; //t('common.statuses.unknown');
-  //     });
-  // }
+  async function getAllResourcesYamls(links) {
+    if (links?.length) {
+      const yamlRes = await Promise.all(
+        links.map(async res => {
+          if (res) {
+            return await getResourcesYamls(res);
+          }
+        }),
+      );
+      console.log('!!yamlRes', yamlRes.flat());
+      return yamlRes.flat();
+    }
+  }
 
   const renderCards = () => {
     const columns = Array.from({ length: columnsCount }, () => []);
@@ -295,42 +302,8 @@ export default function CommunityModulesAddModule(props) {
           'modulesAddData',
           modulesAddData,
         );
-        console.log('resourcesToAply', resourcesToAply);
-        // await getResourcesYamls(resourcesToAply[0]);
-        await getResourcesYamls(resourcesToAply[0]);
 
-        //
-        if (resourcesToAply?.length) {
-          const yamlRes = await Promise.all(
-            resourcesToAply.map(async res => {
-              if (res) {
-                return await getResourcesYamls(res);
-              }
-            }),
-          );
-          console.log('yamlRes', yamlRes.flat());
-          // return yamlRes.flat();
-        }
-        // const newModules = selectedModules.filter(
-        //   newModules =>
-        //     !installedCommunityModules.find(
-        //       activeModules => activeModules.name === newModules.name,
-        //     ),
-        // );
-        // const selectedModulesData1 = modulesAddData.filter(
-        //   newModules =>
-        //     !selectedModules.find(
-        //       activeModules => activeModules.name === newModules.name,
-        //     ),
-        // );
-        // const selectedModulesData = modulesAddData.filter(newModules => {
-        //   return !selectedModules.find(activeModules => {
-        //     console.log('activeModules', activeModules, newModules);
-        //     return activeModules.name === newModules.name;
-        //   });
-        // });
-
-        // console.log('selectedModulesData', selectedModulesData);
+        uploadResources();
       }}
     >
       <>
