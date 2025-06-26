@@ -5,10 +5,10 @@
 
 ## HTTP Status Codes
 
-All HTTP response codes are forwarded directly from the Kubernetes API.
+All HTTP response codes are forwarded directly from the [Kubernetes API](https://kubernetes.io/docs/concepts/overview/kubernetes-api/).
 The only exceptions are:
 
-- Invalid request when the backend returns `400` with reason
+- `400` when the request is invalid. The response contains a reason
 - `502` when the backend gets the `503` response code from the Kubernetes API
 - `502` when something unexpected happened when forwarding the request. The response contains the request ID, which can help you find the root cause in the backend logs.
 
