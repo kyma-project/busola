@@ -1,6 +1,6 @@
 # Feature Flags
 
-The document explains the usage of feature flags in Busola, lists and describes all the available feature flags, and provides their configuration examples:
+The document explains the usage of feature flags in Busola, lists and describes all the available feature flags, and provides their configuration examples.
 
 ## Features priority
 
@@ -9,12 +9,12 @@ Initialisation of the Busola features is based on the `stage` property, which ca
 - `PRIMARY` - the feature is resolved while the application bootstraps. Features that should be immediately visible must be set as `PRIMARY` (for example, main navigation structure).
 - `SECONDARY` - the feature is resolved after the application is ready, it must be used for non-critical features (for example, additional navigation nodes).
 
-If the stage is not set, the feature is loaded only on-demand, most often by the iframe. Use the `useFeature` hook to request usage of such feature.
+If the stage is not set, the feature is loaded only on demand, most often by the iframe. Use the `useFeature` hook to request usage of such a feature.
 
 > [!NOTE]
 > Some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
 
-## Features list for Frontend
+## Features List for Frontend
 
 > **TIP:** The list is ordered alphabetically.
 
@@ -62,7 +62,7 @@ EXTENSIBILITY_INJECTIONS:
             link: https://github.com/kyma-project/busola
   ```
 
-- **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar
+- **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar.
 
   Default settings:
 
@@ -111,7 +111,7 @@ HIDDEN_NAMESPACES:
         apiGroup: networking.istio.io
   ```
 
-- **KYMA_COMPANION** - determines if the Kyma Companion chat window is available in Busola
+- **KYMA_COMPANION** - determines if the Kyma Companion chat window is available in Busola.
 
 Default settings:
 
@@ -138,7 +138,7 @@ KYMA_COMPANION:
       defaultKubeconfig: AAAAA-BBBBB
   ```
 
-- **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the following example.
+- **LEGAL_LINKS** – is used to show or hide legal links. You can find all the available links in the following example.
   In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include both the default link, which takes you to the default address, and a link that depends on your chosen language.
 
   Example:
@@ -274,7 +274,7 @@ GZIP:
   isEnabled: true
 ```
 
-- **KYMA_COMPANION** - is used to configure location of Kyma companion API.
+- **KYMA_COMPANION** - is used to configure the location of the Kyma companion API.
 
   Default settings:
 

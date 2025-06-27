@@ -10,7 +10,7 @@ The only exceptions are:
 
 - `400` when the request is invalid. The response contains a reason
 - `502` when the backend gets the `503` response code from the Kubernetes API
-- `502` when something unexpected happened when forwarding the request. The response contains the request ID, which can help you find the root cause in the backend logs.
+- `502` when something unexpected happened when forwarding the request. The response contains the request ID, which can help you find the root cause in the backend logs
 
 ## Connectivity Issues with Busola Against a k3d Cluster
 
@@ -24,7 +24,7 @@ When the k3d cluster's API Server is exposed on the `0.0.0.0` address on your ma
 
 ### Solution
 
-- For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup. This way, `0.0.0.0` is automatically replaced with `host.docker.internal`, which is resolved to 'routable' IP address of a Docker Desktop virtual machine.
+- For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup. This way, `0.0.0.0` is automatically replaced with `host.docker.internal`, which is resolved to a "routable" IP address of a Docker Desktop virtual machine.
 
   ```bash
   docker run --rm -it -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true --pid=host --name busola europe-docker.pkg.dev/kyma-project/prod/busola:latest

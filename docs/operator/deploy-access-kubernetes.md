@@ -4,7 +4,7 @@
 
 ![Busola Kubernetes architecture](assets/busola_kubernetes_3.svg)
 
-To expose Busola, you can use [APIRule](https://github.com/kyma-project/busola/tree/main/resources/istio), [Ingress](https://github.com/kyma-project/busola/tree/main/resources/ingress) or create your own exposing mechanism.
+To expose Busola, you can use [APIRule](https://github.com/kyma-project/busola/tree/main/resources/istio), [Ingress](https://github.com/kyma-project/busola/tree/main/resources/ingress), or create your own exposing mechanism.
 For more details about environment configuration, see [Environment-Specific Settings](configuration.md#environment-specific-settings).
 
 ## Deploying Busola in the Kubernetes Cluster
@@ -15,7 +15,7 @@ To install Busola from the release in the Kubernetes cluster, set the `NAMESPACE
 kubectl apply --namespace "${NAMESPACE}" -f https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml
 ```
 
-To install Busola from main branch in the Kubernetes cluster, run:
+To install Busola from the main branch in the Kubernetes cluster, run:
 
 ```shell
 (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
@@ -51,7 +51,7 @@ Prerequisites:
 (cd resources && kubectl apply --namespace "${NAMESPACE}" -f ingress/ingress.yaml)
 ```
 
-2. Visit `localhost`
+2. Visit `localhost`.
 
 #### Connecting to the k3d Cluster with Busola Installed
 
@@ -74,7 +74,7 @@ yq --inplace '.clusters[].cluster.server = "https://kubernetes.default.svc:443"'
 
 Prerequisites:
 
-- Sidecar Proxy injection enabled, see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
+- Sidecar Proxy injection enabled; see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
 - The API Gateway module installed, see [Quick Install](https://kyma-project.io/#/02-get-started/01-quick-install)
 
 1. Install the Istio required resources:
