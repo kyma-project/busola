@@ -216,7 +216,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   ```yaml
   SENTRY:
     isEnabled: false
-    selectors: []
     config:
       dsn: ''
   ```
@@ -253,13 +252,6 @@ SNOW:
 
   > [!NOTE]
   > This feature is enabled on the frontend and backend.
-
-* **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at the resource details view.
-
-  ```yaml
-  VISUAL_RESOURCES:
-    isEnabled: true
-  ```
 
 ## Features List for Backend
 
