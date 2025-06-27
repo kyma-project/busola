@@ -32,8 +32,8 @@ With the `feature` toggles, you can switch each Busola feature on or off and con
 Features comprise the following elements:
 
 - `FEATURE_ID`: Unique identifier, as defined in the Busola source code
-- `selector`: The k8s resources that can activate the feature
 - `isEnabled`: Activates or deactivates the feature, overwriting the status set by `selector`
+- `selector`: The Kubernetes resources that can activate the feature
 - `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
 
 See the available Busola [feature flags](../features.md) for more information.

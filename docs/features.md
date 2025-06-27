@@ -18,43 +18,6 @@ If the stage is not set, the feature is loaded only on-demand, most often by the
 
 > **TIP:** The list is ordered alphabetically.
 
-- **API_GATEWAY** – is used to show or hide the **API Gateway** view and to define which APIs are required for the view to be shown properly.
-  It is also used to determine if the **API Gateway** list should be displayed in the **Function** and **Service** details.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  API_GATEWAY:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: gateway.kyma-project.io
-  ```
-
-- **CLUSTER_VALIDATION** - determines whether the Cluster Validation panel for scanning the cluster should be enabled in the Cluster Overview page. The scan uses the [resource validation](resource-validation/README.md) rules.
-
-  Default settings:
-
-  ```yaml
-  CLUSTER_VALIDATION:
-    isEnabled: false
-  ```
-
-- **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
-  It is also used to determine if the **EventSubscriptions** should be displayed in **Function** and **Service** details.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  EVENTING:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: eventing.kyma-project.io
-  ```
-
 - **EXTENSIBILITY** - is used to indicate whether the Busola [extensibility](extensibility/README.md) feature is enabled.
 
 Default settings:
@@ -108,16 +71,6 @@ EXTENSIBILITY_INJECTIONS:
     isEnabled: true
     link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   ```
-
-- **GARDENER_LOGIN** - is used to enable or disable the option of logging in with the Gardener kubeconfig. If enabled, you must set the **kubeconfig** parameter to a valid kubeconfig object.
-
-Default settings:
-
-```yaml
-GARDENER_LOGIN:
-  isEnabled: false
-  kubeconfig: null
-```
 
 - **GET_HELP_LINKS** – is used to show or hide helper links. You can find all the available links in the following example.
   In **config**, you can find the unchangeable keys (for example, you cannot use **helpSapCom** instead of **help-sap-com**). The keys include the default link, which takes you to the default address.
