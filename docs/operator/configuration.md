@@ -9,7 +9,7 @@ Busola configuration is the product of gathering and merging the configurations 
 ### Backend
 
 - Busola backend default cluster configuration, acquired from the [defaultConfig.yaml](../../backend/settings/defaultConfig.yaml) file.
-- Busola cluster configuration, available in the Busola cluster in the ConfigMap "busola/busola-config" under the key "config".
+- Busola cluster configuration, available in the Busola cluster in the ConfigMap `busola/busola-config` under the key **config**.
   This data is mounted to the `busola` Pods, and during the local development,
   the [defaultConfig.yaml](../../backend/settings/defaultConfig.yaml) file is used.
 
