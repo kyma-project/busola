@@ -24,7 +24,6 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { ManagedWarnings } from 'components/KymaModules/components/ManagedWarnings';
 import { ChannelWarning } from 'components/KymaModules/components/ChannelWarning';
@@ -34,6 +33,8 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
+import { useDispatch } from 'react-redux';
+import { setIsFormOpenState } from 'state/formOpenSlice';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
@@ -113,7 +114,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const dispatch = useDispatch();
 
   const resourceName = kymaResource?.metadata.name;
 
@@ -319,9 +320,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
     });
     setIsManagedChanged(false);
 
-    setIsFormOpen({
-      formOpen: false,
-    });
+    dispatch(setIsFormOpenState({ formOpen: false }));
   };
   const handleCreate = async () => {
     try {
