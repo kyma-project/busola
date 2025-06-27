@@ -114,6 +114,14 @@ export const getResourcePath = (resource: any) => {
       ).toLowerCase()}/${resourceName}`;
 };
 
+export const findChannel = (
+  module: { name: string; channels: [{ version: string; channel: string }] },
+  channel: string,
+) => {
+  return module.channels.find(
+    (ch: { version: string; channel: string }) => ch.channel === channel,
+  );
+};
 export const findCrd = (resourceKind: string, crds: any) => {
   return (crds as CustomResourceDefinitionsType | null)?.items?.find(
     crd => crd.spec?.names?.kind === resourceKind,
@@ -174,16 +182,18 @@ export const findModuleTemplate = (
 };
 
 export const setChannel = (
-  module: { name: string },
+  module: { name: string; channels: [{ version: string; channel: string }] },
   channel: string,
   index: number,
   selectedModules: {
     name: string;
     channel?: string;
+    version?: string;
   }[],
   setSelectedModules: React.Dispatch<React.SetStateAction<any[]>>,
 ) => {
   const modulesToUpdate = [...selectedModules];
+  const channelData = findChannel(module, channel);
   if (
     selectedModules.find(
       (selectedModule: { name: string }) => selectedModule.name === module.name,
@@ -192,12 +202,19 @@ export const setChannel = (
     if (channel === 'predefined') {
       delete modulesToUpdate[index].channel;
     } else modulesToUpdate[index].channel = channel;
+    if (channelData?.version && modulesToUpdate[index]) {
+      modulesToUpdate[index].version = channelData.version;
+    }
   } else {
     modulesToUpdate.push({
       name: module.name,
     });
     if (channel !== 'predefined')
       modulesToUpdate[modulesToUpdate?.length - 1].channel = channel;
+    if (channelData?.version) {
+      modulesToUpdate[modulesToUpdate?.length - 1].version =
+        channelData.version;
+    }
   }
   setSelectedModules(modulesToUpdate);
 };
@@ -279,3 +296,67 @@ export const splitModuleTemplates = (
 
   return { kymaTemplates, communityTemplates };
 };
+
+export const getModuleResourcesLinks = (
+  modulesAddData: {
+    name: string;
+    channels: [
+      { version: string; channel: string; resources: { link: string }[] },
+    ];
+  }[],
+  selectedModules: {
+    name: string;
+    channel?: string;
+    version?: string;
+  }[],
+) => {
+  const resources: any = [];
+
+  (selectedModules || []).forEach(({ name, channel, version }) => {
+    const moduleData = modulesAddData?.find(module => module.name === name);
+    if (moduleData) {
+      moduleData.channels.forEach(
+        ({ channel: ch, version: v, resources: r }) => {
+          const resource = r.find(res => v === version && ch === channel);
+          if (resource?.link) {
+            resources.push(resource.link);
+          }
+        },
+      );
+    }
+  });
+
+  return resources;
+};
+
+async function getResourcesYamls(link: string, post: Function) {
+  if (!link) {
+    console.error('No link provided for community resource');
+    return false;
+  }
+
+  try {
+    const response = await post('/modules/community-resource', { link });
+    if (response?.length) {
+      return response;
+    }
+    console.error('Empty or invalid response:', response);
+    return false;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return false;
+  }
+}
+
+export async function getAllResourcesYamls(links: string[], post: Function) {
+  if (links?.length) {
+    const yamlRes = await Promise.all(
+      links.map(async res => {
+        if (res) {
+          return await getResourcesYamls(res, post);
+        }
+      }),
+    );
+    return yamlRes.flat();
+  }
+}

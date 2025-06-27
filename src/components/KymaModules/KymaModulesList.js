@@ -94,6 +94,7 @@ export default function KymaModulesList({ namespaced }) {
               selectedModules={installedCommunityModules}
               modulesLoading={communityModulesLoading}
               namespaced={namespaced}
+              resourceUrl={resourceUrl}
               setOpenedModuleIndex={setOpenedCommunityModuleIndex}
               handleResourceDelete={handleCommunityModuleDelete}
               customSelectedEntry={selectedEntry}

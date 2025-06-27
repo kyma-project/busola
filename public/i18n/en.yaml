@@ -646,6 +646,8 @@ extensibility:
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
     modules:
+      no-community-modules: No community modules available
+      no-community-modules-installed: No community modules installed
       no-modules: No modules available
       no-modules-installed: No modules installed
       all-modules-added: You have added all the modules
@@ -804,6 +806,7 @@ kyma-modules:
   module-documentation: Documentation
   modules-channel: Modules Channel
   add-module: Add Modules
+  add-community-module: Add Community Modules
   no-modules-description: Customize your cluster by adding the modules you need.
   description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
   release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
@@ -827,6 +830,9 @@ kyma-modules:
   change: Change
   change-release-channel: Change Release Channel
   change-release-channel-warning: The module's version in the fast channel is usually higher than the version in the regular channel. As downgrades are not supported, switching the channel back to regular will not affect the module's version <0>until the channel version is the same or higher.</0> To use the lower version, you must delete the module and re-add it from the <0>regular</0> channel.
+  messages:
+    failure: 'Failed to install the {{resourceType}}: {{error}}'
+    success: '{{resourceType}} installed'
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
