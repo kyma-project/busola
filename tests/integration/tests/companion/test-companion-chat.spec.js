@@ -601,7 +601,7 @@ context('Test Companion Chat Behavior', () => {
     cy.wait(1000);
 
     cy.get('@companion')
-      .find('ui5-button[accessible-name="Place"]')
+      .find('ui5-button[accessible-name="Replace"]')
       .click();
 
     // Check if redirected to correct Deployment Edit From

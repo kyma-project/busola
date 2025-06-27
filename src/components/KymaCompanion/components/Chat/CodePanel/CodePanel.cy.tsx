@@ -24,7 +24,7 @@ describe('CodePanel Component', () => {
 
     cy.get('.code-panel').should('exist');
     cy.get('ui5-panel').should('exist');
-    cy.get('ui5-title').should('contain.text', language);
+    cy.get('ui5-title').should('contain.text', language.toLocaleUpperCase());
     cy.get('pre').should('exist');
     cy.get('code').should('contain.text', code);
   });
@@ -132,7 +132,7 @@ describe('CodePanel Component', () => {
       .should('have.attr', 'icon', 'sys-add');
     cy.get('.action-button')
       .eq(1)
-      .should('contain.text', t('common.buttons.place'));
+      .should('contain.text', t('common.buttons.replace'));
   });
 
   it('handles long code samples with proper wrapping', () => {
@@ -154,7 +154,7 @@ describe('CodePanel Component', () => {
       const code = `// Sample ${lang} code`;
       cy.mount(<CodePanel code={code} language={lang} />);
 
-      cy.get('ui5-title').should('contain.text', lang);
+      cy.get('ui5-title').should('contain.text', lang.toLocaleUpperCase());
       cy.get('code').should('contain.text', code);
       cy.get('ui5-panel').should('exist');
     });
@@ -198,7 +198,7 @@ describe('CodePanel Component', () => {
 
     cy.mount(<CodePanel code={code} language={language} />);
 
-    cy.get('ui5-title').should('contain.text', language);
+    cy.get('ui5-title').should('contain.text', language.toLocaleUpperCase());
     cy.get('ui5-title').should('have.attr', 'level', 'H6');
   });
 });

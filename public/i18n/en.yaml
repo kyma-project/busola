@@ -248,6 +248,7 @@ common:
     learn-more: Learn More
     ok: OK
     place: Place
+    replace: Replace
     remove-all: Remove all
     reset: Reset
     restart: Restart
