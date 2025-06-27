@@ -33,6 +33,14 @@ To learn how to install the dashboard with Istio Ingress and install it in a Kym
 
 Run the `npm start` command.
 
+## Related Information
+
+- For more information on the Busola configuration, see [Configuration](docs/operator/configuration.md).
+- For more information on using Busola for development, see [Development](docs/contributor/development.md).
+- To learn how to run Busola in Docker, see [Busola in Docker](docs/contributor/busola-docker.md).
+- To learn how to deploy and access Busola in the Kubernetes cluster, see [Deploying and Accessing Busola in the Kubernetes Cluster](docs/operator/deploy-access-kubernetes.md).
+- For more information on troubleshooting Busola, see [Troubleshooting](docs/contributor/troubleshooting.md).
+
 ## Contributing
 
 See the [Contributing Rules](CONTRIBUTING.md).
@@ -44,9 +52,3 @@ See the [Code of Conduct](CODE_OF_CONDUCT.md) document.
 ## Licensing
 
 See the [license](./LICENSE) file.
-
-- For more information on the Busola configuration, see [Configuration](docs/operator/configuration.md).
-- For more information on using Busola for development, see [Development](docs/contributor/development.md).
-- To learn how to run Busola in Docker, see [Busola in Docker](docs/contributor/busola-docker.md).
-- To learn how to deploy and access Busola in the Kubernetes cluster, see [Deploying and Accessing Busola in the Kubernetes Cluster](docs/operator/deploy-access-kubernetes.md).
-- For more information on troubleshooting Busola, see [Troubleshooting](docs/contributor/troubleshooting.md).
