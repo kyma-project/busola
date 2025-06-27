@@ -34,9 +34,6 @@ export default function CommunityModuleEdit({
     return <></>;
   }
 
-  console.log('MODULE', module);
-  console.log('Installed Version', installedVersion);
-
   return (
     <FlexBox direction="Column" style={{ gap: '0.5rem' }} key={module?.name}>
       <Label>{`${module.name}:`}</Label>

@@ -211,17 +211,26 @@ export default function KymaModulesEdit({ resource, ...props }) {
 
   const communityModules = getCommunityModules(moduleTemplates);
 
-  // TODO: detect if version return to the old one
+  // TODO: detect if version return to the initial one to setChanged to false
   const onCommunityChange = (module, value) => {
     console.log(module, value);
+    const [name, namespace] = value.split('|');
+    const moduleTemplate = {
+      name,
+      namespace,
+    };
+
     const modules = [...communityModulesToApply];
     const moduleToUpdateIdx = modules.findIndex(m => m.moduleName === module);
     if (moduleToUpdateIdx < 0) {
-      modules.push({ moduleName: module, moduleTempplate: value });
+      modules.push({ moduleName: module, moduleTemplate: moduleTemplate });
     } else {
-      modules[moduleToUpdateIdx].moduleTemplate = value;
+      modules[moduleToUpdateIdx].moduleTemplate = moduleTemplate;
     }
     console.log('Modules to Update', modules);
+    setIsResourceEdited({
+      isEdited: true,
+    });
     setCommunityModulesToApply([...modules]);
   };
 

@@ -9,6 +9,7 @@ import {
   ModuleTemplateStatus,
   ModuleTemplateType,
 } from './support';
+import { getInstalledModules } from 'components/KymaModules/components/CommunityModulesHelpers';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
@@ -188,24 +189,10 @@ export const useGetInstalledModules = (
     return { installed: [], loading: false, error: null };
   }
 
-  // TODO: extract it as find version match in manager images
-  const installedModules = moduleTemplates.items?.filter(module => {
-    const foundManager = managers[module.metadata.name];
-    if (!foundManager) {
-      return false;
-    }
-    const managerVersion = foundManager.spec?.template?.spec.containers
-      .map(container => {
-        const imgName = container.image.split(':');
-        const imgTag = imgName[imgName.length - 1];
-        return imgTag;
-      })
-      .find((imgTag: string) => imgTag === 'v' + module.spec.version);
-    return !!managerVersion;
-  });
+  const installedModules = getInstalledModules(moduleTemplates, managers);
 
   const installed =
-    installedModules?.map(module => ({
+    installedModules.items?.map(module => ({
       name:
         module.metadata?.labels['operator.kyma-project.io/module-name'] ??
         module.spec.moduleName,

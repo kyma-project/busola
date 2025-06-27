@@ -8,6 +8,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { getAvailableCommunityModules, VersionInfo } from 'components/KymaModules/components/CommunityModulesHelpers';
 import { ModuleReleaseMetaListType, ModuleTemplateListType } from 'components/KymaModules/support';
 import { Button } from '@ui5/webcomponents-react';
+import React, { useMemo } from 'react';
 
 type CommunityModulesEditProp = {
   communityModules: ModuleTemplateListType;
@@ -27,6 +28,13 @@ export default function CommunityModulesEdit({
     'COMMUNITY_MODULES',
   );
 
+  const availableCommunityModules = useMemo(() => {
+    return getAvailableCommunityModules(
+      communityModules,
+      moduleReleaseMetas,
+    );
+  }, [communityModules, moduleReleaseMetas]);
+
   const {
     installed: installedCommunityModules,
     loading,
@@ -39,15 +47,10 @@ export default function CommunityModulesEdit({
     );
   }
 
-  const availableCommunityModules = getAvailableCommunityModules(
-    communityModules,
-    moduleReleaseMetas,
-  );
-
   // console.log('installed community modules', installedCommunityModules);
   // console.log('available community modules', availableCommunityModules);
 
-  // TODO: extract it as a separte method -> markInstalledVersion
+  // TODO: extract it as a separate method -> markInstalledVersion
   installedCommunityModules.forEach(installedModule => {
     const foundModuleVersions = availableCommunityModules.get(
       installedModule.name,
@@ -82,7 +85,7 @@ export default function CommunityModulesEdit({
         versions: versionInfo.map(v => ({
           moduleTemplate: {
             name: v.moduleTemplate?.metadata.name,
-            namespace: v.moduleTemplate?.metadata.namespace
+            namespace: v.moduleTemplate?.metadata.namespace,
           },
           version: v.version,
           channel: v.channel ?? '',
@@ -94,55 +97,59 @@ export default function CommunityModulesEdit({
   );
 
   const onSave = () => {
+    console.log('Saving version change');
   };
-  console.log(communityModulesToDisplay);
 
   if (isCommunityModulesEnabled || loading) {
     // @ts-ignore
     return (
-      <UI5Panel
-        title={''}
-        headerActions={
-          <Button
-            className="min-width-button"
-            // disabled={readOnly || disableEdit}
-            // aria-disabled={readOnly || disableEdit}
-            onClick={onSave}
-            design="Emphasized"
-            // tooltip={invalidPopupMessage}
-          >
-            {t('common.buttons.save')}
-          </Button>
-        }
-        children={
-          <CollapsibleSection
-            defaultOpen={true}
-            className="collapsible-margins"
-            title={t('community-modules.title')}
-          >
-            {/*<Form*/}
-            {/*  className={'resource-form ui5-content-density-compact'}*/}
-            {/*  labelSpan="S0 M0 L0 XL0"*/}
-            {/*  layout="S1 M1 L1 XL1"*/}
-            {/*>*/}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '3fr 3fr',
-                gap: '0.5rem 1rem',
-              }}
+      <section>
+        <UI5Panel
+          title={''}
+          headerActions={
+            <Button
+              className="min-width-button"
+              // disabled={readOnly || disableEdit}
+              // aria-disabled={readOnly || disableEdit}
+              onClick={onSave}
+              design="Emphasized"
+              // tooltip={invalidPopupMessage}
             >
-              {communityModulesToDisplay &&
-                communityModulesToDisplay.map(module => {
-                  return (
-                    <CommunityModuleEdit module={module} onChange={onChange} />
-                  );
-                })}
-            </div>
-            {/*</Form>*/}
-          </CollapsibleSection>
-        }
-      ></UI5Panel>
+              {t('common.buttons.save')}
+            </Button>
+          }
+          children={
+            <CollapsibleSection
+              defaultOpen={true}
+              className="collapsible-margins"
+              title={t('community-modules.title')}
+            >
+              {/*<Form*/}
+              {/*  className={'resource-form ui5-content-density-compact'}*/}
+              {/*  labelSpan="S0 M0 L0 XL0"*/}
+              {/*  layout="S1 M1 L1 XL1"*/}
+              {/*>*/}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '3fr 3fr',
+                  gap: '0.5rem 1rem',
+                }}
+              >
+                {communityModulesToDisplay &&
+                  communityModulesToDisplay.map(module => {
+                    return (
+                      <CommunityModuleEdit module={module} onChange={onChange} />
+                    );
+                  })}
+              </div>
+              {/*</Form>*/}
+            </CollapsibleSection>
+          }
+        >
+        </UI5Panel>
+        {/*{createPortal(<UnsavedMessageBox />, document.body)}*/}
+      </section>
 
       //
       // <ResourceForm
