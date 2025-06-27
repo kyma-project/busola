@@ -299,7 +299,7 @@ SNOW:
   ```
 
   > [!NOTE]
-  > Enable this feature on the frontend and backend.
+  > This feature is enabled on the frontend and backend.
 
 * **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at the resource details view.
 
@@ -310,10 +310,10 @@ SNOW:
 
 ## Features List for Backend
 
-- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
-
 > [!NOTE]
-> It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
+> Backend features cannot be modified at the cluster's ConfigMap level.
+
+- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
 
 Default settings:
 
@@ -339,4 +339,4 @@ GZIP:
   ```
 
   > [!NOTE]
-  > Enable this feature on the frontend and backend.
+  > This feature is enabled on the frontend and backend.
