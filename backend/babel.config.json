@@ -9,7 +9,8 @@
         "targets": {
           "node": 12
         }
-      }
+      },
+      "jotai/babel/preset"
     ]
   ]
 }

@@ -27,6 +27,7 @@ import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ModulesListRows } from './ModulesListRows';
 import { useNavigate } from 'react-router';
+import { useSetAtom } from 'jotai';
 
 type ModulesListProps = {
   resource: KymaResourceType;
@@ -76,7 +77,7 @@ export const ModulesList = ({
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
 
   const handleShowAddModule = () => {
     setLayoutColumn({

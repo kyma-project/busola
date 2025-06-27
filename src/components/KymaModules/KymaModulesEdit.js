@@ -34,6 +34,7 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
+import { useSetAtom } from 'jotai';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
@@ -113,7 +114,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
 

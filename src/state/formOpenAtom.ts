@@ -1,4 +1,4 @@
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'jotai';
 
 export interface IsFormOpenState {
   formOpen: boolean;
@@ -7,9 +7,5 @@ export interface IsFormOpenState {
 
 const defaultValue = { formOpen: false, leavingForm: false };
 
-export const isFormOpenState: RecoilState<IsFormOpenState> = atom<
-  IsFormOpenState
->({
-  key: 'isFormOpenState',
-  default: defaultValue,
-});
+export const isFormOpenState = atom<IsFormOpenState>(defaultValue);
+isFormOpenState.debugLabel = 'isFormOpenState';

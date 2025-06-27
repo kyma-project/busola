@@ -2,12 +2,13 @@ import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { useAtom } from 'jotai';
 
 export function useFormNavigation() {
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,
   );
-  const [{ formOpen }, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenState);
 
   const navigateSafely = useCallback(
     (action: Function) => {

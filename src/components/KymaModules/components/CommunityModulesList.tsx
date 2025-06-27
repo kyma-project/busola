@@ -24,6 +24,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
 import { useFetchModuleData } from '../hooks';
 import { ModulesListRows } from './ModulesListRows';
+import { useSetAtom } from 'jotai';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -67,7 +68,7 @@ export const CommunityModulesList = ({
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
   const { getItem: getModuleResource } = useFetchModuleData(
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.data ?? null,
