@@ -14,6 +14,8 @@ import {
   fetchResourceCounts,
   generateAssociatedResourcesUrls,
   getAssociatedResources,
+  getCommunityResourceUrls,
+  getCommunityResources,
   getCRResource,
   handleItemClick,
 } from '../deleteModulesHelpers';
@@ -26,6 +28,7 @@ import { cloneDeep } from 'lodash';
 import { KymaResourceType, ModuleTemplateListType } from '../support';
 import { SetterOrUpdater } from 'recoil';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
@@ -33,8 +36,9 @@ type ModulesListDeleteBoxProps = {
   selectedModules: { name: string }[];
   chosenModuleIndex: number | null;
   kymaResource: KymaResourceType;
-  kymaResourceState: KymaResourceType;
+  kymaResourceState?: KymaResourceType;
   detailsOpen: boolean;
+  isCommunity?: boolean;
   setLayoutColumn: SetterOrUpdater<ColumnLayoutState>;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
@@ -50,6 +54,7 @@ export const ModulesDeleteBox = ({
   kymaResource,
   kymaResourceState,
   detailsOpen,
+  isCommunity,
   setLayoutColumn,
   handleModuleUninstall,
   setChosenModuleIndex,
@@ -62,10 +67,14 @@ export const ModulesDeleteBox = ({
   const { clusterUrl, namespaceUrl } = useUrl();
   const deleteResourceMutation = useDelete();
   const fetchFn = useSingleGet();
+  const post = usePost();
 
   const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});
   const [forceDeleteUrls, setForceDeleteUrls] = useState<string[]>([]);
   const [crUrls, setCrUrls] = useState<string[]>([]);
+  const [communityResourcesUrls, setCommunityResourcesUrls] = useState<
+    string[]
+  >([]);
   const [allowForceDelete, setAllowForceDelete] = useState(false);
   const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
 
@@ -99,16 +108,31 @@ export const ModulesDeleteBox = ({
         selectedModules,
         kymaResource,
         moduleTemplates,
+        isCommunity,
       );
 
-      const crUrl = await generateAssociatedResourcesUrls(
-        crUResources,
-        fetchFn,
-        clusterUrl,
-        getScope,
-        namespaceUrl,
-        navigate,
-      );
+      const crUrl = isCommunity
+        ? getCommunityResourceUrls(crUResources)
+        : await generateAssociatedResourcesUrls(
+            crUResources,
+            fetchFn,
+            clusterUrl,
+            getScope,
+            namespaceUrl,
+            navigate,
+          );
+
+      if (isCommunity) {
+        const communityResources = await getCommunityResources(
+          chosenModuleIndex,
+          selectedModules,
+          kymaResource,
+          moduleTemplates,
+          post,
+        );
+        const communityUrls = getCommunityResourceUrls(communityResources);
+        setCommunityResourcesUrls(communityUrls);
+      }
 
       setResourceCounts(counts);
       setForceDeleteUrls(urls);
@@ -129,6 +153,61 @@ export const ModulesDeleteBox = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourceCounts, associatedResources]);
+
+  const deleteAllResources = () => {
+    if (allowForceDelete && forceDeleteUrls.length > 0) {
+      deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
+    }
+    if (chosenModuleIndex != null) {
+      selectedModules.splice(chosenModuleIndex, 1);
+    }
+    if (!isCommunity && kymaResource) {
+      setKymaResourceState({
+        ...kymaResource,
+        spec: {
+          ...kymaResource.spec,
+          modules: selectedModules,
+        },
+      });
+      handleModuleUninstall();
+      setInitialUnchangedResource(cloneDeep(kymaResourceState));
+    }
+
+    if (detailsOpen) {
+      setLayoutColumn({
+        layout: 'OneColumn',
+        startColumn: null,
+        midColumn: null,
+        endColumn: null,
+      });
+    }
+    if (allowForceDelete && forceDeleteUrls.length > 0) {
+      deleteCrResources(deleteResourceMutation, crUrls);
+    }
+  };
+
+  const deleteCommunityResources = async () => {
+    if (allowForceDelete && forceDeleteUrls.length) {
+      // Delete associated resources.
+      await deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
+    }
+    if (allowForceDelete && crUrls?.length) {
+      // Delete spec.data.
+      await deleteCrResources(deleteResourceMutation, crUrls);
+    }
+    if (allowForceDelete && communityResourcesUrls?.length) {
+      // Delete community resources.
+      await deleteCrResources(deleteResourceMutation, communityResourcesUrls);
+    }
+    if (detailsOpen) {
+      setLayoutColumn({
+        layout: 'OneColumn',
+        startColumn: null,
+        midColumn: null,
+        endColumn: null,
+      });
+    }
+  };
 
   return (
     <DeleteMessageBox
@@ -230,31 +309,10 @@ export const ModulesDeleteBox = ({
           : ''
       }
       deleteFn={() => {
-        if (allowForceDelete && forceDeleteUrls.length > 0) {
-          deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
-        }
-        if (chosenModuleIndex != null) {
-          selectedModules.splice(chosenModuleIndex, 1);
-        }
-        setKymaResourceState({
-          ...kymaResource,
-          spec: {
-            ...kymaResource.spec,
-            modules: selectedModules,
-          },
-        });
-        handleModuleUninstall();
-        setInitialUnchangedResource(cloneDeep(kymaResourceState));
-        if (detailsOpen) {
-          setLayoutColumn({
-            layout: 'OneColumn',
-            startColumn: null,
-            midColumn: null,
-            endColumn: null,
-          });
-        }
-        if (allowForceDelete && forceDeleteUrls.length > 0) {
-          deleteCrResources(deleteResourceMutation, crUrls);
+        if (!isCommunity && kymaResource) {
+          deleteAllResources();
+        } else if (isCommunity) {
+          deleteCommunityResources();
         }
       }}
     />
