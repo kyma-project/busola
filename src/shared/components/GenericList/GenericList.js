@@ -63,6 +63,7 @@ export const GenericList = ({
   customColumnLayout = null,
   enableColumnLayout,
   resourceType = '',
+  rawResourceType = '',
   customUrl,
   hasDetailsView,
   disableHiding = true,
@@ -227,32 +228,7 @@ export const GenericList = ({
       }
 
       if (!entries.length) {
-        return (
-          <BodyFallback>
-            {emptyListProps?.simpleEmptyListMessage === false ||
-            (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
-              <EmptyListComponent
-                titleText={emptyListProps.titleText}
-                subtitleText={emptyListProps.subtitleText}
-                showButton={emptyListProps.showButton}
-                buttonText={emptyListProps.buttonText}
-                url={emptyListProps.url}
-                onClick={emptyListProps.onClick}
-                image={emptyListProps?.image}
-              />
-            ) : (
-              <p>
-                {emptyListProps?.titleText ? (
-                  <Trans i18nKey={emptyListProps?.titleText} />
-                ) : i18n.exists(notFoundMessage) ? (
-                  t(notFoundMessage)
-                ) : (
-                  notFoundMessage
-                )}
-              </p>
-            )}
-          </BodyFallback>
-        );
+        return;
       }
     }
 
@@ -296,12 +272,13 @@ export const GenericList = ({
             isModuleSelected
           }
           index={index}
-          key={e.metadata?.uid || e.name || e.metadata?.name || index}
+          key={`${e.metadata?.uid || e.name || e.metadata?.name}-${index}`}
           entry={e}
           actions={actions}
           rowRenderer={rowRenderer}
           displayArrow={displayArrow}
           hasDetailsView={hasDetailsView}
+          enableColumnLayout={enableColumnLayout}
         />
       );
     });
@@ -374,7 +351,7 @@ export const GenericList = ({
                   selectedEntry?.metadata?.name ??
                   e.target.children[0].innerText,
                 resourceType: resourceType,
-                rawResourceTypeName: resourceType,
+                rawResourceTypeName: rawResourceType,
                 namespaceId: selectedEntry?.metadata?.namespace,
                 apiGroup: group,
                 apiVersion: version,
@@ -414,11 +391,43 @@ export const GenericList = ({
       className={className}
     >
       <Table
+        noData={
+          <div>
+            {!serverDataError && !serverDataLoading && !entries?.length ? (
+              emptyListProps?.simpleEmptyListMessage === false ||
+              (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
+                <EmptyListComponent
+                  titleText={emptyListProps.titleText}
+                  subtitleText={emptyListProps.subtitleText}
+                  showButton={emptyListProps.showButton}
+                  buttonText={emptyListProps.buttonText}
+                  url={emptyListProps.url}
+                  onClick={emptyListProps.onClick}
+                  image={emptyListProps?.image}
+                />
+              ) : (
+                <p>
+                  {emptyListProps?.titleText ? (
+                    <Trans i18nKey={emptyListProps?.titleText} />
+                  ) : i18n.exists(notFoundMessage) ? (
+                    t(notFoundMessage)
+                  ) : (
+                    notFoundMessage
+                  )}
+                </p>
+              )
+            ) : (
+              <Spinner />
+            )}
+          </div>
+        }
         overflowMode={setOverflowMode()}
         accessibleName={accessibleName ?? title}
         rowActionCount={displayArrow ? 1 : 0}
         className={`ui5-generic-list ${
-          hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
+          hasDetailsView && filteredEntries.length && enableColumnLayout
+            ? 'cursor-pointer'
+            : ''
         }`}
         onMouseDown={() => {
           window.getSelection().removeAllRanges();

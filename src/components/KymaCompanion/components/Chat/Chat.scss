@@ -6,39 +6,35 @@
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
-
+    position: relative;
     &::-webkit-scrollbar {
       display: none;
     }
 
-    .message-container.left-aligned {
-      position: relative;
-      align-self: flex-start;
-    }
+    .context-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
 
-    .message-container.right-aligned {
-      position: relative;
-      align-self: flex-end;
-    }
-  }
-
-  .outer-input-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    .input-container {
-      position: relative;
-
-      #text-area-icon {
-        position: absolute;
-        right: 0.5rem;
-        bottom: 0.6rem;
+      &:not(:first-child) {
+        margin-top: 8px;
       }
-    }
 
-    #disclaimer {
-      font-size: 0.65rem;
+      .message-context {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .message-container.left-aligned {
+          position: relative;
+          align-self: flex-start;
+        }
+
+        .message-container.right-aligned {
+          position: relative;
+          align-self: flex-end;
+        }
+      }
     }
   }
 }

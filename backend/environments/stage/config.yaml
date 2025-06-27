@@ -1,0 +1,8 @@
+config:
+  features:
+    GZIP:
+      isEnabled: true
+    TRACKING:
+      isEnabled: false
+    KYMA_COMPANION:
+      link: 'test-stage'

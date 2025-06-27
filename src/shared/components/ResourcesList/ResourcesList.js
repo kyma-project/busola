@@ -26,6 +26,8 @@ import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
 import { useNavigate } from 'react-router';
+import { useUrl } from 'hooks/useUrl';
+import { Link } from '../Link/Link';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -53,6 +55,7 @@ ResourcesList.propTypes = {
   createActionLabel: PropTypes.string,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
+  rawResourceType: PropTypes.string.isRequired,
   resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
@@ -191,6 +194,7 @@ function Resources(props) {
 export function ResourceListRenderer({
   resourceUrl,
   resourceType,
+  rawResourceType,
   resourceTitle,
   namespace,
   customColumns = [],
@@ -230,7 +234,7 @@ export function ResourceListRenderer({
   emptyListProps = null,
   simpleEmptyListMessage = false,
   disableHiding,
-  displayArrow,
+  displayArrow = enableColumnLayout,
   accessibleName,
 }) {
   useVersionWarning({
@@ -260,15 +264,55 @@ export function ResourceListRenderer({
     resourceTitle,
     resourceType,
   );
+  const { resourceUrl: resourceUrlFn } = useUrl();
+
+  const linkTo = entry => {
+    const overrides = namespace === '-all-' ? { namespace } : {};
+    return customUrl
+      ? customUrl(entry)
+      : resourceUrlFn(entry, { resourceType, ...overrides });
+  };
+
+  const onLinkClick = (entry, e) => {
+    e.preventDefault();
+
+    setLayoutColumn({
+      midColumn: null,
+      showCreate: null,
+      endColumn: null,
+      layout: 'OneColumn',
+      showEdit: null,
+      startColumn: {
+        resourceName: entry?.metadata?.name ?? e.target.innerText,
+        resourceType: resourceType,
+        rawResourceTypeName: rawResourceType,
+        namespaceId: entry?.metadata?.namespace,
+        apiGroup: entry.metadata.group,
+        apiVersion: entry.apiVersion,
+      },
+    });
+
+    navigate(`${linkTo(entry)}`);
+  };
 
   const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-            {nameSelector(entry)}
-          </Text>
+          enableColumnLayout ? (
+            <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
+              {nameSelector(entry)}
+            </Text>
+          ) : (
+            <Link
+              url={`${linkTo(entry)}`}
+              onClick={e => onLinkClick(entry, e)}
+              style={{ fontWeight: 'bold' }}
+            >
+              {nameSelector(entry)}
+            </Link>
+          )
         ) : (
           <b>{nameSelector(entry)}</b>
         ),
@@ -349,7 +393,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
-              rawResourceTypeName: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
               resource: activeResource,
             },
@@ -362,6 +406,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
               resource: activeResource,
             },
@@ -450,7 +495,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: layoutState?.midColumn.resourceName,
-              rawResourceTypeName: layoutState?.midColumn.resourceName,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
             },
             showEdit: null,
@@ -462,6 +507,7 @@ export function ResourceListRenderer({
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
             },
             showEdit: null,
@@ -543,6 +589,7 @@ export function ResourceListRenderer({
             hasDetailsView={hasDetailsView}
             customUrl={customUrl}
             resourceType={resourceType}
+            rawResourceType={rawResourceType}
             customColumnLayout={customColumnLayout}
             columnLayout={columnLayout}
             enableColumnLayout={enableColumnLayout}

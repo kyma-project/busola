@@ -43,7 +43,7 @@ export function addCluster(
   switchCluster = true,
 ) {
   const { setClusters } = clustersInfo;
-  setClusters({ [params.contextName]: params });
+  setClusters(prev => ({ ...prev, [params.contextName]: params }));
   if (switchCluster) {
     addCurrentCluster(params, clustersInfo);
   }
@@ -166,20 +166,12 @@ export const addByContext = (
     const user = kubeconfig.users.find(u => u.name === context.context.user);
     if (!user) throw Error('user not found');
 
-    const newKubeconfig: ValidKubeconfig = {
-      ...kubeconfig,
-      'current-context': context.name,
-      contexts: [context],
-      clusters: [cluster],
-      users: [user],
-    };
-
     const clusterParams: NonNullable<ActiveClusterState> = {
       name: context.name,
-      kubeconfig: newKubeconfig,
+      kubeconfig: kubeconfig,
       contextName: context.name,
       config: { ...config, storage },
-      currentContext: getContext(newKubeconfig, context.name),
+      currentContext: getContext(kubeconfig, context.name),
     };
 
     addCluster(clusterParams, clustersInfo, switchCluster);

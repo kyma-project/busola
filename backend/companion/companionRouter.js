@@ -1,7 +1,13 @@
 import express from 'express';
 import { TokenManager } from './TokenManager';
+import { pipeline } from 'stream/promises';
+import { Readable } from 'stream';
+
+const config = require('../config.js');
 
 const tokenManager = new TokenManager();
+const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.link ??
+  ''}/api/conversations/`;
 
 const router = express.Router();
 
@@ -22,7 +28,7 @@ async function handlePromptSuggestions(req, res) {
   const clientKeyData = req.headers['x-client-key-data'];
 
   try {
-    const url = 'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
+    const endpointUrl = COMPANION_API_BASE_URL;
     const payload = {
       resource_kind: resourceType,
       resource_api_version: groupVersion,
@@ -49,7 +55,7 @@ async function handlePromptSuggestions(req, res) {
       throw new Error('Missing authentication credentials');
     }
 
-    const response = await fetch(url, {
+    const response = await fetch(endpointUrl, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
@@ -92,11 +98,10 @@ async function handleChatMessage(req, res) {
     if (!uuidPattern.test(conversationId)) {
       throw new Error('Invalid session ID ');
     }
-    const baseUrl =
-      'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
-    const targetUrl = new URL(
+
+    const endpointUrl = new URL(
       `${encodeURIComponent(conversationId)}/messages`,
-      baseUrl,
+      COMPANION_API_BASE_URL,
     );
 
     const payload = {
@@ -111,7 +116,6 @@ async function handleChatMessage(req, res) {
 
     // Set up headers for streaming response
     res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
@@ -133,31 +137,18 @@ async function handleChatMessage(req, res) {
       throw new Error('Missing authentication credentials');
     }
 
-    const response = await fetch(targetUrl, {
+    const response = await fetch(endpointUrl, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
     });
 
-    if (!response.body) {
-      throw new Error('Response body is null');
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { done, value } = await reader.read();
-
-      if (done) {
-        break;
-      }
-
-      const chunk = decoder.decode(value, { stream: true });
-      res.write(chunk);
-    }
-
-    res.end();
+    const stream = Readable.fromWeb(response.body);
+    await pipeline(stream, res);
   } catch (error) {
     if (!res.headersSent) {
       res.status(500).json({ error: 'Failed to fetch AI chat data' });
@@ -188,11 +179,9 @@ async function handleFollowUpSuggestions(req, res) {
   const conversationId = sessionId;
 
   try {
-    const baseUrl =
-      'https://companion.cp.dev.kyma.cloud.sap/api/conversations/';
-    const targetUrl = new URL(
+    const endpointUrl = new URL(
       `${encodeURIComponent(conversationId)}/questions`,
-      baseUrl,
+      COMPANION_API_BASE_URL,
     );
 
     const AUTH_TOKEN = await tokenManager.getToken();
@@ -215,7 +204,7 @@ async function handleFollowUpSuggestions(req, res) {
       throw new Error('Missing authentication credentials');
     }
 
-    const response = await fetch(targetUrl, {
+    const response = await fetch(endpointUrl, {
       method: 'GET',
       headers,
     });

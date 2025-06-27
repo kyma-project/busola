@@ -103,6 +103,7 @@ context('Accessibility test Extensions view', () => {
       clearSearch: false,
       checkIfResourceIsRemoved: false,
       selectSearchResult: true,
+      searchInPlainTableText: true,
     });
 
     cy.get('ui5-table-row')

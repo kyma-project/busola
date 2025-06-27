@@ -24,7 +24,7 @@ Cypress.Commands.add('resetCompanion', () => {
 
 Cypress.Commands.add('sendPrompt', prompt => {
   cy.get('.kyma-companion')
-    .find('ui5-textarea[placeholder="Message Joule"]')
+    .find('ui5-textarea[placeholder="Message Joule..."]')
     .find('textarea')
     .should('be.visible')
     .type(`${prompt}{enter}`);

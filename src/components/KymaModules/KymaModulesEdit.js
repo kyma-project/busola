@@ -40,7 +40,15 @@ const addChannelsToModules = moduleReleaseMetas => {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => item.name === name);
-    if (module.spec.channel) {
+    const moduleMetaRelase = moduleReleaseMetas?.items.find(
+      item => item.spec.moduleName === name,
+    );
+
+    const isModuleMetaRelease = acc.find(
+      item => item.name === moduleMetaRelase?.spec?.moduleName,
+    );
+
+    if (module.spec.channel && !isModuleMetaRelease) {
       if (!existingModule) {
         acc.push({
           name: name,
@@ -68,9 +76,6 @@ const addChannelsToModules = moduleReleaseMetas => {
       }
     } else {
       if (!existingModule) {
-        const moduleMetaRelase = moduleReleaseMetas?.items.find(
-          item => item.spec.moduleName === name,
-        );
         moduleMetaRelase?.spec.channels.forEach(channel => {
           if (!acc.find(item => item.name === name)) {
             acc.push({

@@ -1,42 +1,22 @@
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
 import { handleTracking } from './tracking.js';
-import jsyaml from 'js-yaml';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
+import communityRouter from './modules/communityRouter';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
-const merge = require('lodash.merge');
-
-global.config = {};
-
-try {
-  // config from the copnfiguration file
-
-  const defaultConfig = jsyaml.load(
-    fs.readFileSync('./settings/defaultConfig.yaml'),
-  );
-
-  // config retrieved from busola's config map
-  // path exist after docker build
-  if (fs.existsSync('./config/config.yaml')) {
-    const configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
-    global.config = merge(defaultConfig, configFromMap).config;
-  } else {
-    global.config = defaultConfig.config;
-  }
-} catch (e) {
-  console.log('Error while reading the configuration files', e?.message || e);
-}
+const config = require('./config.js');
 
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
 
-const gzipEnabled = global.config.features?.GZIP?.isEnabled;
+const gzipEnabled = config.features?.GZIP?.isEnabled;
+
 if (gzipEnabled)
   app.use(
     compression({
@@ -94,12 +74,14 @@ if (isDocker) {
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend/modules', communityRouter);
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
   handleTracking(app);
   app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend/modules', communityRouter);
   app.use('/backend', handleRequest);
 }
 

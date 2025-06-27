@@ -136,6 +136,7 @@ const DefaultRowRenderer = ({
   isSelected = false,
   displayArrow = false,
   hasDetailsView,
+  enableColumnLayout = false,
 }) => {
   const cells = rowRenderer.map((cell, id) => {
     if (cell?.content) {
@@ -150,7 +151,12 @@ const DefaultRowRenderer = ({
     }
   });
   const actionsCell = (
-    <TableCell horizontalAlign="Right">
+    <TableCell
+      horizontalAlign="Right"
+      style={{
+        paddingRight: enableColumnLayout ? '0' : '0.5rem',
+      }}
+    >
       <ListActions actions={actions} entry={entry} />
     </TableCell>
   );
@@ -158,7 +164,7 @@ const DefaultRowRenderer = ({
   return (
     <TableRow
       className={isSelected ? 'row-selected' : 'row'}
-      interactive={true}
+      interactive={enableColumnLayout}
       navigated={isSelected}
       actions={displayArrow && <TableRowActionNavigation />}
     >

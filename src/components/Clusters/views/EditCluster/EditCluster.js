@@ -17,6 +17,7 @@ import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { getUserIndex } from '../../shared';
+import { ContextButtons } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
 export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
   const elementsWithId =
@@ -65,7 +66,10 @@ export const ClusterDataForm = ({
   const [authenticationType, setAuthenticationType] = useState(
     kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
   );
-
+  const hasOneContext = kubeconfig?.contexts?.length === 1;
+  const [chosenContext, setChosenContext] = useState(
+    kubeconfig?.['current-context'],
+  );
   const issuerUrl = findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex);
   const clientId = findInitialValue(kubeconfig, 'oidc-client-id', userIndex);
   const clientSecret = findInitialValue(
@@ -190,6 +194,28 @@ export const ClusterDataForm = ({
             }
           }}
         />
+        {!hasOneContext && (
+          <ResourceForm.FormField
+            required
+            value={chosenContext}
+            propertyPath='$["current-context"]'
+            label={t('clusters.labels.context')}
+            validate={value => !!value}
+            setValue={context => {
+              jp.value(kubeconfig, '$["current-context"]', context);
+              setChosenContext(context);
+              setResource({ ...kubeconfig });
+            }}
+            input={({ setValue }) => (
+              <ContextButtons
+                contexts={kubeconfig?.contexts || []}
+                setValue={setValue}
+                chosenContext={chosenContext}
+                setChosenContext={setChosenContext}
+              />
+            )}
+          />
+        )}
         <ResourceForm.FormField
           label={t('clusters.auth-type')}
           key={t('clusters.auth-type')}

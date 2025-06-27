@@ -32,32 +32,46 @@ export function ContextChooser(params) {
           label={t('clusters.wizard.context')}
           validate={value => !!value}
           input={({ setValue }) => (
-            <FlexBox
-              direction="Column"
-              id="context-chooser"
-              className="sap-margin-top-tiny"
-            >
-              {kubeconfig.contexts.map(context => (
-                <RadioButton
-                  key={context.name}
-                  name={context.name}
-                  value={context.name}
-                  checked={params.chosenContext === context.name}
-                  text={context.name}
-                  onChange={() => {
-                    setValue(context.name);
-                    params.setChosenContext(context.name);
-                  }}
-                />
-              ))}
-            </FlexBox>
+            <ContextButtons
+              contexts={kubeconfig.contexts}
+              setValue={setValue}
+              chosenContext={params.chosenContext}
+              setChosenContext={params.setChosenContext}
+            />
           )}
         />
       </ResourceForm.Wrapper>
     </div>
   );
 }
-
+export function ContextButtons({
+  contexts,
+  setValue,
+  chosenContext,
+  setChosenContext,
+}) {
+  return (
+    <FlexBox
+      direction="Column"
+      id="context-chooser"
+      className="sap-margin-top-tiny"
+    >
+      {contexts.map(context => (
+        <RadioButton
+          key={context.name}
+          name={context.name}
+          value={context.name}
+          checked={chosenContext === context.name}
+          text={context.name}
+          onChange={() => {
+            setValue(context.name);
+            if (setChosenContext) setChosenContext(context.name);
+          }}
+        />
+      ))}
+    </FlexBox>
+  );
+}
 export function ContextChooserMessage({ contexts, setValue, onCancel }) {
   const { t } = useTranslation();
   const [chosenContext, setChosenContext] = useState('');

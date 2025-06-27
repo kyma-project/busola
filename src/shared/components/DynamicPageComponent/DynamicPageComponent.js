@@ -110,6 +110,7 @@ export const DynamicPageComponent = ({
   protectedResourceWarning,
   className,
   customActionIfFormOpen,
+  isFirstColumnWithEdit = false,
 }) => {
   const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
@@ -128,8 +129,15 @@ export const DynamicPageComponent = ({
   );
 
   useEffect(() => {
-    setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
-  }, [layoutColumn]);
+    if (
+      layoutColumn?.layout !== 'OneColumn' &&
+      layoutNumber === 'startColumn'
+    ) {
+      setSelectedTab(editColumn === 'startColumn' ? 'edit' : 'view');
+    } else {
+      setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
+    }
+  }, [editColumn, layoutNumber, layoutColumn?.layout, layoutColumn?.showEdit]);
 
   const dynamicPageRef = useRef(null);
   const tabContainerRef = useRef(null);
@@ -362,31 +370,48 @@ export const DynamicPageComponent = ({
 
               if (newTabName === 'edit') {
                 const params = new URLSearchParams();
+                let showEdit = {
+                  resource: null,
+                };
                 if (layoutColumn.layout !== 'OneColumn') {
                   params.set('layout', layoutColumn.layout);
-                  if (title === 'Modules') {
+                  if (isFirstColumnWithEdit) {
                     params.set('editColumn', 'startColumn');
+                    showEdit = layoutColumn?.showEdit;
+                  } else if (editColumn === 'startColumn') {
+                    params.set('editColumn', 'startColumn');
+                    params.set('showEdit', 'true');
+                  } else {
+                    params.set('showEdit', 'true');
                   }
+                } else {
+                  params.set('showEdit', 'true');
                 }
-                params.set('showEdit', 'true');
 
                 setLayoutColumn({
                   ...layoutColumn,
-                  showEdit: {
-                    resource: null,
-                  },
+                  showEdit,
                 });
                 navigate(`${window.location.pathname}?${params.toString()}`);
               } else {
+                let showEdit = null;
+                const params = new URLSearchParams();
+                if (isFirstColumnWithEdit) {
+                  showEdit = layoutColumn?.showEdit;
+                } else if (editColumn === 'startColumn') {
+                  params.set('editColumn', 'startColumn');
+                }
                 setLayoutColumn({
                   ...layoutColumn,
-                  showEdit: null,
+                  showEdit,
                 });
                 navigate(
                   `${window.location.pathname}${
                     layoutColumn.layout === 'OneColumn'
                       ? ''
-                      : '?layout=' + layoutColumn.layout
+                      : '?layout=' +
+                        layoutColumn.layout +
+                        `${params ? '&' + params.toString() : ''}`
                   }`,
                 );
               }

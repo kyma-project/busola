@@ -17,6 +17,7 @@ FROM base AS release
 WORKDIR /app
 COPY --chown=65532:65532 --from=build /app/backend-production.js ./
 COPY --chown=65532:65532 settings settings/
+COPY --chown=65532:65532 environments environments/
 COPY --chown=65532:65532 certs.pem certs.pem
 COPY --chown=65532:65532 package* ./
 RUN npm ci --only=production

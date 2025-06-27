@@ -23,6 +23,7 @@ import NamespaceRoutes from './NamespaceRoutes';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { IncorrectPath } from './IncorrectPath';
 import { removePreviousPath } from 'state/useAfterInitHook';
+import { useUrl } from 'hooks/useUrl';
 
 export default function ClusterRoutes() {
   let { currentClusterName } = useParams() || {};
@@ -36,6 +37,7 @@ export default function ClusterRoutes() {
   const [cluster, setCluster] = useRecoilState(clusterState);
   const [search] = useSearchParams();
   const [extensibilityRoutes, setExtensibilityRoutes] = useState(null);
+  const { clusterUrl } = useUrl();
 
   useEffect(() => {
     if (extensions?.length) {
@@ -76,7 +78,7 @@ export default function ClusterRoutes() {
           path="*"
           element={
             <IncorrectPath
-              to="overview"
+              to={clusterUrl('overview')}
               message={t('components.incorrect-path.message.cluster')}
             />
           }

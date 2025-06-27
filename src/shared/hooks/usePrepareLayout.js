@@ -267,6 +267,7 @@ export function usePrepareLayoutColumns({
           : {
               resourceName,
               resourceType,
+              rawResourceTypeName,
               namespaceId: resourceNamespace,
               apiGroup,
               apiVersion,
