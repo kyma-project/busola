@@ -781,7 +781,12 @@ kyma-companion:
   introduction: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. Meanwhile, you can check the suggested questions below; you may find them helpful!
   introduction-no-suggestions: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. While I don't have any initial suggestions for this resource, feel free to ask me anything you'd like!
   placeholder: Message Joule...
-  disclaimer: Joule is powered by generative AI, and the output must be reviewed before use. Do not enter any sensitive personal data, and avoid entering any other data you do not wish to be processed.
+  disclaimer:
+    tooltip: Disclaimer
+    title: AI Notice
+    text: "Joule is powered by generative AI and all output should be reviewed before use. Please do not enter any sensitive personal data, and avoid entering any other personal data you do not wish to be processed. Learn more in the <0>Joule Data Protection and Privacy</0>."
+    hint: Joule uses AI. Verify results.
+    back-conversation: Back to Conversation
   tabs:
     chat: Chat
     page-insights: Page Insights

@@ -34,6 +34,7 @@ type ChatProps = {
   setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
   error: AIError;
   setError: React.Dispatch<React.SetStateAction<AIError>>;
+  hide: boolean;
 };
 
 export const Chat = ({
@@ -45,6 +46,7 @@ export const Chat = ({
   setLoading,
   isReset,
   setIsReset,
+  hide = false,
 }: ChatProps) => {
   const { t } = useTranslation();
   const chatRef = useRef<HTMLDivElement | null>(null);
@@ -315,6 +317,7 @@ export const Chat = ({
 
   return (
     <FlexBox
+      style={hide ? { display: 'none' } : undefined}
       direction="Column"
       justifyContent="SpaceBetween"
       className="chat-container"
