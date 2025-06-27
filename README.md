@@ -35,7 +35,7 @@ Run the `npm start` command.
 
 ## Configuration
 
-For more information on the Busola configuration, see [Configuration](docs/contributor/configuration.md).
+For more information on the Busola configuration, see [Configuration](docs/operator/configuration.md).
 
 ## Development
 
@@ -47,7 +47,7 @@ To learn how to run Busola in Docker, see [Busola in Docker](docs/contributor/bu
 
 ## Deploying and Accessing Busola in the Kubernetes Cluster
 
-To learn how to deploy and access Busola in the Kubernetes cluster, see [Deploying and Accessing Busola in the Kubernetes Cluster](docs/contributor/deploy-access-kubernetes.md).
+To learn how to deploy and access Busola in the Kubernetes cluster, see [Deploying and Accessing Busola in the Kubernetes Cluster](docs/operator/deploy-access-kubernetes.md).
 
 ## Troubleshooting
 
