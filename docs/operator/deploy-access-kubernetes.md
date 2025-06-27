@@ -9,7 +9,7 @@ For more details about environment configuration, see [Environment-Specific Sett
 
 ## Deploying Busola in the Kubernetes Cluster
 
-To install Busola from the release in the Kubernetes cluster, set the `NAMESPACE` and `VERSION` shell environment variables with the desired release and run:
+To install Busola from the release in the Kubernetes cluster, set the **NAMESPACE** and **VERSION** shell environment variables with the desired release and run:
 
 ```shell
 kubectl apply --namespace "${NAMESPACE}" -f https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml
@@ -21,7 +21,7 @@ To install Busola from the main branch in the Kubernetes cluster, run:
 (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
 ```
 
-To install Busola using a specific environment configuration, set the `ENVIRONMENT` shell environment variable and run:
+To install Busola using a specific environment configuration, set the **ENVIRONMENT** shell environment variable and run:
 
 ```shell
 (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
@@ -63,7 +63,7 @@ Prerequisites:
 
 - [yq](https://mikefarah.gitbook.io/yq)
 
-Set the `K3D_CLUSTER_NAME` shell environment variable to the name of your cluster and run:
+Set the **K3D_CLUSTER_NAME** shell environment variable to the name of your cluster and run:
 
 ```shell
 k3d kubeconfig get ${K3D_CLUSTER_NAME} > k3d-kubeconfig.yaml
@@ -75,7 +75,7 @@ yq --inplace '.clusters[].cluster.server = "https://kubernetes.default.svc:443"'
 Prerequisites:
 
 - Sidecar Proxy injection enabled; see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
-- The API Gateway module installed, see [Quick Install](https://kyma-project.io/#/02-get-started/01-quick-install)
+- The API Gateway module installed, see [Adding and Deleting a Kyma Module](https://help.sap.com/docs/btp/sap-business-technology-platform/enable-and-disable-kyma-module?locale=en-US&version=Cloud)
 
 1. Install the Istio required resources:
 
