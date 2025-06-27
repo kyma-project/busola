@@ -1,41 +1,44 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
+import { useNavigate } from 'react-router';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { useNotification } from 'shared/contexts/NotificationContext';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import ModulesCard from 'components/KymaModules/components/ModulesCard';
 
 import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { CommunityModuleContext } from './providers/CommunityModuleProvider';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
+import { getModuleResourcesLinks, getAllResourcesYamls } from './support';
 
 import './KymaModulesAddModule.scss';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
-import {
-  OPERATION_STATE_INITIAL,
-  OPERATION_STATE_SUCCEEDED,
-} from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+
 export default function CommunityModulesAddModule(props) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const notification = useNotification();
+
   const post = usePost();
-  const {
-    installedCommunityModules,
-    communityModulesLoading,
-    setOpenedModuleIndex: setOpenedCommunityModuleIndex,
-  } = useContext(CommunityModuleContext);
+  const { installedCommunityModules, communityModulesLoading } = useContext(
+    CommunityModuleContext,
+  );
   const { communityModuleTemplates: moduleTemplates } = useContext(
     ModuleTemplatesContext,
   );
   const [selectedModules, setSelectedModules] = useState([]);
   const [resourcesToAply, setResourcesToAply] = useState([]);
-  const [uploadState, setUploadState] = useState(OPERATION_STATE_INITIAL);
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const uploadResources = useUploadResources(
     resourcesToAply,
     setResourcesToAply,
-    setUploadState,
+    () => {},
     'default',
   );
 
@@ -92,31 +95,14 @@ export default function CommunityModulesAddModule(props) {
   }, []);
 
   useEffect(() => {
-    const getModuleResourcesLinks = () => {
-      const resources = [];
+    const resourcesLinks = getModuleResourcesLinks(
+      modulesAddData,
+      selectedModules,
+    );
 
-      (selectedModules || []).forEach(({ name, channel, version }) => {
-        console.log('selectedModules[].forEach', name, channel, version);
-        const moduleData = modulesAddData?.find(module => module.name === name);
-        if (moduleData) {
-          moduleData.channels.forEach(
-            ({ channel: ch, version: v, resources: r }) => {
-              const resource = r.find(res => v === version && ch === channel);
-              if (resource?.link) {
-                resources.push(resource.link);
-              }
-            },
-          );
-        }
-      });
-
-      return resources;
-    };
-
-    const resourcesLinks = getModuleResourcesLinks();
     (async function() {
       try {
-        const yamls = await getAllResourcesYamls(resourcesLinks);
+        const yamls = await getAllResourcesYamls(resourcesLinks, post);
 
         setResourcesToAply(
           yamls.map(resource => {
@@ -175,18 +161,14 @@ export default function CommunityModulesAddModule(props) {
   };
 
   const setCheckbox = (module, checked, index) => {
-    console.log('setCheckbox');
-
     const newSelectedModules = [...selectedModules];
     if (checked) {
-      console.log('checked');
       newSelectedModules.push({
         name: module.name,
       });
     } else {
       newSelectedModules.splice(index, 1);
     }
-    console.log('newSelectedModules', newSelectedModules);
     setSelectedModules(newSelectedModules);
   };
 
@@ -210,38 +192,6 @@ export default function CommunityModulesAddModule(props) {
       ?.find(mod => mod.name === moduleName)
       ?.channels.some(({ channel: ch, isBeta }) => ch && isBeta);
   };
-  async function getResourcesYamls(link) {
-    if (!link) {
-      console.error('No link provided for community resource');
-      return false;
-    }
-
-    try {
-      const response = await post('/modules/community-resource', { link });
-      if (response?.length) {
-        console.log('yamlFile2', response.flat());
-        return response;
-      }
-      console.error('Empty or invalid response:', response);
-      return false;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return false;
-    }
-  }
-  async function getAllResourcesYamls(links) {
-    if (links?.length) {
-      const yamlRes = await Promise.all(
-        links.map(async res => {
-          if (res) {
-            return await getResourcesYamls(res);
-          }
-        }),
-      );
-      console.log('!!yamlRes', yamlRes.flat());
-      return yamlRes.flat();
-    }
-  }
 
   const renderCards = () => {
     const columns = Array.from({ length: columnsCount }, () => []);
@@ -283,6 +233,35 @@ export default function CommunityModulesAddModule(props) {
     );
   };
 
+  const handleSubmit = () => {
+    try {
+      uploadResources();
+
+      notification.notifySuccess({
+        content: t('kyma-modules.messages.success', {
+          resourceType: 'Community Module',
+        }),
+      });
+
+      setLayoutColumn({
+        ...layoutColumn,
+        layout: 'OneColumn',
+        midColumn: null,
+        endColumn: null,
+        showCreate: null,
+      });
+      navigate(window.location.pathname, { replace: true });
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        content: t('kyma-modules.messages.failure', {
+          resourceType: 'Community Module',
+          error: e.message,
+        }),
+      });
+    }
+  };
+
   return (
     <ResourceForm
       {...props}
@@ -294,17 +273,9 @@ export default function CommunityModulesAddModule(props) {
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
       formWithoutPanel
       className="add-modules-form"
-      // onSubmit={ handleSubmit}
-      onSubmit={async newData => {
-        console.log(
-          'handling Install Community module',
-          selectedModules,
-          'modulesAddData',
-          modulesAddData,
-        );
+      onSubmit={handleSubmit}
 
-        uploadResources();
-      }}
+      // onSubmit={async newData => {}}
     >
       <>
         {modulesAddData?.length !== 0 ? (
