@@ -3,7 +3,7 @@ import {
   cpusToHumanReadable,
   getBytes,
   getCpus,
-} from 'resources/Namespaces/ResourcesUsage';
+} from 'shared/helpers/resources';
 import { ResourceQuota } from './ResourceQuotaDetails';
 import { calculateMetrics } from 'resources/Pods/podQueries';
 import { UsageMetrics } from 'resources/Pods/types';

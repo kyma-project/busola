@@ -12,7 +12,7 @@ type LinkProps = {
   design?: 'Default' | 'Subtle' | 'Emphasized';
   resetLayout?: boolean;
   onClick?: any;
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
 };
 
 export const Link = ({
@@ -23,7 +23,7 @@ export const Link = ({
   design = 'Emphasized',
   resetLayout = true,
   onClick,
-  style,
+  style = {},
 }: LinkProps) => {
   const setLayout = useSetRecoilState(columnLayoutState);
   const navigate = useNavigate();
