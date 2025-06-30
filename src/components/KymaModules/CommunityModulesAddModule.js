@@ -274,8 +274,6 @@ export default function CommunityModulesAddModule(props) {
       formWithoutPanel
       className="add-modules-form"
       onSubmit={handleSubmit}
-
-      // onSubmit={async newData => {}}
     >
       <>
         {modulesAddData?.length !== 0 ? (

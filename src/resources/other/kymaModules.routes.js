@@ -53,7 +53,6 @@ const ColumnWrapper = ({
       layoutState?.showEdit?.resource ||
       null,
     rawResourceTypeName: 'Kyma',
-    // TODO check why after F5 createType is lost
   });
 
   const startColumnComponent = useDeferredValue(
