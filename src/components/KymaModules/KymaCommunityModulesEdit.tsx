@@ -8,25 +8,83 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { getAvailableCommunityModules, VersionInfo } from 'components/KymaModules/components/CommunityModulesHelpers';
 import { ModuleReleaseMetaListType, ModuleTemplateListType } from 'components/KymaModules/support';
 import { Button } from '@ui5/webcomponents-react';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
+import { createPortal } from 'react-dom';
+import { SetterOrUpdater, useSetRecoilState } from 'recoil';
+import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 type CommunityModulesEditProp = {
   communityModules: ModuleTemplateListType;
   moduleReleaseMetas: ModuleReleaseMetaListType;
   loadingModuleTemplates: boolean;
-  onChange: any;
 };
+
+
+// TODO: detect if version return to the initial one to setChanged to false
+function onCommunityChange(communityModules: ModuleTemplateListType, installedCommunityModules: ModuleTemplateListType, communityModulesToApply: Map<string, any>, setCommunityModulesToApply: SetterOrUpdater<any>, setIsResourceEdited: SetterOrUpdater<any>): any {
+  return (module: string, value: string) => {
+    console.log(module, value);
+    const [name, namespace] = value.split('|');
+    const moduleTemplate = {
+      name,
+      namespace,
+    };
+    const newModulesToUpdated = new Map(communityModulesToApply);
+
+
+    const foundModule = communityModules.items.find(item => item.metadata.namespace === moduleTemplate.namespace && item.metadata.name === moduleTemplate.name);
+    if (foundModule) {
+      const moduleToUpdate = communityModulesToApply.get(foundModule.spec.moduleName);
+      if (moduleToUpdate) {
+        const installedModule = installedCommunityModules.items.find(item => item.metadata.name === foundModule.metadata.name && item.metadata.namespace === foundModule.metadata.namespace);
+        if (installedModule) {
+          newModulesToUpdated.delete(foundModule.spec.moduleName)
+        } else {
+          newModulesToUpdated.set(foundModule.spec.moduleName, foundModule)
+        }
+        //   Delete if installed or update if not installed
+      } else {
+        newModulesToUpdated.set(foundModule.spec.moduleName, foundModule);
+      }
+    } else {
+
+    }
+
+
+    console.log('Modules to Update', newModulesToUpdated);
+    if (newModulesToUpdated.size === 0) {
+      setIsResourceEdited({
+        isEdited: false,
+      });
+    } else {
+      setIsResourceEdited({
+        isEdited: true,
+      });
+    }
+    setCommunityModulesToApply(newModulesToUpdated);
+  };
+}
+
+
+function findModule(communityModulesToApply: [any], moduleTemplate: { name: string, namespace: string }): any {
+
+}
+
 
 export default function CommunityModulesEdit({
                                                communityModules,
                                                moduleReleaseMetas,
                                                loadingModuleTemplates,
-                                               onChange,
                                              }: CommunityModulesEditProp) {
   const { t } = useTranslation();
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     'COMMUNITY_MODULES',
   );
+
+  const [communityModulesToApply, setCommunityModulesToApply] = useState(new Map<string, any>());
+  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
+
 
   const availableCommunityModules = useMemo(() => {
     return getAvailableCommunityModules(
@@ -36,10 +94,10 @@ export default function CommunityModulesEdit({
   }, [communityModules, moduleReleaseMetas]);
 
   const {
-    installed: installedCommunityModules,
-    loading,
+    installedModules: installedCommunityModules,
+    loading:installedCommunityModulesLoading,
   } = useGetInstalledModules(communityModules, loadingModuleTemplates);
-  if (loading) {
+  if (installedCommunityModulesLoading) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />
@@ -51,13 +109,13 @@ export default function CommunityModulesEdit({
   // console.log('available community modules', availableCommunityModules);
 
   // TODO: extract it as a separate method -> markInstalledVersion
-  installedCommunityModules.forEach(installedModule => {
+  installedCommunityModules.items.forEach(installedModule => {
     const foundModuleVersions = availableCommunityModules.get(
-      installedModule.name,
+      installedModule.spec.moduleName || installedModule.metadata.labels['operator.kyma-project.io/module-name'],
     );
     if (foundModuleVersions) {
       const versionIdx = foundModuleVersions.findIndex(version => {
-        return version.version === installedModule.version;
+        return version.version === installedModule.spec.version;
       });
 
       if (versionIdx > -1) {
@@ -139,7 +197,8 @@ export default function CommunityModulesEdit({
                 {communityModulesToDisplay &&
                   communityModulesToDisplay.map(module => {
                     return (
-                      <CommunityModuleEdit module={module} onChange={onChange} />
+                      <CommunityModuleEdit module={module}
+                                           onChange={onCommunityChange(communityModules, installedCommunityModules, communityModulesToApply, setCommunityModulesToApply, setIsResourceEdited)} />
                     );
                   })}
               </div>
@@ -148,56 +207,11 @@ export default function CommunityModulesEdit({
           }
         >
         </UI5Panel>
-        {/*{createPortal(<UnsavedMessageBox />, document.body)}*/}
+        {createPortal(<UnsavedMessageBox />, document.body)}
       </section>
-
-      //
-      // <ResourceForm
-      //   {...props}
-      //   className="kyma-modules-create"
-      //   pluralKind="kymas"
-      //   singularName={t('kyma-modules.kyma')}
-      //   resource={kymaResource}
-      //   initialResource={initialResource}
-      //   setResource={setKymaResource}
-      //   createUrl={props.resourceUrl}
-      //   disableDefaultFields
-      //   skipCreateFn={skipModuleFn}
-      // >
-      //   <ResourceForm.CollapsibleSection
-      //     defaultOpen
-      //     defaultTitleType
-      //     className="collapsible-margins"
-      //     title={t('kyma-modules.modules-channel')}
-      //   >
-      //     <UnmanagedModuleInfo kymaResource={kymaResource} />
-      //     {modulesEditData?.length !== 0 ? (
-      //       <>
-      //         {checkIfSelectedModuleIsBeta() ? (
-      //           <MessageStrip
-      //             key={'beta'}
-      //             design="Critical"
-      //             hideCloseButton
-      //             className="sap-margin-top-tiny"
-      //           >
-      //             {t('kyma-modules.beta-alert')}
-      //           </MessageStrip>
-      //         ) : null}
-      //         {renderModules()}
-      //       </>
-      //     ) : (
-      //       <MessageStrip
-      //         design="Critical"
-      //         hideCloseButton
-      //         className="sap-margin-top-small"
-      //       >
-      //         {t('extensibility.widgets.modules.no-modules-installed')}
-      //       </MessageStrip>
-      //     )}
-      //   </ResourceForm.CollapsibleSection>
-      // </ResourceForm>
     );
   } else {
     return <></>;
   }
 }
+

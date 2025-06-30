@@ -35,10 +35,7 @@ import {
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
 import CommunityModulesEdit from 'components/KymaModules/KymaCommunityModulesEdit';
-import {
-  getAvailableCommunityModules,
-  getCommunityModules,
-} from 'components/KymaModules/components/CommunityModulesHelpers';
+import { getCommunityModules } from 'components/KymaModules/components/CommunityModulesHelpers';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
@@ -119,8 +116,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [initialUnchangedResource] = useState(cloneDeep(resource));
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
-
-  const [communityModulesToApply, setCommunityModulesToApply] = useState([]);
 
   const resourceName = kymaResource?.metadata.name;
 
@@ -210,29 +205,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
   };
 
   const communityModules = getCommunityModules(moduleTemplates);
-
-  // TODO: detect if version return to the initial one to setChanged to false
-  const onCommunityChange = (module, value) => {
-    console.log(module, value);
-    const [name, namespace] = value.split('|');
-    const moduleTemplate = {
-      name,
-      namespace,
-    };
-
-    const modules = [...communityModulesToApply];
-    const moduleToUpdateIdx = modules.findIndex(m => m.moduleName === module);
-    if (moduleToUpdateIdx < 0) {
-      modules.push({ moduleName: module, moduleTemplate: moduleTemplate });
-    } else {
-      modules[moduleToUpdateIdx].moduleTemplate = moduleTemplate;
-    }
-    console.log('Modules to Update', modules);
-    setIsResourceEdited({
-      isEdited: true,
-    });
-    setCommunityModulesToApply([...modules]);
-  };
 
   const onChange = (module, value, index) => {
     setChannel(module, value, index, selectedModules, setSelectedModules);
@@ -495,7 +467,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
         communityModules={communityModules}
         moduleReleaseMetas={moduleReleaseMetas}
         loadingModuleTemplates={loadingModuleTemplates}
-        onChange={onCommunityChange}
       ></CommunityModulesEdit>
     </>
   );

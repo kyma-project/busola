@@ -171,6 +171,7 @@ export const useFetchModuleData = (
   return { loading, error, data, getItem };
 };
 
+// TODO: this function should return ModuleTemplateListType
 export const useGetInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesLoading?: boolean,
@@ -196,11 +197,13 @@ export const useGetInstalledModules = (
       name:
         module.metadata?.labels['operator.kyma-project.io/module-name'] ??
         module.spec.moduleName,
+      moduleTemplateName: module.metadata.name,
+      namespace: module.metadata.namespace,
       version: module.spec.version,
       resource: module.spec.data,
     })) ?? [];
 
-  return { installed, loading, error };
+  return { installed, installedModules, loading, error };
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {
