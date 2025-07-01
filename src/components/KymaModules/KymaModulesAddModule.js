@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -9,7 +9,7 @@ import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { KymaModuleContext } from './providers/KymaModuleProvider';
 
 import './KymaModulesAddModule.scss';
-import { findModuleStatus } from './support';
+import { findModuleStatus, getModulesAddData } from './support';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 
 export default function KymaModulesAddModule(props) {
@@ -54,6 +54,20 @@ export default function KymaModulesAddModule(props) {
     skip: !resourceName,
   });
 
+  const isAlreadyInstalled = name =>
+    initialUnchangedResource?.spec?.modules?.find(
+      installedModule => installedModule.name === name,
+    );
+  const modulesAddData = useMemo(
+    () =>
+      getModulesAddData(
+        moduleTemplates,
+        moduleReleaseMetas,
+        isAlreadyInstalled,
+      ),
+    [moduleTemplates, moduleReleaseMetas], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
   const [columnsCount, setColumnsCount] = useState(2);
   const [cardsContainerRef, setCardsContainerRef] = useState(null);
 
@@ -94,87 +108,6 @@ export default function KymaModulesAddModule(props) {
       </div>
     );
   }
-
-  const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
-    const name = module.metadata.labels['operator.kyma-project.io/module-name'];
-    const existingModule = acc.find(item => item.name === name);
-    const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
-      installedModule => installedModule.name === name,
-    );
-    const moduleMetaRelase = moduleReleaseMetas?.items.find(
-      item => item.spec.moduleName === name,
-    );
-
-    const isModuleMetaRelease = acc.find(
-      item => item.name === moduleMetaRelase?.spec?.moduleName,
-    );
-
-    if (module.spec.channel && !isModuleMetaRelease) {
-      if (!existingModule && !isAlreadyInstalled) {
-        acc.push({
-          name: name,
-          channels: [
-            {
-              channel: module.spec.channel,
-              version: module.spec.descriptor.component.version,
-              isBeta:
-                module.metadata.labels['operator.kyma-project.io/beta'] ===
-                'true',
-            },
-          ],
-          docsUrl:
-            module.metadata.annotations['operator.kyma-project.io/doc-url'],
-          icon: {
-            link: module.spec?.info?.icons[0]?.link,
-            name: module.spec?.info?.icons[0]?.name,
-          },
-          isMetaRelease: false,
-        });
-      } else if (existingModule) {
-        existingModule.channels?.push({
-          channel: module.spec.channel,
-          version: module.spec.descriptor.component.version,
-          isBeta:
-            module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
-          isMetaRelease: false,
-        });
-      }
-    } else {
-      if (!existingModule && !isAlreadyInstalled) {
-        moduleMetaRelase?.spec.channels.forEach(channel => {
-          if (!acc.find(item => item.name === name)) {
-            acc.push({
-              name: name,
-              channels: [
-                {
-                  channel: channel.channel,
-                  version: channel.version,
-                  isBeta: moduleMetaRelase.spec.beta ?? false,
-                  isMetaRelease: true,
-                },
-              ],
-              docsUrl: module.spec.info.documentation,
-              icon: {
-                link: module.spec?.info?.icons[0]?.link,
-                name: module.spec?.info?.icons[0]?.name,
-              },
-            });
-          } else {
-            acc
-              .find(item => item.name === name)
-              .channels.push({
-                channel: channel.channel,
-                version: channel.version,
-                isBeta: moduleMetaRelase.spec.beta ?? false,
-                isMetaRelease: true,
-              });
-          }
-        });
-      }
-    }
-
-    return acc ?? [];
-  }, []);
 
   const isChecked = name => {
     return !!selectedModules?.find(module => module.name === name);

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
@@ -14,7 +14,7 @@ import ModulesCard from 'components/KymaModules/components/ModulesCard';
 import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { CommunityModuleContext } from './providers/CommunityModuleProvider';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
-import { getModuleResourcesLinks } from './support';
+import { getModuleResourcesLinks, getModulesAddData } from './support';
 import { getAllResourcesYamls } from './deleteModulesHelpers';
 
 import './KymaModulesAddModule.scss';
@@ -44,56 +44,19 @@ export default function CommunityModulesAddModule(props) {
   );
 
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({});
-
-  const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
-    const name = module.metadata.labels['operator.kyma-project.io/module-name'];
-    const existingModule = acc.find(item => {
-      return item.metadata.name === name;
-    });
-    const isAlreadyInstalled = installedCommunityModules.find(
+  const isAlreadyInstalled = name =>
+    installedCommunityModules.find(
       installedModule => installedModule.name === name,
     );
-
-    const moduleMetaRelase = moduleReleaseMetas?.items.find(
-      item => item.spec.moduleName === name,
-    );
-
-    if (!existingModule && !isAlreadyInstalled) {
-      moduleMetaRelase?.spec.channels.forEach(channel => {
-        if (!acc.find(item => item.name === name)) {
-          acc.push({
-            name: name,
-            channels: [
-              {
-                channel: channel.channel,
-                version: channel.version,
-                isBeta: moduleMetaRelase.spec.beta ?? false,
-                isMetaRelease: true,
-                resources: module.spec.resources,
-              },
-            ],
-            docsUrl: module.spec.info.documentation,
-            icon: {
-              link: module.spec?.info?.icons[0]?.link,
-              name: module.spec?.info?.icons[0]?.name,
-            },
-          });
-        } else {
-          acc
-            .find(item => item.name === name)
-            .channels.push({
-              channel: channel.channel,
-              version: channel.version,
-              isBeta: moduleMetaRelase.spec.beta ?? false,
-              isMetaRelease: true,
-              resources: module.spec.resources,
-            });
-        }
-      });
-    }
-
-    return acc ?? [];
-  }, []);
+  const modulesAddData = useMemo(
+    () =>
+      getModulesAddData(
+        moduleTemplates,
+        moduleReleaseMetas,
+        isAlreadyInstalled,
+      ),
+    [moduleTemplates, moduleReleaseMetas], // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   useEffect(() => {
     const resourcesLinks = getModuleResourcesLinks(
