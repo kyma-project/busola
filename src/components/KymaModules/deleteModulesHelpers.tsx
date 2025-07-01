@@ -299,6 +299,19 @@ export default async function postForCommunityResources(
   }
 }
 
+export async function getAllResourcesYamls(links: string[], post: PostFn) {
+  if (links?.length) {
+    const yamlRes = await Promise.all(
+      links.map(async res => {
+        if (res) {
+          return await postForCommunityResources(post, res);
+        }
+      }),
+    );
+    return yamlRes.flat();
+  }
+}
+
 export const getCommunityResourceUrls = (resources: any) => {
   if (!resources?.length) return [];
 

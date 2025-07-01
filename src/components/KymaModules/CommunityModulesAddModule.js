@@ -14,7 +14,8 @@ import ModulesCard from 'components/KymaModules/components/ModulesCard';
 import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { CommunityModuleContext } from './providers/CommunityModuleProvider';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
-import { getModuleResourcesLinks, getAllResourcesYamls } from './support';
+import { getModuleResourcesLinks } from './support';
+import { getAllResourcesYamls } from './deleteModulesHelpers';
 
 import './KymaModulesAddModule.scss';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
