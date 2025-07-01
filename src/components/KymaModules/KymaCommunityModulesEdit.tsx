@@ -6,13 +6,16 @@ import CommunityModuleEdit from 'components/KymaModules/components/ModuleEdit';
 import { useGetInstalledModules } from 'components/KymaModules/hooks';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { getAvailableCommunityModules, VersionInfo } from 'components/KymaModules/components/CommunityModulesHelpers';
-import { ModuleReleaseMetaListType, ModuleTemplateListType } from 'components/KymaModules/support';
+import { ModuleReleaseMetaListType, ModuleTemplateListType, ModuleTemplateType } from 'components/KymaModules/support';
 import { Button } from '@ui5/webcomponents-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
+import { getAllResourcesYamls } from 'components/KymaModules/tmpInstallHelpers';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 
 type CommunityModulesEditProp = {
   communityModules: ModuleTemplateListType;
@@ -39,9 +42,9 @@ function onCommunityChange(communityModules: ModuleTemplateListType, installedCo
       if (moduleToUpdate) {
         const installedModule = installedCommunityModules.items.find(item => item.metadata.name === foundModule.metadata.name && item.metadata.namespace === foundModule.metadata.namespace);
         if (installedModule) {
-          newModulesToUpdated.delete(foundModule.spec.moduleName)
+          newModulesToUpdated.delete(foundModule.spec.moduleName);
         } else {
-          newModulesToUpdated.set(foundModule.spec.moduleName, foundModule)
+          newModulesToUpdated.set(foundModule.spec.moduleName, foundModule);
         }
         //   Delete if installed or update if not installed
       } else {
@@ -82,7 +85,13 @@ export default function CommunityModulesEdit({
     'COMMUNITY_MODULES',
   );
 
-  const [communityModulesToApply, setCommunityModulesToApply] = useState(new Map<string, any>());
+  const [resourcesToApply, setResourcesToApply] = useState<{value:any}[]>([]);
+  const uploadResources = useUploadResources(resourcesToApply, setResourcesToApply, () => {
+  }, null);
+
+
+  const post = usePost();
+  const [communityModulesToApply, setCommunityModulesToApply] = useState(new Map<string, ModuleTemplateType>());
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
 
 
@@ -94,9 +103,32 @@ export default function CommunityModulesEdit({
   }, [communityModules, moduleReleaseMetas]);
 
   const {
-    installedModules: installedCommunityModules,
-    loading:installedCommunityModulesLoading,
+    installed: installedCommunityModules,
+    loading: installedCommunityModulesLoading,
   } = useGetInstalledModules(communityModules, loadingModuleTemplates);
+
+
+  // TODO: this code is from Agata
+  useEffect(() => {
+    const resourcesLinks = [...communityModulesToApply.values()].map(moduleTpl => moduleTpl.spec.resources).flat().map(item => item?.link || '');
+
+    console.log(resourcesLinks);
+    (async function() {
+      try {
+        const yamls = await getAllResourcesYamls(resourcesLinks, post);
+
+        const yamlsResources = yamls?.map(resource => {
+          return { value: resource };
+        })
+
+        setResourcesToApply(yamlsResources || []);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [communityModulesToApply]);
+  // TODO:
+
   if (installedCommunityModulesLoading) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
@@ -126,6 +158,14 @@ export default function CommunityModulesEdit({
     }
   });
 
+
+  const onSave = () => {
+    console.log('Saving version change');
+    uploadResources();
+  //   TODO: use notifications
+  };
+
+
   const communityModulesToDisplay = Array.from(
     availableCommunityModules,
     ([key, versionInfo]) => {
@@ -154,11 +194,8 @@ export default function CommunityModulesEdit({
     },
   );
 
-  const onSave = () => {
-    console.log('Saving version change');
-  };
 
-  if (isCommunityModulesEnabled || loading) {
+  if (isCommunityModulesEnabled || installedCommunityModulesLoading) {
     // @ts-ignore
     return (
       <section>

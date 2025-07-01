@@ -33,9 +33,21 @@ export function CommunityModuleContextProvider({
     ModuleTemplatesContext,
   );
   const {
-    installed: installedCommunityModules,
+    installed: installedModules,
     loading: communityModulesLoading,
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
+
+  // TODO: move it to separate function
+  const installedCommunityModules =
+    installedModules.items?.map(module => ({
+      name:
+        module.metadata?.labels['operator.kyma-project.io/module-name'] ??
+        module.spec.moduleName,
+      moduleTemplateName: module.metadata.name,
+      namespace: module.metadata.namespace,
+      version: module.spec.version,
+      resource: module.spec.data,
+    })) ?? [];
 
   useEffect(() => {
     if (layoutState?.layout) {

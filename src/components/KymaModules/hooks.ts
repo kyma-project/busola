@@ -184,26 +184,14 @@ export const useGetInstalledModules = (
   );
 
   if (moduleTemplatesLoading) {
-    return { installed: [], loading: true, error: null };
+    return { installed: { items: [] }, loading: true, error: null };
   }
   if (!moduleTemplates) {
-    return { installed: [], loading: false, error: null };
+    return { installed: { items: [] }, loading: false, error: null };
   }
 
-  const installedModules = getInstalledModules(moduleTemplates, managers);
-
-  const installed =
-    installedModules.items?.map(module => ({
-      name:
-        module.metadata?.labels['operator.kyma-project.io/module-name'] ??
-        module.spec.moduleName,
-      moduleTemplateName: module.metadata.name,
-      namespace: module.metadata.namespace,
-      version: module.spec.version,
-      resource: module.spec.data,
-    })) ?? [];
-
-  return { installed, installedModules, loading, error };
+  const installed = getInstalledModules(moduleTemplates, managers);
+  return { installed, loading, error };
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {

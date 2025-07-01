@@ -88,6 +88,12 @@ export type ModuleTemplateType = {
     };
     manager: ModuleManagerType;
     moduleName?: string;
+    resources?: [
+      {
+        link: string;
+        name: string;
+      },
+    ];
   };
 };
 
