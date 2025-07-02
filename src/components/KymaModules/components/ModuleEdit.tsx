@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 export type ModuleInfoProps = {
   module: ModuleInfo;
-  onChange: any;
+  onChange: Function;
 };
 
 export type ModuleInfo = {

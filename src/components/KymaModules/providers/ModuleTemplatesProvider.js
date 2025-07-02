@@ -4,10 +4,10 @@ import { useModuleTemplatesQuery } from '../kymaModulesQueries';
 import { splitModuleTemplates } from '../support';
 
 export const ModuleTemplatesContext = createContext({
-  allModuleTemplates: null,
+  allModuleTemplates: { items: [] },
   moduleTemplatesLoading: false,
-  communityModuleTemplates: null,
-  moduleTemplates: null,
+  communityModuleTemplates: { items: [] },
+  moduleTemplates: { items: [] },
 });
 
 export function ModuleTemplatesContextProvider({ children }) {

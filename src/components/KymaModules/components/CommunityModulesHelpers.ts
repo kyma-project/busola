@@ -1,4 +1,5 @@
 import {
+  getModuleName,
   ModuleReleaseMetaListType,
   ModuleTemplateListType,
   ModuleTemplateType,
@@ -6,74 +7,106 @@ import {
 
 export type VersionInfo = {
   version: string;
+  moduleTemplateName: string;
+  moduleTemplateNamespace: string;
   channel?: string;
-  moduleTemplate?: ModuleTemplateType;
   installed?: boolean;
+  beta?: boolean;
 };
 
 export function getAvailableCommunityModules(
   communityModulesTemplates: ModuleTemplateListType,
+  installedModuleTemplates: ModuleTemplateListType,
   moduleReleaseMetas: ModuleReleaseMetaListType,
 ): Map<string, VersionInfo[]> {
   //This part is responsible for creating moduleName with all Version from ModuleTemplates
-  const availableCommunityModules = communityModulesTemplates.items.reduce(
-    (acc, module): Map<string, VersionInfo[]> => {
-      const moduleName = module.spec.moduleName ?? 'not-found';
-      const version = module.spec.version;
-      const channel = module.spec.channel;
-      const moduleVersions = acc.get(moduleName);
-      if (moduleVersions) {
-        const newVersionCandidate = {
-          version: version,
-          channel: channel,
-          moduleTemplate: module,
-        };
-        const foundVersion = moduleVersions.find(module => {
-          return (
-            module.channel === newVersionCandidate.channel &&
-            module.version === newVersionCandidate.version
-          );
-        });
-        if (!foundVersion) {
-          moduleVersions.push(newVersionCandidate);
-        }
-      } else {
-        acc.set(moduleName, [
-          {
-            version: version,
-            channel: channel,
-            moduleTemplate: module,
-          },
-        ]);
-      }
-      return acc;
-    },
-    new Map<string, VersionInfo[]>(),
-  );
-
-  // TODO: do sth with that later
-  //
-  // moduleReleaseMetas.items.forEach(releaseMeta => {
-  //   const foundModuleVersions = availableCommunityModules.get(
-  //     releaseMeta.spec.moduleName,
-  //   );
-  //   if (foundModuleVersions) {
-  //     // foundModuleVersions.fin
-  //     // releaseMeta.spec.channels.forEach( channel => {
-  //     //   if (channel.channel === foundVersions.)
-  //     // })
-  //     const availableChannels = releaseMeta.spec.channels.map(channel => {
-  //       return {
-  //         moduleTemplate: findProperModuleTemplate( TUTAJ TRZEBA COŚ CIEKAWEGO DAĆ ,channel.channel, channel.version)
-  //         channel: channel.channel,
-  //         version: channel.version,
-  //       };
-  //     });
-  //     foundModuleVersions.push(...availableChannels);
-  //   }
-  // });
-
+  const availableCommunityModules = new Map<string, VersionInfo[]>();
+  fillModuleVersions(availableCommunityModules, communityModulesTemplates);
+  markInstalledVersion(availableCommunityModules, installedModuleTemplates);
+  fillModulesWithMetadata(availableCommunityModules, moduleReleaseMetas);
   return availableCommunityModules;
+}
+
+function fillModuleVersions(
+  availableCommunityModules: Map<string, VersionInfo[]>,
+  communityModulesTemplates: ModuleTemplateListType,
+) {
+  communityModulesTemplates.items.reduce((acc, moduleTemplate): Map<
+    string,
+    VersionInfo[]
+  > => {
+    const moduleName = getModuleName(moduleTemplate);
+    const newVersionCandidate = createVersion(moduleTemplate);
+
+    const moduleVersions = acc.get(moduleName);
+    if (moduleVersions) {
+      const foundVersion = moduleVersions.find(module => {
+        return (
+          module.channel === newVersionCandidate.channel &&
+          module.version === newVersionCandidate.version
+        );
+      });
+      if (!foundVersion) {
+        moduleVersions.push(newVersionCandidate);
+      }
+    } else {
+      acc.set(moduleName, [newVersionCandidate]);
+    }
+    return acc;
+  }, availableCommunityModules);
+}
+
+function createVersion(moduleTemplate: ModuleTemplateType): VersionInfo {
+  return {
+    version: moduleTemplate.spec.version,
+    channel: moduleTemplate.spec.channel,
+    moduleTemplateNamespace: moduleTemplate.metadata.namespace,
+    moduleTemplateName: moduleTemplate.metadata.name,
+  };
+}
+
+function markInstalledVersion(
+  availableCommunityModules: Map<string, VersionInfo[]>,
+  installedModuleTemplates: ModuleTemplateListType,
+) {
+  installedModuleTemplates.items.forEach(installedModule => {
+    const foundModuleVersions = availableCommunityModules.get(
+      getModuleName(installedModule),
+    );
+    if (foundModuleVersions) {
+      const versionIdx = foundModuleVersions.findIndex(version => {
+        return version.version === installedModule.spec.version;
+      });
+
+      if (versionIdx > -1) {
+        foundModuleVersions[versionIdx].installed = true;
+      }
+    }
+  });
+}
+
+function fillModulesWithMetadata(
+  availableCommunityModules: Map<string, VersionInfo[]>,
+  moduleReleaseMetas: ModuleReleaseMetaListType,
+) {
+  moduleReleaseMetas.items.forEach(releaseMeta => {
+    const foundVersions = availableCommunityModules.get(
+      releaseMeta.spec.moduleName,
+    );
+    if (foundVersions) {
+      foundVersions.forEach(version => {
+        const matchedChannelMeta = releaseMeta.spec.channels.find(
+          channelMeta => {
+            return channelMeta.version === version.version;
+          },
+        );
+        if (matchedChannelMeta) {
+          version.channel = matchedChannelMeta.channel;
+          version.beta = releaseMeta.spec.beta ?? false;
+        }
+      });
+    }
+  });
 }
 
 export function getCommunityModules(

@@ -175,7 +175,11 @@ export const useFetchModuleData = (
 export const useGetInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesLoading?: boolean,
-) => {
+): {
+  installed: ModuleTemplateListType;
+  loading: boolean;
+  error?: any;
+} => {
   const { data: managers, loading, error } = useFetchModuleData(
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.manager ?? null,

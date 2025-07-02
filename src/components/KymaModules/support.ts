@@ -109,12 +109,21 @@ export type ModuleReleaseMetas = {
       version: string;
     }[];
     moduleName: string;
+    beta?: boolean;
   };
 };
 
 export type ModuleReleaseMetaListType = {
   items: ModuleReleaseMetas[];
 };
+
+export const getModuleName = (moduleTemplate: ModuleTemplateType): string => {
+  return (
+    moduleTemplate.metadata?.labels['operator.kyma-project.io/module-name'] ??
+    moduleTemplate.spec.moduleName
+  );
+};
+
 export const getResourcePath = (resource: any) => {
   if (!resource) return '';
 

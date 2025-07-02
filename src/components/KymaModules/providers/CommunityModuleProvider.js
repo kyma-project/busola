@@ -12,9 +12,8 @@ export const CommunityModuleContext = createContext({
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
   deleteModuleButton: () => <></>,
-  installedCommunityModules: [],
-  communityModulesLoading: false,
-  communityModuleTemplates: null,
+  installedCommunityModules: { items: [] },
+  installedCommunityModulesLoading: false,
 });
 
 export function CommunityModuleContextProvider({
@@ -33,21 +32,9 @@ export function CommunityModuleContextProvider({
     ModuleTemplatesContext,
   );
   const {
-    installed: installedModules,
-    loading: communityModulesLoading,
+    installed: installedCommunityModules,
+    loading: installedCommunityModulesLoading,
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
-
-  // TODO: move it to separate function
-  const installedCommunityModules =
-    installedModules.items?.map(module => ({
-      name:
-        module.metadata?.labels['operator.kyma-project.io/module-name'] ??
-        module.spec.moduleName,
-      moduleTemplateName: module.metadata.name,
-      namespace: module.metadata.namespace,
-      version: module.spec.version,
-      resource: module.spec.data,
-    })) ?? [];
 
   useEffect(() => {
     if (layoutState?.layout) {
@@ -59,12 +46,15 @@ export function CommunityModuleContextProvider({
     const index =
       moduleIndex ??
       // Find index of the selected module after a refresh or other case after which we have undefined.
-      activeModules?.findIndex(module =>
+      activeModules.items?.findIndex(module =>
         checkSelectedModule(module, layoutState),
       );
     return index > -1 ? index : undefined;
   };
 
+  const simplifiedInstalledModules = simplifyInstalledModules(
+    installedCommunityModules,
+  );
   const deleteModuleButton = (
     <div>
       <Button onClick={() => handleResourceDelete({})} design="Transparent">
@@ -79,25 +69,25 @@ export function CommunityModuleContextProvider({
         setOpenedModuleIndex: setOpenedModuleIndex,
         showDeleteDialog: showDeleteDialog,
         installedCommunityModules: installedCommunityModules,
-        communityModulesLoading: communityModulesLoading,
+        communityModulesLoading: installedCommunityModulesLoading,
         DeleteMessageBox: DeleteMessageBox,
         deleteModuleButton: deleteModuleButton,
         handleResourceDelete: handleResourceDelete,
       }}
     >
       {createPortal(
-        getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !==
+        getOpenedModuleIndex(openedModuleIndex, simplifiedInstalledModules) !==
           undefined &&
-          !communityModulesLoading &&
+          !installedCommunityModulesLoading &&
           !moduleTemplatesLoading &&
           showDeleteDialog && (
             <ModulesDeleteBox
               kymaResource={kymaResource}
               DeleteMessageBox={DeleteMessageBox}
-              selectedModules={installedCommunityModules}
+              selectedModules={simplifiedInstalledModules}
               chosenModuleIndex={getOpenedModuleIndex(
                 openedModuleIndex,
-                installedCommunityModules,
+                simplifiedInstalledModules,
               )}
               moduleTemplates={communityModuleTemplates}
               detailsOpen={detailsOpen}
@@ -110,5 +100,19 @@ export function CommunityModuleContextProvider({
       )}
       {children}
     </CommunityModuleContext.Provider>
+  );
+}
+
+function simplifyInstalledModules(installedModules) {
+  return (
+    installedModules.items?.map(module => ({
+      name:
+        module.metadata?.labels['operator.kyma-project.io/module-name'] ??
+        module.spec.moduleName,
+      moduleTemplateName: module.metadata.name,
+      namespace: module.metadata.namespace,
+      version: module.spec.version,
+      resource: module.spec.data,
+    })) ?? []
   );
 }
