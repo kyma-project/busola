@@ -35,7 +35,6 @@ import {
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
 import CommunityModulesEdit from 'components/KymaModules/KymaCommunityModulesEdit';
-import { getCommunityModules } from 'components/KymaModules/components/CommunityModulesHelpers';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {

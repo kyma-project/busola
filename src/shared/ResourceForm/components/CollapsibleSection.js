@@ -9,7 +9,7 @@ import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/T
 
 export function CollapsibleSection({
   disabled = false,
-  defaultOpen = undefined,
+  defaultOpen,
   canChangeState = true,
   title,
   defaultTitleType = false,
