@@ -22,6 +22,7 @@ import BannerCarousel from 'components/Extensibility/components/FeaturedCard/Ban
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import './ClusterOverview.scss';
+import { AiBanner } from 'components/KymaCompanion/components/AiBanner/AiBanner';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -30,6 +31,7 @@ const Injections = React.lazy(() =>
 export function ClusterOverview() {
   const { t } = useTranslation();
   const clusterValidation = useFeature('CLUSTER_VALIDATION');
+  const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();
@@ -91,11 +93,35 @@ export function ClusterOverview() {
           <>
             <BannerCarousel
               children={
-                <Injections
-                  destination="ClusterOverview"
-                  slot="banner"
-                  root=""
-                />
+                <>
+                  {isKymaCompanionEnabled && (
+                    <AiBanner
+                      id="ai-banner"
+                      title={'Meet Joule'}
+                      description={
+                        'Your personal, contextual assistant - ready with the right insights and answers to all your Kyma questions.'
+                      }
+                      design={'information-2'}
+                      image="AI"
+                      buttons={
+                        <>
+                          <Button key="try-joule" design="Emphasized">
+                            {'Try Joule'}
+                          </Button>
+                          <Button key="ai-feedback" endIcon="inspect">
+                            Give Feedback
+                          </Button>
+                          ,
+                        </>
+                      }
+                    />
+                  )}
+                  <Injections
+                    destination="ClusterOverview"
+                    slot="banner"
+                    root=""
+                  />
+                </>
               }
             />
             <Injections
