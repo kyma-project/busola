@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { last, mapValues } from 'lodash';
 
@@ -53,17 +53,9 @@ export function useJsonata({
   const { t } = useTranslation();
   const dataSourcesContext = useContext(DataSourcesContext);
 
-  const [dataSourceFetchers, setDataSourceFetchers] = useState(
-    getDataSourceFetchers(resource, dataSourcesContext),
-  );
-
-  useEffect(() => {
-    const dataSourceFetchers = getDataSourceFetchers(
-      resource,
-      dataSourcesContext,
-    );
-    setDataSourceFetchers(dataSourceFetchers);
-  }, [dataSourcesContext.store]); // eslint-disable-line react-hooks/exhaustive-deps
+  const dataSourceFetchers = useMemo(() => {
+    return getDataSourceFetchers(resource, dataSourcesContext);
+  }, [resource, dataSourcesContext]);
 
   const jsonata: JsonataFunction = (
     query,
@@ -78,7 +70,7 @@ export function useJsonata({
       const value = jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {
-          ...mapValues(dataSourceFetchers, dsf => dsf.value),
+          ...mapValues(dataSourceFetchers, dsf => dsf.value()),
           root: extras.resource || resource,
           parent: parent,
           embedResource: embedResource,

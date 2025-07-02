@@ -33,7 +33,8 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const cluster = useRecoilValue(clusterState);
 
-  const jsonata = useJsonata({ resource: {} as Resource });
+  const emptyResource = useMemo(() => ({} as Resource), []);
+  const jsonata = useJsonata({ resource: emptyResource });
   const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
   const { navigateSafely } = useFormNavigation();
 

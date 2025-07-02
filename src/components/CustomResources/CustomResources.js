@@ -78,7 +78,6 @@ export function CustomResources({
     resourceUrl,
     title: pluralize(crd.spec.names.kind),
     resourceType: crd.spec.names.kind,
-    rawResourceType: crd.spec.names.kind,
     isCompact: true,
     showTitle,
     customColumns,
