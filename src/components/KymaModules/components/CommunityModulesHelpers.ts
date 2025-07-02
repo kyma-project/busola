@@ -4,6 +4,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
+import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 export type VersionInfo = {
   version: string;
@@ -147,4 +148,39 @@ function imageMatchVersion(image: string, version: string): boolean {
   const imgName = image.split(':');
   const imgTag = imgName[imgName.length - 1];
   return imgTag.includes(version);
+}
+
+export default async function postForCommunityResources(
+  post: PostFn,
+  link: string,
+) {
+  if (!link) {
+    console.error('No link provided for community resource');
+    return false;
+  }
+
+  try {
+    const response = await post('/modules/community-resource', { link });
+    if (response?.length) {
+      return response;
+    }
+    console.error('Empty or invalid response:', response);
+    return false;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return false;
+  }
+}
+
+export async function getAllResourcesYamls(links: string[], post: PostFn) {
+  if (links?.length) {
+    const yamlRes = await Promise.all(
+      links.map(async link => {
+        if (link) {
+          return await postForCommunityResources(post, link);
+        }
+      }),
+    );
+    return yamlRes.flat();
+  }
 }

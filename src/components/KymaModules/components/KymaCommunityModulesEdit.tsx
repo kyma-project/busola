@@ -7,6 +7,7 @@ import CommunityModuleEdit, {
 } from 'components/KymaModules/components/ModuleEdit';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
+  getAllResourcesYamls,
   getAvailableCommunityModules,
   VersionInfo,
 } from 'components/KymaModules/components/CommunityModulesHelpers';
@@ -23,8 +24,7 @@ import { createPortal } from 'react-dom';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
-import { getAllResourcesYamls } from 'components/KymaModules/tmpInstallHelpers';
-import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { PostFn, usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
 import {
   NotificationContextArgs,
@@ -98,7 +98,7 @@ function onCommunityChange(
 function fetchResourcesToApply(
   communityModulesToApply: Map<string, ModuleTemplateType>,
   setResourcesToApply: Function,
-  post: Function,
+  post: PostFn,
 ) {
   const resourcesLinks = [...communityModulesToApply.values()]
     .map(moduleTpl => moduleTpl.spec.resources)
