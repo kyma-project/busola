@@ -96,4 +96,3 @@ tests/kyma/fixtures/kubeconfig.yaml
 kyma/**
 
 backend/companion/credentials.json
-src/components/KymaModules/KymaCommunityModulesEdit.tsx

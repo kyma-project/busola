@@ -802,6 +802,7 @@ kyma-modules:
   module-added: Module added 
   module-uninstall: Module deleted
   module-updated: Module updated
+  module-update-failed: Module update failed
   module-documentation: Documentation
   modules-channel: Modules Channel
   add-module: Add Modules

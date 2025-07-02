@@ -204,8 +204,6 @@ export default function KymaModulesEdit({ resource, ...props }) {
     });
   };
 
-  const communityModules = getCommunityModules(moduleTemplates);
-
   const onChange = (module, value, index) => {
     setChannel(module, value, index, selectedModules, setSelectedModules);
     setKymaResource({
@@ -464,9 +462,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
         </ResourceForm>
       )}
       <CommunityModulesEdit
-        communityModules={communityModules}
         moduleReleaseMetas={moduleReleaseMetas}
-        loadingModuleTemplates={loadingModuleTemplates}
       ></CommunityModulesEdit>
     </>
   );

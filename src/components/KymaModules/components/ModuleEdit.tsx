@@ -2,21 +2,20 @@ import { FlexBox, Label, Option, Select } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 export type ModuleInfoProps = {
-  module: ModuleInfo;
+  module: ModuleDisplayInfo;
   onChange: Function;
 };
 
-export type ModuleInfo = {
+export type ModuleDisplayInfo = {
   name: string;
-  versions: VersionInfo[];
+  versions: VersionDisplayInfo[];
 };
 
-export type VersionInfo = {
+export type VersionDisplayInfo = {
   moduleTemplate: {
     name: string;
     namespace: string;
   };
-  key: string;
   version: string;
   channel: string;
   installed: boolean;
