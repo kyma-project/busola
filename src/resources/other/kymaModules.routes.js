@@ -1,4 +1,4 @@
-import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { FlexibleColumnLayout, MessageStrip } from '@ui5/webcomponents-react';
 import React, { Suspense, useDeferredValue } from 'react';
 import { Route, useParams } from 'react-router';
 import { useRecoilState } from 'recoil';
@@ -120,7 +120,7 @@ const ColumnWrapper = ({
                 }}
               />
             )}
-            {layoutState?.showCreate?.createType !== 'community' && (
+            {layoutState?.showCreate?.createType === 'kyma' && (
               <ResourceCreate
                 title={t('kyma-modules.add-module')}
                 confirmText={t('common.buttons.add')}
@@ -134,6 +134,25 @@ const ColumnWrapper = ({
                 }}
               />
             )}
+            {layoutState?.showCreate?.createType !== 'community' &&
+              layoutState?.showCreate?.createType !== 'kyma' && (
+                <ResourceCreate
+                  title={t('kyma-modules.add-module')}
+                  confirmText={t('common.buttons.add')}
+                  layoutCloseCreateUrl={url}
+                  renderForm={renderProps => {
+                    return (
+                      <ErrorBoundary>
+                        <div className="sap-margin-small">
+                          <MessageStrip design="Critical" hideCloseButton>
+                            {t('err-boundary.sth-went-wrong')}
+                          </MessageStrip>
+                        </div>
+                      </ErrorBoundary>
+                    );
+                  }}
+                />
+              )}
           </div>
         )}
     </>
