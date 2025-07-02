@@ -15,6 +15,7 @@ import {
 import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { useMemo } from 'react';
 
 type NavItemProps = {
   node: NavNode;
@@ -36,19 +37,22 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
   const { navigateSafely } = useFormNavigation();
 
-  const isNodeSelected = (node: NavNode) => {
+  const isSelected = useMemo(() => {
     if (node.externalUrl) return false;
-    else {
-      const { pathname } = window.location;
-      const namespacePart = namespaceId ? `/namespaces/${namespaceId}/` : '/';
-      const resourcePart = pathname.replace(
-        `/cluster/${cluster?.name}${namespacePart}`,
-        '',
-      );
-      const pathSegment = resourcePart.split('/')?.[0];
-      return pathSegment === node.pathSegment;
-    }
-  };
+    const namespacePart = namespaceId ? `/namespaces/${namespaceId}/` : '/';
+    const resourcePart = location.pathname.replace(
+      `/cluster/${cluster?.name}${namespacePart}`,
+      '',
+    );
+    const pathSegment = resourcePart.split('/')?.[0];
+    return pathSegment === node.pathSegment;
+  }, [
+    node.externalUrl,
+    node.pathSegment,
+    location.pathname,
+    namespaceId,
+    cluster?.name,
+  ]);
 
   const handleNavigation = () => {
     if (node.dataSources) {
@@ -91,7 +95,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
     text: t(node.label, { defaultValue: node.label }),
-    selected: isNodeSelected(node),
+    selected: isSelected,
     onClick: (e: Event) => {
       e.stopPropagation();
       handleNavigation();
