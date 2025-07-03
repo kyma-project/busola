@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { isSystemThemeDark, themeState } from 'state/preferences/themeAtom';
 import modulesIllustration from './assets/Modules/modulesIllustration.svg';
 import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
-import AiIllustrationLight from './FeaturedCard/assets/AI/AiIllustrationLight.svg';
-import AiIllustrationDark from './FeaturedCard/assets/AI/AiIllustrationDark.svg';
-import AiIllustrationHClight from './FeaturedCard/assets/AI/AiIllustrationHClight.svg';
-import AiIllustrationHCdark from './FeaturedCard/assets/AI/AiIllustrationHCdark.svg';
+import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';
+import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
+import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
+import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import { useRecoilValue } from 'recoil';
 
 type FeatureCardBannerProps = {

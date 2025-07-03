@@ -22,7 +22,7 @@ import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import './ClusterOverview.scss';
-import { AiBanner } from 'components/KymaCompanion/components/AiBanner/AiBanner';
+import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -95,7 +95,7 @@ export function ClusterOverview() {
               children={
                 <>
                   {isKymaCompanionEnabled && (
-                    <AiBanner
+                    <FeatureCardBanner
                       id="ai-banner"
                       title={'Meet Joule'}
                       description={
@@ -111,7 +111,6 @@ export function ClusterOverview() {
                           <Button key="ai-feedback" endIcon="inspect">
                             Give Feedback
                           </Button>
-                          ,
                         </>
                       }
                     />
