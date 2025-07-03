@@ -4,7 +4,7 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { CollapsibleSection } from 'shared/ResourceForm/components/CollapsibleSection';
 import CommunityModuleEdit, {
   ModuleDisplayInfo,
-} from 'components/KymaModules/components/ModuleEdit';
+} from 'components/KymaModules/components/CommunityModuleEdit';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   getAllResourcesYamls,
@@ -105,7 +105,6 @@ function fetchResourcesToApply(
     .flat()
     .map(item => item?.link || '');
 
-  console.log(resourcesLinks);
   (async function() {
     try {
       const yamls = await getAllResourcesYamls(resourcesLinks, post);

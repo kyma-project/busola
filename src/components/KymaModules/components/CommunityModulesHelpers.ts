@@ -13,6 +13,8 @@ export type VersionInfo = {
   channel?: string;
   installed?: boolean;
   beta?: boolean;
+  docsURL?: string;
+  icon?: {};
 };
 
 export function getAvailableCommunityModules(
@@ -20,7 +22,6 @@ export function getAvailableCommunityModules(
   installedModuleTemplates: ModuleTemplateListType,
   moduleReleaseMetas: ModuleReleaseMetaListType,
 ): Map<string, VersionInfo[]> {
-  //This part is responsible for creating moduleName with all Version from ModuleTemplates
   const availableCommunityModules = new Map<string, VersionInfo[]>();
   fillModuleVersions(availableCommunityModules, communityModulesTemplates);
   markInstalledVersion(availableCommunityModules, installedModuleTemplates);
