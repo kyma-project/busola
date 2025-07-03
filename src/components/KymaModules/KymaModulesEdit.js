@@ -462,6 +462,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
       )}
       <CommunityModulesEdit
         moduleReleaseMetas={moduleReleaseMetas}
+        moduleReleaseMetasLoading={loadingModulesReleaseMetas}
       ></CommunityModulesEdit>
     </>
   );

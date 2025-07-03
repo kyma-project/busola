@@ -34,6 +34,7 @@ import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleT
 
 type CommunityModulesEditProp = {
   moduleReleaseMetas: ModuleReleaseMetaListType;
+  moduleReleaseMetasLoading: boolean;
 };
 
 const isModuleInstalled = (
@@ -197,6 +198,7 @@ function transformDataForDisplay(
 
 export default function CommunityModulesEdit({
   moduleReleaseMetas,
+  moduleReleaseMetasLoading,
 }: CommunityModulesEditProp) {
   const { t } = useTranslation();
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
@@ -227,7 +229,9 @@ export default function CommunityModulesEdit({
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
-    if (!moduleTemplatesLoading) {
+    console.log(moduleReleaseMetasLoading, moduleReleaseMetas);
+    if (!moduleReleaseMetasLoading) {
+      console.log(moduleReleaseMetas);
       return getAvailableCommunityModules(
         communityModuleTemplates,
         installedCommunityModuleTemplates,
@@ -240,7 +244,7 @@ export default function CommunityModulesEdit({
     communityModuleTemplates,
     moduleReleaseMetas,
     installedCommunityModuleTemplates,
-    moduleTemplatesLoading,
+    moduleReleaseMetasLoading,
   ]);
 
   useEffect(() => {
@@ -293,9 +297,10 @@ export default function CommunityModulesEdit({
                 }}
               >
                 {communityModulesToDisplay &&
-                  communityModulesToDisplay.map(module => {
+                  communityModulesToDisplay.map((module, idx) => {
                     return (
                       <CommunityModuleEdit
+                        key={`${module.name}+${idx}`}
                         module={module}
                         onChange={onCommunityChange(
                           communityModuleTemplates,
@@ -308,7 +313,6 @@ export default function CommunityModulesEdit({
                     );
                   })}
               </div>
-              {/*</Form>*/}
             </CollapsibleSection>
           }
         ></UI5Panel>
