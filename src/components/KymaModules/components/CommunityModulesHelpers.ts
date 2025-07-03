@@ -114,7 +114,7 @@ function fillModulesWithMetadata(
   availableCommunityModules: Map<string, VersionInfo[]>,
   moduleReleaseMetas: ModuleReleaseMetaListType,
 ) {
-  moduleReleaseMetas.items.forEach(releaseMeta => {
+  moduleReleaseMetas?.items.forEach(releaseMeta => {
     const foundVersions = availableCommunityModules.get(
       releaseMeta.spec.moduleName,
     );

@@ -460,10 +460,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
           </ResourceForm.CollapsibleSection>
         </ResourceForm>
       )}
-      <CommunityModulesEdit
-        moduleReleaseMetas={moduleReleaseMetas}
-        moduleReleaseMetasLoading={loadingModulesReleaseMetas}
-      ></CommunityModulesEdit>
+      <CommunityModulesEdit />
     </>
   );
 }

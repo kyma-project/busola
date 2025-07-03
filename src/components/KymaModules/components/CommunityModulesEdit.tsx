@@ -13,7 +13,6 @@ import {
 } from 'components/KymaModules/components/CommunityModulesHelpers';
 import {
   getModuleName,
-  ModuleReleaseMetaListType,
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
@@ -31,11 +30,6 @@ import {
   useNotification,
 } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
-
-type CommunityModulesEditProp = {
-  moduleReleaseMetas: ModuleReleaseMetaListType;
-  moduleReleaseMetasLoading: boolean;
-};
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -56,7 +50,6 @@ function onCommunityChange(
   setIsResourceEdited: SetterOrUpdater<any>,
 ): any {
   return (module: string, value: string) => {
-    console.log(module, value);
     const [name, namespace] = value.split('|');
     const moduleTemplate = {
       name,
@@ -98,7 +91,6 @@ function onCommunityChange(
       return;
     }
 
-    console.log('Modules to Update', newModulesToUpdated);
     if (newModulesToUpdated.size === 0) {
       setIsResourceEdited({
         isEdited: false,
@@ -145,7 +137,6 @@ function onSave(
 ) {
   return () => {
     try {
-      console.log('Saving version change');
       uploadResources();
       setIsResourceEdited({
         isEdited: false,
@@ -196,10 +187,7 @@ function transformDataForDisplay(
   });
 }
 
-export default function CommunityModulesEdit({
-  moduleReleaseMetas,
-  moduleReleaseMetasLoading,
-}: CommunityModulesEditProp) {
+export default function CommunityModulesEdit() {
   const { t } = useTranslation();
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     'COMMUNITY_MODULES',
@@ -220,18 +208,19 @@ export default function CommunityModulesEdit({
     new Map<string, ModuleTemplateType>(),
   );
 
-  const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
-    ModuleTemplatesContext,
-  );
+  const {
+    moduleTemplatesLoading,
+    communityModuleTemplates,
+    moduleReleaseMetasLoading,
+    moduleReleaseMetas,
+  } = useContext(ModuleTemplatesContext);
   const {
     installedCommunityModuleTemplates,
     installedCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
-    console.log(moduleReleaseMetasLoading, moduleReleaseMetas);
     if (!moduleReleaseMetasLoading) {
-      console.log(moduleReleaseMetas);
       return getAvailableCommunityModules(
         communityModuleTemplates,
         installedCommunityModuleTemplates,
