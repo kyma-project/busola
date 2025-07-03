@@ -14,7 +14,10 @@ export type VersionInfo = {
   installed?: boolean;
   beta?: boolean;
   docsURL?: string;
-  icon?: {};
+  icon?: {
+    link: string;
+    name: string;
+  };
 };
 
 export function getAvailableCommunityModules(
@@ -64,9 +67,29 @@ function createVersion(moduleTemplate: ModuleTemplateType): VersionInfo {
     channel: moduleTemplate.spec.channel,
     moduleTemplateNamespace: moduleTemplate.metadata.namespace,
     moduleTemplateName: moduleTemplate.metadata.name,
+    docsURL: moduleTemplate.spec.info?.documentation,
+    icon: getiFirstIcon(moduleTemplate.spec.info?.icons),
   };
 }
 
+function getiFirstIcon(
+  icons?: [
+    {
+      name: string;
+      link: string;
+    },
+  ],
+) {
+  const firstIcon = icons?.at(0);
+  if (firstIcon) {
+    return {
+      link: firstIcon.link,
+      name: firstIcon.name,
+    };
+  } else {
+    return undefinedg;
+  }
+}
 function markInstalledVersion(
   availableCommunityModules: Map<string, VersionInfo[]>,
   installedModuleTemplates: ModuleTemplateListType,

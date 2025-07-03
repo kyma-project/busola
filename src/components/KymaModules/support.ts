@@ -85,6 +85,12 @@ export type ModuleTemplateType = {
     version: string;
     info?: {
       documentation?: string;
+      icons?: [
+        {
+          link: string;
+          name: string;
+        },
+      ];
     };
     manager: ModuleManagerType;
     moduleName?: string;
