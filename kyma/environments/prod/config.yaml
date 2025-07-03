@@ -73,6 +73,8 @@ config:
       isEnabled: false
     KYMA_COMPANION:
       isEnabled: false
+      config:
+        feedbackLink: ''
     EVENTING:
       isEnabled: true
       selectors:

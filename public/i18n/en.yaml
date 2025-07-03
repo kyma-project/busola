@@ -765,6 +765,12 @@ kubeconfig-id:
   error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-companion:
+  banner: 
+    title: Meet Joule
+    description: Your personal, contextual assistant - ready with the right insights and answers to all your Kyma questions.
+    buttons:
+      try-joule: Try Joule
+      feedback: Give Feedback
   name: Joule
   opener:
     use-ai: AI Companion
