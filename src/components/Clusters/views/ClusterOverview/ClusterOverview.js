@@ -23,6 +23,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import './ClusterOverview.scss';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -31,7 +32,10 @@ const Injections = React.lazy(() =>
 export function ClusterOverview() {
   const { t } = useTranslation();
   const clusterValidation = useFeature('CLUSTER_VALIDATION');
-  const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
+  const {
+    isEnabled: isKymaCompanionEnabled,
+    config: companionConfig,
+  } = useFeature('KYMA_COMPANION');
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();
@@ -41,6 +45,7 @@ export function ClusterOverview() {
     resourceType: t('clusters.labels.name'),
   });
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
+  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
 
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   useEffect(() => {
@@ -105,10 +110,29 @@ export function ClusterOverview() {
                       image="AI"
                       buttons={
                         <>
-                          <Button key="try-joule" design="Emphasized">
+                          <Button
+                            key="try-joule"
+                            design="Emphasized"
+                            onClick={e => {
+                              e.preventDefault();
+                              setShowCompanion({
+                                show: true,
+                                fullScreen: false,
+                              });
+                            }}
+                          >
                             {'Try Joule'}
                           </Button>
-                          <Button key="ai-feedback" endIcon="inspect">
+                          <Button
+                            key="ai-feedback"
+                            endIcon="inspect"
+                            onClick={() => {
+                              window.open(
+                                companionConfig?.feedbackLink,
+                                '_blank',
+                              );
+                            }}
+                          >
                             Give Feedback
                           </Button>
                         </>
