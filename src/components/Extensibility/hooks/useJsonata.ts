@@ -55,7 +55,8 @@ export function useJsonata({
 
   const dataSourceFetchers = useMemo(() => {
     return getDataSourceFetchers(resource, dataSourcesContext);
-  }, [resource, dataSourcesContext]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataSourcesContext.store]);
 
   const jsonata: JsonataFunction = (
     query,
@@ -70,7 +71,7 @@ export function useJsonata({
       const value = jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {
-          ...mapValues(dataSourceFetchers, dsf => dsf.value()),
+          ...mapValues(dataSourceFetchers, dsf => dsf.value),
           root: extras.resource || resource,
           parent: parent,
           embedResource: embedResource,
