@@ -1,7 +1,8 @@
 import { cloneDeep, isEqual } from 'lodash';
 import { useEffect, useMemo } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { useSelector } from 'react-redux';
+import { useSetRecoilState } from 'recoil';
+import { getIsFormOpenState } from 'state/formOpenSlice';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
 const excludeStatus = resource => {
@@ -19,7 +20,7 @@ export function useFormEditTracking(
   initialResource,
   editorError = false,
 ) {
-  const { formOpen } = useRecoilValue(isFormOpenState);
+  const { formOpen } = useSelector(getIsFormOpenState);
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
 
   const excludedResource = useMemo(() => excludeStatus(resource), [resource]);
