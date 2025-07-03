@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Carousel } from '@ui5/webcomponents-react';
 
-export default function BannerCarousel({ children }) {
-  const carouselRef = useRef(null);
+export default function BannerCarousel({ children }: { children: ReactNode }) {
+  const carouselRef = useRef<React.ElementRef<typeof Carousel>>(null);
   const [childrenLength, setChildrenLength] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);

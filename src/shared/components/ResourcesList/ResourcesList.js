@@ -23,7 +23,7 @@ import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
-import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
+import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
 import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';

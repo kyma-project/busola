@@ -18,7 +18,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import ClusterStats from './ClusterStats';
 import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
+import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import './ClusterOverview.scss';
