@@ -1,5 +1,4 @@
 import { FlexBox, Label, Option, Select } from '@ui5/webcomponents-react';
-import { useTranslation } from 'react-i18next';
 
 export type ModuleInfoProps = {
   module: ModuleDisplayInfo;
@@ -22,12 +21,10 @@ export type VersionDisplayInfo = {
   textToDisplay: string;
 };
 
-export default function CommunityModuleEdit({
+export default function CommunityModuleVersionSelect({
   module,
   onChange,
 }: ModuleInfoProps) {
-  const { t } = useTranslation();
-
   const installedVersion = module.versions.find(v => v.installed);
   if (!installedVersion) {
     return <></>;

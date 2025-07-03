@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { CollapsibleSection } from 'shared/ResourceForm/components/CollapsibleSection';
-import CommunityModuleEdit, {
+import CommunityModuleVersionSelect, {
   ModuleDisplayInfo,
-} from 'components/KymaModules/components/CommunityModuleEdit';
+} from 'components/KymaModules/components/CommunityModuleVersionSelect';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   getAllResourcesYamls,
@@ -288,7 +288,7 @@ export default function CommunityModulesEdit() {
                 {communityModulesToDisplay &&
                   communityModulesToDisplay.map((module, idx) => {
                     return (
-                      <CommunityModuleEdit
+                      <CommunityModuleVersionSelect
                         key={`${module.name}+${idx}`}
                         module={module}
                         onChange={onCommunityChange(
