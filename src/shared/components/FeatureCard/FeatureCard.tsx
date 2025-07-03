@@ -8,24 +8,13 @@ import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
 import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
 import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import { useRecoilValue } from 'recoil';
-
-type FeatureCardBannerProps = {
-  id: string;
-  title: string;
-  description: string;
-  design: string;
-  image?: string;
-  buttons?: React.ReactNode;
-};
-
-type IllustrationType = 'None' | 'AI' | 'Modules' | string;
-type ThemeType =
-  | 'sap_horizon_hcw'
-  | 'sap_horizon_hcb'
-  | 'sap_horizon'
-  | 'sap_horizon_dark'
-  | 'light_dark'
-  | string;
+import {
+  BackgroundStyle,
+  DesignType,
+  FeatureCardBannerProps,
+  IllustrationType,
+  ThemeType,
+} from './types';
 
 const getIllustration = (
   illustration: IllustrationType,
@@ -82,12 +71,6 @@ export function FeatureCardBanner({
   if (hideBanner) {
     return <></>;
   }
-
-  interface BackgroundStyle {
-    background: string;
-  }
-
-  type DesignType = 'information-1' | 'information-2' | string;
 
   const getBackgroundStyle = (design: DesignType): BackgroundStyle => {
     switch (design) {
