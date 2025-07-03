@@ -5,6 +5,7 @@ export type FeatureCardBannerProps = {
   design: string;
   image?: string;
   buttons?: React.ReactNode;
+  titleIcon?: string;
 };
 
 export type IllustrationType = 'None' | 'AI' | 'Modules' | string;

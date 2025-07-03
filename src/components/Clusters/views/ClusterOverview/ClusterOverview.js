@@ -20,7 +20,7 @@ import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AiBanner';
+import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner';
 
 import './ClusterOverview.scss';
 

@@ -58,6 +58,7 @@ export function FeatureCardBanner({
   design,
   image = '',
   buttons,
+  titleIcon,
 }: FeatureCardBannerProps) {
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${id}`;
@@ -105,9 +106,25 @@ export function FeatureCardBanner({
           />
           <div className="outer-container" style={{ margin: '2rem 2.5rem' }}>
             <div className="inner-container">
-              <Title level="H1" size="H1" wrappingType="Normal">
-                {title}
-              </Title>
+              <div style={{ width: '100%' }} className="title-container">
+                <Title
+                  level="H1"
+                  size="H1"
+                  wrappingType="Normal"
+                  style={{
+                    display: 'inline-flex',
+                  }}
+                >
+                  {title}
+                </Title>
+                {titleIcon && (
+                  <img
+                    src={titleIcon}
+                    alt="Title Icon"
+                    className="bsl-icon-xxl"
+                  />
+                )}
+              </div>
               <Text>{description}</Text>
               <div className="button-container sap-margin-top-small">
                 {buttons && buttons}
