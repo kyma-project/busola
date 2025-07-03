@@ -206,17 +206,21 @@ export default function CommunityModulesEdit({
     ModuleTemplatesContext,
   );
   const {
-    installedCommunityModules,
+    installedCommunityModuleTemplates,
     installedCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
     return getAvailableCommunityModules(
       communityModuleTemplates,
-      installedCommunityModules,
+      installedCommunityModuleTemplates,
       moduleReleaseMetas,
     );
-  }, [communityModuleTemplates, moduleReleaseMetas, installedCommunityModules]);
+  }, [
+    communityModuleTemplates,
+    moduleReleaseMetas,
+    installedCommunityModuleTemplates,
+  ]);
 
   useEffect(() => {
     fetchResourcesToApply(communityModulesToApply, setResourcesToApply, post);
@@ -274,7 +278,7 @@ export default function CommunityModulesEdit({
                         module={module}
                         onChange={onCommunityChange(
                           communityModuleTemplates,
-                          installedCommunityModules,
+                          installedCommunityModuleTemplates,
                           communityModulesToApply,
                           setCommunityModulesToApply,
                           setIsResourceEdited,

@@ -38,7 +38,7 @@ export default function KymaModulesList({ namespaced }) {
     ModuleTemplatesContext,
   );
   const {
-    installedCommunityModulesSimpleList: installedCommunityModules,
+    installedCommunityModules,
     installedCommunityModulesLoading,
     setOpenedModuleIndex: setOpenedCommunityModuleIndex,
     handleResourceDelete: handleCommunityModuleDelete,

@@ -12,8 +12,8 @@ export const CommunityModuleContext = createContext({
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
   deleteModuleButton: () => <></>,
-  installedCommunityModules: { items: [] },
-  installedCommunityModulesSimpleList: [],
+  installedCommunityModules: [],
+  installedCommunityModuleTemplates: { items: [] },
   installedCommunityModulesLoading: false,
 });
 
@@ -33,7 +33,7 @@ export function CommunityModuleContextProvider({
     ModuleTemplatesContext,
   );
   const {
-    installed: installedCommunityModules,
+    installed: installedCommunityModuleTemplates,
     loading: installedCommunityModulesLoading,
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
 
@@ -53,8 +53,8 @@ export function CommunityModuleContextProvider({
     return index > -1 ? index : undefined;
   };
 
-  const simplifiedInstalledModules = simplifyInstalledModules(
-    installedCommunityModules,
+  const installedCommunityModules = simplifyInstalledModules(
+    installedCommunityModuleTemplates,
   );
   const deleteModuleButton = (
     <div>
@@ -70,7 +70,7 @@ export function CommunityModuleContextProvider({
         setOpenedModuleIndex: setOpenedModuleIndex,
         showDeleteDialog: showDeleteDialog,
         installedCommunityModules: installedCommunityModules,
-        installedCommunityModulesSimpleList: simplifiedInstalledModules,
+        installedCommunityModuleTemplates: installedCommunityModuleTemplates,
         communityModulesLoading: installedCommunityModulesLoading,
         DeleteMessageBox: DeleteMessageBox,
         deleteModuleButton: deleteModuleButton,
@@ -78,7 +78,7 @@ export function CommunityModuleContextProvider({
       }}
     >
       {createPortal(
-        getOpenedModuleIndex(openedModuleIndex, simplifiedInstalledModules) !==
+        getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !==
           undefined &&
           !installedCommunityModulesLoading &&
           !moduleTemplatesLoading &&
@@ -86,10 +86,10 @@ export function CommunityModuleContextProvider({
             <ModulesDeleteBox
               kymaResource={kymaResource}
               DeleteMessageBox={DeleteMessageBox}
-              selectedModules={simplifiedInstalledModules}
+              selectedModules={installedCommunityModules}
               chosenModuleIndex={getOpenedModuleIndex(
                 openedModuleIndex,
-                simplifiedInstalledModules,
+                installedCommunityModules,
               )}
               moduleTemplates={communityModuleTemplates}
               detailsOpen={detailsOpen}
