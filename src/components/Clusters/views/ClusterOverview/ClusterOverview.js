@@ -20,10 +20,9 @@ import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AiBanner';
 
 import './ClusterOverview.scss';
-import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -45,7 +44,6 @@ export function ClusterOverview() {
     resourceType: t('clusters.labels.name'),
   });
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
-  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
 
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   useEffect(() => {
@@ -100,42 +98,7 @@ export function ClusterOverview() {
               children={
                 <>
                   {isKymaCompanionEnabled && (
-                    <FeatureCardBanner
-                      id="ai-banner"
-                      title={t('kyma-companion.banner.title')}
-                      description={t('kyma-companion.banner.description')}
-                      design={'information-2'}
-                      image="AI"
-                      buttons={
-                        <>
-                          <Button
-                            key="try-joule"
-                            design="Emphasized"
-                            onClick={e => {
-                              e.preventDefault();
-                              setShowCompanion({
-                                show: true,
-                                fullScreen: false,
-                              });
-                            }}
-                          >
-                            {t('kyma-companion.banner.buttons.try-joule')}
-                          </Button>
-                          <Button
-                            key="ai-feedback"
-                            endIcon="inspect"
-                            onClick={() => {
-                              window.open(
-                                companionConfig?.feedbackLink,
-                                '_blank',
-                              );
-                            }}
-                          >
-                            {t('kyma-companion.banner.buttons.feedback')}
-                          </Button>
-                        </>
-                      }
-                    />
+                    <AIBanner feedbackUrl={companionConfig?.feedbackLink} />
                   )}
                   <Injections
                     destination="ClusterOverview"
