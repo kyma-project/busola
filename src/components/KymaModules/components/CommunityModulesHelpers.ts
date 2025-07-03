@@ -87,7 +87,7 @@ function getiFirstIcon(
       name: firstIcon.name,
     };
   } else {
-    return undefinedg;
+    return undefined;
   }
 }
 function markInstalledVersion(
