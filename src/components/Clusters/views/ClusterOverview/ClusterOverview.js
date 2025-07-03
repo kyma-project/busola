@@ -102,10 +102,8 @@ export function ClusterOverview() {
                   {isKymaCompanionEnabled && (
                     <FeatureCardBanner
                       id="ai-banner"
-                      title={'Meet Joule'}
-                      description={
-                        'Your personal, contextual assistant - ready with the right insights and answers to all your Kyma questions.'
-                      }
+                      title={t('kyma-companion.banner.title')}
+                      description={t('kyma-companion.banner.description')}
                       design={'information-2'}
                       image="AI"
                       buttons={
@@ -121,7 +119,7 @@ export function ClusterOverview() {
                               });
                             }}
                           >
-                            {'Try Joule'}
+                            {t('kyma-companion.banner.buttons.try-joule')}
                           </Button>
                           <Button
                             key="ai-feedback"
@@ -133,7 +131,7 @@ export function ClusterOverview() {
                               );
                             }}
                           >
-                            Give Feedback
+                            {t('kyma-companion.banner.buttons.feedback')}
                           </Button>
                         </>
                       }
