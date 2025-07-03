@@ -261,11 +261,6 @@ export default function CommunityModulesEdit({
               className="collapsible-margins"
               title={t('community-modules.title')}
             >
-              {/*<Form*/}
-              {/*  className={'resource-form ui5-content-density-compact'}*/}
-              {/*  labelSpan="S0 M0 L0 XL0"*/}
-              {/*  layout="S1 M1 L1 XL1"*/}
-              {/*>*/}
               <div
                 style={{
                   display: 'grid',

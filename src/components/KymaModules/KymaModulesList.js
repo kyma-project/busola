@@ -38,7 +38,7 @@ export default function KymaModulesList({ namespaced }) {
     ModuleTemplatesContext,
   );
   const {
-    installedCommunityModules,
+    installedCommunityModulesSimpleList: installedCommunityModules,
     installedCommunityModulesLoading,
     setOpenedModuleIndex: setOpenedCommunityModuleIndex,
     handleResourceDelete: handleCommunityModuleDelete,
@@ -50,11 +50,11 @@ export default function KymaModulesList({ namespaced }) {
   useEffect(() => {
     if (
       !installedCommunityModulesLoading &&
-      installedCommunityModules?.items.length
+      installedCommunityModules?.length
     ) {
       setSelectedEntry(
-        installedCommunityModules.items.find(module =>
-          checkSelectedModule(module, layoutState),
+        installedCommunityModules.find(moduleTemplate =>
+          checkSelectedModule(moduleTemplate, layoutState),
         )?.name,
       );
     }

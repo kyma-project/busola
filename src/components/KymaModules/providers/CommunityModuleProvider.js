@@ -13,6 +13,7 @@ export const CommunityModuleContext = createContext({
   handleResourceDelete: () => {},
   deleteModuleButton: () => <></>,
   installedCommunityModules: { items: [] },
+  installedCommunityModulesSimpleList: [],
   installedCommunityModulesLoading: false,
 });
 
@@ -69,6 +70,7 @@ export function CommunityModuleContextProvider({
         setOpenedModuleIndex: setOpenedModuleIndex,
         showDeleteDialog: showDeleteDialog,
         installedCommunityModules: installedCommunityModules,
+        installedCommunityModulesSimpleList: simplifiedInstalledModules,
         communityModulesLoading: installedCommunityModulesLoading,
         DeleteMessageBox: DeleteMessageBox,
         deleteModuleButton: deleteModuleButton,
