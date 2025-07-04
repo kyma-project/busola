@@ -22,6 +22,9 @@ const KymaModulesList = React.lazy(() =>
 const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
+const CommunityModulesAddModule = React.lazy(() =>
+  import('../../components/KymaModules/CommunityModulesAddModule'),
+);
 
 const ColumnWrapper = ({
   defaultColumn = 'list',
@@ -98,22 +101,39 @@ const ColumnWrapper = ({
             />
           </div>
         )}
+
       {/* create */}
       {!layoutState?.midColumn &&
         (defaultColumn !== 'details' || layoutState.layout !== 'OneColumn') && (
           <div className="column-content">
-            <ResourceCreate
-              title={t('kyma-modules.add-module')}
-              confirmText={t('common.buttons.add')}
-              layoutCloseCreateUrl={url}
-              renderForm={renderProps => {
-                return (
-                  <ErrorBoundary>
-                    <KymaModulesAddModule {...renderProps} />
-                  </ErrorBoundary>
-                );
-              }}
-            />
+            {layoutState?.showCreate?.createType === 'community' && (
+              <ResourceCreate
+                title={t('kyma-modules.add-community-module')}
+                confirmText={t('common.buttons.add')}
+                layoutCloseCreateUrl={url}
+                renderForm={renderProps => {
+                  return (
+                    <ErrorBoundary>
+                      <CommunityModulesAddModule {...renderProps} />
+                    </ErrorBoundary>
+                  );
+                }}
+              />
+            )}
+            {layoutState?.showCreate?.createType !== 'community' && (
+              <ResourceCreate
+                title={t('kyma-modules.add-module')}
+                confirmText={t('common.buttons.add')}
+                layoutCloseCreateUrl={url}
+                renderForm={renderProps => {
+                  return (
+                    <ErrorBoundary>
+                      <KymaModulesAddModule {...renderProps} />
+                    </ErrorBoundary>
+                  );
+                }}
+              />
+            )}
           </div>
         )}
     </>

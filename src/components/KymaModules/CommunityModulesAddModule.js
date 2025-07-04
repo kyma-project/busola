@@ -1,61 +1,51 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+
+import { useNavigate } from 'react-router';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import ModulesCard from 'components/KymaModules/components/ModulesCard';
-import { cloneDeep } from 'lodash';
+
 import { useModulesReleaseQuery } from './kymaModulesQueries';
-import { KymaModuleContext } from './providers/KymaModuleProvider';
+import { CommunityModuleContext } from './providers/CommunityModuleProvider';
+import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
+import { getModuleResourcesLinks, getModulesAddData } from './support';
+import { getAllResourcesYamls } from './deleteModulesHelpers';
 
 import './KymaModulesAddModule.scss';
-import { findModuleStatus, getModulesAddData } from './support';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 
-export default function KymaModulesAddModule(props) {
+export default function CommunityModulesAddModule(props) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const notification = useNotification();
 
-  const {
-    kymaResource: resourceName,
-    resourceUrl: kymaResourceUrl,
-    kymaResourceState: kymaResource,
-    setKymaResourceState: setKymaResource,
-    kymaResourceLoading: loading,
-    selectedModules: activeKymaModules,
-    initialUnchangedResource,
-  } = useContext(KymaModuleContext);
-
-  const { moduleTemplates } = useContext(ModuleTemplatesContext);
-
-  const [resource, setResource] = useState(cloneDeep(kymaResource));
-
+  const post = usePost();
+  const { installedCommunityModules, communityModulesLoading } = useContext(
+    CommunityModuleContext,
+  );
+  const { communityModuleTemplates: moduleTemplates } = useContext(
+    ModuleTemplatesContext,
+  );
   const [selectedModules, setSelectedModules] = useState([]);
+  const [resourcesToAply, setResourcesToAply] = useState([]);
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
 
-  useEffect(() => {
-    if (selectedModules && kymaResource) {
-      const newModules = selectedModules.filter(
-        newModules =>
-          !activeKymaModules.find(
-            activeModules => activeModules.name === newModules.name,
-          ),
-      );
-      const mergedModules = activeKymaModules.concat(newModules);
-      setResource({
-        ...kymaResource,
-        spec: {
-          ...kymaResource?.spec,
-          modules: mergedModules,
-        },
-      });
-    }
-  }, [setKymaResource, kymaResource, selectedModules, activeKymaModules]);
+  const uploadResources = useUploadResources(
+    resourcesToAply,
+    setResourcesToAply,
+    () => {},
+    'default',
+  );
 
-  const { data: moduleReleaseMetas } = useModulesReleaseQuery({
-    skip: !resourceName,
-  });
-
+  const { data: moduleReleaseMetas } = useModulesReleaseQuery({});
   const isAlreadyInstalled = name =>
-    initialUnchangedResource?.spec?.modules?.find(
+    installedCommunityModules.find(
       installedModule => installedModule.name === name,
     );
   const modulesAddData = useMemo(
@@ -67,6 +57,27 @@ export default function KymaModulesAddModule(props) {
       ),
     [moduleTemplates, moduleReleaseMetas], // eslint-disable-line react-hooks/exhaustive-deps
   );
+
+  useEffect(() => {
+    const resourcesLinks = getModuleResourcesLinks(
+      modulesAddData,
+      selectedModules,
+    );
+
+    (async function() {
+      try {
+        const yamls = await getAllResourcesYamls(resourcesLinks, post);
+
+        setResourcesToAply(
+          yamls.map(resource => {
+            return { value: resource };
+          }),
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [selectedModules]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [columnsCount, setColumnsCount] = useState(2);
   const [cardsContainerRef, setCardsContainerRef] = useState(null);
@@ -101,7 +112,7 @@ export default function KymaModulesAddModule(props) {
     };
   }, [cardsContainerRef, calculateColumns]);
 
-  if (loading || !kymaResource) {
+  if (communityModulesLoading) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />
@@ -134,8 +145,7 @@ export default function KymaModulesAddModule(props) {
 
       return moduleData
         ? moduleData.channels.some(
-            ({ channel: ch, isBeta }) =>
-              ch === (channel || kymaResource.spec.channel) && isBeta,
+            ({ channel: ch, isBeta }) => ch === channel && isBeta,
           )
         : false;
     });
@@ -144,11 +154,7 @@ export default function KymaModulesAddModule(props) {
   const checkIfStatusModuleIsBeta = moduleName => {
     return modulesAddData
       ?.find(mod => mod.name === moduleName)
-      ?.channels.some(
-        ({ channel: ch, isBeta }) =>
-          ch === findModuleStatus(kymaResource, moduleName)?.channel ||
-          (kymaResource.spec.channel && isBeta),
-      );
+      ?.channels.some(({ channel: ch, isBeta }) => ch && isBeta);
   };
 
   const renderCards = () => {
@@ -162,7 +168,6 @@ export default function KymaModulesAddModule(props) {
       const card = (
         <ModulesCard
           module={module}
-          kymaResource={kymaResource}
           index={index}
           key={module.name}
           isChecked={isChecked}
@@ -192,15 +197,38 @@ export default function KymaModulesAddModule(props) {
     );
   };
 
+  const handleSubmit = () => {
+    try {
+      uploadResources();
+
+      notification.notifySuccess({
+        content: t('kyma-modules.messages.success', {
+          resourceType: 'Community Module',
+        }),
+      });
+
+      setLayoutColumn({
+        ...layoutColumn,
+        layout: 'OneColumn',
+        midColumn: null,
+        endColumn: null,
+        showCreate: null,
+      });
+      navigate(window.location.pathname, { replace: true });
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        content: t('kyma-modules.messages.failure', {
+          resourceType: 'Community Module',
+          error: e.message,
+        }),
+      });
+    }
+  };
+
   return (
     <ResourceForm
       {...props}
-      createUrl={kymaResourceUrl}
-      pluralKind={'kymas'}
-      singularName={'Kyma'}
-      resource={resource}
-      setResource={setResource}
-      initialResource={initialUnchangedResource}
       disableDefaultFields
       formElementRef={props.formElementRef}
       onChange={props.onChange}
@@ -209,38 +237,33 @@ export default function KymaModulesAddModule(props) {
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
       formWithoutPanel
       className="add-modules-form"
+      onSubmit={handleSubmit}
     >
-      {modulesAddData?.length !== 0 ? (
-        <>
-          {checkIfSelectedModuleIsBeta() ? (
-            <MessageStrip
-              key={'beta'}
-              design="Critical"
-              hideCloseButton
-              className="sap-margin-top-small"
-            >
-              {t('kyma-modules.beta-alert')}
-            </MessageStrip>
-          ) : null}
-          {renderCards()}
-        </>
-      ) : kymaResource?.spec?.modules ? (
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          className="sap-margin-top-small"
-        >
-          {t('extensibility.widgets.modules.all-modules-added')}
-        </MessageStrip>
-      ) : (
-        <MessageStrip
-          design="Critical"
-          hideCloseButton
-          className="sap-margin-top-small"
-        >
-          {t('extensibility.widgets.modules.no-modules')}
-        </MessageStrip>
-      )}
+      <>
+        {modulesAddData?.length !== 0 ? (
+          <>
+            {checkIfSelectedModuleIsBeta() ? (
+              <MessageStrip
+                key={'beta'}
+                design="Critical"
+                hideCloseButton
+                className="sap-margin-top-small"
+              >
+                {t('kyma-modules.beta-alert')}
+              </MessageStrip>
+            ) : null}
+            {renderCards()}
+          </>
+        ) : (
+          <MessageStrip
+            design="Critical"
+            hideCloseButton
+            className="sap-margin-top-small"
+          >
+            {t('extensibility.widgets.modules.no-community-modules')}
+          </MessageStrip>
+        )}
+      </>
     </ResourceForm>
   );
 }

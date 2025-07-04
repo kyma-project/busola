@@ -11,6 +11,7 @@ export type ColumnState = {
 export type ShowCreate = {
   resourceType: null | string;
   rawResourceTypeName?: null | string;
+  createType?: null | string;
   namespaceId: null | string;
   resource?: null | object;
   resourceUrl?: null | string;
