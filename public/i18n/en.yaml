@@ -797,8 +797,6 @@ kyma-modules:
   installed-modules: Installed Modules
   predefined-channel: Predefined
   modify-modules: Modify Modules
-  module-added: Module added 
-  module-uninstall: Module deleted
   module-documentation: Documentation
   modules-channel: Modules Channel
   add-module: Add Modules
@@ -829,6 +827,8 @@ kyma-modules:
   messages:
     failure: 'Failed to install the {{resourceType}}: {{error}}'
     success: '{{resourceType}} installed'
+    module-added: Module added 
+    module-uninstall: Module deleted
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
