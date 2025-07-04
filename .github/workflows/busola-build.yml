@@ -49,5 +49,3 @@ jobs:
       dockerfile: Dockerfile
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
-      platforms: |
-        linux/amd64
