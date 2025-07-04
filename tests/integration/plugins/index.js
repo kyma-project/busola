@@ -57,7 +57,10 @@ module.exports = (on, config) => {
     const width = 1920;
     const height = 1080;
 
-    if (browser.name === 'chrome' && browser.isHeadless) {
+    if (
+      browser.name === 'chrome' ||
+      (browser.name === 'chromium' && browser.isHeadless)
+    ) {
       launchOptions.args.push(`--window-size=${width},${height}`);
     }
   });
