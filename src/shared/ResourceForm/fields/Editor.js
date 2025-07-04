@@ -23,7 +23,9 @@ export function Editor({
     if (!convert) {
       return value;
     } else if (language === 'yaml') {
-      return jsyaml.dump(JSON.parse(JSON.stringify(value), { noRefs: true }));
+      return jsyaml.dump(JSON.parse(JSON.stringify(value), { noRefs: true }), {
+        lineWidth: -1,
+      });
     } else if (language === 'json') {
       return JSON.stringify(value, null, 2);
     } else {

@@ -21,7 +21,9 @@ function formatValue(value, language, formatAsString) {
   if (language === 'json' && !formatAsString) {
     return JSON.stringify(value, null, 2);
   } else if (language === 'yaml') {
-    return typeof value === 'undefined' ? '' : jsyaml.dump(value);
+    return typeof value === 'undefined'
+      ? ''
+      : jsyaml.dump(value, { lineWidth: -1 });
   } else {
     return value;
   }
