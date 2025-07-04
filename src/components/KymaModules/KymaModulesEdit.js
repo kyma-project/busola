@@ -2,15 +2,13 @@ import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { createPatch } from 'rfc6902';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
-import { useUrl } from 'hooks/useUrl';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 
 import {
@@ -35,14 +33,22 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findSpec, findStatus, setChannel } from './support';
+import { findModuleSpec, findModuleStatus, setChannel } from './support';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
     const existingModule = acc.find(item => item.name === name);
-    if (module.spec.channel) {
+    const moduleMetaRelase = moduleReleaseMetas?.items.find(
+      item => item.spec.moduleName === name,
+    );
+
+    const isModuleMetaRelease = acc.find(
+      item => item.name === moduleMetaRelase?.spec?.moduleName,
+    );
+
+    if (module.spec.channel && !isModuleMetaRelease) {
       if (!existingModule) {
         acc.push({
           name: name,
@@ -70,9 +76,6 @@ const addChannelsToModules = moduleReleaseMetas => {
       }
     } else {
       if (!existingModule) {
-        const moduleMetaRelase = moduleReleaseMetas?.items.find(
-          item => item.spec.moduleName === name,
-        );
         moduleMetaRelase?.spec.channels.forEach(channel => {
           if (!acc.find(item => item.name === name)) {
             acc.push({
@@ -127,9 +130,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
     skip: !resourceName,
   });
 
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const notification = useNotification();
-  const { scopedUrl } = useUrl();
 
   const getRequest = useSingleGet();
   const patchRequest = useUpdate();
@@ -228,13 +229,13 @@ export default function KymaModulesEdit({ resource, ...props }) {
         >
           <Label>{`${module.name}:`}</Label>
           <Select
-            accessibleName={`channel-select-${module.name}`}
+            accessibleName={`${module.name} channel select`}
             onChange={event => {
               onChange(module, event.detail.selectedOption.value, index);
             }}
             value={
-              findSpec(kymaResource, module.name)?.channel ||
-              findStatus(kymaResource, module.name)?.channel ||
+              findModuleSpec(kymaResource, module.name)?.channel ||
+              findModuleStatus(kymaResource, module.name)?.channel ||
               'predefined'
             }
             className="channel-select"
@@ -244,7 +245,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
                 !module.channels?.filter(
                   channel =>
                     channel.channel ===
-                    findSpec(kymaResource, module.name)?.channel,
+                    findModuleSpec(kymaResource, module.name)?.channel,
                 )
               }
               value={'predefined'}
@@ -264,7 +265,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
               <Option
                 selected={
                   channel.channel ===
-                  findSpec(kymaResource, module.name)?.channel
+                  findModuleSpec(kymaResource, module.name)?.channel
                 }
                 key={`${channel.channel}-${module.name}${
                   channel.isMetaRelease ? '-meta' : ''
@@ -281,11 +282,10 @@ export default function KymaModulesEdit({ resource, ...props }) {
             ))}
           </Select>
           <CheckBox
-            accessibleName="managed-checkbox"
+            accessibleName={`${module.name} managed checkbox`}
             text={t('kyma-modules.managed')}
-            checked={findSpec(kymaResource, module.name)?.managed}
+            checked={findModuleSpec(kymaResource, module.name)?.managed}
             onChange={event => {
-              console.log(event);
               setManaged(event.target.checked, index);
             }}
           />
@@ -313,26 +313,10 @@ export default function KymaModulesEdit({ resource, ...props }) {
         resourceType: t('kyma-modules.kyma'),
       }),
     });
-    setLayoutColumn({
-      ...layoutColumn,
-      layout: 'OneColumn',
-      showCreate: null,
-      endColumn: {
-        resourceName: kymaResource.metadata.name,
-        resourceType: kymaResource.kind,
-        namespaceId: kymaResource.metadata.namespace,
-      },
-    });
-    window.history.pushState(
-      window.history.state,
-      '',
-      `${scopedUrl(`kymas/${encodeURIComponent(kymaResource.metadata.name)}`)}`,
-    );
 
     setIsResourceEdited({
       isEdited: false,
     });
-
     setIsManagedChanged(false);
 
     setIsFormOpen({
@@ -429,51 +413,52 @@ export default function KymaModulesEdit({ resource, ...props }) {
         />,
         document.body,
       )}
-      <ResourceForm
-        {...props}
-        className="kyma-modules-create"
-        pluralKind="kymas"
-        singularName={t('kyma-modules.kyma')}
-        resource={kymaResource}
-        initialResource={initialResource}
-        initialUnchangedResource={initialUnchangedResource}
-        setResource={setKymaResource}
-        createUrl={props.resourceUrl}
-        disableDefaultFields
-        skipCreateFn={skipModuleFn}
-      >
-        <ResourceForm.CollapsibleSection
-          defaultOpen
-          defaultTitleType
-          className="collapsible-margins"
-          title={t('kyma-modules.modules-channel')}
+      {kymaResource && (
+        <ResourceForm
+          {...props}
+          className="kyma-modules-create"
+          pluralKind="kymas"
+          singularName={t('kyma-modules.kyma')}
+          resource={kymaResource}
+          initialResource={initialResource}
+          setResource={setKymaResource}
+          createUrl={props.resourceUrl}
+          disableDefaultFields
+          skipCreateFn={skipModuleFn}
         >
-          <UnmanagedModuleInfo kymaResource={kymaResource} />
-          {modulesEditData?.length !== 0 ? (
-            <>
-              {checkIfSelectedModuleIsBeta() ? (
-                <MessageStrip
-                  key={'beta'}
-                  design="Critical"
-                  hideCloseButton
-                  className="sap-margin-top-tiny"
-                >
-                  {t('kyma-modules.beta-alert')}
-                </MessageStrip>
-              ) : null}
-              {renderModules()}
-            </>
-          ) : (
-            <MessageStrip
-              design="Critical"
-              hideCloseButton
-              className="sap-margin-top-small"
-            >
-              {t('extensibility.widgets.modules.no-modules-installed')}
-            </MessageStrip>
-          )}
-        </ResourceForm.CollapsibleSection>
-      </ResourceForm>
+          <ResourceForm.CollapsibleSection
+            defaultOpen
+            defaultTitleType
+            className="collapsible-margins"
+            title={t('kyma-modules.modules-channel')}
+          >
+            <UnmanagedModuleInfo kymaResource={kymaResource} />
+            {modulesEditData?.length !== 0 ? (
+              <>
+                {checkIfSelectedModuleIsBeta() ? (
+                  <MessageStrip
+                    key={'beta'}
+                    design="Critical"
+                    hideCloseButton
+                    className="sap-margin-top-tiny"
+                  >
+                    {t('kyma-modules.beta-alert')}
+                  </MessageStrip>
+                ) : null}
+                {renderModules()}
+              </>
+            ) : (
+              <MessageStrip
+                design="Critical"
+                hideCloseButton
+                className="sap-margin-top-small"
+              >
+                {t('extensibility.widgets.modules.no-modules-installed')}
+              </MessageStrip>
+            )}
+          </ResourceForm.CollapsibleSection>
+        </ResourceForm>
+      )}
     </>
   );
 }

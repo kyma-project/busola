@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -68,6 +68,7 @@ export function DetailsCard({
 
             setLayoutColumn({
               layout: 'OneColumn',
+              startColumn: null,
               midColumn: null,
               endColumn: null,
             });

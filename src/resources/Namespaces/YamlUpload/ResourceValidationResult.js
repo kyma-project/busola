@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import {
@@ -55,7 +56,9 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   const { debounced } = useLoadingDebounce(resource, 500);
 
   const warnings = [
-    useValidateResourceBySchema(debounced, validationSchema),
+    useValidateResourceBySchema(debounced, validationSchema, {
+      base: 'https://dashboard.kyma.cloud.sap', // Workaround for jsonschema 1.5.0 - https://github.com/tdegrunt/jsonschema/issues/407
+    }),
     useNamespaceWarning(debounced),
   ];
 
@@ -74,15 +77,16 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
 
   return (
     <>
-      {warnings.flat().map(warning => (
-        <>
+      {warnings.flat().map((warning, idx) => (
+        <React.Fragment key={idx}>
           <FlexBox alignItems={'Begin'}>
             <ObjectStatus
               showDefaultIcon
+              aria-label="Warning"
               state="Critical"
               className="sap-margin-end-small"
               style={{
-                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v2-7-0_panel_content_padding` is divided by 2
+                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v2-11-0_panel_content_padding` is divided by 2
               }}
             />
             <ValidationWarning warning={warning.message} />
@@ -94,7 +98,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
               marginRight: '-1rem',
             }}
           />
-        </>
+        </React.Fragment>
       ))}
     </>
   );
@@ -107,14 +111,16 @@ export const ResourceValidationResult = ({ resource }) => {
   const validationSchemas = useRecoilValue(validationSchemasEnabledState);
   const { debounced } = useLoadingDebounce(resource, 500);
   const warnings = [
-    useValidateResourceBySchema(debounced, validationSchemas),
+    useValidateResourceBySchema(debounced, validationSchemas, {
+      base: 'https://dashboard.kyma.cloud.sap',
+    }),
     useNamespaceWarning(debounced),
   ];
   const statusIcon = validateResources.isEnabled ? (
     warnings.flat().length !== 0 ? (
-      <ObjectStatus showDefaultIcon state="Critical" />
+      <ObjectStatus showDefaultIcon aria-label="Warning" state="Critical" />
     ) : (
-      <ObjectStatus showDefaultIcon state="Positive" />
+      <ObjectStatus showDefaultIcon state="Positive" aria-label="Positive" />
     )
   ) : (
     <div></div>

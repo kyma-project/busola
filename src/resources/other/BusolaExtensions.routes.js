@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import React from 'react';
+import { Route, useParams } from 'react-router';
+import { useRecoilValue } from 'recoil';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +10,7 @@ import { usePrepareCreateProps } from 'resources/helpers';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 const BusolaExtensionList = React.lazy(() =>
   import('components/BusolaExtensions/BusolaExtensionList'),
@@ -23,32 +24,25 @@ const BusolaExtensionCreate = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+  const layoutState = useRecoilValue(columnLayoutState);
   const { clusterUrl } = useUrl();
 
   const { t } = useTranslation();
 
   const { namespace, name } = useParams();
 
-  const initialLayoutState = layout
-    ? {
-        layout: layout ?? layoutState?.layout,
-        midColumn: {
-          resourceName: name,
-          resourceType: 'Extensions',
-          namespaceId: namespace,
-        },
-        endColumn: null,
-      }
-    : null;
-
-  useEffect(() => {
-    if (layout) {
-      setLayoutColumn(initialLayoutState);
-    }
-  }, [layout, namespace, name]); // eslint-disable-line react-hooks/exhaustive-deps
+  usePrepareLayoutColumns({
+    resourceType: 'Extensions',
+    namespaceId: namespace,
+    apiGroup: '',
+    apiVersion: 'v1',
+    resourceName: name,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
+    rawResourceTypeName: 'ConfigMap',
+  });
 
   const elementCreateProps = usePrepareCreateProps({
     resourceType: 'ConfigMap',
@@ -59,7 +53,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   let startColumnComponent = null;
 
-  if (!layout && defaultColumn === 'details') {
+  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
       <BusolaExtensionDetails
         name={layoutState?.midColumn?.resourceName || name}
@@ -94,7 +88,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
           <BusolaExtensionCreate
             {...renderProps}
             {...elementCreateProps}
-            layoutNumber="StartColumn" // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
+            layoutNumber="startColumn" // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
           />
         );
 
@@ -111,11 +105,13 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       midColumn={
         <>
           {!layoutState?.showCreate &&
-            (defaultColumn !== 'details' || layout) && (
+            (defaultColumn !== 'details' ||
+              layoutState.layout !== 'OneColumn') && (
               <div className="column-content">{detailsMidColumn}</div>
             )}
           {!layoutState?.midColumn &&
-            (defaultColumn !== 'details' || layout) && (
+            (defaultColumn !== 'details' ||
+              layoutState.layout !== 'OneColumn') && (
               <div className="column-content">{createMidColumn}</div>
             )}
         </>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -17,17 +17,28 @@ export default function ConfigMapCreate({
   resourceUrl,
   ...props
 }) {
+  const { t } = useTranslation();
+
   const [configMap, setConfigMap] = useState(
     initialConfigMap
       ? cloneDeep(initialConfigMap)
       : createConfigMapTemplate(namespace || ''),
   );
-  const [initialUnchangedResource] = useState(initialConfigMap);
-  const [initialResource] = useState(
+
+  const [initialResource, setInitialResource] = useState(
     initialConfigMap || createConfigMapTemplate(namespace || ''),
   );
 
-  const { t } = useTranslation();
+  useEffect(() => {
+    setConfigMap(
+      initialConfigMap
+        ? cloneDeep(initialConfigMap)
+        : createConfigMapTemplate(namespace || ''),
+    );
+    setInitialResource(
+      initialConfigMap || createConfigMapTemplate(namespace || ''),
+    );
+  }, [initialConfigMap, namespace]);
 
   const schema = useContext(SchemaContext);
   const dataDesc = getDescription(schema, 'data');
@@ -39,7 +50,7 @@ export default function ConfigMapCreate({
       singularName={t('config-maps.name_singular')}
       resource={configMap}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setConfigMap}
       onChange={onChange}
       formElementRef={formElementRef}

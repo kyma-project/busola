@@ -1,0 +1,34 @@
+.code-response {
+  background-color: var(--sapBaseColor);
+  padding: 0.75rem;
+  border-radius: 4px;
+  position: relative;
+
+  #copy-icon {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+  }
+
+  #code-text {
+    white-space: pre-wrap;
+  }
+}
+
+.code-panel {
+  .action-button {
+    color: var(--sapTextColor);
+  }
+}
+
+.code-panel::part(header) {
+  background-color: var(--sapBaseColor);
+  border-radius: 4px 4px 0 0;
+  padding: 0.5rem 0.75rem !important;
+}
+
+.code-panel::part(content) {
+  background-color: var(--sapBaseColor);
+  border-radius: 0 0 4px 4px;
+  padding: 0;
+}

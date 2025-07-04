@@ -27,15 +27,18 @@ context('Accessibility test Cron Jobs', () => {
       .wait(1000)
       .type(NAMESPACE_NAME);
 
-    cy.clickGenericListLink(NAMESPACE_NAME);
+    cy.clickListLink(NAMESPACE_NAME);
 
     cy.navigateTo('Workloads', 'Cron Jobs');
 
     cy.contains('ui5-title', 'Cron Jobs').should('be.visible');
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Cron Jobs list',
       );
@@ -48,9 +51,12 @@ context('Accessibility test Cron Jobs', () => {
       .contains('ui5-title', 'Create Cron Job')
       .should('be.visible');
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Cron Jobs create',
       );
@@ -130,9 +136,12 @@ context('Accessibility test Cron Jobs', () => {
       .contains('ui5-title', CRON_JOB_NAME)
       .should('be.visible');
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Cron Jobs details',
       );

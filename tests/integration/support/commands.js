@@ -54,18 +54,25 @@ Cypress.Commands.add('clickGenericListLink', resourceName => {
     .click();
 });
 
+Cypress.Commands.add('clickListLink', resourceName => {
+  cy.get('ui5-table-row')
+    .find('ui5-table-cell')
+    .contains('ui5-link', resourceName)
+    .click();
+});
+
 Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, $elements =>
   $elements.filter((_, e) => !e.value),
 );
 
-Cypress.Commands.add('goToNamespaceDetails', () => {
+Cypress.Commands.add('goToNamespaceDetails', namespace => {
   // Go to the details of namespace
   cy.getLeftNav()
     .find('ui5-side-navigation-item')
     .contains('Namespaces')
     .click();
 
-  cy.clickGenericListLink(Cypress.env('NAMESPACE_NAME'));
+  cy.clickListLink(namespace ?? Cypress.env('NAMESPACE_NAME'));
 
   return cy.end();
 });
@@ -168,12 +175,21 @@ Cypress.Commands.add(
       clearSearch = true,
       checkIfResourceIsRemoved = true,
       selectSearchResult = false,
+      searchInPlainTableText = false,
+      parentSelector = null,
     } = options;
 
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .wait(1000)
-      .type(resourceName);
+    cy.wait(500);
+    if (parentSelector) {
+      cy.get(parentSelector)
+        .find('ui5-input[id="search-input"]:visible')
+        .find('input')
+        .type(resourceName);
+    } else {
+      cy.get('ui5-input[id="search-input"]:visible')
+        .find('input')
+        .type(resourceName);
+    }
 
     cy.wait(1000);
 
@@ -183,7 +199,15 @@ Cypress.Commands.add(
         .click();
     }
 
-    cy.checkItemOnGenericListLink(resourceName);
+    if (searchInPlainTableText) {
+      //  TODO: Modules in tests are unmannaged and text is not in ui5-text component
+      cy.get('ui5-table-row')
+        .find('ui5-table-cell')
+        .contains(resourceName)
+        .should('be.visible');
+    } else {
+      cy.checkItemOnGenericListLink(resourceName);
+    }
 
     cy.get('ui5-button[data-testid="delete"]').click();
 
@@ -198,17 +222,25 @@ Cypress.Commands.add(
         cy.contains('ui5-toast', /deleted/).should('be.visible');
       }
 
-      if (clearSearch) {
-        cy.get('ui5-input[id="search-input"]:visible')
-          .find('input')
-          .wait(1000)
-          .clear();
-      }
-
       if (checkIfResourceIsRemoved) {
         cy.get('ui5-table')
           .contains(resourceName)
           .should('not.exist');
+      }
+    }
+
+    if (clearSearch) {
+      if (parentSelector) {
+        cy.get(parentSelector)
+          .find('ui5-input[id="search-input"]:visible')
+          .find('input')
+          .wait(1000)
+          .clear();
+      } else {
+        cy.get('ui5-input[id="search-input"]:visible')
+          .find('input')
+          .wait(1000)
+          .clear();
       }
     }
   },

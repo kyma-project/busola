@@ -13,8 +13,7 @@ This table lists the available parameters of the **data.details.header**, **data
 | Parameter             | Required | Type                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------- | -------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **source**            | **Yes**  | string or [JSONata](100-jsonata.md) expression  | Used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets.                                                                                                                                                                                                                                                                                        |
-| **name**              | **Yes**  | string                                          | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](150-translations.md                                                                                                                                                                                                         |
-| ).                    |
+| **name**              | **Yes**  | string                                          | Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the [**translation** section](150-translations.md).                                                                                                                                                                                                       |
 | **widget**            | No       | string                                          | A widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [List and Details Widgets](./50-list-and-details-widgets.md).                                                                                                                                                                                                                |
 | **valuePreprocessor** | No       | string                                          | Name of the [value preprocessor](130-additional-sections-resources.md#value-preprocessors).                                                                                                                                                                                                                                                                                                                          |
 | **visibility**        | No       | boolean or [JSONata](100-jsonata.md) expression | By default all fields are visible; however, you can use the **visibility** property to control a single item display. <br>- If set to `false` explicitly, the field doesn't render. <br> - If set to any string, this property is treated as [JSONata](100-jsonata.md) format, determining if the field should be visible based on the current value given as `$value`. <br> - If not set, the field always renders. |
@@ -24,7 +23,10 @@ Extra parameters might be available for specific widgets.
 
 #### Status Body
 
-The **data.details.status.body** is an array of objects. By default listed values are displayed in two columns. Adding parameter **fullWidth: true** will display values in one column. The **data.details.status.body** accepts one widget (for example [ConditionList](./50-list-and-details-widgets.md#conditionList))
+The **data.details.status.body** is an array of objects. By default, listed values are displayed in two columns. Adding parameter **fullWidth: true** displays values in one column. The **data.details.status.body** accepts one widget (for example, [ConditionList](./50-list-and-details-widgets.md#conditionList)).
+
+> [!NOTE]
+> The **data.details.status.body** field is required for the **data.details.status** to render properly.
 
 See the following examples:
 
@@ -47,19 +49,6 @@ details:
       - name: Condition details
         widget: ConditionList
         source: status.conditions
-```
-
-```yaml
-details:
-  status:
-    - name: Replicas
-      source: status.replicas
-    - name: Containers
-      source: status.containers
-      fullWidth: true
-    - name: Condition details
-      widget: ConditionList
-      source: status.conditions
 ```
 
 #### Status Header

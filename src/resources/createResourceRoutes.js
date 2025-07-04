@@ -1,7 +1,7 @@
-import React, { Suspense, useEffect, useMemo } from 'react';
+import React, { Suspense, useMemo } from 'react';
 
-import { useRecoilState } from 'recoil';
-import { Route, useParams, useSearchParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { Route, useParams } from 'react-router';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,27 +18,20 @@ import { useUrl } from 'hooks/useUrl';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { SchemaContext } from 'shared/helpers/schema';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
 ) => {
   const { detailsView = false, pathSegment = '' } = config;
 
-  const details = detailsView ? '/:resourceName' : '';
+  const details = detailsView ? '/:resourceName?' : '';
 
   return `${pathSegment}${details}`;
 };
 
-const ColumnWrapper = ({
-  defaultColumn = 'list',
-  list,
-  details,
-  create,
-  ...props
-}) => {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [searchParams] = useSearchParams();
-  const layout = searchParams.get('layout');
+const ColumnWrapper = ({ list, details, create, ...props }) => {
+  const layoutState = useRecoilValue(columnLayoutState);
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
@@ -57,24 +50,20 @@ const ColumnWrapper = ({
     [props.namespaceId, namespaceIdFromParams],
   );
 
-  const initialLayoutState = layout
-    ? {
-        layout: layout ?? layoutState?.layout,
-        midColumn: {
-          resourceName: resourceName,
-          resourceType: props.resourceType,
-          namespaceId: namespaceId,
-        },
-        endColumn: null,
-      }
-    : null;
+  usePrepareLayoutColumns({
+    resourceType: props.resourceType,
+    namespaceId: namespaceId,
+    apiGroup: props.apiGroup,
+    apiVersion: props.apiVersion,
+    resourceName: resourceName,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
+    rawResourceTypeName: props.resourceType,
+  });
 
-  useEffect(() => {
-    if (layout && resourceName && props.resourceType) {
-      setLayoutColumn(initialLayoutState);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [layout, namespaceId, resourceName, props.resourceType]);
+  const defaultColumn = resourceName ? 'details' : 'list';
 
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,
@@ -112,6 +101,7 @@ const ColumnWrapper = ({
 
   const listComponent = React.cloneElement(list, {
     ...elementListProps,
+    rawResourceType: props.resourceType,
     layoutCloseCreateUrl,
     enableColumnLayout: elementListProps.resourceType !== 'Namespaces',
   });
@@ -121,7 +111,7 @@ const ColumnWrapper = ({
 
   let startColumnComponent = null;
 
-  if (!layout && defaultColumn === 'details') {
+  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = detailsComponent;
   } else {
     startColumnComponent = listComponent;
@@ -157,7 +147,7 @@ const ColumnWrapper = ({
             ...elementCreateProps,
             ...renderProps,
             enableColumnLayout: true,
-            layoutNumber: 'StartColumn',
+            layoutNumber: 'startColumn',
             resource: layoutState?.showCreate?.resource, // For ResourceCreate we want to set layoutNumber to previous column so detail are opened instead of create
           });
         return <ErrorBoundary>{createComponent}</ErrorBoundary>;
@@ -169,18 +159,20 @@ const ColumnWrapper = ({
     <SchemaContext.Provider value={schema || null}>
       <FlexibleColumnLayout
         style={{ height: '100%' }}
-        layout={layoutState?.layout || 'OneColumn'}
+        layout={layoutState?.layout}
         startColumn={
           <div className="column-content">{startColumnComponent}</div>
         }
         midColumn={
           <>
             {!layoutState?.showCreate &&
-              (defaultColumn !== 'details' || layout) && (
+              (defaultColumn !== 'details' ||
+                layoutState.layout !== 'OneColumn') && (
                 <div className="column-content">{detailsMidColumn}</div>
               )}
             {!layoutState?.midColumn &&
-              (defaultColumn !== 'details' || layout) && (
+              (defaultColumn !== 'details' ||
+                layoutState.layout !== 'OneColumn') && (
                 <div className="column-content">{createMidColumn}</div>
               )}
           </>
@@ -194,23 +186,19 @@ export const createResourceRoutes = ({
   List = null,
   Details = null,
   Create = null,
-  namespaced = true,
   resourceType = '',
   resourceI18Key = '',
+  customPath = null,
   ...props
 }) => {
   const pathSegment = resourceType.toLowerCase();
 
-  const listPath = createPath({ pathSegment });
-  const detailsPath = Details
-    ? createPath({ pathSegment, detailsView: true })
-    : '';
+  const path = customPath || createPath({ pathSegment, detailsView: true });
 
   return (
-    <React.Fragment key={listPath}>
+    <React.Fragment key={path}>
       <Route
-        path={listPath}
-        exact
+        path={path}
         element={
           <Suspense fallback={<Spinner />}>
             <ColumnWrapper
@@ -227,27 +215,6 @@ export const createResourceRoutes = ({
           </Suspense>
         }
       />
-      {detailsPath ? (
-        <Route
-          path={detailsPath}
-          element={
-            <Suspense fallback={<Spinner />}>
-              <ColumnWrapper
-                resourceType={resourceType}
-                resourceI18Key={resourceI18Key}
-                hasDetailsView={true}
-                list={<List />}
-                details={<Details />}
-                create={Create ? <Create /> : null}
-                defaultColumn="details"
-                {...props}
-              >
-                <Details />
-              </ColumnWrapper>
-            </Suspense>
-          }
-        />
-      ) : null}
     </React.Fragment>
   );
 };

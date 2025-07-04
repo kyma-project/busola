@@ -11,6 +11,14 @@ export type Theme =
 const THEME_STORAGE_KEY = 'busola.theme';
 const DEFAULT_THEME = 'light_dark';
 
+export const isCurrentThemeDark = (theme: Theme) => {
+  return (
+    (theme === 'light_dark' && isSystemThemeDark()) ||
+    theme === 'sap_horizon_dark' ||
+    theme === 'sap_horizon_hcb'
+  );
+};
+
 export const isSystemThemeDark = () => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 };

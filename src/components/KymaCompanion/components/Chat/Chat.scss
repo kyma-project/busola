@@ -1,30 +1,39 @@
 .chat-container {
-  height: 100%;
-  overflow: hidden;
+  height: calc(100vh - 60px - 1rem);
 
   .chat-list {
     display: flex;
     flex-direction: column;
-    overflow: auto;
     gap: 8px;
-
+    overflow-y: auto;
+    position: relative;
     &::-webkit-scrollbar {
       display: none;
     }
 
-    .left-aligned {
-      align-self: flex-start;
-      background-color: var(--sapBackgroundColor);
-      border-radius: 8px 8px 8px 0;
-    }
+    .context-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
 
-    .right-aligned {
-      align-self: flex-end;
-      background-color: var(--sapContent_Illustrative_Color1);
-      border-radius: 8px 8px 0 8px;
+      &:not(:first-child) {
+        margin-top: 8px;
+      }
 
-      .text {
-        color: white;
+      .message-context {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .message-container.left-aligned {
+          position: relative;
+          align-self: flex-start;
+        }
+
+        .message-container.right-aligned {
+          position: relative;
+          align-self: flex-end;
+        }
       }
     }
   }

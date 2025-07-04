@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -8,11 +9,8 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
 import { useRecoilState } from 'recoil';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
-
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import './ResourceCreate.scss';
 
 export const ResourceCreate = ({
@@ -25,7 +23,7 @@ export const ResourceCreate = ({
   readOnly = false,
   disableEdit = false,
   layoutCloseCreateUrl,
-  layoutNumber = 'MidColumn',
+  layoutNumber = 'midColumn',
   onlyYaml = false,
   protectedResource = false,
   protectedResourceWarning = null,
@@ -38,11 +36,9 @@ export const ResourceCreate = ({
     revalidate,
   } = useCustomFormValidator();
   const notificationManager = useNotification();
+  const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const { navigateSafely } = useFormNavigation();
 
   confirmText = confirmText || t('common.buttons.create');
 
@@ -86,40 +82,40 @@ export const ResourceCreate = ({
   }
 
   function navigateAfterClose() {
-    setIsResourceEdited({ isEdited: false });
-    window.history.pushState(
-      window.history.state,
-      '',
+    navigate(
       layoutCloseCreateUrl
         ? layoutCloseCreateUrl
         : `${window.location.pathname.slice(
             0,
             window.location.pathname.lastIndexOf('/'),
           )}${
-            layoutNumber === 'MidColumn' ||
+            layoutNumber === 'midColumn' ||
             layoutCloseCreateUrl?.showCreate?.resourceType
               ? ''
               : '?layout=TwoColumnsMidExpanded'
           }`,
     );
-    layoutNumber === 'MidColumn'
+    layoutNumber === 'midColumn'
       ? setLayoutColumn({
           ...layoutColumn,
           midColumn: null,
           layout: 'OneColumn',
           showCreate: null,
+          showEdit: null,
         })
       : setLayoutColumn({
           ...layoutColumn,
           endColumn: null,
           layout: 'TwoColumnsMidExpanded',
           showCreate: null,
+          showEdit: null,
         });
   }
 
   function renderConfirmButton() {
     return (
       <Button
+        className="min-width-button"
         disabled={readOnly || disableEdit}
         aria-disabled={readOnly || disableEdit}
         onClick={handleFormSubmit}
@@ -135,13 +131,7 @@ export const ResourceCreate = ({
     return (
       <Button
         onClick={() => {
-          handleActionIfFormOpen(
-            isResourceEdited,
-            setIsResourceEdited,
-            isFormOpen,
-            setIsFormOpen,
-            () => navigateAfterClose(),
-          );
+          navigateSafely(() => navigateAfterClose());
         }}
         design="Transparent"
       >
@@ -157,7 +147,7 @@ export const ResourceCreate = ({
           title={title}
           layoutNumber={layoutNumber}
           layoutCloseUrl={`${layoutCloseCreateUrl}${
-            layoutNumber === 'EndColumn' ? '?layout=TwoColumnsMidExpanded' : ''
+            layoutNumber === 'endColumn' ? '?layout=TwoColumnsMidExpanded' : ''
           }`}
           showYamlTab={disableEdit && onlyYaml}
           content={stickyHeaderHeight => (

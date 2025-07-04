@@ -2,43 +2,41 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useTranslation } from 'react-i18next';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
 import { Button } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router';
+import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
-import { ResourceQuotaProps } from './ResourceQuotaDetails';
+import { ResourceQuota } from './ResourceQuotaDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export function ResourceQuotasList(props: any) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
   const { namespaceUrl } = useUrl();
 
   const customColumns = [
     {
       header: t('resource-quotas.headers.limits.cpu'),
-      value: (quota: ResourceQuotaProps) =>
+      value: (quota: ResourceQuota) =>
         quota.spec?.hard?.['limits.cpu'] || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.limits.memory'),
-      value: (quota: ResourceQuotaProps) =>
+      value: (quota: ResourceQuota) =>
         quota.spec?.hard?.['limits.memory'] || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.requests.cpu'),
-      value: (quota: ResourceQuotaProps) =>
+      value: (quota: ResourceQuota) =>
         quota.spec?.hard?.['requests.cpu'] ||
         quota.spec?.hard?.cpu ||
         EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('resource-quotas.headers.requests.memory'),
-      value: (quota: ResourceQuotaProps) =>
+      value: (quota: ResourceQuota) =>
         quota.spec?.hard?.['requests.memory'] ||
         quota.spec?.hard?.memory ||
         EMPTY_TEXT_PLACEHOLDER,
@@ -47,17 +45,30 @@ export function ResourceQuotasList(props: any) {
 
   const handleShowCreate = () => {
     setLayoutColumn({
+      startColumn: {
+        resourceName: null,
+        resourceType: 'ResourceQuota',
+        rawResourceTypeName: 'ResourceQuota',
+        namespaceId: props.namespace,
+        apiGroup: '',
+        apiVersion: 'v1',
+      },
       midColumn: null,
       endColumn: null,
       showCreate: {
         resourceType: props.resourceType,
+        rawResourceTypeName: props.resourceType,
         namespaceId: props.namespace,
+        resourceUrl: props.resourceUrl,
       },
       layout: 'TwoColumnsMidExpanded',
     });
-    setIsFormOpen({ formOpen: true, leavingForm: false });
     navigate(
-      namespaceUrl(`${pluralize(props.resourceType.toLowerCase() || '')}`),
+      namespaceUrl(
+        `${pluralize(
+          props.resourceType.toLowerCase() || '',
+        )}?layout=TwoColumnsMidExpanded&showCreate=true`,
+      ),
     );
   };
 

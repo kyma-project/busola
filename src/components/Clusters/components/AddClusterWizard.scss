@@ -2,6 +2,28 @@
   height: 90vh;
 }
 
+.add-cluster-wizard-dialog {
+  .cluster-wizard-buttons {
+    z-index: 5;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2rem;
+    margin: 0 2rem;
+    display: flex;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--sapGroup_TitleBorderColor);
+    border-radius: var(--sapElement_BorderCornerRadius);
+    background-color: var(--sapGroup_TitleBackground);
+    box-shadow: 0 0 0.125rem 0
+        color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
+      0 0.5rem 1rem 0
+        color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
+  }
+}
+
 .add-cluster {
   &__content-container {
     background-color: var(--sapGroup_TitleBackground);
@@ -14,44 +36,16 @@
   }
 }
 
+ui5-wizard::part(step-content) {
+  --_ui5-v2-11-0_wiz_content_item_wrapper_padding: 0;
+  --_ui5-v2-11-0_wiz_content_item_wrapper_bg: transparent;
+}
+
 ui5-wizard {
   height: 100%;
   width: 75vw;
 
   .cluster-wizard {
-    @mixin cluster-wizard-buttons-style {
-      z-index: 100;
-      bottom: 1rem;
-      display: flex;
-      justify-content: flex-end;
-      box-sizing: border-box;
-      padding: 0.5rem;
-      border: 1px solid var(--sapGroup_TitleBorderColor);
-      border-radius: var(--sapElement_BorderCornerRadius);
-      background-color: var(--sapGroup_TitleBackground);
-      box-shadow: 0 0 0.125rem 0
-          color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
-        0 0.5rem 1rem 0
-          color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
-    }
-
-    &__buttons {
-      &__sticky {
-        position: sticky;
-        width: calc(100% + 32px);
-        margin: 0 -16px;
-        @include cluster-wizard-buttons-style;
-      }
-
-      &__absolute {
-        position: absolute;
-        left: 0;
-        width: calc(100% - 32px);
-        margin: 0 16px;
-        @include cluster-wizard-buttons-style;
-      }
-    }
-
     &__token-info,
     &__storage-preference {
       color: var(--sapContent_LabelColor);
@@ -62,6 +56,7 @@ ui5-wizard {
       display: flex;
       flex-flow: column;
       overflow: auto;
+      margin-bottom: 4rem;
 
       .cluster-wizard__auth-form {
         height: unset;

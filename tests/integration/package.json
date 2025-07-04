@@ -4,26 +4,25 @@
   "scripts": {
     "start": "cypress open",
     "start:local": "CYPRESS_LOCAL_DEV=true cypress open",
-    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
+    "start:local-smoke": "CYPRESS_LOCAL_DEV=true cypress open -C cypress-smoke.js",
+    "test:cluster": "cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js,tests/companion/*.spec.js\" --browser chrome",
     "test:cluster:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/cluster/*.spec.js,tests/extensibility/*.spec.js\" --browser chrome",
     "test:namespace": "cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
     "test:namespace:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/namespace/*.spec.js\" --browser chrome",
     "test:kyma-e2e": "cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
     "test:kyma-e2e:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/kyma*/*spec.js\" --browser chromium",
     "test:smoke-extensions": "cypress run --browser chromium -C cypress-smoke.js",
+    "test:smoke-simple": "cypress run --browser chromium --spec \"tests/namespace/a-run-before.spec.js\" ",
     "test:local": "CYPRESS_LOCAL_DEV=true cypress run --browser chrome",
     "run-docker": "docker run --rm -it -e DOCKER_DESKTOP_CLUSTER=true --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT=$ENV europe-docker.pkg.dev/kyma-project/dev/busola:PR-$PR_NUMBER",
     "test:accesibility": "cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome",
     "test:accesibility:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome"
   },
   "devDependencies": {
-    "cypress": "^13.17.0",
+    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-6.1.0.tgz",
+    "cypress": "^14.5.0",
     "cypress-file-upload": "^5.0.8",
     "cypress-plugin-tab": "^1.0.5",
-    "js-yaml": "^4.1.0",
-    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-6.1.0.tgz"
-  },
-  "optionalDependencies": {
-    "cypress": "^13.6.1"
+    "js-yaml": "^4.1.0"
   }
 }

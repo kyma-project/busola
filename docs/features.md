@@ -1,53 +1,24 @@
----
-title: Feature flags
----
+# Feature Flags
 
-The document explains the usage of feature flags in Busola, lists and describes all the available feature flags, and provides their configuration examples:
+The document explains the usage of feature flags in Busola, lists and describes all the available feature flags, and provides their configuration examples.
 
-#### Features priority
+## Features priority
 
 Initialisation of the Busola features is based on the `stage` property, which can take one of the following values:
 
 - `PRIMARY` - the feature is resolved while the application bootstraps. Features that should be immediately visible must be set as `PRIMARY` (for example, main navigation structure).
 - `SECONDARY` - the feature is resolved after the application is ready, it must be used for non-critical features (for example, additional navigation nodes).
 
-If the stage is not set, the feature is loaded only on-demand, most often by the iframe. Use the `useFeature` hook to request usage of such feature.
+If the stage is not set, the feature is loaded only on demand, most often by the iframe. Use the `useFeature` hook to request usage of such a feature.
 
-Note that some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
+> [!NOTE]
+> Some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
 
-#### Features list
+## Features List for Frontend
 
 > **TIP:** The list is ordered alphabetically.
 
-- **API_GATEWAY** – is used to show or hide the **API Gateway** view and to define which APIs are required for the view to be shown properly.
-  It is also used to determine if the **API Gateway** list should be displayed in the **Function** and **Service** details.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  API_GATEWAY:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: gateway.kyma-project.io
-  ```
-
-- **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
-  It is also used to determine if the **EventSubscriptions** should be displayed in **Function** and **Service** details.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  EVENTING:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: eventing.kyma-project.io
-  ```
-
-- **EXTENSIBILITY** - is used to indicate whether the Busola [extensibility](extensibility/README.md) feature should be enabled.
+- **EXTENSIBILITY** - is used to indicate whether the Busola [extensibility](extensibility/README.md) feature is enabled.
 
 Default settings:
 
@@ -56,13 +27,22 @@ EXTENSIBILITY:
   isEnabled: true
 ```
 
-- **EXTENSIBILITY_CUSTOM_COMPONENTS** - is used to indicate whether entirely custom extensions can be added to Busola. See [this example](../examples/custom-extension/README.md).
+- **EXTENSIBILITY_CUSTOM_COMPONENTS** - is used to indicate whether entire custom extensions can be added to Busola. See [this example](../examples/custom-extension/README.md).
 
 Default settings:
 
 ```yaml
 EXTENSIBILITY_CUSTOM_COMPONENTS:
   isEnabled: false
+```
+
+- **EXTENSIBILITY_INJECTIONS** - is used to indicate whether extensibility injections can be added to Busola. For more information, see [Widget Injection](https://github.com/kyma-project/busola/blob/main/docs/extensibility/70-widget-injection.md).
+
+Default settings:
+
+```yaml
+EXTENSIBILITY_INJECTIONS:
+  isEnabled: true
 ```
 
 - **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `scope`: either `namespace` or `cluster` (defaults to `cluster`), `children`: a list of pairs (label and link).
@@ -82,15 +62,15 @@ EXTENSIBILITY_CUSTOM_COMPONENTS:
             link: https://github.com/kyma-project/busola
   ```
 
-- **GARDENER_LOGIN** - is used to enable or disable the option of logging in with the Gardener kubeconfig. If enabled, you must set the **kubeconfig** parameter to a valid kubeconfig object.
+- **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar.
 
-Default settings:
+  Default settings:
 
-```yaml
-GARDENER_LOGIN:
-  isEnabled: false
-  kubeconfig: null
-```
+  ```yaml
+  FEEDBACK:
+    isEnabled: true
+    link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  ```
 
 - **GET_HELP_LINKS** – is used to show or hide helper links. You can find all the available links in the following example.
   In **config**, you can find the unchangeable keys (for example, you cannot use **helpSapCom** instead of **help-sap-com**). The keys include the default link, which takes you to the default address.
@@ -105,17 +85,6 @@ GARDENER_LOGIN:
       help-sap-com:
         default: https://help.sap.com
   ```
-
-* **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
-
-> **NOTE:** It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
-
-Default settings:
-
-```yaml
-GZIP:
-  isEnabled: true
-```
 
 - **HIDDEN_NAMESPACES** – is used to define a list of Namespaces that are considered system, and are hidden by default.
 
@@ -142,7 +111,16 @@ HIDDEN_NAMESPACES:
         apiGroup: networking.istio.io
   ```
 
-* **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
+- **KYMA_COMPANION** - determines if the Kyma Companion chat window is available in Busola.
+
+Default settings:
+
+```yaml
+KYMA_COMPANION:
+  isEnabled: false
+```
+
+- **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
   If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
 
   - **showClustersOverview** - optional configuration to instruct Busola to show **Clusters Overview** rather than the current context cluster, after the clusters are loaded.
@@ -160,7 +138,7 @@ HIDDEN_NAMESPACES:
       defaultKubeconfig: AAAAA-BBBBB
   ```
 
-* **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the following example.
+- **LEGAL_LINKS** – is used to show or hide legal links. You can find all the available links in the following example.
   In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include both the default link, which takes you to the default address, and a link that depends on your chosen language.
 
   Example:
@@ -219,6 +197,18 @@ HIDDEN_NAMESPACES:
 
 The **match** keys and **messageSrc** must use the format described in the [`jsonpath` repository](https://github.com/dchester/jsonpath).
 
+- **RESOURCE_VALIDATION** - determines the selected policies for [resource validation](resource-validation/README.md). They can be overwritten in the user preferences.
+
+  Default settings:
+
+  ```yaml
+  RESOURCE_VALIDATION:
+    isEnabled: true
+    config:
+      policies:
+        - Default
+  ```
+
 - **SENTRY** – is used to enable monitoring of uncaught exceptions, which then are analyzed and repaired. The address to which you send the information is located under the **dsn** key.
 
   Default settings:
@@ -226,7 +216,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   ```yaml
   SENTRY:
     isEnabled: false
-    selectors: []
     config:
       dsn: ''
   ```
@@ -245,6 +234,15 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     isEnabled: true
   ```
 
+- **SNOW** - determines if the snow animation is enabled in Busola.
+
+Default settings:
+
+```yaml
+SNOW:
+  isEnabled: false
+```
+
 - **TRACKING** - determines if simple application usage tracking is enabled.
 
   ```yaml
@@ -252,7 +250,8 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     isEnabled: false
   ```
 
-  > NOTE: Enable this feature on the frontend and backend.
+  > [!NOTE]
+  > This feature is enabled on the frontend and backend.
 
 * **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at the resource details view.
 
@@ -261,33 +260,35 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     isEnabled: true
   ```
 
-- **RESOURCE_VALIDATION** - determines the selected policies for [resource validation](resource-validation/README.md). They can be overwritten in the user preferences.
+## Features List for Backend
+
+> [!NOTE]
+> Backend features cannot be modified at the cluster's ConfigMap level.
+
+- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
+
+Default settings:
+
+```yaml
+GZIP:
+  isEnabled: true
+```
+
+- **KYMA_COMPANION** - is used to configure the location of the Kyma companion API.
 
   Default settings:
 
   ```yaml
-  RESOURCE_VALIDATION:
-    isEnabled: true
-    config:
-      policies:
-        - Default
+  KYMA_COMPANION:
+    link: ''
   ```
 
-- **CLUSTER_VALIDATION** - determines whether the Cluster Validation panel for scanning the cluster should be enabled in the Cluster Overview page. The scan uses the [resource validation](resource-validation/README.md) rules.
-
-  Default settings:
+  - **TRACKING** - determines if simple application usage tracking is enabled.
 
   ```yaml
-  CLUSTER_VALIDATION:
+  TRACKING:
     isEnabled: false
   ```
 
-- **FEEDBACK** - determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar
-
-  Default settings:
-
-  ```yaml
-  FEEDBACK:
-    isEnabled: true
-    link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
-  ```
+  > [!NOTE]
+  > This feature is enabled on the frontend and backend.

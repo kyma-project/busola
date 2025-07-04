@@ -15,13 +15,18 @@ context(
     });
 
     it('Check sections of namespace details', () => {
-      cy.contains('ui5-text', LIMIT_NAME)
+      cy.contains('ui5-link', LIMIT_NAME)
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('Container').should('be.visible');
+      cy.get('ui5-panel')
+        .get('ui5-table-row')
+        .find('ui5-table-cell')
+        .contains('Container')
+        .scrollIntoView()
+        .should('be.visible');
 
-      cy.contains('ui5-text', QUOTA_NAME)
+      cy.contains('ui5-link', QUOTA_NAME)
         .scrollIntoView()
         .should('be.visible');
 
@@ -33,11 +38,15 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('Memory Requests').should('be.visible');
-
-      cy.contains('Memory Limits').should('be.visible');
-
       cy.contains('Events')
+        .scrollIntoView()
+        .should('be.visible');
+
+      cy.contains('CPU Usage')
+        .scrollIntoView()
+        .should('be.visible');
+
+      cy.contains('Memory Usage')
         .scrollIntoView()
         .should('be.visible');
     });

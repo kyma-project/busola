@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 
@@ -10,6 +10,7 @@ import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 import { useRecoilValue } from 'recoil';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export default function SecretCreate({
   namespace,
@@ -23,13 +24,24 @@ export default function SecretCreate({
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
-    initialSecret
-      ? { ...initialSecret }
-      : createSecretTemplate(namespace || ''),
-  );
-  const [initialUnchangedResource] = useState(initialSecret);
-  const [initialResource] = useState(
     initialSecret || createSecretTemplate(namespace || ''),
+  );
+  const [initialResource, setInitialResource] = useState(
+    initialSecret || createSecretTemplate(namespace || ''),
+  );
+  const layoutState = useRecoilValue(columnLayoutState);
+
+  useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
+    setSecret(initialSecret || createSecretTemplate(namespace || ''));
+    setInitialResource(initialSecret || createSecretTemplate(namespace || ''));
+  }, [initialSecret, namespace, layoutState?.showEdit?.resource]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
   );
 
   const [lockedKeys, setLockedKeys] = useState([]);
@@ -77,15 +89,12 @@ export default function SecretCreate({
       singularName={t('secrets.name_singular')}
       resource={secret}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setSecret}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      presets={
-        !initialUnchangedResource &&
-        createPresets(secretDefs, namespace || '', t)
-      }
+      presets={!isEdit && createPresets(secretDefs, namespace || '', t)}
       setCustomValid={setCustomValid}
     >
       <ResourceForm.FormField
@@ -98,7 +107,7 @@ export default function SecretCreate({
             accessibleName="Secret's type's Combobox"
             placeholder={t('secrets.placeholders.type')}
             value={options.find(o => o.key === value)?.text ?? value}
-            disabled={!!initialUnchangedResource || !options?.length}
+            disabled={isEdit || !options?.length}
             onChange={event => onChangeInput(event, setValue)}
             onInput={event => onChangeInput(event, setValue)}
           >

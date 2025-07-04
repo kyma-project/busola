@@ -9,7 +9,12 @@ import {
 import { useRecoilValue } from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 
-export const useGetSchema = ({ schemaId, skip, resource }) => {
+export const useGetSchema = ({
+  schemaId,
+  skip,
+  resource,
+  additionalId = '',
+}) => {
   if (!schemaId && resource) {
     const { group, version, kind } = resource;
     if (!group) schemaId = `${version}/${kind}`;
@@ -23,26 +28,31 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
   const isWorkerOkay = isWorkerAvailable && !schemasError;
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(!isWorkerOkay ? false : !skip);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     setSchema(null);
     setError(null);
-    setLoading(!isWorkerOkay ? false : !skip);
+    setLoading(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schemaId]);
 
   useEffect(() => {
-    if (!areSchemasComputed || schema || skip || !isWorkerOkay) {
+    if (schema || skip || !isWorkerOkay) {
+      setLoading(false);
       return;
     }
-    sendWorkerMessage('getSchema', schemaId);
+    if (!areSchemasComputed) return;
 
-    addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {
-      setSchema(schema);
-      setError(null);
-      setLoading(false);
-    });
+    sendWorkerMessage('getSchema', schemaId, additionalId);
+
+    addWorkerListener(
+      `schemaComputed:${schemaId}${additionalId}`,
+      ({ schema }) => {
+        setSchema(schema);
+        setError(null);
+        setLoading(false);
+      },
+    );
     addWorkerListener('customError', err => {
       setError(err);
       setLoading(false);
@@ -51,7 +61,15 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
       setError(err);
       setLoading(false);
     });
-  }, [areSchemasComputed, schemaId, setSchema, schema, skip, isWorkerOkay]);
+  }, [
+    areSchemasComputed,
+    schemaId,
+    setSchema,
+    schema,
+    skip,
+    isWorkerOkay,
+    additionalId,
+  ]);
 
   return { schema, error, loading };
 };

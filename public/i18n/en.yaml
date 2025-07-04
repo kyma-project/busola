@@ -9,6 +9,7 @@ cluster-overview:
     nodes: Nodes
     cluster-details: Cluster Details
     metadata: Metadata
+    pool: Pool
   statistics:
     cpu-usage: 'CPU Usage'
     memory-usage: 'Memory Usage'
@@ -41,6 +42,8 @@ cluster-overview:
     total-persistentvolumes: 'Total Persistent Volumes'
     persistent-volumes-total-capacity: 'Total Capacity'
     nodes: 'Nodes'
+    nvidia-gpus: 'Nvidia GPUs'
+    modules-overview: 'Modules Overview'
   tooltips:
       cpu-used-percentage: 'CPU used: {{percentage}}'
       memory-used-percentage: 'Memory used: {{percentage}}'
@@ -102,9 +105,11 @@ clusters:
     issuer-url: Issuer URL
     name: Clusters
     scopes: Scopes
+    context: Context
   list:
     no-clusters-found: No clusters found
   messages:
+    choose-cluster: Choose cluster
     wrong-configuration: Cannot apply the configuration
     connection-failed: Error connecting to cluster. Check your configuration and make sure the cluster is online.
   name_singular: Cluster
@@ -114,6 +119,8 @@ clusters:
     title-current-cluster: Cluster Details
     kyma-version: Kyma Version
     kubernetes-version: Kubernetes Version
+    global-account-id: Global Account ID
+    subaccount-id: Subaccount ID
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
@@ -138,7 +145,6 @@ clusters:
     title: Storage Type
   token: Token
   wizard:
-    all-contexts: All contexts
     auth:
       client-id: Client ID
       client-secret: Client Secret
@@ -147,12 +153,14 @@ clusters:
       token: Token
       using-oidc: OIDC provider
     context: Context to connect
+    provide-context: Provide Context
     kubeconfig-upload: Drop a .kubeconfig file or click to 
     editor-placeholder: Paste .kubeconfig here
     incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
-    multi-context-info: All contexts will be connected. Be aware that only {{context}} is validated. The remaining contexts are connected without validation.
+    several-context-info: You have more than one cluster in your SAP BTP account.
+    several-context-question: Which one do you want to open?
     not-an-object: kubeconfig is not an object
     storage: Privacy
     token-info: If you don't know how to get your token, ask your authentication provider.
@@ -216,6 +224,7 @@ command-palette:
     no-results-found: No results found
   search:
     remove-ns-context: Remove Namespace context
+    quick-navigation: Quick navigation
 common:
   ariaLabel:
     new-tab-link: This link will be opened in a new tab.
@@ -224,6 +233,7 @@ common:
     add-all: Add all
     button-disabled: Disabled
     cancel: Cancel
+    choose: Choose
     clone: Clone
     close: Close
     connect: Connect
@@ -234,8 +244,10 @@ common:
     discard: Discard
     disconnect: Disconnect
     edit: Edit
+    cascade-delete: Cascade Delete
     learn-more: Learn More
     ok: OK
+    place: Place
     remove-all: Remove all
     reset: Reset
     restart: Restart
@@ -369,6 +381,9 @@ common:
   statuses:
     error: Error
     ready: Ready
+    warning: Warning
+    processing: Processing
+    other: Other
     unknown: Unknown
   tabs:
     edit: Edit
@@ -756,16 +771,27 @@ kyma-companion:
     suggestions: Suggestions
     input-placeholder: Ask about this resource
     error-message: Couldn't fetch suggestions. Please try again.
+    preparing-final-answer: Preparing the final answer
   error:
     title: Service is interrupted
     subtitle: A temporary interruption occured. Please try again.
-  introduction1: Hello there,
-  introduction2: How can I help you?
-  placeholder: Type something
+    chat-error: An error occurred
+    suggestions-error: No suggestions available
+    http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
+  introduction: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. Meanwhile, you can check the suggested questions below; you may find them helpful!
+  introduction-no-suggestions: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. While I don't have any initial suggestions for this resource, feel free to ask me anything you'd like!
+  placeholder: Message Joule...
+  disclaimer:
+    tooltip: Disclaimer
+    title: AI Notice
+    text: "Joule is powered by generative AI and all output should be reviewed before use. Please do not enter any sensitive personal data, and avoid entering any other personal data you do not wish to be processed. Learn more in the <0>Joule Data Protection and Privacy</0>."
+    hint: Joule uses AI. Verify results.
+    back-conversation: Back to Conversation
   tabs:
     chat: Chat
     page-insights: Page Insights
 kyma-modules:
+  delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
   associated-resources: Associated Resources
   unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
   unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
@@ -793,7 +819,9 @@ kyma-modules:
   no-version: No version available
   channel-overridden: Overridden
   managed: Managed
-  associated-resources-warning: If there are resources left, remove them first to delete the module.
+  associated-resources-warning: If there are resources left, remove them first to delete the module or use cascade delete.
+  cascade-delete: Cascade Delete
+  cascade-delete-warning: Cascade delete removes all connected resources first and then removes the module. This action cannot be undone.
   beta: Beta
   beta-alert: "CAUTION: The Service Level Agreements (SLAs) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
   change: Change
@@ -817,16 +845,6 @@ limit-ranges:
     type: Type
   name_singular: LimitRange
   title: Limit Ranges
-machine-info:
-  architecture: Architecture
-  cpus: CPUs
-  gib: GiB
-  kube-proxy-version: Kube proxy version
-  kubelet-version: Kubelet version
-  memory: Memory
-  operating-system: Operating system
-  pods-capacity: Pods capacity
-  title: Machine info
 match-expressions:
   headers:
     key: Key
@@ -900,13 +918,29 @@ no-permissions:
 node-details:
   all: All messages
   information: Information
-  internal-ip: Internal IP
   pod-cidr: Pod CIDRs
-  provider: Provider
   warnings: Warnings
+  region: Region
+  zone: Zone
+  pool: Pool
+  machine-type: Machine Type
+  machine-info:
+    architecture: Architecture
+    provider: Provider
+    internal-ip: Internal IP
+    cpus: CPUs
+    nvidia-gpus: Nvidia GPUs
+    gib: GiB
+    kubelet-version: Kubelet version
+    memory: Memory
+    operating-system: Operating system
+    pods-capacity: Pods capacity
+    hostname: Hostname
+    title: Machine info
 nodes:
   title: Nodes
   title_details: Node {{nodeName}}
+  description: Kubernetes executes your workload by grouping containers into Pods that operate on <0>Nodes</0>, which can be virtual or physical machines depending on the cluster configuration. The control plane monitors each node, which includes the services required to run Pods.
 persistent-volume-claims:
   description: <0>PersistentVolumeClaim (PVC)</0> is a request for the PersistentVolume resources.
   headers:

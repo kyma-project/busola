@@ -6,6 +6,14 @@
   ui5-checkbox {
     margin-top: -6.75px;
   }
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 2fr 8fr 8fr 3fr;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .resource-form--unset-height {

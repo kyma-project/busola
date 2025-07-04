@@ -14,9 +14,12 @@ context('Accessibility test Modules view', () => {
       .contains('Modify Modules')
       .click();
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Modules view',
       );
@@ -29,9 +32,12 @@ context('Accessibility test Modules view', () => {
 
     cy.wait(1000);
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Add Modules view',
       );
@@ -60,9 +66,12 @@ context('Accessibility test Modules view', () => {
 
     cy.wait(1000);
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Edit Modules view',
       );

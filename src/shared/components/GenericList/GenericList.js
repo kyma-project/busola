@@ -1,12 +1,11 @@
-import { Table } from '../../../components/App/UI5Imports';
-
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useEffect, useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import {
   BodyFallback,
   HeaderRenderer,
@@ -19,19 +18,16 @@ import ListActions from 'shared/components/ListActions/ListActions';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { SortModalPanel } from './SortModalPanel';
-
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeState } from 'state/preferences/pageSizeAtom';
-import './GenericList.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { Table } from '@ui5/webcomponents-react';
 import './GenericList.scss';
 
 const defaultSort = {
@@ -67,21 +63,22 @@ export const GenericList = ({
   customColumnLayout = null,
   enableColumnLayout,
   resourceType = '',
+  rawResourceType = '',
   customUrl,
   hasDetailsView,
   disableHiding = true,
   displayArrow = false,
-  handleRedirect = null,
   nameColIndex = 0,
   namespaceColIndex = -1,
   noHideFields,
   customRowClick,
   className = '',
   accessibleName,
+  customSelectedEntry = '',
 }) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
-  const [entrySelected, setEntrySelected] = useState('');
+  const [entrySelected, setEntrySelected] = useState(customSelectedEntry || '');
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
@@ -90,23 +87,29 @@ export const GenericList = ({
     order: 'ASC',
   });
 
+  useEffect(() => {
+    setEntrySelected(customSelectedEntry || '');
+  }, [customSelectedEntry]);
+
   const sorting = (sort, resources) => {
     if (!sortBy || isEmpty(sortBy)) return resources;
 
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
+
     if (sort.order === 'ASC') {
-      return [...resources.sort(sortFunction)];
+      return [...resources].sort(sortFunction);
     } else {
-      return [...resources.sort((a, b) => sortFunction(b, a))];
+      return [...resources].sort((a, b) => sortFunction(b, a));
     }
   };
 
   const globalPageSize = useRecoilValue(pageSizeState);
-  const [pageSize, setLocalPageSize] = useState(globalPageSize);
+  const [pageSize, setPageSize] = useState(globalPageSize);
+
   useEffect(() => {
-    setLocalPageSize(globalPageSize);
+    setPageSize(globalPageSize);
   }, [globalPageSize]);
 
   pagination = useMemo(() => {
@@ -130,6 +133,7 @@ export const GenericList = ({
         setCurrentPage(pagesCount);
       }
     }
+
     setFilteredEntries(
       filterEntries(
         sorting(sort, entries),
@@ -146,7 +150,7 @@ export const GenericList = ({
     sort,
   ]);
 
-  React.useEffect(() => setCurrentPage(1), [searchQuery]);
+  useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
     const selected = entries.find(entry => {
@@ -224,32 +228,7 @@ export const GenericList = ({
       }
 
       if (!entries.length) {
-        return (
-          <BodyFallback>
-            {emptyListProps?.simpleEmptyListMessage === false ||
-            (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
-              <EmptyListComponent
-                titleText={emptyListProps.titleText}
-                subtitleText={emptyListProps.subtitleText}
-                showButton={emptyListProps.showButton}
-                buttonText={emptyListProps.buttonText}
-                url={emptyListProps.url}
-                onClick={emptyListProps.onClick}
-                image={emptyListProps?.image}
-              />
-            ) : (
-              <p>
-                {emptyListProps?.titleText ? (
-                  <Trans i18nKey={emptyListProps?.titleText} />
-                ) : i18n.exists(notFoundMessage) ? (
-                  t(notFoundMessage)
-                ) : (
-                  notFoundMessage
-                )}
-              </p>
-            )}
-          </BodyFallback>
-        );
+        return;
       }
     }
 
@@ -293,39 +272,41 @@ export const GenericList = ({
             isModuleSelected
           }
           index={index}
-          key={e.metadata?.uid || e.name || e.metadata?.name || index}
+          key={`${e.metadata?.uid || e.name || e.metadata?.name}-${index}`}
           entry={e}
           actions={actions}
           rowRenderer={rowRenderer}
           displayArrow={displayArrow}
           hasDetailsView={hasDetailsView}
+          enableColumnLayout={enableColumnLayout}
         />
       );
     });
   };
 
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  const { resourceUrl: resourceUrlFn } = useUrl();
+  const { navigateSafely } = useFormNavigation();
+  const { resourceUrl: resourceUrlFn, namespace } = useUrl();
   const linkTo = entry => {
+    const overrides = namespace === '-all-' ? { namespace } : {};
     return customUrl
       ? customUrl(entry)
-      : resourceUrlFn(entry, { resourceType });
+      : resourceUrlFn(entry, { resourceType, ...overrides });
   };
 
   const handleRowClick = e => {
+    const arrowColumnCount = displayArrow ? 1 : 0;
     const item = (
-      e.target.children[nameColIndex].children[0].innerText ??
-      e.target.children[nameColIndex].innerText
+      e.detail.row.children[nameColIndex + arrowColumnCount].children[0]
+        .innerText ??
+      e.detail.row.children[nameColIndex + arrowColumnCount].innerText
     )?.trimEnd();
 
     const hasNamepace = namespaceColIndex !== -1;
     const itemNamespace = hasNamepace
-      ? e?.target?.children[namespaceColIndex]?.children[0]?.innerText ??
-        e?.target?.children[namespaceColIndex]?.innerText
+      ? e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
+          ?.children[0]?.innerText ??
+        e?.detail?.row.children[namespaceColIndex + arrowColumnCount]?.innerText
       : '';
 
     const selectedEntry = entries.find(entry => {
@@ -342,60 +323,63 @@ export const GenericList = ({
       setEntrySelectedNamespace(itemNamespace);
       return customRowClick(item, selectedEntry);
     } else {
-      if (handleRedirect) {
-        const redirectLayout = handleRedirect(selectedEntry, resourceType);
-        if (redirectLayout) {
-          setLayoutColumn({
-            ...redirectLayout,
-          });
-          navigate(
-            redirectLayout.layout === 'OneColumn'
-              ? linkTo(selectedEntry)
-              : `${linkTo(selectedEntry)}?layout=${redirectLayout.layout}`,
-          );
-          return;
-        }
-      }
       setEntrySelected(
         selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
       );
       setEntrySelectedNamespace(selectedEntry?.metadata?.namespace ?? '');
-      if (!enableColumnLayout) {
-        setLayoutColumn({
-          midColumn: null,
-          endColumn: null,
-          layout: 'OneColumn',
-        });
 
-        navigate(linkTo(selectedEntry));
-      } else {
-        setLayoutColumn(
-          columnLayout
-            ? {
-                midColumn: layoutState.midColumn,
-                endColumn: customColumnLayout(selectedEntry),
-                layout: columnLayout,
-              }
-            : {
-                midColumn: {
-                  resourceName:
-                    selectedEntry?.metadata?.name ??
-                    e.target.children[0].innerText,
-                  resourceType: resourceType,
-                  namespaceId: selectedEntry?.metadata?.namespace,
-                },
-                endColumn: null,
-                layout: 'TwoColumnsMidExpanded',
+      const { group, version } = extractApiGroupVersion(
+        selectedEntry?.apiVersion,
+      );
+      const newLayout = enableColumnLayout
+        ? columnLayout ?? 'TwoColumnsMidExpanded'
+        : 'OneColumn';
+      setLayoutColumn(
+        columnLayout
+          ? {
+              ...layoutState,
+              showCreate: null,
+              endColumn: customColumnLayout(selectedEntry),
+              layout: newLayout,
+              showEdit: null,
+            }
+          : {
+              ...layoutState,
+              showCreate: null,
+              midColumn: {
+                resourceName:
+                  selectedEntry?.metadata?.name ??
+                  e.target.children[0].innerText,
+                resourceType: resourceType,
+                rawResourceTypeName: rawResourceType,
+                namespaceId: selectedEntry?.metadata?.namespace,
+                apiGroup: group,
+                apiVersion: version,
               },
-        );
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${linkTo(selectedEntry)}?layout=${columnLayout ??
-            'TwoColumnsMidExpanded'}`,
-        );
-      }
+              endColumn: null,
+              layout: newLayout,
+              showEdit: null,
+            },
+      );
+      const link = `${linkTo(selectedEntry)}${
+        enableColumnLayout
+          ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
+              namespace === '-all-' && selectedEntry?.metadata?.namespace
+                ? `&resourceNamespace=${selectedEntry?.metadata?.namespace}`
+                : ''
+            }`
+          : ''
+      }`;
+      navigate(link);
     }
+  };
+
+  const setOverflowMode = () => {
+    const anyPopinHidden = headerRenderer().some(h => h === 'Popin');
+    if (!anyPopinHidden && !noHideFields && disableHiding) {
+      return 'Scroll';
+    }
+    return 'Popin';
   };
 
   return (
@@ -407,9 +391,43 @@ export const GenericList = ({
       className={className}
     >
       <Table
+        noData={
+          <div>
+            {!serverDataError && !serverDataLoading && !entries?.length ? (
+              emptyListProps?.simpleEmptyListMessage === false ||
+              (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
+                <EmptyListComponent
+                  titleText={emptyListProps.titleText}
+                  subtitleText={emptyListProps.subtitleText}
+                  showButton={emptyListProps.showButton}
+                  buttonText={emptyListProps.buttonText}
+                  url={emptyListProps.url}
+                  onClick={emptyListProps.onClick}
+                  image={emptyListProps?.image}
+                />
+              ) : (
+                <p>
+                  {emptyListProps?.titleText ? (
+                    <Trans i18nKey={emptyListProps?.titleText} />
+                  ) : i18n.exists(notFoundMessage) ? (
+                    t(notFoundMessage)
+                  ) : (
+                    notFoundMessage
+                  )}
+                </p>
+              )
+            ) : (
+              <Spinner />
+            )}
+          </div>
+        }
+        overflowMode={setOverflowMode()}
         accessibleName={accessibleName ?? title}
+        rowActionCount={displayArrow ? 1 : 0}
         className={`ui5-generic-list ${
-          hasDetailsView && filteredEntries.length ? 'cursor-pointer' : ''
+          hasDetailsView && filteredEntries.length && enableColumnLayout
+            ? 'cursor-pointer'
+            : ''
         }`}
         onMouseDown={() => {
           window.getSelection().removeAllRanges();
@@ -417,21 +435,14 @@ export const GenericList = ({
         onRowClick={e => {
           const selection = window.getSelection().toString();
           if (!hasDetailsView || selection.length > 0) return;
-          handleActionIfFormOpen(
-            isResourceEdited,
-            setIsResourceEdited,
-            isFormOpen,
-            setIsFormOpen,
-            () => handleRowClick(e),
-          );
+          navigateSafely(() => handleRowClick(e));
         }}
-        columns={
+        headerRow={
           <HeaderRenderer
             entries={entries}
             actions={actions}
             headerRenderer={headerRenderer}
             disableHiding={disableHiding}
-            displayArrow={displayArrow}
             noHideFields={noHideFields}
           />
         }
@@ -446,7 +457,7 @@ export const GenericList = ({
             currentPage={currentPage}
             itemsPerPage={pagination.itemsPerPage}
             onChangePage={setCurrentPage}
-            setLocalPageSize={setLocalPageSize}
+            setLocalPageSize={setPageSize}
           />
         )}
     </UI5Panel>

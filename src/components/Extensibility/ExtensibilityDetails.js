@@ -1,4 +1,5 @@
 import pluralize from 'pluralize';
+import { useContext } from 'react';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -20,6 +21,7 @@ import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
 import { useSetRecoilState } from 'recoil';
 import { resourcesConditions } from 'state/resourceConditionsAtom';
+import { KymaModuleContext } from 'components/KymaModules/providers/KymaModuleProvider';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,
@@ -38,6 +40,7 @@ export const ExtensibilityDetailsCore = ({
 
   const { schema } = useGetSchema({
     resource,
+    additionalId: 'Details',
   });
 
   const jsonata = useJsonata({});
@@ -86,10 +89,18 @@ export const ExtensibilityDetailsCore = ({
     return { visible, error };
   };
 
+  const prepareDisableEdit = resource => {
+    if (disableEdit && typeof disableEdit === 'string') {
+      const [isDisabled] = jsonata(disableEdit, { resource });
+      return typeof isDisabled === 'boolean' ? isDisabled : false;
+    }
+    return disableEdit;
+  };
+
   return (
     <ResourceDetails
       layoutCloseCreateUrl={layoutCloseCreateUrl}
-      disableEdit={disableEdit}
+      disableEdit={prepareDisableEdit}
       disableDelete={disableDelete}
       resourceTitle={resourceTitle}
       headerActions={headerActions}
@@ -215,10 +226,11 @@ const ExtensibilityDetails = ({
   layoutCloseCreateUrl,
   namespaceId,
   isModule = false,
-  headerActions,
 }) => {
   const resMetaData = useGetCRbyPath(resourceType);
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+
+  const { deleteModuleButton: headerActions } = useContext(KymaModuleContext);
 
   if (!resMetaData) {
     return (
@@ -228,7 +240,7 @@ const ExtensibilityDetails = ({
           resourceName,
           resourceNamespace: namespaceId,
           layoutCloseCreateUrl,
-          layoutNumber: 'MidColumn',
+          layoutNumber: 'midColumn',
           headerActions,
           isModule,
         }}

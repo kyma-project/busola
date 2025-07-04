@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { createPortal } from 'react-dom';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+  useSearchParams,
+} from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-// this import is necessary for the V1 Tables to work properly,
-// it can be removed after https://github.com/kyma-project/busola/issues/3489 is resolved
-import './UI5Imports';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
@@ -23,13 +26,13 @@ import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigI
 import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLoginRoute';
 import { useHandleResetEndpoint } from 'components/Clusters/shared';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
-import { useAfterInitHook } from 'state/useAfterInitHook';
+import { removePreviousPath, useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
-import { useGetKymaResources } from 'state/kymaResourcesAtom';
+import { multipleContexts } from 'state/multipleContextsAtom';
 
 import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
-import { showKymaCompanionState } from 'components/KymaCompanion/state/showKymaCompanionAtom';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
 import { Preferences } from 'components/Preferences/Preferences';
 import { Header } from 'header/Header';
@@ -39,6 +42,7 @@ import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
 import { IncorrectPath } from './IncorrectPath';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { ContextChooserMessage } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
 import { themeState } from 'state/preferences/themeAtom';
 import { initTheme } from './initTheme';
@@ -54,6 +58,9 @@ export default function App() {
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [search] = useSearchParams();
+  const [contextsState, setContextsState] = useRecoilState(multipleContexts);
 
   useEffect(() => {
     setNamespace(namespace);
@@ -78,7 +85,6 @@ export default function App() {
   useSentry();
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
-  useGetKymaResources();
 
   const showCompanion = useRecoilValue(showKymaCompanionState);
 
@@ -104,27 +110,50 @@ export default function App() {
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />
+            {search.get('kubeconfigID') &&
+              !!contextsState?.contexts?.length &&
+              kubeconfigIdState === 'loading' &&
+              createPortal(
+                <ContextChooserMessage
+                  contexts={contextsState?.contexts}
+                  setValue={(value: string) =>
+                    setContextsState(state => ({
+                      ...state,
+                      chosenContext: value,
+                    }))
+                  }
+                  onCancel={() => {
+                    setContextsState({} as any);
+                    removePreviousPath();
+                    navigate('/clusters');
+                  }}
+                />,
+                document.body,
+              )}
             <ContentWrapper>
               <Routes key={cluster?.name}>
-                <Route
-                  path="*"
-                  element={
-                    <IncorrectPath
-                      to="clusters"
-                      message={t('components.incorrect-path.message.clusters')}
+                {kubeconfigIdState !== 'loading' &&
+                  !search.get('kubeconfigID') && (
+                    <Route
+                      path="*"
+                      element={
+                        <IncorrectPath
+                          to="/clusters"
+                          message={t(
+                            'components.incorrect-path.message.clusters',
+                          )}
+                        />
+                      }
                     />
-                  }
-                />
-                <Route path="/" />
+                  )}
                 <Route path="clusters" element={<ClusterList />} />
                 <Route
                   path="cluster/:currentClusterName"
                   element={<Navigate to="overview" />}
                 />
-                <Route
-                  path="cluster/:currentClusterName/*"
-                  element={<ClusterRoutes />}
-                />
+                <Route path="cluster/:currentClusterName">
+                  <Route path="*" element={<ClusterRoutes />} />
+                </Route>
                 {makeGardenerLoginRoute()}
               </Routes>
               <Preferences />
@@ -136,7 +165,7 @@ export default function App() {
         <SplitterElement
           resizable={!showCompanion.fullScreen}
           size={showCompanion.fullScreen ? '100%' : '30%'}
-          minSize={350}
+          minSize={400}
         >
           <KymaCompanion />
         </SplitterElement>

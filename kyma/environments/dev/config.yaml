@@ -43,10 +43,8 @@ config:
         kubeconfigUrl: https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig
     SENTRY:
       isEnabled: true
-      selectors: []
       config:
-        dsn: >-
-          https://016845744e4741cc9bea0caaabc0fe87@o399001.ingest.sentry.io/5953495
+        dsn: https://016845744e4741cc9bea0caaabc0fe87@o399001.ingest.sentry.io/5953495
     SHOW_KYMA_VERSION:
       isEnabled: true
     SHOW_GARDENER_METADATA:
@@ -69,9 +67,9 @@ config:
     EXTENSIBILITY_CUSTOM_COMPONENTS:
       isEnabled: false
     EXTENSIBILITY_WIZARD:
-      isEnabled: true
-    KYMA_COMPANION:
       isEnabled: false
+    KYMA_COMPANION:
+      isEnabled: true
     TRACKING:
       isEnabled: false
     EVENTING:
@@ -102,4 +100,6 @@ config:
     COLUMN_LAYOUT:
       isEnabled: true
     SNOW:
-      isEnabled: true
+      isEnabled: false
+    COMMUNITY_MODULES:
+      isEnabled: false

@@ -1,4 +1,5 @@
 import PinoHttp from 'pino-http';
+import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
 
@@ -7,6 +8,8 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid').v4;
+const escape = require('lodash.escape');
+const config = require('./config.js');
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
@@ -33,8 +36,7 @@ const workaroundForNodeMetrics = req => {
 export const makeHandleRequest = () => {
   const isDev = process.env.NODE_ENV !== 'production';
   const isTrackingEnabled =
-    global.config?.features?.TRACKING?.isEnabled &&
-    process.env.IS_DOCKER !== 'true';
+    config?.features?.TRACKING?.isEnabled && process.env.IS_DOCKER !== 'true';
 
   const logger = PinoHttp({
     autoLogging: !!(isDev || isTrackingEnabled), //to disable the automatic "request completed" and "request errored" logging.
@@ -47,7 +49,7 @@ export const makeHandleRequest = () => {
         id: req.id,
         method: req.method,
         url: req.url,
-        apiServerAddress: req.headers['x-cluster-url'],
+        apiServerAddress: escape(req.headers['x-cluster-url']),
         code: req.code,
         stack: req.stack,
         type: req.type,
@@ -63,6 +65,7 @@ export const makeHandleRequest = () => {
       headersData = extractHeadersData(req);
     } catch (e) {
       req.log.error('Headers error:' + e.message);
+      res.contentType('text/plain; charset=utf-8');
       res.status(400).send('Headers are missing or in a wrong format.');
       return;
     }
@@ -71,7 +74,8 @@ export const makeHandleRequest = () => {
       filters.forEach(filter => filter(req, headersData));
     } catch (e) {
       req.log.error('Filters rejected the request: ' + e.message);
-      res.status(400).send('Request ID: ' + req.id);
+      res.contentType('text/plain; charset=utf-8');
+      res.status(400).send('Request ID: ' + escape(req.id));
       return;
     }
 
@@ -85,7 +89,6 @@ export const makeHandleRequest = () => {
       hostname: targetApiServer.hostname,
       path: req.originalUrl.replace(/^\/backend/, ''),
       headers,
-      body: req.body,
       method: req.method,
       port: targetApiServer.port || 443,
       ca,
@@ -108,26 +111,50 @@ export const makeHandleRequest = () => {
       const statusCode =
         k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
 
+      // Ensure charset is specified in content type
+      let contentType = k8sResponse.headers['Content-Type'] || 'text/json';
+      if (!contentType.includes('charset=')) {
+        contentType += '; charset=utf-8';
+      }
+
       res.writeHead(statusCode, {
-        'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
+        'Content-Type': contentType,
         'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
+        'X-Content-Type-Options': 'nosniff',
       });
       k8sResponse.pipe(res);
     });
     k8sRequest.on('error', throwInternalServerError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
-    k8sRequest.end(Buffer.isBuffer(req.body) ? req.body : undefined);
-    req.pipe(k8sRequest);
+
+    if (Buffer.isBuffer(req.body)) {
+      k8sRequest.end(req.body);
+    } else {
+      // If there's no body, pipe the request (for streaming)
+      req.pipe(k8sRequest);
+    }
 
     function throwInternalServerError(originalError) {
       req.log.warn(originalError);
-      res.status(502).send('Request ID: ' + req.id);
+      res.contentType('text/plain; charset=utf-8');
+      res
+        .status(502)
+        .send('Internal server error. Request ID: ' + escape(req.id));
     }
   };
 };
 
+// Rate limiter: Max 200 requests per 1 minutes per IP
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 200,
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 export const serveStaticApp = (app, requestPath, directoryPath) => {
   app.use(requestPath, express.static(path.join(__dirname, directoryPath)));
-  app.get(requestPath + '*', (_, res) =>
+  app.get(requestPath + '*splat', limiter, (_, res) =>
     res.sendFile(path.join(__dirname + directoryPath + '/index.html')),
   );
 };
@@ -143,11 +170,19 @@ function extractHeadersData(req) {
   const clientKeyDataHeader = 'x-client-key-data';
   const authorizationHeader = 'x-k8s-authorization';
   let targetApiServer;
+
   if (req.headers[urlHeader]) {
-    targetApiServer = handleDockerDesktopSubsitution(
-      new URL(req.headers[urlHeader]),
-    );
+    try {
+      targetApiServer = handleDockerDesktopSubsitution(
+        new URL(req.headers[urlHeader]),
+      );
+    } catch (e) {
+      throw new Error('Invalid cluster URL provided.');
+    }
+  } else {
+    throw new Error('Missing required cluster URL.');
   }
+
   const ca = decodeHeaderToBuffer(req.headers[caHeader]) || certs;
   const cert = decodeHeaderToBuffer(req.headers[clientCAHeader]);
   const key = decodeHeaderToBuffer(req.headers[clientKeyDataHeader]);

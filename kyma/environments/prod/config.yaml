@@ -43,7 +43,6 @@ config:
         kubeconfigUrl: https://kyma-env-broker.cp.kyma.cloud.sap/kubeconfig
     SENTRY:
       isEnabled: false
-      selectors: []
       config:
         dsn: ''
     SHOW_KYMA_VERSION:
@@ -71,7 +70,7 @@ config:
     EXTENSIBILITY_CUSTOM_COMPONENTS:
       isEnabled: false
     EXTENSIBILITY_WIZARD:
-      isEnabled: true
+      isEnabled: false
     KYMA_COMPANION:
       isEnabled: false
     EVENTING:
@@ -102,4 +101,6 @@ config:
     COLUMN_LAYOUT:
       isEnabled: true
     SNOW:
+      isEnabled: false
+    COMMUNITY_MODULES:
       isEnabled: false

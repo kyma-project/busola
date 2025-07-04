@@ -8,21 +8,42 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useUrl } from 'hooks/useUrl';
 import { Icon, ObjectStatus, Text } from '@ui5/webcomponents-react';
 import {
-  ResourceDescription,
   docsURL,
   i18nDescriptionKey,
+  ResourceDescription,
 } from 'resources/Events';
+import { pathSegment } from 'resources/ClusterEvents';
+import { Link } from 'shared/components/Link/Link';
+
+function useEventUrl(resourceType, clusterView) {
+  const { namespaceUrl, clusterUrl } = useUrl();
+
+  if (clusterView) {
+    return resource => {
+      return clusterUrl(
+        `${pathSegment}/${resource.metadata.namespace}/${resource.metadata.name}`,
+      );
+    };
+  }
+  return resource => {
+    return namespaceUrl(`${resourceType}/${resource.metadata.name}`, {
+      namespace: resource.metadata.namespace,
+    });
+  };
+}
 
 export function EventList({
   defaultType,
   hideInvolvedObjects,
   filter,
   isCompact,
+  isClusterView = false,
   ...props
 }) {
   const { t } = useTranslation();
-  const { namespaceUrl, namespace } = useUrl();
+  const { namespace } = useUrl();
   const resourceType = props.resourceType.toLowerCase();
+  const customUrl = useEventUrl(resourceType, isClusterView);
   const {
     EVENT_MESSAGE_TYPE,
     displayType,
@@ -56,7 +77,7 @@ export function EventList({
             <Tooltip content={e.type}>
               <ObjectStatus
                 aria-label="Warning"
-                icon={<Icon name="warning" />}
+                icon={<Icon accessibleName="Warning" name="warning" />}
                 className="has-tooltip"
                 state="Critical"
               />
@@ -68,7 +89,7 @@ export function EventList({
                 name="message-information"
                 design="Information"
                 className="has-tooltip bsl-icon-m"
-                icon={<Icon name="information" />}
+                icon={<Icon accessibleName="Normal" name="information" />}
                 state="Information"
               />
             </Tooltip>
@@ -82,11 +103,16 @@ export function EventList({
     },
     {
       header: t('common.headers.name'),
-      value: entry => (
-        <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-          {entry.metadata?.name}
-        </Text>
-      ),
+      value: entry =>
+        isCompact && !props.displayArrow ? (
+          <Link url={`${customUrl(entry)}`} style={{ fontWeight: 'bold' }}>
+            {entry.metadata?.name}
+          </Link>
+        ) : (
+          <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
+            {entry.metadata?.name}
+          </Text>
+        ),
       id: 'name',
     },
     namespace === '-all-'
@@ -149,11 +175,7 @@ export function EventList({
       searchSettings={{
         textSearchProperties,
       }}
-      customUrl={event =>
-        namespaceUrl(`${resourceType}/${event.metadata.name}`, {
-          namespace: event.metadata.namespace,
-        })
-      }
+      customUrl={customUrl}
       emptyListProps={{
         showButton: false,
         subtitleText: i18nDescriptionKey,

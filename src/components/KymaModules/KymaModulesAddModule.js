@@ -1,29 +1,31 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import ModulesCard from 'components/KymaModules/components/ModulesCard';
 import { cloneDeep } from 'lodash';
-import {
-  useModulesReleaseQuery,
-  useModuleTemplatesQuery,
-} from './kymaModulesQueries';
+import { useModulesReleaseQuery } from './kymaModulesQueries';
+import { KymaModuleContext } from './providers/KymaModuleProvider';
 
 import './KymaModulesAddModule.scss';
-import { findStatus } from './support';
+import { findModuleStatus } from './support';
+import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 
-export default function KymaModulesAddModule({
-  resourceName,
-  kymaResourceUrl,
-  loading,
-  activeKymaModules,
-  initialUnchangedResource,
-  kymaResource,
-  setKymaResource,
-  props,
-}) {
+export default function KymaModulesAddModule(props) {
   const { t } = useTranslation();
+
+  const {
+    kymaResource: resourceName,
+    resourceUrl: kymaResourceUrl,
+    kymaResourceState: kymaResource,
+    setKymaResourceState: setKymaResource,
+    kymaResourceLoading: loading,
+    selectedModules: activeKymaModules,
+    initialUnchangedResource,
+  } = useContext(KymaModuleContext);
+
+  const { moduleTemplates } = useContext(ModuleTemplatesContext);
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
@@ -49,9 +51,6 @@ export default function KymaModulesAddModule({
   }, [setKymaResource, kymaResource, selectedModules, activeKymaModules]);
 
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
-    skip: !resourceName,
-  });
-  const { data: moduleTemplates } = useModuleTemplatesQuery({
     skip: !resourceName,
   });
 
@@ -106,7 +105,11 @@ export default function KymaModulesAddModule({
       item => item.spec.moduleName === name,
     );
 
-    if (module.spec.channel) {
+    const isModuleMetaRelease = acc.find(
+      item => item.name === moduleMetaRelase?.spec?.moduleName,
+    );
+
+    if (module.spec.channel && !isModuleMetaRelease) {
       if (!existingModule && !isAlreadyInstalled) {
         acc.push({
           name: name,
@@ -210,7 +213,7 @@ export default function KymaModulesAddModule({
       ?.find(mod => mod.name === moduleName)
       ?.channels.some(
         ({ channel: ch, isBeta }) =>
-          ch === findStatus(kymaResource, moduleName)?.channel ||
+          ch === findModuleStatus(kymaResource, moduleName)?.channel ||
           (kymaResource.spec.channel && isBeta),
       );
   };
@@ -268,9 +271,8 @@ export default function KymaModulesAddModule({
       disableDefaultFields
       formElementRef={props.formElementRef}
       onChange={props.onChange}
-      layoutNumber={'StartColumn'}
+      layoutNumber="startColumn"
       resetLayout
-      initialUnchangedResource={initialUnchangedResource}
       afterCreatedCustomMessage={t('kyma-modules.module-added')}
       formWithoutPanel
       className="add-modules-form"

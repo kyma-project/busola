@@ -3,13 +3,12 @@ import yaml from 'js-yaml';
 import { Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
 import { initReactI18next } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
 import { savePreviousPath } from 'state/useAfterInitHook';
 
 import App from './components/App/App';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
 import { NotificationProvider } from 'shared/contexts/NotificationContext';
 
 import { ThemeProvider } from '@ui5/webcomponents-react';
@@ -65,9 +64,7 @@ root.render(
       <BrowserRouter>
         <Suspense fallback={<Spinner />}>
           <NotificationProvider>
-            <CommandPaletteProvider>
-              <App />
-            </CommandPaletteProvider>
+            <App />
           </NotificationProvider>
         </Suspense>
       </BrowserRouter>

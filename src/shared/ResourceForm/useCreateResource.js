@@ -1,6 +1,6 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -12,14 +12,17 @@ import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { useNavigate } from 'react-router';
+import { useMemo } from 'react';
 
 export function useCreateResource({
   singularName,
   pluralKind,
   resource,
-  initialUnchangedResource,
+  initialResource,
+  updateInitialResource,
   createUrl,
   skipCreateFn,
   afterCreatedFn,
@@ -29,51 +32,65 @@ export function useCreateResource({
   afterCreatedCustomMessage,
 }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const notification = useNotification();
   const getRequest = useSingleGet();
   const postRequest = usePost();
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const activeNamespace = useRecoilValue(activeNamespaceIdState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
-  const isEdit = !!initialUnchangedResource?.metadata?.name;
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name &&
+      !!!layoutColumn?.showCreate?.resource,
+    [initialResource, layoutColumn?.showCreate?.resource],
+  );
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
-      content: afterCreatedCustomMessage
-        ? afterCreatedCustomMessage
-        : t(
-            isEdit
-              ? 'common.create-form.messages.patch-success'
-              : 'common.create-form.messages.create-success',
-            {
-              resourceType: singularName,
-            },
-          ),
+      content:
+        afterCreatedCustomMessage ??
+        t(
+          isEdit
+            ? 'common.create-form.messages.patch-success'
+            : 'common.create-form.messages.create-success',
+          {
+            resourceType: singularName,
+          },
+        ),
     });
+    updateInitialResource(resource);
 
     if (!isEdit || resetLayout) {
       if (resetLayout) {
         setLayoutColumn({
+          ...layoutColumn,
           layout: 'OneColumn',
           midColumn: null,
           endColumn: null,
           showCreate: null,
         });
+        navigate(window.location.pathname, { replace: true });
       } else {
+        const { group, version } = extractApiGroupVersion(resource?.apiVersion);
         setLayoutColumn(
           nextLayout === 'TwoColumnsMidExpanded'
             ? {
+                ...layoutColumn,
                 layout: nextLayout,
                 showCreate: null,
+                showEdit: null,
                 midColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
-                  namespaceId: resource.metadata.namespace,
+                  rawResourceTypeName: resource.kind,
+                  namespaceId: resource.metadata.namespace ?? activeNamespace,
+                  apiGroup: group,
+                  apiVersion: version,
                 },
                 endColumn: null,
               }
@@ -81,22 +98,21 @@ export function useCreateResource({
                 ...layoutColumn,
                 layout: nextLayout,
                 showCreate: null,
+                showEdit: null,
                 endColumn: {
                   resourceName: resource.metadata.name,
                   resourceType: resource.kind,
-                  namespaceId: resource.metadata.namespace,
+                  rawResourceTypeName: resource.kind,
+                  namespaceId: resource.metadata.namespace ?? activeNamespace,
                 },
               },
         );
-        window.history.pushState(
-          window.history.state,
-          '',
-          `${scopedUrl(
-            `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
-              resource.metadata.name,
-            )}`,
-          )}${nextQuery}`,
-        );
+        const link = `${scopedUrl(
+          `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+            resource.metadata.name,
+          )}`,
+        )}${nextQuery}`;
+        navigate(link);
       }
     }
   };
@@ -122,19 +138,12 @@ export function useCreateResource({
     } else {
       defaultAfterCreatedFn();
     }
-    setIsResourceEdited({
-      isEdited: false,
-    });
-
-    setIsFormOpen({
-      formOpen: false,
-    });
   };
 
   const handleCreate = async () => {
     try {
       if (isEdit) {
-        const diff = createPatch(initialUnchangedResource, resource);
+        const diff = createPatch(initialResource, resource);
         await patchRequest(createUrl, diff);
       } else {
         await postRequest(createUrl, resource);
@@ -150,11 +159,11 @@ export function useCreateResource({
         const makeForceUpdateFn = closeModal => {
           return async () => {
             resource.metadata.resourceVersion =
-              initialUnchangedResource?.metadata.resourceVersion;
+              initialResource?.metadata.resourceVersion;
             try {
               await patchRequest(
                 createUrl,
-                createPatch(initialUnchangedResource, resource),
+                createPatch(initialResource, resource),
               );
               closeModal();
               onSuccess();

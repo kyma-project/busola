@@ -1,29 +1,20 @@
-import { useEffect } from 'react';
-import {
-  useLocation,
-  useNavigate,
-  useNavigationType,
-  NavigationType,
-} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
 
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import {
-  SideNavigationSubItem,
   SideNavigationItem,
+  SideNavigationSubItem,
 } from '@ui5/webcomponents-react';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-
-import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from 'shared/components/UnsavedMessageBox/helpers';
 import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 type NavItemProps = {
   node: NavNode;
@@ -35,12 +26,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
-  const navigationType = useNavigationType();
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);
@@ -48,6 +34,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   const jsonata = useJsonata({ resource: {} as Resource });
   const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
+  const { navigateSafely } = useFormNavigation();
 
   const isNodeSelected = (node: NavNode) => {
     if (node.externalUrl) return false;
@@ -63,7 +50,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     }
   };
 
-  const handleNavigation = (isNavigatingForward?: boolean) => {
+  const handleNavigation = () => {
     if (node.dataSources) {
       let link =
         !jsonataError && jsonataLink ? jsonataLink : node.externalUrl ?? '';
@@ -77,34 +64,29 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
       const newWindow = window.open(link, 'noopener, noreferrer');
       if (newWindow) newWindow.opener = null;
     } else {
-      handleActionIfFormOpen(
-        isResourceEdited,
-        setIsResourceEdited,
-        isFormOpen,
-        setIsFormOpen,
-        () => {
+      navigateSafely(() => {
+        const url = node.createUrlFn
+          ? node.createUrlFn(urlGenerators)
+          : scopedUrl(node.pathSegment);
+        if (location?.pathname !== url) {
           setLayoutColumn({
+            startColumn: {
+              resourceType: node?.resourceTypeCased,
+              rawResourceTypeName: node?.resourceTypeCased,
+              resourceName: null,
+              namespaceId: namespaceId,
+              apiGroup: node?.apiGroup,
+              apiVersion: node?.apiVersion,
+            },
             midColumn: null,
             endColumn: null,
             layout: 'OneColumn',
           });
-          const url = node.createUrlFn
-            ? node.createUrlFn(urlGenerators)
-            : scopedUrl(node.pathSegment);
-          if (location?.pathname !== url && isNavigatingForward) {
-            navigate(url);
-          }
-        },
-      );
+          navigate(url);
+        }
+      });
     }
   };
-
-  useEffect(() => {
-    if (navigationType === NavigationType.Pop) {
-      handleNavigation();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigationType]);
 
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
@@ -112,7 +94,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     selected: isNodeSelected(node),
     onClick: (e: Event) => {
       e.stopPropagation();
-      handleNavigation(true);
+      handleNavigation();
     },
   };
 

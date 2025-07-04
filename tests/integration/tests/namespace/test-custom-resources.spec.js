@@ -15,6 +15,8 @@ context('Test Custom Resources', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
+    cy.wait(1000);
+
     cy.get('body').type(
       `${Cypress.platform === 'darwin' ? '{cmd}k' : '{ctrl}k'}`,
     );
@@ -53,7 +55,7 @@ context('Test Custom Resources', () => {
         force: true,
       });
 
-    cy.get('table').should('have.length', 1);
+    cy.get('ui5-table').should('have.length', 1);
 
     cy.get('ui5-table-row')
       .contains('Tnamespaces')

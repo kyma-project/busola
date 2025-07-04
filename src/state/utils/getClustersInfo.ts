@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { clusterState } from 'state/clusterAtom';
 import { clustersState } from 'state/clustersAtom';

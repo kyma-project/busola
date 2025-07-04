@@ -1,6 +1,6 @@
 import { KubeconfigIdHandleState } from 'components/App/useLoginWithKubeconfigID';
 import { useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { authDataState } from './authDataAtom';
 import { clusterState } from './clusterAtom';
@@ -10,9 +10,25 @@ const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 export function savePreviousPath() {
   const queryParams = new URLSearchParams(window.location.search);
 
-  const previousPath = queryParams.get('layout')
-    ? `${window.location.pathname}?layout=${queryParams.get('layout')}`
-    : window.location.pathname;
+  const layoutParam = queryParams.get('layout');
+  const showCreateParam = queryParams.get('showCreate');
+  const showEditParam = queryParams.get('showEdit');
+  const editColumnParam = queryParams.get('editColumn');
+
+  let previousPath = window.location.pathname;
+
+  if (layoutParam || showCreateParam || showEditParam) {
+    previousPath += '?';
+    const params = [];
+
+    if (layoutParam) params.push(`layout=${layoutParam}`);
+    if (showCreateParam) params.push(`showCreate=${showCreateParam}`);
+    if (showEditParam) params.push(`showEdit=${showEditParam}`);
+    if (editColumnParam) params.push(`editColumn=${editColumnParam}`);
+
+    previousPath += params.join('&');
+  }
+
   if (previousPath !== '/' && previousPath !== '/clusters') {
     localStorage.setItem(PREVIOUS_PATHNAME_KEY, previousPath);
   }

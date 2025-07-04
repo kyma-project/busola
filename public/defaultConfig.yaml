@@ -31,8 +31,7 @@ config:
       config:
         kubeconfigUrl: /kubeconfig
     SENTRY:
-      isEnabled: true
-      selectors: []
+      isEnabled: false
       config:
         dsn: ''
     EXTERNAL_NODES:
@@ -52,7 +51,7 @@ config:
     EXTENSIBILITY_CUSTOM_COMPONENTS:
       isEnabled: false
     EXTENSIBILITY_WIZARD:
-      isEnabled: true
+      isEnabled: false
     KYMA_COMPANION:
       isEnabled: false
     TRACKING:
@@ -81,4 +80,6 @@ config:
       isEnabled: true
       link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_d3UPNymSgUHAb9Y?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
     SNOW:
-      isEnabled: true
+      isEnabled: false
+    COMMUNITY_MODULES:
+      isEnabled: false

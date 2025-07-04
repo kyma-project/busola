@@ -5,10 +5,16 @@
   ui5-dynamic-page-title {
     justify-content: center;
     min-height: 3rem;
+    pointer-events: none;
+
+    [slot='actionsBar'] {
+      pointer-events: auto;
+    }
   }
 
   .bold-title {
     font-family: var(--sapObjectHeader_Title_FontFamily);
+    text-wrap-mode: wrap;
   }
 
   .description {
@@ -62,7 +68,7 @@
 
   ui5-dynamic-page-header {
     padding-top: 0;
-    padding-bottom: 0;
+    padding-bottom: 1rem;
   }
 }
 

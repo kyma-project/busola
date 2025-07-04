@@ -1,174 +1,390 @@
 import { useTranslation } from 'react-i18next';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { FlexBox, Icon, Input } from '@ui5/webcomponents-react';
-import { initialPromptState } from 'components/KymaCompanion/state/initalPromptAtom';
-import Message from './messages/Message';
-import Bubbles from './messages/Bubbles';
-import ErrorMessage from './messages/ErrorMessage';
-import { sessionIDState } from 'components/KymaCompanion/state/sessionIDAtom';
+import { FlexBox } from '@ui5/webcomponents-react';
+import Message from './Message/Message';
+import Bubbles from './Bubbles/Bubbles';
+import ErrorMessage from './ErrorMessage/ErrorMessage';
+import { sessionIDState } from 'state/companion/sessionIDAtom';
 import { clusterState } from 'state/clusterAtom';
 import { authDataState } from 'state/authDataAtom';
 import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuestions';
 import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
+import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
+import { AIError } from '../KymaCompanion';
+import ContextLabel from './ContextLabel/ContextLabel';
+import QueryInput from './Input/QueryInput';
+import {
+  Author,
+  ChatGroup,
+  ErrResponse,
+  ErrorType,
+  MessageChunk,
+  Message as MessageType,
+  chatGroupHelpers,
+} from './types';
 import './Chat.scss';
 
-interface MessageType {
-  author: 'user' | 'ai';
-  messageChunks: { step: string; result: string }[];
-  isLoading: boolean;
-  suggestions?: any[];
-}
+type ChatProps = {
+  chatHistory: ChatGroup[];
+  setChatHistory: React.Dispatch<React.SetStateAction<ChatGroup[]>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isReset: boolean;
+  setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
+  error: AIError;
+  setError: React.Dispatch<React.SetStateAction<AIError>>;
+  hide: boolean;
+};
 
-export default function Chat() {
+export const Chat = ({
+  chatHistory,
+  setChatHistory,
+  error,
+  setError,
+  loading,
+  setLoading,
+  isReset,
+  setIsReset,
+  hide = false,
+}: ChatProps) => {
   const { t } = useTranslation();
+  const chatRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [inputValue, setInputValue] = useState<string>('');
-  const [chatHistory, setChatHistory] = useState<MessageType[]>([]);
-  const [errorOccured, setErrorOccured] = useState<boolean>(false);
-  const initialPrompt = useRecoilValue<string>(initialPromptState);
+
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
 
-  const addMessage = ({ author, messageChunks, isLoading }: MessageType) => {
-    setChatHistory(prevItems =>
-      prevItems.concat({ author, messageChunks, isLoading }),
+  const {
+    initialSuggestions,
+    initialSuggestionsLoading,
+    currentResource,
+  } = usePromptSuggestions(isReset, setIsReset, {
+    skip:
+      chatHistory.reduce((count, group) => count + group.messages.length, 0) >
+      1,
+  });
+
+  const getCurrentContext = useCallback(() => {
+    if (!currentResource.resourceType) return undefined;
+    return currentResource.resourceName
+      ? `${currentResource.resourceType} - ${currentResource.resourceName}`
+      : currentResource.resourceType;
+  }, [currentResource]);
+
+  const addMessage = (message: MessageType) => {
+    const currentContext = getCurrentContext();
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.addMessage(prevGroups, message, currentContext),
     );
   };
 
-  const handleChatResponse = (response: any) => {
-    const isLoading = response?.step !== 'output';
-    if (!isLoading) {
-      getFollowUpQuestions({
-        sessionID,
-        handleFollowUpQuestions,
-        clusterUrl: cluster.currentContext.cluster.cluster.server,
-        token: authData.token,
-        certificateAuthorityData:
-          cluster.currentContext.cluster.cluster['certificate-authority-data'],
-      });
-    }
-    setChatHistory(prevMessages => {
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages.slice(0, -1).concat({
-        author: 'ai',
-        messageChunks: latestMessage.messageChunks.concat(response),
+  const updateLatestMessage = (updates: Partial<MessageType>) => {
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.updateLatestMessage(prevGroups, updates),
+    );
+  };
+
+  const concatMsgToLatestMessage = (
+    response: MessageChunk,
+    isLoading: boolean,
+  ) => {
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.concatMsgToLatestMessage(
+        prevGroups,
+        response,
         isLoading,
-      });
+      ),
+    );
+  };
+
+  const removeLastMessage = () => {
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.removeLastMessage(prevGroups),
+    );
+  };
+
+  const setErrorOnLastUserMsg = () => {
+    setChatHistory(prevGroups =>
+      chatGroupHelpers.setErrorOnLastUserMsg(prevGroups),
+    );
+  };
+
+  const handleChatResponse = (response: MessageChunk) => {
+    const isLoading = response?.data?.answer?.next !== '__end__';
+
+    if (!isLoading) {
+      const finalTask = response.data.answer?.tasks?.at(-1);
+      const hasError = finalTask?.status === 'error';
+
+      if (hasError) {
+        const allTasksError =
+          response.data.answer?.tasks?.every(task => task.status === 'error') ??
+          false;
+        const displayRetry = response.data.error !== null || allTasksError;
+        removeLastMessage();
+        handleError(
+          {
+            type: ErrorType.FATAL,
+            message: response.data.answer.content,
+          },
+          displayRetry,
+        );
+        return;
+      } else {
+        setFollowUpLoading();
+        getFollowUpQuestions({
+          sessionID,
+          handleFollowUpQuestions,
+          handleFollowUpError,
+          clusterUrl: cluster.currentContext.cluster.cluster.server,
+          token: authData.token,
+          certificateAuthorityData:
+            cluster.currentContext.cluster.cluster[
+              'certificate-authority-data'
+            ],
+        });
+      }
+    }
+    concatMsgToLatestMessage(response, isLoading);
+  };
+
+  const setFollowUpLoading = () => {
+    setError({ message: null, displayRetry: false });
+    setLoading(true);
+    updateLatestMessage({ suggestionsLoading: true });
+  };
+
+  const handleFollowUpQuestions = (questions: string[]) => {
+    updateLatestMessage({ suggestions: questions, suggestionsLoading: false });
+    setLoading(false);
+  };
+
+  const handleFollowUpError = () => {
+    updateLatestMessage({
+      hasError: true,
+      suggestionsLoading: false,
     });
+    setLoading(false);
   };
 
-  const handleFollowUpQuestions = (questions: any) => {
-    setChatHistory(prevMessages => {
-      const [latestMessage] = prevMessages.slice(-1);
-      return prevMessages
-        .slice(0, -1)
-        .concat({ ...latestMessage, suggestions: questions });
-    });
+  const handleError = (errResponse: ErrResponse, displayRetry?: boolean) => {
+    switch (errResponse.type) {
+      case ErrorType.FATAL: {
+        setErrorOnLastUserMsg();
+        setLoading(false);
+        setError({
+          message:
+            errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
+          displayRetry: displayRetry ?? false,
+        });
+        break;
+      }
+      case ErrorType.RETRYABLE: {
+        const errMsg = t('kyma-companion.error.http-error', {
+          attempt: `${errResponse.attempt}/${errResponse.maxAttempts}`,
+          statusCode: errResponse.statusCode,
+        });
+        setLoading(true);
+        updateLatestMessage({
+          author: Author.AI,
+          messageChunks: [
+            {
+              data: {
+                answer: {
+                  content: errMsg,
+                  next: '__end__',
+                },
+              },
+            },
+          ],
+          isLoading: false,
+        });
+        break;
+      }
+    }
   };
 
-  const handleError = () => {
-    setErrorOccured(true);
-    setChatHistory(prevItems => prevItems.slice(0, -2));
+  const retryPreviousPrompt = () => {
+    const previousPrompt = chatGroupHelpers.findLastUserPrompt(chatHistory);
+    if (previousPrompt) {
+      removeLastMessage();
+      sendPrompt(previousPrompt);
+    }
   };
 
-  const sendPrompt = (prompt: string) => {
-    setErrorOccured(false);
+  const sendPrompt = (query: string) => {
+    setError({ message: null, displayRetry: false });
+    setLoading(true);
+
     addMessage({
-      author: 'user',
-      messageChunks: [{ step: 'output', result: prompt }],
+      author: Author.USER,
+      messageChunks: [
+        {
+          data: {
+            answer: {
+              content: query,
+              next: '__end__',
+            },
+          },
+        },
+      ],
       isLoading: false,
     });
     getChatResponse({
-      prompt,
+      query,
+      namespace: currentResource?.namespace,
+      resourceType: currentResource?.resourceType,
+      groupVersion: currentResource?.groupVersion,
+      resourceName: currentResource?.resourceName,
       handleChatResponse,
       handleError,
       sessionID,
       clusterUrl: cluster.currentContext.cluster.cluster.server,
-      token: authData.token,
+      clusterAuth: {
+        token: authData?.token,
+        clientCertificateData: authData['client-certificate-data'],
+        clientKeyData: authData['client-key-data'],
+      },
       certificateAuthorityData:
         cluster.currentContext.cluster.cluster['certificate-authority-data'],
     });
-    addMessage({ author: 'ai', messageChunks: [], isLoading: true });
-  };
-
-  const onSubmitInput = () => {
-    if (inputValue.length === 0) return;
-    const prompt = inputValue;
-    setInputValue('');
-    sendPrompt(prompt);
+    addMessage({ author: Author.AI, messageChunks: [], isLoading: true });
   };
 
   const scrollToBottom = () => {
-    if (containerRef?.current?.lastChild)
-      (containerRef.current.lastChild as HTMLElement).scrollIntoView({
+    if (chatRef?.current?.lastChild)
+      (chatRef.current.lastChild as HTMLElement).scrollIntoView({
         behavior: 'smooth',
-        block: 'start',
+        block: 'end',
       });
   };
 
   useEffect(() => {
-    if (chatHistory.length === 0) sendPrompt(initialPrompt);
-    // eslint-disable-next-line
-  }, []);
+    const totalMessageCount = chatHistory.reduce(
+      (count, group) => count + group.messages.length,
+      0,
+    );
+
+    if (totalMessageCount === 1) {
+      if (initialSuggestionsLoading) {
+        // Update the context of the first group
+        const currentContext = getCurrentContext();
+        setChatHistory(prevGroups =>
+          chatGroupHelpers.updateFirstGroupContext(prevGroups, currentContext),
+        );
+        updateLatestMessage({
+          messageChunks: [
+            {
+              data: {
+                answer: {
+                  content: t('kyma-companion.introduction'),
+                  next: '__end__',
+                },
+              },
+            },
+          ],
+        });
+        setFollowUpLoading();
+      } else if (initialSuggestions) {
+        handleFollowUpQuestions(initialSuggestions);
+        if (initialSuggestions.length === 0) {
+          updateLatestMessage({
+            messageChunks: [
+              {
+                data: {
+                  answer: {
+                    content: t('kyma-companion.introduction-no-suggestions'),
+                    next: '__end__',
+                  },
+                },
+              },
+            ],
+          });
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialSuggestions, initialSuggestionsLoading]);
 
   useEffect(() => {
-    const delay = errorOccured ? 500 : 0;
+    const delay = error ? 500 : 0;
     setTimeout(() => {
       scrollToBottom();
     }, delay);
-  }, [chatHistory, errorOccured]);
+  }, [chatHistory, error]);
 
   return (
     <FlexBox
+      style={hide ? { display: 'none' } : undefined}
       direction="Column"
       justifyContent="SpaceBetween"
       className="chat-container"
+      ref={containerRef}
     >
-      <div className="chat-list sap-margin-tiny" ref={containerRef}>
-        {chatHistory.map((message, index) => {
-          return message.author === 'ai' ? (
-            <React.Fragment key={index}>
-              <Message
-                className="left-aligned"
-                messageChunks={message.messageChunks}
-                isLoading={message.isLoading}
-              />
-              {index === chatHistory.length - 1 && !message.isLoading && (
-                <Bubbles
-                  onClick={sendPrompt}
-                  suggestions={message.suggestions}
-                />
+      <div
+        className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
+        ref={chatRef}
+      >
+        {chatHistory.map((group, groupIndex) => {
+          const isLastGroup = groupIndex === chatHistory.length - 1;
+
+          return (
+            <div key={groupIndex} className="context-group">
+              {group.context && (
+                <ContextLabel labelText={group.context.labelText} />
               )}
-            </React.Fragment>
-          ) : (
-            <Message
-              key={index}
-              className="right-aligned"
-              messageChunks={message.messageChunks}
-              isLoading={message.isLoading}
-            />
+              <div className="message-context">
+                {group.messages.map((message, messageIndex) => {
+                  const isLastMessage =
+                    isLastGroup && messageIndex === group.messages.length - 1;
+
+                  return message.author === Author.AI ? (
+                    <React.Fragment key={`${groupIndex}-${messageIndex}`}>
+                      <Message
+                        author={message.author}
+                        messageChunks={message.messageChunks}
+                        isLoading={message.isLoading}
+                        hasError={message.hasError ?? false}
+                        isLatestMessage={isLastMessage}
+                      />
+                      {isLastMessage && !message.isLoading && (
+                        <Bubbles
+                          onClick={sendPrompt}
+                          suggestions={message.suggestions}
+                          isLoading={message.suggestionsLoading ?? false}
+                        />
+                      )}
+                    </React.Fragment>
+                  ) : (
+                    <Message
+                      author={Author.USER}
+                      key={`${groupIndex}-${messageIndex}`}
+                      messageChunks={message.messageChunks}
+                      isLoading={message.isLoading}
+                      hasError={message.hasError ?? false}
+                      isLatestMessage={isLastMessage}
+                    />
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
-        {errorOccured && (
+        {error.message && (
           <ErrorMessage
-            errorOnInitialMessage={chatHistory.length === 0}
-            resendInitialPrompt={() => sendPrompt(initialPrompt)}
+            errorMessage={error.message ?? t('kyma-companion.error.subtitle')}
+            retryPrompt={() => retryPreviousPrompt()}
+            displayRetry={error.displayRetry}
           />
         )}
       </div>
-      <div className="sap-margin-x-tiny">
-        <Input
-          className="full-width"
-          disabled={chatHistory[chatHistory.length - 1]?.isLoading}
-          placeholder={t('kyma-companion.placeholder')}
-          value={inputValue}
-          icon={<Icon name="paper-plane" onClick={onSubmitInput} />}
-          onKeyDown={e => e.key === 'Enter' && onSubmitInput()}
-          onInput={e => setInputValue(e.target.value)}
-        />
-      </div>
+      <QueryInput
+        loading={loading}
+        sendPrompt={sendPrompt}
+        containerRef={containerRef}
+      />
     </FlexBox>
   );
-}
+};

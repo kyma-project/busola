@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -16,10 +16,10 @@ import { LimitPresets, MemoryPresets } from './Presets';
 import { useSidecar } from 'shared/hooks/useSidecarInjection';
 import { CONFIG } from './config';
 import { useUrl } from 'hooks/useUrl';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import './NamespaceCreate.scss';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
 import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
@@ -41,13 +41,31 @@ export default function NamespaceCreate({
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
 
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
-  const [initialUnchangedResource] = useState(initialNamespace);
-  const [initialResource] = useState(
+  const [initialResource, setInitialResource] = useState(
     initialNamespace || createNamespaceTemplate(),
+  );
+
+  useEffect(() => {
+    if (layoutColumn?.showEdit?.resource) return;
+
+    setNamespace(
+      initialNamespace
+        ? cloneDeep(initialNamespace)
+        : createNamespaceTemplate(),
+    );
+    setInitialResource(initialNamespace || createNamespaceTemplate());
+  }, [initialNamespace, layoutColumn?.showEdit?.resource]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name &&
+      !!!layoutColumn?.showCreate?.resource,
+    [initialResource, layoutColumn?.showCreate?.resource],
   );
 
   const {
@@ -56,7 +74,7 @@ export default function NamespaceCreate({
     setSidecarEnabled,
     setIsChanged,
   } = useSidecar({
-    initialRes: initialUnchangedResource,
+    initialRes: initialResource,
     res: namespace,
     setRes: setNamespace,
     path: '$.metadata.labels',
@@ -72,13 +90,10 @@ export default function NamespaceCreate({
   const [withMemory, setWithMemory] = useState(false);
   const [memory, setMemory] = useState(createResourceQuotaTemplate({}));
 
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
-
   const createLimitResource = useCreateResource({
     singularName: 'LimitRange',
     pluralKind: 'LimitRanges',
     resource: limits,
-    initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${namespace.metadata?.name}/limitranges`,
     afterCreatedFn: () => {},
   });
@@ -87,7 +102,6 @@ export default function NamespaceCreate({
     singularName: 'ResourceQuota',
     pluralKind: 'ResourceQuotas',
     resource: memory,
-    initialUnchangedResource: null,
     createUrl: `/api/v1/namespaces/${namespace?.metadata?.name}/resourcequotas`,
     afterCreatedFn: () => {},
   });
@@ -110,14 +124,22 @@ export default function NamespaceCreate({
   }, [namespace.metadata?.name]);
 
   async function afterNamespaceCreated() {
-    setLayoutColumn({
+    setLayoutColumn(prevState => ({
       layout: 'OneColumn',
       showCreate: null,
+      showEdit: prevState.showEdit,
+      startColumn: {
+        resourceType: 'Namespace',
+        rawResourceTypeName: 'Namespace',
+        resourceName: namespace.metadata?.name,
+        apiGroup: '',
+        apiVersion: 'v1',
+      },
       midColumn: null,
       endColumn: null,
-    });
+    }));
 
-    if (!initialUnchangedResource) {
+    if (!isEdit) {
       navigate(clusterUrl(`namespaces/${namespace.metadata?.name}`));
     }
 
@@ -136,9 +158,7 @@ export default function NamespaceCreate({
 
     if (!rejectedRequest) {
       onCompleted(
-        `Namespace ${namespace.metadata.name} ${
-          initialUnchangedResource ? 'edited' : 'created'
-        }`,
+        `Namespace ${namespace.metadata.name} ${isEdit ? 'edited' : 'created'}`,
       );
     } else {
       onError(
@@ -160,7 +180,7 @@ export default function NamespaceCreate({
       >
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
-      {!initialUnchangedResource && withLimits ? (
+      {!isEdit && withLimits ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.container-limits')}
           tooltipContent={LimitRangeDescription}
@@ -173,7 +193,7 @@ export default function NamespaceCreate({
           />
         </ResourceForm.CollapsibleSection>
       ) : null}
-      {!initialUnchangedResource && withMemory ? (
+      {!isEdit && withMemory ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.memory-quotas')}
           tooltipContent={ResourceQuotaDescription}
@@ -194,14 +214,14 @@ export default function NamespaceCreate({
       {...props}
       pluralKind="namespaces"
       singularName={t('namespaces.name_singular')}
-      renderEditor={!initialUnchangedResource ? renderEditor : null}
+      renderEditor={!isEdit ? renderEditor : null}
       resource={namespace}
       setResource={setNamespace}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}
       labelsProps={{
@@ -222,7 +242,7 @@ export default function NamespaceCreate({
         />
       ) : null}
 
-      {!initialUnchangedResource ? (
+      {!isEdit ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-memory-quotas')}
           tooltipContent={ResourceQuotaDescription}
@@ -265,7 +285,7 @@ export default function NamespaceCreate({
           </FlexBox>
         </ResourceForm.CollapsibleSection>
       ) : null}
-      {!initialUnchangedResource ? (
+      {!isEdit ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-limits')}
           tooltipContent={LimitRangeDescription}

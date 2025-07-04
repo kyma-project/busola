@@ -1,7 +1,14 @@
 .emptyListComponent {
+  width: 100%;
+
   &__buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
+}
+
+div[slot='noData'] {
+  width: 100%;
+  text-align: center;
 }

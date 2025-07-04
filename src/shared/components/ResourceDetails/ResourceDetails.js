@@ -59,7 +59,7 @@ ResourceDetails.propTypes = {
   windowTitle: PropTypes.string,
   resourceGraphConfig: PropTypes.object,
   resourceSchema: PropTypes.object,
-  disableEdit: PropTypes.bool,
+  disableEdit: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   disableDelete: PropTypes.bool,
   showYamlTab: PropTypes.bool,
   layoutCloseCreateUrl: PropTypes.string,
@@ -101,7 +101,7 @@ function ResourceDetailsRenderer(props) {
             props.resourceType,
           )}
           layoutCloseUrl={props.layoutCloseCreateUrl}
-          layoutNumber={props.layoutNumber ?? 'MidColumn'}
+          layoutNumber={props.layoutNumber ?? 'midColumn'}
         />
       );
     }
@@ -110,7 +110,7 @@ function ResourceDetailsRenderer(props) {
         resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
         customMessage={getErrorMessage(error)}
         layoutCloseUrl={props.layoutCloseCreateUrl}
-        layoutNumber={props.layoutNumber ?? 'MidColumn'}
+        layoutNumber={props.layoutNumber ?? 'midColumn'}
       />
     );
   }
@@ -119,12 +119,17 @@ function ResourceDetailsRenderer(props) {
     <>
       {resource && (
         <Resource
+          {...props}
           key={resource.metadata.name}
           deleteResourceMutation={deleteResourceMutation}
           updateResourceMutation={updateResourceMutation}
           silentRefetch={silentRefetch}
           resource={resource}
-          {...props}
+          disableEdit={
+            typeof props.disableEdit === 'function'
+              ? props.disableEdit(resource)
+              : props.disableEdit
+          }
         />
       )}
     </>
@@ -137,7 +142,7 @@ function Resource({
   hideLabels = false,
   hideAnnotations = false,
   hideLastUpdate = false,
-  layoutNumber = 'MidColumn',
+  layoutNumber = 'midColumn',
   layoutCloseCreateUrl,
   children,
   createResourceForm: CreateResourceForm,
@@ -163,6 +168,7 @@ function Resource({
   disableDelete = false,
   statusBadge,
   customStatusColumns,
+  customStatus,
   customHealthCards,
   showHealthCardsTitle,
   statusConditions,
@@ -268,69 +274,70 @@ function Resource({
     return EMPTY_TEXT_PLACEHOLDER;
   };
 
-  const resourceStatusCard =
-    customStatusColumns?.length ||
+  const resourceStatusCard = customStatus ? (
+    customStatus
+  ) : customStatusColumns?.length ||
     customConditionsComponents?.length ||
     statusConditions?.length ? (
-      <ResourceStatusCard
-        statusBadge={statusBadge ? statusBadge(resource) : null}
-        customColumns={
-          customStatusColumns?.length ? (
-            <>
-              {customStatusColumns
-                ?.filter(filterColumns)
-                .filter(col => !col?.conditionComponent)
-                ?.filter(col => !col?.fullWidth || col?.fullWidth === false)
-                ?.map(col => (
-                  <DynamicPageComponent.Column
-                    key={col.header}
-                    title={col.header}
-                  >
-                    {col.value(resource)}
-                  </DynamicPageComponent.Column>
-                ))}
-            </>
-          ) : null
-        }
-        customColumnsLong={
-          customStatusColumns?.length ? (
-            <>
-              {customStatusColumns
-                ?.filter(filterColumns)
-                .filter(col => !col?.conditionComponent)
-                ?.filter(col => col?.fullWidth && col?.fullWidth === true)
-                ?.map(col => (
-                  <DynamicPageComponent.Column
-                    key={col.header}
-                    title={col.header}
-                  >
-                    {col.value(resource)}
-                  </DynamicPageComponent.Column>
-                ))}
-            </>
-          ) : null
-        }
-        conditions={statusConditions ? statusConditions(resource) : null}
-        customConditionsComponent={
-          customConditionsComponents?.length ? (
-            <>
-              {customConditionsComponents
-                ?.filter(filterColumns)
-                ?.map((component, index) => (
-                  <React.Fragment
-                    key={`${component.header.replace(' ', '-')}-${index}`}
-                  >
-                    <div className="title bsl-has-color-status-4 sap-margin-x-small">
-                      {component.header}:
-                    </div>
-                    {component.value(resource)}
-                  </React.Fragment>
-                ))}
-            </>
-          ) : null
-        }
-      />
-    ) : null;
+    <ResourceStatusCard
+      statusBadge={statusBadge ? statusBadge(resource) : null}
+      customColumns={
+        customStatusColumns?.length ? (
+          <>
+            {customStatusColumns
+              ?.filter(filterColumns)
+              .filter(col => !col?.conditionComponent)
+              ?.filter(col => !col?.fullWidth || col?.fullWidth === false)
+              ?.map(col => (
+                <DynamicPageComponent.Column
+                  key={col.header}
+                  title={col.header}
+                >
+                  {col.value(resource)}
+                </DynamicPageComponent.Column>
+              ))}
+          </>
+        ) : null
+      }
+      customColumnsLong={
+        customStatusColumns?.length ? (
+          <>
+            {customStatusColumns
+              ?.filter(filterColumns)
+              .filter(col => !col?.conditionComponent)
+              ?.filter(col => col?.fullWidth && col?.fullWidth === true)
+              ?.map(col => (
+                <DynamicPageComponent.Column
+                  key={col.header}
+                  title={col.header}
+                >
+                  {col.value(resource)}
+                </DynamicPageComponent.Column>
+              ))}
+          </>
+        ) : null
+      }
+      conditions={statusConditions ? statusConditions(resource) : null}
+      customConditionsComponent={
+        customConditionsComponents?.length ? (
+          <>
+            {customConditionsComponents
+              ?.filter(filterColumns)
+              ?.map((component, index) => (
+                <React.Fragment
+                  key={`${component.header.replace(' ', '-')}-${index}`}
+                >
+                  <div className="title bsl-has-color-status-4 sap-margin-x-small">
+                    {component.header}:
+                  </div>
+                  {component.value(resource)}
+                </React.Fragment>
+              ))}
+          </>
+        ) : null
+      }
+    />
+  ) : null;
 
   const resourceDetailsCard = (
     <ResourceDetailsCard
@@ -416,7 +423,7 @@ function Resource({
         className={className}
         headerContent={headerContent}
         showYamlTab={showYamlTab || disableEdit}
-        layoutNumber={layoutNumber ?? 'MidColumn'}
+        layoutNumber={layoutNumber ?? 'midColumn'}
         layoutCloseUrl={layoutCloseCreateUrl}
         title={customTitle ?? resource.metadata.name}
         description={headerDescription}

@@ -1,5 +1,7 @@
+const config = require('./config.js');
+
 export function handleTracking(app) {
-  const { isEnabled } = global.config.features?.TRACKING || {};
+  const { isEnabled } = config.features?.TRACKING || {};
 
   if (isEnabled) {
     app.post('/backend/tracking', (req, res) => {

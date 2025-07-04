@@ -1,0 +1,48 @@
+.tasks-list {
+  max-width: 80%;
+  padding: 12px;
+  background-color: var(--sapTile_Background);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .loading-item {
+    gap: 0.5rem;
+
+    .text {
+      flex-grow: 1;
+    }
+  }
+}
+
+.ai-steps-loader {
+  position: relative;
+  min-width: 24px;
+  max-width: 24px;
+  min-height: 24px;
+  max-height: 24px;
+  border-radius: 50%;
+  background: var(--sapAssistant_BackgroundGradient);
+  animation: spin 2s linear infinite;
+
+  &:before {
+    position: absolute;
+    content: '';
+    background: var(--sapTile_Background);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

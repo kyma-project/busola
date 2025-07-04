@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This script returns the id of the draft release
+# Builds and runs busola using local nodejs
 
 # standard bash error handling
 set -o nounset  # treat unset variables as an error and exit immediately.

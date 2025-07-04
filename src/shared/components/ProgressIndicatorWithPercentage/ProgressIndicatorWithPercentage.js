@@ -17,6 +17,7 @@ export const ProgressIndicatorWithPercentage = ({
   tooltip,
   leftTitle,
   rightTitle,
+  accessibleName = 'Progress indicator',
 }) => {
   const applyColors = progressRef => {
     const dataBar = progressRef?.shadowRoot?.querySelector(
@@ -32,8 +33,10 @@ export const ProgressIndicatorWithPercentage = ({
     }
   };
 
+  const tooltipProps = { ...tooltip, style: { width: '100%' } };
+
   return (
-    <TooltipWrapper tooltipProps={tooltip}>
+    <TooltipWrapper tooltipProps={tooltipProps}>
       <div className="progress-indicator-percentage">
         {rightTitle && (
           <p className="progress-indicator-percentage__percents">
@@ -41,6 +44,7 @@ export const ProgressIndicatorWithPercentage = ({
           </p>
         )}
         <ProgressIndicator
+          accessibleName={accessibleName}
           displayValue={leftTitle}
           value={value}
           ref={progress => applyColors(progress)}

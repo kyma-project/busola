@@ -50,7 +50,7 @@
   }
 
   .settings-panel {
-    width: 350px;
+    width: var(--card-width);
 
     &::part(header) {
       font-family: var(--sapFontFamily);
@@ -108,7 +108,25 @@
 }
 
 @container (max-width: 260px) {
+  .add-modules-form {
+    padding: 0 0.25rem;
+  }
+
   .gridbox-addModule {
     --card-width: 230px;
+  }
+}
+
+@container (max-width: 250px) {
+  .gridbox-addModule {
+    --card-width: 200px;
+
+    .gridbox-addModule-column {
+      .settings-panel {
+        &::part(content) {
+          padding: 0 1rem 0 var(--left-spacing);
+        }
+      }
+    }
   }
 }

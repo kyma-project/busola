@@ -1,13 +1,13 @@
-@import '../shared/components/ResourceGraph/mixins';
+@use '../shared/components/ResourceGraph/mixins';
 
-@import './wizard-dialog.scss';
+@use './wizard-dialog.scss';
 
 :root {
-  --card-box-shadow: var(--_ui5-v2-7-0_card_box_shadow);
-  --card-border: var(--_ui5-v2-7-0_card_border);
-  --card-border-radius: var(--_ui5-v2-7-0_card_border-radius);
-  --card-border: var(--_ui5-v2-7-0_card_border);
-  --ui5-v2-7-0_table_bottom_border: none !important;
+  --card-box-shadow: var(--_ui5-v2-11-0_card_box_shadow);
+  --card-border: var(--_ui5-v2-11-0_card_border);
+  --card-border-radius: var(--_ui5-v2-11-0_card_border-radius);
+  --card-border: var(--_ui5-v2-11-0_card_border);
+  --ui5-v2-11-0_table_bottom_border: none !important;
 }
 
 html {
@@ -23,6 +23,10 @@ body {
   .tippy-popper[aria-hidden='true'] {
     display: none;
   }
+}
+
+.min-width-button {
+  min-width: 50px;
 }
 
 .column-content {
@@ -181,10 +185,15 @@ ui5-tabcontainer::part(content) {
 .search-with-display-more {
   @include input-icon(
     url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iMjYiIGhlaWdodD0iMjYiPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzRENUE2QyIgZD0iTTQyMiAwcTM4IDAgNjQgMjZ0MjYgNjR2MzMycTAgMzgtMjYgNjR0LTY0IDI2SDEzOHEtMjggMC01My41LTExdC00NC0yOS41LTI5LjUtNDRUMCAzNzRxMC0yOSAxMS01My41VDQwLjUgMjc3dDQ0LTI5LjVUMTM4IDIzN2gxMjdsLTMzLTMzcS04LTgtOC0xOCAwLTExIDcuNS0xOC41VDI1MCAxNjB0MTggN2w3NyA3N3E3IDkgNyAxOCAwIDExLTcgMThsLTc3IDc3cS04IDgtMTggOC0xMSAwLTE4LjUtNy41VDIyNCAzMzlxMC0xMCA4LTE4bDMzLTMzSDEzOHEtMTggMC0zNCA3dC0yNy41IDE4LjUtMTguNSAyNy03IDMzLjVxMCAzNiAyNS41IDYxLjVUMTM4IDQ2MWgyODRxMTcgMCAyOC0xMXQxMS0yOFY5MHEwLTE3LTExLTI4dC0yOC0xMUg5MHEtMTcgMC0yOCAxMVQ1MSA5MHY3NnEwIDExLTcgMTguNVQyNiAxOTJ0LTE4LjUtNy41VDAgMTY2VjkwcTAtMzggMjYtNjRUOTAgMGgzMzJ6IiAvPjwvc3ZnPg==),
-    48px,
-    16px center,
+    2rem,
+    0.75rem center,
     16px
   );
+  height: 2rem;
+
+  ui5-icon {
+    align-self: center;
+  }
 }
 
 .combobox-with-dimension-icon {
@@ -289,35 +298,35 @@ ui5-popover {
 }
 
 // WORKAROUND FOR UI5 TITLE CUT OFF
-ui5-title[level='H1'] {
+ui5-title[size='H1'] {
   line-height: calc(var(--sapFontHeader1Size) * 1.15);
 }
-ui5-title[level='H2'] {
+ui5-title[size='H2'] {
   line-height: calc(var(--sapFontHeader2Size) * 1.15);
 }
-ui5-title[level='H3'] {
+ui5-title[size='H3'] {
   line-height: calc(var(--sapFontHeader3Size) * 1.15);
 }
-ui5-title[level='H4'] {
+ui5-title[size='H4'] {
   line-height: calc(var(--sapFontHeader4Size) * 1.15);
 }
-ui5-title[level='H5'] {
+ui5-title[size='H5'] {
   line-height: calc(var(--sapFontHeader5Size) * 1.15);
 }
 
-@include graph-node-border(pod, 4);
-@include graph-node-border(virtualservice, 1);
-@include graph-node-border(rolebinding, 2);
-@include graph-node-border(apirule, 2);
-@include graph-node-border(configmap, 5);
-@include graph-node-border(cronjob, 2);
-@include graph-node-border(function, 2);
-@include graph-node-border(horizontalpodautoscaler, 6);
-@include graph-node-border(job, 1);
-@include graph-node-border(oauth2client, 1);
-@include graph-node-border(replicaset, 6);
-@include graph-node-border(clusterrolebinding, 2);
-@include graph-node-border(role, 1);
-@include graph-node-border(clusterrole, 1);
-@include graph-node-border(secret, 5);
-@include graph-node-border(service, 3);
+@include mixins.graph-node-border(pod, 4);
+@include mixins.graph-node-border(virtualservice, 1);
+@include mixins.graph-node-border(rolebinding, 2);
+@include mixins.graph-node-border(apirule, 2);
+@include mixins.graph-node-border(configmap, 5);
+@include mixins.graph-node-border(cronjob, 2);
+@include mixins.graph-node-border(function, 2);
+@include mixins.graph-node-border(horizontalpodautoscaler, 6);
+@include mixins.graph-node-border(job, 1);
+@include mixins.graph-node-border(oauth2client, 1);
+@include mixins.graph-node-border(replicaset, 6);
+@include mixins.graph-node-border(clusterrolebinding, 2);
+@include mixins.graph-node-border(role, 1);
+@include mixins.graph-node-border(clusterrole, 1);
+@include mixins.graph-node-border(secret, 5);
+@include mixins.graph-node-border(service, 3);

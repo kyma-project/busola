@@ -33,6 +33,7 @@ export const configFeaturesNames = {
   CLUSTER_VALIDATION: 'CLUSTER_VALIDATION',
   FEEDBACK: 'FEEDBACK',
   SNOW: 'SNOW',
+  COMMUNITY_MODULES: 'COMMUNITY_MODULES',
 } as const;
 
 export type ConfigFeatureList = {
@@ -135,7 +136,8 @@ export interface UrlGenerators {
 }
 
 export type NavNode = {
-  resourceType: string; // Jobs, CronJobs etc.
+  resourceType: string; // jobs, cronjobs etc.
+  resourceTypeCased: string; // Jobs, CronJobs etc.
   category: string;
   namespaced: boolean;
   label: string;

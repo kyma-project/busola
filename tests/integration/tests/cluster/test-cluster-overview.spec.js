@@ -70,7 +70,7 @@ context('Test Cluster Overview', () => {
     // remove injection
     cy.getLeftNav()
       .contains('Back To Cluster Details')
-      .click();
+      .click({ force: true });
     cy.navigateTo('Configuration', 'Extensions');
     cy.deleteFromGenericList('Extension', 'hpatest');
 

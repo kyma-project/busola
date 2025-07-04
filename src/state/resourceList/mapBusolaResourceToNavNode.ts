@@ -8,6 +8,7 @@ export const mapBusolaResourceToNavNode = (resource: PartialNavNode) => {
 
   node.category = resource.category || '';
   node.resourceType = resource.resourceType.toLowerCase();
+  node.resourceTypeCased = resource.resourceType;
   node.pathSegment = (
     resource.pathSegment || resource.resourceType
   ).toLowerCase();

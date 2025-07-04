@@ -34,9 +34,12 @@ context('Accessibility test Custom Resources', () => {
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Custom Resources overview',
       );
@@ -53,9 +56,12 @@ context('Accessibility test Custom Resources', () => {
 
     cy.url().should('match', /customresources/);
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Custom Resources single list',
       );
@@ -85,9 +91,12 @@ context('Accessibility test Custom Resources', () => {
 
     cy.contains('ui5-title', 'tcluster-test').should('be.visible');
 
-    cy.runAllAccessibilityTests()
-      .printAccessibilityTestResults()
-      .submitAccessibilityConcernsToAMP(
+    cy.runAllAccessibilityTests().printAccessibilityTestResults();
+
+    if (Cypress.env('IS_PR') === 'true')
+      cy.log('Skipping AMP submission for PR');
+    else
+      cy.submitAccessibilityConcernsToAMP(
         Cypress.env('AMP_REPORT_NAME'),
         'Tcluster Custom Resource details',
       );

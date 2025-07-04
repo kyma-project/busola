@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -10,8 +10,11 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 import { createTemplate } from './templates';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { BusyIndicator } from '@ui5/webcomponents-react';
+import { useRecoilState } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
-function CRCreate({
+function CRCreateForm({
   onChange,
   formElementRef,
   crd,
@@ -19,27 +22,35 @@ function CRCreate({
   resource: initialCustomResource,
   ...props
 }) {
+  const { crdName } = useParams();
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { t } = useTranslation();
   const notification = useNotification();
   const [cr, setCr] = useState(
     cloneDeep(initialCustomResource) || createTemplate(crd),
   );
-  const [initialUnchangedResource] = useState(initialCustomResource);
-  const [initialResource] = useState(
+  const [initialResource, setInitialResource] = useState(
     initialCustomResource || createTemplate(crd),
   );
-  const currUrl = window.location.href;
 
-  const customUrl = useCustomResourceUrl(
-    crd,
-    currUrl.includes('customresources/'),
+  useEffect(() => {
+    if (layoutColumn?.showEdit?.resource) return;
+
+    setCr(cloneDeep(initialCustomResource) || createTemplate(crd));
+    setInitialResource(initialCustomResource || createTemplate(crd));
+  }, [initialCustomResource, crd, layoutColumn?.showEdit?.resource]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name &&
+      !!!layoutColumn?.showCreate?.resource,
+    [initialResource, layoutColumn?.showCreate?.resource],
   );
 
+  const customUrl = useCustomResourceUrl(crd);
+
   const navigate = useNavigate();
-  const { nextQuery, currentQuery } = usePrepareLayout(layoutNumber);
-  const goToLayoutQuery = customUrl(cr).includes('customresources/')
-    ? nextQuery
-    : currentQuery;
+  const { nextQuery } = usePrepareLayout(layoutNumber);
 
   const currentVersion = crd.spec.versions?.find(ver => ver.storage).name;
   const namespace =
@@ -62,7 +73,7 @@ function CRCreate({
       singularName={crd.spec.names.kind}
       resource={cr}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setCr}
       onChange={onChange}
       formElementRef={formElementRef}
@@ -71,12 +82,58 @@ function CRCreate({
       layoutNumber={layoutNumber}
       afterCreatedFn={() => {
         notification.notifySuccess({
-          content: t('common.create-form.messages.patch-success', {
-            resourceType: crd.spec.names.kind,
-          }),
+          content: t(
+            isEdit
+              ? 'common.create-form.messages.patch-success'
+              : 'common.create-form.messages.create-success',
+            {
+              resourceType: crd.spec.names.kind,
+            },
+          ),
         });
-        navigate(`${customUrl(cr)}${goToLayoutQuery}`);
+        navigate(`${customUrl(cr)}${nextQuery}`);
+        setLayoutColumn({
+          ...layoutColumn,
+          showCreate: null,
+          endColumn: {
+            resourceName: cr.metadata.name,
+            resourceType: crdName,
+            rawResourceTypeName: crd.spec.names.kind,
+            namespaceId: cr.metadata.namespace,
+          },
+        });
       }}
+    />
+  );
+}
+
+function CRCreate({
+  onChange,
+  formElementRef,
+  crd,
+  layoutNumber,
+  resource: initialCustomResource,
+  ...props
+}) {
+  if (!crd) {
+    return (
+      <BusyIndicator
+        active
+        size="M"
+        delay={0}
+        className="sap-margin-top-small"
+      />
+    );
+  }
+
+  return (
+    <CRCreateForm
+      onChange={onChange}
+      formElementRef={formElementRef}
+      crd={crd}
+      layoutNumber={layoutNumber}
+      resource={initialCustomResource}
+      {...props}
     />
   );
 }

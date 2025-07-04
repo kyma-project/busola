@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Uri } from 'monaco-editor';
-import { setDiagnosticsOptions } from 'monaco-yaml';
+import * as monaco from 'monaco-editor';
+import { configureMonacoYaml } from 'monaco-yaml';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { v4 as uuid } from 'uuid';
 import YamlWorker from './yaml.worker.js?worker';
@@ -32,6 +33,7 @@ export function useAutocompleteWorker({
   autocompletionDisabled,
   readOnly,
   language,
+  schema: predefinedSchema,
 }) {
   const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
 
@@ -42,11 +44,12 @@ export function useAutocompleteWorker({
     autocompletionDisabled = true;
   }
 
-  const { schema, loading, error } = useGetSchema({
+  const { schema: fetchedSchema, loading, error } = useGetSchema({
     schemaId,
-    skip: autocompletionDisabled,
+    skip: autocompletionDisabled || !!predefinedSchema,
   });
 
+  const schema = predefinedSchema || fetchedSchema;
   /**
    * Call this before initializing Monaco. This function alters Monaco global config to set up JSON-based
    * autocompletion.
@@ -63,7 +66,7 @@ export function useAutocompleteWorker({
       });
     }
 
-    setDiagnosticsOptions({
+    configureMonacoYaml(monaco, {
       enableSchemaRequest: false,
       hover: true,
       completion: !!schema && !readOnly,

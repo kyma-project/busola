@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, useParams } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 
@@ -16,7 +16,7 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 export default function NamespaceRoutes() {
   const { t } = useTranslation();
   const { namespaceId } = useParams();
-  const { clusterUrl } = useUrl();
+  const { clusterUrl, namespaceUrl } = useUrl();
   const language = useRecoilValue(languageAtom);
   const extensions = useRecoilValue(extensionsState);
   const [extensibilityRoutes, setExtensibilityRoutes] = useState<
@@ -62,7 +62,7 @@ export default function NamespaceRoutes() {
           path="*"
           element={
             <IncorrectPath
-              to=""
+              to={namespaceUrl('')}
               message={t('components.incorrect-path.message.namespace')}
             />
           }

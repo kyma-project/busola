@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -8,6 +8,8 @@ import { createRuleTemplate, validateRole } from './helpers';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useRecoilValue } from 'recoil';
 
 export function GenericRoleCreate({
   onChange,
@@ -23,8 +25,23 @@ export function GenericRoleCreate({
 }) {
   const { t } = useTranslation();
   const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
-  const [initialUnchangedResource] = useState(initialRole);
-  const [initialResource] = useState(initialRole || createTemplate());
+  const [initialResource, setInitialResource] = useState(
+    initialRole || createTemplate(),
+  );
+  const layoutState = useRecoilValue(columnLayoutState);
+
+  useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
+    setRole(cloneDeep(initialRole) || createTemplate());
+    setInitialResource(initialRole || createTemplate());
+  }, [initialRole, createTemplate, layoutState?.showEdit?.resource]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   useEffect(() => {
     setCustomValid(validateRole(role));
@@ -40,13 +57,13 @@ export function GenericRoleCreate({
       singularName={singularName}
       resource={role}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       setResource={setRole}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      presets={!initialUnchangedResource && presets}
+      presets={!isEdit && presets}
       nameProps={{ readOnly: !!initialRole?.metadata?.name }}
     >
       <ItemArray

@@ -6,6 +6,7 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
+import { extractApiGroupVersion } from 'resources/Roles/helpers';
 
 export function CustomResources({
   crd,
@@ -19,7 +20,7 @@ export function CustomResources({
 }) {
   const { group, names } = crd.spec;
   const name = names.plural;
-  const customUrl = useCustomResourceUrl(crd, true);
+  const customUrl = useCustomResourceUrl(crd);
   const { namespace } = useUrl();
   const resourceUrl =
     namespace && namespace !== '-all-'
@@ -61,10 +62,13 @@ export function CustomResources({
   if (customColumns?.length > 5) customColumns.length = 5;
 
   const customColumnLayout = resource => {
+    const { group, version } = extractApiGroupVersion(crd?.apiVersion);
     return {
       resourceName: resource?.metadata?.name,
       resourceType: crd?.metadata?.name,
       namespaceId: resource?.metadata?.namespace,
+      apiGroup: group,
+      apiVersion: version,
     };
   };
 
@@ -81,7 +85,7 @@ export function CustomResources({
     omitColumnsIds,
     hideCreateOption,
     createResourceForm: props => (
-      <CRCreate {...props} crd={crd} layoutNumber="MidColumn" />
+      <CRCreate {...props} crd={crd} layoutNumber="midColumn" />
     ),
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
     searchSettings: {
@@ -93,7 +97,7 @@ export function CustomResources({
     layoutCloseCreateUrl: layoutCloseCreateUrl,
     columnLayout: 'ThreeColumnsEndExpanded',
     customColumnLayout,
-    layoutNumber: 'MidColumn',
+    layoutNumber: 'midColumn',
     parentCrdName: crd.metadata.name,
     simpleEmptyListMessage,
   };

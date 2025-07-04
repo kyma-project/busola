@@ -19,7 +19,7 @@ module.exports = (on, config) => {
     '/' +
     date.getDate() +
     '-' +
-    (date.getUTCHours() + 2) +
+    (date.getUTCHours() + 1) +
     ':' +
     date.getUTCMinutes();
   const reportName = `AMP_REPORT_${todaysDate}`;
@@ -28,6 +28,7 @@ module.exports = (on, config) => {
   config.env.STORAGE_CLASS_NAME = randomName;
   config.env.APP_NAME = randomName;
   config.env.ACC_AMP_TOKEN = process.env.ACC_AMP_TOKEN;
+  config.env.IS_PR = process.env.IS_PR;
   config.env.AMP_REPORT_NAME = reportName;
 
   on('task', {

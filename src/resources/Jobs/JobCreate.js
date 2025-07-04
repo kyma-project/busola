@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +11,8 @@ import { JobSpecSection } from './SpecSection';
 import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { useRecoilValue } from 'recoil';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -34,18 +36,43 @@ export default function JobCreate({
 }) {
   const { t } = useTranslation();
 
-  const defaultSidecarAnnotations = initialJob
-    ? initialJob?.spec?.template?.metadata?.annotations
-    : {};
-  const [initialUnchangedResource] = useState(initialJob);
-  const [initialResource] = useState(
-    initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
-  );
+  const defaultSidecarAnnotations = useMemo(() => {
+    return initialJob?.spec?.template?.metadata?.annotations || {};
+  }, [initialJob]);
 
   const [job, setJob] = useState(
     initialJob
       ? cloneDeep(initialJob)
       : createJobTemplate(namespace, defaultSidecarAnnotations),
+  );
+
+  const [initialResource, setInitialResource] = useState(
+    initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+  );
+  const layoutState = useRecoilValue(columnLayoutState);
+
+  useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
+    setJob(
+      initialJob
+        ? cloneDeep(initialJob)
+        : createJobTemplate(namespace, defaultSidecarAnnotations),
+    );
+    setInitialResource(
+      initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+    );
+  }, [
+    initialJob,
+    namespace,
+    defaultSidecarAnnotations,
+    layoutState?.showEdit?.resource,
+  ]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
   );
 
   useEffect(() => {
@@ -66,23 +93,19 @@ export default function JobCreate({
       resource={job}
       setResource={setJob}
       initialResource={initialResource}
-      initialUnchangedResource={initialUnchangedResource}
+      updateInitialResource={setInitialResource}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={
-        !initialUnchangedResource &&
-        createJobPresets(namespace, t, defaultSidecarAnnotations)
+        !isEdit && createJobPresets(namespace, t, defaultSidecarAnnotations)
       }
       createUrl={resourceUrl}
     >
-      <JobSpecSection
-        propertyPath="$.spec"
-        readOnly={!!initialUnchangedResource}
-      />
+      <JobSpecSection propertyPath="$.spec" readOnly={isEdit} />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
         tooltipContent={t(containersDesc)}
-        readOnly={!!initialUnchangedResource}
+        readOnly={isEdit}
       />
       <MessageStrip design="Information" hideCloseButton>
         {t('jobs.create-modal.containers-readonly-in-edit')}

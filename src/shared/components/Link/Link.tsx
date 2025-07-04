@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Link as UI5Link } from '@ui5/webcomponents-react';
 import { useSetRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 type LinkProps = {
   url: string;
@@ -12,6 +12,7 @@ type LinkProps = {
   design?: 'Default' | 'Subtle' | 'Emphasized';
   resetLayout?: boolean;
   onClick?: any;
+  style?: React.CSSProperties;
 };
 
 export const Link = ({
@@ -22,17 +23,22 @@ export const Link = ({
   design = 'Emphasized',
   resetLayout = true,
   onClick,
+  style = {},
 }: LinkProps) => {
   const setLayout = useSetRecoilState(columnLayoutState);
   const navigate = useNavigate();
 
-  function handleOnlick(resetLayout: any, url: any) {
-    if (resetLayout)
+  function handleOnlick(resetLayout: any, url: any, e: any) {
+    e.preventDefault();
+
+    if (resetLayout) {
       setLayout({
+        startColumn: null,
         midColumn: null,
         endColumn: null,
         layout: 'OneColumn',
       });
+    }
     navigate(url);
   }
 
@@ -42,7 +48,10 @@ export const Link = ({
       design={design}
       className={className}
       data-testid={dataTestId}
-      onClick={() => (onClick ? onClick() : handleOnlick(resetLayout, url))}
+      onClick={e => (onClick ? onClick(e) : handleOnlick(resetLayout, url, e))}
+      href={url}
+      target="_blank"
+      style={style}
     >
       {children}
     </UI5Link>

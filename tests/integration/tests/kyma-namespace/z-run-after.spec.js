@@ -16,6 +16,7 @@ context('Clean up Namespace', () => {
       clearSearch: false,
       checkIfResourceIsRemoved: false,
       selectSearchResult: true,
+      searchInPlainTableText: true,
     });
   });
 

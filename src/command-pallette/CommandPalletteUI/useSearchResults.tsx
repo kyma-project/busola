@@ -14,7 +14,7 @@ import { clusterState } from 'state/clusterAtom';
 import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
 import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { useNavigate, To } from 'react-router-dom';
+import { useNavigate, To } from 'react-router';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 
 type useSearchResultsProps = {
@@ -56,6 +56,7 @@ export function useSearchResults({
   const navigateAndCloseColumns = (to: To) => {
     setLayoutColumn({
       layout: 'OneColumn',
+      startColumn: null,
       midColumn: null,
       endColumn: null,
     });

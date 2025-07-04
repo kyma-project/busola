@@ -1,8 +1,14 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Select, Option, Title } from '@ui5/webcomponents-react';
-
+import {
+  Title,
+  RadioButton,
+  FlexBox,
+  MessageBox,
+  Button,
+  Text,
+} from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
-
 import './ContextChooser.scss';
 
 export function ContextChooser(params) {
@@ -13,60 +19,105 @@ export function ContextChooser(params) {
     return '';
   }
 
-  const contexts = kubeconfig.contexts.map(({ name }) => ({
-    key: name,
-    text: name,
-  }));
-  contexts.push({
-    key: '-all-',
-    text: t('clusters.wizard.all-contexts'),
-  });
-
-  const onChange = (event, setValue) => {
-    const selectedContext = event.detail.selectedOption.value;
-    setValue(selectedContext);
-  };
-
   return (
-    <div className="add-cluster__content-container sap-margin-bottom-medium">
-      <ResourceForm.Wrapper {...params} className="sap-margin-bottom-medium">
-        <Title level="H5">{'Provide Context'}</Title>
+    <div className="add-cluster__content-container">
+      <ResourceForm.Wrapper {...params}>
+        <Title className="sap-margin-bottom-small" level="H5">
+          {t('clusters.wizard.provide-context')}
+        </Title>
         <ResourceForm.FormField
           required
+          value={params.chosenContext}
           propertyPath='$["current-context"]'
           label={t('clusters.wizard.context')}
           validate={value => !!value}
-          input={({ value, setValue }) => (
-            <Select
-              id="context-chooser"
-              onChange={event => {
-                onChange(event, setValue);
-              }}
-            >
-              {contexts.map(context => (
-                <Option
-                  key={context.key}
-                  value={context.key}
-                  selected={value === context.key}
-                >
-                  {context.text}
-                </Option>
-              ))}
-            </Select>
+          input={({ setValue }) => (
+            <ContextButtons
+              contexts={kubeconfig.contexts}
+              setValue={setValue}
+              chosenContext={params.chosenContext}
+              setChosenContext={params.setChosenContext}
+            />
           )}
         />
-        {kubeconfig['current-context'] === '-all-' && (
-          <MessageStrip
-            design="Information"
-            hideCloseButton
-            className="sap-margin-y-small"
-          >
-            {t('clusters.wizard.multi-context-info', {
-              context: kubeconfig.contexts[0]?.name,
-            })}
-          </MessageStrip>
-        )}
       </ResourceForm.Wrapper>
     </div>
+  );
+}
+export function ContextButtons({
+  contexts,
+  setValue,
+  chosenContext,
+  setChosenContext,
+}) {
+  return (
+    <FlexBox
+      direction="Column"
+      id="context-chooser"
+      className="sap-margin-top-tiny"
+    >
+      {contexts.map(context => (
+        <RadioButton
+          key={context.name}
+          name={context.name}
+          value={context.name}
+          checked={chosenContext === context.name}
+          text={context.name}
+          onChange={() => {
+            setValue(context.name);
+            if (setChosenContext) setChosenContext(context.name);
+          }}
+        />
+      ))}
+    </FlexBox>
+  );
+}
+export function ContextChooserMessage({ contexts, setValue, onCancel }) {
+  const { t } = useTranslation();
+  const [chosenContext, setChosenContext] = useState('');
+
+  if (!Array.isArray(contexts)) {
+    return null;
+  }
+  return (
+    <MessageBox
+      titleText={t('clusters.messages.choose-cluster')}
+      open={true}
+      className="ui5-content-density-compact context-chooser-message"
+      actions={[
+        <Button
+          key="confirmation"
+          design="Emphasized"
+          onClick={() => setValue(chosenContext)}
+          disabled={!chosenContext}
+        >
+          {t('common.buttons.choose')}
+        </Button>,
+        <Button key="cancel" design="Transparent" onClick={onCancel}>
+          {t('common.buttons.cancel')}
+        </Button>,
+      ]}
+    >
+      <FlexBox direction="Column" gap={16}>
+        <Text className="context-chooser-content-text">
+          {t('clusters.wizard.several-context-info')}
+          <br />
+          {t('clusters.wizard.several-context-question')}
+        </Text>
+        <FlexBox direction="Column" className="radio-box-container">
+          {contexts.map(context => (
+            <RadioButton
+              id={'context-chooser' + context.name}
+              key={context.name}
+              name={context.name}
+              value={context.name}
+              checked={chosenContext === context.name}
+              text={context.name}
+              onChange={() => setChosenContext(context.name)}
+            />
+          ))}
+        </FlexBox>
+      </FlexBox>
+    </MessageBox>
   );
 }

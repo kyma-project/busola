@@ -10,12 +10,10 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
 import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
-import { Text } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'shared/components/Link/Link';
 
 export function ClusterNodes({ data, error, loading }) {
   const { clusterUrl } = useUrl();
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const getStatusType = status => {
@@ -44,24 +42,23 @@ export function ClusterNodes({ data, error, loading }) {
     t('cluster-overview.headers.cpu'),
     t('cluster-overview.headers.memory'),
     t('common.headers.created'),
-    t('common.headers.version'),
     t('common.headers.status'),
-    t('common.headers.region'),
+    t('node-details.pool'),
+    t('node-details.machine-type'),
     t('common.headers.zone'),
   ];
 
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
-    const region = entry?.metadata?.labels?.['topology.kubernetes.io/region'];
-    const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
     return [
-      <Text
-        style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}
+      <Link
+        style={{ fontWeight: 'bold' }}
         data-testid={`node-details-link-${entry.metadata?.name}`}
+        url={clusterUrl(`overview/nodes/${entry.metadata?.name}`)}
       >
         {entry.metadata?.name}
-      </Text>,
+      </Link>,
       cpu ? (
         <>
           <ProgressIndicatorWithPercentage
@@ -74,6 +71,7 @@ export function ClusterNodes({ data, error, loading }) {
               }),
               position: 'bottom',
             }}
+            accessibleName="CPU usage"
           />
         </>
       ) : (
@@ -90,6 +88,7 @@ export function ClusterNodes({ data, error, loading }) {
             position: 'bottom',
           }}
           dataBarColor="var(--sapChart_Good)"
+          accessibleName="Memory usage"
         />
       ) : (
         EMPTY_TEXT_PLACEHOLDER
@@ -97,10 +96,13 @@ export function ClusterNodes({ data, error, loading }) {
       <ReadableCreationTimestamp
         timestamp={entry.metadata?.creationTimestamp}
       />,
-      entry.status?.nodeInfo?.kubeletVersion || EMPTY_TEXT_PLACEHOLDER,
       getStatus(entry.status),
-      region ?? EMPTY_TEXT_PLACEHOLDER,
-      zone ?? EMPTY_TEXT_PLACEHOLDER,
+      entry.metadata?.labels?.['worker.gardener.cloud/pool'] ??
+        EMPTY_TEXT_PLACEHOLDER,
+      entry.metadata?.labels?.['node.kubernetes.io/instance-type'] ??
+        EMPTY_TEXT_PLACEHOLDER,
+      entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
+        EMPTY_TEXT_PLACEHOLDER,
     ];
   };
 
@@ -112,10 +114,6 @@ export function ClusterNodes({ data, error, loading }) {
     'cluster.version',
     data?.[0]?.status?.nodeInfo?.kubeletVersion,
   );
-
-  const handleClickResource = resourceName => {
-    navigate(clusterUrl(`overview/nodes/${resourceName}`));
-  };
 
   return (
     <>
@@ -134,7 +132,6 @@ export function ClusterNodes({ data, error, loading }) {
             showSearchField: false,
             allowSlashShortcut: false,
           }}
-          customRowClick={handleClickResource}
           hasDetailsView
         />
       )}

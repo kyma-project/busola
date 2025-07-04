@@ -28,7 +28,11 @@ export const EmptyListComponent = ({
   image = 'TntNoApplications',
 }: EmptyListComponentProps) => {
   const { t } = useTranslation();
-  const subtitle = <Trans i18nKey={subtitleText} />;
+  const subtitle = subtitleText ? (
+    <Trans i18nKey={subtitleText} components={[<ExternalLink url={url} />]} />
+  ) : (
+    ''
+  );
 
   if (showButton === undefined) {
     showButton = typeof onClick === 'function';
@@ -40,6 +44,7 @@ export const EmptyListComponent = ({
 
   return (
     <IllustratedMessage
+      className="emptyListComponent"
       name={image}
       design="Auto"
       title={

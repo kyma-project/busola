@@ -6,6 +6,7 @@
 
   &::part(content) {
     padding: 0;
+    overflow: visible;
   }
 }
 
@@ -15,7 +16,7 @@
 
 .toolbar > :first-child {
   display: flex;
-  align-items: end;
+  align-items: center;
 }
 
 .header-actions {
@@ -31,5 +32,11 @@
   .invisible,
   .toolbar-spacer {
     display: none;
+  }
+}
+
+@container (max-width: 450px) {
+  .toolbar > :first-child {
+    align-items: end;
   }
 }

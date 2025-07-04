@@ -3,7 +3,7 @@
 You can use list and details widgets in the lists and details pages in the user interface component of your resource.
 You can distinguish the following widget types:
 
-- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.detail.bodies**
+- [Inline widgets](#inline-widgets) for simple values in **data.list**, **data.details.header**, **data.details.status** and **data.details.body**
   - [`Bagde`](#badge)
   - [`ControlledBy`](#controlledby)
   - [`ConditionList`](#conditionlist) - used only in **data.details.status** or **data.details.status.body**
@@ -14,6 +14,7 @@ You can distinguish the following widget types:
   - [`ResourceButton`](#resourcebutton)
   - [`ResourceLink`](#resourcelink)
   - [`Text`](#text)
+  - [`TimeFromNow`](#timefromnow)
 - [Block widgets](#block-widgets) for more complex layouts used only in **data.details.body**
   - [`Alert`](#alert)
   - [`CodeViewer`](#codeviewer)
@@ -59,9 +60,8 @@ See the following example:
   description: status.message
 ```
 
-<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="50%">
 <br/><br/>
-<img src="./assets/display-widgets/Bagde2.png" alt="Example of a badge widget with a tooltip" width="40%" style="border: 1px solid #D2D5D9">
 
 ### `ControlledBy`
 
@@ -82,7 +82,7 @@ This is an example of kind and name link:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%">
 
 This is an exaple of kind only:
 
@@ -93,15 +93,16 @@ This is an exaple of kind only:
   kindOnly: true
 ```
 
-<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%">
 
 ### `ConditionList`
 
 The `ConditionList` widget renders the conditions as an expandable list with condition details. This widget is primarily designed for the overview section **data.details.status** or **data.details.status.body**
 
-| Parameter      | Required | Type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| -------------- | -------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **highlights** | No       |      | A map of highlight rules that will only be applied to the `condition` matching `type`. Key refers to the type of highlight, while the rule can be a plain array of values ​​or a string containing the [JSONata](100-jsonata.md) rule. Allowed keys are `informative`, `positive`, `negative`, `critical`, and `type`. <br><br> With the `type` key (required), you can specify which condition the highlighting must be applied to. It must contain one of the `types` of the source condition. <br><br> If no highlighting is provided, the following values ​​are automatically supported: <br> - rendered as informational: `Unknown`. <br> - rendered as positive: `True`. <br> - rendered as critical: `False`. |
+| Parameter         | Required | Type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------------- | -------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **highlights**    | No       |      | A map of highlight rules that will only be applied to the `condition` matching `type`. Key refers to the type of highlight, while the rule can be a plain array of values ​​or a string containing the [JSONata](100-jsonata.md) rule. Allowed keys are `informative`, `positive`, `negative`, `critical`, and `type`. <br><br> With the `type` key (required), you can specify which condition the highlighting must be applied to. It must contain one of the `types` of the source condition. <br><br> If no highlighting is provided, the following values ​​are automatically supported: <br> - rendered as informational: `Unknown`. <br> - rendered as positive: `True`. <br> - rendered as critical: `False`. |
+| **customContent** | No       |      | Allows adding custom content to specific condition types. Each object contains: <br> - `type` (required): The condition type to match <br> - `value` (required): A string, JSONata expression, or a widget definition to render custom content <br> - `header`: Optional header text for the custom content section <br><br> The custom content is rendered above the condition's default message.                                                                                                                                                                                                                                                                                                                    |
 
 See the following example of the standard `ConditionList`:
 
@@ -113,7 +114,7 @@ status:
       source: status.conditions
 ```
 
-<img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ConditionList.png" alt="Example of a condition list widget">
 
 This is an example of `ConditionList` with overriden statuses:
 
@@ -140,7 +141,25 @@ status:
             - unknown
 ```
 
-<img src="./assets/display-widgets/ConditionListHighlights.png" alt="Example of a condition list widget with overriden statuses" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ConditionListHighlights.png" alt="Example of a condition list widget with overriden statuses">
+
+This is an example of `ConditionList` with added custom content:
+
+```yaml
+status:
+  body:
+    - name: Condition details
+      widget: ConditionList
+      source: status.conditions
+      customContent:
+        - value:
+            widget: Badge
+            source: $filter(status.conditions, function($c){$c.type = 'AbleToScale'}).reason
+          type: AbleToScale
+          header: Reason
+```
+
+<img src="./assets/display-widgets/ConditionListContent.png" alt="Example of a condition list widget with custom content" width="30%">
 
 ### `ExternalLink`
 
@@ -162,8 +181,6 @@ This is an example of the linkFormula and textFormula usage:
   link: "'https://' & $item.port.name & ':' & $string($item.port.number)"
 ```
 
-<img src="./assets/display-widgets/ExternalLink.png" alt="Example of a ExternalLink widget" width="50%" style="border: 1px solid #D2D5D9">
-
 This is an example of source only usage:
 
 ```yaml
@@ -172,7 +189,7 @@ This is an example of source only usage:
   name: spec.servers.hosts
 ```
 
-<img src="./assets/display-widgets/ExternalLink2.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ExternalLinks.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="40%">
 
 ### `ExternalLinkButton`
 
@@ -193,7 +210,7 @@ See the following example:
   link: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach
 ```
 
-<img src="./assets/display-widgets/ExternalLinkButton.png" alt="Example of a ExternalLinkButton widget" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ExternalLinkButton.png" alt="Example of a ExternalLinkButton widget" width="30%">
 
 ### `JoinedArray`
 
@@ -210,19 +227,24 @@ These are the available `JoinedArray` widget parameters:
 See the following example:
 
 ```yaml
-- name: Joined array
-  source: spec.dnsNames
+- name: Comments
   widget: JoinedArray
-  separator: ': '
-- name: Joined array
-  source: spec.statuses
+  source: spec.comments
+  separator: ' || '
+```
+
+<img src="./assets/display-widgets/JoinedArray1.png" alt="Example of a joined array widget" width="40%">
+
+```yaml
+- name: Toppings
+  source: spec.toppings.name
   widget: JoinedArray
   children:
     - source: $item
       widget: Badge
 ```
 
-<img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/JoinedArray2.png" alt="Example of a joined array widget" width="30%">
 
 ### `Labels`
 
@@ -243,7 +265,7 @@ See the following example:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Lables.png" alt="Example of a Labels widget" width="30%">
 
 ### `ResourceButton`
 
@@ -260,16 +282,17 @@ These are the available `ResourceButton` widget parameters:
 This is an example for widget usage in the details section:
 
 ```yaml
-- widget: ResourceButton
+- name: Deployments
+  widget: ResourceButton
   source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
   resource:
     name: metadata.ownerReferences[0].name
     namespace: $root.metadata.namespace
     kind: "'Deployment'"
-  icon: add
+  icon: right-arrow
 ```
 
-<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceButton.png" alt="Example of a ResourceButton widget" width="30%">
 
 ### `ResourceLink`
 
@@ -285,15 +308,18 @@ These are the available `ResourceLink` widget parameters:
 This is an example of the `ResourceLink` widget usage in the details section:
 
 ```yaml
-- widget: ResourceLink
-  source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+- name: Owner References
+  widget: ResourceLink
+  source: >-
+    'Go to ' & $item.spec.ownerReferences[0].kind & ' ' &
+    $item.spec.ownerReferences[0].name
   resource:
-    name: metadata.ownerReferences[0].name
+    name: $item.spec.ownerReferences[0].name
     namespace: $root.metadata.namespace
-    kind: "'Deployment'"
+    kind: $item.spec.ownerReferences[0].kind
 ```
 
-<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%">
 
 ### `Text`
 
@@ -314,7 +340,21 @@ See the following example:
   placeholder: '-'
 ```
 
-<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%">
+
+### `TimeFromNow`
+
+The `TimeFromNow` widget calculates the time difference between the date provided in **source** and the current time and displays it in the format X days ago.
+
+See the following example:
+
+```yaml
+- name: Last Scale Time
+  source: status.lastScaleTime
+  widget: TimeFromNow
+```
+
+<img src="./assets/display-widgets/TimeFromNow.png" alt="Example of a TimeFromNow widget" width="40%">
 
 ## Block Widgets
 
@@ -334,7 +374,7 @@ These are the available `Alert` widget parameters:
 See the following example:
 
 ```yaml
-- source: "'I am some warning for a user'"
+- source: "'Here is a warning message'"
   widget: Alert
   severity: warning
 
@@ -342,6 +382,8 @@ See the following example:
   widget: Alert
   disableMargin: true
 ```
+
+<img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="70%">
 
 ### `CodeViewer`
 
@@ -361,7 +403,7 @@ See the following example:
   language: "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 ```
 
-<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget">
 
 ### `Columns`
 
@@ -390,7 +432,7 @@ See the following example:
         - source: spec.other-value
 ```
 
-<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget">
 
 ### `EventList`
 
@@ -398,12 +440,12 @@ The `EventList` widget renders a list of Events.
 
 These are the available `Columns` widget parameters:
 
-| Parameter                  | Required | Type                               | Description                                                                                                                                                                                                                                                  |
-| -------------------------- | -------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **filter**                 | No       | [JSONata](100-jsonata.md) function | Use it to filter Events emitted by a specific resource. There is a special custom function [matchEvents](101-preset-functions.md#matchevents-item-kind-name) you can use to filter Events, for example, `$matchEvents($$, $root.kind, $root.metadata.name)`. |
-| **defaultType**            | No       | string                             | The value is either: `all`, `information`, or `warning`. When set to `information` or `warning`, Events with specific type are displayed. By default all Events are fetched.                                                                                 |
-| **hideInvolvedObjects**    | No       | boolean                            | If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`.                                                                                                                                                                            |
-| **simpleEmptyListMessage** | No       | boolean                            | If set to `true`, the empty events list shows the `no resources` message without any images or links.                                                                                                                                                        |
+| Parameter                  | Required | Type                               | Description                                                                                                                                                                                                                                                          |
+| -------------------------- | -------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **filter**                 | No       | [JSONata](100-jsonata.md) function | Use it to filter Events emitted by a specific resource. There is a special custom function [matchEvents](101-jsonata-preset-functions.md#matchevents-item-kind-name) you can use to filter Events, for example, `$matchEvents($$, $root.kind, $root.metadata.name)`. |
+| **defaultType**            | No       | string                             | The value is either: `all`, `information`, or `warning`. When set to `information` or `warning`, Events with specific type are displayed. By default all Events are fetched.                                                                                         |
+| **hideInvolvedObjects**    | No       | boolean                            | If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`.                                                                                                                                                                                    |
+| **simpleEmptyListMessage** | No       | boolean                            | If set to `true`, the empty events list shows the `no resources` message without any images or links.                                                                                                                                                                |
 
 See the following examples:
 
@@ -414,7 +456,7 @@ See the following examples:
   defaultType: information
 ```
 
-<img src="./assets/display-widgets/EventList.png" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/EventList-InvolvedObject.png" alt="Example of a EventList widget">
 
 ---
 
@@ -426,7 +468,7 @@ See the following examples:
   hideInvolvedObjects: true
 ```
 
-<img src="./assets/display-widgets/EventListHiddenField.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/EventList-Hidden.png" alt="Example of a EventList widget with hidden involved objects">
 
 ### `FeaturedCard`
 
@@ -472,7 +514,7 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget">
 
 ### `Panel`
 
@@ -504,7 +546,7 @@ See the following example:
     - source: '$parent.entry2'
 ```
 
-<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget">
 
 See the following example:
 
@@ -537,17 +579,17 @@ The `ResourceList` widgets render a list of Kubernetes resources. The ResourceLi
 
 These are the available `ResourceList` widget parameters:
 
-| Parameter                  | Required | Type                                       | Description                                                                                                                                                                                                                                                              |
-| -------------------------- | -------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **children**               | No       | []objects                                  | Used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola or using extensibility.                                                                                                                    |
-| **sort**                   | No       | []objects                                  | Allows you to sort by the value from the given **source**.                                                                                                                                                                                                               |
-| **sort.source**            | **Yes**  | [JSONata](100-jsonata.md) expression       | Used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                                                                                     |
-| **sort.default**           | No       | boolean                                    | If set to `true`, the list view is sorted by this value by default.                                                                                                                                                                                                      |
-| **sort.compareFunction**   | No       | [JSONata](100-jsonata.md) compare function | It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](101-preset-functions.md#comparestrings-first-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
-| **search**                 | No       | []objects                                  | Allows you to search for resources including the value from the given **source**.                                                                                                                                                                                        |
-| **search.source**          | **Yes**  | [JSONata](100-jsonata.md) expression       | Used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                                                                                     |
-| **search.searchFunction**  | No       | [JSONata](100-jsonata.md) search function  | It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.                                                                                                                                             |
-| **simpleEmptyListMessage** | No       | boolean                                    | If set to `true`, the empty resource list shows the `no resources` message without any images or links.                                                                                                                                                                  |
+| Parameter                  | Required | Type                                       | Description                                                                                                                                                                                                                                                                      |
+| -------------------------- | -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **children**               | No       | []objects                                  | Used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola or using extensibility.                                                                                                                            |
+| **sort**                   | No       | []objects                                  | Allows you to sort by the value from the given **source**.                                                                                                                                                                                                                       |
+| **sort.source**            | **Yes**  | [JSONata](100-jsonata.md) expression       | Used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                                                                                             |
+| **sort.default**           | No       | boolean                                    | If set to `true`, the list view is sorted by this value by default.                                                                                                                                                                                                              |
+| **sort.compareFunction**   | No       | [JSONata](100-jsonata.md) compare function | It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](101-jsonata-preset-functions.md#comparestrings-first-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
+| **search**                 | No       | []objects                                  | Allows you to search for resources including the value from the given **source**.                                                                                                                                                                                                |
+| **search.source**          | **Yes**  | [JSONata](100-jsonata.md) expression       | Used to fetch data for the column. In its simplest form, it's the path to the value.                                                                                                                                                                                             |
+| **search.searchFunction**  | No       | [JSONata](100-jsonata.md) search function  | It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.                                                                                                                                                     |
+| **simpleEmptyListMessage** | No       | boolean                                    | If set to `true`, the empty resource list shows the `no resources` message without any images or links.                                                                                                                                                                          |
 
 Since the `ResourceList` widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
@@ -569,7 +611,7 @@ See the following examples"
       searchFunction: '$filter(spec.containers, function($c){ $contains($c.image, $input) })'
 ```
 
-<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget">
 
 ---
 
@@ -593,7 +635,7 @@ See the following examples"
         default: true
 ```
 
-<img src="./assets/display-widgets/ResourceListChildren.png" alt="Example of a ResourceList widget with children" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceListChildren.png" alt="Example of a ResourceList widget with children">
 
 ### `ResourceRefs`
 
@@ -613,7 +655,7 @@ See the following example:
   kind: Secret
 ```
 
-<img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget">
 
 ### `StatisticalCard`
 
@@ -670,7 +712,7 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" style="border: 1px solid #D2D5D9" width="75%">
+<img src="./assets/display-widgets/StatisticalCard.png" alt="Example of a StatisticalCard widget" width="50%">
 
 ### `Table`
 
@@ -678,15 +720,15 @@ Table widgets display array data as rows of a table instead of free-standing com
 
 These are the available `Table` widget parameters:
 
-| Parameter              | Required | Type                                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ---------------------- | -------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **collapsible**        | No       | array of widgets                                 | Displays as an extra collapsible section. Uses the same format as the **children** parameter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| **collapsibleTitle**   | No       | string or the [JSONata](100-jsonata.md) function | Defines the title for the collapsible sections.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| **disablePadding**     | No       | boolean                                          | Disables the padding inside the panel body.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| **showHeader**         | No       | boolean                                          | Disables displaying the head row.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **extraHeaderContent** | No       | array of extra widgets                           | Displays as an action section. Uses the same format as the **children** parameter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| **sort**               | No       | boolean                                          | If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties: <br>>br> - **default** - optional flag. If set to `true`, the list view is sorted by this value by default. <br> - **compareFunction** - optional [JSONata](100-jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](101-preset-functions.md#comparestrings-first-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
-| **search**             | No       | boolean                                          | If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property: <br><br> - **searchFunction** - optional [JSONata](100-jsonata.md) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.                                                                                                                                                                                                                                        |
+| Parameter              | Required | Type                                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------------------- | -------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **collapsible**        | No       | array of widgets                                 | Displays as an extra collapsible section. Uses the same format as the **children** parameter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| **collapsibleTitle**   | No       | string or the [JSONata](100-jsonata.md) function | Defines the title for the collapsible sections.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **disablePadding**     | No       | boolean                                          | Disables the padding inside the panel body.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| **showHeader**         | No       | boolean                                          | Disables displaying the head row.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| **extraHeaderContent** | No       | array of extra widgets                           | Displays as an action section. Uses the same format as the **children** parameter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **sort**               | No       | boolean                                          | If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties: <br>>br> - **default** - optional flag. If set to `true`, the list view is sorted by this value by default. <br> - **compareFunction** - optional [JSONata](100-jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](101-jsonata-preset-functions.md#comparestrings-first-second) used to compare two strings, for example, `$compareStrings($first, $second)`. |
+| **search**             | No       | boolean                                          | If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property: <br><br> - **searchFunction** - optional [JSONata](100-jsonata.md) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.                                                                                                                                                                                                                                                |
 
 See the following example:
 
@@ -707,7 +749,7 @@ See the following example:
         searchFunction: '$filter($item.price, function($p){ $p > $number($input) }'
 ```
 
-<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" width="40%">
 
 ### `Tabs`
 
@@ -729,7 +771,7 @@ See the following example:
           source: '...'
 ```
 
-<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget">
 
 ## Radial Chart
 
@@ -771,4 +813,4 @@ injections: |-
         location: ClusterOverview
 ```
 
-<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" style="border: 1px solid #D2D5D9" width="75%">
+<img src="./assets/display-widgets/RadialChart.png" alt="Example of a RadialChart widget" width="30%">

@@ -6,3 +6,21 @@
     align-self: center;
   }
 }
+
+ui5-dialog.context-chooser-message {
+  width: 478px;
+
+  ui5-icon {
+    display: none;
+  }
+
+  .context-chooser-content-text {
+    padding-left: 7.5px;
+  }
+
+  .radio-box-container {
+    * {
+      margin: -4px 0;
+    }
+  }
+}

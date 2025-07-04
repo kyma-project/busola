@@ -1,0 +1,82 @@
+name: PR Kyma Dashboard K8s Chart test
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    paths:
+      - '.github/workflows/pull-kyma-intergation-tests.yml'
+      - '.github/scripts/**'
+      - "kyma/**"
+      - "backend/**"
+      - "public/**"
+      - "src/**"
+      - "package.json"
+      - "Makefile"
+      - "Dockerfile*"
+      - "nginx/**"
+      - 'resources/**'
+      - 'tests/integration/**'
+jobs:
+  run-integration-test:
+    runs-on: ubuntu-latest
+    env:
+      IMG: kyma-dashboard:local-pr-${{github.sha}}
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: gardenlinux/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Merge with latest main
+        uses: ./.github/actions/merge
+      - name: Install k3d
+        env:
+          K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
+        run: curl --silent --fail $K3D_URL | bash
+      - name: Setup K3d cluster
+        run: |
+          ./.github/scripts/provision_k3d_for_kyma.sh | tee kyma-provision.log
+      - uses: actions/setup-node@v4
+        name: Setup node
+        with:
+          node-version: 22
+      - name: Build Busola Docker Image
+        shell: bash
+        run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
+      - name: Import Kyma Dashbaord image to k3d
+        shell: bash
+        run: k3d image import "${IMG}" -c kyma
+      - name: Deploy Busola
+        id: deploy_busola
+        shell: bash
+        run: .github/scripts/deploy_busola_on_k8s.sh "${IMG}" | tee busola-deploy.log
+        env:
+          ENV: dev
+      - name: Prepare kubeconfig
+        run: |
+          .github/scripts/prepare_kubeconfig.sh
+      - name: Run tests
+        shell: bash
+        run: |
+          export CYPRESS_DOMAIN=http://${{ steps.deploy_busola.outputs.IP }}
+          cd tests/integration
+          npm ci && npm run "test:smoke-simple"
+      - name: Uploads artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: cypress-${{ github.job }}
+          path: tests/integration/cypress
+          retention-days: 90
+      - name: Upload Kyma Dashboard logs
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: kyma-dashboard-logs-${{ github.job }}
+          path: |
+            kyma-alpha-deploy.log
+            kyma-provision.log
+            busola-build.log
+          retention-days: 90

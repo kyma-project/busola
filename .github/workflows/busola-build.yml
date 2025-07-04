@@ -30,8 +30,11 @@ on:
       - "src/**"
       - "package.json"
       - "Makefile"
-      - "Dockerfile"
-      - "nginx/nginx.conf"
+      - "Dockerfile*"
+      - "nginx/**"
+      - '.github/workflows/pull-kyma-intergation-tests.yml'
+      - 'resources/**'
+      - 'tests/integration/**'
 
 permissions:
   id-token: write # This is required for requesting the JWT token
@@ -46,3 +49,5 @@ jobs:
       dockerfile: Dockerfile
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
+      platforms: |
+        linux/amd64

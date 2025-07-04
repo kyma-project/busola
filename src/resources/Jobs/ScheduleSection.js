@@ -55,6 +55,7 @@ function TimeInput({ entries, index, name, setSchedule }) {
           placeholder={t('cron-jobs.create-modal.' + name)}
           className="full-width"
           required
+          accessibleName={t('cron-jobs.create-modal.' + name)}
         />
       )}
     />

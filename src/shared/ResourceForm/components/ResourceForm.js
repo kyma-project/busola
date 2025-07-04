@@ -14,31 +14,22 @@ import jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
-import { cloneDeep } from 'lodash';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
+import { columnLayoutState } from 'state/columnLayoutAtom';
+import { useFormEditTracking } from 'shared/hooks/useFormEditTracking';
 import './ResourceForm.scss';
-
-export const excludeStatus = resource => {
-  const modifiedResource = cloneDeep(resource);
-  delete modifiedResource.status;
-  delete modifiedResource.metadata?.resourceVersion;
-  delete modifiedResource.metadata?.managedFields;
-  return modifiedResource;
-};
 
 export function ResourceForm({
   pluralKind, // used for the request path
   singularName,
   resource,
   initialResource,
-  initialUnchangedResource,
+  updateInitialResource = () => {},
   setResource,
   setCustomValid,
   onChange,
@@ -68,11 +59,27 @@ export function ResourceForm({
   initialMode,
   yamlSearchDisabled,
   yamlHideDisabled,
-  isEdit,
   stickyHeaderHeight,
   resetLayout,
   formWithoutPanel,
 }) {
+  const layoutState = useRecoilValue(columnLayoutState);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
+
+  useEffect(() => {
+    if (layoutState?.showCreate?.resource) {
+      setResource(JSON.parse(JSON.stringify(layoutState.showCreate.resource)));
+    } else if (layoutState?.showEdit?.resource) {
+      setResource(JSON.parse(JSON.stringify(layoutState.showEdit.resource)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layoutState?.showCreate?.resource, layoutState?.showEdit?.resource]);
+
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
     () => resource?.apiVersion + '/' + resource?.kind,
@@ -89,49 +96,22 @@ export function ResourceForm({
   }
 
   const editViewMode = useRecoilValue(editViewModeState);
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  const { leavingForm } = isFormOpen;
   const [editorError, setEditorError] = useState(null);
 
-  useEffect(() => {
-    // Check if form is opened based on width
-    if (leavingForm && formElementRef?.current?.clientWidth !== 0) {
-      if (
-        JSON.stringify(excludeStatus(resource)) !==
-          JSON.stringify(excludeStatus(initialResource)) ||
-        editorError
-      ) {
-        setIsResourceEdited({ ...isResourceEdited, isEdited: true });
-      }
-
-      if (
-        JSON.stringify(excludeStatus(resource)) ===
-          JSON.stringify(excludeStatus(initialResource)) &&
-        !editorError
-      ) {
-        setIsResourceEdited({ isEdited: false });
-        setIsFormOpen({ formOpen: false });
-        if (isResourceEdited.discardAction) isResourceEdited.discardAction();
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [leavingForm]);
+  useFormEditTracking(resource, initialResource, editorError);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,
     pluralKind,
     resource,
-    initialUnchangedResource,
+    initialResource,
+    updateInitialResource,
     createUrl,
     skipCreateFn,
     afterCreatedFn,
     urlPath,
     layoutNumber,
-    setResource,
     resetLayout,
     afterCreatedCustomMessage,
   });
@@ -202,6 +182,7 @@ export function ResourceForm({
       schemaId={resourceSchemaId}
       updateValueOnParentChange={true}
       setEditorError={setEditorError}
+      schema={schema}
     />
   );
   editor = renderEditor
@@ -238,7 +219,7 @@ export function ResourceForm({
                   <K8sNameField
                     propertyPath="$.metadata.name"
                     kind={singularName}
-                    readOnly={readOnly || !!initialUnchangedResource}
+                    readOnly={readOnly || isEdit}
                     setValue={handleNameChange}
                     tooltipContent={nameDesc}
                     {...nameProps}
@@ -307,7 +288,7 @@ export function ResourceForm({
                     setMode(newMode);
                     if (onModeChange) onModeChange(mode, newMode);
                   }}
-                  isEditing={!!isEdit}
+                  isEditing={isEdit}
                   isDisabled={modeSelectorDisabled}
                 />
               )}

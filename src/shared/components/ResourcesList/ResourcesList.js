@@ -5,7 +5,7 @@ import { Button, Text } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import jp from 'jsonpath';
 import pluralize from 'pluralize';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
@@ -24,8 +24,10 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useGetInjections } from 'components/Extensibility/useGetInjection';
+import { useNavigate } from 'react-router';
+import { useUrl } from 'hooks/useUrl';
+import { Link } from '../Link/Link';
 
 const Injections = React.lazy(() =>
   import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -53,6 +55,7 @@ ResourcesList.propTypes = {
   createActionLabel: PropTypes.string,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
+  rawResourceType: PropTypes.string.isRequired,
   resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
@@ -71,7 +74,6 @@ ResourcesList.propTypes = {
   disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
-  handleRedirect: PropTypes.func,
   filterFn: PropTypes.func,
 };
 
@@ -82,7 +84,7 @@ export function ResourcesList({
   resourceTitle,
   isCompact,
   description,
-  layoutNumber = 'StartColumn',
+  layoutNumber = 'startColumn',
   resources,
   filterFn = () => true,
   ...props
@@ -192,6 +194,7 @@ function Resources(props) {
 export function ResourceListRenderer({
   resourceUrl,
   resourceType,
+  rawResourceType,
   resourceTitle,
   namespace,
   customColumns = [],
@@ -220,7 +223,7 @@ export function ResourceListRenderer({
   columnLayout,
   customColumnLayout,
   layoutCloseCreateUrl,
-  layoutNumber = 'StartColumn',
+  layoutNumber = 'startColumn',
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -231,8 +234,7 @@ export function ResourceListRenderer({
   emptyListProps = null,
   simpleEmptyListMessage = false,
   disableHiding,
-  displayArrow,
-  handleRedirect,
+  displayArrow = enableColumnLayout,
   accessibleName,
 }) {
   useVersionWarning({
@@ -245,8 +247,8 @@ export function ResourceListRenderer({
     protectedResourceWarning,
     protectedResourcePopover,
   } = useProtectedResources();
+  const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -262,15 +264,55 @@ export function ResourceListRenderer({
     resourceTitle,
     resourceType,
   );
+  const { resourceUrl: resourceUrlFn } = useUrl();
+
+  const linkTo = entry => {
+    const overrides = namespace === '-all-' ? { namespace } : {};
+    return customUrl
+      ? customUrl(entry)
+      : resourceUrlFn(entry, { resourceType, ...overrides });
+  };
+
+  const onLinkClick = (entry, e) => {
+    e.preventDefault();
+
+    setLayoutColumn({
+      midColumn: null,
+      showCreate: null,
+      endColumn: null,
+      layout: 'OneColumn',
+      showEdit: null,
+      startColumn: {
+        resourceName: entry?.metadata?.name ?? e.target.innerText,
+        resourceType: resourceType,
+        rawResourceTypeName: rawResourceType,
+        namespaceId: entry?.metadata?.namespace,
+        apiGroup: entry.metadata.group,
+        apiVersion: entry.apiVersion,
+      },
+    });
+
+    navigate(`${linkTo(entry)}`);
+  };
 
   const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Text style={{ fontWeight: 'bold', color: 'var(--sapLinkColor)' }}>
-            {nameSelector(entry)}
-          </Text>
+          enableColumnLayout ? (
+            <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
+              {nameSelector(entry)}
+            </Text>
+          ) : (
+            <Link
+              url={`${linkTo(entry)}`}
+              onClick={e => onLinkClick(entry, e)}
+              style={{ fontWeight: 'bold' }}
+            >
+              {nameSelector(entry)}
+            </Link>
+          )
         ) : (
           <b>{nameSelector(entry)}</b>
         ),
@@ -344,35 +386,39 @@ export function ResourceListRenderer({
     setActiveResource(activeResource);
 
     setLayoutColumn(
-      layoutNumber === 'MidColumn' && enableColumnLayout
+      layoutNumber === 'midColumn' && enableColumnLayout
         ? {
+            ...layoutState,
             midColumn: layoutState?.midColumn,
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
               resource: activeResource,
             },
+            showEdit: null,
             layout: 'ThreeColumnsEndExpanded',
           }
         : {
+            ...layoutState,
             midColumn: null,
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
               resource: activeResource,
             },
+            showEdit: null,
             layout: 'TwoColumnsMidExpanded',
           },
     );
 
-    window.history.pushState(
-      window.history.state,
-      '',
-      `${
-        layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
-      }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
+    navigate(
+      `${layoutCloseCreateUrl ?? window.location.pathname}?${
+        layoutNumber === 'midColumn' ? 'layout=TwoColumnsMidExpanded&' : ''
+      }showCreate=true`,
     );
   };
 
@@ -420,7 +466,14 @@ export function ResourceListRenderer({
     const rowColumns = customColumns?.map((col, index) => {
       if (col?.value && index === nameColIndex) {
         return (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              wordBreak: 'break-word',
+            }}
+          >
             {col.value(entry)}
             {protectedResourceWarning(entry)}
           </div>
@@ -435,35 +488,40 @@ export function ResourceListRenderer({
   const handleShowCreate = () => {
     setActiveResource(undefined);
     setLayoutColumn(
-      layoutNumber === 'MidColumn' && enableColumnLayout
+      layoutNumber === 'midColumn' && enableColumnLayout
         ? {
+            ...layoutState,
             midColumn: layoutState?.midColumn,
             endColumn: null,
             showCreate: {
-              resourceType: resourceType,
+              resourceType: layoutState?.midColumn.resourceName,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
             },
+            showEdit: null,
             layout: 'ThreeColumnsEndExpanded',
           }
         : {
+            ...layoutState,
             midColumn: null,
             endColumn: null,
             showCreate: {
               resourceType: resourceType,
+              rawResourceTypeName: rawResourceType,
               namespaceId: namespace,
             },
+            showEdit: null,
             layout: 'TwoColumnsMidExpanded',
           },
     );
 
-    window.history.pushState(
-      window.history.state,
-      '',
-      `${
-        layoutCloseCreateUrl ? layoutCloseCreateUrl : window.location.pathname
-      }${layoutNumber === 'MidColumn' ? '?layout=TwoColumnsMidExpanded' : ''}`,
+    navigate(
+      `${layoutCloseCreateUrl ?? window.location.pathname}${
+        layoutNumber === 'midColumn'
+          ? '?layout=ThreeColumnsEndExpanded'
+          : '?layout=TwoColumnsMidExpanded'
+      }&showCreate=true`,
     );
-    setIsFormOpen({ formOpen: true });
   };
 
   const extraHeaderContent = listHeaderActions || [
@@ -531,6 +589,7 @@ export function ResourceListRenderer({
             hasDetailsView={hasDetailsView}
             customUrl={customUrl}
             resourceType={resourceType}
+            rawResourceType={rawResourceType}
             customColumnLayout={customColumnLayout}
             columnLayout={columnLayout}
             enableColumnLayout={enableColumnLayout}
@@ -562,7 +621,6 @@ export function ResourceListRenderer({
               ...emptyListProps,
               simpleEmptyListMessage: simpleEmptyListMessage,
             }}
-            handleRedirect={handleRedirect}
             nameColIndex={nameColIndex}
             namespaceColIndex={namespaceColIndex}
           />

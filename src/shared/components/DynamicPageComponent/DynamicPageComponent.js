@@ -1,27 +1,28 @@
 import PropTypes from 'prop-types';
 import {
   Button,
-  FlexBox,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
-  Title,
-  TabContainer,
+  FlexBox,
   Tab,
+  TabContainer,
+  Title,
 } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
-import { handleActionIfFormOpen } from '../UnsavedMessageBox/helpers';
+import { useNavigate, useSearchParams } from 'react-router';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   const [headerHeight, setHeaderHeight] = useState(undefined);
@@ -109,7 +110,9 @@ export const DynamicPageComponent = ({
   protectedResourceWarning,
   className,
   customActionIfFormOpen,
+  isFirstColumnWithEdit = false,
 }) => {
+  const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
   const { t } = useTranslation();
@@ -117,7 +120,24 @@ export const DynamicPageComponent = ({
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
-  const [selectedSectionIdState, setSelectedSectionIdState] = useState('view');
+  const { navigateSafely } = useFormNavigation();
+  const [searchParams] = useSearchParams();
+  const editColumn = searchParams.get('editColumn');
+
+  const [selectedTab, setSelectedTab] = useState(
+    layoutColumn?.showEdit ? 'edit' : 'view',
+  );
+
+  useEffect(() => {
+    if (
+      layoutColumn?.layout !== 'OneColumn' &&
+      layoutNumber === 'startColumn'
+    ) {
+      setSelectedTab(editColumn === 'startColumn' ? 'edit' : 'view');
+    } else {
+      setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
+    }
+  }, [editColumn, layoutNumber, layoutColumn?.layout, layoutColumn?.showEdit]);
 
   const dynamicPageRef = useRef(null);
   const tabContainerRef = useRef(null);
@@ -127,34 +147,39 @@ export const DynamicPageComponent = ({
   );
 
   const handleColumnClose = () => {
-    window.history.pushState(
-      window.history.state,
-      '',
-      layoutCloseUrl
-        ? layoutCloseUrl
-        : `${window.location.pathname.slice(
-            0,
-            window.location.pathname.lastIndexOf('/'),
-          )}${
-            layoutNumber === 'MidColumn' ||
-            layoutColumn?.showCreate?.resourceType
-              ? ''
-              : '?layout=TwoColumnsMidExpanded'
-          }`,
-    );
-    layoutNumber === 'MidColumn'
+    layoutNumber === 'midColumn'
       ? setLayoutColumn({
           ...layoutColumn,
           midColumn: null,
           layout: 'OneColumn',
           showCreate: null,
+          showEdit: null,
         })
       : setLayoutColumn({
           ...layoutColumn,
           endColumn: null,
           layout: 'TwoColumnsMidExpanded',
           showCreate: null,
+          showEdit: null,
         });
+
+    if (layoutCloseUrl) {
+      navigate(
+        layoutCloseUrl +
+          (editColumn ? `?showEdit=${!!layoutColumn.showEdit}` : ''),
+      );
+      return;
+    }
+
+    const link = `${window.location.pathname.slice(
+      0,
+      window.location.pathname.lastIndexOf('/'),
+    )}${
+      layoutNumber === 'midColumn' || layoutColumn?.showCreate?.resourceType
+        ? ''
+        : '?layout=TwoColumnsMidExpanded'
+    }`;
+    navigate(link);
   };
 
   const actionsBar = (
@@ -170,7 +195,7 @@ export const DynamicPageComponent = ({
           {(window.location.search.includes('layout') ||
             (!window.location.search.includes('layout') &&
               layoutColumn?.showCreate?.resourceType)) &&
-          layoutNumber !== 'StartColumn' ? (
+          layoutNumber !== 'startColumn' ? (
             <ToolbarSeparator />
           ) : null}
         </>
@@ -179,34 +204,31 @@ export const DynamicPageComponent = ({
       (!window.location.search.includes('layout') &&
         layoutColumn?.showCreate?.resourceType) ? (
         layoutColumn.layout !== 'OneColumn' ? (
-          layoutNumber !== 'StartColumn' ? (
+          layoutNumber !== 'startColumn' ? (
             <>
               {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
               ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
                 layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-                layoutNumber !== 'MidColumn') ? (
+                layoutNumber !== 'midColumn') ? (
                 <Button
                   accessibleName="enter-full-screen"
                   design="Transparent"
                   icon="full-screen"
                   onClick={() => {
                     const newLayout =
-                      layoutNumber === 'MidColumn'
+                      layoutNumber === 'midColumn'
                         ? 'MidColumnFullScreen'
                         : 'EndColumnFullScreen';
                     setLayoutColumn({
                       ...layoutColumn,
                       layout: newLayout,
                     });
-                    window.history.pushState(
-                      window.history.state,
-                      '',
-                      `${window.location.pathname}${
-                        layoutColumn?.showCreate?.resourceType
-                          ? ''
-                          : '?layout=' + newLayout
-                      }`,
-                    );
+                    const link = `${window.location.pathname}${
+                      layoutColumn?.showCreate?.resourceType
+                        ? '?layout=' + newLayout + '&showCreate=true'
+                        : '?layout=' + newLayout
+                    }`;
+                    navigate(link);
                   }}
                 />
               ) : null}
@@ -218,7 +240,7 @@ export const DynamicPageComponent = ({
                   icon="exit-full-screen"
                   onClick={() => {
                     const newLayout =
-                      layoutNumber === 'MidColumn'
+                      layoutNumber === 'midColumn'
                         ? layoutColumn.endColumn === null
                           ? 'TwoColumnsMidExpanded'
                           : 'ThreeColumnsMidExpanded'
@@ -227,15 +249,12 @@ export const DynamicPageComponent = ({
                       ...layoutColumn,
                       layout: newLayout,
                     });
-                    window.history.pushState(
-                      window.history.state,
-                      '',
-                      `${window.location.pathname}${
-                        layoutColumn?.showCreate?.resourceType
-                          ? ''
-                          : '?layout=' + newLayout
-                      }`,
-                    );
+                    const link = `${window.location.pathname}${
+                      layoutColumn?.showCreate?.resourceType
+                        ? '?layout=' + newLayout + '&showCreate=true'
+                        : '?layout=' + newLayout
+                    }`;
+                    navigate(link);
                   }}
                 />
               ) : null}
@@ -244,13 +263,7 @@ export const DynamicPageComponent = ({
                 design="Transparent"
                 icon="decline"
                 onClick={() => {
-                  handleActionIfFormOpen(
-                    isResourceEdited,
-                    setIsResourceEdited,
-                    isFormOpen,
-                    setIsFormOpen,
-                    () => handleColumnClose(),
-                  );
+                  navigateSafely(() => handleColumnClose());
                 }}
               />
             </>
@@ -344,48 +357,82 @@ export const DynamicPageComponent = ({
                 isFormOpen,
                 setIsFormOpen,
               );
-              setSelectedSectionIdState(e.detail.tab.getAttribute('data-mode'));
+              setSelectedTab(e.detail.tab.getAttribute('data-mode'));
               return;
             }
             if (isFormOpen.formOpen) {
               e.preventDefault();
             }
 
-            handleActionIfFormOpen(
-              isResourceEdited,
-              setIsResourceEdited,
-              isFormOpen,
-              setIsFormOpen,
-              () => {
-                setSelectedSectionIdState(
-                  e.detail.tab.getAttribute('data-mode'),
-                );
-                setIsResourceEdited({
-                  isEdited: false,
-                });
-              },
-            );
+            const newTabName = e.detail.tab.getAttribute('data-mode');
+            navigateSafely(() => {
+              setSelectedTab(newTabName);
 
-            if (e.detail.tab.getAttribute('data-mode') === 'edit') {
-              setIsFormOpen({ formOpen: true });
-            }
+              if (newTabName === 'edit') {
+                const params = new URLSearchParams();
+                let showEdit = {
+                  resource: null,
+                };
+                if (layoutColumn.layout !== 'OneColumn') {
+                  params.set('layout', layoutColumn.layout);
+                  if (isFirstColumnWithEdit) {
+                    params.set('editColumn', 'startColumn');
+                    showEdit = layoutColumn?.showEdit;
+                  } else if (editColumn === 'startColumn') {
+                    params.set('editColumn', 'startColumn');
+                    params.set('showEdit', 'true');
+                  } else {
+                    params.set('showEdit', 'true');
+                  }
+                } else {
+                  params.set('showEdit', 'true');
+                }
+
+                setLayoutColumn({
+                  ...layoutColumn,
+                  showEdit,
+                });
+                navigate(`${window.location.pathname}?${params.toString()}`);
+              } else {
+                let showEdit = null;
+                const params = new URLSearchParams();
+                if (isFirstColumnWithEdit) {
+                  showEdit = layoutColumn?.showEdit;
+                } else if (editColumn === 'startColumn') {
+                  params.set('editColumn', 'startColumn');
+                }
+                setLayoutColumn({
+                  ...layoutColumn,
+                  showEdit,
+                });
+                navigate(
+                  `${window.location.pathname}${
+                    layoutColumn.layout === 'OneColumn'
+                      ? ''
+                      : '?layout=' +
+                        layoutColumn.layout +
+                        `${params ? '&' + params.toString() : ''}`
+                  }`,
+                );
+              }
+            });
           }}
         >
           <Tab
             data-mode="view"
             text={t('common.tabs.view')}
-            selected={selectedSectionIdState === 'view'}
+            selected={selectedTab === 'view'}
           ></Tab>
           <Tab
             data-mode="edit"
             text={showYamlTab ? t('common.tabs.yaml') : t('common.tabs.edit')}
-            selected={selectedSectionIdState === 'edit'}
+            selected={selectedTab === 'edit'}
           ></Tab>
         </TabContainer>
 
-        {selectedSectionIdState === 'view' && content}
+        {selectedTab === 'view' && content}
 
-        {selectedSectionIdState === 'edit' &&
+        {selectedTab === 'edit' &&
           inlineEditForm(headerHeight + tabContainerHeight)}
       </DynamicPage>
     );

@@ -29,7 +29,7 @@ export function Editor({
   onFocus,
   options = {}, // IEditorOptions, check Monaco API for the list of options
   placeholder = null,
-  ...rest
+  schema,
 }) {
   const { t } = useTranslation();
   const prevValueRef = useRef(value);
@@ -45,6 +45,7 @@ export function Editor({
     autocompletionDisabled,
     readOnly,
     language,
+    schema,
   });
 
   // set autocompletion global context to the current editor and initialize an editor instance
@@ -67,18 +68,15 @@ export function Editor({
 
   // update editor when was error
   useEffect(() => {
-    if (prevValueRef.current !== value && editorInstance && error) {
+    if (
+      prevValueRef.current !== value &&
+      editorInstance &&
+      (error || readOnly)
+    ) {
       editorInstance.setValue(value);
       prevValueRef.current = value;
     }
-  }, [value, editorInstance, error]);
-
-  useEffect(() => {
-    if (prevValueRef.current !== value && readOnly) {
-      editorInstance.setValue(value);
-      prevValueRef.current = value;
-    }
-  }, [value, editorInstance, readOnly]);
+  }, [value, editorInstance, error, readOnly]);
 
   useUpdateValueOnParentChange({
     updateValueOnParentChange,
@@ -93,13 +91,13 @@ export function Editor({
       className="resource-form__wrapper"
       style={{ height, minHeight: height }}
     >
-      {loading ? (
+      {loading && (
         <div className="resource-form__overlay">
           <Spinner />
         </div>
-      ) : null}
+      )}
       <div ref={divRef} className="resource-form__editor" />
-      {placeholder && !!!value && (
+      {placeholder && !value && (
         <div className="resource-form__placeholder">{placeholder}</div>
       )}
       <div className="resource-form__legend">
@@ -108,6 +106,7 @@ export function Editor({
             design="Negative"
             hideCloseButton
             className="break-word sap-margin-small"
+            role="alert"
           >
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
@@ -116,6 +115,7 @@ export function Editor({
           <MessageStrip
             className="break-word sap-margin-small"
             design="Critical"
+            role="alert"
           >
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError.error || schemaError.message || schemaError,
@@ -127,6 +127,7 @@ export function Editor({
             design="Critical"
             hideCloseButton
             className="break-word sap-margin-small"
+            role="alert"
           >
             {warnings.map(m => (
               <span

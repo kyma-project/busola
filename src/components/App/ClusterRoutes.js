@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useSearchParams } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useSearchParams,
+  useNavigate,
+  useParams,
+} from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { useNavigate, useParams } from 'react-router-dom';
 
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
@@ -18,6 +23,7 @@ import NamespaceRoutes from './NamespaceRoutes';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { IncorrectPath } from './IncorrectPath';
 import { removePreviousPath } from 'state/useAfterInitHook';
+import { useUrl } from 'hooks/useUrl';
 
 export default function ClusterRoutes() {
   let { currentClusterName } = useParams() || {};
@@ -31,6 +37,7 @@ export default function ClusterRoutes() {
   const [cluster, setCluster] = useRecoilState(clusterState);
   const [search] = useSearchParams();
   const [extensibilityRoutes, setExtensibilityRoutes] = useState(null);
+  const { clusterUrl } = useUrl();
 
   useEffect(() => {
     if (extensions?.length) {
@@ -71,7 +78,7 @@ export default function ClusterRoutes() {
           path="*"
           element={
             <IncorrectPath
-              to="overview"
+              to={clusterUrl('overview')}
               message={t('components.incorrect-path.message.cluster')}
             />
           }
@@ -91,7 +98,9 @@ export default function ClusterRoutes() {
       {extensibilityRoutes}
       {resourceRoutes}
       {otherRoutes}
-      <Route path="namespaces/:namespaceId/*" element={<NamespaceRoutes />} />
+      <Route path="namespaces/:namespaceId">
+        <Route path="*" element={<NamespaceRoutes />} />
+      </Route>
     </Routes>
   );
 }

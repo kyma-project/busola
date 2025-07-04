@@ -11,7 +11,7 @@ import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { hasNonOidcAuth } from 'state/authDataAtom';
 import { createUserManager } from 'state/authDataAtom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
@@ -98,7 +98,7 @@ export function getContext(
       return { cluster, user, namespace: context.namespace };
     }
   } catch (e) {
-    throw Error("Cannot 'getContext': " + e);
+    throw Error(`Unable to add context. ${e}`);
   }
 }
 
@@ -166,25 +166,17 @@ export const addByContext = (
     const user = kubeconfig.users.find(u => u.name === context.context.user);
     if (!user) throw Error('user not found');
 
-    const newKubeconfig: ValidKubeconfig = {
-      ...kubeconfig,
-      'current-context': context.name,
-      contexts: [context],
-      clusters: [cluster],
-      users: [user],
-    };
-
     const clusterParams: NonNullable<ActiveClusterState> = {
       name: context.name,
-      kubeconfig: newKubeconfig,
+      kubeconfig: kubeconfig,
       contextName: context.name,
       config: { ...config, storage },
-      currentContext: getContext(newKubeconfig, context.name),
+      currentContext: getContext(kubeconfig, context.name),
     };
 
     addCluster(clusterParams, clustersInfo, switchCluster);
   } catch (e) {
-    throw Error("Cannot 'addByContext': " + e);
+    throw Error(`Unable to add context. ${e}`);
   }
 };
 

@@ -51,6 +51,8 @@ export const useValidateResourceBySchema = (
   validationSchema: ValidationSchema,
 ) => {
   return useMemo(() => {
-    return validateResourceBySchema(resource, validationSchema);
+    return validateResourceBySchema(resource, validationSchema, {
+      base: 'https://dashboard.kyma.cloud.sap', // Workaround for jsonschema 1.5.0 - https://github.com/tdegrunt/jsonschema/issues/407
+    });
   }, [resource, validationSchema]);
 };

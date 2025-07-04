@@ -48,6 +48,7 @@ export function MemoryInput({
           onInput={e => setValue(e.target.value + selectedUnit)}
           className="full-width"
           disabled={disabled}
+          accessibleName={label}
         />
         <Dropdown
           options={options}
@@ -55,6 +56,7 @@ export function MemoryInput({
           selectedKey={selectedUnit}
           onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
           disabled={disabled}
+          accessibleName={label}
         />
       </FlexBox>
     </FlexBox>

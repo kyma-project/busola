@@ -3,10 +3,9 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import LimitRangeCreate from './LimitRangeCreate';
 import LimitRangeSpecification from './LimitRangeSpecification';
 import { Button } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router';
+import { useRecoilState } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 
@@ -14,7 +13,6 @@ export function LimitRangesList(props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const { namespaceUrl } = useUrl();
 
   const customColumns = [
@@ -26,17 +24,29 @@ export function LimitRangesList(props) {
 
   const handleShowCreate = () => {
     setLayoutColumn({
+      startColumn: {
+        resourceType: 'LimitRange',
+        rawResourceTypeName: 'LimitRange',
+        namespaceId: props.namespace,
+        apiGroup: '',
+        apiVersion: 'v1',
+      },
       midColumn: null,
       endColumn: null,
       showCreate: {
         resourceType: props.resourceType,
+        rawResourceTypeName: props.resourceType,
         namespaceId: props.namespace,
+        resourceUrl: props.resourceUrl,
       },
       layout: 'TwoColumnsMidExpanded',
     });
-    setIsFormOpen({ formOpen: true });
     navigate(
-      namespaceUrl(`${pluralize(props.resourceType.toLowerCase() || '')}`),
+      namespaceUrl(
+        `${pluralize(
+          props.resourceType.toLowerCase() || '',
+        )}?layout=TwoColumnsMidExpanded&showCreate=true`,
+      ),
     );
   };
 

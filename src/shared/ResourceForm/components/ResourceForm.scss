@@ -35,10 +35,6 @@ form .resource-form {
     width: 100%;
   }
 
-  ui5-switch {
-    margin-top: -0.5rem;
-  }
-
   .form-field,
   .simple-list,
   .flexbox-gap {
@@ -59,6 +55,7 @@ form .resource-form {
 
     &__content {
       width: fit-content;
+      min-width: 100px;
     }
   }
 

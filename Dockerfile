@@ -1,7 +1,7 @@
 # this is a Dockerfile for single deployment app - both backend and frontends
 
 # ---- Base Alpine with Node ----
-FROM --platform=$BUILDPLATFORM node:20.17-alpine3.20  AS builder
+FROM --platform=$BUILDPLATFORM node:22.14-alpine3.21 AS builder
 ARG default_tag
 ARG tag
 
@@ -27,7 +27,7 @@ RUN npm run build:docker
 RUN cd /app/backend && npm run build
 
 # ---- Environments Configuration ----
-FROM --platform=$BUILDPLATFORM node:20.17-alpine3.20 AS configuration
+FROM --platform=$BUILDPLATFORM node:22.14-alpine3.21 AS configuration
 WORKDIR /kyma
 
 RUN apk add make
@@ -39,7 +39,7 @@ RUN npm ci
 RUN make prepare-configuration
 
 # ---- Serve ----
-FROM alpine:3.20.2
+FROM alpine:3.21.3
 WORKDIR /app
 
 RUN apk --no-cache upgrade && \
@@ -51,6 +51,7 @@ COPY --chown=65532:65532 --from=builder /app/backend/backend-production.js /app/
 COPY --chown=65532:65532 --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --chown=65532:65532 --from=builder /app/backend/package* /app/
 COPY --chown=65532:65532 --from=builder /app/backend/settings/* /app/settings/
+COPY --chown=65532:65532 --from=builder /app/backend/environments /app/environments
 COPY --chown=65532:65532 --from=builder /app/start_node.sh /app/start_node.sh
 COPY --chown=65532:65532 --from=configuration /kyma/build /app/core-ui/environments
 

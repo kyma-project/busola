@@ -8,9 +8,8 @@ import {
 } from '@ui5/webcomponents-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
@@ -21,7 +20,7 @@ import { useUrl } from 'hooks/useUrl';
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
-import { isFormOpenState } from 'state/formOpenAtom';
+import './useDeleteResource.scss';
 
 export function useDeleteResource({
   resourceTitle,
@@ -43,7 +42,6 @@ export function useDeleteResource({
   const { resourceListUrl } = useUrl();
   const cluster = useRecoilValue(clusterState);
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -57,6 +55,12 @@ export function useDeleteResource({
     currentQuery,
   } = usePrepareLayout(layoutNumber);
 
+  const performCancel = cancelFn => {
+    if (cancelFn) {
+      cancelFn();
+    }
+    setShowDeleteDialog(false);
+  };
   const performDelete = async (resource, resourceUrl, deleteFn) => {
     const withoutQueryString = path => path?.split('?')?.[0];
     const url = withoutQueryString(resourceUrl);
@@ -72,11 +76,11 @@ export function useDeleteResource({
         layoutColumn.endColumn?.resourceName === resource?.metadata?.name &&
         layoutColumn.endColumn?.namespaceId === resource?.metadata?.namespace);
     const goToLayout =
-      redirectBack || (forceRedirect && layoutNumber !== 'MidColumn')
+      redirectBack || (forceRedirect && layoutNumber !== 'midColumn')
         ? prevLayout
         : currentLayout;
     const goToLayoutQuery =
-      redirectBack || (forceRedirect && layoutNumber !== 'MidColumn')
+      redirectBack || (forceRedirect && layoutNumber !== 'midColumn')
         ? prevQuery
         : currentQuery;
 
@@ -100,9 +104,7 @@ export function useDeleteResource({
                 )}/busolaextensions`,
               );
             } else {
-              window.history.pushState(
-                window.history.state,
-                '',
+              navigate(
                 `${window.location.pathname.slice(
                   0,
                   window.location.pathname.lastIndexOf('/'),
@@ -152,18 +154,11 @@ export function useDeleteResource({
     }
   };
 
-  const closeDeleteDialog = () => {
-    setShowDeleteDialog(false);
-  };
-
   const handleResourceDelete = ({ resource, resourceUrl, deleteFn }) => {
     if (dontConfirmDelete && !forceConfirmDelete) {
       performDelete(resource, resourceUrl, deleteFn);
     } else {
       setShowDeleteDialog(true);
-    }
-    if (isFormOpen.formOpen) {
-      setIsFormOpen({ formOpen: false });
     }
   };
 
@@ -173,11 +168,14 @@ export function useDeleteResource({
     resourceIsCluster = false,
     resourceUrl,
     deleteFn,
+    cancelFn,
     additionalDeleteInfo,
+    customDeleteText,
     disableDeleteButton = false,
   }) => {
     return (
       <MessageBox
+        style={{ maxWidth: '700px' }}
         type="Warning"
         titleText={t(
           resourceIsCluster
@@ -189,6 +187,7 @@ export function useDeleteResource({
         )}
         open={showDeleteDialog}
         className="ui5-content-density-compact"
+        id="delete-message-box"
         actions={[
           <Button
             key="delete-confirmation"
@@ -200,19 +199,23 @@ export function useDeleteResource({
             {t(
               resourceIsCluster
                 ? 'common.buttons.disconnect'
-                : 'common.buttons.delete',
+                : customDeleteText ?? 'common.buttons.delete',
             )}
           </Button>,
           <Button
             key="delete-cancel"
             data-testid="delete-cancel"
             design="Transparent"
-            onClick={() => setShowDeleteDialog(false)}
+            onClick={() => {
+              performCancel(cancelFn);
+            }}
           >
             {t('common.buttons.cancel')}
           </Button>,
         ]}
-        onClose={closeDeleteDialog}
+        onClose={() => {
+          performCancel(cancelFn);
+        }}
       >
         <FlexBox
           direction="Column"
@@ -252,5 +255,5 @@ export function useDeleteResource({
     );
   };
 
-  return [DeleteMessageBox, handleResourceDelete];
+  return [DeleteMessageBox, handleResourceDelete, showDeleteDialog];
 }

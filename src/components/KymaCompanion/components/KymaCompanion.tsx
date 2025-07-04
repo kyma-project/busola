@@ -1,35 +1,73 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  Card,
-  Tab,
-  TabContainer,
-  Title,
-} from '@ui5/webcomponents-react';
+import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
 import {
   ShowKymaCompanion,
   showKymaCompanionState,
-} from 'components/KymaCompanion/state/showKymaCompanionAtom';
-import Chat from './Chat/Chat';
+} from 'state/companion/showKymaCompanionAtom';
+import { Chat } from './Chat/Chat';
+import { ChatGroup, chatGroupHelpers } from './Chat/types';
+import Disclaimer from './Disclaimer/Disclaimer';
 import './KymaCompanion.scss';
+
+export interface AIError {
+  message: string | null;
+  displayRetry: boolean;
+}
 
 export default function KymaCompanion() {
   const { t } = useTranslation();
+
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
+  const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isReset, setIsReset] = useState<boolean>(false);
+  const [chatHistory, setChatHistory] = useState<ChatGroup[]>(
+    chatGroupHelpers.createInitialState(t('kyma-companion.introduction')),
+  );
+  const [error, setError] = useState<AIError>({
+    message: null,
+    displayRetry: false,
+  });
+
+  function handleRefresh() {
+    setChatHistory(
+      chatGroupHelpers.createInitialState(t('kyma-companion.introduction')),
+    );
+    setError({
+      message: null,
+      displayRetry: false,
+    });
+    setIsReset(true);
+  }
 
   return (
-    <div id="companion_wrapper" className="sap-margin-tiny">
+    <div id="companion_wrapper">
       <Card
         className="kyma-companion"
         header={
-          <div className="kyma-companion__header">
-            <Title level="H4" size="H4" className="title">
+          <div
+            className={`kyma-companion__${
+              showDisclaimer ? 'disclaimer-' : ''
+            }header`}
+          >
+            <Title level="H5" size="H5" className="title">
               {t('kyma-companion.name')}
             </Title>
-            <div>
+            <div className="actions-container">
+              {!showDisclaimer && (
+                <Button
+                  design="Transparent"
+                  icon="restart"
+                  disabled={loading}
+                  tooltip={t('common.buttons.reset')}
+                  className="action"
+                  onClick={() => handleRefresh()}
+                />
+              )}
               <Button
                 design="Transparent"
                 icon={
@@ -43,9 +81,19 @@ export default function KymaCompanion() {
                   })
                 }
               />
+              {!showDisclaimer && (
+                <Button
+                  design="Transparent"
+                  icon="hint"
+                  tooltip={t('kyma-companion.disclaimer.tooltip')}
+                  className="action"
+                  onClick={() => setShowDisclaimer(true)}
+                />
+              )}
               <Button
                 design="Transparent"
                 icon="decline"
+                tooltip={t('common.buttons.close')}
                 className="action"
                 onClick={() =>
                   setShowCompanion({ show: false, fullScreen: false })
@@ -55,14 +103,20 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <TabContainer
-          contentBackgroundDesign="Transparent"
-          className={`tab-container`}
-        >
-          <Tab selected text={t('kyma-companion.tabs.chat')}>
-            <Chat />
-          </Tab>
-        </TabContainer>
+        <Chat
+          loading={loading}
+          setLoading={setLoading}
+          chatHistory={chatHistory}
+          setChatHistory={setChatHistory}
+          isReset={isReset}
+          setIsReset={setIsReset}
+          error={error}
+          setError={setError}
+          hide={showDisclaimer}
+        />
+        {showDisclaimer && (
+          <Disclaimer hideDisclaimer={() => setShowDisclaimer(false)} />
+        )}
       </Card>
     </div>
   );

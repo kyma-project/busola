@@ -40,6 +40,7 @@ These are the available `Text` widget parameters:
 | **decodable**         | No       | boolean             | Specifies that the field is base64-encoded and can be decoded in the UI. It can't be used together with **enum**.                                                                                                    |
 | **decodedPlacehoder** | No       | string              | An optional alternative placeholder to use when the field is decoded.                                                                                                                                                |
 | **disableOnEdit**     | No       | boolean             | Disables a field in edit mode, defaults to `false`. Ignored if **readOnly** is set to `true`.                                                                                                                        |
+| **dropdownOnly**      | No       | boolean             | Applicable only to inputs with a dropdown. When set to `true`, it restricts user input, allowing selection only from the predefined options. Defaults to `false`.                                                    |
 
 See the following examples:
 
@@ -53,7 +54,7 @@ See the following examples:
   decodedPlaceholder: Plain text data
 ```
 
-<img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Text-Decoded.png" alt="Example of a text widget">
 
 ```yaml
 - path: protocol
@@ -71,8 +72,8 @@ See the following examples:
   tooltip: Specifies which protocol to use for tunneling the downstream connection.
 ```
 
-<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
-<img src="./assets/form-widgets/Dropdown2.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Text-Info.png" alt="Example of a dropdown text widget">
+<img src="./assets/form-widgets/Text-Dropdown.png" alt="Example of a dropdown text widget with a tooltip">
 
 ### `Number`
 
@@ -92,7 +93,7 @@ See the following examples:
   widget: Number
 ```
 
-<img src="./assets/form-widgets/Number.png" alt="Example of a number widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Number.png" alt="Example of a number widget">
 
 ```yaml
 - path: spec.capacity
@@ -101,7 +102,7 @@ See the following examples:
   disableOnEdit: true
 ```
 
-<img src="./assets/form-widgets/Number2.png" alt="Example of a number widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Number2.png" alt="Example of a number widget">
 
 ### `Switch`
 
@@ -119,7 +120,7 @@ See the following examples:
   widget: Switch
 ```
 
-<img src="./assets/form-widgets/Switch.png" alt="Example of a switch widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Switch.png" alt="Example of a switch widget">
 
 ```yaml
 - path: spec.importCustomRoutes
@@ -127,7 +128,7 @@ See the following examples:
   disableOnEdit: true
 ```
 
-<img src="./assets/form-widgets/Switch2.png" alt="Example of a switch widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Switch2.png" alt="Example of a switch widget">
 
 ### `Name`
 
@@ -151,7 +152,7 @@ See the following examples:
   widget: Name
 ```
 
-<img src="./assets/form-widgets/Name.png" alt="Example of a name widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Name.png" alt="Example of a name widget">
 
 ```yaml
 - path: spec.my-data
@@ -159,7 +160,7 @@ See the following examples:
   disableOnEdit: true
 ```
 
-<img src="./assets/form-widgets/Name2.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Name-DisableOnEdit.png" alt="Example of a name widget with disabled option to edit">
 
 ### `CodeEditor`
 
@@ -184,7 +185,7 @@ See the following example:
   language: "'JSON'"
 ```
 
-<img src="./assets/form-widgets/CodeEditor.png" alt="Example of a code editor widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/CodeEditor.png" alt="Example of a code editor widget">
 
 > **NOTE:** Remember to put both single and double quotes if you want to use plain language (for example, "'YAML'"). Specifying just double quotes ("YAML") makes Busola try to access a nonexistent YAML variable, resulting in the language being `undefined`.
 
@@ -211,11 +212,12 @@ These are the available `Bagde` widget parameters:
 See the following example:
 
 ```yaml
-- path: spec.namespace
+- path: spec.serviceInstanceName
   widget: Resource
   resource:
-    scope: cluster
-    kind: Namespace
+    kind: ServiceInstance
+    scope: namespace
+    group: services.cloud.sap.com
     version: v1
 - path: spec.gateway
   widget: Resource
@@ -227,7 +229,7 @@ See the following example:
     version: v1alpha3
 ```
 
-<img src="./assets/form-widgets/Resource.png" alt="Example of a Resource widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Resource.png" alt="Example of a Resource widget">
 
 ### `MultiCheckbox`
 
@@ -259,7 +261,7 @@ See the following example:
     - key: DELETE
 ```
 
-<img src="./assets/form-widgets/MultiCheckbox.png" alt="Example of a MultiCheckbox widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/MultiCheckbox.png" alt="Example of a MultiCheckbox widget">
 
 ## Complex Widgets
 
@@ -295,7 +297,7 @@ See the following example:
   alert: "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
 ```
 
-<img src="./assets/form-widgets/Alert.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Alert.png" alt="Example of a text widget">
 
 ### `KeyValuePair`
 
@@ -332,7 +334,7 @@ See the following example:
     - exact
 ```
 
-<img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget" style=" border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget">
 
 ### `ResourceRef`
 
@@ -378,7 +380,7 @@ See the following example:
   toExternal: namespace & '/' & name
 ```
 
-<img src="./assets/form-widgets/ResourceRef.png" alt="Example of a ResourceRef widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/ResourceRef.png" alt="Example of a ResourceRef widget">
 
 ## Presentation Widgets
 
@@ -401,11 +403,11 @@ See the following example:
 - path: spec.service
   widget: FormGroup
   children:
-    - path: host
+    - path: name
     - path: port
 ```
 
-<img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget">
 
 ### `GenericList`
 
@@ -423,29 +425,32 @@ These are the available `GenericList` widget parameters:
 See the following example:
 
 ```yaml
-- path: spec.services
-  widget: GenericList
-  children:
-    - path: '[].host'
-    - path: '[].port'
-
- - widget: GenericList
-   path: spec.filter.filters
-   children:
-     - path: '[].eventType.value'
-       placeholder: placeholder.eventType
-     - path: '[].eventSource.value'
-   template:
-     eventSource:
-       property: source
-       type: exact
-       value: ''
-     eventType:
-       property: type
-       type: exact
+- path: spec.ownerReferences
+      widget: GenericList
+      children:
+        - path: '[].apiVersion'
+        - path: '[].kind'
+        - path: '[].name'
 ```
 
-<img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget">
+
+```yaml
+- widget: GenericList
+  path: spec.filter.filters
+  children:
+    - path: '[].eventType.value'
+      placeholder: placeholder.eventType
+    - path: '[].eventSource.value'
+  template:
+    eventSource:
+      property: source
+      type: exact
+      value: ''
+    eventType:
+      property: type
+      type: exact
+```
 
 ### `SimpleList`
 
@@ -475,15 +480,15 @@ See the following example:
       placeholder: Enter the required port
 ```
 
-<img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
-
 #### Scalar Values
 
 When array items are scalars instead of objects, a child still has to be provided with the path `[]`; no header with the field title is then rendered in the resulting table.
 
 ```yaml
-- path: spec.services
+- path: spec.comments
   widget: SimpleList
   children:
     - path: '[]'
 ```
+
+<img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget">
