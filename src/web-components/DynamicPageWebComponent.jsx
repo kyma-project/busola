@@ -4,7 +4,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import customCSS from 'shared/components/DynamicPageComponent/DynamicPageComponent.scss?inline';
 import { parseHtmlToJsx } from './htmlTojsx';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Suspense } from 'react';
 
