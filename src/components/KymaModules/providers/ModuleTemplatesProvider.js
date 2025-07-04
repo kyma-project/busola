@@ -1,13 +1,18 @@
 import { createContext } from 'react';
 
-import { useModuleTemplatesQuery } from '../kymaModulesQueries';
+import {
+  useModulesReleaseQuery,
+  useModuleTemplatesQuery,
+} from '../kymaModulesQueries';
 import { splitModuleTemplates } from '../support';
 
 export const ModuleTemplatesContext = createContext({
-  allModuleTemplates: null,
+  allModuleTemplates: { items: [] },
   moduleTemplatesLoading: false,
-  communityModuleTemplates: null,
-  moduleTemplates: null,
+  moduleReleaseMetas: { items: [] },
+  moduleReleaseMetasLoading: false,
+  communityModuleTemplates: { items: [] },
+  moduleTemplates: { items: [] },
 });
 
 export function ModuleTemplatesContextProvider({ children }) {
@@ -16,6 +21,11 @@ export function ModuleTemplatesContextProvider({ children }) {
     data: allModuleTemplates,
     loading: moduleTemplatesLoading,
   } = useModuleTemplatesQuery({});
+
+  const {
+    data: moduleReleaseMetas,
+    loading: moduleReleaseMetasLoading,
+  } = useModulesReleaseQuery({});
 
   const {
     communityTemplates: communityModuleTemplates,
@@ -27,6 +37,8 @@ export function ModuleTemplatesContextProvider({ children }) {
       value={{
         allModuleTemplates: allModuleTemplates,
         moduleTemplates: moduleTemplates,
+        moduleReleaseMetas: moduleReleaseMetas,
+        moduleReleaseMetasLoading: moduleReleaseMetasLoading,
         moduleTemplatesLoading: moduleTemplatesLoading,
         communityModuleTemplates: communityModuleTemplates,
       }}

@@ -15,7 +15,7 @@ type NotificationContextProps = {
 type NotifySuccessFn = (props: ToastProps, visibilityTime?: number) => void;
 type NotifyErrorFn = (props: Omit<ErrorModalProps, 'close'>) => void;
 
-type NotificationContextArgs = {
+export type NotificationContextArgs = {
   isOpen: boolean;
   notifySuccess: NotifySuccessFn;
   notifyError: NotifyErrorFn;

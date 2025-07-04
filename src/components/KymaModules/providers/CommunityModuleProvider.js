@@ -13,8 +13,8 @@ export const CommunityModuleContext = createContext({
   handleResourceDelete: () => {},
   deleteModuleButton: () => <></>,
   installedCommunityModules: [],
-  communityModulesLoading: false,
-  communityModuleTemplates: null,
+  installedCommunityModuleTemplates: { items: [] },
+  installedCommunityModulesLoading: false,
 });
 
 export function CommunityModuleContextProvider({
@@ -33,8 +33,8 @@ export function CommunityModuleContextProvider({
     ModuleTemplatesContext,
   );
   const {
-    installed: installedCommunityModules,
-    loading: communityModulesLoading,
+    installed: installedCommunityModuleTemplates,
+    loading: installedCommunityModulesLoading,
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
 
   useEffect(() => {
@@ -47,12 +47,15 @@ export function CommunityModuleContextProvider({
     const index =
       moduleIndex ??
       // Find index of the selected module after a refresh or other case after which we have undefined.
-      activeModules?.findIndex(module =>
+      activeModules.items?.findIndex(module =>
         checkSelectedModule(module, layoutState),
       );
     return index > -1 ? index : undefined;
   };
 
+  const installedCommunityModules = simplifyInstalledModules(
+    installedCommunityModuleTemplates,
+  );
   const deleteModuleButton = (
     <div>
       <Button onClick={() => handleResourceDelete({})} design="Transparent">
@@ -67,7 +70,8 @@ export function CommunityModuleContextProvider({
         setOpenedModuleIndex: setOpenedModuleIndex,
         showDeleteDialog: showDeleteDialog,
         installedCommunityModules: installedCommunityModules,
-        communityModulesLoading: communityModulesLoading,
+        installedCommunityModuleTemplates: installedCommunityModuleTemplates,
+        communityModulesLoading: installedCommunityModulesLoading,
         DeleteMessageBox: DeleteMessageBox,
         deleteModuleButton: deleteModuleButton,
         handleResourceDelete: handleResourceDelete,
@@ -76,7 +80,7 @@ export function CommunityModuleContextProvider({
       {createPortal(
         getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !==
           undefined &&
-          !communityModulesLoading &&
+          !installedCommunityModulesLoading &&
           !moduleTemplatesLoading &&
           showDeleteDialog && (
             <ModulesDeleteBox
@@ -98,5 +102,19 @@ export function CommunityModuleContextProvider({
       )}
       {children}
     </CommunityModuleContext.Provider>
+  );
+}
+
+function simplifyInstalledModules(installedModules) {
+  return (
+    installedModules.items?.map(module => ({
+      name:
+        module.metadata?.labels['operator.kyma-project.io/module-name'] ??
+        module.spec.moduleName,
+      moduleTemplateName: module.metadata.name,
+      namespace: module.metadata.namespace,
+      version: module.spec.version,
+      resource: module.spec.data,
+    })) ?? []
   );
 }
