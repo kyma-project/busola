@@ -49,5 +49,17 @@ module.exports = (on, config) => {
       }
     },
   });
+
+  on('before:browser:launch', (browser = {}, launchOptions) => {
+    console.log(
+      'Resizing browser in headless mode for better screenshot and video quality in CI',
+    );
+    const width = 1920;
+    const height = 1080;
+
+    if (browser.name === 'chrome' && browser.isHeadless) {
+      launchOptions.args.push(`--window-size=${width},${height}`);
+    }
+  });
   return config;
 };
