@@ -36,7 +36,7 @@ export default function CommunityModuleVersionSelect({
       <Select
         accessibleName={`${module.name} channel select`}
         onChange={event => {
-          onChange(module.name, event.detail.selectedOption.value);
+          onChange(event.detail.selectedOption.value);
         }}
         value={`${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}
         className="channel-select"

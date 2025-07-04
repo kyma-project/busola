@@ -37,53 +37,49 @@ const isModuleInstalled = (
 ) => {
   return installedCommunityModules.items.find(
     item =>
-      getModuleName(item) === foundModuleTemplate.metadata.name &&
+      item.metadata.name === foundModuleTemplate.metadata.name &&
       item.metadata.namespace === foundModuleTemplate.metadata.namespace,
   );
 };
 
-function onCommunityChange(
-  communityModules: ModuleTemplateListType,
-  installedCommunityModules: ModuleTemplateListType,
-  communityModulesToApply: Map<string, any>,
-  setCommunityModulesToApply: SetterOrUpdater<any>,
+function onVersionChange(
+  moduleTemplates: ModuleTemplateListType,
+  installedModuleTemplates: ModuleTemplateListType,
+  moduleTemplatesToApply: Map<string, ModuleTemplateType>,
+  setModulesTemplatesToApply: SetterOrUpdater<Map<string, ModuleTemplateType>>,
   setIsResourceEdited: SetterOrUpdater<any>,
 ): any {
-  return (module: string, value: string) => {
-    const [name, namespace] = value.split('|');
-    const moduleTemplate = {
-      name,
-      namespace,
-    };
-    const newModulesToUpdated = new Map(communityModulesToApply);
+  return (value: string) => {
+    const newModulesTemplatesToApply = new Map(moduleTemplatesToApply);
 
-    // TODO: refactor it
-    const foundModuleTemplate = communityModules.items.find(
+    const [name, namespace] = value.split('|');
+    const newModuleTemplateToApply = moduleTemplates.items.find(
       item =>
-        item.metadata.namespace === moduleTemplate.namespace &&
-        item.metadata.name === moduleTemplate.name,
+        item.metadata.namespace === namespace && item.metadata.name === name,
     );
-    if (foundModuleTemplate) {
-      const moduleToUpdate = communityModulesToApply.get(
-        getModuleName(foundModuleTemplate),
+    if (newModuleTemplateToApply) {
+      const moduleTemplateToApply = moduleTemplatesToApply.get(
+        getModuleName(newModuleTemplateToApply),
       );
-      if (moduleToUpdate) {
+      if (moduleTemplateToApply) {
         const moduleInstalled = isModuleInstalled(
-          foundModuleTemplate,
-          installedCommunityModules,
+          newModuleTemplateToApply,
+          installedModuleTemplates,
         );
         if (moduleInstalled) {
-          newModulesToUpdated.delete(getModuleName(foundModuleTemplate));
+          newModulesTemplatesToApply.delete(
+            getModuleName(newModuleTemplateToApply),
+          );
         } else {
-          newModulesToUpdated.set(
-            getModuleName(foundModuleTemplate),
-            foundModuleTemplate,
+          newModulesTemplatesToApply.set(
+            getModuleName(newModuleTemplateToApply),
+            newModuleTemplateToApply,
           );
         }
       } else {
-        newModulesToUpdated.set(
-          getModuleName(foundModuleTemplate),
-          foundModuleTemplate,
+        newModulesTemplatesToApply.set(
+          getModuleName(newModuleTemplateToApply),
+          newModuleTemplateToApply,
         );
       }
     } else {
@@ -91,7 +87,7 @@ function onCommunityChange(
       return;
     }
 
-    if (newModulesToUpdated.size === 0) {
+    if (newModulesTemplatesToApply.size === 0) {
       setIsResourceEdited({
         isEdited: false,
       });
@@ -100,7 +96,7 @@ function onCommunityChange(
         isEdited: true,
       });
     }
-    setCommunityModulesToApply(newModulesToUpdated);
+    setModulesTemplatesToApply(newModulesTemplatesToApply);
   };
 }
 
@@ -143,11 +139,11 @@ function onSave(
       });
 
       notification.notifySuccess({
-        content: t('kyma-modules.module-updated'),
+        content: t('kyma-modules.modules-updated'),
       });
     } catch (e) {
       notification.notifyError({
-        content: t('kyma-modules.module-update-failed'),
+        content: t('kyma-modules.modules-update-failed'),
       });
       console.error(e);
     }
@@ -204,9 +200,10 @@ export default function CommunityModulesEdit() {
     () => {},
     'default',
   );
-  const [communityModulesToApply, setCommunityModulesToApply] = useState(
-    new Map<string, ModuleTemplateType>(),
-  );
+  const [
+    communityModulesTemplatesToApply,
+    setCommunityModulesTemplatesToApply,
+  ] = useState(new Map<string, ModuleTemplateType>());
 
   const {
     moduleTemplatesLoading,
@@ -237,8 +234,12 @@ export default function CommunityModulesEdit() {
   ]);
 
   useEffect(() => {
-    fetchResourcesToApply(communityModulesToApply, setResourcesToApply, post);
-  }, [communityModulesToApply]); // eslint-disable-line react-hooks/exhaustive-deps
+    fetchResourcesToApply(
+      communityModulesTemplatesToApply,
+      setResourcesToApply,
+      post,
+    );
+  }, [communityModulesTemplatesToApply]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (installedCommunityModulesLoading || moduleTemplatesLoading) {
     return (
@@ -291,11 +292,11 @@ export default function CommunityModulesEdit() {
                       <CommunityModuleVersionSelect
                         key={`${module.name}+${idx}`}
                         module={module}
-                        onChange={onCommunityChange(
+                        onChange={onVersionChange(
                           communityModuleTemplates,
                           installedCommunityModuleTemplates,
-                          communityModulesToApply,
-                          setCommunityModulesToApply,
+                          communityModulesTemplatesToApply,
+                          setCommunityModulesTemplatesToApply,
                           setIsResourceEdited,
                         )}
                       />
