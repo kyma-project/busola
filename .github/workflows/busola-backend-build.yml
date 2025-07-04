@@ -34,5 +34,3 @@ jobs:
       dockerfile: Dockerfile
       context: backend
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
-      platforms: |
-        linux/amd64
