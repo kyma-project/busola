@@ -11,17 +11,25 @@ export function savePreviousPath() {
   const queryParams = new URLSearchParams(window.location.search);
 
   const layoutParam = queryParams.get('layout');
+  const resourceNamespaceParam = queryParams.get('resourceNamespace');
   const showCreateParam = queryParams.get('showCreate');
   const showEditParam = queryParams.get('showEdit');
   const editColumnParam = queryParams.get('editColumn');
 
   let previousPath = window.location.pathname;
 
-  if (layoutParam || showCreateParam || showEditParam) {
+  if (
+    layoutParam ||
+    resourceNamespaceParam ||
+    showCreateParam ||
+    showEditParam
+  ) {
     previousPath += '?';
     const params = [];
 
     if (layoutParam) params.push(`layout=${layoutParam}`);
+    if (resourceNamespaceParam)
+      params.push(`resourceNamespace=${resourceNamespaceParam}`);
     if (showCreateParam) params.push(`showCreate=${showCreateParam}`);
     if (showEditParam) params.push(`showEdit=${showEditParam}`);
     if (editColumnParam) params.push(`editColumn=${editColumnParam}`);

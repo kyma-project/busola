@@ -54,7 +54,7 @@ export default function KymaCompanion() {
               showDisclaimer ? 'disclaimer-' : ''
             }header`}
           >
-            <Title level="H5" size="H5" className="title">
+            <Title level="H5" size="H5" className="companion-title">
               {t('kyma-companion.name')}
             </Title>
             <div className="actions-container">

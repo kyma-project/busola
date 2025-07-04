@@ -37,7 +37,7 @@ export const ColumnWrapper = () => {
 
   usePrepareLayoutColumns({
     resourceType: 'CustomResourceDefinition',
-    namespaceId: '',
+    namespaceId: namespace,
     apiGroup: 'apiextensions.k8s.io',
     apiVersion: 'v1',
     resourceName: crdName,
