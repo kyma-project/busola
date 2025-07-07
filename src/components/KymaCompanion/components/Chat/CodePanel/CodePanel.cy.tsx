@@ -129,7 +129,7 @@ describe('CodePanel Component', () => {
       .should('exist');
     cy.get('.action-button')
       .eq(1)
-      .should('have.attr', 'icon', 'sys-add');
+      .should('have.attr', 'icon', 'fpa-icons/replace');
     cy.get('.action-button')
       .eq(1)
       .should('contain.text', t('common.buttons.replace'));
