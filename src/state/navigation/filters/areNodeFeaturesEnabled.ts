@@ -5,7 +5,7 @@ export const areNodeFeaturesEnabled = (
   configFeatures: ConfigFeatureList,
 ): boolean => {
   if (dependsOnConfigFeatures(node)) {
-    if (isARequiredFeatureDisabled(node, configFeatures)) {
+    if (isARequiredFeatureDisabled(node, configFeatures ?? {})) {
       return false;
     }
   }
