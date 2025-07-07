@@ -767,7 +767,7 @@ kubeconfig-id:
 kyma-companion:
   banner: 
     title: Meet Joule
-    description: Your personal, contextual assistant - ready with the right insights and answers to all your Kyma questions.
+    description: Joule is your personal, contextual assistant, ready to help with all Kyma-related questions. Ask about Kyma features, Kubernetes best practices, step-by-step instructions, and more.
     buttons:
       try-joule: Try Joule
       feedback: Give Feedback
