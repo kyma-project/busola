@@ -23,7 +23,7 @@ const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
 );
 const CommunityModulesAddModule = React.lazy(() =>
-  import('../../components/KymaModules/CommunityModulesAddModule'),
+  import('../../components/KymaModules/CommunityModulesAddModule.tsx'),
 );
 
 const ColumnWrapper = ({
