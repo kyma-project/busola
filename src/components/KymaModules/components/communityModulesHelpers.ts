@@ -36,7 +36,7 @@ function fillModuleVersions(
   availableCommunityModules: Map<string, VersionInfo[]>,
   communityModulesTemplates: ModuleTemplateListType,
 ) {
-  communityModulesTemplates.items.reduce((acc, moduleTemplate): Map<
+  (communityModulesTemplates?.items || []).reduce((acc, moduleTemplate): Map<
     string,
     VersionInfo[]
   > => {
@@ -68,11 +68,11 @@ function createVersion(moduleTemplate: ModuleTemplateType): VersionInfo {
     moduleTemplateNamespace: moduleTemplate.metadata.namespace,
     moduleTemplateName: moduleTemplate.metadata.name,
     docsURL: moduleTemplate.spec.info?.documentation,
-    icon: getiFirstIcon(moduleTemplate.spec.info?.icons),
+    icon: getFirstIcon(moduleTemplate.spec.info?.icons),
   };
 }
 
-function getiFirstIcon(
+function getFirstIcon(
   icons?: [
     {
       name: string;
@@ -90,11 +90,12 @@ function getiFirstIcon(
     return undefined;
   }
 }
+
 function markInstalledVersion(
   availableCommunityModules: Map<string, VersionInfo[]>,
   installedModuleTemplates: ModuleTemplateListType,
 ) {
-  installedModuleTemplates.items.forEach(installedModule => {
+  (installedModuleTemplates?.items || []).forEach(installedModule => {
     const foundModuleVersions = availableCommunityModules.get(
       getModuleName(installedModule),
     );
@@ -114,7 +115,7 @@ function fillModulesWithMetadata(
   availableCommunityModules: Map<string, VersionInfo[]>,
   moduleReleaseMetas: ModuleReleaseMetaListType,
 ) {
-  moduleReleaseMetas?.items.forEach(releaseMeta => {
+  (moduleReleaseMetas?.items || [])?.forEach(releaseMeta => {
     const foundVersions = availableCommunityModules.get(
       releaseMeta.spec.moduleName,
     );
@@ -132,18 +133,6 @@ function fillModulesWithMetadata(
       });
     }
   });
-}
-
-export function getCommunityModules(
-  moduleTemplates: ModuleTemplateListType,
-): ModuleTemplateListType {
-  return {
-    items: moduleTemplates?.items.filter(module => {
-      return (
-        module.metadata.labels['operator.kyma-project.io/managed-by'] !== 'kyma'
-      );
-    }),
-  };
 }
 
 export function getInstalledModules(
@@ -174,10 +163,7 @@ function imageMatchVersion(image: string, version: string): boolean {
   return imgTag.includes(version);
 }
 
-export default async function postForCommunityResources(
-  post: PostFn,
-  link: string,
-) {
+async function postForCommunityResources(post: PostFn, link: string) {
   if (!link) {
     console.error('No link provided for community resource');
     return false;

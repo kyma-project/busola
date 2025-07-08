@@ -114,7 +114,6 @@ export default function KymaModulesList({ namespaced }) {
           isEdit={true}
           confirmText={t('common.buttons.save')}
           protectedResource={isProtected(kymaResource)}
-          title={'FIX ME!'}
           protectedResourceWarning={protectedResourceWarning(
             kymaResource,
             true,

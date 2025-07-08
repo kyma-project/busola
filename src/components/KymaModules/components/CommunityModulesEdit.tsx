@@ -10,7 +10,7 @@ import {
   getAllResourcesYamls,
   getAvailableCommunityModules,
   VersionInfo,
-} from 'components/KymaModules/components/CommunityModulesHelpers';
+} from 'components/KymaModules/components/communityModulesHelpers';
 import {
   getModuleName,
   ModuleTemplateListType,
@@ -57,34 +57,26 @@ function onVersionChange(
       item =>
         item.metadata.namespace === namespace && item.metadata.name === name,
     );
-    if (newModuleTemplateToApply) {
-      const moduleTemplateToApply = moduleTemplatesToApply.get(
-        getModuleName(newModuleTemplateToApply),
-      );
-      if (moduleTemplateToApply) {
-        const moduleInstalled = isModuleInstalled(
-          newModuleTemplateToApply,
-          installedModuleTemplates,
-        );
-        if (moduleInstalled) {
-          newModulesTemplatesToApply.delete(
-            getModuleName(newModuleTemplateToApply),
-          );
-        } else {
-          newModulesTemplatesToApply.set(
-            getModuleName(newModuleTemplateToApply),
-            newModuleTemplateToApply,
-          );
-        }
-      } else {
-        newModulesTemplatesToApply.set(
-          getModuleName(newModuleTemplateToApply),
-          newModuleTemplateToApply,
-        );
-      }
-    } else {
+    if (!newModuleTemplateToApply) {
       console.warn(`Can't find module template`);
       return;
+    }
+
+    let moduleName = getModuleName(newModuleTemplateToApply);
+    const moduleTemplateToApply = moduleTemplatesToApply.get(moduleName);
+
+    if (moduleTemplateToApply) {
+      const moduleInstalled = isModuleInstalled(
+        newModuleTemplateToApply,
+        installedModuleTemplates,
+      );
+      if (moduleInstalled) {
+        newModulesTemplatesToApply.delete(moduleName);
+      } else {
+        newModulesTemplatesToApply.set(moduleName, newModuleTemplateToApply);
+      }
+    } else {
+      newModulesTemplatesToApply.set(moduleName, newModuleTemplateToApply);
     }
 
     if (newModulesTemplatesToApply.size === 0) {
@@ -156,10 +148,9 @@ function transformDataForDisplay(
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     const formatDisplayText = (v: VersionInfo): string => {
-      const version =
-        (v.channel ? v.channel + ' ' : '') +
-        `(v${v.version})` +
-        (v.beta ? '-  Beta' : '');
+      const version = `${v.channel ? v.channel + ' ' : ''}(v${v.version})${
+        v.beta ? ' - Beta' : ''
+      }`;
       if (v.installed) {
         return t('community-modules.installed') + ` ${version}`;
       } else {
@@ -275,6 +266,7 @@ export default function CommunityModulesEdit() {
           }
           children={
             <CollapsibleSection
+              defaultTitleType
               defaultOpen={true}
               className="collapsible-margins"
               title={t('community-modules.title')}

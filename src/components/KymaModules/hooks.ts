@@ -9,7 +9,7 @@ import {
   ModuleTemplateStatus,
   ModuleTemplateType,
 } from './support';
-import { getInstalledModules } from 'components/KymaModules/components/CommunityModulesHelpers';
+import { getInstalledModules } from 'components/KymaModules/components/communityModulesHelpers';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
@@ -171,7 +171,6 @@ export const useFetchModuleData = (
   return { loading, error, data, getItem };
 };
 
-// TODO: this function should return ModuleTemplateListType
 export const useGetInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesLoading?: boolean,
