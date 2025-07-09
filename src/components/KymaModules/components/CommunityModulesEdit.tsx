@@ -16,7 +16,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
-import { Button } from '@ui5/webcomponents-react';
+import { Button, Form } from '@ui5/webcomponents-react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
@@ -30,6 +30,9 @@ import {
   useNotification,
 } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
+
+import './CommunityModule.scss';
+import classnames from 'classnames';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -265,37 +268,38 @@ export default function CommunityModulesEdit() {
             </Button>
           }
           children={
-            <CollapsibleSection
-              defaultTitleType
-              defaultOpen={true}
-              className="collapsible-margins"
-              title={t('community-modules.title')}
+            <Form
+              className={classnames(
+                'resource-form ui5-content-density-compact',
+                'community-modules',
+              )}
             >
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '3fr 3fr',
-                  gap: '0.5rem 1rem',
-                }}
+              <CollapsibleSection
+                defaultTitleType
+                defaultOpen={true}
+                className="collapsible-margins"
+                title={t('community-modules.title')}
               >
-                {communityModulesToDisplay &&
-                  communityModulesToDisplay.map((module, idx) => {
-                    return (
-                      <CommunityModuleVersionSelect
-                        key={`${module.name}+${idx}`}
-                        module={module}
-                        onChange={onVersionChange(
-                          communityModuleTemplates,
-                          installedCommunityModuleTemplates,
-                          communityModulesTemplatesToApply,
-                          setCommunityModulesTemplatesToApply,
-                          setIsResourceEdited,
-                        )}
-                      />
-                    );
-                  })}
-              </div>
-            </CollapsibleSection>
+                <div className="edit sap-margin-begin-tiny sap-margin-end-tiny">
+                  {communityModulesToDisplay &&
+                    communityModulesToDisplay.map((module, idx) => {
+                      return (
+                        <CommunityModuleVersionSelect
+                          key={`${module.name}+${idx}`}
+                          module={module}
+                          onChange={onVersionChange(
+                            communityModuleTemplates,
+                            installedCommunityModuleTemplates,
+                            communityModulesTemplatesToApply,
+                            setCommunityModulesTemplatesToApply,
+                            setIsResourceEdited,
+                          )}
+                        />
+                      );
+                    })}
+                </div>
+              </CollapsibleSection>
+            </Form>
           }
         ></UI5Panel>
         {createPortal(<UnsavedMessageBox />, document.body)}

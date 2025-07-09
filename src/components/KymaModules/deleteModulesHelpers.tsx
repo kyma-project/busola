@@ -5,7 +5,7 @@ import {
   ModuleTemplateListType,
 } from './support';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
-import postForCommunityResources from 'components/KymaModules/components/CommunityModulesHelpers';
+import { postForCommunityResources } from 'components/KymaModules/components/communityModulesHelpers';
 
 interface Counts {
   [key: string]: number;

@@ -163,7 +163,7 @@ function imageMatchVersion(image: string, version: string): boolean {
   return imgTag.includes(version);
 }
 
-async function postForCommunityResources(post: PostFn, link: string) {
+export async function postForCommunityResources(post: PostFn, link: string) {
   if (!link) {
     console.error('No link provided for community resource');
     return false;

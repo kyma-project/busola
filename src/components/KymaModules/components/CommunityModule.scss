@@ -1,0 +1,16 @@
+.community-modules {
+  .edit {
+    display: grid;
+    gridtemplatecolumns: 3fr 3fr;
+    //gap: 0.5rem 1rem;
+  }
+  .collapsible-margins {
+    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+  padding: 0 1rem;
+  min-height: calc(50vh - 17rem);
+}

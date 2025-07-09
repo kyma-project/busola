@@ -7,7 +7,7 @@
     z-index: 0;
     .resource-form--panel,
     .resource-form--panel::part(content) {
-      min-height: calc(100vh - 20rem);
+      min-height: calc(50vh - 20rem);
     }
 
     .resource-form--panel {
