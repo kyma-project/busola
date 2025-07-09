@@ -212,8 +212,6 @@ export default function CodePanel({
     </div>
   ) : (
     <Panel
-      // the height is 20 lines times 21px per line (14px font size x 1.5 line height) plus header height
-      style={{ maxHeight: 'calc(420px + 3.5rem)', overflowY: 'scroll' }}
       className="code-panel sap-margin-y-small"
       stickyHeader
       header={
