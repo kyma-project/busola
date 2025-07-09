@@ -8,39 +8,6 @@ context('Test Companion UI', () => {
     cy.loginAndSelectCluster();
   });
 
-  describe('AI Announcment banner', () => {
-    it('AI Banner should be visible when feature is enabled', () => {
-      cy.get('ui5-card').as('featurecard');
-
-      cy.get('@featurecard')
-        .contains('Meet Joule')
-        .should('be.visible');
-
-      cy.get('@featurecard')
-        .contains('ui5-button', 'Try Joule')
-        .click();
-
-      cy.get('.kyma-companion').as('companion');
-
-      cy.wait(100);
-
-      cy.get('@companion')
-        .contains('Hi, I am your Kyma assistant! ')
-        .should('be.visible');
-    });
-
-    it('AI Banner should NOT be visible when feature is disabled', () => {
-      cy.setBusolaFeature('KYMA_COMPANION', false);
-      cy.reload();
-
-      cy.get('ui5-card').as('featurecard');
-
-      cy.get('@featurecard')
-        .contains('Meet Joule')
-        .should('not.exist');
-    });
-  });
-
   describe('Fullscreen button', () => {
     it('Enters fullscreen correctly', () => {
       cy.openCompanion();
@@ -102,6 +69,39 @@ context('Test Companion UI', () => {
 
       cy.get('@shellbar')
         .find('ui5-toggle-button[icon="da"]')
+        .should('not.exist');
+    });
+  });
+
+  describe('AI Announcment banner', () => {
+    it('AI Banner should be visible when feature is enabled', () => {
+      cy.get('ui5-card').as('featurecard');
+
+      cy.get('@featurecard')
+        .contains('Meet Joule')
+        .should('be.visible');
+
+      cy.get('@featurecard')
+        .contains('ui5-button', 'Try Joule')
+        .click();
+
+      cy.get('.kyma-companion').as('companion');
+
+      cy.wait(100);
+
+      cy.get('@companion')
+        .contains('Hi, I am your Kyma assistant! ')
+        .should('be.visible');
+    });
+
+    it('AI Banner should NOT be visible when feature is disabled', () => {
+      cy.setBusolaFeature('KYMA_COMPANION', false);
+      cy.reload();
+
+      cy.get('ui5-card').as('featurecard');
+
+      cy.get('@featurecard')
+        .contains('Meet Joule')
         .should('not.exist');
     });
   });
