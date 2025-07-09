@@ -49,30 +49,6 @@ context('Test Companion UI', () => {
     });
   });
 
-  describe('Availability outside of cluster context', () => {
-    it('Companion should not be available on cluster list', () => {
-      cy.get('ui5-shellbar').as('shellbar');
-
-      cy.get('@shellbar')
-        .find('.ui5-shellbar-menu-button')
-        .click();
-
-      cy.wait(1000);
-
-      cy.get('@shellbar')
-        .find('ui5-li')
-        .contains('Clusters Overview')
-        .should('be.visible')
-        .find('li[part="native-li"]')
-        .click({ force: true });
-      cy.wait(1000);
-
-      cy.get('@shellbar')
-        .find('ui5-toggle-button[icon="da"]')
-        .should('not.exist');
-    });
-  });
-
   describe('AI Announcment banner', () => {
     it('AI Banner should be visible when feature is enabled', () => {
       cy.get('ui5-card').as('featurecard');
@@ -102,6 +78,32 @@ context('Test Companion UI', () => {
 
       cy.get('@featurecard')
         .contains('Meet Joule')
+        .should('not.exist');
+    });
+  });
+
+  describe('Availability outside of cluster context', () => {
+    it('Companion should not be available on cluster list', () => {
+      cy.setBusolaFeature('KYMA_COMPANION', false);
+      cy.reload();
+      cy.get('ui5-shellbar').as('shellbar');
+
+      cy.get('@shellbar')
+        .find('.ui5-shellbar-menu-button')
+        .click();
+
+      cy.wait(1000);
+
+      cy.get('@shellbar')
+        .find('ui5-li')
+        .contains('Clusters Overview')
+        .should('be.visible')
+        .find('li[part="native-li"]')
+        .click({ force: true });
+      cy.wait(1000);
+
+      cy.get('@shellbar')
+        .find('ui5-toggle-button[icon="da"]')
         .should('not.exist');
     });
   });
