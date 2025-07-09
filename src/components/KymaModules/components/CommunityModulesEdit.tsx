@@ -33,7 +33,6 @@ import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleT
 
 import './CommunityModule.scss';
 import classnames from 'classnames';
-// import 'components/KymaModules/KymaModulesCreate.scss';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -254,7 +253,6 @@ export default function CommunityModulesEdit() {
       <section>
         <UI5Panel
           title={''}
-          // className={'community-modules'}
           headerActions={
             <Button
               className="min-width-button"
@@ -279,13 +277,12 @@ export default function CommunityModulesEdit() {
               labelSpan="S0 M0 L0 XL0"
               layout="S1 M1 L1 XL1"
             >
-              <FormItem className="test">
+              <FormItem>
                 <div className={'sap-margin-bottom-tiny'}>
                   <CollapsibleSection
                     defaultTitleType
                     defaultOpen={true}
-                    className={'collapsible-margins'}
-                    // className="collapsible-margins"
+                    className="collapsible-margins"
                     title={t('community-modules.title')}
                   >
                     <div className={'edit'}>

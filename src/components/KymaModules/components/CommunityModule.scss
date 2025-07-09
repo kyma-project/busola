@@ -1,9 +1,3 @@
-.edit {
-  display: grid;
-  grid-template-columns: 3fr 3fr;
-  gap: 0.5rem 1rem;
-}
-
 .community-modules {
   .collapsible-margins {
     padding: 0;
@@ -17,8 +11,10 @@
   .channel-select {
     width: 100%;
   }
-}
 
-.test {
-  grid-template-columns: none;
+  .edit {
+    display: grid;
+    grid-template-columns: 3fr 3fr;
+    gap: 0.5rem 1rem;
+  }
 }
