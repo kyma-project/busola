@@ -460,7 +460,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
           </ResourceForm.CollapsibleSection>
         </ResourceForm>
       )}
-      <CommunityModulesEdit />
+      <CommunityModulesEdit className={'kyma-modules-create'} />
     </>
   );
 }

@@ -16,7 +16,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
-import { Button, Form } from '@ui5/webcomponents-react';
+import { Button, Form, FormItem } from '@ui5/webcomponents-react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
@@ -33,6 +33,7 @@ import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleT
 
 import './CommunityModule.scss';
 import classnames from 'classnames';
+// import 'components/KymaModules/KymaModulesCreate.scss';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -253,6 +254,7 @@ export default function CommunityModulesEdit() {
       <section>
         <UI5Panel
           title={''}
+          // className={'community-modules'}
           headerActions={
             <Button
               className="min-width-button"
@@ -267,41 +269,49 @@ export default function CommunityModulesEdit() {
               {t('common.buttons.save')}
             </Button>
           }
-          children={
+        >
+          <div className={'community-modules'}>
             <Form
               className={classnames(
-                'resource-form ui5-content-density-compact',
-                'community-modules',
+                'resource-form',
+                'ui5-content-density-compact',
               )}
+              labelSpan="S0 M0 L0 XL0"
+              layout="S1 M1 L1 XL1"
             >
-              <CollapsibleSection
-                defaultTitleType
-                defaultOpen={true}
-                className="collapsible-margins"
-                title={t('community-modules.title')}
-              >
-                <div className="edit sap-margin-begin-tiny sap-margin-end-tiny">
-                  {communityModulesToDisplay &&
-                    communityModulesToDisplay.map((module, idx) => {
-                      return (
-                        <CommunityModuleVersionSelect
-                          key={`${module.name}+${idx}`}
-                          module={module}
-                          onChange={onVersionChange(
-                            communityModuleTemplates,
-                            installedCommunityModuleTemplates,
-                            communityModulesTemplatesToApply,
-                            setCommunityModulesTemplatesToApply,
-                            setIsResourceEdited,
-                          )}
-                        />
-                      );
-                    })}
+              <FormItem className="test">
+                <div className={'sap-margin-bottom-tiny'}>
+                  <CollapsibleSection
+                    defaultTitleType
+                    defaultOpen={true}
+                    className={'full-width collapsible-margins'}
+                    // className="collapsible-margins"
+                    title={t('community-modules.title')}
+                  >
+                    <div className={'edit'}>
+                      {communityModulesToDisplay &&
+                        communityModulesToDisplay.map((module, idx) => {
+                          return (
+                            <CommunityModuleVersionSelect
+                              key={`${module.name}+${idx}`}
+                              module={module}
+                              onChange={onVersionChange(
+                                communityModuleTemplates,
+                                installedCommunityModuleTemplates,
+                                communityModulesTemplatesToApply,
+                                setCommunityModulesTemplatesToApply,
+                                setIsResourceEdited,
+                              )}
+                            />
+                          );
+                        })}
+                    </div>
+                  </CollapsibleSection>
                 </div>
-              </CollapsibleSection>
+              </FormItem>
             </Form>
-          }
-        ></UI5Panel>
+          </div>
+        </UI5Panel>
         {createPortal(<UnsavedMessageBox />, document.body)}
       </section>
     );
