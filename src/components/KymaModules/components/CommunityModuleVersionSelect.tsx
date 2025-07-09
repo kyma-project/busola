@@ -19,6 +19,7 @@ export type VersionDisplayInfo = {
   channel: string;
   installed: boolean;
   textToDisplay: string;
+  beta?: boolean;
 };
 
 export default function CommunityModuleVersionSelect({
@@ -46,6 +47,7 @@ export default function CommunityModuleVersionSelect({
             selected={version.installed}
             key={`${idx}-${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}
             value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
+            additionalText={version.beta ? 'Beta' : ''}
           >
             {version.textToDisplay}
           </Option>

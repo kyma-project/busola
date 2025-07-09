@@ -151,14 +151,7 @@ function transformDataForDisplay(
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     const formatDisplayText = (v: VersionInfo): string => {
-      const version = `${v.channel ? v.channel + ' ' : ''}(v${v.version})${
-        v.beta ? ' - Beta' : ''
-      }`;
-      if (v.installed) {
-        return t('community-modules.installed') + ` ${version}`;
-      } else {
-        return version;
-      }
+      return `${v.channel ? v.channel + ' ' : ''}(v${v.version})`;
     };
 
     return {
@@ -171,6 +164,7 @@ function transformDataForDisplay(
         version: v.version,
         channel: v.channel ?? '',
         installed: v.installed ?? false,
+        beta: v.beta,
         textToDisplay: formatDisplayText(v),
       })),
     };
