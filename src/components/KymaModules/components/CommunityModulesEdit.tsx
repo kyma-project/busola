@@ -284,7 +284,7 @@ export default function CommunityModulesEdit() {
                   <CollapsibleSection
                     defaultTitleType
                     defaultOpen={true}
-                    className={'full-width collapsible-margins'}
+                    className={'collapsible-margins'}
                     // className="collapsible-margins"
                     title={t('community-modules.title')}
                   >
