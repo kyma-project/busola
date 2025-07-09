@@ -37,7 +37,7 @@ context('Test Companion UI', () => {
 
       cy.get('@featurecard')
         .contains('Meet Joule')
-        .should('not.be.visible');
+        .should('not.exist');
     });
   });
 
