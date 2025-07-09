@@ -16,6 +16,9 @@
 }
 
 .code-panel {
+  border-radius: 4px;
+  overflow-y: auto !important;
+
   .action-button {
     color: var(--sapTextColor);
   }
