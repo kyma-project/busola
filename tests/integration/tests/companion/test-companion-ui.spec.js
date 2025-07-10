@@ -49,7 +49,7 @@ context('Test Companion UI', () => {
     });
   });
 
-  describe('AI Announcment banner', () => {
+  describe('AI Announcement banner', () => {
     it('AI Banner should be visible when feature is enabled', () => {
       cy.get('ui5-card').as('featurecard');
 
