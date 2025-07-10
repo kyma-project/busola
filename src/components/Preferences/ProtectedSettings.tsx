@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
+import { configFeaturesNames } from 'state/types';
 
 export default function ProtectedSettings() {
   const { t } = useTranslation();
@@ -12,8 +13,9 @@ export default function ProtectedSettings() {
     setDisableResourceProtection,
   ] = useRecoilState(disableResourceProtectionState);
 
-  const protectedResourcesEnabled = useFeature('PROTECTED_RESOURCES')
-    ?.isEnabled;
+  const protectedResourcesEnabled = useFeature(
+    configFeaturesNames.PROTECTED_RESOURCES,
+  )?.isEnabled;
 
   if (!protectedResourcesEnabled) return null;
 

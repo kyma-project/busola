@@ -22,6 +22,7 @@ import BannerCarousel from 'components/Extensibility/components/FeaturedCard/Ban
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 import './ClusterOverview.scss';
+import { configFeaturesNames } from 'state/types';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -29,7 +30,7 @@ const Injections = React.lazy(() =>
 
 export function ClusterOverview() {
   const { t } = useTranslation();
-  const clusterValidation = useFeature('CLUSTER_VALIDATION');
+  const clusterValidation = useFeature(configFeaturesNames.CLUSTER_VALIDATION);
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();

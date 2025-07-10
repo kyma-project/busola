@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as Sentry from '@sentry/react';
 import { useFeature } from './useFeature';
+import { configFeaturesNames } from 'state/types';
 
 const initSentry = dsn => {
   try {
@@ -23,7 +24,7 @@ const initSentry = dsn => {
 
 export function useSentry() {
   const [dsn, setDsn] = useState(null);
-  const feature = useFeature('SENTRY');
+  const feature = useFeature(configFeaturesNames.SENTRY);
 
   useEffect(() => {
     try {

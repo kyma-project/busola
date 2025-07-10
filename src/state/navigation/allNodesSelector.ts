@@ -1,6 +1,6 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
 
-import { NavNode } from '../types';
+import { configFeaturesNames, NavNode } from '../types';
 
 import { mergeInExtensibilityNav } from './sidebarNavigationNodesSelector';
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
@@ -24,7 +24,8 @@ export const allNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
 
     let extResources = get(extensionsState);
 
-    const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
+    const isExtensibilityOn =
+      features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
     if (isExtensibilityOn && extResources) {
       const extNavNodes = extResources.map(ext => mapExtResourceToNavNode(ext));
       allNodes = mergeInExtensibilityNav(navNodes, extNavNodes);

@@ -8,7 +8,7 @@ import { MemoizedGraphviz } from './GraphvizComponent';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { buildGraph } from 'shared/components/ResourceGraph/buildGraph';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useMinWidth, TABLET } from 'hooks/useMinWidth';
+import { TABLET, useMinWidth } from 'hooks/useMinWidth';
 import { SaveGraphControls } from './SaveGraphControls';
 import { DetailsCard } from './DetailsCard/DetailsCard';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -19,6 +19,7 @@ import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
 import './ResourceGraph.scss';
+import { configFeaturesNames } from 'state/types';
 
 function ResourceGraph({
   resource,
@@ -86,7 +87,7 @@ function ResourceGraph({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBeenInView]);
-  if (!useFeature('VISUAL_RESOURCES')?.isEnabled) {
+  if (!useFeature(configFeaturesNames.VISUAL_RESOURCES)?.isEnabled) {
     return EMPTY_TEXT_PLACEHOLDER;
   }
 
@@ -137,4 +138,5 @@ function ResourceGraph({
     </Panel>
   );
 }
+
 export default ResourceGraph;

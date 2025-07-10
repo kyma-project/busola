@@ -1,6 +1,6 @@
 import { useFeature } from 'hooks/useFeature';
 import { useEffect, useMemo } from 'react';
-import { atom, RecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   ExtendedValidateResources,
   getExtendedValidateResourceState,
@@ -12,6 +12,7 @@ import {
   ValidationSchema,
   validationSchemasState,
 } from './validationSchemasAtom';
+import { configFeaturesNames } from 'state/types';
 
 type PolicyReference = string;
 
@@ -41,7 +42,7 @@ const getEnabledPolicyNames = (
 
 export const usePolicySet = () => {
   const validationFeature = useFeature(
-    'RESOURCE_VALIDATION',
+    configFeaturesNames.RESOURCE_VALIDATION,
   ) as ValidationFeatureConfig;
   const validateResources = useRecoilValue(validateResourcesState);
   const validationPreferences = useMemo(

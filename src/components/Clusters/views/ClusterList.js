@@ -30,10 +30,11 @@ import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyLi
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { Link } from 'shared/components/Link/Link';
+import { configFeaturesNames } from 'state/types';
 
 function ClusterList() {
-  const gardenerLoginFeature = useFeature('GARDENER_LOGIN');
-  const kubeconfigIdFeature = useFeature('KUBECONFIG_ID');
+  const gardenerLoginFeature = useFeature(configFeaturesNames.GARDENER_LOGIN);
+  const kubeconfigIdFeature = useFeature(configFeaturesNames.KUBECONFIG_ID);
   const loadDefaultKubeconfigId = useLoadDefaultKubeconfigId();
 
   const clustersInfo = useClustersInfo();

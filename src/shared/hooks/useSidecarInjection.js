@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import jp from 'jsonpath';
 import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from 'state/types';
 
 export const useSidecar = ({
   initialRes,
@@ -11,7 +12,7 @@ export const useSidecar = ({
   enabled,
   disabled,
 }) => {
-  const isIstioFeatureOn = useFeature('ISTIO')?.isEnabled;
+  const isIstioFeatureOn = useFeature(configFeaturesNames.ISTIO)?.isEnabled;
 
   const isInitSidecarInjectionTurnedOn =
     jp.value(initialRes || {}, `${path}["${[label]}"]`) === enabled;

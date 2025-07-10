@@ -1,8 +1,9 @@
-import { apiGroupState } from './../state/discoverability/apiGroupsSelector';
+import { apiGroupState } from 'state/discoverability/apiGroupsSelector';
 import { useEffect } from 'react';
 import { useFeature } from 'hooks/useFeature';
 import * as Sentry from '@sentry/react';
 import { useRecoilValue } from 'recoil';
+import { configFeaturesNames } from 'state/types';
 
 export function useVersionWarning({
   resourceUrl,
@@ -12,7 +13,9 @@ export function useVersionWarning({
   resourceType: string;
 }) {
   const apiGroups = useRecoilValue(apiGroupState);
-  const { isEnabled: isTrackingEnabled } = useFeature('SENTRY');
+  const { isEnabled: isTrackingEnabled } = useFeature(
+    configFeaturesNames.SENTRY,
+  );
 
   useEffect(() => {
     if (!isTrackingEnabled) return;

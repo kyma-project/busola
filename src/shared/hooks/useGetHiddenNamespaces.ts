@@ -1,5 +1,5 @@
 import { useFeature } from 'hooks/useFeature';
-import { ConfigFeature } from 'state/types';
+import { ConfigFeature, configFeaturesNames } from 'state/types';
 import { useMemo } from 'react';
 
 interface HiddenNamespacesFeature extends ConfigFeature {
@@ -10,7 +10,7 @@ interface HiddenNamespacesFeature extends ConfigFeature {
 
 export const useGetHiddenNamespaces = (): string[] => {
   const hiddenNamespacesConfig = useFeature<HiddenNamespacesFeature>(
-    'HIDDEN_NAMESPACES',
+    configFeaturesNames.HIDDEN_NAMESPACES,
   );
 
   const hiddenNamespaces = useMemo(() => {

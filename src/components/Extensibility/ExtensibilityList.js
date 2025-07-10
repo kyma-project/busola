@@ -12,12 +12,12 @@ import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtens
 import { useGetCRbyPath } from './useGetCRbyPath';
 import ExtensibilityCreate from './ExtensibilityCreate';
 import {
-  useCreateResourceDescription,
-  TranslationBundleContext,
-  useGetTranslation,
   applyFormula,
-  getTextSearchProperties,
   getResourceDescAndUrl,
+  getTextSearchProperties,
+  TranslationBundleContext,
+  useCreateResourceDescription,
+  useGetTranslation,
 } from './helpers';
 import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
@@ -28,6 +28,7 @@ import { createPortal } from 'react-dom';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 import '../../web-components/eventListenerTracker';
+import { configFeaturesNames } from 'state/types';
 
 export const ExtensibilityListCore = ({
   resMetaData,
@@ -149,7 +150,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
   const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
   const { isEnabled: isExtensibilityCustomComponentsEnabled } = useFeature(
-    'EXTENSIBILITY_CUSTOM_COMPONENTS',
+    configFeaturesNames.EXTENSIBILITY_CUSTOM_COMPONENTS,
   );
 
   useEffect(() => {

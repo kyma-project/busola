@@ -14,6 +14,7 @@ import { ValidationFeatureConfig } from 'state/validationEnabledSchemasAtom';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ResourceValidationSettings.scss';
+import { configFeaturesNames } from 'state/types';
 
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
@@ -21,7 +22,7 @@ export default function ResourceValidationSettings() {
     validateResourcesState,
   );
   const validationFeature = useFeature(
-    'RESOURCE_VALIDATION',
+    configFeaturesNames.RESOURCE_VALIDATION,
   ) as ValidationFeatureConfig;
 
   const {

@@ -6,13 +6,14 @@ export type Scope = 'namespace' | 'cluster';
 export interface ConfigFeature {
   isEnabled?: boolean;
   stage?: 'PRIMARY' | 'SECONDARY';
+
   [key: string]: any;
 }
 
 export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
-  EVENTING: 'EVENTING',
-  API_GATEWAY: 'API_GATEWAY',
+  EVENTING: 'EVENTING', //TODO: it can be removed
+  API_GATEWAY: 'API_GATEWAY', //TODO: it can be removed
   ISTIO: 'ISTIO',
   LEGAL_LINKS: 'LEGAL_LINKS',
   GET_HELP_LINKS: 'GET_HELP_LINKS',
