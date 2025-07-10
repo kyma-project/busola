@@ -32,7 +32,6 @@ import {
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 
 import './CommunityModule.scss';
-import classnames from 'classnames';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -264,10 +263,7 @@ export default function CommunityModulesEdit() {
         >
           <div className={'community-modules'}>
             <Form
-              className={classnames(
-                'resource-form',
-                'ui5-content-density-compact',
-              )}
+              className="resource-form ui5-content-density-compact"
               labelSpan="S0 M0 L0 XL0"
               layout="S1 M1 L1 XL1"
             >
