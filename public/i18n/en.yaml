@@ -804,6 +804,7 @@ kyma-modules:
   unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
   unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
   installed-modules: Installed Modules
+  installed-community-modules: Installed Community Modules
   predefined-channel: Predefined
   modify-modules: Modify Modules
   module-added: Module added 

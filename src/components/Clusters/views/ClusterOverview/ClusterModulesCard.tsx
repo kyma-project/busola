@@ -5,10 +5,44 @@ import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router';
 import { useGetAllModulesStatuses } from 'components/KymaModules/hooks';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
+import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
 
+const CountStatuseByType = (
+  statuses: Record<string, any>,
+  loadingStatuses: boolean,
+  statusesError: Error | null,
+) => {
+  if (statuses && !loadingStatuses && !statusesError) {
+    return statuses.reduce(
+      (
+        acc: {
+          ready: number;
+          error: number;
+          warning: number;
+          processing: number;
+          other: number;
+        },
+        m: { status: string },
+      ) => {
+        if (m?.status === 'Ready') acc.ready++;
+        else if (m?.status === 'Error') acc.error++;
+        else if (m?.status === 'Warning') acc.warning++;
+        else if (m?.status === 'Processing') acc.processing++;
+        else acc.other++;
+        return acc;
+      },
+      { ready: 0, error: 0, warning: 0, processing: 0, other: 0 },
+    );
+  }
+  return { ready: 0, error: 0, warning: 0, processing: 0, other: 0 };
+};
 export default function ClusterModulesCard() {
   const { t } = useTranslation();
+  const {
+    installedCommunityModules,
+    installedCommunityModulesLoading,
+  } = useContext(CommunityModuleContext);
   const { modules, error, loading: loadingModules } = useKymaModulesQuery();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
@@ -19,42 +53,29 @@ export default function ClusterModulesCard() {
   } = useGetAllModulesStatuses(modules);
 
   const moduleStatusCounts = useMemo(() => {
-    if (statuses && !loadingStatuses && !statusesError) {
-      return statuses.reduce(
-        (
-          acc: {
-            ready: number;
-            error: number;
-            warning: number;
-            processing: number;
-            other: number;
-          },
-          m: { status: string },
-        ) => {
-          if (m?.status === 'Ready') acc.ready++;
-          else if (m?.status === 'Error') acc.error++;
-          else if (m?.status === 'Warning') acc.warning++;
-          else if (m?.status === 'Processing') acc.processing++;
-          else acc.other++;
-          return acc;
-        },
-        { ready: 0, error: 0, warning: 0, processing: 0, other: 0 },
-      );
-    }
-    return { ready: 0, error: 0, warning: 0, processing: 0, other: 0 };
-
+    return CountStatuseByType(statuses, loadingStatuses, statusesError);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statuses, statusesError]);
 
+  console.log(installedCommunityModules);
+
+  const display =
+    !error && !loadingModules && modules && !installedCommunityModulesLoading;
+
   return (
     <>
-      {!error && !loadingModules && modules && (
+      {display && (
         <CountingCard
           className="modules-statuses"
-          value={modules?.length}
+          value={modules?.length + installedCommunityModules?.length}
           title={t('cluster-overview.statistics.modules-overview')}
           subTitle={t('kyma-modules.installed-modules')}
           extraInfo={[
+            {
+              title: t('kyma-modules.installed-community-modules'),
+              // TODO: get value
+              value: installedCommunityModules?.length,
+            },
             {
               title: t('common.statuses.ready'),
               value: moduleStatusCounts.ready,

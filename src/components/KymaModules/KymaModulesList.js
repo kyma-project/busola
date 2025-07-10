@@ -17,6 +17,7 @@ import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
+import { CommunityModulesDeleteBoxContext } from 'components/KymaModules/components/CommunityModulesDeleteBox';
 
 export default function KymaModulesList({ namespaced }) {
   const { t } = useTranslation();
@@ -41,9 +42,12 @@ export default function KymaModulesList({ namespaced }) {
   const {
     installedCommunityModules,
     installedCommunityModulesLoading,
+  } = useContext(CommunityModuleContext);
+
+  const {
     setOpenedModuleIndex: setOpenedCommunityModuleIndex,
     handleResourceDelete: handleCommunityModuleDelete,
-  } = useContext(CommunityModuleContext);
+  } = useContext(CommunityModulesDeleteBoxContext);
 
   const [selectedEntry, setSelectedEntry] = useState(null);
   const { isProtected, protectedResourceWarning } = useProtectedResources();
