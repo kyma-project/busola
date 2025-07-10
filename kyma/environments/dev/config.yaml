@@ -72,16 +72,6 @@ config:
       isEnabled: true
     TRACKING:
       isEnabled: false
-    EVENTING:
-      isEnabled: true
-      selectors:
-        - type: apiGroup
-          apiGroup: eventing.kyma-project.io
-    API_GATEWAY:
-      isEnabled: true
-      selectors:
-        - type: apiGroup
-          apiGroup: gateway.kyma-project.io
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
