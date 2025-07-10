@@ -52,11 +52,13 @@ function getCustomTheme(theme: Theme) {
       background: 'var(--sapBaseColor)',
       fontFamily: 'var(--sapFontFamily)',
       fontSize: '14px',
+      paddingBottom: '0.75rem',
     },
     'pre[class*="language-"]': {
       background: 'var(--sapBaseColor)',
       padding: '0 0.75rem',
-      margin: '0.5rem 0',
+      marginTop: '0.5rem',
+      marginBottom: '0',
       borderRadius: '8px',
     },
     comment: {
