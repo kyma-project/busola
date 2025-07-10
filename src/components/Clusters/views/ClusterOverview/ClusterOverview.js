@@ -23,6 +23,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner';
 
 import './ClusterOverview.scss';
+import { configFeaturesNames } from 'state/types';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -34,7 +35,7 @@ export function ClusterOverview() {
   const {
     isEnabled: isKymaCompanionEnabled,
     config: companionConfig,
-  } = useFeature('KYMA_COMPANION');
+  } = useFeature(configFeaturesNames.KYMA_COMPANION);
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();
