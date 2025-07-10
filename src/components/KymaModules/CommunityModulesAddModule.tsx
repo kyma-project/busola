@@ -266,7 +266,7 @@ export default function CommunityModulesAddModule(props: any) {
   const renderCards = () => {
     const columns = Array.from({ length: columnsCount }, (): any => []);
 
-    communityModulesToDisplay?.map((module, i) => {
+    communityModulesToDisplay?.forEach((module, i) => {
       const card = (
         <CommunityModulesCard
           module={module}
