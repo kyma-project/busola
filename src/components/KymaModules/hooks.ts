@@ -12,7 +12,7 @@ import {
 import {
   getInstalledModules,
   getNotInstalledModules,
-} from './components/communityModulesHelpers';
+} from './components/communityModulesHelpers1';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
