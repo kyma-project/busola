@@ -12,8 +12,8 @@ export interface ConfigFeature {
 
 export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
-  EVENTING: 'EVENTING', //TODO: it can be removed
-  API_GATEWAY: 'API_GATEWAY', //TODO: it can be removed
+  EVENTING: 'EVENTING',
+  API_GATEWAY: 'API_GATEWAY',
   ISTIO: 'ISTIO',
   LEGAL_LINKS: 'LEGAL_LINKS',
   GET_HELP_LINKS: 'GET_HELP_LINKS',
