@@ -14,6 +14,13 @@ export const enum ModuleTemplateStatus {
   NotInstalled = 'Not installed',
 }
 
+export type MetadataType = {
+  name: string;
+  namespace: string;
+  labels: Record<string, string>;
+  annotations: Record<string, string>;
+};
+
 export type ConditionType = {
   lastTransitionTime: string;
   lastUpdateTime: string;
@@ -51,10 +58,7 @@ export type KymaResourceStatusModuleType = {
 export type KymaResourceType = {
   apiVersion: string;
   kind: string;
-  metadata: {
-    name: string;
-    namespace: string;
-  };
+  metadata: MetadataType;
   spec: {
     channel: string;
     modules: KymaResourceSpecModuleType[];
@@ -73,12 +77,7 @@ export type ModuleManagerType = {
 };
 
 export type ModuleTemplateType = {
-  metadata: {
-    name: string;
-    namespace: string;
-    labels: Record<string, string>;
-    annotations: Record<string, string>;
-  };
+  metadata: MetadataType;
   spec: {
     associatedResources: any;
     data: any;
@@ -86,14 +85,42 @@ export type ModuleTemplateType = {
     version: string;
     info?: {
       documentation?: string;
+      icons?: [
+        {
+          link: string;
+          name: string;
+        },
+      ];
     };
     manager: ModuleManagerType;
     moduleName?: string;
+    resources?: [
+      {
+        link: string;
+        name: string;
+      },
+    ];
   };
 };
 
 export type ModuleTemplateListType = {
   items: ModuleTemplateType[];
+};
+
+export type ModuleReleaseMetas = {
+  metadata: MetadataType;
+  spec: {
+    channels: {
+      channel: string;
+      version: string;
+    }[];
+    moduleName: string;
+    beta?: boolean;
+  };
+};
+
+export type ModuleReleaseMetaListType = {
+  items: ModuleReleaseMetas[];
 };
 
 export const getResourcePath = (resource: any) => {
@@ -171,6 +198,13 @@ export const findModuleTemplate = (
   );
 
   return moduleWithInfo ?? moduleTemplateWithoutInfo;
+};
+
+export const getModuleName = (moduleTemplate: ModuleTemplateType): string => {
+  return (
+    moduleTemplate.metadata?.labels['operator.kyma-project.io/module-name'] ??
+    moduleTemplate.spec.moduleName
+  );
 };
 
 export const setChannel = (

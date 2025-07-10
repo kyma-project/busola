@@ -802,6 +802,8 @@ kyma-modules:
   modify-modules: Modify Modules
   module-added: Module added 
   module-uninstall: Module deleted
+  modules-updated: Modules updated
+  modules-update-failed: Modules update failed
   module-documentation: Documentation
   modules-channel: Modules Channel
   add-module: Add Modules
@@ -828,6 +830,8 @@ kyma-modules:
   change: Change
   change-release-channel: Change Release Channel
   change-release-channel-warning: The module's version in the fast channel is usually higher than the version in the regular channel. As downgrades are not supported, switching the channel back to regular will not affect the module's version <0>until the channel version is the same or higher.</0> To use the lower version, you must delete the module and re-add it from the <0>regular</0> channel.
+community-modules:
+  title: Community Modules
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
