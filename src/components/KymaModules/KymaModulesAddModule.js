@@ -240,17 +240,6 @@ export default function KymaModulesAddModule(props) {
         />
       );
       columns[i % columnsCount].push(card);
-      console.log(
-        'columnsCount',
-        columnsCount,
-        'card',
-        card,
-        'i',
-        i,
-        'i % columnsCount',
-        i % columnsCount,
-      );
-      console.log('columns', columns);
     });
 
     return (

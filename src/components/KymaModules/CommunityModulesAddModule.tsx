@@ -1,22 +1,21 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import { useRecoilState } from 'recoil';
 import { useFeature } from 'hooks/useFeature';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { CollapsibleSection } from 'shared/ResourceForm/components/CollapsibleSection';
-import CommunityModuleVersionSelect from 'components/KymaModules/components/CommunityModuleVersionSelect'; //   ModuleDisplayInfo,
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   getAllResourcesYamls,
   getAvailableCommunityModules,
   VersionInfo,
-} from 'components/KymaModules/components/CommunityModulesHelpers';
+} from 'components/KymaModules/components/communityModulesHelpers';
 import {
   getModuleName,
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
-import { Button } from '@ui5/webcomponents-react';
 import React, {
   useCallback,
   useContext,
@@ -33,10 +32,7 @@ import { PostFn, usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
 import CommunityModulesCard from 'components/KymaModules/components/CommunityModulesCard';
 
-import {
-  NotificationContextArgs,
-  useNotification,
-} from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 
 import './KymaModulesAddModule.scss';
@@ -49,6 +45,7 @@ type VersionDisplayInfo = {
   channel: string;
   installed: boolean;
   textToDisplay: string;
+  beta?: boolean;
   icon?: { link: string; name: string };
   docsURL?: string;
 };
@@ -56,25 +53,14 @@ type ModuleDisplayInfo = {
   name: string;
   versions: VersionDisplayInfo[];
 };
-const isModuleInstalled = (
-  foundModuleTemplate: ModuleTemplateType,
-  installedCommunityModules: ModuleTemplateListType,
-) => {
-  return installedCommunityModules.items.find(
-    item =>
-      item.metadata.name === foundModuleTemplate.metadata.name &&
-      item.metadata.namespace === foundModuleTemplate.metadata.namespace,
-  );
-};
 
 function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
-  installedModuleTemplates: ModuleTemplateListType,
   moduleTemplatesToApply: Map<string, ModuleTemplateType>,
   setModulesTemplatesToApply: SetterOrUpdater<Map<string, ModuleTemplateType>>,
   setIsResourceEdited: SetterOrUpdater<any>,
 ): any {
-  return (value: string) => {
+  return (value: string, shouldRemove: boolean) => {
     const newModulesTemplatesToApply = new Map(moduleTemplatesToApply);
 
     const [name, namespace] = value.split('|');
@@ -82,36 +68,21 @@ function onVersionChange(
       item =>
         item.metadata.namespace === namespace && item.metadata.name === name,
     );
-    if (newModuleTemplateToApply) {
-      const moduleTemplateToApply = moduleTemplatesToApply.get(
-        getModuleName(newModuleTemplateToApply),
-      );
-      if (moduleTemplateToApply) {
-        const moduleInstalled = isModuleInstalled(
-          newModuleTemplateToApply,
-          installedModuleTemplates,
-        );
-        if (moduleInstalled) {
-          newModulesTemplatesToApply.delete(
-            getModuleName(newModuleTemplateToApply),
-          );
-        } else {
-          newModulesTemplatesToApply.set(
-            getModuleName(newModuleTemplateToApply),
-            newModuleTemplateToApply,
-          );
-        }
-      } else {
-        newModulesTemplatesToApply.set(
-          getModuleName(newModuleTemplateToApply),
-          newModuleTemplateToApply,
-        );
-      }
-    } else {
+    if (!newModuleTemplateToApply) {
       console.warn(`Can't find module template`);
       return;
     }
 
+    let moduleName = getModuleName(newModuleTemplateToApply);
+
+    if (shouldRemove) {
+      newModulesTemplatesToApply.delete(moduleName);
+    } else if (newModuleTemplateToApply) {
+      newModulesTemplatesToApply.set(
+        getModuleName(newModuleTemplateToApply),
+        newModuleTemplateToApply,
+      );
+    }
     if (newModulesTemplatesToApply.size === 0) {
       setIsResourceEdited({
         isEdited: false,
@@ -121,7 +92,7 @@ function onVersionChange(
         isEdited: true,
       });
     }
-    console.log('newModulesTemplatesToApply', newModulesTemplatesToApply);
+
     setModulesTemplatesToApply(newModulesTemplatesToApply);
   };
 }
@@ -145,52 +116,19 @@ function fetchResourcesToApply(
       });
 
       setResourcesToApply(yamlsResources || []);
-      console.log('resourcesToApply', yamlsResources || []);
     } catch (e) {
       console.error(e);
     }
   })();
 }
 
-function onSave(
-  uploadResources: Function,
-  setIsResourceEdited: Function,
-  notification: NotificationContextArgs,
-  t: Function,
-) {
-  return () => {
-    try {
-      uploadResources();
-      setIsResourceEdited({
-        isEdited: false,
-      });
-
-      notification.notifySuccess({
-        content: t('kyma-modules.modules-updated'),
-      });
-    } catch (e) {
-      notification.notifyError({
-        content: t('kyma-modules.modules-update-failed'),
-      });
-      console.error(e);
-    }
-  };
-}
-
 function transformDataForDisplay(
   availableCommunityModules: Map<string, VersionInfo[]>,
-  t: Function,
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     const formatDisplayText = (v: VersionInfo): string => {
-      const version = `${v.channel ? v.channel + ' ' : ''}(v${v.version})${
-        v.beta ? ' - Beta' : ''
-      }`;
-      if (v.installed) {
-        return t('community-modules.installed') + ` ${version}`;
-      } else {
-        return version;
-      }
+      const version = `${v.channel ? v.channel + ' ' : ''}(v${v.version})`;
+      return version;
     };
 
     return {
@@ -204,6 +142,7 @@ function transformDataForDisplay(
         channel: v.channel ?? '',
         installed: v.installed ?? false,
         textToDisplay: formatDisplayText(v),
+        beta: v.beta,
         icon: v.icon,
         docsURL: v.docsURL,
       })),
@@ -213,6 +152,7 @@ function transformDataForDisplay(
 
 export default function CommunityModulesAddModule(props: any) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     'COMMUNITY_MODULES',
   );
@@ -222,6 +162,8 @@ export default function CommunityModulesAddModule(props: any) {
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
+  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+
   const uploadResources = useUploadResources(
     resourcesToApply,
     setResourcesToApply,
@@ -240,24 +182,26 @@ export default function CommunityModulesAddModule(props: any) {
     moduleReleaseMetas,
   } = useContext(ModuleTemplatesContext);
   const {
-    installedCommunityModuleTemplates,
-    installedCommunityModulesLoading,
+    installedCommunityModules,
+    notInstalledCommunityModuleTemplates,
+    notInstalledCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
-    if (!moduleReleaseMetasLoading && communityModuleTemplates) {
+    if (!moduleReleaseMetasLoading && notInstalledCommunityModuleTemplates) {
       return getAvailableCommunityModules(
-        communityModuleTemplates,
-        installedCommunityModuleTemplates,
+        notInstalledCommunityModuleTemplates,
+        null,
         moduleReleaseMetas,
       );
     } else {
       return new Map();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    communityModuleTemplates,
+    notInstalledCommunityModuleTemplates,
+    installedCommunityModules,
     moduleReleaseMetas,
-    installedCommunityModuleTemplates,
     moduleReleaseMetasLoading,
   ]);
 
@@ -267,12 +211,6 @@ export default function CommunityModulesAddModule(props: any) {
       setResourcesToApply,
       post,
     );
-    console.log(
-      'communityModulesTemplatesToApply',
-      communityModulesTemplatesToApply,
-      'resourcesToApply',
-      resourcesToApply,
-    );
   }, [communityModulesTemplatesToApply]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [columnsCount, setColumnsCount] = useState(2);
@@ -280,14 +218,8 @@ export default function CommunityModulesAddModule(props: any) {
     cardsContainerRef,
     setCardsContainerRef,
   ] = useState<HTMLDivElement | null>(null);
-  //   const setCardsContainerRef: React.Dispatch<React.SetStateAction<HTMLInputElement|null>>
 
   const calculateColumns = useCallback(() => {
-    console.log(
-      'lolo calculateColumns',
-      cardsContainerRef,
-      cardsContainerRef?.clientWidth,
-    );
     if (cardsContainerRef?.clientWidth) {
       const containerWidth = cardsContainerRef?.clientWidth;
       const cardWidth = 350;
@@ -296,7 +228,6 @@ export default function CommunityModulesAddModule(props: any) {
         1,
         Math.floor((containerWidth + gap) / (cardWidth + gap)),
       );
-      console.log('colNumber', colNumber);
       return colNumber;
     }
     return 2;
@@ -317,7 +248,7 @@ export default function CommunityModulesAddModule(props: any) {
       }
     };
   }, [cardsContainerRef, calculateColumns]);
-  if (installedCommunityModulesLoading || moduleTemplatesLoading) {
+  if (notInstalledCommunityModulesLoading || moduleTemplatesLoading) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />
@@ -327,63 +258,31 @@ export default function CommunityModulesAddModule(props: any) {
 
   const communityModulesToDisplay = transformDataForDisplay(
     availableCommunityModules,
-    t,
   );
 
   const isChecked = (name: string) => {
-    return !!communityModulesTemplatesToApply.get(name);
+    const sth = !!communityModulesTemplatesToApply.get(name);
+    return sth;
   };
   const renderCards = () => {
     const columns = Array.from({ length: columnsCount }, (): any => []);
 
     communityModulesToDisplay?.map((module, i) => {
-      console.log(
-        'communityModulesTemplatesToApply',
-        communityModulesTemplatesToApply,
-        'communityModulesToDisplay',
-        communityModulesToDisplay,
-        'i',
-        i,
-        'i % columnsCount',
-        i % columnsCount,
-      );
-      //   const index = communityModulesTemplatesToApply?.findIndex(
-      //     kymaResourceModule => {
-      //       return kymaResourceModule.name === module?.name;
-      //     },
-      //   );
-
       const card = (
         <CommunityModulesCard
           module={module}
-          //   index={index}
           key={`${module.name}+${i}`}
           isChecked={isChecked}
           onChange={onVersionChange(
-            communityModuleTemplates,
-            installedCommunityModuleTemplates,
+            notInstalledCommunityModuleTemplates,
             communityModulesTemplatesToApply,
             setCommunityModulesTemplatesToApply,
             setIsResourceEdited,
           )}
-          //   setCheckbox={setCheckbox}
-          //   selectedModules={selectedModules}
-          //   setSelectedModules={setSelectedModules}
-          //   checkIfStatusModuleIsBeta={checkIfStatusModuleIsBeta}
+          selectedModules={communityModulesTemplatesToApply}
         />
       );
       columns[i % columnsCount].push(card);
-      console.log(
-        'columnsCount',
-        columnsCount,
-        'card',
-        card,
-        'i',
-        i,
-        'i % columnsCount',
-        i % columnsCount,
-      );
-      console.log('columns', columns);
     });
 
     return (
@@ -403,6 +302,35 @@ export default function CommunityModulesAddModule(props: any) {
     );
   };
 
+  const handleSubmit = () => {
+    try {
+      uploadResources();
+
+      notification.notifySuccess({
+        content: t('kyma-modules.messages.success', {
+          resourceType: 'Community Module',
+        }),
+      });
+
+      setLayoutColumn({
+        ...layoutColumn,
+        layout: 'OneColumn',
+        midColumn: null,
+        endColumn: null,
+        showCreate: null,
+      });
+      navigate(window.location.pathname, { replace: true });
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        content: t('kyma-modules.messages.failure', {
+          resourceType: 'Community Module',
+          error: e instanceof Error && e?.message ? e.message : '',
+        }),
+      });
+    }
+  };
+
   if (isCommunityModulesEnabled) {
     return (
       <>
@@ -416,7 +344,7 @@ export default function CommunityModulesAddModule(props: any) {
           afterCreatedCustomMessage={t('kyma-modules.messages.module-added')}
           formWithoutPanel
           className="add-modules-form"
-          onSubmit={() => {}}
+          onSubmit={handleSubmit}
         >
           <>
             {communityModulesToDisplay?.length !== 0 ? (
@@ -444,58 +372,6 @@ export default function CommunityModulesAddModule(props: any) {
             )}
           </>
         </ResourceForm>
-        <section>
-          <UI5Panel
-            title={''}
-            headerActions={
-              <Button
-                className="min-width-button"
-                onClick={onSave(
-                  uploadResources,
-                  setIsResourceEdited,
-                  notification,
-                  t,
-                )}
-                design="Emphasized"
-              >
-                {t('common.buttons.save')}
-              </Button>
-            }
-            children={
-              <CollapsibleSection
-                defaultOpen={true}
-                className="collapsible-margins"
-                title={t('community-modules.title')}
-              >
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '3fr 3fr',
-                    gap: '0.5rem 1rem',
-                  }}
-                >
-                  {communityModulesToDisplay &&
-                    communityModulesToDisplay.map((module, idx) => {
-                      // return <div>lolo - {module.name}</div>;
-                      return (
-                        <CommunityModuleVersionSelect
-                          key={`${module.name}+${idx}`}
-                          module={module}
-                          onChange={onVersionChange(
-                            communityModuleTemplates,
-                            installedCommunityModuleTemplates,
-                            communityModulesTemplatesToApply,
-                            setCommunityModulesTemplatesToApply,
-                            setIsResourceEdited,
-                          )}
-                        />
-                      );
-                    })}
-                </div>
-              </CollapsibleSection>
-            }
-          ></UI5Panel>
-        </section>
 
         {createPortal(<UnsavedMessageBox />, document.body)}
       </>

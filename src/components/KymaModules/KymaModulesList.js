@@ -39,7 +39,7 @@ export default function KymaModulesList({ namespaced }) {
   );
   const {
     installedCommunityModules,
-    communityModulesLoading,
+    installedCommunityModulesLoading,
     setOpenedModuleIndex: setOpenedCommunityModuleIndex,
     handleResourceDelete: handleCommunityModuleDelete,
   } = useContext(CommunityModuleContext);
@@ -48,14 +48,21 @@ export default function KymaModulesList({ namespaced }) {
   const { isProtected, protectedResourceWarning } = useProtectedResources();
 
   useEffect(() => {
-    if (!communityModulesLoading && installedCommunityModules.length) {
+    if (
+      !installedCommunityModulesLoading &&
+      installedCommunityModules?.length
+    ) {
       setSelectedEntry(
-        installedCommunityModules.find(module =>
-          checkSelectedModule(module, layoutState),
+        installedCommunityModules.find(moduleTemplate =>
+          checkSelectedModule(moduleTemplate, layoutState),
         )?.name,
       );
     }
-  }, [communityModulesLoading, installedCommunityModules, layoutState]);
+  }, [
+    installedCommunityModulesLoading,
+    installedCommunityModules,
+    layoutState,
+  ]);
 
   if (moduleTemplatesLoading || kymaResourceLoading) {
     return <Spinner />;
@@ -92,9 +99,8 @@ export default function KymaModulesList({ namespaced }) {
               key="community-modules-list"
               moduleTemplates={communityModuleTemplates}
               selectedModules={installedCommunityModules}
-              modulesLoading={communityModulesLoading}
+              modulesLoading={installedCommunityModulesLoading}
               namespaced={namespaced}
-              resourceUrl={resourceUrl}
               setOpenedModuleIndex={setOpenedCommunityModuleIndex}
               handleResourceDelete={handleCommunityModuleDelete}
               customSelectedEntry={selectedEntry}

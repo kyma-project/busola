@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Card,
   CheckBox,
@@ -12,11 +12,6 @@ import {
 } from '@ui5/webcomponents-react';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
-import {
-  findModuleSpec,
-  findModuleStatus,
-  setChannel,
-} from 'components/KymaModules/support';
 
 async function isImageAvailable(url) {
   try {
@@ -40,14 +35,9 @@ async function getImageSrc(module) {
 
 export default function CommunityModulesCard({
   module,
-  // kymaResource,
-  // index,
   isChecked,
   onChange,
-  // setCheckbox,
-  // checkIfStatusModuleIsBeta,
-  // selectedModules,
-  // setSelectedModules,
+  selectedModules,
 }) {
   const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState('');
@@ -61,52 +51,16 @@ export default function CommunityModulesCard({
     checkImage();
   }, [module]);
 
-  // const defaultVersion = useMemo(
-  //   () =>
-  //     module?.channels?.find(
-  //       channel => channel?.channel === kymaResource?.spec?.channel,
-  //     )?.version,
-  //   [kymaResource?.spec?.channel, module?.channels],
-  // );
-
-  // Check if the module version from kymaResource exists and set the channel if not.
-  // const checkIfVersionExistsAndSet = () => {
-  //   if ( module?.channels?.[0]?.version) {
-  //     setChannel(
-  //       module,
-  //       module.channels[0].version,
-  //       index,
-  //       selectedModules,
-  //       setSelectedModules,
-  //     );
-  //   }
-  // };
-
-  // const getNameForVersion = version => {
-  //   if (typeof version === 'string' && version.startsWith('v')) {
-  //     return version;
-  //   }
-  //   return `v${version}`;
-  // };
-
-  // const getSelectedValue = () => {
-  //   const defaultValue = defaultVersion
-  //     ? 'predefined'
-  //     : module?.channels?.[0]?.channel;
-  //   return (
-  //     findModuleSpec(kymaResource, module.name)?.channel ||
-  //     findModuleStatus(kymaResource, module.name)?.channel ||
-  //     defaultValue
-  //   );
-  // };
-  console.log('module.channels', module.channels);
   return (
-    <Card key={module.name} className="addModuleCard">
+    <Card key={`card-${module.nniame}`} className="addModuleCard">
       <ListItemStandard
         className="moduleCardHeader"
+        key={`list-${module.name}`}
         onClick={() => {
-          // setCheckbox(module, !isChecked(module.name), index);
-          // checkIfVersionExistsAndSet();
+          onChange(
+            `${module.versions[0].moduleTemplate.name}|${module.versions[0].moduleTemplate.namespace}`,
+            isChecked(module.name),
+          );
         }}
       >
         <CheckBox className="checkbox" checked={isChecked(module.name)} />
@@ -114,23 +68,7 @@ export default function CommunityModulesCard({
           <Title level="H6" size="H6">
             {module.name}
           </Title>
-          <Text className="bsl-has-color-status-4">
-            {/* {findModuleStatus(kymaResource, module.name)?.version
-              ? `v${findModuleStatus(kymaResource, module.name)?.version} ${
-                  checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''
-                }`
-              : module.channels.find(
-                  channel => kymaResource?.spec?.channel === channel.channel,
-                )?.version
-              ? `v${
-                  module.channels.find(
-                    channel => kymaResource?.spec?.channel === channel.channel,
-                  )?.version
-                } ${checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''}`
-              : module?.channels?.[0]?.version
-              ? `v${module?.channels?.[0]?.version}`
-              : t('kyma-modules.no-version')} */}
-          </Text>
+          <Text className="bsl-has-color-status-4"></Text>
         </div>
         {imageSrc !== '' && (
           <img
@@ -166,22 +104,17 @@ export default function CommunityModulesCard({
           <Select
             accessibleName={`${module.name} channel select`}
             onChange={event => {
-              onChange(event.detail.selectedOption.value);
+              onChange(event.detail.selectedOption.value, false);
             }}
-            value={'default'}
-            // value={getSelectedValue()}
-
+            value={`${module.versions[0].moduleTemplate.name}|${module.versions[0].moduleTemplate.namespace}`}
             className="channel-select"
           >
             {module.versions?.map((version, idx) => (
               <Option
-                selected={version.installed}
-                // selected={
-                //   channel.channel ===
-                //   findModuleSpec(kymaResource, module.name)?.channel
-                // }
-                // key={`${idx}-${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}
+                selected={selectedModules.get(module.name)}
+                key={`option-${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
                 value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
+                additionalText={version.beta ? 'Beta' : ''}
               >
                 {version.textToDisplay}
               </Option>

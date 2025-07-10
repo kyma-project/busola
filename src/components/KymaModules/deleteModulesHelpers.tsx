@@ -325,13 +325,13 @@ export const getCommunityResourceUrls = async (
     resources.map(async (resource: any) => {
       if (!resource) return '';
       const resourceName = resource?.metadata?.name || resource?.name;
+
       const url = await getUrl(
         resource,
         'default',
         clusterNodes,
         namespaceNodes,
       );
-
       return `${url}/${resourceName}`;
     }),
   );

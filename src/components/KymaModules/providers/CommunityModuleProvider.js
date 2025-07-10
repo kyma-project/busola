@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { t } from 'i18next';
-import { useGetInstalledModules } from '../hooks';
+import { useGetInstalledModules, useGetNotInstalledModules } from '../hooks';
 import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
 import { createPortal } from 'react-dom';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
@@ -15,6 +15,8 @@ export const CommunityModuleContext = createContext({
   installedCommunityModules: [],
   installedCommunityModuleTemplates: { items: [] },
   installedCommunityModulesLoading: false,
+  notInstalledCommunityModuleTemplates: { items: [] },
+  notInstalledCommunityModulesLoading: false,
 });
 
 export function CommunityModuleContextProvider({
@@ -36,6 +38,13 @@ export function CommunityModuleContextProvider({
     installed: installedCommunityModuleTemplates,
     loading: installedCommunityModulesLoading,
   } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
+  const {
+    notInstalled: notInstalledCommunityModuleTemplates,
+    loading: notInstalledCommunityModulesLoading,
+  } = useGetNotInstalledModules(
+    communityModuleTemplates,
+    moduleTemplatesLoading,
+  );
 
   useEffect(() => {
     if (layoutState?.layout) {
@@ -72,6 +81,8 @@ export function CommunityModuleContextProvider({
         installedCommunityModules: installedCommunityModules,
         installedCommunityModuleTemplates: installedCommunityModuleTemplates,
         communityModulesLoading: installedCommunityModulesLoading,
+        notInstalledCommunityModuleTemplates: notInstalledCommunityModuleTemplates,
+        notInstalledCommunityModulesLoading: notInstalledCommunityModulesLoading,
         DeleteMessageBox: DeleteMessageBox,
         deleteModuleButton: deleteModuleButton,
         handleResourceDelete: handleResourceDelete,

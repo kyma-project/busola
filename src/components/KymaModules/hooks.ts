@@ -9,6 +9,10 @@ import {
   ModuleTemplateStatus,
   ModuleTemplateType,
 } from './support';
+import {
+  getInstalledModules,
+  getNotInstalledModules,
+} from './components/communityModulesHelpers';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
@@ -173,7 +177,11 @@ export const useFetchModuleData = (
 export const useGetInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesLoading?: boolean,
-) => {
+): {
+  installed: ModuleTemplateListType;
+  loading: boolean;
+  error?: any;
+} => {
   const { data: managers, loading, error } = useFetchModuleData(
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.manager ?? null,
@@ -182,26 +190,39 @@ export const useGetInstalledModules = (
   );
 
   if (moduleTemplatesLoading) {
-    return { installed: [], loading: true, error: null };
+    return { installed: { items: [] }, loading: true, error: null };
   }
   if (!moduleTemplates) {
-    return { installed: [], loading: false, error: null };
+    return { installed: { items: [] }, loading: false, error: null };
   }
 
-  const filtered = moduleTemplates.items?.filter(
-    module => !!managers[module.metadata.name],
+  const installed = getInstalledModules(moduleTemplates, managers);
+  return { installed, loading, error };
+};
+export const useGetNotInstalledModules = (
+  moduleTemplates: ModuleTemplateListType,
+  moduleTemplatesLoading?: boolean,
+): {
+  notInstalled: ModuleTemplateListType;
+  loading: boolean;
+  error?: any;
+} => {
+  const { data: managers, loading, error } = useFetchModuleData(
+    moduleTemplates,
+    (module: ModuleTemplateType) => module?.spec?.manager ?? null,
+    'manager',
+    moduleTemplatesLoading,
   );
 
-  const installed =
-    filtered?.map(module => ({
-      name:
-        module.metadata?.labels['operator.kyma-project.io/module-name'] ??
-        module.spec.moduleName,
-      version: module.spec.version,
-      resource: module.spec.data,
-    })) ?? [];
+  if (moduleTemplatesLoading) {
+    return { notInstalled: { items: [] }, loading: true, error: null };
+  }
+  if (!moduleTemplates) {
+    return { notInstalled: { items: [] }, loading: false, error: null };
+  }
 
-  return { installed, loading, error };
+  const notInstalled = getNotInstalledModules(moduleTemplates, managers);
+  return { notInstalled, loading, error };
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {
@@ -222,6 +243,7 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
           namespace: manager?.namespace,
         },
       } as KymaResourceType);
+
       async function fetchResource() {
         try {
           const response = await fetch({ relativeUrl: path });

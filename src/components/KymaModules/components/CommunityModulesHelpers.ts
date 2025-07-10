@@ -24,20 +24,13 @@ export type VersionInfo = {
 
 export function getAvailableCommunityModules(
   communityModulesTemplates: ModuleTemplateListType,
-  installedModuleTemplates: ModuleTemplateListType,
+  installedModuleTemplates: ModuleTemplateListType | null,
   moduleReleaseMetas: ModuleReleaseMetaListType,
 ): Map<string, VersionInfo[]> {
-  console.log(
-    'communityModulesTemplates',
-    communityModulesTemplates,
-    'installedModuleTemplates',
-    installedModuleTemplates,
-    'moduleReleaseMetas',
-    moduleReleaseMetas,
-  );
   const availableCommunityModules = new Map<string, VersionInfo[]>();
   fillModuleVersions(availableCommunityModules, communityModulesTemplates);
-  markInstalledVersion(availableCommunityModules, installedModuleTemplates);
+  if (installedModuleTemplates)
+    markInstalledVersion(availableCommunityModules, installedModuleTemplates);
   fillModulesWithMetadata(availableCommunityModules, moduleReleaseMetas);
   return availableCommunityModules;
 }
@@ -104,7 +97,6 @@ function markInstalledVersion(
   availableCommunityModules: Map<string, VersionInfo[]>,
   installedModuleTemplates: ModuleTemplateListType,
 ) {
-  console.log('installedModuleTemplates', installedModuleTemplates);
   (installedModuleTemplates?.items || []).forEach(installedModule => {
     const foundModuleVersions = availableCommunityModules.get(
       getModuleName(installedModule),
@@ -176,6 +168,21 @@ export function getInstalledModules(
 
   return {
     items: installedModuleTemplates,
+  };
+}
+export function getNotInstalledModules(
+  moduleTemplates: ModuleTemplateListType,
+  managers: any,
+): ModuleTemplateListType {
+  const notInstalledModuleTemplates = moduleTemplates.items?.filter(module => {
+    const foundManager = managers[module.metadata.name];
+    if (!foundManager) {
+      return true;
+    }
+  });
+
+  return {
+    items: notInstalledModuleTemplates,
   };
 }
 
