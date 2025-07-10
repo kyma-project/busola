@@ -155,13 +155,17 @@ export const GenericList = ({
   useEffect(() => {
     const selected = entries.find(entry => {
       const name = entry?.metadata?.name;
-      return name && window.location.href.includes(name);
+      return (
+        name &&
+        window.location.href.includes(name) &&
+        window.location.href.includes(resourceType.toLowerCase())
+      );
     })?.metadata?.name;
 
     if (selected) {
       setEntrySelected(selected);
     }
-  }, [entries]);
+  }, [entries, resourceType]);
 
   const headerActions = (
     <>

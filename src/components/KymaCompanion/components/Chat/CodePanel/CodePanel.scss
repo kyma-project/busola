@@ -16,6 +16,17 @@
 }
 
 .code-panel {
+  border-radius: 4px;
+
+  pre {
+    max-height: 420px; // the height is 20 lines times 21px per line (14px font size x 1.5 line height)
+    overflow: auto !important;
+
+    &::-webkit-scrollbar {
+      background: transparent;
+    }
+  }
+
   .action-button {
     color: var(--sapTextColor);
   }

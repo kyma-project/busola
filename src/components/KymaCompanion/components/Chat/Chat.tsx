@@ -34,6 +34,7 @@ type ChatProps = {
   setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
   error: AIError;
   setError: React.Dispatch<React.SetStateAction<AIError>>;
+  hide: boolean;
 };
 
 export const Chat = ({
@@ -45,6 +46,7 @@ export const Chat = ({
   setLoading,
   isReset,
   setIsReset,
+  hide = false,
 }: ChatProps) => {
   const { t } = useTranslation();
   const chatRef = useRef<HTMLDivElement | null>(null);
@@ -252,11 +254,22 @@ export const Chat = ({
   };
 
   const scrollToBottom = () => {
-    if (chatRef?.current?.lastChild)
-      (chatRef.current.lastChild as HTMLElement).scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-      });
+    const lastChild = chatRef?.current?.lastElementChild as HTMLElement | null;
+    if (!lastChild) return;
+
+    const userMessages = lastChild.querySelectorAll<HTMLElement>(
+      '.message-context .message-container.right-aligned',
+    );
+    const lastMessage = userMessages[userMessages.length - 1];
+    if (!lastMessage) return;
+
+    const contextLabel = lastChild.querySelector<HTMLElement>('.context-label');
+    const offset = contextLabel?.offsetHeight || 0;
+
+    chatRef.current?.scrollTo({
+      top: lastMessage.offsetTop - offset,
+      behavior: 'smooth',
+    });
   };
 
   useEffect(() => {
@@ -315,6 +328,7 @@ export const Chat = ({
 
   return (
     <FlexBox
+      style={hide ? { display: 'none' } : undefined}
       direction="Column"
       justifyContent="SpaceBetween"
       className="chat-container"

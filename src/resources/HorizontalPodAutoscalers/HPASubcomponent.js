@@ -13,7 +13,8 @@ const ExtensibilityList = React.lazy(() =>
 
 export const HPASubcomponent = props => {
   const { t } = useTranslation();
-  const { kind, name } = props.metadata?.ownerReferences?.[0] ?? {};
+  const resourceKind = props.kind;
+  const resourceName = props.metadata.name;
   const namespace = useRecoilValue(activeNamespaceIdState);
   const extensions = useRecoilValue(extensionsState);
 
@@ -23,10 +24,9 @@ export const HPASubcomponent = props => {
 
   const url = `/apis/autoscaling/v2/namespaces/${namespace}/horizontalpodautoscalers`;
   const hpaFilter = hpa => {
-    if (!kind || !name) return true;
     return (
-      hpa.spec?.scaleTargetRef?.kind === kind &&
-      hpa.spec?.scaleTargetRef?.name === name
+      hpa.spec?.scaleTargetRef?.kind === resourceKind &&
+      hpa.spec?.scaleTargetRef?.name === resourceName
     );
   };
 

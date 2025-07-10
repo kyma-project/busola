@@ -1,7 +1,4 @@
-import {
-  ErrResponse,
-  MessageChunk,
-} from 'components/KymaCompanion/components/Chat/Message/Message';
+import { ErrResponse, MessageChunk } from '../components/Chat/types';
 
 export type handleChatResponseFn = (chunk: MessageChunk) => void;
 export type handleChatErrorResponseFn = (errResponse: ErrResponse) => void;

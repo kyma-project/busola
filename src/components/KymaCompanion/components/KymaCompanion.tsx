@@ -8,6 +8,7 @@ import {
 } from 'state/companion/showKymaCompanionAtom';
 import { Chat } from './Chat/Chat';
 import { ChatGroup, chatGroupHelpers } from './Chat/types';
+import Disclaimer from './Disclaimer/Disclaimer';
 import './KymaCompanion.scss';
 
 export interface AIError {
@@ -21,6 +22,7 @@ export default function KymaCompanion() {
   const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
     showKymaCompanionState,
   );
+  const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [isReset, setIsReset] = useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<ChatGroup[]>(
@@ -47,19 +49,25 @@ export default function KymaCompanion() {
       <Card
         className="kyma-companion"
         header={
-          <div className="kyma-companion__header">
-            <Title level="H5" size="H5" className="title">
+          <div
+            className={`kyma-companion__${
+              showDisclaimer ? 'disclaimer-' : ''
+            }header`}
+          >
+            <Title level="H5" size="H5" className="companion-title">
               {t('kyma-companion.name')}
             </Title>
             <div className="actions-container">
-              <Button
-                design="Transparent"
-                icon="restart"
-                disabled={loading}
-                tooltip={t('common.buttons.reset')}
-                className="action"
-                onClick={() => handleRefresh()}
-              />
+              {!showDisclaimer && (
+                <Button
+                  design="Transparent"
+                  icon="restart"
+                  disabled={loading}
+                  tooltip={t('common.buttons.reset')}
+                  className="action"
+                  onClick={() => handleRefresh()}
+                />
+              )}
               <Button
                 design="Transparent"
                 icon={
@@ -73,6 +81,15 @@ export default function KymaCompanion() {
                   })
                 }
               />
+              {!showDisclaimer && (
+                <Button
+                  design="Transparent"
+                  icon="hint"
+                  tooltip={t('kyma-companion.disclaimer.tooltip')}
+                  className="action"
+                  onClick={() => setShowDisclaimer(true)}
+                />
+              )}
               <Button
                 design="Transparent"
                 icon="decline"
@@ -95,7 +112,11 @@ export default function KymaCompanion() {
           setIsReset={setIsReset}
           error={error}
           setError={setError}
+          hide={showDisclaimer}
         />
+        {showDisclaimer && (
+          <Disclaimer hideDisclaimer={() => setShowDisclaimer(false)} />
+        )}
       </Card>
     </div>
   );

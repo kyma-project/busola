@@ -7,6 +7,7 @@ import {
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { NavNode } from 'state/types';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
+import { postForCommunityResources } from 'components/KymaModules/components/communityModulesHelpers';
 
 interface Counts {
   [key: string]: number;
@@ -278,28 +279,6 @@ export const deleteCrResources = async (
     return 'Error while deleting Custom Resource';
   }
 };
-
-export default async function postForCommunityResources(
-  post: PostFn,
-  link: string,
-) {
-  if (!link) {
-    console.error('No link provided for community resource');
-    return false;
-  }
-
-  try {
-    const response = await post('/modules/community-resource', { link });
-    if (response?.length) {
-      return response;
-    }
-    console.error('Empty or invalid response:', response);
-    return false;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return false;
-  }
-}
 
 export async function getAllResourcesYamls(links: string[], post: PostFn) {
   if (links?.length) {

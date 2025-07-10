@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import {
-  getBytes,
-  getCpus,
-} from '../../resources/Namespaces/ResourcesUsage.js';
+import { getBytes, getCpus } from 'shared/helpers/resources';
 
 const getPercentageFromUsage = (value, total) => {
   if (total === 0) {
@@ -123,18 +120,12 @@ const emptyResources = {
 };
 
 function addResources(a, b) {
-  if (!a) {
-    if (!b) {
-      return structuredClone(emptyResources);
-    }
-    return b;
+  if (!a && !b) {
+    return structuredClone(emptyResources);
   }
-  if (!b) {
-    if (!a) {
-      return structuredClone(emptyResources);
-    }
-    return a;
-  }
+  if (!a) return b ?? structuredClone(emptyResources);
+  if (!b) return a;
+
   return {
     limits: {
       cpu: getCpus(a?.limits?.cpu) + getCpus(b?.limits?.cpu),

@@ -11,6 +11,7 @@ export function savePreviousPath() {
   const queryParams = new URLSearchParams(window.location.search);
 
   const layoutParam = queryParams.get('layout');
+  const resourceNamespaceParam = queryParams.get('resourceNamespace');
   const showCreateParam = queryParams.get('showCreate');
   const createTypeParam = queryParams.get('createType');
   const showEditParam = queryParams.get('showEdit');
@@ -18,11 +19,18 @@ export function savePreviousPath() {
 
   let previousPath = window.location.pathname;
 
-  if (layoutParam || showCreateParam || showEditParam) {
+  if (
+    layoutParam ||
+    resourceNamespaceParam ||
+    showCreateParam ||
+    showEditParam
+  ) {
     previousPath += '?';
     const params = [];
 
     if (layoutParam) params.push(`layout=${layoutParam}`);
+    if (resourceNamespaceParam)
+      params.push(`resourceNamespace=${resourceNamespaceParam}`);
     if (showCreateParam) params.push(`showCreate=${showCreateParam}`);
     if (createTypeParam) params.push(`createType=${createTypeParam}`);
     if (showEditParam) params.push(`showEdit=${showEditParam}`);

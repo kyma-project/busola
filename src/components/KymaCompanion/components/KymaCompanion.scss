@@ -10,15 +10,25 @@
     height: 100%;
     width: 100%;
 
+    &__disclaimer-header {
+      @extend .kyma-companion__header;
+      background: unset !important;
+      background-position: unset !important;
+      background-size: unset !important;
+      background-color: var(--sapAssistant_Color1) !important;
+    }
+
     &__header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: var(--sapAssistant_Color1);
+      background: var(--sapAssistant_BackgroundGradient);
+      background-size: 100% 400%;
+      background-position: 0 0;
       min-height: 60px;
       padding: 0 1rem;
 
-      .title {
+      .companion-title {
         color: white;
         text-shadow: none;
       }
