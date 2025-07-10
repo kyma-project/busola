@@ -176,9 +176,8 @@ export function getNotInstalledModules(
 ): ModuleTemplateListType {
   const notInstalledModuleTemplates = moduleTemplates.items?.filter(module => {
     const foundManager = managers[module.metadata.name];
-    if (!foundManager) {
-      return true;
-    }
+
+    return !foundManager;
   });
 
   return {
