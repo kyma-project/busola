@@ -803,10 +803,6 @@ kyma-modules:
   installed-modules: Installed Modules
   predefined-channel: Predefined
   modify-modules: Modify Modules
-  module-added: Module added 
-  module-uninstall: Module deleted
-  modules-updated: Modules updated
-  modules-update-failed: Modules update failed
   module-documentation: Documentation
   modules-channel: Modules Channel
   add-module: Add Modules
@@ -839,6 +835,8 @@ kyma-modules:
     success: '{{resourceType}} installed'
     module-added: Module added 
     module-uninstall: Module deleted
+    modules-updated: Modules updated
+    modules-update-failed: Modules update failed
 community-modules:
   title: Community Modules
 legal:
