@@ -10,7 +10,7 @@ import {
   getAllResourcesYamls,
   getAvailableCommunityModules,
   VersionInfo,
-} from 'components/KymaModules/components/communityModulesHelpers1';
+} from 'components/KymaModules/components/communityModulesHelpers';
 import {
   getModuleName,
   ModuleTemplateListType,
