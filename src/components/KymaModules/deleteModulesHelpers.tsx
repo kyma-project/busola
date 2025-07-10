@@ -5,6 +5,8 @@ import {
   ModuleTemplateListType,
 } from './support';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
+import { NavNode } from 'state/types';
+import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
 interface Counts {
   [key: string]: number;
@@ -312,25 +314,25 @@ export async function getAllResourcesYamls(links: string[], post: PostFn) {
   }
 }
 
-export const getCommunityResourceUrls = (resources: any) => {
+export const getCommunityResourceUrls = async (
+  resources: any,
+  clusterNodes: NavNode[],
+  namespaceNodes: NavNode[],
+) => {
   if (!resources?.length) return [];
 
-  return resources.map((resource: any) => {
-    if (!resource) return '';
+  return await Promise.all(
+    resources.map(async (resource: any) => {
+      if (!resource) return '';
+      const resourceName = resource?.metadata?.name || resource?.name;
+      const url = await getUrl(
+        resource,
+        'default',
+        clusterNodes,
+        namespaceNodes,
+      );
 
-    const apiVersion =
-      resource?.apiVersion || `${resource?.group}/${resource?.version}`;
-    const resourceName = resource?.metadata?.name || resource?.name;
-    const resourceNamespace =
-      resource?.metadata?.namespace || resource?.namespace;
-    const api = apiVersion === 'v1' ? 'api' : 'apis';
-
-    return resourceNamespace
-      ? `/${api}/${apiVersion}/namespaces/${resourceNamespace}/${pluralize(
-          resource.kind,
-        ).toLowerCase()}/${resourceName}`
-      : `/${api}/${apiVersion}/${pluralize(
-          resource.kind || '',
-        ).toLowerCase()}/${resourceName}`;
-  });
+      return `${url}/${resourceName}`;
+    }),
+  );
 };
