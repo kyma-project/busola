@@ -122,11 +122,8 @@ async function readChunk(
         return;
       }
       const receivedString = decoder.decode(value, { stream: true });
-      // Split by newlines to handle multiple JSON objects in one chunk
-      const messages = receivedString
-        .split('\n')
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
+      // handle multiple JSON objects in one chunk
+      const messages = splitJsonObjects(receivedString);
 
       messages.forEach(message => {
         const chunk = JSON.parse(message);
@@ -145,6 +142,17 @@ async function readChunk(
         type: ErrorType.FATAL,
       });
     });
+}
+
+function splitJsonObjects(text: string): string[] {
+  return text
+    .split(/\}\s*\{/)
+    .map((part, index, array) => {
+      if (index === 0) return part + (array.length > 1 ? '}' : '');
+      if (index === array.length - 1) return '{' + part;
+      return '{' + part + '}';
+    })
+    .filter(part => part.trim().length > 0);
 }
 
 export default async function getChatResponse({
