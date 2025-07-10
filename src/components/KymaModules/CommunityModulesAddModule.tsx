@@ -177,7 +177,6 @@ export default function CommunityModulesAddModule(props: any) {
 
   const {
     moduleTemplatesLoading,
-    communityModuleTemplates,
     moduleReleaseMetasLoading,
     moduleReleaseMetas,
   } = useContext(ModuleTemplatesContext);
