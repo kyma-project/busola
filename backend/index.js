@@ -1,8 +1,10 @@
-import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
+import { handleK8sRequests } from './kubernetes/handler';
 import { handleTracking } from './tracking.js';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
+import addLogger from './logging';
+import { serveMonaco, serveStaticApp } from './statics';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');
@@ -67,7 +69,7 @@ const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 const isDocker = process.env.IS_DOCKER === 'true';
 
-const handleRequest = makeHandleRequest();
+const handleRequest = addLogger(handleK8sRequests);
 
 if (isDocker) {
   // Running in dev mode
