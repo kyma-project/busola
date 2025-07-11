@@ -73,7 +73,6 @@ async function handlePromptSuggestions(req, res) {
     res
       .status(500)
       .json({ error: 'Failed to fetch AI chat data.' + escape(req.id) });
-    // res.contentType('text/plain; charset=utf-8');
   }
 }
 
