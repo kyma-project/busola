@@ -3,13 +3,12 @@ import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 import escape from 'lodash.escape';
-import addLogger from '../logging';
 
 const config = require('../config.js');
 
 const tokenManager = new TokenManager();
 const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.config
-  ?.apiBaseUrl ??''}/api/conversations/`;
+  ?.apiBaseUrl ?? ''}/api/conversations/`;
 const router = express.Router();
 
 router.use(express.json());
