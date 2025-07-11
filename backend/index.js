@@ -4,7 +4,7 @@ import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import addLogger from './logging';
-import { serveMonaco, serveStaticApp } from 'backend/statics';
+import { serveMonaco, serveStaticApp } from './statics';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');
