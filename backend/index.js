@@ -1,8 +1,11 @@
-import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
+import { handleK8sRequests } from './kubernetes/kubernetesRouter';
 import { handleTracking } from './tracking.js';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
+import addLogger from './logging';
+import path from 'path';
+import rateLimit from 'express-rate-limit';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');
@@ -67,7 +70,7 @@ const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 const isDocker = process.env.IS_DOCKER === 'true';
 
-const handleRequest = makeHandleRequest();
+const handleRequest = addLogger(handleK8sRequests);
 
 if (isDocker) {
   // Running in dev mode
@@ -92,3 +95,23 @@ process.on('SIGINT', function() {
 server.listen(port, '0.0.0.0', address, () => {
   console.log(`Busola backend server started @ ${port}!`);
 });
+
+// Rate limiter: Max 200 requests per 1 minutes per IP
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 200,
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const serveStaticApp = (app, requestPath, directoryPath) => {
+  app.use(requestPath, express.static(path.join(__dirname, directoryPath)));
+  app.get(requestPath + '*splat', limiter, (_, res) =>
+    res.sendFile(path.join(__dirname + directoryPath + '/index.html')),
+  );
+};
+
+const serveMonaco = app => {
+  app.use('/vs', express.static(path.join(__dirname, '/core-ui/vs')));
+};

@@ -2,13 +2,14 @@ import express from 'express';
 import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
+import escape from 'lodash.escape';
+import addLogger from '../logging';
 
 const config = require('../config.js');
 
 const tokenManager = new TokenManager();
 const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.config
-  ?.apiBaseUrl ?? ''}/api/conversations/`;
-
+  ?.apiBaseUrl ??''}/api/conversations/`;
 const router = express.Router();
 
 router.use(express.json());
@@ -68,7 +69,11 @@ async function handlePromptSuggestions(req, res) {
       conversationId: data?.conversation_id,
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch AI chat data' });
+    req.log.warn(error);
+    res
+      .status(500)
+      .json({ error: 'Failed to fetch AI chat data.' + escape(req.id) });
+    // res.contentType('text/plain; charset=utf-8');
   }
 }
 
@@ -151,15 +156,16 @@ async function handleChatMessage(req, res) {
     await pipeline(stream, res);
   } catch (error) {
     if (!res.headersSent) {
-      res.status(500).json({ error: 'Failed to fetch AI chat data' });
+      req.log.warn(error);
+      res
+        .status(500)
+        .json({ error: 'Failed to fetch AI chat data.' + escape(req.id) });
     } else {
       setTimeout(() => {
-        res.write(
-          JSON.stringify({
-            error: 'Failed to fetch AI chat data',
-          }),
-        );
-        res.end();
+        req.log.warn(error);
+        res
+          .status(500)
+          .json({ error: 'Failed to fetch AI chat data.' + escape(req.id) });
       }, 500);
     }
   }
@@ -219,8 +225,8 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
-router.post('/suggestions', handlePromptSuggestions);
-router.post('/messages', handleChatMessage);
-router.post('/followup', handleFollowUpSuggestions);
+router.post('/suggestions', addLogger(handlePromptSuggestions));
+router.post('/messages', addLogger(handleChatMessage));
+router.post('/followup', addLogger(handleFollowUpSuggestions));
 
 export default router;
