@@ -6,9 +6,9 @@ import { Readable } from 'stream';
 const config = require('../config.js');
 
 const tokenManager = new TokenManager();
-const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.link ??
-  ''}/api/conversations/`;
-console.log(COMPANION_API_BASE_URL);
+const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.config
+  ?.apiBaseUrl ?? ''}/api/conversations/`;
+
 const router = express.Router();
 
 router.use(express.json());

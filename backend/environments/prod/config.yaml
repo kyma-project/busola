@@ -5,4 +5,6 @@ config:
     TRACKING:
       isEnabled: false
     KYMA_COMPANION:
-      link: ''
+      config:
+        apiBaseUrl: ''
+        tokenUrl: ''
