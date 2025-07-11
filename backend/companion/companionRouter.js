@@ -3,6 +3,7 @@ import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 import escape from 'lodash.escape';
+import addLogger from '../logging';
 
 const config = require('../config.js');
 
