@@ -50,6 +50,7 @@ export function RichEditorDataField({
     >
       {internalData.map((item, index) => (
         <RichEditorSection
+          key={index}
           item={item}
           setInternalData={setInternalData}
           onChange={data =>

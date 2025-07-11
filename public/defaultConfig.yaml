@@ -58,16 +58,6 @@ config:
         feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/preview/previewId/1fa80b40-56c3-4b20-9902-877df3da3493/SV_dmWATTfes5SstG6?Q_CHL=preview&Q_SurveyVersionID=current
     TRACKING:
       isEnabled: false
-    EVENTING:
-      isEnabled: true
-      selectors:
-        - type: apiGroup
-          apiGroup: eventing.kyma-project.io
-    API_GATEWAY:
-      isEnabled: true
-      selectors:
-        - type: apiGroup
-          apiGroup: gateway.kyma-project.io
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null

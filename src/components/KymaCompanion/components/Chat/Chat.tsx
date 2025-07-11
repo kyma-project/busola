@@ -254,11 +254,22 @@ export const Chat = ({
   };
 
   const scrollToBottom = () => {
-    if (chatRef?.current?.lastChild)
-      (chatRef.current.lastChild as HTMLElement).scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-      });
+    const lastChild = chatRef?.current?.lastElementChild as HTMLElement | null;
+    if (!lastChild) return;
+
+    const userMessages = lastChild.querySelectorAll<HTMLElement>(
+      '.message-context .message-container.right-aligned',
+    );
+    const lastMessage = userMessages[userMessages.length - 1];
+    if (!lastMessage) return;
+
+    const contextLabel = lastChild.querySelector<HTMLElement>('.context-label');
+    const offset = contextLabel?.offsetHeight || 0;
+
+    chatRef.current?.scrollTo({
+      top: lastMessage.offsetTop - offset,
+      behavior: 'smooth',
+    });
   };
 
   useEffect(() => {

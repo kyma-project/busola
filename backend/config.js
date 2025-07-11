@@ -15,7 +15,7 @@ function getConfigDir() {
 function getEnvConfig() {
   const envConfigDir = getConfigDir();
   let configYaml = {};
-  console.log(path.join('./', envConfigDir, '/config.yaml'));
+
   if (envConfigDir) {
     configYaml = jsyaml.load(
       fs.readFileSync(path.join(envConfigDir, '/config.yaml')),

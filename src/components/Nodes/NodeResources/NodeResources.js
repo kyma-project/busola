@@ -5,7 +5,7 @@ import './NodeResources.scss';
 import {
   bytesToHumanReadable,
   cpusToHumanReadable,
-} from '../../../resources/Namespaces/ResourcesUsage.js';
+} from 'shared/helpers/resources';
 
 export function NodeResources({ metrics, resources }) {
   const { t } = useTranslation();

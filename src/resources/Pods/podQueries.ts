@@ -10,7 +10,7 @@ import {
   UsageMetrics,
   UseGetOptions,
 } from './types';
-import { getBytes, getCpus } from 'resources/Namespaces/ResourcesUsage';
+import { getBytes, getCpus } from 'shared/helpers/resources';
 
 // Finding capacity for a given usage.
 const getAllocatable = (

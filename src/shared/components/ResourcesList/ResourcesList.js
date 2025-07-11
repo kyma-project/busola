@@ -55,7 +55,7 @@ ResourcesList.propTypes = {
   createActionLabel: PropTypes.string,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
-  rawResourceType: PropTypes.string.isRequired,
+  rawResourceType: PropTypes.string,
   resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,

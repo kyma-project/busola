@@ -2,7 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SetterOrUpdater, useRecoilValue } from 'recoil';
 import { Category } from 'state/navigation/categories';
-import { SideNavigationItem, Ui5CustomEvent } from '@ui5/webcomponents-react';
+import {
+  SideNavigationItem,
+  SideNavigationItemDomRef,
+  Ui5CustomEvent,
+} from '@ui5/webcomponents-react';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
@@ -12,6 +16,7 @@ import {
   DataSourcesContextProvider,
 } from 'components/Extensibility/contexts/DataSources';
 import { cloneDeep } from 'lodash';
+import { SideNavigationItemClickEventDetail } from '@ui5/webcomponents-fiori/dist/SideNavigationItemBase';
 
 type CategoryItemProps = {
   category: Category;
@@ -29,7 +34,12 @@ export function CategoryItem({
   const expanded = expandedCategories.includes(category.key);
   const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
 
-  const handleAddExpandedCategory = (e: Ui5CustomEvent) => {
+  const handleAddExpandedCategory = (
+    e: Ui5CustomEvent<
+      SideNavigationItemDomRef,
+      SideNavigationItemClickEventDetail
+    >,
+  ) => {
     e.preventDefault();
 
     if (!isSidebarCondensed) {

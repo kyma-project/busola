@@ -5,4 +5,4 @@ config:
     TRACKING:
       isEnabled: false
     KYMA_COMPANION:
-      link: 'test-stage'
+      link: 'https://companion.cp.stage.kyma.cloud.sap'

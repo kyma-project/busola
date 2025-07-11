@@ -9,7 +9,7 @@ import {
   bytesToHumanReadable,
   cpusToHumanReadable,
   getBytes,
-} from 'resources/Namespaces/ResourcesUsage';
+} from 'shared/helpers/resources';
 import {
   getHealthyDaemonsets,
   getHealthyReplicasCount,

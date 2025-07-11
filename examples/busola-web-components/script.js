@@ -111,4 +111,6 @@ class MyCustomPage extends HTMLElement {
 }
 
 // Define the custom element
-customElements.define('my-custom-page', MyCustomPage);
+if (!customElements.get('my-custom-page')) {
+  customElements.define('my-custom-page', MyCustomPage);
+}

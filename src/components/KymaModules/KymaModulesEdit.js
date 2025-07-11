@@ -34,6 +34,7 @@ import {
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
+import CommunityModulesEdit from 'components/KymaModules/components/CommunityModulesEdit';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
@@ -125,7 +126,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
   });
   const {
     data: moduleTemplates,
-    loading: lodingModuleTemplates,
+    loading: loadingModuleTemplates,
   } = useModuleTemplatesQuery({
     skip: !resourceName,
   });
@@ -149,7 +150,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
     onSave: false,
   });
 
-  if (lodingModuleTemplates || loadingModulesReleaseMetas) {
+  if (loadingModuleTemplates || loadingModulesReleaseMetas) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />
@@ -459,6 +460,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
           </ResourceForm.CollapsibleSection>
         </ResourceForm>
       )}
+      <CommunityModulesEdit className={'kyma-modules-create'} />
     </>
   );
 }
