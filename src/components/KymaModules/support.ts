@@ -331,36 +331,3 @@ export const splitModuleTemplates = (
 
   return { kymaTemplates, communityTemplates };
 };
-
-export const getModuleResourcesLinks = (
-  modulesAddData: {
-    name: string;
-    channels: [
-      { version: string; channel: string; resources: { link: string }[] },
-    ];
-  }[],
-  selectedModules: {
-    name: string;
-    channel?: string;
-    version?: string;
-  }[],
-) => {
-  const resources: any = [];
-
-  (selectedModules || []).forEach(({ name, channel, version }) => {
-    const moduleData = modulesAddData?.find(module => module.name === name);
-
-    if (moduleData) {
-      moduleData.channels.forEach(
-        ({ channel: ch, version: v, resources: r }) => {
-          const resource = r.find(res => v === version && ch === channel);
-          if (resource?.link) {
-            resources.push(resource.link);
-          }
-        },
-      );
-    }
-  });
-
-  return resources;
-};

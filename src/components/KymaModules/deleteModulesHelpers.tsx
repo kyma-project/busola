@@ -280,19 +280,6 @@ export const deleteCrResources = async (
   }
 };
 
-export async function getAllResourcesYamls(links: string[], post: PostFn) {
-  if (links?.length) {
-    const yamlRes = await Promise.all(
-      links.map(async res => {
-        if (res) {
-          return await postForCommunityResources(post, res);
-        }
-      }),
-    );
-    return yamlRes.flat();
-  }
-}
-
 export const getCommunityResourceUrls = async (
   resources: any,
   clusterNodes: NavNode[],

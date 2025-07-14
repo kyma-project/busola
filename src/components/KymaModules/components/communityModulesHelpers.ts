@@ -22,14 +22,12 @@ export type VersionInfo = {
 
 export function getAvailableCommunityModules(
   communityModulesTemplates: ModuleTemplateListType,
-  installedModuleTemplates: ModuleTemplateListType | null,
+  installedModuleTemplates: ModuleTemplateListType,
   moduleReleaseMetas: ModuleReleaseMetaListType,
 ): Map<string, VersionInfo[]> {
   const availableCommunityModules = new Map<string, VersionInfo[]>();
   fillModuleVersions(availableCommunityModules, communityModulesTemplates);
-  if (installedModuleTemplates) {
-    markInstalledVersion(availableCommunityModules, installedModuleTemplates);
-  }
+  markInstalledVersion(availableCommunityModules, installedModuleTemplates);
   fillModulesWithMetadata(availableCommunityModules, moduleReleaseMetas);
   return availableCommunityModules;
 }
