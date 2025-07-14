@@ -57,8 +57,6 @@ export default function ClusterModulesCard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statuses, statusesError]);
 
-  console.log(installedCommunityModules);
-
   const display =
     !error && !loadingModules && modules && !installedCommunityModulesLoading;
 
@@ -73,7 +71,6 @@ export default function ClusterModulesCard() {
           extraInfo={[
             {
               title: t('kyma-modules.installed-community-modules'),
-              // TODO: get value
               value: installedCommunityModules?.length,
             },
             {

@@ -11,7 +11,7 @@ import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails'
 import { t } from 'i18next';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
-import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
+import { KymaModuleContextProvider } from 'components/KymaModules/providers/KymaModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 import { CommunityModulesDeleteBoxContextProvider } from 'components/KymaModules/components/CommunityModulesDeleteBox';
 import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
