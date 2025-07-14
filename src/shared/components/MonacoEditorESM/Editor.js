@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
@@ -32,7 +31,6 @@ export function Editor({
   schema,
 }) {
   const { t } = useTranslation();
-  const prevValueRef = useRef(value);
 
   // prepare autocompletion
   const {
@@ -48,7 +46,7 @@ export function Editor({
     schema,
   });
 
-  // set autocompletion global context to the current editor and initialize an editor instance
+  // Initialize editor instance
   const { editorInstance, divRef, descriptor } = useCreateEditor({
     value,
     options,
@@ -57,27 +55,13 @@ export function Editor({
     readOnly,
   });
 
-  // manage listeners
-  useOnFocus({
-    editorInstance,
-    onFocus,
-  });
+  // Set up event listeners
+  useOnFocus({ editorInstance, onFocus });
   useOnBlur({ editorInstance, onBlur });
   useOnMount({ editorInstance, onMount });
   useOnChange({ editorInstance, onChange });
 
-  // update editor when was error
-  useEffect(() => {
-    if (
-      prevValueRef.current !== value &&
-      editorInstance &&
-      (error || readOnly)
-    ) {
-      editorInstance.setValue(value);
-      prevValueRef.current = value;
-    }
-  }, [value, editorInstance, error, readOnly]);
-
+  // Handle value updates from parent
   useUpdateValueOnParentChange({
     updateValueOnParentChange,
     editorInstance,
@@ -132,7 +116,7 @@ export function Editor({
             {warnings.map(m => (
               <span
                 className="line"
-                key={`${m.startLineNumber}${m.startColumn}`}
+                key={`${m.startLineNumber}-${m.startColumn}`}
               >
                 {t('common.tooltips.line')} {m.startLineNumber},{' '}
                 {t('common.tooltips.column')} {m.startColumn}: {m.message}

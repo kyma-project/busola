@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { isEqual } from 'lodash';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { editor, Uri } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -12,8 +11,7 @@ export const getEditorTheme = theme => {
     case 'sap_horizon_hcb':
       return 'hc-black';
     case 'light_dark':
-      return window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
+      return window.matchMedia?.('(prefers-color-scheme: dark)').matches
         ? 'vs-dark'
         : 'vs';
     default:
@@ -34,10 +32,7 @@ export const useCreateEditor = ({
   const divRef = useRef(null);
   const { t } = useTranslation();
 
-  const memoizedOptions = useRef({});
-  if (!isEqual(memoizedOptions.current, options)) {
-    memoizedOptions.current = options;
-  }
+  const memoizedOptions = useMemo(() => options, [options]);
 
   const [editorInstance, setEditorInstance] = useState(null);
 
@@ -63,7 +58,7 @@ export const useCreateEditor = ({
       scrollbar: {
         alwaysConsumeMouseWheel: false,
       },
-      ...memoizedOptions.current,
+      ...memoizedOptions,
     });
 
     setEditorInstance(instance);
