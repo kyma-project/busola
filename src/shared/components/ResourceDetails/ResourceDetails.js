@@ -29,7 +29,7 @@ import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/Readab
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
+import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.

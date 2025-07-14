@@ -18,8 +18,9 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import ClusterStats from './ClusterStats';
 import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import BannerCarousel from 'components/Extensibility/components/FeaturedCard/BannerCarousel';
+import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { columnLayoutState } from 'state/columnLayoutAtom';
+import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner';
 
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
@@ -30,6 +31,10 @@ const Injections = React.lazy(() =>
 
 export function ClusterOverview() {
   const { t } = useTranslation();
+  const {
+    isEnabled: isKymaCompanionEnabled,
+    config: companionConfig,
+  } = useFeature(configFeaturesNames.KYMA_COMPANION);
   const clusterValidation = useFeature(configFeaturesNames.CLUSTER_VALIDATION);
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
@@ -92,11 +97,16 @@ export function ClusterOverview() {
           <>
             <BannerCarousel
               children={
-                <Injections
-                  destination="ClusterOverview"
-                  slot="banner"
-                  root=""
-                />
+                <>
+                  {isKymaCompanionEnabled && (
+                    <AIBanner feedbackUrl={companionConfig?.feedbackLink} />
+                  )}
+                  <Injections
+                    destination="ClusterOverview"
+                    slot="banner"
+                    root=""
+                  />
+                </>
               }
             />
             <Injections

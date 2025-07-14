@@ -1,6 +1,6 @@
 import { Button, FlexBox, Link, Text } from '@ui5/webcomponents-react';
 import { useTranslation, Trans } from 'react-i18next';
-import JouleIcon from '../JouleIcon';
+import JouleIcon from '../AIBanner/assets/JouleIconWhite.svg';
 import './Disclaimer.scss';
 
 interface DisclaimerProps {
@@ -19,7 +19,7 @@ export default function Disclaimer({ hideDisclaimer }: DisclaimerProps) {
         alignItems="Center"
         gap={16}
       >
-        <JouleIcon size={4} />
+        <img src={JouleIcon} alt="Joule Icon" className="bsl-icon-xxxl" />
         <Text id="disclaimer-title">
           {t('kyma-companion.disclaimer.title')}
         </Text>

@@ -73,6 +73,8 @@ config:
       isEnabled: false
     KYMA_COMPANION:
       isEnabled: false
+      config:
+        feedbackLink: ''
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null

@@ -71,6 +71,8 @@ config:
       isEnabled: false
     KYMA_COMPANION:
       isEnabled: false
+      config:
+        feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/form/SV_dmWATTfes5SstG6
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
