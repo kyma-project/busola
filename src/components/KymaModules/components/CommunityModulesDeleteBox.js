@@ -6,14 +6,26 @@ import { KymaModuleContext } from 'components/KymaModules/providers/KymaModulePr
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import { createPortal } from 'react-dom';
 
-export default function CommunityModulesDeleteBox(
+export const CommunityModulesDeleteBoxContext = createContext({
+  setOpenedModuleIndex: () => {},
+  showDeleteDialog: () => {},
+  openedModuleIndex: undefined,
+  deleteModuleButton: <></>,
+  handleResourceDelete: () => {},
+});
+
+export function CommunityModulesDeleteBoxContextProvider({
+  handleResourceDelete,
   showDeleteDialog,
   DeleteMessageBox,
   layoutState,
   setLayoutColumn,
-) {
+  children,
+}) {
   const { t } = useTranslation();
+  const [openedModuleIndex, setOpenedModuleIndex] = useState();
 
   const { kymaResource } = useContext(KymaModuleContext);
 
@@ -25,12 +37,6 @@ export default function CommunityModulesDeleteBox(
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
-
-  const {
-    setOpenedModuleIndex,
-    openedModuleIndex,
-    handleResourceDelete,
-  } = useContext(CommunityModulesDeleteBoxContextProvider);
 
   const [detailsOpen, setDetailsOpen] = useState(false);
 
@@ -59,59 +65,37 @@ export default function CommunityModulesDeleteBox(
   );
 
   return (
-    getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !==
-      undefined &&
-    !installedCommunityModulesLoading &&
-    !moduleTemplatesLoading &&
-    showDeleteDialog && (
-      <CommunityModulesDeleteBoxContext.Provider
-        value={{
-          setOpenedModuleIndex: setOpenedModuleIndex,
-          showDeleteDialog: showDeleteDialog,
-          DeleteMessageBox: DeleteMessageBox,
-          deleteModuleButton: deleteModuleButton,
-          handleResourceDelete: handleResourceDelete,
-        }}
-      >
-        <ModulesDeleteBox
-          kymaResource={kymaResource}
-          DeleteMessageBox={DeleteMessageBox}
-          selectedModules={installedCommunityModules}
-          chosenModuleIndex={getOpenedModuleIndex(
-            openedModuleIndex,
-            installedCommunityModules,
-          )}
-          moduleTemplates={communityModuleTemplates}
-          detailsOpen={detailsOpen}
-          setChosenModuleIndex={setOpenedModuleIndex}
-          setLayoutColumn={setLayoutColumn}
-          isCommunity={true}
-        />
-      </CommunityModulesDeleteBoxContext.Provider>
-    )
-  );
-}
-
-export const CommunityModulesDeleteBoxContext = createContext({
-  setOpenedModuleIndex: () => {},
-  openedModuleIndex: undefined,
-  handleResourceDelete: () => {},
-});
-
-export function CommunityModulesDeleteBoxContextProvider({
-  handleResourceDelete,
-  children,
-}) {
-  const [openedModuleIndex, setOpenedModuleIndex] = useState();
-
-  return (
     <CommunityModulesDeleteBoxContext.Provider
       value={{
         setOpenedModuleIndex: setOpenedModuleIndex,
         openedModuleIndex: openedModuleIndex,
         handleResourceDelete: handleResourceDelete,
+        deleteModuleButton: deleteModuleButton,
       }}
     >
+      {createPortal(
+        getOpenedModuleIndex(openedModuleIndex, installedCommunityModules) !==
+          undefined &&
+          !installedCommunityModulesLoading &&
+          !moduleTemplatesLoading &&
+          showDeleteDialog && (
+            <ModulesDeleteBox
+              kymaResource={kymaResource}
+              DeleteMessageBox={DeleteMessageBox}
+              selectedModules={installedCommunityModules}
+              chosenModuleIndex={getOpenedModuleIndex(
+                openedModuleIndex,
+                installedCommunityModules,
+              )}
+              moduleTemplates={communityModuleTemplates}
+              detailsOpen={detailsOpen}
+              setChosenModuleIndex={setOpenedModuleIndex}
+              setLayoutColumn={setLayoutColumn}
+              isCommunity={true}
+            />
+          ),
+        document.body,
+      )}
       {children}
     </CommunityModulesDeleteBoxContext.Provider>
   );

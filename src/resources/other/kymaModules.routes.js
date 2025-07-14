@@ -13,9 +13,7 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/KymaModules/providers/ModuleTemplatesProvider';
-import CommunityModulesDeleteBox, {
-  CommunityModulesDeleteBoxContextProvider,
-} from 'components/KymaModules/components/CommunityModulesDeleteBox';
+import { CommunityModulesDeleteBoxContextProvider } from 'components/KymaModules/components/CommunityModulesDeleteBox';
 import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
 
 const KymaModulesList = React.lazy(() =>
@@ -133,16 +131,12 @@ const ColumnWrapper = ({
       >
         <CommunityModuleContextProvider>
           <CommunityModulesDeleteBoxContextProvider
+            setLayoutColumn={setLayoutColumn}
+            layoutState={layoutState}
+            DeleteMessageBox={DeleteMessageBox}
             handleResourceDelete={handleResourceDelete}
+            showDeleteDialog={showDeleteDialog}
           >
-            createPortal(
-            <CommunityModulesDeleteBox
-              setLayoutColumn={setLayoutColumn}
-              layoutState={layoutState}
-              showDeleteDialog={showDeleteDialog}
-              DeleteMessageBox={DeleteMessageBox}
-            />
-            , document.body)
             <Suspense fallback={<Spinner />}>
               <FlexibleColumnLayout
                 style={{ height: '100%' }}
