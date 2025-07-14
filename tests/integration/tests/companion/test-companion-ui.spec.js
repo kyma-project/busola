@@ -58,7 +58,7 @@ context('Test Companion UI', () => {
         .should('be.visible');
 
       cy.get('@featurecard')
-        .contains('ui5-button', 'Try Joule')
+        .contains('ui5-button', 'Try Out Joule')
         .click();
 
       cy.get('.kyma-companion').as('companion');
