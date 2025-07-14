@@ -284,6 +284,7 @@ export const getCommunityResourceUrls = async (
   resources: any,
   clusterNodes: NavNode[],
   namespaceNodes: NavNode[],
+  fetchFn: Function,
 ) => {
   if (!resources?.length) return [];
 
@@ -297,6 +298,7 @@ export const getCommunityResourceUrls = async (
         'default',
         clusterNodes,
         namespaceNodes,
+        fetchFn,
       );
       return `${url}/${resourceName}`;
     }),

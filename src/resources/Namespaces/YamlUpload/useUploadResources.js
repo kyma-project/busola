@@ -27,6 +27,7 @@ export const getUrl = async (
   namespaceId,
   clusterNodes,
   namespaceNodes,
+  fetchFn,
 ) => {
   const resourceType = pluralize(resource.kind.toLowerCase());
   const hasNamespace = !!resource?.metadata?.namespace;
@@ -44,7 +45,7 @@ export const getUrl = async (
   } else if (isKnownNamespaceWide) {
     return getResourceUrl(resource, namespaceId);
   } else {
-    const response = await fetch(getResourceKindUrl(resource));
+    const response = await fetchFn(getResourceKindUrl(resource));
     const json = await response.json();
     const apiGroupResources = json?.resources;
     const apiGroup = apiGroupResources.find(r => r?.kind === resource?.kind);
@@ -96,6 +97,7 @@ export function useUploadResources(
       namespaceId,
       clusterNodes,
       namespaceNodes,
+      fetch,
     );
     const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
     const existingResource = await fetchPossibleExistingResource(urlWithName);

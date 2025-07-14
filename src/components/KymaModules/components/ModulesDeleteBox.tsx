@@ -123,6 +123,7 @@ export const ModulesDeleteBox = ({
             crUResources,
             clusterNodes,
             namespaceNodes,
+            fetchFn,
           )
         : await generateAssociatedResourcesUrls(
             crUResources,
@@ -145,6 +146,7 @@ export const ModulesDeleteBox = ({
           communityResources,
           clusterNodes,
           namespaceNodes,
+          fetchFn,
         );
         setCommunityResourcesUrls(communityUrls);
       }
