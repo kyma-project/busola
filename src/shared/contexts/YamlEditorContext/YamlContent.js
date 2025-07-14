@@ -5,6 +5,10 @@ import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
+const EDITOR_OPTIONS = {
+  minimap: { enabled: false },
+};
+
 export function YamlContent({
   yaml,
   setChangedYamlFn,
@@ -44,9 +48,7 @@ export function YamlContent({
           onChange={setChangedYamlFn}
           onMount={setEditor}
           readOnly={readOnly}
-          options={{
-            minimap: { enabled: false },
-          }}
+          options={EDITOR_OPTIONS}
         />
       </ErrorBoundary>
     </>

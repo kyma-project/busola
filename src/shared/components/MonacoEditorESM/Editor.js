@@ -13,6 +13,8 @@ import { useCreateEditor } from './hooks/useCreateEditor';
 
 import './Editor.scss';
 
+const DEFAULT_OPTIONS = {};
+
 export function Editor({
   value = '',
   error, // used by the resourceFormWrapper to display error that previous input is used
@@ -26,7 +28,7 @@ export function Editor({
   height,
   onBlur,
   onFocus,
-  options = {}, // IEditorOptions, check Monaco API for the list of options
+  options = DEFAULT_OPTIONS, // IEditorOptions, check Monaco API for the list of options
   placeholder = null,
   schema,
 }) {

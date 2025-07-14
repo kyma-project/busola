@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { editor, Uri } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -32,8 +32,6 @@ export const useCreateEditor = ({
   const divRef = useRef(null);
   const { t } = useTranslation();
 
-  const memoizedOptions = useMemo(() => options, [options]);
-
   const [editorInstance, setEditorInstance] = useState(null);
 
   useEffect(() => {
@@ -58,7 +56,7 @@ export const useCreateEditor = ({
       scrollbar: {
         alwaysConsumeMouseWheel: false,
       },
-      ...memoizedOptions,
+      ...options,
     });
 
     setEditorInstance(instance);
@@ -67,7 +65,6 @@ export const useCreateEditor = ({
       editor.getModel(descriptor.current)?.dispose();
       instance.dispose();
     };
-    // missing dependencies: 'value'
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     descriptor,
@@ -77,6 +74,7 @@ export const useCreateEditor = ({
     language,
     t,
     readOnly,
+    options,
   ]);
 
   return { editorInstance, divRef, descriptor };
