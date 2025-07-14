@@ -70,9 +70,9 @@ async function handlePromptSuggestions(req, res) {
     });
   } catch (error) {
     req.log.warn(error);
-    res
-      .status(500)
-      .json({ error: 'Failed to fetch AI chat data.' + escape(req.id) });
+    res.status(500).json({
+      error: 'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
+    });
   }
 }
 
@@ -156,15 +156,15 @@ async function handleChatMessage(req, res) {
   } catch (error) {
     if (!res.headersSent) {
       req.log.warn(error);
-      res
-        .status(500)
-        .json({ error: 'Failed to fetch AI chat data.' + escape(req.id) });
+      res.status(500).json({
+        error: 'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
+      });
     } else {
       setTimeout(() => {
         req.log.warn(error);
-        res
-          .status(500)
-          .json({ error: 'Failed to fetch AI chat data.' + escape(req.id) });
+        res.status(500).json({
+          error: 'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
+        });
       }, 500);
     }
   }
