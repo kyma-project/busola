@@ -1,5 +1,7 @@
+const config = require('../config.js');
+
 export async function getKcpToken() {
-  const tokenUrl = 'https://kymatest.accounts400.ondemand.com/oauth2/token';
+  const tokenUrl = config.features?.KYMA_COMPANION?.config?.tokenUrl ?? '';
   const grantType = 'client_credentials';
 
   const secretManagerCredentials = getSecretManagerCredentials();

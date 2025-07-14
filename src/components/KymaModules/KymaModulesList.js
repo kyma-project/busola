@@ -16,12 +16,13 @@ import { checkSelectedModule } from './support';
 import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from 'state/types';
 
 export default function KymaModulesList({ namespaced }) {
   const { t } = useTranslation();
   const layoutState = useRecoilValue(columnLayoutState);
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
-    'COMMUNITY_MODULES',
+    configFeaturesNames.COMMUNITY_MODULES,
   );
 
   const {

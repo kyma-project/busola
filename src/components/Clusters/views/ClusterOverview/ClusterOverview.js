@@ -31,11 +31,11 @@ const Injections = React.lazy(() =>
 
 export function ClusterOverview() {
   const { t } = useTranslation();
-  const clusterValidation = useFeature('CLUSTER_VALIDATION');
   const {
     isEnabled: isKymaCompanionEnabled,
     config: companionConfig,
   } = useFeature(configFeaturesNames.KYMA_COMPANION);
+  const clusterValidation = useFeature(configFeaturesNames.CLUSTER_VALIDATION);
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();

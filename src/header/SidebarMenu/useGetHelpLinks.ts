@@ -1,6 +1,6 @@
 import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
-import { ConfigFeature } from 'state/types';
+import { ConfigFeature, configFeaturesNames } from 'state/types';
 
 export type GetHelpLink = {
   label: string;
@@ -13,8 +13,9 @@ interface GetHelpLinksFeature extends ConfigFeature {
 
 export const useGetHelpLinks = (): GetHelpLink[] => {
   const { t, i18n } = useTranslation();
-  const getHelpLinksConfig = useFeature<GetHelpLinksFeature>('GET_HELP_LINKS')
-    ?.config;
+  const getHelpLinksConfig = useFeature<GetHelpLinksFeature>(
+    configFeaturesNames.GET_HELP_LINKS,
+  )?.config;
 
   if (!getHelpLinksConfig) return [];
 

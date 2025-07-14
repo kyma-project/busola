@@ -4,7 +4,7 @@ import { partial } from 'lodash';
 import { assignNodesToCategories } from './assignToCategories';
 import { Category } from './categories';
 import { hasCurrentScope } from './filters/hasCurrentScope';
-import { NavNode, Scope } from '../types';
+import { configFeaturesNames, NavNode, Scope } from '../types';
 
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
@@ -33,7 +33,8 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     let allNodes = [...navNodes, ...externalNodes];
 
     const extResources = get(extensionsState);
-    const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
+    const isExtensibilityOn =
+      features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
     if (isExtensibilityOn && extResources) {
       const extNavNodes = extResources.map(ext => mapExtResourceToNavNode(ext));
       allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);

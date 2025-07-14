@@ -13,13 +13,16 @@ import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
+import { configFeaturesNames } from 'state/types';
 
 export function useProtectedResources() {
   const { t } = useTranslation();
   const popoverRef = useRef(null);
   const [popoverMessage, setPopoverMessage] = useState('');
 
-  const protectedResourcesFeature = useFeature('PROTECTED_RESOURCES');
+  const protectedResourcesFeature = useFeature(
+    configFeaturesNames.PROTECTED_RESOURCES,
+  );
   const disableResourceProtection = useRecoilValue(
     disableResourceProtectionState,
   );
