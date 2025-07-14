@@ -2,9 +2,9 @@ import { useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   Avatar,
+  ListItemStandard,
   ShellBar,
   ShellBarItem,
-  ListItemStandard,
   ToggleButton,
 } from '@ui5/webcomponents-react';
 
@@ -45,7 +45,9 @@ export function Header() {
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
 
-  const { isEnabled: isKymaCompanionEnabled } = useFeature('KYMA_COMPANION');
+  const { isEnabled: isKymaCompanionEnabled } = useFeature(
+    configFeaturesNames.KYMA_COMPANION,
+  );
   const [showCompanion, setShowCompanion] = useRecoilState(
     showKymaCompanionState,
   );

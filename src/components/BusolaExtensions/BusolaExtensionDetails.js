@@ -20,9 +20,9 @@ import { useUrl } from 'hooks/useUrl';
 import {
   formatCurrentVersion,
   getLatestVersion,
+  getMigrationFunctions,
   getSupportedVersions,
   migrateToLatest,
-  getMigrationFunctions,
 } from '../../components/Extensibility/migration';
 import { SectionEditor } from './SectionEditor';
 
@@ -30,6 +30,7 @@ import { BusolaExtensionEdit } from './BusolaExtensionEdit';
 import { SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { configFeaturesNames } from 'state/types';
 
 export function BusolaExtensionDetails({ name, namespace }) {
   const { t } = useTranslation();
@@ -125,7 +126,9 @@ export function BusolaExtensionDetails({ name, namespace }) {
 
   const ExtensibilityVersion = configmap => {
     const { t } = useTranslation();
-    const { isEnabled: isExtensibilityEnabled } = useFeature('EXTENSIBILITY');
+    const { isEnabled: isExtensibilityEnabled } = useFeature(
+      configFeaturesNames.EXTENSIBILITY,
+    );
     const hasExtensibilityLabel =
       configmap?.metadata?.labels &&
       configmap?.metadata?.labels['busola.io/extension'] === 'resource';

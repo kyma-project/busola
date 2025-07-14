@@ -1,6 +1,6 @@
 import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
-import { ConfigFeature } from 'state/types';
+import { ConfigFeature, configFeaturesNames } from 'state/types';
 
 export type LegalLink = {
   label: string;
@@ -13,7 +13,9 @@ interface LegalLinksFeature extends ConfigFeature {
 
 export const useGetLegalLinks = (): LegalLink[] => {
   const { t, i18n } = useTranslation();
-  const legalLinksConfig = useFeature<LegalLinksFeature>('LEGAL_LINKS')?.config;
+  const legalLinksConfig = useFeature<LegalLinksFeature>(
+    configFeaturesNames.LEGAL_LINKS,
+  )?.config;
 
   if (!legalLinksConfig) return [];
 

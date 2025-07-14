@@ -8,6 +8,7 @@ import { KubeconfigOIDCAuth } from 'types';
 import { GardenerLoginFeature } from './GardenerLoginFeature';
 import { useGardenerLogin } from './useGardenerLoginFunction';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
+import { configFeaturesNames } from 'state/types';
 
 export default function GardenerLogin() {
   const [token, setToken] = useState('');
@@ -16,7 +17,9 @@ export default function GardenerLogin() {
 
   const { t } = useTranslation();
 
-  const gardenerFeature = useFeature<GardenerLoginFeature>('GARDENER_LOGIN');
+  const gardenerFeature = useFeature<GardenerLoginFeature>(
+    configFeaturesNames.GARDENER_LOGIN,
+  );
   const navigate = useNavigate();
   const performGardenerLogin = useGardenerLogin(setReport);
 

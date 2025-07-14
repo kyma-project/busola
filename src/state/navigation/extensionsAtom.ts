@@ -1,4 +1,4 @@
-import { ExtWizardConfig } from './../types';
+import { configFeaturesNames, ExtWizardConfig } from './../types';
 import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
@@ -414,13 +414,13 @@ export const useGetExtensions = () => {
   const permissionSet = useRecoilValue(permissionSetsSelector);
   const { namespace } = useUrl();
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
-    'EXTENSIBILITY_INJECTIONS',
+    configFeaturesNames.EXTENSIBILITY_INJECTIONS,
   );
   const { isEnabled: isExtensibilityWizardEnabled } = useFeature(
-    'EXTENSIBILITY_WIZARD',
+    configFeaturesNames.EXTENSIBILITY_WIZARD,
   );
   const { isEnabled: isExtensibilityCustomComponentsEnabled } = useFeature(
-    'EXTENSIBILITY_CUSTOM_COMPONENTS',
+    configFeaturesNames.EXTENSIBILITY_CUSTOM_COMPONENTS,
   );
   const { data: crds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,

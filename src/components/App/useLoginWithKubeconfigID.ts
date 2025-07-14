@@ -12,10 +12,13 @@ import {
 } from 'state/utils/getClustersInfo';
 import { TFunction } from 'i18next';
 import { useFeature } from 'hooks/useFeature';
-import { ConfigFeature } from 'state/types';
+import {
+  ClusterStorage,
+  ConfigFeature,
+  configFeaturesNames,
+} from 'state/types';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { configurationAtom } from 'state/configuration/configurationAtom';
-import { ClusterStorage } from 'state/types';
 import {
   KubeConfigMultipleState,
   multipleContexts,
@@ -155,7 +158,9 @@ const loadKubeconfigIdCluster = async (
 export type KubeconfigIdHandleState = 'not started' | 'loading' | 'done';
 
 export function useLoginWithKubeconfigID() {
-  const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>('KUBECONFIG_ID');
+  const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
+    configFeaturesNames.KUBECONFIG_ID,
+  );
   const configuration = useRecoilValue(configurationAtom);
   const clusters = useRecoilValue(clustersState);
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
@@ -238,7 +243,9 @@ export function useLoginWithKubeconfigID() {
 }
 
 export function useLoadDefaultKubeconfigId() {
-  const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>('KUBECONFIG_ID')!;
+  const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
+    configFeaturesNames.KUBECONFIG_ID,
+  )!;
   const clusters = useRecoilValue(clustersState);
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();

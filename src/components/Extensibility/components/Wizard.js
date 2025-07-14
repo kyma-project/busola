@@ -9,12 +9,15 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 import { createPortal } from 'react-dom';
+import { configFeaturesNames } from 'state/types';
 
 export function Wizard({ value, structure, singleRootResource }) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const [showWizard, setShowWizard] = useState(false);
-  const { isEnabled: isWizardEnabled } = useFeature('EXTENSIBILITY_WIZARD');
+  const { isEnabled: isWizardEnabled } = useFeature(
+    configFeaturesNames.EXTENSIBILITY_WIZARD,
+  );
   const wizardName = structure?.wizard || '';
 
   const handleCloseWithEscape = e => {

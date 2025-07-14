@@ -1,6 +1,6 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
 
-import { NavNode } from '../types';
+import { configFeaturesNames, NavNode } from '../types';
 
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { configurationAtom } from '../configuration/configurationAtom';
@@ -20,7 +20,8 @@ export const availableNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
     const extResources = get(extensionsState);
 
     let extensibilityNodes: NavNode[] = [];
-    const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
+    const isExtensibilityOn =
+      features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
     if (isExtensibilityOn && extResources) {
       const extNavNodes = extResources?.map(ext =>
         mapExtResourceToNavNode(ext),
