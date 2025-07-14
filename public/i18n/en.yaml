@@ -770,7 +770,7 @@ kyma-companion:
     title: Meet Joule
     description: Joule is your personal, contextual assistant, ready to help with all Kyma-related questions. Ask about Kyma features, Kubernetes best practices, step-by-step instructions, and more.
     buttons:
-      try-joule: Try Joule
+      try-joule: Try Out Joule
       feedback: Give Feedback
   name: Joule
   opener:
