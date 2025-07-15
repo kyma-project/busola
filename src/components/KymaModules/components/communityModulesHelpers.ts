@@ -209,3 +209,28 @@ export async function getAllResourcesYamls(links: string[], post: PostFn) {
     return yamlRes.flat();
   }
 }
+
+export function fetchResourcesToApply(
+  communityModulesToApply: Map<string, ModuleTemplateType>,
+  setResourcesToApply: Function,
+  post: PostFn,
+) {
+  const resourcesLinks = [...communityModulesToApply.values()]
+    .map(moduleTpl => moduleTpl.spec.resources)
+    .flat()
+    .map(item => item?.link || '');
+
+  (async function() {
+    try {
+      const yamls = await getAllResourcesYamls(resourcesLinks, post);
+
+      const yamlsResources = yamls?.map(resource => {
+        return { value: resource };
+      });
+
+      setResourcesToApply(yamlsResources || []);
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+}

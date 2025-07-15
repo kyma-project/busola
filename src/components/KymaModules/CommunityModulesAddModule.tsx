@@ -7,7 +7,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
-  getAllResourcesYamls,
+  fetchResourcesToApply,
   getAvailableCommunityModules,
   VersionInfo,
 } from 'components/KymaModules/components/communityModulesHelpers';
@@ -16,13 +16,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
@@ -97,31 +91,6 @@ function onVersionChange(
   };
 }
 
-function fetchResourcesToApply(
-  communityModulesToApply: Map<string, ModuleTemplateType>,
-  setResourcesToApply: Function,
-  post: PostFn,
-) {
-  const resourcesLinks = [...communityModulesToApply.values()]
-    .map(moduleTpl => moduleTpl.spec.resources)
-    .flat()
-    .map(item => item?.link || '');
-
-  (async function() {
-    try {
-      const yamls = await getAllResourcesYamls(resourcesLinks, post);
-
-      const yamlsResources = yamls?.map(resource => {
-        return { value: resource };
-      });
-
-      setResourcesToApply(yamlsResources || []);
-    } catch (e) {
-      console.error(e);
-    }
-  })();
-}
-
 function transformDataForDisplay(
   availableCommunityModules: Map<string, VersionInfo[]>,
 ): ModuleDisplayInfo[] {
@@ -190,7 +159,7 @@ export default function CommunityModulesAddModule(props: any) {
     if (!moduleReleaseMetasLoading && notInstalledCommunityModuleTemplates) {
       return getAvailableCommunityModules(
         notInstalledCommunityModuleTemplates,
-        null,
+        {} as ModuleTemplateListType,
         moduleReleaseMetas,
       );
     } else {
@@ -347,19 +316,7 @@ export default function CommunityModulesAddModule(props: any) {
         >
           <>
             {communityModulesToDisplay?.length !== 0 ? (
-              <>
-                {/* {checkIfSelectedModuleIsBeta() ? (
-                <MessageStrip
-                  key={'beta'}
-                  design="Critical"
-                  hideCloseButton
-                  className="sap-margin-top-small"
-                >
-                  {t('kyma-modules.beta-alert')}
-                </MessageStrip>
-              ) : null} */}
-                {renderCards()}
-              </>
+              renderCards()
             ) : (
               <MessageStrip
                 design="Critical"
