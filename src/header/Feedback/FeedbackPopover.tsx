@@ -15,9 +15,14 @@ import { configFeaturesNames } from 'state/types';
 import './FeedbackPopover.scss';
 
 export default function FeedbackPopover() {
-  const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
+  const { isEnabled: isFeedbackEnabled, link: kymaFeedbackLink } = useFeature(
     configFeaturesNames.FEEDBACK,
   );
+  const {
+    isEnabled: isKymaCompanionEnabled,
+    config: { feedbackLink: companionFeedbackLink },
+  } = useFeature(configFeaturesNames.KYMA_COMPANION);
+
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
 
@@ -56,31 +61,37 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
-          <FlexBox
-            alignItems="Start"
-            direction="Column"
-            justifyContent="Start"
-            gap={16}
-            className="sap-margin-bottom-medium"
-          >
+          {isKymaCompanionEnabled && (
             <FlexBox
-              direction="Row"
-              alignItems="Center"
+              alignItems="Start"
+              direction="Column"
               justifyContent="Start"
-              gap={12}
+              gap={16}
+              className="sap-margin-bottom-medium"
             >
-              <Title level="H6" size="H6">
-                {t('feedback.joule.title')}
-              </Title>
-              <ObjectStatus state="Information" inverted>
-                {t('feedback.new')}
-              </ObjectStatus>
+              <FlexBox
+                direction="Row"
+                alignItems="Center"
+                justifyContent="Start"
+                gap={12}
+              >
+                <Title level="H6" size="H6">
+                  {t('feedback.joule.title')}
+                </Title>
+                <ObjectStatus state="Information" inverted>
+                  {t('feedback.new')}
+                </ObjectStatus>
+              </FlexBox>
+              <Text className="info-text">{t('feedback.joule.info')}</Text>
+              <Button
+                design="Emphasized"
+                endIcon="inspect"
+                onClick={() => window.open(companionFeedbackLink, '_blank')}
+              >
+                {t('feedback.give-feedback')}
+              </Button>
             </FlexBox>
-            <Text className="info-text">{t('feedback.joule.info')}</Text>
-            <Button design="Emphasized" endIcon="inspect">
-              {t('feedback.give-feedback')}
-            </Button>
-          </FlexBox>
+          )}
           <FlexBox
             alignItems="Start"
             direction="Column"
@@ -94,7 +105,7 @@ export default function FeedbackPopover() {
             <Text className="info-text">{t('feedback.kyma.info')}</Text>
             <Button
               endIcon="inspect"
-              onClick={() => window.open(feedbackLink, '_blank')}
+              onClick={() => window.open(kymaFeedbackLink, '_blank')}
             >
               {t('feedback.give-feedback')}
             </Button>
