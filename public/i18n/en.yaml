@@ -771,7 +771,6 @@ kyma-companion:
     description: Joule is your personal, contextual assistant, ready to help with all Kyma-related questions. Ask about Kyma features, Kubernetes best practices, step-by-step instructions, and more.
     buttons:
       try-joule: Try Out Joule
-      feedback: Give Feedback
   name: Joule
   opener:
     use-ai: AI Companion
@@ -838,6 +837,19 @@ kyma-modules:
   change-release-channel-warning: The module's version in the fast channel is usually higher than the version in the regular channel. As downgrades are not supported, switching the channel back to regular will not affect the module's version <0>until the channel version is the same or higher.</0> To use the lower version, you must delete the module and re-add it from the <0>regular</0> channel.
 community-modules:
   title: Community Modules
+feedback:
+  feedback: Feedback
+  give-feedback: Give Feedback
+  new: New
+  intro: 
+    title: Hello,
+    info: Tell us what's on your mind.
+  joule:
+    title: Joule Feedback
+    info: Complete a 1-minute survey and help us improve your Joule experience! The survey will open in a new tab.
+  kyma:
+    title: Kyma Dashboard Feedback
+    info: Your opinion matters. Share your thoughts with us at any time!
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
@@ -885,12 +897,10 @@ namespaces:
   title: Namespaces
 navigation:
   all-namespaces: All Namespaces
-  feedback: Feedback
   snow: Let it snow
   snow-stop: Stop the snow
   menu:
     get-help: Get Help
-    give-feedback: Give Feedback
     legal-information: Legal Information
   preferences:
     title: Preferences

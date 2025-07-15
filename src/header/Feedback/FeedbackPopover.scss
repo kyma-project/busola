@@ -1,0 +1,13 @@
+.feedbackPopover > * {
+  width: calc(410px - 2rem);
+}
+
+.feedbackPopover {
+  .info-text {
+    color: var(--sapContent_LabelColor);
+  }
+
+  ui5-button {
+    width: 100%;
+  }
+}
