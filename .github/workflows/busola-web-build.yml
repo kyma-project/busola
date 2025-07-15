@@ -59,21 +59,14 @@ jobs:
         run: |
           images='${{ needs.build-web-image.outputs.images }}'
           # Get the first non-latest tag (e.g. v20250715-fcab78c9)
-          tag=$(echo "$images" | jq -r '.[]' | grep -v ':latest' | grep -oE ':[^:]+' | head -n1 | sed 's/^://')
+          tag=$(echo "$images" | jq -r '.[]' | grep -v ':latest' | awk -F: '{print $NF}' | head -n1)
           echo "image_tag=$tag" >> $GITHUB_OUTPUT
 
   open-pr-for-dev-deploy:
     name: Open PR for dev deploy
     runs-on: ubuntu-latest
     needs: [build-web-image, extract-image-tag]
-    if: |
-      contains(needs.build-web-image.outputs.images, 'v') &&
-      (
-        contains(needs.build-web-image.outputs.images, 'v20') &&
-        !contains(needs.build-web-image.outputs.images, 'v0.') &&
-        !contains(needs.build-web-image.outputs.images, 'v1.') &&
-        !contains(needs.build-web-image.outputs.images, 'v2.') # add more semver prefixes as needed
-      )
+    if: contains(needs.build-busola-image.outputs.images, 'v20')
     steps:
       - name: Checkout busola-deploy repo
         uses: actions/checkout@v4

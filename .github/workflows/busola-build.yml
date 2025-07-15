@@ -63,21 +63,14 @@ jobs:
         id: extract_tag
         run: |
           images='${{ needs.build-busola-image.outputs.images }}'
-          tag=$(echo "$images" | jq -r '.[]' | grep -v ':latest' | grep -oE ':[^:]+' | head -n1 | sed 's/^://')
+          tag=$(echo "$images" | jq -r '.[]' | grep -v ':latest' | awk -F: '{print $NF}' | head -n1)
           echo "image_tag=$tag" >> $GITHUB_OUTPUT
 
   open-pr-for-dev-deploy:
     name: Open PR for dev deploy
     runs-on: ubuntu-latest
     needs: [build-busola-image, extract-image-tag]
-    if: |
-      contains(needs.build-busola-image.outputs.images, 'v') &&
-      (
-        contains(needs.build-busola-image.outputs.images, 'v20') &&
-        !contains(needs.build-busola-image.outputs.images, 'v0.') &&
-        !contains(needs.build-busola-image.outputs.images, 'v1.') &&
-        !contains(needs.build-busola-image.outputs.images, 'v2.') # add more semver prefixes as needed
-      )
+    if: contains(needs.build-busola-image.outputs.images, 'v20')
     steps:
       - name: Checkout busola-deploy repo
         uses: actions/checkout@v4
