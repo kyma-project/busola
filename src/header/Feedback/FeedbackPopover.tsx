@@ -20,7 +20,7 @@ export default function FeedbackPopover() {
   );
   const {
     isEnabled: isKymaCompanionEnabled,
-    config: { feedbackLink: companionFeedbackLink },
+    config: { feedbackLink: companionFeedbackLink } = {},
   } = useFeature(configFeaturesNames.KYMA_COMPANION);
 
   const { t } = useTranslation();
@@ -61,7 +61,7 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
-          {isKymaCompanionEnabled && (
+          {isKymaCompanionEnabled && companionFeedbackLink && (
             <FlexBox
               alignItems="Start"
               direction="Column"
