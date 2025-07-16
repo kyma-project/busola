@@ -208,11 +208,14 @@ export const ModulesDeleteBox = ({
       // Delete associated resources.
       await deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
     }
-    if (allowForceDelete && crUrls?.length) {
+    if ((allowForceDelete || !associatedResourceLeft) && crUrls?.length) {
       // Delete spec.data.
       await deleteCrResources(deleteResourceMutation, crUrls);
     }
-    if (allowForceDelete && communityResourcesUrls?.length) {
+    if (
+      (allowForceDelete || !associatedResourceLeft) &&
+      communityResourcesUrls?.length
+    ) {
       // Delete community resources.
       await deleteCrResources(deleteResourceMutation, communityResourcesUrls);
     }
