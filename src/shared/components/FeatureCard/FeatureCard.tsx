@@ -16,6 +16,8 @@ import {
   ThemeType,
 } from './types';
 
+import './FeaturedCard.scss';
+
 const getIllustration = (
   illustration: IllustrationType,
   theme: ThemeType,

@@ -1,8 +1,6 @@
 import { Widget, InlineWidget } from '../Widget';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 
-import './FeaturedCard.scss';
-
 export function FeaturedCard({ value, structure, schema, ...props }) {
   const { id, title, description, illustration, design } = structure;
 
