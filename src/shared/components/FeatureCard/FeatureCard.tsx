@@ -53,6 +53,7 @@ const getIllustration = (
       }
   }
 };
+
 export function FeatureCardBanner({
   id,
   title,
@@ -71,7 +72,7 @@ export function FeatureCardBanner({
     if (storedHideValue !== null) setHideBanner(storedHideValue === 'true');
   }, [hideBannerKey]);
 
-  if (hideBanner) {
+  if (!id || hideBanner) {
     return <></>;
   }
 
