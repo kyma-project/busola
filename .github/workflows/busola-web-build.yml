@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-web-image, extract-image-tag]
     # open PR only if the image tag starts with 'v20' ensuring only commit tags sent to dev
-     if: startsWith(needs.extract-image-tag.outputs.image_tag, 'v20')
+    if: startsWith(needs.extract-image-tag.outputs.image_tag, 'v20')
     steps:
       - name: Checkout busola-deploy repo
         uses: actions/checkout@v4
