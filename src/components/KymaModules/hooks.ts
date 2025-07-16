@@ -174,35 +174,11 @@ export const useFetchModuleData = (
   return { loading, error, data, getItem };
 };
 
-export const useGetInstalledModules = (
+export const useGetInstalledNotInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesLoading?: boolean,
 ): {
   installed: ModuleTemplateListType;
-  loading: boolean;
-  error?: any;
-} => {
-  const { data: managers, loading, error } = useFetchModuleData(
-    moduleTemplates,
-    (module: ModuleTemplateType) => module?.spec?.manager ?? null,
-    'manager',
-    moduleTemplatesLoading,
-  );
-
-  if (moduleTemplatesLoading) {
-    return { installed: { items: [] }, loading: true, error: null };
-  }
-  if (!moduleTemplates) {
-    return { installed: { items: [] }, loading: false, error: null };
-  }
-
-  const installed = getInstalledModules(moduleTemplates, managers);
-  return { installed, loading, error };
-};
-export const useGetNotInstalledModules = (
-  moduleTemplates: ModuleTemplateListType,
-  moduleTemplatesLoading?: boolean,
-): {
   notInstalled: ModuleTemplateListType;
   loading: boolean;
   error?: any;
@@ -215,14 +191,26 @@ export const useGetNotInstalledModules = (
   );
 
   if (moduleTemplatesLoading) {
-    return { notInstalled: { items: [] }, loading: true, error: null };
+    return {
+      installed: { items: [] },
+      notInstalled: { items: [] },
+      loading: true,
+      error: null,
+    };
   }
   if (!moduleTemplates) {
-    return { notInstalled: { items: [] }, loading: false, error: null };
+    return {
+      installed: { items: [] },
+      notInstalled: { items: [] },
+      loading: false,
+      error: null,
+    };
   }
 
+  const installed = getInstalledModules(moduleTemplates, managers);
   const notInstalled = getNotInstalledModules(moduleTemplates, managers);
-  return { notInstalled, loading, error };
+
+  return { installed, notInstalled, loading, error };
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {

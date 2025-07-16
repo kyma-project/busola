@@ -22,9 +22,9 @@ import { createPortal } from 'react-dom';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
-import { PostFn, usePost } from 'shared/hooks/BackendAPI/usePost';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
-import CommunityModulesCard from 'components/KymaModules/components/CommunityModulesCard';
+import CommunityModuleCard from 'components/KymaModules/components/CommunityModuleCard';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
@@ -152,7 +152,7 @@ export default function CommunityModulesAddModule(props: any) {
   const {
     installedCommunityModules,
     notInstalledCommunityModuleTemplates,
-    notInstalledCommunityModulesLoading,
+    installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
@@ -237,7 +237,7 @@ export default function CommunityModulesAddModule(props: any) {
 
     communityModulesToDisplay?.forEach((module, i) => {
       const card = (
-        <CommunityModulesCard
+        <CommunityModuleCard
           module={module}
           key={`${module.name}+${i}`}
           isChecked={isChecked}

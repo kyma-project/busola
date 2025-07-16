@@ -33,7 +33,7 @@ async function getImageSrc(module) {
   }
 }
 
-export default function CommunityModulesCard({
+export default function CommunityModuleCard({
   module,
   isChecked,
   onChange,

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { t } from 'i18next';
-import { useGetInstalledModules, useGetNotInstalledModules } from '../hooks';
+import { useGetInstalledNotInstalledModules } from '../hooks';
 import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
 import { createPortal } from 'react-dom';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
@@ -14,9 +14,8 @@ export const CommunityModuleContext = createContext({
   deleteModuleButton: () => <></>,
   installedCommunityModules: [],
   installedCommunityModuleTemplates: { items: [] },
-  installedCommunityModulesLoading: false,
   notInstalledCommunityModuleTemplates: { items: [] },
-  notInstalledCommunityModulesLoading: false,
+  installedCommunityModulesLoading: false,
 });
 
 export function CommunityModuleContextProvider({
@@ -36,16 +35,12 @@ export function CommunityModuleContextProvider({
   );
   const {
     installed: installedCommunityModuleTemplates,
-    loading: installedCommunityModulesLoading,
-  } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
-  const {
     notInstalled: notInstalledCommunityModuleTemplates,
-    loading: notInstalledCommunityModulesLoading,
-  } = useGetNotInstalledModules(
+    loading: installedCommunityModulesLoading,
+  } = useGetInstalledNotInstalledModules(
     communityModuleTemplates,
     moduleTemplatesLoading,
   );
-
   useEffect(() => {
     if (layoutState?.layout) {
       setDetailsOpen(layoutState?.layout !== 'OneColumn');
@@ -82,7 +77,6 @@ export function CommunityModuleContextProvider({
         installedCommunityModuleTemplates: installedCommunityModuleTemplates,
         communityModulesLoading: installedCommunityModulesLoading,
         notInstalledCommunityModuleTemplates: notInstalledCommunityModuleTemplates,
-        notInstalledCommunityModulesLoading: notInstalledCommunityModulesLoading,
         DeleteMessageBox: DeleteMessageBox,
         deleteModuleButton: deleteModuleButton,
         handleResourceDelete: handleResourceDelete,
