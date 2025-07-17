@@ -5,6 +5,8 @@ import {
   ModuleTemplateListType,
 } from './support';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
+import { NavNode } from 'state/types';
+import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { postForCommunityResources } from 'components/KymaModules/components/communityModulesHelpers';
 
 interface Counts {
@@ -278,25 +280,27 @@ export const deleteCrResources = async (
   }
 };
 
-export const getCommunityResourceUrls = (resources: any) => {
+export const getCommunityResourceUrls = async (
+  resources: any,
+  clusterNodes: NavNode[],
+  namespaceNodes: NavNode[],
+  fetchFn: Function,
+) => {
   if (!resources?.length) return [];
 
-  return resources.map((resource: any) => {
-    if (!resource) return '';
+  return await Promise.all(
+    resources.map(async (resource: any) => {
+      if (!resource) return '';
+      const resourceName = resource?.metadata?.name || resource?.name;
 
-    const apiVersion =
-      resource?.apiVersion || `${resource?.group}/${resource?.version}`;
-    const resourceName = resource?.metadata?.name || resource?.name;
-    const resourceNamespace =
-      resource?.metadata?.namespace || resource?.namespace;
-    const api = apiVersion === 'v1' ? 'api' : 'apis';
-
-    return resourceNamespace
-      ? `/${api}/${apiVersion}/namespaces/${resourceNamespace}/${pluralize(
-          resource.kind,
-        ).toLowerCase()}/${resourceName}`
-      : `/${api}/${apiVersion}/${pluralize(
-          resource.kind || '',
-        ).toLowerCase()}/${resourceName}`;
-  });
+      const url = await getUrl(
+        resource,
+        'default',
+        clusterNodes,
+        namespaceNodes,
+        fetchFn,
+      );
+      return `${url}/${resourceName}`;
+    }),
+  );
 };

@@ -22,6 +22,38 @@ export const STATE_WAITING = 'WAITING';
 export const STATE_UPDATED = 'UPDATED';
 export const STATE_CREATED = 'CREATED';
 
+export const getUrl = async (
+  resource,
+  namespaceId,
+  clusterNodes,
+  namespaceNodes,
+  fetchFn,
+) => {
+  const resourceType = pluralize(resource.kind.toLowerCase());
+  const hasNamespace = !!resource?.metadata?.namespace;
+  const isKnownClusterWide = !!clusterNodes.find(
+    n => n.resourceType === resourceType,
+  );
+  const isKnownNamespaceWide = !!namespaceNodes.find(
+    n => n.resourceType === resourceType,
+  );
+
+  if (isKnownClusterWide) {
+    return getResourceUrl(resource, null);
+  } else if (hasNamespace) {
+    return getResourceUrl(resource);
+  } else if (isKnownNamespaceWide) {
+    return getResourceUrl(resource, namespaceId);
+  } else {
+    const response = await fetchFn(getResourceKindUrl(resource));
+    const json = await response.json();
+    const apiGroupResources = json?.resources;
+    const apiGroup = apiGroupResources.find(r => r?.kind === resource?.kind);
+    return apiGroup?.namespaced
+      ? getResourceUrl(resource, namespaceId)
+      : getResourceUrl(resource);
+  }
+};
 export function useUploadResources(
   resources = [],
   setResourcesData,
@@ -50,33 +82,6 @@ export function useUploadResources(
     });
   };
 
-  const getUrl = async resource => {
-    const resourceType = pluralize(resource.kind.toLowerCase());
-    const hasNamespace = !!resource?.metadata?.namespace;
-    const isKnownClusterWide = !!clusterNodes.find(
-      n => n.resourceType === resourceType,
-    );
-    const isKnownNamespaceWide = !!namespaceNodes.find(
-      n => n.resourceType === resourceType,
-    );
-
-    if (isKnownClusterWide) {
-      return getResourceUrl(resource, null);
-    } else if (hasNamespace) {
-      return getResourceUrl(resource);
-    } else if (isKnownNamespaceWide) {
-      return getResourceUrl(resource, namespaceId);
-    } else {
-      const response = await fetch(getResourceKindUrl(resource));
-      const json = await response.json();
-      const apiGroupResources = json?.resources;
-      const apiGroup = apiGroupResources.find(r => r?.kind === resource?.kind);
-      return apiGroup?.namespaced
-        ? getResourceUrl(resource, namespaceId)
-        : getResourceUrl(resource);
-    }
-  };
-
   const fetchPossibleExistingResource = async url => {
     try {
       const response = await fetch(url);
@@ -87,7 +92,13 @@ export function useUploadResources(
   };
 
   const fetchApiGroup = async (resource, index) => {
-    const url = await getUrl(resource.value);
+    const url = await getUrl(
+      resource.value,
+      namespaceId,
+      clusterNodes,
+      namespaceNodes,
+      fetch,
+    );
     const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
     const existingResource = await fetchPossibleExistingResource(urlWithName);
     try {

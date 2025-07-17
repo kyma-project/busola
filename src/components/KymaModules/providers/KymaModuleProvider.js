@@ -73,7 +73,7 @@ export function KymaModuleContextProvider({
     createUrl: resourceUrl,
     afterCreatedFn: () =>
       notification.notifySuccess({
-        content: t('kyma-modules.module-uninstall'),
+        content: t('kyma-modules.messages.module-uninstall'),
       }),
   });
 

@@ -7,7 +7,7 @@ import CommunityModuleVersionSelect, {
 } from 'components/KymaModules/components/CommunityModuleVersionSelect';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
-  getAllResourcesYamls,
+  fetchResourcesToApply,
   getAvailableCommunityModules,
   VersionInfo,
 } from 'components/KymaModules/components/communityModulesHelpers';
@@ -17,13 +17,13 @@ import {
   ModuleTemplateType,
 } from 'components/KymaModules/support';
 import { Button, Form, FormItem } from '@ui5/webcomponents-react';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
-import { PostFn, usePost } from 'shared/hooks/BackendAPI/usePost';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
 import {
   NotificationContextArgs,
@@ -94,31 +94,6 @@ function onVersionChange(
   };
 }
 
-function fetchResourcesToApply(
-  communityModulesToApply: Map<string, ModuleTemplateType>,
-  setResourcesToApply: Function,
-  post: PostFn,
-) {
-  const resourcesLinks = [...communityModulesToApply.values()]
-    .map(moduleTpl => moduleTpl.spec.resources)
-    .flat()
-    .map(item => item?.link || '');
-
-  (async function() {
-    try {
-      const yamls = await getAllResourcesYamls(resourcesLinks, post);
-
-      const yamlsResources = yamls?.map(resource => {
-        return { value: resource };
-      });
-
-      setResourcesToApply(yamlsResources || []);
-    } catch (e) {
-      console.error(e);
-    }
-  })();
-}
-
 function onSave(
   uploadResources: Function,
   setIsResourceEdited: Function,
@@ -133,11 +108,11 @@ function onSave(
       });
 
       notification.notifySuccess({
-        content: t('kyma-modules.modules-updated'),
+        content: t('kyma-modules.messages.modules-updated'),
       });
     } catch (e) {
       notification.notifyError({
-        content: t('kyma-modules.modules-update-failed'),
+        content: t('kyma-modules.messages.modules-update-failed'),
       });
       console.error(e);
     }
