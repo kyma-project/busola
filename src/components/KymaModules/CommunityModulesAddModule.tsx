@@ -270,7 +270,8 @@ export default function CommunityModulesAddModule(props: any) {
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     try {
       uploadResources();
 
