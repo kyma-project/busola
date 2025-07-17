@@ -15,7 +15,7 @@ export default function FeedbackMessage(): JSX.Element {
   );
 
   return (
-    <div className="sap-margin-x-tiny sap-margin-bottom-small">
+    <div className="sap-margin-x-tiny">
       <Card>
         <IllustratedMessage
           name="Survey"
