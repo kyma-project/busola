@@ -11,8 +11,8 @@ RUN apk update && \
 WORKDIR /app
 
 # Set env variables
-ENV PRODUCTION true
-ENV CI true
+ENV PRODUCTION=true
+ENV CI=true
 
 COPY . /app
 # build arg `tag` is used because `default_tag` is used by image builder and it cannot be overwritten.

@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
-import { useGetInstalledModules } from '../hooks';
+import { useGetInstalledNotInstalledModules } from '../hooks';
 import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
 
 export const CommunityModuleContext = createContext({
   installedCommunityModules: [],
   installedCommunityModuleTemplates: { items: [] },
+  notInstalledCommunityModuleTemplates: { items: [] },
   installedCommunityModulesLoading: false,
 });
 
@@ -14,14 +15,16 @@ export function CommunityModuleContextProvider({ children }) {
   );
   const {
     installed: installedCommunityModuleTemplates,
+    notInstalled: notInstalledCommunityModuleTemplates,
     loading: installedCommunityModulesLoading,
-  } = useGetInstalledModules(communityModuleTemplates, moduleTemplatesLoading);
+  } = useGetInstalledNotInstalledModules(
+    communityModuleTemplates,
+    moduleTemplatesLoading,
+  );
 
   const installedCommunityModules = simplifyInstalledModules(
     installedCommunityModuleTemplates,
   );
-
-  console.log(installedCommunityModuleTemplates);
 
   return (
     <CommunityModuleContext.Provider
@@ -29,6 +32,7 @@ export function CommunityModuleContextProvider({ children }) {
         installedCommunityModules: installedCommunityModules,
         installedCommunityModuleTemplates: installedCommunityModuleTemplates,
         communityModulesLoading: installedCommunityModulesLoading,
+        notInstalledCommunityModuleTemplates: notInstalledCommunityModuleTemplates,
       }}
     >
       {children}

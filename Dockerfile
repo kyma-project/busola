@@ -14,8 +14,8 @@ WORKDIR /app
 # Install global dependencies
 
 # Set env variables
-ENV PRODUCTION true
-ENV CI true
+ENV PRODUCTION=true
+ENV CI=true
 
 COPY . /app
 

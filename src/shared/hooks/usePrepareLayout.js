@@ -98,6 +98,7 @@ export function usePrepareLayoutColumns({
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');
+  const createType = searchParams.get('createType');
   const showEdit = searchParams.get('showEdit');
   const editColumn = searchParams.get('editColumn');
   const resourceNamespace =
@@ -126,7 +127,9 @@ export function usePrepareLayoutColumns({
               apiVersion,
             }
           : null,
-        showCreate: showCreate ? { resourceType, namespaceId, resource } : null,
+        showCreate: showCreate
+          ? { resourceType, namespaceId, resource, createType }
+          : null,
         showEdit: showEdit
           ? editColumn === 'startColumn'
             ? { resourceType, namespaceId, apiGroup, apiVersion }
@@ -275,6 +278,7 @@ export function usePrepareLayoutColumns({
   }, [
     layout,
     showCreate,
+    createType,
     showEdit,
     editColumn,
     resourceNamespace,
