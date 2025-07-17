@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import jsyaml from 'js-yaml';
 
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -47,8 +47,11 @@ export function MonacoRenderer({
   nestingLevel = 0,
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const value = useMemo(() => getValue(storeKeys, resource), [
+    storeKeys,
+    resource,
+  ]);
 
-  const value = getValue(storeKeys, resource);
   const jsonata = useJsonata({
     resource,
     scope: value,

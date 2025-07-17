@@ -4,6 +4,8 @@ import createWebComponent from './createWebComponent';
 import monacoCSS from 'monaco-editor/min/vs/editor/editor.main.css?inline';
 import customCSS from 'shared/components/MonacoEditorESM/Editor.scss?inline';
 
+const DEFAULT_OPTIONS = {};
+
 function EditorWithRecoil(props) {
   return (
     <RecoilRoot>
@@ -28,7 +30,7 @@ createWebComponent(
     onBlur: undefined,
     onFocus: undefined,
     schemaId: undefined,
-    options: {},
+    options: DEFAULT_OPTIONS,
     error: undefined,
   },
   [
