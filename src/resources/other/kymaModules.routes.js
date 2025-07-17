@@ -11,9 +11,10 @@ import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails'
 import { t } from 'i18next';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
-import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
-import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
+import { KymaModuleContextProvider } from 'components/KymaModules/providers/KymaModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/KymaModules/providers/ModuleTemplatesProvider';
+import { CommunityModulesDeleteBoxContextProvider } from 'components/KymaModules/components/CommunityModulesDeleteBox';
+import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -167,21 +168,23 @@ const ColumnWrapper = ({
         handleResourceDelete={handleResourceDelete}
         showDeleteDialog={showDeleteDialog}
       >
-        <CommunityModuleContextProvider
-          setLayoutColumn={setLayoutColumn}
-          layoutState={layoutState}
-          DeleteMessageBox={DeleteMessageBox}
-          handleResourceDelete={handleResourceDelete}
-          showDeleteDialog={showDeleteDialog}
-        >
-          <Suspense fallback={<Spinner />}>
-            <FlexibleColumnLayout
-              style={{ height: '100%' }}
-              layout={layoutState?.layout}
-              startColumn={startColumnComponent}
-              midColumn={midColumnComponent}
-            />
-          </Suspense>
+        <CommunityModuleContextProvider>
+          <CommunityModulesDeleteBoxContextProvider
+            setLayoutColumn={setLayoutColumn}
+            layoutState={layoutState}
+            DeleteMessageBox={DeleteMessageBox}
+            handleResourceDelete={handleResourceDelete}
+            showDeleteDialog={showDeleteDialog}
+          >
+            <Suspense fallback={<Spinner />}>
+              <FlexibleColumnLayout
+                style={{ height: '100%' }}
+                layout={layoutState?.layout}
+                startColumn={startColumnComponent}
+                midColumn={midColumnComponent}
+              />
+            </Suspense>
+          </CommunityModulesDeleteBoxContextProvider>
         </CommunityModuleContextProvider>
       </KymaModuleContextProvider>
     </ModuleTemplatesContextProvider>
