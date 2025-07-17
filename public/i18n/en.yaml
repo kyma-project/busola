@@ -773,6 +773,9 @@ kyma-companion:
       try-joule: Try Out Joule
       feedback: Give Feedback
   name: Joule
+  feedback:
+    title: We’d love to hear from you!
+    subtitle: Tell us about your experience with Joule in the Kyma Dashboard.
   opener:
     use-ai: AI Companion
     suggestions: Suggestions
