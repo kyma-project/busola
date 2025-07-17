@@ -19,18 +19,18 @@ export default function FeedbackMessage(): JSX.Element {
       <Card>
         <IllustratedMessage
           name="Survey"
-          design="Spot"
-          key="feedback-message"
+          design="Medium"
+          key="feedback-message-chat"
           titleText={t('kyma-companion.feedback.title')}
           subtitle={
             <Text className="sap-margin-bottom-tiny">
               {t('kyma-companion.feedback.subtitle')}
             </Text>
           }
-          className="sap-margin-top-small no-padding"
+          className="sap-margin-top-small"
         >
           <Button
-            key="ai-feedback"
+            key="ai-feedback-chat"
             endIcon="inspect"
             design="Emphasized"
             onClick={() => {
