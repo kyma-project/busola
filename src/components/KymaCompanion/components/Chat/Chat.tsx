@@ -356,7 +356,7 @@ export const Chat = ({
                 {group.messages.map((message, messageIndex) => {
                   const isLastMessage =
                     isLastGroup && messageIndex === group.messages.length - 1;
-                  console.log(message);
+
                   return message.author === Author.AI ? (
                     <React.Fragment key={`${groupIndex}-${messageIndex}`}>
                       {message.isFeedback ? (
