@@ -22,11 +22,7 @@ export default function FeedbackMessage(): JSX.Element {
           design="Medium"
           key="feedback-message-chat"
           titleText={t('kyma-companion.feedback.title')}
-          subtitle={
-            <Text className="sap-margin-bottom-tiny">
-              {t('kyma-companion.feedback.subtitle')}
-            </Text>
-          }
+          subtitle={<Text>{t('kyma-companion.feedback.subtitle')}</Text>}
           className="sap-margin-top-small"
         >
           <Button
