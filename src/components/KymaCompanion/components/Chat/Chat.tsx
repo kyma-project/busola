@@ -13,6 +13,7 @@ import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
 import { AIError } from '../KymaCompanion';
 import ContextLabel from './ContextLabel/ContextLabel';
+import TimestampLabel from './TimestampLabel/TimestampLabel';
 import QueryInput from './Input/QueryInput';
 import {
   Author,
@@ -35,6 +36,7 @@ type ChatProps = {
   error: AIError;
   setError: React.Dispatch<React.SetStateAction<AIError>>;
   hide: boolean;
+  time: Date | null;
 };
 
 export const Chat = ({
@@ -47,6 +49,7 @@ export const Chat = ({
   isReset,
   setIsReset,
   hide = false,
+  time,
 }: ChatProps) => {
   const { t } = useTranslation();
   const chatRef = useRef<HTMLDivElement | null>(null);
@@ -325,7 +328,7 @@ export const Chat = ({
       scrollToBottom();
     }, delay);
   }, [chatHistory, error]);
-
+  console.log('chatHistory', chatHistory);
   return (
     <FlexBox
       style={hide ? { display: 'none' } : undefined}
@@ -338,6 +341,7 @@ export const Chat = ({
         className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
         ref={chatRef}
       >
+        <TimestampLabel time={time} />
         {chatHistory.map((group, groupIndex) => {
           const isLastGroup = groupIndex === chatHistory.length - 1;
 

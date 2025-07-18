@@ -1,0 +1,13 @@
+.timestamp-label {
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-inline: 0.5rem;
+  width: calc(100% - 1rem);
+  background: var(--sapBaseColor);
+}
+.timestamp-label-text {
+  font-size: 12px;
+}
