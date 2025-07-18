@@ -172,9 +172,27 @@ export const Chat = ({
   const handleError = (errResponse: ErrResponse, displayRetry?: boolean) => {
     switch (errResponse.type) {
       case ErrorType.FATAL: {
+        const errMsg = t('kyma-companion.error.http-error-no-retry', {
+          statusCode: errResponse.statusCode,
+        });
         setErrorOnLastUserMsg();
         setLoading(false);
+        updateLatestMessage({
+          author: Author.AI,
+          messageChunks: [
+            {
+              data: {
+                answer: {
+                  content: errMsg,
+                  next: '__end__',
+                },
+              },
+            },
+          ],
+          isLoading: false,
+        });
         setError({
+          title: errResponse.title,
           message:
             errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
           displayRetry: displayRetry ?? false,
@@ -385,6 +403,7 @@ export const Chat = ({
         })}
         {error.message && (
           <ErrorMessage
+            errorTitle={error?.title}
             errorMessage={error.message ?? t('kyma-companion.error.subtitle')}
             retryPrompt={() => retryPreviousPrompt()}
             displayRetry={error.displayRetry}

@@ -93,13 +93,17 @@ async function fetchResponse(
     .catch(error => {
       if (error instanceof HttpError) {
         handleError({
-          message: error.message,
-          statusCode: error.statusCode,
-          type: ErrorType.RETRYABLE,
+          title: error?.title,
+          message: error?.message,
+          statusCode: error?.statusCode,
+          type:
+            error?.statusCode === 429 ? ErrorType.FATAL : ErrorType.RETRYABLE,
         });
       } else {
         handleError({
-          message: error.message,
+          title: error?.title,
+          message: error?.message,
+          statusCode: error?.statusCode ?? 'unknown',
           type: ErrorType.FATAL,
         });
       }
@@ -205,11 +209,34 @@ export default async function getChatResponse({
     MAX_ATTEMPTS,
     RETRY_DELAY,
   );
-  if (!result) {
+
+  if (result?.finished) {
+    return;
+  }
+
+  if (result?.error?.statusCode === 429) {
+    handleError({
+      title: 'Token usage limit exceeded',
+      message:
+        'To ensure a fair usage, Kyma Companion controls the number of requests a cluster can make within 24 hours.',
+      type: ErrorType.FATAL,
+      statusCode: result?.error?.statusCode,
+    });
+  } else if (result?.error?.statusCode && result?.error?.statusCode < 500) {
+    handleError({
+      title: result?.error?.title,
+      message:
+        result?.error?.message ||
+        "Couldn't fetch response from Kyma Companion because of network errors.",
+      type: ErrorType.FATAL,
+      statusCode: result?.error?.statusCode,
+    });
+  } else {
     handleError({
       message:
         "Couldn't fetch response from Kyma Companion because of network errors.",
       type: ErrorType.FATAL,
+      statusCode: result?.error?.statusCode || 500,
     });
   }
 }

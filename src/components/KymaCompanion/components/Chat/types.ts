@@ -14,6 +14,7 @@ export interface ErrResponse {
   statusCode?: number;
   attempt?: number;
   maxAttempts?: number;
+  title?: string;
 }
 
 export interface MessageChunk {
