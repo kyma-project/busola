@@ -4,7 +4,6 @@ import {
   Avatar,
   ListItemStandard,
   ShellBar,
-  ShellBarItem,
   ToggleButton,
 } from '@ui5/webcomponents-react';
 
@@ -26,6 +25,7 @@ import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/Comm
 import { SnowFeature } from './SnowFeature';
 
 import { configFeaturesNames } from 'state/types';
+import FeedbackPopover from './Feedback/FeedbackPopover';
 import './Header.scss';
 
 export function Header() {
@@ -38,9 +38,6 @@ export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
-  const { isEnabled: isFeedbackEnabled, link: feedbackLink } = useFeature(
-    configFeaturesNames.FEEDBACK,
-  );
 
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
@@ -142,14 +139,7 @@ export function Header() {
         ref={shellbarRef}
       >
         <SnowFeature />
-        {isFeedbackEnabled && (
-          <ShellBarItem
-            onClick={() => window.open(feedbackLink, '_blank')}
-            icon="feedback"
-            text={t('navigation.feedback')}
-            title={t('navigation.feedback')}
-          />
-        )}
+        <FeedbackPopover />
         {isKymaCompanionEnabled &&
           isSAPUser &&
           window.location.pathname !== '/clusters' && (

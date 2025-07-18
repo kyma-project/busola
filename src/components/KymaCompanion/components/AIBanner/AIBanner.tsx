@@ -63,7 +63,7 @@ export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
               window.open(feedbackUrl, '_blank');
             }}
           >
-            {t('kyma-companion.banner.buttons.feedback')}
+            {t('feedback.give-feedback')}
           </Button>
         </>
       }

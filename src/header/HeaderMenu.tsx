@@ -54,7 +54,7 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
 
     if (e.detail.text === t('navigation.preferences.title')) {
       setPreferencesOpen(true);
-    } else if (e.detail.text === t('navigation.menu.give-feedback')) {
+    } else if (e.detail.text === t('feedback.give-feedback')) {
       openNewWindow(feedbackLink);
     } else if (legalLinkUsed) {
       openNewWindow(legalLinkUsed.link);
@@ -83,7 +83,7 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
       />
       <MenuItem
         key="give-feedback"
-        text={t('navigation.menu.give-feedback')}
+        text={t('feedback.give-feedback')}
         icon="feedback"
       />
       <MenuItem
