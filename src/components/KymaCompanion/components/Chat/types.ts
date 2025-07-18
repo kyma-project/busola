@@ -29,6 +29,7 @@ export interface MessageChunk {
         agent: string;
       }[];
       next: string;
+      is_feedback?: boolean;
     };
     error?: string | null;
   };
@@ -41,6 +42,7 @@ export interface Message {
   suggestions?: string[];
   suggestionsLoading?: boolean;
   hasError?: boolean;
+  isFeedback?: boolean;
 }
 
 export interface ChatGroup {
@@ -127,6 +129,7 @@ export const chatGroupHelpers = {
     groups: ChatGroup[],
     response: MessageChunk,
     isLoading: boolean,
+    isFeedback: boolean,
   ): ChatGroup[] => {
     if (groups.length === 0) return groups;
 
@@ -142,6 +145,7 @@ export const chatGroupHelpers = {
       ...lastMessage,
       messageChunks: [...lastMessage.messageChunks, response],
       isLoading,
+      isFeedback,
     };
 
     newGroups[newGroups.length - 1] = {

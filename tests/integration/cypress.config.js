@@ -97,6 +97,7 @@ module.exports = defineConfig({
       'tests/kyma-namespace/z-run-after.spec.js',
       'tests/companion/test-companion-chat-error.spec.js',
       'tests/companion/test-companion-chat.spec.js',
+      'tests/companion/test-companion-chat-feedback.spec.js',
       'tests/companion/test-companion-streaming.spec.js',
       'tests/companion/test-companion-suggestions-error.spec.js',
       'tests/companion/test-companion-suggestions.spec.js',
