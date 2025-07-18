@@ -157,6 +157,21 @@ export function getInstalledModules(
   };
 }
 
+export function getNotInstalledModules(
+  moduleTemplates: ModuleTemplateListType,
+  managers: any,
+): ModuleTemplateListType {
+  const notInstalledModuleTemplates = moduleTemplates.items?.filter(module => {
+    const foundManager = managers[module.metadata.name];
+
+    return !foundManager;
+  });
+
+  return {
+    items: notInstalledModuleTemplates,
+  };
+}
+
 function imageMatchVersion(image: string, version: string): boolean {
   const imgName = image.split(':');
   const imgTag = imgName[imgName.length - 1];
@@ -193,4 +208,29 @@ export async function getAllResourcesYamls(links: string[], post: PostFn) {
     );
     return yamlRes.flat();
   }
+}
+
+export function fetchResourcesToApply(
+  communityModulesToApply: Map<string, ModuleTemplateType>,
+  setResourcesToApply: Function,
+  post: PostFn,
+) {
+  const resourcesLinks = [...communityModulesToApply.values()]
+    .map(moduleTpl => moduleTpl.spec.resources)
+    .flat()
+    .map(item => item?.link || '');
+
+  (async function() {
+    try {
+      const yamls = await getAllResourcesYamls(resourcesLinks, post);
+
+      const yamlsResources = yamls?.map(resource => {
+        return { value: resource };
+      });
+
+      setResourcesToApply(yamlsResources || []);
+    } catch (e) {
+      console.error(e);
+    }
+  })();
 }

@@ -93,12 +93,13 @@ export const ModulesList = ({
       showCreate: {
         resourceType: 'kymas',
         rawResourceTypeName: 'Kyma',
+        createType: 'kyma',
         resourceUrl: resourceUrl,
       } as ShowCreate,
     });
 
     navigate(
-      `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true`,
+      `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true&createType=kyma`,
     );
     setIsFormOpen(state => ({ ...state, formOpen: true }));
   };

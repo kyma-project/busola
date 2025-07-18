@@ -13,6 +13,7 @@ export function savePreviousPath() {
   const layoutParam = queryParams.get('layout');
   const resourceNamespaceParam = queryParams.get('resourceNamespace');
   const showCreateParam = queryParams.get('showCreate');
+  const createTypeParam = queryParams.get('createType');
   const showEditParam = queryParams.get('showEdit');
   const editColumnParam = queryParams.get('editColumn');
 
@@ -31,6 +32,7 @@ export function savePreviousPath() {
     if (resourceNamespaceParam)
       params.push(`resourceNamespace=${resourceNamespaceParam}`);
     if (showCreateParam) params.push(`showCreate=${showCreateParam}`);
+    if (createTypeParam) params.push(`createType=${createTypeParam}`);
     if (showEditParam) params.push(`showEdit=${showEditParam}`);
     if (editColumnParam) params.push(`editColumn=${editColumnParam}`);
 

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { isEqual } from 'lodash';
 import { editor, Uri } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -12,8 +11,7 @@ export const getEditorTheme = theme => {
     case 'sap_horizon_hcb':
       return 'hc-black';
     case 'light_dark':
-      return window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
+      return window.matchMedia?.('(prefers-color-scheme: dark)').matches
         ? 'vs-dark'
         : 'vs';
     default:
@@ -33,11 +31,6 @@ export const useCreateEditor = ({
   const descriptor = useRef(new Uri());
   const divRef = useRef(null);
   const { t } = useTranslation();
-
-  const memoizedOptions = useRef({});
-  if (!isEqual(memoizedOptions.current, options)) {
-    memoizedOptions.current = options;
-  }
 
   const [editorInstance, setEditorInstance] = useState(null);
 
@@ -63,7 +56,7 @@ export const useCreateEditor = ({
       scrollbar: {
         alwaysConsumeMouseWheel: false,
       },
-      ...memoizedOptions.current,
+      ...options,
     });
 
     setEditorInstance(instance);
@@ -72,7 +65,6 @@ export const useCreateEditor = ({
       editor.getModel(descriptor.current)?.dispose();
       instance.dispose();
     };
-    // missing dependencies: 'value'
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     descriptor,
@@ -82,6 +74,7 @@ export const useCreateEditor = ({
     language,
     t,
     readOnly,
+    options,
   ]);
 
   return { editorInstance, divRef, descriptor };

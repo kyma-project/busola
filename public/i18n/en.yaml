@@ -594,6 +594,7 @@ discovery-and-network:
 err-boundary:
   go-back: Go back
   restored-initial-form: Something went wrong. We restored the initial form for you.
+  sth-went-wrong: Something went wrong. 
 events:
   description: <0>Event</0> is an object that is automatically created in response to changes in the cluster resources like Nodes, Pods or containers.
   headers:
@@ -647,6 +648,8 @@ extensibility:
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
     modules:
+      no-community-modules: No community modules available
+      no-community-modules-installed: No community modules installed
       no-modules: No modules available
       no-modules-installed: No modules installed
       all-modules-added: You have added all the modules
@@ -807,15 +810,13 @@ kyma-modules:
   unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
   unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
   installed-modules: Installed Modules
+  installed-community-modules: Community Modules
   predefined-channel: Predefined
   modify-modules: Modify Modules
-  module-added: Module added 
-  module-uninstall: Module deleted
-  modules-updated: Modules updated
-  modules-update-failed: Modules update failed
   module-documentation: Documentation
   modules-channel: Modules Channel
   add-module: Add Modules
+  add-community-module: Add Community Modules
   no-modules-description: Customize your cluster by adding the modules you need.
   description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
   release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
@@ -839,6 +840,13 @@ kyma-modules:
   change: Change
   change-release-channel: Change Release Channel
   change-release-channel-warning: The module's version in the fast channel is usually higher than the version in the regular channel. As downgrades are not supported, switching the channel back to regular will not affect the module's version <0>until the channel version is the same or higher.</0> To use the lower version, you must delete the module and re-add it from the <0>regular</0> channel.
+  messages:
+    failure: 'Failed to install the {{resourceType}}: {{error}}'
+    success: '{{resourceType}} installed'
+    module-added: Module added 
+    module-uninstall: Module deleted
+    modules-updated: Modules updated
+    modules-update-failed: Modules update failed
 community-modules:
   title: Community Modules
 legal:
