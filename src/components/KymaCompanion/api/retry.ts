@@ -13,13 +13,17 @@ export async function retryFetch(
   handleError: handleChatErrorResponseFn,
   maxAttempts: number,
   retryDelay: number,
-): Promise<boolean> {
+): Promise<{ finished: boolean; error: ErrResponse | null }> {
   let finished = false;
+  let error: ErrResponse | null = null;
   for (let i = 0; i < maxAttempts; i++) {
+    // eslint-disable-next-line no-loop-func
     const handleErrWrapper = (errResponse: ErrResponse) => {
-      errResponse.maxAttempts = maxAttempts;
+      errResponse.maxAttempts =
+        errResponse?.statusCode === 429 ? 1 : maxAttempts;
       errResponse.attempt = i + 1;
       handleError(errResponse);
+      error = errResponse;
       console.debug('2: Finished handling the error', errResponse);
     };
     const handleChatResponseWrapper = (chunk: MessageChunk) => {
@@ -30,7 +34,9 @@ export async function retryFetch(
     finished = await fetchFn(handleChatResponseWrapper, handleErrWrapper);
 
     console.debug(`3: Fetch Done. Result: ${finished}`);
-    if (!finished) {
+    if (error?.['statusCode'] === 429) {
+      break;
+    } else if (!finished) {
       await new Promise(resolve => setTimeout(resolve, retryDelay));
     } else {
       console.debug('DONE');
@@ -38,5 +44,5 @@ export async function retryFetch(
       break;
     }
   }
-  return finished;
+  return { finished, error };
 }
