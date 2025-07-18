@@ -21,6 +21,7 @@ export default function FeedbackMessage(): JSX.Element {
           name="Survey"
           design="Small"
           key="feedback-message-chat"
+          style={{ padding: '1.5rem' }}
           titleText={t('kyma-companion.feedback.title')}
           subtitle={<Text>{t('kyma-companion.feedback.subtitle')}</Text>}
         >
