@@ -31,9 +31,7 @@ context('Test Companion Chat Error Handling', () => {
 
     cy.get('@companion')
       .find('ui5-card')
-      .contains(
-        'Tell us about your experience with Joule in the Kyma Dashboard',
-      )
+      .contains('Tell us about your experience with Joule in Kyma dashboard')
       .should('be.visible')
       .get('ui5-button')
       .contains('Give Feedback')
