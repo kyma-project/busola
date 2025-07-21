@@ -294,7 +294,7 @@ export const CommunityModulesList = ({
           {
             image: 'TntComponents',
             titleText: `${t('common.labels.no')} ${t(
-              'community-modules.title',
+              'modules.community.title',
             ).toLocaleLowerCase()}`,
             subtitleText: t('modules.community.no-modules-description'),
             url:
