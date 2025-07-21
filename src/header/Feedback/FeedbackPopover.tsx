@@ -8,11 +8,13 @@ import {
   Title,
 } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { configFeaturesNames } from 'state/types';
 import './FeedbackPopover.scss';
+
+const FEEDBACK_VIEWED_STORAGE_KEY = 'feedback-new-indicators-viewed';
 
 export default function FeedbackPopover() {
   const { isEnabled: isFeedbackEnabled, link: kymaFeedbackLink } = useFeature(
@@ -25,6 +27,23 @@ export default function FeedbackPopover() {
 
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [showNewIndicators, setShowNewIndicators] = useState(false);
+
+  useEffect(() => {
+    const hasViewed = localStorage.getItem(FEEDBACK_VIEWED_STORAGE_KEY);
+    if (hasViewed !== 'true') {
+      setShowNewIndicators(true);
+    }
+  }, []);
+
+  const handleFeedbackClose = () => {
+    setFeedbackOpen(false);
+
+    if (showNewIndicators) {
+      localStorage.setItem(FEEDBACK_VIEWED_STORAGE_KEY, 'true');
+      setShowNewIndicators(false);
+    }
+  };
 
   if (!isFeedbackEnabled) {
     return null;
@@ -38,13 +57,13 @@ export default function FeedbackPopover() {
         icon="feedback"
         text={t('feedback.feedback')}
         title={t('feedback.give-feedback')}
-        count="1"
+        count={showNewIndicators ? '1' : undefined}
       />
       {createPortal(
         <Popover
           opener="feedbackOpener"
           open={feedbackOpen}
-          onClose={() => setFeedbackOpen(false)}
+          onClose={handleFeedbackClose}
           horizontalAlign="End"
           placement="Bottom"
           verticalAlign="Center"
@@ -79,9 +98,11 @@ export default function FeedbackPopover() {
                 <Title level="H6" size="H6">
                   {t('feedback.joule.title')}
                 </Title>
-                <ObjectStatus state="Information" inverted>
-                  {t('feedback.new')}
-                </ObjectStatus>
+                {showNewIndicators && (
+                  <ObjectStatus state="Information" inverted>
+                    {t('feedback.new')}
+                  </ObjectStatus>
+                )}
               </FlexBox>
               <Text className="info-text">{t('feedback.joule.info')}</Text>
               <Button
