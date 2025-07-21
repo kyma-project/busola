@@ -55,7 +55,11 @@ export default function FeedbackPopover() {
         icon="feedback"
         text={t('feedback.feedback')}
         title={t('feedback.give-feedback')}
-        count={showNewIndicators ? '1' : undefined}
+        count={
+          isKymaCompanionEnabled && companionFeedbackLink && showNewIndicators
+            ? '1'
+            : undefined
+        }
       />
       {createPortal(
         <Popover

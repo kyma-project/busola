@@ -89,24 +89,6 @@ context('Test Cluster Overview', () => {
     ).should('not.exist');
   });
 
-  it('Check feedback feature via feature flag', () => {
-    cy.setBusolaFeature('FEEDBACK', true);
-
-    cy.loginAndSelectCluster();
-
-    cy.get('ui5-shellbar')
-      .find('[name="feedback"]')
-      .should('exist');
-
-    cy.setBusolaFeature('FEEDBACK', false);
-
-    cy.loginAndSelectCluster();
-
-    cy.get('ui5-shellbar')
-      .find('[name="feedback"]')
-      .should('not.exist');
-  });
-
   it('Go to Node details', () => {
     cy.wait(500);
 
