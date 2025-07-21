@@ -109,7 +109,7 @@ const ColumnWrapper = ({
           <div className="column-content">
             {layoutState?.showCreate?.createType === 'community' && (
               <ResourceCreate
-                title={t('kyma-modules.add-community-module')}
+                title={t('community-modules.add-module')}
                 confirmText={t('common.buttons.add')}
                 layoutCloseCreateUrl={url}
                 renderForm={renderProps => {

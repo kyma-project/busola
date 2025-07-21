@@ -255,6 +255,7 @@ export const CommunityModulesList = ({
   return (
     <React.Fragment key="commmunity-modules-list">
       <GenericList
+        testid={'community-modules-list'}
         className={'community-modules-list'}
         accessibleName={undefined}
         actions={actions as any}
