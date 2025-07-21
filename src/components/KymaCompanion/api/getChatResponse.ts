@@ -106,7 +106,8 @@ async function fetchResponse(
           title: error?.title,
           message: error?.message,
           statusCode: error?.statusCode ?? 'unknown',
-          maxAttempts: 1,
+          maxAttempts:
+            error.statusCode === HTTPStatus.RATE_LIMIT_CODE ? 1 : MAX_ATTEMPTS,
           type: ErrorType.FATAL,
         });
       }
