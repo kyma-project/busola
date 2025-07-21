@@ -31,7 +31,7 @@ describe('Retry mechanism', () => {
     //THEN
     expect(handleSuccess).toHaveBeenCalled();
     expect(handleError).toHaveBeenCalledTimes(0);
-    expect(result).toBeTruthy();
+    expect(result?.finished).toBeTruthy();
   });
 
   it('Success at third attempt', async () => {
@@ -50,7 +50,7 @@ describe('Retry mechanism', () => {
     //THEN
     expect(handleSuccess).toHaveBeenCalled();
     expect(handleError).toHaveBeenCalledTimes(2);
-    expect(result).toBeTruthy();
+    expect(result?.finished).toBeTruthy();
   });
 
   it('All attempts failed', async () => {
@@ -69,7 +69,7 @@ describe('Retry mechanism', () => {
     //THEN
     expect(handleError).toHaveBeenCalledTimes(3);
     expect(handleSuccess).toHaveBeenCalledTimes(0);
-    expect(result).toBeFalsy();
+    expect(result?.finished).toBeFalsy();
   });
 });
 
