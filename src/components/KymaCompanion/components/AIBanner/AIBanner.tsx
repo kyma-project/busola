@@ -27,7 +27,7 @@ const getIllustration = (theme: ThemeType): string | undefined => {
   }
 };
 
-export function AIBanner(feedbackUrl?: string) {
+export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
   const { t } = useTranslation();
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
   const theme = useRecoilValue(themeState);

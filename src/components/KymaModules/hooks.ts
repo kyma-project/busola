@@ -9,7 +9,10 @@ import {
   ModuleTemplateStatus,
   ModuleTemplateType,
 } from './support';
-import { getInstalledModules } from 'components/KymaModules/components/communityModulesHelpers';
+import {
+  getInstalledModules,
+  getNotInstalledModules,
+} from './components/communityModulesHelpers';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
@@ -171,11 +174,12 @@ export const useFetchModuleData = (
   return { loading, error, data, getItem };
 };
 
-export const useGetInstalledModules = (
+export const useGetInstalledNotInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesLoading?: boolean,
 ): {
   installed: ModuleTemplateListType;
+  notInstalled: ModuleTemplateListType;
   loading: boolean;
   error?: any;
 } => {
@@ -187,14 +191,26 @@ export const useGetInstalledModules = (
   );
 
   if (moduleTemplatesLoading) {
-    return { installed: { items: [] }, loading: true, error: null };
+    return {
+      installed: { items: [] },
+      notInstalled: { items: [] },
+      loading: true,
+      error: null,
+    };
   }
   if (!moduleTemplates) {
-    return { installed: { items: [] }, loading: false, error: null };
+    return {
+      installed: { items: [] },
+      notInstalled: { items: [] },
+      loading: false,
+      error: null,
+    };
   }
 
   const installed = getInstalledModules(moduleTemplates, managers);
-  return { installed, loading, error };
+  const notInstalled = getNotInstalledModules(moduleTemplates, managers);
+
+  return { installed, notInstalled, loading, error };
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {

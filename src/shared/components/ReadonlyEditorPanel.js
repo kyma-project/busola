@@ -6,6 +6,10 @@ import { useEffect, useState } from 'react';
 import { Button } from '@ui5/webcomponents-react';
 import { base64Decode } from 'shared/helpers';
 
+const EDITOR_OPTIONS = {
+  minimap: { enabled: false },
+};
+
 export function ReadonlyEditorPanel({
   title,
   value,
@@ -29,12 +33,6 @@ export function ReadonlyEditorPanel({
   const encode = () => {
     setEncoded(false);
     setValueState(base64Decode(value));
-  };
-
-  const options = {
-    minimap: {
-      enabled: false,
-    },
   };
 
   const headerActions =
@@ -70,7 +68,7 @@ export function ReadonlyEditorPanel({
       <Editor
         height="20em"
         value={valueState}
-        options={options}
+        options={EDITOR_OPTIONS}
         onMount={setEditor}
         autocompletionDisabled
         readOnly

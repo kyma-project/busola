@@ -147,7 +147,7 @@ task('pack-statics', () => {
         newLine: '---\n',
       }),
     )
-    .pipe(dest(`build${env}/extensions`));
+    .pipe(dest(`build/${env}/extensions`));
 });
 
 task('clean-wizards', () => {

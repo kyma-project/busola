@@ -8,6 +8,10 @@ import { JSONSchema } from './JSONSchema';
 import './SchemaViewer.scss';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 
+const EDITOR_OPTIONS = {
+  minimap: { enabled: false },
+};
+
 export function SchemaViewer({ name, schema }) {
   const [schemaMode, setSchemaMode] = useState('viewer');
 
@@ -50,32 +54,14 @@ export function SchemaViewer({ name, schema }) {
           <JSONSchema root={true} {...schema.openAPIV3Schema} />
         </div>
       )}
-      {schemaMode === 'json' && (
+      {['json', 'yaml'].includes(schemaMode) && (
         <EditorWrapper
-          language="json"
-          height="20em"
-          value={schema}
-          autocompletionDisabled
-          readOnly
-          options={{
-            minimap: {
-              enabled: false,
-            },
-          }}
-        />
-      )}
-      {schemaMode === 'yaml' && (
-        <EditorWrapper
-          language="yaml"
+          language={schemaMode}
           autocompletionDisabled
           height="20em"
           value={schema}
           readOnly
-          options={{
-            minimap: {
-              enabled: false,
-            },
-          }}
+          options={EDITOR_OPTIONS}
         />
       )}
     </UI5Panel>

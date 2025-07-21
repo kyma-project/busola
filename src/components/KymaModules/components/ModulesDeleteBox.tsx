@@ -29,6 +29,8 @@ import { KymaResourceType, ModuleTemplateListType } from '../support';
 import { SetterOrUpdater } from 'recoil';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useRecoilValue } from 'recoil';
+import { allNodesSelector } from 'state/navigation/allNodesSelector';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
@@ -68,7 +70,12 @@ export const ModulesDeleteBox = ({
   const deleteResourceMutation = useDelete();
   const fetchFn = useSingleGet();
   const post = usePost();
-
+  const clusterNodes = useRecoilValue(allNodesSelector).filter(
+    node => !node.namespaced,
+  );
+  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
+    node => node.namespaced,
+  );
   const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});
   const [forceDeleteUrls, setForceDeleteUrls] = useState<string[]>([]);
   const [crUrls, setCrUrls] = useState<string[]>([]);
@@ -112,7 +119,12 @@ export const ModulesDeleteBox = ({
       );
 
       const crUrl = isCommunity
-        ? getCommunityResourceUrls(crUResources)
+        ? await getCommunityResourceUrls(
+            crUResources,
+            clusterNodes,
+            namespaceNodes,
+            fetchFn,
+          )
         : await generateAssociatedResourcesUrls(
             crUResources,
             fetchFn,
@@ -130,7 +142,12 @@ export const ModulesDeleteBox = ({
           moduleTemplates,
           post,
         );
-        const communityUrls = getCommunityResourceUrls(communityResources);
+        const communityUrls = await getCommunityResourceUrls(
+          communityResources,
+          clusterNodes,
+          namespaceNodes,
+          fetchFn,
+        );
         setCommunityResourcesUrls(communityUrls);
       }
 
@@ -191,11 +208,14 @@ export const ModulesDeleteBox = ({
       // Delete associated resources.
       await deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
     }
-    if (allowForceDelete && crUrls?.length) {
+    if ((allowForceDelete || !associatedResourceLeft) && crUrls?.length) {
       // Delete spec.data.
       await deleteCrResources(deleteResourceMutation, crUrls);
     }
-    if (allowForceDelete && communityResourcesUrls?.length) {
+    if (
+      (allowForceDelete || !associatedResourceLeft) &&
+      communityResourcesUrls?.length
+    ) {
       // Delete community resources.
       await deleteCrResources(deleteResourceMutation, communityResourcesUrls);
     }

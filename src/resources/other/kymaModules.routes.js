@@ -1,4 +1,4 @@
-import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
+import { FlexibleColumnLayout, MessageStrip } from '@ui5/webcomponents-react';
 import React, { Suspense, useDeferredValue } from 'react';
 import { Route, useParams } from 'react-router';
 import { useRecoilState } from 'recoil';
@@ -11,9 +11,10 @@ import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails'
 import { t } from 'i18next';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
-import { KymaModuleContextProvider } from '../../components/KymaModules/providers/KymaModuleProvider';
-import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
+import { KymaModuleContextProvider } from 'components/KymaModules/providers/KymaModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/KymaModules/providers/ModuleTemplatesProvider';
+import { CommunityModulesDeleteBoxContextProvider } from 'components/KymaModules/components/CommunityModulesDeleteBox';
+import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
 
 const KymaModulesList = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesList'),
@@ -21,6 +22,9 @@ const KymaModulesList = React.lazy(() =>
 
 const KymaModulesAddModule = React.lazy(() =>
   import('../../components/KymaModules/KymaModulesAddModule'),
+);
+const CommunityModulesAddModule = React.lazy(() =>
+  import('../../components/KymaModules/CommunityModulesAddModule.tsx'),
 );
 
 const ColumnWrapper = ({
@@ -98,22 +102,58 @@ const ColumnWrapper = ({
             />
           </div>
         )}
+
       {/* create */}
       {!layoutState?.midColumn &&
         (defaultColumn !== 'details' || layoutState.layout !== 'OneColumn') && (
           <div className="column-content">
-            <ResourceCreate
-              title={t('kyma-modules.add-module')}
-              confirmText={t('common.buttons.add')}
-              layoutCloseCreateUrl={url}
-              renderForm={renderProps => {
-                return (
-                  <ErrorBoundary>
-                    <KymaModulesAddModule {...renderProps} />
-                  </ErrorBoundary>
-                );
-              }}
-            />
+            {layoutState?.showCreate?.createType === 'community' && (
+              <ResourceCreate
+                title={t('kyma-modules.add-community-module')}
+                confirmText={t('common.buttons.add')}
+                layoutCloseCreateUrl={url}
+                renderForm={renderProps => {
+                  return (
+                    <ErrorBoundary>
+                      <CommunityModulesAddModule {...renderProps} />
+                    </ErrorBoundary>
+                  );
+                }}
+              />
+            )}
+            {layoutState?.showCreate?.createType === 'kyma' && (
+              <ResourceCreate
+                title={t('kyma-modules.add-module')}
+                confirmText={t('common.buttons.add')}
+                layoutCloseCreateUrl={url}
+                renderForm={renderProps => {
+                  return (
+                    <ErrorBoundary>
+                      <KymaModulesAddModule {...renderProps} />
+                    </ErrorBoundary>
+                  );
+                }}
+              />
+            )}
+            {layoutState?.showCreate?.createType !== 'community' &&
+              layoutState?.showCreate?.createType !== 'kyma' && (
+                <ResourceCreate
+                  title={t('kyma-modules.add-module')}
+                  confirmText={t('common.buttons.add')}
+                  layoutCloseCreateUrl={url}
+                  renderForm={renderProps => {
+                    return (
+                      <ErrorBoundary>
+                        <div className="sap-margin-small">
+                          <MessageStrip design="Critical" hideCloseButton>
+                            {t('err-boundary.sth-went-wrong')}
+                          </MessageStrip>
+                        </div>
+                      </ErrorBoundary>
+                    );
+                  }}
+                />
+              )}
           </div>
         )}
     </>
@@ -128,21 +168,23 @@ const ColumnWrapper = ({
         handleResourceDelete={handleResourceDelete}
         showDeleteDialog={showDeleteDialog}
       >
-        <CommunityModuleContextProvider
-          setLayoutColumn={setLayoutColumn}
-          layoutState={layoutState}
-          DeleteMessageBox={DeleteMessageBox}
-          handleResourceDelete={handleResourceDelete}
-          showDeleteDialog={showDeleteDialog}
-        >
-          <Suspense fallback={<Spinner />}>
-            <FlexibleColumnLayout
-              style={{ height: '100%' }}
-              layout={layoutState?.layout}
-              startColumn={startColumnComponent}
-              midColumn={midColumnComponent}
-            />
-          </Suspense>
+        <CommunityModuleContextProvider>
+          <CommunityModulesDeleteBoxContextProvider
+            setLayoutColumn={setLayoutColumn}
+            layoutState={layoutState}
+            DeleteMessageBox={DeleteMessageBox}
+            handleResourceDelete={handleResourceDelete}
+            showDeleteDialog={showDeleteDialog}
+          >
+            <Suspense fallback={<Spinner />}>
+              <FlexibleColumnLayout
+                style={{ height: '100%' }}
+                layout={layoutState?.layout}
+                startColumn={startColumnComponent}
+                midColumn={midColumnComponent}
+              />
+            </Suspense>
+          </CommunityModulesDeleteBoxContextProvider>
         </CommunityModuleContextProvider>
       </KymaModuleContextProvider>
     </ModuleTemplatesContextProvider>
