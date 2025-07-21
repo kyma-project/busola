@@ -9,14 +9,15 @@ export const resolveType = (status: string) => {
   switch (status) {
     case 'Initial':
     case 'Pending':
-    case 'Available':
     case 'Released':
       return 'Information';
+    case 'Available':
     case 'Ready':
     case 'Bound':
     case 'Running':
     case 'Success':
     case 'Succeeded':
+    case 'Progressing':
     case 'Ok':
       return 'Positive';
     case 'Processing':
