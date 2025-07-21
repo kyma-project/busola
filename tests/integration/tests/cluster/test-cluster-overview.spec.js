@@ -90,6 +90,8 @@ context('Test Cluster Overview', () => {
   });
 
   it('Go to Node details', () => {
+    cy.loginAndSelectCluster();
+
     cy.wait(500);
 
     cy.contains('ui5-panel', 'Nodes').within(_ => {
