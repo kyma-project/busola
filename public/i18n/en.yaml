@@ -784,10 +784,26 @@ kyma-companion:
     preparing-final-answer: Preparing the final answer
   error:
     title: Service is interrupted
-    subtitle: A temporary interruption occured. Please try again.
+    subtitle: A temporary interruption occurred. Please try again.
+    unauthorized-title: Unauthorized
+    unauthorized-message: Authentication failed.
+    not_found-title: Not found
+    not_found-message: The requested resource was not found.
+    bad_request-title: Bad request
+    bad_request-message: Invalid request format or parameters.
+    unprocessable_entity-title: Validation error
+    unprocessable_entity-message: Request validation failed
+    method_not_allowed-title: Method not allowed
+    method_not_allowed-message: HTTP method not supported for this endpoint.
+    request_timeout-title: Request timeout
+    request_timeout-message: Request took too long to process.
+    rate_limit_code-title: Token usage limit exceeded
+    rate_limit_code-message: To ensure a fair usage, Kyma Companion controls the number of requests a cluster can make within 24 hours.
+    internal_server_error-message: Couldn't fetch response from Kyma Companion because of network errors.
     chat-error: An error occurred
     suggestions-error: No suggestions available
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
+    http-error-no-retry: Response status code is {{statusCode}}.
   introduction: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. Meanwhile, you can check the suggested questions below; you may find them helpful!
   introduction-no-suggestions: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. While I don't have any initial suggestions for this resource, feel free to ask me anything you'd like!
   placeholder: Message Joule...

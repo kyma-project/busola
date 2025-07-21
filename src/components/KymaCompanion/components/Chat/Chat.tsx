@@ -24,6 +24,7 @@ import {
   chatGroupHelpers,
 } from './types';
 import './Chat.scss';
+import { getErrorMessageAndTitle } from 'components/KymaCompanion/api/error';
 
 type ChatProps = {
   chatHistory: ChatGroup[];
@@ -172,29 +173,31 @@ export const Chat = ({
   const handleError = (errResponse: ErrResponse, displayRetry?: boolean) => {
     switch (errResponse.type) {
       case ErrorType.FATAL: {
-        const errMsg = t('kyma-companion.error.http-error-no-retry', {
-          statusCode: errResponse.statusCode,
-        });
         setErrorOnLastUserMsg();
         setLoading(false);
-        updateLatestMessage({
-          author: Author.AI,
-          messageChunks: [
-            {
-              data: {
-                answer: {
-                  content: errMsg,
-                  next: '__end__',
+        if (errResponse.maxAttempts === 1) {
+          updateLatestMessage({
+            author: Author.AI,
+            messageChunks: [
+              {
+                data: {
+                  answer: {
+                    content: t('kyma-companion.error.http-error-no-retry', {
+                      statusCode: errResponse.statusCode,
+                    }),
+                    next: '__end__',
+                  },
                 },
               },
-            },
-          ],
-          isLoading: false,
-        });
+            ],
+            isLoading: false,
+          });
+        }
+        const errorMessageAndTitle = getErrorMessageAndTitle(errResponse, t);
         setError({
-          title: errResponse.title,
+          title: errorMessageAndTitle.title,
           message:
-            errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
+            errorMessageAndTitle.message ?? t('kyma-companion.error.subtitle'),
           displayRetry: displayRetry ?? false,
         });
         break;
@@ -261,7 +264,7 @@ export const Chat = ({
       sessionID,
       clusterUrl: cluster.currentContext.cluster.cluster.server,
       clusterAuth: {
-        token: authData?.token,
+        token: authData?.token + 'blabla',
         clientCertificateData: authData['client-certificate-data'],
         clientKeyData: authData['client-key-data'],
       },
