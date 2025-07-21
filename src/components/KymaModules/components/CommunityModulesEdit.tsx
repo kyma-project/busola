@@ -108,11 +108,11 @@ function onSave(
       });
 
       notification.notifySuccess({
-        content: t('community-modules.messages.modules-updated'),
+        content: t('modules.community.messages.modules-updated'),
       });
     } catch (e) {
       notification.notifyError({
-        content: t('community-modules.messages.modules-update-failed'),
+        content: t('modules.community.messages.modules-update-failed'),
       });
       console.error(e);
     }
@@ -248,7 +248,7 @@ export default function CommunityModulesEdit() {
                     defaultTitleType
                     defaultOpen={true}
                     className="collapsible-margins"
-                    title={t('community-modules.title')}
+                    title={t('modules.community.title')}
                   >
                     <div className={'edit'}>
                       {communityModulesToDisplay &&

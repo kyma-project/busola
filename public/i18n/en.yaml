@@ -796,6 +796,23 @@ kyma-companion:
   tabs:
     chat: Chat
     page-insights: Page Insights
+
+modules:
+  community:
+    add-module: Add Community Modules
+    documentation: Documentation
+    installed-modules: Community Modules
+    release-channel: Release channel
+    title: Community Modules
+    no-modules: No community modules available
+    no-modules-description: Customize your cluster by adding the modules you need.
+    messages:
+      failure: 'Failed to install the {{resourceType}}: {{error}}'
+      success: '{{resourceType}} installed'
+      module-added: Community Module added
+      module-uninstall: Community Module deleted
+      modules-updated: Community Modules updated
+
 kyma-modules:
   all-modules-added: You have added all the modules
   delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
@@ -806,7 +823,6 @@ kyma-modules:
   installed-modules: Installed Modules
   predefined-channel: Predefined
   modify-modules: Modify Modules
-  module-documentation: Documentation
   modules-channel: Modules Channel
   add-module: Add Modules
   no-modules: No modules available
@@ -840,18 +856,7 @@ kyma-modules:
     module-uninstall: Module deleted
     modules-updated: Modules updated
     modules-update-failed: Modules update failed
-community-modules:
-  installed-modules: Community Modules
-  add-module: Add Community Modules
-  title: Community Modules
-  no-modules: No community modules available
-  no-modules-description: Customize your cluster by adding the modules you need.
-  messages:
-    failure: 'Failed to install the {{resourceType}}: {{error}}'
-    success: '{{resourceType}} installed'
-    module-added: Community Module added
-    module-uninstall: Community Module deleted
-    modules-updated: Community Modules updated
+
 
 legal:
   copyright: Copyright

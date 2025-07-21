@@ -109,7 +109,7 @@ const ColumnWrapper = ({
           <div className="column-content">
             {layoutState?.showCreate?.createType === 'community' && (
               <ResourceCreate
-                title={t('community-modules.add-module')}
+                title={t('modules.community.add-module')}
                 confirmText={t('common.buttons.add')}
                 layoutCloseCreateUrl={url}
                 renderForm={renderProps => {
