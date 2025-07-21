@@ -36,9 +36,7 @@ export default function FeedbackPopover() {
     }
   }, []);
 
-  const handleFeedbackClose = () => {
-    setFeedbackOpen(false);
-
+  const handleNewFeedbackViewed = () => {
     if (showNewIndicators) {
       localStorage.setItem(FEEDBACK_VIEWED_STORAGE_KEY, 'true');
       setShowNewIndicators(false);
@@ -63,7 +61,7 @@ export default function FeedbackPopover() {
         <Popover
           opener="feedbackOpener"
           open={feedbackOpen}
-          onClose={handleFeedbackClose}
+          onClose={() => setFeedbackOpen(false)}
           horizontalAlign="End"
           placement="Bottom"
           verticalAlign="Center"
@@ -108,7 +106,10 @@ export default function FeedbackPopover() {
               <Button
                 design="Emphasized"
                 endIcon="inspect"
-                onClick={() => window.open(companionFeedbackLink, '_blank')}
+                onClick={() => {
+                  handleNewFeedbackViewed();
+                  window.open(companionFeedbackLink, '_blank');
+                }}
               >
                 {t('feedback.give-feedback')}
               </Button>
