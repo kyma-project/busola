@@ -38,6 +38,7 @@ export default function FeedbackPopover() {
         icon="feedback"
         text={t('feedback.feedback')}
         title={t('feedback.give-feedback')}
+        count="1"
       />
       {createPortal(
         <Popover
@@ -105,6 +106,11 @@ export default function FeedbackPopover() {
             <Text className="info-text">{t('feedback.kyma.info')}</Text>
             <Button
               endIcon="inspect"
+              design={
+                !isKymaCompanionEnabled || !companionFeedbackLink
+                  ? 'Emphasized'
+                  : 'Default'
+              }
               onClick={() => window.open(kymaFeedbackLink, '_blank')}
             >
               {t('feedback.give-feedback')}
