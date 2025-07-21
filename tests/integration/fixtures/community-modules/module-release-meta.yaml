@@ -1,0 +1,14 @@
+apiVersion: operator.kyma-project.io/v1beta2
+kind: ModuleReleaseMeta
+metadata:
+  name: busola-module
+  namespace: default
+spec:
+  beta: true
+  channels:
+    - channel: regular
+      version: 0.0.10
+    - channel: fast
+      version: 0.0.13
+  internal: false
+  moduleName: busola

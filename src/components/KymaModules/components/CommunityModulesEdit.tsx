@@ -16,7 +16,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
-import { Button, Form, FormItem } from '@ui5/webcomponents-react';
+import { Button, Form, FormItem, MessageStrip } from '@ui5/webcomponents-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
@@ -250,24 +250,34 @@ export default function CommunityModulesEdit() {
                     className="collapsible-margins"
                     title={t('modules.community.title')}
                   >
-                    <div className={'edit'}>
-                      {communityModulesToDisplay &&
-                        communityModulesToDisplay.map((module, idx) => {
-                          return (
-                            <CommunityModuleVersionSelect
-                              key={`${module.name}+${idx}`}
-                              module={module}
-                              onChange={onVersionChange(
-                                communityModuleTemplates,
-                                installedCommunityModuleTemplates,
-                                communityModulesTemplatesToApply,
-                                setCommunityModulesTemplatesToApply,
-                                setIsResourceEdited,
-                              )}
-                            />
-                          );
-                        })}
-                    </div>
+                    {installedCommunityModuleTemplates.items.length !== 0 ? (
+                      <div className={'edit'}>
+                        {communityModulesToDisplay &&
+                          communityModulesToDisplay.map((module, idx) => {
+                            return (
+                              <CommunityModuleVersionSelect
+                                key={`${module.name}+${idx}`}
+                                module={module}
+                                onChange={onVersionChange(
+                                  communityModuleTemplates,
+                                  installedCommunityModuleTemplates,
+                                  communityModulesTemplatesToApply,
+                                  setCommunityModulesTemplatesToApply,
+                                  setIsResourceEdited,
+                                )}
+                              />
+                            );
+                          })}
+                      </div>
+                    ) : (
+                      <MessageStrip
+                        design="Critical"
+                        hideCloseButton
+                        className="sap-margin-top-small"
+                      >
+                        {t('modules.community.no-modules-installed')}
+                      </MessageStrip>
+                    )}
                   </CollapsibleSection>
                 </div>
               </FormItem>
