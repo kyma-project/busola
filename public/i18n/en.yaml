@@ -648,14 +648,10 @@ extensibility:
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
     modules:
-      no-community-modules: No community modules available
-      no-community-modules-installed: No community modules installed
       no-modules: No modules available
-      no-modules-installed: No modules installed
-      all-modules-added: You have added all the modules
-      documentation: DOCUMENTATION
       module-channel-label: Module channel overwrite
       module-channel-placeholder: Uses Default Kyma Channel
+      documentation: DOCUMENTATION
   wizard:
     summary: Summary
     upload: Upload
@@ -801,6 +797,7 @@ kyma-companion:
     chat: Chat
     page-insights: Page Insights
 kyma-modules:
+  all-modules-added: You have added all the modules
   delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
   associated-resources: Associated Resources
   unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
@@ -812,6 +809,7 @@ kyma-modules:
   module-documentation: Documentation
   modules-channel: Modules Channel
   add-module: Add Modules
+  no-modules: No modules available
   no-modules-description: Customize your cluster by adding the modules you need.
   description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
   release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
@@ -846,6 +844,7 @@ community-modules:
   installed-modules: Community Modules
   add-module: Add Community Modules
   title: Community Modules
+  no-modules: No community modules available
   no-modules-description: Customize your cluster by adding the modules you need.
   messages:
     failure: 'Failed to install the {{resourceType}}: {{error}}'

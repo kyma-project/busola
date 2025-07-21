@@ -454,7 +454,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
                 hideCloseButton
                 className="sap-margin-top-small"
               >
-                {t('extensibility.widgets.modules.no-modules-installed')}
+                {t('kyma-modules.no-modules-installed')}
               </MessageStrip>
             )}
           </ResourceForm.CollapsibleSection>

@@ -324,7 +324,7 @@ export default function CommunityModulesAddModule(props: any) {
                 hideCloseButton
                 className="sap-margin-top-small"
               >
-                {t('extensibility.widgets.modules.no-community-modules')}
+                {t('community-modules.no-community-modules')}
               </MessageStrip>
             )}
           </>

@@ -297,7 +297,7 @@ export default function KymaModulesAddModule(props) {
           hideCloseButton
           className="sap-margin-top-small"
         >
-          {t('extensibility.widgets.modules.all-modules-added')}
+          {t('kyma-modules.all-modules-added')}
         </MessageStrip>
       ) : (
         <MessageStrip
@@ -305,7 +305,7 @@ export default function KymaModulesAddModule(props) {
           hideCloseButton
           className="sap-margin-top-small"
         >
-          {t('extensibility.widgets.modules.no-modules')}
+          {t('kyma-modules.no-modules')}
         </MessageStrip>
       )}
     </ResourceForm>
