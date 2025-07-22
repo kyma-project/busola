@@ -126,7 +126,6 @@ export default function FeedbackPopover() {
             gap={16}
           >
             <Title level="H6" size="H6">
-              {' '}
               {t('feedback.kyma.title')}
             </Title>
             <Text className="info-text">{t('feedback.kyma.info')}</Text>
