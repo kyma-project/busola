@@ -264,7 +264,7 @@ export const Chat = ({
       sessionID,
       clusterUrl: cluster.currentContext.cluster.cluster.server,
       clusterAuth: {
-        token: authData?.token + 'blabla',
+        token: authData?.token,
         clientCertificateData: authData['client-certificate-data'],
         clientKeyData: authData['client-key-data'],
       },
