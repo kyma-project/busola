@@ -90,10 +90,10 @@ export const ModulesListRows = ({
       return kymaResourceModule?.name === resource?.name;
     }) ?? -1;
 
-  const { data: managerResourceState } = useGetManagerStatus(
-    currentModuleTemplate?.spec?.manager,
-  );
-
+  const {
+    data: managerResourceState,
+    error: managerResourceStateError,
+  } = useGetManagerStatus(currentModuleTemplate?.spec?.manager);
   if (
     moduleStatus &&
     !moduleStatus.resource &&
@@ -118,6 +118,12 @@ export const ModulesListRows = ({
     ];
 
   const currentModuleReleaseMeta = findModuleReleaseMeta(resource.name);
+  const resolvedInstallationStateName = resolveInstallationStateName(
+    moduleStatus?.state,
+    !!currentModuleTemplate?.spec?.manager,
+    managerResourceState?.state,
+    !!managerResourceStateError,
+  );
 
   const isChannelOverridden = moduleIndex
     ? kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined
@@ -186,18 +192,18 @@ export const ModulesListRows = ({
       key="installation-state"
       resourceKind="kymas"
       type={resolveType(
-        kymaResource ? moduleStatus?.state : managerResourceState?.state ?? '',
+        kymaResource
+          ? resolvedInstallationStateName
+          : managerResourceState?.state ?? '',
       )}
       tooltipContent={
-        kymaResource ? moduleStatus?.message : managerResourceState?.message
+        kymaResource
+          ? moduleStatus?.message ?? managerResourceState?.message
+          : managerResourceState?.message
       }
     >
       {kymaResource
-        ? resolveInstallationStateName(
-            moduleStatus?.state,
-            !!currentModuleTemplate?.spec?.manager,
-            managerResourceState?.state,
-          )
+        ? resolvedInstallationStateName
         : managerResourceState?.state}
     </StatusBadge>,
     // Documentation

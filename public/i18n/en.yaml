@@ -774,7 +774,6 @@ kyma-companion:
     description: Joule is your personal, contextual assistant, ready to help with all Kyma-related questions. Ask about Kyma features, Kubernetes best practices, step-by-step instructions, and more.
     buttons:
       try-joule: Try Out Joule
-      feedback: Give Feedback
   name: Joule
   feedback:
     title: We’d love to hear from you!
@@ -819,6 +818,9 @@ kyma-companion:
   tabs:
     chat: Chat
     page-insights: Page Insights
+  time:
+    today: Today
+    yesterday: Yesterday
 kyma-modules:
   delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
   associated-resources: Associated Resources
@@ -865,6 +867,19 @@ kyma-modules:
     modules-update-failed: Modules update failed
 community-modules:
   title: Community Modules
+feedback:
+  feedback: Feedback
+  give-feedback: Give Feedback
+  new: New
+  intro: 
+    title: Hello,
+    info: Tell us what's on your mind.
+  joule:
+    title: Joule Feedback
+    info: Complete a 1-minute survey and help us improve your Joule experience! The survey will open in a new tab.
+  kyma:
+    title: Kyma Dashboard Feedback
+    info: Your opinion matters. Share your thoughts with us at any time!
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
@@ -912,12 +927,10 @@ namespaces:
   title: Namespaces
 navigation:
   all-namespaces: All Namespaces
-  feedback: Feedback
   snow: Let it snow
   snow-stop: Stop the snow
   menu:
     get-help: Get Help
-    give-feedback: Give Feedback
     legal-information: Legal Information
   preferences:
     title: Preferences

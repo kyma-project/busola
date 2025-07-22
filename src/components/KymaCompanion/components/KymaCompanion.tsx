@@ -33,6 +33,7 @@ export default function KymaCompanion() {
     message: null,
     displayRetry: false,
   });
+  const [time, setTime] = useState<Date>(new Date());
 
   function handleRefresh() {
     setChatHistory(
@@ -42,6 +43,7 @@ export default function KymaCompanion() {
       message: null,
       displayRetry: false,
     });
+    setTime(new Date());
     setIsReset(true);
   }
 
@@ -114,6 +116,7 @@ export default function KymaCompanion() {
           error={error}
           setError={setError}
           hide={showDisclaimer}
+          time={time}
         />
         {showDisclaimer && (
           <Disclaimer hideDisclaimer={() => setShowDisclaimer(false)} />

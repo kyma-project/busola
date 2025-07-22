@@ -298,16 +298,23 @@ export const resolveInstallationStateName = (
   state?: string,
   managerExists?: boolean,
   managerResourceState?: string,
+  managerError?: boolean,
 ) => {
   if (state === ModuleTemplateStatus.Unmanaged && !managerExists) {
     return ModuleTemplateStatus.NotInstalled;
   }
 
   if (state === ModuleTemplateStatus.Unmanaged && managerExists) {
-    if (resolveType(state) !== resolveType(managerResourceState ?? '')) {
-      return ModuleTemplateStatus.Processing;
-    }
     return managerResourceState || ModuleTemplateStatus.Unknown;
+  }
+
+  if (
+    state &&
+    managerExists &&
+    !managerError &&
+    resolveType(state) !== resolveType(managerResourceState ?? '')
+  ) {
+    return ModuleTemplateStatus.Processing;
   }
 
   return state || ModuleTemplateStatus.Unknown;

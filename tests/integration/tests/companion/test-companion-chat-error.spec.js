@@ -238,7 +238,7 @@ context('Test Companion Chat Error Handling', () => {
 
     cy.get('@companion')
       .find('.chat-list > *')
-      .eq(0)
+      .eq(1)
       .find('.message-context > .message-container')
       .eq(2)
       .should('be.visible')
