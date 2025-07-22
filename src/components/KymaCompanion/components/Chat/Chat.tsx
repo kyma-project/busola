@@ -25,6 +25,7 @@ import {
 } from './types';
 import './Chat.scss';
 import { getErrorMessageAndTitle } from 'components/KymaCompanion/api/error';
+import FeedbackMessage from './FeedbackMessage/FeedbackMessage';
 
 type ChatProps = {
   chatHistory: ChatGroup[];
@@ -90,12 +91,14 @@ export const Chat = ({
   const concatMsgToLatestMessage = (
     response: MessageChunk,
     isLoading: boolean,
+    isFeedback: boolean,
   ) => {
     setChatHistory(prevGroups =>
       chatGroupHelpers.concatMsgToLatestMessage(
         prevGroups,
         response,
         isLoading,
+        isFeedback,
       ),
     );
   };
@@ -114,6 +117,7 @@ export const Chat = ({
 
   const handleChatResponse = (response: MessageChunk) => {
     const isLoading = response?.data?.answer?.next !== '__end__';
+    const isFeedback = response?.data?.answer?.is_feedback === true;
 
     if (!isLoading) {
       const finalTask = response.data.answer?.tasks?.at(-1);
@@ -133,6 +137,8 @@ export const Chat = ({
           displayRetry,
         );
         return;
+      } else if (isFeedback) {
+        setLoading(false);
       } else {
         setFollowUpLoading();
         getFollowUpQuestions({
@@ -148,7 +154,7 @@ export const Chat = ({
         });
       }
     }
-    concatMsgToLatestMessage(response, isLoading);
+    concatMsgToLatestMessage(response, isLoading, isFeedback);
   };
 
   const setFollowUpLoading = () => {
@@ -373,22 +379,28 @@ export const Chat = ({
                     isLastGroup && messageIndex === group.messages.length - 1;
 
                   return message.author === Author.AI ? (
-                    <React.Fragment key={`${groupIndex}-${messageIndex}`}>
-                      <Message
-                        author={message.author}
-                        messageChunks={message.messageChunks}
-                        isLoading={message.isLoading}
-                        hasError={message.hasError ?? false}
-                        isLatestMessage={isLastMessage}
-                      />
-                      {isLastMessage && !message.isLoading && (
-                        <Bubbles
-                          onClick={sendPrompt}
-                          suggestions={message.suggestions}
-                          isLoading={message.suggestionsLoading ?? false}
-                        />
+                    <>
+                      {message.isFeedback ? (
+                        <FeedbackMessage />
+                      ) : (
+                        <React.Fragment key={`${groupIndex}-${messageIndex}`}>
+                          <Message
+                            author={message.author}
+                            messageChunks={message.messageChunks}
+                            isLoading={message.isLoading}
+                            hasError={message.hasError ?? false}
+                            isLatestMessage={isLastMessage}
+                          />
+                          {isLastMessage && !message.isLoading && (
+                            <Bubbles
+                              onClick={sendPrompt}
+                              suggestions={message.suggestions}
+                              isLoading={message.suggestionsLoading ?? false}
+                            />
+                          )}
+                        </React.Fragment>
                       )}
-                    </React.Fragment>
+                    </>
                   ) : (
                     <Message
                       author={Author.USER}
