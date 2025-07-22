@@ -147,8 +147,9 @@ async function handleChatMessage(req, res) {
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    if (!response.ok && response.status) {
+      res.status(response.status).json(await response.json());
+      return;
     }
 
     const stream = Readable.fromWeb(response.body);
