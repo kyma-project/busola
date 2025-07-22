@@ -6,8 +6,6 @@ import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpen
 import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 import { useGetLegalLinks } from './SidebarMenu/useGetLegalLinks';
 import { useGetHelpLinks } from './SidebarMenu/useGetHelpLinks';
-import { useFeature } from 'hooks/useFeature';
-import { configFeaturesNames } from 'state/types';
 import { useTranslation } from 'react-i18next';
 
 interface LegalLink {
@@ -31,7 +29,6 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
   const getHelpLinks = useGetHelpLinks();
-  const { link: feedbackLink } = useFeature(configFeaturesNames.FEEDBACK);
 
   const nonBreakableSpaces = (number: number): string => {
     let spaces = '';
@@ -54,8 +51,6 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
 
     if (e.detail.text === t('navigation.preferences.title')) {
       setPreferencesOpen(true);
-    } else if (e.detail.text === t('navigation.menu.give-feedback')) {
-      openNewWindow(feedbackLink);
     } else if (legalLinkUsed) {
       openNewWindow(legalLinkUsed.link);
     } else if (
@@ -80,11 +75,6 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
         key="preferences"
         text={t('navigation.preferences.title')}
         icon="wrench"
-      />
-      <MenuItem
-        key="give-feedback"
-        text={t('navigation.menu.give-feedback')}
-        icon="feedback"
       />
       <MenuItem
         key="get-help"

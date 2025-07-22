@@ -196,7 +196,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
-          {isExtensibilityCustomComponentsEnabled && resMetaData.customHtml ? (
+          {isExtensibilityCustomComponentsEnabled && resMetaData?.customHtml ? (
             <>
               <div
                 id="custom-html"
