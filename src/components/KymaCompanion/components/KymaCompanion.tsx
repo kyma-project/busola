@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
