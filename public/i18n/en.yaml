@@ -796,7 +796,6 @@ kyma-companion:
   tabs:
     chat: Chat
     page-insights: Page Insights
-
 modules:
   community:
     add-module: Add Community Modules
@@ -858,8 +857,6 @@ kyma-modules:
     module-uninstall: Module deleted
     modules-updated: Modules updated
     modules-update-failed: Modules update failed
-
-
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
