@@ -147,9 +147,13 @@ async function handleChatMessage(req, res) {
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok && response.status) {
-      res.status(response.status).json(await response.json());
-      return;
+    if (!response.ok) {
+      const respJson = await response.json();
+      const errorMessage = respJson.message;
+      const error = new Error(errorMessage);
+      error.status = response.status;
+      error.error = response.statusText;
+      throw error;
     }
 
     const stream = Readable.fromWeb(response.body);
@@ -157,14 +161,16 @@ async function handleChatMessage(req, res) {
   } catch (error) {
     if (!res.headersSent) {
       req.log.warn(error);
-      res.status(500).json({
-        error: 'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
+      res.status(error.status).json({
+        error: error.error,
+        message: error.message,
       });
     } else {
       setTimeout(() => {
         req.log.warn(error);
-        res.status(500).json({
-          error: 'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
+        res.status(error.status).json({
+          error: error.error,
+          message: error.message,
         });
       }, 500);
     }

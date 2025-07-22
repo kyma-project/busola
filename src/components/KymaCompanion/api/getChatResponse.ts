@@ -74,7 +74,10 @@ async function fetchResponse(
   })
     .then(async response => {
       if (!response.ok) {
-        throw new HttpError('Network response was not ok', response.status);
+        const respJson = await response.json();
+        const error = new HttpError(response.statusText, response.status);
+        error.message = respJson?.message;
+        throw error;
       }
       const reader = response.body?.getReader();
       if (!reader) {
