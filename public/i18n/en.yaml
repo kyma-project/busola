@@ -772,6 +772,9 @@ kyma-companion:
       try-joule: Try Out Joule
       feedback: Give Feedback
   name: Joule
+  feedback:
+    title: We’d love to hear from you!
+    subtitle: Tell us about your experience with Joule in Kyma dashboard.
   opener:
     use-ai: AI Companion
     suggestions: Suggestions
@@ -796,6 +799,9 @@ kyma-companion:
   tabs:
     chat: Chat
     page-insights: Page Insights
+  time:
+    today: Today
+    yesterday: Yesterday
 modules:
   community:
     add-module: Add Community Modules
@@ -812,7 +818,6 @@ modules:
       module-added: Community Module added
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
-
 kyma-modules:
   all-modules-added: You have added all the modules
   delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
