@@ -16,9 +16,8 @@ context('Test Companion Streaming Behavior', () => {
 
   it('two pending tasks', () => {
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 500,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           event: 'agent_action',
           data: {
             answer: {
@@ -40,7 +39,11 @@ context('Test Companion Streaming Behavior', () => {
               next: 'agent1',
             },
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 500,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     let followupCallCount = 0;
@@ -95,9 +98,8 @@ context('Test Companion Streaming Behavior', () => {
 
   it('one pending task, one completed task', () => {
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 500,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           event: 'agent_action',
           data: {
             answer: {
@@ -119,7 +121,11 @@ context('Test Companion Streaming Behavior', () => {
               next: 'agent2',
             },
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 500,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     let followupCallCount = 0;
@@ -178,9 +184,8 @@ context('Test Companion Streaming Behavior', () => {
 
   it('two completed tasks', () => {
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 500,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           event: 'agent_action',
           data: {
             answer: {
@@ -202,7 +207,11 @@ context('Test Companion Streaming Behavior', () => {
               next: 'agent2',
             },
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 500,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     let followupCallCount = 0;
