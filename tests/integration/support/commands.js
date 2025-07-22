@@ -214,6 +214,8 @@ Cypress.Commands.add(
     if (confirmationEnabled) {
       cy.contains(`delete ${resourceType} ${resourceName}`);
 
+      cy.wait(2000);
+
       cy.get(`[header-text="Delete ${resourceType}"]:visible`)
         .find('[data-testid="delete-confirmation"]')
         .click();

@@ -5,7 +5,7 @@ metadata:
     operator.kyma-project.io/is-cluster-scoped: 'false'
   labels:
     operator.kyma-project.io/module-name: busola
-  name: busola-fast
+  name: busola-0-13
   namespace: kyma-system
 spec:
   descriptor:

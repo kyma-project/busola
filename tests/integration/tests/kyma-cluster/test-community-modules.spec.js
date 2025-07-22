@@ -48,12 +48,105 @@ context('Test Community Modules views', () => {
       .contains('busola')
       .should('be.visible');
 
+    cy.get('ui5-title')
+      .contains('busola')
+      .click();
+
+    // TODO:
+    // This wait allows 'community modules add' to download needed resources to apply from backend.
+    // The download is initiated when user mark module to install
+    cy.wait(3000);
+
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
       .click();
+
+    cy.get('ui5-panel[data-testid="community-modules-list"]')
+      .contains('ui5-button', 'Add')
+      .click();
+
+    // Check if already installed module is not visible
+    cy.get('ui5-form[class="resource-form"]').contains(
+      'No community modules available',
+    );
   });
 
-  it('Test Community Modules list and details', () => {});
-  it('Test changing Community Module version', () => {});
-  it('Test deleting Community Modules from List and Details', () => {});
+  it('Test number of Modules in Modules Overview card', () => {
+    cy.getLeftNav()
+      .contains('Cluster Details')
+      .click();
+
+    cy.contains('ui5-card', 'Installed Modules')
+      .contains('1')
+      .should('be.visible');
+
+    cy.contains('ui5-card', 'Community Modules')
+      .contains('1')
+      .should('be.visible');
+
+    cy.get('ui5-card')
+      .contains('Modify Modules')
+      .click();
+  });
+
+  it('Test Community Modules list', () => {
+    cy.get('.community-modules-list')
+      .find('ui5-input[id="search-input"]:visible')
+      .find('input')
+      .wait(1000)
+      .type('busola');
+
+    cy.get('.community-modules-list')
+      .find('ui5-table-row')
+      .contains('busola')
+      .should('be.visible');
+  });
+
+  it('Test changing Community Module channel', () => {
+    cy.inspectTab('Edit');
+
+    cy.wait(1000);
+
+    cy.contains('ui5-label', 'busola').should('be.visible');
+
+    cy.contains('ui5-label', 'busola')
+      .parent()
+      .find('ui5-select')
+      .click();
+
+    cy.wait(500);
+
+    cy.get('ui5-option:visible')
+      .contains('0.0.13')
+      .click();
+
+    cy.wait(3000);
+    //   TODO: check if version changed
+    cy.get('ui5-panel[data-testid="community-modules-edit"]')
+      .find('ui5-button')
+      .contains('Save')
+      .click();
+
+    cy.contains('Community Modules updated').should('be.visible');
+
+    cy.inspectTab('View');
+
+    cy.get('.community-modules-list')
+      .find('ui5-table-row')
+      .contains('busola')
+      .should('be.visible');
+
+    cy.get('.community-modules-list')
+      .find('ui5-table-row')
+      .contains('0.0.13')
+      .should('be.visible');
+  });
+
+  it('Test deleting Community Modules from List and Details', () => {
+    cy.deleteFromGenericList('Module', 'busola', {
+      searchInPlainTableText: true,
+      deletedVisible: false,
+      parentSelector: '.community-modules-list',
+    });
+  });
 });
