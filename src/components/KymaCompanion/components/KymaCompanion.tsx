@@ -32,11 +32,7 @@ export default function KymaCompanion() {
     message: null,
     displayRetry: false,
   });
-  const [time, setTime] = useState<Date | null>(null);
-
-  useEffect(() => {
-    setTime(new Date());
-  }, []);
+  const [time, setTime] = useState<Date>(new Date());
 
   function handleRefresh() {
     setChatHistory(

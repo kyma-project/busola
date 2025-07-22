@@ -800,6 +800,9 @@ kyma-companion:
   tabs:
     chat: Chat
     page-insights: Page Insights
+  time:
+    today: Today
+    yesterday: Yesterday
 kyma-modules:
   delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
   associated-resources: Associated Resources

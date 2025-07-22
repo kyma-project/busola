@@ -328,7 +328,7 @@ export const Chat = ({
       scrollToBottom();
     }, delay);
   }, [chatHistory, error]);
-  console.log('chatHistory', chatHistory);
+
   return (
     <FlexBox
       style={hide ? { display: 'none' } : undefined}
@@ -341,7 +341,7 @@ export const Chat = ({
         className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
         ref={chatRef}
       >
-        <TimestampLabel time={time} />
+        {time && <TimestampLabel time={time} />}
         {chatHistory.map((group, groupIndex) => {
           const isLastGroup = groupIndex === chatHistory.length - 1;
 
