@@ -219,7 +219,7 @@ export default async function getChatResponse({
       title: result?.error?.title,
       message:
         result?.error?.message ||
-        "Couldn't fetch response from Kyma Companion because of network errors.",
+        "Couldn't fetch response from Joule because of network errors.",
       type: ErrorType.FATAL,
       statusCode: result?.error?.statusCode,
       maxAttempts: result?.error?.maxAttempts,

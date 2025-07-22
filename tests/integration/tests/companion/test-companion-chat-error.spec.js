@@ -99,7 +99,7 @@ context('Test Companion Chat Error Handling', () => {
       .find('ui5-illustrated-message')
       .should(
         'contain.text',
-        `Couldn't fetch response from Kyma Companion because of network errors.`,
+        `Couldn't fetch response from Joule because of network errors.`,
       )
       .should('be.visible')
       .find('ui5-button[design="Emphasized"]')
@@ -311,7 +311,7 @@ context('Test Companion Chat Error Handling', () => {
       .find('ui5-illustrated-message')
       .should(
         'contain.text',
-        `To ensure a fair usage, Kyma Companion controls the number of requests a cluster can make within 24 hours.`,
+        `To ensure fair usage, Joule controls the number of requests a cluster can make within 24 hours.`,
       )
       .should('be.visible');
 
