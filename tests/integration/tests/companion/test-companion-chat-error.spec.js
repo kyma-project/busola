@@ -250,4 +250,99 @@ context('Test Companion Chat Error Handling', () => {
       .find('ui5-illustrated-message')
       .should('not.exist');
   });
+
+  it('check error status code handling message', () => {
+    // Test for 401 Unauthorized.
+    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+      req.reply({ statusCode: 401 });
+    }).as('getChatResponse');
+    cy.get('.kyma-companion').as('companion');
+
+    cy.resetCompanion();
+    cy.wait('@getPromptSuggestions');
+    cy.wait(1000);
+
+    cy.sendPrompt('Test');
+
+    cy.wait('@getChatResponse');
+
+    cy.wait(4000);
+
+    cy.testChatLength(3);
+
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .eq(0)
+      .find('.message-container')
+      .should('contain.text', `Response status code is 401`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .should('contain.text', `Authentication failed.`)
+      .should('be.visible');
+
+    // Test for 429 Too Many Requests.
+    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+      req.reply({ statusCode: 429 });
+    }).as('getChatResponse');
+    cy.get('.kyma-companion').as('companion');
+
+    cy.resetCompanion();
+    cy.wait('@getPromptSuggestions');
+    cy.wait(1000);
+
+    cy.sendPrompt('Test');
+
+    cy.wait('@getChatResponse');
+
+    cy.wait(4000);
+
+    cy.testChatLength(3);
+
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .eq(0)
+      .find('.message-container')
+      .should('contain.text', `Response status code is 429`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .should(
+        'contain.text',
+        `To ensure a fair usage, Kyma Companion controls the number of requests a cluster can make within 24 hours.`,
+      )
+      .should('be.visible');
+
+    // Test for 422 Validation error.
+    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+      req.reply({ statusCode: 422 });
+    }).as('getChatResponse');
+    cy.get('.kyma-companion').as('companion');
+
+    cy.resetCompanion();
+    cy.wait('@getPromptSuggestions');
+    cy.wait(1000);
+
+    cy.sendPrompt('Test');
+
+    cy.wait('@getChatResponse');
+
+    cy.wait(4000);
+
+    cy.testChatLength(3);
+
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .eq(0)
+      .find('.message-container')
+      .should('contain.text', `Response status code is 422`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .should('contain.text', `Request validation failed`)
+      .should('be.visible');
+  });
 });
