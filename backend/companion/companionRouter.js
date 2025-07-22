@@ -162,9 +162,13 @@ async function handleChatMessage(req, res) {
     } else {
       setTimeout(() => {
         req.log.warn(error);
-        res.status(500).json({
-          error: 'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
-        });
+        res.write(
+          JSON.stringify({
+            error:
+              'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
+          }),
+        );
+        res.end();
       }, 500);
     }
   }
