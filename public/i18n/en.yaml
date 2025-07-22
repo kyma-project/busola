@@ -802,7 +802,7 @@ kyma-companion:
     request_timeout-message: Request took too long to process.
     rate_limit_code-title: Token usage limit exceeded
     rate_limit_code-message: To ensure fair usage, Joule controls the number of requests a cluster can make within 24 hours.
-    internal_server_error-message: Couldn't fetch response from Kyma Companion because of network errors.
+    internal_server_error-message: Couldn't fetch response from Joule because of network errors.
     chat-error: An error occurred
     suggestions-error: No suggestions available
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
