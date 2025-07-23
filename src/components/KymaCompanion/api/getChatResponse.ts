@@ -74,8 +74,8 @@ async function fetchResponse(
   })
     .then(async response => {
       if (!response.ok) {
-        const respJson = await response.json();
-        const error = new HttpError(response.statusText, response.status);
+        const respJson = await response?.json();
+        const error = new HttpError(response?.statusText, response?.status);
         error.message = respJson?.message;
         throw error;
       }

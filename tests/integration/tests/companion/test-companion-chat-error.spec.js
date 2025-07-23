@@ -257,8 +257,8 @@ context('Test Companion Chat Error Handling', () => {
       req.reply({
         statusCode: 401,
         body: {
-          error: 'testError',
-          message: 'testMessage',
+          error: 'Unauthorized',
+          message: 'Authentication failed',
         },
       });
     }).as('getChatResponse');
@@ -285,7 +285,7 @@ context('Test Companion Chat Error Handling', () => {
     cy.get('@companion')
       .find('.chat-list')
       .find('ui5-illustrated-message')
-      .should('contain.text', `Authentication failed.`)
+      .should('contain.text', `Authentication failed`)
       .should('be.visible');
 
     // Test for 429 Too Many Requests.
@@ -293,8 +293,9 @@ context('Test Companion Chat Error Handling', () => {
       req.reply({
         statusCode: 429,
         body: {
-          error: 'testError',
-          message: 'testMessage',
+          error: 'Token usage limit exceeded',
+          message:
+            'To ensure fair usage, Joule controls the number of requests a cluster can make within 24 hours.',
         },
       });
     }).as('getChatResponse');
@@ -323,7 +324,7 @@ context('Test Companion Chat Error Handling', () => {
       .find('ui5-illustrated-message')
       .should(
         'contain.text',
-        `To ensure fair usage, Joule controls the number of requests a cluster can make within 24 hours.`,
+        `To ensure fair usage, Joule controls the number of requests a cluster can make within 24 hours`,
       )
       .should('be.visible');
 
@@ -332,8 +333,8 @@ context('Test Companion Chat Error Handling', () => {
       req.reply({
         statusCode: 422,
         body: {
-          error: 'testError',
-          message: 'testMessage',
+          error: 'Validation error',
+          message: 'Request validation failed',
         },
       });
     }).as('getChatResponse');

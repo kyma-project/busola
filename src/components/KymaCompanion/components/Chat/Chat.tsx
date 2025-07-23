@@ -25,7 +25,6 @@ import {
   chatGroupHelpers,
 } from './types';
 import './Chat.scss';
-import { getErrorMessageAndTitle } from 'components/KymaCompanion/api/error';
 import FeedbackMessage from './FeedbackMessage/FeedbackMessage';
 
 type ChatProps = {
@@ -202,11 +201,9 @@ export const Chat = ({
             isLoading: false,
           });
         }
-        const errorMessageAndTitle = getErrorMessageAndTitle(errResponse, t);
         setError({
-          title: errorMessageAndTitle.title,
-          message:
-            errorMessageAndTitle.message ?? t('kyma-companion.error.subtitle'),
+          title: errResponse.title,
+          message: errResponse.message ?? t('kyma-companion.error.subtitle'),
           displayRetry: displayRetry ?? false,
         });
         break;

@@ -148,11 +148,12 @@ async function handleChatMessage(req, res) {
     });
 
     if (!response.ok) {
-      const respJson = await response.json();
-      const errorMessage = respJson.message;
-      const error = new Error(errorMessage);
-      error.status = response.status;
-      error.error = response.statusText;
+      const respJson = await response?.json();
+      const error = new Error(respJson?.message ?? '');
+      error.status = response?.status ?? 500;
+      error.error =
+        response?.statusText ??
+        'Failed to fetch AI chat data. Request ID: ' + escape(req.id);
       throw error;
     }
 

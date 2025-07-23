@@ -787,21 +787,6 @@ kyma-companion:
   error:
     title: Service is interrupted
     subtitle: A temporary interruption occurred. Please try again.
-    unauthorized-title: Unauthorized
-    unauthorized-message: Authentication failed.
-    not_found-title: Not found
-    not_found-message: The requested resource was not found.
-    bad_request-title: Bad request
-    bad_request-message: Invalid request format or parameters.
-    unprocessable_entity-title: Validation error
-    unprocessable_entity-message: Request validation failed
-    method_not_allowed-title: Method not allowed
-    method_not_allowed-message: HTTP method not supported for this endpoint.
-    request_timeout-title: Request timeout
-    request_timeout-message: Request took too long to process.
-    rate_limit_code-title: Token usage limit exceeded
-    rate_limit_code-message: To ensure fair usage, Joule controls the number of requests a cluster can make within 24 hours.
-    internal_server_error-message: Couldn't fetch response from Joule because of network errors.
     chat-error: An error occurred
     suggestions-error: No suggestions available
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
