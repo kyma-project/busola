@@ -27,22 +27,18 @@ export async function retryFetch(
       errResponse.attempt = i + 1;
       handleError(errResponse);
       error = errResponse;
-      console.debug('2: Finished handling the error', errResponse);
     };
     const handleChatResponseWrapper = (chunk: MessageChunk) => {
       handleChatResponse(chunk);
-      console.debug('2: Finished reading the answer');
     };
 
     finished = await fetchFn(handleChatResponseWrapper, handleErrWrapper);
 
-    console.debug(`3: Fetch Done. Result: ${finished}`);
     if (error?.['statusCode'] === HTTPStatus.RATE_LIMIT_CODE) {
       break;
     } else if (!finished) {
       await new Promise(resolve => setTimeout(resolve, retryDelay));
     } else {
-      console.debug('DONE');
       finished = true;
       break;
     }

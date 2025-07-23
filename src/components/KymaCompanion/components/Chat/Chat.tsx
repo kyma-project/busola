@@ -276,6 +276,7 @@ export const Chat = ({
       },
       certificateAuthorityData:
         cluster.currentContext.cluster.cluster['certificate-authority-data'],
+      t,
     });
     addMessage({ author: Author.AI, messageChunks: [], isLoading: true });
   };

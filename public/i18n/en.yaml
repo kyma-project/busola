@@ -787,6 +787,7 @@ kyma-companion:
   error:
     title: Service is interrupted
     subtitle: A temporary interruption occurred. Please try again.
+    internal_server_error-message: Couldn't fetch response from Joule because of network errors.
     chat-error: An error occurred
     suggestions-error: No suggestions available
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.

@@ -6,6 +6,7 @@ import {
   retryFetch,
 } from 'components/KymaCompanion/api/retry';
 import { ErrorType, ErrResponse, MessageChunk } from '../components/Chat/types';
+import { TFunction } from 'i18next';
 
 const MAX_ATTEMPTS = 3;
 const RETRY_DELAY = 1_000;
@@ -28,6 +29,7 @@ type GetChatResponseArgs = {
   clusterUrl: string;
   clusterAuth: ClusterAuth;
   certificateAuthorityData: string;
+  t: TFunction;
 };
 
 const fillAuthHeaders = (
@@ -66,7 +68,6 @@ async function fetchResponse(
   handleChatResponse: { (chunk: MessageChunk): void },
   handleError: { (errResponse: ErrResponse): void },
 ): Promise<boolean> {
-  console.debug('1: Fetch called');
   return fetch(url, {
     headers,
     body,
@@ -178,6 +179,7 @@ export default async function getChatResponse({
   clusterUrl,
   clusterAuth,
   certificateAuthorityData,
+  t,
 }: GetChatResponseArgs): Promise<void> {
   const { backendAddress } = getClusterConfig();
   const url = `${backendAddress}/ai-chat/messages`;
@@ -222,7 +224,7 @@ export default async function getChatResponse({
       title: result?.error?.title,
       message:
         result?.error?.message ||
-        "Couldn't fetch response from Joule because of network errors.",
+        t('kyma-companion.error.internal_server_error-message'),
       type: ErrorType.FATAL,
       statusCode: result?.error?.statusCode,
       maxAttempts: result?.error?.maxAttempts,
