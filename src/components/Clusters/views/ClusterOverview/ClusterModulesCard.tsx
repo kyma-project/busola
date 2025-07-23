@@ -70,7 +70,7 @@ export default function ClusterModulesCard() {
           subTitle={t('kyma-modules.installed-modules')}
           extraInfo={[
             {
-              title: t('kyma-modules.installed-community-modules'),
+              title: t('modules.community.installed-modules'),
               value: installedCommunityModules?.length,
             },
             {

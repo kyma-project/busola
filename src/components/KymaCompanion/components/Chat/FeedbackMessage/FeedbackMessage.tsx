@@ -33,7 +33,7 @@ export default function FeedbackMessage(): JSX.Element {
               window.open(companionConfig?.feedbackLink, '_blank');
             }}
           >
-            {t('kyma-companion.banner.buttons.feedback')}
+            {t('feedback.give-feedback')}
           </Button>
         </IllustratedMessage>
       </Card>
