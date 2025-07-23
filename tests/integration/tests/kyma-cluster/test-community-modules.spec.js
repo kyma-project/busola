@@ -52,9 +52,8 @@ context('Test Community Modules views', () => {
       .contains('busola')
       .click();
 
-    // TODO:
-    // This wait allows 'community modules add' to download needed resources to apply from backend.
-    // The download is initiated when user mark module to install
+    // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
+    // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
     cy.wait(2000);
 
     cy.get('[data-testid="create-form-footer-bar"]')
@@ -118,8 +117,10 @@ context('Test Community Modules views', () => {
       .contains('0.0.13')
       .click();
 
-    cy.wait(3000);
-    //   TODO: check if version changed
+    // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
+    // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
+    cy.wait(2000);
+
     cy.get('ui5-panel[data-testid="community-modules-edit"]')
       .find('ui5-button')
       .contains('Save')
@@ -145,6 +146,7 @@ context('Test Community Modules views', () => {
       searchInPlainTableText: true,
       deletedVisible: false,
       parentSelector: '.community-modules-list',
+      waitForDelete: 2000,
     });
   });
 });
