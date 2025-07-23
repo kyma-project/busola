@@ -88,7 +88,7 @@ export default function CommunityModuleCard({
             url={module.versions[0]?.docsURL}
             linkClassName="sap-margin-top-tiny sap-margin-bottom-small"
           >
-            {t('kyma-modules.module-documentation')}
+            {t('modules.community.documentation')}
           </ExternalLink>
         )}
       </div>
@@ -100,7 +100,7 @@ export default function CommunityModuleCard({
         data-testid={`module-settings-panel-${module.name}`}
       >
         <div className="settings-panel__content sap-margin-y-small">
-          <Label>{t('kyma-modules.release-channel') + ':'} </Label>
+          <Label>{t('modules.community.release-channel') + ':'} </Label>
           <Select
             accessibleName={`${module.name} channel select`}
             onChange={event => {

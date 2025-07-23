@@ -276,7 +276,7 @@ export default function CommunityModulesAddModule(props: any) {
       uploadResources();
 
       notification.notifySuccess({
-        content: t('kyma-modules.messages.success', {
+        content: t('modules.community.messages.success', {
           resourceType: 'Community Module',
         }),
       });
@@ -292,7 +292,7 @@ export default function CommunityModulesAddModule(props: any) {
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        content: t('kyma-modules.messages.failure', {
+        content: t('modules.community.messages.failure', {
           resourceType: 'Community Module',
           error: e instanceof Error && e?.message ? e.message : '',
         }),
@@ -310,7 +310,9 @@ export default function CommunityModulesAddModule(props: any) {
           onChange={props.onChange}
           layoutNumber="startColumn"
           resetLayout
-          afterCreatedCustomMessage={t('kyma-modules.messages.module-added')}
+          afterCreatedCustomMessage={t(
+            'modules.community.messages.module-added',
+          )}
           formWithoutPanel
           className="add-modules-form"
           onSubmit={handleSubmit}
@@ -324,7 +326,7 @@ export default function CommunityModulesAddModule(props: any) {
                 hideCloseButton
                 className="sap-margin-top-small"
               >
-                {t('extensibility.widgets.modules.no-community-modules')}
+                {t('modules.community.no-modules')}
               </MessageStrip>
             )}
           </>
