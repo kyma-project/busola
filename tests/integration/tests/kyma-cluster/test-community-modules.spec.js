@@ -55,7 +55,7 @@ context('Test Community Modules views', () => {
     // TODO:
     // This wait allows 'community modules add' to download needed resources to apply from backend.
     // The download is initiated when user mark module to install
-    cy.wait(3000);
+    cy.wait(2000);
 
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
@@ -66,9 +66,7 @@ context('Test Community Modules views', () => {
       .click();
 
     // Check if already installed module is not visible
-    cy.get('ui5-form[class="resource-form"]').contains(
-      'No community modules available',
-    );
+    cy.get('.create-form').contains('No community modules available');
   });
 
   it('Test number of Modules in Modules Overview card', () => {
