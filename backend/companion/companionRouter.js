@@ -148,12 +148,20 @@ async function handleChatMessage(req, res) {
     });
 
     if (!response.ok) {
-      const respJson = await response?.json();
-      const error = new Error(respJson?.message ?? '');
-      error.status = response?.status ?? 500;
-      error.error =
-        response?.statusText ??
-        'Failed to fetch AI chat data. Request ID: ' + escape(req.id);
+      const error = new Error();
+      error.status = response.status;
+
+      if (response.status >= 500) {
+        error.message = 'A temporary interruption occurred. Please try again.';
+        error.error = 'Service is interrupted';
+      } else {
+        const respJson = await response?.json();
+        error.message =
+          respJson?.message ??
+          'A temporary interruption occurred. Please try again.';
+        error.error = respJson?.error ?? response?.statusText;
+      }
+
       throw error;
     }
 
