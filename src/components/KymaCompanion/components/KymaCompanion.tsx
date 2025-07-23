@@ -12,6 +12,7 @@ import Disclaimer from './Disclaimer/Disclaimer';
 import './KymaCompanion.scss';
 
 export interface AIError {
+  title?: string;
   message: string | null;
   displayRetry: boolean;
 }

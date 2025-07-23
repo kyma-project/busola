@@ -183,9 +183,27 @@ export const Chat = ({
       case ErrorType.FATAL: {
         setErrorOnLastUserMsg();
         setLoading(false);
+        if (errResponse.maxAttempts === 1) {
+          updateLatestMessage({
+            author: Author.AI,
+            messageChunks: [
+              {
+                data: {
+                  answer: {
+                    content: t('kyma-companion.error.http-error-no-retry', {
+                      statusCode: errResponse.statusCode,
+                    }),
+                    next: '__end__',
+                  },
+                },
+              },
+            ],
+            isLoading: false,
+          });
+        }
         setError({
-          message:
-            errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
+          title: errResponse.title,
+          message: errResponse.message ?? t('kyma-companion.error.subtitle'),
           displayRetry: displayRetry ?? false,
         });
         break;
@@ -258,6 +276,7 @@ export const Chat = ({
       },
       certificateAuthorityData:
         cluster.currentContext.cluster.cluster['certificate-authority-data'],
+      t,
     });
     addMessage({ author: Author.AI, messageChunks: [], isLoading: true });
   };
@@ -401,6 +420,7 @@ export const Chat = ({
         })}
         {error.message && (
           <ErrorMessage
+            errorTitle={error?.title}
             errorMessage={error.message ?? t('kyma-companion.error.subtitle')}
             retryPrompt={() => retryPreviousPrompt()}
             displayRetry={error.displayRetry}

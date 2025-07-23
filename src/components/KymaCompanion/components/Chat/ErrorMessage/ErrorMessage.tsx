@@ -7,12 +7,14 @@ import {
 import { useTranslation } from 'react-i18next';
 
 interface ErrorMessageProps {
+  errorTitle?: string;
   errorMessage: string;
   displayRetry: boolean;
   retryPrompt: () => void;
 }
 
 export default function ErrorMessage({
+  errorTitle,
   errorMessage,
   displayRetry,
   retryPrompt,
@@ -26,7 +28,7 @@ export default function ErrorMessage({
           name="Connection"
           design="Spot"
           key="error-message"
-          titleText={t('kyma-companion.error.title')}
+          titleText={errorTitle ?? t('kyma-companion.error.title')}
           subtitle={
             <Text className="sap-margin-bottom-tiny">{errorMessage}</Text>
           }

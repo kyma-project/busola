@@ -786,10 +786,12 @@ kyma-companion:
     preparing-final-answer: Preparing the final answer
   error:
     title: Service is interrupted
-    subtitle: A temporary interruption occured. Please try again.
+    subtitle: A temporary interruption occurred. Please try again.
+    internal_server_error-message: Couldn't fetch response from Joule because of network errors.
     chat-error: An error occurred
     suggestions-error: No suggestions available
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
+    http-error-no-retry: Response status code is {{statusCode}}.
   introduction: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. Meanwhile, you can check the suggested questions below; you may find them helpful!
   introduction-no-suggestions: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. While I don't have any initial suggestions for this resource, feel free to ask me anything you'd like!
   placeholder: Message Joule...
