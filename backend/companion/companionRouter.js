@@ -160,23 +160,19 @@ async function handleChatMessage(req, res) {
     const stream = Readable.fromWeb(response.body);
     await pipeline(stream, res);
   } catch (error) {
+    req.log.warn(error);
     if (!res.headersSent) {
-      req.log.warn(error);
       res.status(error.status).json({
         error: error.error,
         message: error.message,
       });
     } else {
-      setTimeout(() => {
-        req.log.warn(error);
-        res.write(
-          JSON.stringify({
-            error:
-              'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
-          }),
-        );
-        res.end();
-      }, 500);
+      res.write(
+        JSON.stringify({
+          error: 'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
+        }) + '\n',
+      );
+      res.end();
     }
   }
 }
