@@ -254,7 +254,13 @@ context('Test Companion Chat Error Handling', () => {
   it('check error status code handling message', () => {
     // Test for 401 Unauthorized.
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({ statusCode: 401 });
+      req.reply({
+        statusCode: 401,
+        body: {
+          error: 'testError',
+          message: 'testMessage',
+        },
+      });
     }).as('getChatResponse');
     cy.get('.kyma-companion').as('companion');
 
@@ -284,7 +290,13 @@ context('Test Companion Chat Error Handling', () => {
 
     // Test for 429 Too Many Requests.
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({ statusCode: 429 });
+      req.reply({
+        statusCode: 429,
+        body: {
+          error: 'testError',
+          message: 'testMessage',
+        },
+      });
     }).as('getChatResponse');
     cy.get('.kyma-companion').as('companion');
 
@@ -317,7 +329,13 @@ context('Test Companion Chat Error Handling', () => {
 
     // Test for 422 Validation error.
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({ statusCode: 422 });
+      req.reply({
+        statusCode: 422,
+        body: {
+          error: 'testError',
+          message: 'testMessage',
+        },
+      });
     }).as('getChatResponse');
     cy.get('.kyma-companion').as('companion');
 
