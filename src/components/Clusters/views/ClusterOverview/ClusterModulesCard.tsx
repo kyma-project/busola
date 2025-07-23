@@ -69,7 +69,6 @@ export default function ClusterModulesCard() {
           title={t('cluster-overview.statistics.modules-overview')}
           subTitle={t('kyma-modules.installed-modules')}
           extraInfo={[
-            // TODO: use feature flag
             {
               title: t('modules.community.installed-modules'),
               value: installedCommunityModules?.length,

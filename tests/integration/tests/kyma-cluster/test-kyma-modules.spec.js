@@ -34,13 +34,14 @@ context('Test Kyma Modules views', () => {
 
   it('Test adding Modules', () => {
     // TODO: add data-testid for panel
-    cy.get('ui5-table')
+    cy.get('ui5-panel[data-testid="modules-list"]')
+      .find('ui5-table')
       .find('ui5-illustrated-message')
       .find('ui5-title', 'No modules')
       .should('be.visible');
 
     // Add first module
-    cy.get('ui5-panel')
+    cy.get('ui5-panel[data-testid="modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
 
@@ -59,7 +60,7 @@ context('Test Kyma Modules views', () => {
       .click();
 
     // Check if already installed module is not visible
-    cy.get('ui5-panel')
+    cy.get('ui5-panel[data-testid="modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
 

@@ -287,6 +287,7 @@ export const ModulesList = ({
         <UnmanagedModuleInfo kymaResource={kymaResource} />
       </div>
       <GenericList
+        testid={'modules-list'}
         className={'modules-list'}
         accessibleName={undefined}
         actions={actions as any}
