@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { useRecoilState } from 'recoil';
+import {
+  SetterOrUpdater,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -19,9 +24,11 @@ import {
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
-import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
+import {
+  uploadResouce,
+  useUploadResources,
+} from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
 import CommunityModuleCard from 'components/KymaModules/components/CommunityModuleCard';
@@ -30,6 +37,9 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 
 import './KymaModulesAddModule.scss';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { allNodesSelector } from 'state/navigation/allNodesSelector';
+
 type VersionDisplayInfo = {
   moduleTemplate: {
     name: string;
@@ -133,6 +143,15 @@ export default function CommunityModulesAddModule(props: any) {
   );
   const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
 
+  const patchRequest = useUpdate();
+
+  const clusterNodes = useRecoilValue(allNodesSelector).filter(
+    node => !node.namespaced,
+  );
+  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
+    node => node.namespaced,
+  );
+
   const uploadResources = useUploadResources(
     resourcesToApply,
     setResourcesToApply,
@@ -173,13 +192,13 @@ export default function CommunityModulesAddModule(props: any) {
     moduleReleaseMetasLoading,
   ]);
 
-  useEffect(() => {
-    fetchResourcesToApply(
-      communityModulesTemplatesToApply,
-      setResourcesToApply,
-      post,
-    );
-  }, [communityModulesTemplatesToApply]); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   fetchResourcesToApply(
+  //     communityModulesTemplatesToApply,
+  //     setResourcesToApply,
+  //     post,
+  //   );
+  // }, [communityModulesTemplatesToApply]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [columnsCount, setColumnsCount] = useState(2);
   const [
@@ -270,34 +289,63 @@ export default function CommunityModulesAddModule(props: any) {
     );
   };
 
+  function sleep(lf_ms: number) {
+    return new Promise(resolve => setTimeout(resolve, lf_ms));
+  }
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    try {
-      uploadResources();
+    (async function() {
+      try {
+        const yamlls = await fetchResourcesToApply(
+          communityModulesTemplatesToApply,
+          setResourcesToApply,
+          post,
+        );
 
-      notification.notifySuccess({
-        content: t('modules.community.messages.success', {
-          resourceType: 'Community Module',
-        }),
-      });
+        const promises =
+          yamlls?.map(y =>
+            uploadResouce(
+              y,
+              'default',
+              clusterNodes,
+              namespaceNodes,
+              post,
+              patchRequest(),
+            ),
+          ) || [];
 
-      setLayoutColumn({
-        ...layoutColumn,
-        layout: 'OneColumn',
-        midColumn: null,
-        endColumn: null,
-        showCreate: null,
-      });
-      navigate(window.location.pathname, { replace: true });
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t('modules.community.messages.failure', {
-          resourceType: 'Community Module',
-          error: e instanceof Error && e?.message ? e.message : '',
-        }),
-      });
-    }
+        await Promise.allSettled(promises);
+        // await sleep(1000);
+        // await uploadResources();
+        // await sleep(4000);
+        // e.submit();
+
+        notification.notifySuccess({
+          content: t('modules.community.messages.success', {
+            resourceType: 'Community Module',
+          }),
+        });
+
+        setLayoutColumn({
+          ...layoutColumn,
+          layout: 'OneColumn',
+          midColumn: null,
+          endColumn: null,
+          showCreate: null,
+        });
+        navigate(window.location.pathname, { replace: true });
+      } catch (e) {
+        console.error(e);
+        notification.notifyError({
+          content: t('modules.community.messages.failure', {
+            resourceType: 'Community Module',
+            error: e instanceof Error && e?.message ? e.message : '',
+          }),
+        });
+      }
+    })();
+    return false;
   };
 
   if (isCommunityModulesEnabled) {

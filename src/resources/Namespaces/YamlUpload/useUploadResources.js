@@ -54,12 +54,14 @@ export const getUrl = async (
       : getResourceUrl(resource);
   }
 };
+
 export function useUploadResources(
   resources = [],
   setResourcesData,
   setLastOperationState,
   namespaceId,
 ) {
+  console.log(resources);
   const fetch = useSingleGet();
   const post = usePost();
   const patchRequest = useUpdate();
@@ -91,7 +93,7 @@ export function useUploadResources(
     }
   };
 
-  const fetchApiGroup = async (resource, index) => {
+  const uploadResource = async (resource, index) => {
     const url = await getUrl(
       resource.value,
       namespaceId,
@@ -137,12 +139,15 @@ export function useUploadResources(
     }
   };
 
-  const fetchResources = useCallback(() => {
+  const fetchResources = useCallback(async () => {
+    console.log('START', filteredResources);
+    console.log('START', resources);
     if (filteredResources?.length) {
       setLastOperationState(OPERATION_STATE_WAITING);
       for (const [index, resource] of filteredResources?.entries()) {
+        console.log('UPDATE', resource);
         updateState(index, STATE_WAITING);
-        fetchApiGroup(resource, index);
+        await uploadResource(resource, index);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,4 +156,52 @@ export function useUploadResources(
   useComponentDidMount(fetchResources);
 
   return fetchResources;
+}
+
+export async function uploadResouce(
+  resource,
+  namespaceId,
+  clusterNodes,
+  namespaceNodes,
+  post,
+  patchRequest,
+) {
+  const fetchPossibleExistingResource = async url => {
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (_) {
+      return null;
+    }
+  };
+
+  const url = await getUrl(
+    resource.value,
+    namespaceId,
+    clusterNodes,
+    namespaceNodes,
+    fetch,
+  );
+  const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
+  const existingResource = await fetchPossibleExistingResource(urlWithName);
+  try {
+    //add a new resource
+    if (!existingResource) {
+      await post(url, resource.value);
+    } else {
+      if (
+        existingResource?.metadata?.resourceVersion &&
+        !resource?.value?.metadata?.resourceVersion
+      ) {
+        resource.value.metadata.resourceVersion =
+          existingResource.metadata.resourceVersion;
+      }
+      const diff = createPatch(existingResource, resource.value);
+      await patchRequest(urlWithName, diff);
+    }
+  } catch (e) {
+    console.warn(e);
+
+    return false;
+  }
 }
