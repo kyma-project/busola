@@ -177,7 +177,11 @@ async function handleChatMessage(req, res) {
     } else {
       res.write(
         JSON.stringify({
-          error: 'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
+          streamingError: {
+            message:
+              'An error occured during streaming. Request ID: ' +
+              escape(req.id),
+          },
         }) + '\n',
       );
       res.end();

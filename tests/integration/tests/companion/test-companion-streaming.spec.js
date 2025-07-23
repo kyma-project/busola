@@ -270,4 +270,88 @@ context('Test Companion Streaming Behavior', () => {
 
     cy.wrap(followupCallCount).should('eq', 0);
   });
+
+  it('handles multiple complete JSON objects in single chunk', () => {
+    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+      // Two complete JSON objects in one response
+      const chunk1 =
+        JSON.stringify({
+          event: 'agent_action',
+          data: {
+            answer: {
+              content: '',
+              tasks: [
+                {
+                  task_id: 0,
+                  task_name: 'Performing step 1',
+                  status: 'pending',
+                  agent: 'agent1',
+                },
+              ],
+              next: 'agent1',
+            },
+          },
+        }) + '\n';
+
+      const chunk2 =
+        JSON.stringify({
+          event: 'agent_action',
+          data: {
+            answer: {
+              content: '',
+              tasks: [
+                {
+                  task_id: 0,
+                  task_name: 'Performing step 1',
+                  status: 'pending',
+                  agent: 'agent1',
+                },
+                {
+                  task_id: 1,
+                  task_name: 'Performing step 2',
+                  status: 'pending',
+                  agent: 'agent2',
+                },
+              ],
+              next: 'agent3',
+            },
+          },
+        }) + '\n';
+
+      req.reply({
+        delay: 500,
+        body: chunk1 + chunk2,
+      });
+    }).as('getChatResponse');
+
+    cy.closeCompanion();
+    cy.openCompanion();
+    cy.get('.kyma-companion').as('companion');
+
+    cy.clickSuggestion(0);
+
+    cy.get('@companion')
+      .find('.tasks-list')
+      .find('.ai-busy-indicator')
+      .should('be.visible');
+
+    cy.wait('@getChatResponse');
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('.tasks-list')
+      .find('.ai-busy-indicator')
+      .should('not.exist');
+
+    cy.get('@companion')
+      .find('.tasks-list > .loading-item')
+      .should('have.length', 2)
+      .each((task, index) => {
+        cy.wrap(task)
+          .should('be.visible')
+          .should('contain.text', `Performing step ${index + 1}`)
+          .find('.ai-steps-loader')
+          .should('be.visible');
+      });
+  });
 });

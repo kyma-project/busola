@@ -120,7 +120,7 @@ async function fetchResponse(
     });
 }
 
-async function readChunk(
+export async function readChunk(
   reader: ReadableStreamDefaultReader<Uint8Array>,
   decoder: TextDecoder,
   handleChatResponse: (chunk: MessageChunk) => void,
@@ -149,8 +149,8 @@ async function readChunk(
       completeObjects.forEach(message => {
         const chunk = JSON.parse(message);
         // Custom error provided by busola backend during streaming, not by companion backend
-        if (chunk?.error) {
-          throw new Error(chunk?.error);
+        if (chunk?.streamingError) {
+          throw new Error(chunk.streamingError.message);
         }
         handleChatResponse(chunk);
       });
@@ -174,7 +174,7 @@ async function readChunk(
     });
 }
 
-function extractJsonObjectsFromChunk(
+export function extractJsonObjectsFromChunk(
   text: string,
 ): { completeObjects: string[]; remainingBuffer: string } {
   const completeObjects: string[] = [];
