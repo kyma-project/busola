@@ -99,7 +99,7 @@ context('Test Companion Chat Error Handling', () => {
       .find('ui5-illustrated-message')
       .should(
         'contain.text',
-        `Couldn't fetch response from Kyma Companion because of network errors.`,
+        `Couldn't fetch response from Joule because of network errors.`,
       )
       .should('be.visible')
       .find('ui5-button[design="Emphasized"]')
@@ -255,5 +255,119 @@ context('Test Companion Chat Error Handling', () => {
       .find('.chat-list')
       .find('ui5-illustrated-message')
       .should('not.exist');
+  });
+
+  it('check error status code handling message', () => {
+    // Test for 401 Unauthorized.
+    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+      req.reply({
+        statusCode: 401,
+        body: {
+          error: 'Unauthorized',
+          message: 'Authentication failed',
+        },
+      });
+    }).as('getChatResponse');
+    cy.get('.kyma-companion').as('companion');
+
+    cy.resetCompanion();
+    cy.wait('@getPromptSuggestions');
+    cy.wait(1000);
+
+    cy.sendPrompt('Test');
+
+    cy.wait('@getChatResponse');
+
+    cy.wait(4000);
+
+    cy.testChatLength(3);
+
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .eq(0)
+      .find('.message-container')
+      .should('contain.text', `Response status code is 401`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .should('contain.text', `Authentication failed`)
+      .should('be.visible');
+
+    // Test for 429 Too Many Requests.
+    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+      req.reply({
+        statusCode: 429,
+        body: {
+          error: 'Token usage limit exceeded',
+          message:
+            'To ensure fair usage, Joule controls the number of requests a cluster can make within 24 hours.',
+        },
+      });
+    }).as('getChatResponse');
+    cy.get('.kyma-companion').as('companion');
+
+    cy.resetCompanion();
+    cy.wait('@getPromptSuggestions');
+    cy.wait(1000);
+
+    cy.sendPrompt('Test');
+
+    cy.wait('@getChatResponse');
+
+    cy.wait(4000);
+
+    cy.testChatLength(3);
+
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .eq(0)
+      .find('.message-container')
+      .should('contain.text', `Response status code is 429`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .should(
+        'contain.text',
+        `To ensure fair usage, Joule controls the number of requests a cluster can make within 24 hours`,
+      )
+      .should('be.visible');
+
+    // Test for 422 Validation error.
+    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+      req.reply({
+        statusCode: 422,
+        body: {
+          error: 'Validation error',
+          message: 'Request validation failed',
+        },
+      });
+    }).as('getChatResponse');
+    cy.get('.kyma-companion').as('companion');
+
+    cy.resetCompanion();
+    cy.wait('@getPromptSuggestions');
+    cy.wait(1000);
+
+    cy.sendPrompt('Test');
+
+    cy.wait('@getChatResponse');
+
+    cy.wait(4000);
+
+    cy.testChatLength(3);
+
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .eq(0)
+      .find('.message-container')
+      .should('contain.text', `Response status code is 422`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .should('contain.text', `Request validation failed`)
+      .should('be.visible');
   });
 });

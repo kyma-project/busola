@@ -70,7 +70,7 @@ config:
     EXTENSIBILITY_WIZARD:
       isEnabled: false
     KYMA_COMPANION:
-      isEnabled: false
+      isEnabled: true
       config:
         feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/form/SV_dmWATTfes5SstG6
     GARDENER_LOGIN:
