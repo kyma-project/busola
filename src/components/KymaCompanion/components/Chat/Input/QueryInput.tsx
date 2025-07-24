@@ -7,7 +7,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { encodingForModel } from 'js-tiktoken';
+import { useTokenValidation } from 'components/KymaCompanion/hooks/useTokenValidation';
 import './QueryInput.scss';
 
 // Layout constants
@@ -22,12 +22,6 @@ const PADDING_MULTI_ROW = '2.75rem';
 const PADDING_SINGLE_ROW = '4rem';
 const EXPAND_THRESHOLD = 4;
 const CONTRACT_THRESHOLD = 2;
-
-// Token validation constants
-const MAX_TOKENS = 100; // Adjust this based on your backend limit
-const WARNING_THRESHOLD = 0.9; // Show warning at 90% of limit
-const DEFAULT_MODEL = 'gpt-4'; // Default model for tokenization
-const DEBOUNCE_DELAY = 300; // Delay in ms for debouncing
 
 type QueryInputProps = {
   loading: boolean;
@@ -45,43 +39,13 @@ export default function QueryInput({
   const [inputValue, setInputValue] = useState<string>('');
   const [maxRows, setMaxRows] = useState(0);
   const [isMultiRowMode, setIsMultiRowMode] = useState(false);
-  const [isTokenLimitExceeded, setIsTokenLimitExceeded] = useState(false);
-  const [showTokenWarning, setShowTokenWarning] = useState(false);
-  const [tokenError, setTokenError] = useState(false);
 
-  const getTokenCount = useCallback((text: string) => {
-    const encoding = encodingForModel(DEFAULT_MODEL);
-    const tokens = encoding.encode(text);
-    return tokens.length;
-  }, []);
-
-  // Update token-related state
-  const updateTokenState = useCallback((count: number) => {
-    setIsTokenLimitExceeded(count > MAX_TOKENS);
-    setShowTokenWarning(
-      count > MAX_TOKENS * WARNING_THRESHOLD && count <= MAX_TOKENS,
-    );
-  }, []);
-
-  // Debounced token calculation
-  useEffect(() => {
-    if (inputValue) {
-      const timeoutId = setTimeout(() => {
-        try {
-          const count = getTokenCount(inputValue);
-          updateTokenState(count);
-        } catch (err) {
-          console.error('Tokenization failed', err);
-          setTokenError(true);
-        }
-      }, DEBOUNCE_DELAY);
-
-      return () => clearTimeout(timeoutId);
-    } else {
-      setIsTokenLimitExceeded(false);
-      setShowTokenWarning(false);
-    }
-  }, [inputValue, getTokenCount, updateTokenState]);
+  const {
+    isTokenLimitExceeded,
+    showTokenWarning,
+    tokenError,
+    validateTokenCount,
+  } = useTokenValidation(inputValue);
 
   const checkRowCount = useCallback(() => {
     if (!textareaRef.current) return;
@@ -116,23 +80,14 @@ export default function QueryInput({
   const onSubmitInput = () => {
     if (inputValue.length === 0) return;
 
-    // Calculate token count immediately before submission
-    try {
-      const count = getTokenCount(inputValue);
-      if (count > MAX_TOKENS) {
-        updateTokenState(count);
-        return;
-      }
-    } catch (err) {
-      console.error('Tokenization failed', err);
-      setTokenError(true);
+    // Immediate token validation before submission (bypasses debounce)
+    const { isValid } = validateTokenCount(inputValue);
+    if (!isValid) {
       return;
     }
 
     const prompt = inputValue;
     setInputValue('');
-    setIsTokenLimitExceeded(false);
-    setShowTokenWarning(false);
     sendPrompt(prompt);
   };
 
@@ -227,11 +182,7 @@ export default function QueryInput({
             name="decline"
             mode="Interactive"
             design="Default"
-            onClick={() => {
-              setInputValue('');
-              setIsTokenLimitExceeded(false);
-              setShowTokenWarning(false);
-            }}
+            onClick={() => setInputValue('')}
           />
           <Button
             id="submit-icon"
