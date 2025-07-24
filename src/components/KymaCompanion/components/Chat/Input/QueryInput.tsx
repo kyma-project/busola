@@ -7,6 +7,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { encodingForModel } from 'js-tiktoken';
 import './QueryInput.scss';
 
 // Layout constants
@@ -21,6 +22,12 @@ const PADDING_MULTI_ROW = '2.75rem';
 const PADDING_SINGLE_ROW = '4rem';
 const EXPAND_THRESHOLD = 4;
 const CONTRACT_THRESHOLD = 2;
+
+// Token validation constants
+const MAX_TOKENS = 100; // Adjust this based on your backend limit
+const WARNING_THRESHOLD = 0.9; // Show warning at 90% of limit
+const DEFAULT_MODEL = 'gpt-4'; // Default model for tokenization
+const DEBOUNCE_DELAY = 300; // Delay in ms for debouncing
 
 type QueryInputProps = {
   loading: boolean;
@@ -38,6 +45,43 @@ export default function QueryInput({
   const [inputValue, setInputValue] = useState<string>('');
   const [maxRows, setMaxRows] = useState(0);
   const [isMultiRowMode, setIsMultiRowMode] = useState(false);
+  const [isTokenLimitExceeded, setIsTokenLimitExceeded] = useState(false);
+  const [showTokenWarning, setShowTokenWarning] = useState(false);
+
+  const getTokenCount = useCallback((text: string) => {
+    try {
+      const encoding = encodingForModel(DEFAULT_MODEL);
+      const tokens = encoding.encode(text);
+      return tokens.length;
+    } catch (error) {
+      console.error('Error calculating token count:', error);
+      return Math.ceil(text.length / 4); // Fallback estimation
+    }
+  }, []);
+
+  // Update token-related state
+  const updateTokenState = useCallback((count: number) => {
+    setIsTokenLimitExceeded(count > MAX_TOKENS);
+    setShowTokenWarning(
+      count > MAX_TOKENS * WARNING_THRESHOLD && count <= MAX_TOKENS,
+    );
+  }, []);
+
+  // Debounced token calculation
+  useEffect(() => {
+    if (inputValue) {
+      const timeoutId = setTimeout(() => {
+        const count = getTokenCount(inputValue);
+        updateTokenState(count);
+      }, DEBOUNCE_DELAY);
+
+      // Cleanup: clear timeout if input changes before delay
+      return () => clearTimeout(timeoutId);
+    } else {
+      setIsTokenLimitExceeded(false);
+      setShowTokenWarning(false);
+    }
+  }, [inputValue, getTokenCount, updateTokenState]);
 
   const checkRowCount = useCallback(() => {
     if (!textareaRef.current) return;
@@ -59,11 +103,9 @@ export default function QueryInput({
 
     const canvasHeight = containerRef.current.clientHeight;
     const maxAllowedHeight = canvasHeight * MAX_HEIGHT_RATIO;
-
     const availableContentHeight =
       maxAllowedHeight - 2 * PADDING_BLOCK - 2 * BORDER_SIZE;
     const calculatedMaxRows = Math.floor(availableContentHeight / LINE_HEIGHT);
-
     const finalMaxRows = Math.max(
       1,
       Math.min(calculatedMaxRows, FALLBACK_MAX_ROWS),
@@ -73,9 +115,43 @@ export default function QueryInput({
 
   const onSubmitInput = () => {
     if (inputValue.length === 0) return;
+
+    // Calculate token count immediately before submission
+    const count = getTokenCount(inputValue);
+    if (count > MAX_TOKENS) {
+      updateTokenState(count);
+      return;
+    }
+
     const prompt = inputValue;
     setInputValue('');
+    setIsTokenLimitExceeded(false);
+    setShowTokenWarning(false);
     sendPrompt(prompt);
+  };
+
+  const getValueState = () => {
+    if (isTokenLimitExceeded) return 'Negative';
+    if (showTokenWarning) return 'Critical';
+    return 'None';
+  };
+
+  const getValueStateMessage = () => {
+    if (showTokenWarning)
+      return (
+        <Text>
+          {
+            'Approaching token limit: your current query surpasses 90% of the configured limit'
+          }
+        </Text>
+      );
+    if (isTokenLimitExceeded)
+      return (
+        <Text>
+          {'Iput exceeds your token limit. Please shorten your message.'}
+        </Text>
+      );
+    return null;
   };
 
   useEffect(() => {
@@ -90,44 +166,29 @@ export default function QueryInput({
   }, [loading]);
 
   useEffect(() => {
-    requestAnimationFrame(() => {
-      calculateMaxRows();
-    });
-
+    requestAnimationFrame(() => calculateMaxRows());
     const handleWindowResize = () => calculateMaxRows();
     window.addEventListener('resize', handleWindowResize);
-
-    return () => {
-      window.removeEventListener('resize', handleWindowResize);
-    };
+    return () => window.removeEventListener('resize', handleWindowResize);
   }, [calculateMaxRows]);
 
   useEffect(() => {
     if (!textareaRef.current) return;
-
     const textarea = textareaRef.current;
-    const resizeObserver = new ResizeObserver(() => {
-      checkRowCount();
-    });
-
+    const resizeObserver = new ResizeObserver(() => checkRowCount());
     resizeObserver.observe(textarea);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
+    return () => resizeObserver.disconnect();
   }, [checkRowCount]);
 
   useEffect(() => {
     requestAnimationFrame(() => {
       const textarea = textareaRef.current;
-
       const mirrorElement = textarea?.shadowRoot?.querySelector(
         '.ui5-textarea-mirror',
       ) as HTMLElement;
       const innerElement = textarea?.shadowRoot?.querySelector(
         '.ui5-textarea-inner',
       ) as HTMLElement;
-
       if (mirrorElement && innerElement) {
         const padding = isMultiRowMode ? PADDING_MULTI_ROW : PADDING_SINGLE_ROW;
         mirrorElement.style.paddingRight = padding;
@@ -148,16 +209,15 @@ export default function QueryInput({
           rows={1}
           placeholder={t('kyma-companion.placeholder')}
           value={inputValue}
+          valueState={getValueState()}
+          valueStateMessage={getValueStateMessage()}
           onKeyDown={e => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               onSubmitInput();
             }
           }}
-          onInput={e => {
-            setInputValue(e.target.value);
-          }}
-          valueState="None"
+          onInput={e => setInputValue(e.target.value)}
         />
         <div
           className={`query-input-actions${isMultiRowMode ? '__column' : ''}`}
@@ -169,13 +229,19 @@ export default function QueryInput({
             name="decline"
             mode="Interactive"
             design="Default"
-            onClick={() => setInputValue('')}
+            onClick={() => {
+              setInputValue('');
+              setIsTokenLimitExceeded(false);
+              setShowTokenWarning(false);
+            }}
           />
           <Button
             id="submit-icon"
             icon="paper-plane"
             design="Emphasized"
-            disabled={loading || inputValue.length === 0}
+            disabled={
+              loading || inputValue.length === 0 || isTokenLimitExceeded
+            }
             onClick={onSubmitInput}
           />
         </div>
