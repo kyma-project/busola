@@ -47,16 +47,12 @@ export default function QueryInput({
   const [isMultiRowMode, setIsMultiRowMode] = useState(false);
   const [isTokenLimitExceeded, setIsTokenLimitExceeded] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
+  const [tokenError, setTokenError] = useState(false);
 
   const getTokenCount = useCallback((text: string) => {
-    try {
-      const encoding = encodingForModel(DEFAULT_MODEL);
-      const tokens = encoding.encode(text);
-      return tokens.length;
-    } catch (error) {
-      console.error('Error calculating token count:', error);
-      return Math.ceil(text.length / 4); // Fallback estimation
-    }
+    const encoding = encodingForModel(DEFAULT_MODEL);
+    const tokens = encoding.encode(text);
+    return tokens.length;
   }, []);
 
   // Update token-related state
@@ -71,11 +67,15 @@ export default function QueryInput({
   useEffect(() => {
     if (inputValue) {
       const timeoutId = setTimeout(() => {
-        const count = getTokenCount(inputValue);
-        updateTokenState(count);
+        try {
+          const count = getTokenCount(inputValue);
+          updateTokenState(count);
+        } catch (err) {
+          console.error('Tokenization failed', err);
+          setTokenError(true);
+        }
       }, DEBOUNCE_DELAY);
 
-      // Cleanup: clear timeout if input changes before delay
       return () => clearTimeout(timeoutId);
     } else {
       setIsTokenLimitExceeded(false);
@@ -117,9 +117,15 @@ export default function QueryInput({
     if (inputValue.length === 0) return;
 
     // Calculate token count immediately before submission
-    const count = getTokenCount(inputValue);
-    if (count > MAX_TOKENS) {
-      updateTokenState(count);
+    try {
+      const count = getTokenCount(inputValue);
+      if (count > MAX_TOKENS) {
+        updateTokenState(count);
+        return;
+      }
+    } catch (err) {
+      console.error('Tokenization failed', err);
+      setTokenError(true);
       return;
     }
 
@@ -131,7 +137,7 @@ export default function QueryInput({
   };
 
   const getValueState = () => {
-    if (isTokenLimitExceeded) return 'Negative';
+    if (isTokenLimitExceeded || tokenError) return 'Negative';
     if (showTokenWarning) return 'Critical';
     return 'None';
   };
@@ -141,6 +147,8 @@ export default function QueryInput({
       return <Text>{t('kyma-companion.input-tokens.warning')}</Text>;
     if (isTokenLimitExceeded)
       return <Text>{t('kyma-companion.input-tokens.error')}</Text>;
+    if (tokenError)
+      return <Text>{t('kyma-companion.input-tokens.calculation-error')}</Text>;
     return null;
   };
 
@@ -230,7 +238,10 @@ export default function QueryInput({
             icon="paper-plane"
             design="Emphasized"
             disabled={
-              loading || inputValue.length === 0 || isTokenLimitExceeded
+              loading ||
+              inputValue.length === 0 ||
+              isTokenLimitExceeded ||
+              tokenError
             }
             onClick={onSubmitInput}
           />
