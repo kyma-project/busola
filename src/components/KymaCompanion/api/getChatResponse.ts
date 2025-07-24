@@ -1,11 +1,16 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { HttpError, HTTPStatus } from './error';
 import {
   handleChatErrorResponseFn,
   handleChatResponseFn,
   retryFetch,
 } from 'components/KymaCompanion/api/retry';
-import { ErrorType, ErrResponse, MessageChunk } from '../components/Chat/types';
+import {
+  ErrorType,
+  ErrResponse,
+  HttpError,
+  HTTPStatus,
+  MessageChunk,
+} from '../components/Chat/types';
 import { TFunction } from 'i18next';
 
 const MAX_ATTEMPTS = 3;
@@ -76,9 +81,11 @@ async function fetchResponse(
     .then(async response => {
       if (!response.ok) {
         const respJson = await response?.json();
-        const error = new HttpError(response?.statusText, response?.status);
-        error.message = respJson?.message;
-        throw error;
+        throw new HttpError(
+          response.status,
+          respJson?.error,
+          respJson?.message,
+        );
       }
       const reader = response.body?.getReader();
       if (!reader) {

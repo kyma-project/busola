@@ -3,6 +3,27 @@ export enum Author {
   AI = 'ai',
 }
 
+export interface AIError {
+  title?: string;
+  message: string | null;
+  displayRetry: boolean;
+}
+
+export class HttpError extends Error {
+  statusCode: number;
+  title: string;
+
+  constructor(statusCode: number, title: string, message: string) {
+    super(message);
+    this.statusCode = statusCode;
+    this.title = title;
+  }
+}
+
+export enum HTTPStatus {
+  RATE_LIMIT_CODE = 429,
+}
+
 export enum ErrorType {
   FATAL,
   RETRYABLE,

@@ -11,11 +11,11 @@ import { authDataState } from 'state/authDataAtom';
 import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuestions';
 import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
-import { AIError } from '../KymaCompanion';
 import ContextLabel from './ContextLabel/ContextLabel';
 import TimestampLabel from './TimestampLabel/TimestampLabel';
 import QueryInput from './Input/QueryInput';
 import {
+  AIError,
   Author,
   ChatGroup,
   ErrResponse,
