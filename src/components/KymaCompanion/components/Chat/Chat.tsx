@@ -22,8 +22,8 @@ import {
   ErrorType,
   MessageChunk,
   Message as MessageType,
-  chatGroupHelpers,
 } from './types';
+import { chatHelpers } from './chatHelper';
 import './Chat.scss';
 import FeedbackMessage from './FeedbackMessage/FeedbackMessage';
 
@@ -80,13 +80,13 @@ export const Chat = ({
   const addMessage = (message: MessageType) => {
     const currentContext = getCurrentContext();
     setChatHistory(prevGroups =>
-      chatGroupHelpers.addMessage(prevGroups, message, currentContext),
+      chatHelpers.addMessage(prevGroups, message, currentContext),
     );
   };
 
   const updateLatestMessage = (updates: Partial<MessageType>) => {
     setChatHistory(prevGroups =>
-      chatGroupHelpers.updateLatestMessage(prevGroups, updates),
+      chatHelpers.updateLatestMessage(prevGroups, updates),
     );
   };
 
@@ -96,7 +96,7 @@ export const Chat = ({
     isFeedback: boolean,
   ) => {
     setChatHistory(prevGroups =>
-      chatGroupHelpers.concatMsgToLatestMessage(
+      chatHelpers.concatMsgToLatestMessage(
         prevGroups,
         response,
         isLoading,
@@ -106,15 +106,11 @@ export const Chat = ({
   };
 
   const removeLastMessage = () => {
-    setChatHistory(prevGroups =>
-      chatGroupHelpers.removeLastMessage(prevGroups),
-    );
+    setChatHistory(prevGroups => chatHelpers.removeLastMessage(prevGroups));
   };
 
   const setErrorOnLastUserMsg = () => {
-    setChatHistory(prevGroups =>
-      chatGroupHelpers.setErrorOnLastUserMsg(prevGroups),
-    );
+    setChatHistory(prevGroups => chatHelpers.setErrorOnLastUserMsg(prevGroups));
   };
 
   const handleChatResponse = (response: MessageChunk) => {
@@ -234,7 +230,7 @@ export const Chat = ({
   };
 
   const retryPreviousPrompt = () => {
-    const previousPrompt = chatGroupHelpers.findLastUserPrompt(chatHistory);
+    const previousPrompt = chatHelpers.findLastUserPrompt(chatHistory);
     if (previousPrompt) {
       removeLastMessage();
       sendPrompt(previousPrompt);
@@ -311,7 +307,7 @@ export const Chat = ({
         // Update the context of the first group
         const currentContext = getCurrentContext();
         setChatHistory(prevGroups =>
-          chatGroupHelpers.updateFirstGroupContext(prevGroups, currentContext),
+          chatHelpers.updateFirstGroupContext(prevGroups, currentContext),
         );
         updateLatestMessage({
           messageChunks: [
