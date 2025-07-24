@@ -1,5 +1,8 @@
-import { ErrResponse, MessageChunk } from '../components/Chat/types';
-import { HTTPStatus } from './error';
+import {
+  ErrResponse,
+  HTTPStatus,
+  MessageChunk,
+} from '../components/Chat/types';
 
 export type handleChatResponseFn = (chunk: MessageChunk) => void;
 export type handleChatErrorResponseFn = (errResponse: ErrResponse) => void;
