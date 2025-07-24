@@ -42,6 +42,7 @@ export interface Message {
   isLoading: boolean;
   suggestions?: string[];
   suggestionsLoading?: boolean;
+  partialAIFailure?: boolean;
   hasError?: boolean;
   isFeedback?: boolean;
 }

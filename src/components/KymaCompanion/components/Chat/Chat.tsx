@@ -118,23 +118,41 @@ export const Chat = ({
     const isFeedback = response?.data?.answer?.is_feedback === true;
 
     if (!isLoading) {
-      const finalTask = response.data.answer?.tasks?.at(-1);
-      const hasError = finalTask?.status === 'error';
+      const hasError =
+        response.data.answer?.tasks?.some(task => task.status === 'error') ??
+        false;
 
       if (hasError) {
         const allTasksError =
           response.data.answer?.tasks?.every(task => task.status === 'error') ??
           false;
-        const displayRetry = response.data.error !== null || allTasksError;
-        removeLastMessage();
-        handleError(
-          {
-            type: ErrorType.FATAL,
-            message: response.data.answer.content,
-          },
-          displayRetry,
-        );
-        return;
+        if (!allTasksError) {
+          // handle partial error
+          updateLatestMessage({ partialAIFailure: true });
+          setFollowUpLoading();
+          getFollowUpQuestions({
+            sessionID,
+            handleFollowUpQuestions,
+            handleFollowUpError,
+            clusterUrl: cluster.currentContext.cluster.cluster.server,
+            token: authData.token,
+            certificateAuthorityData:
+              cluster.currentContext.cluster.cluster[
+                'certificate-authority-data'
+              ],
+          });
+        } else {
+          const displayRetry = response.data.error !== null || allTasksError;
+          removeLastMessage();
+          handleError(
+            {
+              type: ErrorType.FATAL,
+              message: response.data.answer.content,
+            },
+            displayRetry,
+          );
+          return;
+        }
       } else if (isFeedback) {
         setLoading(false);
       } else {
@@ -181,7 +199,6 @@ export const Chat = ({
         setLoading(false);
         if (errResponse.maxAttempts === 1) {
           updateLatestMessage({
-            author: Author.AI,
             messageChunks: [
               {
                 data: {
@@ -211,7 +228,6 @@ export const Chat = ({
         });
         setLoading(true);
         updateLatestMessage({
-          author: Author.AI,
           messageChunks: [
             {
               data: {
@@ -386,7 +402,8 @@ export const Chat = ({
                             author={message.author}
                             messageChunks={message.messageChunks}
                             isLoading={message.isLoading}
-                            hasError={message.hasError ?? false}
+                            partialAIFailure={message.partialAIFailure}
+                            hasError={message.hasError}
                             isLatestMessage={isLastMessage}
                           />
                           {isLastMessage && !message.isLoading && (
@@ -405,7 +422,7 @@ export const Chat = ({
                       key={`${groupIndex}-${messageIndex}`}
                       messageChunks={message.messageChunks}
                       isLoading={message.isLoading}
-                      hasError={message.hasError ?? false}
+                      hasError={message.hasError}
                       isLatestMessage={isLastMessage}
                     />
                   );
