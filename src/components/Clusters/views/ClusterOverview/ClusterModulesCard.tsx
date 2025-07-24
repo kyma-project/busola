@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router';
 import { useGetAllModulesStatuses } from 'components/KymaModules/hooks';
 import { useContext, useMemo } from 'react';
 import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
+import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from 'state/types';
 
 const CountStatuseByType = (
   statuses: Record<string, any>,
@@ -57,6 +59,10 @@ export default function ClusterModulesCard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statuses, statusesError]);
 
+  const { isEnabled: isCommunityModulesEnabled } = useFeature(
+    configFeaturesNames.COMMUNITY_MODULES,
+  );
+
   const display =
     !error && !loadingModules && modules && !installedCommunityModulesLoading;
 
@@ -69,10 +75,12 @@ export default function ClusterModulesCard() {
           title={t('cluster-overview.statistics.modules-overview')}
           subTitle={t('kyma-modules.installed-modules')}
           extraInfo={[
-            {
-              title: t('modules.community.installed-modules'),
-              value: installedCommunityModules?.length,
-            },
+            isCommunityModulesEnabled
+              ? {
+                  title: t('modules.community.installed-modules'),
+                  value: installedCommunityModules?.length,
+                }
+              : null,
             {
               title: t('common.statuses.ready'),
               value: moduleStatusCounts.ready,
