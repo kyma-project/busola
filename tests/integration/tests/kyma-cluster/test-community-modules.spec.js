@@ -87,6 +87,8 @@ context('Test Community Modules views', () => {
   });
 
   it('Test Community Modules list', () => {
+    cy.wait(1000);
+
     cy.get('.community-modules-list')
       .find('ui5-input[id="search-input"]:visible')
       .find('input')

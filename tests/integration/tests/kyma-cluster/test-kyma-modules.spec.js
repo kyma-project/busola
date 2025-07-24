@@ -33,7 +33,6 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Test adding Modules', () => {
-    // TODO: add data-testid for panel
     cy.get('ui5-panel[data-testid="modules-list"]')
       .find('ui5-table')
       .find('ui5-illustrated-message')
