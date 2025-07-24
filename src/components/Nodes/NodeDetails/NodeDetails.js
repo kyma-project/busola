@@ -42,7 +42,8 @@ export default function NodeDetails({ nodeName }) {
       midColumn: null,
       endColumn: null,
     });
-  }, [setLayoutColumn, nodeName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeName]);
 
   if (loading) return <Spinner />;
   if (error) return <Text>{error}</Text>;
