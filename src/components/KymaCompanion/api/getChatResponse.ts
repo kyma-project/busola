@@ -120,32 +120,50 @@ async function fetchResponse(
     });
 }
 
-async function readChunk(
+export async function readChunk(
   reader: ReadableStreamDefaultReader<Uint8Array>,
   decoder: TextDecoder,
   handleChatResponse: (chunk: MessageChunk) => void,
   handleError: (errResponse: ErrResponse) => void,
   sessionID: string,
+  buffer: string = '',
 ): Promise<void> {
   return reader
     .read()
     .then(({ done, value }) => {
       if (done) {
+        if (buffer.trim()) {
+          handleError({
+            message: 'Stream ended with incomplete JSON data',
+            type: ErrorType.FATAL,
+          });
+        }
         return;
       }
       const receivedString = decoder.decode(value, { stream: true });
-      // handle multiple JSON objects in one chunk
-      const messages = splitJsonObjects(receivedString);
+      const combinedData = buffer + receivedString;
+      const { completeObjects, remainingBuffer } = extractJsonObjectsFromChunk(
+        combinedData,
+      );
 
-      messages.forEach(message => {
+      completeObjects.forEach(message => {
         const chunk = JSON.parse(message);
         // Custom error provided by busola backend during streaming, not by companion backend
-        if (chunk?.error) {
-          throw new Error(chunk?.error);
+        if (chunk?.streamingError) {
+          throw new Error(chunk.streamingError.message);
         }
         handleChatResponse(chunk);
       });
-      readChunk(reader, decoder, handleChatResponse, handleError, sessionID);
+
+      // Continue reading with the updated buffer
+      readChunk(
+        reader,
+        decoder,
+        handleChatResponse,
+        handleError,
+        sessionID,
+        remainingBuffer,
+      );
     })
     .catch(error => {
       console.error('Error reading stream:', error);
@@ -156,15 +174,45 @@ async function readChunk(
     });
 }
 
-function splitJsonObjects(text: string): string[] {
-  return text
-    .split(/\}\s*\{/)
-    .map((part, index, array) => {
-      if (index === 0) return part + (array.length > 1 ? '}' : '');
-      if (index === array.length - 1) return '{' + part;
-      return '{' + part + '}';
-    })
-    .filter(part => part.trim().length > 0);
+export function extractJsonObjectsFromChunk(
+  text: string,
+): { completeObjects: string[]; remainingBuffer: string } {
+  const completeObjects: string[] = [];
+  let remainingBuffer = text;
+
+  // Look for complete JSON objects (ending with `}}\n`)
+  const jsonEndPattern = /\}\}\n/g;
+  let match;
+  let lastIndex = 0;
+
+  while ((match = jsonEndPattern.exec(text)) !== null) {
+    // Extract the complete JSON object (from lastIndex to end of match)
+    const completeObject = text.substring(
+      lastIndex,
+      match.index + match[0].length,
+    );
+
+    const trimmedObject = completeObject.trim();
+    if (trimmedObject.startsWith('{')) {
+      completeObjects.push(trimmedObject.replace(/\n$/, ''));
+      lastIndex = match.index + match[0].length;
+    }
+  }
+
+  // Whatever remains after the last complete object stays in the buffer
+  remainingBuffer = text.substring(lastIndex);
+
+  // If we didn't find any complete objects (doesn't end with `}}\n`),
+  // store in buffer and wait for the next chunk
+  if (
+    completeObjects.length === 0 &&
+    text.trim() &&
+    !text.trim().endsWith('}}\n')
+  ) {
+    remainingBuffer = text;
+  }
+
+  return { completeObjects, remainingBuffer };
 }
 
 export default async function getChatResponse({

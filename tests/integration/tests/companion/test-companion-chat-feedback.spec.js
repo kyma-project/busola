@@ -10,9 +10,8 @@ context('Test Companion Chat Error Handling', () => {
 
   it('Feedback response handling', () => {
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 750,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           data: {
             answer: {
               content: 'Hello, this is an AI feedback response',
@@ -20,7 +19,11 @@ context('Test Companion Chat Error Handling', () => {
               is_feedback: true,
             },
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 750,
+        body: mockResponse,
       });
     }).as('getChatFeedbackResponse');
 

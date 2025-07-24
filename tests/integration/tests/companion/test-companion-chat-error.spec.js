@@ -127,9 +127,8 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
 
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 100,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           data: {
             answer: {
               content: 'This is a custom error message',
@@ -145,7 +144,11 @@ context('Test Companion Chat Error Handling', () => {
             },
             error: 'error',
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 100,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     cy.resetCompanion();
@@ -169,9 +172,8 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
 
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 100,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           data: {
             answer: {
               content: 'This is a custom error message',
@@ -193,7 +195,11 @@ context('Test Companion Chat Error Handling', () => {
             },
             error: null,
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 100,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     cy.resetCompanion();
