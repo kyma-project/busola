@@ -138,19 +138,9 @@ export default function QueryInput({
 
   const getValueStateMessage = () => {
     if (showTokenWarning)
-      return (
-        <Text>
-          {
-            'Approaching token limit: your current query surpasses 90% of the configured limit'
-          }
-        </Text>
-      );
+      return <Text>{t('kyma-companion.input-tokens.warning')}</Text>;
     if (isTokenLimitExceeded)
-      return (
-        <Text>
-          {'Iput exceeds your token limit. Please shorten your message.'}
-        </Text>
-      );
+      return <Text>{t('kyma-companion.input-tokens.error')}</Text>;
     return null;
   };
 
