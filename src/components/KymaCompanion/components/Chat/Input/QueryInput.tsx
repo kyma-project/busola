@@ -7,6 +7,8 @@ import {
 } from '@ui5/webcomponents-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from 'state/types';
 import { useTokenValidation } from 'components/KymaCompanion/hooks/useTokenValidation';
 import './QueryInput.scss';
 
@@ -40,14 +42,17 @@ export default function QueryInput({
   const [maxRows, setMaxRows] = useState(0);
   const [isMultiRowMode, setIsMultiRowMode] = useState(false);
 
+  const { config: companionConfig } = useFeature(
+    configFeaturesNames.KYMA_COMPANION,
+  );
+
   const {
     isTokenLimitExceeded,
     showTokenWarning,
     tokenError,
     tokenCount,
     validateTokenCount,
-    maxTokens,
-  } = useTokenValidation(inputValue);
+  } = useTokenValidation(inputValue, companionConfig);
 
   const checkRowCount = useCallback(() => {
     if (!textareaRef.current) return;
@@ -103,13 +108,19 @@ export default function QueryInput({
     if (showTokenWarning)
       return (
         <Text>
-          {t('kyma-companion.input-tokens.warning', { tokenCount, maxTokens })}
+          {t('kyma-companion.input-tokens.warning', {
+            tokenCount,
+            maxTokens: companionConfig.queryMaxTokens,
+          })}
         </Text>
       );
     if (isTokenLimitExceeded)
       return (
         <Text>
-          {t('kyma-companion.input-tokens.error', { tokenCount, maxTokens })}
+          {t('kyma-companion.input-tokens.error', {
+            tokenCount,
+            maxTokens: companionConfig.queryMaxTokens,
+          })}
         </Text>
       );
     if (tokenError)

@@ -1,10 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { encodingForModel } from 'js-tiktoken';
+import { encodingForModel, TiktokenModel } from 'js-tiktoken';
 
-const MAX_TOKENS = 8000;
-const DEFAULT_MODEL = 'gpt-4.1';
 const WARNING_THRESHOLD = 0.8;
 const DEBOUNCE_DELAY = 500;
+// Fallback values should config not be available
+const FALLBACK_MAX_TOKENS = 8000;
+const FALLBACK_MODEL: TiktokenModel = 'gpt-4';
+
+interface CompanionConfig {
+  model: string;
+  queryMaxTokens: number;
+}
 
 interface TokenValidationState {
   isTokenLimitExceeded: boolean;
@@ -15,10 +21,13 @@ interface TokenValidationState {
 
 export const useTokenValidation = (
   text: string,
+  config: CompanionConfig,
 ): TokenValidationState & {
   validateTokenCount: (inputText: string) => { isValid: boolean };
-  maxTokens: number;
 } => {
+  const maxTokens = config?.queryMaxTokens ?? FALLBACK_MAX_TOKENS;
+  const model = (config?.model as TiktokenModel) ?? FALLBACK_MODEL;
+
   const [state, setState] = useState<TokenValidationState>({
     isTokenLimitExceeded: false,
     showTokenWarning: false,
@@ -26,7 +35,7 @@ export const useTokenValidation = (
     tokenCount: 0,
   });
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const encoding = useMemo(() => encodingForModel(DEFAULT_MODEL), []);
+  const encoding = useMemo(() => encodingForModel(model), [model]);
 
   const getTokenCount = useCallback(
     (inputText: string): number => {
@@ -41,7 +50,7 @@ export const useTokenValidation = (
       try {
         const count = getTokenCount(inputText);
         return {
-          isValid: count <= MAX_TOKENS,
+          isValid: count <= maxTokens,
         };
       } catch (err) {
         console.error('Tokenization failed', err);
@@ -50,20 +59,23 @@ export const useTokenValidation = (
         };
       }
     },
-    [getTokenCount],
+    [getTokenCount, maxTokens],
   );
 
-  const updateTokenState = useCallback((count: number) => {
-    const isExceeded = count > MAX_TOKENS;
-    const showWarning = !isExceeded && count > MAX_TOKENS * WARNING_THRESHOLD;
+  const updateTokenState = useCallback(
+    (count: number) => {
+      const isExceeded = count > maxTokens;
+      const showWarning = !isExceeded && count > maxTokens * WARNING_THRESHOLD;
 
-    setState({
-      isTokenLimitExceeded: isExceeded,
-      showTokenWarning: showWarning,
-      tokenError: false,
-      tokenCount: count,
-    });
-  }, []);
+      setState({
+        isTokenLimitExceeded: isExceeded,
+        showTokenWarning: showWarning,
+        tokenError: false,
+        tokenCount: count,
+      });
+    },
+    [maxTokens],
+  );
 
   // Debounced token calculation
   useEffect(() => {
@@ -90,6 +102,5 @@ export const useTokenValidation = (
   return {
     ...state,
     validateTokenCount,
-    maxTokens: MAX_TOKENS,
   };
 };
