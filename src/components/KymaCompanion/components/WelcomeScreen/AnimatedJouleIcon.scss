@@ -1,0 +1,23 @@
+@keyframes glimmerStars {
+  0% {
+    transform: scale(1);
+    opacity: 50%;
+  }
+
+  100% {
+    transform: scale(1.2);
+  }
+}
+.star {
+  animation: glimmerStars 1.2s ease-in-out alternate infinite;
+}
+
+.star:nth-child(3) {
+  transform-origin: 42px 0px;
+  animation-delay: 0.6s;
+}
+
+.star:nth-child(4) {
+  transform-origin: 16px 24px;
+  animation-delay: 0.9s;
+}

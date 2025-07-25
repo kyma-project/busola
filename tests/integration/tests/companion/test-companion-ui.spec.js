@@ -8,6 +8,54 @@ context('Test Companion UI', () => {
     cy.loginAndSelectCluster();
   });
 
+  describe('Test Welcome screen', () => {
+    it('Initial loading screen should appear on first open', () => {
+      cy.openCompanion();
+
+      cy.get('.kyma-companion').as('companion');
+
+      cy.get('@companion')
+        .find('.chat-loading-screen')
+        .find('.chat-loading-indicator')
+        .should('be.visible');
+
+      cy.closeCompanion();
+    });
+
+    it('Welcome screen should be visible on first open', () => {
+      cy.mockPromptSuggestions();
+      cy.openCompanion();
+      cy.wait(3000);
+      cy.get('.kyma-companion').as('companion');
+
+      cy.wait('@getPromptSuggestions');
+      cy.wait(1000);
+
+      cy.get('@companion')
+        .find('.chat-initial-screen')
+        .contains('Hello')
+        .should('be.visible');
+    });
+
+    it('Welcome screen should not be visible after reset', () => {
+      cy.get('.kyma-companion').as('companion');
+
+      cy.clickSuggestion(0);
+
+      cy.get('@companion')
+        .find('.chat-initial-screen')
+        .should('not.exist');
+
+      cy.resetCompanion();
+
+      cy.get('@companion')
+        .find('.chat-initial-screen')
+        .should('not.exist');
+
+      cy.closeCompanion();
+    });
+  });
+
   describe('Fullscreen button', () => {
     it('Enters fullscreen correctly', () => {
       cy.openCompanion();
