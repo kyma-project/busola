@@ -174,7 +174,7 @@ export default function CommunityModulesEdit() {
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
-    if (!moduleTemplatesLoading && installedCommunityModulesLoading) {
+    if (!moduleTemplatesLoading || installedCommunityModulesLoading) {
       return getAvailableCommunityModules(
         communityModuleTemplates,
         installedCommunityModuleTemplates,
