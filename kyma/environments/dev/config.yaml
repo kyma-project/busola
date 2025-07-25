@@ -94,4 +94,4 @@ config:
     SNOW:
       isEnabled: false
     COMMUNITY_MODULES:
-      isEnabled: false
+      isEnabled: true

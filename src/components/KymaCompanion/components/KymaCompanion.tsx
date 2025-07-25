@@ -12,6 +12,7 @@ import Disclaimer from './Disclaimer/Disclaimer';
 import './KymaCompanion.scss';
 
 export interface AIError {
+  title?: string;
   message: string | null;
   displayRetry: boolean;
 }
@@ -33,6 +34,7 @@ export default function KymaCompanion() {
     message: null,
     displayRetry: false,
   });
+  const [time, setTime] = useState<Date>(new Date());
 
   function handleRefresh() {
     setChatHistory(
@@ -42,6 +44,7 @@ export default function KymaCompanion() {
       message: null,
       displayRetry: false,
     });
+    setTime(new Date());
     setIsReset(true);
     setIsInitialScreen(false);
   }
@@ -121,6 +124,7 @@ export default function KymaCompanion() {
           error={error}
           setError={setError}
           hide={showDisclaimer}
+          time={time}
           setIsInitialScreen={setIsInitialScreen}
           isInitialScreen={isInitialScreen}
         />

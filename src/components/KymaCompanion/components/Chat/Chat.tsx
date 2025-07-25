@@ -13,6 +13,7 @@ import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
 import { AIError } from '../KymaCompanion';
 import ContextLabel from './ContextLabel/ContextLabel';
+import TimestampLabel from './TimestampLabel/TimestampLabel';
 import QueryInput from './Input/QueryInput';
 import {
   Author,
@@ -38,6 +39,7 @@ type ChatProps = {
   error: AIError;
   setError: React.Dispatch<React.SetStateAction<AIError>>;
   hide: boolean;
+  time: Date | null;
   setIsInitialScreen: React.Dispatch<React.SetStateAction<boolean>>;
   isInitialScreen: boolean;
 };
@@ -52,6 +54,7 @@ export const Chat = ({
   isReset,
   setIsReset,
   hide = false,
+  time,
   setIsInitialScreen,
   isInitialScreen,
 }: ChatProps) => {
@@ -186,9 +189,27 @@ export const Chat = ({
       case ErrorType.FATAL: {
         setErrorOnLastUserMsg();
         setLoading(false);
+        if (errResponse.maxAttempts === 1) {
+          updateLatestMessage({
+            author: Author.AI,
+            messageChunks: [
+              {
+                data: {
+                  answer: {
+                    content: t('kyma-companion.error.http-error-no-retry', {
+                      statusCode: errResponse.statusCode,
+                    }),
+                    next: '__end__',
+                  },
+                },
+              },
+            ],
+            isLoading: false,
+          });
+        }
         setError({
-          message:
-            errResponse.message ?? t('kyma-companion.error.subtitle') ?? '',
+          title: errResponse.title,
+          message: errResponse.message ?? t('kyma-companion.error.subtitle'),
           displayRetry: displayRetry ?? false,
         });
         break;
@@ -261,6 +282,7 @@ export const Chat = ({
       },
       certificateAuthorityData:
         cluster.currentContext.cluster.cluster['certificate-authority-data'],
+      t,
     });
     addMessage({ author: Author.AI, messageChunks: [], isLoading: true });
   };
@@ -365,6 +387,7 @@ export const Chat = ({
               className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
               ref={chatRef}
             >
+              {time && <TimestampLabel time={time} />}
               {chatHistory.map((group, groupIndex) => {
                 const isLastGroup = groupIndex === chatHistory.length - 1;
 
@@ -423,6 +446,7 @@ export const Chat = ({
               })}
               {error.message && (
                 <ErrorMessage
+                  errorTitle={error?.title}
                   errorMessage={
                     error.message ?? t('kyma-companion.error.subtitle')
                   }

@@ -1,4 +1,5 @@
 import { ErrResponse, MessageChunk } from '../components/Chat/types';
+import { HTTPStatus } from './error';
 
 export type handleChatResponseFn = (chunk: MessageChunk) => void;
 export type handleChatErrorResponseFn = (errResponse: ErrResponse) => void;
@@ -13,30 +14,34 @@ export async function retryFetch(
   handleError: handleChatErrorResponseFn,
   maxAttempts: number,
   retryDelay: number,
-): Promise<boolean> {
+): Promise<{ finished: boolean; error: ErrResponse | null }> {
   let finished = false;
+  let error: ErrResponse | null = null;
   for (let i = 0; i < maxAttempts; i++) {
+    // eslint-disable-next-line no-loop-func
     const handleErrWrapper = (errResponse: ErrResponse) => {
-      errResponse.maxAttempts = maxAttempts;
+      errResponse.maxAttempts =
+        errResponse?.statusCode === HTTPStatus.RATE_LIMIT_CODE
+          ? 1
+          : maxAttempts;
       errResponse.attempt = i + 1;
       handleError(errResponse);
-      console.debug('2: Finished handling the error', errResponse);
+      error = errResponse;
     };
     const handleChatResponseWrapper = (chunk: MessageChunk) => {
       handleChatResponse(chunk);
-      console.debug('2: Finished reading the answer');
     };
 
     finished = await fetchFn(handleChatResponseWrapper, handleErrWrapper);
 
-    console.debug(`3: Fetch Done. Result: ${finished}`);
-    if (!finished) {
+    if (error?.['statusCode'] === HTTPStatus.RATE_LIMIT_CODE) {
+      break;
+    } else if (!finished) {
       await new Promise(resolve => setTimeout(resolve, retryDelay));
     } else {
-      console.debug('DONE');
       finished = true;
       break;
     }
   }
-  return finished;
+  return { finished, error };
 }

@@ -1,11 +1,12 @@
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { HttpError } from './error';
+import { HttpError, HTTPStatus } from './error';
 import {
   handleChatErrorResponseFn,
   handleChatResponseFn,
   retryFetch,
 } from 'components/KymaCompanion/api/retry';
 import { ErrorType, ErrResponse, MessageChunk } from '../components/Chat/types';
+import { TFunction } from 'i18next';
 
 const MAX_ATTEMPTS = 3;
 const RETRY_DELAY = 1_000;
@@ -28,6 +29,7 @@ type GetChatResponseArgs = {
   clusterUrl: string;
   clusterAuth: ClusterAuth;
   certificateAuthorityData: string;
+  t: TFunction;
 };
 
 const fillAuthHeaders = (
@@ -66,7 +68,6 @@ async function fetchResponse(
   handleChatResponse: { (chunk: MessageChunk): void },
   handleError: { (errResponse: ErrResponse): void },
 ): Promise<boolean> {
-  console.debug('1: Fetch called');
   return fetch(url, {
     headers,
     body,
@@ -74,7 +75,10 @@ async function fetchResponse(
   })
     .then(async response => {
       if (!response.ok) {
-        throw new HttpError('Network response was not ok', response.status);
+        const respJson = await response?.json();
+        const error = new HttpError(response?.statusText, response?.status);
+        error.message = respJson?.message;
+        throw error;
       }
       const reader = response.body?.getReader();
       if (!reader) {
@@ -91,15 +95,23 @@ async function fetchResponse(
       return true;
     })
     .catch(error => {
-      if (error instanceof HttpError) {
+      if (
+        error instanceof HttpError &&
+        error.statusCode !== HTTPStatus.RATE_LIMIT_CODE
+      ) {
         handleError({
-          message: error.message,
-          statusCode: error.statusCode,
+          title: error?.title,
+          message: error?.message,
+          statusCode: error?.statusCode,
           type: ErrorType.RETRYABLE,
         });
       } else {
         handleError({
-          message: error.message,
+          title: error?.title,
+          message: error?.message,
+          statusCode: error?.statusCode ?? 'unknown',
+          maxAttempts:
+            error.statusCode === HTTPStatus.RATE_LIMIT_CODE ? 1 : MAX_ATTEMPTS,
           type: ErrorType.FATAL,
         });
       }
@@ -167,6 +179,7 @@ export default async function getChatResponse({
   clusterUrl,
   clusterAuth,
   certificateAuthorityData,
+  t,
 }: GetChatResponseArgs): Promise<void> {
   const { backendAddress } = getClusterConfig();
   const url = `${backendAddress}/ai-chat/messages`;
@@ -205,11 +218,16 @@ export default async function getChatResponse({
     MAX_ATTEMPTS,
     RETRY_DELAY,
   );
-  if (!result) {
+
+  if (!result?.finished) {
     handleError({
+      title: result?.error?.title,
       message:
-        "Couldn't fetch response from Kyma Companion because of network errors.",
+        result?.error?.message ||
+        t('kyma-companion.error.internal_server_error-message'),
       type: ErrorType.FATAL,
+      statusCode: result?.error?.statusCode,
+      maxAttempts: result?.error?.maxAttempts,
     });
   }
 }

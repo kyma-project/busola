@@ -255,6 +255,7 @@ export const CommunityModulesList = ({
   return (
     <React.Fragment key="commmunity-modules-list">
       <GenericList
+        testid={'community-modules-list'}
         className={'community-modules-list'}
         accessibleName={undefined}
         actions={actions as any}
@@ -293,9 +294,9 @@ export const CommunityModulesList = ({
           {
             image: 'TntComponents',
             titleText: `${t('common.labels.no')} ${t(
-              'kyma-modules.title',
+              'modules.community.title',
             ).toLocaleLowerCase()}`,
-            subtitleText: t('kyma-modules.no-modules-description'),
+            subtitleText: t('modules.community.no-modules-description'),
             url:
               'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
             buttonText: t('common.buttons.add'),

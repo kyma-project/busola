@@ -43,7 +43,6 @@ export const ServiceAccountTokenStatus = ({
       <Token
         style={{ textTransform: 'capitalize' }}
         text={accountTokenValues.status}
-        readonly
       ></Token>
     </button>
   );
