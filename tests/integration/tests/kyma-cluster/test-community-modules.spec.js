@@ -101,7 +101,7 @@ context('Test Community Modules views', () => {
       .should('be.visible');
   });
 
-  it('Test changing Community Module channel', () => {
+  it('Test changing Community Module version', () => {
     cy.inspectTab('Edit');
 
     cy.wait(1000);
@@ -116,7 +116,7 @@ context('Test Community Modules views', () => {
     cy.wait(500);
 
     cy.get('ui5-option:visible')
-      .contains('0.0.13')
+      .contains('0.0.12')
       .click();
 
     // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
@@ -139,7 +139,7 @@ context('Test Community Modules views', () => {
 
     cy.get('.community-modules-list')
       .find('ui5-table-row')
-      .contains('0.0.13')
+      .contains('0.0.12')
       .should('be.visible');
   });
 

@@ -257,7 +257,6 @@ export const CommunityModulesList = ({
       <GenericList
         testid={'community-modules-list'}
         className={'community-modules-list'}
-        accessibleName={undefined}
         actions={actions as any}
         customRowClick={handleClickResource}
         extraHeaderContent={[

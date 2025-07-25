@@ -73,7 +73,7 @@ export const GenericList = ({
   noHideFields,
   customRowClick,
   className = '',
-  accessibleName,
+  accessibleName = null,
   customSelectedEntry = '',
 }) => {
   const navigate = useNavigate();
