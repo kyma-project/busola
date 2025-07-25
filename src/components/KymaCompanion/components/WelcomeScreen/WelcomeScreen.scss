@@ -1,0 +1,72 @@
+.chat-initial-screen {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  align-items: end;
+  justify-items: center;
+  background: var(--sapAssistant_BackgroundGradient);
+  margin: 0;
+
+  .initial-screen-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: 100%;
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
+    margin: 0;
+  }
+
+  .initial-joule-icon {
+    height: 120px;
+  }
+
+  .hello-text {
+    color: white;
+    font-size: 24px;
+    font-weight: 300;
+  }
+
+  .chat-introduction {
+    color: white;
+    font-size: 38px;
+    font-weight: 300;
+  }
+}
+
+.message-variants-container {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  width: fit-content;
+  transition: width 0.1s ease-in-out;
+  height: inherit;
+}
+
+.text {
+  position: relative;
+  left: 0;
+  top: 0;
+  color: inherit;
+  opacity: 1;
+  transition: opacity 0.1s ease-in-out;
+  white-space: nowrap;
+  visibility: visible;
+  font-size: inherit;
+
+  &.next {
+    position: absolute;
+  }
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+.fade-in {
+  opacity: 1;
+  z-index: 1;
+  visibility: visible;
+}

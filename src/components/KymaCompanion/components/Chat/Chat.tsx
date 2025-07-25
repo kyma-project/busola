@@ -25,6 +25,8 @@ import {
 } from './types';
 import './Chat.scss';
 import FeedbackMessage from './FeedbackMessage/FeedbackMessage';
+import { WelcomeScreen } from '../WelcomeScreen/WelcomeScreen';
+import loadingIcon from './icon_loading.gif';
 
 type ChatProps = {
   chatHistory: ChatGroup[];
@@ -36,6 +38,8 @@ type ChatProps = {
   error: AIError;
   setError: React.Dispatch<React.SetStateAction<AIError>>;
   hide: boolean;
+  setIsInitialScreen: React.Dispatch<React.SetStateAction<boolean>>;
+  isInitialScreen: boolean;
 };
 
 export const Chat = ({
@@ -48,6 +52,8 @@ export const Chat = ({
   isReset,
   setIsReset,
   hide = false,
+  setIsInitialScreen,
+  isInitialScreen,
 }: ChatProps) => {
   const { t } = useTranslation();
   const chatRef = useRef<HTMLDivElement | null>(null);
@@ -332,82 +338,108 @@ export const Chat = ({
     }, delay);
   }, [chatHistory, error]);
 
+  const showWelcomeScreen =
+    chatHistory[0].messages.length === 1 && isInitialScreen;
   return (
-    <FlexBox
-      style={hide ? { display: 'none' } : undefined}
-      direction="Column"
-      justifyContent="SpaceBetween"
-      className="chat-container"
-      ref={containerRef}
-    >
-      <div
-        className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
-        ref={chatRef}
-      >
-        {chatHistory.map((group, groupIndex) => {
-          const isLastGroup = groupIndex === chatHistory.length - 1;
+    <>
+      {initialSuggestionsLoading && isInitialScreen ? (
+        <div className="chat-loading-screen">
+          <img
+            src={loadingIcon}
+            className="chat-loading-indicator"
+            alt="Loading indicator"
+          />
+        </div>
+      ) : (
+        <div className={`chat-container ${showWelcomeScreen ? 'split' : ''}`}>
+          {showWelcomeScreen && <WelcomeScreen />}
+          <FlexBox
+            style={
+              hide ? { display: 'none', height: '100%' } : { height: '100%' }
+            }
+            direction="Column"
+            justifyContent="SpaceBetween"
+            ref={containerRef}
+          >
+            <div
+              className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
+              ref={chatRef}
+            >
+              {chatHistory.map((group, groupIndex) => {
+                const isLastGroup = groupIndex === chatHistory.length - 1;
 
-          return (
-            <div key={groupIndex} className="context-group">
-              {group.context && (
-                <ContextLabel labelText={group.context.labelText} />
-              )}
-              <div className="message-context">
-                {group.messages.map((message, messageIndex) => {
-                  const isLastMessage =
-                    isLastGroup && messageIndex === group.messages.length - 1;
+                return (
+                  <div key={groupIndex} className="context-group">
+                    {group.context && (
+                      <ContextLabel labelText={group.context.labelText} />
+                    )}
+                    <div className="message-context">
+                      {group.messages.map((message, messageIndex) => {
+                        const isLastMessage =
+                          isLastGroup &&
+                          messageIndex === group.messages.length - 1;
 
-                  return message.author === Author.AI ? (
-                    <>
-                      {message.isFeedback ? (
-                        <FeedbackMessage />
-                      ) : (
-                        <React.Fragment key={`${groupIndex}-${messageIndex}`}>
+                        return message.author === Author.AI ? (
+                          <>
+                            {message.isFeedback ? (
+                              <FeedbackMessage />
+                            ) : (
+                              <React.Fragment
+                                key={`${groupIndex}-${messageIndex}`}
+                              >
+                                <Message
+                                  author={message.author}
+                                  messageChunks={message.messageChunks}
+                                  isLoading={message.isLoading}
+                                  hasError={message.hasError ?? false}
+                                  isLatestMessage={isLastMessage}
+                                />
+                                {isLastMessage && !message.isLoading && (
+                                  <Bubbles
+                                    onClick={sendPrompt}
+                                    suggestions={message.suggestions}
+                                    isLoading={
+                                      message.suggestionsLoading ?? false
+                                    }
+                                  />
+                                )}
+                              </React.Fragment>
+                            )}
+                          </>
+                        ) : (
                           <Message
-                            author={message.author}
+                            author={Author.USER}
+                            key={`${groupIndex}-${messageIndex}`}
                             messageChunks={message.messageChunks}
                             isLoading={message.isLoading}
                             hasError={message.hasError ?? false}
                             isLatestMessage={isLastMessage}
                           />
-                          {isLastMessage && !message.isLoading && (
-                            <Bubbles
-                              onClick={sendPrompt}
-                              suggestions={message.suggestions}
-                              isLoading={message.suggestionsLoading ?? false}
-                            />
-                          )}
-                        </React.Fragment>
-                      )}
-                    </>
-                  ) : (
-                    <Message
-                      author={Author.USER}
-                      key={`${groupIndex}-${messageIndex}`}
-                      messageChunks={message.messageChunks}
-                      isLoading={message.isLoading}
-                      hasError={message.hasError ?? false}
-                      isLatestMessage={isLastMessage}
-                    />
-                  );
-                })}
-              </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+              {error.message && (
+                <ErrorMessage
+                  errorMessage={
+                    error.message ?? t('kyma-companion.error.subtitle')
+                  }
+                  retryPrompt={() => retryPreviousPrompt()}
+                  displayRetry={error.displayRetry}
+                />
+              )}
             </div>
-          );
-        })}
-        {error.message && (
-          <ErrorMessage
-            errorMessage={error.message ?? t('kyma-companion.error.subtitle')}
-            retryPrompt={() => retryPreviousPrompt()}
-            displayRetry={error.displayRetry}
-          />
-        )}
-      </div>
-      <QueryInput
-        loading={loading}
-        sendPrompt={sendPrompt}
-        containerRef={containerRef}
-      />
-    </FlexBox>
+
+            <QueryInput
+              loading={loading}
+              sendPrompt={sendPrompt}
+              containerRef={containerRef}
+            />
+          </FlexBox>
+        </div>
+      )}
+    </>
   );
 };

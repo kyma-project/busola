@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { useRecoilState } from 'recoil';
@@ -24,6 +24,7 @@ export default function KymaCompanion() {
   );
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isInitialScreen, setIsInitialScreen] = useState<boolean>(true);
   const [isReset, setIsReset] = useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<ChatGroup[]>(
     chatGroupHelpers.createInitialState(t('kyma-companion.introduction')),
@@ -42,7 +43,14 @@ export default function KymaCompanion() {
       displayRetry: false,
     });
     setIsReset(true);
+    setIsInitialScreen(false);
   }
+
+  useEffect(() => {
+    if (chatHistory[0].messages.length > 1) {
+      setIsInitialScreen(false);
+    }
+  }, [chatHistory]);
 
   return (
     <div id="companion_wrapper">
@@ -51,14 +59,14 @@ export default function KymaCompanion() {
         header={
           <div
             className={`kyma-companion__${
-              showDisclaimer ? 'disclaimer-' : ''
+              showDisclaimer || isInitialScreen ? 'fullscreen-' : ''
             }header`}
           >
             <Title level="H5" size="H5" className="companion-title">
               {t('kyma-companion.name')}
             </Title>
             <div className="actions-container">
-              {!showDisclaimer && (
+              {!showDisclaimer && !isInitialScreen && (
                 <Button
                   design="Transparent"
                   icon="restart"
@@ -113,6 +121,8 @@ export default function KymaCompanion() {
           error={error}
           setError={setError}
           hide={showDisclaimer}
+          setIsInitialScreen={setIsInitialScreen}
+          isInitialScreen={isInitialScreen}
         />
         {showDisclaimer && (
           <Disclaimer hideDisclaimer={() => setShowDisclaimer(false)} />

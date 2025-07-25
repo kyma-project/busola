@@ -1,6 +1,11 @@
 .chat-container {
   height: calc(100vh - 60px - 1rem);
 
+  &.split {
+    display: grid;
+    grid-template-rows: 60% 1fr;
+  }
+
   .chat-list {
     display: flex;
     flex-direction: column;
@@ -36,5 +41,18 @@
         }
       }
     }
+  }
+}
+
+.chat-loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 60px - 1rem);
+  margin: 0;
+  background: var(--sapAssistant_BackgroundGradient);
+
+  .chat-loading-indicator {
+    height: 416px;
   }
 }
