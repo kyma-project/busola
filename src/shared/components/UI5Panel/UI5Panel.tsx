@@ -18,6 +18,7 @@ type UI5PanelProps = {
   description?: string;
   stickyHeader?: boolean;
   headerTop?: string;
+  testid?: string;
 };
 
 export const UI5Panel = ({
@@ -33,6 +34,7 @@ export const UI5Panel = ({
   description = '',
   stickyHeader = false,
   headerTop = '0',
+  testid,
 }: UI5PanelProps) => {
   useEffect(() => {
     if (headerTop !== '0')
@@ -51,6 +53,7 @@ export const UI5Panel = ({
   });
   return (
     <Panel
+      data-testid={testid}
       fixed={fixed}
       key={keyComponent}
       className={`${className} bsl-panel-header card-shadow ${

@@ -177,6 +177,7 @@ Cypress.Commands.add(
       selectSearchResult = false,
       searchInPlainTableText = false,
       parentSelector = null,
+      waitForDelete = 0,
     } = options;
 
     cy.wait(500);
@@ -213,6 +214,12 @@ Cypress.Commands.add(
 
     if (confirmationEnabled) {
       cy.contains(`delete ${resourceType} ${resourceName}`);
+
+      // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
+      // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
+      if (waitForDelete !== 0) {
+        cy.wait(waitForDelete);
+      }
 
       cy.get(`[header-text="Delete ${resourceType}"]:visible`)
         .find('[data-testid="delete-confirmation"]')

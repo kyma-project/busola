@@ -287,8 +287,8 @@ export const ModulesList = ({
         <UnmanagedModuleInfo kymaResource={kymaResource} />
       </div>
       <GenericList
+        testid={'kyma-modules-list'}
         className={'modules-list'}
-        accessibleName={undefined}
         actions={actions as any}
         customRowClick={handleClickResource}
         extraHeaderContent={[

@@ -16,7 +16,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
-import { Button, Form, FormItem } from '@ui5/webcomponents-react';
+import { Button, Form, FormItem, MessageStrip } from '@ui5/webcomponents-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
@@ -32,6 +32,7 @@ import {
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 
 import './CommunityModule.scss';
+import { capitalizeFirstLetter } from '@ui5/webcomponents-react-base';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -125,7 +126,9 @@ function transformDataForDisplay(
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     const formatDisplayText = (v: VersionInfo): string => {
-      return `${v.channel ? v.channel + ' ' : ''}(v${v.version})`;
+      return `${v.channel ? capitalizeFirstLetter(v.channel) + ' ' : ''}(v${
+        v.version
+      })`;
     };
 
     return {
@@ -220,6 +223,7 @@ export default function CommunityModulesEdit() {
     return (
       <section>
         <UI5Panel
+          testid={'community-modules-edit'}
           title={''}
           headerActions={
             <Button
@@ -250,24 +254,34 @@ export default function CommunityModulesEdit() {
                     className="collapsible-margins"
                     title={t('modules.community.title')}
                   >
-                    <div className={'edit'}>
-                      {communityModulesToDisplay &&
-                        communityModulesToDisplay.map((module, idx) => {
-                          return (
-                            <CommunityModuleVersionSelect
-                              key={`${module.name}+${idx}`}
-                              module={module}
-                              onChange={onVersionChange(
-                                communityModuleTemplates,
-                                installedCommunityModuleTemplates,
-                                communityModulesTemplatesToApply,
-                                setCommunityModulesTemplatesToApply,
-                                setIsResourceEdited,
-                              )}
-                            />
-                          );
-                        })}
-                    </div>
+                    {installedCommunityModuleTemplates.items.length !== 0 ? (
+                      <div className={'edit'}>
+                        {communityModulesToDisplay &&
+                          communityModulesToDisplay.map((module, idx) => {
+                            return (
+                              <CommunityModuleVersionSelect
+                                key={`${module.name}+${idx}`}
+                                module={module}
+                                onChange={onVersionChange(
+                                  communityModuleTemplates,
+                                  installedCommunityModuleTemplates,
+                                  communityModulesTemplatesToApply,
+                                  setCommunityModulesTemplatesToApply,
+                                  setIsResourceEdited,
+                                )}
+                              />
+                            );
+                          })}
+                      </div>
+                    ) : (
+                      <MessageStrip
+                        design="Critical"
+                        hideCloseButton
+                        className="sap-margin-top-small"
+                      >
+                        {t('modules.community.no-modules-installed')}
+                      </MessageStrip>
+                    )}
                   </CollapsibleSection>
                 </div>
               </FormItem>

@@ -1,5 +1,10 @@
-import { useWindowTitle } from 'shared/hooks/useWindowTitle';
+import { useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { useSetRecoilState } from 'recoil';
+import { Text } from '@ui5/webcomponents-react';
+
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useNodeQuery, useResourceByNode } from '../nodeQueries';
 import { MachineInfo } from '../MachineInfo/MachineInfo';
 import { NodeResources } from '../NodeResources/NodeResources';
@@ -7,14 +12,13 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { createPortal } from 'react-dom';
+
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceForm } from 'shared/ResourceForm';
-import { useMemo } from 'react';
 import { Description } from 'shared/components/Description/Description';
-import { Text } from '@ui5/webcomponents-react';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
+import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -24,6 +28,23 @@ export default function NodeDetails({ nodeName }) {
   const { data: resources, loading: loadingMetrics } = useResourceByNode(
     nodeName,
   );
+
+  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  useEffect(() => {
+    setLayoutColumn({
+      layout: 'OneColumn',
+      startColumn: {
+        resourceType: 'nodes',
+        resourceName: nodeName,
+        rawResourceTypeName: 'Node',
+        apiVersion: 'v1',
+      },
+      midColumn: null,
+      endColumn: null,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeName]);
+
   if (loading) return <Spinner />;
   if (error) return <Text>{error}</Text>;
 
