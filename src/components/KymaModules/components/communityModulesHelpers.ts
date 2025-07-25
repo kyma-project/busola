@@ -1,6 +1,5 @@
 import {
   getModuleName,
-  ModuleReleaseMetaListType,
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
@@ -10,9 +9,7 @@ export type VersionInfo = {
   version: string;
   moduleTemplateName: string;
   moduleTemplateNamespace: string;
-  channel?: string;
   installed?: boolean;
-  beta?: boolean;
   docsURL?: string;
   icon?: {
     link: string;
@@ -23,12 +20,10 @@ export type VersionInfo = {
 export function getAvailableCommunityModules(
   communityModulesTemplates: ModuleTemplateListType,
   installedModuleTemplates: ModuleTemplateListType,
-  moduleReleaseMetas: ModuleReleaseMetaListType,
 ): Map<string, VersionInfo[]> {
   const availableCommunityModules = new Map<string, VersionInfo[]>();
   fillModuleVersions(availableCommunityModules, communityModulesTemplates);
   markInstalledVersion(availableCommunityModules, installedModuleTemplates);
-  fillModulesWithMetadata(availableCommunityModules, moduleReleaseMetas);
   return availableCommunityModules;
 }
 
@@ -46,10 +41,7 @@ function fillModuleVersions(
     const moduleVersions = acc.get(moduleName);
     if (moduleVersions) {
       const foundVersion = moduleVersions.find(module => {
-        return (
-          module.channel === newVersionCandidate.channel &&
-          module.version === newVersionCandidate.version
-        );
+        return module.version === newVersionCandidate.version;
       });
       if (!foundVersion) {
         moduleVersions.push(newVersionCandidate);
@@ -64,7 +56,6 @@ function fillModuleVersions(
 function createVersion(moduleTemplate: ModuleTemplateType): VersionInfo {
   return {
     version: moduleTemplate.spec.version,
-    channel: moduleTemplate.spec.channel,
     moduleTemplateNamespace: moduleTemplate.metadata.namespace,
     moduleTemplateName: moduleTemplate.metadata.name,
     docsURL: moduleTemplate.spec.info?.documentation,
@@ -107,30 +98,6 @@ function markInstalledVersion(
       if (versionIdx > -1) {
         foundModuleVersions[versionIdx].installed = true;
       }
-    }
-  });
-}
-
-function fillModulesWithMetadata(
-  availableCommunityModules: Map<string, VersionInfo[]>,
-  moduleReleaseMetas: ModuleReleaseMetaListType,
-) {
-  (moduleReleaseMetas?.items || [])?.forEach(releaseMeta => {
-    const foundVersions = availableCommunityModules.get(
-      releaseMeta.spec.moduleName,
-    );
-    if (foundVersions) {
-      foundVersions.forEach(version => {
-        const matchedChannelMeta = releaseMeta.spec.channels.find(
-          channelMeta => {
-            return channelMeta.version === version.version;
-          },
-        );
-        if (matchedChannelMeta) {
-          version.channel = matchedChannelMeta.channel;
-          version.beta = releaseMeta.spec.beta ?? false;
-        }
-      });
     }
   });
 }

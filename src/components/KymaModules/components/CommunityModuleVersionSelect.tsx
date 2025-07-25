@@ -16,10 +16,8 @@ export type VersionDisplayInfo = {
     namespace: string;
   };
   version: string;
-  channel: string;
   installed: boolean;
   textToDisplay: string;
-  beta?: boolean;
 };
 
 export default function CommunityModuleVersionSelect({
@@ -35,7 +33,7 @@ export default function CommunityModuleVersionSelect({
     <FlexBox direction="Column" style={{ gap: '0.5rem' }} key={module?.name}>
       <Label>{`${module.name}:`}</Label>
       <Select
-        accessibleName={`${module.name} channel select`}
+        accessibleName={`${module.name} version select`}
         onChange={event => {
           onChange(event.detail.selectedOption.value);
         }}
@@ -47,7 +45,6 @@ export default function CommunityModuleVersionSelect({
             selected={version.installed}
             key={`${idx}-${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}
             value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
-            additionalText={version.beta ? 'Beta' : ''}
           >
             {version.textToDisplay}
           </Option>
