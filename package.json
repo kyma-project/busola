@@ -86,6 +86,7 @@
     "i18next": "^24.2.3",
     "i18next-http-backend": "^3.0.2",
     "immutable": "^5.1.1",
+    "js-tiktoken": "^1.0.20",
     "js-yaml": "^4.1.0",
     "jsonata": "^1.8.7",
     "jsonpath": "^1.1.1",

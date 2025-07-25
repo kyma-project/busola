@@ -75,6 +75,8 @@ config:
       isEnabled: false
       config:
         feedbackLink: ''
+        model: ''
+        queryMaxTokens: 0
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
