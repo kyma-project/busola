@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Create, ResourceDescription } from 'components/KymaModules';
+import { Create, ResourceDescription } from 'components/Modules';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ModulesList } from './components/ModulesList';
 import { KymaModuleContext } from './providers/KymaModuleProvider';
@@ -9,15 +9,15 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
-import { CommunityModulesList } from './components/CommunityModulesList';
-import { CommunityModuleContext } from './providers/CommunityModuleProvider';
+import { CommunityModulesList } from 'components/Modules/community/CommunityModulesList';
+import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 import { checkSelectedModule } from './support';
 import { useRecoilValue } from 'recoil';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
-import { CommunityModulesDeleteBoxContext } from 'components/KymaModules/components/CommunityModulesDeleteBox';
+import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 
 export default function KymaModulesList({ namespaced }) {
   const { t } = useTranslation();

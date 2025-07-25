@@ -12,7 +12,7 @@ import * as secretMetadata from 'resources/Secrets';
 import * as crdMetadata from 'resources/CustomResourceDefinitions';
 import * as cmMetadata from 'resources/ConfigMaps';
 
-import { kymaModulesNavNode } from 'components/KymaModules/kymaModulesNode';
+import { kymaModulesNavNode } from 'components/Modules/kymaModulesNode';
 
 export const addAdditionalNodes = (
   navNodes: NavNode[],

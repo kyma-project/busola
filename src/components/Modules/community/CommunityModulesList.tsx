@@ -10,7 +10,7 @@ import {
   findModuleTemplate,
   ModuleTemplateListType,
   ModuleTemplateType,
-} from '../support';
+} from 'components/Modules/support';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import {
@@ -22,8 +22,8 @@ import { isFormOpenState } from 'state/formOpenAtom';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
-import { useFetchModuleData } from '../hooks';
-import { ModulesListRows } from './ModulesListRows';
+import { useFetchModuleData } from 'components/Modules/hooks';
+import { ModulesListRows } from 'components/Modules/components/ModulesListRows';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
