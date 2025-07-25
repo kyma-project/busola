@@ -1,27 +1,29 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { encodingForModel } from 'js-tiktoken';
 
-// Token validation constants
-const MAX_TOKENS = 100; // Adjust this based on your backend limit
-const WARNING_THRESHOLD = 0.9; // Show warning at 90% of limit
-const DEFAULT_MODEL = 'gpt-4'; // Default model for tokenization
-const DEBOUNCE_DELAY = 300; // Delay in ms for debouncing
+const MAX_TOKENS = 8000;
+const DEFAULT_MODEL = 'gpt-4.1';
+const WARNING_THRESHOLD = 0.8;
+const DEBOUNCE_DELAY = 500;
 
 interface TokenValidationState {
   isTokenLimitExceeded: boolean;
   showTokenWarning: boolean;
   tokenError: boolean;
+  tokenCount: number;
 }
 
 export const useTokenValidation = (
   text: string,
 ): TokenValidationState & {
   validateTokenCount: (inputText: string) => { isValid: boolean };
+  maxTokens: number;
 } => {
   const [state, setState] = useState<TokenValidationState>({
     isTokenLimitExceeded: false,
     showTokenWarning: false,
     tokenError: false,
+    tokenCount: 0,
   });
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const encoding = useMemo(() => encodingForModel(DEFAULT_MODEL), []);
@@ -59,6 +61,7 @@ export const useTokenValidation = (
       isTokenLimitExceeded: isExceeded,
       showTokenWarning: showWarning,
       tokenError: false,
+      tokenCount: count,
     });
   }, []);
 
@@ -87,5 +90,6 @@ export const useTokenValidation = (
   return {
     ...state,
     validateTokenCount,
+    maxTokens: MAX_TOKENS,
   };
 };

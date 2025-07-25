@@ -789,8 +789,8 @@ kyma-companion:
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
     http-error-no-retry: Response status code is {{statusCode}}.
   input-tokens:
-    warning: Approaching per-query token limit (90% used)
-    error: Message exceeds per-query token limit
+    warning: "Approaching per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)"
+    error: "Message exceeds per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)"
     calculation-error: Unable to calculate token count.
   introduction: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. Meanwhile, you can check the suggested questions below; you may find them helpful!
   introduction-no-suggestions: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. While I don't have any initial suggestions for this resource, feel free to ask me anything you'd like!
