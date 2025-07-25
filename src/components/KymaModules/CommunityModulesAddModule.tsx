@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { useRecoilState } from 'recoil';
+import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -19,7 +19,6 @@ import {
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
-import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -30,16 +29,15 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 
 import './KymaModulesAddModule.scss';
+
 type VersionDisplayInfo = {
   moduleTemplate: {
     name: string;
     namespace: string;
   };
   version: string;
-  channel: string;
   installed: boolean;
   textToDisplay: string;
-  beta?: boolean;
   icon?: { link: string; name: string };
   docsURL?: string;
 };
@@ -96,8 +94,7 @@ function transformDataForDisplay(
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     const formatDisplayText = (v: VersionInfo): string => {
-      const version = `${v.channel ? v.channel + ' ' : ''}(v${v.version})`;
-      return version;
+      return `v${v.version}`;
     };
 
     return {
@@ -108,10 +105,8 @@ function transformDataForDisplay(
           namespace: v.moduleTemplateNamespace,
         },
         version: v.version,
-        channel: v.channel ?? '',
         installed: v.installed ?? false,
         textToDisplay: formatDisplayText(v),
-        beta: v.beta,
         icon: v.icon,
         docsURL: v.docsURL,
       })),
@@ -144,13 +139,10 @@ export default function CommunityModulesAddModule(props: any) {
     setCommunityModulesTemplatesToApply,
   ] = useState(new Map<string, ModuleTemplateType>());
 
+  const { moduleTemplatesLoading, moduleReleaseMetasLoading } = useContext(
+    ModuleTemplatesContext,
+  );
   const {
-    moduleTemplatesLoading,
-    moduleReleaseMetasLoading,
-    moduleReleaseMetas,
-  } = useContext(ModuleTemplatesContext);
-  const {
-    installedCommunityModules,
     notInstalledCommunityModuleTemplates,
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
@@ -160,18 +152,11 @@ export default function CommunityModulesAddModule(props: any) {
       return getAvailableCommunityModules(
         notInstalledCommunityModuleTemplates,
         {} as ModuleTemplateListType,
-        moduleReleaseMetas,
       );
     } else {
       return new Map();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    notInstalledCommunityModuleTemplates,
-    installedCommunityModules,
-    moduleReleaseMetas,
-    moduleReleaseMetasLoading,
-  ]);
+  }, [notInstalledCommunityModuleTemplates, moduleReleaseMetasLoading]);
 
   useEffect(() => {
     fetchResourcesToApply(

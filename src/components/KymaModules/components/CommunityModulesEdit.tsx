@@ -32,7 +32,6 @@ import {
 import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 
 import './CommunityModule.scss';
-import { capitalizeFirstLetter } from '@ui5/webcomponents-react-base';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -126,9 +125,7 @@ function transformDataForDisplay(
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     const formatDisplayText = (v: VersionInfo): string => {
-      return `${v.channel ? capitalizeFirstLetter(v.channel) + ' ' : ''}(v${
-        v.version
-      })`;
+      return `v${v.version}`;
     };
 
     return {
@@ -139,9 +136,7 @@ function transformDataForDisplay(
           namespace: v.moduleTemplateNamespace,
         },
         version: v.version,
-        channel: v.channel ?? '',
         installed: v.installed ?? false,
-        beta: v.beta,
         textToDisplay: formatDisplayText(v),
       })),
     };
@@ -170,32 +165,28 @@ export default function CommunityModulesEdit() {
     setCommunityModulesTemplatesToApply,
   ] = useState(new Map<string, ModuleTemplateType>());
 
-  const {
-    moduleTemplatesLoading,
-    communityModuleTemplates,
-    moduleReleaseMetasLoading,
-    moduleReleaseMetas,
-  } = useContext(ModuleTemplatesContext);
+  const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
+    ModuleTemplatesContext,
+  );
   const {
     installedCommunityModuleTemplates,
     installedCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
-    if (!moduleReleaseMetasLoading) {
+    if (!moduleTemplatesLoading && installedCommunityModulesLoading) {
       return getAvailableCommunityModules(
         communityModuleTemplates,
         installedCommunityModuleTemplates,
-        moduleReleaseMetas,
       );
     } else {
       return new Map();
     }
   }, [
     communityModuleTemplates,
-    moduleReleaseMetas,
+    moduleTemplatesLoading,
     installedCommunityModuleTemplates,
-    moduleReleaseMetasLoading,
+    installedCommunityModulesLoading,
   ]);
 
   useEffect(() => {
