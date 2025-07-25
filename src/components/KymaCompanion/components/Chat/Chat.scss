@@ -3,7 +3,8 @@
 
   &.split {
     display: grid;
-    grid-template-rows: 60% 1fr;
+    grid-template-rows: 55% 45%;
+    grid-template-columns: 100%;
   }
 
   .chat-list {

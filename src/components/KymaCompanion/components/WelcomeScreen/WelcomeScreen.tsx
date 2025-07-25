@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlexBox, Text } from '@ui5/webcomponents-react';
 import { AnimatedJouleIcon } from './AnimatedJouleIcon';
@@ -7,43 +7,66 @@ import '../Chat/Message/Message.scss';
 
 export const WelcomeScreen = () => {
   const { t } = useTranslation();
-  const messageVariants = ['help', 'assist', 'guide'];
+  const messageVariants = [
+    t('kyma-companion.welcome-screen.help'),
+    t('kyma-companion.welcome-screen.assist'),
+    t('kyma-companion.welcome-screen.guide'),
+  ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [wordWidth, setWordWidth] = useState(0);
+  const measureRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (measureRef.current) {
+      setWordWidth(measureRef.current.offsetWidth);
+    }
+  }, [currentIndex]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setFade(true);
-      setIsVisible(true);
+      setTimeout(() => {
+        setFade(true);
+        setIsVisible(true);
+      }, 600);
 
       setTimeout(() => {
         setCurrentIndex(prev => (prev + 1) % messageVariants.length);
         setFade(false);
-      }, 500); // duration of overlap
-
-      setTimeout(() => {
         setIsVisible(false);
-      }, 500); // duration of overlap
-    }, 3000); // delay before switching phrases
+      }, 650); // Duration of overlap
+    }, 3600); // Delay before switching phrases
 
     return () => clearInterval(interval);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="chat-initial-screen">
       <AnimatedJouleIcon className="initial-joule-icon" />
       <FlexBox className="initial-screen-text-container">
         <Text className="hello-text">
-          {t('kyma-companion.welcome-screen.hello')}
+          {t('kyma-companion.welcome-screen.hello')},
         </Text>
         <Text className="chat-introduction">
-          How can I
-          <div className="message-variants-container">
+          <div
+            className="sap-margin-end-tiny"
+            style={{ display: 'inline-block' }}
+          >
+            {t('kyma-companion.welcome-screen.how-can-i')}
+          </div>
+          <div
+            className="message-variants-container"
+            style={{ width: `${wordWidth}px` }}
+          >
+            {/* Hidden span for measuring */}
+            <span ref={measureRef} className="word measure">
+              {messageVariants[currentIndex]}
+            </span>
             <Text
               className={`text current ${fade ? 'fade-out' : ''}`}
               style={{
-                transition: !fade ? 'none' : 'opacity 0.1s ease-in-out',
+                transition: !fade ? 'none' : 'opacity 0.1s ease-in-out', // Has to match styling in CSS file to not flash
               }}
             >
               {messageVariants[currentIndex]}
@@ -55,7 +78,12 @@ export const WelcomeScreen = () => {
               {messageVariants[(currentIndex + 1) % messageVariants.length]}
             </Text>
           </div>
-          you?
+          <div
+            className="sap-margin-begin-tiny"
+            style={{ display: 'inline-block' }}
+          >
+            {t('kyma-companion.welcome-screen.you-question')}{' '}
+          </div>
         </Text>
         <div className={'message-container left-aligned'}>
           <div className={'markdown message left-aligned'}>

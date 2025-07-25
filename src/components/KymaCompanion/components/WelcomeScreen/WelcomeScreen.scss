@@ -23,16 +23,19 @@
     height: 120px;
   }
 
-  .hello-text {
+  .hello-text,
+  .chat-introduction {
     color: white;
-    font-size: 24px;
     font-weight: 300;
+    margin-inline: 0.5rem;
+  }
+
+  .hello-text {
+    font-size: 24px;
   }
 
   .chat-introduction {
-    color: white;
     font-size: 38px;
-    font-weight: 300;
   }
 }
 
@@ -69,4 +72,12 @@
   opacity: 1;
   z-index: 1;
   visibility: visible;
+}
+
+.measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
 }

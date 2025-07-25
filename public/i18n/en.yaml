@@ -803,7 +803,11 @@ kyma-companion:
   welcome-screen:
     hello: Hello
     talk-to-me: Talk to me naturally. For example, "what are my tasks for today?"
-    how-help: How can I {{helpWord}} you?
+    how-can-i: How can I 
+    you-question: you?
+    help: help
+    assist: assist
+    guide: guide
   time:
     today: Today
     yesterday: Yesterday

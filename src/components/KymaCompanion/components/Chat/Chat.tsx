@@ -362,6 +362,7 @@ export const Chat = ({
 
   const showWelcomeScreen =
     chatHistory[0].messages.length === 1 && isInitialScreen;
+
   return (
     <>
       {initialSuggestionsLoading && isInitialScreen ? (
