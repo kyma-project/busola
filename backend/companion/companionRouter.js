@@ -148,35 +148,43 @@ async function handleChatMessage(req, res) {
     });
 
     if (!response.ok) {
-      const respJson = await response?.json();
-      const error = new Error(respJson?.message ?? '');
-      error.status = response?.status ?? 500;
-      error.error =
-        response?.statusText ??
-        'Failed to fetch AI chat data. Request ID: ' + escape(req.id);
+      const error = new Error();
+      error.status = response.status;
+
+      if (response.status >= 500) {
+        error.message = 'A temporary interruption occurred. Please try again.';
+        error.error = 'Service is interrupted';
+      } else {
+        const respJson = await response?.json();
+        error.message =
+          respJson?.message ??
+          'A temporary interruption occurred. Please try again.';
+        error.error = respJson?.error ?? response?.statusText;
+      }
+
       throw error;
     }
 
     const stream = Readable.fromWeb(response.body);
     await pipeline(stream, res);
   } catch (error) {
+    req.log.warn(error);
     if (!res.headersSent) {
-      req.log.warn(error);
       res.status(error.status).json({
         error: error.error,
         message: error.message,
       });
     } else {
-      setTimeout(() => {
-        req.log.warn(error);
-        res.write(
-          JSON.stringify({
-            error:
-              'Failed to fetch AI chat data. Request ID: ' + escape(req.id),
-          }),
-        );
-        res.end();
-      }, 500);
+      res.write(
+        JSON.stringify({
+          streamingError: {
+            message:
+              'An error occured during streaming. Request ID: ' +
+              escape(req.id),
+          },
+        }) + '\n',
+      );
+      res.end();
     }
   }
 }
