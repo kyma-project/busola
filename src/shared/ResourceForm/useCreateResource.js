@@ -143,6 +143,13 @@ export function useCreateResource({
   const handleCreate = async () => {
     try {
       if (isEdit) {
+        if (
+          initialResource?.metadata?.resourceVersion &&
+          !resource?.metadata?.resourceVersion
+        ) {
+          resource.metadata.resourceVersion =
+            initialResource.metadata.resourceVersion;
+        }
         const diff = createPatch(initialResource, resource);
         await patchRequest(createUrl, diff);
       } else {
