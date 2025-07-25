@@ -24,6 +24,7 @@ export const useTokenValidation = (
   config: CompanionConfig,
 ): TokenValidationState & {
   validateTokenCount: (inputText: string) => { isValid: boolean };
+  maxTokens: number;
 } => {
   const maxTokens = config?.queryMaxTokens ?? FALLBACK_MAX_TOKENS;
   const model = (config?.model as TiktokenModel) ?? FALLBACK_MODEL;
@@ -102,5 +103,6 @@ export const useTokenValidation = (
   return {
     ...state,
     validateTokenCount,
+    maxTokens,
   };
 };

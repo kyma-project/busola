@@ -52,6 +52,7 @@ export default function QueryInput({
     tokenError,
     tokenCount,
     validateTokenCount,
+    maxTokens,
   } = useTokenValidation(inputValue, companionConfig);
 
   const checkRowCount = useCallback(() => {
@@ -108,19 +109,13 @@ export default function QueryInput({
     if (showTokenWarning)
       return (
         <Text>
-          {t('kyma-companion.input-tokens.warning', {
-            tokenCount,
-            maxTokens: companionConfig.queryMaxTokens,
-          })}
+          {t('kyma-companion.input-tokens.warning', { tokenCount, maxTokens })}
         </Text>
       );
     if (isTokenLimitExceeded)
       return (
         <Text>
-          {t('kyma-companion.input-tokens.error', {
-            tokenCount,
-            maxTokens: companionConfig.queryMaxTokens,
-          })}
+          {t('kyma-companion.input-tokens.error', { tokenCount, maxTokens })}
         </Text>
       );
     if (tokenError)
