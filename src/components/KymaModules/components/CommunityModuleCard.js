@@ -24,7 +24,7 @@ async function isImageAvailable(url) {
 
 async function getImageSrc(module) {
   const defaultImage = '/assets/sap-logo.svg';
-  const iconLink = module.versions[0]?.icon.link;
+  const iconLink = module.versions[0]?.icon?.link;
 
   if (iconLink && (await isImageAvailable(iconLink))) {
     return iconLink;

@@ -1,0 +1,53 @@
+apiVersion: operator.kyma-project.io/v1beta2
+kind: ModuleTemplate
+metadata:
+  annotations:
+    operator.kyma-project.io/is-cluster-scoped: 'false'
+  labels:
+    operator.kyma-project.io/module-name: busola
+  name: busola-0-11
+  namespace: kyma-system
+spec:
+  descriptor:
+    component:
+      componentReferences: []
+      name: kyma-project.io/module/busola
+      provider: '{"name":"kyma-project.io","labels":[{"name":"kyma-project.io/built-by","value":"modulectl","version":"v1"}]}'
+      repositoryContexts:
+        - baseUrl: http://k3d-oci.localhost:5001
+          componentNameMapping: urlPath
+          type: OCIRegistry
+      sources:
+        - access:
+            commit: 106643ead24aff8da197fc89a46ce546193ea8f1
+            repoUrl: https://github.com/kyma-project/busola.git
+            type: gitHub
+          labels:
+            - name: git.kyma-project.io/ref
+              value: HEAD
+              version: v1
+          name: module-sources
+          type: Github
+          version: 0.0.29
+      version: 0.0.29
+    meta:
+      schemaVersion: v2
+  info:
+    documentation: https://kyma-project.io/#/busola/user/README
+    icons:
+      - link: https://kyma-project.io/assets/logo_icon.svg
+        name: module-icon
+    repository: https://github.com/kyma-project/busola.git
+  manager:
+    group: apps
+    kind: Deployment
+    name: busola
+    namespace: default
+    version: v1
+  mandatory: false
+  moduleName: busola
+  requiresDowntime: false
+  resources:
+    - link: https://github.com/kyma-project/busola/releases/download/v0.0.11/busola.yaml
+      name: rawManifest
+  version: 0.0.11
