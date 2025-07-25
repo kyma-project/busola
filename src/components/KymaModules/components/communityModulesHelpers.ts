@@ -210,7 +210,7 @@ export async function getAllResourcesYamls(links: string[], post: PostFn) {
   }
 }
 
-export function fetchResourcesToApply(
+export async function fetchResourcesToApply(
   communityModulesToApply: Map<string, ModuleTemplateType>,
   setResourcesToApply: Function,
   post: PostFn,
@@ -220,17 +220,18 @@ export function fetchResourcesToApply(
     .flat()
     .map(item => item?.link || '');
 
-  (async function() {
-    try {
-      const yamls = await getAllResourcesYamls(resourcesLinks, post);
+  // await (async function() {
+  try {
+    const yamls = await getAllResourcesYamls(resourcesLinks, post);
 
-      const yamlsResources = yamls?.map(resource => {
-        return { value: resource };
-      });
+    const yamlsResources = yamls?.map(resource => {
+      return { value: resource };
+    });
 
-      setResourcesToApply(yamlsResources || []);
-    } catch (e) {
-      console.error(e);
-    }
-  })();
+    setResourcesToApply(yamlsResources || []);
+    return yamlsResources;
+  } catch (e) {
+    console.error(e);
+  }
+  // })();
 }
