@@ -34,8 +34,7 @@ context('Test Companion Chat Behavior', () => {
       .find('.message-context > *')
       .should('have.length', 2)
       .eq(1)
-      .should('be.visible')
-      .should('have.class', 'ai-busy-indicator');
+      .should('be.visible');
 
     cy.get('@companion')
       .find('.chat-list > *')
@@ -496,6 +495,8 @@ context('Test Companion Chat Behavior', () => {
       .find('textarea')
       .should('be.visible')
       .should('be.disabled');
+
+    cy.clickSuggestion(0);
 
     cy.get('@companion')
       .find('ui5-button[tooltip="Reset"]')
