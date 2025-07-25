@@ -53,7 +53,7 @@ config:
     EXTENSIBILITY_WIZARD:
       isEnabled: false
     KYMA_COMPANION:
-      isEnabled: true
+      isEnabled: false
       config:
         feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/preview/previewId/1fa80b40-56c3-4b20-9902-877df3da3493/SV_dmWATTfes5SstG6?Q_CHL=preview&Q_SurveyVersionID=current
     TRACKING:

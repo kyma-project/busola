@@ -40,7 +40,6 @@ type ChatProps = {
   setError: React.Dispatch<React.SetStateAction<AIError>>;
   hide: boolean;
   time: Date | null;
-  setIsInitialScreen: React.Dispatch<React.SetStateAction<boolean>>;
   isInitialScreen: boolean;
 };
 
@@ -55,7 +54,6 @@ export const Chat = ({
   setIsReset,
   hide = false,
   time,
-  setIsInitialScreen,
   isInitialScreen,
 }: ChatProps) => {
   const { t } = useTranslation();
