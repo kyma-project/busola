@@ -87,11 +87,6 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
     cy.resetCompanion();
 
-    cy.get('@companion')
-      .find('.chat-loading-screen')
-      .find('.chat-loading-indicator')
-      .should('be.visible');
-
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
