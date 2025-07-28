@@ -38,6 +38,7 @@ context('Test Companion UI', () => {
     });
 
     it('Welcome screen should not be visible after reset', () => {
+      cy.mockChatResponse();
       cy.get('.kyma-companion').as('companion');
 
       cy.clickSuggestion(0);
