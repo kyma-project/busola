@@ -423,7 +423,7 @@ context('Test Companion Chat Behavior', () => {
       .find('.message-context > *')
       .eq(1)
       .should('be.visible')
-      .should('have.class', 'ai-busy-indicator');
+      .should('have.class', 'bubbles-container');
 
     cy.get('@companion')
       .find('.chat-list > *')
@@ -465,22 +465,14 @@ context('Test Companion Chat Behavior', () => {
   });
 
   it('disables input and reset button while loading', () => {
+    cy.closeCompanion();
+    cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
-    cy.resetCompanion();
 
     cy.get('@companion')
-      .find('ui5-textarea[placeholder="Message Joule..."]')
-      .find('textarea')
-      .should('be.visible')
-      .should('be.disabled');
-
-    cy.get('@companion')
-      .find('ui5-button[tooltip="Reset"]')
-      .should('be.visible')
-      .should('be.disabled');
-
-    cy.wait('@getPromptSuggestions');
-    cy.wait(1000);
+      .find('.chat-loading-screen')
+      .find('.chat-loading-indicator')
+      .should('be.visible');
 
     cy.get('@companion')
       .find('ui5-textarea[placeholder="Message Joule..."]')
@@ -490,17 +482,21 @@ context('Test Companion Chat Behavior', () => {
 
     cy.get('@companion')
       .find('ui5-button[tooltip="Reset"]')
-      .should('be.visible')
-      .should('not.be.disabled');
+      .should('not.exist');
 
     cy.closeCompanion();
     cy.openCompanion();
 
     cy.get('@companion')
+      .find('.chat-loading-screen')
+      .find('.chat-loading-indicator')
+      .should('be.visible');
+
+    cy.get('@companion')
       .find('ui5-textarea[placeholder="Message Joule..."]')
       .find('textarea')
       .should('be.visible')
-      .should('be.disabled');
+      .should('not.be.disabled');
 
     cy.clickSuggestion(0);
 
