@@ -44,13 +44,11 @@ export default function KymaCompanion() {
   }
 
   useEffect(() => {
-    if (showDisclaimer || chatHistory[0].messages.length > 1) {
+    if (showDisclaimer || chatHistory[0].messages.length > 1 || isReset) {
       setIsInitialScreen(false);
       return;
-    } else {
-      setIsInitialScreen(true);
     }
-  }, [chatHistory, showDisclaimer]);
+  }, [chatHistory, showDisclaimer, isReset]);
 
   return (
     <div id="companion_wrapper">
