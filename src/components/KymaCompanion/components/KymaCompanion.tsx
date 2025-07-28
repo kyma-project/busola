@@ -50,10 +50,13 @@ export default function KymaCompanion() {
   }
 
   useEffect(() => {
-    if (chatHistory[0].messages.length > 1) {
+    if (showDisclaimer || chatHistory[0].messages.length > 1) {
       setIsInitialScreen(false);
+      return;
+    } else {
+      setIsInitialScreen(true);
     }
-  }, [chatHistory]);
+  }, [chatHistory, showDisclaimer]);
 
   return (
     <div id="companion_wrapper">
@@ -125,7 +128,6 @@ export default function KymaCompanion() {
           setError={setError}
           hide={showDisclaimer}
           time={time}
-          setIsInitialScreen={setIsInitialScreen}
           isInitialScreen={isInitialScreen}
         />
         {showDisclaimer && (

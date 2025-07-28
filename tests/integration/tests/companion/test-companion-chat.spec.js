@@ -21,6 +21,11 @@ context('Test Companion Chat Behavior', () => {
     cy.get('.kyma-companion').as('companion');
 
     cy.get('@companion')
+      .find('.chat-loading-screen')
+      .find('.chat-loading-indicator')
+      .should('be.visible');
+
+    cy.get('@companion')
       .find('.chat-list > .context-group')
       .should('have.length', 1)
       .eq(0)
@@ -34,7 +39,8 @@ context('Test Companion Chat Behavior', () => {
       .find('.message-context > *')
       .should('have.length', 2)
       .eq(1)
-      .should('be.visible');
+      .should('be.visible')
+      .should('have.class', 'bubbles-container');
 
     cy.get('@companion')
       .find('.chat-list > *')

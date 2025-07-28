@@ -46,7 +46,8 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
 
     cy.get('@companion')
-      .find('.ai-busy-indicator')
+      .find('.chat-loading-screen')
+      .find('.chat-loading-indicator')
       .should('be.visible');
 
     cy.wait('@getPromptSuggestions').then(interception => {
@@ -87,7 +88,8 @@ context('Test Companion Initial Suggestions', () => {
     cy.resetCompanion();
 
     cy.get('@companion')
-      .find('.ai-busy-indicator')
+      .find('.chat-loading-screen')
+      .find('.chat-loading-indicator')
       .should('be.visible');
 
     cy.wait('@getPromptSuggestions').then(interception => {
@@ -115,7 +117,8 @@ context('Test Companion Initial Suggestions', () => {
     cy.navigateTo('Workloads', 'Deployments');
 
     cy.get('@companion')
-      .find('.ai-busy-indicator')
+      .find('.chat-loading-screen')
+      .find('.chat-loading-indicator')
       .should('be.visible');
 
     cy.wait('@getPromptSuggestions').then(interception => {
@@ -143,7 +146,8 @@ context('Test Companion Initial Suggestions', () => {
     cy.go('back');
 
     cy.get('@companion')
-      .find('.ai-busy-indicator')
+      .find('.chat-loading-screen')
+      .find('.chat-loading-indicator')
       .should('be.visible');
 
     cy.wait('@getPromptSuggestions').then(interception => {

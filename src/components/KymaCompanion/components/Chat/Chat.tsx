@@ -372,12 +372,13 @@ export const Chat = ({
           />
         </div>
       ) : (
-        <div className={`chat-container ${showWelcomeScreen ? 'split' : ''}`}>
+        <div
+          className={`chat-container ${showWelcomeScreen ? 'split' : ''}`}
+          style={hide ? { display: 'none' } : {}}
+        >
           {showWelcomeScreen && <WelcomeScreen />}
           <FlexBox
-            style={
-              hide ? { display: 'none', height: '100%' } : { height: '100%' }
-            }
+            style={{ height: '100%' }}
             direction="Column"
             justifyContent="SpaceBetween"
             ref={containerRef}
