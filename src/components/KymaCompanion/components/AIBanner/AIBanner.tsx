@@ -8,6 +8,7 @@ import JouleIconLightTheme from './assets/JouleIcon.svg';
 import JouleIconDarkHCdarkTheme from './assets/JouleIconWhite.svg';
 import JouleIconHClightTheme from './assets/JouleIconBlack.svg';
 import { isSystemThemeDark, themeState } from 'state/preferences/themeAtom';
+import './AIBanner.scss';
 
 const getIllustration = (theme: ThemeType): string | undefined => {
   switch (theme) {
@@ -27,7 +28,13 @@ const getIllustration = (theme: ThemeType): string | undefined => {
   }
 };
 
-export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
+export function AIBanner({
+  feedbackUrl,
+  documentationUrl,
+}: {
+  feedbackUrl: string;
+  documentationUrl: string;
+}) {
   const { t } = useTranslation();
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
   const theme = useRecoilValue(themeState);
@@ -36,6 +43,7 @@ export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
   return (
     <FeatureCardBanner
       id="ai-banner"
+      className="ai-banner-card"
       title={t('kyma-companion.banner.title')}
       titleIcon={titleIcon}
       description={t('kyma-companion.banner.description')}
@@ -64,6 +72,15 @@ export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
             }}
           >
             {t('feedback.give-feedback')}
+          </Button>
+          <Button
+            key="ai-documentation"
+            endIcon="inspect"
+            onClick={() => {
+              window.open(documentationUrl, '_blank');
+            }}
+          >
+            {t('kyma-companion.banner.buttons.documentation')}
           </Button>
         </>
       }

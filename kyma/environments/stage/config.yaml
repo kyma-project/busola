@@ -73,6 +73,7 @@ config:
       isEnabled: true
       config:
         feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/form/SV_dmWATTfes5SstG6
+        documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null

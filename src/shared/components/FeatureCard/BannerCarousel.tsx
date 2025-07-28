@@ -6,7 +6,8 @@ export default function BannerCarousel({ children }: { children: ReactNode }) {
   const [childrenLength, setChildrenLength] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const SCROLL_INTERVALL_MS = 6000;
+  const [isUserChoice, setIsUserChoice] = useState(false);
+  const SCROLL_INTERVALL_MS = 25000;
 
   useEffect(() => {
     setChildrenLength(carouselRef?.current?.children?.length ?? 0);
@@ -14,7 +15,7 @@ export default function BannerCarousel({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (!isHovered) {
+      if (!isHovered && !isUserChoice) {
         const newIndex = (activeIndex + 1) % childrenLength;
         carouselRef?.current?.navigateTo(newIndex);
         setActiveIndex(newIndex);
@@ -22,7 +23,7 @@ export default function BannerCarousel({ children }: { children: ReactNode }) {
     }, SCROLL_INTERVALL_MS);
 
     return () => clearTimeout(timeoutId);
-  }, [activeIndex, isHovered, childrenLength]);
+  }, [activeIndex, isHovered, childrenLength, isUserChoice]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -39,12 +40,16 @@ export default function BannerCarousel({ children }: { children: ReactNode }) {
       backgroundDesign="Transparent"
       pageIndicatorBackgroundDesign="Transparent"
       pageIndicatorBorderDesign="None"
-      children={children}
       ref={carouselRef}
       style={childrenLength === 0 ? { display: 'none' } : {}}
-      onNavigate={event => setActiveIndex(event.detail.selectedIndex)}
+      onNavigate={event => {
+        setIsUserChoice(true);
+        setActiveIndex(event.detail.selectedIndex);
+      }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-    />
+    >
+      {children}
+    </Carousel>
   );
 }

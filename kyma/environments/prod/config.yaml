@@ -75,6 +75,7 @@ config:
       isEnabled: false
       config:
         feedbackLink: ''
+        documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null

@@ -62,6 +62,7 @@ export function FeatureCardBanner({
   image = '',
   buttons,
   titleIcon,
+  className = '',
 }: FeatureCardBannerProps) {
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${id}`;
@@ -98,7 +99,7 @@ export function FeatureCardBanner({
   };
   const illustration = getIllustration(image, theme);
   return (
-    <div className="sap-margin-top-small">
+    <div className={`sap-margin-top-small ${className}`}>
       <Card className="feature-card-container">
         <div className="feature-card" style={getBackgroundStyle(design)}>
           <Button

@@ -95,20 +95,21 @@ export function ClusterOverview() {
         actions={actions}
         content={
           <>
-            <BannerCarousel
-              children={
-                <>
-                  {isKymaCompanionEnabled && (
-                    <AIBanner feedbackUrl={companionConfig?.feedbackLink} />
-                  )}
-                  <Injections
-                    destination="ClusterOverview"
-                    slot="banner"
-                    root=""
+            <BannerCarousel>
+              <>
+                {isKymaCompanionEnabled && (
+                  <AIBanner
+                    feedbackUrl={companionConfig?.feedbackLink}
+                    documentationUrl={companionConfig?.documentationLink}
                   />
-                </>
-              }
-            />
+                )}
+                <Injections
+                  destination="ClusterOverview"
+                  slot="banner"
+                  root=""
+                />
+              </>
+            </BannerCarousel>
             <Injections
               destination="ClusterOverview"
               slot="details-top"
