@@ -372,7 +372,7 @@ context('Test Companion Chat Error Handling', () => {
           config: {
             features: {
               KYMA_COMPANION: {
-                isEnabled: false,
+                isEnabled: true,
                 config: {
                   model: 'gpt-4.1',
                   queryMaxTokens: 8,
