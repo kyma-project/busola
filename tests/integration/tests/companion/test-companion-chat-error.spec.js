@@ -127,9 +127,8 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
 
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 100,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           data: {
             answer: {
               content: 'This is a custom error message',
@@ -145,7 +144,11 @@ context('Test Companion Chat Error Handling', () => {
             },
             error: 'error',
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 100,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     cy.resetCompanion();
@@ -169,9 +172,8 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
 
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 100,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           data: {
             answer: {
               content: 'This is a custom error message',
@@ -193,7 +195,11 @@ context('Test Companion Chat Error Handling', () => {
             },
             error: null,
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 100,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     cy.resetCompanion();
@@ -285,6 +291,13 @@ context('Test Companion Chat Error Handling', () => {
     cy.get('@companion')
       .find('.chat-list')
       .find('ui5-illustrated-message')
+      .find('ui5-title')
+      .should('contain.text', `Unauthorized`)
+      .should('be.visible');
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
       .should('contain.text', `Authentication failed`)
       .should('be.visible');
 
@@ -318,6 +331,13 @@ context('Test Companion Chat Error Handling', () => {
       .eq(0)
       .find('.message-container')
       .should('contain.text', `Response status code is 429`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .find('ui5-title')
+      .should('contain.text', `Token usage limit exceeded`)
+      .should('be.visible');
 
     cy.get('@companion')
       .find('.chat-list')
@@ -357,6 +377,13 @@ context('Test Companion Chat Error Handling', () => {
       .eq(0)
       .find('.message-container')
       .should('contain.text', `Response status code is 422`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .find('ui5-title')
+      .should('contain.text', `Validation error`)
+      .should('be.visible');
 
     cy.get('@companion')
       .find('.chat-list')

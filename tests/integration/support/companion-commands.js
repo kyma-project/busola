@@ -65,48 +65,57 @@ Cypress.Commands.add('mockPromptSuggestions', () => {
 
 Cypress.Commands.add('mockChatResponse', () => {
   cy.intercept('POST', '/backend/ai-chat/messages', req => {
-    req.reply({
-      delay: 750,
-      body: {
+    const mockResponse =
+      JSON.stringify({
         data: {
           answer: {
             content: 'Hello, this is an AI response',
             next: '__end__',
           },
         },
-      },
+      }) + '\n';
+
+    req.reply({
+      delay: 750,
+      body: mockResponse,
     });
   }).as('getChatResponse');
 });
 
 Cypress.Commands.add('mockChatResponseWithPlaceNew', () => {
   cy.intercept('POST', '/backend/ai-chat/messages', req => {
-    req.reply({
-      delay: 750,
-      body: {
+    const mockResponse =
+      JSON.stringify({
         data: {
           answer: {
             content: responseWithPlaceNew,
             next: '__end__',
           },
         },
-      },
+      }) + '\n';
+
+    req.reply({
+      delay: 750,
+      body: mockResponse,
     });
   }).as('getChatResponseWithPlaceNew');
 });
 
 Cypress.Commands.add('mockChatResponseWithPlaceEdit', () => {
   cy.intercept('POST', '/backend/ai-chat/messages', req => {
-    req.reply({
-      delay: 750,
-      body: {
+    const mockResponse =
+      JSON.stringify({
         data: {
           answer: {
             content: responseWithPlaceEdit,
             next: '__end__',
           },
         },
-      },
+      }) + '\n';
+
+    req.reply({
+      delay: 750,
+      body: mockResponse,
     });
   }).as('getChatResponseWithPlaceEdit');
 });
