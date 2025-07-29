@@ -8,7 +8,6 @@ import JouleIconLightTheme from './assets/JouleIcon.svg';
 import JouleIconDarkHCdarkTheme from './assets/JouleIconWhite.svg';
 import JouleIconHClightTheme from './assets/JouleIconBlack.svg';
 import { isSystemThemeDark, themeState } from 'state/preferences/themeAtom';
-import './AIBanner.scss';
 
 const getIllustration = (theme: ThemeType): string | undefined => {
   switch (theme) {
