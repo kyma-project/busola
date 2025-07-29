@@ -786,6 +786,7 @@ kyma-companion:
     internal_server_error-message: Couldn't fetch response from Joule because of network errors.
     chat-error: An error occurred
     suggestions-error: No suggestions available
+    partial-ai-failure: Some tasks encountered errors. The results might be incomplete or not fully actionable.
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
     http-error-no-retry: Response status code is {{statusCode}}.
   input-tokens:

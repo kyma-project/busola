@@ -392,6 +392,117 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
   });
 
+  it('error handling of partial AI task failures', () => {
+    // Mock a response where some tasks succeed and some fail
+    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+      const mockResponse =
+        JSON.stringify({
+          data: {
+            answer: {
+              content:
+                'Here are the results, though some tasks encountered issues.',
+              tasks: [
+                {
+                  task_id: 0,
+                  task_name: 'Performing step 1',
+                  status: 'completed',
+                  agent: 'agent1',
+                },
+                {
+                  task_id: 1,
+                  task_name: 'Performing step 2',
+                  status: 'error',
+                  agent: 'agent2',
+                },
+                {
+                  task_id: 2,
+                  task_name: 'Performing step 3',
+                  status: 'completed',
+                  agent: 'agent3',
+                },
+                {
+                  task_id: 3,
+                  task_name: 'Performing step 4',
+                  status: 'completed',
+                  agent: 'agent4',
+                },
+              ],
+              next: '__end__',
+            },
+            error: null,
+          },
+        }) + '\n';
+
+      req.reply({
+        delay: 100,
+        body: mockResponse,
+      });
+    }).as('getChatResponse');
+
+    cy.resetCompanion();
+    cy.get('.kyma-companion').as('companion');
+    cy.wait('@getPromptSuggestions');
+
+    cy.sendPrompt('Test partial failure');
+
+    cy.wait('@getChatResponse');
+    cy.wait('@getFollowUpSuggestions');
+    cy.wait(1000);
+
+    // Verify the message content is being displayed despite partial failure
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('.message-container')
+      .contains('Here are the results, though some tasks encountered issues.')
+      .should('be.visible');
+
+    // Verify the partial failure error message is displayed correctly
+    cy.get('@companion')
+      .find('.chat-list > .context-group')
+      .should('have.length', 1)
+      .eq(0)
+      .find('.message-context > .message-container')
+      .should('have.length', 3)
+      .eq(2)
+      .find('.message-error')
+      .should('be.visible')
+      .should('have.class', 'left-aligned')
+      .should(
+        'contain.text',
+        'Some tasks encountered errors. The results might be incomplete or not fully actionable.',
+      )
+      .find('ui5-icon[name="error"]')
+      .should('be.visible');
+
+    // Verify follow-up suggestions are displayed despite the partial failure
+    cy.get('@companion')
+      .find('ui5-button.bubble-button')
+      .should('have.length', 5)
+      .should('be.visible');
+
+    // Send another message to verify the error notice persists
+    cy.mockChatResponse();
+    cy.sendPrompt('Test');
+
+    cy.wait('@getChatResponse');
+    cy.wait('@getFollowUpSuggestions');
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('.message-context > .message-container')
+      .should('have.length', 5)
+      .eq(2)
+      .find('.message-error')
+      .should('exist');
+
+    // Verify the partial failure error message is not displayed for regular responses
+    cy.get('@companion')
+      .find('.message-context > .message-container')
+      .eq(4)
+      .find('.message-error')
+      .should('not.exist');
+  });
+
   it('token count validation - warning and error', () => {
     const mockConfig = {
       data: {
