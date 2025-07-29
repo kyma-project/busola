@@ -1,4 +1,4 @@
-import { Switch } from '@ui5/webcomponents-react';
+import { Label, Switch } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
@@ -21,11 +21,15 @@ export default function ProtectedSettings() {
 
   return (
     <div className="preferences-row">
-      <span className="bsl-has-color-status-4">
+      <Label
+        for="disable-resource-protection-switch"
+        className="bsl-has-color-status-4"
+      >
         {t('settings.clusters.disableResourceProtection')}
-      </span>
+      </Label>
       <div>
         <Switch
+          id="disable-resource-protection-switch"
           accessibleName={t('settings.clusters.disableResourceProtection')}
           checked={disableResourceProtection}
           onChange={() => setDisableResourceProtection(prevState => !prevState)}

@@ -20,8 +20,12 @@ export const ValidationSwitch = () => {
 
   return (
     <div className="validate-resources">
-      <Label>{t('upload-yaml.labels.validate-resources')}</Label>
+      <Label for="validate-resources-switch">
+        {t('upload-yaml.labels.validate-resources')}
+      </Label>
       <Switch
+        id="validate-resources-switch"
+        accessibleName={t('upload-yaml.labels.validate-resources')}
         onChange={() =>
           setValidateResources({
             isEnabled: !isEnabled,

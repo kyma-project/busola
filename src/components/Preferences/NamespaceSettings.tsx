@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
-import { Switch } from '@ui5/webcomponents-react';
+import { Label, Switch } from '@ui5/webcomponents-react';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 
 export default function NamespaceSettings() {
@@ -15,11 +15,15 @@ export default function NamespaceSettings() {
 
   return (
     <div className="preferences-row">
-      <span className="bsl-has-color-status-4">
+      <Label
+        for="show-hidden-namespaces-switch"
+        className="bsl-has-color-status-4"
+      >
         {t('settings.clusters.showHiddenNamespaces')}
-      </span>
+      </Label>
       <div>
         <Switch
+          id="show-hidden-namespaces-switch"
           accessibleName={t('settings.clusters.showHiddenNamespaces')}
           checked={showHiddenNamespaces}
           onChange={toggleVisibility}

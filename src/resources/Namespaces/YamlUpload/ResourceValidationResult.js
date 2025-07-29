@@ -130,7 +130,6 @@ export const ResourceValidationResult = ({ resource }) => {
     <>
       <Panel
         collapsed={true}
-        hideCloseButton={true}
         hidden={!validateResources.isEnabled}
         fixed={!validateResources.isEnabled}
         style={{
@@ -140,13 +139,15 @@ export const ResourceValidationResult = ({ resource }) => {
           marginLeft: '-1rem',
           marginRight: '-1rem',
         }}
-        header={
-          <Toolbar toolbarStyle={'Clear'}>
-            {resource?.kind + ' ' + resource?.metadata?.name}
-            <ToolbarSpacer />
-            {statusIcon}
-          </Toolbar>
-        }
+        // header={
+        //   <Toolbar toolbarStyle={'Clear'} slot='header'>
+        //     {resource?.kind + ' ' + resource?.metadata?.name}
+        //     <ToolbarSpacer />
+        //     {statusIcon}
+        //   </Toolbar>
+        // }
+        headerText={resource?.kind + ' ' + resource?.metadata?.name}
+        accessibleName={resource?.kind + ' ' + resource?.metadata?.name}
       >
         {validateResources.isEnabled && (
           <ValidationWarnings
