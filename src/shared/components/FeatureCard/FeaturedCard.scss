@@ -30,7 +30,8 @@
     flex-direction: column;
     gap: 16px;
     width: 50%;
-    margin-bottom: 32px;
+    max-width: 700px;
+    margin: 0 32px 32px 0;
 
     .title-container {
       ui5-title {
@@ -70,19 +71,19 @@
   }
 }
 
-@container (max-width: 850px) {
-  .feature-card {
-    .illustration {
-      margin-right: 0%;
-    }
-  }
-}
-
 @container (max-width: 625px) {
   .feature-card {
+    .illustration {
+      max-width: 100%;
+    }
     .outer-container {
       flex-direction: column-reverse;
-      gap: 16px;
+      align-items: start;
+      gap: 32px;
+
+      .inner-container {
+        width: 100%;
+      }
     }
   }
 }
