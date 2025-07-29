@@ -41,6 +41,7 @@ type ChatProps = {
   hide: boolean;
   time: Date | null;
   isInitialScreen: boolean;
+  onInitialLoadingChange?: (isLoading: boolean) => void;
 };
 
 export const Chat = ({
@@ -55,10 +56,12 @@ export const Chat = ({
   hide = false,
   time,
   isInitialScreen,
+  onInitialLoadingChange = () => {},
 }: ChatProps) => {
   const { t } = useTranslation();
   const chatRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const hasLoadingScreenLoaded = useRef(false);
 
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
@@ -361,9 +364,25 @@ export const Chat = ({
   const showWelcomeScreen =
     chatHistory[0].messages.length === 1 && isInitialScreen;
 
+  useEffect(() => {
+    if (
+      !initialSuggestionsLoading &&
+      isInitialScreen &&
+      !hasLoadingScreenLoaded.current
+    ) {
+      hasLoadingScreenLoaded.current = true;
+    }
+
+    onInitialLoadingChange?.(
+      initialSuggestionsLoading &&
+        isInitialScreen &&
+        !hasLoadingScreenLoaded.current,
+    );
+  }, [initialSuggestionsLoading, isInitialScreen, onInitialLoadingChange]);
+
   return (
     <>
-      {initialSuggestionsLoading && isInitialScreen ? (
+      {initialSuggestionsLoading && !hasLoadingScreenLoaded.current ? (
         <div className="chat-loading-screen">
           <img
             src={loadingIcon}
@@ -387,7 +406,7 @@ export const Chat = ({
               className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
               ref={chatRef}
             >
-              {time && <TimestampLabel time={time} />}
+              {time && !showWelcomeScreen && <TimestampLabel time={time} />}
               {chatHistory.map((group, groupIndex) => {
                 const isLastGroup = groupIndex === chatHistory.length - 1;
 

@@ -20,6 +20,7 @@ export default function KymaCompanion() {
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [isInitialScreen, setIsInitialScreen] = useState<boolean>(true);
+  const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [isReset, setIsReset] = useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<ChatGroup[]>(
     chatGroupHelpers.createInitialState(t('kyma-companion.introduction')),
@@ -44,11 +45,13 @@ export default function KymaCompanion() {
   }
 
   useEffect(() => {
-    if (showDisclaimer || chatHistory[0].messages.length > 1 || isReset) {
+    if (chatHistory[0].messages.length > 1) {
       setIsInitialScreen(false);
       return;
+    } else {
+      setIsInitialScreen(true);
     }
-  }, [chatHistory, showDisclaimer, isReset]);
+  }, [chatHistory]);
 
   return (
     <div id="companion_wrapper">
@@ -74,20 +77,24 @@ export default function KymaCompanion() {
                   onClick={() => handleRefresh()}
                 />
               )}
-              <Button
-                design="Transparent"
-                icon={
-                  showCompanion.fullScreen ? 'exit-full-screen' : 'full-screen'
-                }
-                className="action"
-                onClick={() =>
-                  setShowCompanion({
-                    show: true,
-                    fullScreen: !showCompanion.fullScreen,
-                  })
-                }
-              />
-              {!showDisclaimer && (
+              {!initialLoading && (
+                <Button
+                  design="Transparent"
+                  icon={
+                    showCompanion.fullScreen
+                      ? 'exit-full-screen'
+                      : 'full-screen'
+                  }
+                  className="action"
+                  onClick={() =>
+                    setShowCompanion({
+                      show: true,
+                      fullScreen: !showCompanion.fullScreen,
+                    })
+                  }
+                />
+              )}
+              {!showDisclaimer && !initialLoading && (
                 <Button
                   design="Transparent"
                   icon="hint"
@@ -121,6 +128,7 @@ export default function KymaCompanion() {
           hide={showDisclaimer}
           time={time}
           isInitialScreen={isInitialScreen}
+          onInitialLoadingChange={setInitialLoading}
         />
         {showDisclaimer && (
           <Disclaimer hideDisclaimer={() => setShowDisclaimer(false)} />
