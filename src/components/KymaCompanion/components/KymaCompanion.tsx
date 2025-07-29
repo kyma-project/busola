@@ -7,7 +7,8 @@ import {
   showKymaCompanionState,
 } from 'state/companion/showKymaCompanionAtom';
 import { Chat } from './Chat/Chat';
-import { AIError, ChatGroup, chatGroupHelpers } from './Chat/types';
+import { chatHelpers } from './Chat/chatHelper';
+import { AIError, ChatGroup } from './Chat/types';
 import Disclaimer from './Disclaimer/Disclaimer';
 import './KymaCompanion.scss';
 
@@ -23,7 +24,7 @@ export default function KymaCompanion() {
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [isReset, setIsReset] = useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<ChatGroup[]>(
-    chatGroupHelpers.createInitialState(t('kyma-companion.introduction')),
+    chatHelpers.createInitialState(t('kyma-companion.introduction')),
   );
   const [error, setError] = useState<AIError>({
     message: null,
@@ -33,7 +34,7 @@ export default function KymaCompanion() {
 
   function handleRefresh() {
     setChatHistory(
-      chatGroupHelpers.createInitialState(t('kyma-companion.introduction')),
+      chatHelpers.createInitialState(t('kyma-companion.introduction')),
     );
     setError({
       message: null,

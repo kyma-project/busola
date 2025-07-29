@@ -12,7 +12,8 @@ interface MessageProps {
   author: Author;
   messageChunks: MessageChunk[];
   isLoading: boolean;
-  hasError: boolean;
+  partialAIFailure?: boolean;
+  hasError?: boolean;
   isLatestMessage: boolean;
   disableFormatting?: boolean;
 }
@@ -21,7 +22,8 @@ export default function Message({
   author,
   messageChunks,
   isLoading,
-  hasError,
+  partialAIFailure = false,
+  hasError = false,
   isLatestMessage,
 }: MessageProps): JSX.Element {
   const currentTheme = useRecoilValue(themeState);
@@ -53,6 +55,14 @@ export default function Message({
       >
         {segmentedText}
       </div>
+      {partialAIFailure && (
+        <div className={'message-error ' + className}>
+          <Text className="error-text">
+            {t('kyma-companion.error.partial-ai-failure')}
+          </Text>
+          <Icon name="error" design="Negative" className="error-icon" />
+        </div>
+      )}
       {displayError && (
         <div className={'message-error ' + className}>
           <Text className="error-text">

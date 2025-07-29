@@ -786,8 +786,13 @@ kyma-companion:
     internal_server_error-message: Couldn't fetch response from Joule because of network errors.
     chat-error: An error occurred
     suggestions-error: No suggestions available
+    partial-ai-failure: Some tasks encountered errors. The results might be incomplete or not fully actionable.
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
     http-error-no-retry: Response status code is {{statusCode}}.
+  input-tokens:
+    warning: "Approaching per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)"
+    error: "Message exceeds per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)"
+    calculation-error: Unable to calculate token count.
   introduction: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. Meanwhile, you can check the suggested questions below; you may find them helpful!
   introduction-no-suggestions: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. While I don't have any initial suggestions for this resource, feel free to ask me anything you'd like!
   placeholder: Message Joule...
