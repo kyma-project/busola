@@ -35,10 +35,39 @@ context('Test Companion UI', () => {
         .find('.chat-initial-screen')
         .contains('Hello')
         .should('be.visible');
+
+      cy.closeCompanion();
     });
 
-    it('Welcome screen should not be visible after reset', () => {
+    it('Loading screen should not be visible after reset', () => {
+      cy.mockPromptSuggestions();
       cy.mockChatResponse();
+      cy.openCompanion();
+      cy.get('.kyma-companion').as('companion');
+
+      cy.clickSuggestion(0);
+
+      cy.get('@companion')
+        .find('.chat-initial-screen')
+        .should('not.exist');
+
+      cy.resetCompanion();
+
+      cy.get('@companion')
+        .find('.chat-loading-screen')
+        .should('not.exist');
+
+      cy.get('@companion')
+        .find('.ai-busy-indicator')
+        .should('be.visible');
+
+      cy.closeCompanion();
+    });
+
+    it('Welcome screen should be visible after reset', () => {
+      cy.mockPromptSuggestions();
+      cy.mockChatResponse();
+      cy.openCompanion();
       cy.get('.kyma-companion').as('companion');
 
       cy.clickSuggestion(0);
@@ -51,7 +80,8 @@ context('Test Companion UI', () => {
 
       cy.get('@companion')
         .find('.chat-initial-screen')
-        .should('not.exist');
+        .contains('Hello')
+        .should('be.visible');
 
       cy.closeCompanion();
     });

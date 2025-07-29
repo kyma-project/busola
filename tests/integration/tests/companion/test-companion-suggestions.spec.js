@@ -87,6 +87,14 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
     cy.resetCompanion();
 
+    cy.get('@companion')
+      .find('.chat-initial-screen')
+      .should('be.visible');
+
+    cy.get('@companion')
+      .find('.ai-busy-indicator')
+      .should('be.visible');
+
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
@@ -111,6 +119,10 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
     cy.navigateTo('Workloads', 'Deployments');
 
+    cy.get('@companion')
+      .find('.ai-busy-indicator')
+      .should('be.visible');
+
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
         resourceName: '',
@@ -134,6 +146,10 @@ context('Test Companion Initial Suggestions', () => {
   it('updates suggestions again when navigating back to Namespace', () => {
     cy.get('.kyma-companion').as('companion');
     cy.go('back');
+
+    cy.get('@companion')
+      .find('.ai-busy-indicator')
+      .should('be.visible');
 
     cy.wait('@getPromptSuggestions').then(interception => {
       expect(interception.request.body).to.deep.equal({
