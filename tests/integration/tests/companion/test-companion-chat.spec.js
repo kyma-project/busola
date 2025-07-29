@@ -32,6 +32,8 @@ context('Test Companion Chat Behavior', () => {
       .find('.context-label')
       .contains('Namespace - default');
 
+    cy.wait(2000);
+
     cy.get('@companion')
       .find('.chat-list > *')
       .should('have.length', 1)
