@@ -26,7 +26,6 @@ import { CommunityModuleContext } from 'components/KymaModules/providers/Communi
 import CommunityModuleCard from 'components/KymaModules/components/CommunityModuleCard';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
 
 import './KymaModulesAddModule.scss';
 
@@ -93,10 +92,6 @@ function transformDataForDisplay(
   availableCommunityModules: Map<string, VersionInfo[]>,
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
-    const formatDisplayText = (v: VersionInfo): string => {
-      return `v${v.version}`;
-    };
-
     return {
       name: moduleName,
       versions: versions.map(v => ({
@@ -106,7 +101,7 @@ function transformDataForDisplay(
         },
         version: v.version,
         installed: v.installed ?? false,
-        textToDisplay: formatDisplayText(v),
+        textToDisplay: `v${v.version}`,
         icon: v.icon,
         docsURL: v.docsURL,
       })),
@@ -139,16 +134,13 @@ export default function CommunityModulesAddModule(props: any) {
     setCommunityModulesTemplatesToApply,
   ] = useState(new Map<string, ModuleTemplateType>());
 
-  const { moduleTemplatesLoading, moduleReleaseMetasLoading } = useContext(
-    ModuleTemplatesContext,
-  );
   const {
     notInstalledCommunityModuleTemplates,
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
-    if (!moduleReleaseMetasLoading && notInstalledCommunityModuleTemplates) {
+    if (!notInstalledCommunityModulesLoading) {
       return getAvailableCommunityModules(
         notInstalledCommunityModuleTemplates,
         {} as ModuleTemplateListType,
@@ -156,7 +148,10 @@ export default function CommunityModulesAddModule(props: any) {
     } else {
       return new Map();
     }
-  }, [notInstalledCommunityModuleTemplates, moduleReleaseMetasLoading]);
+  }, [
+    notInstalledCommunityModuleTemplates,
+    notInstalledCommunityModulesLoading,
+  ]);
 
   useEffect(() => {
     fetchResourcesToApply(
@@ -201,7 +196,7 @@ export default function CommunityModulesAddModule(props: any) {
       }
     };
   }, [cardsContainerRef, calculateColumns]);
-  if (notInstalledCommunityModulesLoading || moduleTemplatesLoading) {
+  if (notInstalledCommunityModulesLoading) {
     return (
       <div style={{ height: 'calc(100vh - 14rem)' }}>
         <Spinner />

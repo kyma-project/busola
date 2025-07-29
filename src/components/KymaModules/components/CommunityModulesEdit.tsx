@@ -124,10 +124,6 @@ function transformDataForDisplay(
   t: Function,
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
-    const formatDisplayText = (v: VersionInfo): string => {
-      return `v${v.version}`;
-    };
-
     return {
       name: moduleName,
       versions: versions.map(v => ({
@@ -137,7 +133,7 @@ function transformDataForDisplay(
         },
         version: v.version,
         installed: v.installed ?? false,
-        textToDisplay: formatDisplayText(v),
+        textToDisplay: `v${v.version}`,
       })),
     };
   });
