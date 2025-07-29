@@ -56,6 +56,8 @@ config:
       isEnabled: false
       config:
         feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/preview/previewId/1fa80b40-56c3-4b20-9902-877df3da3493/SV_dmWATTfes5SstG6?Q_CHL=preview&Q_SurveyVersionID=current
+        model: 'gpt-4.1'
+        queryMaxTokens: 8000
     TRACKING:
       isEnabled: false
     GARDENER_LOGIN:

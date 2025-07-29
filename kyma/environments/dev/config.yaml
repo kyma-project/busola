@@ -72,6 +72,8 @@ config:
       isEnabled: true
       config:
         feedbackLink: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        model: 'gpt-4.1'
+        queryMaxTokens: 8000
     TRACKING:
       isEnabled: false
     GARDENER_LOGIN:
