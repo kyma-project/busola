@@ -16,7 +16,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/KymaModules/support';
-import { Button, Form, FormItem } from '@ui5/webcomponents-react';
+import { Button, Form, FormItem, MessageStrip } from '@ui5/webcomponents-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
@@ -124,10 +124,6 @@ function transformDataForDisplay(
   t: Function,
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
-    const formatDisplayText = (v: VersionInfo): string => {
-      return `${v.channel ? v.channel + ' ' : ''}(v${v.version})`;
-    };
-
     return {
       name: moduleName,
       versions: versions.map(v => ({
@@ -136,10 +132,8 @@ function transformDataForDisplay(
           namespace: v.moduleTemplateNamespace,
         },
         version: v.version,
-        channel: v.channel ?? '',
         installed: v.installed ?? false,
-        beta: v.beta,
-        textToDisplay: formatDisplayText(v),
+        textToDisplay: `v${v.version}`,
       })),
     };
   });
@@ -167,32 +161,28 @@ export default function CommunityModulesEdit() {
     setCommunityModulesTemplatesToApply,
   ] = useState(new Map<string, ModuleTemplateType>());
 
-  const {
-    moduleTemplatesLoading,
-    communityModuleTemplates,
-    moduleReleaseMetasLoading,
-    moduleReleaseMetas,
-  } = useContext(ModuleTemplatesContext);
+  const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
+    ModuleTemplatesContext,
+  );
   const {
     installedCommunityModuleTemplates,
     installedCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
-    if (!moduleReleaseMetasLoading) {
+    if (!moduleTemplatesLoading && !installedCommunityModulesLoading) {
       return getAvailableCommunityModules(
         communityModuleTemplates,
         installedCommunityModuleTemplates,
-        moduleReleaseMetas,
       );
     } else {
       return new Map();
     }
   }, [
     communityModuleTemplates,
-    moduleReleaseMetas,
+    moduleTemplatesLoading,
     installedCommunityModuleTemplates,
-    moduleReleaseMetasLoading,
+    installedCommunityModulesLoading,
   ]);
 
   useEffect(() => {
@@ -220,6 +210,7 @@ export default function CommunityModulesEdit() {
     return (
       <section>
         <UI5Panel
+          testid={'community-modules-edit'}
           title={''}
           headerActions={
             <Button
@@ -250,24 +241,34 @@ export default function CommunityModulesEdit() {
                     className="collapsible-margins"
                     title={t('modules.community.title')}
                   >
-                    <div className={'edit'}>
-                      {communityModulesToDisplay &&
-                        communityModulesToDisplay.map((module, idx) => {
-                          return (
-                            <CommunityModuleVersionSelect
-                              key={`${module.name}+${idx}`}
-                              module={module}
-                              onChange={onVersionChange(
-                                communityModuleTemplates,
-                                installedCommunityModuleTemplates,
-                                communityModulesTemplatesToApply,
-                                setCommunityModulesTemplatesToApply,
-                                setIsResourceEdited,
-                              )}
-                            />
-                          );
-                        })}
-                    </div>
+                    {installedCommunityModuleTemplates.items.length !== 0 ? (
+                      <div className={'edit'}>
+                        {communityModulesToDisplay &&
+                          communityModulesToDisplay.map((module, idx) => {
+                            return (
+                              <CommunityModuleVersionSelect
+                                key={`${module.name}+${idx}`}
+                                module={module}
+                                onChange={onVersionChange(
+                                  communityModuleTemplates,
+                                  installedCommunityModuleTemplates,
+                                  communityModulesTemplatesToApply,
+                                  setCommunityModulesTemplatesToApply,
+                                  setIsResourceEdited,
+                                )}
+                              />
+                            );
+                          })}
+                      </div>
+                    ) : (
+                      <MessageStrip
+                        design="Critical"
+                        hideCloseButton
+                        className="sap-margin-top-small"
+                      >
+                        {t('modules.community.no-modules-installed')}
+                      </MessageStrip>
+                    )}
                   </CollapsibleSection>
                 </div>
               </FormItem>

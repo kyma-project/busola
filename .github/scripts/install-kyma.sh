@@ -43,6 +43,7 @@ echo "Apply modules fixtures"
 kubectl apply -f tests/integration/fixtures/module-templates-crd.yaml
 kubectl apply -f tests/integration/fixtures/test-crd-kyma.yaml
 kubectl apply -f tests/integration/fixtures/modules
+kubectl apply -f tests/integration/fixtures/community-modules
 
 echo "Apply gardener resources"
 echo "Certificates"

@@ -73,7 +73,7 @@ export const GenericList = ({
   noHideFields,
   customRowClick,
   className = '',
-  accessibleName,
+  accessibleName = null,
   customSelectedEntry = '',
 }) => {
   const navigate = useNavigate();
@@ -390,7 +390,7 @@ export const GenericList = ({
     <UI5Panel
       title={title}
       headerActions={!headerActionsEmpty && headerActions}
-      data-testid={testid}
+      testid={testid}
       disableMargin={disableMargin}
       className={className}
     >

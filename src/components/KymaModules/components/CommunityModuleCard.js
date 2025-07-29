@@ -24,7 +24,7 @@ async function isImageAvailable(url) {
 
 async function getImageSrc(module) {
   const defaultImage = '/assets/sap-logo.svg';
-  const iconLink = module.versions[0]?.icon.link;
+  const iconLink = module.versions[0]?.icon?.link;
 
   if (iconLink && (await isImageAvailable(iconLink))) {
     return iconLink;
@@ -102,14 +102,14 @@ export default function CommunityModuleCard({
         <div className="settings-panel__content sap-margin-y-small">
           <Label>{t('modules.community.release-channel') + ':'} </Label>
           <Select
-            accessibleName={`${module.name} channel select`}
+            accessibleName={`${module.name} version select`}
             onChange={event => {
               onChange(event.detail.selectedOption.value, false);
             }}
             value={`${module.versions[0].moduleTemplate.name}|${module.versions[0].moduleTemplate.namespace}`}
             className="channel-select"
           >
-            {module.versions?.map((version, idx) => (
+            {module.versions?.map(version => (
               <Option
                 selected={selectedModules.get(module.name)}
                 key={`option-${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}

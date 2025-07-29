@@ -7,15 +7,9 @@ import {
   showKymaCompanionState,
 } from 'state/companion/showKymaCompanionAtom';
 import { Chat } from './Chat/Chat';
-import { ChatGroup, chatGroupHelpers } from './Chat/types';
+import { AIError, ChatGroup, chatGroupHelpers } from './Chat/types';
 import Disclaimer from './Disclaimer/Disclaimer';
 import './KymaCompanion.scss';
-
-export interface AIError {
-  title?: string;
-  message: string | null;
-  displayRetry: boolean;
-}
 
 export default function KymaCompanion() {
   const { t } = useTranslation();

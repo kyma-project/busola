@@ -74,6 +74,8 @@ config:
       config:
         feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/form/SV_dmWATTfes5SstG6
         documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
+        model: 'gpt-4.1'
+        queryMaxTokens: 8000
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null

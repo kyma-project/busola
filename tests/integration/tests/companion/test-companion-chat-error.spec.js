@@ -127,9 +127,8 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
 
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 100,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           data: {
             answer: {
               content: 'This is a custom error message',
@@ -145,7 +144,11 @@ context('Test Companion Chat Error Handling', () => {
             },
             error: 'error',
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 100,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     cy.resetCompanion();
@@ -169,9 +172,8 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
 
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
-      req.reply({
-        delay: 100,
-        body: {
+      const mockResponse =
+        JSON.stringify({
           data: {
             answer: {
               content: 'This is a custom error message',
@@ -193,7 +195,11 @@ context('Test Companion Chat Error Handling', () => {
             },
             error: null,
           },
-        },
+        }) + '\n';
+
+      req.reply({
+        delay: 100,
+        body: mockResponse,
       });
     }).as('getChatResponse');
     cy.resetCompanion();
@@ -285,6 +291,13 @@ context('Test Companion Chat Error Handling', () => {
     cy.get('@companion')
       .find('.chat-list')
       .find('ui5-illustrated-message')
+      .find('ui5-title')
+      .should('contain.text', `Unauthorized`)
+      .should('be.visible');
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
       .should('contain.text', `Authentication failed`)
       .should('be.visible');
 
@@ -318,6 +331,13 @@ context('Test Companion Chat Error Handling', () => {
       .eq(0)
       .find('.message-container')
       .should('contain.text', `Response status code is 429`);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
+      .find('ui5-title')
+      .should('contain.text', `Token usage limit exceeded`)
+      .should('be.visible');
 
     cy.get('@companion')
       .find('.chat-list')
@@ -361,7 +381,136 @@ context('Test Companion Chat Error Handling', () => {
     cy.get('@companion')
       .find('.chat-list')
       .find('ui5-illustrated-message')
+      .find('ui5-title')
+      .should('contain.text', `Validation error`)
+      .should('be.visible');
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('ui5-illustrated-message')
       .should('contain.text', `Request validation failed`)
       .should('be.visible');
+  });
+
+  it('token count validation - warning and error', () => {
+    const mockConfig = {
+      data: {
+        config: JSON.stringify({
+          config: {
+            features: {
+              KYMA_COMPANION: {
+                isEnabled: true,
+                config: {
+                  model: 'gpt-4.1',
+                  queryMaxTokens: 8,
+                },
+              },
+            },
+          },
+        }),
+      },
+    };
+
+    const configRequest = {
+      method: 'GET',
+      url: '/backend/api/v1/namespaces/kube-public/configmaps/busola-config',
+    };
+    cy.intercept(configRequest, mockConfig);
+
+    cy.reload();
+    cy.openCompanion();
+    cy.get('.kyma-companion').as('companion');
+    cy.wait('@getPromptSuggestions');
+
+    // test valid token count & able to submit input
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .find('textarea')
+      .should('be.visible')
+      .type(`Test success!`);
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .should('have.attr', 'value-state', 'None');
+
+    cy.get('@companion')
+      .find('.query-input-actions > ui5-button[id="submit-icon"]')
+      .should('not.be.disabled')
+      .click();
+
+    cy.wait('@getChatResponse');
+    cy.get('@getChatResponse.all').should('have.length', 1);
+    cy.wait('@getFollowUpSuggestions');
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('.message-container')
+      .contains('Test success!')
+      .should('be.visible');
+
+    // test warning threshold & able to submit input
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .find('textarea')
+      .should('be.visible')
+      .type(`This prompt will test the warning!`);
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .should('have.attr', 'value-state', 'Critical')
+      .should('contain.text', 'Approaching per-query token limit');
+
+    cy.get('@companion')
+      .find('.query-input-actions > ui5-button[id="submit-icon"]')
+      .should('not.be.disabled')
+      .click();
+
+    cy.wait('@getChatResponse');
+    cy.get('@getChatResponse.all').should('have.length', 2);
+    cy.wait('@getFollowUpSuggestions');
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('.message-container')
+      .contains('This prompt will test the warning!')
+      .should('be.visible');
+
+    // test error & NOT able to submit input
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .find('textarea')
+      .should('be.visible')
+      .type(
+        `This prompt will exceed the token limit and cause an error indication!`,
+      );
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .should('have.attr', 'value-state', 'Negative')
+      .should('contain.text', 'Message exceeds per-query token limit');
+
+    cy.get('@companion')
+      .find('.query-input-actions > ui5-button[id="submit-icon"]')
+      .should('be.disabled');
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .find('textarea')
+      .type(`{enter}`);
+
+    cy.wait(1000);
+    cy.get('@getChatResponse.all').should('have.length', 2);
+
+    cy.get('@companion')
+      .find('.chat-list')
+      .find('.message-container')
+      .contains(
+        'This prompt will exceed the token limit and cause an error indication!',
+      )
+      .should('not.exist');
   });
 });
