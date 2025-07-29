@@ -56,7 +56,10 @@ export default function FeedbackPopover() {
         text={t('feedback.feedback')}
         title={t('feedback.give-feedback')}
         count={
-          isKymaCompanionEnabled && companionFeedbackLink && showNewIndicators
+          isKymaCompanionEnabled &&
+          companionFeedbackLink &&
+          showNewIndicators &&
+          window.location.pathname !== '/clusters'
             ? '1'
             : undefined
         }
@@ -83,42 +86,44 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
-          {isKymaCompanionEnabled && companionFeedbackLink && (
-            <FlexBox
-              alignItems="Start"
-              direction="Column"
-              justifyContent="Start"
-              gap={16}
-              className="sap-margin-bottom-medium"
-            >
+          {isKymaCompanionEnabled &&
+            companionFeedbackLink &&
+            window.location.pathname !== '/clusters' && (
               <FlexBox
-                direction="Row"
-                alignItems="Center"
+                alignItems="Start"
+                direction="Column"
                 justifyContent="Start"
-                gap={12}
+                gap={16}
+                className="sap-margin-bottom-medium"
               >
-                <Title level="H6" size="H6">
-                  {t('feedback.joule.title')}
-                </Title>
-                {showNewIndicators && (
-                  <ObjectStatus state="Information" inverted>
-                    {t('feedback.new')}
-                  </ObjectStatus>
-                )}
+                <FlexBox
+                  direction="Row"
+                  alignItems="Center"
+                  justifyContent="Start"
+                  gap={12}
+                >
+                  <Title level="H6" size="H6">
+                    {t('feedback.joule.title')}
+                  </Title>
+                  {showNewIndicators && (
+                    <ObjectStatus state="Information" inverted>
+                      {t('feedback.new')}
+                    </ObjectStatus>
+                  )}
+                </FlexBox>
+                <Text className="info-text">{t('feedback.joule.info')}</Text>
+                <Button
+                  design="Emphasized"
+                  endIcon="inspect"
+                  onClick={() => {
+                    handleNewFeedbackViewed();
+                    window.open(companionFeedbackLink, '_blank');
+                  }}
+                >
+                  {t('feedback.give-feedback')}
+                </Button>
               </FlexBox>
-              <Text className="info-text">{t('feedback.joule.info')}</Text>
-              <Button
-                design="Emphasized"
-                endIcon="inspect"
-                onClick={() => {
-                  handleNewFeedbackViewed();
-                  window.open(companionFeedbackLink, '_blank');
-                }}
-              >
-                {t('feedback.give-feedback')}
-              </Button>
-            </FlexBox>
-          )}
+            )}
           <FlexBox
             alignItems="Start"
             direction="Column"

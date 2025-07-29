@@ -73,6 +73,8 @@ config:
       isEnabled: true
       config:
         feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/form/SV_dmWATTfes5SstG6
+        model: 'gpt-4.1'
+        queryMaxTokens: 8000
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
