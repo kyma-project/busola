@@ -46,7 +46,8 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
 
     cy.get('@companion')
-      .find('.ai-busy-indicator')
+      .find('.chat-loading-screen')
+      .find('.chat-loading-indicator')
       .should('be.visible');
 
     cy.wait('@getPromptSuggestions').then(interception => {
@@ -85,6 +86,10 @@ context('Test Companion Initial Suggestions', () => {
   it('reloads suggestions after reset', () => {
     cy.get('.kyma-companion').as('companion');
     cy.resetCompanion();
+
+    cy.get('@companion')
+      .find('.chat-initial-screen')
+      .should('be.visible');
 
     cy.get('@companion')
       .find('.ai-busy-indicator')
