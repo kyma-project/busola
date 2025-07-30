@@ -139,15 +139,15 @@ export const ResourceValidationResult = ({ resource }) => {
           marginLeft: '-1rem',
           marginRight: '-1rem',
         }}
-        // header={
-        //   <Toolbar toolbarStyle={'Clear'} slot='header'>
-        //     {resource?.kind + ' ' + resource?.metadata?.name}
-        //     <ToolbarSpacer />
-        //     {statusIcon}
-        //   </Toolbar>
-        // }
-        headerText={resource?.kind + ' ' + resource?.metadata?.name}
+        header={
+          <Toolbar toolbarStyle={'Clear'} slot="header">
+            {resource?.kind + ' ' + resource?.metadata?.name}
+            <ToolbarSpacer />
+            {statusIcon}
+          </Toolbar>
+        }
         accessibleName={resource?.kind + ' ' + resource?.metadata?.name}
+        accessibleRole="listitem"
       >
         {validateResources.isEnabled && (
           <ValidationWarnings
