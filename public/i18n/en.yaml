@@ -767,7 +767,7 @@ kubeconfig-id:
 kyma-companion:
   banner:
     title: Meet Joule
-    description: Joule in Kyma dashboard assists you with a wide range of tasks specific to Kyma and Kubernetes. You can use it, for example, to troubleshoot issues, create Functions, scale applications, or configure Ingress.
+    description: Joule in Kyma dashboard assists you with a wide range of tasks specific to Kyma and Kubernetes. You can use it, for example, to troubleshoot issues, create Functions, scale applications, or configure Ingress. As this is an experimental feature, we encourage you to explore its capabilities and share your feedback to help us improve.
     buttons:
       try-joule: Try Out Joule
       documentation: Documentation
