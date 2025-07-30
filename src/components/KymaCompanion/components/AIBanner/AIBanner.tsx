@@ -60,7 +60,12 @@ export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
             key="ai-feedback"
             endIcon="inspect"
             onClick={() => {
-              window.open(feedbackUrl, '_blank');
+              const newWindow = window.open(
+                feedbackUrl,
+                '_blank',
+                'noopener, noreferrer',
+              );
+              if (newWindow) newWindow.opener = null;
             }}
           >
             {t('feedback.give-feedback')}
