@@ -12,6 +12,7 @@ mend:
     - '**/tests/**'
     - '**/kyma/enviroments/**'
     - '**/kyma/extensions/**'
+    - '**/*.test.*'
 checkmarx-one:
   preset: javascript-default
   exclude:
@@ -23,3 +24,4 @@ checkmarx-one:
     - '**/tests/**'
     - '**/kyma/enviroments/**'
     - '**/kyma/extensions/**'
+    - '**/*.test.*'

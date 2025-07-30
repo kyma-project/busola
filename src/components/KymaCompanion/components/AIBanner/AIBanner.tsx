@@ -27,7 +27,13 @@ const getIllustration = (theme: ThemeType): string | undefined => {
   }
 };
 
-export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
+export function AIBanner({
+  feedbackUrl,
+  documentationUrl,
+}: {
+  feedbackUrl: string;
+  documentationUrl: string;
+}) {
   const { t } = useTranslation();
   const setShowCompanion = useSetRecoilState(showKymaCompanionState);
   const theme = useRecoilValue(themeState);
@@ -36,6 +42,7 @@ export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
   return (
     <FeatureCardBanner
       id="ai-banner"
+      className="ai-banner-card"
       title={t('kyma-companion.banner.title')}
       titleIcon={titleIcon}
       description={t('kyma-companion.banner.description')}
@@ -69,6 +76,15 @@ export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
             }}
           >
             {t('feedback.give-feedback')}
+          </Button>
+          <Button
+            key="ai-documentation"
+            endIcon="inspect"
+            onClick={() => {
+              window.open(documentationUrl, '_blank');
+            }}
+          >
+            {t('kyma-companion.banner.buttons.documentation')}
           </Button>
         </>
       }

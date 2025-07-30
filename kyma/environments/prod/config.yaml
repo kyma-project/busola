@@ -75,6 +75,7 @@ config:
       isEnabled: false
       config:
         feedbackLink: ''
+        documentationLink: ''
         model: ''
         queryMaxTokens: 0
     GARDENER_LOGIN:
