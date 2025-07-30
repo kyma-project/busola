@@ -12,17 +12,21 @@ export const WelcomeScreen = () => {
     t('kyma-companion.welcome-screen.assist'),
     t('kyma-companion.welcome-screen.guide'),
   ];
+
+  const measureRef = useRef<HTMLElement | null>(null);
+
+  const width = measureRef.current?.offsetWidth || 0;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [wordWidth, setWordWidth] = useState(72); // Width of word "help" as default
-  const measureRef = useRef<HTMLElement | null>(null);
+  const [wordWidth, setWordWidth] = useState(width);
 
   useEffect(() => {
     if (measureRef.current) {
-      setWordWidth(measureRef.current.offsetWidth || 72);
+      setWordWidth(measureRef.current.offsetWidth || width);
     }
-  }, [currentIndex]);
+  }, [currentIndex, width]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -55,14 +59,14 @@ export const WelcomeScreen = () => {
           >
             {t('kyma-companion.welcome-screen.how-can-i')}
           </div>
+          {/* Hidden span for measuring */}
+          <span ref={measureRef} className="word measure">
+            {messageVariants[currentIndex]}
+          </span>
           <div
             className="message-variants-container"
             style={{ width: `${wordWidth}px` }}
           >
-            {/* Hidden span for measuring */}
-            <span ref={measureRef} className="word measure">
-              {messageVariants[currentIndex]}
-            </span>
             <Text
               className={`text current ${fade ? 'fade-out' : ''}`}
               style={{
@@ -82,7 +86,7 @@ export const WelcomeScreen = () => {
             className="sap-margin-begin-tiny"
             style={{ display: 'inline-block' }}
           >
-            {t('kyma-companion.welcome-screen.you-question')}{' '}
+            {t('kyma-companion.welcome-screen.you-question')}
           </div>
         </Text>
         <div className={'message-container left-aligned'}>
