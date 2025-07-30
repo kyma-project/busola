@@ -75,7 +75,7 @@ config:
       isEnabled: false
       config:
         feedbackLink: ''
-        documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
+        documentationLink: ''
         model: ''
         queryMaxTokens: 0
     GARDENER_LOGIN:
