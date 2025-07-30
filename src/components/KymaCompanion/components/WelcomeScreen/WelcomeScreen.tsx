@@ -15,12 +15,12 @@ export const WelcomeScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [wordWidth, setWordWidth] = useState(0);
+  const [wordWidth, setWordWidth] = useState(72); // Width of word "help" as default
   const measureRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (measureRef.current) {
-      setWordWidth(measureRef.current.offsetWidth);
+      setWordWidth(measureRef.current.offsetWidth || 72);
     }
   }, [currentIndex]);
 
