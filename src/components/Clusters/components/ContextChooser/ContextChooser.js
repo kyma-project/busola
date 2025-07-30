@@ -7,8 +7,11 @@ import {
   MessageBox,
   Button,
   Text,
+  Label,
 } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
+import { getUserDetail } from './helpers';
+
 import './ContextChooser.scss';
 
 export function ContextChooser(params) {
@@ -34,6 +37,7 @@ export function ContextChooser(params) {
           input={({ setValue }) => (
             <ContextButtons
               contexts={kubeconfig.contexts}
+              users={kubeconfig?.users}
               setValue={setValue}
               chosenContext={params.chosenContext}
               setChosenContext={params.setChosenContext}
@@ -45,6 +49,7 @@ export function ContextChooser(params) {
   );
 }
 export function ContextButtons({
+  users,
   contexts,
   setValue,
   chosenContext,
@@ -56,27 +61,44 @@ export function ContextButtons({
       id="context-chooser"
       className="sap-margin-top-tiny"
     >
-      {contexts.map(context => (
-        <RadioButton
-          key={context.name}
-          name={context.name}
-          value={context.name}
-          checked={chosenContext === context.name}
-          text={context.name}
-          onChange={() => {
-            setValue(context.name);
-            if (setChosenContext) setChosenContext(context.name);
-          }}
-        />
-      ))}
+      {contexts.map(context => {
+        return (
+          <>
+            <RadioButton
+              key={context.name}
+              name={context.name}
+              value={context.name}
+              checked={chosenContext === context.name}
+              text={context.name}
+              onChange={() => {
+                setValue(context.name);
+                if (setChosenContext) setChosenContext(context.name);
+              }}
+            />
+            <div className="sap-margin-begin-medium">
+              <Label showColon>IssuerUrl</Label>
+              <Text>
+                {getUserDetail(context.name, '--oidc-issuer-url=', users)}
+              </Text>
+
+              <Label showColon className="sap-margin-top-tiny">
+                ClientID
+              </Label>
+              <Text>
+                {getUserDetail(context.name, '--oidc-client-id=', users)}
+              </Text>
+            </div>
+          </>
+        );
+      })}
     </FlexBox>
   );
 }
 export function ContextChooserMessage({ contexts, setValue, onCancel }) {
   const { t } = useTranslation();
   const [chosenContext, setChosenContext] = useState('');
-
-  if (!Array.isArray(contexts)) {
+  console.log(contexts);
+  if (!Array.isArray(contexts?.contexts)) {
     return null;
   }
   return (
@@ -104,17 +126,40 @@ export function ContextChooserMessage({ contexts, setValue, onCancel }) {
           <br />
           {t('clusters.wizard.several-context-question')}
         </Text>
-        <FlexBox direction="Column" className="radio-box-container">
-          {contexts.map(context => (
-            <RadioButton
-              id={'context-chooser' + context.name}
-              key={context.name}
-              name={context.name}
-              value={context.name}
-              checked={chosenContext === context.name}
-              text={context.name}
-              onChange={() => setChosenContext(context.name)}
-            />
+        <FlexBox direction="Column">
+          {contexts.contexts.map(context => (
+            <>
+              <RadioButton
+                id={'context-chooser' + context.name}
+                key={context.name}
+                name={context.name}
+                value={context.name}
+                checked={chosenContext === context.name}
+                text={context.name}
+                onChange={() => setChosenContext(context.name)}
+              />
+              <div className="sap-margin-begin-medium">
+                <Label showColon>IssuerUrl</Label>
+                <Text>
+                  {getUserDetail(
+                    context.name,
+                    '--oidc-issuer-url=',
+                    contexts?.users,
+                  )}
+                </Text>
+
+                <Label showColon className="sap-margin-top-tiny">
+                  ClientID
+                </Label>
+                <Text>
+                  {getUserDetail(
+                    context.name,
+                    '--oidc-client-id=',
+                    contexts?.users,
+                  )}
+                </Text>
+              </div>
+            </>
           ))}
         </FlexBox>
       </FlexBox>
