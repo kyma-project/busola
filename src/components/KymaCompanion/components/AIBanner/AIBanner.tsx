@@ -81,7 +81,12 @@ export function AIBanner({
             key="ai-documentation"
             endIcon="inspect"
             onClick={() => {
-              window.open(documentationUrl, '_blank');
+              const newWindow = window.open(
+                documentationUrl,
+                '_blank',
+                'noopener, noreferrer',
+              );
+              if (newWindow) newWindow.opener = null;
             }}
           >
             {t('kyma-companion.banner.buttons.documentation')}
