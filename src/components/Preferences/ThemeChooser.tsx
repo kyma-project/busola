@@ -23,7 +23,7 @@ export default function ThemeChooser() {
 
   return (
     <>
-      {AVAILABLE_THEMES.map(themeName => {
+      {AVAILABLE_THEMES.map((themeName) => {
         return (
           <TileButton
             key={themeName}

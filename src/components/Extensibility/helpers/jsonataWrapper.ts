@@ -20,11 +20,14 @@ export const escapeKebabCase = (expr: string) => {
 
   // First, extract all string literals to preserve them.
   const literals: any = [];
-  const expressionWithoutStrings = expr.replace(stringLiteralPattern, match => {
-    literals.push(match);
-    // Encapsulate index with placeholder
-    return placeholder + (literals.length - 1) + placeholder;
-  });
+  const expressionWithoutStrings = expr.replace(
+    stringLiteralPattern,
+    (match) => {
+      literals.push(match);
+      // Encapsulate index with placeholder
+      return placeholder + (literals.length - 1) + placeholder;
+    },
+  );
 
   // Escape hyphens in the remaining expression (outside of string literals)
   const escapedExpression = expressionWithoutStrings.replace(
@@ -48,8 +51,8 @@ export function jsonataWrapper(expression: string) {
 
     const podLabels = Object?.entries(pod.metadata?.labels);
     const resourceLabels = Object?.entries(labels);
-    return resourceLabels.every(resLabel =>
-      podLabels.some(podLabel => isEqual(resLabel, podLabel)),
+    return resourceLabels.every((resLabel) =>
+      podLabels.some((podLabel) => isEqual(resLabel, podLabel)),
     );
   });
 
@@ -67,7 +70,7 @@ export function jsonataWrapper(expression: string) {
     return first?.localeCompare(second) ?? 1;
   });
 
-  exp.registerFunction('readableTimestamp', timestamp => {
+  exp.registerFunction('readableTimestamp', (timestamp) => {
     return getReadableTimestamp(timestamp);
   });
 
@@ -84,12 +87,12 @@ export function jsonataWrapper(expression: string) {
   });
 
   exp.registerFunction('prepareUrl', (url, overrides) => {
-    const parsedUrl = url.replace(new RegExp('{([^{]+)}', 'g'), function(
-      _: any,
-      overrideName: string,
-    ) {
-      return overrides[overrideName];
-    });
+    const parsedUrl = url.replace(
+      new RegExp('{([^{]+)}', 'g'),
+      function (_: any, overrideName: string) {
+        return overrides[overrideName];
+      },
+    );
     return parsedUrl;
   });
 

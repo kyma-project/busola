@@ -29,10 +29,8 @@ export function CommunityModulesDeleteBoxContextProvider({
 
   const { kymaResource } = useContext(KymaModuleContext);
 
-  const {
-    installedCommunityModules,
-    installedCommunityModulesLoading,
-  } = useContext(CommunityModuleContext);
+  const { installedCommunityModules, installedCommunityModulesLoading } =
+    useContext(CommunityModuleContext);
 
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
@@ -50,7 +48,7 @@ export function CommunityModulesDeleteBoxContextProvider({
     const index =
       moduleIndex ??
       // Find index of the selected module after a refresh or other case after which we have undefined.
-      activeModules.items?.findIndex(module =>
+      activeModules.items?.findIndex((module) =>
         checkSelectedModule(module, layoutState),
       );
     return index > -1 ? index : undefined;

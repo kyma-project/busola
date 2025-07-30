@@ -88,7 +88,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   const [refetchSource, setRefetchSource] = useState('');
 
   const findUpdatedName = (conditionsArr: string[], storeArr: string[]) => {
-    return conditionsArr.find(item => storeArr.includes(item));
+    return conditionsArr.find((item) => storeArr.includes(item));
   };
 
   // clear timeouts on component unmount
@@ -195,7 +195,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   };
 
   const getRelatedResourceInPath = (path: string) => {
-    return Object.keys(dataSources).find(dataSourceName =>
+    return Object.keys(dataSources).find((dataSourceName) =>
       path.startsWith('$' + dataSourceName),
     );
   };

@@ -31,9 +31,7 @@ context('Test Certificates', () => {
 
     cy.saveChanges('Create');
 
-    cy.getMidColumn()
-      .contains('ui5-title', CERT_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', CERT_NAME).should('be.visible');
   });
 
   it('Edits a certificate', () => {

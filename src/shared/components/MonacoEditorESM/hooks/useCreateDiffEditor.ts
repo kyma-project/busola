@@ -21,10 +21,8 @@ export const useCreateDiffEditor = ({
   const divRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
 
-  const [
-    editorInstance,
-    setEditorInstance,
-  ] = useState<editor.IStandaloneDiffEditor | null>(null);
+  const [editorInstance, setEditorInstance] =
+    useState<editor.IStandaloneDiffEditor | null>(null);
 
   useEffect(() => {
     if (!divRef.current) return;

@@ -7,9 +7,8 @@ export interface IsFormOpenState {
 
 const defaultValue = { formOpen: false, leavingForm: false };
 
-export const isFormOpenState: RecoilState<IsFormOpenState> = atom<
-  IsFormOpenState
->({
-  key: 'isFormOpenState',
-  default: defaultValue,
-});
+export const isFormOpenState: RecoilState<IsFormOpenState> =
+  atom<IsFormOpenState>({
+    key: 'isFormOpenState',
+    default: defaultValue,
+  });

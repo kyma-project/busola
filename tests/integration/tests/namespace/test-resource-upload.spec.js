@@ -3,9 +3,7 @@ import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
 import jsyaml from 'js-yaml';
 
-const SC_NAME = `sc-upload-yaml-${Math.random()
-  .toString()
-  .substr(2, 8)}`;
+const SC_NAME = `sc-upload-yaml-${Math.random().toString().substr(2, 8)}`;
 
 async function loadValidResources(namespaceName) {
   const resources = await loadFile('yaml-upload--valid.yaml', false);
@@ -24,15 +22,13 @@ context('Test resource upload', () => {
   });
 
   it('Creates resources', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
-      resources => {
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      (resources) => {
+        const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
       },
     );
@@ -61,9 +57,9 @@ context('Test resource upload', () => {
 
   it('Upserts resources', () => {
     cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
-      resources => {
+      (resources) => {
         resources[0].metadata.name = 'echo-server-upload-yaml-2';
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+        const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
       },
     );
@@ -82,10 +78,10 @@ context('Test resource upload', () => {
 
   it('Handles errors', () => {
     cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
-      resources => {
+      (resources) => {
         resources[0].metadata.name = 'echo-server-upload-yaml';
         resources[0].apiVersion = '/apis/errors';
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+        const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
       },
     );

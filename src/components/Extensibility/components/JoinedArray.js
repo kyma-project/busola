@@ -18,7 +18,7 @@ export function JoinedArray({
     return emptyLeafPlaceholder;
   } else if (
     !Array.isArray(value) ||
-    value.some(item => typeof item === 'object' || Array.isArray(item))
+    value.some((item) => typeof item === 'object' || Array.isArray(item))
   ) {
     return t('extensibility.widgets.joined-array.error');
   }
@@ -37,21 +37,21 @@ export function JoinedArray({
             </div>
           ))
         : structure?.children
-        ? value.map((val, i) => (
-            <>
-              {structure?.children?.map((def, idx) => (
-                <Widget
-                  structure={def}
-                  arrayItems={[...arrayItems, val]}
-                  value={val}
-                  key={idx}
-                  {...props}
-                />
-              ))}
-              {i !== value.length - 1 && separator}
-            </>
-          ))
-        : value.join(separator) || emptyLeafPlaceholder}
+          ? value.map((val, i) => (
+              <>
+                {structure?.children?.map((def, idx) => (
+                  <Widget
+                    structure={def}
+                    arrayItems={[...arrayItems, val]}
+                    value={val}
+                    key={idx}
+                    {...props}
+                  />
+                ))}
+                {i !== value.length - 1 && separator}
+              </>
+            ))
+          : value.join(separator) || emptyLeafPlaceholder}
     </div>
   );
 }

@@ -25,16 +25,14 @@ import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner'
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
 
-const Injections = React.lazy(() =>
-  import('../../../Extensibility/ExtensibilityInjections'),
+const Injections = React.lazy(
+  () => import('../../../Extensibility/ExtensibilityInjections'),
 );
 
 export function ClusterOverview() {
   const { t } = useTranslation();
-  const {
-    isEnabled: isKymaCompanionEnabled,
-    config: companionConfig,
-  } = useFeature(configFeaturesNames.KYMA_COMPANION);
+  const { isEnabled: isKymaCompanionEnabled, config: companionConfig } =
+    useFeature(configFeaturesNames.KYMA_COMPANION);
   const clusterValidation = useFeature(configFeaturesNames.CLUSTER_VALIDATION);
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
@@ -135,7 +133,7 @@ export function ClusterOverview() {
           resource={currentCluster}
           resourceIsCluster={true}
           resourceTitle={currentCluster?.kubeconfig['current-context']}
-          deleteFn={e => {
+          deleteFn={(e) => {
             deleteCluster(e.name, clustersInfo);
             notification.notifySuccess({
               content: t('clusters.disconnect'),

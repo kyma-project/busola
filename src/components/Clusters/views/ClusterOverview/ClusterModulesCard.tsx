@@ -41,10 +41,8 @@ const CountStatuseByType = (
 };
 export default function ClusterModulesCard() {
   const { t } = useTranslation();
-  const {
-    installedCommunityModules,
-    installedCommunityModulesLoading,
-  } = useContext(CommunityModuleContext);
+  const { installedCommunityModules, installedCommunityModulesLoading } =
+    useContext(CommunityModuleContext);
   const { modules, error, loading: loadingModules } = useKymaModulesQuery();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();

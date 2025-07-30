@@ -9,7 +9,7 @@ context('Test Companion Chat Error Handling', () => {
   });
 
   it('Feedback response handling', () => {
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           data: {

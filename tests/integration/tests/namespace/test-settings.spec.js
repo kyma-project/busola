@@ -40,9 +40,7 @@ context('Test app settings and preferences', () => {
 
     cy.contains('ui5-title', NAME).should('be.visible');
 
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.getLeftNav().contains('Config Maps').click();
 
     cy.contains('ui5-table-row', NAME)
       .find('ui5-button[data-testid="delete"]')
@@ -107,7 +105,7 @@ context('Test app settings and preferences', () => {
     cy.contains('.preferences-row', 'Show hidden Namespaces')
       .find('[accessible-name="Show hidden Namespaces"]')
       .invoke('attr', 'aria-checked')
-      .then(value => {
+      .then((value) => {
         if (value === 'true' || value === 'checked') {
           cy.contains('.preferences-row', 'Show hidden Namespaces')
             .find('ui5-switch')
@@ -121,9 +119,7 @@ context('Test app settings and preferences', () => {
       .should('be.visible')
       .click();
 
-    cy.getLeftNav()
-      .contains('Back To Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Back To Cluster Details').click();
 
     cy.getLeftNav()
       .find('ui5-side-navigation-item')

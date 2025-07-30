@@ -35,7 +35,9 @@ describe('useGetCRbyPath', () => {
   it('Returns nothing for an empty list', () => {
     const { queryByTestId } = render(
       <RecoilRoot
-        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
+        initializeState={(snapshot) =>
+          snapshot.set(allExtensionsState, mockCrds)
+        }
       >
         <TestComponent />
       </RecoilRoot>,
@@ -67,7 +69,9 @@ describe('useGetCRbyPath', () => {
 
     const { queryByTestId } = render(
       <RecoilRoot
-        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
+        initializeState={(snapshot) =>
+          snapshot.set(allExtensionsState, mockCrds)
+        }
       >
         <TestComponent />
       </RecoilRoot>,
@@ -101,7 +105,9 @@ describe('useGetCRbyPath', () => {
 
     const { queryByTestId } = render(
       <RecoilRoot
-        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
+        initializeState={(snapshot) =>
+          snapshot.set(allExtensionsState, mockCrds)
+        }
       >
         <TestComponent />
       </RecoilRoot>,
@@ -135,7 +141,9 @@ describe('useGetCRbyPath', () => {
 
     const { queryByTestId } = render(
       <RecoilRoot
-        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
+        initializeState={(snapshot) =>
+          snapshot.set(allExtensionsState, mockCrds)
+        }
       >
         <TestComponent />
       </RecoilRoot>,

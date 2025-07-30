@@ -62,7 +62,7 @@ export default function ResourceQuotaDetails(props: any) {
             )}
             {resource.spec?.scopeSelector && (
               <UI5Panel title={t('resource-quotas.headers.scope-selectors')}>
-                {resource.spec.scopeSelector?.matchExpressions?.map(scope => (
+                {resource.spec.scopeSelector?.matchExpressions?.map((scope) => (
                   <>
                     <Title
                       level="H6"

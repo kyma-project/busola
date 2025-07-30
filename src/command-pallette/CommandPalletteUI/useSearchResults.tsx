@@ -71,8 +71,8 @@ export function useSearchResults({
     activeClusterName: cluster?.name,
     query: preprocessedQuery,
     tokens: preprocessedQuery.split(/(\/+)/).filter(Boolean),
-    clusterNodes: availableNodes.filter(n => !n.namespaced),
-    namespaceNodes: availableNodes.filter(n => n.namespaced),
+    clusterNodes: availableNodes.filter((n) => !n.namespaced),
+    namespaceNodes: availableNodes.filter((n) => n.namespaced),
     hiddenNamespaces,
     showHiddenNamespaces,
     resourceCache,
@@ -90,7 +90,7 @@ export function useSearchResults({
     }
   }, [query, namespaceContext]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const results = handlers.createResults(context).map(result => ({
+  const results = handlers.createResults(context).map((result) => ({
     ...result,
     onActivate: () => {
       // entry can explicitly prevent hiding of command palette by returning false

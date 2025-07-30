@@ -10,9 +10,8 @@ const defaultValue: KubeConfigMultipleState = {
   chosenContext: null,
 };
 
-export const multipleContexts: RecoilState<KubeConfigMultipleState> = atom<
-  KubeConfigMultipleState
->({
-  key: 'multipleContexts',
-  default: defaultValue,
-});
+export const multipleContexts: RecoilState<KubeConfigMultipleState> =
+  atom<KubeConfigMultipleState>({
+    key: 'multipleContexts',
+    default: defaultValue,
+  });

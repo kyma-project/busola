@@ -40,11 +40,11 @@ export let RESOURCE_PATH = {
   VirtualService: 'virtualservices',
 };
 
-export const filterByResource = (resourceKind, resourceName) => e =>
+export const filterByResource = (resourceKind, resourceName) => (e) =>
   e.involvedObject?.name === resourceName &&
   e.involvedObject?.kind === resourceKind;
 
-export const FormatInvolvedObject = obj => {
+export const FormatInvolvedObject = (obj) => {
   const namespacePrefix = obj.namespace ? `${obj.namespace}` : '';
   const namespaceOverride = obj.namespace ? { namespace: obj.namespace } : null;
 
@@ -59,7 +59,7 @@ export const FormatInvolvedObject = obj => {
   );
 };
 
-export const FormatSourceObject = obj => {
+export const FormatSourceObject = (obj) => {
   const { clusterUrl } = useUrl();
   if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
@@ -76,14 +76,14 @@ export const useMessageList = (defaultType = EVENT_MESSAGE_TYPE.ALL) => {
   const MessageSelector = (
     <Dropdown
       accessibleName="message-type"
-      options={Object.values(EVENT_MESSAGE_TYPE).map(el => ({
+      options={Object.values(EVENT_MESSAGE_TYPE).map((el) => ({
         key: el.key,
         text: t(`node-details.${el.text}`),
       }))}
       selectedKey={displayType.key}
       onSelect={(_, { key }) => {
         setDisplayType(
-          Object.values(EVENT_MESSAGE_TYPE).find(type => type.key === key),
+          Object.values(EVENT_MESSAGE_TYPE).find((type) => type.key === key),
         );
       }}
     />

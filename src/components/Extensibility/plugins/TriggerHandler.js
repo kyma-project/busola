@@ -56,9 +56,9 @@ export function TriggerHandler({
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
   const myChange = useMemo(
-    () => action => {
+    () => (action) => {
       if (action.scopes?.includes('value')) {
-        action.schema.get('trigger')?.forEach(t => trigger(t, storeKeys));
+        action.schema.get('trigger')?.forEach((t) => trigger(t, storeKeys));
       }
       onChange(action);
     },

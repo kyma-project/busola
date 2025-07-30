@@ -115,7 +115,7 @@ export function Editor({
             className="break-word sap-margin-small"
             role="alert"
           >
-            {warnings.map(m => (
+            {warnings.map((m) => (
               <span
                 className="line"
                 key={`${m.startLineNumber}-${m.startColumn}`}

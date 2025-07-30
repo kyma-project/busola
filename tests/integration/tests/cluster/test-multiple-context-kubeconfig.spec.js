@@ -42,7 +42,7 @@ context('Test multiple context kubeconfig', () => {
   it('User can choose different context with the multiple context kubeconfig', () => {
     cy.handleExceptions();
 
-    cy.wrap(loadMultipleContextKubeconfig()).then(kubeconfig => {
+    cy.wrap(loadMultipleContextKubeconfig()).then((kubeconfig) => {
       cy.visit(`${config.clusterAddress}/clusters`)
         .get('ui5-button:visible')
         .contains('Connect')
@@ -70,9 +70,7 @@ context('Test multiple context kubeconfig', () => {
 
       cy.contains('Next').click({ force: true });
 
-      cy.get('ui5-button:visible')
-        .contains('Next step')
-        .click();
+      cy.get('ui5-button:visible').contains('Next step').click();
 
       cy.get(`[accessible-name="last-step"]:visible`)
         .contains('Connect cluster')

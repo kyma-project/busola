@@ -8,7 +8,9 @@ function extractGroupVersions(apis: ApiGroupState) {
   if (!apis) return [CORE_GROUP];
   return [
     CORE_GROUP,
-    ...apis.flatMap(api => api?.versions?.map(version => version.groupVersion)),
+    ...apis.flatMap((api) =>
+      api?.versions?.map((version) => version.groupVersion),
+    ),
   ];
 }
 
@@ -22,7 +24,7 @@ export function apiGroup({
   apis: ApiGroupState;
 }) {
   const containsGroup = (groupVersions: any[]) =>
-    groupVersions?.find(g => g.includes(group));
+    groupVersions?.find((g) => g.includes(group));
 
   return async ({
     featureName,
@@ -50,8 +52,8 @@ export function apiGroup({
 export function service({
   fetchFn,
   urlsGenerator,
-  validator = async res => res?.status < 400,
-  urlMutator = url => url,
+  validator = async (res) => res?.status < 400,
+  urlMutator = (url) => url,
 }: {
   fetchFn: FetchFn | undefined;
   urlsGenerator: (featureConfig: ConfigFeature) => string[];

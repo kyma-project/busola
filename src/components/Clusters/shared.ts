@@ -43,7 +43,7 @@ export function addCluster(
   switchCluster = true,
 ) {
   const { setClusters } = clustersInfo;
-  setClusters(prev => ({ ...prev, [params.contextName]: params }));
+  setClusters((prev) => ({ ...prev, [params.contextName]: params }));
   if (switchCluster) {
     addCurrentCluster(params, clustersInfo);
   }
@@ -54,7 +54,7 @@ export function deleteCluster(
   clustersInfo: useClustersInfoType,
 ) {
   const { setClusters } = clustersInfo;
-  setClusters(prev => {
+  setClusters((prev) => {
     // todo the same function when we switch cluster from oidc one
     const prevCredentials = prev?.[clusterName]?.currentContext.user.user;
     if (!hasNonOidcAuth(prevCredentials)) {
@@ -86,13 +86,13 @@ export function getContext(
         user: kubeconfig.users[0],
       };
     } else {
-      const { context } = contexts.find(c => c.name === currentContextName)!;
+      const { context } = contexts.find((c) => c.name === currentContextName)!;
       const cluster = kubeconfig.clusters.find(
-        c => c?.name === context.cluster,
+        (c) => c?.name === context.cluster,
       );
       if (!cluster) throw Error('cluster not found');
 
-      const user = kubeconfig.users.find(u => u?.name === context.user);
+      const user = kubeconfig.users.find((u) => u?.name === context.user);
       if (!user) throw Error('user not found');
 
       return { cluster, user, namespace: context.namespace };
@@ -107,16 +107,17 @@ export function getUserIndex(kubeconfig?: Kubeconfig) {
   const context =
     contextName === '-all-'
       ? kubeconfig?.contexts?.[0]?.context
-      : kubeconfig?.contexts?.find(c => c?.name === contextName)?.context;
-  const index = kubeconfig?.users?.findIndex(u => u?.name === context?.user)!;
+      : kubeconfig?.contexts?.find((c) => c?.name === contextName)?.context;
+  const index = kubeconfig?.users?.findIndex((u) => u?.name === context?.user)!;
   return index > 0 ? index : 0;
 }
 
 export function getUser(kubeconfig: Kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
-  const context = kubeconfig?.contexts?.find(c => c?.name === contextName)
-    ?.context;
-  return kubeconfig?.users?.find(u => u?.name === context?.user)?.user;
+  const context = kubeconfig?.contexts?.find(
+    (c) => c?.name === contextName,
+  )?.context;
+  return kubeconfig?.users?.find((u) => u?.name === context?.user)?.user;
 }
 
 export function hasKubeconfigAuth(kubeconfig: Kubeconfig) {
@@ -159,11 +160,11 @@ export const addByContext = (
   const kubeconfig = userKubeconfig as ValidKubeconfig;
   try {
     const cluster = kubeconfig.clusters?.find(
-      c => c.name === context.context.cluster,
+      (c) => c.name === context.context.cluster,
     );
     if (!cluster) throw Error('cluster not found');
 
-    const user = kubeconfig.users.find(u => u.name === context.context.user);
+    const user = kubeconfig.users.find((u) => u.name === context.context.user);
     if (!user) throw Error('user not found');
 
     const clusterParams: NonNullable<ActiveClusterState> = {

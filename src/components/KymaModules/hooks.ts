@@ -55,7 +55,7 @@ export function useGetAllModulesStatuses(modules: any[]) {
       setLoading(true);
       try {
         const results = await Promise.all(
-          modules.map(async module => {
+          modules.map(async (module) => {
             const resource = module?.resource ?? module;
 
             if (!resource) return null;
@@ -124,7 +124,7 @@ export const useFetchModuleData = (
       const errors: string[] = [];
 
       const results = await Promise.allSettled(
-        items.map(async moduleTemplate => {
+        items.map(async (moduleTemplate) => {
           const name = moduleTemplate?.metadata?.name;
           const resource = selector(moduleTemplate);
 
@@ -183,7 +183,11 @@ export const useGetInstalledNotInstalledModules = (
   loading: boolean;
   error?: any;
 } => {
-  const { data: managers, loading, error } = useFetchModuleData(
+  const {
+    data: managers,
+    loading,
+    error,
+  } = useFetchModuleData(
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.manager ?? null,
     'manager',

@@ -26,7 +26,7 @@ export default function EditViewSettings() {
         </span>
         <Select
           id="editTypeComboBox"
-          onChange={e => {
+          onChange={(e) => {
             setEditViewMode({
               preferencesViewType: e.target.value ?? 'MODE_DEFAULT',
               dynamicViewType:

@@ -18,7 +18,7 @@ export default function LanguageSettings() {
     <div className="preferences-row">
       <span className="bsl-has-color-status-4">{t('settings.language')}</span>
       <Select onChange={onChange}>
-        {AVAILABLE_LANGUAGES.map(available_language => (
+        {AVAILABLE_LANGUAGES.map((available_language) => (
           <Option
             value={available_language.key}
             key={available_language.key}

@@ -28,7 +28,7 @@ function PodTemplateTable({ className, items, columns, rowRenderer }) {
       className={className}
       headerRow={
         <TableHeaderRow style={{ width: '50%' }}>
-          {columns.map(column => (
+          {columns.map((column) => (
             <TableHeaderCell>
               <Title level="H5">{column}</Title>
             </TableHeaderCell>
@@ -46,7 +46,7 @@ function PodTemplateTable({ className, items, columns, rowRenderer }) {
 export function ContainersPanel({ title, containers }) {
   return (
     <List headerText={title}>
-      {containers?.map(container => (
+      {containers?.map((container) => (
         <ContainerComponent key={container.name} container={container} />
       ))}
     </List>
@@ -87,7 +87,7 @@ function ContainerComponent({ container }) {
               className="card-shadow"
               items={container.env}
               columns={[t('common.headers.name'), t('common.headers.value')]}
-              rowRenderer={env => (
+              rowRenderer={(env) => (
                 <>
                   <TableCell>
                     <Label>{env.name}</Label>
@@ -110,7 +110,7 @@ function ContainerComponent({ container }) {
             <PodTemplateTable
               items={container.volumeMounts}
               columns={[t('common.headers.name'), t('pods.labels.mount-path')]}
-              rowRenderer={mount => (
+              rowRenderer={(mount) => (
                 <>
                   <TableCell>
                     <Label>{mount.name}</Label>
@@ -150,7 +150,7 @@ export function VolumesPanel({ title, labels, volumes }) {
         label={t('common.headers.labels')}
         component={<Labels labels={labels} />}
       />
-      {volumes.map(volume => (
+      {volumes.map((volume) => (
         <VolumeComponent key={volume.name} volume={volume} />
       ))}
     </List>
@@ -169,7 +169,7 @@ function VolumeComponent({ volume }) {
       case !!secret:
         return t('secrets.name_singular');
       default:
-        const volumeType = Object.keys(volume).find(key => key !== 'name');
+        const volumeType = Object.keys(volume).find((key) => key !== 'name');
         return volumeType;
     }
   };
@@ -203,7 +203,7 @@ function VolumeComponent({ volume }) {
             <PodTemplateTable
               items={k8sResource.items}
               columns={[t('common.headers.key'), t('common.labels.path')]}
-              rowRenderer={mount => (
+              rowRenderer={(mount) => (
                 <>
                   <TableCell>
                     <Label>{mount.key}</Label>

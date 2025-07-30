@@ -19,13 +19,13 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
 
   const validationProps = useValidation({
     inputRef,
-    onChange: [onChange, e => setValue && setValue(e.target.value)],
+    onChange: [onChange, (e) => setValue && setValue(e.target.value)],
   });
 
   return (
     <Input
       value={value || ''}
-      onInput={onChange ?? (e => setValue && setValue(e.target.value))}
+      onInput={onChange ?? ((e) => setValue && setValue(e.target.value))}
       {...inputProps}
       {...validationProps}
     />

@@ -21,7 +21,7 @@ export async function getConfigDir(): Promise<string> {
 
 function readEnv(input: string): Map<string, string> {
   return new Map(
-    input.split('\n').map(value => {
+    input.split('\n').map((value) => {
       const envVar = value.trim().split('=');
       if (envVar?.length === 2 && envVar[1]) {
         return [envVar[0], envVar[1]];

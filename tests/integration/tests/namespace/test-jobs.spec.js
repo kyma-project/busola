@@ -1,11 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-const JOB_NAME =
-  'test-job-' +
-  Math.random()
-    .toString()
-    .substr(2, 8);
+const JOB_NAME = 'test-job-' + Math.random().toString().substr(2, 8);
 
 const SECOND_CONTAINER_NAME = JOB_NAME + '-node';
 
@@ -155,9 +151,7 @@ context('Test Jobs', () => {
       .should('be.visible');
 
     // edit labels
-    cy.get('.edit-form')
-      .contains('Labels')
-      .click();
+    cy.get('.edit-form').contains('Labels').click();
 
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')
@@ -179,9 +173,7 @@ context('Test Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.getLeftNav()
-      .contains(/^Jobs/)
-      .click();
+    cy.getLeftNav().contains(/^Jobs/).click();
 
     cy.contains('ui5-text', JOB_NAME).should('be.visible');
   });

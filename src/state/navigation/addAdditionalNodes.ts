@@ -61,7 +61,7 @@ export const addAdditionalNodes = (
 };
 
 const findResourceIndex = (res: NavNode, list: NavNode[]): number =>
-  list.findIndex(el => isEqual(el, res));
+  list.findIndex((el) => isEqual(el, res));
 
 const addResource = (resource: NavNode, index: number, list: NavNode[]) => {
   list.splice(index, 0, resource);

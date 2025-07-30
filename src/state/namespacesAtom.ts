@@ -4,9 +4,8 @@ export type NamespacesState = string[] | null;
 
 const defaultValue = null;
 
-export const namespacesState: RecoilState<NamespacesState> = atom<
-  NamespacesState
->({
-  key: 'namespacesState',
-  default: defaultValue,
-});
+export const namespacesState: RecoilState<NamespacesState> =
+  atom<NamespacesState>({
+    key: 'namespacesState',
+    default: defaultValue,
+  });

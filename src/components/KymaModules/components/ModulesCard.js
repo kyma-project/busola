@@ -63,7 +63,7 @@ export default function ModulesCard({
   const defaultVersion = useMemo(
     () =>
       module?.channels?.find(
-        channel => channel?.channel === kymaResource?.spec?.channel,
+        (channel) => channel?.channel === kymaResource?.spec?.channel,
       )?.version,
     [kymaResource?.spec?.channel, module?.channels],
   );
@@ -81,7 +81,7 @@ export default function ModulesCard({
     }
   };
 
-  const getNameForVersion = version => {
+  const getNameForVersion = (version) => {
     if (typeof version === 'string' && version.startsWith('v')) {
       return version;
     }
@@ -119,16 +119,18 @@ export default function ModulesCard({
                   checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''
                 }`
               : module.channels.find(
-                  channel => kymaResource?.spec?.channel === channel.channel,
-                )?.version
-              ? `v${
-                  module.channels.find(
-                    channel => kymaResource?.spec?.channel === channel.channel,
+                    (channel) =>
+                      kymaResource?.spec?.channel === channel.channel,
                   )?.version
-                } ${checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''}`
-              : module?.channels?.[0]?.version
-              ? `v${module?.channels?.[0]?.version}`
-              : t('kyma-modules.no-version')}
+                ? `v${
+                    module.channels.find(
+                      (channel) =>
+                        kymaResource?.spec?.channel === channel.channel,
+                    )?.version
+                  } ${checkIfStatusModuleIsBeta(module.name) ? '(Beta)' : ''}`
+                : module?.channels?.[0]?.version
+                  ? `v${module?.channels?.[0]?.version}`
+                  : t('kyma-modules.no-version')}
           </Text>
         </div>
         {imageSrc !== '' && (
@@ -159,7 +161,7 @@ export default function ModulesCard({
         <div className="settings-panel__content sap-margin-y-small">
           <Label>{t('kyma-modules.release-channel') + ':'} </Label>
           <Select
-            onChange={event => {
+            onChange={(event) => {
               setChannel(
                 module,
                 event.detail.selectedOption.value,
@@ -174,7 +176,7 @@ export default function ModulesCard({
             {defaultVersion && (
               <Option
                 selected={module?.channels?.find(
-                  channel =>
+                  (channel) =>
                     channel.channel ===
                     findModuleSpec(kymaResource, module.name)?.channel,
                 )}
@@ -187,7 +189,7 @@ export default function ModulesCard({
                 )} ${getNameForVersion(defaultVersion)})`}
               </Option>
             )}
-            {module.channels?.map(channel => (
+            {module.channels?.map((channel) => (
               <Option
                 selected={
                   channel.channel ===

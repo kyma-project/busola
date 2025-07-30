@@ -36,7 +36,7 @@ export function Badge({
 
   const badgeType = getBadgeType(structure.highlights, value, jsonata, t);
 
-  const getTooltipContent = description => {
+  const getTooltipContent = (description) => {
     if (tooltip && !tooltipError) {
       return tooltip;
     }

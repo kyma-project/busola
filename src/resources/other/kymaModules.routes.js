@@ -16,15 +16,15 @@ import { ModuleTemplatesContextProvider } from 'components/KymaModules/providers
 import { CommunityModulesDeleteBoxContextProvider } from 'components/KymaModules/components/CommunityModulesDeleteBox';
 import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
 
-const KymaModulesList = React.lazy(() =>
-  import('../../components/KymaModules/KymaModulesList'),
+const KymaModulesList = React.lazy(
+  () => import('../../components/KymaModules/KymaModulesList'),
 );
 
-const KymaModulesAddModule = React.lazy(() =>
-  import('../../components/KymaModules/KymaModulesAddModule'),
+const KymaModulesAddModule = React.lazy(
+  () => import('../../components/KymaModules/KymaModulesAddModule'),
 );
-const CommunityModulesAddModule = React.lazy(() =>
-  import('../../components/KymaModules/CommunityModulesAddModule.tsx'),
+const CommunityModulesAddModule = React.lazy(
+  () => import('../../components/KymaModules/CommunityModulesAddModule.tsx'),
 );
 
 const ColumnWrapper = ({
@@ -112,7 +112,7 @@ const ColumnWrapper = ({
                 title={t('modules.community.add-module')}
                 confirmText={t('common.buttons.add')}
                 layoutCloseCreateUrl={url}
-                renderForm={renderProps => {
+                renderForm={(renderProps) => {
                   return (
                     <ErrorBoundary>
                       <CommunityModulesAddModule {...renderProps} />
@@ -126,7 +126,7 @@ const ColumnWrapper = ({
                 title={t('kyma-modules.add-module')}
                 confirmText={t('common.buttons.add')}
                 layoutCloseCreateUrl={url}
-                renderForm={renderProps => {
+                renderForm={(renderProps) => {
                   return (
                     <ErrorBoundary>
                       <KymaModulesAddModule {...renderProps} />
@@ -141,7 +141,7 @@ const ColumnWrapper = ({
                   title={t('kyma-modules.add-module')}
                   confirmText={t('common.buttons.add')}
                   layoutCloseCreateUrl={url}
-                  renderForm={renderProps => {
+                  renderForm={(renderProps) => {
                     return (
                       <ErrorBoundary>
                         <div className="sap-margin-small">
@@ -192,14 +192,11 @@ const ColumnWrapper = ({
 };
 
 const KymaModules = ({ defaultColumn, namespaced }) => {
-  const [
-    DeleteMessageBox,
-    handleResourceDelete,
-    showDeleteDialog,
-  ] = useDeleteResource({
-    resourceType: t('kyma-modules.title'),
-    forceConfirmDelete: true,
-  });
+  const [DeleteMessageBox, handleResourceDelete, showDeleteDialog] =
+    useDeleteResource({
+      resourceType: t('kyma-modules.title'),
+      forceConfirmDelete: true,
+    });
   return (
     <Suspense fallback={<Spinner />}>
       <ColumnWrapper

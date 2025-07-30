@@ -21,7 +21,7 @@ function NoPermissions() {
     const contextName = updatedCluster.kubeconfig['current-context'];
     const context =
       updatedCluster.kubeconfig.contexts?.find(
-        ctx => ctx.name === contextName,
+        (ctx) => ctx.name === contextName,
       ) || updatedCluster.kubeconfig.contexts?.[0];
 
     context.context.namespace = namespaceName;

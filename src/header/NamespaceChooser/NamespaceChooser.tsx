@@ -33,13 +33,13 @@ export function NamespaceChooser() {
     />,
   ];
 
-  allNamespaces?.map(ns =>
+  allNamespaces?.map((ns) =>
     namespaces.push(
       <SideNavigationSubItem
         text={ns}
         key={ns}
         data-key={ns}
-        onClick={e => {
+        onClick={(e) => {
           navigateSafely(() =>
             navigate(
               namespaceUrl(resourceType, {

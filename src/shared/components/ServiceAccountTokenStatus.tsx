@@ -18,7 +18,7 @@ export const ServiceAccountTokenStatus = ({
     e.stopPropagation();
     if (popoverRef.current) {
       popoverRef.current.opener = openerRef.current;
-      setOpenPopover(prev => !prev);
+      setOpenPopover((prev) => !prev);
     }
   };
 
@@ -60,7 +60,7 @@ export const ServiceAccountTokenStatus = ({
         <Popover
           ref={popoverRef}
           open={openPopover}
-          onClose={e => {
+          onClose={(e) => {
             e.stopPropagation();
             setOpenPopover(false);
           }}

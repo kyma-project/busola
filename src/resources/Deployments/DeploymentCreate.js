@@ -82,7 +82,7 @@ export default function DeploymentCreate({
     setCustomValid(hasAnyContainers);
   }, [deployment, setCustomValid]);
 
-  const handleNameChange = name => {
+  const handleNameChange = (name) => {
     jp.value(deployment, '$.metadata.name', name);
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(deployment, '$.spec.template.spec.containers[0].name', name);
@@ -101,7 +101,7 @@ export default function DeploymentCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       presets={!isEdit && createPresets(namespace, t)}
-      onPresetSelected={value => {
+      onPresetSelected={(value) => {
         setDeployment(value.deployment);
       }}
       // create modal on a namespace details doesn't have the resourceUrl
@@ -126,7 +126,7 @@ export default function DeploymentCreate({
           input={Inputs.Switch}
           checked={isSidecarEnabled}
           onChange={() => {
-            setSidecarEnabled(value => !value);
+            setSidecarEnabled((value) => !value);
             setIsChanged(true);
           }}
         />

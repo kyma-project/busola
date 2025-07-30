@@ -102,9 +102,8 @@ export const useGetConfiguration = () => {
   }, [cluster, auth, apis]);
 };
 
-export const configurationAtom: RecoilState<Configuration> = atom<
-  Configuration
->({
-  key: 'configurationAtom',
-  default: defaultValue,
-});
+export const configurationAtom: RecoilState<Configuration> =
+  atom<Configuration>({
+    key: 'configurationAtom',
+    default: defaultValue,
+  });

@@ -17,12 +17,14 @@ function getAvailableLanguages() {
       .sort((a, b) => a.id.localeCompare(b.id))
       // move yaml and json to the top
       .sort((a, _) => (a.id === 'json' || a.id === 'yaml' ? -1 : 1))
-      .map(l => ({
+      .map((l) => ({
         key: l.id,
         text: l.aliases?.[0] || l.id,
       }))
       // remove duplicates
-      .filter((l, index, arr) => arr.findIndex(e => e.key === l.key) === index)
+      .filter(
+        (l, index, arr) => arr.findIndex((e) => e.key === l.key) === index,
+      )
   );
 }
 
@@ -36,9 +38,9 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       accessibleName="choose-language"
       disabled={!item}
       value={typeof language === 'string' ? language : ''}
-      onChange={event => {
+      onChange={(event) => {
         const selectedOption = getAvailableLanguages().find(
-          o => o.text === event.target.value,
+          (o) => o.text === event.target.value,
         );
         if (selectedOption) onChange(selectedOption.key);
       }}
@@ -62,7 +64,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const keyInput = (
     <FormField
       value={key || ''}
-      setValue={key => onChange({ key })}
+      setValue={(key) => onChange({ key })}
       input={Inputs.Text}
       label={t('components.key-value-form.key')}
       className="sap-margin-bottom-small"
@@ -72,7 +74,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
     />
   );
   const handleChange = useCallback(
-    value => onChange({ key: key || '', value }),
+    (value) => onChange({ key: key || '', value }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [key, language],
   );

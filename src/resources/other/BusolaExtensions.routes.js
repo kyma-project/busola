@@ -12,15 +12,15 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
-const BusolaExtensionList = React.lazy(() =>
-  import('components/BusolaExtensions/BusolaExtensionList'),
+const BusolaExtensionList = React.lazy(
+  () => import('components/BusolaExtensions/BusolaExtensionList'),
 );
-const BusolaExtensionDetails = React.lazy(() =>
-  import('components/BusolaExtensions/BusolaExtensionDetails'),
+const BusolaExtensionDetails = React.lazy(
+  () => import('components/BusolaExtensions/BusolaExtensionDetails'),
 );
 
-const BusolaExtensionCreate = React.lazy(() =>
-  import('components/BusolaExtensions/BusolaExtensionCreate'),
+const BusolaExtensionCreate = React.lazy(
+  () => import('components/BusolaExtensions/BusolaExtensionCreate'),
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
@@ -83,7 +83,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       title={elementCreateProps.resourceTitle}
       confirmText={t('common.buttons.create')}
       layoutCloseCreateUrl={clusterUrl('busolaextensions')}
-      renderForm={renderProps => {
+      renderForm={(renderProps) => {
         const createComponent = (
           <BusolaExtensionCreate
             {...renderProps}

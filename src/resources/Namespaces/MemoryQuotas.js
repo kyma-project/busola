@@ -16,7 +16,7 @@ export function MemoryInput({
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
   const options = [
     { key: '', text: 'B' },
-    ...units.map(e => ({
+    ...units.map((e) => ({
       key: e,
       text: e,
     })),
@@ -27,7 +27,7 @@ export function MemoryInput({
   const unit = value.replace(numericValue, '');
   const selectedUnit = units.includes(unit) ? unit : '';
 
-  const setValue = val => {
+  const setValue = (val) => {
     jp.value(container, propertyPath, val);
     setContainer({ ...container });
   };
@@ -45,7 +45,7 @@ export function MemoryInput({
           min="0"
           required={required}
           value={numericValue}
-          onInput={e => setValue(e.target.value + selectedUnit)}
+          onInput={(e) => setValue(e.target.value + selectedUnit)}
           className="full-width"
           disabled={disabled}
           accessibleName={label}

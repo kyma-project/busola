@@ -32,7 +32,7 @@ export function CollapsibleSection({
     }
   }, [defaultOpen]);
 
-  const toggle = e => {
+  const toggle = (e) => {
     e.stopPropagation();
     if (!canChangeState) return;
     if (disabled) return;
@@ -53,8 +53,8 @@ export function CollapsibleSection({
     typeof title === 'string'
       ? title
       : Array.isArray(title?.props?.children)
-      ? title?.props?.children.join()
-      : title?.props?.children;
+        ? title?.props?.children.join()
+        : title?.props?.children;
 
   return (
     <Panel
@@ -65,7 +65,7 @@ export function CollapsibleSection({
       onToggle={toggle}
       data-testid={titleText?.toLowerCase().replaceAll(' ', '-')}
       accessibleName={titleText}
-      ref={panelElement => {
+      ref={(panelElement) => {
         if (panelElement) {
           panelElement.useAccessibleNameForToggleButton = true;
         }

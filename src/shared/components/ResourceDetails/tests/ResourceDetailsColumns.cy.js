@@ -29,7 +29,7 @@ describe('ResourceDetails Columns', () => {
         customColumns={[
           {
             header: 'some-header',
-            value: resource =>
+            value: (resource) =>
               `${resource.metadata.name} | ${resource.metadata.namespace}`,
           },
         ]}

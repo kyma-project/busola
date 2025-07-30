@@ -42,7 +42,7 @@ export default function BannerCarousel({ children }: { children: ReactNode }) {
       children={children}
       ref={carouselRef}
       style={childrenLength === 0 ? { display: 'none' } : {}}
-      onNavigate={event => setActiveIndex(event.detail.selectedIndex)}
+      onNavigate={(event) => setActiveIndex(event.detail.selectedIndex)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     />

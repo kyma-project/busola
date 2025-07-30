@@ -10,19 +10,13 @@ context('Test Cluster Overview', () => {
   });
 
   it('Check Cluster Overview details', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-title', 'Cluster Details').should('be.visible');
 
-    cy.contains('Version')
-      .next('.content')
-      .should('not.be.empty');
+    cy.contains('Version').next('.content').should('not.be.empty');
 
-    cy.contains('API Server Address')
-      .next('.content')
-      .should('not.be.empty');
+    cy.contains('API Server Address').next('.content').should('not.be.empty');
 
     cy.contains('Nodes').should('be.visible');
 
@@ -32,8 +26,8 @@ context('Test Cluster Overview', () => {
   it('Check injections', () => {
     // upload injection
     cy.contains('ui5-button', 'Upload YAML').click();
-    cy.loadFiles('examples/injections/countingcard.yaml').then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    cy.loadFiles('examples/injections/countingcard.yaml').then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
     cy.get('ui5-dialog')
@@ -68,18 +62,14 @@ context('Test Cluster Overview', () => {
       .should('be.visible');
 
     // remove injection
-    cy.getLeftNav()
-      .contains('Back To Cluster Details')
-      .click({ force: true });
+    cy.getLeftNav().contains('Back To Cluster Details').click({ force: true });
     cy.navigateTo('Configuration', 'Extensions');
     cy.deleteFromGenericList('Extension', 'hpatest');
 
     cy.reload();
 
     // test injected statistical card does not exist
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('.ui5-card-header-title', 'MyTitle').should('not.exist');
 
@@ -94,27 +84,17 @@ context('Test Cluster Overview', () => {
 
     cy.wait(500);
 
-    cy.contains('ui5-panel', 'Nodes').within(_ => {
-      cy.get('ui5-table-row')
-        .first()
-        .find('ui5-table-cell')
-        .first()
-        .click();
+    cy.contains('ui5-panel', 'Nodes').within((_) => {
+      cy.get('ui5-table-row').first().find('ui5-table-cell').first().click();
     });
   });
 
   it('Test Node details', () => {
-    cy.contains('Pod CIDR')
-      .next('.content')
-      .should('not.be.empty');
+    cy.contains('Pod CIDR').next('.content').should('not.be.empty');
 
-    cy.contains('Internal IP')
-      .next('.content')
-      .should('not.be.empty');
+    cy.contains('Internal IP').next('.content').should('not.be.empty');
 
-    cy.contains('Hostname')
-      .next('.content')
-      .should('not.be.empty');
+    cy.contains('Hostname').next('.content').should('not.be.empty');
 
     cy.contains('CPU').should('be.visible');
 

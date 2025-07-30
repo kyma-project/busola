@@ -19,7 +19,7 @@ export function RichEditorDataField({
       Object.entries(data || {}).map(([key, value]) => ({
         key,
         value,
-        language: internalData.find(d => d?.key === key)?.language || '',
+        language: internalData.find((d) => d?.key === key)?.language || '',
       })),
     );
     firstRender.current = false;
@@ -53,8 +53,8 @@ export function RichEditorDataField({
           key={index}
           item={item}
           setInternalData={setInternalData}
-          onChange={data =>
-            setInternalData(internalData => {
+          onChange={(data) =>
+            setInternalData((internalData) => {
               internalData[index] = {
                 ...item,
                 ...data,

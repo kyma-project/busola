@@ -119,15 +119,14 @@ function createWebComponent(
         }
 
         if (attribute.name.includes('slot_')) {
-          props[
-            kebabToCamelCase(attribute.name.replace('slot_', ''))
-          ] = this.attributes[i].value;
+          props[kebabToCamelCase(attribute.name.replace('slot_', ''))] =
+            this.attributes[i].value;
           this.removeAttribute(attribute.value);
         }
       }
 
       // Set slots
-      Object.keys(this._slots).forEach(slotName => {
+      Object.keys(this._slots).forEach((slotName) => {
         if (typeof this._slots[slotName] !== 'function') {
           props[slotName] = parseHtmlToJsx(this._slots[slotName]);
         }

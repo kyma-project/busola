@@ -44,7 +44,7 @@ export function SearchInput({
   const searchInputRef = useRef(null);
   const columnLayout = useRecoilValue(columnLayoutState);
 
-  const onKeyPress = e => {
+  const onKeyPress = (e) => {
     const { key } = e;
     if (isDetailsView) return;
     const isCommandPalleteOpen = document.querySelector(
@@ -72,7 +72,7 @@ export function SearchInput({
 
   useEventListener('keydown', onKeyPress, null, [disabled, allowSlashShortcut]);
 
-  const renderSearchList = entries => {
+  const renderSearchList = (entries) => {
     const suggestions = getSearchSuggestions(entries);
 
     return suggestions.map((suggestion, index) => (
@@ -80,13 +80,13 @@ export function SearchInput({
     ));
   };
 
-  const getSearchSuggestions = entries => {
+  const getSearchSuggestions = (entries) => {
     if (!entries) return [];
     const suggestions = entries
-      .flatMap(entry =>
+      .flatMap((entry) =>
         getEntryMatches(entry, searchQuery, suggestionProperties),
       )
-      .filter(suggestion => suggestion);
+      .filter((suggestion) => suggestion);
     return Array.from(new Set(suggestions));
   };
 
@@ -109,7 +109,7 @@ export function SearchInput({
         icon={<Icon className="bsl-has-color-status-4" name="search" />}
         ref={searchInputRef}
         value={searchQuery}
-        onInput={e => handleQueryChange(e.target.value)}
+        onInput={(e) => handleQueryChange(e.target.value)}
         showSuggestions={showSuggestion}
       >
         {showSuggestion && renderSearchList(filteredEntries)}

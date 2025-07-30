@@ -103,13 +103,13 @@ export default function CommunityModuleCard({
           <Label>{t('modules.community.release-channel') + ':'} </Label>
           <Select
             accessibleName={`${module.name} version select`}
-            onChange={event => {
+            onChange={(event) => {
               onChange(event.detail.selectedOption.value, false);
             }}
             value={`${module.versions[0].moduleTemplate.name}|${module.versions[0].moduleTemplate.namespace}`}
             className="channel-select"
           >
-            {module.versions?.map(version => (
+            {module.versions?.map((version) => (
               <Option
                 selected={selectedModules.get(module.name)}
                 key={`option-${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}

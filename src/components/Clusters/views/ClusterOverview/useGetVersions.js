@@ -6,8 +6,9 @@ import { configFeaturesNames } from 'state/types';
 
 export function useGetVersions() {
   const { t } = useTranslation();
-  const showKymaVersion = useFeature(configFeaturesNames.SHOW_KYMA_VERSION)
-    ?.isEnabled;
+  const showKymaVersion = useFeature(
+    configFeaturesNames.SHOW_KYMA_VERSION,
+  )?.isEnabled;
 
   const {
     data: k8sVersion,

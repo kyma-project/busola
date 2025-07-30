@@ -68,9 +68,9 @@ export function BusolaExtensionDetails({ name, namespace }) {
     }
   };
 
-  const BusolaExtensionEditor = resource => {
+  const BusolaExtensionEditor = (resource) => {
     const { data } = resource;
-    return SECTIONS.map(key => (
+    return SECTIONS.map((key) => (
       <ReadonlyEditorPanel
         editorProps={{ language: 'yaml' }}
         title={t(`extensibility.sections.${key}`)}
@@ -92,7 +92,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
             id={`edit-resource-modal`}
             key={`edit-resource-modal`}
             className="modal-size--l"
-            renderForm={props => (
+            renderForm={(props) => (
               <ErrorBoundary>
                 <SectionEditor
                   {...props}
@@ -105,7 +105,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
                   data={data[key]}
                   schema={extensibilitySchemas[key]}
                   resource={data}
-                  onSubmit={newData => {
+                  onSubmit={(newData) => {
                     const newResource = {
                       ...resource,
                       data: {
@@ -124,7 +124,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
     ));
   };
 
-  const ExtensibilityVersion = configmap => {
+  const ExtensibilityVersion = (configmap) => {
     const { t } = useTranslation();
     const { isEnabled: isExtensibilityEnabled } = useFeature(
       configFeaturesNames.EXTENSIBILITY,
@@ -140,11 +140,11 @@ export function BusolaExtensionDetails({ name, namespace }) {
     );
 
     const hasMigrationFunction = getMigrationFunctions().some(
-      version => version === currentVersion,
+      (version) => version === currentVersion,
     );
     const isCurrentVersion = getLatestVersion() === currentVersion;
     const isSupportedVersion = getSupportedVersions().some(
-      version => version === currentVersion,
+      (version) => version === currentVersion,
     );
 
     const showMessage = () => {
@@ -226,7 +226,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: secret => (
+      value: (secret) => (
         <ControlledBy ownerReferences={secret.metadata.ownerReferences} />
       ),
     },

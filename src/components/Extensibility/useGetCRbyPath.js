@@ -7,13 +7,13 @@ import pluralize from 'pluralize';
 import { allExtensionsState } from 'state/navigation/extensionsAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
-export const useGetCRbyPath = resourceType => {
+export const useGetCRbyPath = (resourceType) => {
   const { namespaceId } = useParams();
   const extensions = useRecoilValue(allExtensionsState);
   const { name: clusterName } = useRecoilValue(clusterState) || {};
   const layoutState = useRecoilValue(columnLayoutState);
   const resource = useMemo(() => {
-    return extensions.find(el => {
+    return extensions.find((el) => {
       const { scope, urlPath, resource } = el.general || {};
       const extensionPath = urlPath || pluralize(resource?.kind?.toLowerCase());
 

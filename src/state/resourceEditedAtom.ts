@@ -7,9 +7,8 @@ export interface IsResourceEditedState {
 
 const defaultValue = { isEdited: false };
 
-export const isResourceEditedState: RecoilState<IsResourceEditedState> = atom<
-  IsResourceEditedState
->({
-  key: 'isResourceEditedState',
-  default: defaultValue,
-});
+export const isResourceEditedState: RecoilState<IsResourceEditedState> =
+  atom<IsResourceEditedState>({
+    key: 'isResourceEditedState',
+    default: defaultValue,
+  });

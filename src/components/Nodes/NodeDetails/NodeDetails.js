@@ -25,9 +25,8 @@ export default function NodeDetails({ nodeName }) {
   const { t } = useTranslation();
   const node = useMemo(() => data?.node, [data]);
   useWindowTitle(t('nodes.title_details', { nodeName }));
-  const { data: resources, loading: loadingMetrics } = useResourceByNode(
-    nodeName,
-  );
+  const { data: resources, loading: loadingMetrics } =
+    useResourceByNode(nodeName);
 
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function NodeDetails({ nodeName }) {
 
   const gpus = node ? getAvailableNvidiaGPUs([node]) : 0;
 
-  const filterByHost = e => e.source.host === nodeName;
+  const filterByHost = (e) => e.source.host === nodeName;
 
   const customComponents = [
     () =>
@@ -72,19 +71,19 @@ export default function NodeDetails({ nodeName }) {
   const customColumns = [
     {
       header: t('node-details.region'),
-      value: node => node.metadata?.labels?.['topology.kubernetes.io/region'],
+      value: (node) => node.metadata?.labels?.['topology.kubernetes.io/region'],
     },
     {
       header: t('node-details.zone'),
-      value: node => node.metadata?.labels?.['topology.kubernetes.io/zone'],
+      value: (node) => node.metadata?.labels?.['topology.kubernetes.io/zone'],
     },
     {
       header: t('node-details.pool'),
-      value: node => node.metadata?.labels?.['worker.gardener.cloud/pool'],
+      value: (node) => node.metadata?.labels?.['worker.gardener.cloud/pool'],
     },
     {
       header: t('node-details.machine-type'),
-      value: node =>
+      value: (node) =>
         node.metadata?.labels?.['node.kubernetes.io/instance-type'],
     },
   ];

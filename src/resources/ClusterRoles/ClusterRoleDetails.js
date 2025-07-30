@@ -4,7 +4,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import ClusterRoleCreate from './ClusterRoleCreate';
 import { ResourceDescription } from 'resources/ClusterRoles';
 
-const ClusterRolesDetails = props => {
+const ClusterRolesDetails = (props) => {
   return (
     <ResourceDetails
       {...props}

@@ -7,7 +7,7 @@ vi.mock('copy-to-clipboard');
 
 vi.mock('@ui5/webcomponents-react', () => {
   return {
-    Button: props => <button {...props}>{props.children}</button>,
+    Button: (props) => <button {...props}>{props.children}</button>,
   };
 });
 

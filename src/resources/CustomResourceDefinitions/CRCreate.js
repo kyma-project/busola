@@ -52,7 +52,7 @@ function CRCreateForm({
   const navigate = useNavigate();
   const { nextQuery } = usePrepareLayout(layoutNumber);
 
-  const currentVersion = crd.spec.versions?.find(ver => ver.storage).name;
+  const currentVersion = crd.spec.versions?.find((ver) => ver.storage).name;
   const namespace =
     crd.spec.scope === 'Namespaced'
       ? `/namespaces/${cr.metadata?.namespace || ''}`
@@ -61,8 +61,9 @@ function CRCreateForm({
     ? '/' + initialCustomResource.metadata.name
     : '';
 
-  const createUrl = `/apis/${crd.spec?.group ||
-    ''}/${currentVersion}${namespace}/${
+  const createUrl = `/apis/${
+    crd.spec?.group || ''
+  }/${currentVersion}${namespace}/${
     crd.spec.names.plural
   }${createUrlResourceName}`;
 

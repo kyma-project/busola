@@ -11,14 +11,16 @@ export function useAvailableNamespaces() {
   const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
 
-  const { data: allNamespaces, error, refetch, silentRefetch } = useGetList()(
-    '/api/v1/namespaces',
-    {
-      pollingInterval: 3000,
-      onDataReceived: () => {},
-      skip: false,
-    },
-  ) as {
+  const {
+    data: allNamespaces,
+    error,
+    refetch,
+    silentRefetch,
+  } = useGetList()('/api/v1/namespaces', {
+    pollingInterval: 3000,
+    onDataReceived: () => {},
+    skip: false,
+  }) as {
     loading: boolean;
     error: any;
     data: Array<K8sResource> | null;
@@ -32,8 +34,8 @@ export function useAvailableNamespaces() {
       return;
     }
     const filteredNamespaces = allNamespaces
-      ?.map(n => n.metadata?.name)
-      ?.filter(n => {
+      ?.map((n) => n.metadata?.name)
+      ?.filter((n) => {
         if (showHiddenNamespaces) return true;
         return !hiddenNamespaces.includes(n);
       });

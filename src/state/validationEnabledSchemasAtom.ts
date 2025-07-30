@@ -69,7 +69,9 @@ export const getValidationEnabledSchemas = (
 ) => {
   const { rules, policies } = validationSchemas;
 
-  const enabledPolicies = policies.filter(policy => policySet.has(policy.name));
+  const enabledPolicies = policies.filter((policy) =>
+    policySet.has(policy.name),
+  );
   const enabledRules = getEnabledRules(rules, enabledPolicies, policies);
 
   return {
@@ -97,9 +99,8 @@ export const useGetValidationEnabledSchemas = () => {
   }, [validationSchemas, policySet]);
 };
 
-export const validationSchemasEnabledState: RecoilState<ValidationSchema | null> = atom<ValidationSchema | null>(
-  {
+export const validationSchemasEnabledState: RecoilState<ValidationSchema | null> =
+  atom<ValidationSchema | null>({
     key: 'validationEnabledSchemasState',
     default: emptyValidationSchema,
-  },
-);
+  });

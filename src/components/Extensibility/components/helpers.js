@@ -1,10 +1,11 @@
 import { Widget } from './Widget';
 
-const shouldUseDefaultColumns = structure => !Array.isArray(structure.children);
+const shouldUseDefaultColumns = (structure) =>
+  !Array.isArray(structure.children);
 
-const getSortOptions = structure => {
+const getSortOptions = (structure) => {
   if (!shouldUseDefaultColumns(structure)) {
-    return structure.children.filter(child => child.sort);
+    return structure.children.filter((child) => child.sort);
   }
 
   return (structure?.sort || []).reduce((acc, current) => {
@@ -23,14 +24,14 @@ const getSortOptions = structure => {
   }, []);
 };
 
-export const getSortDetails = structure => {
+export const getSortDetails = (structure) => {
   const sortOptions = getSortOptions(structure);
   return { sortOptions, defaultSort: shouldUseDefaultColumns(structure) };
 };
 
-const getSearchOptions = structure => {
+const getSearchOptions = (structure) => {
   if (!shouldUseDefaultColumns(structure)) {
-    return structure.children.filter(child => child.search);
+    return structure.children.filter((child) => child.search);
   }
 
   return (structure?.search || []).reduce((acc, current) => {
@@ -48,7 +49,7 @@ const getSearchOptions = structure => {
   }, []);
 };
 
-export const getSearchDetails = structure => {
+export const getSearchDetails = (structure) => {
   const searchOptions = getSearchOptions(structure);
   return { searchOptions, defaultSearch: shouldUseDefaultColumns(structure) };
 };
@@ -60,7 +61,7 @@ export const getChildren = (structure, originalResource) => {
 
   const children = structure.children.map(({ name, ...props }) => ({
     header: name,
-    value: value => (
+    value: (value) => (
       <Widget
         value={value}
         structure={props}

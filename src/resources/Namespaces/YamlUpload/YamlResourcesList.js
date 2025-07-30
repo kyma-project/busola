@@ -31,26 +31,26 @@ export function YamlResourcesList({ resourcesData }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const defaultNamespace = namespaceId || 'default';
 
-  const resources = resourcesData?.filter(resource => resource !== null);
+  const resources = resourcesData?.filter((resource) => resource !== null);
 
   const showResourcesToUpload = () => {
-    return !resources?.filter(r => r.status)?.length;
+    return !resources?.filter((r) => r.status)?.length;
   };
 
   const uploadedResources = resources?.filter(
-    r => r.status && r.status !== STATE_WAITING,
+    (r) => r.status && r.status !== STATE_WAITING,
   );
 
   const getPercentage = () => {
     return (
-      ((resources?.filter(r => r.status && r.status !== STATE_WAITING)
+      ((resources?.filter((r) => r.status && r.status !== STATE_WAITING)
         ?.length || 0) /
         (resources?.length || 0)) *
       100
     );
   };
 
-  const getIcon = status => {
+  const getIcon = (status) => {
     switch (status) {
       case STATE_WAITING:
         return 'pending';
@@ -64,7 +64,7 @@ export function YamlResourcesList({ resourcesData }) {
     }
   };
 
-  const getStatus = status => {
+  const getStatus = (status) => {
     return t(`upload-yaml.statuses.${status.toLowerCase()}`);
   };
 

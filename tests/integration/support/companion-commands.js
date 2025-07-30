@@ -11,18 +11,14 @@ Cypress.Commands.add('openCompanion', () => {
 });
 
 Cypress.Commands.add('closeCompanion', () => {
-  cy.get('.kyma-companion')
-    .find('ui5-button[tooltip="Close"]')
-    .click();
+  cy.get('.kyma-companion').find('ui5-button[tooltip="Close"]').click();
 });
 
 Cypress.Commands.add('resetCompanion', () => {
-  cy.get('.kyma-companion')
-    .find('ui5-button[tooltip="Reset"]')
-    .click();
+  cy.get('.kyma-companion').find('ui5-button[tooltip="Reset"]').click();
 });
 
-Cypress.Commands.add('sendPrompt', prompt => {
+Cypress.Commands.add('sendPrompt', (prompt) => {
   cy.get('.kyma-companion')
     .find('ui5-textarea[placeholder="Message Joule..."]')
     .find('textarea')
@@ -30,7 +26,7 @@ Cypress.Commands.add('sendPrompt', prompt => {
     .type(`${prompt}{enter}`);
 });
 
-Cypress.Commands.add('clickSuggestion', index => {
+Cypress.Commands.add('clickSuggestion', (index) => {
   cy.get('.kyma-companion')
     .find('.bubbles-container')
     .find('ui5-button.bubble-button')
@@ -38,7 +34,7 @@ Cypress.Commands.add('clickSuggestion', index => {
     .click();
 });
 
-Cypress.Commands.add('testChatLength', length => {
+Cypress.Commands.add('testChatLength', (length) => {
   cy.get('.kyma-companion')
     .find('.chat-list')
     .find('.message-container')
@@ -46,7 +42,7 @@ Cypress.Commands.add('testChatLength', length => {
 });
 
 Cypress.Commands.add('mockPromptSuggestions', () => {
-  cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
+  cy.intercept('POST', '/backend/ai-chat/suggestions', (req) => {
     req.reply({
       delay: 750,
       body: {
@@ -64,7 +60,7 @@ Cypress.Commands.add('mockPromptSuggestions', () => {
 });
 
 Cypress.Commands.add('mockChatResponse', () => {
-  cy.intercept('POST', '/backend/ai-chat/messages', req => {
+  cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
     const mockResponse =
       JSON.stringify({
         data: {
@@ -83,7 +79,7 @@ Cypress.Commands.add('mockChatResponse', () => {
 });
 
 Cypress.Commands.add('mockChatResponseWithPlaceNew', () => {
-  cy.intercept('POST', '/backend/ai-chat/messages', req => {
+  cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
     const mockResponse =
       JSON.stringify({
         data: {
@@ -102,7 +98,7 @@ Cypress.Commands.add('mockChatResponseWithPlaceNew', () => {
 });
 
 Cypress.Commands.add('mockChatResponseWithPlaceEdit', () => {
-  cy.intercept('POST', '/backend/ai-chat/messages', req => {
+  cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
     const mockResponse =
       JSON.stringify({
         data: {
@@ -121,7 +117,7 @@ Cypress.Commands.add('mockChatResponseWithPlaceEdit', () => {
 });
 
 Cypress.Commands.add('mockFollowups', () => {
-  cy.intercept('POST', '/backend/ai-chat/followup', req => {
+  cy.intercept('POST', '/backend/ai-chat/followup', (req) => {
     req.reply({
       delay: 750,
       body: {

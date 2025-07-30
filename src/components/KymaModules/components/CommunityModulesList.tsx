@@ -99,7 +99,7 @@ export const CommunityModulesList = ({
     navigate(
       `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true&createType=community`,
     );
-    setIsFormOpen(state => ({ ...state, formOpen: true }));
+    setIsFormOpen((state) => ({ ...state, formOpen: true }));
   };
 
   const headerRenderer = () => [
@@ -151,13 +151,13 @@ export const CommunityModulesList = ({
       tooltip: () => t('common.buttons.delete'),
       icon: 'delete',
       disabledHandler: (resource: { name: string }) => {
-        const index = installedModules?.findIndex(module => {
+        const index = installedModules?.findIndex((module) => {
           return module.name === resource.name;
         });
         return index < 0;
       },
       handler: (resource: { name: string }) => {
-        const index = installedModules?.findIndex(module => {
+        const index = installedModules?.findIndex((module) => {
           return module.name === resource.name;
         });
         setOpenedModuleIndex(index);
@@ -180,7 +180,7 @@ export const CommunityModulesList = ({
     },
   ) => {
     setOpenedModuleIndex(
-      installedModules?.findIndex(entry => entry.name === moduleName),
+      installedModules?.findIndex((entry) => entry.name === moduleName),
     );
 
     setSelectedEntry?.(moduleName);
@@ -274,7 +274,7 @@ export const CommunityModulesList = ({
         entries={installedModules as any}
         serverDataLoading={modulesLoading}
         headerRenderer={headerRenderer}
-        rowRenderer={resource =>
+        rowRenderer={(resource) =>
           ModulesListRows({
             resourceName: resource.name,
             resource,
@@ -296,8 +296,7 @@ export const CommunityModulesList = ({
               'modules.community.title',
             ).toLocaleLowerCase()}`,
             subtitleText: t('modules.community.no-modules-description'),
-            url:
-              'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
+            url: 'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
             buttonText: t('common.buttons.add'),
             showButton: true,
             onClick: handleShowAddModule,

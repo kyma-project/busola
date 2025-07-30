@@ -53,15 +53,15 @@ export function useNodesQuery(skip = false) {
 
   useEffect(() => {
     if (nodes) {
-      const getNodeMetrics = node => {
+      const getNodeMetrics = (node) => {
         const metricsForNode = nodeMetrics.items.find(
-          metrics => node.metadata.name === metrics.metadata.name,
+          (metrics) => node.metadata.name === metrics.metadata.name,
         );
         return createUsageMetrics(node, metricsForNode);
       };
 
       setData(
-        nodes.items?.map(n => ({
+        nodes.items?.map((n) => ({
           ...n,
           metrics: nodeMetrics ? getNodeMetrics(n) : {},
         })),
@@ -172,7 +172,11 @@ export function calcNodeResources(pods) {
 
 export function useResourceByNode(nodeName) {
   const [data, setData] = useState(null);
-  const { data: pods, error, loading } = useGet(
+  const {
+    data: pods,
+    error,
+    loading,
+  } = useGet(
     `/api/v1/pods?fieldSelector=spec.nodeName=${nodeName},status.phase!=Failed,status.phase!=Succeeded&limit=500`,
   );
 

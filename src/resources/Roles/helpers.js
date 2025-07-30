@@ -2,7 +2,7 @@ export function unique(arr) {
   return [...new Set(arr)];
 }
 export const EMPTY_API_GROUP_KEY = 'core-api-group';
-export const extractApiGroupVersion = groupVersion => {
+export const extractApiGroupVersion = (groupVersion) => {
   if (!groupVersion) return { group: '', version: '' };
   // handle core ('') group
   if (groupVersion === 'v1') return { group: '', version: 'v1' };
@@ -11,7 +11,7 @@ export const extractApiGroupVersion = groupVersion => {
   return { group: apiGroup, version: apiVersion };
 };
 
-export const getApiGroupInputOptions = groupVersions =>
+export const getApiGroupInputOptions = (groupVersions) =>
   unique(groupVersions?.map(extractApiGroupVersion))?.map(({ group }) =>
     group === ''
       ? { key: EMPTY_API_GROUP_KEY, text: '(core)' }
@@ -44,7 +44,7 @@ export function createRuleTemplate(isNamespaced) {
 }
 
 export function createRolePresets(namespace, translate, groupVersions) {
-  const apiGroups = getApiGroupInputOptions(groupVersions).map(g =>
+  const apiGroups = getApiGroupInputOptions(groupVersions).map((g) =>
     g.key === 'core-api-group' ? '' : g.key,
   );
 

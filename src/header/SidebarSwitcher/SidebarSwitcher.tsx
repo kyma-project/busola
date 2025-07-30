@@ -12,7 +12,7 @@ export function SidebarSwitcher(props: any) {
   return (
     <Button
       slot={props.slot}
-      onClick={() => setSidebarCondensed(prevState => !prevState)}
+      onClick={() => setSidebarCondensed((prevState) => !prevState)}
       icon="menu2"
       design="Transparent"
       accessibleName="collapse-sidebar"

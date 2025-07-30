@@ -31,7 +31,7 @@ describe('useGet', () => {
         throw new Error('2'); // failing calls
       });
     render(<Testbed setGetResult={mock} />, {
-      initializeState: snapshot => {
+      initializeState: (snapshot) => {
         snapshot.set(authDataState, { token: 'test-token' });
         snapshot.set(clusterState, {});
       },

@@ -70,7 +70,7 @@ export default function NamespaceDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: namespace => (
+      value: (namespace) => (
         <NamespaceStatus namespaceStatus={namespace.status} />
       ),
     },

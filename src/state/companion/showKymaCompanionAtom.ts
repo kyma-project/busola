@@ -10,9 +10,8 @@ const DEFAULT_SHOW_KYMA_COMPANION: ShowKymaCompanion = {
   fullScreen: false,
 };
 
-export const showKymaCompanionState: RecoilState<ShowKymaCompanion> = atom<
-  ShowKymaCompanion
->({
-  key: 'showKymaCompanionState',
-  default: DEFAULT_SHOW_KYMA_COMPANION,
-});
+export const showKymaCompanionState: RecoilState<ShowKymaCompanion> =
+  atom<ShowKymaCompanion>({
+    key: 'showKymaCompanionState',
+    default: DEFAULT_SHOW_KYMA_COMPANION,
+  });

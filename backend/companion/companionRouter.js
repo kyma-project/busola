@@ -8,8 +8,9 @@ import addLogger from '../logging';
 const config = require('../config.js');
 
 const tokenManager = new TokenManager();
-const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.config
-  ?.apiBaseUrl ?? ''}/api/conversations/`;
+const COMPANION_API_BASE_URL = `${
+  config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? ''
+}/api/conversations/`;
 const router = express.Router();
 
 router.use(express.json());
@@ -77,13 +78,8 @@ async function handlePromptSuggestions(req, res) {
 }
 
 async function handleChatMessage(req, res) {
-  const {
-    query,
-    namespace,
-    resourceType,
-    groupVersion,
-    resourceName,
-  } = JSON.parse(req.body.toString());
+  const { query, namespace, resourceType, groupVersion, resourceName } =
+    JSON.parse(req.body.toString());
 
   const clusterUrl = req.headers['x-cluster-url'];
   const certificateAuthorityData =

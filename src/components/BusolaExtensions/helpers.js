@@ -17,7 +17,7 @@ function extractFirstLevelProperties(crd) {
   const filterSimpleProps = ([, property]) =>
     property.type !== 'object' && property.type !== 'array';
 
-  const spec = crd.spec.versions.find(v => v.storage).schema?.openAPIV3Schema
+  const spec = crd.spec.versions.find((v) => v.storage).schema?.openAPIV3Schema
     ?.properties?.spec;
 
   const firstLevelProperties = spec?.properties || {};
@@ -35,9 +35,9 @@ function extractFirstLevelProperties(crd) {
 }
 
 function extractAdditionalPrinterColumns(crd) {
-  const version = crd.spec.versions.find(v => v.storage);
+  const version = crd.spec.versions.find((v) => v.storage);
 
-  return (version.additionalPrinterColumns || []).map(apc => ({
+  return (version.additionalPrinterColumns || []).map((apc) => ({
     path: apc.jsonPath.substring(1), // remove trailing '.'
     type: apc.type,
     name: apc.name,
@@ -53,7 +53,7 @@ export function extractValueColumns(crd) {
   const firstLevelPropertiesColumns = extractFirstLevelProperties(crd);
   const additionalPrinterColumns = extractAdditionalPrinterColumns(crd);
 
-  const inferWidgets = c => ({
+  const inferWidgets = (c) => ({
     ...c,
     ...(isStatusMaybe(c) ? { widget: 'Badge' } : {}),
   });
@@ -64,7 +64,7 @@ export function extractValueColumns(crd) {
 }
 
 export function createExtensibilityTemplate(crd, t) {
-  const version = crd.spec.versions.find(v => v.storage);
+  const version = crd.spec.versions.find((v) => v.storage);
   const additionalValueColumns = extractValueColumns(crd);
   const possibleStatusColumn = additionalValueColumns.find(isStatusMaybe);
 
@@ -115,10 +115,10 @@ export function createExtensibilityTemplate(crd, t) {
 }
 
 export function createConfigmap(crd, data) {
-  const filterViewProps = arr =>
+  const filterViewProps = (arr) =>
     (arr ?? [])
-      .filter(e => e.isSelected)
-      .map(e => ({
+      .filter((e) => e.isSelected)
+      .map((e) => ({
         name: e.name,
         source: e.path,
       }));
@@ -132,8 +132,8 @@ export function createConfigmap(crd, data) {
   }
 
   data.form = (data.form ?? [])
-    .filter(e => e.isSelected)
-    .map(e => ({ path: e.path, required: e.required }));
+    .filter((e) => e.isSelected)
+    .map((e) => ({ path: e.path, required: e.required }));
 
   return {
     kind: 'ConfigMap',

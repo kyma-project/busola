@@ -22,7 +22,7 @@ export default function OtherSettings() {
         {t('settings.other.default-page-size')}
       </span>
       <Select onChange={onChange}>
-        {AVAILABLE_PAGE_SIZES.map(available_size => (
+        {AVAILABLE_PAGE_SIZES.map((available_size) => (
           <Option
             value={available_size.toString()}
             key={available_size}

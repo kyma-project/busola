@@ -43,9 +43,7 @@ context('Test Replica Sets', () => {
   });
 
   it('Checks the details view', () => {
-    cy.getMidColumn()
-      .contains(`${REPLICA_SET_NAME}-`)
-      .click({ force: true });
+    cy.getMidColumn().contains(`${REPLICA_SET_NAME}-`).click({ force: true });
 
     cy.contains(REPLICA_SET_NAME);
 
@@ -55,9 +53,7 @@ context('Test Replica Sets', () => {
   });
 
   it('Checks the list view', () => {
-    cy.getLeftNav()
-      .contains('Replica Sets')
-      .click();
+    cy.getLeftNav().contains('Replica Sets').click();
 
     cy.clickGenericListLink(REPLICA_SET_NAME);
 

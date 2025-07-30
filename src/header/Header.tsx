@@ -51,7 +51,7 @@ export function Header() {
   const shellbarRef = useRef(null);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
-    name => name !== cluster?.name,
+    (name) => name !== cluster?.name,
   );
 
   const clustersList = [
@@ -93,7 +93,7 @@ export function Header() {
             : ''
         }
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
-        onMenuItemClick={e => {
+        onMenuItemClick={(e) => {
           navigateSafely(() => {
             e.detail.item.textContent ===
             t('clusters.overview.title-all-clusters')
@@ -129,7 +129,7 @@ export function Header() {
           )
         }
         showSearchField
-        onSearchButtonClick={e => {
+        onSearchButtonClick={(e) => {
           if (!e.detail.searchFieldVisible) {
             setIsSearchOpen(true);
             return;
@@ -146,7 +146,7 @@ export function Header() {
             <ToggleButton
               accessibleName="Kyma Companion"
               icon={showCompanion.show ? 'da-2' : 'da'}
-              onClick={e => {
+              onClick={(e) => {
                 e.preventDefault();
                 setShowCompanion({
                   show: true,

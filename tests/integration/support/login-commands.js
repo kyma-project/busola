@@ -5,7 +5,7 @@ const NO_VALUE = 'NO_VALUE'; // must be something, OIDC server doesn't accept em
 const USERNAME = Cypress.env('OIDC_USER');
 const PASSWORD = Cypress.env('OIDC_PASS');
 
-Cypress.Commands.add('loginAndSelectCluster', function(params) {
+Cypress.Commands.add('loginAndSelectCluster', function (params) {
   cy.handleExceptions();
 
   if (!params?.disableClear) {
@@ -25,16 +25,17 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
     ...params,
   };
 
-  cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
+  cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
     if (kubeconfig.users?.[0]?.user?.exec?.args) {
       // conditionally logs in to OIDC
-      const URLelement = kubeconfig.users[0].user.exec.args.find(el =>
+      const URLelement = kubeconfig.users[0].user.exec.args.find((el) =>
         el.includes('oidc-issuer-url'),
       );
       // kubeconfig should only specify a scheme and a domain without the "/ui/protected/profilemanagement" part , i.e, https://apskyxzcl.accounts400.ondemand.com
-      const OICD_URL = /oidc-issuer-url=(?<url>(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}))/.exec(
-        URLelement,
-      )?.groups?.url;
+      const OICD_URL =
+        /oidc-issuer-url=(?<url>(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}))/.exec(
+          URLelement,
+        )?.groups?.url;
 
       // validating the input
       if (!(OICD_URL && USERNAME && PASSWORD)) {
@@ -44,15 +45,17 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       }
       cy.wrap(OICD_URL && USERNAME && PASSWORD).should('be.ok');
 
-      cy.request(OICD_URL).then(res => {
+      cy.request(OICD_URL).then((res) => {
         const cookies = res.headers?.['set-cookie'];
 
-        const xsrfCookie = cookies?.find(el => el.includes('XSRF'));
+        const xsrfCookie = cookies?.find((el) => el.includes('XSRF'));
         const xsrfToken = xsrfCookie
           ? /XSRF_COOKIE="?(?<token>.*?)"?;/.exec(xsrfCookie)?.groups?.token
           : NO_VALUE;
 
-        const jSessionIdCookie = cookies?.find(el => el.includes('JSESSIONID'));
+        const jSessionIdCookie = cookies?.find((el) =>
+          el.includes('JSESSIONID'),
+        );
         const jSessionIdToken = jSessionIdCookie
           ? /JSESSIONID="?(?<token>.*?)"?;/.exec(jSessionIdCookie)?.groups
               ?.token
@@ -95,7 +98,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
             j_username: USERNAME,
             j_password: PASSWORD,
           },
-        }).then(res => {
+        }).then((res) => {
           // assuming cookies are set only for successful login attempts
           if (!res.headers?.['set-cookie']) {
             cy.log('Failed OIDC login attempt!!');
@@ -117,25 +120,17 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       },
     );
 
-    cy.get('ui5-button:visible')
-      .contains('Next step')
-      .click();
+    cy.get('ui5-button:visible').contains('Next step').click();
 
     if (staticToken) {
-      cy.get('ui5-button:visible')
-        .contains('Next step')
-        .click();
+      cy.get('ui5-button:visible').contains('Next step').click();
     }
 
     if (storage) {
-      cy.contains(storage)
-        .parent('ui5-radio-button')
-        .click();
+      cy.contains(storage).parent('ui5-radio-button').click();
     }
 
-    cy.get('ui5-button:visible')
-      .contains('Next step')
-      .click();
+    cy.get('ui5-button:visible').contains('Next step').click();
 
     cy.get(`[accessible-name="last-step"]:visible`)
       .contains('Connect cluster')

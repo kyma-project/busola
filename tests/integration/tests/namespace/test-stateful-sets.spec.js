@@ -2,11 +2,7 @@ import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-stateful-sets.yaml';
 
-const SS_NAME =
-  'test-' +
-  Math.random()
-    .toString()
-    .substr(2, 8);
+const SS_NAME = 'test-' + Math.random().toString().substr(2, 8);
 
 async function loadSS(name, namespace, fileName) {
   const resource = await loadFile(fileName);
@@ -32,7 +28,7 @@ context('Test Stateful Sets', () => {
     cy.openCreate();
 
     cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      SS_CONFIG => {
+      (SS_CONFIG) => {
         const SS = JSON.stringify(SS_CONFIG);
         cy.pasteToMonaco(SS);
       },

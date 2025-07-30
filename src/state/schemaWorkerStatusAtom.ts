@@ -10,9 +10,8 @@ const defaultValue = {
   schemasError: null,
 };
 
-export const schemaWorkerStatusState: RecoilState<SchemaWorkerStatusState> = atom<
-  SchemaWorkerStatusState
->({
-  key: 'schemaWorkerStatusState',
-  default: defaultValue,
-});
+export const schemaWorkerStatusState: RecoilState<SchemaWorkerStatusState> =
+  atom<SchemaWorkerStatusState>({
+    key: 'schemaWorkerStatusState',
+    default: defaultValue,
+  });

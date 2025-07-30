@@ -4,9 +4,8 @@ type IsSidebarCondensed = boolean;
 
 const DEFAULT_IS_SIDEBAR_CONDENSED = false;
 
-export const isSidebarCondensedState: RecoilState<IsSidebarCondensed> = atom<
-  IsSidebarCondensed
->({
-  key: 'isSidebarCondensedState',
-  default: DEFAULT_IS_SIDEBAR_CONDENSED,
-});
+export const isSidebarCondensedState: RecoilState<IsSidebarCondensed> =
+  atom<IsSidebarCondensed>({
+    key: 'isSidebarCondensedState',
+    default: DEFAULT_IS_SIDEBAR_CONDENSED,
+  });

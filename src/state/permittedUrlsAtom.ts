@@ -11,9 +11,8 @@ export type PermittedUrlsState = {
 
 const defaultValue = {};
 
-export const permittedUrlsState: RecoilState<PermittedUrlsState> = atom<
-  PermittedUrlsState
->({
-  key: 'permittedUrlsState',
-  default: defaultValue,
-});
+export const permittedUrlsState: RecoilState<PermittedUrlsState> =
+  atom<PermittedUrlsState>({
+    key: 'permittedUrlsState',
+    default: defaultValue,
+  });

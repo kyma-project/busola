@@ -3,8 +3,8 @@ import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { List, fromJS } from 'immutable';
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
-const propertiesWrapper = src => ({
-  map: cb => List(src?.map(([key, val]) => cb(val, key))),
+const propertiesWrapper = (src) => ({
+  map: (cb) => List(src?.map(([key, val]) => cb(val, key))),
   toJSON: () => src,
 });
 
@@ -19,8 +19,11 @@ export function SchemaRulesInjector({
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
-  const { path: myPath, children: childRules, ...itemRule } =
-    schema.get('schemaRule') ?? rootRule;
+  const {
+    path: myPath,
+    children: childRules,
+    ...itemRule
+  } = schema.get('schemaRule') ?? rootRule;
 
   let newSchema = schema.mergeDeep(itemRule);
 
@@ -31,7 +34,7 @@ export function SchemaRulesInjector({
 
   if (newSchema.get('properties')) {
     const newProperties = childRules
-      ?.map(rule => {
+      ?.map((rule) => {
         if (rule.custom) {
           return ['', fromJS({ ...rule, schemaRule: rule })];
         }
@@ -43,7 +46,7 @@ export function SchemaRulesInjector({
 
         return property ? [propertyKey, property] : null;
       })
-      .filter(rule => !!rule);
+      .filter((rule) => !!rule);
 
     newSchema = newSchema.set('properties', propertiesWrapper(newProperties));
   }

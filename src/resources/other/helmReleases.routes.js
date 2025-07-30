@@ -6,12 +6,12 @@ import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
-const HelmReleasesList = React.lazy(() =>
-  import('../../components/HelmReleases/HelmReleasesList'),
+const HelmReleasesList = React.lazy(
+  () => import('../../components/HelmReleases/HelmReleasesList'),
 );
 
-const HelmReleaseDetails = React.lazy(() =>
-  import('../../components/HelmReleases/HelmReleasesDetails'),
+const HelmReleaseDetails = React.lazy(
+  () => import('../../components/HelmReleases/HelmReleasesDetails'),
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {

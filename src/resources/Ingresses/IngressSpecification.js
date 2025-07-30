@@ -24,7 +24,7 @@ export const IngressSpecification = ({ resource }) => {
               t('ingresses.labels.hosts'),
               t('ingresses.labels.secret-name'),
             ]}
-            rowRenderer={tls => [
+            rowRenderer={(tls) => [
               tls?.hosts ? (
                 <Tokens tokens={tls?.hosts} />
               ) : (

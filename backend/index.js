@@ -87,7 +87,7 @@ if (isDocker) {
   app.use('/backend', handleRequest);
 }
 
-process.on('SIGINT', function() {
+process.on('SIGINT', function () {
   process.exit();
 });
 

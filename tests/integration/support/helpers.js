@@ -5,23 +5,17 @@ export function chooseComboboxOption(selector, optionText, force = false) {
     .click()
     .type(optionText);
 
-  cy.get('ui5-cb-item:visible')
-    .contains(optionText)
-    .click({ force: force });
+  cy.get('ui5-cb-item:visible').contains(optionText).click({ force: force });
 
   return cy.end();
 }
 
 export function useCategory(category) {
   before(() => {
-    cy.getLeftNav()
-      .contains(category)
-      .click();
+    cy.getLeftNav().contains(category).click();
   });
 
   after(() => {
-    cy.getLeftNav()
-      .contains(category)
-      .click();
+    cy.getLeftNav().contains(category).click();
   });
 }

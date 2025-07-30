@@ -18,7 +18,7 @@ export function ChooseStorage({ storage, setStorage }) {
           text={`${t('clusters.storage.labels.localStorage')}: ${t(
             'clusters.storage.descriptions.localStorage',
           )}`}
-          onChange={event => setStorage(event.target.value)}
+          onChange={(event) => setStorage(event.target.value)}
         />
         <RadioButton
           name="storage"
@@ -27,7 +27,7 @@ export function ChooseStorage({ storage, setStorage }) {
           text={`${t('clusters.storage.labels.sessionStorage')}: ${t(
             'clusters.storage.descriptions.sessionStorage',
           )}`}
-          onChange={event => setStorage(event.target.value)}
+          onChange={(event) => setStorage(event.target.value)}
         />
         <RadioButton
           name="storage"
@@ -36,7 +36,7 @@ export function ChooseStorage({ storage, setStorage }) {
           text={`${t('clusters.storage.labels.inMemory')}: ${t(
             'clusters.storage.descriptions.inMemory',
           )}`}
-          onChange={event => setStorage(event.target.value)}
+          onChange={(event) => setStorage(event.target.value)}
         />
       </FlexBox>
     </>

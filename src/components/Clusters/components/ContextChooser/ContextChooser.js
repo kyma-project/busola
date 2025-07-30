@@ -30,7 +30,7 @@ export function ContextChooser(params) {
           value={params.chosenContext}
           propertyPath='$["current-context"]'
           label={t('clusters.wizard.context')}
-          validate={value => !!value}
+          validate={(value) => !!value}
           input={({ setValue }) => (
             <ContextButtons
               contexts={kubeconfig.contexts}
@@ -56,7 +56,7 @@ export function ContextButtons({
       id="context-chooser"
       className="sap-margin-top-tiny"
     >
-      {contexts.map(context => (
+      {contexts.map((context) => (
         <RadioButton
           key={context.name}
           name={context.name}
@@ -105,7 +105,7 @@ export function ContextChooserMessage({ contexts, setValue, onCancel }) {
           {t('clusters.wizard.several-context-question')}
         </Text>
         <FlexBox direction="Column" className="radio-box-container">
-          {contexts.map(context => (
+          {contexts.map((context) => (
             <RadioButton
               id={'context-chooser' + context.name}
               key={context.name}

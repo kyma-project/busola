@@ -73,7 +73,7 @@ async function cycle(
     for (const relatedResource of findRelatedResources(kind, config)) {
       const alreadyInStore = !!store.current[relatedResource.kind];
       const alreadyToFetch = !!resourcesToFetch.find(
-        r => r.kind === relatedResource.kind,
+        (r) => r.kind === relatedResource.kind,
       );
 
       if (!alreadyInStore && !alreadyToFetch) {
@@ -121,13 +121,12 @@ async function cycle(
       );
 
       const filterOnlyRelated = (possiblyRelatedResource: K8sResource) =>
-        store.current[resource.fromKind]!.some(oR =>
+        store.current[resource.fromKind]!.some((oR) =>
           match(possiblyRelatedResource, oR, config),
         );
 
-      store.current[resource.kind] = allResourcesForKind.filter(
-        filterOnlyRelated,
-      );
+      store.current[resource.kind] =
+        allResourcesForKind.filter(filterOnlyRelated);
     } catch (e) {
       console.warn(e);
     }
@@ -161,10 +160,10 @@ export function useRelatedResources({
   events,
 }: useRelatedResourcesProps): useRelatedResourcesReturnValue {
   const clusterNodes = useRecoilValue(allNodesSelector).filter(
-    node => !node.namespaced,
+    (node) => !node.namespaced,
   );
   const namespaceNodes = useRecoilValue(allNodesSelector).filter(
-    node => node.namespaced,
+    (node) => node.namespaced,
   );
   const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();

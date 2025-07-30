@@ -14,7 +14,7 @@ export function Checkboxes({
     if (checked) {
       setValue([...(value || []), key]);
     } else {
-      setValue(value.filter(v => v !== key));
+      setValue(value.filter((v) => v !== key));
     }
   };
   return (
@@ -24,7 +24,7 @@ export function Checkboxes({
           <CheckBox
             data-testid={`${dataTestID}.${key}`}
             checked={value?.includes(key)}
-            onChange={e => updateValue(key, e.target.checked)}
+            onChange={(e) => updateValue(key, e.target.checked)}
             text={text}
           />
           {description && (

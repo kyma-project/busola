@@ -85,7 +85,7 @@ export function KymaModuleContextProvider({
     const index =
       moduleIndex ??
       // Find index of the selected module after a refresh or other case after which we have undefined.
-      activeModules?.findIndex(module =>
+      activeModules?.findIndex((module) =>
         checkSelectedModule(module, layoutState),
       );
     return index > -1 ? index : undefined;

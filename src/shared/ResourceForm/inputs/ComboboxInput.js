@@ -15,10 +15,10 @@ export function ComboboxInput({
   accessibleName,
   ...props
 }) {
-  const onChange = event => {
+  const onChange = (event) => {
     let selectedOption;
     if (!props?.isNumeric) {
-      selectedOption = options.find(o => o.text === event.target.value) ?? {
+      selectedOption = options.find((o) => o.text === event.target.value) ?? {
         key: event.target._state.filterValue,
         text: event.target._state.filterValue,
       };
@@ -29,7 +29,7 @@ export function ComboboxInput({
         return;
       }
 
-      selectedOption = options.find(o => o.text === newValue) ?? {
+      selectedOption = options.find((o) => o.text === newValue) ?? {
         key: filterValue,
         text: filterValue,
       };
@@ -52,7 +52,7 @@ export function ComboboxInput({
       onChange={onChange}
       onInput={updatesOnInput ? onChange : () => {}}
       value={
-        options.find(o => o.key === value || o.key === selectedKey)?.text ??
+        options.find((o) => o.key === value || o.key === selectedKey)?.text ??
         value
       }
       placeholder={placeholder}

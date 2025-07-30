@@ -15,7 +15,7 @@ export const useSideDrawer = (
 
   useEffect(() => {
     // return a function to skip changing the open state on initial render
-    return _ => setOpen(true);
+    return (_) => setOpen(true);
   }, [content]);
 
   const drawerComponent = content ? (

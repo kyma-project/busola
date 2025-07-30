@@ -11,7 +11,7 @@ export function useRestartResource(baseUrl) {
   const patchRequest = useUpdate();
   const notification = useNotification();
 
-  return async resource => {
+  return async (resource) => {
     const url = baseUrl + '/' + resource.metadata.name;
     const updatedResource = cloneDeep(resource);
     jp.value(
@@ -42,7 +42,7 @@ export function useRestartAction(baseUrl) {
   return {
     name: t('common.buttons.restart'),
     icon: 'refresh',
-    tooltip: entry =>
+    tooltip: (entry) =>
       isProtected(entry)
         ? t('common.tooltips.protected-resources-info')
         : t('common.buttons.restart'),

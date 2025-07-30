@@ -17,9 +17,9 @@ export function useValidation({ inputRef, onChange }) {
   return {
     validationState,
     ref,
-    onChange: e => {
+    onChange: (e) => {
       if (Array.isArray(onChange)) {
-        onChange.filter(oc => oc).forEach(oc => oc(e));
+        onChange.filter((oc) => oc).forEach((oc) => oc(e));
       } else if (onChange) {
         onChange(e);
       }

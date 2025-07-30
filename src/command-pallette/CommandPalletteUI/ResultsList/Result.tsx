@@ -62,7 +62,7 @@ export function Result({
     >
       <div>
         <p className="label">{label}</p>
-        {aliases?.map(alias => (
+        {aliases?.map((alias) => (
           <p className="key" key={alias}>
             {alias}
           </p>

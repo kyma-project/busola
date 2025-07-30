@@ -12,7 +12,7 @@ context('Test Companion Initial Suggestions', () => {
   let callCount = 0;
 
   beforeEach(() => {
-    cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
+    cy.intercept('POST', '/backend/ai-chat/suggestions', (req) => {
       callCount++;
       req.reply({
         delay: 2000,
@@ -31,7 +31,7 @@ context('Test Companion Initial Suggestions', () => {
 
     cy.mockChatResponse();
 
-    cy.intercept('POST', '/backend/ai-chat/followup', req => {
+    cy.intercept('POST', '/backend/ai-chat/followup', (req) => {
       req.reply({
         delay: 100,
         body: {
@@ -45,11 +45,9 @@ context('Test Companion Initial Suggestions', () => {
     cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
 
-    cy.get('@companion')
-      .find('.ai-busy-indicator')
-      .should('be.visible');
+    cy.get('@companion').find('.ai-busy-indicator').should('be.visible');
 
-    cy.wait('@getPromptSuggestions').then(interception => {
+    cy.wait('@getPromptSuggestions').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
         resourceType: 'Namespace',
@@ -70,7 +68,7 @@ context('Test Companion Initial Suggestions', () => {
 
     cy.clickSuggestion(0);
 
-    cy.wait('@getChatResponse').then(interception => {
+    cy.wait('@getChatResponse').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
         resourceType: 'Namespace',
@@ -86,11 +84,9 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
     cy.resetCompanion();
 
-    cy.get('@companion')
-      .find('.ai-busy-indicator')
-      .should('be.visible');
+    cy.get('@companion').find('.ai-busy-indicator').should('be.visible');
 
-    cy.wait('@getPromptSuggestions').then(interception => {
+    cy.wait('@getPromptSuggestions').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
         resourceType: 'Namespace',
@@ -114,11 +110,9 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.get('@companion')
-      .find('.ai-busy-indicator')
-      .should('be.visible');
+    cy.get('@companion').find('.ai-busy-indicator').should('be.visible');
 
-    cy.wait('@getPromptSuggestions').then(interception => {
+    cy.wait('@getPromptSuggestions').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: '',
         resourceType: 'Deployment',
@@ -142,11 +136,9 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
     cy.go('back');
 
-    cy.get('@companion')
-      .find('.ai-busy-indicator')
-      .should('be.visible');
+    cy.get('@companion').find('.ai-busy-indicator').should('be.visible');
 
-    cy.wait('@getPromptSuggestions').then(interception => {
+    cy.wait('@getPromptSuggestions').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
         resourceType: 'Namespace',
@@ -170,7 +162,7 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('.kyma-companion').as('companion');
     cy.clickSuggestion(0);
 
-    cy.wait('@getChatResponse').then(interception => {
+    cy.wait('@getChatResponse').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
         resourceType: 'Namespace',
@@ -183,13 +175,9 @@ context('Test Companion Initial Suggestions', () => {
 
     cy.navigateTo('Workloads', 'Deployments');
 
-    cy.get('@companion')
-      .find('.ai-busy-indicator')
-      .should('not.exist');
+    cy.get('@companion').find('.ai-busy-indicator').should('not.exist');
 
-    cy.get('@companion')
-      .find('.bubbles-container')
-      .should('not.exist');
+    cy.get('@companion').find('.bubbles-container').should('not.exist');
 
     cy.wrap(callCount).should('equal', 4);
   });

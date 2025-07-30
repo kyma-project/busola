@@ -16,7 +16,7 @@ export function StatisticalCard({
   });
   const { t } = useGetTranslation();
 
-  const extraInfo = structure.children?.map(child => {
+  const extraInfo = structure.children?.map((child) => {
     const [childValue, err] = jsonata(child.source, {
       resource: value,
     });

@@ -40,9 +40,8 @@ const defaultValue = {
   showEdit: null,
 };
 
-export const columnLayoutState: RecoilState<ColumnLayoutState> = atom<
-  ColumnLayoutState
->({
-  key: 'ColumnLayoutState',
-  default: defaultValue,
-});
+export const columnLayoutState: RecoilState<ColumnLayoutState> =
+  atom<ColumnLayoutState>({
+    key: 'ColumnLayoutState',
+    default: defaultValue,
+  });

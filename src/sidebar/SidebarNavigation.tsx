@@ -48,9 +48,13 @@ export function SidebarNavigation() {
   );
 
   const filteredNavigationNodes =
-    navigationNodes.filter(nn => nn.items?.length > 0) || [];
-  const topLevelNodes = filteredNavigationNodes?.filter(nn => nn.topLevelNode);
-  const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
+    navigationNodes.filter((nn) => nn.items?.length > 0) || [];
+  const topLevelNodes = filteredNavigationNodes?.filter(
+    (nn) => nn.topLevelNode,
+  );
+  const categoryNodes = filteredNavigationNodes?.filter(
+    (nn) => !nn.topLevelNode,
+  );
 
   const isClusterOverviewSelected = () => {
     const { pathname } = window.location;
@@ -78,7 +82,7 @@ export function SidebarNavigation() {
   return (
     <SideNavigation
       collapsed={isSidebarCondensed}
-      onSelectionChange={e => e.preventDefault()}
+      onSelectionChange={(e) => e.preventDefault()}
       header={
         <>
           {namespace && (
@@ -119,13 +123,13 @@ export function SidebarNavigation() {
                 <ComboBox
                   id="NamespaceComboBox"
                   className="combobox-with-dimension-icon"
-                  onSelectionChange={e => {
+                  onSelectionChange={(e) => {
                     navigateSafely(() => {
                       const newNamespace =
                         e.target.value === t('navigation.all-namespaces')
                           ? '-all-'
                           : e.target.value;
-                      setLayoutColumn(prevState => ({
+                      setLayoutColumn((prevState) => ({
                         startColumn: {
                           resourceType:
                             prevState.startColumn?.resourceType ?? null,
@@ -196,7 +200,7 @@ export function SidebarNavigation() {
           selected={isClusterOverviewSelected()}
         />
       )}
-      {topLevelNodes.map(node =>
+      {topLevelNodes.map((node) =>
         node.items?.map((item, index) => <NavItem node={item} key={index} />),
       )}
       {categoryNodes.map((category, index) => (

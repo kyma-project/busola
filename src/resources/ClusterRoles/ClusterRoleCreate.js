@@ -13,10 +13,10 @@ export default function ClusterRoleCreate(props) {
 
   const createTemplate = useCallback(() => createClusterRoleTemplate(), []);
 
-  const presets = useMemo(() => createClusterRolePresets(t, groupVersions), [
-    t,
-    groupVersions,
-  ]);
+  const presets = useMemo(
+    () => createClusterRolePresets(t, groupVersions),
+    [t, groupVersions],
+  );
 
   return (
     <GenericRoleCreate

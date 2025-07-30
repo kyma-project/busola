@@ -47,7 +47,7 @@ export function CategoryItem({
         return;
       } else if (expanded) {
         handleExpandedCategories(
-          expandedCategories.filter(el => el !== category.key),
+          expandedCategories.filter((el) => el !== category.key),
         );
       } else {
         handleExpandedCategories([...expandedCategories, category.key]);
@@ -58,7 +58,7 @@ export function CategoryItem({
   const handleEmptyNamespace = (dataSources: DataSources) => {
     // Some data is available only on a certain namespace. If we don't have a given namespace, we can still get it on all namespaces.
     let clonedDataSources = cloneDeep(dataSources);
-    Object.keys(clonedDataSources).forEach(key => {
+    Object.keys(clonedDataSources).forEach((key) => {
       if (clonedDataSources?.[key]?.resource) {
         clonedDataSources[key].resource = {
           ...clonedDataSources[key]?.resource,

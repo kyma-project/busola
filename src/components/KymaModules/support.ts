@@ -152,12 +152,12 @@ export const findChannel = (
 };
 export const findCrd = (resourceKind: string, crds: any) => {
   return (crds as CustomResourceDefinitionsType | null)?.items?.find(
-    crd => crd.spec?.names?.kind === resourceKind,
+    (crd) => crd.spec?.names?.kind === resourceKind,
   );
 };
 
 export const findExtension = (resourceKind: string, extensions: any) => {
-  return (extensions as { data: { general: string } }[] | null)?.find(ext => {
+  return (extensions as { data: { general: string } }[] | null)?.find((ext) => {
     const { resource: extensionResource } =
       jsyaml.load(ext.data.general, { json: true }) || ({} as any);
     return extensionResource.kind === resourceKind;
@@ -190,14 +190,14 @@ export const findModuleTemplate = (
 ) => {
   // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
   const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
-    moduleTemplate =>
+    (moduleTemplate) =>
       moduleName ===
         moduleTemplate.metadata.labels[
           'operator.kyma-project.io/module-name'
         ] && moduleTemplate.spec.channel === channel,
   );
   const moduleWithInfo = moduleTemplates?.items?.find(
-    moduleTemplate =>
+    (moduleTemplate) =>
       moduleName ===
         moduleTemplate.metadata.labels[
           'operator.kyma-project.io/module-name'
@@ -328,7 +328,7 @@ export const splitModuleTemplates = (
   const communityTemplates: ModuleTemplateListType = { items: [] };
   const kymaTemplates: ModuleTemplateListType = { items: [] };
 
-  moduleTemplates.items.forEach(item => {
+  moduleTemplates.items.forEach((item) => {
     if (item.metadata?.labels?.['operator.kyma-project.io/managed-by']) {
       kymaTemplates.items.push(item);
     } else {

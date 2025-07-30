@@ -117,7 +117,7 @@ export default function App() {
                 <ContextChooserMessage
                   contexts={contextsState?.contexts}
                   setValue={(value: string) =>
-                    setContextsState(state => ({
+                    setContextsState((state) => ({
                       ...state,
                       chosenContext: value,
                     }))

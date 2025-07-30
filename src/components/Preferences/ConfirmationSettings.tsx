@@ -18,7 +18,9 @@ export default function ConfirmationSettings() {
         <Switch
           accessibleName={t('settings.clusters.dontConfirmDelete')}
           checked={dontConfirmDelete}
-          onChange={() => setDontConfirmDelete(previousState => !previousState)}
+          onChange={() =>
+            setDontConfirmDelete((previousState) => !previousState)
+          }
         />
       </div>
     </div>

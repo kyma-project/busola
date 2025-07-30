@@ -18,7 +18,7 @@ export function hasAnyRoleBound(permissionSet: PermissionSetState) {
   // leave out ssrr permission, as it's always there
   permissionSet = permissionSet.filter(filterSelfSubjectRulesReview);
 
-  const verbs = permissionSet.flatMap(p => p.verbs);
+  const verbs = permissionSet.flatMap((p) => p.verbs);
 
   const usefulVerbs = [
     'get',
@@ -31,7 +31,7 @@ export function hasAnyRoleBound(permissionSet: PermissionSetState) {
     '*',
   ];
 
-  return verbs.some(v => usefulVerbs.includes(v));
+  return verbs.some((v) => usefulVerbs.includes(v));
 }
 
 export async function getPermissionResourceRules(
@@ -64,34 +64,33 @@ export type PermissionSet = {
 
 export type PermissionSetState = PermissionSet[];
 
-export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
-  PermissionSetState
->({
-  key: 'PermissionSet',
-  get: async ({ get }) => {
-    const cluster = get(clusterState);
-    const activeNamespaceId = get(activeNamespaceIdState) || '';
-    const postFn = getPostFn(get);
+export const permissionSetsSelector: RecoilValue<PermissionSetState> =
+  selector<PermissionSetState>({
+    key: 'PermissionSet',
+    get: async ({ get }) => {
+      const cluster = get(clusterState);
+      const activeNamespaceId = get(activeNamespaceIdState) || '';
+      const postFn = getPostFn(get);
 
-    if (postFn) {
-      try {
-        const resourceRules = await getPermissionResourceRules(
-          postFn,
-          activeNamespaceId,
-        );
+      if (postFn) {
+        try {
+          const resourceRules = await getPermissionResourceRules(
+            postFn,
+            activeNamespaceId,
+          );
 
-        if (
-          !hasAnyRoleBound(resourceRules) &&
-          !window.location.href.endsWith('/no-permissions')
-        ) {
-          window.location.href =
-            window.origin + `/cluster/${cluster?.contextName}/no-permissions`;
+          if (
+            !hasAnyRoleBound(resourceRules) &&
+            !window.location.href.endsWith('/no-permissions')
+          ) {
+            window.location.href =
+              window.origin + `/cluster/${cluster?.contextName}/no-permissions`;
+          }
+          return resourceRules;
+        } catch (e) {
+          return [];
         }
-        return resourceRules;
-      } catch (e) {
-        return [];
       }
-    }
-    return [];
-  },
-});
+      return [];
+    },
+  });

@@ -23,7 +23,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
   return (
     <ResourceForm.Wrapper
       resource={auth}
-      setResource={auth => {
+      setResource={(auth) => {
         jp.value(
           resource,
           `$.users[${userIndex}].user.exec`,
@@ -78,7 +78,7 @@ const TokenForm = ({ resource, setResource, ...props }) => {
       <ResourceForm.FormField
         required
         value={token}
-        setValue={val => {
+        setValue={(val) => {
           setToken(val);
           jp.value(resource, `$.users[${userIndex}].user.token`, val);
         }}

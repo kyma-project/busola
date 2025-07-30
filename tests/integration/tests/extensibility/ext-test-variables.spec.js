@@ -17,17 +17,15 @@ context('Test extensibility variables', () => {
   });
 
   it('Creates the EXT test resources config', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles(
       'examples/testing/configuration/test-resource-configmap.yaml',
       'examples/testing/configuration/test-resource-crd.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    ).then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
@@ -41,8 +39,8 @@ context('Test extensibility variables', () => {
       .should('have.length', 2);
 
     cy.loadFiles('examples/testing/samples/test-resource-samples.yaml').then(
-      resources => {
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      (resources) => {
+        const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
       },
     );
@@ -78,14 +76,10 @@ context('Test extensibility variables', () => {
   });
 
   it('Tests variables', () => {
-    cy.wait(500)
-      .get('.create-form')
-      .as('form');
+    cy.wait(500).get('.create-form').as('form');
 
     // test vars with no default value
-    cy.get('@form')
-      .find('input')
-      .should('be.empty');
+    cy.get('@form').find('input').should('be.empty');
 
     // test vars with enums
     cy.get('@form')
@@ -96,13 +90,9 @@ context('Test extensibility variables', () => {
       })
       .click();
 
-    cy.get('ui5-cb-item:visible')
-      .contains('simple')
-      .should('exist');
+    cy.get('ui5-cb-item:visible').contains('simple').should('exist');
 
-    cy.get('ui5-cb-item:visible')
-      .contains('advanced')
-      .should('exist');
+    cy.get('ui5-cb-item:visible').contains('advanced').should('exist');
 
     // test if fielsd based on visibility are not visible
     cy.get('@form')
@@ -114,13 +104,9 @@ context('Test extensibility variables', () => {
     );
 
     // test visibility based on var (select 'simple')
-    cy.get('ui5-cb-item:visible')
-      .contains('simple')
-      .click();
+    cy.get('ui5-cb-item:visible').contains('simple').click();
 
-    cy.get('@form')
-      .find('[data-testid="spec.name"]:visible')
-      .should('exist');
+    cy.get('@form').find('[data-testid="spec.name"]:visible').should('exist');
 
     // test visibility based on var (select 'advanced')
     cy.get('@form')
@@ -131,9 +117,7 @@ context('Test extensibility variables', () => {
       })
       .click();
 
-    cy.get('ui5-cb-item:visible')
-      .contains('advanced')
-      .click();
+    cy.get('ui5-cb-item:visible').contains('advanced').click();
 
     cy.get('[aria-label="Advanced, collapsed"]:visible', { log: false }).should(
       'exist',
@@ -162,9 +146,7 @@ context('Test extensibility variables', () => {
       .get('ui5-combobox[placeholder="Choose template"]:visible')
       .click();
 
-    cy.get('ui5-cb-item:visible')
-      .contains('Fixes')
-      .click();
+    cy.get('ui5-cb-item:visible').contains('Fixes').click();
 
     cy.get('@form')
       .find('[data-testid="spec.prefix"]:visible')
@@ -281,14 +263,8 @@ context('Test extensibility variables', () => {
     cy.saveChanges('Create');
 
     // check arrayOfStrings
-    cy.getMidColumn()
-      .contains('ui5-title', NAME)
-      .should('be.visible');
-    cy.getMidColumn()
-      .contains('value_1, value_3')
-      .should('exist');
-    cy.getMidColumn()
-      .contains('value_2')
-      .should('not.exist');
+    cy.getMidColumn().contains('ui5-title', NAME).should('be.visible');
+    cy.getMidColumn().contains('value_1, value_3').should('exist');
+    cy.getMidColumn().contains('value_2').should('not.exist');
   });
 });

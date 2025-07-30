@@ -254,7 +254,7 @@ export const deleteAssociatedResources = async (
 ) => {
   try {
     await Promise.all(
-      forceDeleteUrls.map(async url => {
+      forceDeleteUrls.map(async (url) => {
         return await deleteResourceMutation(url);
       }),
     );
@@ -270,7 +270,7 @@ export const deleteCrResources = async (
 ) => {
   try {
     await Promise.all(
-      crUrls.map(async url => {
+      crUrls.map(async (url) => {
         return await deleteResourceMutation(url);
       }),
     );

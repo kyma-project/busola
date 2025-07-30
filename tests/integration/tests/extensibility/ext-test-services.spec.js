@@ -16,14 +16,12 @@ context('Test Services', () => {
   });
 
   it('Creates the EXT Services config', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
-    cy.loadFiles('examples/services/configuration.yaml').then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    cy.loadFiles('examples/services/configuration.yaml').then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
@@ -36,8 +34,8 @@ context('Test Services', () => {
       .find('.status-message-success')
       .should('have.length', 1);
 
-    cy.loadFiles('examples/services/samples.yaml').then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    cy.loadFiles('examples/services/samples.yaml').then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
@@ -54,9 +52,7 @@ context('Test Services', () => {
   it('Displays the EXT Services list view', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
+    cy.getLeftNav().contains('Namespaces').click();
 
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
@@ -65,13 +61,9 @@ context('Test Services', () => {
 
     cy.clickListLink('services');
 
-    cy.getLeftNav()
-      .contains('Examples')
-      .click();
+    cy.getLeftNav().contains('Examples').click();
 
-    cy.getLeftNav()
-      .contains('Custom Services')
-      .click();
+    cy.getLeftNav().contains('Custom Services').click();
 
     cy.contains('Type');
     cy.contains('LoadBalancer');

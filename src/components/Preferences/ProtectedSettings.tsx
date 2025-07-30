@@ -8,10 +8,8 @@ import { configFeaturesNames } from 'state/types';
 
 export default function ProtectedSettings() {
   const { t } = useTranslation();
-  const [
-    disableResourceProtection,
-    setDisableResourceProtection,
-  ] = useRecoilState(disableResourceProtectionState);
+  const [disableResourceProtection, setDisableResourceProtection] =
+    useRecoilState(disableResourceProtectionState);
 
   const protectedResourcesEnabled = useFeature(
     configFeaturesNames.PROTECTED_RESOURCES,
@@ -28,7 +26,9 @@ export default function ProtectedSettings() {
         <Switch
           accessibleName={t('settings.clusters.disableResourceProtection')}
           checked={disableResourceProtection}
-          onChange={() => setDisableResourceProtection(prevState => !prevState)}
+          onChange={() =>
+            setDisableResourceProtection((prevState) => !prevState)
+          }
         />
       </div>
     </div>

@@ -7,11 +7,11 @@ import { useRecoilValue } from 'recoil';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
-const ExtensibilityList = React.lazy(() =>
-  import('../../components/Extensibility/ExtensibilityList'),
+const ExtensibilityList = React.lazy(
+  () => import('../../components/Extensibility/ExtensibilityList'),
 );
 
-export const HPASubcomponent = props => {
+export const HPASubcomponent = (props) => {
   const { t } = useTranslation();
   const resourceKind = props.kind;
   const resourceName = props.metadata.name;
@@ -19,11 +19,11 @@ export const HPASubcomponent = props => {
   const extensions = useRecoilValue(extensionsState);
 
   const extensibilityHPAs = extensions?.find(
-    cR => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
+    (cR) => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
   );
 
   const url = `/apis/autoscaling/v2/namespaces/${namespace}/horizontalpodautoscalers`;
-  const hpaFilter = hpa => {
+  const hpaFilter = (hpa) => {
     return (
       hpa.spec?.scaleTargetRef?.kind === resourceKind &&
       hpa.spec?.scaleTargetRef?.name === resourceName

@@ -112,7 +112,7 @@ const ScanResultResourcesTree = ({
   resources?: ScanResourceStatus[];
 }) => {
   const filteredResources = resources?.filter(
-    resource => resource.items && resource.items.length > 0,
+    (resource) => resource.items && resource.items.length > 0,
   );
   return (
     <>

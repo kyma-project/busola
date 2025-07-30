@@ -18,7 +18,7 @@ export const validateResourceBySchema = (
   options?: Options,
 ) => {
   const warnings = (schema?.rules || [])
-    .map(currentRule => {
+    .map((currentRule) => {
       try {
         const schemaValidator = new Validator();
         const result = schemaValidator.validate(
@@ -41,7 +41,7 @@ export const validateResourceBySchema = (
         return undefined;
       }
     })
-    .filter(value => value !== undefined);
+    .filter((value) => value !== undefined);
 
   return warnings as Warning[];
 };

@@ -61,24 +61,27 @@ function addLinkNode() {
   document.head.appendChild(newLink);
 }
 type AddLinkEffect = () => AtomEffect<Theme>;
-export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
-  const envUrl =
-    import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+export const addLinkEffect: AddLinkEffect =
+  () =>
+  ({ onSet, setSelf }) => {
+    const envUrl =
+      import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
-  setSelf(param => {
-    const defaultValue = param as Theme;
-    applyThemeToLinkNode(defaultValue, envUrl);
-    return defaultValue;
-  });
+    setSelf((param) => {
+      const defaultValue = param as Theme;
+      applyThemeToLinkNode(defaultValue, envUrl);
+      return defaultValue;
+    });
 
-  onSet(newTheme => {
-    let themeNew;
-    if (newTheme === 'light_dark')
-      themeNew = isSystemThemeDark() ? 'dark' : 'default';
-    else themeNew = newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
-    applyThemeToLinkNode(themeNew, envUrl);
-  });
-};
+    onSet((newTheme) => {
+      let themeNew;
+      if (newTheme === 'light_dark')
+        themeNew = isSystemThemeDark() ? 'dark' : 'default';
+      else
+        themeNew = newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
+      applyThemeToLinkNode(themeNew, envUrl);
+    });
+  };
 
 export const themeState: RecoilState<Theme> = atom<Theme>({
   key: 'themeState',

@@ -52,7 +52,8 @@ export const ClusterValidation = () => {
     return { fetch, post };
   }, [authData, cluster]);
   const resourceLoader = useMemo(
-    () => new ResourceLoader(relativeUrl => fetch({ relativeUrl }), undefined),
+    () =>
+      new ResourceLoader((relativeUrl) => fetch({ relativeUrl }), undefined),
     [fetch],
   );
   const validationSchemas = useRecoilValue(validationSchemasState);
@@ -63,14 +64,14 @@ export const ClusterValidation = () => {
   const [resources, setResources] = useRecoilState(resourcesState);
 
   const listableResources = useMemo(() => {
-    return resources?.filter(resource => resource.verbs?.includes('list'));
+    return resources?.filter((resource) => resource.verbs?.includes('list'));
   }, [resources]);
 
   const scanReady = !!(validationSchemas && listableResources);
 
   useEffect(() => {
     if (!resources)
-      resourceLoader.loadResourceLists().then(resourceList => {
+      resourceLoader.loadResourceLists().then((resourceList) => {
         setResources(resourceList);
       });
   }, [resources, resourceLoader, setResources]);
@@ -81,10 +82,8 @@ export const ClusterValidation = () => {
     [namespaces, defaultPolicySet],
   );
 
-  const [
-    selectedConfiguration,
-    setConfiguration,
-  ] = useState<ScanConfiguration | null>(null);
+  const [selectedConfiguration, setConfiguration] =
+    useState<ScanConfiguration | null>(null);
   const configuration = useMemo(
     () => selectedConfiguration ?? defaultConfiguration,
     [selectedConfiguration, defaultConfiguration],
@@ -232,7 +231,7 @@ export const ClusterValidation = () => {
           }}
           configuration={configuration}
           namespaces={namespaces}
-          policies={validationSchemas?.policies.map(policy => policy.name)}
+          policies={validationSchemas?.policies.map((policy) => policy.name)}
         />,
         document.body,
       )}
@@ -266,7 +265,7 @@ const Section = ({
     <FlexBox alignItems="Center" justifyContent="Center">
       <Card
         header={
-          titleText ?? subtitleText ?? status ? (
+          (titleText ?? subtitleText ?? status) ? (
             <CardHeader
               titleText={titleText}
               subtitleText={subtitleText}

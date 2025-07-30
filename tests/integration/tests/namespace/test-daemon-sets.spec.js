@@ -4,11 +4,7 @@ import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-daemon-sets.yaml';
 
-const DS_NAME =
-  'test-' +
-  Math.random()
-    .toString()
-    .substr(2, 8);
+const DS_NAME = 'test-' + Math.random().toString().substr(2, 8);
 
 async function loadDS(name, namespace, fileName) {
   const resource = await loadFile(fileName);
@@ -34,7 +30,7 @@ context('Test Daemon Sets', () => {
     cy.openCreate();
 
     cy.wrap(loadDS(DS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      DS_CONFIG => {
+      (DS_CONFIG) => {
         const DS = JSON.stringify(DS_CONFIG);
         cy.pasteToMonaco(DS);
       },

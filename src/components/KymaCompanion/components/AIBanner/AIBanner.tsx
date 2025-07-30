@@ -46,7 +46,7 @@ export function AIBanner({ feedbackUrl }: { feedbackUrl: string }) {
           <Button
             key="try-joule"
             design="Emphasized"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               setShowCompanion({
                 show: true,

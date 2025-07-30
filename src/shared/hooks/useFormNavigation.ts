@@ -14,7 +14,7 @@ export function useFormNavigation() {
       // Check if we should show the confirmation dialog
       if (formOpen && isResourceEdited.isEdited) {
         // Store the navigation action for later use if the user confirms
-        setIsResourceEdited(prevState => ({
+        setIsResourceEdited((prevState) => ({
           ...prevState,
           discardAction: () => action(),
         }));

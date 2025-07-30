@@ -42,7 +42,7 @@ export default function ClusterRoutes() {
   useEffect(() => {
     if (extensions?.length) {
       setExtensibilityRoutes(
-        extensions?.map(extension =>
+        extensions?.map((extension) =>
           createExtensibilityRoutes(extension, language),
         ),
       );

@@ -43,7 +43,7 @@ export function FileInput({
   }
 
   function fileChanged(files) {
-    setFileNames([...files]?.map(file => file.name || ''));
+    setFileNames([...files]?.map((file) => file.name || ''));
     if (files.length) {
       fileInputChanged(files);
     }
@@ -85,7 +85,7 @@ export function FileInput({
         ref={inputRef}
         type="file"
         id="file-upload"
-        onChange={e => fileChanged(e.target.files)}
+        onChange={(e) => fileChanged(e.target.files)}
         aria-hidden="true"
         accept={acceptedFileFormats}
         required={required}

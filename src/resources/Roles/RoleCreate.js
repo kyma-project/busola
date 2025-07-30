@@ -12,9 +12,10 @@ export default function RoleCreate(props) {
   const groupVersions = useRecoilValue(groupVersionState);
   const namespace = useRecoilValue(activeNamespaceIdState);
 
-  const createTemplate = useCallback(() => createRoleTemplate(namespace), [
-    namespace,
-  ]);
+  const createTemplate = useCallback(
+    () => createRoleTemplate(namespace),
+    [namespace],
+  );
 
   const presets = useMemo(
     () => createRolePresets(namespace, t, groupVersions || []),

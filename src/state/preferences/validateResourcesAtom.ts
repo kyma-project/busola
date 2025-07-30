@@ -12,15 +12,14 @@ export type ValidateResources = boolean | ExtendedValidateResources;
 const VALIDATE_RESOURCES_STORAGE_KEY = 'busola.validateResources';
 const DEFAULT_VALIDATE_RESOURCES = true;
 
-export const validateResourcesState: RecoilState<ValidateResources> = atom<
-  ValidateResources
->({
-  key: 'validateResourcesState',
-  default: DEFAULT_VALIDATE_RESOURCES,
-  effects: [
-    localStorageEffect<ValidateResources>(VALIDATE_RESOURCES_STORAGE_KEY),
-  ],
-});
+export const validateResourcesState: RecoilState<ValidateResources> =
+  atom<ValidateResources>({
+    key: 'validateResourcesState',
+    default: DEFAULT_VALIDATE_RESOURCES,
+    effects: [
+      localStorageEffect<ValidateResources>(VALIDATE_RESOURCES_STORAGE_KEY),
+    ],
+  });
 
 export const getExtendedValidateResourceState = (
   validateResources: ValidateResources,

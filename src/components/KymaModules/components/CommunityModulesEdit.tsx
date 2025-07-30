@@ -38,7 +38,7 @@ const isModuleInstalled = (
   installedCommunityModules: ModuleTemplateListType,
 ) => {
   return installedCommunityModules.items.find(
-    item =>
+    (item) =>
       item.metadata.name === foundModuleTemplate.metadata.name &&
       item.metadata.namespace === foundModuleTemplate.metadata.namespace,
   );
@@ -56,7 +56,7 @@ function onVersionChange(
 
     const [name, namespace] = value.split('|');
     const newModuleTemplateToApply = moduleTemplates.items.find(
-      item =>
+      (item) =>
         item.metadata.namespace === namespace && item.metadata.name === name,
     );
     if (!newModuleTemplateToApply) {
@@ -126,7 +126,7 @@ function transformDataForDisplay(
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     return {
       name: moduleName,
-      versions: versions.map(v => ({
+      versions: versions.map((v) => ({
         moduleTemplate: {
           name: v.moduleTemplateName,
           namespace: v.moduleTemplateNamespace,
@@ -141,9 +141,8 @@ function transformDataForDisplay(
 
 export default function CommunityModulesEdit() {
   const { t } = useTranslation();
-  const { isEnabled: isCommunityModulesEnabled } = useFeature(
-    'COMMUNITY_MODULES',
-  );
+  const { isEnabled: isCommunityModulesEnabled } =
+    useFeature('COMMUNITY_MODULES');
   const notification = useNotification();
   const post = usePost();
   const setIsResourceEdited = useSetRecoilState(isResourceEditedState);

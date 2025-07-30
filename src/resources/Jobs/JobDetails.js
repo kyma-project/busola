@@ -19,7 +19,7 @@ export function JobDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: job => (
+      value: (job) => (
         <ControlledBy
           ownerReferences={job.metadata.ownerReferences}
           namespace={job.metadata.namespace}
@@ -31,7 +31,7 @@ export function JobDetails(props) {
   const customStatusColumns = [
     {
       header: t('jobs.start-time'),
-      value: job =>
+      value: (job) =>
         job.status.startTime ? (
           <ReadableCreationTimestamp
             key="start"
@@ -43,7 +43,7 @@ export function JobDetails(props) {
     },
     {
       header: t('jobs.completion-time'),
-      value: job =>
+      value: (job) =>
         job.status.completionTime ? (
           <ReadableCreationTimestamp
             key="completion"
@@ -55,26 +55,30 @@ export function JobDetails(props) {
     },
     {
       header: t('jobs.active'),
-      value: job => <div>{job?.status?.active ?? EMPTY_TEXT_PLACEHOLDER}</div>,
+      value: (job) => (
+        <div>{job?.status?.active ?? EMPTY_TEXT_PLACEHOLDER}</div>
+      ),
     },
     {
       header: t('jobs.failed'),
-      value: job => <div>{job?.status?.failed ?? EMPTY_TEXT_PLACEHOLDER}</div>,
+      value: (job) => (
+        <div>{job?.status?.failed ?? EMPTY_TEXT_PLACEHOLDER}</div>
+      ),
     },
     {
       header: t('jobs.ready'),
-      value: job => <div>{job?.status?.ready ?? EMPTY_TEXT_PLACEHOLDER}</div>,
+      value: (job) => <div>{job?.status?.ready ?? EMPTY_TEXT_PLACEHOLDER}</div>,
     },
     {
       header: t('jobs.succeeded'),
-      value: job => (
+      value: (job) => (
         <div>{job?.status?.succeeded ?? EMPTY_TEXT_PLACEHOLDER}</div>
       ),
     },
   ];
 
-  const statusConditions = job => {
-    return job?.status?.conditions?.map(condition => {
+  const statusConditions = (job) => {
+    return job?.status?.conditions?.map((condition) => {
       return {
         header: { titleText: condition.type, status: condition.status },
         message:
@@ -112,7 +116,7 @@ export function JobDetails(props) {
     />
   );
 
-  const MatchSelector = job => (
+  const MatchSelector = (job) => (
     <Selector
       key="match-selector"
       namespace={job?.metadata?.namespace}
@@ -122,7 +126,7 @@ export function JobDetails(props) {
     />
   );
 
-  const JobPodTemplate = job => (
+  const JobPodTemplate = (job) => (
     <PodTemplate key="pod-template" template={job.spec?.template} />
   );
 
@@ -136,7 +140,7 @@ export function JobDetails(props) {
       description={ResourceDescription}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
-      statusBadge={job => <JobCompletions key="completions" job={job} />}
+      statusBadge={(job) => <JobCompletions key="completions" job={job} />}
       {...props}
     />
   );

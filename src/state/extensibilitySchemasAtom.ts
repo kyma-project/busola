@@ -46,9 +46,8 @@ export const useGetExtensibilitySchemas = async () => {
   }, [cluster, auth]);
 };
 
-export const extensibilitySchemasState: RecoilState<ExtensiblitySchemas | null> = atom<ExtensiblitySchemas | null>(
-  {
+export const extensibilitySchemasState: RecoilState<ExtensiblitySchemas | null> =
+  atom<ExtensiblitySchemas | null>({
     key: 'extensibilitySchemasState',
     default: {},
-  },
-);
+  });

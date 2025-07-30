@@ -41,7 +41,7 @@ import { useGetWizard } from './useGetWizard';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 
 // TODO extract this as a helper
-const isK8sResource = resource => {
+const isK8sResource = (resource) => {
   if (!resource) return true;
   return resource.apiVersion && resource.kind && resource.metadata;
 };
@@ -99,18 +99,18 @@ export function ExtensibilityWizardCore({
     resourceSchema.general.resources,
   );
   const schemaMaps = useMemo(
-    () => mapValues(schemas, schema => createOrderedMap(schema)),
+    () => mapValues(schemas, (schema) => createOrderedMap(schema)),
     [schemas],
   );
   const resources = useMemo(
-    () => mapValues(store, val => getResourceObjFromUIStore(val)),
+    () => mapValues(store, (val) => getResourceObjFromUIStore(val)),
     [store],
   );
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState([]);
 
   const onChange = (actions, resource) => {
     if (actions.scopes.includes('value')) {
-      setStore(prevStore => {
+      setStore((prevStore) => {
         const newStore = storeUpdater(actions)(prevStore[resource]);
         return {
           ...prevStore,
@@ -122,7 +122,7 @@ export function ExtensibilityWizardCore({
 
   useEffect(() => {
     const fullSchemaRules = prepareRules(
-      resourceSchema.steps.flatMap(step => step.form) ?? [],
+      resourceSchema.steps.flatMap((step) => step.form) ?? [],
       disableOnEdit,
       t,
     );
@@ -135,7 +135,7 @@ export function ExtensibilityWizardCore({
   useEffect(() => {
     setYaml(
       Object.values(resources)
-        .map(resource => jsyaml.dump(resource))
+        .map((resource) => jsyaml.dump(resource))
         .join('---\n'),
     );
   }, [resources]);
@@ -150,13 +150,13 @@ export function ExtensibilityWizardCore({
       setUploadState(OPERATION_STATE_INITIAL);
 
       const files = jsyaml.loadAll(yaml);
-      if (files.some(file => typeof file !== 'object')) {
+      if (files.some((file) => typeof file !== 'object')) {
         setError(t('clusters.wizard.not-an-object'));
-      } else if (files.some(file => !isK8sResource(file))) {
+      } else if (files.some((file) => !isK8sResource(file))) {
         setError(t('upload-yaml.messages.not-a-k8s-resource'));
       } else {
         setResourcesWithStatuses(
-          files.map(resource => {
+          files.map((resource) => {
             return { value: resource };
           }),
         );
@@ -192,7 +192,7 @@ export function ExtensibilityWizardCore({
   return (
     <UIMetaProvider widgets={widgets}>
       <Wizard contentLayout="SingleStep" className="extensibility-wizard">
-        {resourceSchema.steps.map(step => {
+        {resourceSchema.steps.map((step) => {
           selectedIndex = selectedIndex + 1;
           return (
             <WizardStep
@@ -205,7 +205,7 @@ export function ExtensibilityWizardCore({
                   store={store[step.resource]}
                   showValidity={true}
                   rootRule={prepareSchemaRules(step.form)}
-                  onChange={actions => onChange(actions, step.resource)}
+                  onChange={(actions) => onChange(actions, step.resource)}
                 >
                   <FormStack
                     isRoot

@@ -9,7 +9,8 @@ export interface ConfigFeature {
   [key: string]: any;
 }
 
-export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof configFeaturesNames];
+export type ConfigFeaturesNames =
+  (typeof configFeaturesNames)[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
   ISTIO: 'ISTIO',
   LEGAL_LINKS: 'LEGAL_LINKS',

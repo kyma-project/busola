@@ -13,16 +13,10 @@ function testAndSelectOptions(section, selection) {
   cy.contains('ui5-panel', section).as(`${section}Header`);
   cy.contains('.form-field', section).as(`${section}FormField`);
 
-  cy.get(`@${section}Header`)
-    .contains('Add all')
-    .click();
-  cy.get(`@${section}FormField`)
-    .find('[type="checkbox"]')
-    .should('be.checked');
+  cy.get(`@${section}Header`).contains('Add all').click();
+  cy.get(`@${section}FormField`).find('[type="checkbox"]').should('be.checked');
 
-  cy.get(`@${section}Header`)
-    .contains('Remove all')
-    .click();
+  cy.get(`@${section}Header`).contains('Remove all').click();
 
   cy.get(`@${section}FormField`)
     .find('[type="checkbox"]')
@@ -50,7 +44,7 @@ context('Test Cluster Validation Scan', () => {
       },
     );
 
-    cy.fixture('examples/resource-validation/rule-set.yaml').then(ruleSet => {
+    cy.fixture('examples/resource-validation/rule-set.yaml').then((ruleSet) => {
       cy.mockConfigMap({
         label: 'busola.io/resource-validation=rule-set',
         data: ruleSet,
@@ -122,10 +116,7 @@ context('Test Cluster Validation Scan', () => {
     }
 
     function toggleTreeItem(title) {
-      findTitle(title)
-        .find('.ui5-li-tree-toggle-icon:visible')
-        .eq(0)
-        .click();
+      findTitle(title).find('.ui5-li-tree-toggle-icon:visible').eq(0).click();
     }
 
     findTitle('Cluster Resources');

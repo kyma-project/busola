@@ -31,7 +31,7 @@ export function GenericList({
   const tooltipContent = schema.get('description');
   const [newItemIndex, setNewItemIndex] = useState(0);
 
-  const addItem = itemTemplate => {
+  const addItem = (itemTemplate) => {
     onChange({
       storeKeys,
       scopes: ['value', 'internal'],
@@ -42,7 +42,7 @@ export function GenericList({
     });
   };
 
-  const removeItem = index => {
+  const removeItem = (index) => {
     onChange({
       storeKeys,
       scopes: ['value', 'internal'],
@@ -61,7 +61,7 @@ export function GenericList({
       title={tFromStoreKeys(storeKeys, schema)}
       nestingLevel={nestingLevel}
       required={required}
-      actions={setOpen => (
+      actions={(setOpen) => (
         <Button
           design="Transparent"
           icon="add"

@@ -49,7 +49,7 @@ context('Test Companion Chat Behavior', () => {
       .should('have.class', 'left-aligned')
       .should('contain.text', 'Hi, I am your Kyma assistant!');
 
-    cy.wait('@getPromptSuggestions').then(interception => {
+    cy.wait('@getPromptSuggestions').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
         resourceType: 'Namespace',
@@ -111,7 +111,7 @@ context('Test Companion Chat Behavior', () => {
       .should('be.visible')
       .should('have.class', 'tasks-list');
 
-    cy.wait('@getChatResponse').then(interception => {
+    cy.wait('@getChatResponse').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
         resourceType: 'Namespace',
@@ -144,7 +144,7 @@ context('Test Companion Chat Behavior', () => {
       .should('have.class', 'left-aligned')
       .should('contain.text', 'Hello, this is an AI response');
 
-    cy.wait('@getFollowUpSuggestions').then(interception => {
+    cy.wait('@getFollowUpSuggestions').then((interception) => {
       expect(interception.request.headers['session-id']).to.equal('test-id');
     });
     cy.wait(2500);
@@ -189,7 +189,7 @@ context('Test Companion Chat Behavior', () => {
       .should('be.visible')
       .should('have.class', 'tasks-list');
 
-    cy.wait('@getChatResponse').then(interception => {
+    cy.wait('@getChatResponse').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: 'default',
         resourceType: 'Namespace',
@@ -222,7 +222,7 @@ context('Test Companion Chat Behavior', () => {
       .should('have.class', 'left-aligned')
       .should('contain.text', 'Hello, this is an AI response');
 
-    cy.wait('@getFollowUpSuggestions').then(interception => {
+    cy.wait('@getFollowUpSuggestions').then((interception) => {
       expect(interception.request.headers['session-id']).to.equal('test-id');
     });
     cy.wait(2500);
@@ -371,7 +371,7 @@ context('Test Companion Chat Behavior', () => {
       .should('be.visible')
       .should('have.class', 'tasks-list');
 
-    cy.wait('@getChatResponse').then(interception => {
+    cy.wait('@getChatResponse').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: '',
         resourceType: 'ServiceAccount',
@@ -385,7 +385,7 @@ context('Test Companion Chat Behavior', () => {
   });
 
   it('resetting chat works correctly', () => {
-    cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
+    cy.intercept('POST', '/backend/ai-chat/suggestions', (req) => {
       req.reply({
         delay: 500,
         body: {
@@ -432,7 +432,7 @@ context('Test Companion Chat Behavior', () => {
       .should('have.class', 'left-aligned')
       .should('contain.text', 'Hi, I am your Kyma assistant!');
 
-    cy.wait('@getPromptSuggestions').then(interception => {
+    cy.wait('@getPromptSuggestions').then((interception) => {
       expect(interception.request.body).to.deep.equal({
         resourceName: '',
         resourceType: 'ServiceAccount',
@@ -570,9 +570,7 @@ context('Test Companion Chat Behavior', () => {
       .type('Create Deployment{enter}');
     cy.wait(1000);
 
-    cy.get('@companion')
-      .find('ui5-button[accessible-name="Place"]')
-      .click();
+    cy.get('@companion').find('ui5-button[accessible-name="Place"]').click();
 
     // Check if redirected to Deployment Create Form
     cy.contains('ui5-dynamic-page-title', 'Create Deployment').should(
@@ -600,9 +598,7 @@ context('Test Companion Chat Behavior', () => {
       .type('Create Deployment{enter}');
     cy.wait(1000);
 
-    cy.get('@companion')
-      .find('ui5-button[accessible-name="Replace"]')
-      .click();
+    cy.get('@companion').find('ui5-button[accessible-name="Replace"]').click();
 
     // Check if redirected to correct Deployment Edit From
     cy.contains('ui5-dynamic-page-title', 'test-deployment').should(

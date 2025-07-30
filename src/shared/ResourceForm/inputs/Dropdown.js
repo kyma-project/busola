@@ -27,13 +27,8 @@ export function Dropdown({
     }
   };
 
-  const {
-    inputRef,
-    validate,
-    validationRef,
-    setResource,
-    ...dropdownProps
-  } = props;
+  const { inputRef, validate, validationRef, setResource, ...dropdownProps } =
+    props;
   return (
     <BusolaDropdown
       selectedKey={selectedKey ?? value}

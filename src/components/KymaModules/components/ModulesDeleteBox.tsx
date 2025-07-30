@@ -71,10 +71,10 @@ export const ModulesDeleteBox = ({
   const fetchFn = useSingleGet();
   const post = usePost();
   const clusterNodes = useRecoilValue(allNodesSelector).filter(
-    node => !node.namespaced,
+    (node) => !node.namespaced,
   );
   const namespaceNodes = useRecoilValue(allNodesSelector).filter(
-    node => node.namespaced,
+    (node) => node.namespaced,
   );
   const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});
   const [forceDeleteUrls, setForceDeleteUrls] = useState<string[]>([]);
@@ -275,7 +275,7 @@ export const ModulesDeleteBox = ({
                     const resourceCount = resourceCounts[key];
                     return (
                       <ListItemStandard
-                        onClick={e => {
+                        onClick={(e) => {
                           e.preventDefault();
                           handleItemClick(
                             associatedResource.kind,

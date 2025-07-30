@@ -10,7 +10,7 @@ context('Test navigation features', () => {
 
   it("Navigates to Cluster Overview when namespace in url doesn't exist", () => {
     cy.navigateTo('Workloads', 'Deployments');
-    cy.url().then(url => {
+    cy.url().then((url) => {
       const newurl = url.replace(
         Cypress.env('NAMESPACE_NAME'),
         'non-exist-namespace',

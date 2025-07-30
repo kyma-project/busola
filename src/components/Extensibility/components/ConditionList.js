@@ -27,10 +27,10 @@ export const ConditionList = ({
     return null;
   }
 
-  const conditions = value.map(v => {
-    const override = structure?.highlights?.find(o => o.type === v.type);
+  const conditions = value.map((v) => {
+    const override = structure?.highlights?.find((o) => o.type === v.type);
     const customContent = structure?.customContent
-      ?.map(c => {
+      ?.map((c) => {
         return {
           ...c,
           value:
@@ -48,7 +48,7 @@ export const ConditionList = ({
             ),
         };
       })
-      .filter(c => c.type === v.type);
+      .filter((c) => c.type === v.type);
 
     const badgeType = override
       ? getBadgeType(override, v.status, jsonata, t)

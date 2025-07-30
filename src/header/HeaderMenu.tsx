@@ -46,8 +46,8 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
   const handleMenuItemClick = (
     e: Ui5CustomEvent<MenuDomRef, MenuItemClickEventDetail>,
   ) => {
-    const legalLinkUsed = legalLinks.find(x => x.label === e.detail.text);
-    const getHelpLinkUsed = getHelpLinks.find(x => x.label === e.detail.text);
+    const legalLinkUsed = legalLinks.find((x) => x.label === e.detail.text);
+    const getHelpLinkUsed = getHelpLinks.find((x) => x.label === e.detail.text);
 
     if (e.detail.text === t('navigation.preferences.title')) {
       setPreferencesOpen(true);

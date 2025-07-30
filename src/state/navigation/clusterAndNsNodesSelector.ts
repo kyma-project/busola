@@ -10,53 +10,52 @@ import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
 import { moduleTemplatesCountSelector } from 'state/moduleTemplatesCountSelector';
 
-export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
-  NavNode[]
->({
-  key: 'navigationNodesSelector',
-  get: async ({ get }) => {
-    const resourceList: NavNode[] = get(resourceListSelector);
-    const activeNamespaceId = get(activeNamespaceIdState);
-    const openapiPathIdList = get(openapiPathIdListSelector);
-    const permissionSet = get(permissionSetsSelector);
-    const configuration = get(configurationAtom);
-    const moduleTemplatesCount = get(moduleTemplatesCountSelector);
+export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> =
+  selector<NavNode[]>({
+    key: 'navigationNodesSelector',
+    get: async ({ get }) => {
+      const resourceList: NavNode[] = get(resourceListSelector);
+      const activeNamespaceId = get(activeNamespaceIdState);
+      const openapiPathIdList = get(openapiPathIdListSelector);
+      const permissionSet = get(permissionSetsSelector);
+      const configuration = get(configurationAtom);
+      const moduleTemplatesCount = get(moduleTemplatesCountSelector);
 
-    const features = configuration?.features || {};
+      const features = configuration?.features || {};
 
-    const areDependenciesInitialized =
-      !isEmpty(openapiPathIdList) &&
-      !!features &&
-      !isEmpty(resourceList) &&
-      !isEmpty(permissionSet);
+      const areDependenciesInitialized =
+        !isEmpty(openapiPathIdList) &&
+        !!features &&
+        !isEmpty(resourceList) &&
+        !isEmpty(permissionSet);
 
-    if (!areDependenciesInitialized) {
-      return [];
-    }
+      if (!areDependenciesInitialized) {
+        return [];
+      }
 
-    const configSet = {
-      configFeatures: features!,
-      openapiPathIdList,
-      permissionSet,
-    };
+      const configSet = {
+        configFeatures: features!,
+        openapiPathIdList,
+        permissionSet,
+      };
 
-    const isNodeVisibleForCurrentConfigSet = partial(
-      shouldNodeBeVisible,
-      configSet,
-    );
+      const isNodeVisibleForCurrentConfigSet = partial(
+        shouldNodeBeVisible,
+        configSet,
+      );
 
-    const navNodes: NavNode[] = resourceList.filter(
-      isNodeVisibleForCurrentConfigSet,
-    );
+      const navNodes: NavNode[] = resourceList.filter(
+        isNodeVisibleForCurrentConfigSet,
+      );
 
-    const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    const navNodesWithAddons = addAdditionalNodes(
-      navNodes,
-      scope,
-      features!,
-      moduleTemplatesCount,
-    );
+      const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
+      const navNodesWithAddons = addAdditionalNodes(
+        navNodes,
+        scope,
+        features!,
+        moduleTemplatesCount,
+      );
 
-    return navNodesWithAddons;
-  },
-});
+      return navNodesWithAddons;
+    },
+  });

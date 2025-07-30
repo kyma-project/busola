@@ -35,8 +35,8 @@ export function Dropdown({
     disabled = true;
   }
 
-  const onSelectionChange = event => {
-    const selectedOption = options.find(o => o.key === event.detail.item.id);
+  const onSelectionChange = (event) => {
+    const selectedOption = options.find((o) => o.key === event.detail.item.id);
     if (selectedOption) onSelect(event, selectedOption);
   };
 
@@ -50,7 +50,7 @@ export function Dropdown({
       placeholder={placeholder || label}
       disabled={disabled || !options?.length}
       required={required}
-      onKeyDown={event => {
+      onKeyDown={(event) => {
         event.preventDefault();
       }}
       onClick={() => {
@@ -70,10 +70,10 @@ export function Dropdown({
         popover.open = true;
       }}
       onSelectionChange={onSelectionChange}
-      value={options.find(o => o.key === selectedKey)?.text}
+      value={options.find((o) => o.key === selectedKey)?.text}
       {...props}
     >
-      {options.map(option => (
+      {options.map((option) => (
         <ComboBoxItem key={option.key} id={option.key} text={option.text} />
       ))}
     </ComboBox>

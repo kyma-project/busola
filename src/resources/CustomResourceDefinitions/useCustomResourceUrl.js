@@ -6,7 +6,7 @@ export function useCustomResourceUrl(crd) {
   const { clusterUrl, namespaceUrl } = useUrl();
   const activeNamespaceId = useRecoilValue(activeNamespaceIdState);
 
-  return cr => {
+  return (cr) => {
     const crClusterURL = clusterUrl(
       `customresources/${crd.metadata.name}/${cr.metadata.name}`,
     );

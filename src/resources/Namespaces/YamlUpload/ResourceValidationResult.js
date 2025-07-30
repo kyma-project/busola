@@ -23,7 +23,7 @@ import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { SeparatorLine } from './SeparatorLine';
 
-const useNamespaceWarning = resource => {
+const useNamespaceWarning = (resource) => {
   const { t } = useTranslation();
   return useIsInCurrentNamespace(resource)
     ? []
