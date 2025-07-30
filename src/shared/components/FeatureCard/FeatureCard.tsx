@@ -62,6 +62,7 @@ export function FeatureCardBanner({
   image = '',
   buttons,
   titleIcon,
+  className = '',
 }: FeatureCardBannerProps) {
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${id}`;
@@ -98,7 +99,7 @@ export function FeatureCardBanner({
   };
   const illustration = getIllustration(image, theme);
   return (
-    <div className="sap-margin-top-small">
+    <div className={`sap-margin-top-small ${className}`}>
       <Card className="feature-card-container">
         <div className="feature-card" style={getBackgroundStyle(design)}>
           <Button
@@ -107,7 +108,7 @@ export function FeatureCardBanner({
             className="decline-button"
             onClick={handleToggle}
           />
-          <div className="outer-container" style={{ margin: '2rem 2.5rem' }}>
+          <div className="outer-container">
             <div className="inner-container">
               <div style={{ width: '100%' }} className="title-container">
                 <Title
@@ -118,7 +119,8 @@ export function FeatureCardBanner({
                     display: 'inline-flex',
                   }}
                 >
-                  {title}
+                  {/* This extra span element is for the ability to add additional styles that cannot be added to the Title component. */}
+                  <span className="banner-title">{title}</span>
                 </Title>
                 {titleIcon && (
                   <img
