@@ -30,7 +30,12 @@ export default function FeedbackMessage(): JSX.Element {
             endIcon="inspect"
             design="Emphasized"
             onClick={() => {
-              window.open(companionConfig?.feedbackLink, '_blank');
+              const newWindow = window.open(
+                companionConfig?.feedbackLink,
+                '_blank',
+                'noopener, noreferrer',
+              );
+              if (newWindow) newWindow.opener = null;
             }}
           >
             {t('feedback.give-feedback')}
