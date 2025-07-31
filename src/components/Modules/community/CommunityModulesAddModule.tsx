@@ -11,7 +11,11 @@ import {
   getAvailableCommunityModules,
   VersionInfo,
 } from 'components/Modules/community/communityModulesHelpers';
-import { getModuleName, ModuleTemplateListType, ModuleTemplateType } from 'components/Modules/support';
+import {
+  getModuleName,
+  ModuleTemplateListType,
+  ModuleTemplateType,
+} from 'components/Modules/support';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
