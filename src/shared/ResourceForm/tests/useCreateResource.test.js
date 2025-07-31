@@ -122,6 +122,7 @@ describe('useCreateResource', () => {
     await waitFor(() => {
       expect(mockNotifySuccess).not.toHaveBeenCalled();
       expect(mockNotifyError).toHaveBeenCalledWith({
+        actions: expect.any(Function),
         content: 'common.create-form.messages.create-failure',
       });
     });
