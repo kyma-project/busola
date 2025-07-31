@@ -38,27 +38,27 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         propertyPath="$.issuerUrl"
         label={t('clusters.wizard.auth.issuer-url')}
         input={Inputs.Text}
-        accessible-name="issuer-url"
+        accessible-name={t('clusters.wizard.auth.issuer-url')}
       />
       <ResourceForm.FormField
         required
         propertyPath="$.clientId"
         label={t('clusters.wizard.auth.client-id')}
         input={Inputs.Text}
-        accessible-name="client-id"
+        accessible-name={t('clusters.wizard.auth.client-id')}
       />
       <ResourceForm.FormField
         propertyPath="$.clientSecret"
         label={t('clusters.wizard.auth.client-secret')}
         input={Inputs.Text}
-        accessible-name="client-secret"
+        accessible-name={t('clusters.wizard.auth.client-secret')}
       />
       <TextArrayInput
         required
         defaultOpen
         propertyPath="$.scopes"
         title={t('clusters.wizard.auth.scopes')}
-        accessible-name="scopes"
+        accessible-name={t('clusters.wizard.auth.scopes')}
       />
     </ResourceForm.Wrapper>
   );
@@ -142,8 +142,9 @@ export function AuthForm({
         )}
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.using-oidc')}
-          input={() => (
+          input={props => (
             <Switch
+              {...props}
               className="sap-margin-top-tiny"
               checked={useOidc}
               onChange={switchAuthVariant}
