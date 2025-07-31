@@ -75,32 +75,21 @@ export function ContextButtons({
                 if (setChosenContext) setChosenContext(context.name);
               }}
             />
-            <div className="sap-margin-begin-medium">
-              <Label showColon>IssuerUrl</Label>
-              <Text>
-                {getUserDetail(context.name, '--oidc-issuer-url=', users)}
-              </Text>
-
-              <Label showColon className="sap-margin-top-tiny">
-                ClientID
-              </Label>
-              <Text>
-                {getUserDetail(context.name, '--oidc-client-id=', users)}
-              </Text>
-            </div>
+            <AuthContextData contextName={context.name} users={users} />
           </>
         );
       })}
     </FlexBox>
   );
 }
-export function ContextChooserMessage({ contexts, setValue, onCancel }) {
+export function ContextChooserMessage({ contextState, setValue, onCancel }) {
   const { t } = useTranslation();
   const [chosenContext, setChosenContext] = useState('');
-  console.log(contexts);
-  if (!Array.isArray(contexts?.contexts)) {
+
+  if (!Array.isArray(contextState?.contexts)) {
     return null;
   }
+
   return (
     <MessageBox
       titleText={t('clusters.messages.choose-cluster')}
@@ -127,7 +116,7 @@ export function ContextChooserMessage({ contexts, setValue, onCancel }) {
           {t('clusters.wizard.several-context-question')}
         </Text>
         <FlexBox direction="Column">
-          {contexts.contexts.map(context => (
+          {contextState.contexts.map(context => (
             <>
               <RadioButton
                 id={'context-chooser' + context.name}
@@ -138,31 +127,35 @@ export function ContextChooserMessage({ contexts, setValue, onCancel }) {
                 text={context.name}
                 onChange={() => setChosenContext(context.name)}
               />
-              <div className="sap-margin-begin-medium">
-                <Label showColon>IssuerUrl</Label>
-                <Text>
-                  {getUserDetail(
-                    context.name,
-                    '--oidc-issuer-url=',
-                    contexts?.users,
-                  )}
-                </Text>
-
-                <Label showColon className="sap-margin-top-tiny">
-                  ClientID
-                </Label>
-                <Text>
-                  {getUserDetail(
-                    context.name,
-                    '--oidc-client-id=',
-                    contexts?.users,
-                  )}
-                </Text>
-              </div>
+              <AuthContextData
+                contextName={context.name}
+                users={contextState?.users}
+              />
             </>
           ))}
         </FlexBox>
       </FlexBox>
     </MessageBox>
+  );
+}
+
+function AuthContextData({ contextName, users }) {
+  const { t } = useTranslation();
+
+  const issuerUrl = getUserDetail(contextName, '--oidc-issuer-url=', users);
+  const clientId = getUserDetail(contextName, '--oidc-client-id=', users);
+
+  return (
+    <div className="sap-margin-begin-medium">
+      <Label for="issuer-url" showColon>
+        {t('clusters.auth.issuer-url')}
+      </Label>
+      <Text id="issuer-url">{issuerUrl}</Text>
+
+      <Label for="client-id" showColon className="sap-margin-top-tiny">
+        {t('clusters.auth.client-id')}
+      </Label>
+      <Text id="client-id">{clientId}</Text>
+    </div>
   );
 }
