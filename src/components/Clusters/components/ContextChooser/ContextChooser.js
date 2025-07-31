@@ -148,12 +148,12 @@ function AuthContextData({ contextName, users }) {
   return (
     <div className="sap-margin-begin-medium">
       <Label for="issuer-url" showColon>
-        {t('clusters.auth.issuer-url')}
+        {t('clusters.wizard.auth.issuer-url')}
       </Label>
       <Text id="issuer-url">{issuerUrl}</Text>
 
       <Label for="client-id" showColon className="sap-margin-top-tiny">
-        {t('clusters.auth.client-id')}
+        {t('clusters.wizard.auth.client-id')}
       </Label>
       <Text id="client-id">{clientId}</Text>
     </div>
