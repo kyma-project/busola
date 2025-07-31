@@ -1,6 +1,17 @@
-# Feature Flags
+---
+title: Feature Flags
+---
 
-The document explains the usage of feature flags in Busola, lists and describes all the available feature flags, and provides their configuration examples.
+<!-- Use this template to provide technical details about configuration of a Kyma chart or sub-chart.
+
+For the filename, follow the `{COMPONENT/AREA}-{NUMBER}-{TITLE}.md` convention.
+Make sure that the configuration document for the main chart displays first on the list.
+
+For reference, see the existing [**Configuration** documents](https://kyma-project.io/#/05-technical-reference/00-configuration-parameters/README).-->
+
+To configure the {Component name} {sub-}chart, override the default values of its `defaultConfig.yaml` file.
+
+<!-- Use the tip feature to provide links to the documentation about Kyma configuration. Also add a link to examples of either top-level charts overrides for charts configuration documents or sub-charts overrides for sub-chart configuration documents.-->
 
 ## Features priority
 
@@ -14,20 +25,23 @@ If the stage is not set, the feature is loaded only on demand, most often by the
 > [!NOTE]
 > Some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
 
-## Features List for Frontend
+## Configurable Flags for Frontend
 
 > **TIP:** The list is ordered alphabetically.
 
-- **EXTENSIBILITY** - is used to indicate whether the Busola [extensibility](extensibility/README.md) feature is enabled.
+This table lists the frontend configurable feature flags, their descriptions, and default values:
 
-Default settings:
+| Feature flag                        |                                                                                                                                                                                                                                                                                                Description | Default value                                                                                       |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | --------------------------------------------------------------------------------------------------- |
+| **EXTENSIBILITY**                   |                                                                                                                                                                                                      Used to indicate whether the Busola [ extensibility ](../extensibility/README.md) feature is enabled. | `true`                                                                                              |
+| **EXTENSIBILITY_CUSTOM_COMPONENTS** |                                                                                                                                                                 Used to indicate whether entire custom extensions can be added to Busola. See [ this example ](../../examples/custom-extension/README.md). | `false`                                                                                             |
+| **EXTENSIBILITY_INJECTIONS**        |                                                                                      Used to indicate whether extensibility injections can be added to Busola. For more information, see [ Widget Injection ](https://github.com/kyma-project/busola/blob/main/docs/extensibility/70-widget-injection.md). | `true`                                                                                              |
+| **EXTERNAL_NODES**                  |                                                                          Used to provide a list of links to external websites. `category` : a category name, `icon` : an optional icon, `scope` : either `namespace` or `cluster` (defaults to `cluster` ), `children` : a list of pairs (label and link). | `true`                                                                                              |
+| **FEEDBACK**                        |                                                                                                                                                                                        Determines if the feedback icon with the link redirecting the user to the survey should be rendered at the top bar. | `true`                                                                                              |
+| **GET_HELP_LINKS**                  | Used to show or hide helper links. You can find all the available links in the following example. In **config** , you can find the unchangeable keys (for example, you cannot use **helpSapCom** instead of **help-sap-com** ). The keys include the default link, which takes you to the default address. | `kyma-project-io : default : https://kyma-project.io help-sap-com : default : https://help.sap.com` |
+| **HIDDEN_NAMESPACES**               |                                                                                                                                                                                                                  Used to define a list of Namespaces that are considered system and are hidden by default. | `true`                                                                                              |
 
-```yaml
-EXTENSIBILITY:
-  isEnabled: true
-```
-
-- **EXTENSIBILITY_CUSTOM_COMPONENTS** - is used to indicate whether entire custom extensions can be added to Busola. See [this example](../examples/custom-extension/README.md).
+- **EXTENSIBILITY_CUSTOM_COMPONENTS** - is used to indicate whether entire custom extensions can be added to Busola. See [this example](../../examples/custom-extension/README.md).
 
 Default settings:
 
@@ -72,8 +86,7 @@ EXTENSIBILITY_INJECTIONS:
     link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   ```
 
-- **GET_HELP_LINKS** – is used to show or hide helper links. You can find all the available links in the following example.
-  In **config**, you can find the unchangeable keys (for example, you cannot use **helpSapCom** instead of **help-sap-com**). The keys include the default link, which takes you to the default address.
+- **GET_HELP_LINKS** – is used to show or hide helper links. You can find all the available links in the following example. In **config**, you can find the unchangeable keys (for example, you cannot use **helpSapCom** instead of **help-sap-com**). The keys include the default link, which takes you to the default address.
 
   Example:
 
