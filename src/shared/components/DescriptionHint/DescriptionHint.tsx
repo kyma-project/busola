@@ -23,7 +23,7 @@ export function HintButton({
   className,
 }: HintButtonProps) {
   const [ID] = useState(uniqueId('id-')); //todo: migrate to useID from react after upgrade to version 18+
-  const descBtnRef = useRef(null);
+  const popoverRef = useRef(null);
   const { t, i18n } = useTranslation();
   let desc = description;
 
@@ -36,7 +36,6 @@ export function HintButton({
       <Button
         className={className}
         id={`descriptionOpener-${ID}`}
-        ref={descBtnRef}
         icon="hint"
         design="Transparent"
         onClick={e => {
@@ -49,11 +48,12 @@ export function HintButton({
       />
       {createPortal(
         <Popover
+          ref={popoverRef}
           opener={`descriptionOpener-${ID}`}
           //Point initial focus to other component removes the focus from the link in description
           onOpen={() => {
             // @ts-ignore
-            descBtnRef.current.focus();
+            popoverRef.current.focus();
           }}
           open={showTitleDescription}
           onClose={e => {
