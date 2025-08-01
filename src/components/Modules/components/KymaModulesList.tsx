@@ -44,7 +44,7 @@ type ModulesListProps = {
   setSelectedEntry?: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export const ModulesList = ({
+export const KymaModulesList = ({
   resource,
   moduleTemplates,
   resourceName,

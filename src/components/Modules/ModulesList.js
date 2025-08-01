@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Create, ResourceDescription } from 'components/Modules';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { ModulesList } from './components/ModulesList';
+import { KymaModulesList } from 'components/Modules/components/KymaModulesList';
 import { KymaModuleContext } from './providers/KymaModuleProvider';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
@@ -19,7 +19,7 @@ import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 
-export default function KymaModulesList({ namespaced }) {
+export default function ModulesList({ namespaced }) {
   const { t } = useTranslation();
   const layoutState = useRecoilValue(columnLayoutState);
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
@@ -84,7 +84,7 @@ export default function KymaModulesList({ namespaced }) {
       content={
         <>
           {kymaResource && (
-            <ModulesList
+            <KymaModulesList
               key="kyma-modules-list"
               resource={kymaResource}
               moduleTemplates={moduleTemplates}
