@@ -13,7 +13,7 @@ To configure Busola, override the default values of its `defaultConfig.yaml` fil
 
 <!-- Use the tip feature to provide links to the documentation about Kyma configuration. Also add a link to examples of either top-level charts overrides for charts configuration documents or sub-charts overrides for sub-chart configuration documents.-->
 
-## Features priority
+## Features Priority
 
 Initialisation of the Busola features is based on the `stage` property, which can take one of the following values:
 
