@@ -37,7 +37,12 @@ export function FormField({
     >
       {!isListItem && label && (
         <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
-          <Label required={required && !disabled}>{label}</Label>
+          <Label
+            forElement={label.replace(' ', '-').toLowerCase()}
+            required={required && !disabled}
+          >
+            {label}
+          </Label>
           {tooltipContent && (
             <HintButton
               setShowTitleDescription={setOpenPopover}
@@ -58,6 +63,7 @@ export function FormField({
               disabled,
               className: 'full-width',
               accessibleName: label,
+              id: label.replace(' ', '-').toLowerCase(),
               ...inputProps,
             })}
         {inputInfo && (
