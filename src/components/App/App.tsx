@@ -115,7 +115,7 @@ export default function App() {
               kubeconfigIdState === 'loading' &&
               createPortal(
                 <ContextChooserMessage
-                  contexts={contextsState?.contexts}
+                  contextState={contextsState}
                   setValue={(value: string) =>
                     setContextsState(state => ({
                       ...state,
