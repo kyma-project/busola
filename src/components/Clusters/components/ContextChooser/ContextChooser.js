@@ -74,6 +74,10 @@ export function ContextButtons({
                 value={context.name}
                 checked={chosenContext === context.name}
                 text={context.name}
+                onChange={() => {
+                  setValue(context.name);
+                  if (setChosenContext) setChosenContext(context.name);
+                }}
               />
               <AuthContextData contextName={context.name} users={users} />
             </div>
@@ -126,6 +130,7 @@ export function ContextChooserMessage({ contextState, setValue, onCancel }) {
                   value={context.name}
                   checked={chosenContext === context.name}
                   text={context.name}
+                  onChange={() => setChosenContext(context.name)}
                 />
                 <AuthContextData
                   contextName={context.name}
