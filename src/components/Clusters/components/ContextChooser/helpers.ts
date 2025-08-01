@@ -9,7 +9,7 @@ export function getUserDetail(
 
   if (user?.user?.exec?.args === undefined) return null;
 
-  const clientIDArg = (user.user?.exec?.args || []).find(arg =>
+  const clientIDArg = (user.user.exec.args || []).find(arg =>
     arg.startsWith(parameter),
   );
   return clientIDArg
