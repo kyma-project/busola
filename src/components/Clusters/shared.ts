@@ -9,11 +9,11 @@ import {
 } from 'types';
 import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
-import { hasNonOidcAuth } from 'state/authDataAtom';
-import { createUserManager } from 'state/authDataAtom';
+import { hasNonOidcAuth, createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import { removePreviousPath } from 'state/useAfterInitHook';
+import { ManualKubeConfigIdType } from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 
 function addCurrentCluster(
@@ -87,12 +87,12 @@ export function getContext(
       };
     } else {
       const { context } = contexts.find(c => c.name === currentContextName)!;
-      const cluster = kubeconfig.clusters.find(
+      const cluster = kubeconfig.clusters?.find(
         c => c?.name === context.cluster,
       );
       if (!cluster) throw Error('cluster not found');
 
-      const user = kubeconfig.users.find(u => u?.name === context.user);
+      const user = kubeconfig.users?.find(u => u?.name === context.user);
       if (!user) throw Error('user not found');
 
       return { cluster, user, namespace: context.namespace };
@@ -155,16 +155,57 @@ export const addByContext = (
     config: any;
   },
   clustersInfo: useClustersInfoType,
+  manualKubeConfigId?: any,
 ) => {
-  const kubeconfig = userKubeconfig as ValidKubeconfig;
+  let kubeconfig = userKubeconfig as ValidKubeconfig;
   try {
     const cluster = kubeconfig.clusters?.find(
       c => c.name === context.context.cluster,
     );
     if (!cluster) throw Error('cluster not found');
 
-    const user = kubeconfig.users.find(u => u.name === context.context.user);
-    if (!user) throw Error('user not found');
+    let haveAuth = hasKubeconfigAuth(kubeconfig);
+    if (!haveAuth) {
+      if (!kubeconfig.users?.length) {
+        kubeconfig = {
+          ...kubeconfig,
+          users: [],
+        };
+      }
+      console.log(
+        'TEST-KubeconfigIIIIIIID',
+        manualKubeConfigId?.manualKubeConfigId,
+      );
+      let token = manualKubeConfigId?.manualKubeConfigId?.token;
+      if (!token && manualKubeConfigId?.setManualKubeConfigId) {
+        manualKubeConfigId.setManualKubeConfigId?.(
+          (prev: ManualKubeConfigIdType) => ({
+            ...prev,
+            formOpen: true,
+          }),
+        );
+        throw Error('kubeconfig does not have authentication data');
+      }
+      if (token) {
+        kubeconfig.users = [
+          ...kubeconfig.users,
+          { user: { token }, name: context.context.user },
+        ];
+        manualKubeConfigId?.setManualKubeConfigId?.(
+          (prev: ManualKubeConfigIdType) => ({
+            ...prev,
+            token: '',
+          }),
+        );
+      } else {
+        throw Error('kubeconfig does not have authentication data');
+      }
+    }
+
+    const user = kubeconfig.users?.find(u => u.name === context.context.user);
+    if (!user) {
+      throw Error('user not found');
+    }
 
     const clusterParams: NonNullable<ActiveClusterState> = {
       name: context.name,

@@ -24,6 +24,7 @@ import {
   multipleContexts,
 } from 'state/multipleContextsAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { manualKubeConfigIdState } from 'state/manualKubeConfigIdAtom';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -70,6 +71,7 @@ const addClusters = async (
   t: TFunction,
   notification?: any,
   navigate?: NavigateFunction,
+  manualKubeConfigId?: any,
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
   const currentContext = kubeconfig['current-context'];
@@ -93,6 +95,7 @@ const addClusters = async (
             config: {},
           },
           clusterInfo,
+          manualKubeConfigId,
         );
     });
 
@@ -122,6 +125,7 @@ const loadKubeconfigIdCluster = async (
   clusterInfo: useClustersInfoType,
   t: TFunction,
   setContextsState?: SetterOrUpdater<KubeConfigMultipleState>,
+  manualKubeConfigId?: any,
 ) => {
   try {
     const kubeconfig = await loadKubeconfigById(
@@ -140,7 +144,16 @@ const loadKubeconfigIdCluster = async (
         ...kubeconfig,
       }));
     } else {
-      addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature, t);
+      addClusters(
+        kubeconfig,
+        clusters,
+        clusterInfo,
+        kubeconfigIdFeature,
+        t,
+        undefined,
+        undefined,
+        manualKubeConfigId,
+      );
       return 'done';
     }
   } catch (e) {
@@ -164,6 +177,9 @@ export function useLoginWithKubeconfigID() {
   const configuration = useRecoilValue(configurationAtom);
   const clusters = useRecoilValue(clustersState);
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
+  const [manualKubeConfigId, setManualKubeConfigId] = useRecoilState(
+    manualKubeConfigIdState,
+  );
   const notification = useNotification();
   const navigate = useNavigate();
   const [search] = useSearchParams();
@@ -189,11 +205,38 @@ export function useLoginWithKubeconfigID() {
         t,
         notification,
         navigate,
+        { manualKubeConfigId, setManualKubeConfigId },
       );
       setHandledKubeconfigId('done');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contextsState]);
+  }, [contextsState, manualKubeConfigId?.token]);
+
+  useEffect(() => {
+    if (manualKubeConfigId?.token) {
+      const kubeconfigId = search.get('kubeconfigID');
+      if (!kubeconfigId || !kubeconfigIdFeature?.isEnabled) {
+        setHandledKubeconfigId('done');
+        return;
+      }
+      setHandledKubeconfigId('loading');
+      loadKubeconfigIdCluster(
+        kubeconfigId,
+        kubeconfigIdFeature,
+        clusters,
+        clusterInfo,
+        t,
+        setContextsState,
+        { manualKubeConfigId, setManualKubeConfigId },
+      ).then(val => {
+        if (val === 'done') {
+          console.log('TEST-BBBBB', val);
+          setHandledKubeconfigId('done');
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [manualKubeConfigId?.token]);
 
   useEffect(() => {
     const dependenciesReady = !!configuration?.features && !!clusters;
@@ -221,8 +264,10 @@ export function useLoginWithKubeconfigID() {
       clusterInfo,
       t,
       setContextsState,
+      { manualKubeConfigId, setManualKubeConfigId },
     ).then(val => {
       if (val === 'done') {
+        console.log('TEST-BBBBB', val);
         setHandledKubeconfigId('done');
       }
     });
@@ -237,6 +282,8 @@ export function useLoginWithKubeconfigID() {
     configuration,
     setCurrentCluster,
     setContextsState,
+    setManualKubeConfigId,
+    manualKubeConfigId,
   ]);
 
   return handledKubeconfigId;

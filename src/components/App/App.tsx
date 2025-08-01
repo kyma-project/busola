@@ -49,6 +49,8 @@ import { initTheme } from './initTheme';
 
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
+import { manualKubeConfigIdState } from 'state/manualKubeConfigIdAtom';
+import { AuthForm } from 'components/Clusters/components/AuthForm';
 
 export default function App() {
   const theme = useRecoilValue(themeState);
@@ -61,6 +63,9 @@ export default function App() {
   const navigate = useNavigate();
   const [search] = useSearchParams();
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
+  const [manualKubeConfigId, setManualKubeConfigId] = useRecoilState(
+    manualKubeConfigIdState,
+  );
 
   useEffect(() => {
     setNamespace(namespace);
@@ -110,6 +115,23 @@ export default function App() {
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />
+            {search.get('kubeconfigID') &&
+              manualKubeConfigId.formOpen &&
+              createPortal(
+                // TODO: Temporary for testing
+                <div style={{ position: 'absolute', top: '35%', left: '35%' }}>
+                  <AuthForm
+                    formElementRef={null}
+                    resource={{}}
+                    setResource={(val: any) => {
+                      console.log('TEST-AAP-AuthForm:', val);
+                      setManualKubeConfigId(prev => prev);
+                    }}
+                    revalidate={() => {}}
+                  />
+                </div>,
+                document.body,
+              )}
             {search.get('kubeconfigID') &&
               !!contextsState?.contexts?.length &&
               kubeconfigIdState === 'loading' &&
