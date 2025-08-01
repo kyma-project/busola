@@ -63,5 +63,3 @@ This table lists the frontend configurable feature flags, their descriptions, an
 | **GZIP**           |                                    Indicates whether a response from the backend server should be compressed or not. | `isEnabled: true`  |
 | **KYMA_COMPANION** |                                                                    Configure the location of the Kyma companion API. | `link: ''`         |
 | **TRACKING**       | Determines if simple application usage tracking is enabled. **This feature is enabled on the frontend and backend.** | `isEnabled: false` |
-
-|
