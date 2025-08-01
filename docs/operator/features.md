@@ -53,35 +53,15 @@ This table lists the frontend configurable feature flags, their descriptions, an
 | **TRACKING**                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Determines if simple application usage tracking is enabled. | `isEnabled: false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | **VISUAL_RESOURCES**                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Determines if the resource graphs should be rendered at the resource details view. | `isEnabled: true`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
-## Features List for Backend
+## Configurable Flags for Backend
 
 > [!NOTE]
 > Backend features cannot be modified at the cluster's ConfigMap level.
 
-- **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
+| Feature flag       |                                                                                                          Description | Default value      |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------: | ------------------ |
+| **GZIP**           |                                    Indicates whether a response from the backend server should be compressed or not. | `isEnabled: true`  |
+| **KYMA_COMPANION** |                                                                    Configure the location of the Kyma companion API. | `link: ''`         |
+| **TRACKING**       | Determines if simple application usage tracking is enabled. **This feature is enabled on the frontend and backend.** | `isEnabled: false` |
 
-Default settings:
-
-```yaml
-GZIP:
-  isEnabled: true
-```
-
-- **KYMA_COMPANION** - is used to configure the location of the Kyma companion API.
-
-  Default settings:
-
-  ```yaml
-  KYMA_COMPANION:
-    link: ''
-  ```
-
-  - **TRACKING** - determines if simple application usage tracking is enabled.
-
-  ```yaml
-  TRACKING:
-    isEnabled: false
-  ```
-
-  > [!NOTE]
-  > This feature is enabled on the frontend and backend.
+|
