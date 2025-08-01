@@ -79,6 +79,8 @@ export function FileInput({
       onDrop={drop}
       onDragEnter={() => setDraggingCounter(draggingOverCounter + 1)}
       onDragLeave={() => setDraggingCounter(draggingOverCounter - 1)}
+      onFocus={() => setDraggingCounter(draggingOverCounter + 1)}
+      onBlur={() => setDraggingCounter(draggingOverCounter - 1)}
       onDragOver={dragOver}
     >
       <input
