@@ -79,7 +79,9 @@ export function ContextButtons({
                   if (setChosenContext) setChosenContext(context.name);
                 }}
               />
-              <AuthContextData contextName={context.name} users={users} />
+              {users && (
+                <AuthContextData contextName={context.name} users={users} />
+              )}
             </div>
           </ListItemCustom>
         );
@@ -132,10 +134,12 @@ export function ContextChooserMessage({ contextState, setValue, onCancel }) {
                   text={context.name}
                   onChange={() => setChosenContext(context.name)}
                 />
-                <AuthContextData
-                  contextName={context.name}
-                  users={contextState?.users}
-                />
+                {contextState?.users && (
+                  <AuthContextData
+                    contextName={context.name}
+                    users={contextState.users}
+                  />
+                )}
               </div>
             </ListItemCustom>
           </>
