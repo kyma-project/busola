@@ -58,8 +58,8 @@ This table lists the frontend configurable feature flags, their descriptions, an
 > [!NOTE]
 > Backend features cannot be modified at the cluster's ConfigMap level.
 
-| Feature flag       |                                                                                                          Description | Default value      |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------: | ------------------ |
-| **GZIP**           |                                    Indicates whether a response from the backend server should be compressed or not. | `isEnabled: true`  |
-| **KYMA_COMPANION** |                                                                    Configure the location of the Kyma companion API. | `link: ''`         |
-| **TRACKING**       | Determines if simple application usage tracking is enabled. **This feature is enabled on the frontend and backend.** | `isEnabled: false` |
+| Feature flag       |                                                                                                      Description | Default value      |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------: | ------------------ |
+| **GZIP**           |                                Indicates whether a response from the backend server should be compressed or not. | `isEnabled: true`  |
+| **KYMA_COMPANION** |                                                                Configure the location of the Kyma companion API. | `link: ''`         |
+| **TRACKING**       | Determines if simple application usage tracking is enabled. **This feature is enabled in frontend and backend.** | `isEnabled: false` |
