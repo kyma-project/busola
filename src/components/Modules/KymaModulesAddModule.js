@@ -3,7 +3,7 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import ModulesCard from 'components/KymaModules/components/ModulesCard';
+import ModulesCard from 'components/Modules/components/ModulesCard';
 import { cloneDeep } from 'lodash';
 import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { KymaModuleContext } from './providers/KymaModuleProvider';

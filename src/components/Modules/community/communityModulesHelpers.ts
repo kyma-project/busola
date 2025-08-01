@@ -2,7 +2,7 @@ import {
   getModuleName,
   ModuleTemplateListType,
   ModuleTemplateType,
-} from 'components/KymaModules/support';
+} from 'components/Modules/support';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 export type VersionInfo = {

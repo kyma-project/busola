@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import { useKymaModulesQuery } from 'components/KymaModules/kymaModulesQueries';
+import { useKymaModulesQuery } from 'components/Modules/kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router';
-import { useGetAllModulesStatuses } from 'components/KymaModules/hooks';
+import { useGetAllModulesStatuses } from 'components/Modules/hooks';
 import { useContext, useMemo } from 'react';
-import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
+import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 

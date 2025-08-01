@@ -10,24 +10,24 @@ import {
   fetchResourcesToApply,
   getAvailableCommunityModules,
   VersionInfo,
-} from 'components/KymaModules/components/communityModulesHelpers';
+} from 'components/Modules/community/communityModulesHelpers';
 import {
   getModuleName,
   ModuleTemplateListType,
   ModuleTemplateType,
-} from 'components/KymaModules/support';
+} from 'components/Modules/support';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
-import CommunityModuleCard from 'components/KymaModules/components/CommunityModuleCard';
+import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
+import CommunityModuleCard from 'components/Modules/community/components/CommunityModuleCard';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 
-import './KymaModulesAddModule.scss';
+import 'components/Modules/KymaModulesAddModule.scss';
 
 type VersionDisplayInfo = {
   moduleTemplate: {

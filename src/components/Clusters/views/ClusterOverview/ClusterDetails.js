@@ -14,8 +14,8 @@ import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { configFeaturesNames } from 'state/types';
-import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
-import { ModuleTemplatesContextProvider } from 'components/KymaModules/providers/ModuleTemplatesProvider';
+import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
+import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();

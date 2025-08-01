@@ -21,7 +21,7 @@ import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
 import { useSetRecoilState } from 'recoil';
 import { resourcesConditions } from 'state/resourceConditionsAtom';
-import { KymaModuleContext } from 'components/KymaModules/providers/KymaModuleProvider';
+import { KymaModuleContext } from 'components/Modules/providers/KymaModuleProvider';
 
 export const ExtensibilityDetailsCore = ({
   resMetaData,

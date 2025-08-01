@@ -7,7 +7,7 @@ import {
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { NavNode } from 'state/types';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
-import { postForCommunityResources } from 'components/KymaModules/components/communityModulesHelpers';
+import { postForCommunityResources } from 'components/Modules/community/communityModulesHelpers';
 
 interface Counts {
   [key: string]: number;
