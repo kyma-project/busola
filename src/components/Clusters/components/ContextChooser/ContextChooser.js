@@ -122,27 +122,25 @@ export function ContextChooserMessage({ contextState, setValue, onCancel }) {
         }}
       >
         {contextState.contexts.map(context => (
-          <>
-            <ListItemCustom key={context.name} style={{}}>
-              <div>
-                <RadioButton
-                  id={'context-chooser' + context.name}
-                  key={context.name}
-                  name={context.name}
-                  value={context.name}
-                  checked={chosenContext === context.name}
-                  text={context.name}
-                  onChange={() => setChosenContext(context.name)}
+          <ListItemCustom key={context.name} style={{}}>
+            <div>
+              <RadioButton
+                id={'context-chooser' + context.name}
+                key={context.name}
+                name={context.name}
+                value={context.name}
+                checked={chosenContext === context.name}
+                text={context.name}
+                onChange={() => setChosenContext(context.name)}
+              />
+              {contextState?.users && (
+                <AuthContextData
+                  contextName={context.name}
+                  users={contextState.users}
                 />
-                {contextState?.users && (
-                  <AuthContextData
-                    contextName={context.name}
-                    users={contextState.users}
-                  />
-                )}
-              </div>
-            </ListItemCustom>
-          </>
+              )}
+            </div>
+          </ListItemCustom>
         ))}
       </List>
     </MessageBox>
@@ -154,6 +152,8 @@ function AuthContextData({ contextName, users }) {
 
   const issuerUrl = getUserDetail(contextName, '--oidc-issuer-url=', users);
   const clientId = getUserDetail(contextName, '--oidc-client-id=', users);
+
+  if (issuerUrl === null && clientId === null) return null;
 
   return (
     <div className="sap-margin-begin-medium sap-margin-bottom-small">
