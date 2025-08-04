@@ -208,6 +208,7 @@ export const ClusterDataForm = ({
             }}
             input={({ setValue }) => (
               <ContextButtons
+                users={kubeconfig?.users || []}
                 contexts={kubeconfig?.contexts || []}
                 setValue={setValue}
                 chosenContext={chosenContext}
