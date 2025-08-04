@@ -110,12 +110,7 @@ export function FileInput({
           <p className="file-input__secondary">{availableFormatsMessage}</p>
         )}
 
-        <p
-          className="file-input__secondary"
-          id="file-input__uploaded-files"
-          ref={fileNameRef}
-          tabIndex={1}
-        >
+        <p className="file-input__secondary" ref={fileNameRef} tabIndex={1}>
           {fileNames.length
             ? `${fileNames.join(', ')} ${t('components.file-input.uploaded')}`
             : ''}
