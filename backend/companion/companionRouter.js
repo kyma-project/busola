@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
@@ -12,6 +13,15 @@ const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.config
   ?.apiBaseUrl ?? ''}/api/conversations/`;
 const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
+
+// Rate limiter: Max 200 requests per 1 minutes per IP
+const companionRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 200,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 router.use(express.json());
 
@@ -207,8 +217,16 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
-router.post('/suggestions', addLogger(handlePromptSuggestions));
-router.post('/messages', addLogger(handleChatMessage));
-router.post('/followup', addLogger(handleFollowUpSuggestions));
+router.post(
+  '/suggestions',
+  companionRateLimiter,
+  addLogger(handlePromptSuggestions),
+);
+router.post('/messages', companionRateLimiter, addLogger(handleChatMessage));
+router.post(
+  '/followup',
+  companionRateLimiter,
+  addLogger(handleFollowUpSuggestions),
+);
 
 export default router;
