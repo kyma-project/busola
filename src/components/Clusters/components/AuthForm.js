@@ -118,7 +118,7 @@ export function AuthForm({
 
   return (
     <ResourceForm.Wrapper
-      formEementRef={formElementRef}
+      formElementRef={formElementRef}
       resource={resource}
       setResource={setResource}
       {...props}
