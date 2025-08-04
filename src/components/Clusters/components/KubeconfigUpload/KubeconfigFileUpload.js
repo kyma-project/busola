@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { FileInput } from 'shared/components/FileInput/FileInput';
-import { Title, Button, Popover, Text } from '@ui5/webcomponents-react';
+import { Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { createPortal } from 'react-dom';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 
 export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
