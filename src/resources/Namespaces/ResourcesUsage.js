@@ -25,7 +25,10 @@ export const ResourcesUsage = ({ namespace }) => {
         <Card
           className="item"
           header={
-            <CardHeader titleText={t('namespaces.overview.resources.error')} />
+            <CardHeader
+              titleText={t('namespaces.overview.resources.error')}
+              accessibleName={t('namespaces.overview.resources.error')}
+            />
           }
         />
       </div>
@@ -40,6 +43,7 @@ export const ResourcesUsage = ({ namespace }) => {
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.cpu-usage')}
+              accessibleName={t('cluster-overview.statistics.cpu-usage')}
             />
           }
         >
@@ -73,6 +77,7 @@ export const ResourcesUsage = ({ namespace }) => {
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.memory-usage')}
+              accessibleName={t('cluster-overview.statistics.memory-usage')}
             />
           }
         >

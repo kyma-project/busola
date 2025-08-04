@@ -100,7 +100,7 @@ export function FeatureCardBanner({
   const illustration = getIllustration(image, theme);
   return (
     <div className={`sap-margin-top-small ${className}`}>
-      <Card className="feature-card-container">
+      <Card accessibleName={title} className="feature-card-container">
         <div className="feature-card" style={getBackgroundStyle(design)}>
           <Button
             design="Transparent"

@@ -16,7 +16,7 @@ const systemNamespaces = [
 ];
 
 export const getDefaultScanConfiguration = (
-  namespaces: string[],
+  namespaces: string[] | null,
   policies: string[],
 ): ScanConfiguration => {
   const userNamespaces =

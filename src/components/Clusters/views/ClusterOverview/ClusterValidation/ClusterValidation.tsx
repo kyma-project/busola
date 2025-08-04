@@ -243,6 +243,7 @@ export const ClusterValidation = () => {
 const InfoTile = ({ title, content }: { title?: string; content?: string }) => {
   return (
     <Card
+      accessibleName={title}
       header={<CardHeader titleText={title} subtitleText={content} />}
       style={{ width: 'fit-content', margin: '5px' }}
     ></Card>
@@ -265,6 +266,7 @@ const Section = ({
   return (
     <FlexBox alignItems="Center" justifyContent="Center">
       <Card
+        accessibleName={titleText}
         header={
           titleText ?? subtitleText ?? status ? (
             <CardHeader

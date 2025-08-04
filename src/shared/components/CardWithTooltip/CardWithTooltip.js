@@ -16,6 +16,7 @@ export const CardWithTooltip = ({ title, tooltip, children, icon }) => {
       header={
         <CardHeader
           titleText={title}
+          accessibleName={title}
           action={
             <div slot="action">
               <TooltipWrapper tooltipProps={tooltip}>
