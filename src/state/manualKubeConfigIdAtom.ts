@@ -2,10 +2,10 @@ import { atom, RecoilState } from 'recoil';
 
 export type ManualKubeConfigIdType = {
   formOpen: boolean;
-  token: string;
+  auth: any;
 };
 
-const defaultValue = { formOpen: false, token: '' };
+const defaultValue = { formOpen: false, auth: null };
 
 export const manualKubeConfigIdState: RecoilState<ManualKubeConfigIdType> = atom<
   ManualKubeConfigIdType

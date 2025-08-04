@@ -11,7 +11,7 @@ import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { hasNonOidcAuth, createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router';
-import { useSetRecoilState } from 'recoil';
+import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { ManualKubeConfigIdType } from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
@@ -155,7 +155,10 @@ export const addByContext = (
     config: any;
   },
   clustersInfo: useClustersInfoType,
-  manualKubeConfigId?: any,
+  manualKubeConfigId?: {
+    manualKubeConfigId?: ManualKubeConfigIdType;
+    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+  },
 ) => {
   let kubeconfig = userKubeconfig as ValidKubeconfig;
   try {
@@ -172,12 +175,8 @@ export const addByContext = (
           users: [],
         };
       }
-      console.log(
-        'TEST-KubeconfigIIIIIIID',
-        manualKubeConfigId?.manualKubeConfigId,
-      );
-      let token = manualKubeConfigId?.manualKubeConfigId?.token;
-      if (!token && manualKubeConfigId?.setManualKubeConfigId) {
+      let auth = manualKubeConfigId?.manualKubeConfigId?.auth;
+      if (!auth && manualKubeConfigId?.setManualKubeConfigId) {
         manualKubeConfigId.setManualKubeConfigId?.(
           (prev: ManualKubeConfigIdType) => ({
             ...prev,
@@ -186,22 +185,21 @@ export const addByContext = (
         );
         throw Error('kubeconfig does not have authentication data');
       }
-      if (token) {
+      if (auth) {
         kubeconfig.users = [
           ...kubeconfig.users,
-          { user: { token }, name: context.context.user },
+          { user: { ...auth }, name: context.context.user },
         ];
         manualKubeConfigId?.setManualKubeConfigId?.(
           (prev: ManualKubeConfigIdType) => ({
             ...prev,
-            token: '',
+            auth: null,
           }),
         );
       } else {
         throw Error('kubeconfig does not have authentication data');
       }
     }
-
     const user = kubeconfig.users?.find(u => u.name === context.context.user);
     if (!user) {
       throw Error('user not found');

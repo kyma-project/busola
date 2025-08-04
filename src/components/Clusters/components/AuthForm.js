@@ -91,10 +91,10 @@ const TokenForm = ({ resource, setResource, ...props }) => {
 };
 
 export function AuthForm({
-  formElementRef,
+  formElementRef = null,
   resource,
   setResource,
-  revalidate,
+  revalidate = () => {},
   ...props
 }) {
   const { t } = useTranslation();

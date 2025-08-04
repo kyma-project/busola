@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Navigate,
@@ -31,7 +31,12 @@ import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { multipleContexts } from 'state/multipleContextsAtom';
 
-import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Dialog,
+  SplitterElement,
+  SplitterLayout,
+} from '@ui5/webcomponents-react';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
 import { Preferences } from 'components/Preferences/Preferences';
@@ -51,6 +56,7 @@ import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
 import { manualKubeConfigIdState } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
+import { ResourceForm } from 'shared/ResourceForm';
 
 export default function App() {
   const theme = useRecoilValue(themeState);
@@ -66,6 +72,12 @@ export default function App() {
   const [manualKubeConfigId, setManualKubeConfigId] = useRecoilState(
     manualKubeConfigIdState,
   );
+  const [authFormState, setAuthFormState] = useState<{
+    users?: Array<{
+      name: string;
+      user: { exec: { args?: string[] }; token: string };
+    }>;
+  }>({});
 
   useEffect(() => {
     setNamespace(namespace);
@@ -92,6 +104,18 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useRecoilValue(showKymaCompanionState);
+  const updateManualKubeConfigIdState = (e: any) => {
+    e.preventDefault();
+    const auth = authFormState?.users?.find(
+      user => user?.user?.token || user?.user?.exec,
+    )?.user;
+    if (auth) {
+      setManualKubeConfigId({
+        formOpen: false,
+        auth,
+      });
+    }
+  };
 
   if (isLoading) {
     return <Spinner />;
@@ -118,18 +142,21 @@ export default function App() {
             {search.get('kubeconfigID') &&
               manualKubeConfigId.formOpen &&
               createPortal(
-                // TODO: Temporary for testing
-                <div style={{ position: 'absolute', top: '35%', left: '35%' }}>
-                  <AuthForm
-                    formElementRef={null}
-                    resource={{}}
-                    setResource={(val: any) => {
-                      console.log('TEST-AAP-AuthForm:', val);
-                      setManualKubeConfigId(prev => prev);
-                    }}
-                    revalidate={() => {}}
-                  />
-                </div>,
+                <Dialog open={true}>
+                  {/*@ts-ignore*/}
+                  <ResourceForm.Single
+                    createResource={updateManualKubeConfigIdState}
+                  >
+                    <AuthForm
+                      resource={authFormState}
+                      setResource={setAuthFormState}
+                    />
+                    <div className="auth-form-dialog-footer">
+                      <Button type="Submit">{t('clusters.add.title')}</Button>
+                    </div>
+                    {/*@ts-ignore*/}
+                  </ResourceForm.Single>
+                </Dialog>,
                 document.body,
               )}
             {search.get('kubeconfigID') &&
