@@ -24,7 +24,7 @@ import { useGetExtensibilitySchemas } from 'state/extensibilitySchemasAtom';
 import { useGetValidationSchemas } from 'state/validationSchemasAtom';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLoginRoute';
-import { useHandleResetEndpoint } from 'components/Clusters/shared';
+import { useHandleResetEndpoint, Users } from 'components/Clusters/shared';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { removePreviousPath, useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
@@ -73,10 +73,7 @@ export default function App() {
     manualKubeConfigIdState,
   );
   const [authFormState, setAuthFormState] = useState<{
-    users?: Array<{
-      name: string;
-      user: { exec: { args?: string[] }; token: string };
-    }>;
+    users?: Users;
   }>({});
 
   useEffect(() => {

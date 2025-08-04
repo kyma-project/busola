@@ -16,6 +16,11 @@ import { removePreviousPath } from 'state/useAfterInitHook';
 import { ManualKubeConfigIdType } from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 
+export type Users = Array<{
+  name: string;
+  user: { exec: { args?: string[] }; token: string };
+}>;
+
 function addCurrentCluster(
   params: NonNullable<ActiveClusterState>,
   clustersInfo: useClustersInfoType,
@@ -167,7 +172,11 @@ export const addByContext = (
     );
     if (!cluster) throw Error('cluster not found');
 
+    let user = kubeconfig.users?.find(u => u.name === context.context.user);
     let haveAuth = hasKubeconfigAuth(kubeconfig);
+    const authIndex = (kubeconfig?.users as Users)?.findIndex(
+      user => user?.user?.token || user?.user?.exec,
+    );
     if (!haveAuth) {
       if (!kubeconfig.users?.length) {
         kubeconfig = {
@@ -196,11 +205,21 @@ export const addByContext = (
             auth: null,
           }),
         );
+        // Update user after kubeconfig updated.
+        user = kubeconfig.users?.find(u => u.name === context.context.user);
+      } else if (!user && authIndex >= 0) {
+        (kubeconfig?.users as Users)?.forEach((user, index) => {
+          if ((user?.user?.token || user?.user?.exec) && !user?.name) {
+            kubeconfig.users[index] = { ...user, name: context.context.user };
+          }
+        });
+        // Update user after kubeconfig updated.
+        user = kubeconfig.users?.find(u => u.name === context.context.user);
       } else {
         throw Error('kubeconfig does not have authentication data');
       }
     }
-    const user = kubeconfig.users?.find(u => u.name === context.context.user);
+
     if (!user) {
       throw Error('user not found');
     }
