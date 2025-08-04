@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
-import { useGetInstalledNotInstalledModules } from '../hooks';
-import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
+import { useGetInstalledNotInstalledModules } from 'components/Modules/hooks';
+import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 
 export const CommunityModuleContext = createContext({
   installedCommunityModules: [],

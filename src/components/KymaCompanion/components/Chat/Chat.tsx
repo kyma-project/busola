@@ -26,6 +26,8 @@ import {
 import { chatHelpers } from './chatHelper';
 import './Chat.scss';
 import FeedbackMessage from './FeedbackMessage/FeedbackMessage';
+import { WelcomeScreen } from '../WelcomeScreen/WelcomeScreen';
+import loadingIcon from './icon_loading.gif';
 
 type ChatProps = {
   chatHistory: ChatGroup[];
@@ -38,6 +40,8 @@ type ChatProps = {
   setError: React.Dispatch<React.SetStateAction<AIError>>;
   hide: boolean;
   time: Date | null;
+  isInitialScreen: boolean;
+  onInitialLoadingChange?: (isLoading: boolean) => void;
 };
 
 export const Chat = ({
@@ -51,10 +55,13 @@ export const Chat = ({
   setIsReset,
   hide = false,
   time,
+  isInitialScreen,
+  onInitialLoadingChange = () => {},
 }: ChatProps) => {
   const { t } = useTranslation();
   const chatRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const hasLoadingScreenLoaded = useRef(false);
 
   const sessionID = useRecoilValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
@@ -366,85 +373,129 @@ export const Chat = ({
     }, delay);
   }, [chatHistory, error]);
 
+  const showWelcomeScreen =
+    chatHistory[0].messages.length === 1 && isInitialScreen;
+
+  useEffect(() => {
+    if (
+      !initialSuggestionsLoading &&
+      isInitialScreen &&
+      !hasLoadingScreenLoaded.current
+    ) {
+      hasLoadingScreenLoaded.current = true;
+    }
+
+    onInitialLoadingChange?.(
+      initialSuggestionsLoading &&
+        isInitialScreen &&
+        !hasLoadingScreenLoaded.current,
+    );
+  }, [initialSuggestionsLoading, isInitialScreen, onInitialLoadingChange]);
+
   return (
-    <FlexBox
-      style={hide ? { display: 'none' } : undefined}
-      direction="Column"
-      justifyContent="SpaceBetween"
-      className="chat-container"
-      ref={containerRef}
-    >
-      <div
-        className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
-        ref={chatRef}
-      >
-        {time && <TimestampLabel time={time} />}
-        {chatHistory.map((group, groupIndex) => {
-          const isLastGroup = groupIndex === chatHistory.length - 1;
+    <>
+      {initialSuggestionsLoading && !hasLoadingScreenLoaded.current ? (
+        <div className="chat-loading-screen">
+          <img
+            src={loadingIcon}
+            className="chat-loading-indicator"
+            alt="Loading indicator"
+          />
+        </div>
+      ) : (
+        <div
+          className={`chat-container ${showWelcomeScreen ? 'split' : ''}`}
+          style={hide ? { display: 'none' } : {}}
+        >
+          {showWelcomeScreen && <WelcomeScreen />}
+          <FlexBox
+            style={{ height: '100%' }}
+            direction="Column"
+            justifyContent="SpaceBetween"
+            ref={containerRef}
+          >
+            <div
+              className="chat-list sap-margin-x-tiny sap-margin-top-tiny"
+              ref={chatRef}
+            >
+              {time && !showWelcomeScreen && <TimestampLabel time={time} />}
+              {chatHistory.map((group, groupIndex) => {
+                const isLastGroup = groupIndex === chatHistory.length - 1;
 
-          return (
-            <div key={groupIndex} className="context-group">
-              {group.context && (
-                <ContextLabel labelText={group.context.labelText} />
-              )}
-              <div className="message-context">
-                {group.messages.map((message, messageIndex) => {
-                  const isLastMessage =
-                    isLastGroup && messageIndex === group.messages.length - 1;
+                return (
+                  <div key={groupIndex} className="context-group">
+                    {group.context && (
+                      <ContextLabel labelText={group.context.labelText} />
+                    )}
+                    <div className="message-context">
+                      {group.messages.map((message, messageIndex) => {
+                        const isLastMessage =
+                          isLastGroup &&
+                          messageIndex === group.messages.length - 1;
 
-                  return message.author === Author.AI ? (
-                    <>
-                      {message.isFeedback ? (
-                        <FeedbackMessage />
-                      ) : (
-                        <React.Fragment key={`${groupIndex}-${messageIndex}`}>
+                        return message.author === Author.AI ? (
+                          <>
+                            {message.isFeedback ? (
+                              <FeedbackMessage />
+                            ) : (
+                              <React.Fragment
+                                key={`${groupIndex}-${messageIndex}`}
+                              >
+                                <Message
+                                  author={message.author}
+                                  messageChunks={message.messageChunks}
+                                  isLoading={message.isLoading}
+                                  partialAIFailure={message.partialAIFailure}
+                                  hasError={message.hasError}
+                                  isLatestMessage={isLastMessage}
+                                />
+                                {isLastMessage && !message.isLoading && (
+                                  <Bubbles
+                                    onClick={sendPrompt}
+                                    suggestions={message.suggestions}
+                                    isLoading={
+                                      message.suggestionsLoading ?? false
+                                    }
+                                  />
+                                )}
+                              </React.Fragment>
+                            )}
+                          </>
+                        ) : (
                           <Message
-                            author={message.author}
+                            author={Author.USER}
+                            key={`${groupIndex}-${messageIndex}`}
                             messageChunks={message.messageChunks}
                             isLoading={message.isLoading}
-                            partialAIFailure={message.partialAIFailure}
                             hasError={message.hasError}
                             isLatestMessage={isLastMessage}
                           />
-                          {isLastMessage && !message.isLoading && (
-                            <Bubbles
-                              onClick={sendPrompt}
-                              suggestions={message.suggestions}
-                              isLoading={message.suggestionsLoading ?? false}
-                            />
-                          )}
-                        </React.Fragment>
-                      )}
-                    </>
-                  ) : (
-                    <Message
-                      author={Author.USER}
-                      key={`${groupIndex}-${messageIndex}`}
-                      messageChunks={message.messageChunks}
-                      isLoading={message.isLoading}
-                      hasError={message.hasError}
-                      isLatestMessage={isLastMessage}
-                    />
-                  );
-                })}
-              </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+              {error.message && (
+                <ErrorMessage
+                  errorTitle={error?.title}
+                  errorMessage={
+                    error.message ?? t('kyma-companion.error.subtitle')
+                  }
+                  retryPrompt={() => retryPreviousPrompt()}
+                  displayRetry={error.displayRetry}
+                />
+              )}
             </div>
-          );
-        })}
-        {error.message && (
-          <ErrorMessage
-            errorTitle={error?.title}
-            errorMessage={error.message ?? t('kyma-companion.error.subtitle')}
-            retryPrompt={() => retryPreviousPrompt()}
-            displayRetry={error.displayRetry}
-          />
-        )}
-      </div>
-      <QueryInput
-        loading={loading}
-        sendPrompt={sendPrompt}
-        containerRef={containerRef}
-      />
-    </FlexBox>
+
+            <QueryInput
+              loading={loading}
+              sendPrompt={sendPrompt}
+              containerRef={containerRef}
+            />
+          </FlexBox>
+        </div>
+      )}
+    </>
   );
 };

@@ -11,20 +11,20 @@ import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails'
 import { t } from 'i18next';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
-import { KymaModuleContextProvider } from 'components/KymaModules/providers/KymaModuleProvider';
-import { ModuleTemplatesContextProvider } from 'components/KymaModules/providers/ModuleTemplatesProvider';
-import { CommunityModulesDeleteBoxContextProvider } from 'components/KymaModules/components/CommunityModulesDeleteBox';
-import { CommunityModuleContextProvider } from 'components/KymaModules/providers/CommunityModuleProvider';
+import { KymaModuleContextProvider } from 'components/Modules/providers/KymaModuleProvider';
+import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
+import { CommunityModulesDeleteBoxContextProvider } from 'components/Modules/community/components/CommunityModulesDeleteBox';
+import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 
 const KymaModulesList = React.lazy(() =>
-  import('../../components/KymaModules/KymaModulesList'),
+  import('components/Modules/ModulesList'),
 );
 
 const KymaModulesAddModule = React.lazy(() =>
-  import('../../components/KymaModules/KymaModulesAddModule'),
+  import('../../components/Modules/KymaModulesAddModule'),
 );
 const CommunityModulesAddModule = React.lazy(() =>
-  import('../../components/KymaModules/CommunityModulesAddModule.tsx'),
+  import('components/Modules/community/CommunityModulesAddModule.tsx'),
 );
 
 const ColumnWrapper = ({

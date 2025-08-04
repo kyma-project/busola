@@ -117,7 +117,12 @@ export default function FeedbackPopover() {
                   endIcon="inspect"
                   onClick={() => {
                     handleNewFeedbackViewed();
-                    window.open(companionFeedbackLink, '_blank');
+                    const newWindow = window.open(
+                      companionFeedbackLink,
+                      '_blank',
+                      'noopener, noreferrer',
+                    );
+                    if (newWindow) newWindow.opener = null;
                   }}
                 >
                   {t('feedback.give-feedback')}
@@ -141,7 +146,14 @@ export default function FeedbackPopover() {
                   ? 'Emphasized'
                   : 'Default'
               }
-              onClick={() => window.open(kymaFeedbackLink, '_blank')}
+              onClick={() => {
+                const newWindow = window.open(
+                  kymaFeedbackLink,
+                  '_blank',
+                  'noopener, noreferrer',
+                );
+                if (newWindow) newWindow.opener = null;
+              }}
             >
               {t('feedback.give-feedback')}
             </Button>

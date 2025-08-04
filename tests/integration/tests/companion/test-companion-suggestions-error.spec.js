@@ -38,15 +38,6 @@ context('Test Companion Initial Suggestions Error Handling', () => {
   });
 
   it('adjusts introductory message after error of fetching initial suggestions', () => {
-    cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
-      req.reply({
-        statusCode: 500,
-        body: {
-          error: 'Internal Server Error',
-        },
-      });
-    }).as('getPromptSuggestions');
-
     cy.get('.kyma-companion').as('companion');
     cy.closeCompanion();
     cy.openCompanion();
@@ -59,7 +50,19 @@ context('Test Companion Initial Suggestions Error Handling', () => {
       )
       .should('be.visible');
 
+    cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
+      req.reply({
+        statusCode: 500,
+        body: {
+          error: 'Internal Server Error',
+        },
+      });
+    }).as('getPromptSuggestions');
+
     cy.wait('@getPromptSuggestions');
+
+    cy.closeCompanion();
+    cy.openCompanion();
 
     cy.get('@companion')
       .find('.chat-list')

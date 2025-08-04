@@ -4,18 +4,18 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { CollapsibleSection } from 'shared/ResourceForm/components/CollapsibleSection';
 import CommunityModuleVersionSelect, {
   ModuleDisplayInfo,
-} from 'components/KymaModules/components/CommunityModuleVersionSelect';
+} from 'components/Modules/community/components/CommunityModuleVersionSelect';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   fetchResourcesToApply,
   getAvailableCommunityModules,
   VersionInfo,
-} from 'components/KymaModules/components/communityModulesHelpers';
+} from 'components/Modules/community/communityModulesHelpers';
 import {
   getModuleName,
   ModuleTemplateListType,
   ModuleTemplateType,
-} from 'components/KymaModules/support';
+} from 'components/Modules/support';
 import { Button, Form, FormItem, MessageStrip } from '@ui5/webcomponents-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
@@ -24,14 +24,14 @@ import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
+import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import {
   NotificationContextArgs,
   useNotification,
 } from 'shared/contexts/NotificationContext';
-import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
+import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 
-import './CommunityModule.scss';
+import 'components/Modules/community/CommunityModule.scss';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,

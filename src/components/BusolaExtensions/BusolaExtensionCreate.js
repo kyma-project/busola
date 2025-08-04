@@ -106,6 +106,7 @@ export default function BusolaExtensionCreate({
             key: crd.metadata.name,
             text: crd.metadata.name,
           }))}
+          id="combobox-input"
         />
         {crd && (
           <>

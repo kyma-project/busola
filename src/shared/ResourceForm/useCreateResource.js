@@ -119,7 +119,15 @@ export function useCreateResource({
 
   const showError = error => {
     console.error(error);
+    const previousActiveElement = document.activeElement;
     notification.notifyError({
+      actions: (close, defaultCloseButton) => {
+        const closeWrapper = () => {
+          close();
+          previousActiveElement.focus();
+        };
+        return defaultCloseButton(closeWrapper);
+      },
       content: t(
         isEdit
           ? 'common.create-form.messages.patch-failure'

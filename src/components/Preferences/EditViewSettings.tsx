@@ -1,4 +1,4 @@
-import { Option, Select } from '@ui5/webcomponents-react';
+import { Label, Option, Select } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import {
@@ -21,11 +21,12 @@ export default function EditViewSettings() {
   return (
     <>
       <div className="preferences-row">
-        <span className="bsl-has-color-status-4">
+        <Label for="editTypeComboBox" className="bsl-has-color-status-4">
           {t('settings.clusters.edit-view.choose')}
-        </span>
+        </Label>
         <Select
           id="editTypeComboBox"
+          accessibleName={t('settings.clusters.edit-view.choose')}
           onChange={e => {
             setEditViewMode({
               preferencesViewType: e.target.value ?? 'MODE_DEFAULT',

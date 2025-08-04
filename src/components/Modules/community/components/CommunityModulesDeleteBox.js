@@ -1,9 +1,9 @@
-import { ModulesDeleteBox } from 'components/KymaModules/components/ModulesDeleteBox';
+import { ModulesDeleteBox } from 'components/Modules/components/ModulesDeleteBox';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { checkSelectedModule } from 'components/KymaModules/support';
-import { CommunityModuleContext } from 'components/KymaModules/providers/CommunityModuleProvider';
-import { KymaModuleContext } from 'components/KymaModules/providers/KymaModuleProvider';
-import { ModuleTemplatesContext } from 'components/KymaModules/providers/ModuleTemplatesProvider';
+import { checkSelectedModule } from 'components/Modules/support';
+import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
+import { KymaModuleContext } from 'components/Modules/providers/KymaModuleProvider';
+import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';

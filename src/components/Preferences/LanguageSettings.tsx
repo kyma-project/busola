@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
-import { Select, Option } from '@ui5/webcomponents-react';
+import { Select, Option, Label } from '@ui5/webcomponents-react';
 import { languageAtom } from 'state/preferences/languageAtom';
 
 const AVAILABLE_LANGUAGES = [{ key: 'en', text: 'English' }];
@@ -16,8 +16,14 @@ export default function LanguageSettings() {
 
   return (
     <div className="preferences-row">
-      <span className="bsl-has-color-status-4">{t('settings.language')}</span>
-      <Select onChange={onChange}>
+      <Label for="language-select" className="bsl-has-color-status-4">
+        {t('settings.language')}
+      </Label>
+      <Select
+        id="language-select"
+        accessibleName={t('settings.language')}
+        onChange={onChange}
+      >
         {AVAILABLE_LANGUAGES.map(available_language => (
           <Option
             value={available_language.key}

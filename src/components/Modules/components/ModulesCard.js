@@ -16,7 +16,7 @@ import {
   findModuleSpec,
   findModuleStatus,
   setChannel,
-} from 'components/KymaModules/support';
+} from 'components/Modules/support';
 
 async function isImageAvailable(url) {
   try {

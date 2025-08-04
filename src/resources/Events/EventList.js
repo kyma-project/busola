@@ -115,13 +115,15 @@ export function EventList({
         ),
       id: 'name',
     },
-    namespace === '-all-'
-      ? {
-          header: t('common.headers.namespace'),
-          value: entry => entry.metadata.namespace,
-          id: 'namespace',
-        }
-      : null,
+    ...(!namespace || namespace === '-all-'
+      ? [
+          {
+            header: t('common.headers.namespace'),
+            value: entry => entry.metadata.namespace,
+            id: 'namespace',
+          },
+        ]
+      : []),
     {
       ...involvedObject,
     },

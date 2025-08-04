@@ -130,7 +130,6 @@ export const ResourceValidationResult = ({ resource }) => {
     <>
       <Panel
         collapsed={true}
-        hideCloseButton={true}
         hidden={!validateResources.isEnabled}
         fixed={!validateResources.isEnabled}
         style={{
@@ -141,12 +140,14 @@ export const ResourceValidationResult = ({ resource }) => {
           marginRight: '-1rem',
         }}
         header={
-          <Toolbar toolbarStyle={'Clear'}>
+          <Toolbar toolbarStyle={'Clear'} slot="header">
             {resource?.kind + ' ' + resource?.metadata?.name}
             <ToolbarSpacer />
             {statusIcon}
           </Toolbar>
         }
+        accessibleName={resource?.kind + ' ' + resource?.metadata?.name}
+        accessibleRole="listitem"
       >
         {validateResources.isEnabled && (
           <ValidationWarnings

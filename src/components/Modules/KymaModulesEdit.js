@@ -26,15 +26,15 @@ import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { ManagedWarnings } from 'components/KymaModules/components/ManagedWarnings';
-import { ChannelWarning } from 'components/KymaModules/components/ChannelWarning';
-import { UnmanagedModuleInfo } from 'components/KymaModules/components/UnmanagedModuleInfo';
+import { ManagedWarnings } from 'components/Modules/components/ManagedWarnings';
+import { ChannelWarning } from 'components/Modules/components/ChannelWarning';
+import { UnmanagedModuleInfo } from 'components/Modules/components/UnmanagedModuleInfo';
 import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
-import CommunityModulesEdit from 'components/KymaModules/components/CommunityModulesEdit';
+import CommunityModulesEdit from 'components/Modules/community/CommunityModulesEdit';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {

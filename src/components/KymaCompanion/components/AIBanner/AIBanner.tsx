@@ -67,7 +67,12 @@ export function AIBanner({
             key="ai-feedback"
             endIcon="inspect"
             onClick={() => {
-              window.open(feedbackUrl, '_blank');
+              const newWindow = window.open(
+                feedbackUrl,
+                '_blank',
+                'noopener, noreferrer',
+              );
+              if (newWindow) newWindow.opener = null;
             }}
           >
             {t('feedback.give-feedback')}
@@ -76,7 +81,12 @@ export function AIBanner({
             key="ai-documentation"
             endIcon="inspect"
             onClick={() => {
-              window.open(documentationUrl, '_blank');
+              const newWindow = window.open(
+                documentationUrl,
+                '_blank',
+                'noopener, noreferrer',
+              );
+              if (newWindow) newWindow.opener = null;
             }}
           >
             {t('kyma-companion.banner.buttons.documentation')}
