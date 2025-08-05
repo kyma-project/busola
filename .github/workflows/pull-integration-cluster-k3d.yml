@@ -46,6 +46,10 @@ jobs:
         shell: bash
         run: |
           .github/scripts/setup_local_busola.sh | tee busola.log
+      - name: Install custom component example
+        shell: bash
+        run: |
+          (cd examples/busola-web-components && kubectl kustomize . | kubectl apply -n kyma-system -f - )
       - name: Run tests
         shell: bash
         run: |
