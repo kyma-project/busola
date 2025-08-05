@@ -15,6 +15,7 @@ export function NodeResources({ metrics, resources }) {
     <>
       <Card
         className="radial-chart-card"
+        accessibleName={t('cluster-overview.statistics.cpu-usage')}
         header={
           <CardHeader titleText={t('cluster-overview.statistics.cpu-usage')} />
         }
@@ -36,6 +37,7 @@ export function NodeResources({ metrics, resources }) {
       </Card>
       <Card
         className="radial-chart-card"
+        accessibleName={t('cluster-overview.statistics.memory-usage')}
         header={
           <CardHeader
             titleText={t('cluster-overview.statistics.memory-usage')}
@@ -53,6 +55,7 @@ export function NodeResources({ metrics, resources }) {
       </Card>
       <Card
         className="radial-chart-card"
+        accessibleName={t('cluster-overview.statistics.cpu-requests')}
         header={
           <CardHeader
             titleText={t('cluster-overview.statistics.cpu-requests')}
@@ -84,6 +87,7 @@ export function NodeResources({ metrics, resources }) {
       </Card>
       <Card
         className="radial-chart-card"
+        accessibleName={t('cluster-overview.statistics.memory-requests')}
         header={
           <CardHeader
             titleText={t('cluster-overview.statistics.memory-requests')}
@@ -105,6 +109,7 @@ export function NodeResources({ metrics, resources }) {
       </Card>
       <Card
         className="radial-chart-card"
+        accessibleName={t('cluster-overview.statistics.cpu-limits')}
         header={
           <CardHeader titleText={t('cluster-overview.statistics.cpu-limits')} />
         }
@@ -134,6 +139,7 @@ export function NodeResources({ metrics, resources }) {
       </Card>
       <Card
         className="radial-chart-card"
+        accessibleName={t('cluster-overview.statistics.memory-limits')}
         header={
           <CardHeader
             titleText={t('cluster-overview.statistics.memory-limits')}

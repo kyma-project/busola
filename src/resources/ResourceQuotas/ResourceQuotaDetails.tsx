@@ -106,6 +106,7 @@ export default function ResourceQuotaDetails(props: any) {
                 >
                   <Card
                     className="radial-chart-card"
+                    accessibleName={t(chartData.headerTitle)}
                     header={<CardHeader titleText={t(chartData.headerTitle)} />}
                   >
                     <UI5RadialChart

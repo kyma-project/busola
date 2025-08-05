@@ -120,6 +120,7 @@ export default function ClusterStats({ nodesData }) {
         <div className="item-wrapper card-tall">
           <Card
             className="radial-chart-card item"
+            accessibleName={t('cluster-overview.statistics.cpu-usage')}
             header={
               <CardHeader
                 titleText={t('cluster-overview.statistics.cpu-usage')}
@@ -153,6 +154,7 @@ export default function ClusterStats({ nodesData }) {
         <div className="item-wrapper card-tall">
           <Card
             className="radial-chart-card item"
+            accessibleName={t('cluster-overview.statistics.memory-usage')}
             header={
               <CardHeader
                 titleText={t('cluster-overview.statistics.memory-usage')}

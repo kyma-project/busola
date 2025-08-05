@@ -52,7 +52,11 @@ export default function CommunityModuleCard({
   }, [module]);
 
   return (
-    <Card key={`card-${module.name}`} className="addModuleCard">
+    <Card
+      accessibleName={module.name}
+      key={`card-${module.name}`}
+      className="addModuleCard"
+    >
       <ListItemStandard
         className="moduleCardHeader"
         key={`list-${module.name}`}

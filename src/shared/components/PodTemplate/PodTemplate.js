@@ -13,6 +13,7 @@ export function PodTemplate({ template }) {
   return (
     <div className="sap-margin-x-small sap-margin-bottom-small">
       <Card
+        accessibleName={t('pods.labels.pod-template')}
         className="pod-template"
         key="pod-template"
         header={<CardHeader titleText={t('pods.labels.pod-template')} />}
