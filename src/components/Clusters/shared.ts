@@ -166,13 +166,15 @@ export const addByContext = (
   },
 ) => {
   let kubeconfig = userKubeconfig as ValidKubeconfig;
+  const findUser = () =>
+    kubeconfig.users?.find(u => u.name === context.context.user);
   try {
     const cluster = kubeconfig.clusters?.find(
       c => c.name === context.context.cluster,
     );
     if (!cluster) throw Error('cluster not found');
 
-    let user = kubeconfig.users?.find(u => u.name === context.context.user);
+    let user = findUser();
     let haveAuth = hasKubeconfigAuth(kubeconfig);
     const authIndex = (kubeconfig?.users as Users)?.findIndex(
       user => user?.user?.token || user?.user?.exec,
@@ -205,16 +207,16 @@ export const addByContext = (
             auth: null,
           }),
         );
-        // Update user after kubeconfig updated.
-        user = kubeconfig.users?.find(u => u.name === context.context.user);
+        // Update user after kubeconfig changes.
+        user = findUser();
       } else if (!user && authIndex >= 0) {
         (kubeconfig?.users as Users)?.forEach((user, index) => {
           if ((user?.user?.token || user?.user?.exec) && !user?.name) {
             kubeconfig.users[index] = { ...user, name: context.context.user };
           }
         });
-        // Update user after kubeconfig updated.
-        user = kubeconfig.users?.find(u => u.name === context.context.user);
+        // Update user after kubeconfig changes.
+        user = findUser();
       } else {
         throw Error('kubeconfig does not have authentication data');
       }
