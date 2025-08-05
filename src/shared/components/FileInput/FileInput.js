@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
@@ -31,6 +31,7 @@ export function FileInput({
   const openAddCluster = useRecoilValue(showAddClusterWizard);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
+  const fileNameRef = useRef(null);
 
   useEffect(() => {
     if (!openAdd && !openAddCluster) setFileNames([]);
@@ -46,6 +47,12 @@ export function FileInput({
     setFileNames([...files]?.map(file => file.name || ''));
     if (files.length) {
       fileInputChanged(files);
+    }
+
+    if (fileNameRef.current) {
+      setTimeout(() => {
+        fileNameRef.current?.focus();
+      }, 50); // Timeout to ensure the focus is set after the DOM update
     }
   }
 
@@ -104,11 +111,12 @@ export function FileInput({
         {availableFormatsMessage && (
           <p className="file-input__secondary">{availableFormatsMessage}</p>
         )}
-        {!!fileNames.length && (
-          <p className="file-input__secondary">
-            {`${fileNames.join(', ')} ${t('components.file-input.uploaded')}`}
-          </p>
-        )}
+
+        <p className="file-input__secondary" ref={fileNameRef} tabIndex={1}>
+          {fileNames.length
+            ? `${fileNames.join(', ')} ${t('components.file-input.uploaded')}`
+            : ''}
+        </p>
       </div>
     </label>
   );
