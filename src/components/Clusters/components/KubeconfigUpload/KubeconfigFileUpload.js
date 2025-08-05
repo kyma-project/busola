@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { FileInput } from 'shared/components/FileInput/FileInput';
-import { Title, Button, Popover, Text } from '@ui5/webcomponents-react';
+import { Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { createPortal } from 'react-dom';
+import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 
 export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
   const { t } = useTranslation();
@@ -26,26 +26,13 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
       <Title level="H5" className="sap-margin-bottom-tiny">
         {t('clusters.wizard.kubeconfig')}
         <>
-          <Button
-            id="descriptionOpener"
-            icon="hint"
-            design="Transparent"
+          <HintButton
+            setShowTitleDescription={setShowTitleDescription}
+            showTitleDescription={showTitleDescription}
+            description={t('clusters.wizard.intro')}
             className="sap-margin-begin-tiny"
-            onClick={() => {
-              setShowTitleDescription(true);
-            }}
+            ariaTitle={t('clusters.wizard.kubeconfig')}
           />
-          {createPortal(
-            <Popover
-              opener="descriptionOpener"
-              open={showTitleDescription}
-              onClose={() => setShowTitleDescription(false)}
-              placement="End"
-            >
-              <Text className="description">{t('clusters.wizard.intro')}</Text>
-            </Popover>,
-            document.body,
-          )}
         </>
       </Title>
       <FileInput

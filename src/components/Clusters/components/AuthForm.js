@@ -59,6 +59,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         propertyPath="$.scopes"
         title={t('clusters.wizard.auth.scopes')}
         accessible-name={t('clusters.wizard.auth.scopes')}
+        ariaLabel={t('clusters.wizard.auth.scopes')}
       />
     </ResourceForm.Wrapper>
   );

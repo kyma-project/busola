@@ -15,6 +15,7 @@ export function ResourceStatusCard({
   return (
     <div>
       <Card
+        accessibleName={t('common.headers.status')}
         header={
           <div className="resource-status-card__header">
             <CardHeader titleText={t('common.headers.status')} />

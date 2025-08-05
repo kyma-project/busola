@@ -100,7 +100,11 @@ export default function ModulesCard({
   };
 
   return (
-    <Card key={module.name} className="addModuleCard">
+    <Card
+      accessibleName={module.name}
+      key={module.name}
+      className="addModuleCard"
+    >
       <ListItemStandard
         className="moduleCardHeader"
         onClick={() => {

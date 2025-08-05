@@ -135,6 +135,7 @@ export function YamlResourcesList({ resourcesData }) {
               }}
             >
               <Card
+                accessibleName={t('upload-yaml.upload-progress')}
                 header={
                   <CardHeader
                     titleText={t('upload-yaml.upload-progress')}

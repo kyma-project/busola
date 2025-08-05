@@ -1,4 +1,4 @@
-import { FlexBox, RadioButton } from '@ui5/webcomponents-react';
+import { FlexBox, Label, RadioButton } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ChooseStorage.scss';
 
@@ -7,10 +7,17 @@ export function ChooseStorage({ storage, setStorage }) {
 
   return (
     <>
-      <p className="cluster-wizard__storage-preference sap-margin-bottom-tiny">
-        {`${t('clusters.storage.storage-preference')}:`}
-      </p>
-      <FlexBox direction="Column">
+      <FlexBox
+        direction="Column"
+        aria-labelledby={'storage-preference'}
+        role="radiogroup"
+      >
+        <Label
+          id={'storage-preference'}
+          className="cluster-wizard__storage-preference sap-margin-bottom-tiny"
+        >
+          {`${t('clusters.storage.storage-preference')}:`}
+        </Label>
         <RadioButton
           name="storage"
           value="localStorage"

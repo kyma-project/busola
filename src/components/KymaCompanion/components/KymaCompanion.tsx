@@ -58,6 +58,7 @@ export default function KymaCompanion() {
     <div id="companion_wrapper">
       <Card
         className="kyma-companion"
+        accessibleName={t('kyma-companion.name')}
         header={
           <div
             className={`kyma-companion__${

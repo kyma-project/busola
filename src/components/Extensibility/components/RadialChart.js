@@ -35,6 +35,7 @@ export const RadialChart = ({ structure, value, originalResource }) => {
     <div className="item-wrapper card-tall">
       <Card
         className="radial-chart-card"
+        accessibleName={t(structure?.name)}
         header={<CardHeader titleText={t(structure?.name)} />}
       >
         <UI5RadialChart
