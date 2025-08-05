@@ -194,7 +194,8 @@ export const addByContext = (
             formOpen: true,
           }),
         );
-        throw Error('kubeconfig does not have authentication data');
+        // Return to bypass the errors and update kubeconfig in form.
+        return;
       }
       if (auth) {
         kubeconfig.users = [
