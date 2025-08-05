@@ -64,6 +64,7 @@ export function AIBanner({
             {t('kyma-companion.banner.buttons.try-joule')}
           </Button>
           <Button
+            accessibleRole="Link"
             key="ai-feedback"
             endIcon="inspect"
             onClick={() => {
@@ -78,6 +79,7 @@ export function AIBanner({
             {t('feedback.give-feedback')}
           </Button>
           <Button
+            accessibleRole="Link"
             key="ai-documentation"
             endIcon="inspect"
             onClick={() => {

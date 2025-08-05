@@ -26,6 +26,7 @@ export default function FeedbackMessage(): JSX.Element {
           subtitle={<Text>{t('kyma-companion.feedback.subtitle')}</Text>}
         >
           <Button
+            accessibleRole="Link"
             key="ai-feedback-chat"
             endIcon="inspect"
             design="Emphasized"

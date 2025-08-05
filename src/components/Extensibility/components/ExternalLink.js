@@ -52,6 +52,7 @@ export const ExternalLink = ({
   if (structure.type === 'button') {
     return (
       <Button
+        accessibleRole="Link"
         className="sap-margin-x-tiny"
         endIcon="inspect"
         onClick={() => {

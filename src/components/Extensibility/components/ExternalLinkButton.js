@@ -6,6 +6,7 @@ export function ExternalLinkButton({ structure }) {
 
   return (
     <Button
+      accessibleRole="Link"
       endIcon="inspect"
       design={structure?.emphasized ? 'Emphasized' : 'Default'}
       inline={true}
