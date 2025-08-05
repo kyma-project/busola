@@ -45,6 +45,7 @@ jobs:
       - name: Setup Busola
         shell: bash
         run: |
+          kubectl create namespace kyma-system
           .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Install custom component example
         shell: bash
