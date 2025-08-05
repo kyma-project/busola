@@ -13,10 +13,10 @@ const TooltipWrapper = ({ tooltipProps, children }) => {
 export const CardWithTooltip = ({ title, tooltip, children, icon }) => {
   return (
     <Card
+      accessibleName={title}
       header={
         <CardHeader
           titleText={title}
-          accessibleName={title}
           action={
             <div slot="action">
               <TooltipWrapper tooltipProps={tooltip}>

@@ -23,12 +23,10 @@ export const ResourcesUsage = ({ namespace }) => {
     return (
       <div className="item-wrapper card-small pods-metrics-error">
         <Card
+          accessibleName={t('namespaces.overview.resources.error')}
           className="item"
           header={
-            <CardHeader
-              titleText={t('namespaces.overview.resources.error')}
-              accessibleName={t('namespaces.overview.resources.error')}
-            />
+            <CardHeader titleText={t('namespaces.overview.resources.error')} />
           }
         />
       </div>
@@ -39,11 +37,11 @@ export const ResourcesUsage = ({ namespace }) => {
     <>
       <div className="item-wrapper card-tall">
         <Card
+          accessibleName={t('cluster-overview.statistics.cpu-usage')}
           className="radial-chart-card item"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.cpu-usage')}
-              accessibleName={t('cluster-overview.statistics.cpu-usage')}
             />
           }
         >
@@ -73,11 +71,11 @@ export const ResourcesUsage = ({ namespace }) => {
       </div>
       <div className="item-wrapper card-tall">
         <Card
+          accessibleName={t('cluster-overview.statistics.memory-usage')}
           className="radial-chart-card item"
           header={
             <CardHeader
               titleText={t('cluster-overview.statistics.memory-usage')}
-              accessibleName={t('cluster-overview.statistics.memory-usage')}
             />
           }
         >
