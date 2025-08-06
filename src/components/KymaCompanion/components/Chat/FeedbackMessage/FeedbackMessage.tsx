@@ -27,6 +27,8 @@ export default function FeedbackMessage(): JSX.Element {
         >
           <Button
             accessibleRole="Link"
+            accessibleName={t('feedback.give-feedback')}
+            accessibleDescription="Open in new tab link"
             key="ai-feedback-chat"
             endIcon="inspect"
             design="Emphasized"

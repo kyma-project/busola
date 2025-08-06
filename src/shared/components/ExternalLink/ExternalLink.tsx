@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { renderToString } from 'react-dom/server';
+
 import { Button, FlexBox, Icon, Link } from '@ui5/webcomponents-react';
 
 type LinkProps = {
@@ -36,6 +38,8 @@ export const ExternalLink = ({
     return (
       <Button
         accessibleRole="Link"
+        accessibleName={text || children?.toString() || url}
+        accessibleDescription="Open in new tab link"
         endIcon="inspect"
         design={buttonDesign}
         className="sap-margin-x-tiny"
@@ -50,7 +54,14 @@ export const ExternalLink = ({
   }
 
   return (
-    <Link design={design} href={url} target="_blank" className={linkClassName}>
+    <Link
+      design={design}
+      href={url}
+      target="_blank"
+      className={linkClassName}
+      accessibleName={text || children?.toString() || url}
+      accessibleDescription="Open in new tab link"
+    >
       <FlexBox alignItems="Center">
         {text || children || url}
         <Icon

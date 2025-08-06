@@ -65,6 +65,8 @@ export function AIBanner({
           </Button>
           <Button
             accessibleRole="Link"
+            accessibleName={t('feedback.give-feedback')}
+            accessibleDescription="Open in new tab link"
             key="ai-feedback"
             endIcon="inspect"
             onClick={() => {
@@ -80,6 +82,8 @@ export function AIBanner({
           </Button>
           <Button
             accessibleRole="Link"
+            accessibleName={t('kyma-companion.banner.buttons.documentation')}
+            accessibleDescription="Open in new tab link"
             key="ai-documentation"
             endIcon="inspect"
             onClick={() => {

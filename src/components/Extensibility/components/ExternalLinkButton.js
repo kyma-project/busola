@@ -7,6 +7,8 @@ export function ExternalLinkButton({ structure }) {
   return (
     <Button
       accessibleRole="Link"
+      accessibleName={structure?.name ?? t('common.buttons.learn-more')}
+      accessibleDescription="Open in new tab link"
       endIcon="inspect"
       design={structure?.emphasized ? 'Emphasized' : 'Default'}
       inline={true}
