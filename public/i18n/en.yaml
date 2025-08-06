@@ -235,6 +235,7 @@ common:
     clone: Clone
     close: Close
     connect: Connect
+    copied: Copied
     copy: Copy
     create: Create
     delete: Delete
@@ -391,6 +392,7 @@ common:
   tooltips:
     column: Col
     copy-to-clipboard: Copy to Clipboard
+    copied-to-clipboard: Copied {{resourceName}} to clipboard
     download: Download
     error: Error
     hide: Hide read-only fields
