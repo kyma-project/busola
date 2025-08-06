@@ -45,11 +45,11 @@ jobs:
       - name: Setup Busola
         shell: bash
         run: |
-          kubectl create namespace kyma-system
           .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Install custom component example
         shell: bash
         run: |
+          kubectl create namespace kyma-system
           (cd examples/busola-web-components && kubectl kustomize . | kubectl apply -n kyma-system -f - )
       - name: Run tests
         shell: bash
