@@ -113,6 +113,9 @@ export default function FeedbackPopover() {
                 </FlexBox>
                 <Text className="info-text">{t('feedback.joule.info')}</Text>
                 <Button
+                  accessibleRole="Link"
+                  accessibleName={t('feedback.give-feedback')}
+                  accessibleDescription="Open in new tab link"
                   design="Emphasized"
                   endIcon="inspect"
                   onClick={() => {
@@ -140,6 +143,9 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.kyma.info')}</Text>
             <Button
+              accessibleRole="Link"
+              accessibleName={t('feedback.give-feedback')}
+              accessibleDescription="Open in new tab link"
               endIcon="inspect"
               design={
                 !isKymaCompanionEnabled || !companionFeedbackLink
