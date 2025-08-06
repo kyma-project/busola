@@ -84,13 +84,13 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
                     }
 
                     const expression = jsonataWrapper(relation.filter);
-                    const filter = (
+                    const filter = async (
                       originalResource,
                       possiblyRelatedResource,
                     ) => {
                       expression.assign('root', originalResource);
                       expression.assign('item', possiblyRelatedResource);
-                      return expression.evaluate();
+                      return await expression.evaluate();
                     };
 
                     return { ...relation, filter };
