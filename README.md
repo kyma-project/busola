@@ -8,6 +8,8 @@ Busola is a web-based UI for managing resources within a Kubernetes cluster. It'
 
 ### Subcomponents
 
+1
+
 The Busola project contains additional sub-projects:
 
 - [`Backend`](./backend) - A proxy between Busola and the Kubernetes cluster
