@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { renderToString } from 'react-dom/server';
 
 import { Button, FlexBox, Icon, Link } from '@ui5/webcomponents-react';
 
