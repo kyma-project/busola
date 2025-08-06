@@ -8,6 +8,12 @@ context('Test Companion UI', () => {
     cy.loginAndSelectCluster();
   });
 
+  beforeEach(() => {
+    cy.mockPromptSuggestions();
+    cy.mockChatResponse();
+    cy.mockFollowups();
+  });
+
   describe('Test Welcome screen', () => {
     it('Initial loading screen should appear on first open', () => {
       cy.openCompanion();
@@ -23,7 +29,6 @@ context('Test Companion UI', () => {
     });
 
     it('Welcome screen should be visible on first open', () => {
-      cy.mockPromptSuggestions();
       cy.openCompanion();
       cy.wait(3000);
       cy.get('.kyma-companion').as('companion');
@@ -40,8 +45,6 @@ context('Test Companion UI', () => {
     });
 
     it('Loading screen should not be visible after reset', () => {
-      cy.mockPromptSuggestions();
-      cy.mockChatResponse();
       cy.openCompanion();
       cy.get('.kyma-companion').as('companion');
 
@@ -65,8 +68,6 @@ context('Test Companion UI', () => {
     });
 
     it('Welcome screen should be visible after reset', () => {
-      cy.mockPromptSuggestions();
-      cy.mockChatResponse();
       cy.openCompanion();
       cy.get('.kyma-companion').as('companion');
 
