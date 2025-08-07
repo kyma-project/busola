@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAtom } from 'jotai';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import {
   ShowKymaCompanion,
@@ -9,8 +10,8 @@ import { Chat } from './Chat/Chat';
 import { chatHelpers } from './Chat/chatHelper';
 import { AIError, ChatGroup } from './Chat/types';
 import Disclaimer from './Disclaimer/Disclaimer';
+
 import './KymaCompanion.scss';
-import { useAtom } from 'jotai';
 
 export default function KymaCompanion() {
   const { t } = useTranslation();

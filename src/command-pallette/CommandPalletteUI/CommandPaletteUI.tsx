@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { useEventListener } from 'hooks/useEventListener';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -13,11 +14,11 @@ import { ResultsList } from './ResultsList/ResultsList';
 import { useSearchResults } from './useSearchResults';
 import { K8sResource } from 'types';
 import { Button, Icon, Input } from '@ui5/webcomponents-react';
-import './CommandPaletteUI.scss';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-import { useAtomValue } from 'jotai';
+
+import './CommandPaletteUI.scss';
 
 function Background({
   hide,

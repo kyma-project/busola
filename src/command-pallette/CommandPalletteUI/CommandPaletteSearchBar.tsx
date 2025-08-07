@@ -2,6 +2,7 @@ import { useEffect, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
 import { useEventListener } from 'hooks/useEventListener';
@@ -11,7 +12,6 @@ import { availableNodesSelector } from 'state/navigation/availableNodesSelector'
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
-import { useAtomValue } from 'jotai';
 
 type CommandPaletteSearchBarProps = {
   slot?: string;

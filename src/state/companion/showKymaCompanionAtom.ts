@@ -1,5 +1,3 @@
-// import { atom, RecoilState } from 'recoil';
-
 import { atom } from 'jotai';
 
 export type ShowKymaCompanion = {

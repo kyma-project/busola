@@ -9,6 +9,7 @@ import {
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
@@ -49,7 +50,6 @@ import { initTheme } from './initTheme';
 
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
-import { useAtomValue } from 'jotai';
 
 export default function App() {
   const theme = useRecoilValue(themeState);

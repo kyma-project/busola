@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 import {
   Avatar,
   ListItemStandard,
@@ -17,17 +18,16 @@ import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { configFeaturesNames } from 'state/types';
 
 import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
-
-import { configFeaturesNames } from 'state/types';
 import FeedbackPopover from './Feedback/FeedbackPopover';
+
 import './Header.scss';
-import { useAtom } from 'jotai';
 
 export function Header() {
   useAvailableNamespaces();
