@@ -11,7 +11,6 @@ export function Checkboxes({
   accessibleName,
   ...props
 }) {
-  console.log('Checkboxes', props);
   const updateValue = (key, checked) => {
     if (checked) {
       setValue([...(value || []), key]);
