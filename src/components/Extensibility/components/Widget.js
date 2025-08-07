@@ -7,6 +7,7 @@ import { useGetTranslation, useGetPlaceholder } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
+import { useEffect, useState } from 'react';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
@@ -108,16 +109,30 @@ export function Widget({
     arrayItems,
   });
 
-  const [childValue] = jsonata(structure.source, {
-    index: index,
-  });
-  const [visible, visibilityError] = jsonata(
-    structure.visibility?.toString(),
-    {
-      value: childValue,
-    },
-    true,
-  );
+  const [childValue, setChildValue] = useState(null);
+  const [visible, setVisible] = useState(null);
+  const [visibilityError, setVisibilityError] = useState(null);
+
+  useEffect(() => {
+    jsonata(structure.source, {
+      index: index,
+    }).then(([result]) => {
+      setChildValue(result);
+    });
+  }, [jsonata, structure.source, index]);
+
+  useEffect(() => {
+    jsonata(
+      structure.visibility?.toString(),
+      {
+        value: childValue,
+      },
+      true,
+    ).then(([result, error]) => {
+      setVisible(result);
+      setVisibilityError(error);
+    });
+  }, [jsonata, structure.visibility, childValue]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

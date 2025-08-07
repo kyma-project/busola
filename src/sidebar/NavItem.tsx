@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
@@ -15,7 +16,6 @@ import {
 import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-import { useMemo } from 'react';
 
 type NavItemProps = {
   node: NavNode;
@@ -35,8 +35,16 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   const emptyResource = useMemo(() => ({} as Resource), []);
   const jsonata = useJsonata({ resource: emptyResource });
-  const [jsonataLink, jsonataError] = jsonata(node.externalUrl || '');
+  const [jsonataLink, setJsonataLink] = useState('');
+  const [jsonataError, setJsonataError] = useState<Error | null>(null);
   const { navigateSafely } = useFormNavigation();
+
+  useEffect(() => {
+    jsonata(node.externalUrl || '').then(([link, error]) => {
+      setJsonataLink(link);
+      setJsonataError(error);
+    });
+  }, [jsonata, node.externalUrl]);
 
   const isSelected = useMemo(() => {
     if (node.externalUrl) return false;
