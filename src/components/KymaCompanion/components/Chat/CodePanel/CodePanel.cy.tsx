@@ -10,7 +10,7 @@ describe('CodePanel Component', () => {
     cy.mount(<CodePanel code={code} language="" />);
 
     cy.get('.code-response').should('exist');
-    cy.get('#copy-icon').should('exist');
+    cy.get('.copy-icon').should('exist');
     cy.get('#code-text').should('contain.text', code);
     cy.get('ui5-panel').should('not.exist');
     cy.get('pre').should('not.exist');

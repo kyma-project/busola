@@ -84,12 +84,10 @@ const CopyButton = ({
         onClick={() => handleCopy()}
         className={buttonClassName}
         tooltip={t('common.tooltips.copy-to-clipboard')}
-        aria-label={
-          iconOnly
-            ? copied
-              ? t('common.tooltips.copied-to-clipboard', { resourceName })
-              : t('common.tooltips.copy-to-clipboard')
-            : ''
+        accessibleName={
+          iconOnly && copied
+            ? t('common.tooltips.copied-to-clipboard', { resourceName })
+            : t('common.tooltips.copy-to-clipboard')
         }
         aria-live={iconOnly ? 'polite' : undefined}
       >
