@@ -67,7 +67,11 @@ export default function CommunityModuleCard({
           );
         }}
       >
-        <CheckBox className="checkbox" checked={isChecked(module.name)} />
+        <CheckBox
+          accessibleName={`${module.name} community module checkbox`}
+          className="checkbox"
+          checked={isChecked(module.name)}
+        />
         <div className="titles">
           <Title level="H6" size="H6">
             {module.name}

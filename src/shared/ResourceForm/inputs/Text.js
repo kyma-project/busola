@@ -7,13 +7,13 @@ export function Text({ key, ...props }) {
 
 export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
   if (!props.readOnly) delete props.readOnly;
-
   const {
     validationRef,
     internalValue,
     setMultiValue,
     setResource,
     validateMessage,
+    accessibleName,
     ...inputProps
   } = props;
 
