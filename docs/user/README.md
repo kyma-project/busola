@@ -2,7 +2,7 @@
 
 Use Kyma dashboard to access various features and functionalities of Kyma runtime.
 
-Kyma dashboard is a web-based UI utilizing the React library and the SAP Fiori Horizon design system. Kyma uses Kyma dashboard as a central administration dashboard, which provides a graphical overview of your cluster and all its resources.
+Kyma dashboard is a web-based UI utilizing the React library and the SAP Fiori Horizon design system. It works on top of the [Busola UI](https://github.com/kyma-project/busola) and provides basic configuration for different environments (including extensions, authorization, and feature flags) for Kyma clusters. Kyma uses Kyma dashboard as a central administration dashboard, which provides a graphical overview of your cluster and all its resources.
 
 You can also use Kyma dashboard as a standalone dashboard for managing Kubernetes clusters.
 
