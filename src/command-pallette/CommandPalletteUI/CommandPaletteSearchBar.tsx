@@ -11,6 +11,7 @@ import { availableNodesSelector } from 'state/navigation/availableNodesSelector'
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
+import { useAtomValue } from 'jotai';
 
 type CommandPaletteSearchBarProps = {
   slot?: string;
@@ -32,7 +33,7 @@ export function CommandPaletteSearchBar({
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
-  const showCompanion = useRecoilValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionState);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const htmlWrapEl = document.getElementById('html-wrap');

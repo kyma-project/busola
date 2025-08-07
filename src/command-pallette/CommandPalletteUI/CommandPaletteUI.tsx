@@ -17,6 +17,7 @@ import './CommandPaletteUI.scss';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { useAtomValue } from 'jotai';
 
 function Background({
   hide,
@@ -67,7 +68,7 @@ export function CommandPaletteUI({
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
-  const showCompanion = useRecoilValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionState);
 
   const commandPaletteRef = useRef<HTMLDivElement | null>(null);
 

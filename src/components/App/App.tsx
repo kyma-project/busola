@@ -49,6 +49,7 @@ import { initTheme } from './initTheme';
 
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
+import { useAtomValue } from 'jotai';
 
 export default function App() {
   const theme = useRecoilValue(themeState);
@@ -86,7 +87,7 @@ export default function App() {
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
 
-  const showCompanion = useRecoilValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionState);
 
   if (isLoading) {
     return <Spinner />;

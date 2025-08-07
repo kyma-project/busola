@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import {
   Avatar,
   ListItemStandard,
@@ -27,6 +27,7 @@ import { SnowFeature } from './SnowFeature';
 import { configFeaturesNames } from 'state/types';
 import FeedbackPopover from './Feedback/FeedbackPopover';
 import './Header.scss';
+import { useAtom } from 'jotai';
 
 export function Header() {
   useAvailableNamespaces();
@@ -45,9 +46,8 @@ export function Header() {
   const { isEnabled: isKymaCompanionEnabled } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
   );
-  const [showCompanion, setShowCompanion] = useRecoilState(
-    showKymaCompanionState,
-  );
+
+  const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionState);
   const shellbarRef = useRef(null);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(

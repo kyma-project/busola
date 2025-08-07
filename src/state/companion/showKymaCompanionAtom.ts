@@ -1,4 +1,6 @@
-import { atom, RecoilState } from 'recoil';
+// import { atom, RecoilState } from 'recoil';
+
+import { atom } from 'jotai';
 
 export type ShowKymaCompanion = {
   show: boolean;
@@ -10,9 +12,8 @@ const DEFAULT_SHOW_KYMA_COMPANION: ShowKymaCompanion = {
   fullScreen: false,
 };
 
-export const showKymaCompanionState: RecoilState<ShowKymaCompanion> = atom<
-  ShowKymaCompanion
->({
-  key: 'showKymaCompanionState',
-  default: DEFAULT_SHOW_KYMA_COMPANION,
-});
+export const showKymaCompanionState = atom<ShowKymaCompanion>(
+  DEFAULT_SHOW_KYMA_COMPANION,
+);
+
+showKymaCompanionState.debugLabel = 'showKymaCompanionState';

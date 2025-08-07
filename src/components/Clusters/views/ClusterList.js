@@ -31,6 +31,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { Link } from 'shared/components/Link/Link';
 import { configFeaturesNames } from 'state/types';
+import { useSetAtom } from 'jotai';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature(configFeaturesNames.GARDENER_LOGIN);
@@ -49,7 +50,7 @@ function ClusterList() {
   const [chosenCluster, setChosenCluster] = useState(null);
   const setShowAdd = useSetRecoilState(showAddClusterWizard);
   const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
+  const setShowCompanion = useSetAtom(showKymaCompanionState);
 
   useEffect(() => {
     setShowCompanion({
