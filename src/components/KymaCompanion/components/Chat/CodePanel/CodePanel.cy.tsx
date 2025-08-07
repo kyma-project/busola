@@ -67,7 +67,11 @@ describe('CodePanel Component', () => {
       .eq(0)
       .should('have.attr', 'icon', 'copy')
       .should('have.attr', 'design', 'Transparent')
-      .should('have.attr', 'accessible-name', t('common.buttons.copy'));
+      .should(
+        'have.attr',
+        'accessible-name',
+        t('common.tooltips.copy-to-clipboard'),
+      );
     cy.get('.action-button')
       .eq(1)
       .should('have.attr', 'icon', 'sys-add');
