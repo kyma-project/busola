@@ -22,5 +22,11 @@
   },
   {
     "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/tracepipeline_busola_extension_cm.yaml"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/metricpipeline_busola_extension_cm.yaml"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/telemetry_busola_extension_cm.yaml"
   }
 ]
