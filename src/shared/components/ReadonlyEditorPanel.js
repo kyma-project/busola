@@ -58,7 +58,13 @@ export function ReadonlyEditorPanel({
     ));
 
   return (
-    <UI5Panel title={title} headerActions={headerActions}>
+    <UI5Panel
+      title={title}
+      headerActions={headerActions}
+      accessibleName={`${title} ${t('common.labels.read-only')} ${t(
+        'common.ariaLabel.editor',
+      )}`}
+    >
       <EditorActions
         val={valueState}
         editor={editor}

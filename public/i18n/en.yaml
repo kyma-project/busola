@@ -226,6 +226,7 @@ command-palette:
 common:
   ariaLabel:
     new-tab-link: This link will be opened in a new tab.
+    editor: editor
   buttons:
     add: Add
     add-all: Add all
