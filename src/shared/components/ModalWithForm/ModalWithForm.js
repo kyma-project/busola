@@ -25,6 +25,7 @@ export const ModalWithForm = ({
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
   const { navigateSafely } = useFormNavigation();
+  const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
   const {
     isValid,
@@ -52,8 +53,27 @@ export const ModalWithForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getToggleFormFn]);
 
+  const checkRequiredInputs = () => {
+    const invalidList = formElementRef?.current?.querySelectorAll(':invalid');
+    const scopes = formElementRef?.current?.querySelector(
+      '[accessible-name="Scopes"]',
+    );
+    const scopesValid = [
+      ...(scopes?.querySelectorAll('ui5-input') ?? []),
+    ]?.filter(el => el?.value);
+    const isScopesInvalid = scopes && !scopesValid?.length;
+    if (invalidList?.length || isScopesInvalid) {
+      setHasInvalidInputs(true);
+    } else {
+      setHasInvalidInputs(false);
+    }
+  };
+
   function handleFormChanged() {
-    setTimeout(() => revalidate());
+    setTimeout(() => {
+      revalidate();
+      checkRequiredInputs();
+    });
   }
 
   function handleFormError(title, message, isWarning) {
@@ -115,7 +135,7 @@ export const ModalWithForm = ({
               endContent={
                 <>
                   <Button
-                    disabled={!isValid}
+                    disabled={!isValid || hasInvalidInputs}
                     aria-disabled={!isValid}
                     onClick={handleFormSubmit}
                     design="Emphasized"

@@ -52,6 +52,7 @@ export function AddClusterWizard({
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const [chosenContext, setChosenContext] = useState(undefined);
+  const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
   const {
     isValid: authValid,
@@ -147,11 +148,30 @@ export function AddClusterWizard({
         return !kubeconfig;
       case 2:
         return kubeconfig && (!hasAuth || !hasOneContext)
-          ? !authValid || invalidMultipleContexts
+          ? !authValid || invalidMultipleContexts || hasInvalidInputs
           : false;
       default:
         return false;
     }
+  };
+
+  const checkRequiredInputs = () => {
+    // setTimeout is used to delay and ensure that the form validation runs after the state updates.
+    setTimeout(() => {
+      const invalidList = authFormRef?.current?.querySelectorAll(':invalid');
+      const scopes = authFormRef?.current?.querySelector(
+        '[accessible-name="Scopes"]',
+      );
+      const scopesValid = [
+        ...(scopes?.querySelectorAll('ui5-input') ?? []),
+      ]?.filter(el => el?.value);
+      const isScopesInvalid = scopes && !scopesValid?.length;
+      if (invalidList?.length || isScopesInvalid) {
+        setHasInvalidInputs(true);
+      } else {
+        setHasInvalidInputs(false);
+      }
+    });
   };
 
   return (
@@ -194,7 +214,12 @@ export function AddClusterWizard({
                     setChosenContext={setChosenContext}
                   />
                 )}
-                {!hasAuth && <AuthForm revalidate={revalidate} />}
+                {!hasAuth && (
+                  <AuthForm
+                    checkRequiredInputs={checkRequiredInputs}
+                    revalidate={revalidate}
+                  />
+                )}
               </ResourceForm.Single>
             </div>
           </WizardStep>

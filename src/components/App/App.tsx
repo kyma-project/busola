@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Navigate,
@@ -67,6 +67,7 @@ export default function App() {
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const authFormRef = useRef<HTMLFormElement>(null);
   const [search] = useSearchParams();
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
   const [manualKubeConfigId, setManualKubeConfigId] = useRecoilState(
@@ -75,6 +76,7 @@ export default function App() {
   const [authFormState, setAuthFormState] = useState<{
     users?: Users;
   }>({});
+  const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
   useEffect(() => {
     setNamespace(namespace);
@@ -101,6 +103,7 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useRecoilValue(showKymaCompanionState);
+
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();
     const auth = authFormState?.users?.find(
@@ -117,6 +120,25 @@ export default function App() {
   if (isLoading) {
     return <Spinner />;
   }
+
+  const checkRequiredInputs = () => {
+    // setTimeout is used to delay and ensure that the form validation runs after the state updates.
+    setTimeout(() => {
+      const invalidList = authFormRef?.current?.querySelectorAll(':invalid');
+      const scopes = authFormRef?.current?.querySelector(
+        '[accessible-name="Scopes"]',
+      );
+      const scopesValid = [
+        ...(scopes?.querySelectorAll('ui5-input') ?? []),
+      ]?.filter((el: any) => el?.value);
+      const isScopesInvalid = scopes && !scopesValid?.length;
+      if (invalidList?.length || isScopesInvalid) {
+        setHasInvalidInputs(true);
+      } else {
+        setHasInvalidInputs(false);
+      }
+    });
+  };
 
   initTheme(theme);
 
@@ -142,14 +164,18 @@ export default function App() {
                 <Dialog open={true}>
                   {/*@ts-ignore*/}
                   <ResourceForm.Single
+                    formElementRef={authFormRef}
                     createResource={updateManualKubeConfigIdState}
                   >
                     <AuthForm
                       resource={authFormState}
                       setResource={setAuthFormState}
+                      checkRequiredInputs={checkRequiredInputs}
                     />
                     <div className="auth-form-dialog-footer">
-                      <Button type="Submit">{t('clusters.add.title')}</Button>
+                      <Button disabled={hasInvalidInputs} type="Submit">
+                        {t('clusters.add.title')}
+                      </Button>
                     </div>
                     {/*@ts-ignore*/}
                   </ResourceForm.Single>

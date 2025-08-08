@@ -15,7 +15,7 @@ import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { authDataState } from 'state/authDataAtom';
 import { Title } from '@ui5/webcomponents-react';
 
-import { addCluster, getContext, deleteCluster } from '../../shared';
+import { addCluster, getContext, deleteCluster, getUser } from '../../shared';
 import { getUserIndex } from '../../shared';
 import { ContextButtons } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
@@ -90,6 +90,7 @@ export const ClusterDataForm = ({
       label={t('clusters.token')}
       input={Inputs.Text}
       required
+      onChange={onChange}
       value={kubeconfig?.users?.[userIndex]?.user?.token}
       setValue={val => {
         jp.value(kubeconfig, `$.users[${userIndex}].user.token`, val);
@@ -127,6 +128,7 @@ export const ClusterDataForm = ({
         input={Inputs.Text}
         required
         value={issuerUrl}
+        onChange={onChange}
         setValue={val => {
           createOIDC('issuerUrl', val);
         }}
@@ -136,6 +138,7 @@ export const ClusterDataForm = ({
         input={Inputs.Text}
         required
         value={clientId}
+        onChange={onChange}
         setValue={val => {
           createOIDC('clientId', val);
         }}
@@ -153,6 +156,7 @@ export const ClusterDataForm = ({
         defaultOpen
         title={t('clusters.labels.scopes')}
         value={scopes}
+        toExternal={onChange}
         setValue={val => {
           createOIDC('scopes', val);
         }}
@@ -203,6 +207,13 @@ export const ClusterDataForm = ({
             validate={value => !!value}
             setValue={context => {
               jp.value(kubeconfig, '$["current-context"]', context);
+              if (!getUser(kubeconfig) && kubeconfig?.users?.length) {
+                jp.value(kubeconfig, `$.users`, [
+                  ...(kubeconfig?.users ?? []),
+                  { name: context },
+                ]);
+              }
+              onChange();
               setChosenContext(context);
               setResource({ ...kubeconfig });
             }}
@@ -223,6 +234,7 @@ export const ClusterDataForm = ({
           required
           value={authenticationType}
           setValue={type => {
+            onChange();
             if (type === 'token') {
               delete kubeconfig?.users[userIndex]?.user?.exec;
               jp.value(kubeconfig, `$.users[${userIndex}].user.token`, null);
