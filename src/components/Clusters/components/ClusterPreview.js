@@ -102,6 +102,9 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
             design="Transparent"
             onClick={() => setSelected(1)}
             className="cluster-preview__edit-button"
+            accessibleName={`${t('common.buttons.edit')} ${t(
+              'common.headers.configuration',
+            )}`}
           >
             {t('common.buttons.edit')}
           </Button>
@@ -119,6 +122,9 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
             design="Transparent"
             onClick={() => (hasAuth ? setSelected(1) : setSelected(2))}
             className="cluster-preview__edit-button"
+            accessibleName={`${t('common.buttons.edit')} ${t(
+              'clusters.wizard.authentication',
+            )}`}
           >
             {t('common.buttons.edit')}
           </Button>
@@ -166,6 +172,9 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
               hasAuth ? setSelected(2) : setSelected(3);
             }}
             className="cluster-preview__edit-button"
+            accessibleName={`${t('common.buttons.edit')} ${t(
+              'clusters.wizard.storage',
+            )}`}
           >
             {t('common.buttons.edit')}
           </Button>
