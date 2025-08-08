@@ -9,7 +9,7 @@ import { getPorts } from 'shared/components/GetContainersPorts';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
-import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 ContainersData.propTypes = {
@@ -19,7 +19,7 @@ ContainersData.propTypes = {
 export default function ContainersData({ type, containers, statuses }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const setLayout = useSetRecoilState(columnLayoutState);
+  const setLayout = useSetAtom(columnLayoutState);
 
   if (!containers) {
     return null;

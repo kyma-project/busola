@@ -1,7 +1,7 @@
 import { FlexibleColumnLayout, MessageStrip } from '@ui5/webcomponents-react';
 import React, { Suspense, useDeferredValue } from 'react';
 import { Route, useParams } from 'react-router';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -34,7 +34,7 @@ const ColumnWrapper = ({
   handleResourceDelete,
   showDeleteDialog,
 }) => {
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
   const { clusterUrl, namespaceUrl } = useUrl();
   const url = namespaced
     ? namespaceUrl('kymamodules')

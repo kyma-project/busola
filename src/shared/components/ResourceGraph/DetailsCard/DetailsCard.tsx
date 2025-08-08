@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 
 import { Button } from '@ui5/webcomponents-react';
 import { Labels } from 'shared/components/Labels/Labels';
@@ -24,7 +25,7 @@ export function DetailsCard({
   const navigate = useNavigate();
   const { clusterUrl } = useUrl();
   const nodes = useRecoilValue(allNodesSelector);
-  const [, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [, setLayoutColumn] = useAtom(columnLayoutState);
 
   return (
     <div className="details-card-wrapper">

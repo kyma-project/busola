@@ -27,7 +27,7 @@ import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 
@@ -199,7 +199,7 @@ function Resource({
     layoutNumber,
   });
 
-  const layoutColumn = useRecoilValue(columnLayoutState);
+  const layoutColumn = useAtomValue(columnLayoutState);
   const protectedResource = isProtected(resource);
 
   const actions = readOnly ? null : (

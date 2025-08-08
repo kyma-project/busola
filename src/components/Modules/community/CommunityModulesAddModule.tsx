@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
+import { SetterOrUpdater, useSetRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -121,7 +122,7 @@ export default function CommunityModulesAddModule(props: any) {
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
 
   const uploadResources = useUploadResources(
     resourcesToApply,

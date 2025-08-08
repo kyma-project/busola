@@ -12,7 +12,7 @@ import {
   createDeploymentTemplate,
   createPresets,
 } from './templates';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
@@ -38,7 +38,7 @@ export default function DeploymentCreate({
   const [initialResource, setInitialResource] = useState(
     initialDeployment || createDeploymentTemplate(namespace),
   );
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

@@ -17,6 +17,7 @@ import './DynamicPageComponent.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
@@ -114,7 +115,7 @@ export const DynamicPageComponent = ({
 }) => {
   const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
   const { t } = useTranslation();
   const [isResourceEdited, setIsResourceEdited] = useRecoilState(
     isResourceEditedState,

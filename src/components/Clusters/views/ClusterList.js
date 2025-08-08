@@ -50,7 +50,7 @@ function ClusterList() {
 
   const [chosenCluster, setChosenCluster] = useState(null);
   const setShowAdd = useSetRecoilState(showAddClusterWizard);
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
   const setShowCompanion = useSetAtom(showKymaCompanionState);
 
   useEffect(() => {

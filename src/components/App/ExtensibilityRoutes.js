@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import pluralize from 'pluralize';
 import i18next from 'i18next';
 import { Route, useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,7 +22,7 @@ const Details = React.lazy(() =>
 const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
 const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();
