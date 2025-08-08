@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { useAtomValue } from 'jotai';
+import { useSetAtom, useAtomValue } from 'jotai';
 import { sessionIDState } from '../../../state/companion/sessionIDAtom';
 import getPromptSuggestions from '../api/getPromptSuggestions';
 import { ColumnLayoutState, columnLayoutState } from 'state/columnLayoutAtom';
@@ -42,7 +41,7 @@ export function usePromptSuggestions(
 ) {
   const post = usePost();
   const [initialSuggestions, setInitialSuggestions] = useState<string[]>([]);
-  const setSessionID = useSetRecoilState(sessionIDState);
+  const setSessionID = useSetAtom(sessionIDState);
   const columnLayout = useAtomValue(columnLayoutState);
   const [loading, setLoading] = useState(true);
   const fetchedResourceRef = useRef('');
