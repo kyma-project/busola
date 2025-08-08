@@ -8,10 +8,11 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import './YamlUploadDialog.scss';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { useAtom } from 'jotai';
 
 export const YamlUpload = React.lazy(() => import('./YamlUpload'));
 
@@ -32,7 +33,7 @@ export function YamlUploadDialog() {
   const [lastOperationState, setLastOperationState] = useState(
     OPERATION_STATE_INITIAL,
   );
-  const [openAdd, setShowAdd] = useRecoilState(showYamlUploadDialogState);
+  const [openAdd, setShowAdd] = useAtom(showYamlUploadDialogState);
 
   const fetchResources = useUploadResources(
     resourcesWithStatuses,

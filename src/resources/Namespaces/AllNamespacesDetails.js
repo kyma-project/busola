@@ -9,12 +9,12 @@ import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/Reso
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { createPortal } from 'react-dom';
 import YamlUploadDialog from './YamlUpload/YamlUploadDialog';
-import { useSetRecoilState } from 'recoil';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { useSetAtom } from 'jotai';
 
 export function AllNamespacesDetails() {
   const { t } = useTranslation();
-  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
+  const setShowAdd = useSetAtom(showYamlUploadDialogState);
 
   const limitRangesParams = {
     hasDetailsView: true,
