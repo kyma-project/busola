@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Navigate,
@@ -9,7 +9,7 @@ import {
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
@@ -25,14 +25,19 @@ import { useGetExtensibilitySchemas } from 'state/extensibilitySchemasAtom';
 import { useGetValidationSchemas } from 'state/validationSchemasAtom';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLoginRoute';
-import { useHandleResetEndpoint } from 'components/Clusters/shared';
+import { useHandleResetEndpoint, Users } from 'components/Clusters/shared';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { removePreviousPath, useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { multipleContexts } from 'state/multipleContextsAtom';
 
-import { SplitterElement, SplitterLayout } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Dialog,
+  SplitterElement,
+  SplitterLayout,
+} from '@ui5/webcomponents-react';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
 import { Preferences } from 'components/Preferences/Preferences';
@@ -50,6 +55,10 @@ import { initTheme } from './initTheme';
 
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
+import { manualKubeConfigIdState } from 'state/manualKubeConfigIdAtom';
+import { AuthForm } from 'components/Clusters/components/AuthForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 
 export default function App() {
   const theme = useRecoilValue(themeState);
@@ -60,8 +69,16 @@ export default function App() {
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const authFormRef = useRef<HTMLFormElement>(null);
   const [search] = useSearchParams();
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
+  const [manualKubeConfigId, setManualKubeConfigId] = useAtom(
+    manualKubeConfigIdState,
+  );
+  const [authFormState, setAuthFormState] = useState<{
+    users?: Users;
+  }>({});
+  const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
   useEffect(() => {
     setNamespace(namespace);
@@ -89,9 +106,29 @@ export default function App() {
 
   const showCompanion = useAtomValue(showKymaCompanionState);
 
+  const updateManualKubeConfigIdState = (e: any) => {
+    e.preventDefault();
+    const auth = authFormState?.users?.find(
+      user => user?.user?.token || user?.user?.exec,
+    )?.user;
+    if (auth) {
+      setManualKubeConfigId({
+        formOpen: false,
+        auth,
+      });
+    }
+  };
+
   if (isLoading) {
     return <Spinner />;
   }
+
+  const checkRequiredInputs = () => {
+    // setTimeout is used to delay and ensure that the form validation runs after the state updates.
+    setTimeout(() => {
+      checkAuthRequiredInputs(authFormRef, setHasInvalidInputs);
+    });
+  };
 
   initTheme(theme);
 
@@ -111,6 +148,30 @@ export default function App() {
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />
+            {search.get('kubeconfigID') &&
+              manualKubeConfigId.formOpen &&
+              createPortal(
+                <Dialog open={true}>
+                  {/*@ts-ignore*/}
+                  <ResourceForm.Single
+                    formElementRef={authFormRef}
+                    createResource={updateManualKubeConfigIdState}
+                  >
+                    <AuthForm
+                      resource={authFormState}
+                      setResource={setAuthFormState}
+                      checkRequiredInputs={checkRequiredInputs}
+                    />
+                    <div className="auth-form-dialog-footer">
+                      <Button disabled={hasInvalidInputs} type="Submit">
+                        {t('clusters.add.title')}
+                      </Button>
+                    </div>
+                    {/*@ts-ignore*/}
+                  </ResourceForm.Single>
+                </Dialog>,
+                document.body,
+              )}
             {search.get('kubeconfigID') &&
               !!contextsState?.contexts?.length &&
               kubeconfigIdState === 'loading' &&

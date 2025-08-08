@@ -9,7 +9,7 @@ import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutState } from 'state/columnLayoutAtom';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 export function GenericRoleCreate({
   onChange,
@@ -28,7 +28,7 @@ export function GenericRoleCreate({
   const [initialResource, setInitialResource] = useState(
     initialRole || createTemplate(),
   );
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

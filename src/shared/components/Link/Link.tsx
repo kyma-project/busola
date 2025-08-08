@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link as UI5Link } from '@ui5/webcomponents-react';
-import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
 
@@ -25,7 +25,7 @@ export const Link = ({
   onClick,
   style = {},
 }: LinkProps) => {
-  const setLayout = useSetRecoilState(columnLayoutState);
+  const setLayout = useSetAtom(columnLayoutState);
   const navigate = useNavigate();
 
   function handleOnlick(resetLayout: any, url: any, e: any) {

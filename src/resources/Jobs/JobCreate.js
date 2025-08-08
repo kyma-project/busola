@@ -11,7 +11,7 @@ import { JobSpecSection } from './SpecSection';
 import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function isJobValid(job = {}) {
@@ -49,7 +49,7 @@ export default function JobCreate({
   const [initialResource, setInitialResource] = useState(
     initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
   );
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

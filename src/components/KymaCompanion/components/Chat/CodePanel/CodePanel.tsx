@@ -1,6 +1,7 @@
 import { Text, Panel, Title, FlexBox, Button } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import {
   isCurrentThemeDark,
@@ -89,7 +90,7 @@ export default function CodePanel({
   const { t } = useTranslation();
   const theme = useRecoilValue(themeState);
   const syntaxTheme = getCustomTheme(theme);
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
   const navigate = useNavigate();
   const cluster = useRecoilValue(clusterState);
 

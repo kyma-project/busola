@@ -13,7 +13,7 @@ import { CommunityModulesList } from 'components/Modules/community/CommunityModu
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 import { checkSelectedModule } from './support';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
@@ -21,7 +21,7 @@ import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/c
 
 export default function ModulesList({ namespaced }) {
   const { t } = useTranslation();
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );

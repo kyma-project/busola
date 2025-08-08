@@ -15,7 +15,7 @@ import {
   createCronJobPresets,
 } from 'resources/Jobs/templates';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function isCronJobValid(cronJob) {
@@ -44,7 +44,7 @@ export default function CronJobCreate({
   const [initialResource, setInitialResource] = useState(
     initialCronJob || createCronJobTemplate(namespace),
   );
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

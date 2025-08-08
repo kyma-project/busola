@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +24,7 @@ const BusolaExtensionCreate = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
   const { clusterUrl } = useUrl();
 
   const { t } = useTranslation();

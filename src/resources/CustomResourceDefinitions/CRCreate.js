@@ -11,7 +11,7 @@ import { createTemplate } from './templates';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { BusyIndicator } from '@ui5/webcomponents-react';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 function CRCreateForm({
@@ -23,7 +23,7 @@ function CRCreateForm({
   ...props
 }) {
   const { crdName } = useParams();
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
   const { t } = useTranslation();
   const notification = useNotification();
   const [cr, setCr] = useState(
