@@ -8,6 +8,7 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 
 export const ModalWithForm = ({
   performRefetch = () => {},
@@ -53,26 +54,10 @@ export const ModalWithForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getToggleFormFn]);
 
-  const checkRequiredInputs = () => {
-    const invalidList = formElementRef?.current?.querySelectorAll(':invalid');
-    const scopes = formElementRef?.current?.querySelector(
-      '[accessible-name="Scopes"]',
-    );
-    const scopesValid = [
-      ...(scopes?.querySelectorAll('ui5-input') ?? []),
-    ]?.filter(el => el?.value);
-    const isScopesInvalid = scopes && !scopesValid?.length;
-    if (invalidList?.length || isScopesInvalid) {
-      setHasInvalidInputs(true);
-    } else {
-      setHasInvalidInputs(false);
-    }
-  };
-
   function handleFormChanged() {
     setTimeout(() => {
       revalidate();
-      checkRequiredInputs();
+      checkAuthRequiredInputs(formElementRef, setHasInvalidInputs);
     });
   }
 

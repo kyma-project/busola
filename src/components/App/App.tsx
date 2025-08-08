@@ -57,6 +57,7 @@ import '../../web-components/index'; //Import for custom Web Components
 import { manualKubeConfigIdState } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
+import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 
 export default function App() {
   const theme = useRecoilValue(themeState);
@@ -124,19 +125,7 @@ export default function App() {
   const checkRequiredInputs = () => {
     // setTimeout is used to delay and ensure that the form validation runs after the state updates.
     setTimeout(() => {
-      const invalidList = authFormRef?.current?.querySelectorAll(':invalid');
-      const scopes = authFormRef?.current?.querySelector(
-        '[accessible-name="Scopes"]',
-      );
-      const scopesValid = [
-        ...(scopes?.querySelectorAll('ui5-input') ?? []),
-      ]?.filter((el: any) => el?.value);
-      const isScopesInvalid = scopes && !scopesValid?.length;
-      if (invalidList?.length || isScopesInvalid) {
-        setHasInvalidInputs(true);
-      } else {
-        setHasInvalidInputs(false);
-      }
+      checkAuthRequiredInputs(authFormRef, setHasInvalidInputs);
     });
   };
 
