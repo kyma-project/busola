@@ -1,6 +1,6 @@
 import React, { Suspense, useMemo } from 'react';
 import { Route, useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -28,7 +28,7 @@ const CustomResource = React.lazy(() =>
 );
 
 export const ColumnWrapper = () => {
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
 
   const { t } = useTranslation();
 

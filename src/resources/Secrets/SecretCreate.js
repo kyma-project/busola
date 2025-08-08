@@ -8,6 +8,7 @@ import { DataField } from 'shared/ResourceForm/fields';
 import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -29,7 +30,7 @@ export default function SecretCreate({
   const [initialResource, setInitialResource] = useState(
     initialSecret || createSecretTemplate(namespace || ''),
   );
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

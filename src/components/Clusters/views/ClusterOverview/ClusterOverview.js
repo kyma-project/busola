@@ -7,6 +7,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { createPortal } from 'react-dom';
@@ -46,7 +47,7 @@ export function ClusterOverview() {
   });
   const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
 
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
   useEffect(() => {
     setLayoutColumn({
       layout: 'OneColumn',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -15,7 +15,7 @@ const HelmReleaseDetails = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
   const { namespaceId, releaseName } = useParams();
 
   usePrepareLayoutColumns({

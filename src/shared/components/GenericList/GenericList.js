@@ -2,7 +2,8 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 
 import { useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
@@ -288,7 +289,7 @@ export const GenericList = ({
     });
   };
 
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
   const linkTo = entry => {
