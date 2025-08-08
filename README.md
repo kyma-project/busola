@@ -16,7 +16,7 @@ The Busola project contains additional sub-projects:
 
 ## Prerequisites
 
-- [`npm`](https://www.npmjs.com/) in version 10.x
+- [`npm`](https://www.npmjs.com/) in version 11.x
 - [`node`](https://nodejs.org/en/) in version 22.x
 
 ## Installation
@@ -38,8 +38,8 @@ Run the `npm start` command.
 - For more information on the Busola configuration, see [Configuration](docs/operator/configuration.md).
 - For more information on using Busola for development, see [Development](docs/contributor/development.md).
 - To learn how to run Busola in Docker, see [Busola in Docker](docs/contributor/busola-docker.md).
-- To learn how to deploy and access Busola in the Kubernetes cluster, see [Deploying and Accessing Busola in the Kubernetes Cluster](docs/operator/deploy-access-kubernetes.md).
-- For more information on troubleshooting Busola, see [Troubleshooting](docs/contributor/troubleshooting.md).
+- To learn how to deploy and access Busola in the Kubernetes cluster, see [Deploying and Accessing Busola in the Kubernetes Cluster](docs/contributor/deploy-access-kubernetes.md).
+- For more information on troubleshooting Busola, see [Troubleshooting](docs/operator/troubleshooting.md).
 
 ## Contributing
 
