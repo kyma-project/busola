@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SetterOrUpdater, useRecoilValue } from 'recoil';
+import { SetterOrUpdater } from 'recoil';
+import { useAtom } from 'jotai';
+
 import { Category } from 'state/navigation/categories';
 import {
   SideNavigationItem,
@@ -32,7 +34,7 @@ export function CategoryItem({
   const { t } = useTranslation();
   const categoryName = t(category.label, { defaultValue: category.label });
   const expanded = expandedCategories.includes(category.key);
-  const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
+  const isSidebarCondensed = useAtom(isSidebarCondensedState);
 
   const handleAddExpandedCategory = (
     e: Ui5CustomEvent<

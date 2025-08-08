@@ -1,4 +1,5 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   SideNavigation,
   SideNavigationItem,
@@ -23,7 +24,7 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
-  const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
+  const isSidebarCondensed = useAtomValue(isSidebarCondensedState);
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
   const navigate = useNavigate();
