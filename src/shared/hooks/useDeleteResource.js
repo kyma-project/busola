@@ -241,6 +241,7 @@ export function useDeleteResource({
           )}
           {!forceConfirmDelete && (
             <CheckBox
+              accessibleName={t('common.delete-dialog.delete-confirm')}
               checked={dontConfirmDelete}
               onChange={() => setDontConfirmDelete(prevState => !prevState)}
               text={t('common.delete-dialog.delete-confirm')}

@@ -18,6 +18,7 @@ export function Presets({
   const presetDropdown = (
     <Dropdown
       placeholder={t('common.create-form.choose-template')} //TODO Have placeholder blank or sth
+      accessibleName={t('common.create-form.template')}
       options={options}
       disabled={disabled}
       label={label}

@@ -112,7 +112,11 @@ export default function ModulesCard({
           checkIfVersionExistsAndSet();
         }}
       >
-        <CheckBox className="checkbox" checked={isChecked(module.name)} />
+        <CheckBox
+          accessibleName={`${module.name}  module checkbox`}
+          className="checkbox"
+          checked={isChecked(module.name)}
+        />
         <div className="titles">
           <Title level="H6" size="H6">
             {module.name}

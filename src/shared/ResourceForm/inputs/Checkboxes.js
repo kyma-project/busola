@@ -8,6 +8,7 @@ export function Checkboxes({
   inline,
   dataTestID,
   inputRef,
+  accessibleName,
   ...props
 }) {
   const updateValue = (key, checked) => {
@@ -22,6 +23,7 @@ export function Checkboxes({
       {options.map(({ key, text, description }) => (
         <FlexBox wrap="Wrap" alignItems="Center" key={key}>
           <CheckBox
+            accessibleName={text}
             data-testid={`${dataTestID}.${key}`}
             checked={value?.includes(key)}
             onChange={e => updateValue(key, e.target.checked)}

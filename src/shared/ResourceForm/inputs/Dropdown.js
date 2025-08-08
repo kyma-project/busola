@@ -7,6 +7,7 @@ export function Dropdown({
   error,
   loading,
   selectedKey,
+  accessibleName,
   ...props
 }) {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ export function Dropdown({
       selectedKey={selectedKey ?? value}
       onSelect={(_, selected) => setValue(selected.key, selected)}
       validationState={getValidationState()}
+      accessibleName={`${accessibleName} Dropdown input`}
       {...dropdownProps}
     />
   );
