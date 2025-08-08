@@ -50,7 +50,7 @@ export function useSearchResults({
   const fetch = useFetch();
   const { t } = useTranslation();
   const setOpenPreferencesModal = useSetRecoilState(isPreferencesOpenState);
-  const setShowYamlUpload = useSetRecoilState(showYamlUploadDialogState);
+  const setShowYamlUpload = useSetAtom(showYamlUploadDialogState);
   const clustersInfo = useClustersInfo();
   const navigate = useNavigate();
 
