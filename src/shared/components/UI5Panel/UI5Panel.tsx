@@ -19,6 +19,7 @@ type UI5PanelProps = {
   stickyHeader?: boolean;
   headerTop?: string;
   testid?: string;
+  accessibleName?: string;
 };
 
 export const UI5Panel = ({
@@ -35,6 +36,7 @@ export const UI5Panel = ({
   stickyHeader = false,
   headerTop = '0',
   testid,
+  accessibleName,
 }: UI5PanelProps) => {
   useEffect(() => {
     if (headerTop !== '0')
@@ -60,6 +62,7 @@ export const UI5Panel = ({
         !disableMargin ? 'sap-margin-small' : ''
       }`}
       stickyHeader={stickyHeader}
+      accessibleName={accessibleName}
       header={
         <Toolbar
           className="toolbar"
