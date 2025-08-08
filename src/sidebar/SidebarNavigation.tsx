@@ -1,6 +1,5 @@
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useSetAtom } from 'jotai';
 import {
   SideNavigation,
   SideNavigationItem,
