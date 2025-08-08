@@ -2,6 +2,7 @@ import { useEffect, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
 import { useEventListener } from 'hooks/useEventListener';
@@ -32,7 +33,7 @@ export function CommandPaletteSearchBar({
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
-  const showCompanion = useRecoilValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionState);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const htmlWrapEl = document.getElementById('html-wrap');

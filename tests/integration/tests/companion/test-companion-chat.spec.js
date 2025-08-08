@@ -608,6 +608,7 @@ context('Test Companion Chat Behavior', () => {
     cy.get('@companion')
       .find('ui5-button[accessible-name="Replace"]')
       .click();
+    cy.wait(1000);
 
     // Check if redirected to correct Deployment Edit From
     cy.contains('ui5-dynamic-page-title', 'test-deployment').should(
@@ -615,7 +616,6 @@ context('Test Companion Chat Behavior', () => {
     );
 
     cy.saveChanges('Edit');
-    cy.wait(1000);
 
     cy.contains('Deployment updated').should('be.visible');
 

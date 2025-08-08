@@ -1,20 +1,13 @@
-import {
-  Text,
-  Panel,
-  Title,
-  Icon,
-  FlexBox,
-  Button,
-} from '@ui5/webcomponents-react';
+import { Text, Panel, Title, FlexBox, Button } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import {
   isCurrentThemeDark,
   Theme,
   themeState,
 } from 'state/preferences/themeAtom';
-import copyToClipboard from 'copy-to-clipboard';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
 import { clusterState } from 'state/clusterAtom';
@@ -26,6 +19,7 @@ import { registerIcon } from '@ui5/webcomponents-base/dist/asset-registries/Icon
 import { registerIconCollectionForTheme } from '@ui5/webcomponents-base/dist/asset-registries/util/IconCollectionsByTheme.js';
 
 import './CodePanel.scss';
+import CopyButton from 'shared/components/CopyButton/CopyButton';
 
 // Register icon for replace action
 registerIcon('replace', {
@@ -96,7 +90,7 @@ export default function CodePanel({
   const { t } = useTranslation();
   const theme = useRecoilValue(themeState);
   const syntaxTheme = getCustomTheme(theme);
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
   const navigate = useNavigate();
   const cluster = useRecoilValue(clusterState);
 
@@ -202,13 +196,7 @@ export default function CodePanel({
 
   return !language ? (
     <div className="code-response sap-margin-y-small">
-      <Icon
-        id="copy-icon"
-        mode="Interactive"
-        name="copy"
-        design="Information"
-        onClick={() => copyToClipboard(code)}
-      />
+      <CopyButton contentToCopy={code} tooltipClassName="copy-icon" />
       <Text id="code-text">{code}</Text>
     </div>
   ) : (
@@ -221,15 +209,11 @@ export default function CodePanel({
             {language.toLocaleUpperCase()}
           </Title>
           <FlexBox justifyContent="End" alignItems="Center">
-            <Button
-              className="action-button"
-              design="Transparent"
-              icon="copy"
-              onClick={() => copyToClipboard(code)}
-              accessibleName={t('common.buttons.copy')}
-            >
-              {t('common.buttons.copy')}
-            </Button>
+            <CopyButton
+              buttonClassName="action-button"
+              contentToCopy={code}
+              iconOnly={false}
+            />
             {withAction && link?.actionType === 'New' && (
               <Button
                 className="action-button"

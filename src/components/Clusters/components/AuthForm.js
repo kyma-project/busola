@@ -39,6 +39,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         label={t('clusters.wizard.auth.issuer-url')}
         input={Inputs.Text}
         accessible-name={t('clusters.wizard.auth.issuer-url')}
+        {...props}
       />
       <ResourceForm.FormField
         required
@@ -46,6 +47,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         label={t('clusters.wizard.auth.client-id')}
         input={Inputs.Text}
         accessible-name={t('clusters.wizard.auth.client-id')}
+        {...props}
       />
       <ResourceForm.FormField
         propertyPath="$.clientSecret"
@@ -60,6 +62,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         title={t('clusters.wizard.auth.scopes')}
         accessible-name={t('clusters.wizard.auth.scopes')}
         ariaLabel={t('clusters.wizard.auth.scopes')}
+        toExternal={props?.onChange}
       />
     </ResourceForm.Wrapper>
   );
@@ -92,10 +95,11 @@ const TokenForm = ({ resource, setResource, ...props }) => {
 };
 
 export function AuthForm({
-  formElementRef,
+  formElementRef = null,
   resource,
   setResource,
-  revalidate,
+  revalidate = () => {},
+  checkRequiredInputs = () => {},
   ...props
 }) {
   const { t } = useTranslation();
@@ -104,7 +108,8 @@ export function AuthForm({
 
   useEffect(() => {
     revalidate();
-  }, [useOidc, revalidate]);
+    checkRequiredInputs();
+  }, [useOidc, revalidate, checkRequiredInputs]);
 
   const userIndex = getUserIndex(resource);
 
@@ -119,7 +124,7 @@ export function AuthForm({
 
   return (
     <ResourceForm.Wrapper
-      formEementRef={formElementRef}
+      formElementRef={formElementRef}
       resource={resource}
       setResource={setResource}
       {...props}
@@ -139,7 +144,11 @@ export function AuthForm({
           })}
         </MessageStrip>
         {!useOidc && (
-          <TokenForm resource={resource} setResource={setResource} />
+          <TokenForm
+            onChange={checkRequiredInputs}
+            resource={resource}
+            setResource={setResource}
+          />
         )}
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.using-oidc')}
@@ -153,7 +162,13 @@ export function AuthForm({
           )}
           className="oidc-switch"
         />
-        {useOidc && <OIDCform resource={resource} setResource={setResource} />}
+        {useOidc && (
+          <OIDCform
+            onChange={checkRequiredInputs}
+            resource={resource}
+            setResource={setResource}
+          />
+        )}
       </div>
     </ResourceForm.Wrapper>
   );

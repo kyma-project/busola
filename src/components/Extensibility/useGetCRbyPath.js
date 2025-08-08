@@ -1,4 +1,5 @@
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 
 import { useParams } from 'react-router';
@@ -11,7 +12,7 @@ export const useGetCRbyPath = resourceType => {
   const { namespaceId } = useParams();
   const extensions = useRecoilValue(allExtensionsState);
   const { name: clusterName } = useRecoilValue(clusterState) || {};
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
   const resource = useMemo(() => {
     return extensions.find(el => {
       const { scope, urlPath, resource } = el.general || {};

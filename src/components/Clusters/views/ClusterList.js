@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@ui5/webcomponents-react';
+import { useSetAtom } from 'jotai';
+import { useSetRecoilState } from 'recoil';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { showAddClusterWizard } from 'state/showAddClusterWizard';
+import { columnLayoutState } from 'state/columnLayoutAtom';
+import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { configFeaturesNames } from 'state/types';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -12,6 +17,10 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
+import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
+import { Link } from 'shared/components/Link/Link';
+
+import { Button } from '@ui5/webcomponents-react';
 
 import { deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
@@ -24,13 +33,6 @@ import { useNavigate } from 'react-router';
 import { createPortal } from 'react-dom';
 
 import './ClusterList.scss';
-import { useSetRecoilState } from 'recoil';
-import { showAddClusterWizard } from 'state/showAddClusterWizard';
-import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
-import { columnLayoutState } from 'state/columnLayoutAtom';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
-import { Link } from 'shared/components/Link/Link';
-import { configFeaturesNames } from 'state/types';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature(configFeaturesNames.GARDENER_LOGIN);
@@ -48,8 +50,8 @@ function ClusterList() {
 
   const [chosenCluster, setChosenCluster] = useState(null);
   const setShowAdd = useSetRecoilState(showAddClusterWizard);
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
-  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
+  const setShowCompanion = useSetAtom(showKymaCompanionState);
 
   useEffect(() => {
     setShowCompanion({

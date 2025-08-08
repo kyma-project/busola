@@ -1,10 +1,6 @@
-import { atom, RecoilState } from 'recoil';
-
-type SessionID = string;
+import { atom } from 'jotai';
 
 const DEFAULT_SESSION_ID = '';
 
-export const sessionIDState: RecoilState<SessionID> = atom<SessionID>({
-  key: 'sessionIDState',
-  default: DEFAULT_SESSION_ID,
-});
+export const sessionIDState = atom<string>(DEFAULT_SESSION_ID);
+sessionIDState.debugLabel = 'sessionIDState';

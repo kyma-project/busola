@@ -1,6 +1,7 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 import { ThemeType } from 'shared/components/FeatureCard/types';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
@@ -35,7 +36,7 @@ export function AIBanner({
   documentationUrl: string;
 }) {
   const { t } = useTranslation();
-  const setShowCompanion = useSetRecoilState(showKymaCompanionState);
+  const setShowCompanion = useSetAtom(showKymaCompanionState);
   const theme = useRecoilValue(themeState);
 
   const titleIcon = getIllustration(theme);
@@ -64,6 +65,9 @@ export function AIBanner({
             {t('kyma-companion.banner.buttons.try-joule')}
           </Button>
           <Button
+            accessibleRole="Link"
+            accessibleName={t('feedback.give-feedback')}
+            accessibleDescription="Open in new tab link"
             key="ai-feedback"
             endIcon="inspect"
             onClick={() => {
@@ -78,6 +82,9 @@ export function AIBanner({
             {t('feedback.give-feedback')}
           </Button>
           <Button
+            accessibleRole="Link"
+            accessibleName={t('kyma-companion.banner.buttons.documentation')}
+            accessibleDescription="Open in new tab link"
             key="ai-documentation"
             endIcon="inspect"
             onClick={() => {

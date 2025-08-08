@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
@@ -42,7 +43,7 @@ export function useSearchResults({
   const clusters = useRecoilValue(clustersState);
   const cluster = useRecoilValue(clusterState);
   const availableNodes = useRecoilValue(availableNodesSelector);
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
 
   const hiddenNamespaces = useGetHiddenNamespaces();
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);

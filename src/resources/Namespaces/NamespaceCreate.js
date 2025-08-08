@@ -19,7 +19,7 @@ import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router';
 
 import './NamespaceCreate.scss';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
 import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
@@ -41,7 +41,7 @@ export default function NamespaceCreate({
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
 
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),

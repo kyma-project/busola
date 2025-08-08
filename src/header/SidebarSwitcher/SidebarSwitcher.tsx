@@ -1,11 +1,11 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 export function SidebarSwitcher(props: any) {
   const { t } = useTranslation();
-  const [isSidebarCondensed, setSidebarCondensed] = useRecoilState(
+  const [isSidebarCondensed, setSidebarCondensed] = useAtom(
     isSidebarCondensedState,
   );
 

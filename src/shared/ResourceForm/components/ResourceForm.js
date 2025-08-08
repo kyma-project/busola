@@ -15,6 +15,7 @@ import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
@@ -63,7 +64,7 @@ export function ResourceForm({
   resetLayout,
   formWithoutPanel,
 }) {
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
 
   const isEdit = useMemo(
     () =>

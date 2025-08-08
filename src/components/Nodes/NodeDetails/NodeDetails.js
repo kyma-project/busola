@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { Text } from '@ui5/webcomponents-react';
 
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -29,7 +29,7 @@ export default function NodeDetails({ nodeName }) {
     nodeName,
   );
 
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
   useEffect(() => {
     setLayoutColumn({
       layout: 'OneColumn',

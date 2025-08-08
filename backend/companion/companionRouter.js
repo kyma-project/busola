@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
@@ -10,51 +11,79 @@ const config = require('../config.js');
 const tokenManager = new TokenManager();
 const COMPANION_API_BASE_URL = `${config.features?.KYMA_COMPANION?.config
   ?.apiBaseUrl ?? ''}/api/conversations/`;
+const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
 
+// Rate limiter: Max 200 requests per 1 minutes per IP
+const companionRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 200,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 router.use(express.json());
+
+function extractAuthHeaders(req) {
+  return {
+    clusterUrl: req.headers['x-cluster-url'],
+    certificateAuthorityData:
+      req.headers['x-cluster-certificate-authority-data'],
+    clusterToken: req.headers['x-k8s-authorization']?.replace(
+      /^Bearer\s+/i,
+      '',
+    ),
+    clientCertificateData: req.headers['x-client-certificate-data'],
+    clientKeyData: req.headers['x-client-key-data'],
+    sessionId: req.headers['session-id'],
+  };
+}
+
+async function buildApiHeaders(authData, contentType = 'application/json') {
+  const headers = {
+    Accept: contentType,
+    'Content-Type': 'application/json',
+    'X-Cluster-Certificate-Authority-Data': authData.certificateAuthorityData,
+    'X-Cluster-Url': authData.clusterUrl,
+  };
+
+  if (!SKIP_AUTH) {
+    const AUTH_TOKEN = await tokenManager.getToken();
+    headers.Authorization = `Bearer ${AUTH_TOKEN}`;
+  }
+
+  if (authData.sessionId) {
+    headers['Session-Id'] = authData.sessionId;
+  }
+
+  if (authData.clusterToken) {
+    headers['X-K8s-Authorization'] = authData.clusterToken;
+  } else if (authData.clientCertificateData && authData.clientKeyData) {
+    headers['X-Client-Certificate-Data'] = authData.clientCertificateData;
+    headers['X-Client-Key-Data'] = authData.clientKeyData;
+  } else {
+    throw new Error('Missing authentication credentials');
+  }
+
+  return headers;
+}
 
 async function handlePromptSuggestions(req, res) {
   const { namespace, resourceType, groupVersion, resourceName } = JSON.parse(
     req.body.toString(),
   );
-  const clusterUrl = req.headers['x-cluster-url'];
-  const certificateAuthorityData =
-    req.headers['x-cluster-certificate-authority-data'];
-  const clusterToken = req.headers['x-k8s-authorization']?.replace(
-    /^Bearer\s+/i,
-    '',
-  );
-  const clientCertificateData = req.headers['x-client-certificate-data'];
-  const clientKeyData = req.headers['x-client-key-data'];
+  const authData = extractAuthHeaders(req);
+  const endpointUrl = COMPANION_API_BASE_URL;
+  const payload = {
+    resource_kind: resourceType,
+    resource_api_version: groupVersion,
+    resource_name: resourceName,
+    namespace: namespace,
+  };
 
   try {
-    const endpointUrl = COMPANION_API_BASE_URL;
-    const payload = {
-      resource_kind: resourceType,
-      resource_api_version: groupVersion,
-      resource_name: resourceName,
-      namespace: namespace,
-    };
-
-    const AUTH_TOKEN = await tokenManager.getToken();
-
-    const headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${AUTH_TOKEN}`,
-      'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-      'X-Cluster-Url': clusterUrl,
-    };
-
-    if (clusterToken) {
-      headers['X-K8s-Authorization'] = clusterToken;
-    } else if (clientCertificateData && clientKeyData) {
-      headers['X-Client-Certificate-Data'] = clientCertificateData;
-      headers['X-Client-Key-Data'] = clientKeyData;
-    } else {
-      throw new Error('Missing authentication credentials');
-    }
+    const headers = await buildApiHeaders(authData);
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
@@ -85,61 +114,33 @@ async function handleChatMessage(req, res) {
     resourceName,
   } = JSON.parse(req.body.toString());
 
-  const clusterUrl = req.headers['x-cluster-url'];
-  const certificateAuthorityData =
-    req.headers['x-cluster-certificate-authority-data'];
-  const clusterToken = req.headers['x-k8s-authorization']?.replace(
-    /^Bearer\s+/i,
-    '',
+  const authData = extractAuthHeaders(req);
+  const conversationId = authData.sessionId;
+
+  const endpointUrl = new URL(
+    `${encodeURIComponent(conversationId)}/messages`,
+    COMPANION_API_BASE_URL,
   );
-  const clientCertificateData = req.headers['x-client-certificate-data'];
-  const clientKeyData = req.headers['x-client-key-data'];
-  const sessionId = req.headers['session-id'];
-  const conversationId = sessionId;
+
+  const payload = {
+    query,
+    resource_kind: resourceType,
+    resource_api_version: groupVersion,
+    resource_name: resourceName,
+    namespace: namespace,
+  };
 
   try {
     const uuidPattern = /^[a-f0-9]{32}$/i;
     if (!uuidPattern.test(conversationId)) {
       throw new Error('Invalid session ID ');
     }
-
-    const endpointUrl = new URL(
-      `${encodeURIComponent(conversationId)}/messages`,
-      COMPANION_API_BASE_URL,
-    );
-
-    const payload = {
-      query,
-      resource_kind: resourceType,
-      resource_api_version: groupVersion,
-      resource_name: resourceName,
-      namespace: namespace,
-    };
-
-    const AUTH_TOKEN = await tokenManager.getToken();
-
     // Set up headers for streaming response
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
-    const headers = {
-      Accept: 'text/event-stream',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${AUTH_TOKEN}`,
-      'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-      'X-Cluster-Url': clusterUrl,
-      'Session-Id': sessionId,
-    };
-
-    if (clusterToken) {
-      headers['X-K8s-Authorization'] = clusterToken;
-    } else if (clientCertificateData && clientKeyData) {
-      headers['X-Client-Certificate-Data'] = clientCertificateData;
-      headers['X-Client-Key-Data'] = clientKeyData;
-    } else {
-      throw new Error('Missing authentication credentials');
-    }
+    const headers = await buildApiHeaders(authData, 'text/event-stream');
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
@@ -190,43 +191,16 @@ async function handleChatMessage(req, res) {
 }
 
 async function handleFollowUpSuggestions(req, res) {
-  const clusterUrl = req.headers['x-cluster-url'];
-  const certificateAuthorityData =
-    req.headers['x-cluster-certificate-authority-data'];
-  const clusterToken = req.headers['x-k8s-authorization']?.replace(
-    /^Bearer\s+/i,
-    '',
+  const authData = extractAuthHeaders(req);
+  const conversationId = authData.sessionId;
+
+  const endpointUrl = new URL(
+    `${encodeURIComponent(conversationId)}/questions`,
+    COMPANION_API_BASE_URL,
   );
-  const clientCertificateData = req.headers['x-client-certificate-data'];
-  const clientKeyData = req.headers['x-client-key-data'];
-  const sessionId = req.headers['session-id'];
-  const conversationId = sessionId;
 
   try {
-    const endpointUrl = new URL(
-      `${encodeURIComponent(conversationId)}/questions`,
-      COMPANION_API_BASE_URL,
-    );
-
-    const AUTH_TOKEN = await tokenManager.getToken();
-
-    const headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${AUTH_TOKEN}`,
-      'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-      'X-Cluster-Url': clusterUrl,
-      'Session-Id': sessionId,
-    };
-
-    if (clusterToken) {
-      headers['X-K8s-Authorization'] = clusterToken;
-    } else if (clientCertificateData && clientKeyData) {
-      headers['X-Client-Certificate-Data'] = clientCertificateData;
-      headers['X-Client-Key-Data'] = clientKeyData;
-    } else {
-      throw new Error('Missing authentication credentials');
-    }
+    const headers = await buildApiHeaders(authData);
 
     const response = await fetch(endpointUrl, {
       method: 'GET',
@@ -243,8 +217,16 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
-router.post('/suggestions', addLogger(handlePromptSuggestions));
-router.post('/messages', addLogger(handleChatMessage));
-router.post('/followup', addLogger(handleFollowUpSuggestions));
+router.post(
+  '/suggestions',
+  companionRateLimiter,
+  addLogger(handlePromptSuggestions),
+);
+router.post('/messages', companionRateLimiter, addLogger(handleChatMessage));
+router.post(
+  '/followup',
+  companionRateLimiter,
+  addLogger(handleFollowUpSuggestions),
+);
 
 export default router;

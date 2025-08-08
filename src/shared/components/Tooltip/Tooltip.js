@@ -7,15 +7,17 @@ import './Tooltip.scss';
 
 export const Tooltip = ({
   children,
-  content,
+  content = {},
   position,
   trigger = 'mouseenter',
-  tippyProps,
+  tippyProps = {},
   delay = [200, 0],
-  style,
+  style = null,
+  className = '',
 }) => {
   return (
     <TippyTooltip
+      className={className}
       html={content}
       position={position}
       trigger={trigger}

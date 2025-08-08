@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { FlexBox } from '@ui5/webcomponents-react';
 import Message from './Message/Message';
 import Bubbles from './Bubbles/Bubbles';
@@ -63,7 +64,7 @@ export const Chat = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const hasLoadingScreenLoaded = useRef(false);
 
-  const sessionID = useRecoilValue<string>(sessionIDState);
+  const sessionID = useAtomValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
   const authData = useRecoilValue<any>(authDataState);
 

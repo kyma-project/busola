@@ -1,12 +1,8 @@
-import { atom, RecoilState } from 'recoil';
-
-type IsSidebarCondensed = boolean;
+import { atom } from 'jotai';
 
 const DEFAULT_IS_SIDEBAR_CONDENSED = false;
 
-export const isSidebarCondensedState: RecoilState<IsSidebarCondensed> = atom<
-  IsSidebarCondensed
->({
-  key: 'isSidebarCondensedState',
-  default: DEFAULT_IS_SIDEBAR_CONDENSED,
-});
+export const isSidebarCondensedState = atom<boolean>(
+  DEFAULT_IS_SIDEBAR_CONDENSED,
+);
+isSidebarCondensedState.debugLabel = 'isSidebarCondensedState';

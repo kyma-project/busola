@@ -26,6 +26,7 @@ import { merge } from 'lodash';
 
 import { TriggerContext, TriggerContextProvider } from './contexts/Trigger';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { TranslationBundleContext } from './helpers';
@@ -44,7 +45,7 @@ export function ExtensibilityCreateCore({
 }) {
   const { prepareVars, readVars } = useVariables();
   const namespace = useRecoilValue(activeNamespaceIdState);
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;

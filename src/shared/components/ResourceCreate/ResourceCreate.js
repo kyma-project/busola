@@ -8,7 +8,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import './ResourceCreate.scss';
@@ -37,7 +37,7 @@ export const ResourceCreate = ({
   } = useCustomFormValidator();
   const notificationManager = useNotification();
   const navigate = useNavigate();
-  const [layoutColumn, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
   const { navigateSafely } = useFormNavigation();
 
   confirmText = confirmText || t('common.buttons.create');

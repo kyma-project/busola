@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useSetAtom } from 'jotai';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
@@ -26,7 +27,7 @@ export default function BusolaExtensionCreate({
   const notificationManager = useNotification();
   const upsert = useUpsert();
   const cluster = useRecoilValue(clusterState);
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 

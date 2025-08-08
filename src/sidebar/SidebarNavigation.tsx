@@ -1,4 +1,5 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   SideNavigation,
   SideNavigationItem,
@@ -23,12 +24,12 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
-  const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
+  const isSidebarCondensed = useAtomValue(isSidebarCondensedState);
   const namespace = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =

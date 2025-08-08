@@ -24,6 +24,11 @@ import {
   multipleContexts,
 } from 'state/multipleContextsAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import {
+  manualKubeConfigIdState,
+  ManualKubeConfigIdType,
+} from 'state/manualKubeConfigIdAtom';
+import { useAtom } from 'jotai';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -70,6 +75,10 @@ const addClusters = async (
   t: TFunction,
   notification?: any,
   navigate?: NavigateFunction,
+  manualKubeConfigId?: {
+    manualKubeConfigId?: ManualKubeConfigIdType;
+    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+  },
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
   const currentContext = kubeconfig['current-context'];
@@ -93,6 +102,7 @@ const addClusters = async (
             config: {},
           },
           clusterInfo,
+          manualKubeConfigId,
         );
     });
 
@@ -122,6 +132,10 @@ const loadKubeconfigIdCluster = async (
   clusterInfo: useClustersInfoType,
   t: TFunction,
   setContextsState?: SetterOrUpdater<KubeConfigMultipleState>,
+  manualKubeConfigId?: {
+    manualKubeConfigId?: ManualKubeConfigIdType;
+    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+  },
 ) => {
   try {
     const kubeconfig = await loadKubeconfigById(
@@ -140,7 +154,16 @@ const loadKubeconfigIdCluster = async (
         ...kubeconfig,
       }));
     } else {
-      addClusters(kubeconfig, clusters, clusterInfo, kubeconfigIdFeature, t);
+      addClusters(
+        kubeconfig,
+        clusters,
+        clusterInfo,
+        kubeconfigIdFeature,
+        t,
+        undefined,
+        undefined,
+        manualKubeConfigId,
+      );
       return 'done';
     }
   } catch (e) {
@@ -164,6 +187,9 @@ export function useLoginWithKubeconfigID() {
   const configuration = useRecoilValue(configurationAtom);
   const clusters = useRecoilValue(clustersState);
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
+  const [manualKubeConfigId, setManualKubeConfigId] = useAtom(
+    manualKubeConfigIdState,
+  );
   const notification = useNotification();
   const navigate = useNavigate();
   const [search] = useSearchParams();
@@ -189,11 +215,37 @@ export function useLoginWithKubeconfigID() {
         t,
         notification,
         navigate,
+        { manualKubeConfigId, setManualKubeConfigId },
       );
       setHandledKubeconfigId('done');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contextsState]);
+  }, [contextsState, manualKubeConfigId?.auth]);
+
+  useEffect(() => {
+    if (manualKubeConfigId?.auth) {
+      const kubeconfigId = search.get('kubeconfigID');
+      if (!kubeconfigId || !kubeconfigIdFeature?.isEnabled) {
+        setHandledKubeconfigId('done');
+        return;
+      }
+      setHandledKubeconfigId('loading');
+      loadKubeconfigIdCluster(
+        kubeconfigId,
+        kubeconfigIdFeature,
+        clusters,
+        clusterInfo,
+        t,
+        setContextsState,
+        { manualKubeConfigId, setManualKubeConfigId },
+      ).then(val => {
+        if (val === 'done') {
+          setHandledKubeconfigId('done');
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [manualKubeConfigId?.auth]);
 
   useEffect(() => {
     const dependenciesReady = !!configuration?.features && !!clusters;
@@ -221,6 +273,7 @@ export function useLoginWithKubeconfigID() {
       clusterInfo,
       t,
       setContextsState,
+      { manualKubeConfigId, setManualKubeConfigId },
     ).then(val => {
       if (val === 'done') {
         setHandledKubeconfigId('done');
@@ -237,6 +290,8 @@ export function useLoginWithKubeconfigID() {
     configuration,
     setCurrentCluster,
     setContextsState,
+    setManualKubeConfigId,
+    manualKubeConfigId,
   ]);
 
   return handledKubeconfigId;

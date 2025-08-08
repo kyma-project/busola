@@ -9,12 +9,17 @@ import {
 } from 'types';
 import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
-import { hasNonOidcAuth } from 'state/authDataAtom';
-import { createUserManager } from 'state/authDataAtom';
+import { hasNonOidcAuth, createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router';
-import { useSetRecoilState } from 'recoil';
+import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { removePreviousPath } from 'state/useAfterInitHook';
+import { ManualKubeConfigIdType } from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
+
+export type Users = Array<{
+  name: string;
+  user: { exec: { args?: string[] }; token: string };
+}>;
 
 function addCurrentCluster(
   params: NonNullable<ActiveClusterState>,
@@ -87,12 +92,12 @@ export function getContext(
       };
     } else {
       const { context } = contexts.find(c => c.name === currentContextName)!;
-      const cluster = kubeconfig.clusters.find(
+      const cluster = kubeconfig.clusters?.find(
         c => c?.name === context.cluster,
       );
       if (!cluster) throw Error('cluster not found');
 
-      const user = kubeconfig.users.find(u => u?.name === context.user);
+      const user = kubeconfig.users?.find(u => u?.name === context.user);
       if (!user) throw Error('user not found');
 
       return { cluster, user, namespace: context.namespace };
@@ -155,16 +160,72 @@ export const addByContext = (
     config: any;
   },
   clustersInfo: useClustersInfoType,
+  manualKubeConfigId?: {
+    manualKubeConfigId?: ManualKubeConfigIdType;
+    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+  },
 ) => {
-  const kubeconfig = userKubeconfig as ValidKubeconfig;
+  let kubeconfig = userKubeconfig as ValidKubeconfig;
+  const findUser = () =>
+    kubeconfig.users?.find(u => u.name === context.context.user);
   try {
     const cluster = kubeconfig.clusters?.find(
       c => c.name === context.context.cluster,
     );
     if (!cluster) throw Error('cluster not found');
 
-    const user = kubeconfig.users.find(u => u.name === context.context.user);
-    if (!user) throw Error('user not found');
+    let user = findUser();
+    let haveAuth = hasKubeconfigAuth(kubeconfig);
+    const authIndex = (kubeconfig?.users as Users)?.findIndex(
+      user => user?.user?.token || user?.user?.exec,
+    );
+    if (!haveAuth) {
+      if (!kubeconfig.users?.length) {
+        kubeconfig = {
+          ...kubeconfig,
+          users: [],
+        };
+      }
+      let auth = manualKubeConfigId?.manualKubeConfigId?.auth;
+      if (!auth && manualKubeConfigId?.setManualKubeConfigId) {
+        manualKubeConfigId.setManualKubeConfigId?.(
+          (prev: ManualKubeConfigIdType) => ({
+            ...prev,
+            formOpen: true,
+          }),
+        );
+        // Return to bypass the errors and update kubeconfig in form.
+        return;
+      }
+      if (auth) {
+        kubeconfig.users = [
+          ...kubeconfig.users,
+          { user: { ...auth }, name: context.context.user },
+        ];
+        manualKubeConfigId?.setManualKubeConfigId?.(
+          (prev: ManualKubeConfigIdType) => ({
+            ...prev,
+            auth: null,
+          }),
+        );
+        // Update user after kubeconfig changes.
+        user = findUser();
+      } else if (!user && authIndex >= 0) {
+        (kubeconfig?.users as Users)?.forEach((user, index) => {
+          if ((user?.user?.token || user?.user?.exec) && !user?.name) {
+            kubeconfig.users[index] = { ...user, name: context.context.user };
+          }
+        });
+        // Update user after kubeconfig changes.
+        user = findUser();
+      } else {
+        throw Error('kubeconfig does not have authentication data');
+      }
+    }
+
+    if (!user) {
+      throw Error('user not found');
+    }
 
     const clusterParams: NonNullable<ActiveClusterState> = {
       name: context.name,

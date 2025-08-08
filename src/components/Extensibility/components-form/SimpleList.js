@@ -1,6 +1,5 @@
-import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button, FlexBox, Label as UI5Label } from '@ui5/webcomponents-react';
+import { Button, FlexBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateResourceDescription,
@@ -46,12 +45,6 @@ export function SimpleList({
 
   const isLast = index => index === listSize;
   const itemsSchema = schema.get('items');
-  const titleRenderer = ({ schema, storeKeys }) => {
-    const label = tFromStoreKeys(storeKeys, schema);
-    return <UI5Label>{label}</UI5Label>;
-  };
-
-  const isObject = itemsSchema?.get('type') === 'object';
 
   return (
     <ResourceForm.CollapsibleSection
@@ -64,26 +57,6 @@ export function SimpleList({
       {...props}
     >
       <ul className="multi-input">
-        {isObject && (
-          <li key="is-object" className="bsl-col-md--11 simple-list">
-            <PluginStack
-              schema={itemsSchema}
-              widgets={{
-                ...widgets,
-                types: mapValues(widgets.types, () => titleRenderer),
-                custom: {
-                  ...mapValues(widgets.custom, () => titleRenderer),
-                  Null: () => '',
-                },
-              }}
-              parentSchema={schema}
-              storeKeys={storeKeys.push(0)}
-              level={level + 1}
-              nestingLevel={nestingLevel + 1}
-              schemaKeys={schemaKeys?.push('items')}
-            />
-          </li>
-        )}
         {Array(listSize + 1)
           .fill(null)
           .map((_val, index) => {
