@@ -9,6 +9,7 @@ import { useJsonata } from './hooks/useJsonata';
 import { usePrepareResourceUrl } from 'resources/helpers';
 import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useEffect, useState } from 'react';
 
 export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const isStatic = resMetaData?.general?.type === 'static';
@@ -32,27 +33,42 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
     skip: !resourceUrl,
   });
 
+  const [filteredItems, setFilteredItems] = useState([]);
   const jsonata = useJsonata({});
-
-  // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
-  if (!resource && !isStatic) {
-    return null;
-  }
 
   const dataSources = resMetaData?.dataSources || {};
   const general = resMetaData?.general || {};
   const injection = resMetaData?.injection;
   const injectionName = injection?.name;
   const filter = injection?.target.filter || injection?.filter || null;
-
   const items = data?.items || [];
-  const filteredItems = items.filter(item => {
+
+  useEffect(() => {
+    let isMounted = true;
     if (filter) {
-      const [value] = jsonata(filter, { item, root });
-      return value;
+      Promise.all(
+        items.map(async item => {
+          const [value] = await jsonata(filter, { item, root });
+          return value ? item : null;
+        }),
+      ).then(results => {
+        if (isMounted) {
+          setFilteredItems(results.filter(Boolean));
+        }
+      });
+    } else {
+      setFilteredItems(items);
     }
-    return true;
-  });
+    return () => {
+      isMounted = false;
+    };
+  }, [items, filter, jsonata, root]);
+
+  // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
+  if (!resource && !isStatic) {
+    return null;
+  }
+
   return (
     <Widget
       key={injectionName}
