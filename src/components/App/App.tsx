@@ -9,7 +9,7 @@ import {
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
@@ -72,7 +72,7 @@ export default function App() {
   const authFormRef = useRef<HTMLFormElement>(null);
   const [search] = useSearchParams();
   const [contextsState, setContextsState] = useRecoilState(multipleContexts);
-  const [manualKubeConfigId, setManualKubeConfigId] = useRecoilState(
+  const [manualKubeConfigId, setManualKubeConfigId] = useAtom(
     manualKubeConfigIdState,
   );
   const [authFormState, setAuthFormState] = useState<{

@@ -1,4 +1,4 @@
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'jotai';
 
 export type ManualKubeConfigIdType = {
   formOpen: boolean;
@@ -7,9 +7,8 @@ export type ManualKubeConfigIdType = {
 
 const defaultValue = { formOpen: false, auth: null };
 
-export const manualKubeConfigIdState: RecoilState<ManualKubeConfigIdType> = atom<
-  ManualKubeConfigIdType
->({
-  key: 'manualKubeConfigIdState',
-  default: defaultValue,
-});
+export const manualKubeConfigIdState = atom<ManualKubeConfigIdType>(
+  defaultValue,
+);
+
+manualKubeConfigIdState.debugLabel = 'manualKubeConfigIdState';
