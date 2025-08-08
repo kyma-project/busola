@@ -8,6 +8,7 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 
 export const ModalWithForm = ({
   performRefetch = () => {},
@@ -25,6 +26,7 @@ export const ModalWithForm = ({
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
   const { navigateSafely } = useFormNavigation();
+  const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
   const {
     isValid,
@@ -53,7 +55,10 @@ export const ModalWithForm = ({
   }, [getToggleFormFn]);
 
   function handleFormChanged() {
-    setTimeout(() => revalidate());
+    setTimeout(() => {
+      revalidate();
+      checkAuthRequiredInputs(formElementRef, setHasInvalidInputs);
+    });
   }
 
   function handleFormError(title, message, isWarning) {
@@ -115,7 +120,7 @@ export const ModalWithForm = ({
               endContent={
                 <>
                   <Button
-                    disabled={!isValid}
+                    disabled={!isValid || hasInvalidInputs}
                     aria-disabled={!isValid}
                     onClick={handleFormSubmit}
                     design="Emphasized"
