@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
 
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -27,7 +28,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
 
   const { scopedUrl } = urlGenerators;
   const namespaceId = useRecoilValue(activeNamespaceIdState);

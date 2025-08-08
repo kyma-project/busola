@@ -22,6 +22,7 @@ import {
   ColumnState,
   ShowCreate,
 } from 'state/columnLayoutAtom';
+import { useSetAtom } from 'jotai';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
@@ -75,7 +76,7 @@ export const KymaModulesList = ({
 
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
 
   const handleShowAddModule = () => {

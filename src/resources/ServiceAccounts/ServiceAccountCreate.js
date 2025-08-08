@@ -11,7 +11,7 @@ import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
 const createDefaultSecret = serviceAccountName => {
@@ -48,7 +48,7 @@ export default function ServiceAccountCreate({
   const [initialResource, setInitialResource] = useState(
     initialServiceAccount || createServiceAccountTemplate(namespace),
   );
-  const layoutState = useRecoilValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutState);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

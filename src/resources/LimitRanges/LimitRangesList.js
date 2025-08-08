@@ -4,7 +4,7 @@ import LimitRangeCreate from './LimitRangeCreate';
 import LimitRangeSpecification from './LimitRangeSpecification';
 import { Button } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router';
-import { useRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
@@ -12,7 +12,7 @@ import pluralize from 'pluralize';
 export function LimitRangesList(props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
   const { namespaceUrl } = useUrl();
 
   const customColumns = [

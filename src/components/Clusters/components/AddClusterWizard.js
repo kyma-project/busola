@@ -29,6 +29,7 @@ import { ClusterPreview } from './ClusterPreview';
 
 import './AddClusterWizard.scss';
 import { isFormOpenState } from 'state/formOpenAtom';
+import { checkAuthRequiredInputs } from '../helper';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -52,6 +53,7 @@ export function AddClusterWizard({
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const setIsFormOpen = useSetRecoilState(isFormOpenState);
   const [chosenContext, setChosenContext] = useState(undefined);
+  const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
   const {
     isValid: authValid,
@@ -147,11 +149,18 @@ export function AddClusterWizard({
         return !kubeconfig;
       case 2:
         return kubeconfig && (!hasAuth || !hasOneContext)
-          ? !authValid || invalidMultipleContexts
+          ? !authValid || invalidMultipleContexts || hasInvalidInputs
           : false;
       default:
         return false;
     }
+  };
+
+  const checkRequiredInputs = () => {
+    // setTimeout is used to delay and ensure that the form validation runs after the state updates.
+    setTimeout(() => {
+      checkAuthRequiredInputs(authFormRef, setHasInvalidInputs);
+    });
   };
 
   return (
@@ -194,7 +203,12 @@ export function AddClusterWizard({
                     setChosenContext={setChosenContext}
                   />
                 )}
-                {!hasAuth && <AuthForm revalidate={revalidate} />}
+                {!hasAuth && (
+                  <AuthForm
+                    checkRequiredInputs={checkRequiredInputs}
+                    revalidate={revalidate}
+                  />
+                )}
               </ResourceForm.Single>
             </div>
           </WizardStep>

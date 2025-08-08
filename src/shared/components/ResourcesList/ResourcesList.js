@@ -5,7 +5,7 @@ import { Button, Text } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import jp from 'jsonpath';
 import pluralize from 'pluralize';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
@@ -248,7 +248,7 @@ export function ResourceListRenderer({
     protectedResourcePopover,
   } = useProtectedResources();
   const navigate = useNavigate();
-  const [layoutState, setLayoutColumn] = useRecoilState(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,

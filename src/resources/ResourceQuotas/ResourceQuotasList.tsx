@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
 import { Button } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router';
-import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
@@ -13,7 +13,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 export function ResourceQuotasList(props: any) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const setLayoutColumn = useSetRecoilState(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutState);
   const { namespaceUrl } = useUrl();
 
   const customColumns = [

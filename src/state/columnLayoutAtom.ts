@@ -1,4 +1,4 @@
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'jotai';
 
 export type ColumnState = {
   resourceName: null | string;
@@ -8,6 +8,7 @@ export type ColumnState = {
   apiGroup: null | string;
   apiVersion: null | string;
 };
+
 export type ShowCreate = {
   resourceType: null | string;
   rawResourceTypeName?: null | string;
@@ -16,6 +17,7 @@ export type ShowCreate = {
   resource?: null | object;
   resourceUrl?: null | string;
 };
+
 export type ShowEdit = ColumnState & {
   resource?: object | null;
 };
@@ -29,9 +31,7 @@ export type ColumnLayoutState = {
   layout: string;
 };
 
-//empty value here would mean '[*]' - all namespaces
-
-const defaultValue = {
+const defaultValue: ColumnLayoutState = {
   layout: 'OneColumn',
   startColumn: null,
   midColumn: null,
@@ -40,9 +40,5 @@ const defaultValue = {
   showEdit: null,
 };
 
-export const columnLayoutState: RecoilState<ColumnLayoutState> = atom<
-  ColumnLayoutState
->({
-  key: 'ColumnLayoutState',
-  default: defaultValue,
-});
+export const columnLayoutState = atom<ColumnLayoutState>(defaultValue);
+columnLayoutState.debugLabel = 'ColumnLayoutState';
