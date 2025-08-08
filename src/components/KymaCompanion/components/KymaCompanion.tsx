@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAtom } from 'jotai';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
-import { useRecoilState } from 'recoil';
 import {
   ShowKymaCompanion,
   showKymaCompanionState,
@@ -10,12 +10,13 @@ import { Chat } from './Chat/Chat';
 import { chatHelpers } from './Chat/chatHelper';
 import { AIError, ChatGroup } from './Chat/types';
 import Disclaimer from './Disclaimer/Disclaimer';
+
 import './KymaCompanion.scss';
 
 export default function KymaCompanion() {
   const { t } = useTranslation();
 
-  const [showCompanion, setShowCompanion] = useRecoilState<ShowKymaCompanion>(
+  const [showCompanion, setShowCompanion] = useAtom<ShowKymaCompanion>(
     showKymaCompanionState,
   );
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);

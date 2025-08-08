@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@ui5/webcomponents-react';
-import copyToClipboard from 'copy-to-clipboard';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
 import 'shared/contexts/YamlEditorContext/EditorActions.scss';
+import CopyButton from 'shared/components/CopyButton/CopyButton';
 
 const EDITOR_VISIBILITY = 'editor-visibility';
 const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
@@ -105,13 +105,7 @@ export function EditorActions({
         className="action-button"
         tooltip={t('common.tooltips.download')}
       />
-      <Button
-        design="Transparent"
-        icon="copy"
-        onClick={() => copyToClipboard(val)}
-        className="action-button"
-        tooltip={t('common.tooltips.copy-to-clipboard')}
-      />
+      <CopyButton val={val} className="action-button" resourceName={title} />
       <Button
         design="Transparent"
         icon={visible ? 'hide' : 'show'}

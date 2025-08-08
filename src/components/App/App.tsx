@@ -9,6 +9,7 @@ import {
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
@@ -103,7 +104,7 @@ export default function App() {
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
 
-  const showCompanion = useRecoilValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionState);
 
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();

@@ -8,7 +8,8 @@ context('Test Companion Chat Error Handling', () => {
     cy.loginAndSelectCluster();
   });
 
-  it('Feedback response handling', () => {
+  beforeEach(() => {
+    cy.mockPromptSuggestions();
     cy.intercept('POST', '/backend/ai-chat/messages', req => {
       const mockResponse =
         JSON.stringify({
@@ -26,7 +27,10 @@ context('Test Companion Chat Error Handling', () => {
         body: mockResponse,
       });
     }).as('getChatFeedbackResponse');
+    cy.mockFollowups();
+  });
 
+  it('Feedback response handling', () => {
     cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
     cy.sendPrompt('Thanks');

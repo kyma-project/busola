@@ -52,6 +52,9 @@ export const ExternalLink = ({
   if (structure.type === 'button') {
     return (
       <Button
+        accessibleRole="Link"
+        accessibleName={tExt(value)}
+        accessibleDescription="Open in new tab link"
         className="sap-margin-x-tiny"
         endIcon="inspect"
         onClick={() => {
@@ -65,7 +68,13 @@ export const ExternalLink = ({
   }
 
   return (
-    <Link href={href} target="_blank" rel="noopener noreferrer">
+    <Link
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      accessibleName={tExt(value)}
+      accessibleDescription="Open in new tab link"
+    >
       {tExt(value)}
       <Icon
         design="Information"

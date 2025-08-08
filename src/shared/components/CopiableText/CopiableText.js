@@ -4,6 +4,7 @@ import copyToClipboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 
 import './CopiableText.scss';
+import { useRef, useState } from 'react';
 
 CopiableText.propTypes = {
   textToCopy: PropTypes.string.isRequired,
@@ -21,6 +22,19 @@ export function CopiableText({
   disabled,
 }) {
   const { t } = useTranslation();
+  const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef(null);
+
+  const handleCopy = () => {
+    copyToClipboard(textToCopy);
+    setCopied(true);
+
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
   return (
     <div className="copiable-text">
       {!iconOnly ? children || textToCopy : null}
@@ -29,10 +43,10 @@ export function CopiableText({
         design="Transparent"
         className="sap-margin-begin-tiny"
         disabled={disabled}
-        onClick={() => copyToClipboard(textToCopy)}
+        onClick={() => handleCopy()}
         tooltip={t('common.tooltips.copy-to-clipboard')}
       >
-        {buttonText ? buttonText : null}
+        {copied ? t('common.buttons.copied') : buttonText || ''}
       </Button>
     </div>
   );

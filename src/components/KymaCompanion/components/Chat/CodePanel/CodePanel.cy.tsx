@@ -10,7 +10,7 @@ describe('CodePanel Component', () => {
     cy.mount(<CodePanel code={code} language="" />);
 
     cy.get('.code-response').should('exist');
-    cy.get('#copy-icon').should('exist');
+    cy.get('.copy-icon').should('exist');
     cy.get('#code-text').should('contain.text', code);
     cy.get('ui5-panel').should('not.exist');
     cy.get('pre').should('not.exist');
@@ -67,7 +67,11 @@ describe('CodePanel Component', () => {
       .eq(0)
       .should('have.attr', 'icon', 'copy')
       .should('have.attr', 'design', 'Transparent')
-      .should('have.attr', 'accessible-name', t('common.buttons.copy'));
+      .should(
+        'have.attr',
+        'accessible-name',
+        t('common.tooltips.copy-to-clipboard'),
+      );
     cy.get('.action-button')
       .eq(1)
       .should('have.attr', 'icon', 'sys-add');

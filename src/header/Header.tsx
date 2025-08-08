@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 import {
   Avatar,
   ListItemStandard,
@@ -17,15 +18,15 @@ import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { configFeaturesNames } from 'state/types';
 
 import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
-
-import { configFeaturesNames } from 'state/types';
 import FeedbackPopover from './Feedback/FeedbackPopover';
+
 import './Header.scss';
 
 export function Header() {
@@ -45,9 +46,8 @@ export function Header() {
   const { isEnabled: isKymaCompanionEnabled } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
   );
-  const [showCompanion, setShowCompanion] = useRecoilState(
-    showKymaCompanionState,
-  );
+
+  const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionState);
   const shellbarRef = useRef(null);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
