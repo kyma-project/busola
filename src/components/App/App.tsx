@@ -53,12 +53,12 @@ import { ContextChooserMessage } from 'components/Clusters/components/ContextCho
 import { themeState } from 'state/preferences/themeAtom';
 import { initTheme } from './initTheme';
 
-import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
 import { manualKubeConfigIdState } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
+import './App.scss';
 
 export default function App() {
   const theme = useRecoilValue(themeState);
