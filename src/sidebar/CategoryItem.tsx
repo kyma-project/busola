@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SetterOrUpdater } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 
 import { Category } from 'state/navigation/categories';
 import {
@@ -34,7 +34,7 @@ export function CategoryItem({
   const { t } = useTranslation();
   const categoryName = t(category.label, { defaultValue: category.label });
   const expanded = expandedCategories.includes(category.key);
-  const isSidebarCondensed = useAtom(isSidebarCondensedState);
+  const isSidebarCondensed = useAtomValue(isSidebarCondensedState);
 
   const handleAddExpandedCategory = (
     e: Ui5CustomEvent<
