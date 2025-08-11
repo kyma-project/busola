@@ -1,12 +1,7 @@
-import { atom, RecoilState } from 'recoil';
-
+import { atom } from 'jotai';
 export type NamespacesState = string[] | null;
 
 const defaultValue = null;
 
-export const namespacesState: RecoilState<NamespacesState> = atom<
-  NamespacesState
->({
-  key: 'namespacesState',
-  default: defaultValue,
-});
+export const namespacesState = atom<NamespacesState>(defaultValue);
+namespacesState.debugLabel = 'namespacesState';

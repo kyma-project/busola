@@ -1,4 +1,4 @@
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
 import { namespacesState } from 'state/namespacesAtom';
@@ -7,7 +7,7 @@ import { ComboBoxItem } from '@ui5/webcomponents-react';
 
 export function NamespaceDropdown() {
   const { t } = useTranslation();
-  const allNamespaces = useRecoilValue(namespacesState);
+  const allNamespaces = useAtomValue(namespacesState);
 
   let namespaces = [];
 
