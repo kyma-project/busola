@@ -12,7 +12,7 @@ export function useAvailableNamespaces() {
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useAtom(namespacesState);
-  console.log('hiddenNamespaces', hiddenNamespaces);
+
   const { data: allNamespaces, error, refetch, silentRefetch } = useGetList()(
     '/api/v1/namespaces',
     {
