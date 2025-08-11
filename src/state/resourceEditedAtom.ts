@@ -8,3 +8,4 @@ export interface IsResourceEditedState {
 const defaultValue = { isEdited: false };
 
 export const isResourceEditedState = atom<IsResourceEditedState>(defaultValue);
+isResourceEditedState.debugLabel = 'isResourceEditedState';
