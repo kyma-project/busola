@@ -14,12 +14,12 @@ import { ResourcesUsage } from './ResourcesUsage';
 import NamespaceCreate from './NamespaceCreate';
 import { AllNamespacesDetails } from './AllNamespacesDetails';
 
-import { useSetRecoilState } from 'recoil';
 import { ResourceDescription } from 'resources/Namespaces';
+import { useSetAtom } from 'jotai';
 
 export default function NamespaceDetails(props) {
   const { t } = useTranslation();
-  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
+  const setShowAdd = useSetAtom(showYamlUploadDialogState);
 
   if (props.resourceName === '-all-') {
     return <AllNamespacesDetails {...props} />;
