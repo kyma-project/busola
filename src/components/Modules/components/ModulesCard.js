@@ -113,7 +113,7 @@ export default function ModulesCard({
         }}
       >
         <CheckBox
-          accessibleName={`${module.name}  module checkbox`}
+          accessibleName={`${module.name}  module`}
           className="checkbox"
           checked={isChecked(module.name)}
         />

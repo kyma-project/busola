@@ -8,7 +8,6 @@ export function Checkboxes({
   inline,
   dataTestID,
   inputRef,
-  accessibleName,
   ...props
 }) {
   const updateValue = (key, checked) => {

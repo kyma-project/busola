@@ -144,7 +144,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             {index === 0 ? `${sectionName}:` : ''}
           </div>
           <CheckBox
-            accessibleName={`${name} checkbox`}
+            accessibleName={`${name}`}
             className="sap-margin-top-small"
             checked={isChecked}
             onChange={e => {

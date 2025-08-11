@@ -68,7 +68,7 @@ export default function CommunityModuleCard({
         }}
       >
         <CheckBox
-          accessibleName={`${module.name} community module checkbox`}
+          accessibleName={`${module.name} community module`}
           className="checkbox"
           checked={isChecked(module.name)}
         />
