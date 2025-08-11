@@ -2,6 +2,8 @@ import { allExtensionsState } from 'state/navigation/extensionsAtom';
 import { render } from '@testing-library/react';
 import { useGetCRbyPath } from '../useGetCRbyPath.js';
 import { RecoilRoot } from 'recoil';
+import { Provider as JotaiProvider } from 'jotai';
+import { useHydrateAtoms } from 'jotai/utils';
 
 let mockNamespaceId = 'namespaceId';
 let mockCrds = [];
@@ -25,21 +27,33 @@ vi.mock('shared/components/Dropdown/Dropdown', () => {
   };
 });
 
+// Component to initialize Jotai atoms with test data
+const JotaiHydrator = ({ children, initialValues }) => {
+  useHydrateAtoms(initialValues);
+  return children;
+};
+
 const TestComponent = () => {
   const value = useGetCRbyPath();
 
   return <p data-testid="value">{JSON.stringify(value)}</p>;
 };
 
+const renderWithProviders = mockCrds => {
+  return render(
+    <RecoilRoot>
+      <JotaiProvider>
+        <JotaiHydrator initialValues={[[allExtensionsState, mockCrds]]}>
+          <TestComponent />
+        </JotaiHydrator>
+      </JotaiProvider>
+    </RecoilRoot>,
+  );
+};
+
 describe('useGetCRbyPath', () => {
   it('Returns nothing for an empty list', () => {
-    const { queryByTestId } = render(
-      <RecoilRoot
-        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
-      >
-        <TestComponent />
-      </RecoilRoot>,
-    );
+    const { queryByTestId } = renderWithProviders(mockCrds);
 
     expect(queryByTestId('value')).toHaveTextContent('');
   });
@@ -65,13 +79,7 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(
-      <RecoilRoot
-        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
-      >
-        <TestComponent />
-      </RecoilRoot>,
-    );
+    const { queryByTestId } = renderWithProviders(mockCrds);
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
     );
@@ -99,13 +107,7 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(
-      <RecoilRoot
-        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
-      >
-        <TestComponent />
-      </RecoilRoot>,
-    );
+    const { queryByTestId } = renderWithProviders(mockCrds);
 
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
@@ -133,13 +135,7 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(
-      <RecoilRoot
-        initializeState={snapshot => snapshot.set(allExtensionsState, mockCrds)}
-      >
-        <TestComponent />
-      </RecoilRoot>,
-    );
+    const { queryByTestId } = renderWithProviders(mockCrds);
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
     );
