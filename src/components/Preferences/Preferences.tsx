@@ -1,6 +1,6 @@
 import { Button, Icon, Dialog, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 
 import { useEventListener } from 'hooks/useEventListener';
 import { TabContainer, Tab } from '@ui5/webcomponents-react';
@@ -21,7 +21,7 @@ import EditViewSettings from './EditViewSettings';
 
 export function Preferences() {
   const { t } = useTranslation();
-  const [isModalOpen, setModalOpen] = useRecoilState(isPreferencesOpenState);
+  const [isModalOpen, setModalOpen] = useAtom(isPreferencesOpenState);
 
   const tabs = [
     {
