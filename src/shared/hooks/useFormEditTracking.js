@@ -1,6 +1,7 @@
+import { useSetAtom } from 'jotai';
 import { cloneDeep, isEqual } from 'lodash';
 import { useEffect, useMemo } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 
@@ -20,7 +21,7 @@ export function useFormEditTracking(
   editorError = false,
 ) {
   const { formOpen } = useRecoilValue(isFormOpenState);
-  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
+  const setIsResourceEdited = useSetAtom(isResourceEditedState);
 
   const excludedResource = useMemo(() => excludeStatus(resource), [resource]);
 

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { SetterOrUpdater, useSetRecoilState } from 'recoil';
-import { useAtom } from 'jotai';
+import { SetterOrUpdater } from 'recoil';
+import { useAtom, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -118,7 +118,7 @@ export default function CommunityModulesAddModule(props: any) {
   );
   const notification = useNotification();
   const post = usePost();
-  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
+  const setIsResourceEdited = useSetAtom(isResourceEditedState);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
