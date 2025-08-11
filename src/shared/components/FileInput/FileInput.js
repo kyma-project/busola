@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import PropTypes from 'prop-types';
 import { Icon } from '@ui5/webcomponents-react';
@@ -9,7 +9,6 @@ import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
 import './FileInput.scss';
-import { useAtomValue } from 'jotai';
 
 FileInput.propTypes = {
   fileInputChanged: PropTypes.func.isRequired,
@@ -28,8 +27,8 @@ export function FileInput({
   customMessage,
 }) {
   const [fileNames, setFileNames] = useState([]);
+  const openAddCluster = useAtomValue(showAddClusterWizard);
   const openAdd = useAtomValue(showYamlUploadDialogState);
-  const openAddCluster = useRecoilValue(showAddClusterWizard);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
   const fileNameRef = useRef(null);
