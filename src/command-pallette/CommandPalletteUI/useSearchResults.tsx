@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { useSetAtom } from 'jotai';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -50,7 +50,7 @@ export function useSearchResults({
   const fetch = useFetch();
   const { t } = useTranslation();
   const setOpenPreferencesModal = useSetAtom(isPreferencesOpenState);
-  const setShowYamlUpload = useSetRecoilState(showYamlUploadDialogState);
+  const setShowYamlUpload = useSetAtom(showYamlUploadDialogState);
   const clustersInfo = useClustersInfo();
   const navigate = useNavigate();
 
