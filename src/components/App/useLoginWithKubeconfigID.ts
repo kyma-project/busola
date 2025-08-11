@@ -23,7 +23,7 @@ import {
   KubeConfigMultipleState,
   multipleContexts,
 } from 'state/multipleContextsAtom';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import {
   manualKubeConfigIdState,
   ManualKubeConfigIdType,

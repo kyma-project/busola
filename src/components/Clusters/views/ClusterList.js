@@ -12,7 +12,7 @@ import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';

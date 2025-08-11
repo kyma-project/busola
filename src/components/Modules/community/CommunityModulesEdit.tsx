@@ -28,7 +28,7 @@ import { CommunityModuleContext } from 'components/Modules/community/providers/C
 import {
   NotificationContextArgs,
   useNotification,
-} from 'shared/contexts/NotificationContext';
+} from 'shared/contexts/NotificationContext/NotificationContext';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 
 import 'components/Modules/community/CommunityModule.scss';

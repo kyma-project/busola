@@ -5,7 +5,7 @@ import { createPatch } from 'rfc6902';
 import { useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';

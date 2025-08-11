@@ -8,7 +8,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import pluralize from 'pluralize';
 import { useUrl } from 'hooks/useUrl';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 
 export function IncorrectPath({ to, title = '', message = '' }) {
   const { t } = useTranslation();

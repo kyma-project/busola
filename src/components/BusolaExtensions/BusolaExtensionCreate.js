@@ -5,7 +5,7 @@ import { useSetAtom } from 'jotai';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 

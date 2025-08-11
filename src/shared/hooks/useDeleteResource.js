@@ -12,7 +12,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { useAtom } from 'jotai';
 import { useNavigate } from 'react-router';
 
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 
 import { useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';

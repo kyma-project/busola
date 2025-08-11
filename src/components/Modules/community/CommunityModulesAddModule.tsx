@@ -26,7 +26,7 @@ import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import CommunityModuleCard from 'components/Modules/community/components/CommunityModuleCard';
 
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 
 import 'components/Modules/KymaModulesAddModule.scss';
 

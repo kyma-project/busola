@@ -19,7 +19,7 @@ import { authDataState } from 'state/authDataAtom';
 import { openapiState } from 'state/openapi/openapiSelector';
 import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
 import { clusterState } from 'state/clusterAtom';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 

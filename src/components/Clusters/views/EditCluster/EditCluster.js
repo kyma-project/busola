@@ -8,7 +8,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, TextArrayInput } from 'shared/ResourceForm/fields';
 import { ChooseStorage } from 'components/Clusters/components/ChooseStorage';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 import { useClustersInfo } from 'state/utils/getClustersInfo';

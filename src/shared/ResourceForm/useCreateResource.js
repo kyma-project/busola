@@ -1,4 +1,4 @@
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { useAtom } from 'jotai';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog, Button, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';

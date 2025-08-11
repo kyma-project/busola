@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { useSetRecoilState } from 'recoil';

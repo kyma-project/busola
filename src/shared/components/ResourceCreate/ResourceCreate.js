@@ -3,7 +3,7 @@ import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';

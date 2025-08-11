@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';

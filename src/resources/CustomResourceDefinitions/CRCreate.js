@@ -9,7 +9,7 @@ import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCus
 
 import { createTemplate } from './templates';
 import { useTranslation } from 'react-i18next';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { BusyIndicator } from '@ui5/webcomponents-react';
 import { useAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';

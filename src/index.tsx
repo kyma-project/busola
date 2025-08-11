@@ -9,7 +9,7 @@ import { savePreviousPath } from 'state/useAfterInitHook';
 
 import App from './components/App/App';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { NotificationProvider } from 'shared/contexts/NotificationContext';
+import { NotificationProvider } from 'shared/contexts/NotificationContext/NotificationContext';
 
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-react/dist/Assets';

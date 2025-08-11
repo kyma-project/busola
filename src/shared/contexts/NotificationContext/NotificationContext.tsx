@@ -4,8 +4,9 @@ import {
   ErrorModal,
   ErrorModalProps,
   ToastProps,
-} from './ErrorModal/ErrorModal';
+} from '../ErrorModal/ErrorModal';
 import { createPortal } from 'react-dom';
+import './NotificationContext.scss';
 
 type NotificationContextProps = {
   children?: React.ReactNode;

@@ -10,7 +10,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { useFeature } from 'hooks/useFeature';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';

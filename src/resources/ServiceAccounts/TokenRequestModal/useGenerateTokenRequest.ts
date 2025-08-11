@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { useCreateKubeconfig } from 'hooks/useCreateKubeconfig';
 import { useState, useEffect, useMemo, RefObject } from 'react';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';

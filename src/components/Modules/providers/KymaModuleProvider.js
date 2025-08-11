@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash';
 import { t } from 'i18next';
 
 import { useKymaQuery } from '../kymaModulesQueries';
-import { useNotification } from 'shared/contexts/NotificationContext';
+import { useNotification } from 'shared/contexts/NotificationContext/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { checkSelectedModule } from '../support';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
