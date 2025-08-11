@@ -117,7 +117,7 @@ export const DynamicPageComponent = ({
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
   const { t } = useTranslation();
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+  const [isResourceEdited, setIsResourceEdited] = useAtom(
     isResourceEditedState,
   );
   const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
