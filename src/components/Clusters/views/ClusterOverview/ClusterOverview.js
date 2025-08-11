@@ -6,7 +6,6 @@ import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
-import { useSetRecoilState } from 'recoil';
 import { useSetAtom } from 'jotai';
 
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
@@ -45,7 +44,7 @@ export function ClusterOverview() {
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceType: t('clusters.labels.name'),
   });
-  const setShowAdd = useSetRecoilState(showYamlUploadDialogState);
+  const setShowAdd = useSetAtom(showYamlUploadDialogState);
 
   const setLayoutColumn = useSetAtom(columnLayoutState);
   useEffect(() => {
