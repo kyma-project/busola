@@ -14,6 +14,7 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
     setMultiValue,
     setResource,
     validateMessage,
+    accessibleName,
     ...inputProps
   } = props;
 

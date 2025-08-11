@@ -56,7 +56,7 @@ export function MemoryInput({
           selectedKey={selectedUnit}
           onSelect={(_, { key }) => setValue(numericValue.toString() + key)}
           disabled={disabled}
-          accessibleName={label}
+          accessibleName={`${label} units`}
         />
       </FlexBox>
     </FlexBox>
