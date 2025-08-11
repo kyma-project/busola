@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import PropTypes from 'prop-types';
 import { Icon } from '@ui5/webcomponents-react';
@@ -28,7 +29,7 @@ export function FileInput({
 }) {
   const [fileNames, setFileNames] = useState([]);
   const openAdd = useRecoilValue(showYamlUploadDialogState);
-  const openAddCluster = useRecoilValue(showAddClusterWizard);
+  const openAddCluster = useAtomValue(showAddClusterWizard);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
   const fileNameRef = useRef(null);

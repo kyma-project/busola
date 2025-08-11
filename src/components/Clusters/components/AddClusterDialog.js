@@ -3,7 +3,8 @@ import { Dialog } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { AddClusterWizard } from './AddClusterWizard';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
 function AddClusterDialogComponent({ dialogRef }) {
@@ -26,7 +27,7 @@ function AddClusterDialogComponent({ dialogRef }) {
 }
 export function AddClusterDialog() {
   const { t } = useTranslation();
-  const [showWizard, setShowWizard] = useRecoilState(showAddClusterWizard);
+  const [showWizard, setShowWizard] = useAtom(showAddClusterWizard);
   const dialogRef = useRef(null);
 
   return (
