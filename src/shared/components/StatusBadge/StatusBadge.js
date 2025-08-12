@@ -131,7 +131,7 @@ export const StatusBadge = ({
     }
   }
 
-  // tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
+  // TODO: tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
   if (tooltipContent) {
     return (
       <PopoverBadge
@@ -145,7 +145,7 @@ export const StatusBadge = ({
   } else if (noTooltip) {
     return (
       <ObjectStatus
-        aria-label="Status"
+        aria-label={badgeContent}
         role="status"
         inverted
         state={type}
