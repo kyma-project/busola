@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import {
   getValidationEnabledSchemas,
   usePolicySet,
@@ -36,6 +36,7 @@ import '@ui5/webcomponents-icons/dist/status-positive.js';
 import { ScanResult } from './ScanResult';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
+import { useAtom } from 'jotai';
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
@@ -60,7 +61,7 @@ export const ClusterValidation = () => {
 
   const { namespaces } = useAvailableNamespaces();
 
-  const [resources, setResources] = useRecoilState(resourcesState);
+  const [resources, setResources] = useAtom(resourcesState);
 
   const listableResources = useMemo(() => {
     return resources?.filter(resource => resource.verbs?.includes('list'));
