@@ -3,7 +3,13 @@ import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
 import { ExtInjectionConfig, ExtResource } from '../types';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { atom, useSetAtom } from 'jotai';
+import {
+  atom as recoilAtom,
+  RecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
@@ -404,7 +410,7 @@ export const useGetExtensions = () => {
   const auth = useRecoilValue(authDataState);
   const setExtensions = useSetRecoilState(extensionsState);
   const setStatics = useSetRecoilState(staticsState);
-  const setAllExtensions = useSetRecoilState(allExtensionsState);
+  const setAllExtensions = useSetAtom(allExtensionsState);
   const setInjections = useSetRecoilState(injectionsState);
   const setWizard = useSetRecoilState(wizardState);
   const fetchFn = getFetchFn(useRecoilValue);
@@ -573,35 +579,31 @@ export const useGetExtensions = () => {
 // null for defaultValue,
 // empty array for value or error
 const defaultValue = null;
-export const extensionsState: RecoilState<ExtResource[] | null> = atom<
+export const extensionsState: RecoilState<ExtResource[] | null> = recoilAtom<
   ExtResource[] | null
 >({
   key: 'extensionsState',
   default: defaultValue,
 });
 
-export const staticsState: RecoilState<ExtResource[] | null> = atom<
+export const staticsState: RecoilState<ExtResource[] | null> = recoilAtom<
   ExtResource[] | null
 >({
   key: 'staticsState',
   default: defaultValue,
 });
 
-export const allExtensionsState: RecoilState<ExtResource[] | null> = atom<
-  ExtResource[] | null
->({
-  key: 'allExtensionsState',
-  default: defaultValue,
-});
+export const allExtensionsState = atom<ExtResource[] | null>(defaultValue);
+allExtensionsState.debugLabel = 'allExtensionsState';
 
-export const injectionsState: RecoilState<ExtInjectionConfig[] | null> = atom<
+export const injectionsState: RecoilState<
   ExtInjectionConfig[] | null
->({
+> = recoilAtom<ExtInjectionConfig[] | null>({
   key: 'injectionsState',
   default: defaultValue,
 });
 
-export const wizardState: RecoilState<ExtWizardConfig[] | null> = atom<
+export const wizardState: RecoilState<ExtWizardConfig[] | null> = recoilAtom<
   ExtWizardConfig[] | null
 >({
   key: 'wizardState',

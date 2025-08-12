@@ -10,7 +10,7 @@ import { columnLayoutState } from 'state/columnLayoutAtom';
 
 export const useGetCRbyPath = resourceType => {
   const { namespaceId } = useParams();
-  const extensions = useRecoilValue(allExtensionsState);
+  const extensions = useAtomValue(allExtensionsState);
   const { name: clusterName } = useRecoilValue(clusterState) || {};
   const layoutState = useAtomValue(columnLayoutState);
   const resource = useMemo(() => {

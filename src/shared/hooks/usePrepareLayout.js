@@ -4,7 +4,6 @@ import {
   useNavigationType,
   useSearchParams,
 } from 'react-router';
-import { useSetRecoilState } from 'recoil';
 import { useSetAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -95,7 +94,7 @@ export function usePrepareLayoutColumns({
   rawResourceTypeName,
 }) {
   const setLayoutColumn = useSetAtom(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');

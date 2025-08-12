@@ -16,7 +16,6 @@ import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/component
 import './DynamicPageComponent.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
 import { useAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
@@ -87,8 +86,12 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
     <div className="page-header__column" style={styleComputed}>
       {image && <div className="image">{image}</div>}
       <div className="content-container">
-        <div className="title bsl-has-color-status-4 ">{title}:</div>
-        <span className="content bsl-has-color-text-1">{children}</span>
+        <div className="title bsl-has-color-status-4 " tabIndex={0}>
+          {title}:
+        </div>
+        <span className="content bsl-has-color-text-1" tabIndex={0}>
+          {children}
+        </span>
       </div>
     </div>
   );
@@ -117,10 +120,10 @@ export const DynamicPageComponent = ({
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
   const { t } = useTranslation();
-  const [isResourceEdited, setIsResourceEdited] = useRecoilState(
+  const [isResourceEdited, setIsResourceEdited] = useAtom(
     isResourceEditedState,
   );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenState);
   const { navigateSafely } = useFormNavigation();
   const [searchParams] = useSearchParams();
   const editColumn = searchParams.get('editColumn');
