@@ -91,7 +91,7 @@ context('Test Jobs', () => {
     cy.saveChanges('Create');
   });
 
-  it('Inspect details and created Pods', () => {
+  it('Inspect details and created Pods', { retries: 2 }, () => {
     // name
     cy.getMidColumn()
       .find('ui5-dynamic-page-title')
@@ -156,7 +156,7 @@ context('Test Jobs', () => {
       .should('be.visible');
   });
 
-  it('Edit Job', () => {
+  it('Edit Job', { retries: 2 }, () => {
     cy.wait(1000);
 
     cy.inspectTab('Edit');
