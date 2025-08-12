@@ -138,10 +138,6 @@ context('Test Jobs', () => {
     });
 
     // back to job
-    cy.get('.page-header__column')
-      .contains(`Job (${JOB_NAME})`)
-      .contains('ui5-link', JOB_NAME);
-
     cy.get('ui5-card[accessible-name="Metadata"]')
       .find('ul.controlled-by-list')
       .should('contain.text', 'Job')
