@@ -629,4 +629,38 @@ context('Test Companion Chat Behavior', () => {
     cy.closeMidColumn();
     cy.deleteFromGenericList('Deployment', 'test-deployment');
   });
+
+  it('place button works should not be present for incorrect namespace', () => {
+    cy.mockChatResponseWithIncorrectPlaceNew();
+    cy.resetCompanion();
+    cy.get('.kyma-companion').as('companion');
+
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .find('textarea')
+      .click()
+      .type('Create Deployment{enter}');
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('ui5-button[accessible-name="Place"]')
+      .should('not.exist');
+  });
+
+  it('place button should not be present for incorrect resource', () => {
+    cy.mockChatResponseWithIncorrectPlaceEdit();
+    cy.resetCompanion();
+    cy.get('.kyma-companion').as('companion');
+
+    cy.get('@companion')
+      .find('ui5-textarea[placeholder="Message Joule..."]')
+      .find('textarea')
+      .click()
+      .type('Create Deployment{enter}');
+    cy.wait(1000);
+
+    cy.get('@companion')
+      .find('ui5-button[accessible-name="Replace"]')
+      .should('not.exist');
+  });
 });

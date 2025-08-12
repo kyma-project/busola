@@ -247,11 +247,14 @@ export const useDoesNamespaceExist = (url: string, resource: string) => {
   const fetch = useFetch();
 
   const { namespace } = parseParams(url, resource);
+  const { parsedResource } = parseParams(url, resource);
+  // @ts-ignore
+  const resourceNamespace = parsedResource?.metadata?.namespace;
   const [namespaceExists, setNamespaceExists] = useState(false);
 
   useEffect(() => {
     async function fetchResource() {
-      if (!namespace) {
+      if (namespace !== resourceNamespace) {
         setNamespaceExists(false);
         return;
       }
@@ -277,12 +280,18 @@ export const useDoesNamespaceExist = (url: string, resource: string) => {
 
 export const useDoesResourceExist = (url: string, resource: string) => {
   const fetch = useFetch();
-  const { parsedResource } = parseParams(url, resource);
+  const { parsedResource, namespace } = parseParams(url, resource);
+  // @ts-ignore
+  const resourceNamespace = parsedResource?.metadata?.namespace;
 
   const [resourceExists, setResourceExists] = useState(false);
 
   useEffect(() => {
     async function fetchResource() {
+      if (resourceNamespace !== namespace) {
+        setResourceExists(false);
+        return;
+      }
       try {
         const isResource = await fetch({
           relativeUrl: getResourcePath(parsedResource),
