@@ -1,6 +1,6 @@
 import { Button, MessageBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { isFormOpenState } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
@@ -10,7 +10,7 @@ type UnsavedMessageBoxProps = {
 
 export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
   const { t } = useTranslation();
-  const { formOpen, leavingForm } = useRecoilValue(isFormOpenState);
+  const { formOpen, leavingForm } = useAtomValue(isFormOpenState);
   const { confirmDiscard, cancelDiscard } = useFormNavigation();
 
   const handleClose = (

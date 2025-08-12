@@ -16,7 +16,6 @@ import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/component
 import './DynamicPageComponent.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
 import { useAtom } from 'jotai';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
@@ -120,7 +119,7 @@ export const DynamicPageComponent = ({
   const [isResourceEdited, setIsResourceEdited] = useAtom(
     isResourceEditedState,
   );
-  const [isFormOpen, setIsFormOpen] = useRecoilState(isFormOpenState);
+  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenState);
   const { navigateSafely } = useFormNavigation();
   const [searchParams] = useSearchParams();
   const editColumn = searchParams.get('editColumn');
