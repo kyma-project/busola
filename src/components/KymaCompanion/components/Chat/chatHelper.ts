@@ -1,4 +1,8 @@
+import jsyaml from 'js-yaml';
 import { Author, ChatGroup, Message, MessageChunk } from './types';
+import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { useEffect, useState } from 'react';
+import { getResourcePath } from 'components/Modules/support';
 
 // Helper functions for managing grouped chat state
 export const chatHelpers = {
@@ -220,4 +224,81 @@ export const chatHelpers = {
   ): ChatGroup[] => {
     return chatHelpers.updateGroupContext(groups, 0, context);
   },
+};
+
+export const parseParams = (url: string, resource: string) => {
+  const parts = url.split('/').filter(Boolean); // Remove empty strings from split
+  let [namespace, resType, resName]: [string | null, string, string] = [
+    null,
+    '',
+    '',
+  ];
+  if (parts[0] === 'namespaces') {
+    [namespace, resType, resName] = [parts[1], parts[2], parts[3]];
+  } else {
+    [resType, resName] = [parts[0], parts[1]];
+  }
+
+  const parsedResource = jsyaml.load(resource.replace('yaml', '')) || {};
+  return { namespace, resType, resName, parsedResource };
+};
+
+export const useDoesNamespaceExist = (url: string, resource: string) => {
+  const fetch = useFetch();
+
+  const { namespace } = parseParams(url, resource);
+  const [namespaceExists, setNamespaceExists] = useState(false);
+
+  useEffect(() => {
+    async function fetchResource() {
+      if (!namespace) {
+        setNamespaceExists(false);
+        return;
+      }
+      try {
+        const isNamespace = await fetch({
+          relativeUrl: `/api/v1/namespaces/${namespace}`,
+        });
+
+        setNamespaceExists(isNamespace.ok);
+      } catch (e) {
+        if (e instanceof Error) {
+          setNamespaceExists(false);
+        }
+      }
+    }
+
+    fetchResource();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, resource]);
+
+  return namespaceExists;
+};
+
+export const useDoesResourceExist = (url: string, resource: string) => {
+  const fetch = useFetch();
+  const { parsedResource } = parseParams(url, resource);
+
+  const [resourceExists, setResourceExists] = useState(false);
+
+  useEffect(() => {
+    async function fetchResource() {
+      try {
+        const isResource = await fetch({
+          relativeUrl: getResourcePath(parsedResource),
+        });
+        const json = await isResource.json();
+        setResourceExists(isResource.ok && !!json);
+      } catch (e) {
+        if (e instanceof Error) {
+          setResourceExists(false);
+        }
+      }
+    }
+
+    fetchResource();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, resource]);
+
+  return resourceExists;
 };
