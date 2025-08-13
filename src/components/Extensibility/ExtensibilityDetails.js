@@ -1,5 +1,6 @@
 import pluralize from 'pluralize';
 import { useContext } from 'react';
+import { useSetAtom } from 'jotai';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -19,7 +20,6 @@ import {
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
-import { useSetRecoilState } from 'recoil';
 import { resourcesConditions } from 'state/resourceConditionsAtom';
 import { KymaModuleContext } from 'components/Modules/providers/KymaModuleProvider';
 
@@ -32,7 +32,7 @@ export const ExtensibilityDetailsCore = ({
   headerActions,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
-  const setResourcesConditions = useSetRecoilState(resourcesConditions);
+  const setResourcesConditions = useSetAtom(resourcesConditions);
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
   let { disableEdit, disableDelete } = features?.actions || {};
