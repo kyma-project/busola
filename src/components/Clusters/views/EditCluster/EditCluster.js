@@ -245,8 +245,12 @@ export const ClusterDataForm = ({
             setResource({ ...kubeconfig });
             setAuthenticationType(type);
           }}
-          input={({ value, setValue }) => (
-            <AuthenticationTypeDropdown type={value} setType={setValue} />
+          input={({ value, setValue, accessibleName }) => (
+            <AuthenticationTypeDropdown
+              type={value}
+              setType={setValue}
+              accessibleName={accessibleName}
+            />
           )}
         />
         {authenticationType === 'token' ? tokenFields : OIDCFields}

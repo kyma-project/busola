@@ -249,6 +249,9 @@ export default function NamespaceCreate({
           actions={() => (
             <div className="additional-resource">
               <CheckBox
+                accessibleName={t(
+                  'namespaces.create-modal.create-resource-quota',
+                )}
                 checked={withMemory}
                 onChange={() => setWithMemory(!withMemory)}
                 dir="rtl"
@@ -292,6 +295,7 @@ export default function NamespaceCreate({
           actions={() => (
             <div className="additional-resource">
               <CheckBox
+                accessibleName={t('namespaces.create-modal.create-limit-range')}
                 checked={withLimits}
                 onChange={() => setWithLimits(!withLimits)}
                 dir="rtl"

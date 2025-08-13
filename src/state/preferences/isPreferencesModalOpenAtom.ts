@@ -1,12 +1,8 @@
-import { atom, RecoilState } from 'recoil';
-
-type IsPreferencesOpen = boolean;
+import { atom } from 'jotai';
 
 const DEFAULT_IS_PREFERENCES_MODAL_OPEN = false;
 
-export const isPreferencesOpenState: RecoilState<IsPreferencesOpen> = atom<
-  IsPreferencesOpen
->({
-  key: 'isPreferencesModalOpenedState',
-  default: DEFAULT_IS_PREFERENCES_MODAL_OPEN,
-});
+export const isPreferencesOpenState = atom<boolean>(
+  DEFAULT_IS_PREFERENCES_MODAL_OPEN,
+);
+isPreferencesOpenState.debugLabel = 'isPreferencesModalOpenedState';

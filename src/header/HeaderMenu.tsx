@@ -1,7 +1,7 @@
 import { Menu, MenuItem } from '@ui5/webcomponents-react';
 import { MenuDomRef, Ui5CustomEvent } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
-import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 import { useGetLegalLinks } from './SidebarMenu/useGetLegalLinks';
@@ -25,7 +25,7 @@ interface HeaderMenuProps {
 
 export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
   const { t } = useTranslation();
-  const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
+  const setPreferencesOpen = useSetAtom(isPreferencesOpenState);
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
   const getHelpLinks = useGetHelpLinks();

@@ -10,6 +10,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
@@ -18,6 +19,8 @@ import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { authDataState } from 'state/authDataAtom';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
+import { isFormOpenState } from 'state/formOpenAtom';
+import { checkAuthRequiredInputs } from '../helper';
 
 import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
@@ -28,8 +31,6 @@ import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
 
 import './AddClusterWizard.scss';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { checkAuthRequiredInputs } from '../helper';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -49,9 +50,9 @@ export function AddClusterWizard({
     busolaClusterParams?.config?.storage || 'sessionStorage',
   );
   const [selected, setSelected] = useState(1);
-  const setShowWizard = useSetRecoilState(showAddClusterWizard);
+  const setShowWizard = useSetAtom(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
   const [chosenContext, setChosenContext] = useState(undefined);
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 

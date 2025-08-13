@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
 import {
@@ -77,7 +76,7 @@ export const KymaModulesList = ({
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetAtom(columnLayoutState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
 
   const handleShowAddModule = () => {
     setLayoutColumn({

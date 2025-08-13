@@ -2,7 +2,6 @@ import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { createPatch } from 'rfc6902';
-import { useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -35,6 +34,7 @@ import {
 } from './kymaModulesQueries';
 import { findModuleSpec, findModuleStatus, setChannel } from './support';
 import CommunityModulesEdit from 'components/Modules/community/CommunityModulesEdit';
+import { useSetAtom } from 'jotai';
 
 const addChannelsToModules = moduleReleaseMetas => {
   return (acc, module) => {
@@ -113,8 +113,8 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
-  const setIsResourceEdited = useSetRecoilState(isResourceEditedState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsResourceEdited = useSetAtom(isResourceEditedState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
 

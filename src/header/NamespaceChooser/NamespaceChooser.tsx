@@ -1,4 +1,4 @@
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { useMatch, useNavigate } from 'react-router';
@@ -11,7 +11,7 @@ export function NamespaceChooser() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { namespaceUrl } = useUrl();
-  const allNamespaces = useRecoilValue(namespacesState);
+  const allNamespaces = useAtomValue(namespacesState);
   const { navigateSafely } = useFormNavigation();
 
   const { resourceType = '' } =

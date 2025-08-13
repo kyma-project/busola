@@ -3,7 +3,6 @@ import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { useSetAtom } from 'jotai';
-import { useSetRecoilState } from 'recoil';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
@@ -49,7 +48,7 @@ function ClusterList() {
   });
 
   const [chosenCluster, setChosenCluster] = useState(null);
-  const setShowAdd = useSetRecoilState(showAddClusterWizard);
+  const setShowAdd = useSetAtom(showAddClusterWizard);
   const setLayoutColumn = useSetAtom(columnLayoutState);
   const setShowCompanion = useSetAtom(showKymaCompanionState);
 

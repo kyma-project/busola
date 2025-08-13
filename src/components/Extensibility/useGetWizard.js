@@ -1,8 +1,8 @@
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { wizardState } from 'state/navigation/extensionsAtom';
 
 export const useGetWizard = wizardName => {
-  const wizards = useRecoilValue(wizardState);
+  const wizards = useAtomValue(wizardState);
 
   const resource = wizards.find(el => {
     const { id } = el.general || {};
