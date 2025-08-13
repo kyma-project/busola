@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
@@ -22,16 +22,20 @@ export function EnumHandler({
 
   const schemaEnum = schema.get('enum');
 
-  let newSchema = schema;
+  const [newSchema, setNewSchema] = useState(schema);
 
-  if (typeof schemaEnum === 'string') {
-    const [newEnum] = jsonata(
-      schemaEnum,
-      itemVars(resource, rule.itemVars, storeKeys),
-      [],
-    );
-    newSchema = schema.set('enum', newEnum);
-  }
+  useEffect(() => {
+    if (typeof schemaEnum === 'string') {
+      jsonata(
+        schemaEnum,
+        itemVars(resource, rule.itemVars, storeKeys),
+        [],
+      ).then(([newEnum]) => {
+        setNewSchema(schema.set('enum', newEnum));
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schemaEnum, resource, rule.itemVars, storeKeys]);
 
   return (
     <Plugin

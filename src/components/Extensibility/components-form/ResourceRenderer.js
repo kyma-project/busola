@@ -57,9 +57,9 @@ export function ResourceRenderer({
         <K8sResourceSelectWithUseGetList
           data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
           url={url}
-          filter={item => {
+          filter={async item => {
             if (schema.get('filter')) {
-              const [value] = jsonata(schema.get('filter'), {
+              const [value] = await jsonata(schema.get('filter'), {
                 item,
               });
               return value;

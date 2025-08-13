@@ -46,11 +46,11 @@ export function EventList({
       ? `/api/v1/namespaces/${namespaceId}/events`
       : '/api/v1/events';
 
-  const filter = res => {
+  const filter = async res => {
     if (!structure.filter) return true;
 
     try {
-      jsonata(structure.filter, {
+      await jsonata(structure.filter, {
         scope: res,
         arrayItems: [res],
       }).then(([eventFilter, eventFilterError]) => {
@@ -58,6 +58,7 @@ export function EventList({
         return !!eventFilter;
       });
     } catch (e) {
+      console.warn(e);
       return false;
     }
   };

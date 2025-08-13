@@ -39,6 +39,7 @@ export function StatisticalCard({
         };
       }),
     ).then(results => setExtraInfo(results));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure.children]);
 
   useEffect(() => {
@@ -48,6 +49,7 @@ export function StatisticalCard({
       setMainValue(res);
       setErr(error);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure?.mainValue?.source]);
 
   if (err) {

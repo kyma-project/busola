@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -7,7 +8,6 @@ import { useGetTranslation, useGetPlaceholder } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
-import { useEffect, useState } from 'react';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
@@ -70,6 +70,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
           jsonata(arg).then(rs => rs),
         );
       getTextToCopy().then(text => setTextToCopy(text));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isRendererCopyable]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
@@ -123,7 +124,8 @@ export function Widget({
     }).then(([result]) => {
       setChildValue(result);
     });
-  }, [jsonata, structure.source, index]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.source, index]);
 
   useEffect(() => {
     jsonata(
@@ -136,7 +138,8 @@ export function Widget({
       setVisible(result);
       setVisibilityError(error);
     });
-  }, [jsonata, structure.visibility, childValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.visibility, childValue]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

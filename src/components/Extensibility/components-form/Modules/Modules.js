@@ -53,9 +53,9 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const options = schema.get('options');
   let parsedOptions = {};
 
-  function makeJsonata(propObject) {
+  async function makeJsonata(propObject) {
     if (typeof propObject === 'string') {
-      const [newEnum] = jsonata(
+      const [newEnum] = await jsonata(
         propObject,
         itemVars(resource, rule.itemVars, storeKeys),
         [],

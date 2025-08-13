@@ -85,7 +85,7 @@ export function Table({
             index: index,
             scope: entry,
             arrayItems: [...arrayItems, entry],
-          }).then(title => title);
+          }).then(result => result);
         } catch (e) {
           console.warn(e);
           return defaultTitle;

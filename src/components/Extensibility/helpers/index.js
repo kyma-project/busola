@@ -254,7 +254,7 @@ const getSearchingFunction = (searchOption, originalResource) => {
 
 const searchingFunctions = (searchOptions, originalResource) =>
   (searchOptions || []).map(searchOption =>
-    getSearchingFunction(searchOption, originalResource).then(value => value),
+    getSearchingFunction(searchOption, originalResource),
   );
 
 // TODO: If you use getSearchingFunction or searchingFunctions, make sure to handle Promises in their consumers.
