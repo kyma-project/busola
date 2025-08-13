@@ -22,7 +22,6 @@ import {
 } from '@ui5/webcomponents-react';
 import { Loader } from '@ui5/webcomponents-react-compat/dist/components/Loader/index.js';
 import { ClusterValidationConfigurationDialog } from './ClusterValidationConfiguration';
-import { resourcesState } from 'state/resourcesAtom';
 
 import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -36,7 +35,7 @@ import '@ui5/webcomponents-icons/dist/status-positive.js';
 import { ScanResult } from './ScanResult';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
-import { useAtom } from 'jotai';
+import { K8sAPIResource } from 'types';
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
@@ -61,7 +60,7 @@ export const ClusterValidation = () => {
 
   const { namespaces } = useAvailableNamespaces();
 
-  const [resources, setResources] = useAtom(resourcesState);
+  const [resources, setResources] = useState<K8sAPIResource[] | null>(null);
 
   const listableResources = useMemo(() => {
     return resources?.filter(resource => resource.verbs?.includes('list'));
