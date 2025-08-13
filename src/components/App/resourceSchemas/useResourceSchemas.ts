@@ -1,16 +1,14 @@
 import { useEffect } from 'react';
-import { useMatch } from 'react-router';
-import { useNavigate } from 'react-router';
+import { useMatch, useNavigate } from 'react-router';
 import {
-  sendWorkerMessage,
-  addWorkerListener,
   addWorkerErrorListener,
+  addWorkerListener,
+  sendWorkerMessage,
   terminateWorker,
 } from './resourceSchemaWorkerApi';
 import {
   useRecoilValue,
   useRecoilValueLoadable,
-  useRecoilState,
   useSetRecoilState,
 } from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
@@ -22,6 +20,7 @@ import { clusterState } from 'state/clusterAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { useAtom } from 'jotai';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
@@ -36,7 +35,7 @@ export const useResourceSchemas = () => {
   const { currentCluster } = clusterInfo;
 
   const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
-  const [lastFetched, setLastFetched] = useRecoilState(openapiLastFetchedState);
+  const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedState);
 
   useEffect(() => {
     if (

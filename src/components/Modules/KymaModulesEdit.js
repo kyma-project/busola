@@ -2,7 +2,6 @@ import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { createPatch } from 'rfc6902';
-import { useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -115,7 +114,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
   const setIsResourceEdited = useSetAtom(isResourceEditedState);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
 
   const resourceName = kymaResource?.metadata.name;
 

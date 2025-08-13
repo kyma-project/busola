@@ -52,7 +52,7 @@ export function AddClusterWizard({
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetAtom(showAddClusterWizard);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const setIsFormOpen = useSetRecoilState(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenState);
   const [chosenContext, setChosenContext] = useState(undefined);
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
