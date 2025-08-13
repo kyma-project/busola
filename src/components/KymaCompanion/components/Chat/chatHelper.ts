@@ -243,7 +243,11 @@ export const parseParams = (url: string, resource: string) => {
   return { namespace, resType, resName, parsedResource };
 };
 
-export const useDoesNamespaceExist = (url: string, resource: string) => {
+export const useDoesNamespaceExist = (
+  url: string,
+  resource: string,
+  fetchFn?: Function,
+) => {
   const fetch = useFetch();
 
   const { namespace } = parseParams(url, resource);
@@ -254,10 +258,25 @@ export const useDoesNamespaceExist = (url: string, resource: string) => {
 
   useEffect(() => {
     async function fetchResource() {
-      if (namespace !== resourceNamespace) {
+      if (
+        typeof namespace === 'string' &&
+        typeof resourceNamespace === 'string' &&
+        namespace !== resourceNamespace
+      ) {
         setNamespaceExists(false);
         return;
       }
+
+      if (!namespace && !resourceNamespace) {
+        setNamespaceExists(true);
+        return;
+      }
+
+      if (fetchFn && typeof fetchFn === 'function') {
+        setNamespaceExists(fetchFn(getResourcePath(parsedResource)));
+        return;
+      }
+
       try {
         const isNamespace = await fetch({
           relativeUrl: `/api/v1/namespaces/${namespace}`,
@@ -278,7 +297,11 @@ export const useDoesNamespaceExist = (url: string, resource: string) => {
   return namespaceExists;
 };
 
-export const useDoesResourceExist = (url: string, resource: string) => {
+export const useDoesResourceExist = (
+  url: string,
+  resource: string,
+  fetchFn?: Function,
+) => {
   const fetch = useFetch();
   const { parsedResource, namespace } = parseParams(url, resource);
   // @ts-ignore
@@ -288,10 +311,20 @@ export const useDoesResourceExist = (url: string, resource: string) => {
 
   useEffect(() => {
     async function fetchResource() {
-      if (resourceNamespace !== namespace) {
+      if (
+        typeof namespace === 'string' &&
+        typeof resourceNamespace === 'string' &&
+        resourceNamespace !== namespace
+      ) {
         setResourceExists(false);
         return;
       }
+
+      if (fetchFn && typeof fetchFn === 'function') {
+        setResourceExists(fetchFn(getResourcePath(parsedResource)));
+        return;
+      }
+
       try {
         const isResource = await fetch({
           relativeUrl: getResourcePath(parsedResource),

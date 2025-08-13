@@ -44,7 +44,7 @@ describe('CodePanel Component', () => {
       .should('contain.text', t('common.buttons.copy'));
   });
 
-  it('displays both copy and place buttons when withAction is true and link is provided', () => {
+  it('displays only the copy button when resource is not correct', () => {
     const code = 'const hello = "world";';
     const language = 'javascript';
     const link = {
@@ -59,6 +59,34 @@ describe('CodePanel Component', () => {
         language={language}
         withAction={true}
         link={link}
+      />,
+    );
+
+    cy.get('.action-button').should('have.length', 1);
+    cy.get('.action-button')
+      .eq(0)
+      .should('have.attr', 'icon', 'copy');
+    cy.get('.action-button')
+      .eq(0)
+      .should('contain.text', t('common.buttons.copy'));
+  });
+
+  it('displays both copy and place buttons when withAction is true, link is provided and resource is correct', () => {
+    const code = 'const hello = "world";';
+    const language = 'javascript';
+    const link = {
+      name: 'my-service',
+      address: 'services/my-service',
+      actionType: 'New',
+    };
+
+    cy.mount(
+      <CodePanel
+        code={code}
+        language={language}
+        withAction={true}
+        link={link}
+        fetchFn={() => true}
       />,
     );
 
@@ -81,7 +109,8 @@ describe('CodePanel Component', () => {
   });
 
   it('renders the place button with correct attributes for namespace resources', () => {
-    const code = 'apiVersion: v1\nkind: Service\nmetadata:\n  name: my-service';
+    const code =
+      'apiVersion: v1\nkind: Service\nmetadata:\n  name: my-service\n  namespace: default';
     const language = 'yaml';
     const link = {
       name: 'my-service',
@@ -95,6 +124,7 @@ describe('CodePanel Component', () => {
         language={language}
         withAction={true}
         link={link}
+        fetchFn={() => true}
       />,
     );
 
@@ -107,6 +137,34 @@ describe('CodePanel Component', () => {
     cy.get('.action-button')
       .eq(1)
       .should('contain.text', t('common.buttons.place'));
+  });
+
+  it('displays only the copy button when namespaces in resource and link are not the same', () => {
+    const code =
+      'apiVersion: v1\nkind: Service\nmetadata:\n  name: my-service\n  namespace: default';
+    const language = 'yaml';
+    const link = {
+      name: 'my-service',
+      address: 'namespaces/does-not-exist/services/my-service',
+      actionType: 'New',
+    };
+
+    cy.mount(
+      <CodePanel
+        code={code}
+        language={language}
+        withAction={true}
+        link={link}
+      />,
+    );
+
+    cy.get('.action-button').should('have.length', 1);
+    cy.get('.action-button')
+      .eq(0)
+      .should('have.attr', 'icon', 'copy');
+    cy.get('.action-button')
+      .eq(0)
+      .should('contain.text', t('common.buttons.copy'));
   });
 
   it('renders the place button with correct attributes for cluster-level resources', () => {
@@ -125,6 +183,7 @@ describe('CodePanel Component', () => {
         language={language}
         withAction={true}
         link={link}
+        fetchFn={() => true}
       />,
     );
 

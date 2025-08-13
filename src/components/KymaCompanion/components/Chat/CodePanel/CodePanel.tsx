@@ -83,6 +83,7 @@ interface CodePanelProps {
   language: string;
   withAction?: boolean;
   link?: CodeSegmentLink | null;
+  fetchFn?: Function;
 }
 
 export default function CodePanel({
@@ -90,6 +91,7 @@ export default function CodePanel({
   language,
   withAction,
   link,
+  fetchFn,
 }: CodePanelProps): JSX.Element {
   const { t } = useTranslation();
   const theme = useRecoilValue(themeState);
@@ -97,8 +99,16 @@ export default function CodePanel({
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
   const navigate = useNavigate();
   const cluster = useRecoilValue(clusterState);
-  const doesNamespaceExist = useDoesNamespaceExist(link?.address ?? '', code);
-  const doesResourceExist = useDoesResourceExist(link?.address ?? '', code);
+  const doesNamespaceExist = useDoesNamespaceExist(
+    link?.address ?? '',
+    code,
+    fetchFn,
+  );
+  const doesResourceExist = useDoesResourceExist(
+    link?.address ?? '',
+    code,
+    fetchFn,
+  );
 
   const createUrl = (
     namespace: string | null,
