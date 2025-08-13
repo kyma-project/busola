@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
 
@@ -9,7 +10,6 @@ import { useJsonata } from './hooks/useJsonata';
 import { usePrepareResourceUrl } from 'resources/helpers';
 import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { useEffect, useState } from 'react';
 
 export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const isStatic = resMetaData?.general?.type === 'static';
@@ -44,25 +44,22 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const items = data?.items || [];
 
   useEffect(() => {
-    let isMounted = true;
-    if (filter) {
-      Promise.all(
-        items.map(async item => {
-          const [value] = await jsonata(filter, { item, root });
-          return value ? item : null;
-        }),
-      ).then(results => {
-        if (isMounted) {
-          setFilteredItems(results.filter(Boolean));
-        }
-      });
-    } else {
-      setFilteredItems(items);
+    if (!resource && !isStatic) {
+      return;
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [items, filter, jsonata, root]);
+    Promise.all(
+      items.map(async item => {
+        if (filter) {
+          const [value] = await jsonata(filter, { item, root });
+          return value;
+        }
+        return null;
+      }),
+    ).then(results => {
+      setFilteredItems(results.filter(Boolean));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resource, isStatic, filter, JSON.stringify(items)]);
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
   if (!resource && !isStatic) {

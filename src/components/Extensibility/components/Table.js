@@ -11,6 +11,7 @@ import { Widget, InlineWidget } from './Widget';
 import { getSearchDetails, getSortDetails } from './helpers';
 
 import './Table.scss';
+import { AsyncValue } from 'components/AsyncValue/AsyncValue';
 
 const handleTableValue = (value, t) => {
   switch (true) {
@@ -84,7 +85,7 @@ export function Table({
             index: index,
             scope: entry,
             arrayItems: [...arrayItems, entry],
-          });
+          }).then(title => title);
         } catch (e) {
           console.warn(e);
           return defaultTitle;
@@ -178,7 +179,15 @@ export function Table({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
+      sortBy={() =>
+        sortBy(
+          options => <AsyncValue params={[options]} jsonata={jsonata} />,
+          sortOptions,
+          tExt,
+          {},
+          originalResource,
+        )
+      }
       searchSettings={{
         showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,

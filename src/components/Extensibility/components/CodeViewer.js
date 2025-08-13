@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import jsyaml from 'js-yaml';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -31,8 +32,14 @@ export function CodeViewer({
     value,
     arrayItems,
   });
-  let [language] = jsonata(structure?.language, {}, detectLanguage(value));
-  language = language?.toLowerCase();
+
+  const [language, setLanguage] = useState();
+
+  useEffect(() => {
+    jsonata(structure?.language, {}, detectLanguage(value)).then(([lang]) => {
+      setLanguage(lang?.toLowerCase());
+    });
+  }, [jsonata, structure?.language, value]);
 
   const getValue = value => {
     if (!isNil(value)) {

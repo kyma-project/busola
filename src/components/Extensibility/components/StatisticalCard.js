@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useJsonata } from '../hooks/useJsonata';
 import { useGetTranslation } from '../helpers';
@@ -16,25 +17,39 @@ export function StatisticalCard({
   });
   const { t } = useGetTranslation();
 
-  const extraInfo = structure.children?.map(child => {
-    const [childValue, err] = jsonata(child.source, {
+  const [extraInfo, setExtraInfo] = useState([]);
+  const [err, setErr] = useState(null);
+  const [mainValue, setMainValue] = useState(null);
+
+  useEffect(() => {
+    Promise.all(
+      structure.children?.map(async child => {
+        const [childValue, err] = await jsonata(child.source, {
+          resource: value,
+        });
+        if (err) {
+          return t('extensibility.configuration-error', {
+            error: err.message,
+          });
+        }
+
+        return {
+          title: child.name,
+          value: childValue !== undefined ? childValue : EMPTY_TEXT_PLACEHOLDER,
+        };
+      }),
+    ).then(results => setExtraInfo(results));
+  }, [structure.children]);
+
+  useEffect(() => {
+    jsonata(structure?.mainValue?.source, {
       resource: value,
+    }).then(([res, error]) => {
+      setMainValue(res);
+      setErr(error);
     });
-    if (err) {
-      return t('extensibility.configuration-error', {
-        error: err.message,
-      });
-    }
+  }, [structure?.mainValue?.source]);
 
-    return {
-      title: child.name,
-      value: childValue !== undefined ? childValue : EMPTY_TEXT_PLACEHOLDER,
-    };
-  });
-
-  const [mainValue, err] = jsonata(structure?.mainValue?.source, {
-    resource: value,
-  });
   if (err) {
     return t('extensibility.configuration-error', {
       error: err.message,

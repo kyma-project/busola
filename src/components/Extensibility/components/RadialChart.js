@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
@@ -9,25 +10,34 @@ export const RadialChart = ({ structure, value, originalResource }) => {
     resource: originalResource,
     value,
   });
-  let err;
-  let maxValue;
 
-  [maxValue, err] = jsonata(structure.maxValue, {
-    resource: originalResource,
-  });
-  if (err) {
-    return t('extensibility.configuration-error', {
-      error: err.message,
+  const [error, setError] = useState(null);
+  const [maxValue, setMaxValue] = useState(null);
+  const [additionalInfo, setAdditionalInfo] = useState(null);
+
+  useEffect(() => {
+    jsonata(structure.maxValue, {
+      resource: originalResource,
+    }).then(([value, error]) => {
+      setMaxValue(value);
+      if (error) setError(error);
     });
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.maxValue]);
 
-  let additionalInfo;
-  [additionalInfo, err] = jsonata(structure.additionalInfo, {
-    resource: originalResource,
-  });
-  if (err) {
+  useEffect(() => {
+    jsonata(structure.additionalInfo, {
+      resource: originalResource,
+    }).then(([value, error]) => {
+      setAdditionalInfo(value);
+      if (error) setError(error);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.additionalInfo]);
+
+  if (error) {
     return t('extensibility.configuration-error', {
-      error: err.message,
+      error: error.message,
     });
   }
 

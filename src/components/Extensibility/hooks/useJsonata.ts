@@ -9,9 +9,9 @@ import {
   Resource,
 } from '../contexts/DataSources';
 
-type JsonataValue = [string, Error | null];
+export type JsonataValue = [string, Error | null];
 
-type JsonataFunction = {
+export type JsonataFunction = {
   (query: string, extras?: { [key: string]: any }, defaultValue?: any): Promise<
     JsonataValue
   >;
@@ -117,8 +117,10 @@ export function useJsonata({
       return [value, null];
     } catch (err) {
       return [
-        t('extensibility.configuration-error', { error: err.message }),
-        err,
+        t('extensibility.configuration-error', {
+          error: err instanceof Error && err?.message ? err?.message : '',
+        }),
+        err as Error,
       ];
     }
   };

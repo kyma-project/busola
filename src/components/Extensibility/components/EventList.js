@@ -50,12 +50,13 @@ export function EventList({
     if (!structure.filter) return true;
 
     try {
-      const [eventFilter, eventFilterError] = jsonata(structure.filter, {
+      jsonata(structure.filter, {
         scope: res,
         arrayItems: [res],
+      }).then(([eventFilter, eventFilterError]) => {
+        if (eventFilterError) return false;
+        return !!eventFilter;
       });
-      if (eventFilterError) return false;
-      return !!eventFilter;
     } catch (e) {
       return false;
     }

@@ -53,23 +53,27 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       value: props.value,
       arrayItems: props.arrayItems,
     });
+    const [textToCopy, setTextToCopy] = useState(null);
+
+    useEffect(() => {
+      if (!props.structure.copyable || !isRendererCopyable) return;
+      const defaultCopyFunction = ({ value }) =>
+        typeof value === 'object' ? JSON.stringify(value) : value;
+
+      const copyFunction =
+        typeof Renderer.copyFunction === 'function'
+          ? Renderer.copyFunction
+          : defaultCopyFunction;
+
+      const getTextToCopy = async () =>
+        copyFunction(props, Renderer, defaultCopyFunction, arg =>
+          jsonata(arg).then(rs => rs),
+        );
+      getTextToCopy().then(text => setTextToCopy(text));
+    }, [isRendererCopyable]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
 
-    const defaultCopyFunction = ({ value }) =>
-      typeof value === 'object' ? JSON.stringify(value) : value;
-
-    const copyFunction =
-      typeof Renderer.copyFunction === 'function'
-        ? Renderer.copyFunction
-        : defaultCopyFunction;
-
-    const textToCopy = copyFunction(
-      props,
-      Renderer,
-      defaultCopyFunction,
-      jsonata,
-    );
     return (
       <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
         {children}
