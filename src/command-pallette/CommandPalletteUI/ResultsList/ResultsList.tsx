@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react';
 import { useEventListener } from 'hooks/useEventListener';
 import { Result } from './Result';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { addHistoryEntry } from '../search-history';
 import './ResultsList.scss';
 import { useTranslation } from 'react-i18next';
 import { LOADING_INDICATOR } from '../types';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { activateResult, isResultGoingToRedirect } from '../helpers';
 
 function scrollInto(element: Element) {
   element.scrollIntoView({
@@ -38,6 +38,7 @@ export function ResultsList({
   //todo 2
   const isLoading = results.find((r: any) => r.type === LOADING_INDICATOR);
   results = results.filter((r: any) => r.type !== LOADING_INDICATOR);
+
   useEffect(() => {
     if (results?.length <= activeIndex) {
       setActiveIndex(0);
@@ -65,10 +66,18 @@ export function ResultsList({
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
         e.preventDefault();
-        navigateSafely(() => {
-          addHistoryEntry(results[activeIndex].query);
-          results[activeIndex].onActivate();
-        });
+        if (isResultGoingToRedirect(results[activeIndex].query)) {
+          navigateSafely(() =>
+            activateResult(
+              results[activeIndex].query,
+              results[activeIndex].onActivate,
+            ),
+          );
+        } else
+          activateResult(
+            results[activeIndex].query,
+            results[activeIndex].onActivate,
+          );
       }
     },
     [activeIndex, results, isHistoryMode],
@@ -85,10 +94,18 @@ export function ResultsList({
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              navigateSafely(() => {
-                addHistoryEntry(result.query);
-                result.onActivate();
-              });
+              if (isResultGoingToRedirect(results[activeIndex].query)) {
+                navigateSafely(() =>
+                  activateResult(
+                    results[activeIndex].query,
+                    results[activeIndex].onActivate,
+                  ),
+                );
+              } else
+                activateResult(
+                  results[activeIndex].query,
+                  results[activeIndex].onActivate,
+                );
             }}
           />
         ))
