@@ -91,7 +91,7 @@ context('Test Jobs', () => {
     cy.saveChanges('Create');
   });
 
-  it('Inspect details and created Pods', { retries: 2 }, () => {
+  it('Inspect details and created Pods', () => {
     // name
     cy.getMidColumn()
       .find('ui5-dynamic-page-title')
@@ -124,8 +124,8 @@ context('Test Jobs', () => {
     // status
     cy.get('ui5-card[accessible-name="Status"]')
       .find('.resource-status-card__header')
-      .find('[aria-label="Status"]', { timeout: 75 * 1000 })
-      .should('contain.text', 'Completed');
+      .find('.header__status-badge')
+      .should('contain.text', 'Completed', { timeout: 75 * 1000 });
 
     // check logs
     checkJobLogs({
@@ -147,7 +147,7 @@ context('Test Jobs', () => {
 
     // pod status
     cy.get('ui5-table[accessible-name="Pods"]')
-      .find('[aria-label="Status"]')
+      .find('div[role="status"]')
       .contains('Completed')
       .should('be.visible');
   });
