@@ -252,8 +252,7 @@ export const useDoesNamespaceExist = (
 
   const { namespace } = parseParams(url, resource);
   const { parsedResource } = parseParams(url, resource);
-  // @ts-ignore
-  const resourceNamespace = parsedResource?.metadata?.namespace;
+  const resourceNamespace = (parsedResource as any)?.metadata?.namespace;
   const [namespaceExists, setNamespaceExists] = useState(false);
 
   useEffect(() => {
@@ -304,8 +303,7 @@ export const useDoesResourceExist = (
 ) => {
   const fetch = useFetch();
   const { parsedResource, namespace } = parseParams(url, resource);
-  // @ts-ignore
-  const resourceNamespace = parsedResource?.metadata?.namespace;
+  const resourceNamespace = (parsedResource as any)?.metadata?.namespace;
 
   const [resourceExists, setResourceExists] = useState(false);
 
