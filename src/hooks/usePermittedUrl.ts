@@ -1,4 +1,3 @@
-import { useRecoilState } from 'recoil';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
 
@@ -7,6 +6,7 @@ import { useUrl } from 'hooks/useUrl';
 import { permittedUrlsState } from 'state/permittedUrlsAtom';
 import { K8sResource } from 'types';
 import { useEffect } from 'react';
+import { useAtom } from 'jotai';
 
 const DEFAULT_TIMEOUT = 3600;
 
@@ -33,7 +33,7 @@ export function usePermittedUrl(
     resourceNamespace ? resourceNamespace : namespace,
   );
 
-  const [permittedUrls, setPermittedUrls] = useRecoilState(permittedUrlsState);
+  const [permittedUrls, setPermittedUrls] = useAtom(permittedUrlsState);
 
   const now = new Date().getTime();
   const age =

@@ -1,4 +1,4 @@
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'jotai';
 
 export interface UrlConfig {
   url: string | null;
@@ -11,9 +11,5 @@ export type PermittedUrlsState = {
 
 const defaultValue = {};
 
-export const permittedUrlsState: RecoilState<PermittedUrlsState> = atom<
-  PermittedUrlsState
->({
-  key: 'permittedUrlsState',
-  default: defaultValue,
-});
+export const permittedUrlsState = atom<PermittedUrlsState>(defaultValue);
+permittedUrlsState.debugLabel = 'permittedUrlsState';
