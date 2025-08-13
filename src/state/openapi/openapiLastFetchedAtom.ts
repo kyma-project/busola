@@ -1,12 +1,7 @@
-import { atom, RecoilState } from 'recoil';
-
-type OpenapiLastFethedState = string | null;
+import { atom } from 'jotai';
 
 export const defaultValue = null;
 
-export const openapiLastFetchedState: RecoilState<OpenapiLastFethedState> = atom<
-  OpenapiLastFethedState
->({
-  key: 'openapiLastFetchedState',
-  default: defaultValue,
-});
+export const openapiLastFetchedState = atom<string | null>(defaultValue);
+
+openapiLastFetchedState.debugLabel = 'openapiLastFetchedState';
