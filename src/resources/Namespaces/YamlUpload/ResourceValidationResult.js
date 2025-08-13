@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   FlexBox,
   MessageStrip,
@@ -108,7 +109,7 @@ export const ResourceValidationResult = ({ resource }) => {
   const validateResources = getExtendedValidateResourceState(
     useRecoilValue(validateResourcesState),
   );
-  const validationSchemas = useRecoilValue(validationSchemasEnabledState);
+  const validationSchemas = useAtomValue(validationSchemasEnabledState);
   const { debounced } = useLoadingDebounce(resource, 500);
   const warnings = [
     useValidateResourceBySchema(debounced, validationSchemas, {

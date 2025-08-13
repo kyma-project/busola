@@ -1,6 +1,6 @@
 import { useFeature } from 'hooks/useFeature';
 import { useEffect, useMemo } from 'react';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { atom, useSetAtom } from 'jotai';
 import {
   ExtendedValidateResources,
   getExtendedValidateResourceState,
@@ -13,6 +13,7 @@ import {
   validationSchemasState,
 } from './validationSchemasAtom';
 import { configFeaturesNames } from 'state/types';
+import { useRecoilValue } from 'recoil';
 
 type PolicyReference = string;
 
@@ -79,7 +80,7 @@ export const getValidationEnabledSchemas = (
 };
 
 export const useGetValidationEnabledSchemas = () => {
-  const setSchemas = useSetRecoilState(validationSchemasEnabledState);
+  const setSchemas = useSetAtom(validationSchemasEnabledState);
 
   const validationSchemas = useRecoilValue(validationSchemasState);
   const policySet = usePolicySet();
@@ -97,9 +98,6 @@ export const useGetValidationEnabledSchemas = () => {
   }, [validationSchemas, policySet]);
 };
 
-export const validationSchemasEnabledState: RecoilState<ValidationSchema | null> = atom<ValidationSchema | null>(
-  {
-    key: 'validationEnabledSchemasState',
-    default: emptyValidationSchema,
-  },
+export const validationSchemasEnabledState = atom<ValidationSchema | null>(
+  emptyValidationSchema,
 );
