@@ -233,7 +233,8 @@ describe('CodePanel Component', () => {
   });
 
   it('renders correctly with Update action type', () => {
-    const code = 'apiVersion: v1\nkind: Service\nmetadata:\n  name: my-service';
+    const code =
+      'apiVersion: v1\nkind: Service\nmetadata:\n  name: my-service\n  namespace: default';
     const language = 'yaml';
     const link = {
       name: 'my-service',
@@ -247,6 +248,7 @@ describe('CodePanel Component', () => {
         language={language}
         withAction={true}
         link={link}
+        fetchFn={() => true}
       />,
     );
 
