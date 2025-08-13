@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Tag, Label } from '@ui5/webcomponents-react';
+import { Label, Tag } from '@ui5/webcomponents-react';
 
 import './Labels.scss';
 

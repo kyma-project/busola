@@ -86,8 +86,12 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
     <div className="page-header__column" style={styleComputed}>
       {image && <div className="image">{image}</div>}
       <div className="content-container">
-        <div className="title bsl-has-color-status-4 ">{title}:</div>
-        <span className="content bsl-has-color-text-1">{children}</span>
+        <div className="title bsl-has-color-status-4 " tabIndex={0}>
+          {title}:
+        </div>
+        <span className="content bsl-has-color-text-1" tabIndex={0}>
+          {children}
+        </span>
       </div>
     </div>
   );

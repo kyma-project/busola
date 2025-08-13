@@ -117,9 +117,7 @@ context('Test Jobs', () => {
       .should('exist');
 
     // status
-    cy.get('[aria-label="Status"]', { timeout: 75 * 1000 })
-      .first()
-      .contains('Completed');
+    cy.get('[aria-label="Completed"]', { timeout: 75 * 1000 });
 
     // check logs
     checkJobLogs({
