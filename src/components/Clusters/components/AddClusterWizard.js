@@ -29,8 +29,8 @@ import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 export function AddClusterWizard({
   kubeconfig,
   setKubeconfig,
-  config,
   dialogRef,
+  config = {},
 }) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
@@ -169,7 +169,6 @@ export function AddClusterWizard({
         >
           <KubeconfigUpload
             kubeconfig={kubeconfig}
-            config={config}
             setKubeconfig={updateKubeconfig}
             formRef={authFormRef}
           />
