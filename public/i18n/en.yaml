@@ -566,6 +566,8 @@ daemon-sets:
     toleration-seconds: Seconds
 deployments:
   create-modal:
+    args: Args
+    command: Command
     add-container: Add Container
     container-header: Container {{name}}
     containers: Containers
@@ -579,6 +581,12 @@ deployments:
     docker-image: Docker Image
     docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
     image-pull-secret: Image Pull Secret
+    placeholders:
+      args: Arguments to the ENTRYPOINT
+      command: Command to run in a container
+    tooltips:
+      args: Docker image CMD is used if arguments are not provided. Provide either args or command.
+      command: The Docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
   description: <0>Deployment</0> is a Kubernetes object that represents a replicated application running on your cluster.
   headers:
     images: Images
