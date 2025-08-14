@@ -14,7 +14,7 @@ export type Warning =
 
 export const validateResourceBySchema = (
   resource: K8sResource,
-  schema?: ValidationSchema,
+  schema: ValidationSchema,
   options?: Options,
 ) => {
   const warnings = (schema?.rules || [])
@@ -49,10 +49,12 @@ export const validateResourceBySchema = (
 export const useValidateResourceBySchema = (
   resource: K8sResource,
   validationSchema: ValidationSchema,
+  options?: Options,
 ) => {
   return useMemo(() => {
     return validateResourceBySchema(resource, validationSchema, {
       base: 'https://dashboard.kyma.cloud.sap', // Workaround for jsonschema 1.5.0 - https://github.com/tdegrunt/jsonschema/issues/407
+      ...options,
     });
-  }, [resource, validationSchema]);
+  }, [options, resource, validationSchema]);
 };

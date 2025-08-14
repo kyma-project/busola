@@ -22,8 +22,10 @@ import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAto
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { SeparatorLine } from './SeparatorLine';
+import { useAtomValue } from 'jotai';
+import { ValidationSchema } from 'state/validationSchemasAtom';
 
-const useNamespaceWarning = resource => {
+const useNamespaceWarning = (resource: any) => {
   const { t } = useTranslation();
   return useIsInCurrentNamespace(resource)
     ? []
@@ -37,7 +39,7 @@ const useNamespaceWarning = resource => {
       ];
 };
 
-const ValidationWarning = ({ warning }) => {
+const ValidationWarning = ({ warning }: { warning: string }) => {
   const [where, reason] = warning.split(' - ');
   return (
     <>
@@ -50,15 +52,19 @@ const ValidationWarning = ({ warning }) => {
   );
 };
 
-const ValidationWarnings = ({ resource, validationSchema }) => {
+const ValidationWarnings = ({
+  resource,
+  validationSchema,
+}: {
+  resource: any;
+  validationSchema: ValidationSchema;
+}) => {
   const { t } = useTranslation();
 
   const { debounced } = useLoadingDebounce(resource, 500);
 
   const warnings = [
-    useValidateResourceBySchema(debounced, validationSchema, {
-      base: 'https://dashboard.kyma.cloud.sap', // Workaround for jsonschema 1.5.0 - https://github.com/tdegrunt/jsonschema/issues/407
-    }),
+    useValidateResourceBySchema(debounced, validationSchema),
     useNamespaceWarning(debounced),
   ];
 
@@ -71,7 +77,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
         className="sap-margin-bottom-small"
       >
         <p> {t('common.headers.loading')}</p>
-        <Spinner size="Small" center={false} />
+        <Spinner size="S" center={false} />
       </MessageStrip>
     );
 
@@ -79,7 +85,7 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
     <>
       {warnings.flat().map((warning, idx) => (
         <React.Fragment key={idx}>
-          <FlexBox alignItems={'Begin'}>
+          <FlexBox alignItems="Start">
             <ObjectStatus
               showDefaultIcon
               aria-label="Warning"
@@ -89,7 +95,11 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
                 marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v2-11-0_panel_content_padding` is divided by 2
               }}
             />
-            <ValidationWarning warning={warning.message} />
+            <ValidationWarning
+              warning={
+                typeof warning === 'string' ? warning : warning.message ?? ''
+              }
+            />
           </FlexBox>
           <SeparatorLine
             className="sap-margin-y-small"
@@ -104,16 +114,14 @@ const ValidationWarnings = ({ resource, validationSchema }) => {
   );
 };
 
-export const ResourceValidationResult = ({ resource }) => {
+export const ResourceValidationResult = ({ resource }: { resource: any }) => {
   const validateResources = getExtendedValidateResourceState(
     useRecoilValue(validateResourcesState),
   );
-  const validationSchemas = useRecoilValue(validationSchemasEnabledState);
+  const validationSchemas = useAtomValue(validationSchemasEnabledState);
   const { debounced } = useLoadingDebounce(resource, 500);
   const warnings = [
-    useValidateResourceBySchema(debounced, validationSchemas, {
-      base: 'https://dashboard.kyma.cloud.sap',
-    }),
+    useValidateResourceBySchema(debounced, validationSchemas),
     useNamespaceWarning(debounced),
   ];
   const statusIcon = validateResources.isEnabled ? (
@@ -147,7 +155,7 @@ export const ResourceValidationResult = ({ resource }) => {
           </Toolbar>
         }
         accessibleName={resource?.kind + ' ' + resource?.metadata?.name}
-        accessibleRole="listitem"
+        role="listitem"
       >
         {validateResources.isEnabled && (
           <ValidationWarnings
