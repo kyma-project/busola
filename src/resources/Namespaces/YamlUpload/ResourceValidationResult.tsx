@@ -23,7 +23,6 @@ import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAto
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { SeparatorLine } from './SeparatorLine';
-import { useAtomValue } from 'jotai';
 import { ValidationSchema } from 'state/validationSchemasAtom';
 
 const useNamespaceWarning = (resource: any) => {
