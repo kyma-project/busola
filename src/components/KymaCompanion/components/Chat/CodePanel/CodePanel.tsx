@@ -11,7 +11,6 @@ import {
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
 import { clusterState } from 'state/clusterAtom';
-import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import { CodeSegmentLink } from 'components/KymaCompanion/utils/formatMarkdown';
 
@@ -20,6 +19,11 @@ import { registerIconCollectionForTheme } from '@ui5/webcomponents-base/dist/ass
 
 import './CodePanel.scss';
 import CopyButton from 'shared/components/CopyButton/CopyButton';
+import {
+  parseParams,
+  useDoesNamespaceExist,
+  useDoesResourceExist,
+} from '../chatHelper';
 
 // Register icon for replace action
 registerIcon('replace', {
@@ -79,6 +83,7 @@ interface CodePanelProps {
   language: string;
   withAction?: boolean;
   link?: CodeSegmentLink | null;
+  fetchFn?: Function;
 }
 
 export default function CodePanel({
@@ -86,6 +91,7 @@ export default function CodePanel({
   language,
   withAction,
   link,
+  fetchFn,
 }: CodePanelProps): JSX.Element {
   const { t } = useTranslation();
   const theme = useRecoilValue(themeState);
@@ -93,6 +99,16 @@ export default function CodePanel({
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
   const navigate = useNavigate();
   const cluster = useRecoilValue(clusterState);
+  const doesNamespaceExist = useDoesNamespaceExist(
+    link?.address ?? '',
+    code,
+    fetchFn,
+  );
+  const doesResourceExist = useDoesResourceExist(
+    link?.address ?? '',
+    code,
+    fetchFn,
+  );
 
   const createUrl = (
     namespace: string | null,
@@ -117,23 +133,6 @@ export default function CodePanel({
     }
 
     return `${basePath}${fullResourcePath}?${params}`;
-  };
-
-  const parseParams = (url: string, resource: string) => {
-    const parts = url.split('/').filter(Boolean); // Remove empty strings from split
-    let [namespace, resType, resName]: [string | null, string, string] = [
-      null,
-      '',
-      '',
-    ];
-    if (parts[0] === 'namespaces') {
-      [namespace, resType, resName] = [parts[1], parts[2], parts[3]];
-    } else {
-      [resType, resName] = [parts[0], parts[1]];
-    }
-
-    const parsedResource = jsyaml.load(resource.replace('yaml', '')) || {};
-    return { namespace, resType, resName, parsedResource };
   };
 
   const handlePlaceInEditor = (url: string, resource: string, type: string) => {
@@ -214,7 +213,7 @@ export default function CodePanel({
               contentToCopy={code}
               iconOnly={false}
             />
-            {withAction && link?.actionType === 'New' && (
+            {withAction && doesNamespaceExist && link?.actionType === 'New' && (
               <Button
                 className="action-button"
                 design="Transparent"
@@ -227,19 +226,22 @@ export default function CodePanel({
                 {t('common.buttons.place')}
               </Button>
             )}
-            {withAction && link?.actionType === 'Update' && (
-              <Button
-                className="action-button"
-                design="Transparent"
-                icon="fpa-icons/replace"
-                onClick={() =>
-                  handleUpdateInEditor(link.address, code, link.actionType)
-                }
-                accessibleName={t('common.buttons.replace')}
-              >
-                {t('common.buttons.replace')}
-              </Button>
-            )}
+            {withAction &&
+              doesNamespaceExist &&
+              doesResourceExist &&
+              link?.actionType === 'Update' && (
+                <Button
+                  className="action-button"
+                  design="Transparent"
+                  icon="fpa-icons/replace"
+                  onClick={() =>
+                    handleUpdateInEditor(link.address, code, link.actionType)
+                  }
+                  accessibleName={t('common.buttons.replace')}
+                >
+                  {t('common.buttons.replace')}
+                </Button>
+              )}
           </FlexBox>
         </FlexBox>
       }
