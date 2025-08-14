@@ -180,15 +180,17 @@ Cypress.Commands.add(
       waitForDelete = 0,
     } = options;
 
-    cy.wait(500);
+    cy.wait(1000);
     if (parentSelector) {
       cy.get(parentSelector)
         .find('ui5-input[id="search-input"]:visible')
         .find('input')
+        .should('not.be.disabled', { timeout: 5000 })
         .type(resourceName);
     } else {
       cy.get('ui5-input[id="search-input"]:visible')
         .find('input')
+        .should('not.be.disabled', { timeout: 5000 })
         .type(resourceName);
     }
 

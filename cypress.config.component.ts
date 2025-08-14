@@ -10,5 +10,9 @@ export default defineConfig({
     },
     specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress/support/component.jsx',
+    retries: {
+      runMode: 1,
+      openMode: 0,
+    },
   },
 });
