@@ -2,7 +2,7 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
@@ -34,7 +34,7 @@ import { configFeaturesNames } from 'state/types';
 
 export function BusolaExtensionDetails({ name, namespace }) {
   const { t } = useTranslation();
-  const extensibilitySchemas = useRecoilValue(extensibilitySchemasState);
+  const extensibilitySchemas = useAtomValue(extensibilitySchemasState);
 
   const { clusterUrl } = useUrl();
 
