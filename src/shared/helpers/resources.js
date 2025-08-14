@@ -77,7 +77,7 @@ export function formatResourceUnit(
   return output;
 }
 
-export function bytesToHumanReadable(bytes, { fixed = 0, unit = '' } = {}) {
+export function bytesToHumanReadable(bytes, { fixed = 1, unit = '' } = {}) {
   return formatResourceUnit(bytes, true, { withoutSpace: true, fixed, unit });
 }
 
