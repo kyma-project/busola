@@ -1,6 +1,10 @@
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { K8sNameField, RuntimeResources } from 'shared/ResourceForm/fields';
+import {
+  K8sNameField,
+  RuntimeResources,
+  TextArrayInput,
+} from 'shared/ResourceForm/fields';
 
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
 
@@ -39,6 +43,18 @@ function SingleContainerSection({ container, setContainer }) {
         input={Inputs.Text}
         placeholder={t('deployments.create-modal.docker-image-placeholder')}
         tooltipContent={dockerImgDesc}
+      />
+      <TextArrayInput
+        propertyPath="$.command"
+        title={t('deployments.create-modal.command')}
+        placeholder={t('deployments.create-modal.placeholders.command')}
+        tooltipContent={t('deployments.create-modal.tooltips.command')}
+      />
+      <TextArrayInput
+        propertyPath="$.args"
+        title={t('deployments.create-modal.args')}
+        placeholder={t('deployments.create-modal.placeholders.args')}
+        tooltipContent={t('deployments.create-modal.tooltips.args')}
       />
       <RuntimeResources
         title={t('deployments.create-modal.runtime-profile')}
