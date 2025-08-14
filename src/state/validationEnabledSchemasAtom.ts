@@ -104,3 +104,4 @@ export const useGetValidationEnabledSchemas = () => {
 export const validationSchemasEnabledState = atom<ValidationSchema>(
   emptyValidationSchema,
 );
+validationSchemasEnabledState.debugLabel = 'validationSchemasEnabledState';
