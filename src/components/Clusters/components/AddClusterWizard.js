@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import {
-  Wizard,
-  WizardStep,
-  Title,
-  Button,
-  Popover,
-  Text,
-} from '@ui5/webcomponents-react';
+import { Wizard, WizardStep, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useSetAtom } from 'jotai';
@@ -31,12 +24,13 @@ import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
 
 import './AddClusterWizard.scss';
+import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 
 export function AddClusterWizard({
   kubeconfig,
   setKubeconfig,
-  config,
   dialogRef,
+  config = {},
 }) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
@@ -175,7 +169,6 @@ export function AddClusterWizard({
         >
           <KubeconfigUpload
             kubeconfig={kubeconfig}
-            config={config}
             setKubeconfig={updateKubeconfig}
             formRef={authFormRef}
           />
@@ -231,28 +224,14 @@ export function AddClusterWizard({
           <div className="add-cluster__content-container">
             <Title level="H5" className="sap-margin-bottom-small">
               {t('clusters.storage.choose-storage.label')}
-              <>
-                <Button
-                  id="storageDescriptionOpener"
-                  icon="hint"
-                  design="Transparent"
-                  className="sap-margin-begin-tiny"
-                  onClick={() => setShowTitleDescription(true)}
-                />
-                {createPortal(
-                  <Popover
-                    opener="storageDescriptionOpener"
-                    open={showTitleDescription}
-                    onClose={() => setShowTitleDescription(false)}
-                    placement="End"
-                  >
-                    <Text className="description">
-                      {t('clusters.storage.info')}
-                    </Text>
-                  </Popover>,
-                  document.body,
-                )}
-              </>
+              <HintButton
+                id="storageDescriptionOpener"
+                className="sap-margin-begin-tiny"
+                setShowTitleDescription={setShowTitleDescription}
+                description={t('clusters.storage.info')}
+                showTitleDescription={showTitleDescription}
+                ariaTitle={t('clusters.storage.choose-storage.label')}
+              />
             </Title>
             <ChooseStorage storage={storage} setStorage={setStorage} />
           </div>

@@ -1,4 +1,4 @@
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'jotai';
 import { ValidKubeconfig } from 'types';
 
 export interface KubeConfigMultipleState extends ValidKubeconfig {
@@ -10,9 +10,5 @@ const defaultValue: KubeConfigMultipleState = {
   chosenContext: null,
 };
 
-export const multipleContexts: RecoilState<KubeConfigMultipleState> = atom<
-  KubeConfigMultipleState
->({
-  key: 'multipleContexts',
-  default: defaultValue,
-});
+export const multipleContexts = atom<KubeConfigMultipleState>(defaultValue);
+multipleContexts.debugLabel = 'multipleContexts';
