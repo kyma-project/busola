@@ -1,8 +1,8 @@
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { injectionsState } from 'state/navigation/extensionsAtom';
 
 export const useGetInjections = (location, slot) => {
-  const injections = useRecoilValue(injectionsState);
+  const injections = useAtomValue(injectionsState);
   let filteredInjections = [];
 
   (injections || []).forEach(injection => {
