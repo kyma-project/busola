@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
   ListItemStandard,
@@ -15,7 +15,11 @@ import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
-import { clustersState } from 'state/clustersAtom';
+import {
+  clustersState,
+  clustersStateEffectOnSet,
+  clustersStateEffectSetSelf,
+} from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
@@ -40,8 +44,10 @@ export function Header() {
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
 
+  useAtom(clustersStateEffectSetSelf);
+  useAtom(clustersStateEffectOnSet);
   const cluster = useRecoilValue(clusterState);
-  const clusters = useRecoilValue(clustersState);
+  const clusters = useAtomValue(clustersState);
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature(
     configFeaturesNames.KYMA_COMPANION,

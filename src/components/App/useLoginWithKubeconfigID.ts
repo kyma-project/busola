@@ -28,7 +28,7 @@ import {
   manualKubeConfigIdState,
   ManualKubeConfigIdType,
 } from 'state/manualKubeConfigIdAtom';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -185,7 +185,7 @@ export function useLoginWithKubeconfigID() {
     configFeaturesNames.KUBECONFIG_ID,
   );
   const configuration = useRecoilValue(configurationAtom);
-  const clusters = useRecoilValue(clustersState);
+  const clusters = useAtomValue(clustersState);
   const [contextsState, setContextsState] = useAtom(multipleContexts);
   const [manualKubeConfigId, setManualKubeConfigId] = useAtom(
     manualKubeConfigIdState,
@@ -301,7 +301,7 @@ export function useLoadDefaultKubeconfigId() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
     configFeaturesNames.KUBECONFIG_ID,
   )!;
-  const clusters = useRecoilValue(clustersState);
+  const clusters = useAtomValue(clustersState);
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
 
