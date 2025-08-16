@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { isNil } from 'lodash';
 import { useJsonata } from '../hooks/useJsonata';
 import { useTranslation } from 'react-i18next';
@@ -32,9 +33,22 @@ export function Badge({
     arrayItems,
   });
 
-  const [tooltip, tooltipError] = jsonata(structure?.description);
+  const [tooltip, setTooltip] = useState(null);
+  const [tooltipError, setTooltipError] = useState(null);
+  const [badgeType, setBadgeType] = useState(null);
 
-  const badgeType = getBadgeType(structure.highlights, value, jsonata, t);
+  useEffect(() => {
+    jsonata(structure?.description).then(([tooltip, tooltipError]) => {
+      setTooltip(tooltip);
+      setTooltipError(tooltipError);
+    });
+  }, [jsonata, structure?.description]);
+
+  useEffect(() => {
+    getBadgeType(structure.highlights, value, jsonata, t).then(type =>
+      setBadgeType(type),
+    );
+  }, [jsonata, structure?.highlights, value, t]);
 
   const getTooltipContent = description => {
     if (tooltip && !tooltipError) {

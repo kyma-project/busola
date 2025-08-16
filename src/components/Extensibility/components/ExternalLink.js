@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   useGetPlaceholder,
   useGetTranslation,
@@ -8,8 +9,8 @@ import { useJsonata } from '../hooks/useJsonata';
 import { Button, Icon, Link } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 
-const makeHref = ({ jsonata, value, structure }) => {
-  const [link, linkError] = jsonata(structure.link);
+const makeHref = async ({ jsonata, value, structure }) => {
+  const [link, linkError] = await jsonata(structure.link);
   if (linkError) return linkError.message;
 
   let href;
@@ -45,7 +46,11 @@ export const ExternalLink = ({
     arrayItems,
   });
 
-  const href = makeHref({ jsonata, value, structure });
+  const [href, setHref] = useState(null);
+
+  useEffect(() => {
+    makeHref({ jsonata, value, structure }).then(link => setHref(link));
+  }, [jsonata, value, structure]);
 
   if (isNil(value)) return emptyLeafPlaceholder;
 
@@ -88,6 +93,7 @@ export const ExternalLink = ({
 };
 ExternalLink.inline = true;
 ExternalLink.copyable = true;
-ExternalLink.copyFunction = ({ value, structure }, _, __, jsonata) => {
-  return makeHref({ jsonata, value, structure });
+ExternalLink.copyFunction = async ({ value, structure }, _, __, jsonata) => {
+  const href = await makeHref({ jsonata, value, structure });
+  return href;
 };

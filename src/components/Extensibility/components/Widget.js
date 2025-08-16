@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -52,23 +53,28 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       value: props.value,
       arrayItems: props.arrayItems,
     });
+    const [textToCopy, setTextToCopy] = useState(null);
+
+    useEffect(() => {
+      if (!props.structure.copyable || !isRendererCopyable) return;
+      const defaultCopyFunction = ({ value }) =>
+        typeof value === 'object' ? JSON.stringify(value) : value;
+
+      const copyFunction =
+        typeof Renderer.copyFunction === 'function'
+          ? Renderer.copyFunction
+          : defaultCopyFunction;
+
+      const getTextToCopy = async () =>
+        copyFunction(props, Renderer, defaultCopyFunction, arg =>
+          jsonata(arg).then(rs => rs),
+        );
+      getTextToCopy().then(text => setTextToCopy(text));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isRendererCopyable]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
 
-    const defaultCopyFunction = ({ value }) =>
-      typeof value === 'object' ? JSON.stringify(value) : value;
-
-    const copyFunction =
-      typeof Renderer.copyFunction === 'function'
-        ? Renderer.copyFunction
-        : defaultCopyFunction;
-
-    const textToCopy = copyFunction(
-      props,
-      Renderer,
-      defaultCopyFunction,
-      jsonata,
-    );
     return (
       <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
         {children}
@@ -108,16 +114,32 @@ export function Widget({
     arrayItems,
   });
 
-  const [childValue] = jsonata(structure.source, {
-    index: index,
-  });
-  const [visible, visibilityError] = jsonata(
-    structure.visibility?.toString(),
-    {
-      value: childValue,
-    },
-    true,
-  );
+  const [childValue, setChildValue] = useState(null);
+  const [visible, setVisible] = useState(null);
+  const [visibilityError, setVisibilityError] = useState(null);
+
+  useEffect(() => {
+    jsonata(structure.source, {
+      index: index,
+    }).then(([result]) => {
+      setChildValue(result);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.source, index]);
+
+  useEffect(() => {
+    jsonata(
+      structure.visibility?.toString(),
+      {
+        value: childValue,
+      },
+      true,
+    ).then(([result, error]) => {
+      setVisible(result);
+      setVisibilityError(error);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.visibility, childValue]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {
