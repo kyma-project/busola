@@ -4,17 +4,11 @@ import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
 import { ExtInjectionConfig, ExtResource } from '../types';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import {
-  atom as recoilAtom,
-  RecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { configurationState } from 'state/configuration/configurationAtom';
-import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
+import { openapiPathIdListState } from 'state/openapi/openapiPathIdSelector';
 import {
   getPermissionResourceRules,
   permissionSetsSelector,
@@ -406,7 +400,7 @@ const pushExtToEventTypes = (extensions: any) => {
 };
 
 export const useGetExtensions = () => {
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
   const auth = useAtomValue(authDataState);
   const setExtensions = useSetAtom(extensionsState);
   const setStatics = useSetAtom(staticsState);
@@ -416,8 +410,8 @@ export const useGetExtensions = () => {
   const fetchFn = getFetchFn(useAtomValue);
   const configuration = useAtomValue(configurationState);
   const features = configuration?.features;
-  const openapiPathIdList = useRecoilValue(openapiPathIdListSelector);
-  const permissionSet = useRecoilValue(permissionSetsSelector);
+  const openapiPathIdList = useAtomValue(openapiPathIdListState);
+  const permissionSet = useAtomValue(permissionSetsSelector);
   const { namespace } = useUrl();
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
     configFeaturesNames.EXTENSIBILITY_INJECTIONS,

@@ -1,6 +1,5 @@
 import { Text, Panel, Title, FlexBox, Button } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { useRecoilValue } from 'recoil';
 import { useAtom, useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import {
@@ -92,7 +91,7 @@ export default function CodePanel({
   const syntaxTheme = getCustomTheme(theme);
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
   const navigate = useNavigate();
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
 
   const createUrl = (
     namespace: string | null,

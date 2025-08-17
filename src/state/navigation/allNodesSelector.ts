@@ -8,8 +8,8 @@ import { configurationState } from '../configuration/configurationAtom';
 import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 
-export const allNodesSelector = atom<NavNode[]>(get => {
-  const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
+export const allNodesSelector = atom<Promise<NavNode[]>>(async get => {
+  const navNodes: NavNode[] = await get(clusterAndNsNodesSelector);
   const configuration = get(configurationState);
   const features = configuration?.features;
 

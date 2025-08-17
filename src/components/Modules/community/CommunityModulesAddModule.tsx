@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { SetterOrUpdater } from 'recoil';
-import { useAtom, useSetAtom } from 'jotai';
+import { SetStateAction, useAtom, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -49,8 +48,10 @@ type ModuleDisplayInfo = {
 function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesToApply: Map<string, ModuleTemplateType>,
-  setModulesTemplatesToApply: SetterOrUpdater<Map<string, ModuleTemplateType>>,
-  setIsResourceEdited: SetterOrUpdater<any>,
+  setModulesTemplatesToApply: (
+    update: SetStateAction<Map<string, ModuleTemplateType>>,
+  ) => void,
+  setIsResourceEdited: (update: SetStateAction<any>) => void,
 ): any {
   return (value: string, shouldRemove: boolean) => {
     const newModulesTemplatesToApply = new Map(moduleTemplatesToApply);

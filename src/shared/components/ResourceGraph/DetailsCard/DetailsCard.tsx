@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
-import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { Button } from '@ui5/webcomponents-react';
 import { Labels } from 'shared/components/Labels/Labels';
@@ -24,7 +23,7 @@ export function DetailsCard({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clusterUrl } = useUrl();
-  const nodes = useRecoilValue(allNodesSelector);
+  const nodes = useAtomValue(allNodesSelector);
   const [, setLayoutColumn] = useAtom(columnLayoutState);
 
   return (

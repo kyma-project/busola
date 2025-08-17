@@ -1,4 +1,3 @@
-import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router';
 
 import { clusterState } from 'state/clusterAtom';
@@ -10,7 +9,7 @@ export type useClustersInfoType = ReturnType<typeof useClustersInfo>;
 export function useClustersInfo() {
   const navigate = useNavigate();
 
-  const [currentCluster, setCurrentCluster] = useRecoilState(clusterState);
+  const [currentCluster, setCurrentCluster] = useAtom(clusterState);
   const [clusters, setClusters] = useAtom(clustersState);
 
   return {

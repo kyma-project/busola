@@ -7,8 +7,7 @@ import {
   useParams,
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
@@ -35,7 +34,7 @@ export default function ClusterRoutes() {
   const setAuth = useSetAtom(authDataState);
   const clusters = useAtomValue(clustersState);
   const extensions = useAtomValue(extensionsState);
-  const [cluster, setCluster] = useRecoilState(clusterState);
+  const [cluster, setCluster] = useAtom(clusterState);
   const [search] = useSearchParams();
   const [extensibilityRoutes, setExtensibilityRoutes] = useState(null);
   const { clusterUrl } = useUrl();

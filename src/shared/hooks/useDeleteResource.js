@@ -8,8 +8,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useNavigate } from 'react-router';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -41,7 +40,7 @@ export function useDeleteResource({
   const notification = useNotification();
   const navigate = useNavigate();
   const { resourceListUrl } = useUrl();
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
 
   const prettifiedResourceName = prettifyNameSingular(

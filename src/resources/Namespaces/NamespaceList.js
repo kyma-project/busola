@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
@@ -19,7 +18,7 @@ import {
 export function NamespaceList(props) {
   const { t } = useTranslation();
   const showHiddenNamespaces = useAtomValue(showHiddenNamespacesState);
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const navigate = useNavigate();
   const [hasPermissions] = useHasPermissionsFor([['', 'namespaces', ['list']]]);

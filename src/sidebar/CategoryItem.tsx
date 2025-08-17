@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SetterOrUpdater } from 'recoil';
 import { useAtomValue } from 'jotai';
 
 import { Category } from 'state/navigation/categories';
@@ -23,7 +22,7 @@ import { SideNavigationItemClickEventDetail } from '@ui5/webcomponents-fiori/dis
 type CategoryItemProps = {
   category: Category;
   expandedCategories: string[];
-  handleExpandedCategories: SetterOrUpdater<ExpandedCategories>;
+  handleExpandedCategories: (newValue: ExpandedCategories) => void;
 };
 
 export function CategoryItem({

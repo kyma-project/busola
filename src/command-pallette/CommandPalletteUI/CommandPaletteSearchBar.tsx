@@ -1,7 +1,6 @@
 import { useEffect, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
@@ -26,7 +25,7 @@ export function CommandPaletteSearchBar({
   setShouldFocus,
   shellbarRef,
 }: CommandPaletteSearchBarProps) {
-  useRecoilValue(availableNodesSelector); // preload the values to prevent page rerenders
+  useAtomValue(availableNodesSelector); // preload the values to prevent page rerenders
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
   const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);

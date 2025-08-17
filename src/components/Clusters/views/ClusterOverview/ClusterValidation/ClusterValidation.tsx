@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import {
   getValidationEnabledSchemas,
@@ -37,13 +36,12 @@ import { ScanResult } from './ScanResult';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
 import { K8sAPIResource } from 'types';
-import { useAtomValue } from 'jotai';
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
 
   const authData = useAtomValue(authDataState);
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
 
   const { fetch, post } = useMemo(() => {
     const fetch = createFetchFn({

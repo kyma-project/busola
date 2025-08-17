@@ -1,7 +1,6 @@
 import { addByContext } from 'components/Clusters/shared';
 import { ClustersState, clustersState } from 'state/clustersAtom';
-import { SetterOrUpdater } from 'recoil';
-import { useAtom, useAtomValue } from 'jotai';
+import { SetStateAction, useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -77,7 +76,9 @@ const addClusters = async (
   navigate?: NavigateFunction,
   manualKubeConfigId?: {
     manualKubeConfigId?: ManualKubeConfigIdType;
-    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+    setManualKubeConfigId?: (
+      update: SetStateAction<ManualKubeConfigIdType>,
+    ) => void;
   },
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
@@ -131,10 +132,12 @@ const loadKubeconfigIdCluster = async (
   clusters: ClustersState,
   clusterInfo: useClustersInfoType,
   t: TFunction,
-  setContextsState?: SetterOrUpdater<KubeConfigMultipleState>,
+  setContextsState?: (update: SetStateAction<KubeConfigMultipleState>) => void,
   manualKubeConfigId?: {
     manualKubeConfigId?: ManualKubeConfigIdType;
-    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+    setManualKubeConfigId?: (
+      update: SetStateAction<ManualKubeConfigIdType>,
+    ) => void;
   },
 ) => {
   try {

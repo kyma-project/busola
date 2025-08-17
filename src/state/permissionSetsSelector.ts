@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash';
-import { RecoilValue, selector } from 'recoil';
+import { atom } from 'jotai';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { activeNamespaceIdState } from './activeNamespaceIdAtom';
 import { clusterState } from './clusterAtom';
@@ -64,11 +64,8 @@ export type PermissionSet = {
 
 export type PermissionSetState = PermissionSet[];
 
-export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
-  PermissionSetState
->({
-  key: 'PermissionSet',
-  get: async ({ get }) => {
+export const permissionSetsSelector = atom<Promise<PermissionSetState>>(
+  async get => {
     const cluster = get(clusterState);
     const activeNamespaceId = get(activeNamespaceIdState) || '';
     const postFn = getPostFn(get);
@@ -94,4 +91,5 @@ export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
     }
     return [];
   },
-});
+);
+permissionSetsSelector.debugLabel = 'PermissionSet';

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
 
-import { useRecoilValue } from 'recoil';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -32,7 +31,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   const { scopedUrl } = urlGenerators;
   const namespaceId = useAtomValue(activeNamespaceIdState);
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
 
   const emptyResource = useMemo(() => ({} as Resource), []);
   const jsonata = useJsonata({ resource: emptyResource });

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
@@ -26,7 +25,7 @@ export default function BusolaExtensionCreate({
   const navigate = useNavigate();
   const notificationManager = useNotification();
   const upsert = useUpsert();
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
   const setLayoutColumn = useSetAtom(columnLayoutState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);

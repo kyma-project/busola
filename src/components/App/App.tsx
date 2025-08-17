@@ -8,7 +8,6 @@ import {
   useSearchParams,
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
@@ -63,7 +62,7 @@ import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 export default function App() {
   const theme = useAtomValue(themeState);
   const language = useAtomValue(languageState);
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
   const setNamespace = useSetAtom(activeNamespaceIdState);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();

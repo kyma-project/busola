@@ -1,17 +1,11 @@
-import { RecoilValueReadOnly, selector, noWait } from 'recoil';
+import { atom } from 'jotai';
+import { loadable } from 'jotai/utils';
 import { openapiState } from './openapiAtom';
 
-export const openapiPathIdListSelector: RecoilValueReadOnly<string[]> = selector<
-  OpenapiPathIdList
->({
-  key: 'openapiPathIdList',
-  get: ({ get }) => {
-    const openApi = get(noWait(openapiState));
-
-    if (openApi.state === 'hasValue') {
-      const openapiPathIdList = Object.keys(openApi.contents?.paths ?? {});
-      return openapiPathIdList;
-    }
-    return [];
-  },
+export const openapiPathIdListState = atom<string[]>(get => {
+  const openApiLoadable = get(loadable(openapiState));
+  if (openApiLoadable.state === 'hasData') {
+    return Object.keys(openApiLoadable.data?.paths ?? {});
+  }
+  return [];
 });

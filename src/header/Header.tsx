@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
@@ -46,7 +45,7 @@ export function Header() {
 
   useAtom(clustersStateEffectSetSelf);
   useAtom(clustersStateEffectOnSet);
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtom(clusterState);
   const clusters = useAtomValue(clustersState);
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature(

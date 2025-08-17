@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Icon, Input, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { addCluster } from 'components/Clusters/shared';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { clusterState } from 'state/clusterAtom';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { cloneDeep } from 'lodash';
@@ -12,11 +12,11 @@ import './NoPermissions.scss';
 function NoPermissions() {
   const { t } = useTranslation();
   const [namespaceName, setNamespaceName] = useState('');
-  const cluster = useRecoilValue(clusterState)!;
+  const cluster = useAtomValue(clusterState)!;
   const clustersInfo = useClustersInfo();
 
   const updateKubeconfig = () => {
-    // make a copy since we cannot edit Recoil state value
+    // make a copy since we cannot edit state value
     const updatedCluster = cloneDeep(cluster)!;
     const contextName = updatedCluster.kubeconfig['current-context'];
     const context =

@@ -1,4 +1,3 @@
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
@@ -58,7 +57,7 @@ export const createFetchFn = ({
 
 export const useFetch = () => {
   const authData = useAtomValue(authDataState);
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
 
   const fetchFn = createFetchFn({
     authData,

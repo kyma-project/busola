@@ -14,7 +14,7 @@ import {
   OPERATION_STATE_SUCCEEDED,
   OPERATION_STATE_WAITING,
 } from './YamlUploadDialog';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { allNodesSelector } from 'state/navigation/allNodesSelector';
 
 export const STATE_ERROR = 'ERROR';
@@ -64,10 +64,10 @@ export function useUploadResources(
   const post = usePost();
   const patchRequest = useUpdate();
 
-  const clusterNodes = useRecoilValue(allNodesSelector).filter(
+  const clusterNodes = useAtomValue(allNodesSelector).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
+  const namespaceNodes = useAtomValue(allNodesSelector).filter(
     node => node.namespaced,
   );
   const filteredResources = resources?.filter(

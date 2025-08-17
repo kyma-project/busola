@@ -20,7 +20,6 @@ import { Button, Form, FormItem, MessageStrip } from '@ui5/webcomponents-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
-import { SetterOrUpdater } from 'recoil';
 import { isResourceEditedState } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -32,7 +31,7 @@ import {
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 
 import 'components/Modules/community/CommunityModule.scss';
-import { useSetAtom } from 'jotai';
+import { SetStateAction, useSetAtom } from 'jotai';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -49,8 +48,10 @@ function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
   installedModuleTemplates: ModuleTemplateListType,
   moduleTemplatesToApply: Map<string, ModuleTemplateType>,
-  setModulesTemplatesToApply: SetterOrUpdater<Map<string, ModuleTemplateType>>,
-  setIsResourceEdited: SetterOrUpdater<any>,
+  setModulesTemplatesToApply: (
+    update: SetStateAction<Map<string, ModuleTemplateType>>,
+  ) => void,
+  setIsResourceEdited: (update: SetStateAction<any>) => void,
 ): any {
   return (value: string) => {
     const newModulesTemplatesToApply = new Map(moduleTemplatesToApply);

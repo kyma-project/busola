@@ -1,7 +1,6 @@
 import { KubeconfigIdHandleState } from 'components/App/useLoginWithKubeconfigID';
 import { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import { authDataState } from './authDataAtom';
 import { clusterState } from './clusterAtom';
@@ -54,7 +53,7 @@ export function removePreviousPath() {
 }
 
 export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
   const authData = useAtomValue(authDataState);
   const [search] = useSearchParams();
   const navigate = useNavigate();

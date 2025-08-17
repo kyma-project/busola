@@ -26,10 +26,9 @@ import pluralize from 'pluralize';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { cloneDeep } from 'lodash';
 import { KymaResourceType, ModuleTemplateListType } from '../support';
-import { SetterOrUpdater } from 'recoil';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { useRecoilValue } from 'recoil';
+import { SetStateAction, useAtomValue } from 'jotai';
 import { allNodesSelector } from 'state/navigation/allNodesSelector';
 
 type ModulesListDeleteBoxProps = {
@@ -41,7 +40,7 @@ type ModulesListDeleteBoxProps = {
   kymaResourceState?: KymaResourceType;
   detailsOpen: boolean;
   isCommunity?: boolean;
-  setLayoutColumn: SetterOrUpdater<ColumnLayoutState>;
+  setLayoutColumn: (update: SetStateAction<ColumnLayoutState>) => void;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setInitialUnchangedResource: React.Dispatch<React.SetStateAction<any>>;
@@ -70,10 +69,10 @@ export const ModulesDeleteBox = ({
   const deleteResourceMutation = useDelete();
   const fetchFn = useSingleGet();
   const post = usePost();
-  const clusterNodes = useRecoilValue(allNodesSelector).filter(
+  const clusterNodes = useAtomValue(allNodesSelector).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
+  const namespaceNodes = useAtomValue(allNodesSelector).filter(
     node => node.namespaced,
   );
   const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});

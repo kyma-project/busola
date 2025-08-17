@@ -7,7 +7,6 @@ import {
   terminateWorker,
 } from './resourceSchemaWorkerApi';
 import { useAtomValue } from 'jotai';
-import { useRecoilValue } from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 import { useUrl } from 'hooks/useUrl';
 import { authDataState } from 'state/authDataAtom';
@@ -24,7 +23,7 @@ export const useResourceSchemas = () => {
   const authData = useAtomValue(authDataState);
   const openApi = useAtomValue(openapiState);
   const navigate = useNavigate();
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
   const isClusterList = useMatch({ path: '/clusters' });
   const notification = useNotification();
   const { t } = useTranslation();
@@ -67,7 +66,7 @@ export const useResourceSchemas = () => {
       return;
     }
 
-    // Luigi updates authData a few times during a cluster load. The below line cancels repeated requests after the first fetch
+    // authData updates a few times during cluster load. The below line cancels repeated requests after the first fetch
     if (lastFetched === activeClusterName) return;
     if (openApi.state !== 'hasValue') return;
 

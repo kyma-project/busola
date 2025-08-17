@@ -12,7 +12,6 @@ import { ConfigMapResponse, getConfigMaps } from './utils/getConfigMaps';
 import { getFetchFn } from './utils/getFetchFn';
 import { JSONSchema4 } from 'json-schema';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
-import { useRecoilValue } from 'recoil';
 
 export type Rule = {
   uniqueName: string;
@@ -196,7 +195,7 @@ export const useGetValidationSchemas = async () => {
   const setSchemas = useSetAtom(validationSchemasState);
   const cluster = useAtomValue(clusterState);
   const auth = useAtomValue(authDataState);
-  const permissionSet = useRecoilValue(permissionSetsSelector);
+  const permissionSet = useAtomValue(permissionSetsSelector);
   const { namespace } = useUrl();
 
   useEffect(() => {

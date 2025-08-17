@@ -2,8 +2,7 @@ import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 import { User, UserManager } from 'oidc-client-ts';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { atom, useSetAtom } from 'jotai';
-import { useRecoilValue } from 'recoil';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { clusterState } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
@@ -134,7 +133,7 @@ async function handleLogin({
 }
 
 export function useAuthHandler() {
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
   const setAuth = useSetAtom(authDataState);
   const navigate = useNavigate();
   const setLastFetched = useSetAtom(openapiLastFetchedState);

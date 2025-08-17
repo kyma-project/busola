@@ -1,4 +1,4 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
+import { atom } from 'jotai';
 
 import { configFeaturesNames, NavNode } from '../types';
 
@@ -8,27 +8,21 @@ import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 import { mergeInExtensibilityNav } from './sidebarNavigationNodesSelector';
 
-export const availableNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
-  NavNode[]
->({
-  key: 'availableNodesSelector',
-  get: ({ get }) => {
-    const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
-    const configuration = get(configurationState);
-    const features = configuration?.features;
+export const availableNodesSelector = atom<Promise<NavNode[]>>(async get => {
+  const navNodes: NavNode[] = await get(clusterAndNsNodesSelector);
+  const configuration = get(configurationState);
+  const features = configuration?.features;
 
-    const extResources = get(extensionsState);
+  const extResources = get(extensionsState);
 
-    let extensibilityNodes: NavNode[] = [];
-    const isExtensibilityOn =
-      features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
-    if (isExtensibilityOn && extResources) {
-      const extNavNodes = extResources?.map(ext =>
-        mapExtResourceToNavNode(ext),
-      );
-      extensibilityNodes = mergeInExtensibilityNav(navNodes, extNavNodes);
-    }
+  let extensibilityNodes: NavNode[] = [];
+  const isExtensibilityOn =
+    features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
+  if (isExtensibilityOn && extResources) {
+    const extNavNodes = extResources?.map(ext => mapExtResourceToNavNode(ext));
+    extensibilityNodes = mergeInExtensibilityNav(navNodes, extNavNodes);
+  }
 
-    return [...navNodes, ...extensibilityNodes];
-  },
+  return [...navNodes, ...extensibilityNodes];
 });
+availableNodesSelector.debugLabel = 'availableNodesSelector';

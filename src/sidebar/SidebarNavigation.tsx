@@ -1,5 +1,4 @@
-import { useAtomValue, useSetAtom } from 'jotai';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   SideNavigation,
   SideNavigationItem,
@@ -23,7 +22,7 @@ import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 export function SidebarNavigation() {
-  const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
+  const navigationNodes = useAtomValue(sidebarNavigationNodesSelector);
   const isSidebarCondensed = useAtomValue(isSidebarCondensedState);
   const namespace = useAtomValue(activeNamespaceIdState);
   const { t } = useTranslation();
@@ -43,8 +42,7 @@ export function SidebarNavigation() {
     else return namespace || t('navigation.select-namespace');
   };
 
-  // if it's in the CategoryItem, it causes needless re-renders
-  const [expandedCategories, setExpandedCategories] = useRecoilState(
+  const [expandedCategories, setExpandedCategories] = useAtom(
     expandedCategoriesSelector,
   );
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { v4 as uuid } from 'uuid';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { useComponentDidMount } from 'shared/useComponentDidMount';
 import { clusterState } from 'state/clusterAtom';
@@ -52,7 +52,7 @@ export function useAppTracking() {
 }
 
 function useSessionStartTracking() {
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
 
   useComponentDidMount(() => {
     sendTrackingRequest({
@@ -99,7 +99,7 @@ function usePageViewTracking() {
 }
 
 function useClusterChangeTracking() {
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterState);
 
   useEffect(() => {
     if (cluster?.currentContext?.cluster?.cluster?.server) {
