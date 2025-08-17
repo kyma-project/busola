@@ -90,8 +90,8 @@ export function SidebarNavigation() {
               }}
             >
               <SideNavigationItem
-                icon={'slim-arrow-left'}
-                text={'Back To Cluster Details'}
+                icon="slim-arrow-left"
+                text="Back To Cluster Details"
                 onClick={() => {
                   navigateSafely(() => {
                     setDefaultColumnLayout();
@@ -173,7 +173,7 @@ export function SidebarNavigation() {
           />
           {namespace && (
             <SideNavigationItem
-              icon={'dimension'}
+              icon="dimension"
               text={t('common.headers.namespaces')}
               selected={false}
             >
@@ -184,8 +184,8 @@ export function SidebarNavigation() {
       )}
       {!namespace && !isSidebarCondensed && (
         <SideNavigationItem
-          icon={'bbyd-dashboard'}
-          text={'Cluster Details'}
+          icon="bbyd-dashboard"
+          text="Cluster Details"
           onClick={() => {
             navigateSafely(() => {
               setDefaultColumnLayout();

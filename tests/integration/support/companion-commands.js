@@ -1,4 +1,6 @@
 import {
+  incorrectResponseWithPlaceEdit,
+  incorrectResponseWithPlaceNew,
   responseWithPlaceEdit,
   responseWithPlaceNew,
 } from '../fixtures/test-companion-place-resource';
@@ -118,6 +120,44 @@ Cypress.Commands.add('mockChatResponseWithPlaceEdit', () => {
       body: mockResponse,
     });
   }).as('getChatResponseWithPlaceEdit');
+});
+
+Cypress.Commands.add('mockChatResponseWithIncorrectPlaceNew', () => {
+  cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    const mockResponse =
+      JSON.stringify({
+        data: {
+          answer: {
+            content: incorrectResponseWithPlaceNew,
+            next: '__end__',
+          },
+        },
+      }) + '\n';
+
+    req.reply({
+      delay: 750,
+      body: mockResponse,
+    });
+  }).as('mockChatResponseWithIncorrectPlaceNew');
+});
+
+Cypress.Commands.add('mockChatResponseWithIncorrectPlaceEdit', () => {
+  cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    const mockResponse =
+      JSON.stringify({
+        data: {
+          answer: {
+            content: incorrectResponseWithPlaceEdit,
+            next: '__end__',
+          },
+        },
+      }) + '\n';
+
+    req.reply({
+      delay: 750,
+      body: mockResponse,
+    });
+  }).as('mockChatResponseWithIncorrectPlaceEdit');
 });
 
 Cypress.Commands.add('mockFollowups', () => {
