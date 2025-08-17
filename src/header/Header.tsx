@@ -45,7 +45,7 @@ export function Header() {
 
   useAtom(clustersStateEffectSetSelf);
   useAtom(clustersStateEffectOnSet);
-  const cluster = useAtom(clusterState);
+  const cluster = useAtomValue(clusterState);
   const clusters = useAtomValue(clustersState);
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature(
