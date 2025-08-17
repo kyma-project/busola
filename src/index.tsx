@@ -1,7 +1,6 @@
 import i18next from 'i18next';
 import yaml from 'js-yaml';
 import { Suspense } from 'react';
-import { RecoilRoot } from 'recoil';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
@@ -59,15 +58,13 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-  <RecoilRoot>
-    <ThemeProvider>
-      <BrowserRouter>
-        <Suspense fallback={<Spinner />}>
-          <NotificationProvider>
-            <App />
-          </NotificationProvider>
-        </Suspense>
-      </BrowserRouter>
-    </ThemeProvider>
-  </RecoilRoot>,
+  <ThemeProvider>
+    <BrowserRouter>
+      <Suspense fallback={<Spinner />}>
+        <NotificationProvider>
+          <App />
+        </NotificationProvider>
+      </Suspense>
+    </BrowserRouter>
+  </ThemeProvider>,
 );

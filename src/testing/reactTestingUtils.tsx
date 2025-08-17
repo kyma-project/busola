@@ -8,7 +8,8 @@ type CustomRenderOptions = Omit<RenderOptions, 'wrapper'> & {
   initialAtoms?: Iterable<[WritableAtom<unknown, any[], unknown>, unknown]>;
 };
 
-function JotaiHydrator({
+// Component to initialize Jotai atoms with test data
+export function JotaiHydrator({
   initialValues,
   children,
 }: {

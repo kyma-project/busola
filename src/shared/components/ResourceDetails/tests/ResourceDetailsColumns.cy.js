@@ -16,11 +16,14 @@ describe('ResourceDetails Columns', () => {
       },
     });
 
-    const initializeRecoil = ({ set }) => {
-      set(authDataState, {
-        token: 'test-token',
-      });
-    };
+    const initializeJotai = [
+      [
+        authDataState,
+        {
+          token: 'test-token',
+        },
+      ],
+    ];
 
     cy.mount(
       <ResourceDetails
@@ -35,7 +38,7 @@ describe('ResourceDetails Columns', () => {
         ]}
       />,
       {
-        initializeRecoil,
+        initializeJotai,
       },
     );
 

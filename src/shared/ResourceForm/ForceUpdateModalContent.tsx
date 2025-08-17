@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import jsyaml from 'js-yaml';
 import { useCreateDiffEditor } from 'shared/components/MonacoEditorESM/hooks/useCreateDiffEditor';
-import { RecoilRoot } from 'recoil';
 import { K8sResource } from 'types';
 
 type ForceUpdateModalContentProps<TResourceType extends K8sResource> = {
@@ -12,7 +11,7 @@ type ForceUpdateModalContentProps<TResourceType extends K8sResource> = {
   modifiedResource: TResourceType;
 };
 
-function ForceUpdateModalContentComponent({
+export function ForceUpdateModalContent({
   error,
   singularName,
   initialResource,
@@ -51,16 +50,5 @@ function ForceUpdateModalContentComponent({
         {t('common.create-form.messages.force-update')}
       </MessageStrip>
     </>
-  );
-}
-
-// workaround for "This component must be used inside a <RecoilRoot> component."
-export function ForceUpdateModalContent(
-  props: ForceUpdateModalContentProps<K8sResource>,
-) {
-  return (
-    <RecoilRoot>
-      <ForceUpdateModalContentComponent {...props} />
-    </RecoilRoot>
   );
 }
