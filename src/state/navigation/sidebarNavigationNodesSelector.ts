@@ -14,40 +14,42 @@ import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 import { extensibilityNodesExtSelector } from './extensibilityNodesExtSelector';
 
-export const sidebarNavigationNodesSelector = atom<Category[]>(get => {
-  const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
-  const activeNamespaceId = get(activeNamespaceIdState);
-  const externalNodes = get(externalNodesSelector);
-  const externalNodesExt = get(extensibilityNodesExtSelector);
-  const configuration = get(configurationState);
-  const features = configuration?.features;
+export const sidebarNavigationNodesSelector = atom<Promise<Category[]>>(
+  async get => {
+    const navNodes: NavNode[] = await get(clusterAndNsNodesSelector);
+    const activeNamespaceId = get(activeNamespaceIdState);
+    const externalNodes = await get(externalNodesSelector);
+    const externalNodesExt = await get(extensibilityNodesExtSelector);
+    const configuration = get(configurationState);
+    const features = configuration?.features;
 
-  const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-  if (!navNodes || !externalNodes) {
-    return [];
-  }
-  let allNodes = [...navNodes, ...externalNodes];
+    const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
+    if (!navNodes || !externalNodes) {
+      return [];
+    }
+    let allNodes = [...navNodes, ...externalNodes];
 
-  const extResources = get(extensionsState);
-  const isExtensibilityOn =
-    features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
-  if (isExtensibilityOn && extResources) {
-    const extNavNodes = extResources.map(ext => mapExtResourceToNavNode(ext));
-    allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
-  }
+    const extResources = get(extensionsState);
+    const isExtensibilityOn =
+      features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
+    if (isExtensibilityOn && extResources) {
+      const extNavNodes = extResources.map(ext => mapExtResourceToNavNode(ext));
+      allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
+    }
 
-  if (externalNodesExt) {
-    allNodes = allNodes.concat(externalNodesExt);
-  }
-  const nodesFromCurrentScope = partial(hasCurrentScope, scope);
-  const filteredNodes = allNodes.filter(nodesFromCurrentScope);
+    if (externalNodesExt) {
+      allNodes = allNodes.concat(externalNodesExt);
+    }
+    const nodesFromCurrentScope = partial(hasCurrentScope, scope);
+    const filteredNodes = allNodes.filter(nodesFromCurrentScope);
 
-  const assignedToCategories: Category[] = assignNodesToCategories(
-    filteredNodes,
-  );
+    const assignedToCategories: Category[] = assignNodesToCategories(
+      filteredNodes,
+    );
 
-  return assignedToCategories;
-});
+    return assignedToCategories;
+  },
+);
 sidebarNavigationNodesSelector.debugLabel = 'sidebarNavigationNodesSelector';
 
 export const mergeInExtensibilityNav = (

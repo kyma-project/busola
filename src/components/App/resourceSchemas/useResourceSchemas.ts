@@ -49,7 +49,7 @@ export const useResourceSchemas = () => {
     activeClusterName,
     cluster?.contextName,
     authData,
-    openApi.state,
+    openApi,
     isClusterList,
     navigate,
     t,
@@ -68,10 +68,10 @@ export const useResourceSchemas = () => {
 
     // authData updates a few times during cluster load. The below line cancels repeated requests after the first fetch
     if (lastFetched === activeClusterName) return;
-    if (openApi.state !== 'hasValue') return;
+    if (openApi.state !== 'hasData') return;
 
     setLastFetched(activeClusterName);
-    sendWorkerMessage('sendingOpenapi', openApi.contents, activeClusterName);
+    sendWorkerMessage('sendingOpenapi', openApi.data, activeClusterName);
 
     addWorkerListener('computedToJSON', () => {
       setSchemasState({ areSchemasComputed: true, schemasError: null });
@@ -90,8 +90,7 @@ export const useResourceSchemas = () => {
   }, [
     activeClusterName,
     authData,
-    openApi.state,
-    openApi.contents,
+    openApi,
     lastFetched,
     setSchemasState,
     setLastFetched,

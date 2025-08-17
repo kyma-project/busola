@@ -1,4 +1,4 @@
-import { atom, useAtomValue } from 'jotai';
+import { atom } from 'jotai';
 import { isEmpty, partial } from 'lodash';
 import { resourceListState } from '../resourceList/resourceListAtom';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
@@ -11,10 +11,10 @@ import { addAdditionalNodes } from './addAdditionalNodes';
 import { moduleTemplatesCountState } from 'state/moduleTemplatesCountSelector';
 
 export const clusterAndNsNodesSelector = atom<Promise<NavNode[]>>(async get => {
-  const resourceList: NavNode[] = useAtomValue(resourceListState);
+  const resourceList: NavNode[] = get(resourceListState);
   const activeNamespaceId = get(activeNamespaceIdState);
   const openapiPathIdList = get(openapiPathIdListState);
-  const permissionSet = get(permissionSetsSelector);
+  const permissionSet = await get(permissionSetsSelector);
   const configuration = get(configurationState);
   const moduleTemplatesCount = await get(moduleTemplatesCountState);
 
