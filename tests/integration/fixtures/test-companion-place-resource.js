@@ -57,3 +57,63 @@ spec:
             </div>
         </div>
 `;
+
+export const incorrectResponseWithPlaceNew = `Deployment:
+        <div class="yaml-block>
+            <div class="yaml">
+            \`\`\`yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:  
+  name: test-deployment-1 
+  namespace: does-not-exist
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test
+        image: test:latest
+\`\`\`
+            </div>
+            <div class="link" link-type="New">
+                [Apply](/namespaces/default/Deployment)
+            </div>
+        </div>
+`;
+
+export const incorrectResponseWithPlaceEdit = `Deployment:
+        <div class="yaml-block>
+            <div class="yaml">
+            \`\`\`yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment-not-exist
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test
+        image: test:latest
+\`\`\`
+            </div>
+            <div class="link" link-type="Update">
+                [Apply](/namespaces/default/Deployment/test-deployment-not-exist)
+            </div>
+        </div>
+`;
