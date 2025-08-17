@@ -3,30 +3,7 @@ import { ClustersState } from '../clustersAtom';
 import { Cluster } from '../clusterAtom';
 import { ClusterStorage } from '../types';
 
-type LocalStorageEffectFn = <T>(localStorageKey: string) => AtomEffect<T>;
-
 const inMemoryClusters: ClustersState = {};
-
-export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
-  setSelf,
-  onSet,
-}) => {
-  setSelf(previousValue => {
-    const savedValue = localStorage.getItem(localStorageKey);
-
-    try {
-      if (savedValue !== null) return JSON.parse(savedValue);
-      return previousValue ?? {};
-    } catch (e) {
-      console.warn('Cannot get clusters', e);
-      return previousValue ?? {};
-    }
-  });
-
-  onSet(newValue =>
-    localStorage.setItem(localStorageKey, JSON.stringify(newValue)),
-  );
-};
 
 type ClusterStorageEffectFn = <T>(localStorageKey: string) => AtomEffect<T>;
 

@@ -6,7 +6,7 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -44,7 +44,7 @@ export function ExternalResourceRef({
     error: namespacesError,
   } = useGetList()(namespacesUrl);
 
-  const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
+  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesState);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const namespaceData = {
     metadata: {

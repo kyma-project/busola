@@ -1,6 +1,7 @@
 import { addByContext } from 'components/Clusters/shared';
 import { ClustersState, clustersState } from 'state/clustersAtom';
 import { SetterOrUpdater, useRecoilValue } from 'recoil';
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +19,7 @@ import {
   configFeaturesNames,
 } from 'state/types';
 import { removePreviousPath } from 'state/useAfterInitHook';
-import { configurationAtom } from 'state/configuration/configurationAtom';
+import { configurationState } from 'state/configuration/configurationAtom';
 import {
   KubeConfigMultipleState,
   multipleContexts,
@@ -28,7 +29,6 @@ import {
   manualKubeConfigIdState,
   ManualKubeConfigIdType,
 } from 'state/manualKubeConfigIdAtom';
-import { useAtom } from 'jotai';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -184,7 +184,7 @@ export function useLoginWithKubeconfigID() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
     configFeaturesNames.KUBECONFIG_ID,
   );
-  const configuration = useRecoilValue(configurationAtom);
+  const configuration = useAtomValue(configurationState);
   const clusters = useRecoilValue(clustersState);
   const [contextsState, setContextsState] = useAtom(multipleContexts);
   const [manualKubeConfigId, setManualKubeConfigId] = useAtom(

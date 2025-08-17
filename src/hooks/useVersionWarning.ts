@@ -2,7 +2,7 @@ import { apiGroupState } from 'state/discoverability/apiGroupsSelector';
 import { useEffect } from 'react';
 import { useFeature } from 'hooks/useFeature';
 import * as Sentry from '@sentry/react';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { configFeaturesNames } from 'state/types';
 
 export function useVersionWarning({
@@ -12,7 +12,7 @@ export function useVersionWarning({
   resourceUrl: string;
   resourceType: string;
 }) {
-  const apiGroups = useRecoilValue(apiGroupState);
+  const apiGroups = useAtomValue(apiGroupState);
   const { isEnabled: isTrackingEnabled } = useFeature(
     configFeaturesNames.SENTRY,
   );

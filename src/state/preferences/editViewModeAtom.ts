@@ -1,5 +1,4 @@
-import { atom, RecoilState } from 'recoil';
-import { localStorageEffect } from '../utils/effects';
+import { atomWithStorage } from 'jotai/utils';
 
 export type EditViewTypes = {
   preferencesViewType: 'MODE_YAML' | 'MODE_FORM' | 'MODE_DEFAULT' | string;
@@ -11,11 +10,11 @@ export type EditViewMode = string | EditViewTypes;
 const EDIT_VIEW_MODE_STORAGE_KEY = 'busola.editViewMode';
 const DEFAULT_EDIT_VIEW_MODE = 'MODE_DEFAULT';
 
-export const editViewModeState: RecoilState<EditViewMode> = atom<EditViewMode>({
-  key: 'editViewModeState',
-  default: DEFAULT_EDIT_VIEW_MODE,
-  effects: [localStorageEffect<EditViewMode>(EDIT_VIEW_MODE_STORAGE_KEY)],
-});
+export const editViewModeState = atomWithStorage<EditViewMode>(
+  EDIT_VIEW_MODE_STORAGE_KEY,
+  DEFAULT_EDIT_VIEW_MODE,
+);
+editViewModeState.debugLabel = 'editViewModeState';
 
 export const getEditViewModeState = (editView: EditViewMode): EditViewTypes => {
   if (typeof editView === 'string') {

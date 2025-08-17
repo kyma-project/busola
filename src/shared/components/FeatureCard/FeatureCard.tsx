@@ -7,7 +7,7 @@ import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';
 import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
 import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
 import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   BackgroundStyle,
   DesignType,
@@ -66,7 +66,7 @@ export function FeatureCardBanner({
 }: FeatureCardBannerProps) {
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${id}`;
-  const theme = useRecoilValue(themeState);
+  const theme = useAtomValue(themeState);
 
   useEffect(() => {
     const storedHideValue = localStorage.getItem(hideBannerKey);

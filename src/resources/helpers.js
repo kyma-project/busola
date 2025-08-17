@@ -9,7 +9,7 @@ import {
   useGetResourceGraphConfig,
   useAddStyle,
 } from 'shared/components/ResourceGraph/useGetResourceGraphConfig';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 
@@ -77,7 +77,7 @@ export const usePrepareDetailsProps = ({
       : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`
     : '';
 
-  const extensions = useRecoilValue(extensionsState);
+  const extensions = useAtomValue(extensionsState);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
   const resourceGraphConfig = useGetResourceGraphConfig(extensions, addStyle);
 

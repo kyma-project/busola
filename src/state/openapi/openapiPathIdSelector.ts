@@ -1,9 +1,7 @@
 import { RecoilValueReadOnly, selector, noWait } from 'recoil';
-import { openapiState } from './openapiSelector';
+import { openapiState } from './openapiAtom';
 
-type OpenapiPathIdList = string[];
-
-export const openapiPathIdListSelector: RecoilValueReadOnly<OpenapiPathIdList> = selector<
+export const openapiPathIdListSelector: RecoilValueReadOnly<string[]> = selector<
   OpenapiPathIdList
 >({
   key: 'openapiPathIdList',

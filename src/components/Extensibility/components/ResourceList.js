@@ -9,7 +9,7 @@ import { sortBy } from '../helpers/sortBy';
 import { useJsonata } from '../hooks/useJsonata';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 
@@ -37,8 +37,8 @@ export function ResourceList({
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
-  const extensions = useRecoilValue(extensionsState);
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const extensions = useAtomValue(extensionsState);
+  const namespaceId = useAtomValue(activeNamespaceIdState);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);

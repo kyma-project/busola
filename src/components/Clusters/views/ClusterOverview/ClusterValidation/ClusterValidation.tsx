@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   getValidationEnabledSchemas,
   usePolicySet,
@@ -40,7 +41,7 @@ import { K8sAPIResource } from 'types';
 export const ClusterValidation = () => {
   const { t } = useTranslation();
 
-  const authData = useRecoilValue(authDataState);
+  const authData = useAtomValue(authDataState);
   const cluster = useRecoilValue(clusterState);
 
   const { fetch, post } = useMemo(() => {

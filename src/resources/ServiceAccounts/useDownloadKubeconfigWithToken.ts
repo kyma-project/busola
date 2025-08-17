@@ -1,6 +1,7 @@
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { clusterState } from 'state/clusterAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { ValidKubeconfig } from 'types';
@@ -8,7 +9,7 @@ import { useCallback } from 'react';
 
 export const useDownloadKubeconfigWithToken = () => {
   const cluster = useRecoilValue(clusterState)!;
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdState);
 
   const currentCluster = cluster.currentContext.cluster;
 

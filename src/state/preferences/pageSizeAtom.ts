@@ -1,15 +1,12 @@
-import { atom, RecoilState } from 'recoil';
-import { localStorageEffect } from '../utils/effects';
-
-type PageSize = number;
+import { atomWithStorage } from 'jotai/utils';
 
 const PAGE_SIZE_STORAGE_KEY = 'busola.page-size';
 const DEFAULT_PAGE_SIZE = 20;
 
 export const AVAILABLE_PAGE_SIZES = [10, 20, 50];
 
-export const pageSizeState: RecoilState<PageSize> = atom<PageSize>({
-  key: 'pageSizeState',
-  default: DEFAULT_PAGE_SIZE,
-  effects: [localStorageEffect<PageSize>(PAGE_SIZE_STORAGE_KEY)],
-});
+export const pageSizeState = atomWithStorage<number>(
+  PAGE_SIZE_STORAGE_KEY,
+  DEFAULT_PAGE_SIZE,
+);
+pageSizeState.debugLabel = 'pageSizeState';

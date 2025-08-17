@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
@@ -40,7 +40,7 @@ const GardenerProvider = () => {
 export default function ClusterDetails({ currentCluster }) {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
-  const kymaResources = useRecoilValue(kymaResourcesAtom);
+  const kymaResources = useAtomValue(kymaResourcesAtom);
   const config = currentCluster?.config;
   const kymaResourceLabels = useMemo(
     () =>

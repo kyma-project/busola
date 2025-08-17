@@ -1,5 +1,5 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
-import { configurationAtom } from '../configuration/configurationAtom';
+import { atom } from 'jotai';
+import { configurationState } from '../configuration/configurationAtom';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 
@@ -48,12 +48,9 @@ const getExternalNodes = (
   );
 };
 
-export const externalNodesSelector: RecoilValueReadOnly<
-  NavNode[] | null
-> = selector<NavNode[] | null>({
-  key: 'externalNodesSelector',
-  get: async ({ get }) => {
-    const configuration = get(configurationAtom);
+export const externalNodesSelector = atom<Promise<NavNode[] | null>>(
+  async get => {
+    const configuration = get(configurationState);
     const features = configuration?.features;
     const fetchFn = getFetchFn(get);
     if (!fetchFn || !features) {
@@ -70,4 +67,5 @@ export const externalNodesSelector: RecoilValueReadOnly<
 
     return [...externalNodes.filter(n => n)];
   },
-});
+);
+externalNodesSelector.debugLabel = 'externalNodesSelector';

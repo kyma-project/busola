@@ -1,4 +1,4 @@
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import {
   Theme,
   isSystemThemeDark,
@@ -19,7 +19,7 @@ const AVAILABLE_THEMES: Theme[] = [
 
 export default function ThemeChooser() {
   const { t } = useTranslation();
-  const [theme, setUsedTheme] = useRecoilState(themeState);
+  const [theme, setUsedTheme] = useAtom(themeState);
 
   return (
     <>

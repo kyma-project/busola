@@ -9,14 +9,13 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { configurationAtom } from 'state/configuration/configurationAtom';
+import { configurationState } from 'state/configuration/configurationAtom';
 import { authDataState } from 'state/authDataAtom';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
 import { isFormOpenState } from 'state/formOpenAtom';
@@ -38,11 +37,11 @@ export function AddClusterWizard({
   config,
   dialogRef,
 }) {
-  const busolaClusterParams = useRecoilValue(configurationAtom);
+  const busolaClusterParams = useAtomValue(configurationState);
   const { t } = useTranslation();
   const notification = useNotification();
   const clustersInfo = useClustersInfo();
-  const setAuth = useSetRecoilState(authDataState);
+  const setAuth = useSetAtom(authDataState);
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);

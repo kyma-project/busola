@@ -1,4 +1,4 @@
-import { selector, RecoilValue } from 'recoil';
+import { atom } from 'jotai';
 import { getFetchFn } from 'state/utils/getFetchFn';
 
 export type ApiGroupState =
@@ -9,20 +9,16 @@ export type ApiGroupState =
     }[]
   | null;
 
-export const apiGroupState: RecoilValue<ApiGroupState> = selector<
-  ApiGroupState
->({
-  key: 'apigroupstate',
-  get: async ({ get }) => {
-    const fetchFn = getFetchFn(get);
-    if (!fetchFn) return null;
+export const apiGroupState = atom<Promise<ApiGroupState>>(async get => {
+  const fetchFn = getFetchFn(get);
+  if (!fetchFn) return null;
 
-    try {
-      const response = await fetchFn({ relativeUrl: '/apis' });
-      return (await response.json()).groups;
-    } catch (e) {
-      console.warn(e);
-      return null;
-    }
-  },
+  try {
+    const response = await fetchFn({ relativeUrl: '/apis' });
+    return (await response.json()).groups;
+  } catch (e) {
+    console.warn(e);
+    return null;
+  }
 });
+apiGroupState.debugLabel = 'apigroupstate';

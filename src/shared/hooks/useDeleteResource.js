@@ -8,7 +8,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { useAtom } from 'jotai';
 import { useNavigate } from 'react-router';
 
@@ -35,7 +35,7 @@ export function useDeleteResource({
   const { t } = useTranslation();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteResourceMutation = useDelete();
-  const [dontConfirmDelete, setDontConfirmDelete] = useRecoilState(
+  const [dontConfirmDelete, setDontConfirmDelete] = useAtom(
     dontConfirmDeleteState,
   );
   const notification = useNotification();

@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { Label, Switch } from '@ui5/webcomponents-react';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 
 export default function ConfirmationSettings() {
   const { t } = useTranslation();
-  const [dontConfirmDelete, setDontConfirmDelete] = useRecoilState(
+  const [dontConfirmDelete, setDontConfirmDelete] = useAtom(
     dontConfirmDeleteState,
   );
 

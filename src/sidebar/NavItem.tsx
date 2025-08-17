@@ -4,7 +4,7 @@ import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
 
 import { useRecoilValue } from 'recoil';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
 import { columnLayoutState } from 'state/columnLayoutAtom';
@@ -31,7 +31,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const setLayoutColumn = useSetAtom(columnLayoutState);
 
   const { scopedUrl } = urlGenerators;
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdState);
   const cluster = useRecoilValue(clusterState);
 
   const emptyResource = useMemo(() => ({} as Resource), []);

@@ -1,7 +1,6 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -40,7 +39,7 @@ export function useCreateResource({
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
-  const activeNamespace = useRecoilValue(activeNamespaceIdState);
+  const activeNamespace = useAtomValue(activeNamespaceIdState);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 

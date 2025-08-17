@@ -3,7 +3,7 @@ import { RecoilValueReadOnly, selector } from 'recoil';
 import { configFeaturesNames, NavNode } from '../types';
 
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
-import { configurationAtom } from '../configuration/configurationAtom';
+import { configurationState } from '../configuration/configurationAtom';
 import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 import { mergeInExtensibilityNav } from './sidebarNavigationNodesSelector';
@@ -14,7 +14,7 @@ export const availableNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
   key: 'availableNodesSelector',
   get: ({ get }) => {
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
-    const configuration = get(configurationAtom);
+    const configuration = get(configurationState);
     const features = configuration?.features;
 
     const extResources = get(extensionsState);

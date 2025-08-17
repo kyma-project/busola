@@ -3,6 +3,7 @@ import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
 import { atom, RecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   permissionSetsSelector,
   PermissionSetState,
@@ -192,9 +193,9 @@ export const getEnabledRules = (
 
 export const useGetValidationSchemas = async () => {
   const setSchemas = useSetRecoilState(validationSchemasState);
-  const fetchFn = getFetchFn(useRecoilValue);
+  const fetchFn = getFetchFn(useAtomValue);
   const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
+  const auth = useAtomValue(authDataState);
   const permissionSet = useRecoilValue(permissionSetsSelector);
   const { namespace } = useUrl();
 

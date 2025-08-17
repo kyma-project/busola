@@ -1,5 +1,4 @@
-import { atom, RecoilState } from 'recoil';
-import { localStorageEffect } from '../../utils/effects';
+import { atomWithStorage } from 'jotai/utils';
 
 export type ExpandedCategories = string[];
 
@@ -13,14 +12,7 @@ type StoredExpandedCategories = {
 const EXPANDED_CATEGORIES_STORAGE_KEY = 'busola.expanded-categories';
 const defaultValue: StoredExpandedCategories = {};
 
-export const expandedCategoriesState: RecoilState<StoredExpandedCategories> = atom<
+export const expandedCategoriesState = atomWithStorage<
   StoredExpandedCategories
->({
-  key: 'expandedCategoriesState',
-  default: defaultValue,
-  effects: [
-    localStorageEffect<StoredExpandedCategories>(
-      EXPANDED_CATEGORIES_STORAGE_KEY,
-    ),
-  ],
-});
+>(EXPANDED_CATEGORIES_STORAGE_KEY, defaultValue);
+expandedCategoriesState.debugLabel = 'expandedCategoriesState';

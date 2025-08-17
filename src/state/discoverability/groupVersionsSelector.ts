@@ -1,15 +1,12 @@
+import { atom } from 'jotai';
 import { apiGroupState } from './apiGroupsSelector';
-
-import { selector, RecoilValue } from 'recoil';
 
 type GroupVersionSelector = string[] | null;
 
-export const groupVersionState: RecoilValue<GroupVersionSelector> = selector<
-  GroupVersionSelector
->({
-  key: 'groupversionstate',
-  get: ({ get }) => {
-    const apiGroups = get(apiGroupState);
+export const groupVersionState = atom<Promise<GroupVersionSelector>>(
+  async get => {
+    const apiGroups = await get(apiGroupState);
+
     if (!apiGroups) return null;
     else {
       const CORE_GROUP = 'v1';
@@ -21,4 +18,5 @@ export const groupVersionState: RecoilValue<GroupVersionSelector> = selector<
       ];
     }
   },
-});
+);
+groupVersionState.debugLabel = 'groupversionstate';

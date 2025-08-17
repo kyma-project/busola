@@ -1,18 +1,32 @@
 import { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
-import { MutableSnapshot, RecoilRoot } from 'recoil';
+import { Provider, WritableAtom } from 'jotai';
+import { useHydrateAtoms } from 'jotai/utils';
 import { BrowserRouter } from 'react-router';
 
 type CustomRenderOptions = Omit<RenderOptions, 'wrapper'> & {
-  initializeState: (snapshot: MutableSnapshot) => void;
+  initialAtoms?: Iterable<[WritableAtom<unknown, any[], unknown>, unknown]>;
 };
+
+function JotaiHydrator({
+  initialValues,
+  children,
+}: {
+  initialValues?: Iterable<[WritableAtom<unknown, any[], unknown>, unknown]>;
+  children: ReactNode;
+}) {
+  useHydrateAtoms(new Map(initialValues ?? []));
+  return <>{children}</>;
+}
 
 const customRender = (ui: ReactElement, options?: CustomRenderOptions) => {
   const AllTheProviders = ({ children }: { children: ReactNode }) => {
     return (
-      <RecoilRoot initializeState={options?.initializeState}>
-        <BrowserRouter>{children}</BrowserRouter>
-      </RecoilRoot>
+      <Provider>
+        <JotaiHydrator initialValues={options?.initialAtoms}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </JotaiHydrator>
+      </Provider>
     );
   };
 

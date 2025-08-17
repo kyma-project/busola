@@ -30,12 +30,14 @@ describe('useGet', () => {
       .mockImplementation(() => {
         throw new Error('2'); // failing calls
       });
+
     render(<Testbed setGetResult={mock} />, {
-      initializeState: snapshot => {
-        snapshot.set(authDataState, { token: 'test-token' });
-        snapshot.set(clusterState, {});
-      },
+      initialAtoms: [
+        [authDataState, { token: 'test-token' }],
+        [clusterState, {}],
+      ],
     });
+
     // first call - loading
     expect(mock).toHaveBeenCalledWith(true, null, null);
     // first call - valid data

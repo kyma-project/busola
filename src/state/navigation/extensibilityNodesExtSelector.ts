@@ -1,4 +1,4 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
+import { atom } from 'jotai';
 import { ExtResource, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 import { DataSources } from 'components/Extensibility/contexts/DataSources';
@@ -14,6 +14,7 @@ const createExternalNode = (
   dataSources?: DataSources,
 ) => ({
   resourceType: '',
+  resourceTypeCased: '',
   category: category,
   icon: icon,
   namespaced: scope === 'namespace',
@@ -62,11 +63,8 @@ const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   return nodes || [];
 };
 
-export const extensibilityNodesExtSelector: RecoilValueReadOnly<
-  NavNode[] | null
-> = selector<NavNode[] | null>({
-  key: 'extensibilityNodesExtSelector',
-  get: async ({ get }) => {
+export const extensibilityNodesExtSelector = atom<Promise<NavNode[] | null>>(
+  async get => {
     const extensions = get(extensionsState) || [];
     const statics = get(staticsState) || [];
 
@@ -83,4 +81,5 @@ export const extensibilityNodesExtSelector: RecoilValueReadOnly<
 
     return [...filteredExtNodes.concat(filteresStaticsNodes)];
   },
-});
+);
+extensibilityNodesExtSelector.debugLabel = 'extensibilityNodesExtSelector';

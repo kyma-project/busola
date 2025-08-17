@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import {
   editViewModeState,
   getEditViewModeState,
@@ -8,7 +8,7 @@ import {
 
 export function ModeSelector({ mode, setMode, isDisabled = false }) {
   const { t } = useTranslation();
-  const [editViewMode, setEditViewMode] = useRecoilState(editViewModeState);
+  const [editViewMode, setEditViewMode] = useAtom(editViewModeState);
   const { preferencesViewType } = getEditViewModeState(editViewMode);
 
   const buttonsToDisplay = [

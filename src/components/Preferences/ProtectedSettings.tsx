@@ -1,17 +1,16 @@
 import { Label, Switch } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
+import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
 
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
 
 export default function ProtectedSettings() {
   const { t } = useTranslation();
-  const [
-    disableResourceProtection,
-    setDisableResourceProtection,
-  ] = useRecoilState(disableResourceProtectionState);
+  const [disableResourceProtection, setDisableResourceProtection] = useAtom(
+    disableResourceProtectionState,
+  );
 
   const protectedResourcesEnabled = useFeature(
     configFeaturesNames.PROTECTED_RESOURCES,

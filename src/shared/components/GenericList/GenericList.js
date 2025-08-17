@@ -2,8 +2,7 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
@@ -106,7 +105,7 @@ export const GenericList = ({
     }
   };
 
-  const globalPageSize = useRecoilValue(pageSizeState);
+  const globalPageSize = useAtomValue(pageSizeState);
   const [pageSize, setPageSize] = useState(globalPageSize);
 
   useEffect(() => {

@@ -1,13 +1,10 @@
-import { atom, RecoilState } from 'recoil';
-import { localStorageEffect } from 'state/utils/effects';
-
-type Language = string;
+import { atomWithStorage } from 'jotai/utils';
 
 const LANGUAGE_STORAGE_KEY = 'busola.language';
 const DEFAULT_LANGUAGE = 'en';
 
-export const languageAtom: RecoilState<Language> = atom<Language>({
-  key: 'languageState',
-  default: DEFAULT_LANGUAGE,
-  effects: [localStorageEffect(LANGUAGE_STORAGE_KEY)],
-});
+export const languageState = atomWithStorage<string>(
+  LANGUAGE_STORAGE_KEY,
+  DEFAULT_LANGUAGE,
+);
+languageState.debugLabel = 'languageState';

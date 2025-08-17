@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { themeState } from 'state/preferences/themeAtom';
 
 function computeVariables(variableMapping) {
@@ -13,7 +13,7 @@ function computeVariables(variableMapping) {
 }
 
 export function useCssVariables(variableMapping) {
-  const theme = useRecoilValue(themeState);
+  const theme = useAtomValue(themeState);
   const [variables, setVariables] = useState(() =>
     computeVariables(variableMapping),
   );

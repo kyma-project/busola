@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
@@ -15,8 +15,8 @@ export const HPASubcomponent = props => {
   const { t } = useTranslation();
   const resourceKind = props.kind;
   const resourceName = props.metadata.name;
-  const namespace = useRecoilValue(activeNamespaceIdState);
-  const extensions = useRecoilValue(extensionsState);
+  const namespace = useAtomValue(activeNamespaceIdState);
+  const extensions = useAtomValue(extensionsState);
 
   const extensibilityHPAs = extensions?.find(
     cR => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',

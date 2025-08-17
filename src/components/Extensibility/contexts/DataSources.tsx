@@ -8,6 +8,7 @@ import jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { resourcesConditions } from 'state/resourceConditionsAtom';
+import { useAtomValue } from 'jotai';
 
 export interface Resource {
   metadata: {
@@ -83,7 +84,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   const dataSourcesDict = useRef<DataSourcesDict>({});
   // refetch intervals
   const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const fallbackNamespace = useRecoilValue(activeNamespaceIdState);
+  const fallbackNamespace = useAtomValue(activeNamespaceIdState);
   const stateConditions = useRecoilValue(resourcesConditions);
   const [refetchSource, setRefetchSource] = useState('');
 

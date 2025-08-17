@@ -3,7 +3,7 @@ import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
 import { ExtInjectionConfig, ExtResource } from '../types';
-import { atom, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import {
   atom as recoilAtom,
   RecoilState,
@@ -13,7 +13,7 @@ import {
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
-import { configurationAtom } from 'state/configuration/configurationAtom';
+import { configurationState } from 'state/configuration/configurationAtom';
 import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
 import {
   getPermissionResourceRules,
@@ -407,14 +407,14 @@ const pushExtToEventTypes = (extensions: any) => {
 
 export const useGetExtensions = () => {
   const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
-  const setExtensions = useSetRecoilState(extensionsState);
-  const setStatics = useSetRecoilState(staticsState);
+  const auth = useAtomValue(authDataState);
+  const setExtensions = useSetAtom(extensionsState);
+  const setStatics = useSetAtom(staticsState);
   const setAllExtensions = useSetAtom(allExtensionsState);
   const setInjections = useSetRecoilState(injectionsState);
   const setWizard = useSetAtom(wizardState);
-  const fetchFn = getFetchFn(useRecoilValue);
-  const configuration = useRecoilValue(configurationAtom);
+  const fetchFn = getFetchFn(useAtomValue);
+  const configuration = useAtomValue(configurationState);
   const features = configuration?.features;
   const openapiPathIdList = useRecoilValue(openapiPathIdListSelector);
   const permissionSet = useRecoilValue(permissionSetsSelector);
@@ -579,19 +579,11 @@ export const useGetExtensions = () => {
 // null for defaultValue,
 // empty array for value or error
 const defaultValue = null;
-export const extensionsState: RecoilState<ExtResource[] | null> = recoilAtom<
-  ExtResource[] | null
->({
-  key: 'extensionsState',
-  default: defaultValue,
-});
+export const extensionsState = atom<ExtResource[] | null>(defaultValue);
+extensionsState.debugLabel = 'extensionsState';
 
-export const staticsState: RecoilState<ExtResource[] | null> = recoilAtom<
-  ExtResource[] | null
->({
-  key: 'staticsState',
-  default: defaultValue,
-});
+export const staticsState = atom<ExtResource[] | null>(defaultValue);
+staticsState.debugLabel = 'staticsState';
 
 export const allExtensionsState = atom<ExtResource[] | null>(defaultValue);
 allExtensionsState.debugLabel = 'allExtensionsState';

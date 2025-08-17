@@ -1,13 +1,7 @@
-import { atom, RecoilState } from 'recoil';
-
-type ActiveNamespaceIdState = string;
+import { atom } from 'jotai';
 
 //empty value here would mean '[*]' - all namespaces
 export const defaultValue = '';
 
-export const activeNamespaceIdState: RecoilState<ActiveNamespaceIdState> = atom<
-  ActiveNamespaceIdState
->({
-  key: 'ActiveNamespaceIdState',
-  default: defaultValue,
-});
+export const activeNamespaceIdState = atom<string>(defaultValue);
+activeNamespaceIdState.debugLabel = 'ActiveNamespaceIdState';

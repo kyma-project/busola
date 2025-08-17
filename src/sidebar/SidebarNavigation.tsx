@@ -25,7 +25,7 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
   const isSidebarCondensed = useAtomValue(isSidebarCondensedState);
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdState);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();

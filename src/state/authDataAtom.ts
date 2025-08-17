@@ -2,12 +2,12 @@ import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 import { User, UserManager } from 'oidc-client-ts';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { atom, useSetAtom } from 'jotai';
+import { useRecoilValue } from 'recoil';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { clusterState } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
 import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
-import { useSetAtom } from 'jotai';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -135,7 +135,7 @@ async function handleLogin({
 
 export function useAuthHandler() {
   const cluster = useRecoilValue(clusterState);
-  const setAuth = useSetRecoilState(authDataState);
+  const setAuth = useSetAtom(authDataState);
   const navigate = useNavigate();
   const setLastFetched = useSetAtom(openapiLastFetchedState);
   const [isLoading, setIsLoading] = useState(true);
@@ -194,7 +194,5 @@ export function useAuthHandler() {
   return { isLoading };
 }
 
-export const authDataState: RecoilState<AuthDataState> = atom<AuthDataState>({
-  key: 'authDataState',
-  default: null,
-});
+export const authDataState = atom<AuthDataState>(null);
+authDataState.debugLabel = 'authDataState';

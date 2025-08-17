@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from '../TaskList/TasksList';
 import { isCurrentThemeDark, themeState } from 'state/preferences/themeAtom';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import './Message.scss';
 import './marked.scss';
 import { Author, MessageChunk } from '../types';
@@ -26,7 +26,7 @@ export default function Message({
   hasError = false,
   isLatestMessage,
 }: MessageProps): JSX.Element {
-  const currentTheme = useRecoilValue(themeState);
+  const currentTheme = useAtomValue(themeState);
   const isThemeDark = isCurrentThemeDark(currentTheme);
   const predefinedMarkdownThemeClass = isThemeDark ? 'dark' : 'light';
 

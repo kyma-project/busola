@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import { useEventListener } from 'hooks/useEventListener';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
@@ -57,7 +56,7 @@ export function CommandPaletteUI({
   updateResourceCache,
   shellbarWidth,
 }: CommandPaletteProps) {
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdState);
   const { navigateSafely } = useFormNavigation();
 
   const [query, setQuery] = useState('');

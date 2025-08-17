@@ -1,4 +1,4 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
+import { atom } from 'jotai';
 import { partial } from 'lodash';
 
 import { assignNodesToCategories } from './assignToCategories';
@@ -9,50 +9,46 @@ import { configFeaturesNames, NavNode, Scope } from '../types';
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
-import { configurationAtom } from '../configuration/configurationAtom';
+import { configurationState } from '../configuration/configurationAtom';
 import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 import { extensibilityNodesExtSelector } from './extensibilityNodesExtSelector';
 
-export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
-  Category[]
->({
-  key: 'scopedNavigationSelector',
-  get: ({ get }) => {
-    const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
-    const activeNamespaceId = get(activeNamespaceIdState);
-    const externalNodes = get(externalNodesSelector);
-    const externalNodesExt = get(extensibilityNodesExtSelector);
-    const configuration = get(configurationAtom);
-    const features = configuration?.features;
+export const sidebarNavigationNodesSelector = atom<Category[]>(get => {
+  const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
+  const activeNamespaceId = get(activeNamespaceIdState);
+  const externalNodes = get(externalNodesSelector);
+  const externalNodesExt = get(extensibilityNodesExtSelector);
+  const configuration = get(configurationState);
+  const features = configuration?.features;
 
-    const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    if (!navNodes || !externalNodes) {
-      return [];
-    }
-    let allNodes = [...navNodes, ...externalNodes];
+  const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
+  if (!navNodes || !externalNodes) {
+    return [];
+  }
+  let allNodes = [...navNodes, ...externalNodes];
 
-    const extResources = get(extensionsState);
-    const isExtensibilityOn =
-      features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
-    if (isExtensibilityOn && extResources) {
-      const extNavNodes = extResources.map(ext => mapExtResourceToNavNode(ext));
-      allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
-    }
+  const extResources = get(extensionsState);
+  const isExtensibilityOn =
+    features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
+  if (isExtensibilityOn && extResources) {
+    const extNavNodes = extResources.map(ext => mapExtResourceToNavNode(ext));
+    allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
+  }
 
-    if (externalNodesExt) {
-      allNodes = allNodes.concat(externalNodesExt);
-    }
-    const nodesFromCurrentScope = partial(hasCurrentScope, scope);
-    const filteredNodes = allNodes.filter(nodesFromCurrentScope);
+  if (externalNodesExt) {
+    allNodes = allNodes.concat(externalNodesExt);
+  }
+  const nodesFromCurrentScope = partial(hasCurrentScope, scope);
+  const filteredNodes = allNodes.filter(nodesFromCurrentScope);
 
-    const assignedToCategories: Category[] = assignNodesToCategories(
-      filteredNodes,
-    );
+  const assignedToCategories: Category[] = assignNodesToCategories(
+    filteredNodes,
+  );
 
-    return assignedToCategories;
-  },
+  return assignedToCategories;
 });
+sidebarNavigationNodesSelector.debugLabel = 'sidebarNavigationNodesSelector';
 
 export const mergeInExtensibilityNav = (
   nodes: NavNode[],

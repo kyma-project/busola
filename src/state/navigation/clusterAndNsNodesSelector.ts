@@ -1,62 +1,59 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
+import { atom, useAtomValue } from 'jotai';
 import { isEmpty, partial } from 'lodash';
-import { resourceListSelector } from '../resourceList/resourceListSelector';
+import { resourceListState } from '../resourceList/resourceListAtom';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
-import { configurationAtom } from '../configuration/configurationAtom';
+import { configurationState } from '../configuration/configurationAtom';
 import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
 import { moduleTemplatesCountSelector } from 'state/moduleTemplatesCountSelector';
 
-export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
-  NavNode[]
->({
-  key: 'navigationNodesSelector',
-  get: async ({ get }) => {
-    const resourceList: NavNode[] = get(resourceListSelector);
-    const activeNamespaceId = get(activeNamespaceIdState);
-    const openapiPathIdList = get(openapiPathIdListSelector);
-    const permissionSet = get(permissionSetsSelector);
-    const configuration = get(configurationAtom);
-    const moduleTemplatesCount = get(moduleTemplatesCountSelector);
+export const clusterAndNsNodesSelector = atom<Promise<NavNode[]>>(async get => {
+  const resourceList: NavNode[] = useAtomValue(resourceListState);
+  const activeNamespaceId = get(activeNamespaceIdState);
+  const openapiPathIdList = get(openapiPathIdListSelector);
+  const permissionSet = get(permissionSetsSelector);
+  const configuration = get(configurationState);
+  const moduleTemplatesCount = get(moduleTemplatesCountSelector);
 
-    const features = configuration?.features || {};
+  const features = configuration?.features || {};
 
-    const areDependenciesInitialized =
-      !isEmpty(openapiPathIdList) &&
-      !!features &&
-      !isEmpty(resourceList) &&
-      !isEmpty(permissionSet);
+  const areDependenciesInitialized =
+    !isEmpty(openapiPathIdList) &&
+    !!features &&
+    !isEmpty(resourceList) &&
+    !isEmpty(permissionSet);
 
-    if (!areDependenciesInitialized) {
-      return [];
-    }
+  if (!areDependenciesInitialized) {
+    return [];
+  }
 
-    const configSet = {
-      configFeatures: features!,
-      openapiPathIdList,
-      permissionSet,
-    };
+  const configSet = {
+    configFeatures: features!,
+    openapiPathIdList,
+    permissionSet,
+  };
 
-    const isNodeVisibleForCurrentConfigSet = partial(
-      shouldNodeBeVisible,
-      configSet,
-    );
+  const isNodeVisibleForCurrentConfigSet = partial(
+    shouldNodeBeVisible,
+    configSet,
+  );
 
-    const navNodes: NavNode[] = resourceList.filter(
-      isNodeVisibleForCurrentConfigSet,
-    );
+  const navNodes: NavNode[] = resourceList.filter(
+    isNodeVisibleForCurrentConfigSet,
+  );
 
-    const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    const navNodesWithAddons = addAdditionalNodes(
-      navNodes,
-      scope,
-      features!,
-      moduleTemplatesCount,
-    );
+  const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
+  const navNodesWithAddons = addAdditionalNodes(
+    navNodes,
+    scope,
+    features!,
+    moduleTemplatesCount,
+  );
 
-    return navNodesWithAddons;
-  },
+  return navNodesWithAddons;
 });
+
+clusterAndNsNodesSelector.debugLabel = 'clusterAndNsNodesSelector';

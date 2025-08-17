@@ -3,7 +3,7 @@ import { EventList as EventListComponent } from 'resources/Events/EventList';
 
 import { useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function EventList({
@@ -15,7 +15,7 @@ export function EventList({
   singleRootResource,
   embedResource,
 }) {
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdState);
   const { widgetT } = useGetTranslation();
   const jsonata = useJsonata({
     resource: originalResource,

@@ -1,5 +1,4 @@
-import { atom, RecoilState, AtomEffect } from 'recoil';
-import { localStorageEffect } from '../utils/effects';
+import { atomWithStorage } from 'jotai/utils';
 
 export type Theme =
   | 'light_dark'
@@ -60,28 +59,9 @@ function addLinkNode() {
   newLink.rel = 'stylesheet';
   document.head.appendChild(newLink);
 }
-type AddLinkEffect = () => AtomEffect<Theme>;
-export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
-  const envUrl =
-    import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
-  setSelf(param => {
-    const defaultValue = param as Theme;
-    applyThemeToLinkNode(defaultValue, envUrl);
-    return defaultValue;
-  });
-
-  onSet(newTheme => {
-    let themeNew;
-    if (newTheme === 'light_dark')
-      themeNew = isSystemThemeDark() ? 'dark' : 'default';
-    else themeNew = newTheme === 'sap_horizon' ? 'default' : newTheme.slice(12);
-    applyThemeToLinkNode(themeNew, envUrl);
-  });
-};
-
-export const themeState: RecoilState<Theme> = atom<Theme>({
-  key: 'themeState',
-  default: DEFAULT_THEME,
-  effects: [localStorageEffect<Theme>(THEME_STORAGE_KEY), addLinkEffect()],
-});
+export const themeState = atomWithStorage<Theme>(
+  THEME_STORAGE_KEY,
+  DEFAULT_THEME,
+);
+themeState.debugLabel = 'themeState';

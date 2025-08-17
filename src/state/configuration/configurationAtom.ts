@@ -1,7 +1,8 @@
 import jsyaml from 'js-yaml';
 import { isArray, mergeWith } from 'lodash';
 import { useEffect } from 'react';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
@@ -86,10 +87,10 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
 
 export const useGetConfiguration = () => {
   const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
-  const apis = useRecoilValue(apiGroupState);
-  const setConfig = useSetRecoilState(configurationAtom);
-  const fetchFn = getFetchFn(useRecoilValue);
+  const auth = useAtomValue(authDataState);
+  const apis = useAtomValue(apiGroupState);
+  const setConfig = useSetAtom(configurationState);
+  const fetchFn = getFetchFn(useAtomValue);
 
   useEffect(() => {
     const setClusterConfig = async () => {
@@ -102,9 +103,5 @@ export const useGetConfiguration = () => {
   }, [cluster, auth, apis]);
 };
 
-export const configurationAtom: RecoilState<Configuration> = atom<
-  Configuration
->({
-  key: 'configurationAtom',
-  default: defaultValue,
-});
+export const configurationState = atom<Configuration>(defaultValue);
+configurationState.debugLabel = 'configurationState';

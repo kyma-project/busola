@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { editor, Uri } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { themeState } from 'state/preferences/themeAtom';
 
 export const getEditorTheme = theme => {
@@ -26,7 +26,7 @@ export const useCreateEditor = ({
   language,
   readOnly,
 }) => {
-  const theme = useRecoilValue(themeState);
+  const theme = useAtomValue(themeState);
   const editorTheme = getEditorTheme(theme);
   const descriptor = useRef(new Uri());
   const divRef = useRef(null);

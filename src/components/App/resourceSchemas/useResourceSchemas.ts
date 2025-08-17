@@ -6,15 +6,12 @@ import {
   sendWorkerMessage,
   terminateWorker,
 } from './resourceSchemaWorkerApi';
-import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil';
+import { useAtomValue } from 'jotai';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 import { useUrl } from 'hooks/useUrl';
 import { authDataState } from 'state/authDataAtom';
-import { openapiState } from 'state/openapi/openapiSelector';
+import { openapiState } from 'state/openapi/openapiAtom';
 import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
 import { clusterState } from 'state/clusterAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -24,8 +21,8 @@ import { useAtom } from 'jotai';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
-  const authData = useRecoilValue(authDataState);
-  const openApi = useRecoilValueLoadable(openapiState);
+  const authData = useAtomValue(authDataState);
+  const openApi = useAtomValue(openapiState);
   const navigate = useNavigate();
   const cluster = useRecoilValue(clusterState);
   const isClusterList = useMatch({ path: '/clusters' });

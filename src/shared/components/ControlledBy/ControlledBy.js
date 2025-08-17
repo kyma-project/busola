@@ -2,7 +2,7 @@ import pluralize from 'pluralize';
 import './ControlledBy.scss';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 import { resources } from 'resources';
 import { useUrl } from 'hooks/useUrl';
@@ -15,7 +15,7 @@ export const GoToDetailsLink = ({
   namespace,
   noBrackets = false,
 }) => {
-  const extensions = useRecoilValue(extensionsState);
+  const extensions = useAtomValue(extensionsState);
   const { namespaceUrl, clusterUrl } = useUrl();
 
   let path = null;

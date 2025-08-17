@@ -1,4 +1,3 @@
-import React from 'react';
 import { fromJS } from 'immutable';
 
 import {
@@ -11,7 +10,7 @@ import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
 import { usePermittedUrl } from 'hooks/usePermittedUrl';
 
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function ResourceRenderer({
@@ -27,7 +26,7 @@ export function ResourceRenderer({
   embedResource,
   ...props
 }) {
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdState);
   const { setVar } = useVariables();
   const jsonata = useJsonata({
     resource: originalResource,

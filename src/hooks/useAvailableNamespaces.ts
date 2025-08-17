@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
@@ -9,7 +8,7 @@ import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespace
 import { K8sResource } from 'types';
 
 export function useAvailableNamespaces() {
-  const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
+  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesState);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useAtom(namespacesState);
 

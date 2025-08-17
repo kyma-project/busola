@@ -6,11 +6,11 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
+import { useAtomValue } from 'jotai';
 import jp from 'jsonpath';
 import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
 
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
@@ -23,7 +23,7 @@ export function useProtectedResources() {
   const protectedResourcesFeature = useFeature(
     configFeaturesNames.PROTECTED_RESOURCES,
   );
-  const disableResourceProtection = useRecoilValue(
+  const disableResourceProtection = useAtomValue(
     disableResourceProtectionState,
   );
 

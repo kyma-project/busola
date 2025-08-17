@@ -1,4 +1,4 @@
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -12,7 +12,7 @@ import { HelmReleaseStatus } from './HelmReleaseStatus';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdState);
   const { namespaceUrl } = useUrl();
   const resourceUrl = entry => {
     return namespaceUrl(`helm-releases/${entry.releaseName}`, {

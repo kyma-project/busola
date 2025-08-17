@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { v4 as uuid } from 'uuid';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -22,7 +22,7 @@ const useGetHook = processDataFn =>
       compareEntireResource = false,
     } = {},
   ) {
-    const authData = useRecoilValue(authDataState);
+    const authData = useAtomValue(authDataState);
     const lastAuthData = useRef(null);
     const lastResourceVersion = useRef(null);
     const [data, setData] = useState(null);
@@ -168,7 +168,7 @@ export const useGetStream = path => {
   const timeoutRef = useRef();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const authData = useRecoilValue(authDataState);
+  const authData = useAtomValue(authDataState);
   const fetch = useFetch();
   const readerRef = useRef(null);
   const abortController = useRef(new AbortController());

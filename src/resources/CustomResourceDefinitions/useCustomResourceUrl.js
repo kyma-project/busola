@@ -1,10 +1,10 @@
 import { useUrl } from 'hooks/useUrl';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function useCustomResourceUrl(crd) {
   const { clusterUrl, namespaceUrl } = useUrl();
-  const activeNamespaceId = useRecoilValue(activeNamespaceIdState);
+  const activeNamespaceId = useAtomValue(activeNamespaceIdState);
 
   return cr => {
     const crClusterURL = clusterUrl(

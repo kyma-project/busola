@@ -7,9 +7,8 @@ import { DataField } from 'shared/ResourceForm/fields';
 
 import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
-import { configurationAtom } from 'state/configuration/configurationAtom';
+import { configurationState } from 'state/configuration/configurationAtom';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutState } from 'state/columnLayoutAtom';
 
@@ -47,7 +46,7 @@ export default function SecretCreate({
 
   const [lockedKeys, setLockedKeys] = useState([]);
 
-  const features = useRecoilValue(configurationAtom)?.features;
+  const features = useAtomValue(configurationState)?.features;
 
   const secretDefs = getSecretDefs(t, features);
   const type = secret?.type;

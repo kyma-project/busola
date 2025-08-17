@@ -8,15 +8,15 @@ import {
   useSearchParams,
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useAtom, useAtomValue } from 'jotai';
+import { useRecoilValue } from 'recoil';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
 import { useAppTracking } from 'hooks/tracking';
 
 import { clusterState } from 'state/clusterAtom';
-import { languageAtom } from 'state/preferences/languageAtom';
+import { languageState } from 'state/preferences/languageAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useAuthHandler } from 'state/authDataAtom';
 import { useGetConfiguration } from 'state/configuration/configurationAtom';
@@ -61,10 +61,10 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 
 export default function App() {
-  const theme = useRecoilValue(themeState);
-  const language = useRecoilValue(languageAtom);
+  const theme = useAtomValue(themeState);
+  const language = useAtomValue(languageState);
   const cluster = useRecoilValue(clusterState);
-  const setNamespace = useSetRecoilState(activeNamespaceIdState);
+  const setNamespace = useSetAtom(activeNamespaceIdState);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
   const { t, i18n } = useTranslation();

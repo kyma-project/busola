@@ -14,7 +14,6 @@ import jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import { editViewModeState } from 'state/preferences/editViewModeAtom';
 import { createPortal } from 'react-dom';
@@ -96,7 +95,7 @@ export function ResourceForm({
     };
   }
 
-  const editViewMode = useRecoilValue(editViewModeState);
+  const editViewMode = useAtomValue(editViewModeState);
   const [editorError, setEditorError] = useState(null);
 
   useFormEditTracking(resource, initialResource, editorError);

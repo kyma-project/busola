@@ -1,4 +1,4 @@
-import { DefaultValue, RecoilState, selector } from 'recoil';
+import { atom } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
 import {
@@ -6,11 +6,12 @@ import {
   expandedCategoriesState,
 } from './expandedCategoriesAtom';
 
-export const expandedCategoriesSelector: RecoilState<ExpandedCategories> = selector<
-  ExpandedCategories
->({
-  key: 'expandedCategoriesSelector',
-  get: ({ get }) => {
+export const expandedCategoriesSelector = atom<
+  ExpandedCategories,
+  [ExpandedCategories],
+  void
+>(
+  get => {
     const expandedCategories = get(expandedCategoriesState);
     const cluster = get(clusterState);
     const clusterName = cluster?.name || '';
@@ -18,19 +19,18 @@ export const expandedCategoriesSelector: RecoilState<ExpandedCategories> = selec
 
     return expandedCategories[clusterName]?.[scope] || [];
   },
-  set: ({ get, set }, newValue) => {
+  (get, set, newValue) => {
     const expandedCategories = { ...get(expandedCategoriesState) };
     const cluster = get(clusterState);
     const clusterName = cluster?.name || '';
+    const scope = get(activeNamespaceIdState) ? 'namespaced' : 'cluster';
 
-    if (!(newValue instanceof DefaultValue)) {
-      const scope = get(activeNamespaceIdState) ? 'namespaced' : 'cluster';
-      expandedCategories[clusterName] = {
-        ...expandedCategories[clusterName],
-        [scope]: newValue,
-      };
-    }
+    expandedCategories[clusterName] = {
+      ...expandedCategories[clusterName],
+      [scope]: newValue,
+    };
 
     set(expandedCategoriesState, expandedCategories);
   },
-});
+);
+expandedCategoriesSelector.debugLabel = 'expandedCategoriesSelector';

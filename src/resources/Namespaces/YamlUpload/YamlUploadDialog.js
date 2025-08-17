@@ -8,11 +8,10 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
-import { useRecoilValue } from 'recoil';
+import { useAtom, useAtomValue } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import './YamlUploadDialog.scss';
 import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
-import { useAtom } from 'jotai';
 
 export const YamlUpload = React.lazy(() => import('./YamlUpload'));
 
@@ -23,7 +22,7 @@ export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 
 export function YamlUploadDialog() {
   const { t } = useTranslation();
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdState);
   const defaultNamespace = namespaceId || 'default';
 
   const [resourcesData, setResourcesData] = useState();

@@ -1,6 +1,7 @@
 import { useFeature } from 'hooks/useFeature';
 import { useEffect, useMemo } from 'react';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   ExtendedValidateResources,
   getExtendedValidateResourceState,
@@ -44,7 +45,7 @@ export const usePolicySet = () => {
   const validationFeature = useFeature(
     configFeaturesNames.RESOURCE_VALIDATION,
   ) as ValidationFeatureConfig;
-  const validateResources = useRecoilValue(validateResourcesState);
+  const validateResources = useAtomValue(validateResourcesState);
   const validationPreferences = useMemo(
     () => getExtendedValidateResourceState(validateResources),
     [validateResources],

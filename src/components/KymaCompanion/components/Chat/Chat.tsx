@@ -66,7 +66,7 @@ export const Chat = ({
 
   const sessionID = useAtomValue<string>(sessionIDState);
   const cluster = useRecoilValue<any>(clusterState);
-  const authData = useRecoilValue<any>(authDataState);
+  const authData = useAtomValue<any>(authDataState);
 
   const {
     initialSuggestions,

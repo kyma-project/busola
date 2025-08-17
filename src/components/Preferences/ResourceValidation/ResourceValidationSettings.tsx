@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 import { Button, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
@@ -18,7 +19,7 @@ import { configFeaturesNames } from 'state/types';
 
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
-  const [validateResources, setValidateResources] = useRecoilState(
+  const [validateResources, setValidateResources] = useAtom(
     validateResourcesState,
   );
   const validationFeature = useFeature(

@@ -10,7 +10,7 @@ import {
   getApiGroupInputOptions,
   unique,
 } from './helpers';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
 import { getDescription } from 'shared/helpers/schema';
@@ -43,8 +43,8 @@ const verbs = [
 ];
 
 export function RuleInput({ rule, rules, setRules, schema }) {
-  const groupVersions = useRecoilValue(groupVersionState);
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const groupVersions = useAtomValue(groupVersionState);
+  const namespaceId = useAtomValue(activeNamespaceIdState);
   const { t } = useTranslation();
 
   const apiGroupDesc = getDescription(schema, 'rules.apiGroups');

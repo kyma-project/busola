@@ -3,6 +3,7 @@ import { authDataState } from 'state/authDataAtom';
 import { clusterState } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
 import { atom, RecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 type ExtensibilitySchema = any;
 interface ExtensiblitySchemas {
@@ -19,7 +20,7 @@ const getSchema = async (schema: string): Promise<ExtensibilitySchema> => {
 export const useGetExtensibilitySchemas = async () => {
   const setSchemas = useSetRecoilState(extensibilitySchemasState);
   const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
+  const auth = useAtomValue(authDataState);
 
   useEffect(() => {
     const setExtensionsSchema = async () => {

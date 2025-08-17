@@ -3,7 +3,7 @@ import { useFeature } from 'hooks/useFeature';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { themeState } from 'state/preferences/themeAtom';
 import { configFeaturesNames } from 'state/types';
 import './SnowFeature.scss';
@@ -21,7 +21,7 @@ export function SnowFeature() {
   };
   const [isSnowOpen, setIsSnowOpen] = useState(localStorageSnowEnabled());
   const { isEnabled: isSnowEnabled } = useFeature(configFeaturesNames.SNOW);
-  const [theme] = useRecoilState(themeState);
+  const [theme] = useAtom(themeState);
 
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {

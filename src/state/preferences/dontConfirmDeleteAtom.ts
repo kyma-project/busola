@@ -1,17 +1,10 @@
-import { atom, RecoilState } from 'recoil';
-import { localStorageEffect } from '../utils/effects';
-
-type DontConfirmDelete = boolean;
+import { atomWithStorage } from 'jotai/utils';
 
 const DONT_CONFIRM_DELETE_STORAGE_KEY = 'busola.dontConfirmDelete';
 const DEFAULT_DONT_CONFIRM_DELETE = false;
 
-export const dontConfirmDeleteState: RecoilState<DontConfirmDelete> = atom<
-  DontConfirmDelete
->({
-  key: 'dontConfirmDeleteState',
-  default: DEFAULT_DONT_CONFIRM_DELETE,
-  effects: [
-    localStorageEffect<DontConfirmDelete>(DONT_CONFIRM_DELETE_STORAGE_KEY),
-  ],
-});
+export const dontConfirmDeleteState = atomWithStorage<boolean>(
+  DONT_CONFIRM_DELETE_STORAGE_KEY,
+  DEFAULT_DONT_CONFIRM_DELETE,
+);
+dontConfirmDeleteState.debugLabel = 'dontConfirmDeleteState';

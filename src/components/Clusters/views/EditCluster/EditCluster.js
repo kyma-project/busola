@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -272,7 +272,7 @@ function EditClusterComponent({
   const notification = useNotification();
 
   const clustersInfo = useClustersInfo();
-  const setAuth = useSetRecoilState(authDataState);
+  const setAuth = useSetAtom(authDataState);
   const originalName = useRef(kubeconfig?.['current-context'] || '');
 
   const setWholeResource = newKubeconfig => {
