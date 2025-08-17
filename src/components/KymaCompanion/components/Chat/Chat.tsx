@@ -123,7 +123,8 @@ export const Chat = ({
 
   const handleChatResponse = (response: MessageChunk) => {
     const isLoading = response?.data?.answer?.next !== '__end__';
-    const isFeedback = response?.data?.answer?.is_feedback === true;
+    const isFeedback =
+      !isLoading && response?.data?.answer?.is_feedback === true;
 
     if (!isLoading) {
       const hasError =

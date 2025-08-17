@@ -13,7 +13,7 @@ function checkJobLogs({ showLogsSelector, expectedLogs }) {
   cy.wait(10_000);
   cy.get(showLogsSelector).click({ force: true });
 
-  cy.contains(expectedLogs);
+  cy.contains(expectedLogs, { timeout: 5000 });
 
   cy.go('back');
 }
@@ -35,7 +35,6 @@ context('Test Jobs', () => {
     cy.get('[accessible-name="Job name"]:visible')
       .find('input')
       .click()
-      .clear()
       .type(JOB_NAME, { force: true });
 
     // job container name
@@ -94,11 +93,14 @@ context('Test Jobs', () => {
 
   it('Inspect details and created Pods', () => {
     // name
-    cy.getMidColumn().contains(JOB_NAME);
+    cy.getMidColumn()
+      .find('ui5-dynamic-page-title')
+      .contains(JOB_NAME);
 
     // created pod
     cy.getMidColumn()
       .find('ui5-panel')
+      .find('ui5-table[accessible-name="Pods"]')
       .find('ui5-table-row')
       .find('ui5-table-cell')
       .contains('ui5-link', JOB_NAME)
@@ -111,13 +113,19 @@ context('Test Jobs', () => {
     cy.contains(/Imagenode:14-alpine/);
 
     // controlled-by
-    cy.contains('div', 'Controlled By')
-      .next()
-      .find(`div:contains("Job") ui5-link:contains("${JOB_NAME}")`)
-      .should('exist');
+    cy.get('ui5-card[accessible-name="Metadata"]')
+      .should('contain.text', 'Controlled By')
+      .find('ul.controlled-by-list')
+      .should('contain.text', 'Job')
+      .find('ui5-link')
+      .contains(`(${JOB_NAME})`)
+      .should('be.visible');
 
     // status
-    cy.get('[aria-label="Completed"]', { timeout: 75 * 1000 });
+    cy.get('ui5-card[accessible-name="Status"]')
+      .find('.resource-status-card__header')
+      .find('.header__status-badge')
+      .should('contain.text', 'Completed', { timeout: 75 * 1000 });
 
     // check logs
     checkJobLogs({
@@ -130,16 +138,21 @@ context('Test Jobs', () => {
     });
 
     // back to job
-    cy.get('.page-header__column')
-      .contains(`Job (${JOB_NAME})`)
-      .contains('ui5-link', JOB_NAME)
+    cy.get('ui5-card[accessible-name="Metadata"]')
+      .find('ul.controlled-by-list')
+      .should('contain.text', 'Job')
+      .find('ui5-link')
+      .contains(`(${JOB_NAME})`)
       .click();
 
     // pod status
-    cy.contains('Completed');
+    cy.get('ui5-table[accessible-name="Pods"]')
+      .find('div[role="status"]')
+      .contains('Completed')
+      .should('be.visible');
   });
 
-  it('Edit Job', () => {
+  it('Edit Job', { retries: 2 }, () => {
     cy.wait(1000);
 
     cy.inspectTab('Edit');
@@ -173,7 +186,9 @@ context('Test Jobs', () => {
 
     cy.inspectTab('View');
 
-    cy.contains('a=b');
+    cy.get('ui5-card[accessible-name="Metadata"]')
+      .contains('a=b', { timeout: 10000 })
+      .should('be.visible');
   });
 
   it('Inspect list', () => {

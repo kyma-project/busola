@@ -1,6 +1,6 @@
 import pluralize from 'pluralize';
 import { createContext, useEffect, useRef, FC, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
@@ -8,7 +8,6 @@ import jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { resourcesConditions } from 'state/resourceConditionsAtom';
-import { useAtomValue } from 'jotai';
 
 export interface Resource {
   metadata: {
@@ -85,7 +84,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   // refetch intervals
   const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
   const fallbackNamespace = useAtomValue(activeNamespaceIdState);
-  const stateConditions = useRecoilValue(resourcesConditions);
+  const stateConditions = useAtomValue(resourcesConditions);
   const [refetchSource, setRefetchSource] = useState('');
 
   const findUpdatedName = (conditionsArr: string[], storeArr: string[]) => {

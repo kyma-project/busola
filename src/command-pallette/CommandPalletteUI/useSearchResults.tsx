@@ -40,8 +40,9 @@ export function useSearchResults({
   resourceCache,
   updateResourceCache,
 }: useSearchResultsProps): SearchResults {
-  const clusters = useRecoilValue(clustersState);
   const cluster = useAtomValue(clusterState);
+  const clusters = useAtomValue(clustersState);
+
   const availableNodes = useRecoilValue(availableNodesSelector);
   const setLayoutColumn = useSetAtom(columnLayoutState);
 

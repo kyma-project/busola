@@ -3,31 +3,20 @@ import { Dialog } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { AddClusterWizard } from './AddClusterWizard';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { showAddClusterWizard } from 'state/showAddClusterWizard';
 
-function AddClusterDialogComponent({ dialogRef }) {
+export function AddClusterDialog() {
+  const { t } = useTranslation();
+  const [showWizard, setShowWizard] = useAtom(showAddClusterWizard);
   const [kubeconfig, setKubeconfig] = useState(undefined);
-  const showWizard = useAtomValue(showAddClusterWizard);
+  const dialogRef = useRef(null);
 
   useEffect(() => {
     if (!showWizard) {
       setKubeconfig(undefined);
     }
   }, [showWizard]);
-
-  return showWizard ? (
-    <AddClusterWizard
-      kubeconfig={kubeconfig}
-      setKubeconfig={setKubeconfig}
-      dialogRef={dialogRef}
-    />
-  ) : null;
-}
-export function AddClusterDialog() {
-  const { t } = useTranslation();
-  const [showWizard, setShowWizard] = useAtom(showAddClusterWizard);
-  const dialogRef = useRef(null);
 
   return (
     <Dialog
@@ -38,7 +27,13 @@ export function AddClusterDialog() {
       ref={dialogRef}
     >
       <ErrorBoundary>
-        <AddClusterDialogComponent dialogRef={dialogRef} />
+        {showWizard ? (
+          <AddClusterWizard
+            kubeconfig={kubeconfig}
+            setKubeconfig={setKubeconfig}
+            dialogRef={dialogRef}
+          />
+        ) : null}
       </ErrorBoundary>
     </Dialog>
   );

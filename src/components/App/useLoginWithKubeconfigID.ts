@@ -1,6 +1,6 @@
 import { addByContext } from 'components/Clusters/shared';
 import { ClustersState, clustersState } from 'state/clustersAtom';
-import { SetterOrUpdater, useRecoilValue } from 'recoil';
+import { SetterOrUpdater } from 'recoil';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate, useSearchParams } from 'react-router';
@@ -185,7 +185,7 @@ export function useLoginWithKubeconfigID() {
     configFeaturesNames.KUBECONFIG_ID,
   );
   const configuration = useAtomValue(configurationState);
-  const clusters = useRecoilValue(clustersState);
+  const clusters = useAtomValue(clustersState);
   const [contextsState, setContextsState] = useAtom(multipleContexts);
   const [manualKubeConfigId, setManualKubeConfigId] = useAtom(
     manualKubeConfigIdState,
@@ -301,7 +301,7 @@ export function useLoadDefaultKubeconfigId() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
     configFeaturesNames.KUBECONFIG_ID,
   )!;
-  const clusters = useRecoilValue(clustersState);
+  const clusters = useAtomValue(clustersState);
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
 

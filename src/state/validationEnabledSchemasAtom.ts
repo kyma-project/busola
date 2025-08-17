@@ -1,7 +1,6 @@
 import { useFeature } from 'hooks/useFeature';
 import { useEffect, useMemo } from 'react';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useAtomValue } from 'jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import {
   ExtendedValidateResources,
   getExtendedValidateResourceState,
@@ -10,6 +9,7 @@ import {
 import {
   emptyValidationSchema,
   getEnabledRules,
+  ValidationPolicy,
   ValidationSchema,
   validationSchemasState,
 } from './validationSchemasAtom';
@@ -70,7 +70,9 @@ export const getValidationEnabledSchemas = (
 ) => {
   const { rules, policies } = validationSchemas;
 
-  const enabledPolicies = policies.filter(policy => policySet.has(policy.name));
+  const enabledPolicies = policies.filter((policy: ValidationPolicy) =>
+    policySet.has(policy.name),
+  );
   const enabledRules = getEnabledRules(rules, enabledPolicies, policies);
 
   return {
@@ -80,9 +82,9 @@ export const getValidationEnabledSchemas = (
 };
 
 export const useGetValidationEnabledSchemas = () => {
-  const setSchemas = useSetRecoilState(validationSchemasEnabledState);
+  const setSchemas = useSetAtom(validationSchemasEnabledState);
 
-  const validationSchemas = useRecoilValue(validationSchemasState);
+  const validationSchemas = useAtomValue(validationSchemasState);
   const policySet = usePolicySet();
 
   useEffect(() => {
@@ -98,9 +100,7 @@ export const useGetValidationEnabledSchemas = () => {
   }, [validationSchemas, policySet]);
 };
 
-export const validationSchemasEnabledState: RecoilState<ValidationSchema | null> = atom<ValidationSchema | null>(
-  {
-    key: 'validationEnabledSchemasState',
-    default: emptyValidationSchema,
-  },
+export const validationSchemasEnabledState = atom<ValidationSchema>(
+  emptyValidationSchema,
 );
+validationSchemasEnabledState.debugLabel = 'validationSchemasEnabledState';

@@ -1,8 +1,6 @@
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'jotai';
 
 const defaultValue: [] = [];
 
-export const resourcesConditions: RecoilState<[]> = atom<[]>({
-  key: 'resourcesConditions',
-  default: defaultValue,
-});
+export const resourcesConditions = atom<[]>(defaultValue);
+resourcesConditions.debugLabel = 'resourcesConditions';

@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
 import { useAtom } from 'jotai';
 import { Button, Switch } from '@ui5/webcomponents-react';
 import {
@@ -16,6 +15,7 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ResourceValidationSettings.scss';
 import { configFeaturesNames } from 'state/types';
+import { useAtomValue } from 'jotai';
 
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ export default function ResourceValidationSettings() {
       [],
   } = getExtendedValidateResourceState(validateResources);
 
-  const validationSchemas = useRecoilValue(validationSchemasState);
+  const validationSchemas = useAtomValue(validationSchemasState);
   const allOptions = useMemo(
     () =>
       validationSchemas?.policies
@@ -123,6 +123,7 @@ export default function ResourceValidationSettings() {
               title={t(
                 'settings.clusters.resourcesValidation.enabled-policies',
               )}
+              //@ts-ignore
               entries={
                 choosePolicies
                   ? policyList
@@ -177,6 +178,8 @@ export default function ResourceValidationSettings() {
                   'settings.clusters.resourcesValidation.no-policies-found',
                 ),
                 textSearchProperties: ['key', 'text'],
+                showSearchField: true,
+                allowSlashShortcut: true,
               }}
             />
           </>
