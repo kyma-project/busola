@@ -24,6 +24,7 @@ import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner'
 
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
+import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -45,6 +46,7 @@ export function ClusterOverview() {
     resourceType: t('clusters.labels.name'),
   });
   const setShowAdd = useSetAtom(showYamlUploadDialogState);
+  const isSAPUser = useCheckSAPUser();
 
   const setLayoutColumn = useSetAtom(columnLayoutState);
   useEffect(() => {
@@ -97,7 +99,7 @@ export function ClusterOverview() {
           <>
             <BannerCarousel>
               <>
-                {isKymaCompanionEnabled && (
+                {isKymaCompanionEnabled && isSAPUser && (
                   <AIBanner
                     feedbackUrl={companionConfig?.feedbackLink}
                     documentationUrl={companionConfig?.documentationLink}
