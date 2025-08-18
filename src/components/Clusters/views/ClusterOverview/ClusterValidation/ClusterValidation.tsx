@@ -36,6 +36,7 @@ import { ScanResult } from './ScanResult';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
 import { K8sAPIResource } from 'types';
+import { useAtomValue } from 'jotai';
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
@@ -55,7 +56,7 @@ export const ClusterValidation = () => {
     () => new ResourceLoader(relativeUrl => fetch({ relativeUrl }), undefined),
     [fetch],
   );
-  const validationSchemas = useRecoilValue(validationSchemasState);
+  const validationSchemas = useAtomValue(validationSchemasState);
   const defaultPolicySet = usePolicySet();
 
   const { namespaces } = useAvailableNamespaces();

@@ -1,6 +1,7 @@
 import pluralize from 'pluralize';
 import { createContext, useEffect, useRef, FC, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
@@ -84,7 +85,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   // refetch intervals
   const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
   const fallbackNamespace = useRecoilValue(activeNamespaceIdState);
-  const stateConditions = useRecoilValue(resourcesConditions);
+  const stateConditions = useAtomValue(resourcesConditions);
   const [refetchSource, setRefetchSource] = useState('');
 
   const findUpdatedName = (conditionsArr: string[], storeArr: string[]) => {

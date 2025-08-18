@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
@@ -40,7 +40,8 @@ export function useSearchResults({
   resourceCache,
   updateResourceCache,
 }: useSearchResultsProps): SearchResults {
-  const clusters = useRecoilValue(clustersState);
+  const clusters = useAtomValue(clustersState);
+
   const cluster = useRecoilValue(clusterState);
   const availableNodes = useRecoilValue(availableNodesSelector);
   const setLayoutColumn = useSetAtom(columnLayoutState);

@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import { mapValues } from 'lodash';
+import { useAtomValue } from 'jotai';
 import {
   addWorkerListener,
   sendWorkerMessage,
   addWorkerErrorListener,
   isWorkerAvailable,
 } from 'components/App/resourceSchemas/resourceSchemaWorkerApi';
-import { useRecoilValue } from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 
 export const useGetSchema = ({
@@ -21,7 +21,7 @@ export const useGetSchema = ({
     else schemaId = `${group}/${version}/${kind}`;
   }
 
-  const { areSchemasComputed, schemasError } = useRecoilValue(
+  const { areSchemasComputed, schemasError } = useAtomValue(
     schemaWorkerStatusState,
   );
 
@@ -86,7 +86,7 @@ export const useGetResourceSchemas = resources => {
     [resources],
   );
 
-  const { areSchemasComputed, schemasError } = useRecoilValue(
+  const { areSchemasComputed, schemasError } = useAtomValue(
     schemaWorkerStatusState,
   );
 

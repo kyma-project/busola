@@ -411,7 +411,7 @@ export const useGetExtensions = () => {
   const setExtensions = useSetRecoilState(extensionsState);
   const setStatics = useSetRecoilState(staticsState);
   const setAllExtensions = useSetAtom(allExtensionsState);
-  const setInjections = useSetRecoilState(injectionsState);
+  const setInjections = useSetAtom(injectionsState);
   const setWizard = useSetAtom(wizardState);
   const fetchFn = getFetchFn(useRecoilValue);
   const configuration = useRecoilValue(configurationAtom);
@@ -596,12 +596,8 @@ export const staticsState: RecoilState<ExtResource[] | null> = recoilAtom<
 export const allExtensionsState = atom<ExtResource[] | null>(defaultValue);
 allExtensionsState.debugLabel = 'allExtensionsState';
 
-export const injectionsState: RecoilState<
-  ExtInjectionConfig[] | null
-> = recoilAtom<ExtInjectionConfig[] | null>({
-  key: 'injectionsState',
-  default: defaultValue,
-});
+export const injectionsState = atom<ExtInjectionConfig[] | null>(defaultValue);
+injectionsState.debugLabel = 'injectionsState';
 
 export const wizardState = atom<ExtWizardConfig[] | null>(defaultValue);
 wizardState.debugLabel = 'wizardState';
