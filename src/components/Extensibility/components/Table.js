@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
@@ -63,6 +64,8 @@ export function Table({
     arrayItems,
   });
 
+  const [title, setTitle] = useState('');
+
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
@@ -72,7 +75,7 @@ export function Table({
   });
 
   const rowRenderer = (entry, index) => {
-    const makeTitle = () => {
+    const makeTitle = async () => {
       const defaultTitle =
         tExt(structure.name, {
           defaultValue: structure.name || structure.source,
@@ -81,11 +84,11 @@ export function Table({
         (index + 1);
       if (structure.collapsibleTitle) {
         try {
-          return jsonata(structure.collapsibleTitle, {
+          return await jsonata(structure.collapsibleTitle, {
             index: index,
             scope: entry,
             arrayItems: [...arrayItems, entry],
-          }).then(result => result);
+          });
         } catch (e) {
           console.warn(e);
           return defaultTitle;
@@ -94,6 +97,7 @@ export function Table({
         return defaultTitle;
       }
     };
+    makeTitle().then(result => setTitle(result));
 
     const cells = (structure.children || []).map((column, cellIndex) => {
       return (
@@ -118,7 +122,7 @@ export function Table({
 
     return {
       cells,
-      title: makeTitle(),
+      title: title,
       collapseContent: (
         <div className={tdClassNames}>
           {structure.collapsible.map((child, cellIndex) => (

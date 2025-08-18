@@ -247,6 +247,7 @@ const getSearchingFunction = (searchOption, originalResource) => {
 
       return foundValues;
     } catch (e) {
+      console.warn(e);
       return null;
     }
   };
@@ -257,7 +258,6 @@ const searchingFunctions = (searchOptions, originalResource) =>
     getSearchingFunction(searchOption, originalResource),
   );
 
-// TODO: If you use getSearchingFunction or searchingFunctions, make sure to handle Promises in their consumers.
 export const getTextSearchProperties = ({
   searchOptions,
   originalResource = null,
