@@ -10,7 +10,7 @@ export function AddClusterDialog() {
   const { t } = useTranslation();
   const [showWizard, setShowWizard] = useAtom(showAddClusterWizard);
   const [kubeconfig, setKubeconfig] = useState(undefined);
-  const dialogRef = useRef(null);
+  const buttonsContainerRef = useRef(null);
 
   useEffect(() => {
     if (!showWizard) {
@@ -24,16 +24,16 @@ export function AddClusterDialog() {
       className="add-cluster-wizard-dialog"
       headerText={t('clusters.add.title')}
       onClose={() => setShowWizard(false)}
-      ref={dialogRef}
     >
       <ErrorBoundary>
         {showWizard ? (
           <AddClusterWizard
             kubeconfig={kubeconfig}
             setKubeconfig={setKubeconfig}
-            dialogRef={dialogRef}
+            buttonsContainerRef={buttonsContainerRef}
           />
         ) : null}
+        <div ref={buttonsContainerRef}></div>
       </ErrorBoundary>
     </Dialog>
   );

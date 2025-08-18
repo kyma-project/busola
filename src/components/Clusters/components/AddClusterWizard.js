@@ -29,7 +29,7 @@ import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 export function AddClusterWizard({
   kubeconfig,
   setKubeconfig,
-  dialogRef,
+  buttonsContainerRef,
   config = {},
 }) {
   const busolaClusterParams = useRecoilValue(configurationAtom);
@@ -258,7 +258,7 @@ export function AddClusterWizard({
           />
         </WizardStep>
       </Wizard>
-      {dialogRef?.current &&
+      {buttonsContainerRef?.current &&
         createPortal(
           <WizardButtons
             className="cluster-wizard-buttons"
@@ -275,7 +275,7 @@ export function AddClusterWizard({
             onComplete={onComplete}
             invalid={isCurrentStepInvalid(selected)}
           />,
-          dialogRef.current,
+          buttonsContainerRef.current,
         )}
     </>
   );
