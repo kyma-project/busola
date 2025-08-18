@@ -17,8 +17,8 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 import { useUrl } from 'hooks/useUrl';
 
-import { clusterState } from 'state/clusterAtom';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import './useDeleteResource.scss';
 
@@ -40,8 +40,8 @@ export function useDeleteResource({
   const notification = useNotification();
   const navigate = useNavigate();
   const { resourceListUrl } = useUrl();
-  const cluster = useAtomValue(clusterState);
-  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
+  const cluster = useAtomValue(clusterAtom);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,

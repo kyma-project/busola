@@ -1,11 +1,11 @@
 import { Getter } from 'jotai';
-import { authDataState } from '../authDataAtom';
-import { clusterState } from '../clusterAtom';
+import { authDataAtom } from '../authDataAtom';
+import { clusterAtom } from '../clusterAtom';
 import { createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 export const getFetchFn = (get: Getter) => {
-  const authData = get(authDataState);
-  const cluster = get(clusterState);
+  const authData = get(authDataAtom);
+  const cluster = get(clusterAtom);
 
   if (authData && cluster) {
     return createFetchFn({

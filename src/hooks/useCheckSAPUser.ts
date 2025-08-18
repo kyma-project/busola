@@ -1,9 +1,9 @@
 import { jwtDecode } from 'jwt-decode';
 import { useAtomValue } from 'jotai';
-import { AuthDataState, authDataState } from 'state/authDataAtom';
+import { AuthDataState, authDataAtom } from 'state/authDataAtom';
 
 export function useCheckSAPUser() {
-  const authData: AuthDataState = useAtomValue(authDataState);
+  const authData: AuthDataState = useAtomValue(authDataAtom);
   if (window.location.host.includes('localhost')) {
     return true;
   }

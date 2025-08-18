@@ -2,15 +2,15 @@ import { atom } from 'jotai';
 
 import { configFeaturesNames, NavNode } from '../types';
 
-import { mergeInExtensibilityNav } from './sidebarNavigationNodesSelector';
-import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
-import { configurationState } from '../configuration/configurationAtom';
-import { extensionsState } from './extensionsAtom';
+import { mergeInExtensibilityNav } from './sidebarNavigationNodesAtom';
+import { clusterAndNsNodesAtom } from './clusterAndNsNodesAtom';
+import { configurationAtom } from '../configuration/configurationAtom';
+import { extensionsAtom } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 
-export const allNodesSelector = atom<Promise<NavNode[]>>(async get => {
-  const navNodes: NavNode[] = await get(clusterAndNsNodesSelector);
-  const configuration = get(configurationState);
+export const allNodesAtom = atom<Promise<NavNode[]>>(async get => {
+  const navNodes: NavNode[] = await get(clusterAndNsNodesAtom);
+  const configuration = get(configurationAtom);
   const features = configuration?.features;
 
   if (!navNodes) {
@@ -18,7 +18,7 @@ export const allNodesSelector = atom<Promise<NavNode[]>>(async get => {
   }
   let allNodes: NavNode[] = [];
 
-  let extResources = get(extensionsState);
+  let extResources = get(extensionsAtom);
 
   const isExtensibilityOn =
     features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
@@ -29,4 +29,4 @@ export const allNodesSelector = atom<Promise<NavNode[]>>(async get => {
 
   return allNodes;
 });
-allNodesSelector.debugLabel = 'allNodesSelector';
+allNodesAtom.debugLabel = 'allNodesAtom';

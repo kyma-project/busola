@@ -11,8 +11,8 @@ import {
   unique,
 } from './helpers';
 import { useAtomValue } from 'jotai';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
 import { getDescription } from 'shared/helpers/schema';
 
 const nonResourceUrls = [
@@ -43,8 +43,8 @@ const verbs = [
 ];
 
 export function RuleInput({ rule, rules, setRules, schema }) {
-  const groupVersions = useAtomValue(groupVersionState);
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const groupVersions = useAtomValue(groupVersionsAtom);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();
 
   const apiGroupDesc = getDescription(schema, 'rules.apiGroups');

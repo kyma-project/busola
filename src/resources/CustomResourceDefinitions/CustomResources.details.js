@@ -5,14 +5,14 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function CustomResource({ params }) {
   const { t } = useTranslation();
-  const namespace = useAtomValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
   const {
     customResourceDefinitionName,
     resourceVersion,

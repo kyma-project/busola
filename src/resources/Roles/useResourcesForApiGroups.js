@@ -1,13 +1,13 @@
 import { useState, useCallback } from 'react';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useAtomValue } from 'jotai';
-import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
+import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
 
 export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
   const [loading, setLoading] = useState(false);
   const fetch = useSingleGet();
-  const groupVersions = useAtomValue(groupVersionState);
+  const groupVersions = useAtomValue(groupVersionsAtom);
 
   const loadable = apiGroups.some(apiGroup => !cache[apiGroup]);
 

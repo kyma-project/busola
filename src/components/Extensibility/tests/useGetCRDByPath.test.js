@@ -1,4 +1,4 @@
-import { allExtensionsState } from 'state/navigation/extensionsAtom';
+import { allExtensionsAtom } from 'state/navigation/extensionsAtom';
 import { render } from '@testing-library/react';
 import { useGetCRbyPath } from '../useGetCRbyPath.js';
 import { Provider as JotaiProvider } from 'jotai';
@@ -35,7 +35,7 @@ const TestComponent = () => {
 const renderWithProviders = mockCrds => {
   return render(
     <JotaiProvider>
-      <JotaiHydrator initialValues={[[allExtensionsState, mockCrds]]}>
+      <JotaiHydrator initialValues={[[allExtensionsAtom, mockCrds]]}>
         <TestComponent />
       </JotaiHydrator>
     </JotaiProvider>,

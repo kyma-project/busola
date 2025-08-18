@@ -2,7 +2,7 @@ import jsyaml from 'js-yaml';
 import { base64Decode } from 'shared/helpers';
 import { addCluster } from 'components/Clusters/shared';
 import { K8sResource, ValidKubeconfig } from 'types';
-import { PermissionSet } from 'state/permissionSetsSelector';
+import { PermissionSet } from 'state/permissionSetsAtom';
 import { ActiveClusterState } from 'state/clusterAtom';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { useClustersInfo } from 'state/utils/getClustersInfo';

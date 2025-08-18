@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 
 import { usePrepareCreateProps } from 'resources/helpers';
@@ -22,7 +22,7 @@ const Details = React.lazy(() =>
 const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
 const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();

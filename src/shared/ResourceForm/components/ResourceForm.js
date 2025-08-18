@@ -20,7 +20,7 @@ import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFormEditTracking } from 'shared/hooks/useFormEditTracking';
 import './ResourceForm.scss';
 
@@ -63,7 +63,7 @@ export function ResourceForm({
   resetLayout,
   formWithoutPanel,
 }) {
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   const isEdit = useMemo(
     () =>

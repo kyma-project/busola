@@ -7,7 +7,7 @@ import { K8sResource } from 'types';
 import { useEventListener } from 'hooks/useEventListener';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
 
@@ -30,7 +30,7 @@ export function CommandPaletteSearchBar({
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
-  const showCompanion = useAtomValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionAtom);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const htmlWrapEl = document.getElementById('html-wrap');

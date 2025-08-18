@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { ExtResource, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 import { DataSources } from 'components/Extensibility/contexts/DataSources';
-import { extensionsState, staticsState } from 'state/navigation/extensionsAtom';
+import { extensionsAtom, staticsAtom } from 'state/navigation/extensionsAtom';
 import { ExtensibilityNodesExt } from 'state/types';
 
 const createExternalNode = (
@@ -63,9 +63,9 @@ const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   return nodes || [];
 };
 
-export const extensibilityNodesExtSelector = atom<NavNode[] | null>(get => {
-  const extensions = get(extensionsState) || [];
-  const statics = get(staticsState) || [];
+export const extensibilityNodesExtAtom = atom<NavNode[] | null>(get => {
+  const extensions = get(extensionsAtom) || [];
+  const statics = get(staticsAtom) || [];
 
   const fetchFn = getFetchFn(get);
   if (!fetchFn) {
@@ -80,4 +80,4 @@ export const extensibilityNodesExtSelector = atom<NavNode[] | null>(get => {
 
   return [...filteredExtNodes.concat(filteresStaticsNodes)];
 });
-extensibilityNodesExtSelector.debugLabel = 'extensibilityNodesExtSelector';
+extensibilityNodesExtAtom.debugLabel = 'extensibilityNodesExtAtom';

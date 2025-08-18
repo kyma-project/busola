@@ -1,4 +1,4 @@
-import { apiGroupState } from 'state/discoverability/apiGroupsSelector';
+import { apiGroupAtom } from 'state/discoverability/apiGroupsAtom';
 import { useEffect } from 'react';
 import { useFeature } from 'hooks/useFeature';
 import * as Sentry from '@sentry/react';
@@ -12,7 +12,7 @@ export function useVersionWarning({
   resourceUrl: string;
   resourceType: string;
 }) {
-  const apiGroups = useAtomValue(apiGroupState);
+  const apiGroups = useAtomValue(apiGroupAtom);
   const { isEnabled: isTrackingEnabled } = useFeature(
     configFeaturesNames.SENTRY,
   );

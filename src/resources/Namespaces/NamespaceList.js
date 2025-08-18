@@ -7,7 +7,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import NamespaceCreate from './NamespaceCreate';
 import { NamespaceStatus } from './NamespaceStatus';
 import { useNavigate } from 'react-router';
-import { clusterState } from 'state/clusterAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 import {
   ResourceDescription,
@@ -18,7 +18,7 @@ import {
 export function NamespaceList(props) {
   const { t } = useTranslation();
   const showHiddenNamespaces = useAtomValue(showHiddenNamespacesState);
-  const cluster = useAtomValue(clusterState);
+  const cluster = useAtomValue(clusterAtom);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const navigate = useNavigate();
   const [hasPermissions] = useHasPermissionsFor([['', 'namespaces', ['list']]]);

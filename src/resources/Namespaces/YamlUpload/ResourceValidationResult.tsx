@@ -18,7 +18,7 @@ import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceByS
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
+import { validationSchemasEnabledAtom } from 'state/validationEnabledSchemasAtom';
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { SeparatorLine } from './SeparatorLine';
@@ -117,7 +117,7 @@ export const ResourceValidationResult = ({ resource }: { resource: any }) => {
   const validateResources = getExtendedValidateResourceState(
     useAtomValue(validateResourcesState),
   );
-  const validationSchemas = useAtomValue(validationSchemasEnabledState);
+  const validationSchemas = useAtomValue(validationSchemasEnabledAtom);
   const { debounced } = useLoadingDebounce(resource, 500);
   const warnings = [
     useValidateResourceBySchema(debounced, validationSchemas),

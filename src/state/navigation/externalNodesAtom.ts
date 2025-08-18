@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { configurationState } from '../configuration/configurationAtom';
+import { configurationAtom } from '../configuration/configurationAtom';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 
@@ -48,8 +48,8 @@ const getExternalNodes = (
   );
 };
 
-export const externalNodesSelector = atom<NavNode[] | null>(get => {
-  const configuration = get(configurationState);
+export const externalNodesAtom = atom<NavNode[] | null>(get => {
+  const configuration = get(configurationAtom);
   const features = configuration?.features;
   const fetchFn = getFetchFn(get);
   if (!fetchFn || !features) {
@@ -66,4 +66,4 @@ export const externalNodesSelector = atom<NavNode[] | null>(get => {
 
   return [...externalNodes.filter(n => n)];
 });
-externalNodesSelector.debugLabel = 'externalNodesSelector';
+externalNodesAtom.debugLabel = 'externalNodesAtom';

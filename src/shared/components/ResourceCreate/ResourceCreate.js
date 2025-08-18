@@ -9,7 +9,7 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
 import { useAtom } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import './ResourceCreate.scss';
 
@@ -37,7 +37,7 @@ export const ResourceCreate = ({
   } = useCustomFormValidator();
   const notificationManager = useNotification();
   const navigate = useNavigate();
-  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { navigateSafely } = useFormNavigation();
 
   confirmText = confirmText || t('common.buttons.create');

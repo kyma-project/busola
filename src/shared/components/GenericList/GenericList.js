@@ -24,7 +24,7 @@ import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { Table } from '@ui5/webcomponents-react';
@@ -288,7 +288,7 @@ export const GenericList = ({
     });
   };
 
-  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
   const linkTo = entry => {

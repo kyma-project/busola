@@ -7,5 +7,5 @@ export interface IsResourceEditedState {
 
 const defaultValue = { isEdited: false };
 
-export const isResourceEditedState = atom<IsResourceEditedState>(defaultValue);
-isResourceEditedState.debugLabel = 'isResourceEditedState';
+export const isResourceEditedAtom = atom<IsResourceEditedState>(defaultValue);
+isResourceEditedAtom.debugLabel = 'isResourceEditedAtom';

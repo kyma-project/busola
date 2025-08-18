@@ -29,7 +29,7 @@ import { KymaResourceType, ModuleTemplateListType } from '../support';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { SetStateAction, useAtomValue } from 'jotai';
-import { allNodesSelector } from 'state/navigation/allNodesSelector';
+import { allNodesAtom } from 'state/navigation/allNodesAtom';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
@@ -69,10 +69,10 @@ export const ModulesDeleteBox = ({
   const deleteResourceMutation = useDelete();
   const fetchFn = useSingleGet();
   const post = usePost();
-  const clusterNodes = useAtomValue(allNodesSelector).filter(
+  const clusterNodes = useAtomValue(allNodesAtom).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesSelector).filter(
+  const namespaceNodes = useAtomValue(allNodesAtom).filter(
     node => node.namespaced,
   );
   const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});

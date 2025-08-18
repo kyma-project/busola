@@ -1,8 +1,8 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { cloneDeep, isEqual } from 'lodash';
 import { useEffect, useMemo } from 'react';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenAtom } from 'state/formOpenAtom';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 
 const excludeStatus = resource => {
   if (!resource) return null;
@@ -19,8 +19,8 @@ export function useFormEditTracking(
   initialResource,
   editorError = false,
 ) {
-  const { formOpen } = useAtomValue(isFormOpenState);
-  const setIsResourceEdited = useSetAtom(isResourceEditedState);
+  const { formOpen } = useAtomValue(isFormOpenAtom);
+  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
 
   const excludedResource = useMemo(() => excludeStatus(resource), [resource]);
 

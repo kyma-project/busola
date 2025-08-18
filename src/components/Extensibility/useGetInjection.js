@@ -1,8 +1,8 @@
 import { useAtomValue } from 'jotai';
-import { injectionsState } from 'state/navigation/extensionsAtom';
+import { injectionsAtom } from 'state/navigation/extensionsAtom';
 
 export const useGetInjections = (location, slot) => {
-  const injections = useAtomValue(injectionsState);
+  const injections = useAtomValue(injectionsAtom);
   let filteredInjections = [];
 
   (injections || []).forEach(injection => {

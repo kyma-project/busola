@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createNetworkPolicyTemplate } from './templates';
 
@@ -17,7 +17,7 @@ export default function NetworkPolicyCreate({
   ...props
 }) {
   const { t } = useTranslation();
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [networkPolicy, setNetworkPolicy] = useState(
     _.cloneDeep(initialNetworkPolicy) ||
       createNetworkPolicyTemplate(namespaceId),

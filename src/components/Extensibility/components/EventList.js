@@ -4,7 +4,7 @@ import { EventList as EventListComponent } from 'resources/Events/EventList';
 import { useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 import { useAtomValue } from 'jotai';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 export function EventList({
   structure,
@@ -15,7 +15,7 @@ export function EventList({
   singleRootResource,
   embedResource,
 }) {
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { widgetT } = useGetTranslation();
   const jsonata = useJsonata({
     resource: originalResource,

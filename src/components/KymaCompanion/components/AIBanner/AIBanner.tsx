@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 import { ThemeType } from 'shared/components/FeatureCard/types';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import JouleIconLightTheme from './assets/JouleIcon.svg';
 import JouleIconDarkHCdarkTheme from './assets/JouleIconWhite.svg';
 import JouleIconHClightTheme from './assets/JouleIconBlack.svg';
@@ -35,7 +35,7 @@ export function AIBanner({
   documentationUrl: string;
 }) {
   const { t } = useTranslation();
-  const setShowCompanion = useSetAtom(showKymaCompanionState);
+  const setShowCompanion = useSetAtom(showKymaCompanionAtom);
   const theme = useAtomValue(themeState);
 
   const titleIcon = getIllustration(theme);

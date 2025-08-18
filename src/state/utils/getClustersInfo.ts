@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 
-import { clusterState } from 'state/clusterAtom';
-import { clustersState } from 'state/clustersAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { clustersAtom } from 'state/clustersAtom';
 import { useAtom } from 'jotai';
 
 export type useClustersInfoType = ReturnType<typeof useClustersInfo>;
@@ -9,8 +9,8 @@ export type useClustersInfoType = ReturnType<typeof useClustersInfo>;
 export function useClustersInfo() {
   const navigate = useNavigate();
 
-  const [currentCluster, setCurrentCluster] = useAtom(clusterState);
-  const [clusters, setClusters] = useAtom(clustersState);
+  const [currentCluster, setCurrentCluster] = useAtom(clusterAtom);
+  const [clusters, setClusters] = useAtom(clustersAtom);
 
   return {
     currentCluster,

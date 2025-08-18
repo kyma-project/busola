@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import * as _ from 'lodash';
 
 import { createDaemonSetTemplate } from './templates';
@@ -18,7 +18,7 @@ export default function DaemonSetCreate({
 }) {
   const { t } = useTranslation();
 
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [daemonSet, setDaemonSet] = useState(
     _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
   );

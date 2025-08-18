@@ -7,9 +7,9 @@ import { Button } from '@ui5/webcomponents-react';
 import { Labels } from 'shared/components/Labels/Labels';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { K8sResource } from 'types';
-import { allNodesSelector } from 'state/navigation/allNodesSelector';
+import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import pluralize from 'pluralize';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import './DetailsCard.scss';
 
@@ -23,8 +23,8 @@ export function DetailsCard({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clusterUrl } = useUrl();
-  const nodes = useAtomValue(allNodesSelector);
-  const [, setLayoutColumn] = useAtom(columnLayoutState);
+  const nodes = useAtomValue(allNodesAtom);
+  const [, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   return (
     <div className="details-card-wrapper">

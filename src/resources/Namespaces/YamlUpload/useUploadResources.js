@@ -15,7 +15,7 @@ import {
   OPERATION_STATE_WAITING,
 } from './YamlUploadDialog';
 import { useAtomValue } from 'jotai';
-import { allNodesSelector } from 'state/navigation/allNodesSelector';
+import { allNodesAtom } from 'state/navigation/allNodesAtom';
 
 export const STATE_ERROR = 'ERROR';
 export const STATE_WAITING = 'WAITING';
@@ -64,10 +64,10 @@ export function useUploadResources(
   const post = usePost();
   const patchRequest = useUpdate();
 
-  const clusterNodes = useAtomValue(allNodesSelector).filter(
+  const clusterNodes = useAtomValue(allNodesAtom).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesSelector).filter(
+  const namespaceNodes = useAtomValue(allNodesAtom).filter(
     node => node.namespaced,
   );
   const filteredResources = resources?.filter(

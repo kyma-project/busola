@@ -1,12 +1,12 @@
 import { useAtomValue } from 'jotai';
-import { clusterState } from 'state/clusterAtom';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { ValidKubeconfig } from 'types';
 import { useCallback } from 'react';
 
 export const useCreateKubeconfig = () => {
-  const cluster = useAtomValue(clusterState)!;
-  const namespace = useAtomValue(activeNamespaceIdState);
+  const cluster = useAtomValue(clusterAtom)!;
+  const namespace = useAtomValue(activeNamespaceIdAtom);
   const currentCluster = cluster.currentContext.cluster;
 
   const createKubeconfig = useCallback(

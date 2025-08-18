@@ -11,7 +11,7 @@ import { useJsonata } from '../hooks/useJsonata';
 import { usePermittedUrl } from 'hooks/usePermittedUrl';
 
 import { useAtomValue } from 'jotai';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 export function ResourceRenderer({
   onChange,
@@ -26,7 +26,7 @@ export function ResourceRenderer({
   embedResource,
   ...props
 }) {
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { setVar } = useVariables();
   const jsonata = useJsonata({
     resource: originalResource,

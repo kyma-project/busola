@@ -1,4 +1,4 @@
-import { ActiveClusterState, clusterState } from 'state/clusterAtom';
+import { ActiveClusterState, clusterAtom } from 'state/clusterAtom';
 import { ClusterStorage } from 'state/types';
 import {
   CurrentContext,
@@ -245,7 +245,7 @@ export const addByContext = (
 };
 
 export function useHandleResetEndpoint() {
-  const setCluster = useSetAtom(clusterState);
+  const setCluster = useSetAtom(clusterAtom);
   const navigate = useNavigate();
   if (window.location.pathname === '/reset') {
     setCluster(null);

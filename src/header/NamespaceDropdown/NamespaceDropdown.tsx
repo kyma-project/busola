@@ -1,13 +1,13 @@
 import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
-import { namespacesState } from 'state/namespacesAtom';
+import { namespacesAtom } from 'state/namespacesAtom';
 
 import { ComboBoxItem } from '@ui5/webcomponents-react';
 
 export function NamespaceDropdown() {
   const { t } = useTranslation();
-  const allNamespaces = useAtomValue(namespacesState);
+  const allNamespaces = useAtomValue(namespacesAtom);
 
   let namespaces = [];
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import { authDataState } from 'state/authDataAtom';
-import { clusterState } from 'state/clusterAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
 
 type ExtensibilitySchema = any;
@@ -17,9 +17,9 @@ const getSchema = async (schema: string): Promise<ExtensibilitySchema> => {
 };
 
 export const useGetExtensibilitySchemas = async () => {
-  const setSchemas = useSetAtom(extensibilitySchemasState);
-  const cluster = useAtomValue(clusterState);
-  const auth = useAtomValue(authDataState);
+  const setSchemas = useSetAtom(extensibilitySchemasAtom);
+  const cluster = useAtomValue(clusterAtom);
+  const auth = useAtomValue(authDataAtom);
 
   useEffect(() => {
     const setExtensionsSchema = async () => {
@@ -46,5 +46,5 @@ export const useGetExtensibilitySchemas = async () => {
   }, [cluster, auth]);
 };
 
-export const extensibilitySchemasState = atom<ExtensiblitySchemas | null>({});
-extensibilitySchemasState.debugLabel = 'extensibilitySchemasState';
+export const extensibilitySchemasAtom = atom<ExtensiblitySchemas | null>({});
+extensibilitySchemasAtom.debugLabel = 'extensibilitySchemasAtom';

@@ -5,7 +5,7 @@ import {
   getExtendedValidateResourceState,
   validateResourcesState,
 } from 'state/preferences/validateResourcesAtom';
-import { validationSchemasState } from 'state/validationSchemasAtom';
+import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
@@ -34,7 +34,7 @@ export default function ResourceValidationSettings() {
       [],
   } = getExtendedValidateResourceState(validateResources);
 
-  const validationSchemas = useAtomValue(validationSchemasState);
+  const validationSchemas = useAtomValue(validationSchemasAtom);
   const allOptions = useMemo(
     () =>
       validationSchemas?.policies

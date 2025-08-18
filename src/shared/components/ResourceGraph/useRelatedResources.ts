@@ -7,7 +7,7 @@ import {
   match,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
 import { useAtomValue } from 'jotai';
-import { allNodesSelector } from 'state/navigation/allNodesSelector';
+import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { NavNode } from 'state/types';
 import {
   IHaveNoIdeaForNameHere,
@@ -160,10 +160,10 @@ export function useRelatedResources({
   config,
   events,
 }: useRelatedResourcesProps): useRelatedResourcesReturnValue {
-  const clusterNodes = useAtomValue(allNodesSelector).filter(
+  const clusterNodes = useAtomValue(allNodesAtom).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesSelector).filter(
+  const namespaceNodes = useAtomValue(allNodesAtom).filter(
     node => node.namespaced,
   );
   const [startedLoading, setStartedLoading] = useState(false);

@@ -4,16 +4,16 @@ import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
 import { ExtInjectionConfig, ExtResource } from '../types';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import { clusterState } from '../clusterAtom';
-import { authDataState } from '../authDataAtom';
+import { clusterAtom } from '../clusterAtom';
+import { authDataAtom } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
-import { configurationState } from 'state/configuration/configurationAtom';
-import { openapiPathIdListState } from 'state/openapi/openapiPathIdSelector';
+import { configurationAtom } from 'state/configuration/configurationAtom';
+import { openapiPathIdListAtom } from 'state/openapi/openapiPathIdAtom';
 import {
   getPermissionResourceRules,
-  permissionSetsSelector,
+  permissionSetsAtom,
   PermissionSetState,
-} from 'state/permissionSetsSelector';
+} from 'state/permissionSetsAtom';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { mapExtResourceToNavNode } from 'state/resourceList/mapExtResourceToNavNode';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
@@ -400,18 +400,18 @@ const pushExtToEventTypes = (extensions: any) => {
 };
 
 export const useGetExtensions = () => {
-  const cluster = useAtomValue(clusterState);
-  const auth = useAtomValue(authDataState);
-  const setExtensions = useSetAtom(extensionsState);
-  const setStatics = useSetAtom(staticsState);
-  const setAllExtensions = useSetAtom(allExtensionsState);
-  const setInjections = useSetAtom(injectionsState);
-  const setWizard = useSetAtom(wizardState);
+  const cluster = useAtomValue(clusterAtom);
+  const auth = useAtomValue(authDataAtom);
+  const setExtensions = useSetAtom(extensionsAtom);
+  const setStatics = useSetAtom(staticsAtom);
+  const setAllExtensions = useSetAtom(allExtensionsAtom);
+  const setInjections = useSetAtom(injectionsAtom);
+  const setWizard = useSetAtom(wizardAtom);
   const fetchFn = getFetchFn(useAtomValue);
-  const configuration = useAtomValue(configurationState);
+  const configuration = useAtomValue(configurationAtom);
   const features = configuration?.features;
-  const openapiPathIdList = useAtomValue(openapiPathIdListState);
-  const permissionSet = useAtomValue(permissionSetsSelector);
+  const openapiPathIdList = useAtomValue(openapiPathIdListAtom);
+  const permissionSet = useAtomValue(permissionSetsAtom);
   const { namespace } = useUrl();
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
     configFeaturesNames.EXTENSIBILITY_INJECTIONS,
@@ -573,17 +573,17 @@ export const useGetExtensions = () => {
 // null for defaultValue,
 // empty array for value or error
 const defaultValue = null;
-export const extensionsState = atom<ExtResource[] | null>(defaultValue);
-extensionsState.debugLabel = 'extensionsState';
+export const extensionsAtom = atom<ExtResource[] | null>(defaultValue);
+extensionsAtom.debugLabel = 'extensionsAtom';
 
-export const staticsState = atom<ExtResource[] | null>(defaultValue);
-staticsState.debugLabel = 'staticsState';
+export const staticsAtom = atom<ExtResource[] | null>(defaultValue);
+staticsAtom.debugLabel = 'staticsAtom';
 
-export const allExtensionsState = atom<ExtResource[] | null>(defaultValue);
-allExtensionsState.debugLabel = 'allExtensionsState';
+export const allExtensionsAtom = atom<ExtResource[] | null>(defaultValue);
+allExtensionsAtom.debugLabel = 'allExtensionsAtom';
 
-export const injectionsState = atom<ExtInjectionConfig[] | null>(defaultValue);
-injectionsState.debugLabel = 'injectionsState';
+export const injectionsAtom = atom<ExtInjectionConfig[] | null>(defaultValue);
+injectionsAtom.debugLabel = 'injectionsAtom';
 
-export const wizardState = atom<ExtWizardConfig[] | null>(defaultValue);
-wizardState.debugLabel = 'wizardState';
+export const wizardAtom = atom<ExtWizardConfig[] | null>(defaultValue);
+wizardAtom.debugLabel = 'wizardAtom';

@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai';
 import { v4 as uuid } from 'uuid';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import { authDataState } from '../../../state/authDataAtom';
+import { authDataAtom } from '../../../state/authDataAtom';
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
@@ -22,7 +22,7 @@ const useGetHook = processDataFn =>
       compareEntireResource = false,
     } = {},
   ) {
-    const authData = useAtomValue(authDataState);
+    const authData = useAtomValue(authDataAtom);
     const lastAuthData = useRef(null);
     const lastResourceVersion = useRef(null);
     const [data, setData] = useState(null);
@@ -168,7 +168,7 @@ export const useGetStream = path => {
   const timeoutRef = useRef();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const authData = useAtomValue(authDataState);
+  const authData = useAtomValue(authDataAtom);
   const fetch = useFetch();
   const readerRef = useRef(null);
   const abortController = useRef(new AbortController());

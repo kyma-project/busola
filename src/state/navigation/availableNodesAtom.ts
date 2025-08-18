@@ -2,18 +2,18 @@ import { atom } from 'jotai';
 
 import { configFeaturesNames, NavNode } from '../types';
 
-import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
-import { configurationState } from '../configuration/configurationAtom';
-import { extensionsState } from './extensionsAtom';
+import { clusterAndNsNodesAtom } from './clusterAndNsNodesAtom';
+import { configurationAtom } from '../configuration/configurationAtom';
+import { extensionsAtom } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
-import { mergeInExtensibilityNav } from './sidebarNavigationNodesSelector';
+import { mergeInExtensibilityNav } from './sidebarNavigationNodesAtom';
 
-export const availableNodesSelector = atom<Promise<NavNode[]>>(async get => {
-  const navNodes: NavNode[] = await get(clusterAndNsNodesSelector);
-  const configuration = get(configurationState);
+export const availableNodesAtom = atom<Promise<NavNode[]>>(async get => {
+  const navNodes: NavNode[] = await get(clusterAndNsNodesAtom);
+  const configuration = get(configurationAtom);
   const features = configuration?.features;
 
-  const extResources = get(extensionsState);
+  const extResources = get(extensionsAtom);
 
   let extensibilityNodes: NavNode[] = [];
   const isExtensibilityOn =
@@ -25,4 +25,4 @@ export const availableNodesSelector = atom<Promise<NavNode[]>>(async get => {
 
   return [...navNodes, ...extensibilityNodes];
 });
-availableNodesSelector.debugLabel = 'availableNodesSelector';
+availableNodesAtom.debugLabel = 'availableNodesAtom';

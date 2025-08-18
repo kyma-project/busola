@@ -1,6 +1,6 @@
 /* global cy */
 import { ResourceDetails } from '../ResourceDetails';
-import { authDataState } from 'state/authDataAtom';
+import { authDataAtom } from 'state/authDataAtom';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('ResourceDetails visibility', () => {
@@ -18,7 +18,7 @@ describe('ResourceDetails visibility', () => {
 
     const initializeJotai = [
       [
-        authDataState,
+        authDataAtom,
         {
           token: 'test-token',
         },

@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createPodTemplate } from './templates';
 
@@ -18,7 +18,7 @@ export default function PodCreate({
 }) {
   const { t } = useTranslation();
 
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [pod, setPod] = useState(
     _.cloneDeep(initialPod) || createPodTemplate(namespaceId),
   );

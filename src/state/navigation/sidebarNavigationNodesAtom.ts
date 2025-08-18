@@ -6,21 +6,21 @@ import { Category } from './categories';
 import { hasCurrentScope } from './filters/hasCurrentScope';
 import { configFeaturesNames, NavNode, Scope } from '../types';
 
-import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
-import { externalNodesSelector } from './externalNodesSelector';
-import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
-import { configurationState } from '../configuration/configurationAtom';
-import { extensionsState } from './extensionsAtom';
+import { clusterAndNsNodesAtom } from './clusterAndNsNodesAtom';
+import { externalNodesAtom } from './externalNodesAtom';
+import { activeNamespaceIdAtom } from '../activeNamespaceIdAtom';
+import { configurationAtom } from '../configuration/configurationAtom';
+import { extensionsAtom } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
-import { extensibilityNodesExtSelector } from './extensibilityNodesExtSelector';
+import { extensibilityNodesExtAtom } from './extensibilityNodesExtAtom';
 
-export const sidebarNavigationNodesSelector = atom<Promise<Category[]>>(
+export const sidebarNavigationNodesAtom = atom<Promise<Category[]>>(
   async get => {
-    const navNodes: NavNode[] = await get(clusterAndNsNodesSelector);
-    const activeNamespaceId = get(activeNamespaceIdState);
-    const externalNodes = get(externalNodesSelector);
-    const externalNodesExt = get(extensibilityNodesExtSelector);
-    const configuration = get(configurationState);
+    const navNodes: NavNode[] = await get(clusterAndNsNodesAtom);
+    const activeNamespaceId = get(activeNamespaceIdAtom);
+    const externalNodes = get(externalNodesAtom);
+    const externalNodesExt = get(extensibilityNodesExtAtom);
+    const configuration = get(configurationAtom);
     const features = configuration?.features;
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
@@ -29,7 +29,7 @@ export const sidebarNavigationNodesSelector = atom<Promise<Category[]>>(
     }
     let allNodes = [...navNodes, ...externalNodes];
 
-    const extResources = get(extensionsState);
+    const extResources = get(extensionsAtom);
     const isExtensibilityOn =
       features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
     if (isExtensibilityOn && extResources) {
@@ -50,7 +50,7 @@ export const sidebarNavigationNodesSelector = atom<Promise<Category[]>>(
     return assignedToCategories;
   },
 );
-sidebarNavigationNodesSelector.debugLabel = 'sidebarNavigationNodesSelector';
+sidebarNavigationNodesAtom.debugLabel = 'sidebarNavigationNodesAtom';
 
 export const mergeInExtensibilityNav = (
   nodes: NavNode[],

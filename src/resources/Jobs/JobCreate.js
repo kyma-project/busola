@@ -12,7 +12,7 @@ import { ContainersSection } from './ContainersSection';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { useAtomValue } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -49,7 +49,7 @@ export default function JobCreate({
   const [initialResource, setInitialResource] = useState(
     initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
   );
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

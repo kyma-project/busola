@@ -54,11 +54,7 @@ const getInitialClusterState = (): ActiveClusterState => {
 const baseClusterAtom = atom<ActiveClusterState>(getInitialClusterState());
 
 // Main cluster atom with storage side effects
-export const clusterState = atom<
-  ActiveClusterState,
-  [ActiveClusterState],
-  void
->(
+export const clusterAtom = atom<ActiveClusterState, [ActiveClusterState], void>(
   // Getter - read from base atom
   get => get(baseClusterAtom),
 
@@ -75,3 +71,4 @@ export const clusterState = atom<
     }
   },
 );
+clusterAtom.debugLabel = 'clusterAtom';

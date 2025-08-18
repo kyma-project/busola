@@ -10,7 +10,7 @@ import {
   useAddStyle,
 } from 'shared/components/ResourceGraph/useGetResourceGraphConfig';
 import { useAtomValue } from 'jotai';
-import { extensionsState } from 'state/navigation/extensionsAtom';
+import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 
 export const usePrepareResourceUrl = ({
@@ -77,7 +77,7 @@ export const usePrepareDetailsProps = ({
       : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`
     : '';
 
-  const extensions = useAtomValue(extensionsState);
+  const extensions = useAtomValue(extensionsAtom);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
   const resourceGraphConfig = useGetResourceGraphConfig(extensions, addStyle);
 

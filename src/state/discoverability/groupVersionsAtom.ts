@@ -1,11 +1,11 @@
 import { atom } from 'jotai';
-import { apiGroupState } from './apiGroupsSelector';
+import { apiGroupAtom } from './apiGroupsAtom';
 
 type GroupVersionSelector = string[] | null;
 
-export const groupVersionState = atom<Promise<GroupVersionSelector>>(
+export const groupVersionsAtom = atom<Promise<GroupVersionSelector>>(
   async get => {
-    const apiGroups = await get(apiGroupState);
+    const apiGroups = await get(apiGroupAtom);
 
     if (!apiGroups) return null;
     else {
@@ -19,4 +19,4 @@ export const groupVersionState = atom<Promise<GroupVersionSelector>>(
     }
   },
 );
-groupVersionState.debugLabel = 'groupversionstate';
+groupVersionsAtom.debugLabel = 'groupVersionsAtom';

@@ -3,5 +3,5 @@ export type NamespacesState = string[] | null;
 
 const defaultValue = null;
 
-export const namespacesState = atom<NamespacesState>(defaultValue);
-namespacesState.debugLabel = 'namespacesState';
+export const namespacesAtom = atom<NamespacesState>(defaultValue);
+namespacesAtom.debugLabel = 'namespacesAtom';

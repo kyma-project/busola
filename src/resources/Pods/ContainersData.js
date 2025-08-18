@@ -10,7 +10,7 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 import { useSetAtom } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 ContainersData.propTypes = {
   containers: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -19,7 +19,7 @@ ContainersData.propTypes = {
 export default function ContainersData({ type, containers, statuses }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const setLayout = useSetAtom(columnLayoutState);
+  const setLayout = useSetAtom(columnLayoutAtom);
 
   if (!containers) {
     return null;

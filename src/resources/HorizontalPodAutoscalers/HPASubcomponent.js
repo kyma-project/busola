@@ -4,8 +4,8 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 import { useAtomValue } from 'jotai';
-import { extensionsState } from 'state/navigation/extensionsAtom';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { extensionsAtom } from 'state/navigation/extensionsAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 const ExtensibilityList = React.lazy(() =>
   import('../../components/Extensibility/ExtensibilityList'),
@@ -15,8 +15,8 @@ export const HPASubcomponent = props => {
   const { t } = useTranslation();
   const resourceKind = props.kind;
   const resourceName = props.metadata.name;
-  const namespace = useAtomValue(activeNamespaceIdState);
-  const extensions = useAtomValue(extensionsState);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
+  const extensions = useAtomValue(extensionsAtom);
 
   const extensibilityHPAs = extensions?.find(
     cR => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',

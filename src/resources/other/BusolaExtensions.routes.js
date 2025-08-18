@@ -8,7 +8,7 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { usePrepareCreateProps } from 'resources/helpers';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
@@ -24,7 +24,7 @@ const BusolaExtensionCreate = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
   const { clusterUrl } = useUrl();
 
   const { t } = useTranslation();

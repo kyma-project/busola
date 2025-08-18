@@ -8,9 +8,9 @@ import { DataField } from 'shared/ResourceForm/fields';
 import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
 import { useAtomValue } from 'jotai';
-import { configurationState } from 'state/configuration/configurationAtom';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 export default function SecretCreate({
   namespace,
@@ -29,7 +29,7 @@ export default function SecretCreate({
   const [initialResource, setInitialResource] = useState(
     initialSecret || createSecretTemplate(namespace || ''),
   );
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
@@ -46,7 +46,7 @@ export default function SecretCreate({
 
   const [lockedKeys, setLockedKeys] = useState([]);
 
-  const features = useAtomValue(configurationState)?.features;
+  const features = useAtomValue(configurationAtom)?.features;
 
   const secretDefs = getSecretDefs(t, features);
   const type = secret?.type;

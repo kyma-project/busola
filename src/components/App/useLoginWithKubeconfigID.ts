@@ -1,5 +1,5 @@
 import { addByContext } from 'components/Clusters/shared';
-import { ClustersState, clustersState } from 'state/clustersAtom';
+import { ClustersState, clustersAtom } from 'state/clustersAtom';
 import { SetStateAction, useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate, useSearchParams } from 'react-router';
@@ -18,14 +18,14 @@ import {
   configFeaturesNames,
 } from 'state/types';
 import { removePreviousPath } from 'state/useAfterInitHook';
-import { configurationState } from 'state/configuration/configurationAtom';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 import {
   KubeConfigMultipleState,
-  multipleContexts,
+  multipleContextsAtom,
 } from 'state/multipleContextsAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import {
-  manualKubeConfigIdState,
+  manualKubeConfigIdAtom,
   ManualKubeConfigIdType,
 } from 'state/manualKubeConfigIdAtom';
 
@@ -187,11 +187,11 @@ export function useLoginWithKubeconfigID() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
     configFeaturesNames.KUBECONFIG_ID,
   );
-  const configuration = useAtomValue(configurationState);
-  const clusters = useAtomValue(clustersState);
-  const [contextsState, setContextsState] = useAtom(multipleContexts);
+  const configuration = useAtomValue(configurationAtom);
+  const clusters = useAtomValue(clustersAtom);
+  const [contextsState, setContextsState] = useAtom(multipleContextsAtom);
   const [manualKubeConfigId, setManualKubeConfigId] = useAtom(
-    manualKubeConfigIdState,
+    manualKubeConfigIdAtom,
   );
   const notification = useNotification();
   const navigate = useNavigate();
@@ -304,7 +304,7 @@ export function useLoadDefaultKubeconfigId() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
     configFeaturesNames.KUBECONFIG_ID,
   )!;
-  const clusters = useAtomValue(clustersState);
+  const clusters = useAtomValue(clustersAtom);
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
 

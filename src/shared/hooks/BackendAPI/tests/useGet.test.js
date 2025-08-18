@@ -1,7 +1,7 @@
 import { render, waitFor } from 'testing/reactTestingUtils';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { authDataState } from 'state/authDataAtom';
-import { clusterState } from 'state/clusterAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { clusterAtom } from 'state/clusterAtom';
 
 const mockUseFetch = vi.fn();
 vi.mock('./../useFetch', () => ({
@@ -33,8 +33,8 @@ describe('useGet', () => {
 
     render(<Testbed setGetResult={mock} />, {
       initialAtoms: [
-        [authDataState, { token: 'test-token' }],
-        [clusterState, {}],
+        [authDataAtom, { token: 'test-token' }],
+        [clusterAtom, {}],
       ],
     });
 

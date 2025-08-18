@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
-import { clusterState } from './clusterAtom';
+import { clusterAtom } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
-import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
+import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -133,10 +133,10 @@ async function handleLogin({
 }
 
 export function useAuthHandler() {
-  const cluster = useAtomValue(clusterState);
-  const setAuth = useSetAtom(authDataState);
+  const cluster = useAtomValue(clusterAtom);
+  const setAuth = useSetAtom(authDataAtom);
   const navigate = useNavigate();
-  const setLastFetched = useSetAtom(openapiLastFetchedState);
+  const setLastFetched = useSetAtom(openapiLastFetchedAtom);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -193,5 +193,5 @@ export function useAuthHandler() {
   return { isLoading };
 }
 
-export const authDataState = atom<AuthDataState>(null);
-authDataState.debugLabel = 'authDataState';
+export const authDataAtom = atom<AuthDataState>(null);
+authDataAtom.debugLabel = 'authDataAtom';

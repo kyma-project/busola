@@ -22,13 +22,13 @@ import {
 } from './useUploadResources';
 import { ResourceValidationResult } from './ResourceValidationResult';
 
-import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from '../../../state/activeNamespaceIdAtom';
 import { SeparatorLine } from './SeparatorLine';
 import { ValidationSwitch } from './ValidationSwitch';
 
 export function YamlResourcesList({ resourcesData }) {
   const { t } = useTranslation();
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const defaultNamespace = namespaceId || 'default';
 
   const resources = resourcesData?.filter(resource => resource !== null);

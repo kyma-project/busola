@@ -20,7 +20,7 @@ import { Button, Form, FormItem, MessageStrip } from '@ui5/webcomponents-react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
@@ -148,7 +148,7 @@ export default function CommunityModulesEdit() {
   );
   const notification = useNotification();
   const post = usePost();
-  const setIsResourceEdited = useSetAtom(isResourceEditedState);
+  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );

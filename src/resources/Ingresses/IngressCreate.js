@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createIngressTemplate } from './templates';
 import { useAtomValue } from 'jotai';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 export default function IngressCreate({
   formElementRef,
@@ -17,7 +17,7 @@ export default function IngressCreate({
 }) {
   const { t } = useTranslation();
 
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [ingress, setIngress] = useState(
     _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
   );

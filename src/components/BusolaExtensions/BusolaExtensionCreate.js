@@ -11,9 +11,9 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { createConfigmap, createExtensibilityTemplate } from './helpers';
 import { ColumnsInput } from './ColumnsInput';
 import './ExtensibilityStarterForm.scss';
-import { clusterState } from 'state/clusterAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
 
 export default function BusolaExtensionCreate({
@@ -25,8 +25,8 @@ export default function BusolaExtensionCreate({
   const navigate = useNavigate();
   const notificationManager = useNotification();
   const upsert = useUpsert();
-  const cluster = useAtomValue(clusterState);
-  const setLayoutColumn = useSetAtom(columnLayoutState);
+  const cluster = useAtomValue(clusterAtom);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 

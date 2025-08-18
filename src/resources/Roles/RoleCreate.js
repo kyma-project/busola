@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { createRoleTemplate, createRolePresets } from './helpers';
 import { GenericRoleCreate } from './GenericRoleCreate';
 import { useAtomValue } from 'jotai';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
 
 export default function RoleCreate(props) {
   const { t } = useTranslation();
-  const groupVersions = useAtomValue(groupVersionState);
-  const namespace = useAtomValue(activeNamespaceIdState);
+  const groupVersions = useAtomValue(groupVersionsAtom);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
 
   const createTemplate = useCallback(() => createRoleTemplate(namespace), [
     namespace,

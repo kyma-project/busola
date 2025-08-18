@@ -7,9 +7,9 @@ import {
   Theme,
   themeState,
 } from 'state/preferences/themeAtom';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
-import { clusterState } from 'state/clusterAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import pluralize from 'pluralize';
 import { CodeSegmentLink } from 'components/KymaCompanion/utils/formatMarkdown';
 
@@ -95,9 +95,9 @@ export default function CodePanel({
   const { t } = useTranslation();
   const theme = useAtomValue(themeState);
   const syntaxTheme = getCustomTheme(theme);
-  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const navigate = useNavigate();
-  const cluster = useAtomValue(clusterState);
+  const cluster = useAtomValue(clusterAtom);
   const doesNamespaceExist = useDoesNamespaceExist(
     link?.address ?? '',
     code,

@@ -1,10 +1,10 @@
 import { atom } from 'jotai';
 import { getFetchFn } from './utils/getFetchFn';
-import { clusterState } from './clusterAtom';
+import { clusterAtom } from './clusterAtom';
 
-export const moduleTemplatesCountState = atom<Promise<number>>(async get => {
+export const moduleTemplatesCountAtom = atom<Promise<number>>(async get => {
   // Track cluster changes by getting the cluster atom
-  const _cluster = get(clusterState); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const _cluster = get(clusterAtom); // eslint-disable-line @typescript-eslint/no-unused-vars
   const fetchFn = getFetchFn(get);
 
   if (!fetchFn) return null;
@@ -20,4 +20,4 @@ export const moduleTemplatesCountState = atom<Promise<number>>(async get => {
   }
   return moduleTemplates?.items.length || 0;
 });
-moduleTemplatesCountState.debugLabel = 'moduleTemplatesCountState';
+moduleTemplatesCountAtom.debugLabel = 'moduleTemplatesCountAtom';

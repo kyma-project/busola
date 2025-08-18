@@ -1,8 +1,8 @@
 import { isEqual } from 'lodash';
 import { atom } from 'jotai';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
-import { activeNamespaceIdState } from './activeNamespaceIdAtom';
-import { clusterState } from './clusterAtom';
+import { activeNamespaceIdAtom } from './activeNamespaceIdAtom';
+import { clusterAtom } from './clusterAtom';
 import { getPostFn } from './utils/getPostFn';
 
 export function hasAnyRoleBound(permissionSet: PermissionSetState) {
@@ -64,10 +64,10 @@ export type PermissionSet = {
 
 export type PermissionSetState = PermissionSet[];
 
-export const permissionSetsSelector = atom<Promise<PermissionSetState>>(
+export const permissionSetsAtom = atom<Promise<PermissionSetState>>(
   async get => {
-    const cluster = get(clusterState);
-    const activeNamespaceId = get(activeNamespaceIdState) || '';
+    const cluster = get(clusterAtom);
+    const activeNamespaceId = get(activeNamespaceIdAtom) || '';
     const postFn = getPostFn(get);
 
     if (postFn) {
@@ -92,4 +92,4 @@ export const permissionSetsSelector = atom<Promise<PermissionSetState>>(
     return [];
   },
 );
-permissionSetsSelector.debugLabel = 'permissionSetsSelector';
+permissionSetsAtom.debugLabel = 'permissionSetsAtom';

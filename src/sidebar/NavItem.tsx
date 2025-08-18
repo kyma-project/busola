@@ -4,9 +4,9 @@ import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
 
 import { useAtomValue, useSetAtom } from 'jotai';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { clusterState } from 'state/clusterAtom';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import {
   SideNavigationItem,
@@ -27,11 +27,11 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
-  const setLayoutColumn = useSetAtom(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
 
   const { scopedUrl } = urlGenerators;
-  const namespaceId = useAtomValue(activeNamespaceIdState);
-  const cluster = useAtomValue(clusterState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
+  const cluster = useAtomValue(clusterAtom);
 
   const emptyResource = useMemo(() => ({} as Resource), []);
   const jsonata = useJsonata({ resource: emptyResource });

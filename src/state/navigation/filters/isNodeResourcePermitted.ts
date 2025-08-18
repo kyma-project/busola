@@ -1,6 +1,6 @@
 import { doesUserHavePermission } from './permissions';
 import { NavNode } from '../../types';
-import { PermissionSet } from '../../permissionSetsSelector';
+import { PermissionSet } from '../../permissionSetsAtom';
 
 export const isNodeResourcePermitted = (
   node: NavNode,

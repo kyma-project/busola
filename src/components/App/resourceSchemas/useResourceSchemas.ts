@@ -7,12 +7,12 @@ import {
   terminateWorker,
 } from './resourceSchemaWorkerApi';
 import { useAtomValue } from 'jotai';
-import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
+import { schemaWorkerStatusAtom } from 'state/schemaWorkerStatusAtom';
 import { useUrl } from 'hooks/useUrl';
-import { authDataState } from 'state/authDataAtom';
-import { openapiState } from 'state/openapi/openapiAtom';
-import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
-import { clusterState } from 'state/clusterAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { openapiAtom } from 'state/openapi/openapiAtom';
+import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
@@ -20,18 +20,18 @@ import { useAtom, useSetAtom } from 'jotai';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
-  const authData = useAtomValue(authDataState);
-  const openApi = useAtomValue(openapiState);
+  const authData = useAtomValue(authDataAtom);
+  const openApi = useAtomValue(openapiAtom);
   const navigate = useNavigate();
-  const cluster = useAtomValue(clusterState);
+  const cluster = useAtomValue(clusterAtom);
   const isClusterList = useMatch({ path: '/clusters' });
   const notification = useNotification();
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
   const { currentCluster } = clusterInfo;
 
-  const setSchemasState = useSetAtom(schemaWorkerStatusState);
-  const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedState);
+  const setSchemasState = useSetAtom(schemaWorkerStatusAtom);
+  const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedAtom);
 
   useEffect(() => {
     if (

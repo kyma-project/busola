@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createResourceQuotaTemplate } from './templates';
 
@@ -18,7 +18,7 @@ export default function ResourceQuotaCreate({
   ...props
 }) {
   const { t } = useTranslation();
-  const namespaceId = useAtomValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [resourceQuota, setResourceQuota] = useState(
     _.cloneDeep(initialResourceQuota) ||
       createResourceQuotaTemplate({ namespaceName: namespaceId }),

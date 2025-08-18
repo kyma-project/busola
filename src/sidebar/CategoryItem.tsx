@@ -8,7 +8,7 @@ import {
   SideNavigationItemDomRef,
   Ui5CustomEvent,
 } from '@ui5/webcomponents-react';
-import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
+import { isSidebarCondensedAtom } from 'state/preferences/isSidebarCondensedAtom';
 
 import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { NavItem } from './NavItem';
@@ -33,7 +33,7 @@ export function CategoryItem({
   const { t } = useTranslation();
   const categoryName = t(category.label, { defaultValue: category.label });
   const expanded = expandedCategories.includes(category.key);
-  const isSidebarCondensed = useAtomValue(isSidebarCondensedState);
+  const isSidebarCondensed = useAtomValue(isSidebarCondensedAtom);
 
   const handleAddExpandedCategory = (
     e: Ui5CustomEvent<

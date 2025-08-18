@@ -3,11 +3,11 @@ import { isArray, mergeWith } from 'lodash';
 import { useEffect } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 
-import { clusterState } from '../clusterAtom';
-import { authDataState } from '../authDataAtom';
+import { clusterAtom } from '../clusterAtom';
+import { authDataAtom } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
-import { apiGroupState } from '../discoverability/apiGroupsSelector';
+import { apiGroupAtom } from '../discoverability/apiGroupsAtom';
 import { getFeatures } from './getFeatures';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { getConfigDir } from 'shared/utils/env';
@@ -85,10 +85,10 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
 };
 
 export const useGetConfiguration = () => {
-  const cluster = useAtomValue(clusterState);
-  const auth = useAtomValue(authDataState);
-  const apis = useAtomValue(apiGroupState);
-  const setConfig = useSetAtom(configurationState);
+  const cluster = useAtomValue(clusterAtom);
+  const auth = useAtomValue(authDataAtom);
+  const apis = useAtomValue(apiGroupAtom);
+  const setConfig = useSetAtom(configurationAtom);
   const fetchFn = getFetchFn(useAtomValue);
 
   useEffect(() => {
@@ -102,5 +102,5 @@ export const useGetConfiguration = () => {
   }, [cluster, auth, apis]);
 };
 
-export const configurationState = atom<Configuration>(defaultValue);
-configurationState.debugLabel = 'configurationState';
+export const configurationAtom = atom<Configuration>(defaultValue);
+configurationAtom.debugLabel = 'configurationAtom';

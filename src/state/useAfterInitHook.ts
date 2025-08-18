@@ -2,8 +2,8 @@ import { KubeconfigIdHandleState } from 'components/App/useLoginWithKubeconfigID
 import { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
-import { authDataState } from './authDataAtom';
-import { clusterState } from './clusterAtom';
+import { authDataAtom } from './authDataAtom';
+import { clusterAtom } from './clusterAtom';
 
 const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
@@ -53,8 +53,8 @@ export function removePreviousPath() {
 }
 
 export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
-  const cluster = useAtomValue(clusterState);
-  const authData = useAtomValue(authDataState);
+  const cluster = useAtomValue(clusterAtom);
+  const authData = useAtomValue(authDataAtom);
   const [search] = useSearchParams();
   const navigate = useNavigate();
   const initDone = useRef(false);

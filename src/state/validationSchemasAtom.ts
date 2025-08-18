@@ -1,12 +1,9 @@
 import { useEffect } from 'react';
-import { authDataState } from 'state/authDataAtom';
-import { clusterState } from 'state/clusterAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import {
-  permissionSetsSelector,
-  PermissionSetState,
-} from './permissionSetsSelector';
+import { permissionSetsAtom, PermissionSetState } from './permissionSetsAtom';
 import { useUrl } from 'hooks/useUrl';
 import { ConfigMapResponse, getConfigMaps } from './utils/getConfigMaps';
 import { getFetchFn } from './utils/getFetchFn';
@@ -191,11 +188,11 @@ export const getEnabledRules = (
 };
 
 export const useGetValidationSchemas = async () => {
-  const setSchemas = useSetAtom(validationSchemasState);
+  const setSchemas = useSetAtom(validationSchemasAtom);
   const fetchFn = getFetchFn(useAtomValue);
-  const cluster = useAtomValue(clusterState);
-  const auth = useAtomValue(authDataState);
-  const permissionSet = useAtomValue(permissionSetsSelector);
+  const cluster = useAtomValue(clusterAtom);
+  const auth = useAtomValue(authDataAtom);
+  const permissionSet = useAtomValue(permissionSetsAtom);
   const { namespace } = useUrl();
 
   useEffect(() => {
@@ -221,6 +218,7 @@ export const useGetValidationSchemas = async () => {
   }, [cluster, auth, permissionSet, namespace]);
 };
 
-export const validationSchemasState = atom<ValidationSchema | null>(
+export const validationSchemasAtom = atom<ValidationSchema | null>(
   emptyValidationSchema,
 );
+validationSchemasAtom.debugLabel = 'validationSchemasAtom';
