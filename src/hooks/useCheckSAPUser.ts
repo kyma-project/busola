@@ -1,5 +1,5 @@
-import { useAtomValue } from 'jotai';
 import { jwtDecode } from 'jwt-decode';
+import { useAtomValue } from 'jotai';
 import { AuthDataState, authDataState } from 'state/authDataAtom';
 
 export function useCheckSAPUser() {

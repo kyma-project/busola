@@ -63,23 +63,21 @@ const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   return nodes || [];
 };
 
-export const extensibilityNodesExtSelector = atom<Promise<NavNode[] | null>>(
-  async get => {
-    const extensions = get(extensionsState) || [];
-    const statics = get(staticsState) || [];
+export const extensibilityNodesExtSelector = atom<NavNode[] | null>(get => {
+  const extensions = get(extensionsState) || [];
+  const statics = get(staticsState) || [];
 
-    const fetchFn = getFetchFn(get);
-    if (!fetchFn) {
-      return null;
-    }
+  const fetchFn = getFetchFn(get);
+  if (!fetchFn) {
+    return null;
+  }
 
-    const extensibilityNodes = getExtensibilityNodesExt(extensions);
-    const staticsNodes = getExtensibilityNodesExt(statics);
+  const extensibilityNodes = getExtensibilityNodesExt(extensions);
+  const staticsNodes = getExtensibilityNodesExt(statics);
 
-    const filteredExtNodes = [...extensibilityNodes.filter(n => n)];
-    const filteresStaticsNodes = [...staticsNodes.filter(n => n)];
+  const filteredExtNodes = [...extensibilityNodes.filter(n => n)];
+  const filteresStaticsNodes = [...staticsNodes.filter(n => n)];
 
-    return [...filteredExtNodes.concat(filteresStaticsNodes)];
-  },
-);
+  return [...filteredExtNodes.concat(filteresStaticsNodes)];
+});
 extensibilityNodesExtSelector.debugLabel = 'extensibilityNodesExtSelector';

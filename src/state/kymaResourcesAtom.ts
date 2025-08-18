@@ -2,7 +2,7 @@ import { getFetchFn } from './utils/getFetchFn';
 import { clusterState } from './clusterAtom';
 import { atom } from 'jotai';
 
-export const kymaResourcesAtom = atom(async get => {
+export const kymaResourcesState = atom(async get => {
   // We need to track if cluster changes
   const _cluster = get(clusterState); // eslint-disable-line @typescript-eslint/no-unused-vars
   const fetchFn = getFetchFn(get);
@@ -19,4 +19,4 @@ export const kymaResourcesAtom = atom(async get => {
     return null;
   }
 });
-kymaResourcesAtom.debugLabel = 'kymaResourcesAtom';
+kymaResourcesState.debugLabel = 'kymaResourcesState';

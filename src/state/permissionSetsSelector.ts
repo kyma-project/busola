@@ -92,4 +92,4 @@ export const permissionSetsSelector = atom<Promise<PermissionSetState>>(
     return [];
   },
 );
-permissionSetsSelector.debugLabel = 'PermissionSet';
+permissionSetsSelector.debugLabel = 'permissionSetsSelector';

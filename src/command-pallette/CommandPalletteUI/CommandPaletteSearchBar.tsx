@@ -7,7 +7,6 @@ import { K8sResource } from 'types';
 import { useEventListener } from 'hooks/useEventListener';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
-import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
 import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
@@ -25,7 +24,6 @@ export function CommandPaletteSearchBar({
   setShouldFocus,
   shellbarRef,
 }: CommandPaletteSearchBarProps) {
-  useAtomValue(availableNodesSelector); // preload the values to prevent page rerenders
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
   const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);

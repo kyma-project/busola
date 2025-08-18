@@ -18,8 +18,8 @@ export const sidebarNavigationNodesSelector = atom<Promise<Category[]>>(
   async get => {
     const navNodes: NavNode[] = await get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
-    const externalNodes = await get(externalNodesSelector);
-    const externalNodesExt = await get(extensibilityNodesExtSelector);
+    const externalNodes = get(externalNodesSelector);
+    const externalNodesExt = get(extensibilityNodesExtSelector);
     const configuration = get(configurationState);
     const features = configuration?.features;
 

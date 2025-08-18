@@ -48,24 +48,22 @@ const getExternalNodes = (
   );
 };
 
-export const externalNodesSelector = atom<Promise<NavNode[] | null>>(
-  async get => {
-    const configuration = get(configurationState);
-    const features = configuration?.features;
-    const fetchFn = getFetchFn(get);
-    if (!fetchFn || !features) {
-      return null;
-    }
+export const externalNodesSelector = atom<NavNode[] | null>(get => {
+  const configuration = get(configurationState);
+  const features = configuration?.features;
+  const fetchFn = getFetchFn(get);
+  if (!fetchFn || !features) {
+    return null;
+  }
 
-    if (!features[configFeaturesNames.EXTERNAL_NODES]?.isEnabled) {
-      return [];
-    }
+  if (!features[configFeaturesNames.EXTERNAL_NODES]?.isEnabled) {
+    return [];
+  }
 
-    const externalNodes = getExternalNodes(
-      features[configFeaturesNames.EXTERNAL_NODES],
-    );
+  const externalNodes = getExternalNodes(
+    features[configFeaturesNames.EXTERNAL_NODES],
+  );
 
-    return [...externalNodes.filter(n => n)];
-  },
-);
+  return [...externalNodes.filter(n => n)];
+});
 externalNodesSelector.debugLabel = 'externalNodesSelector';

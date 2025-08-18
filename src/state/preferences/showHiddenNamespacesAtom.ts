@@ -7,4 +7,4 @@ export const showHiddenNamespacesState = atomWithStorage<boolean>(
   SHOW_HIDDEN_NAMESPACES_STORAGE_KEY,
   DEFAULT_SHOW_HIDDEN_NAMESPACES,
 );
-showHiddenNamespacesState.debugLabel = 'languageState';
+showHiddenNamespacesState.debugLabel = 'showHiddenNamespacesState';

@@ -20,3 +20,4 @@ export const moduleTemplatesCountState = atom<Promise<number>>(async get => {
   }
   return moduleTemplates?.items.length || 0;
 });
+moduleTemplatesCountState.debugLabel = 'moduleTemplatesCountState';

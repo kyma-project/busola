@@ -191,8 +191,8 @@ export const getEnabledRules = (
 };
 
 export const useGetValidationSchemas = async () => {
-  const fetchFn = getFetchFn(useAtomValue);
   const setSchemas = useSetAtom(validationSchemasState);
+  const fetchFn = getFetchFn(useAtomValue);
   const cluster = useAtomValue(clusterState);
   const auth = useAtomValue(authDataState);
   const permissionSet = useAtomValue(permissionSetsSelector);

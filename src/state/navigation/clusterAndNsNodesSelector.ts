@@ -8,7 +8,7 @@ import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
-import { moduleTemplatesCountState } from 'state/moduleTemplatesCountSelector';
+import { moduleTemplatesCountState } from 'state/moduleTemplatesCountAtom';
 
 export const clusterAndNsNodesSelector = atom<Promise<NavNode[]>>(async get => {
   const resourceList: NavNode[] = get(resourceListState);
