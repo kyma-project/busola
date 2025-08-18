@@ -5,6 +5,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
+import { Label } from '@ui5/webcomponents-react';
 
 export const EVENT_MESSAGE_TYPE = {
   ALL: { key: 'All', text: 'all' },
@@ -74,19 +75,25 @@ export const useMessageList = (defaultType = EVENT_MESSAGE_TYPE.ALL) => {
   const { t } = useTranslation();
 
   const MessageSelector = (
-    <Dropdown
-      accessibleName="message-type"
-      options={Object.values(EVENT_MESSAGE_TYPE).map(el => ({
-        key: el.key,
-        text: t(`node-details.${el.text}`),
-      }))}
-      selectedKey={displayType.key}
-      onSelect={(_, { key }) => {
-        setDisplayType(
-          Object.values(EVENT_MESSAGE_TYPE).find(type => type.key === key),
-        );
-      }}
-    />
+    <>
+      <Label for="events-type-selector">{`${t(
+        'common.labels.message-type',
+      )}:`}</Label>
+      <Dropdown
+        id="events-type-selector"
+        accessibleName="message-type"
+        options={Object.values(EVENT_MESSAGE_TYPE).map(el => ({
+          key: el.key,
+          text: t(`node-details.${el.text}`),
+        }))}
+        selectedKey={displayType.key}
+        onSelect={(_, { key }) => {
+          setDisplayType(
+            Object.values(EVENT_MESSAGE_TYPE).find(type => type.key === key),
+          );
+        }}
+      />
+    </>
   );
 
   return {
