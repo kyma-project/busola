@@ -76,9 +76,9 @@ export const useMessageList = (defaultType = EVENT_MESSAGE_TYPE.ALL) => {
 
   const MessageSelector = (
     <>
-      <Label for="events-type-selector">{`${t(
-        'common.labels.message-type',
-      )}:`}</Label>
+      <Label for="events-type-selector" showColon>
+        {t('common.labels.message-type')}
+      </Label>
       <Dropdown
         id="events-type-selector"
         accessibleName="message-type"
