@@ -39,6 +39,21 @@ export function ResultsList({
   const isLoading = results.find((r: any) => r.type === LOADING_INDICATOR);
   results = results.filter((r: any) => r.type !== LOADING_INDICATOR);
 
+  const activateResultWithSafeNavigation = () => {
+    if (isResultGoingToRedirect(results[activeIndex].query)) {
+      navigateSafely(() =>
+        activateResult(
+          results[activeIndex].query,
+          results[activeIndex].onActivate,
+        ),
+      );
+    } else
+      activateResult(
+        results[activeIndex].query,
+        results[activeIndex].onActivate,
+      );
+  };
+
   useEffect(() => {
     if (results?.length <= activeIndex) {
       setActiveIndex(0);
@@ -66,18 +81,7 @@ export function ResultsList({
         scrollInto(listRef.current!.children[activeIndex - 1]);
       } else if (key === 'Enter' && results?.[activeIndex]) {
         e.preventDefault();
-        if (isResultGoingToRedirect(results[activeIndex].query)) {
-          navigateSafely(() =>
-            activateResult(
-              results[activeIndex].query,
-              results[activeIndex].onActivate,
-            ),
-          );
-        } else
-          activateResult(
-            results[activeIndex].query,
-            results[activeIndex].onActivate,
-          );
+        activateResultWithSafeNavigation();
       }
     },
     [activeIndex, results, isHistoryMode],
@@ -94,18 +98,7 @@ export function ResultsList({
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             onItemClick={() => {
-              if (isResultGoingToRedirect(results[activeIndex].query)) {
-                navigateSafely(() =>
-                  activateResult(
-                    results[activeIndex].query,
-                    results[activeIndex].onActivate,
-                  ),
-                );
-              } else
-                activateResult(
-                  results[activeIndex].query,
-                  results[activeIndex].onActivate,
-                );
+              activateResultWithSafeNavigation();
             }}
           />
         ))
