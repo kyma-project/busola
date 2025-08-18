@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { useEventListener } from 'hooks/useEventListener';
-import { addHistoryEntry, getHistoryEntries } from './search-history';
+import { getHistoryEntries } from './search-history';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import {
   CommandPalletteHelp,
@@ -16,7 +16,7 @@ import { Button, Icon, Input } from '@ui5/webcomponents-react';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-
+import { activateResult, isResultGoingToRedirect } from './helpers';
 import './CommandPaletteUI.scss';
 
 function Background({
@@ -149,10 +149,11 @@ export function CommandPaletteUI({
     if (key === 'Enter' && results[0]) {
       // choose current entry
       e.preventDefault();
-      navigateSafely(() => {
-        addHistoryEntry(results[0].query);
-        results[0].onActivate();
-      });
+      if (isResultGoingToRedirect(results[0].query)) {
+        navigateSafely(() =>
+          activateResult(results[0].query, results[0].onActivate),
+        );
+      } else activateResult(results[0].query, results[0].onActivate);
     } else if (key === 'Tab') {
       e.preventDefault();
       // fill search with active history entry
