@@ -46,30 +46,30 @@ export function formatResourceUnit(
   const infix = withoutSpace ? '' : ' ';
 
   if (unit && prefixMap[unit]) {
-    const value = (amount / prefixMap[unit]).toFixed(fixed);
+    const value = Number((amount / prefixMap[unit]).toFixed(fixed));
     return {
-      string: `${value}${infix}${unit}`,
+      string: `${value.toString()}${infix}${unit}`,
       unit: unit,
-      value: Number(value),
+      value: value,
     };
   }
 
-  const coreValue = preciseRound(amount, 2).toFixed(fixed);
+  const coreValue = Number(preciseRound(amount, 2).toFixed(fixed));
 
   let output = {
-    string: `${coreValue}${infix}${unit}`,
+    string: `${coreValue.toString()}${infix}${unit}`,
     unit: unit,
-    value: Number(coreValue),
+    value: coreValue,
   };
 
   Object.entries(prefixMap).forEach(([prefix, power]) => {
     const tmpValue = amount / power;
     if (tmpValue >= 1) {
-      const value = preciseRound(tmpValue, 2).toFixed(fixed);
+      const value = Number(preciseRound(tmpValue, 2).toFixed(fixed));
       output = {
-        string: `${value}${infix}${prefix}${unit}`,
+        string: `${value.toString()}${infix}${prefix}${unit}`,
         unit: unit,
-        value: Number(value),
+        value: value,
       };
     }
   });
@@ -77,7 +77,7 @@ export function formatResourceUnit(
   return output;
 }
 
-export function bytesToHumanReadable(bytes, { fixed = 0, unit = '' } = {}) {
+export function bytesToHumanReadable(bytes, { fixed = 1, unit = '' } = {}) {
   return formatResourceUnit(bytes, true, { withoutSpace: true, fixed, unit });
 }
 
