@@ -15,10 +15,10 @@ export default [
     '**/*.test.jsx',
     '**/*.cy.jsx',
     '**/*.cy.tsx',
-    'backend/**',
+    'backend/',
   ]),
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
     languageOptions: {
       parser: parserTypeScript,
       parserOptions: {
