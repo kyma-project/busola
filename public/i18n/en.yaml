@@ -331,6 +331,7 @@ common:
     hostname: Hostname
     issuer: Issuer
     last-transition: Last Transition Time
+    message-type: Message Type
     name: Name
     namespace: Namespace
     new-entry: New Entry
