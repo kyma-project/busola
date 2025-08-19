@@ -136,10 +136,11 @@
     "vite-plugin-static-copy": "^2.3.1",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.1.1"
+    "vitest": "^3.1.1",
+    "yaml-sort": "^2.1.0"
   },
   "lint-staged": {
-    "src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
+    "public/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
   },
   "overrides": {
