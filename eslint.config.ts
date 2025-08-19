@@ -10,7 +10,7 @@ export default [
   js.configs.recommended,
   globalIgnores(['tests/**']),
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
     languageOptions: {
       parser: parserTypeScript,
       parserOptions: {
