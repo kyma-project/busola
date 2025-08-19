@@ -18,7 +18,8 @@
     "component-test-headless": "npx cypress run --headless --config-file cypress.config.component.ts --component --browser chrome",
     "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false NODE_OPTIONS=--max-old-space-size=8192 IS_DOCKER=true vite build",
-    "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done"
+    "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -136,7 +137,7 @@
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.4.0",
     "eslint-config-react-app": "^7.0.1",
-    "husky": "^2.4.1",
+    "husky": "^9.1.7",
     "jsdom-worker-fix": "^0.1.8",
     "lint-staged": "^10.4.0",
     "prettier": "^1.18.2",
@@ -153,11 +154,6 @@
   "lint-staged": {
     "src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "overrides": {
     "oidc-client-ts": {
