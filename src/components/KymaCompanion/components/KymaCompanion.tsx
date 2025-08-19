@@ -8,10 +8,15 @@ import {
 } from 'state/companion/showKymaCompanionAtom';
 import { Chat } from './Chat/Chat';
 import { chatHelpers } from './Chat/chatHelper';
-import { AIError, ChatGroup } from './Chat/types';
+import { AIError, Author, ChatGroup } from './Chat/types';
 import Disclaimer from './Disclaimer/Disclaimer';
 
 import './KymaCompanion.scss';
+import {
+  FEEDBACK_SHOW_TYPE,
+  getShowFeedbackStorageKey,
+} from './JouleFeedbackDialog/helpers/feedbackViewHelpers';
+import JouleFeedbackDialog from './JouleFeedbackDialog/JouleFeedbackDialog';
 
 export default function KymaCompanion() {
   const { t } = useTranslation();
@@ -32,6 +37,9 @@ export default function KymaCompanion() {
     displayRetry: false,
   });
   const [time, setTime] = useState<Date>(new Date());
+  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState<boolean>(
+    false,
+  );
 
   function handleRefresh() {
     setChatHistory(
@@ -45,6 +53,18 @@ export default function KymaCompanion() {
     setIsReset(true);
     setIsInitialScreen(false);
   }
+
+  const handleCloseChat = () => {
+    if (getShowFeedbackStorageKey() === FEEDBACK_SHOW_TYPE.NO_SHOW) {
+      setShowCompanion({ show: false, fullScreen: false });
+      return;
+    }
+    const promptsNumber = chatHistory[0].messages.filter(
+      message => message.author === Author.USER,
+    ).length;
+    if (promptsNumber > 4) setIsFeedbackDialogOpen(true);
+    else setShowCompanion({ show: false, fullScreen: false });
+  };
 
   useEffect(() => {
     if (chatHistory[0].messages.length > 1) {
@@ -111,9 +131,7 @@ export default function KymaCompanion() {
                 icon="decline"
                 tooltip={t('common.buttons.close')}
                 className="action"
-                onClick={() =>
-                  setShowCompanion({ show: false, fullScreen: false })
-                }
+                onClick={() => handleCloseChat()}
               />
             </div>
           </div>
@@ -137,6 +155,10 @@ export default function KymaCompanion() {
           <Disclaimer hideDisclaimer={() => setShowDisclaimer(false)} />
         )}
       </Card>
+      <JouleFeedbackDialog
+        isDialogOpen={isFeedbackDialogOpen}
+        onSetDialogClosed={() => setIsFeedbackDialogOpen(false)}
+      />
     </div>
   );
 }

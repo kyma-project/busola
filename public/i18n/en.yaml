@@ -891,6 +891,10 @@ feedback:
   kyma:
     title: Kyma Dashboard Feedback
     info: Your opinion matters. Share your thoughts with us at any time!
+joule-feedback:
+  title: Joule Feedback
+  subtitle: How did Joule do?
+  description: Tell us about your experience with Joule in Kyma dashboard.
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
