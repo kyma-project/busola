@@ -8,17 +8,26 @@ import parserTypeScript from '@typescript-eslint/parser';
 
 export default [
   js.configs.recommended,
-  globalIgnores([
-    'tests/**',
-    '**/*.test.ts',
-    '**/*.test.js',
-    '**/*.test.jsx',
-    '**/*.cy.jsx',
-    '**/*.cy.tsx',
-    'backend/**',
-  ]),
+  // globalIgnores([
+  //   'tests/**',
+  //   '**/*.test.ts',
+  //   '**/*.test.js',
+  //   '**/*.test.jsx',
+  //   '**/*.cy.jsx',
+  //   '**/*.cy.tsx',
+  //   'backend/**',
+  // ]),
   {
     files: ['src/**/*.ts', 'src/**/*.tsx'],
+    ignore: [
+      'tests/**',
+      '**/*.test.ts',
+      '**/*.test.js',
+      '**/*.test.jsx',
+      '**/*.cy.jsx',
+      '**/*.cy.tsx',
+      'backend/**',
+    ],
     languageOptions: {
       parser: parserTypeScript,
       parserOptions: {
