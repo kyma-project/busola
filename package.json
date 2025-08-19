@@ -135,7 +135,6 @@
     "cypress": "^13.17.0",
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.4.0",
-    "eslint-config-react-app": "^7.0.1",
     "husky": "^2.4.1",
     "jsdom-worker-fix": "^0.1.8",
     "lint-staged": "^10.4.0",
