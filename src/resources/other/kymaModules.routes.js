@@ -1,5 +1,5 @@
 import { FlexibleColumnLayout, MessageStrip } from '@ui5/webcomponents-react';
-import React, { Suspense, useDeferredValue } from 'react';
+import React, { Suspense, useDeferredValue, useEffect, useState } from 'react';
 import { Route, useParams } from 'react-router';
 import { useAtom } from 'jotai';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -41,19 +41,38 @@ const ColumnWrapper = ({
     : clusterUrl('kymamodules');
 
   const { resourceName, resourceType, namespace } = useParams();
+  const [resMetadata, setResMetadata] = useState(null);
+
+  useEffect(() => {
+    setLayoutColumn(prev => {
+      // Only update if previous values were empty strings
+      if (prev?.midColumn?.apiGroup === '') {
+        return {
+          ...prev,
+          midColumn: {
+            ...prev.midColumn,
+            apiGroup: resMetadata?.general?.resource?.group,
+            apiVersion: resMetadata?.general?.resource?.version,
+            rawResourceTypeName: resMetadata?.general?.resource?.kind,
+          },
+        };
+      }
+      return prev;
+    });
+  }, [resMetadata, setLayoutColumn]);
 
   usePrepareLayoutColumns({
     resourceType: resourceType,
     namespaceId: namespace,
     apiGroup: '',
-    apiVersion: 'v1',
+    apiVersion: '',
     resourceName: resourceName,
     isModule: true,
     resource:
       layoutState?.showCreate?.resource ||
       layoutState?.showEdit?.resource ||
       null,
-    rawResourceTypeName: 'Kyma',
+    rawResourceTypeName: '',
   });
 
   const startColumnComponent = useDeferredValue(
@@ -99,6 +118,7 @@ const ColumnWrapper = ({
                   : namespace
               }
               isModule={true}
+              setResMetadata={setResMetadata}
             />
           </div>
         )}
