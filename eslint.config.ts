@@ -19,7 +19,7 @@ export default [
   // ]),
   {
     files: ['src/**/*.ts', 'src/**/*.tsx'],
-    ignore: [
+    ignores: [
       'tests/**',
       '**/*.test.ts',
       '**/*.test.js',
