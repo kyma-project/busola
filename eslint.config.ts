@@ -15,7 +15,6 @@ export default [
     '**/*.test.jsx',
     '**/*.cy.jsx',
     '**/*.cy.tsx',
-    'backend/',
   ]),
   {
     files: ['src/**/*.ts', 'src/**/*.tsx'],

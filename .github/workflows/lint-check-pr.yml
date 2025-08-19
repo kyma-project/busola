@@ -17,5 +17,5 @@ jobs:
         run: |
           set -e
           npm ci
-          npx eslint --max-warnings 0 src/ backend/ 
+          npx eslint --max-warnings 0 src/
           npm run lint-check
