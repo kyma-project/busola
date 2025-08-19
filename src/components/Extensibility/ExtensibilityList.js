@@ -29,7 +29,6 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 import '../../web-components/eventListenerTracker';
 import { configFeaturesNames } from 'state/types';
-import { AsyncValue } from 'components/AsyncValue/AsyncValue';
 
 export const ExtensibilityListCore = ({
   resMetaData,
@@ -132,12 +131,7 @@ export const ExtensibilityListCore = ({
       disableDelete={disableDelete}
       createResourceForm={ExtensibilityCreate}
       sortBy={defaultSortOptions =>
-        sortBy(
-          options => <AsyncValue params={[options]} jsonata={jsonata} />,
-          sortOptions,
-          t,
-          defaultSortOptions,
-        )
+        sortBy(jsonata, sortOptions, t, defaultSortOptions)
       }
       searchSettings={{
         textSearchProperties: defaultSearchProperties =>

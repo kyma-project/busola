@@ -1,7 +1,7 @@
 export const getSortingFunction = (jsonata, formula, originalResource) => {
-  return (a, b) => {
-    const [aValue] = jsonata(formula, { scope: a });
-    const [bValue] = jsonata(formula, { scope: b });
+  return async (a, b) => {
+    const [aValue] = await jsonata(formula, { scope: a });
+    const [bValue] = await jsonata(formula, { scope: b });
 
     switch (typeof aValue) {
       case 'number':
@@ -23,15 +23,16 @@ export const getSortingFunction = (jsonata, formula, originalResource) => {
 };
 
 export const applySortFormula = (jsonata, formula, t) => {
-  return (a, b) => {
+  return async (a, b) => {
     if (a === undefined) return -1;
     if (b === undefined) return 1;
-    return jsonata(formula, {
+    const result = await jsonata(formula, {
       scope: {
         first: a,
         second: b,
       },
-    })[0];
+    });
+    return result[0];
   };
 };
 
@@ -51,9 +52,9 @@ export const sortBy = (
       let sortFn = getSortingFunction(jsonata, source, originalResource);
 
       if (sort.compareFunction) {
-        sortFn = (a, b) => {
-          const [aValue] = jsonata(source, { scope: a });
-          const [bValue] = jsonata(source, { scope: b });
+        sortFn = async (a, b) => {
+          const [aValue] = await jsonata(source, { scope: a });
+          const [bValue] = await jsonata(source, { scope: b });
 
           const sortFormula = applySortFormula(
             jsonata,

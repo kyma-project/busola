@@ -12,7 +12,6 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
-import { AsyncValue } from 'components/AsyncValue/AsyncValue';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -126,12 +125,7 @@ export function ResourceList({
         }
         columns={children}
         sortBy={defaultSortOptions =>
-          sortBy(
-            options => <AsyncValue params={[options]} jsonata={jsonata} />,
-            sortOptions,
-            t,
-            defaultSort ? defaultSortOptions : {},
-          )
+          sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
         }
         simpleEmptyListMessage={simpleEmptyListMessage}
         searchSettings={{
