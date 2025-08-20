@@ -231,7 +231,11 @@ export default function ExtensibilityDetails({
   const resMetaData = useGetCRbyPath(resourceType);
   useEffect(() => {
     if (isModule && setResMetadata && resMetaData) {
-      setResMetadata(resMetaData);
+      setResMetadata({
+        group: resMetaData?.general?.resource?.group,
+        version: resMetaData?.general?.resource?.version,
+        kind: resMetaData?.general?.resource?.kind,
+      });
     }
   }, [resMetaData, isModule, setResMetadata]);
 
@@ -250,6 +254,7 @@ export default function ExtensibilityDetails({
           layoutNumber: 'midColumn',
           headerActions,
           isModule,
+          setResMetadata,
         }}
       />
     );

@@ -51,9 +51,9 @@ const ColumnWrapper = ({
           ...prev,
           midColumn: {
             ...prev.midColumn,
-            apiGroup: resMetadata?.general?.resource?.group,
-            apiVersion: resMetadata?.general?.resource?.version,
-            rawResourceTypeName: resMetadata?.general?.resource?.kind,
+            apiGroup: resMetadata?.group,
+            apiVersion: resMetadata?.version,
+            rawResourceTypeName: resMetadata?.kind,
           },
         };
       }
