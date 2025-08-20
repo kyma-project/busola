@@ -20,7 +20,7 @@ import {
 } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
-import { resourcesConditions } from 'state/resourceConditionsAtom';
+import { resourcesConditionsAtom } from 'state/resourceConditionsAtom';
 import { KymaModuleContext } from 'components/Modules/providers/KymaModuleProvider';
 
 export const ExtensibilityDetailsCore = ({
@@ -32,7 +32,7 @@ export const ExtensibilityDetailsCore = ({
   headerActions,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
-  const setResourcesConditions = useSetAtom(resourcesConditions);
+  const setResourcesConditions = useSetAtom(resourcesConditionsAtom);
   const { urlPath, resource, features, description: resourceDescription } =
     resMetaData?.general ?? {};
   let { disableEdit, disableDelete } = features?.actions || {};

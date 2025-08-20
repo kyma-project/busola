@@ -1,15 +1,13 @@
 import { useEffect, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
 import { useEventListener } from 'hooks/useEventListener';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
-import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
 
@@ -26,14 +24,13 @@ export function CommandPaletteSearchBar({
   setShouldFocus,
   shellbarRef,
 }: CommandPaletteSearchBarProps) {
-  useRecoilValue(availableNodesSelector); // preload the values to prevent page rerenders
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
   const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
   const [resourceCache, updateResourceCache] = useObjectState<
     Record<string, K8sResource[]>
   >();
-  const showCompanion = useAtomValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionAtom);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const htmlWrapEl = document.getElementById('html-wrap');

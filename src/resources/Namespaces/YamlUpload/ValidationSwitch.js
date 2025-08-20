@@ -1,15 +1,15 @@
-import React from 'react';
 import { t } from 'i18next';
 import { Label, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
-  validateResourcesState,
+  validateResourcesAtom,
 } from '../../../state/preferences/validateResourcesAtom';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import './ValidationSwitch.scss';
+
 export const ValidationSwitch = () => {
-  const [validateResources, setValidateResources] = useRecoilState(
-    validateResourcesState,
+  const [validateResources, setValidateResources] = useAtom(
+    validateResourcesAtom,
   );
 
   const {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
-import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
+import { isSidebarCondensedAtom } from 'state/preferences/isSidebarCondensedAtom';
 
 function getWindowDimensions() {
   const { innerWidth: width } = window;
@@ -26,7 +26,7 @@ function useWindowDimensions() {
 
 export default function useSidebarCondensed() {
   const width = useWindowDimensions();
-  const setSidebarCondensed = useSetAtom(isSidebarCondensedState);
+  const setSidebarCondensed = useSetAtom(isSidebarCondensedAtom);
 
   useEffect(() => {
     if (width <= 900) setSidebarCondensed(true);

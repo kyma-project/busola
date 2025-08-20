@@ -7,7 +7,7 @@ import jp from 'jsonpath';
 import pluralize from 'pluralize';
 import { useAtom } from 'jotai';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { prettifyNamePlural, prettifyNameSingular } from 'shared/utils/helpers';
@@ -248,7 +248,7 @@ export function ResourceListRenderer({
     protectedResourcePopover,
   } = useProtectedResources();
   const navigate = useNavigate();
-  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,

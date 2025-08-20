@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSetAtom, useAtomValue } from 'jotai';
-import { sessionIDState } from '../../../state/companion/sessionIDAtom';
+import { sessionIDAtom } from '../../../state/companion/sessionIDAtom';
 import getPromptSuggestions from '../api/getPromptSuggestions';
-import { ColumnLayoutState, columnLayoutState } from 'state/columnLayoutAtom';
+import { ColumnLayoutState, columnLayoutAtom } from 'state/columnLayoutAtom';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 
@@ -41,8 +41,8 @@ export function usePromptSuggestions(
 ) {
   const post = usePost();
   const [initialSuggestions, setInitialSuggestions] = useState<string[]>([]);
-  const setSessionID = useSetAtom(sessionIDState);
-  const columnLayout = useAtomValue(columnLayoutState);
+  const setSessionID = useSetAtom(sessionIDAtom);
+  const columnLayout = useAtomValue(columnLayoutAtom);
   const [loading, setLoading] = useState(true);
   const fetchedResourceRef = useRef('');
   const [currentResource, setCurrentResource] = useState<CurrentResource>({

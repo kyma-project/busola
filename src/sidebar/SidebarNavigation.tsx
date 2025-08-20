@@ -1,5 +1,4 @@
-import { useAtomValue, useSetAtom } from 'jotai';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   SideNavigation,
   SideNavigationItem,
@@ -7,14 +6,14 @@ import {
   Label,
   FlexBox,
 } from '@ui5/webcomponents-react';
-import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
-import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/expandedCategoriesSelector';
+import { sidebarNavigationNodesAtom } from 'state/navigation/sidebarNavigationNodesAtom';
+import { expandedCategoriesAtom } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { CategoryItem } from './CategoryItem';
 import { NavItem } from './NavItem';
-import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
+import { isSidebarCondensedAtom } from 'state/preferences/isSidebarCondensedAtom';
 import { NamespaceDropdown } from 'header/NamespaceDropdown/NamespaceDropdown';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
@@ -23,13 +22,13 @@ import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 export function SidebarNavigation() {
-  const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
-  const isSidebarCondensed = useAtomValue(isSidebarCondensedState);
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
+  const isSidebarCondensed = useAtomValue(isSidebarCondensedAtom);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
-  const setLayoutColumn = useSetAtom(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
@@ -43,9 +42,8 @@ export function SidebarNavigation() {
     else return namespace || t('navigation.select-namespace');
   };
 
-  // if it's in the CategoryItem, it causes needless re-renders
-  const [expandedCategories, setExpandedCategories] = useRecoilState(
-    expandedCategoriesSelector,
+  const [expandedCategories, setExpandedCategories] = useAtom(
+    expandedCategoriesAtom,
   );
 
   const filteredNavigationNodes =
@@ -92,8 +90,8 @@ export function SidebarNavigation() {
               }}
             >
               <SideNavigationItem
-                icon={'slim-arrow-left'}
-                text={'Back To Cluster Details'}
+                icon="slim-arrow-left"
+                text="Back To Cluster Details"
                 onClick={() => {
                   navigateSafely(() => {
                     setDefaultColumnLayout();
@@ -175,7 +173,7 @@ export function SidebarNavigation() {
           />
           {namespace && (
             <SideNavigationItem
-              icon={'dimension'}
+              icon="dimension"
               text={t('common.headers.namespaces')}
               selected={false}
             >
@@ -186,8 +184,8 @@ export function SidebarNavigation() {
       )}
       {!namespace && !isSidebarCondensed && (
         <SideNavigationItem
-          icon={'bbyd-dashboard'}
-          text={'Cluster Details'}
+          icon="bbyd-dashboard"
+          text="Cluster Details"
           onClick={() => {
             navigateSafely(() => {
               setDefaultColumnLayout();

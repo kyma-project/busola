@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { SetterOrUpdater } from 'recoil';
-import { useAtom, useSetAtom } from 'jotai';
+import { SetStateAction, useAtom, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -20,7 +19,7 @@ import {
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
@@ -49,8 +48,10 @@ type ModuleDisplayInfo = {
 function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesToApply: Map<string, ModuleTemplateType>,
-  setModulesTemplatesToApply: SetterOrUpdater<Map<string, ModuleTemplateType>>,
-  setIsResourceEdited: SetterOrUpdater<any>,
+  setModulesTemplatesToApply: (
+    update: SetStateAction<Map<string, ModuleTemplateType>>,
+  ) => void,
+  setIsResourceEdited: (update: SetStateAction<any>) => void,
 ): any {
   return (value: string, shouldRemove: boolean) => {
     const newModulesTemplatesToApply = new Map(moduleTemplatesToApply);
@@ -118,11 +119,11 @@ export default function CommunityModulesAddModule(props: any) {
   );
   const notification = useNotification();
   const post = usePost();
-  const setIsResourceEdited = useSetAtom(isResourceEditedState);
+  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
-  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   const uploadResources = useUploadResources(
     resourcesToApply,

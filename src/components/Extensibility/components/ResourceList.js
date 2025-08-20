@@ -9,9 +9,9 @@ import { sortBy } from '../helpers/sortBy';
 import { useJsonata } from '../hooks/useJsonata';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { extensionsState } from 'state/navigation/extensionsAtom';
+import { useAtomValue } from 'jotai';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { extensionsAtom } from 'state/navigation/extensionsAtom';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -37,8 +37,8 @@ export function ResourceList({
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
-  const extensions = useRecoilValue(extensionsState);
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const extensions = useAtomValue(extensionsAtom);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);

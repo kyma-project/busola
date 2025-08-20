@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Link as UI5Link } from '@ui5/webcomponents-react';
 import { useSetAtom } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
 
 type LinkProps = {
@@ -25,7 +25,7 @@ export const Link = ({
   onClick,
   style = {},
 }: LinkProps) => {
-  const setLayout = useSetAtom(columnLayoutState);
+  const setLayout = useSetAtom(columnLayoutAtom);
   const navigate = useNavigate();
 
   function handleOnlick(resetLayout: any, url: any, e: any) {

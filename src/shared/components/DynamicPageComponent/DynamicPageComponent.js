@@ -17,10 +17,10 @@ import './DynamicPageComponent.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
+import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
@@ -118,12 +118,10 @@ export const DynamicPageComponent = ({
 }) => {
   const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { t } = useTranslation();
-  const [isResourceEdited, setIsResourceEdited] = useAtom(
-    isResourceEditedState,
-  );
-  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenState);
+  const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
+  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenAtom);
   const { navigateSafely } = useFormNavigation();
   const [searchParams] = useSearchParams();
   const editColumn = searchParams.get('editColumn');

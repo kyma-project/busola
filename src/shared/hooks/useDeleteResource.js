@@ -8,18 +8,17 @@ import {
 } from '@ui5/webcomponents-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useNavigate } from 'react-router';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { prettifyNameSingular } from 'shared/utils/helpers';
-import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
+import { dontConfirmDeleteAtom } from 'state/preferences/dontConfirmDeleteAtom';
 import { useUrl } from 'hooks/useUrl';
 
-import { clusterState } from 'state/clusterAtom';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import './useDeleteResource.scss';
 
@@ -35,14 +34,14 @@ export function useDeleteResource({
   const { t } = useTranslation();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteResourceMutation = useDelete();
-  const [dontConfirmDelete, setDontConfirmDelete] = useRecoilState(
-    dontConfirmDeleteState,
+  const [dontConfirmDelete, setDontConfirmDelete] = useAtom(
+    dontConfirmDeleteAtom,
   );
   const notification = useNotification();
   const navigate = useNavigate();
   const { resourceListUrl } = useUrl();
-  const cluster = useRecoilValue(clusterState);
-  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
+  const cluster = useAtomValue(clusterAtom);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,

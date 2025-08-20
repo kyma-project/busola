@@ -1,8 +1,8 @@
 import { getFetchFn } from './getFetchFn';
-import { GetRecoilValue } from 'recoil';
+import { Getter } from 'jotai';
 import { createPostFn, PostFn } from 'shared/hooks/BackendAPI/usePost';
 
-export const getPostFn = (get: GetRecoilValue) => {
+export const getPostFn = (get: Getter) => {
   const fetchFn = getFetchFn(get);
   if (!fetchFn) return null;
 

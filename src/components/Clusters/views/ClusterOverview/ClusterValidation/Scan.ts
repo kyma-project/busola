@@ -1,6 +1,6 @@
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
-import { getPermissionResourceRules } from 'state/permissionSetsSelector';
+import { getPermissionResourceRules } from 'state/permissionSetsAtom';
 import { ValidationSchema } from 'state/validationSchemasAtom';
 import { K8sAPIResource, K8sResource } from 'types';
 import { ResourceLoader } from './ResourceLoader';

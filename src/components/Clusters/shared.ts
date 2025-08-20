@@ -1,4 +1,4 @@
-import { ActiveClusterState, clusterState } from 'state/clusterAtom';
+import { ActiveClusterState, clusterAtom } from 'state/clusterAtom';
 import { ClusterStorage } from 'state/types';
 import {
   CurrentContext,
@@ -11,7 +11,7 @@ import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { hasNonOidcAuth, createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router';
-import { SetterOrUpdater, useSetRecoilState } from 'recoil';
+import { SetStateAction, useSetAtom } from 'jotai';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { ManualKubeConfigIdType } from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
@@ -163,7 +163,9 @@ export const addByContext = (
   clustersInfo: useClustersInfoType,
   manualKubeConfigId?: {
     manualKubeConfigId?: ManualKubeConfigIdType;
-    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+    setManualKubeConfigId?: (
+      update: SetStateAction<ManualKubeConfigIdType>,
+    ) => void;
   },
 ) => {
   let kubeconfig = userKubeconfig as ValidKubeconfig;
@@ -243,7 +245,7 @@ export const addByContext = (
 };
 
 export function useHandleResetEndpoint() {
-  const setCluster = useSetRecoilState(clusterState);
+  const setCluster = useSetAtom(clusterAtom);
   const navigate = useNavigate();
   if (window.location.pathname === '/reset') {
     setCluster(null);

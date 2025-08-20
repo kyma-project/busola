@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { Button, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
-  validateResourcesState,
+  validateResourcesAtom,
 } from 'state/preferences/validateResourcesAtom';
-import { validationSchemasState } from 'state/validationSchemasAtom';
+import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
@@ -19,8 +19,8 @@ import { useAtomValue } from 'jotai';
 
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
-  const [validateResources, setValidateResources] = useRecoilState(
-    validateResourcesState,
+  const [validateResources, setValidateResources] = useAtom(
+    validateResourcesAtom,
   );
   const validationFeature = useFeature(
     configFeaturesNames.RESOURCE_VALIDATION,
@@ -34,7 +34,7 @@ export default function ResourceValidationSettings() {
       [],
   } = getExtendedValidateResourceState(validateResources);
 
-  const validationSchemas = useAtomValue(validationSchemasState);
+  const validationSchemas = useAtomValue(validationSchemasAtom);
   const allOptions = useMemo(
     () =>
       validationSchemas?.policies

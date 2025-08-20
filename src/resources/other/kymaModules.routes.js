@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails';
 import { t } from 'i18next';
@@ -34,7 +34,7 @@ const ColumnWrapper = ({
   handleResourceDelete,
   showDeleteDialog,
 }) => {
-  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { clusterUrl, namespaceUrl } = useUrl();
   const url = namespaced
     ? namespaceUrl('kymamodules')

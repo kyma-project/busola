@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { createFetchFn } from 'shared/hooks/BackendAPI/useFetch';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   getValidationEnabledSchemas,
   usePolicySet,
@@ -23,9 +23,9 @@ import {
 import { Loader } from '@ui5/webcomponents-react-compat/dist/components/Loader/index.js';
 import { ClusterValidationConfigurationDialog } from './ClusterValidationConfiguration';
 
-import { authDataState } from 'state/authDataAtom';
-import { clusterState } from 'state/clusterAtom';
-import { validationSchemasState } from 'state/validationSchemasAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import {
   getDefaultScanConfiguration,
   ScanConfiguration,
@@ -36,13 +36,12 @@ import { ScanResult } from './ScanResult';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
 import { K8sAPIResource } from 'types';
-import { useAtomValue } from 'jotai';
 
 export const ClusterValidation = () => {
   const { t } = useTranslation();
 
-  const authData = useRecoilValue(authDataState);
-  const cluster = useRecoilValue(clusterState);
+  const authData = useAtomValue(authDataAtom);
+  const cluster = useAtomValue(clusterAtom);
 
   const { fetch, post } = useMemo(() => {
     const fetch = createFetchFn({
@@ -56,7 +55,7 @@ export const ClusterValidation = () => {
     () => new ResourceLoader(relativeUrl => fetch({ relativeUrl }), undefined),
     [fetch],
   );
-  const validationSchemas = useAtomValue(validationSchemasState);
+  const validationSchemas = useAtomValue(validationSchemasAtom);
   const defaultPolicySet = usePolicySet();
 
   const { namespaces } = useAvailableNamespaces();

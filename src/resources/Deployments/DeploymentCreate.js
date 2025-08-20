@@ -13,7 +13,7 @@ import {
   createPresets,
 } from './templates';
 import { useAtomValue } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
@@ -38,7 +38,7 @@ export default function DeploymentCreate({
   const [initialResource, setInitialResource] = useState(
     initialDeployment || createDeploymentTemplate(namespace),
   );
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

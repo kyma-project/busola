@@ -1,12 +1,12 @@
-import { useRecoilValue } from 'recoil';
-import { clusterState } from 'state/clusterAtom';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useAtomValue } from 'jotai';
+import { clusterAtom } from 'state/clusterAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { ValidKubeconfig } from 'types';
 import { useCallback } from 'react';
 
 export const useCreateKubeconfig = () => {
-  const cluster = useRecoilValue(clusterState)!;
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const cluster = useAtomValue(clusterAtom)!;
+  const namespace = useAtomValue(activeNamespaceIdAtom);
   const currentCluster = cluster.currentContext.cluster;
 
   const createKubeconfig = useCallback(

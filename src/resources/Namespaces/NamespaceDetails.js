@@ -6,7 +6,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangesList } from 'resources/LimitRanges/LimitRangesList';
 import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
@@ -19,7 +19,7 @@ import { useSetAtom } from 'jotai';
 
 export default function NamespaceDetails(props) {
   const { t } = useTranslation();
-  const setShowAdd = useSetAtom(showYamlUploadDialogState);
+  const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
 
   if (props.resourceName === '-all-') {
     return <AllNamespacesDetails {...props} />;
