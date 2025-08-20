@@ -8,16 +8,15 @@ import {
   useSearchParams,
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
 import { useAppTracking } from 'hooks/tracking';
 
-import { clusterState } from 'state/clusterAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import { languageAtom } from 'state/preferences/languageAtom';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useAuthHandler } from 'state/authDataAtom';
 import { useGetConfiguration } from 'state/configuration/configurationAtom';
 import { useGetExtensions } from 'state/navigation/extensionsAtom';
@@ -30,7 +29,7 @@ import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { removePreviousPath, useAfterInitHook } from 'state/useAfterInitHook';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
-import { multipleContexts } from 'state/multipleContextsAtom';
+import { multipleContextsAtom } from 'state/multipleContextsAtom';
 
 import {
   Button,
@@ -38,7 +37,7 @@ import {
   SplitterElement,
   SplitterLayout,
 } from '@ui5/webcomponents-react';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
 import { Preferences } from 'components/Preferences/Preferences';
 import { Header } from 'header/Header';
@@ -50,30 +49,30 @@ import { IncorrectPath } from './IncorrectPath';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ContextChooserMessage } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
-import { themeState } from 'state/preferences/themeAtom';
+import { themeAtom } from 'state/preferences/themeAtom';
 import { initTheme } from './initTheme';
 
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
-import { manualKubeConfigIdState } from 'state/manualKubeConfigIdAtom';
+import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 
 export default function App() {
-  const theme = useRecoilValue(themeState);
-  const language = useRecoilValue(languageAtom);
-  const cluster = useRecoilValue(clusterState);
-  const setNamespace = useSetRecoilState(activeNamespaceIdState);
+  const theme = useAtomValue(themeAtom);
+  const language = useAtomValue(languageAtom);
+  const cluster = useAtomValue(clusterAtom);
+  const setNamespace = useSetAtom(activeNamespaceIdAtom);
   const { namespace } = useUrl();
   const makeGardenerLoginRoute = useMakeGardenerLoginRoute();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const authFormRef = useRef<HTMLFormElement>(null);
   const [search] = useSearchParams();
-  const [contextsState, setContextsState] = useAtom(multipleContexts);
+  const [contextsState, setContextsState] = useAtom(multipleContextsAtom);
   const [manualKubeConfigId, setManualKubeConfigId] = useAtom(
-    manualKubeConfigIdState,
+    manualKubeConfigIdAtom,
   );
   const [authFormState, setAuthFormState] = useState<{
     users?: Users;
@@ -104,7 +103,7 @@ export default function App() {
   useAppTracking();
   useAfterInitHook(kubeconfigIdState);
 
-  const showCompanion = useAtomValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionAtom);
 
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();

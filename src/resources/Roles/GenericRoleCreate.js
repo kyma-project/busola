@@ -8,7 +8,7 @@ import { createRuleTemplate, validateRole } from './helpers';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useAtomValue } from 'jotai';
 
 export function GenericRoleCreate({
@@ -28,7 +28,7 @@ export function GenericRoleCreate({
   const [initialResource, setInitialResource] = useState(
     initialRole || createTemplate(),
   );
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

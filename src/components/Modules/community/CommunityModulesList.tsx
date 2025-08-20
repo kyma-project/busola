@@ -13,12 +13,12 @@ import {
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import {
-  columnLayoutState,
+  columnLayoutAtom,
   ColumnState,
   ShowCreate,
 } from 'state/columnLayoutAtom';
 import { useSetAtom } from 'jotai';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
@@ -68,8 +68,8 @@ export const CommunityModulesList = ({
 
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
-  const setLayoutColumn = useSetAtom(columnLayoutState);
-  const setIsFormOpen = useSetAtom(isFormOpenState);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
+  const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const { getItem: getModuleResource } = useFetchModuleData(
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.data ?? null,

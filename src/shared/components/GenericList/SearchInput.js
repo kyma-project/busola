@@ -8,7 +8,7 @@ import { useEventListener } from 'hooks/useEventListener';
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
 import { useAtomValue } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import './SearchInput.scss';
 
 SearchInput.propTypes = {
@@ -42,7 +42,7 @@ export function SearchInput({
   const { t } = useTranslation();
   const isDetailsView = useContext(ResourceDetailContext);
   const searchInputRef = useRef(null);
-  const columnLayout = useAtomValue(columnLayoutState);
+  const columnLayout = useAtomValue(columnLayoutAtom);
 
   const onKeyPress = e => {
     const { key } = e;

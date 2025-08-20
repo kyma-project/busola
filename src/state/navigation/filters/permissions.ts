@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { PermissionSetState } from 'state/permissionSetsSelector';
+import { PermissionSetState } from 'state/permissionSetsAtom';
 
 export const doesResourceExist = ({
   resourceGroupAndVersion,

@@ -4,17 +4,16 @@ import { atom, useAtomValue, useSetAtom } from 'jotai';
 import {
   ExtendedValidateResources,
   getExtendedValidateResourceState,
-  validateResourcesState,
+  validateResourcesAtom,
 } from './preferences/validateResourcesAtom';
 import {
   emptyValidationSchema,
   getEnabledRules,
   ValidationPolicy,
   ValidationSchema,
-  validationSchemasState,
+  validationSchemasAtom,
 } from './validationSchemasAtom';
 import { configFeaturesNames } from 'state/types';
-import { useRecoilValue } from 'recoil';
 
 type PolicyReference = string;
 
@@ -46,7 +45,7 @@ export const usePolicySet = () => {
   const validationFeature = useFeature(
     configFeaturesNames.RESOURCE_VALIDATION,
   ) as ValidationFeatureConfig;
-  const validateResources = useRecoilValue(validateResourcesState);
+  const validateResources = useAtomValue(validateResourcesAtom);
   const validationPreferences = useMemo(
     () => getExtendedValidateResourceState(validateResources),
     [validateResources],
@@ -83,9 +82,9 @@ export const getValidationEnabledSchemas = (
 };
 
 export const useGetValidationEnabledSchemas = () => {
-  const setSchemas = useSetAtom(validationSchemasEnabledState);
+  const setSchemas = useSetAtom(validationSchemasEnabledAtom);
 
-  const validationSchemas = useAtomValue(validationSchemasState);
+  const validationSchemas = useAtomValue(validationSchemasAtom);
   const policySet = usePolicySet();
 
   useEffect(() => {
@@ -101,7 +100,7 @@ export const useGetValidationEnabledSchemas = () => {
   }, [validationSchemas, policySet]);
 };
 
-export const validationSchemasEnabledState = atom<ValidationSchema>(
+export const validationSchemasEnabledAtom = atom<ValidationSchema>(
   emptyValidationSchema,
 );
-validationSchemasEnabledState.debugLabel = 'validationSchemasEnabledState';
+validationSchemasEnabledAtom.debugLabel = 'validationSchemasEnabledAtom';

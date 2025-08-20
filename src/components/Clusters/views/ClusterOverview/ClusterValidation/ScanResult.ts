@@ -1,5 +1,5 @@
 import { Warning } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
-import { PermissionSet } from 'state/permissionSetsSelector';
+import { PermissionSet } from 'state/permissionSetsAtom';
 import { ValidationSchema } from 'state/validationSchemasAtom';
 import { K8sAPIResource } from 'types';
 

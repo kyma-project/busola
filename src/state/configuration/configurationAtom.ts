@@ -1,13 +1,13 @@
 import jsyaml from 'js-yaml';
 import { isArray, mergeWith } from 'lodash';
 import { useEffect } from 'react';
-import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 
-import { clusterState } from '../clusterAtom';
-import { authDataState } from '../authDataAtom';
+import { clusterAtom } from '../clusterAtom';
+import { authDataAtom } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
-import { apiGroupState } from '../discoverability/apiGroupsSelector';
+import { apiGroupAtom } from '../discoverability/apiGroupsAtom';
 import { getFeatures } from './getFeatures';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { getConfigDir } from 'shared/utils/env';
@@ -85,11 +85,11 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
 };
 
 export const useGetConfiguration = () => {
-  const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
-  const apis = useRecoilValue(apiGroupState);
-  const setConfig = useSetRecoilState(configurationAtom);
-  const fetchFn = getFetchFn(useRecoilValue);
+  const cluster = useAtomValue(clusterAtom);
+  const auth = useAtomValue(authDataAtom);
+  const apis = useAtomValue(apiGroupAtom);
+  const setConfig = useSetAtom(configurationAtom);
+  const fetchFn = getFetchFn(useAtomValue);
 
   useEffect(() => {
     const setClusterConfig = async () => {
@@ -102,9 +102,5 @@ export const useGetConfiguration = () => {
   }, [cluster, auth, apis]);
 };
 
-export const configurationAtom: RecoilState<Configuration> = atom<
-  Configuration
->({
-  key: 'configurationAtom',
-  default: defaultValue,
-});
+export const configurationAtom = atom<Configuration>(defaultValue);
+configurationAtom.debugLabel = 'configurationAtom';

@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { useMatch, useNavigate } from 'react-router';
-import { namespacesState } from 'state/namespacesAtom';
+import { namespacesAtom } from 'state/namespacesAtom';
 
 import { SideNavigationSubItem } from '@ui5/webcomponents-react';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
@@ -11,7 +11,7 @@ export function NamespaceChooser() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { namespaceUrl } = useUrl();
-  const allNamespaces = useAtomValue(namespacesState);
+  const allNamespaces = useAtomValue(namespacesAtom);
   const { navigateSafely } = useFormNavigation();
 
   const { resourceType = '' } =

@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { Label, Switch } from '@ui5/webcomponents-react';
-import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
+import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
 
 export default function NamespaceSettings() {
   const { t } = useTranslation();
-  const [showHiddenNamespaces, setShowHiddenNamespaces] = useRecoilState(
-    showHiddenNamespacesState,
+  const [showHiddenNamespaces, setShowHiddenNamespaces] = useAtom(
+    showHiddenNamespacesAtom,
   );
 
   const toggleVisibility = () => {

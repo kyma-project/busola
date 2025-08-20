@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Wizard, WizardStep, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { configurationAtom } from 'state/configuration/configurationAtom';
-import { authDataState } from 'state/authDataAtom';
-import { showAddClusterWizard } from 'state/showAddClusterWizard';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { showAddClusterWizardAtom } from 'state/showAddClusterWizardAtom';
+import { isFormOpenAtom } from 'state/formOpenAtom';
 import { checkAuthRequiredInputs } from '../helper';
 
 import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
@@ -32,11 +31,11 @@ export function AddClusterWizard({
   dialogRef,
   config = {},
 }) {
-  const busolaClusterParams = useRecoilValue(configurationAtom);
+  const busolaClusterParams = useAtomValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
   const clustersInfo = useClustersInfo();
-  const setAuth = useSetRecoilState(authDataState);
+  const setAuth = useSetAtom(authDataAtom);
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
@@ -44,9 +43,9 @@ export function AddClusterWizard({
     busolaClusterParams?.config?.storage || 'sessionStorage',
   );
   const [selected, setSelected] = useState(1);
-  const setShowWizard = useSetAtom(showAddClusterWizard);
+  const setShowWizard = useSetAtom(showAddClusterWizardAtom);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
-  const setIsFormOpen = useSetAtom(isFormOpenState);
+  const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const [chosenContext, setChosenContext] = useState(undefined);
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 

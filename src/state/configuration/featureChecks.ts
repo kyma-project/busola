@@ -1,6 +1,6 @@
 import { AuthDataState } from '../authDataAtom';
 import { ConfigFeature } from '../types';
-import { ApiGroupState } from 'state/discoverability/apiGroupsSelector';
+import { ApiGroupState } from 'state/discoverability/apiGroupsAtom';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 function extractGroupVersions(apis: ApiGroupState) {

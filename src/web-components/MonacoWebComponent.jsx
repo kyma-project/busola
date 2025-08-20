@@ -1,22 +1,22 @@
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
-import { RecoilRoot } from 'recoil';
+import { Provider } from 'jotai';
 import createWebComponent from './createWebComponent';
 import monacoCSS from 'monaco-editor/min/vs/editor/editor.main.css?inline';
 import customCSS from 'shared/components/MonacoEditorESM/Editor.scss?inline';
 
 const DEFAULT_OPTIONS = {};
 
-function EditorWithRecoil(props) {
+function EditorWithJotai(props) {
   return (
-    <RecoilRoot>
+    <Provider>
       <Editor {...props} />
-    </RecoilRoot>
+    </Provider>
   );
 }
 
 createWebComponent(
   'monaco-editor',
-  EditorWithRecoil,
+  EditorWithJotai,
   {
     value: '',
     language: 'javascript',

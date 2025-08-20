@@ -4,7 +4,7 @@ import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import {
   PermissionSetState,
   getPermissionResourceRules,
-} from 'state/permissionSetsSelector';
+} from 'state/permissionSetsAtom';
 import { K8sResource } from 'types';
 
 export type ConfigMapData = {

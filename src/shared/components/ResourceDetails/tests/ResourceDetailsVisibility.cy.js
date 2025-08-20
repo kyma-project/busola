@@ -1,6 +1,6 @@
 /* global cy */
 import { ResourceDetails } from '../ResourceDetails';
-import { authDataState } from 'state/authDataAtom';
+import { authDataAtom } from 'state/authDataAtom';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 describe('ResourceDetails visibility', () => {
@@ -16,11 +16,14 @@ describe('ResourceDetails visibility', () => {
       },
     });
 
-    const initializeRecoil = ({ set }) => {
-      set(authDataState, {
-        token: 'test-token',
-      });
-    };
+    const initializeJotai = [
+      [
+        authDataAtom,
+        {
+          token: 'test-token',
+        },
+      ],
+    ];
 
     cy.mount(
       <ResourceDetails
@@ -45,7 +48,7 @@ describe('ResourceDetails visibility', () => {
         ]}
       />,
       {
-        initializeRecoil,
+        initializeJotai,
       },
     );
 

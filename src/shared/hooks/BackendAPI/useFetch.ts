@@ -1,11 +1,11 @@
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { throwHttpError } from 'shared/hooks/BackendAPI/config';
 
-import { authDataState, AuthDataState } from '../../../state/authDataAtom';
+import { authDataAtom, AuthDataState } from '../../../state/authDataAtom';
 import { getClusterConfig } from '../../../state/utils/getBackendInfo';
-import { ActiveClusterState, clusterState } from '../../../state/clusterAtom';
+import { ActiveClusterState, clusterAtom } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
   relativeUrl,
@@ -56,8 +56,8 @@ export const createFetchFn = ({
 };
 
 export const useFetch = () => {
-  const authData = useRecoilValue(authDataState);
-  const cluster = useRecoilValue(clusterState);
+  const authData = useAtomValue(authDataAtom);
+  const cluster = useAtomValue(clusterAtom);
 
   const fetchFn = createFetchFn({
     authData,

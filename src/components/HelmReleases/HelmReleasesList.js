@@ -1,10 +1,10 @@
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import { ResourceDescription, docsURL } from 'components/HelmReleases';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -12,7 +12,7 @@ import { HelmReleaseStatus } from './HelmReleaseStatus';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
   const { namespaceUrl } = useUrl();
   const resourceUrl = entry => {
     return namespaceUrl(`helm-releases/${entry.releaseName}`, {

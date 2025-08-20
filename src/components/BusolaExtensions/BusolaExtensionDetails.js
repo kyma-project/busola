@@ -14,7 +14,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { extensibilitySchemasState } from 'state/extensibilitySchemasAtom';
+import { extensibilitySchemasAtom } from 'state/extensibilitySchemasAtom';
 import { useUrl } from 'hooks/useUrl';
 
 import {
@@ -34,7 +34,7 @@ import { configFeaturesNames } from 'state/types';
 
 export function BusolaExtensionDetails({ name, namespace }) {
   const { t } = useTranslation();
-  const extensibilitySchemas = useAtomValue(extensibilitySchemasState);
+  const extensibilitySchemas = useAtomValue(extensibilitySchemasAtom);
 
   const { clusterUrl } = useUrl();
 

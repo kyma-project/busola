@@ -14,14 +14,14 @@ import { CommunityModuleContext } from 'components/Modules/community/providers/C
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 import { checkSelectedModule } from './support';
 import { useAtomValue } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 
 export default function ModulesList({ namespaced }) {
   const { t } = useTranslation();
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );

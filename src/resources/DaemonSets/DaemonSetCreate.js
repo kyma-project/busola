@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import * as _ from 'lodash';
 
 import { createDaemonSetTemplate } from './templates';
@@ -18,7 +18,7 @@ export default function DaemonSetCreate({
 }) {
   const { t } = useTranslation();
 
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [daemonSet, setDaemonSet] = useState(
     _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
   );

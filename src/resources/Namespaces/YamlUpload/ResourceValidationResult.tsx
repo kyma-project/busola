@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import {
   FlexBox,
@@ -12,14 +11,14 @@ import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import {
   getExtendedValidateResourceState,
-  validateResourcesState,
+  validateResourcesAtom,
 } from 'state/preferences/validateResourcesAtom';
 import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
 import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import { validationSchemasEnabledState } from 'state/validationEnabledSchemasAtom';
+import { validationSchemasEnabledAtom } from 'state/validationEnabledSchemasAtom';
 import { useLoadingDebounce } from 'shared/hooks/useLoadingDebounce';
 
 import { SeparatorLine } from './SeparatorLine';
@@ -116,9 +115,9 @@ const ValidationWarnings = ({
 
 export const ResourceValidationResult = ({ resource }: { resource: any }) => {
   const validateResources = getExtendedValidateResourceState(
-    useRecoilValue(validateResourcesState),
+    useAtomValue(validateResourcesAtom),
   );
-  const validationSchemas = useAtomValue(validationSchemasEnabledState);
+  const validationSchemas = useAtomValue(validationSchemasEnabledAtom);
   const { debounced } = useLoadingDebounce(resource, 500);
   const warnings = [
     useValidateResourceBySchema(debounced, validationSchemas),

@@ -10,5 +10,5 @@ const defaultValue: KubeConfigMultipleState = {
   chosenContext: null,
 };
 
-export const multipleContexts = atom<KubeConfigMultipleState>(defaultValue);
-multipleContexts.debugLabel = 'multipleContexts';
+export const multipleContextsAtom = atom<KubeConfigMultipleState>(defaultValue);
+multipleContextsAtom.debugLabel = 'multipleContextsAtom';

@@ -5,13 +5,13 @@ declare namespace Cypress {
     /**
      * Custom command to mount a React component with common providers
      * @param component - React component to mount
-     * @param options - Options for mount, may include initializeRecoil function
-     * @example cy.mount(<MyComponent />, { initializeRecoil: (snapshot) => {...} })
+     * @param options - Options for mount, may include initializeJotai function
+     * @example cy.mount(<MyComponent />, { initializeJotai: [[atom, value]] })
      */
     mount(
       component: React.ReactNode,
       options?: {
-        initializeRecoil?: (snapshot: any) => void;
+        initializeJotai?: Array<[any, any]>;
         [key: string]: any;
       },
     ): Chainable<any>;

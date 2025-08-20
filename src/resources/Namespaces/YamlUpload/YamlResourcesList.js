@@ -10,7 +10,7 @@ import {
   Title,
 } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import './YamlResourceList.scss';
 
@@ -22,13 +22,13 @@ import {
 } from './useUploadResources';
 import { ResourceValidationResult } from './ResourceValidationResult';
 
-import { activeNamespaceIdState } from '../../../state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from '../../../state/activeNamespaceIdAtom';
 import { SeparatorLine } from './SeparatorLine';
 import { ValidationSwitch } from './ValidationSwitch';
 
 export function YamlResourcesList({ resourcesData }) {
   const { t } = useTranslation();
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const defaultNamespace = namespaceId || 'default';
 
   const resources = resourcesData?.filter(resource => resource !== null);

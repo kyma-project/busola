@@ -1,22 +1,21 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
+import { isPreferencesOpenAtom } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import * as handlers from './handlers';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { K8sResource } from 'types';
-import { clustersState } from 'state/clustersAtom';
-import { clusterState } from 'state/clusterAtom';
-import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
+import { clustersAtom } from 'state/clustersAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { availableNodesAtom } from 'state/navigation/availableNodesAtom';
 import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNavigate, To } from 'react-router';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 
 type useSearchResultsProps = {
   query: string;
@@ -40,18 +39,17 @@ export function useSearchResults({
   resourceCache,
   updateResourceCache,
 }: useSearchResultsProps): SearchResults {
-  const clusters = useAtomValue(clustersState);
-
-  const cluster = useRecoilValue(clusterState);
-  const availableNodes = useRecoilValue(availableNodesSelector);
-  const setLayoutColumn = useSetAtom(columnLayoutState);
+  const clusters = useAtomValue(clustersAtom);
+  const cluster = useAtomValue(clusterAtom);
+  const availableNodes = useAtomValue(availableNodesAtom);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
 
   const hiddenNamespaces = useGetHiddenNamespaces();
-  const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
+  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesAtom);
   const fetch = useFetch();
   const { t } = useTranslation();
-  const setOpenPreferencesModal = useSetAtom(isPreferencesOpenState);
-  const setShowYamlUpload = useSetAtom(showYamlUploadDialogState);
+  const setOpenPreferencesModal = useSetAtom(isPreferencesOpenAtom);
+  const setShowYamlUpload = useSetAtom(showYamlUploadDialogAtom);
   const clustersInfo = useClustersInfo();
   const navigate = useNavigate();
 

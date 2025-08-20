@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { editor } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { themeState } from 'state/preferences/themeAtom';
+import { useAtomValue } from 'jotai';
+import { themeAtom } from 'state/preferences/themeAtom';
 import { getEditorTheme } from './useCreateEditor';
 
 type useCreateDiffEditorProps = {
@@ -16,7 +16,7 @@ export const useCreateDiffEditor = ({
   modifiedValue,
   language,
 }: useCreateDiffEditorProps) => {
-  const theme = useRecoilValue(themeState);
+  const theme = useAtomValue(themeAtom);
   const editorTheme = getEditorTheme(theme);
   const divRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();

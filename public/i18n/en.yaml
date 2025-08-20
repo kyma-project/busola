@@ -1,49 +1,48 @@
-horizontal-pod-autoscalers: Horizontal Pod Autoscalers
 apps:
   title: Apps
 cluster-overview:
   headers:
+    cluster-details: Cluster Details
     cpu: CPU
     memory: Memory
+    metadata: Metadata
     metrics: Metrics
     nodes: Nodes
-    cluster-details: Cluster Details
-    metadata: Metadata
     pool: Pool
   statistics:
-    cpu-usage: 'CPU Usage'
-    memory-usage: 'Memory Usage'
-    cpu-requests: 'CPU requests'
-    memory-requests: 'Memory requests'
-    cpu-limits: 'CPU limits'
-    memory-limits: 'Memory limits'
-    pods-overview: 'Pods Overview'
-    total-pods: 'Total Pods'
-    healthy-pods: 'Healthy Pods'
-    pending-pods: 'Pending Pods'
-    failing-pods: 'Failing Pods'
-    deployments-overview: 'Deployments Overview'
-    total-deployments: 'Total Deployments'
-    healthy-deployments: 'Healthy Deployments'
-    failing-deployments: 'Failing Deployments'
-    daemonsets-overview: 'Daemon Sets Overview'
-    total-daemonsets: 'Total Daemon Sets'
-    healthy-daemonsets: 'Healthy Daemon Sets'
-    unhealthy-daemonsets: 'Unhealthy Daemon Sets'
-    statefulsets-overview: 'Stateful Sets Overview'
-    healthy-statefulsets: 'Healthy Stateful Sets'
-    unhealthy-statefulsets: 'Unhealthy Stateful Sets'
-    total-statefulsets: 'Total Stateful Sets'
-    services-overview: 'Services Overview'
-    services-loadbalancers: 'LoadBalancers'
-    services-others: 'Others'
-    total-services: 'Total Services'
-    persistentvolumes-overview: 'Persistent Volumes Overview'
-    total-persistentvolumes: 'Total Persistent Volumes'
-    persistent-volumes-total-capacity: 'Total Capacity'
-    nodes: 'Nodes'
-    nvidia-gpus: 'Nvidia GPUs'
-    modules-overview: 'Modules Overview'
+    cpu-limits: CPU limits
+    cpu-requests: CPU requests
+    cpu-usage: CPU Usage
+    daemonsets-overview: Daemon Sets Overview
+    deployments-overview: Deployments Overview
+    failing-deployments: Failing Deployments
+    failing-pods: Failing Pods
+    healthy-daemonsets: Healthy Daemon Sets
+    healthy-deployments: Healthy Deployments
+    healthy-pods: Healthy Pods
+    healthy-statefulsets: Healthy Stateful Sets
+    memory-limits: Memory limits
+    memory-requests: Memory requests
+    memory-usage: Memory Usage
+    modules-overview: Modules Overview
+    nodes: Nodes
+    nvidia-gpus: Nvidia GPUs
+    pending-pods: Pending Pods
+    persistent-volumes-total-capacity: Total Capacity
+    persistentvolumes-overview: Persistent Volumes Overview
+    pods-overview: Pods Overview
+    services-loadbalancers: LoadBalancers
+    services-others: Others
+    services-overview: Services Overview
+    statefulsets-overview: Stateful Sets Overview
+    total-daemonsets: Total Daemon Sets
+    total-deployments: Total Deployments
+    total-persistentvolumes: Total Persistent Volumes
+    total-pods: Total Pods
+    total-services: Total Services
+    total-statefulsets: Total Stateful Sets
+    unhealthy-daemonsets: Unhealthy Daemon Sets
+    unhealthy-statefulsets: Unhealthy Stateful Sets
   tooltips:
     cpu-used-percentage: 'CPU used: {{percentage}}'
     memory-used-percentage: 'Memory used: {{percentage}}'
@@ -56,35 +55,35 @@ cluster-roles:
   name_singular: ClusterRole
   title: Cluster Roles
 cluster-validation:
-  title: Cluster Validation
   scan:
-    progress: Scan Progress
-    scope: Scan Scope
-    result: Scan Result
-    k8s-api-resources: K8s API Resources
-    cluster-resources: Cluster Resources
-    warning-count: '{{warningCount}} warnings'
-    unauthorized-count: '{{unauthorized}} / {{resourceCount}} unauthorized'
-    partially-scanned: 'partially scanned'
-    not-started: Not started
     buttons:
-      scan: Scan
-      configure: Configure
       clear: Clear
+      configure: Configure
+      scan: Scan
+    cluster-resources: Cluster Resources
     configuration:
-      namespaces: Namespaces To Scan
-      parameters: Scan Parameters
-      parallel-requests: Parallel Requests
       invalid-parallel-requests: Please select an integer greater than 0
+      namespaces: Namespaces To Scan
+      parallel-requests: Parallel Requests
+      parameters: Scan Parameters
+    k8s-api-resources: K8s API Resources
+    not-started: Not started
+    partially-scanned: partially scanned
+    progress: Scan Progress
+    result: Scan Result
+    scope: Scan Scope
+    unauthorized-count: '{{unauthorized}} / {{resourceCount}} unauthorized'
+    warning-count: '{{warningCount}} warnings'
+  title: Cluster Validation
 clusters:
   add:
     load-default: Load default cluster
     title: Connect cluster
   auth-type: Authentication type
   buttons:
+    connect-cluster: Connect cluster
     next-step: Next step
     previous-step: Previous step
-    connect-cluster: Connect cluster
   common:
     api-server-address: API Server Address
     download-kubeconfig: Download Kubeconfig
@@ -97,30 +96,30 @@ clusters:
     subtitle: Connect one to use the Kyma dashboard.
     title: There are no clusters yet
   gardener:
-    error: 'Connecting clusters failed: {{message}}.'
     button: Connect a Gardener cluster
+    error: 'Connecting clusters failed: {{message}}.'
   labels:
     client-id: Client ID
     client-secret: Client Secret
+    context: Context
     issuer-url: Issuer URL
     name: Clusters
     scopes: Scopes
-    context: Context
   list:
     no-clusters-found: No clusters found
   messages:
     choose-cluster: Choose Context
-    wrong-configuration: Cannot apply the configuration
     connection-failed: Error connecting to cluster. Check your configuration and make sure the cluster is online.
+    wrong-configuration: Cannot apply the configuration
   name_singular: Cluster
   oidc: OIDC
   overview:
+    global-account-id: Global Account ID
+    kubernetes-version: Kubernetes Version
+    kyma-version: Kyma Version
+    subaccount-id: Subaccount ID
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Details
-    kyma-version: Kyma Version
-    kubernetes-version: Kubernetes Version
-    global-account-id: Global Account ID
-    subaccount-id: Subaccount ID
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
@@ -129,7 +128,6 @@ clusters:
   storage:
     choose-storage:
       label: Storage type configuration
-    storage-preference: Storage preference
     descriptions:
       inMemory: Cluster data is cleared when you leave or refresh the page.
       localStorage: Cluster data is persisted between browser reloads.
@@ -142,6 +140,7 @@ clusters:
       inMemory: In memory
       localStorage: Local storage
       sessionStorage: Session storage
+    storage-preference: Storage preference
     title: Storage Type
   token: Token
   wizard:
@@ -152,39 +151,39 @@ clusters:
       scopes: Scopes
       token: Token
       using-oidc: OIDC provider
+    authentication: Authentication
     context: Context to connect
-    provide-context: Provide Context
-    kubeconfig-upload: Drop a .kubeconfig file or click to
     editor-placeholder: Paste .kubeconfig here
     incomplete: We couldn't find enough authentication information for {{context}} in your kubeconfig. You can enter it manually.
     intro: To connect a cluster, you have to provide the cluster configuration – called “kubeconfig” in the Kubernetes world.
     kubeconfig: Provide Kubeconfig
+    kubeconfig-upload: Drop a .kubeconfig file or click to
     not-an-object: kubeconfig is not an object
+    provide-context: Provide Context
+    review: Review
     storage: Privacy
     token-info: If you don't know how to get your token, ask your authentication provider.
     update: Provide Authentication
-    authentication: Authentication
-    review: Review
 command-palette:
   crs:
-    cluster-short: Cluster CRs
-    namespace-short: Namespace CRs
     cluster: Custom Resources (Cluster)
+    cluster-short: Cluster CRs
     namespace: Custom Resources (Namespace)
+    namespace-short: Namespace CRs
   help:
+    all-namespaces: List resources from all namespaces
     choose-cluster: Choose cluster
+    cluster-details: Cluster details
     crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
-    open-upload-yaml: Open upload YAML
     open-preferences: Open preferences
+    open-upload-yaml: Open upload YAML
     resource-aliases: Built-in resource aliases
     short-help: Type <0>?</0> for help
-    all-namespaces: List resources from all namespaces
-    cluster-details: Cluster details
   item-actions:
-    navigate-autocomplete: Use <0>Enter</0> to navigate, <0>Tab</0> to autocomplete
     navigate: Use <0>Enter</0> to navigate
+    navigate-autocomplete: Use <0>Enter</0> to navigate, <0>Tab</0> to autocomplete
     show-help: Show available commands
     switch: Switch context
   resource-names:
@@ -221,17 +220,18 @@ command-palette:
     logs-for: Logs for {{target}}
     no-results-found: No results found
   search:
-    remove-ns-context: Remove Namespace context
     quick-navigation: Quick navigation
+    remove-ns-context: Remove Namespace context
 common:
   ariaLabel:
-    new-tab-link: This link will be opened in a new tab.
     editor: editor
+    new-tab-link: This link will be opened in a new tab.
   buttons:
     add: Add
     add-all: Add all
     button-disabled: Disabled
     cancel: Cancel
+    cascade-delete: Cascade Delete
     choose: Choose
     clone: Clone
     close: Close
@@ -244,12 +244,11 @@ common:
     discard: Discard
     disconnect: Disconnect
     edit: Edit
-    cascade-delete: Cascade Delete
     learn-more: Learn More
     ok: OK
     place: Place
-    replace: Replace
     remove-all: Remove all
+    replace: Replace
     reset: Reset
     restart: Restart
     retry: Retry
@@ -275,11 +274,11 @@ common:
     template: Template
   delete-dialog:
     delete-confirm: Don't ask again
-    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
     delete-message: Are you sure you want to delete {{type}} {{name}}?
     delete-title: Delete {{type}}
     disconnect-message: Are you sure you want to disconnect {{type}} {{name}}?
     disconnect-title: Disconnect {{type}}
+    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
   errors:
     couldnt-fetch-resources: Couldn't fetch resources.
     error: Error
@@ -290,41 +289,38 @@ common:
   headers:
     age: Age
     annotations: Annotations
-    created: Created
+    conditions: Conditions
     configuration: Configuration
-    last-update: Last Update
+    created: Created
     description: Description
     discard-changes: Discard Changes
-    warning: Warning
     items: Items
     key: Key
     labels: Labels
+    last-update: Last Update
     link: Link
     loading: Loading...
+    message: Message
     monitoring-and-health: Monitoring and Health
     name: Name
     namespace: Namespace
     namespaces: Namespaces
+    node-details: Node Details
+    nodeInfo: Node Info
     owner: Controlled By
     pods: Pods
     policies: Policies
     region: Region
     resource: Resource
-    resource-type: Resource Type
     resource-details: Resource Details
-    nodeInfo: Node Info
-    node-details: Node Details
+    resource-type: Resource Type
     specification: Specification
     started-at: Started At
     status: Status
     value: Value
     version: Version
+    warning: Warning
     zone: Zone
-    conditions: Conditions
-    message: Message
-  value-units:
-    days-ago: days ago
-    days: days
   labels:
     category: Category
     data: Data
@@ -342,6 +338,7 @@ common:
     resource-name: '{{resource}} $t(common.labels.name)'
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
+    type: Type
     version: 'Kyma Dashboard version:'
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
@@ -364,8 +361,8 @@ common:
     secret-ref-name: Select name
     secret-ref-namespace: Select namespace
   product-title: Kyma
-  protected-resource-description: Resource protected. Go to Preferences to turn on the modification of protected resources.
   protected-resource: Protected resource
+  protected-resource-description: Resource protected. Go to Preferences to turn on the modification of protected resources.
   sorting:
     asc: Ascending
     count: Count
@@ -382,23 +379,25 @@ common:
     type: Type
   statuses:
     error: Error
-    ready: Ready
-    warning: Warning
-    processing: Processing
     other: Other
+    processing: Processing
+    ready: Ready
     unknown: Unknown
+    warning: Warning
   tabs:
     edit: Edit
     view: View
     yaml: YAML
   tooltips:
+    collapse-navigation: Collapse Navigation
     column: Col
-    copy-to-clipboard: Copy to Clipboard
     copied-to-clipboard: Copied {{resourceName}} to clipboard
+    copy-to-clipboard: Copy to Clipboard
     download: Download
     error: Error
+    expand-navigation: Expand Navigation
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc')."
+    k8s-name-input: Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc').
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
     protected-resources-info: To allow for modifying protected resources go to Preferences > Clusters.
@@ -412,32 +411,33 @@ common:
     show: Show read-only fields
     sort: Sort
     unknown-date: Unknown date
-    expand-navigation: Expand Navigation
-    collapse-navigation: Collapse Navigation
+  value-units:
+    days: days
+    days-ago: days ago
   'yes': 'yes'
 components:
-  incorrect-path:
-    title:
-      default: Incorrect path
-    message:
-      default: The provided path does not exist. You will get redirected.
-      cluster: The provided path does not exist. You will get redirected to Clusters Details.
-      clusters: The provided path does not exist. You will get redirected to Clusters Overview.
-      extensions: The provided path does not exist. You will be redirected to the Custom Resource details.
-      namespace: The provided path does not exist. You will get redirected to Namespace Overview.
   dropdown:
     empty-list: No resources available
   error-panel:
     error: An error occured. The component cannot be rendered.
   file-input:
     drag-file-upload: Drag your file here or click to
-    upload: upload
     replace: replace
+    upload: upload
     uploaded: uploaded
   generic-list:
     messages:
       no-search-results: Couldn't find resources matching this query.
       not-found: No entries found
+  incorrect-path:
+    message:
+      cluster: The provided path does not exist. You will get redirected to Clusters Details.
+      clusters: The provided path does not exist. You will get redirected to Clusters Overview.
+      default: The provided path does not exist. You will get redirected.
+      extensions: The provided path does not exist. You will be redirected to the Custom Resource details.
+      namespace: The provided path does not exist. You will get redirected to Namespace Overview.
+    title:
+      default: Incorrect path
   k8s-name-input:
     aria-label: '{{resourceType}} name'
   key-value-field:
@@ -512,6 +512,7 @@ custom-resource-definitions:
   headers:
     categories: Categories
     conversion: Conversion
+    conversion-review-versions: Conversion Review Versions
     description: Description
     group: Group
     json-path: JSON Path
@@ -519,13 +520,12 @@ custom-resource-definitions:
     list-kind: List Kind
     plural: Plural
     scope: Scope
-    short-names: Short Names
-    singular: Singular
-    strategy: Strategy
     service-name: Service Name
     service-namespace: Service Namespace
     service-port: Service Port
-    conversion-review-versions: Conversion Review Versions
+    short-names: Short Names
+    singular: Singular
+    strategy: Strategy
     type: Type
     versions: Versions
   name_singular: CustomResourceDefinition
@@ -542,9 +542,9 @@ custom-resource-definitions:
   title: Custom Resource Definitions
 custom-resources:
   description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResourceDefinition</1> first.
-  title: Custom Resources
   headers:
     api-version: API Version
+  title: Custom Resources
 daemon-sets:
   description: <0>DaemonSet</0> ensures that replicated Pods are running across a set of available nodes.
   name_singular: DaemonSet
@@ -567,24 +567,24 @@ daemon-sets:
     toleration-seconds: Seconds
 deployments:
   create-modal:
+    add-container: Add Container
     args: Args
     command: Command
-    add-container: Add Container
     container-header: Container {{name}}
     containers: Containers
     cpu-limits: CPU Limits
     cpu-requests: CPU Requests
+    docker-image: Docker Image
+    docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
     image: Image
+    image-pull-secret: Image Pull Secret
     memory-limits: Memory Limits
     memory-requests: Memory Requests
     one-container-required: Provide at least one container.
-    runtime-profile: Runtime Profile
-    docker-image: Docker Image
-    docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
-    image-pull-secret: Image Pull Secret
     placeholders:
       args: Arguments to the ENTRYPOINT
       command: Command to run in a container
+    runtime-profile: Runtime Profile
     tooltips:
       args: Docker image CMD is used if arguments are not provided. Provide either args or command.
       command: The Docker image's ENTRYPOINT is used if this is not provided. Provide either args or command.
@@ -592,13 +592,13 @@ deployments:
   headers:
     images: Images
   name_singular: Deployment
-  title: Deployments
   status:
     available-replicas: Available Replicas
     collision-count: Collision Count
     replicas: Replicas
     unavailable-replicas: Unavailable Replicas
     updated-replicas: Updated Replicas
+  title: Deployments
 discovery-and-network:
   title: Discovery and Network
 err-boundary:
@@ -655,24 +655,37 @@ extensibility:
     code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:
       error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
-    table:
-      error: The table widget configuration is incorrect. Path value must be an array type.
     modules:
-      no-modules: No modules available
       documentation: DOCUMENTATION
       module-channel-label: Module channel overwrite
       module-channel-placeholder: Uses Default Kyma Channel
+      no-modules: No modules available
+    table:
+      error: The table widget configuration is incorrect. Path value must be an array type.
   wizard:
-    summary: Summary
-    upload: Upload
     headers:
       name: Extensibility wizard
+    summary: Summary
+    upload: Upload
+feedback:
+  feedback: Feedback
+  give-feedback: Give Feedback
+  intro:
+    info: Tell us what's on your mind.
+    title: Hello,
+  joule:
+    info: Complete a 1-minute survey and help us improve your Joule experience! The survey will open in a new tab.
+    title: Joule Feedback
+  kyma:
+    info: Your opinion matters. Share your thoughts with us at any time!
+    title: Kyma Dashboard Feedback
+  new: New
 gardener:
   headers:
     provider: Provider
 get-help:
-  kyma-project-io: kyma-project.io
   help-sap-com: help.sap.com
+  kyma-project-io: kyma-project.io
 helm-releases:
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
@@ -693,6 +706,7 @@ helm-releases:
   messages:
     cannot-decode: Cannot decode the given Helm Release
   title: Helm Releases
+horizontal-pod-autoscalers: Horizontal Pod Autoscalers
 ingresses:
   description: <0>Ingress</0> describes the routing rules for traffic to services within a cluster. The routing is managed by the Ingress resource.
   labels:
@@ -709,9 +723,9 @@ ingresses:
     path: Path
     path-type: Path type
     paths: Paths
-    ports: Ports
     port-name: Port name
     port-number: Port number
+    ports: Ports
     protocol: Protocol
     rules: Rules
     secret-name: Secret name
@@ -772,134 +786,105 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 kyma-companion:
   banner:
-    title: Meet Joule
-    description: Joule in Kyma dashboard assists you with a wide range of tasks specific to Kyma and Kubernetes. You can use it, for example, to troubleshoot issues, create Functions, scale applications, or configure Ingress. As this is an experimental feature, we encourage you to explore its capabilities and share your feedback to help us improve.
     buttons:
-      try-joule: Try Out Joule
       documentation: Documentation
-  name: Joule
-  feedback:
-    title: We’d love to hear from you!
-    subtitle: Tell us about your experience with Joule in Kyma dashboard.
-  opener:
-    use-ai: AI Companion
-    suggestions: Suggestions
-    input-placeholder: Ask about this resource
-    error-message: Couldn't fetch suggestions. Please try again.
-    preparing-final-answer: Preparing the final answer
+      try-joule: Try Out Joule
+    description: Joule in Kyma dashboard assists you with a wide range of tasks specific to Kyma and Kubernetes. You can use it, for example, to troubleshoot issues, create Functions, scale applications, or configure Ingress. As this is an experimental feature, we encourage you to explore its capabilities and share your feedback to help us improve.
+    title: Meet Joule
+  disclaimer:
+    back-conversation: Back to Conversation
+    hint: Joule uses AI. Verify results.
+    text: Joule is powered by generative AI and all output should be reviewed before use. Please do not enter any sensitive personal data, and avoid entering any other personal data you do not wish to be processed. Learn more in the <0>Joule Data Protection and Privacy</0>.
+    title: AI Notice
+    tooltip: Disclaimer
   error:
-    title: Service is interrupted
-    subtitle: A temporary interruption occurred. Please try again.
-    internal_server_error-message: Couldn't fetch response from Joule because of network errors.
     chat-error: An error occurred
-    suggestions-error: No suggestions available
-    partial-ai-failure: Some tasks encountered errors. The results might be incomplete or not fully actionable.
     http-error: Response status code is {{statusCode}}. Retrying {{attempt}}.
     http-error-no-retry: Response status code is {{statusCode}}.
+    internal_server_error-message: Couldn't fetch response from Joule because of network errors.
+    partial-ai-failure: Some tasks encountered errors. The results might be incomplete or not fully actionable.
+    subtitle: A temporary interruption occurred. Please try again.
+    suggestions-error: No suggestions available
+    title: Service is interrupted
+  feedback:
+    subtitle: Tell us about your experience with Joule in Kyma dashboard.
+    title: We’d love to hear from you!
   input-tokens:
-    warning: "Approaching per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)"
-    error: "Message exceeds per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)"
     calculation-error: Unable to calculate token count.
+    error: Message exceeds per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)
+    warning: Approaching per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)
   introduction: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. Meanwhile, you can check the suggested questions below; you may find them helpful!
   introduction-no-suggestions: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. While I don't have any initial suggestions for this resource, feel free to ask me anything you'd like!
+  name: Joule
+  opener:
+    error-message: Couldn't fetch suggestions. Please try again.
+    input-placeholder: Ask about this resource
+    preparing-final-answer: Preparing the final answer
+    suggestions: Suggestions
+    use-ai: AI Companion
   placeholder: Message Joule...
-  disclaimer:
-    tooltip: Disclaimer
-    title: AI Notice
-    text: "Joule is powered by generative AI and all output should be reviewed before use. Please do not enter any sensitive personal data, and avoid entering any other personal data you do not wish to be processed. Learn more in the <0>Joule Data Protection and Privacy</0>."
-    hint: Joule uses AI. Verify results.
-    back-conversation: Back to Conversation
   tabs:
     chat: Chat
     page-insights: Page Insights
-  welcome-screen:
-    hello: Hello
-    talk-to-me: Talk to me naturally. For example, "what are my tasks for today?"
-    how-can-i: How can I 
-    you-question: you?
-    help: help
-    assist: assist
-    guide: guide
   time:
     today: Today
     yesterday: Yesterday
-modules:
-  community:
-    add-module: Add Community Modules
-    documentation: Documentation
-    installed-modules: Community Modules
-    release-channel: Release channel
-    title: Community Modules
-    no-modules: No community modules available
-    no-modules-installed: No community modules installed
-    no-modules-description: Customize your cluster by adding the modules you need.
-    messages:
-      failure: 'Failed to install the {{resourceType}}: {{error}}'
-      success: '{{resourceType}} installed'
-      module-added: Community Module added
-      module-uninstall: Community Module deleted
-      modules-updated: Community Modules updated
+  welcome-screen:
+    assist: assist
+    guide: guide
+    hello: Hello
+    help: help
+    how-can-i: How can I
+    talk-to-me: Talk to me naturally. For example, "what are my tasks for today?"
+    you-question: you?
 kyma-modules:
-  all-modules-added: You have added all the modules
-  delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
-  associated-resources: Associated Resources
-  unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
-  unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
-  unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
-  installed-modules: Installed Modules
-  predefined-channel: Predefined
-  modify-modules: Modify Modules
-  modules-channel: Modules Channel
   add-module: Add Modules
-  no-modules: No modules available
-  no-modules-installed: No modules installed
-  no-modules-description: Customize your cluster by adding the modules you need.
-  description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
-  release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
-  release-channel: Release channel
-  kyma: Kyma
-  title: Modules
-  namespaces: Namespace
-  channel: Channel
-  version: Version
-  module-state: Module State
-  installation-state: Installation State
-  documentation: Documentation
-  no-version: No version available
-  channel-overridden: Overridden
-  managed: Managed
+  all-modules-added: You have added all the modules
+  associated-resources: Associated Resources
   associated-resources-warning: If there are resources left, remove them first to delete the module or use cascade delete.
+  beta: Beta
+  beta-alert: 'CAUTION: The Service Level Agreements (SLAs) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments.'
   cascade-delete: Cascade Delete
   cascade-delete-warning: Cascade delete removes all connected resources first and then removes the module. This action cannot be undone.
-  beta: Beta
-  beta-alert: "CAUTION: The Service Level Agreements (SLAs) and Support obligations do not apply to Beta modules and functionalities. If Beta modules or functionalities directly or indirectly affect other modules, the Service Level Agreements and Support for these modules are limited to priority levels P3 (Medium) or P4 (Low). Thus, Beta releases are not intended for use in customer production environments."
   change: Change
   change-release-channel: Change Release Channel
   change-release-channel-warning: The module's version in the fast channel is usually higher than the version in the regular channel. As downgrades are not supported, switching the channel back to regular will not affect the module's version <0>until the channel version is the same or higher.</0> To use the lower version, you must delete the module and re-add it from the <0>regular</0> channel.
+  channel: Channel
+  channel-overridden: Overridden
+  delete-module: Before you delete the {{name}} module, make sure the module resources are no longer needed. This action also permanently removes the namespaces, service instances, and service bindings created by the module. Are you sure you want to continue?
+  description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
+  documentation: Documentation
+  installation-state: Installation State
+  installed-modules: Installed Modules
+  kyma: Kyma
+  managed: Managed
   messages:
     failure: 'Failed to install the {{resourceType}}: {{error}}'
-    success: '{{resourceType}} installed'
     module-added: Module added
     module-uninstall: Module deleted
-    modules-updated: Modules updated
     modules-update-failed: Modules update failed
-feedback:
-  feedback: Feedback
-  give-feedback: Give Feedback
-  new: New
-  intro: 
-    title: Hello,
-    info: Tell us what's on your mind.
-  joule:
-    title: Joule Feedback
-    info: Complete a 1-minute survey and help us improve your Joule experience! The survey will open in a new tab.
-  kyma:
-    title: Kyma Dashboard Feedback
-    info: Your opinion matters. Share your thoughts with us at any time!
+    modules-updated: Modules updated
+    success: '{{resourceType}} installed'
+  modify-modules: Modify Modules
+  module-state: Module State
+  modules-channel: Modules Channel
+  namespaces: Namespace
+  no-modules: No modules available
+  no-modules-description: Customize your cluster by adding the modules you need.
+  no-modules-installed: No modules installed
+  no-version: No version available
+  predefined-channel: Predefined
+  release-channel: Release channel
+  release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
+  title: Modules
+  unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
+  unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
+  unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
+  version: Version
 legal:
   copyright: Copyright
   legal-disclosure: Legal Disclosure
@@ -910,10 +895,10 @@ limit-ranges:
   headers:
     default: Default
     default-request: Default Request
+    limits: Limits
     max: Max
     max-ratio: Max Limit/Request Ratio
     min: Min
-    limits: Limits
     resource: Resource
     type: Type
   name_singular: LimitRange
@@ -924,6 +909,22 @@ match-expressions:
     operator: Operator
     values: Values
   title: Match Expressions
+modules:
+  community:
+    add-module: Add Community Modules
+    documentation: Documentation
+    installed-modules: Community Modules
+    messages:
+      failure: 'Failed to install the {{resourceType}}: {{error}}'
+      module-added: Community Module added
+      module-uninstall: Community Module deleted
+      modules-updated: Community Modules updated
+      success: '{{resourceType}} installed'
+    no-modules: No community modules available
+    no-modules-description: Customize your cluster by adding the modules you need.
+    no-modules-installed: No community modules installed
+    release-channel: Release channel
+    title: Community Modules
 namespaces:
   create-modal:
     apply-limits: Apply Limits per Container
@@ -947,18 +948,18 @@ namespaces:
   title: Namespaces
 navigation:
   all-namespaces: All Namespaces
-  snow: Let it snow
-  snow-stop: Stop the snow
+  errors:
+    sidebar: Failed to load navigation items
   menu:
     get-help: Get Help
     legal-information: Legal Information
   preferences:
     title: Preferences
+  select-namespace: Select Namespace...
+  snow: Let it snow
+  snow-stop: Stop the snow
   upload-yaml:
     title: Upload YAML
-  select-namespace: Select Namespace...
-  errors:
-    sidebar: Failed to load navigation items
 network-policies:
   description: <0>NetworkPolicy</0> allows you to control how a Pod communicates with different network entities.
   headers:
@@ -989,43 +990,43 @@ no-permissions:
 node-details:
   all: All messages
   information: Information
-  pod-cidr: Pod CIDRs
-  warnings: Warnings
-  region: Region
-  zone: Zone
-  pool: Pool
-  machine-type: Machine Type
   machine-info:
     architecture: Architecture
-    provider: Provider
-    internal-ip: Internal IP
     cpus: CPUs
-    nvidia-gpus: Nvidia GPUs
     gib: GiB
+    hostname: Hostname
+    internal-ip: Internal IP
     kubelet-version: Kubelet version
     memory: Memory
+    nvidia-gpus: Nvidia GPUs
     operating-system: Operating system
     pods-capacity: Pods capacity
-    hostname: Hostname
+    provider: Provider
     title: Machine info
+  machine-type: Machine Type
+  pod-cidr: Pod CIDRs
+  pool: Pool
+  region: Region
+  warnings: Warnings
+  zone: Zone
 nodes:
+  description: Kubernetes executes your workload by grouping containers into Pods that operate on <0>Nodes</0>, which can be virtual or physical machines depending on the cluster configuration. The control plane monitors each node, which includes the services required to run Pods.
   title: Nodes
   title_details: Node {{nodeName}}
-  description: Kubernetes executes your workload by grouping containers into Pods that operate on <0>Nodes</0>, which can be virtual or physical machines depending on the cluster configuration. The control plane monitors each node, which includes the services required to run Pods.
 persistent-volume-claims:
   description: <0>PersistentVolumeClaim (PVC)</0> is a request for the PersistentVolume resources.
   headers:
-    capacity: Capacity
     access-modes: Access Modes
+    capacity: Capacity
+    resources:
+      limits: Limits
+      requests: Requests
+      title: Resources
     selector: Selector
     storage: Storage
     storage-class-name: Storage Class Name
     volume-mode: Volume Mode
     volume-name: Volume Name
-    resources:
-      title: Resources
-      requests: Requests
-      limits: Limits
   message:
     empty-selector: Matches all PersistentVolumes
   name_singular: PersistentVolumeClaim
@@ -1042,7 +1043,6 @@ pods:
     type: Type
     volume-name: Volume Name
   labels:
-    logs: Logs
     args: Args
     command: Command
     containers: Containers
@@ -1051,6 +1051,7 @@ pods:
     image: Image
     image-pull-policy: Image Pull Policy
     init-containers: Init Containers
+    logs: Logs
     mount-path: Mount Path
     pod-template: Pod Template
     ports: Ports
@@ -1076,55 +1077,55 @@ pods:
   tooltips:
     no-restarts: None of the containers has restarted
 pv:
+  csi:
+    driver: Driver
+    fsType: FSType
+    type: Container Storage Interface
+    volumeAttributes: Volume Attributes
+    volumeHandle: Volume Handle
   description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
+  fc:
+    fsType: FSType
+    lun: LUN
+    targetWWNs: TargetWWNs
+    type: Fibre Channel
+    wwids: WWIDs
   headers:
     access-modes: Access Mode
     capacity: Capacity
     claim: Claim
     claim-name: Claim Name
     finalizers: Finalizers
+    lastPhaseTransitionTime: Last Phase Transition Time
     mount-options: Mount Options
     reclaim-policy: Reclaim Policy
     storage-class: Storage Class
     storage-class-name: Storage Class Name
-    lastPhaseTransitionTime: Last Phase Transition Time
+    type: Type
     volumeMode: Volume Mode
     volumeType: Volume Type
-    type: Type
-  name_singular: PersistentVolume
-  nfs:
-    type: Network File System
-    server: Server
-    path: Path
-  csi:
-    type: Container Storage Interface
-    driver: Driver
-    volumeHandle: Volume Handle
-    fsType: FSType
-    volumeAttributes: Volume Attributes
-  fc:
-    type: Fibre Channel
-    lun: LUN
-    fsType: FSType
-    wwids: WWIDs
-    targetWWNs: TargetWWNs
   hostPath:
-    type: HostPath
     path: Path
+    type: HostPath
   iscsi:
-    type: iSCSI
-    targetPortal: Target Portal
-    iqn: IQN
-    lun: Lun
-    iscsiInterface: ISCSIInterface
-    fsType: FSType
-    portals: Portals
     chapAuthDiscovery: DiscoveryCHAPAuth
     chapAuthSession: SessionCHAPAuth
+    fsType: FSType
+    iqn: IQN
+    iscsiInterface: ISCSIInterface
+    lun: Lun
+    portals: Portals
     secretRef: Secret Reference
+    targetPortal: Target Portal
+    type: iSCSI
   local:
-    type: Local
     path: Path
+    type: Local
+  name_singular: PersistentVolume
+  nfs:
+    path: Path
+    server: Server
+    type: Network File System
   title: Persistent Volumes
 replica-sets:
   cpu: CPU
@@ -1145,13 +1146,13 @@ replica-sets:
     requests: Requests
   memory: Memory
   name_singular: ReplicaSet
-  title: Replica Sets
   status:
     available-replicas: Available Replicas
     fully-labeled-replicas: Fully Labeled Replicas
     observed-generation: Observed Generation
     ready-replicas: Ready Replicas
     replicas: Replicas
+  title: Replica Sets
 resource-graph:
   buttons:
     go-to-details: Go to details
@@ -1161,22 +1162,22 @@ resource-graph:
 resource-quotas:
   description: A <0>Resource Quota</0> provides constraints that limit aggregate resource consumption per namespace.
   headers:
-    limits:
-      memory: Memory Limits
-      cpu: CPU Limits
-    requests:
-      memory: Memory Requests
-      cpu: CPU Requests
-    scopes: Scopes
-    scope-selectors: Scope Selectors
-    limits-usage: Limits and Usage
-    resource: Resource
     hard: Hard
-    used: Used
+    limits:
+      cpu: CPU Limits
+      memory: Memory Limits
+    limits-usage: Limits and Usage
     operator: Operator
+    requests:
+      cpu: CPU Requests
+      memory: Memory Requests
+    resource: Resource
+    scope-selectors: Scope Selectors
+    scopes: Scopes
+    used: Used
     values: Values
-  title: Resource Quotas
   name_singular: Resource Quota
+  title: Resource Quotas
 role-bindings:
   create-modal:
     api-group: API Group
@@ -1215,8 +1216,8 @@ roles:
     rules: Rules
     verbs: Verbs
   messages:
-    load-resources: Click Load resources after selecting API Group.
     invalid: Rules cannot apply to both regular resources and non-resource URLs.
+    load-resources: Click Load resources after selecting API Group.
   name_singular: Role
   templates:
     all-permissions: All permissions
@@ -1264,21 +1265,19 @@ schema:
     yaml: YAML
   required: Required
 secrets:
-  secret-not-found: Secret not found
-  secret-empty: Empty Secret
   buttons:
     decode: Decode
     encode: Encode
-  certificates:
-    close-expiration: Certificate will expire in less than one day.
-    expired: Certificate expired
-    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
   certificate-panel:
     expires: Expires
     issuer: Issuer
     subject: Subject
     title: Certificate Data for {{name}}
     valid-since: Valid Since
+  certificates:
+    close-expiration: Certificate will expire in less than one day.
+    expired: Certificate expired
+    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
   data: Data
   description: <0>Secret</0> is an object that stores sensitive data in key-value pairs.
   headers:
@@ -1288,6 +1287,8 @@ secrets:
   name_singular: Secret
   placeholders:
     type: Type of Secret
+  secret-empty: Empty Secret
+  secret-not-found: Secret not found
   title: Secrets
   type: Type
 selector:
@@ -1304,14 +1305,6 @@ service-accounts:
       enabled: For security reasons, don't use automount if you don't need it.
     disabled: disabled
     enabled: enabled
-  token-request:
-    notification:
-      success: TokenRequest generated
-      failure: Failed to generate a TokenRequest
-    generate: Generate TokenRequest
-    expiration-seconds: Expiration seconds
-    warning: The TokenRequest allows you to log in with your ServiceAccount credentials. It  will be deactivated after the expiration seconds.
-    input-info: You can choose one of the provided options from the dropdown or enter the value in seconds.
   create-modal:
     tooltips:
       associated-secret: Creates a long-lived API token for a ServiceAccount which data is kept in the associated Secret.
@@ -1325,6 +1318,14 @@ service-accounts:
   name_singular: ServiceAccount
   service-account: Service Account
   title: Service Accounts
+  token-request:
+    expiration-seconds: Expiration seconds
+    generate: Generate TokenRequest
+    input-info: You can choose one of the provided options from the dropdown or enter the value in seconds.
+    notification:
+      failure: Failed to generate a TokenRequest
+      success: TokenRequest generated
+    warning: The TokenRequest allows you to log in with your ServiceAccount credentials. It  will be deactivated after the expiration seconds.
 service-management:
   title: Service Management
 settings:
@@ -1332,26 +1333,32 @@ settings:
     description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
     dontConfirmDelete: Delete without confirmation
-    showHiddenNamespaces: Show hidden Namespaces
-    title: Clusters
     edit-view:
+      always-form: Always form
+      always-yaml: Always YAML
       choose: Select default view for resource edit
       default: Default (last one used)
-      always-yaml: Always YAML
-      always-form: Always form
-    resourcesValidation:
-      title: Resource Validation
-      validateResources: Validate Resources
-      enabled-policies: Enabled Policies
-      reset: Reset
-      customize: Customize
-      validation-disabled: Resource validation is disabled
-      no-policies-found: No policies found
     interaction:
       title: Cluster Interaction
+    resourcesValidation:
+      customize: Customize
+      enabled-policies: Enabled Policies
+      no-policies-found: No policies found
+      reset: Reset
+      title: Resource Validation
+      validateResources: Validate Resources
+      validation-disabled: Resource validation is disabled
+    showHiddenNamespaces: Show hidden Namespaces
+    title: Clusters
   interface:
     description: Appearance, language
     themes:
+      light_dark:
+        description: Automatically matches your system settings
+        title: Light / Dark
+      sap_horizon:
+        description: Use in default office environments
+        title: Light
       sap_horizon_dark:
         description: Use in dimmed environments
         title: Dark
@@ -1361,23 +1368,17 @@ settings:
       sap_horizon_hcw:
         description: Optimized contrast and accessibility for dark environments
         title: High-Contrast White
-      sap_horizon:
-        description: Use in default office environments
-        title: Light
-      light_dark:
-        description: Automatically matches your system settings
-        title: Light / Dark
     title: Interface
   language: Language
   other:
-    pagination: Pagination
-    info: Changes to the page size only take effect locally. To set the global default page size, go to Preferences.
-    default-page-size: Default Page Size
-    title: Other
     all: All
-    results-per-page: Results per page
-    page: Page
+    default-page-size: Default Page Size
+    info: Changes to the page size only take effect locally. To set the global default page size, go to Preferences.
     of: of {{pagesCount}}
+    page: Page
+    pagination: Pagination
+    results-per-page: Results per page
+    title: Other
     total-items: '{{itemsCount}} items'
   theme: Theme
 stateful-sets:
@@ -1391,28 +1392,24 @@ stateful-sets:
     observed-generation: Observed Generation
     ready-replicas: Ready Replicas
     replicas: Replicas
-    updated-replicas: Updated Replicas
     update-revision: Update Revision
+    updated-replicas: Updated Replicas
   title: Stateful Sets
 storage:
   title: Storage
 storage-classes:
   description: <0>StorageClass</0> provides a way for administrators to describe the "classes" of storage they offer.
   headers:
+    allow-volume-expansion: Allow Volume Expansion
+    configuration: Configuration
     parameters: Parameters
     provisioner: Provisioner
     reclaim-policy: Reclaim Policy
-    allow-volume-expansion: Allow Volume Expansion
     volume-binding-mode: Volume Binding Mode
-    configuration: Configuration
   name_singular: StorageClass
   title: Storage Classes
 upload-yaml:
-  uploaded-resources: Uploaded Resources
-  info: You can upload multiple resources, separated by “---” in your YAML file.
-    If the resource already exists, it will be updated.
-    Otherwise, a new one is created.
-    If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
+  info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
   labels:
     validate-resources: 'Validate resources:'
   messages:
@@ -1424,7 +1421,8 @@ upload-yaml:
     updated: Updated
     waiting: Waiting
   title: Upload YAML
-  upload-progress: 'Upload progress'
+  upload-progress: Upload progress
+  uploaded-resources: Uploaded Resources
   warnings:
     different-namespace: This resource will be uploaded to the '{{namespace}}' Namespace.
   you-will-create: <0>{{count}} resources</0> will be created.

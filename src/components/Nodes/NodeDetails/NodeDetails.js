@@ -18,7 +18,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Description } from 'shared/components/Description/Description';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 export default function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
@@ -29,7 +29,7 @@ export default function NodeDetails({ nodeName }) {
     nodeName,
   );
 
-  const setLayoutColumn = useSetAtom(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
   useEffect(() => {
     setLayoutColumn({
       layout: 'OneColumn',

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createStatefulSetTemplate } from './templates';
 
@@ -18,7 +18,7 @@ export default function StatefulSetCreate({
 }) {
   const { t } = useTranslation();
 
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [statefulSet, setStatefulSet] = useState(
     _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
   );

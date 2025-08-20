@@ -1,16 +1,16 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createRoleTemplate, createRolePresets } from './helpers';
 import { GenericRoleCreate } from './GenericRoleCreate';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
+import { useAtomValue } from 'jotai';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
 
 export default function RoleCreate(props) {
   const { t } = useTranslation();
-  const groupVersions = useRecoilValue(groupVersionState);
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const groupVersions = useAtomValue(groupVersionsAtom);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
 
   const createTemplate = useCallback(() => createRoleTemplate(namespace), [
     namespace,

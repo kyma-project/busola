@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router';
 
 import './NamespaceCreate.scss';
 import { useAtom } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
 import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
 
@@ -41,7 +41,7 @@ export default function NamespaceCreate({
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
-  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),

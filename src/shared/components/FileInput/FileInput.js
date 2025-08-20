@@ -5,8 +5,8 @@ import { useAtomValue } from 'jotai';
 import PropTypes from 'prop-types';
 import { Icon } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
-import { showAddClusterWizard } from 'state/showAddClusterWizard';
+import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
+import { showAddClusterWizardAtom } from 'state/showAddClusterWizardAtom';
 
 import './FileInput.scss';
 
@@ -27,8 +27,8 @@ export function FileInput({
   customMessage,
 }) {
   const [fileNames, setFileNames] = useState([]);
-  const openAddCluster = useAtomValue(showAddClusterWizard);
-  const openAdd = useAtomValue(showYamlUploadDialogState);
+  const openAddCluster = useAtomValue(showAddClusterWizardAtom);
+  const openAdd = useAtomValue(showYamlUploadDialogAtom);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
   const fileNameRef = useRef(null);

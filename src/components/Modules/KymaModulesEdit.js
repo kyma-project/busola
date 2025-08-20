@@ -23,8 +23,8 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import './KymaModulesCreate.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { isFormOpenState } from 'state/formOpenAtom';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
+import { isFormOpenAtom } from 'state/formOpenAtom';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { ManagedWarnings } from 'components/Modules/components/ManagedWarnings';
 import { ChannelWarning } from 'components/Modules/components/ChannelWarning';
 import { UnmanagedModuleInfo } from 'components/Modules/components/UnmanagedModuleInfo';
@@ -113,8 +113,8 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
   const [initialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
-  const setIsResourceEdited = useSetAtom(isResourceEditedState);
-  const setIsFormOpen = useSetAtom(isFormOpenState);
+  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
+  const setIsFormOpen = useSetAtom(isFormOpenAtom);
 
   const resourceName = kymaResource?.metadata.name;
 

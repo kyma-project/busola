@@ -6,7 +6,7 @@ import { useEventListener } from 'hooks/useEventListener';
 import { TabContainer, Tab } from '@ui5/webcomponents-react';
 
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
-import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
+import { isPreferencesOpenAtom } from 'state/preferences/isPreferencesModalOpenAtom';
 
 import ConfirmationSettings from './ConfirmationSettings';
 import LanguageSettings from './LanguageSettings';
@@ -21,7 +21,7 @@ import EditViewSettings from './EditViewSettings';
 
 export function Preferences() {
   const { t } = useTranslation();
-  const [isModalOpen, setModalOpen] = useAtom(isPreferencesOpenState);
+  const [isModalOpen, setModalOpen] = useAtom(isPreferencesOpenAtom);
 
   const tabs = [
     {
