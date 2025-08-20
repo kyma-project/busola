@@ -70,9 +70,9 @@ export function ResourceRefRender({
       (data || []).map(async res => {
         if (filter) {
           const [value] = await jsonata(filter, { item: res });
-          return value;
+          return value ? res : false;
         }
-        return true;
+        return res;
       }),
     ).then(results => {
       setResources(results.filter(Boolean));

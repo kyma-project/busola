@@ -51,9 +51,9 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
       items.map(async item => {
         if (filter) {
           const [value] = await jsonata(filter, { item, root });
-          return value;
+          return value ? item : false;
         }
-        return null;
+        return item;
       }),
     ).then(results => {
       setFilteredItems(results.filter(Boolean));

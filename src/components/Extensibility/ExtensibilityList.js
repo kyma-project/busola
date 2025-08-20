@@ -97,8 +97,8 @@ export const ExtensibilityListCore = ({
     typeof resMetaData?.resource?.filter === 'string' ||
     typeof generalFilter === 'string';
 
-  const filterFn = value =>
-    applyFormula(
+  const filterFn = async value =>
+    await applyFormula(
       value,
       resMetaData?.resource?.filter || generalFilter,
       tBusola,
@@ -134,8 +134,8 @@ export const ExtensibilityListCore = ({
         sortBy(jsonata, sortOptions, t, defaultSortOptions)
       }
       searchSettings={{
-        textSearchProperties: defaultSearchProperties =>
-          textSearchProperties(defaultSearchProperties),
+        textSearchProperties: async defaultSearchProperties =>
+          await textSearchProperties(defaultSearchProperties),
       }}
       emptyListProps={{
         subtitleText: subtitleText,

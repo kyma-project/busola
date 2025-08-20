@@ -129,8 +129,8 @@ export function ResourceList({
         }
         simpleEmptyListMessage={simpleEmptyListMessage}
         searchSettings={{
-          textSearchProperties: defaultSortOptions =>
-            textSearchProperties(defaultSortOptions),
+          textSearchProperties: async defaultSortOptions =>
+            await textSearchProperties(defaultSortOptions),
         }}
         {...structure}
         {...props}

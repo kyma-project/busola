@@ -65,11 +65,18 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
           ? Renderer.copyFunction
           : defaultCopyFunction;
 
-      copyFunction(props, Renderer, defaultCopyFunction, arg =>
-        jsonata(arg),
-      ).then(text => setTextToCopy(text));
+      const getText = async () => {
+        const text = await copyFunction(
+          props,
+          Renderer,
+          defaultCopyFunction,
+          jsonata,
+        );
+        setTextToCopy(text);
+      };
+      getText();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isRendererCopyable]);
+    }, [isRendererCopyable, props]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Button, Text } from '@ui5/webcomponents-react';
@@ -180,13 +180,30 @@ function Resources(props) {
     },
   );
 
+  const [filteredResources, setFilteredResources] = useState([]);
+
+  useEffect(() => {
+    if (!filter) {
+      setFilteredResources(resources || []);
+    } else {
+      Promise.all(
+        (resources || []).map(async resource => {
+          const passThroughFilter = await filter(resource);
+          return passThroughFilter ? resource : false;
+        }),
+      ).then(results => {
+        setFilteredResources(results.filter(Boolean));
+      });
+    }
+  }, [filter, resources]);
+
   return (
     <ResourceListRenderer
       loading={loading}
       error={error}
       silentRefetch={silentRefetch}
       {...props}
-      resources={filter ? (resources || []).filter(filter) : resources || []}
+      resources={filteredResources}
     />
   );
 }
@@ -259,6 +276,7 @@ export function ResourceListRenderer({
   });
 
   const [activeResource, setActiveResource] = useState(null);
+  const [textSearchProperties, setTextSearchProperties] = useState([]);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -537,17 +555,24 @@ export function ResourceListRenderer({
     ),
   ];
 
-  const textSearchProperties = () => {
+  useEffect(() => {
     const defaultSearchProperties = ['metadata.name', 'metadata.labels'];
-
-    if (typeof searchSettings?.textSearchProperties === 'function')
-      return searchSettings.textSearchProperties(defaultSearchProperties);
-
-    return [
-      ...defaultSearchProperties,
-      ...(searchSettings?.textSearchProperties || []),
-    ];
-  };
+    if (typeof searchSettings?.textSearchProperties === 'function') {
+      const getAsyncTextSearchProperties = async () => {
+        const result = await searchSettings.textSearchProperties(
+          defaultSearchProperties,
+        );
+        setTextSearchProperties(result);
+      };
+      getAsyncTextSearchProperties();
+    } else {
+      setTextSearchProperties([
+        ...defaultSearchProperties,
+        ...(searchSettings?.textSearchProperties || []),
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchSettings?.textSearchProperties]);
 
   const processTitle = title => {
     const words = title.split(' ');
@@ -610,7 +635,7 @@ export function ResourceListRenderer({
             sortBy={sortBy}
             searchSettings={{
               ...searchSettings,
-              textSearchProperties: textSearchProperties(),
+              textSearchProperties: textSearchProperties,
             }}
             emptyListProps={{
               titleText: `${t('common.labels.no')} ${processTitle(

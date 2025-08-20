@@ -225,7 +225,7 @@ const isValueMatching = (value, input) => {
     .includes(input.toString().toLowerCase());
 };
 
-const getSearchingFunction = (searchOption, originalResource) => {
+const getSearchingFunction = async (searchOption, originalResource) => {
   const { source, search } = searchOption;
   return async (entry, input) => {
     try {
@@ -253,19 +253,26 @@ const getSearchingFunction = (searchOption, originalResource) => {
   };
 };
 
-const searchingFunctions = (searchOptions, originalResource) =>
-  (searchOptions || []).map(searchOption =>
-    getSearchingFunction(searchOption, originalResource),
+const searchingFunctions = async (searchOptions, originalResource) =>
+  Promise.all(
+    (searchOptions || []).map(
+      async searchOption =>
+        await getSearchingFunction(searchOption, originalResource),
+    ),
   );
 
-export const getTextSearchProperties = ({
+export const getTextSearchProperties = async ({
   searchOptions,
   originalResource = null,
   defaultSearch,
 }) => {
+  const searchingFunctionsResult = await searchingFunctions(
+    searchOptions,
+    originalResource,
+  );
   return (defaultSearchProperties = []) => [
     ...(defaultSearch ? defaultSearchProperties : []),
-    ...searchingFunctions(searchOptions, originalResource),
+    ...searchingFunctionsResult,
   ];
 };
 
