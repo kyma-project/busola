@@ -338,6 +338,7 @@ common:
     resource-name: '{{resource}} $t(common.labels.name)'
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
+    type: Type
     version: 'Kyma Dashboard version:'
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'

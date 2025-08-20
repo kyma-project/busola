@@ -22,6 +22,7 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
             value.isSelected = e.target.checked;
             setColumns([...columns]);
           }}
+          accessibleName={`Checkbox ${value.name}`}
         />
         <Input
           value={value.name}
@@ -33,9 +34,20 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
           disabled={!value.isSelected ? true : false}
+          accessibleName={t('common.labels.name')}
         />
-        <Input className="full-width" disabled value={value?.path} />
-        <Input className="full-width" disabled value={value?.type} />
+        <Input
+          className="full-width"
+          disabled
+          value={value?.path}
+          accessibleName={t('common.labels.path')}
+        />
+        <Input
+          className="full-width"
+          disabled
+          value={value?.type}
+          accessibleName={t('common.labels.type')}
+        />
       </div>
     );
   });
