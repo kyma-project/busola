@@ -24,7 +24,6 @@ export function AddClusterDialog() {
       className="add-cluster-wizard-dialog"
       headerText={t('clusters.add.title')}
       onClose={() => setShowWizard(false)}
-      ref={dialogRef}
     >
       <ErrorBoundary>
         {showWizard ? (
@@ -34,6 +33,7 @@ export function AddClusterDialog() {
             dialogRef={dialogRef}
           />
         ) : null}
+        <div ref={dialogRef}></div>
       </ErrorBoundary>
     </Dialog>
   );
