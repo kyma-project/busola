@@ -105,6 +105,7 @@ module.exports = defineConfig({
       'tests/companion/test-companion-suggestions-error.spec.js',
       'tests/companion/test-companion-suggestions.spec.js',
       'tests/companion/test-companion-ui.spec.js',
+      'tests/companion/test-companion-feedback-dialog.spec.js',
     ],
     supportFile: 'support/index.js',
   },
