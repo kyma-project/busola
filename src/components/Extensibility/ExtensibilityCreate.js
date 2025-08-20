@@ -25,12 +25,11 @@ import { prepareRules } from './helpers/prepareRules';
 import { merge } from 'lodash';
 
 import { TriggerContext, TriggerContextProvider } from './contexts/Trigger';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { TranslationBundleContext } from './helpers';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -44,8 +43,8 @@ export function ExtensibilityCreateCore({
   ...props
 }) {
   const { prepareVars, readVars } = useVariables();
-  const namespace = useRecoilValue(activeNamespaceIdState);
-  const layoutState = useAtomValue(columnLayoutState);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
+  const layoutState = useAtomValue(columnLayoutAtom);
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;

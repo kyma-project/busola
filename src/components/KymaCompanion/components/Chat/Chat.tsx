@@ -1,14 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import { FlexBox } from '@ui5/webcomponents-react';
 import Message from './Message/Message';
 import Bubbles from './Bubbles/Bubbles';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
-import { sessionIDState } from 'state/companion/sessionIDAtom';
-import { clusterState } from 'state/clusterAtom';
-import { authDataState } from 'state/authDataAtom';
+import { sessionIDAtom } from 'state/companion/sessionIDAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { authDataAtom } from 'state/authDataAtom';
 import getFollowUpQuestions from 'components/KymaCompanion/api/getFollowUpQuestions';
 import getChatResponse from 'components/KymaCompanion/api/getChatResponse';
 import { usePromptSuggestions } from 'components/KymaCompanion/hooks/usePromptSuggestions';
@@ -64,9 +63,9 @@ export const Chat = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const hasLoadingScreenLoaded = useRef(false);
 
-  const sessionID = useAtomValue<string>(sessionIDState);
-  const cluster = useRecoilValue<any>(clusterState);
-  const authData = useRecoilValue<any>(authDataState);
+  const sessionID = useAtomValue<string>(sessionIDAtom);
+  const cluster = useAtomValue<any>(clusterAtom);
+  const authData = useAtomValue<any>(authDataAtom);
 
   const {
     initialSuggestions,

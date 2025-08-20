@@ -10,8 +10,7 @@ const DEFAULT_SHOW_KYMA_COMPANION: ShowKymaCompanion = {
   fullScreen: false,
 };
 
-export const showKymaCompanionState = atom<ShowKymaCompanion>(
+export const showKymaCompanionAtom = atom<ShowKymaCompanion>(
   DEFAULT_SHOW_KYMA_COMPANION,
 );
-
-showKymaCompanionState.debugLabel = 'showKymaCompanionState';
+showKymaCompanionAtom.debugLabel = 'showKymaCompanionAtom';

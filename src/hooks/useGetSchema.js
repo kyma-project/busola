@@ -7,7 +7,7 @@ import {
   addWorkerErrorListener,
   isWorkerAvailable,
 } from 'components/App/resourceSchemas/resourceSchemaWorkerApi';
-import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
+import { schemaWorkerStatusAtom } from 'state/schemaWorkerStatusAtom';
 
 export const useGetSchema = ({
   schemaId,
@@ -22,7 +22,7 @@ export const useGetSchema = ({
   }
 
   const { areSchemasComputed, schemasError } = useAtomValue(
-    schemaWorkerStatusState,
+    schemaWorkerStatusAtom,
   );
 
   const isWorkerOkay = isWorkerAvailable && !schemasError;
@@ -87,7 +87,7 @@ export const useGetResourceSchemas = resources => {
   );
 
   const { areSchemasComputed, schemasError } = useAtomValue(
-    schemaWorkerStatusState,
+    schemaWorkerStatusAtom,
   );
 
   const isWorkerOkay = isWorkerAvailable && !schemasError;

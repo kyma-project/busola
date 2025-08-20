@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { v4 as uuid } from 'uuid';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 import { useComponentDidMount } from 'shared/useComponentDidMount';
-import { clusterState } from 'state/clusterAtom';
+import { clusterAtom } from 'state/clusterAtom';
 
 export function getLoggingId() {
   const STORAGE_KEY = 'busola.logging-id';
@@ -52,7 +52,7 @@ export function useAppTracking() {
 }
 
 function useSessionStartTracking() {
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterAtom);
 
   useComponentDidMount(() => {
     sendTrackingRequest({
@@ -99,7 +99,7 @@ function usePageViewTracking() {
 }
 
 function useClusterChangeTracking() {
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterAtom);
 
   useEffect(() => {
     if (cluster?.currentContext?.cluster?.cluster?.server) {

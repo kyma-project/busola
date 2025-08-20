@@ -4,8 +4,8 @@ import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { createIngressTemplate } from './templates';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useAtomValue } from 'jotai';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 export default function IngressCreate({
   formElementRef,
@@ -17,7 +17,7 @@ export default function IngressCreate({
 }) {
   const { t } = useTranslation();
 
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [ingress, setIngress] = useState(
     _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
   );

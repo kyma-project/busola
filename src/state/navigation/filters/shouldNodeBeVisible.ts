@@ -2,7 +2,7 @@ import { areNodeFeaturesEnabled } from './areNodeFeaturesEnabled';
 import { doesNodeResourceExist } from './doesNodeResourceExist';
 import { isNodeResourcePermitted } from './isNodeResourcePermitted';
 import { ConfigFeatureList, NavNode } from '../../types';
-import { PermissionSet } from '../../permissionSetsSelector';
+import { PermissionSet } from '../../permissionSetsAtom';
 
 export type NavConfigSet = {
   configFeatures: ConfigFeatureList;

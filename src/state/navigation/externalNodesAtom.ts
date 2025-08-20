@@ -1,4 +1,4 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
+import { atom } from 'jotai';
 import { configurationAtom } from '../configuration/configurationAtom';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
@@ -48,26 +48,22 @@ const getExternalNodes = (
   );
 };
 
-export const externalNodesSelector: RecoilValueReadOnly<
-  NavNode[] | null
-> = selector<NavNode[] | null>({
-  key: 'externalNodesSelector',
-  get: async ({ get }) => {
-    const configuration = get(configurationAtom);
-    const features = configuration?.features;
-    const fetchFn = getFetchFn(get);
-    if (!fetchFn || !features) {
-      return null;
-    }
+export const externalNodesAtom = atom<NavNode[] | null>(get => {
+  const configuration = get(configurationAtom);
+  const features = configuration?.features;
+  const fetchFn = getFetchFn(get);
+  if (!fetchFn || !features) {
+    return null;
+  }
 
-    if (!features[configFeaturesNames.EXTERNAL_NODES]?.isEnabled) {
-      return [];
-    }
+  if (!features[configFeaturesNames.EXTERNAL_NODES]?.isEnabled) {
+    return [];
+  }
 
-    const externalNodes = getExternalNodes(
-      features[configFeaturesNames.EXTERNAL_NODES],
-    );
+  const externalNodes = getExternalNodes(
+    features[configFeaturesNames.EXTERNAL_NODES],
+  );
 
-    return [...externalNodes.filter(n => n)];
-  },
+  return [...externalNodes.filter(n => n)];
 });
+externalNodesAtom.debugLabel = 'externalNodesAtom';

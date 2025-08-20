@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createNetworkPolicyTemplate } from './templates';
 
@@ -17,7 +17,7 @@ export default function NetworkPolicyCreate({
   ...props
 }) {
   const { t } = useTranslation();
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [networkPolicy, setNetworkPolicy] = useState(
     _.cloneDeep(initialNetworkPolicy) ||
       createNetworkPolicyTemplate(namespaceId),

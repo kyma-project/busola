@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import {
   ShowKymaCompanion,
-  showKymaCompanionState,
+  showKymaCompanionAtom,
 } from 'state/companion/showKymaCompanionAtom';
 import { Chat } from './Chat/Chat';
 import { chatHelpers } from './Chat/chatHelper';
@@ -17,7 +17,7 @@ export default function KymaCompanion() {
   const { t } = useTranslation();
 
   const [showCompanion, setShowCompanion] = useAtom<ShowKymaCompanion>(
-    showKymaCompanionState,
+    showKymaCompanionAtom,
   );
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);

@@ -1,18 +1,14 @@
 import { useEffect } from 'react';
-import { authDataState } from 'state/authDataAtom';
-import { clusterState } from 'state/clusterAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
-import { atom, useSetAtom } from 'jotai';
-import {
-  permissionSetsSelector,
-  PermissionSetState,
-} from './permissionSetsSelector';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { permissionSetsAtom, PermissionSetState } from './permissionSetsAtom';
 import { useUrl } from 'hooks/useUrl';
 import { ConfigMapResponse, getConfigMaps } from './utils/getConfigMaps';
 import { getFetchFn } from './utils/getFetchFn';
 import { JSONSchema4 } from 'json-schema';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
-import { useRecoilValue } from 'recoil';
 
 export type Rule = {
   uniqueName: string;
@@ -192,11 +188,11 @@ export const getEnabledRules = (
 };
 
 export const useGetValidationSchemas = async () => {
-  const setSchemas = useSetAtom(validationSchemasState);
-  const fetchFn = getFetchFn(useRecoilValue);
-  const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
-  const permissionSet = useRecoilValue(permissionSetsSelector);
+  const setSchemas = useSetAtom(validationSchemasAtom);
+  const fetchFn = getFetchFn(useAtomValue);
+  const cluster = useAtomValue(clusterAtom);
+  const auth = useAtomValue(authDataAtom);
+  const permissionSet = useAtomValue(permissionSetsAtom);
   const { namespace } = useUrl();
 
   useEffect(() => {
@@ -222,6 +218,7 @@ export const useGetValidationSchemas = async () => {
   }, [cluster, auth, permissionSet, namespace]);
 };
 
-export const validationSchemasState = atom<ValidationSchema | null>(
+export const validationSchemasAtom = atom<ValidationSchema | null>(
   emptyValidationSchema,
 );
+validationSchemasAtom.debugLabel = 'validationSchemasAtom';

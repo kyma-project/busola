@@ -10,7 +10,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { usePrepareCreateProps } from 'resources/helpers';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import CRCreate from '../CustomResourceDefinitions/CRCreate';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
@@ -28,7 +28,7 @@ const CustomResource = React.lazy(() =>
 );
 
 export const ColumnWrapper = () => {
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   const { t } = useTranslation();
 

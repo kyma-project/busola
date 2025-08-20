@@ -2,5 +2,5 @@ import { atom } from 'jotai';
 
 const defaultValue: [] = [];
 
-export const resourcesConditions = atom<[]>(defaultValue);
-resourcesConditions.debugLabel = 'resourcesConditions';
+export const resourcesConditionsAtom = atom<[]>(defaultValue);
+resourcesConditionsAtom.debugLabel = 'resourcesConditionsAtom';

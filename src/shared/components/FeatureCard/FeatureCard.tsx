@@ -1,13 +1,13 @@
 import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
 import { useEffect, useState } from 'react';
-import { isSystemThemeDark, themeState } from 'state/preferences/themeAtom';
+import { isSystemThemeDark, themeAtom } from 'state/preferences/themeAtom';
 import modulesIllustration from './assets/Modules/modulesIllustration.svg';
 import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
 import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';
 import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
 import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
 import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   BackgroundStyle,
   DesignType,
@@ -66,7 +66,7 @@ export function FeatureCardBanner({
 }: FeatureCardBannerProps) {
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${id}`;
-  const theme = useRecoilValue(themeState);
+  const theme = useAtomValue(themeAtom);
 
   useEffect(() => {
     const storedHideValue = localStorage.getItem(hideBannerKey);

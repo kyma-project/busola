@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useSetAtom } from 'jotai';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { showAddClusterWizard } from 'state/showAddClusterWizard';
-import { columnLayoutState } from 'state/columnLayoutAtom';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { showAddClusterWizardAtom } from 'state/showAddClusterWizardAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
@@ -48,9 +48,9 @@ function ClusterList() {
   });
 
   const [chosenCluster, setChosenCluster] = useState(null);
-  const setShowAdd = useSetAtom(showAddClusterWizard);
-  const setLayoutColumn = useSetAtom(columnLayoutState);
-  const setShowCompanion = useSetAtom(showKymaCompanionState);
+  const setShowAdd = useSetAtom(showAddClusterWizardAtom);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
+  const setShowCompanion = useSetAtom(showKymaCompanionAtom);
 
   useEffect(() => {
     setShowCompanion({

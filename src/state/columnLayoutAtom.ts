@@ -40,5 +40,5 @@ const defaultValue: ColumnLayoutState = {
   showEdit: null,
 };
 
-export const columnLayoutState = atom<ColumnLayoutState>(defaultValue);
-columnLayoutState.debugLabel = 'ColumnLayoutState';
+export const columnLayoutAtom = atom<ColumnLayoutState>(defaultValue);
+columnLayoutAtom.debugLabel = 'columnLayoutAtom';

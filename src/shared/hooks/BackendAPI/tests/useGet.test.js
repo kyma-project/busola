@@ -1,7 +1,7 @@
 import { render, waitFor } from 'testing/reactTestingUtils';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { authDataState } from 'state/authDataAtom';
-import { clusterState } from 'state/clusterAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { clusterAtom } from 'state/clusterAtom';
 
 const mockUseFetch = vi.fn();
 vi.mock('./../useFetch', () => ({
@@ -30,12 +30,14 @@ describe('useGet', () => {
       .mockImplementation(() => {
         throw new Error('2'); // failing calls
       });
+
     render(<Testbed setGetResult={mock} />, {
-      initializeState: snapshot => {
-        snapshot.set(authDataState, { token: 'test-token' });
-        snapshot.set(clusterState, {});
-      },
+      initialAtoms: [
+        [authDataAtom, { token: 'test-token' }],
+        [clusterAtom, {}],
+      ],
     });
+
     // first call - loading
     expect(mock).toHaveBeenCalledWith(true, null, null);
     // first call - valid data

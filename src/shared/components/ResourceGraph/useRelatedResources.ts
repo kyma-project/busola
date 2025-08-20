@@ -6,8 +6,8 @@ import {
   getApiPath2Todo,
   match,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
-import { useRecoilValue } from 'recoil';
-import { allNodesSelector } from 'state/navigation/allNodesSelector';
+import { useAtomValue } from 'jotai';
+import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { NavNode } from 'state/types';
 import {
   IHaveNoIdeaForNameHere,
@@ -160,10 +160,10 @@ export function useRelatedResources({
   config,
   events,
 }: useRelatedResourcesProps): useRelatedResourcesReturnValue {
-  const clusterNodes = useRecoilValue(allNodesSelector).filter(
+  const clusterNodes = useAtomValue(allNodesAtom).filter(
     node => !node.namespaced,
   );
-  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
+  const namespaceNodes = useAtomValue(allNodesAtom).filter(
     node => node.namespaced,
   );
   const [startedLoading, setStartedLoading] = useState(false);

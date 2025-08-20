@@ -1,9 +1,8 @@
-import { allExtensionsState } from 'state/navigation/extensionsAtom';
+import { allExtensionsAtom } from 'state/navigation/extensionsAtom';
 import { render } from '@testing-library/react';
 import { useGetCRbyPath } from '../useGetCRbyPath.js';
-import { RecoilRoot } from 'recoil';
 import { Provider as JotaiProvider } from 'jotai';
-import { useHydrateAtoms } from 'jotai/utils';
+import { JotaiHydrator } from 'testing/reactTestingUtils.js';
 
 let mockNamespaceId = 'namespaceId';
 let mockCrds = [];
@@ -27,12 +26,6 @@ vi.mock('shared/components/Dropdown/Dropdown', () => {
   };
 });
 
-// Component to initialize Jotai atoms with test data
-const JotaiHydrator = ({ children, initialValues }) => {
-  useHydrateAtoms(initialValues);
-  return children;
-};
-
 const TestComponent = () => {
   const value = useGetCRbyPath();
 
@@ -41,13 +34,11 @@ const TestComponent = () => {
 
 const renderWithProviders = mockCrds => {
   return render(
-    <RecoilRoot>
-      <JotaiProvider>
-        <JotaiHydrator initialValues={[[allExtensionsState, mockCrds]]}>
-          <TestComponent />
-        </JotaiHydrator>
-      </JotaiProvider>
-    </RecoilRoot>,
+    <JotaiProvider>
+      <JotaiHydrator initialValues={[[allExtensionsAtom, mockCrds]]}>
+        <TestComponent />
+      </JotaiHydrator>
+    </JotaiProvider>,
   );
 };
 

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
 import { languageAtom } from 'state/preferences/languageAtom';
-import { extensionsState } from 'state/navigation/extensionsAtom';
+import { extensionsAtom } from 'state/navigation/extensionsAtom';
 
 import { resourceRoutesNamespaced } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
@@ -17,8 +17,8 @@ export default function NamespaceRoutes() {
   const { t } = useTranslation();
   const { namespaceId } = useParams();
   const { clusterUrl, namespaceUrl } = useUrl();
-  const language = useRecoilValue(languageAtom);
-  const extensions = useRecoilValue(extensionsState);
+  const language = useAtomValue(languageAtom);
+  const extensions = useAtomValue(extensionsAtom);
   const [extensibilityRoutes, setExtensibilityRoutes] = useState<
     JSX.Element[] | null
   >(null);

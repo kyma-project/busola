@@ -7,5 +7,5 @@ export interface IsFormOpenState {
 
 const defaultValue = { formOpen: false, leavingForm: false };
 
-export const isFormOpenState = atom<IsFormOpenState>(defaultValue);
-isFormOpenState.debugLabel = 'isFormOpenState';
+export const isFormOpenAtom = atom<IsFormOpenState>(defaultValue);
+isFormOpenAtom.debugLabel = 'isFormOpenAtom';

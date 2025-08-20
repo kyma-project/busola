@@ -11,5 +11,5 @@ export type PermittedUrlsState = {
 
 const defaultValue = {};
 
-export const permittedUrlsState = atom<PermittedUrlsState>(defaultValue);
-permittedUrlsState.debugLabel = 'permittedUrlsState';
+export const permittedUrlsAtom = atom<PermittedUrlsState>(defaultValue);
+permittedUrlsAtom.debugLabel = 'permittedUrlsAtom';
