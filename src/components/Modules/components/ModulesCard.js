@@ -153,7 +153,7 @@ export default function ModulesCard({
             url={module.docsUrl}
             linkClassName="sap-margin-top-tiny sap-margin-bottom-small"
           >
-            {t('kyma-modules.module-documentation')}
+            {t('kyma-modules.documentation')}
           </ExternalLink>
         )}
       </div>

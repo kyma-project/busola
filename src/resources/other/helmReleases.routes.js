@@ -3,7 +3,7 @@ import { Route, useParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 const HelmReleasesList = React.lazy(() =>
@@ -15,7 +15,7 @@ const HelmReleaseDetails = React.lazy(() =>
 );
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
   const { namespaceId, releaseName } = useParams();
 
   usePrepareLayoutColumns({

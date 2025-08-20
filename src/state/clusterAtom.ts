@@ -1,4 +1,4 @@
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'jotai';
 import { CurrentContext, ValidKubeconfig } from 'types';
 import { CLUSTERS_STORAGE_KEY } from './clustersAtom';
 import { ClusterStorage } from './types';
@@ -23,51 +23,52 @@ interface ClusterWithName extends Cluster {
 export type ActiveClusterState = ClusterWithName | null | undefined;
 
 const CLUSTER_NAME_STORAGE_KEY = 'busola.current-cluster-name';
-const defaultValue = undefined;
 
-export const clusterState: RecoilState<ActiveClusterState> = atom<
-  ActiveClusterState
->({
-  key: 'clusterState',
-  default: defaultValue,
-  effects: [
-    ({ setSelf, onSet }) => {
-      setSelf(() => {
-        const getClusters = () => {
-          try {
-            return {
-              ...JSON.parse(localStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}'),
-              ...JSON.parse(
-                sessionStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}',
-              ),
-            };
-          } catch {
-            return null;
-          }
-        };
+const getClusters = () => {
+  try {
+    return {
+      ...JSON.parse(localStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}'),
+      ...JSON.parse(sessionStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}'),
+    };
+  } catch {
+    return null;
+  }
+};
 
-        const clusters = getClusters();
+const getInitialClusterState = (): ActiveClusterState => {
+  const clusters = getClusters();
+  const clusterName = localStorage.getItem(CLUSTER_NAME_STORAGE_KEY);
 
-        const clusterName = localStorage.getItem(CLUSTER_NAME_STORAGE_KEY);
+  if (clusterName && !clusters?.[clusterName]) {
+    localStorage.removeItem(CLUSTERS_STORAGE_KEY);
+    return null;
+  }
 
-        if (clusterName && !clusters?.[clusterName]) {
-          localStorage.removeItem(CLUSTERS_STORAGE_KEY);
-          return null;
-        }
-        if (!clusters || !clusterName) {
-          return null;
-        }
+  if (!clusters || !clusterName) {
+    return null;
+  }
 
-        return { ...clusters[clusterName], name: clusterName };
-      });
+  return { ...clusters[clusterName], name: clusterName };
+};
 
-      onSet(cluster => {
-        if (cluster) {
-          localStorage.setItem(CLUSTER_NAME_STORAGE_KEY, cluster.name);
-        } else {
-          localStorage.removeItem(CLUSTER_NAME_STORAGE_KEY);
-        }
-      });
-    },
-  ],
-});
+const baseClusterAtom = atom<ActiveClusterState>(getInitialClusterState());
+
+// Main cluster atom with storage side effects
+export const clusterAtom = atom<ActiveClusterState, [ActiveClusterState], void>(
+  // Getter - read from base atom
+  get => get(baseClusterAtom),
+
+  // Setter - update base atom and handle storage
+  (_, set, newCluster) => {
+    // Update the base atom
+    set(baseClusterAtom, newCluster);
+
+    // Handle localStorage side effects
+    if (newCluster) {
+      localStorage.setItem(CLUSTER_NAME_STORAGE_KEY, newCluster.name);
+    } else {
+      localStorage.removeItem(CLUSTER_NAME_STORAGE_KEY);
+    }
+  },
+);
+clusterAtom.debugLabel = 'clusterAtom';

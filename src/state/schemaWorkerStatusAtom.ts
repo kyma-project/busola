@@ -1,4 +1,4 @@
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'jotai';
 
 type SchemaWorkerStatusState = {
   areSchemasComputed: boolean;
@@ -10,9 +10,7 @@ const defaultValue = {
   schemasError: null,
 };
 
-export const schemaWorkerStatusState: RecoilState<SchemaWorkerStatusState> = atom<
-  SchemaWorkerStatusState
->({
-  key: 'schemaWorkerStatusState',
-  default: defaultValue,
-});
+export const schemaWorkerStatusAtom = atom<SchemaWorkerStatusState>(
+  defaultValue,
+);
+schemaWorkerStatusAtom.debugLabel = 'schemaWorkerStatusAtom';

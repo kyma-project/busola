@@ -1,6 +1,6 @@
 import { addByContext } from 'components/Clusters/shared';
-import { ClustersState, clustersState } from 'state/clustersAtom';
-import { SetterOrUpdater, useRecoilValue } from 'recoil';
+import { ClustersState, clustersAtom } from 'state/clustersAtom';
+import { SetStateAction, useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -21,14 +21,13 @@ import { removePreviousPath } from 'state/useAfterInitHook';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import {
   KubeConfigMultipleState,
-  multipleContexts,
+  multipleContextsAtom,
 } from 'state/multipleContextsAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import {
-  manualKubeConfigIdState,
+  manualKubeConfigIdAtom,
   ManualKubeConfigIdType,
 } from 'state/manualKubeConfigIdAtom';
-import { useAtom } from 'jotai';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -77,7 +76,9 @@ const addClusters = async (
   navigate?: NavigateFunction,
   manualKubeConfigId?: {
     manualKubeConfigId?: ManualKubeConfigIdType;
-    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+    setManualKubeConfigId?: (
+      update: SetStateAction<ManualKubeConfigIdType>,
+    ) => void;
   },
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
@@ -131,10 +132,12 @@ const loadKubeconfigIdCluster = async (
   clusters: ClustersState,
   clusterInfo: useClustersInfoType,
   t: TFunction,
-  setContextsState?: SetterOrUpdater<KubeConfigMultipleState>,
+  setContextsState?: (update: SetStateAction<KubeConfigMultipleState>) => void,
   manualKubeConfigId?: {
     manualKubeConfigId?: ManualKubeConfigIdType;
-    setManualKubeConfigId?: SetterOrUpdater<ManualKubeConfigIdType>;
+    setManualKubeConfigId?: (
+      update: SetStateAction<ManualKubeConfigIdType>,
+    ) => void;
   },
 ) => {
   try {
@@ -184,11 +187,11 @@ export function useLoginWithKubeconfigID() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
     configFeaturesNames.KUBECONFIG_ID,
   );
-  const configuration = useRecoilValue(configurationAtom);
-  const clusters = useRecoilValue(clustersState);
-  const [contextsState, setContextsState] = useAtom(multipleContexts);
+  const configuration = useAtomValue(configurationAtom);
+  const clusters = useAtomValue(clustersAtom);
+  const [contextsState, setContextsState] = useAtom(multipleContextsAtom);
   const [manualKubeConfigId, setManualKubeConfigId] = useAtom(
-    manualKubeConfigIdState,
+    manualKubeConfigIdAtom,
   );
   const notification = useNotification();
   const navigate = useNavigate();
@@ -301,7 +304,7 @@ export function useLoadDefaultKubeconfigId() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>(
     configFeaturesNames.KUBECONFIG_ID,
   )!;
-  const clusters = useRecoilValue(clustersState);
+  const clusters = useAtomValue(clustersAtom);
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
 

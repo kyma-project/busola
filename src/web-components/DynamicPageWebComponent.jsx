@@ -1,4 +1,4 @@
-import { RecoilRoot } from 'recoil';
+import { Provider } from 'jotai';
 import createWebComponent from './createWebComponent';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { ThemeProvider } from '@ui5/webcomponents-react';
@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Suspense } from 'react';
 
-function DynamicPageWithRecoil(props) {
+function DynamicPageWithJotai(props) {
   const transformedForm = stickyHeaderHeight => {
     if (props.inlineEditForm)
       return parseHtmlToJsx(props.inlineEditForm(stickyHeaderHeight));
@@ -16,7 +16,7 @@ function DynamicPageWithRecoil(props) {
   };
 
   return (
-    <RecoilRoot>
+    <Provider>
       <ThemeProvider>
         <BrowserRouter>
           <Suspense fallback={<Spinner />}>
@@ -29,13 +29,13 @@ function DynamicPageWithRecoil(props) {
           </Suspense>
         </BrowserRouter>
       </ThemeProvider>
-    </RecoilRoot>
+    </Provider>
   );
 }
 
 createWebComponent(
   'dynamic-page-component',
-  DynamicPageWithRecoil,
+  DynamicPageWithJotai,
   {
     headerContent: null,
     title: '',

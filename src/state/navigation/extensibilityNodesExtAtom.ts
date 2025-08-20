@@ -1,8 +1,8 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
+import { atom } from 'jotai';
 import { ExtResource, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 import { DataSources } from 'components/Extensibility/contexts/DataSources';
-import { extensionsState, staticsState } from 'state/navigation/extensionsAtom';
+import { extensionsAtom, staticsAtom } from 'state/navigation/extensionsAtom';
 import { ExtensibilityNodesExt } from 'state/types';
 
 const createExternalNode = (
@@ -14,6 +14,7 @@ const createExternalNode = (
   dataSources?: DataSources,
 ) => ({
   resourceType: '',
+  resourceTypeCased: '',
   category: category,
   icon: icon,
   namespaced: scope === 'namespace',
@@ -62,25 +63,21 @@ const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   return nodes || [];
 };
 
-export const extensibilityNodesExtSelector: RecoilValueReadOnly<
-  NavNode[] | null
-> = selector<NavNode[] | null>({
-  key: 'extensibilityNodesExtSelector',
-  get: async ({ get }) => {
-    const extensions = get(extensionsState) || [];
-    const statics = get(staticsState) || [];
+export const extensibilityNodesExtAtom = atom<NavNode[] | null>(get => {
+  const extensions = get(extensionsAtom) || [];
+  const statics = get(staticsAtom) || [];
 
-    const fetchFn = getFetchFn(get);
-    if (!fetchFn) {
-      return null;
-    }
+  const fetchFn = getFetchFn(get);
+  if (!fetchFn) {
+    return null;
+  }
 
-    const extensibilityNodes = getExtensibilityNodesExt(extensions);
-    const staticsNodes = getExtensibilityNodesExt(statics);
+  const extensibilityNodes = getExtensibilityNodesExt(extensions);
+  const staticsNodes = getExtensibilityNodesExt(statics);
 
-    const filteredExtNodes = [...extensibilityNodes.filter(n => n)];
-    const filteresStaticsNodes = [...staticsNodes.filter(n => n)];
+  const filteredExtNodes = [...extensibilityNodes.filter(n => n)];
+  const filteresStaticsNodes = [...staticsNodes.filter(n => n)];
 
-    return [...filteredExtNodes.concat(filteresStaticsNodes)];
-  },
+  return [...filteredExtNodes.concat(filteresStaticsNodes)];
 });
+extensibilityNodesExtAtom.debugLabel = 'extensibilityNodesExtAtom';

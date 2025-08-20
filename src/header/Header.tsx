@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
   ListItemStandard,
@@ -15,9 +14,13 @@ import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
-import { clustersState } from 'state/clustersAtom';
-import { clusterState } from 'state/clusterAtom';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import {
+  clustersAtom,
+  clustersAtomEffectOnSet,
+  clustersAtomEffectSetSelf,
+} from 'state/clustersAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
 
 import { Logo } from './Logo/Logo';
@@ -40,14 +43,16 @@ export function Header() {
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
 
-  const cluster = useRecoilValue(clusterState);
-  const clusters = useRecoilValue(clustersState);
+  useAtom(clustersAtomEffectSetSelf);
+  useAtom(clustersAtomEffectOnSet);
+  const cluster = useAtomValue(clusterAtom);
+  const clusters = useAtomValue(clustersAtom);
 
   const { isEnabled: isKymaCompanionEnabled } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
   );
 
-  const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionState);
+  const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
   const shellbarRef = useRef(null);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(

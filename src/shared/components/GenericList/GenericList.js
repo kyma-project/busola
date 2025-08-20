@@ -2,8 +2,7 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
@@ -21,11 +20,11 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { SortModalPanel } from './SortModalPanel';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { getErrorMessage } from 'shared/utils/helpers';
-import { pageSizeState } from 'state/preferences/pageSizeAtom';
+import { pageSizeAtom } from 'state/preferences/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { Table } from '@ui5/webcomponents-react';
@@ -106,7 +105,7 @@ export const GenericList = ({
     }
   };
 
-  const globalPageSize = useRecoilValue(pageSizeState);
+  const globalPageSize = useAtomValue(pageSizeAtom);
   const [pageSize, setPageSize] = useState(globalPageSize);
 
   useEffect(() => {
@@ -289,7 +288,7 @@ export const GenericList = ({
     });
   };
 
-  const [layoutState, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
   const linkTo = entry => {

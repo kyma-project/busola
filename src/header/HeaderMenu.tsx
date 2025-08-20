@@ -2,7 +2,7 @@ import { Menu, MenuItem } from '@ui5/webcomponents-react';
 import { MenuDomRef, Ui5CustomEvent } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 import { useSetAtom } from 'jotai';
-import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
+import { isPreferencesOpenAtom } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 import { useGetLegalLinks } from './SidebarMenu/useGetLegalLinks';
 import { useGetHelpLinks } from './SidebarMenu/useGetHelpLinks';
@@ -25,7 +25,7 @@ interface HeaderMenuProps {
 
 export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
   const { t } = useTranslation();
-  const setPreferencesOpen = useSetAtom(isPreferencesOpenState);
+  const setPreferencesOpen = useSetAtom(isPreferencesOpenAtom);
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
   const getHelpLinks = useGetHelpLinks();

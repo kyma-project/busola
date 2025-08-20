@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { ResourceForm } from 'shared/ResourceForm';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import * as _ from 'lodash';
 import { createLimitRangeTemplate } from './templates';
 
@@ -16,7 +16,7 @@ export default function LimitRangeCreate({
 }) {
   const { t } = useTranslation();
 
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [limitRange, setLimitRange] = useState(
     _.cloneDeep(initialLimitRange) ||
       createLimitRangeTemplate({ namespaceName: namespaceId }),

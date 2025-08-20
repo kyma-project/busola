@@ -5,7 +5,7 @@ import { Route, useParams } from 'react-router';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
@@ -31,7 +31,7 @@ export const createPath = (
 };
 
 const ColumnWrapper = ({ list, details, create, ...props }) => {
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
   const { resourceListUrl } = useUrl();
 
   const { t } = useTranslation();

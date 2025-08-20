@@ -1,7 +1,6 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -12,8 +11,8 @@ import { Button } from '@ui5/webcomponents-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
-import { columnLayoutState } from 'state/columnLayoutAtom';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { useMemo } from 'react';
@@ -39,8 +38,8 @@ export function useCreateResource({
   const postRequest = usePost();
   const patchRequest = useUpdate();
   const { scopedUrl } = useUrl();
-  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
-  const activeNamespace = useRecoilValue(activeNamespaceIdState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
+  const activeNamespace = useAtomValue(activeNamespaceIdAtom);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 

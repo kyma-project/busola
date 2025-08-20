@@ -5,14 +5,14 @@ import LimitRangeSpecification from './LimitRangeSpecification';
 import { Button } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router';
 import { useSetAtom } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 
 export function LimitRangesList(props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const setLayoutColumn = useSetAtom(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const { namespaceUrl } = useUrl();
 
   const customColumns = [

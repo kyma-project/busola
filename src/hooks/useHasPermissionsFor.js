@@ -1,6 +1,6 @@
 import pluralize from 'pluralize';
-import { useRecoilValue } from 'recoil';
-import { permissionSetsSelector } from 'state/permissionSetsSelector';
+import { useAtomValue } from 'jotai';
+import { permissionSetsAtom } from 'state/permissionSetsAtom';
 
 export function hasPermissionsFor(
   apiGroup,
@@ -33,7 +33,7 @@ export function hasPermissionsFor(
 }
 
 export function useHasPermissionsFor(queries) {
-  const permissionSet = useRecoilValue(permissionSetsSelector);
+  const permissionSet = useAtomValue(permissionSetsAtom);
 
   return queries.map(([apiGroup, resourceType, verbs]) =>
     hasPermissionsFor(apiGroup, resourceType, permissionSet, verbs),

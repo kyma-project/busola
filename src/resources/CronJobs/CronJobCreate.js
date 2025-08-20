@@ -16,7 +16,7 @@ import {
 } from 'resources/Jobs/templates';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { useAtomValue } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -44,7 +44,7 @@ export default function CronJobCreate({
   const [initialResource, setInitialResource] = useState(
     initialCronJob || createCronJobTemplate(namespace),
   );
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

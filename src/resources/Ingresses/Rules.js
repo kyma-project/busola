@@ -4,8 +4,8 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useAtomValue } from 'jotai';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Link } from 'shared/components/Link/Link';
@@ -36,7 +36,7 @@ const Port = ({ serviceName, port, services }) => {
 
 export const Rules = ({ rules }) => {
   const { t } = useTranslation();
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
 
   const { data: services } = useGetList()(
     `/api/v1/namespaces/${namespace}/services`,

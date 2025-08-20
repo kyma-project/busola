@@ -14,14 +14,13 @@ import jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
-import { editViewModeState } from 'state/preferences/editViewModeAtom';
+import { editViewModeAtom } from 'state/preferences/editViewModeAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFormEditTracking } from 'shared/hooks/useFormEditTracking';
 import './ResourceForm.scss';
 
@@ -64,7 +63,7 @@ export function ResourceForm({
   resetLayout,
   formWithoutPanel,
 }) {
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   const isEdit = useMemo(
     () =>
@@ -96,7 +95,7 @@ export function ResourceForm({
     };
   }
 
-  const editViewMode = useRecoilValue(editViewModeState);
+  const editViewMode = useAtomValue(editViewModeAtom);
   const [editorError, setEditorError] = useState(null);
 
   useFormEditTracking(resource, initialResource, editorError);

@@ -5,8 +5,8 @@ import {
   useSearchParams,
 } from 'react-router';
 import { useSetAtom } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { isFormOpenAtom } from 'state/formOpenAtom';
 
 const switchToPrevLayout = layout => {
   switch (layout) {
@@ -93,8 +93,8 @@ export function usePrepareLayoutColumns({
   isModule,
   rawResourceTypeName,
 }) {
-  const setLayoutColumn = useSetAtom(columnLayoutState);
-  const setIsFormOpen = useSetAtom(isFormOpenState);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
+  const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const [searchParams] = useSearchParams();
   const layout = searchParams.get('layout');
   const showCreate = searchParams.get('showCreate');

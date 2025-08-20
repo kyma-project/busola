@@ -1,7 +1,6 @@
 import { atom } from 'jotai';
 
-export const defaultValue = null;
+const defaultValue = null;
 
-export const openapiLastFetchedState = atom<string | null>(defaultValue);
-
-openapiLastFetchedState.debugLabel = 'openapiLastFetchedState';
+export const openapiLastFetchedAtom = atom<string | null>(defaultValue);
+openapiLastFetchedAtom.debugLabel = 'openapiLastFetchedAtom';

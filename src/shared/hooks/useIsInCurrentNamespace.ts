@@ -1,14 +1,14 @@
 import { K8sResource } from 'types';
 import pluralize from 'pluralize';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { allNodesSelector } from 'state/navigation/allNodesSelector';
+import { useAtomValue } from 'jotai';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { allNodesAtom } from 'state/navigation/allNodesAtom';
 
 export const useIsInCurrentNamespace = (resource: K8sResource) => {
-  const namespaceNodes = useRecoilValue(allNodesSelector).filter(
+  const namespaceNodes = useAtomValue(allNodesAtom).filter(
     node => node.namespaced,
   );
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
 
   const resourceType = pluralize(resource?.kind?.toLowerCase() || '');
   const resourceNamespace = resource?.metadata?.namespace;

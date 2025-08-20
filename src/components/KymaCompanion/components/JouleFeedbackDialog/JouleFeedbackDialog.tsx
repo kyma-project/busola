@@ -14,7 +14,7 @@ import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 import {
   ShowKymaCompanion,
-  showKymaCompanionState,
+  showKymaCompanionAtom,
 } from 'state/companion/showKymaCompanionAtom';
 
 import NewMail from './assets/NewMail.svg';
@@ -44,7 +44,7 @@ export default function JouleFeedbackDialog({
 
   const { t } = useTranslation();
   const [, setShowCompanion] = useAtom<ShowKymaCompanion>(
-    showKymaCompanionState,
+    showKymaCompanionAtom,
   );
   const [shouldShowJouleFeedback, setShouldShowJouleFeedback] = useState(() =>
     getShowFeedbackStorageKey(),

@@ -1,9 +1,8 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useAtomValue } from 'jotai';
 import { useEventListener } from 'hooks/useEventListener';
-import { addHistoryEntry, getHistoryEntries } from './search-history';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { getHistoryEntries } from './search-history';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import {
   CommandPalletteHelp,
   NamespaceContextDisplay,
@@ -14,10 +13,10 @@ import { ResultsList } from './ResultsList/ResultsList';
 import { useSearchResults } from './useSearchResults';
 import { K8sResource } from 'types';
 import { Button, Icon, Input } from '@ui5/webcomponents-react';
-import { showKymaCompanionState } from 'state/companion/showKymaCompanionAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-
+import { activateResult, isResultGoingToRedirect } from './helpers';
 import './CommandPaletteUI.scss';
 
 function Background({
@@ -57,7 +56,7 @@ export function CommandPaletteUI({
   updateResourceCache,
   shellbarWidth,
 }: CommandPaletteProps) {
-  const namespace = useRecoilValue(activeNamespaceIdState);
+  const namespace = useAtomValue(activeNamespaceIdAtom);
   const { navigateSafely } = useFormNavigation();
 
   const [query, setQuery] = useState('');
@@ -69,7 +68,7 @@ export function CommandPaletteUI({
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
-  const showCompanion = useAtomValue(showKymaCompanionState);
+  const showCompanion = useAtomValue(showKymaCompanionAtom);
 
   const commandPaletteRef = useRef<HTMLDivElement | null>(null);
 
@@ -150,10 +149,11 @@ export function CommandPaletteUI({
     if (key === 'Enter' && results[0]) {
       // choose current entry
       e.preventDefault();
-      navigateSafely(() => {
-        addHistoryEntry(results[0].query);
-        results[0].onActivate();
-      });
+      if (isResultGoingToRedirect(results[0].query)) {
+        navigateSafely(() =>
+          activateResult(results[0].query, results[0].onActivate),
+        );
+      } else activateResult(results[0].query, results[0].onActivate);
     } else if (key === 'Tab') {
       e.preventDefault();
       // fill search with active history entry

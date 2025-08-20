@@ -28,7 +28,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { useAtomValue } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 
 // This component is loaded after the page mounts.
@@ -199,7 +199,7 @@ function Resource({
     layoutNumber,
   });
 
-  const layoutColumn = useAtomValue(columnLayoutState);
+  const layoutColumn = useAtomValue(columnLayoutAtom);
   const protectedResource = isProtected(resource);
 
   const actions = readOnly ? null : (

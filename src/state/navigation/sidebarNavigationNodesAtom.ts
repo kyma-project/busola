@@ -1,4 +1,4 @@
-import { RecoilValueReadOnly, selector } from 'recoil';
+import { atom } from 'jotai';
 import { partial } from 'lodash';
 
 import { assignNodesToCategories } from './assignToCategories';
@@ -6,23 +6,20 @@ import { Category } from './categories';
 import { hasCurrentScope } from './filters/hasCurrentScope';
 import { configFeaturesNames, NavNode, Scope } from '../types';
 
-import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
-import { externalNodesSelector } from './externalNodesSelector';
-import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
+import { clusterAndNsNodesAtom } from './clusterAndNsNodesAtom';
+import { externalNodesAtom } from './externalNodesAtom';
+import { activeNamespaceIdAtom } from '../activeNamespaceIdAtom';
 import { configurationAtom } from '../configuration/configurationAtom';
-import { extensionsState } from './extensionsAtom';
+import { extensionsAtom } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
-import { extensibilityNodesExtSelector } from './extensibilityNodesExtSelector';
+import { extensibilityNodesExtAtom } from './extensibilityNodesExtAtom';
 
-export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
-  Category[]
->({
-  key: 'scopedNavigationSelector',
-  get: ({ get }) => {
-    const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
-    const activeNamespaceId = get(activeNamespaceIdState);
-    const externalNodes = get(externalNodesSelector);
-    const externalNodesExt = get(extensibilityNodesExtSelector);
+export const sidebarNavigationNodesAtom = atom<Promise<Category[]>>(
+  async get => {
+    const navNodes: NavNode[] = await get(clusterAndNsNodesAtom);
+    const activeNamespaceId = get(activeNamespaceIdAtom);
+    const externalNodes = get(externalNodesAtom);
+    const externalNodesExt = get(extensibilityNodesExtAtom);
     const configuration = get(configurationAtom);
     const features = configuration?.features;
 
@@ -32,7 +29,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     }
     let allNodes = [...navNodes, ...externalNodes];
 
-    const extResources = get(extensionsState);
+    const extResources = get(extensionsAtom);
     const isExtensibilityOn =
       features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
     if (isExtensibilityOn && extResources) {
@@ -52,7 +49,8 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
 
     return assignedToCategories;
   },
-});
+);
+sidebarNavigationNodesAtom.debugLabel = 'sidebarNavigationNodesAtom';
 
 export const mergeInExtensibilityNav = (
   nodes: NavNode[],

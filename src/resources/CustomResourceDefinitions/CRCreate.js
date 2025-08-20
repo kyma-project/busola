@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { BusyIndicator } from '@ui5/webcomponents-react';
 import { useAtom } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 function CRCreateForm({
   onChange,
@@ -23,7 +23,7 @@ function CRCreateForm({
   ...props
 }) {
   const { crdName } = useParams();
-  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutState);
+  const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { t } = useTranslation();
   const notification = useNotification();
   const [cr, setCr] = useState(

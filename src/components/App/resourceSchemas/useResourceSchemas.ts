@@ -6,36 +6,32 @@ import {
   sendWorkerMessage,
   terminateWorker,
 } from './resourceSchemaWorkerApi';
-import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil';
-import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
+import { useAtomValue } from 'jotai';
+import { schemaWorkerStatusAtom } from 'state/schemaWorkerStatusAtom';
 import { useUrl } from 'hooks/useUrl';
-import { authDataState } from 'state/authDataAtom';
-import { openapiState } from 'state/openapi/openapiSelector';
-import { openapiLastFetchedState } from 'state/openapi/openapiLastFetchedAtom';
-import { clusterState } from 'state/clusterAtom';
+import { authDataAtom } from 'state/authDataAtom';
+import { openapiAtom } from 'state/openapi/openapiAtom';
+import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
-  const authData = useRecoilValue(authDataState);
-  const openApi = useRecoilValueLoadable(openapiState);
+  const authData = useAtomValue(authDataAtom);
+  const openApi = useAtomValue(openapiAtom);
   const navigate = useNavigate();
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useAtomValue(clusterAtom);
   const isClusterList = useMatch({ path: '/clusters' });
   const notification = useNotification();
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
   const { currentCluster } = clusterInfo;
 
-  const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
-  const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedState);
+  const setSchemasState = useSetAtom(schemaWorkerStatusAtom);
+  const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedAtom);
 
   useEffect(() => {
     if (
@@ -53,7 +49,7 @@ export const useResourceSchemas = () => {
     activeClusterName,
     cluster?.contextName,
     authData,
-    openApi.state,
+    openApi,
     isClusterList,
     navigate,
     t,
@@ -70,12 +66,12 @@ export const useResourceSchemas = () => {
       return;
     }
 
-    // Luigi updates authData a few times during a cluster load. The below line cancels repeated requests after the first fetch
+    // authData updates a few times during cluster load. The below line cancels repeated requests after the first fetch
     if (lastFetched === activeClusterName) return;
-    if (openApi.state !== 'hasValue') return;
+    if (openApi.state !== 'hasData') return;
 
     setLastFetched(activeClusterName);
-    sendWorkerMessage('sendingOpenapi', openApi.contents, activeClusterName);
+    sendWorkerMessage('sendingOpenapi', openApi.data, activeClusterName);
 
     addWorkerListener('computedToJSON', () => {
       setSchemasState({ areSchemasComputed: true, schemasError: null });
@@ -94,8 +90,7 @@ export const useResourceSchemas = () => {
   }, [
     activeClusterName,
     authData,
-    openApi.state,
-    openApi.contents,
+    openApi,
     lastFetched,
     setSchemasState,
     setLastFetched,

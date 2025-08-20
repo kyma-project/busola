@@ -1,8 +1,8 @@
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import {
   Theme,
   isSystemThemeDark,
-  themeState,
+  themeAtom,
 } from 'state/preferences/themeAtom';
 import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
 import { TileButton } from 'shared/components/TileButton/TileButton';
@@ -19,7 +19,7 @@ const AVAILABLE_THEMES: Theme[] = [
 
 export default function ThemeChooser() {
   const { t } = useTranslation();
-  const [theme, setUsedTheme] = useRecoilState(themeState);
+  const [theme, setUsedTheme] = useAtom(themeAtom);
 
   return (
     <>

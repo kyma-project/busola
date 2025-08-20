@@ -1,13 +1,11 @@
 import { useCallback } from 'react';
-import { isResourceEditedState } from 'state/resourceEditedAtom';
-import { isFormOpenState } from 'state/formOpenAtom';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
+import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useAtom } from 'jotai';
 
 export function useFormNavigation() {
-  const [isResourceEdited, setIsResourceEdited] = useAtom(
-    isResourceEditedState,
-  );
-  const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenState);
+  const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
+  const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenAtom);
 
   const navigateSafely = useCallback(
     (action: Function) => {

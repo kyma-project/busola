@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -12,7 +12,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { authDataState } from 'state/authDataAtom';
+import { authDataAtom } from 'state/authDataAtom';
 import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster, getUser } from '../../shared';
@@ -272,7 +272,7 @@ function EditClusterComponent({
   const notification = useNotification();
 
   const clustersInfo = useClustersInfo();
-  const setAuth = useSetRecoilState(authDataState);
+  const setAuth = useSetAtom(authDataAtom);
   const originalName = useRef(kubeconfig?.['current-context'] || '');
 
   const setWholeResource = newKubeconfig => {

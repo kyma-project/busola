@@ -3,23 +3,17 @@ import jsyaml from 'js-yaml';
 import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
 import { ExtInjectionConfig, ExtResource } from '../types';
-import { atom, useSetAtom } from 'jotai';
-import {
-  atom as recoilAtom,
-  RecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil';
-import { clusterState } from '../clusterAtom';
-import { authDataState } from '../authDataAtom';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { clusterAtom } from '../clusterAtom';
+import { authDataAtom } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { configurationAtom } from 'state/configuration/configurationAtom';
-import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
+import { openapiPathIdListAtom } from 'state/openapi/openapiPathIdAtom';
 import {
   getPermissionResourceRules,
-  permissionSetsSelector,
+  permissionSetsAtom,
   PermissionSetState,
-} from 'state/permissionSetsSelector';
+} from 'state/permissionSetsAtom';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { mapExtResourceToNavNode } from 'state/resourceList/mapExtResourceToNavNode';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
@@ -406,18 +400,18 @@ const pushExtToEventTypes = (extensions: any) => {
 };
 
 export const useGetExtensions = () => {
-  const cluster = useRecoilValue(clusterState);
-  const auth = useRecoilValue(authDataState);
-  const setExtensions = useSetRecoilState(extensionsState);
-  const setStatics = useSetRecoilState(staticsState);
-  const setAllExtensions = useSetAtom(allExtensionsState);
-  const setInjections = useSetAtom(injectionsState);
-  const setWizard = useSetAtom(wizardState);
-  const fetchFn = getFetchFn(useRecoilValue);
-  const configuration = useRecoilValue(configurationAtom);
+  const cluster = useAtomValue(clusterAtom);
+  const auth = useAtomValue(authDataAtom);
+  const setExtensions = useSetAtom(extensionsAtom);
+  const setStatics = useSetAtom(staticsAtom);
+  const setAllExtensions = useSetAtom(allExtensionsAtom);
+  const setInjections = useSetAtom(injectionsAtom);
+  const setWizard = useSetAtom(wizardAtom);
+  const fetchFn = getFetchFn(useAtomValue);
+  const configuration = useAtomValue(configurationAtom);
   const features = configuration?.features;
-  const openapiPathIdList = useRecoilValue(openapiPathIdListSelector);
-  const permissionSet = useRecoilValue(permissionSetsSelector);
+  const openapiPathIdList = useAtomValue(openapiPathIdListAtom);
+  const permissionSet = useAtomValue(permissionSetsAtom);
   const { namespace } = useUrl();
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
     configFeaturesNames.EXTENSIBILITY_INJECTIONS,
@@ -579,25 +573,17 @@ export const useGetExtensions = () => {
 // null for defaultValue,
 // empty array for value or error
 const defaultValue = null;
-export const extensionsState: RecoilState<ExtResource[] | null> = recoilAtom<
-  ExtResource[] | null
->({
-  key: 'extensionsState',
-  default: defaultValue,
-});
+export const extensionsAtom = atom<ExtResource[] | null>(defaultValue);
+extensionsAtom.debugLabel = 'extensionsAtom';
 
-export const staticsState: RecoilState<ExtResource[] | null> = recoilAtom<
-  ExtResource[] | null
->({
-  key: 'staticsState',
-  default: defaultValue,
-});
+export const staticsAtom = atom<ExtResource[] | null>(defaultValue);
+staticsAtom.debugLabel = 'staticsAtom';
 
-export const allExtensionsState = atom<ExtResource[] | null>(defaultValue);
-allExtensionsState.debugLabel = 'allExtensionsState';
+export const allExtensionsAtom = atom<ExtResource[] | null>(defaultValue);
+allExtensionsAtom.debugLabel = 'allExtensionsAtom';
 
-export const injectionsState = atom<ExtInjectionConfig[] | null>(defaultValue);
-injectionsState.debugLabel = 'injectionsState';
+export const injectionsAtom = atom<ExtInjectionConfig[] | null>(defaultValue);
+injectionsAtom.debugLabel = 'injectionsAtom';
 
-export const wizardState = atom<ExtWizardConfig[] | null>(defaultValue);
-wizardState.debugLabel = 'wizardState';
+export const wizardAtom = atom<ExtWizardConfig[] | null>(defaultValue);
+wizardAtom.debugLabel = 'wizardAtom';

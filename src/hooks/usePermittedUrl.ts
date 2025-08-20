@@ -3,7 +3,7 @@ import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
 
 import { useUrl } from 'hooks/useUrl';
 
-import { permittedUrlsState } from 'state/permittedUrlsAtom';
+import { permittedUrlsAtom } from 'state/permittedUrlsAtom';
 import { K8sResource } from 'types';
 import { useEffect } from 'react';
 import { useAtom } from 'jotai';
@@ -33,7 +33,7 @@ export function usePermittedUrl(
     resourceNamespace ? resourceNamespace : namespace,
   );
 
-  const [permittedUrls, setPermittedUrls] = useAtom(permittedUrlsState);
+  const [permittedUrls, setPermittedUrls] = useAtom(permittedUrlsAtom);
 
   const now = new Date().getTime();
   const age =

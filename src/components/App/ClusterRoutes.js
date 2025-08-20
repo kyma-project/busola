@@ -7,15 +7,15 @@ import {
   useParams,
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
-import { clusterState } from 'state/clusterAtom';
-import { clustersState } from 'state/clustersAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { clustersAtom } from 'state/clustersAtom';
 import { languageAtom } from 'state/preferences/languageAtom';
-import { extensionsState } from 'state/navigation/extensionsAtom';
-import { authDataState } from 'state/authDataAtom';
+import { extensionsAtom } from 'state/navigation/extensionsAtom';
+import { authDataAtom } from 'state/authDataAtom';
 import { otherRoutes } from 'resources/other';
 import { resourceRoutes } from 'resources';
 
@@ -30,11 +30,11 @@ export default function ClusterRoutes() {
 
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const language = useRecoilValue(languageAtom);
-  const setAuth = useSetRecoilState(authDataState);
-  const clusters = useRecoilValue(clustersState);
-  const extensions = useRecoilValue(extensionsState);
-  const [cluster, setCluster] = useRecoilState(clusterState);
+  const language = useAtomValue(languageAtom);
+  const setAuth = useSetAtom(authDataAtom);
+  const clusters = useAtomValue(clustersAtom);
+  const extensions = useAtomValue(extensionsAtom);
+  const [cluster, setCluster] = useAtom(clusterAtom);
   const [search] = useSearchParams();
   const [extensibilityRoutes, setExtensibilityRoutes] = useState(null);
   const { clusterUrl } = useUrl();

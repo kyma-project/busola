@@ -12,7 +12,7 @@ import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useAtomValue } from 'jotai';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 const createDefaultSecret = serviceAccountName => {
   return {
@@ -48,7 +48,7 @@ export default function ServiceAccountCreate({
   const [initialResource, setInitialResource] = useState(
     initialServiceAccount || createServiceAccountTemplate(namespace),
   );
-  const layoutState = useAtomValue(columnLayoutState);
+  const layoutState = useAtomValue(columnLayoutAtom);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;

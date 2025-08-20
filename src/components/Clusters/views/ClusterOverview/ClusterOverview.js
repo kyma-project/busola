@@ -8,7 +8,7 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { useSetAtom } from 'jotai';
 
-import { showYamlUploadDialogState } from 'state/showYamlUploadDialogAtom';
+import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 import { createPortal } from 'react-dom';
 import { deleteCluster } from 'components/Clusters/shared';
 import { Button, Title } from '@ui5/webcomponents-react';
@@ -19,11 +19,12 @@ import ClusterStats from './ClusterStats';
 import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
-import { columnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner';
 
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
+import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
 const Injections = React.lazy(() =>
   import('../../../Extensibility/ExtensibilityInjections'),
@@ -44,9 +45,10 @@ export function ClusterOverview() {
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceType: t('clusters.labels.name'),
   });
-  const setShowAdd = useSetAtom(showYamlUploadDialogState);
+  const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
+  const isSAPUser = useCheckSAPUser();
 
-  const setLayoutColumn = useSetAtom(columnLayoutState);
+  const setLayoutColumn = useSetAtom(columnLayoutAtom);
   useEffect(() => {
     setLayoutColumn({
       layout: 'OneColumn',
@@ -97,7 +99,7 @@ export function ClusterOverview() {
           <>
             <BannerCarousel>
               <>
-                {isKymaCompanionEnabled && (
+                {isKymaCompanionEnabled && isSAPUser && (
                   <AIBanner
                     feedbackUrl={companionConfig?.feedbackLink}
                     documentationUrl={companionConfig?.documentationLink}

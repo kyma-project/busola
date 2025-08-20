@@ -1,10 +1,10 @@
-import { useRecoilValue } from 'recoil';
 import jsonata from 'jsonata';
 import { isEqual } from 'lodash';
 import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
-import { permissionSetsSelector } from 'state/permissionSetsSelector';
+import { permissionSetsAtom } from 'state/permissionSetsAtom';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
+import { useAtomValue } from 'jotai';
 
 /*
   Turns jsonata expressions like
@@ -72,7 +72,7 @@ export function jsonataWrapper(expression: string) {
   });
 
   exp.registerFunction('canI', (resourceGroupAndVersion, resourceKind) => {
-    const permissionSet = useRecoilValue(permissionSetsSelector);
+    const permissionSet = useAtomValue(permissionSetsAtom);
 
     const isPermitted = doesUserHavePermission(
       ['list'],

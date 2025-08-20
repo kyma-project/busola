@@ -1,8 +1,8 @@
 import { Button, MessageBox, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useMatch, useNavigate } from 'react-router';
-import { useRecoilValue } from 'recoil';
-import { extensionsState } from 'state/navigation/extensionsAtom';
+import { useAtomValue } from 'jotai';
+import { extensionsAtom } from 'state/navigation/extensionsAtom';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import pluralize from 'pluralize';
@@ -15,7 +15,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
   const { namespace, namespaceUrl, clusterUrl } = useUrl();
   const notificationManager = useNotification();
   const navigate = useNavigate();
-  const extensions = useRecoilValue(extensionsState);
+  const extensions = useAtomValue(extensionsAtom);
 
   title = title || t('components.incorrect-path.title.default');
   message = message || t('components.incorrect-path.message.default');
