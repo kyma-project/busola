@@ -15,7 +15,7 @@ import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { useAtomValue } from 'jotai';
-import { editViewModeState } from 'state/preferences/editViewModeAtom';
+import { editViewModeAtom } from 'state/preferences/editViewModeAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
@@ -95,7 +95,7 @@ export function ResourceForm({
     };
   }
 
-  const editViewMode = useAtomValue(editViewModeState);
+  const editViewMode = useAtomValue(editViewModeAtom);
   const [editorError, setEditorError] = useState(null);
 
   useFormEditTracking(resource, initialResource, editorError);

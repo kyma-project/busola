@@ -3,13 +3,13 @@ import { useFeature } from 'hooks/useFeature';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
-import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
+import { disableResourceProtectionAtom } from 'state/preferences/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
 
 export default function ProtectedSettings() {
   const { t } = useTranslation();
   const [disableResourceProtection, setDisableResourceProtection] = useAtom(
-    disableResourceProtectionState,
+    disableResourceProtectionAtom,
   );
 
   const protectedResourcesEnabled = useFeature(

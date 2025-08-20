@@ -2,14 +2,14 @@ import { t } from 'i18next';
 import { Label, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
-  validateResourcesState,
+  validateResourcesAtom,
 } from '../../../state/preferences/validateResourcesAtom';
 import { useAtom } from 'jotai';
 import './ValidationSwitch.scss';
 
 export const ValidationSwitch = () => {
   const [validateResources, setValidateResources] = useAtom(
-    validateResourcesState,
+    validateResourcesAtom,
   );
 
   const {

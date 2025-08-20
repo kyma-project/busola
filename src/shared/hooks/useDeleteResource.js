@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { prettifyNameSingular } from 'shared/utils/helpers';
-import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
+import { dontConfirmDeleteAtom } from 'state/preferences/dontConfirmDeleteAtom';
 import { useUrl } from 'hooks/useUrl';
 
 import { clusterAtom } from 'state/clusterAtom';
@@ -35,7 +35,7 @@ export function useDeleteResource({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteResourceMutation = useDelete();
   const [dontConfirmDelete, setDontConfirmDelete] = useAtom(
-    dontConfirmDeleteState,
+    dontConfirmDeleteAtom,
   );
   const notification = useNotification();
   const navigate = useNavigate();

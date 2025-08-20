@@ -2,7 +2,7 @@ import { Label, Option, Select } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import {
-  editViewModeState,
+  editViewModeAtom,
   getEditViewModeState,
 } from 'state/preferences/editViewModeAtom';
 
@@ -14,7 +14,7 @@ const AVAILABLE_EDIT_VIEW_OPTIONS = [
 
 export default function EditViewSettings() {
   const { t } = useTranslation();
-  const [editViewMode, setEditViewMode] = useAtom(editViewModeState);
+  const [editViewMode, setEditViewMode] = useAtom(editViewModeAtom);
 
   const { preferencesViewType } = getEditViewModeState(editViewMode);
 

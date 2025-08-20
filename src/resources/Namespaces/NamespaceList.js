@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
+import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import NamespaceCreate from './NamespaceCreate';
@@ -17,7 +17,7 @@ import {
 
 export function NamespaceList(props) {
   const { t } = useTranslation();
-  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesState);
+  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesAtom);
   const cluster = useAtomValue(clusterAtom);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const navigate = useNavigate();

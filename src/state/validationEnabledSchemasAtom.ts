@@ -4,7 +4,7 @@ import { atom, useAtomValue, useSetAtom } from 'jotai';
 import {
   ExtendedValidateResources,
   getExtendedValidateResourceState,
-  validateResourcesState,
+  validateResourcesAtom,
 } from './preferences/validateResourcesAtom';
 import {
   emptyValidationSchema,
@@ -45,7 +45,7 @@ export const usePolicySet = () => {
   const validationFeature = useFeature(
     configFeaturesNames.RESOURCE_VALIDATION,
   ) as ValidationFeatureConfig;
-  const validateResources = useAtomValue(validateResourcesState);
+  const validateResources = useAtomValue(validateResourcesAtom);
   const validationPreferences = useMemo(
     () => getExtendedValidateResourceState(validateResources),
     [validateResources],

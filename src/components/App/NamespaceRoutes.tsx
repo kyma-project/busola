@@ -3,7 +3,7 @@ import { Routes, Route, useParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
-import { languageState } from 'state/preferences/languageAtom';
+import { languageAtom } from 'state/preferences/languageAtom';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 
 import { resourceRoutesNamespaced } from 'resources';
@@ -17,7 +17,7 @@ export default function NamespaceRoutes() {
   const { t } = useTranslation();
   const { namespaceId } = useParams();
   const { clusterUrl, namespaceUrl } = useUrl();
-  const language = useAtomValue(languageState);
+  const language = useAtomValue(languageAtom);
   const extensions = useAtomValue(extensionsAtom);
   const [extensibilityRoutes, setExtensibilityRoutes] = useState<
     JSX.Element[] | null

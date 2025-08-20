@@ -14,7 +14,7 @@ clustersAtom.debugLabel = 'clustersAtom';
 
 const inMemoryClusters: ClustersState = {};
 
-export const clustersStateEffectSetSelf = withAtomEffect(
+export const clustersAtomEffectSetSelf = withAtomEffect(
   clustersAtom,
   (_get, set) => {
     set(clustersAtom, (previousValue: ClustersState) => {
@@ -34,9 +34,9 @@ export const clustersStateEffectSetSelf = withAtomEffect(
     });
   },
 );
-clustersStateEffectSetSelf.debugLabel = 'clustersStateEffectSetSelf';
+clustersAtomEffectSetSelf.debugLabel = 'clustersAtomEffectSetSelf';
 
-export const clustersStateEffectOnSet = atomEffect((get, _set) => {
+export const clustersAtomEffectOnSet = atomEffect((get, _set) => {
   const newValue = get(clustersAtom);
 
   const localStorageClusters: ClustersState = {};
@@ -82,4 +82,4 @@ export const clustersStateEffectOnSet = atomEffect((get, _set) => {
     JSON.stringify(sessionStorageClusters),
   );
 });
-clustersStateEffectOnSet.debugLabel = 'clustersStateEffectOnSet';
+clustersAtomEffectOnSet.debugLabel = 'clustersAtomEffectOnSet';

@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useSetAtom } from 'jotai';
 import { Select, Option, Label } from '@ui5/webcomponents-react';
-import { languageState } from 'state/preferences/languageAtom';
+import { languageAtom } from 'state/preferences/languageAtom';
 
 const AVAILABLE_LANGUAGES = [{ key: 'en', text: 'English' }];
 
 export default function LanguageSettings() {
   const { t, i18n } = useTranslation();
-  const setLanguage = useSetAtom(languageState);
+  const setLanguage = useSetAtom(languageAtom);
 
   const onChange = (event: CustomEvent) => {
     const selectedLanguage = event.detail.selectedOption.value;

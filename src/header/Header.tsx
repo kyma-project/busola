@@ -16,8 +16,8 @@ import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
 import {
   clustersAtom,
-  clustersStateEffectOnSet,
-  clustersStateEffectSetSelf,
+  clustersAtomEffectOnSet,
+  clustersAtomEffectSetSelf,
 } from 'state/clustersAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
@@ -43,8 +43,8 @@ export function Header() {
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
 
-  useAtom(clustersStateEffectSetSelf);
-  useAtom(clustersStateEffectOnSet);
+  useAtom(clustersAtomEffectSetSelf);
+  useAtom(clustersAtomEffectOnSet);
   const cluster = useAtomValue(clusterAtom);
   const clusters = useAtomValue(clustersAtom);
 

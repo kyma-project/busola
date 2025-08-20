@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
 import { useFeature } from 'hooks/useFeature';
-import { kymaResourcesState } from 'state/kymaResourcesAtom';
+import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
 import { Text } from '@ui5/webcomponents-react';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -40,7 +40,7 @@ const GardenerProvider = () => {
 export default function ClusterDetails({ currentCluster }) {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
-  const kymaResources = useAtomValue(kymaResourcesState);
+  const kymaResources = useAtomValue(kymaResourcesAtom);
   const config = currentCluster?.config;
   const kymaResourceLabels = useMemo(
     () =>

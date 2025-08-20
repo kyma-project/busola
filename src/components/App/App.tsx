@@ -15,7 +15,7 @@ import { useSentry } from 'hooks/useSentry';
 import { useAppTracking } from 'hooks/tracking';
 
 import { clusterAtom } from 'state/clusterAtom';
-import { languageState } from 'state/preferences/languageAtom';
+import { languageAtom } from 'state/preferences/languageAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useAuthHandler } from 'state/authDataAtom';
 import { useGetConfiguration } from 'state/configuration/configurationAtom';
@@ -49,7 +49,7 @@ import { IncorrectPath } from './IncorrectPath';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ContextChooserMessage } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
-import { themeState } from 'state/preferences/themeAtom';
+import { themeAtom } from 'state/preferences/themeAtom';
 import { initTheme } from './initTheme';
 
 import './App.scss';
@@ -60,8 +60,8 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 
 export default function App() {
-  const theme = useAtomValue(themeState);
-  const language = useAtomValue(languageState);
+  const theme = useAtomValue(themeAtom);
+  const language = useAtomValue(languageAtom);
   const cluster = useAtomValue(clusterAtom);
   const setNamespace = useSetAtom(activeNamespaceIdAtom);
   const { namespace } = useUrl();

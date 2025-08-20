@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   isCurrentThemeDark,
   Theme,
-  themeState,
+  themeAtom,
 } from 'state/preferences/themeAtom';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
@@ -93,7 +93,7 @@ export default function CodePanel({
   fetchFn,
 }: CodePanelProps): JSX.Element {
   const { t } = useTranslation();
-  const theme = useAtomValue(themeState);
+  const theme = useAtomValue(themeAtom);
   const syntaxTheme = getCustomTheme(theme);
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const navigate = useNavigate();

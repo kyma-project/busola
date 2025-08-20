@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { isPreferencesOpenAtom } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
+import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import * as handlers from './handlers';
@@ -45,7 +45,7 @@ export function useSearchResults({
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
 
   const hiddenNamespaces = useGetHiddenNamespaces();
-  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesState);
+  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesAtom);
   const fetch = useFetch();
   const { t } = useTranslation();
   const setOpenPreferencesModal = useSetAtom(isPreferencesOpenAtom);

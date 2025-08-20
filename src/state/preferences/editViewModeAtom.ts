@@ -10,11 +10,11 @@ export type EditViewMode = string | EditViewTypes;
 const EDIT_VIEW_MODE_STORAGE_KEY = 'busola.editViewMode';
 const DEFAULT_EDIT_VIEW_MODE = 'MODE_DEFAULT';
 
-export const editViewModeState = atomWithStorage<EditViewMode>(
+export const editViewModeAtom = atomWithStorage<EditViewMode>(
   EDIT_VIEW_MODE_STORAGE_KEY,
   DEFAULT_EDIT_VIEW_MODE,
 );
-editViewModeState.debugLabel = 'editViewModeState';
+editViewModeAtom.debugLabel = 'editViewModeAtom';
 
 export const getEditViewModeState = (editView: EditViewMode): EditViewTypes => {
   if (typeof editView === 'string') {

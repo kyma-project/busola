@@ -60,8 +60,8 @@ function addLinkNode() {
   document.head.appendChild(newLink);
 }
 
-export const themeState = atomWithStorage<Theme>(
+export const themeAtom = atomWithStorage<Theme>(
   THEME_STORAGE_KEY,
   DEFAULT_THEME,
 );
-themeState.debugLabel = 'themeState';
+themeAtom.debugLabel = 'themeAtom';

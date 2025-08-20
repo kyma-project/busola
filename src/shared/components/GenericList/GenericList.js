@@ -20,7 +20,7 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { SortModalPanel } from './SortModalPanel';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { getErrorMessage } from 'shared/utils/helpers';
-import { pageSizeState } from 'state/preferences/pageSizeAtom';
+import { pageSizeAtom } from 'state/preferences/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
@@ -105,7 +105,7 @@ export const GenericList = ({
     }
   };
 
-  const globalPageSize = useAtomValue(pageSizeState);
+  const globalPageSize = useAtomValue(pageSizeAtom);
   const [pageSize, setPageSize] = useState(globalPageSize);
 
   useEffect(() => {

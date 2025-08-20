@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAtomValue } from 'jotai';
-import { themeState } from 'state/preferences/themeAtom';
+import { themeAtom } from 'state/preferences/themeAtom';
 
 function computeVariables(variableMapping) {
   const style = getComputedStyle(document.body);
@@ -13,7 +13,7 @@ function computeVariables(variableMapping) {
 }
 
 export function useCssVariables(variableMapping) {
-  const theme = useAtomValue(themeState);
+  const theme = useAtomValue(themeAtom);
   const [variables, setVariables] = useState(() =>
     computeVariables(variableMapping),
   );

@@ -11,7 +11,7 @@ import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import {
   getExtendedValidateResourceState,
-  validateResourcesState,
+  validateResourcesAtom,
 } from 'state/preferences/validateResourcesAtom';
 import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
 import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
@@ -115,7 +115,7 @@ const ValidationWarnings = ({
 
 export const ResourceValidationResult = ({ resource }: { resource: any }) => {
   const validateResources = getExtendedValidateResourceState(
-    useAtomValue(validateResourcesState),
+    useAtomValue(validateResourcesAtom),
   );
   const validationSchemas = useAtomValue(validationSchemasEnabledAtom);
   const { debounced } = useLoadingDebounce(resource, 500);

@@ -8,7 +8,7 @@ import {
 import classnames from 'classnames';
 import { useAtomValue } from 'jotai';
 
-import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
+import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -44,7 +44,7 @@ export function ExternalResourceRef({
     error: namespacesError,
   } = useGetList()(namespacesUrl);
 
-  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesState);
+  const showHiddenNamespaces = useAtomValue(showHiddenNamespacesAtom);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const namespaceData = {
     metadata: {

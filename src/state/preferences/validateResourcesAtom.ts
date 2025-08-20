@@ -11,11 +11,11 @@ export type ValidateResources = boolean | ExtendedValidateResources;
 const VALIDATE_RESOURCES_STORAGE_KEY = 'busola.validateResources';
 const DEFAULT_VALIDATE_RESOURCES = true;
 
-export const validateResourcesState = atomWithStorage<ValidateResources>(
+export const validateResourcesAtom = atomWithStorage<ValidateResources>(
   VALIDATE_RESOURCES_STORAGE_KEY,
   DEFAULT_VALIDATE_RESOURCES,
 );
-validateResourcesState.debugLabel = 'validateResourcesState';
+validateResourcesAtom.debugLabel = 'validateResourcesAtom';
 
 export const getExtendedValidateResourceState = (
   validateResources: ValidateResources,

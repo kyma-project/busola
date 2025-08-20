@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { Button, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
-  validateResourcesState,
+  validateResourcesAtom,
 } from 'state/preferences/validateResourcesAtom';
 import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
@@ -20,7 +20,7 @@ import { useAtomValue } from 'jotai';
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
   const [validateResources, setValidateResources] = useAtom(
-    validateResourcesState,
+    validateResourcesAtom,
   );
   const validationFeature = useFeature(
     configFeaturesNames.RESOURCE_VALIDATION,

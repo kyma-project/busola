@@ -13,7 +13,7 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { clusterAtom } from 'state/clusterAtom';
 import { clustersAtom } from 'state/clustersAtom';
-import { languageState } from 'state/preferences/languageAtom';
+import { languageAtom } from 'state/preferences/languageAtom';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { authDataAtom } from 'state/authDataAtom';
 import { otherRoutes } from 'resources/other';
@@ -30,7 +30,7 @@ export default function ClusterRoutes() {
 
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const language = useAtomValue(languageState);
+  const language = useAtomValue(languageAtom);
   const setAuth = useSetAtom(authDataAtom);
   const clusters = useAtomValue(clustersAtom);
   const extensions = useAtomValue(extensionsAtom);

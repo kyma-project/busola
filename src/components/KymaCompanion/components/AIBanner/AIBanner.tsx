@@ -7,7 +7,7 @@ import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import JouleIconLightTheme from './assets/JouleIcon.svg';
 import JouleIconDarkHCdarkTheme from './assets/JouleIconWhite.svg';
 import JouleIconHClightTheme from './assets/JouleIconBlack.svg';
-import { isSystemThemeDark, themeState } from 'state/preferences/themeAtom';
+import { isSystemThemeDark, themeAtom } from 'state/preferences/themeAtom';
 
 const getIllustration = (theme: ThemeType): string | undefined => {
   switch (theme) {
@@ -36,7 +36,7 @@ export function AIBanner({
 }) {
   const { t } = useTranslation();
   const setShowCompanion = useSetAtom(showKymaCompanionAtom);
-  const theme = useAtomValue(themeState);
+  const theme = useAtomValue(themeAtom);
 
   const titleIcon = getIllustration(theme);
   return (

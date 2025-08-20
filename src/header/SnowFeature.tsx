@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { themeState } from 'state/preferences/themeAtom';
+import { themeAtom } from 'state/preferences/themeAtom';
 import { configFeaturesNames } from 'state/types';
 import './SnowFeature.scss';
 
@@ -21,7 +21,7 @@ export function SnowFeature() {
   };
   const [isSnowOpen, setIsSnowOpen] = useState(localStorageSnowEnabled());
   const { isEnabled: isSnowEnabled } = useFeature(configFeaturesNames.SNOW);
-  const [theme] = useAtom(themeState);
+  const [theme] = useAtom(themeAtom);
 
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
