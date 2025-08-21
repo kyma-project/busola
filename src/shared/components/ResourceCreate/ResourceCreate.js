@@ -16,6 +16,7 @@ import './ResourceCreate.scss';
 export const ResourceCreate = ({
   performRefetch = () => {},
   title,
+  headerActions,
   renderForm,
   confirmText,
   invalidPopupMessage = '',
@@ -145,6 +146,7 @@ export const ResourceCreate = ({
       {!isEdit && (
         <DynamicPageComponent
           title={title}
+          actions={headerActions}
           layoutNumber={layoutNumber}
           layoutCloseUrl={`${layoutCloseCreateUrl}${
             layoutNumber === 'endColumn' ? '?layout=TwoColumnsMidExpanded' : ''
