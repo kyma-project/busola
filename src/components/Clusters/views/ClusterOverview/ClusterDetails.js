@@ -16,6 +16,8 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { configFeaturesNames } from 'state/types';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
+import { useGetEnvironmentParameters } from './useGetEnvironmentParameters';
+import { Tokens } from 'shared/components/Tokens';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -48,6 +50,10 @@ export default function ClusterDetails({ currentCluster }) {
         .labels || kymaResources?.items[0]?.metadata?.labels,
     [kymaResources],
   );
+  const {
+    natGatewayIps,
+    environmentParametersLoading,
+  } = useGetEnvironmentParameters();
 
   return (
     <div className="resource-details-container">
@@ -96,6 +102,13 @@ export default function ClusterDetails({ currentCluster }) {
                     EMPTY_TEXT_PLACEHOLDER}
                 </DynamicPageComponent.Column>
               </>
+            )}
+            {!environmentParametersLoading && (
+              <DynamicPageComponent.Column
+                title={t('clusters.overview.nat-gateway-ips')}
+              >
+                <Tokens tokens={natGatewayIps} />
+              </DynamicPageComponent.Column>
             )}
           </>
         }
