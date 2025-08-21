@@ -16,6 +16,7 @@ import {
 } from './YamlUploadDialog';
 import { useAtomValue } from 'jotai';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
 
 export const STATE_ERROR = 'ERROR';
 export const STATE_WAITING = 'WAITING';
@@ -54,6 +55,7 @@ export const getUrl = async (
       : getResourceUrl(resource);
   }
 };
+
 export function useUploadResources(
   resources = [],
   setResourcesData,
@@ -104,7 +106,9 @@ export function useUploadResources(
     try {
       //add a new resource
       if (!existingResource) {
-        await post(url, resource.value);
+        await retry(async () => {
+          return await uploadResource(url, resource, post);
+        });
         updateState(index, STATE_CREATED);
         setLastOperationState(lastOperationState =>
           lastOperationState === OPERATION_STATE_WAITING
@@ -151,4 +155,37 @@ export function useUploadResources(
   useComponentDidMount(fetchResources);
 
   return fetchResources;
+}
+
+/**
+ * Function try to upload resource, if response is 404 it will try to do it again after some time
+ * @param url path where the resource should be uploaded
+ * @param resource resource to upload
+ * @param post function to do POST request
+ * @returns {Promise<void>}
+ */
+async function uploadResource(url, resource, post) {
+  try {
+    await post(url, resource.value);
+  } catch (e) {
+    // 404 means that CRD is not available, but it can be uploaded in the same batch
+    if (e instanceof HttpError && e.code === 404) {
+      return false;
+    } else {
+      throw e;
+    }
+  }
+  return true;
+}
+
+async function retry(fn, maxAttempts = 3, retryDelay = 500) {
+  let finished = false;
+  for (let i = 0; i < maxAttempts; i++) {
+    finished = await fn();
+    if (finished) {
+      break;
+    } else {
+      await new Promise(resolve => setTimeout(resolve, retryDelay));
+    }
+  }
 }
