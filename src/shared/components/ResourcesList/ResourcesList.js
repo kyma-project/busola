@@ -276,7 +276,6 @@ export function ResourceListRenderer({
   });
 
   const [activeResource, setActiveResource] = useState(null);
-  const [textSearchProperties, setTextSearchProperties] = useState([]);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -555,24 +554,17 @@ export function ResourceListRenderer({
     ),
   ];
 
-  useEffect(() => {
+  const textSearchProperties = () => {
     const defaultSearchProperties = ['metadata.name', 'metadata.labels'];
-    if (typeof searchSettings?.textSearchProperties === 'function') {
-      const getAsyncTextSearchProperties = async () => {
-        const result = await searchSettings.textSearchProperties(
-          defaultSearchProperties,
-        );
-        setTextSearchProperties(result);
-      };
-      getAsyncTextSearchProperties();
-    } else {
-      setTextSearchProperties([
-        ...defaultSearchProperties,
-        ...(searchSettings?.textSearchProperties || []),
-      ]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchSettings?.textSearchProperties]);
+
+    if (typeof searchSettings?.textSearchProperties === 'function')
+      return searchSettings.textSearchProperties(defaultSearchProperties);
+
+    return [
+      ...defaultSearchProperties,
+      ...(searchSettings?.textSearchProperties || []),
+    ];
+  };
 
   const processTitle = title => {
     const words = title.split(' ');
@@ -635,7 +627,7 @@ export function ResourceListRenderer({
             sortBy={sortBy}
             searchSettings={{
               ...searchSettings,
-              textSearchProperties: textSearchProperties,
+              textSearchProperties: textSearchProperties(),
             }}
             emptyListProps={{
               titleText: `${t('common.labels.no')} ${processTitle(

@@ -253,22 +253,19 @@ const getSearchingFunction = async (searchOption, originalResource) => {
   };
 };
 
-const searchingFunctions = async (searchOptions, originalResource) => {
-  const res = await Promise.all(
-    (searchOptions || []).map(
-      async searchOption =>
-        await getSearchingFunction(searchOption, originalResource),
-    ),
+const searchingFunctions = (searchOptions, originalResource) => {
+  const res = (searchOptions || []).map(searchOption =>
+    getSearchingFunction(searchOption, originalResource),
   );
   return res;
 };
 
-export const getTextSearchProperties = async ({
+export const getTextSearchProperties = ({
   searchOptions,
   originalResource = null,
   defaultSearch,
 }) => {
-  const searchingFunctionsResult = await searchingFunctions(
+  const searchingFunctionsResult = searchingFunctions(
     searchOptions,
     originalResource,
   );

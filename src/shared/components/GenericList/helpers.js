@@ -47,8 +47,13 @@ export const getEntryMatches = async (entry, query, searchProperties) => {
   const flattenedEntry = flattenProperties(entry);
   const flattenedSearchProperties = await Promise.all(
     searchProperties?.map(async property => {
+      if (property instanceof Promise) {
+        const resolve = await property;
+        return await resolve(entry, query);
+      }
       if (typeof property === 'function') {
-        return await property(entry, query);
+        const res = property(entry, query);
+        return res;
       }
       if (property === 'metadata.labels' && entry.metadata?.labels) {
         return getLabelStrings(entry).filter(label => match(label, query));

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
@@ -64,7 +64,6 @@ export function Table({
   });
 
   const [title, setTitle] = useState('');
-  const [textSearchProperties, setTextSearchProperties] = useState([]);
 
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
@@ -165,12 +164,10 @@ export function Table({
     },
   );
 
-  useEffect(() => {
-    getTextSearchProperties({
-      searchOptions,
-      defaultSearch,
-    }).then(result => setTextSearchProperties(result()));
-  }, [searchOptions, defaultSearch]);
+  const textSearchProperties = getTextSearchProperties({
+    searchOptions,
+    defaultSearch,
+  });
 
   return (
     <GenericList
@@ -189,7 +186,7 @@ export function Table({
       searchSettings={{
         showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,
-        textSearchProperties: textSearchProperties,
+        textSearchProperties: textSearchProperties(),
       }}
     />
   );

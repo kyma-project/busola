@@ -134,8 +134,8 @@ export const ExtensibilityListCore = ({
         sortBy(jsonata, sortOptions, t, defaultSortOptions)
       }
       searchSettings={{
-        textSearchProperties: async defaultSearchProperties =>
-          await textSearchProperties(defaultSearchProperties),
+        textSearchProperties: defaultSearchProperties =>
+          textSearchProperties(defaultSearchProperties),
       }}
       emptyListProps={{
         subtitleText: subtitleText,
