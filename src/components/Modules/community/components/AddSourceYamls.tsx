@@ -40,7 +40,6 @@ export const AddSourceYamls = () => {
         const allowedToApply = filterResources(allResources);
         setResourcesToApply(allowedToApply);
       })();
-      console.log('lolo resourcesToApply', resourcesToApply);
     }
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
 
