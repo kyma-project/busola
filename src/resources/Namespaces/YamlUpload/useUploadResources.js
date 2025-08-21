@@ -17,6 +17,7 @@ import {
 import { useAtomValue } from 'jotai';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
+import retry from 'shared/utils/retry';
 
 export const STATE_ERROR = 'ERROR';
 export const STATE_WAITING = 'WAITING';
@@ -176,16 +177,4 @@ async function uploadResource(url, resource, post) {
     }
   }
   return true;
-}
-
-async function retry(fn, maxAttempts = 3, retryDelay = 500) {
-  let finished = false;
-  for (let i = 0; i < maxAttempts; i++) {
-    finished = await fn();
-    if (finished) {
-      break;
-    } else {
-      await new Promise(resolve => setTimeout(resolve, retryDelay));
-    }
-  }
 }

@@ -281,6 +281,7 @@ common:
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
   errors:
     couldnt-fetch-resources: Couldn't fetch resources.
+    delete: Deletion of resource failed
     error: Error
     generic: Invalid field data
     no-permissions: You don't have enough permissions to view this content.
@@ -910,15 +911,20 @@ match-expressions:
     values: Values
   title: Match Expressions
 modules:
+  associated-resources:
+    error: Error loading associated resources
+    loading: Loading...
   community:
     add-module: Add Community Modules
     documentation: Documentation
     installed-modules: Community Modules
     messages:
-      failure: 'Failed to install the {{resourceType}}: {{error}}'
+      delete-failure: 'Failed to delete the {{module}}: {{error}}'
+      install-failure: 'Failed to install the {{resourceType}}: {{error}}'
       module-added: Community Module added
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
+      resources-delete-failure: 'Failed to delete the {{module}} because couldn''t delete following resources: {{resources}}'
       success: '{{resourceType}} installed'
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
