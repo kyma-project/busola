@@ -27,6 +27,8 @@ context('Test Cluster Overview', () => {
     cy.contains('Nodes').should('be.visible');
 
     cy.contains('Events').should('be.visible');
+
+    cy.contains('NAT Gateway IP Addresses').should('be.visible');
   });
 
   it('Check injections', () => {
