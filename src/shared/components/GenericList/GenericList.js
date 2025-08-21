@@ -134,13 +134,11 @@ export const GenericList = ({
       }
     }
 
-    setFilteredEntries(
-      filterEntries(
-        sorting(sort, entries),
-        searchQuery,
-        searchSettings?.textSearchProperties,
-      ),
-    );
+    filterEntries(
+      sorting(sort, entries),
+      searchQuery,
+      searchSettings?.textSearchProperties,
+    ).then(result => setFilteredEntries(result));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     searchQuery,
