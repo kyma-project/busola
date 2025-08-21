@@ -64,7 +64,10 @@ export default function ClusterModulesCard() {
   );
 
   const display =
-    !error && !loadingModules && modules && !installedCommunityModulesLoading;
+    (!error || error?.code === 404) &&
+    !loadingModules &&
+    modules &&
+    !installedCommunityModulesLoading;
 
   return (
     <>

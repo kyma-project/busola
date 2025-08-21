@@ -36,15 +36,13 @@ export const addAdditionalNodes = (
     if (scope === 'cluster') {
       addResource(extensionsNavNode, extNavList.length, extNavList);
     }
-    if (moduleTemplatesCount && moduleTemplatesCount > 0) {
-      addResource(
-        scope === 'cluster'
-          ? kymaModulesNavNode
-          : { ...kymaModulesNavNode, namespaced: true },
-        extNavList.length,
-        extNavList,
-      );
-    }
+    addResource(
+      scope === 'cluster'
+        ? kymaModulesNavNode
+        : { ...kymaModulesNavNode, namespaced: true },
+      extNavList.length,
+      extNavList,
+    );
   }
 
   const crdIndex = findResourceIndex(crd, navNodes) + 1;
