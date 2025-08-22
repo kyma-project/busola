@@ -2,9 +2,8 @@ import {
   Bar,
   Button,
   Dialog,
-  FlexBox,
+  IllustratedMessage,
   Text,
-  Title,
 } from '@ui5/webcomponents-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +16,6 @@ import {
   showKymaCompanionAtom,
 } from 'state/companion/showKymaCompanionAtom';
 
-import NewMail from './assets/NewMail.svg';
 import './JouleFeedbackDialog.scss';
 import {
   dismissFeedbackRequestFirstTime,
@@ -107,30 +105,16 @@ export default function JouleFeedbackDialog({
       footer={<Bar design="Footer" endContent={<>{actions}</>} />}
       className="joule-feedback-dialog"
     >
-      <FlexBox
-        direction="Column"
-        alignItems="Center"
-        justifyContent="Center"
-        className="joule-feedback-layout"
-      >
-        <img
-          src={NewMail}
-          alt="Joule Feedback Illustration"
-          className="illustration"
-        />
-        <FlexBox
-          direction="Column"
-          alignItems="Center"
-          justifyContent="Center"
-          gap={8}
-          className="joule-feedback-text-container"
-        >
-          <Title level="H3" size="H3">
-            {t('joule-feedback.subtitle')}
-          </Title>
+      <IllustratedMessage
+        name="NewMail"
+        design="Dialog"
+        key="joule-feedback"
+        titleText={t('joule-feedback.subtitle')}
+        subtitle={
           <Text className="info-text">{t('joule-feedback.description')}</Text>
-        </FlexBox>
-      </FlexBox>
+        }
+        className="no-padding"
+      ></IllustratedMessage>
     </Dialog>
   );
 }

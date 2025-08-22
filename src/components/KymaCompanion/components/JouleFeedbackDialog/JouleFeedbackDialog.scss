@@ -2,21 +2,7 @@
   width: calc(410px - 1rem);
 }
 
-.joule-feedback-layout {
-  margin: 1rem;
-
-  .illustration {
-    height: auto;
-    max-width: 100%;
-    padding: 1rem 0;
-  }
-
-  .joule-feedback-text-container {
-    padding-bottom: 8px;
-  }
-
-  .info-text {
-    color: var(--sapContent_LabelColor);
-    text-align: center;
-  }
+.info-text {
+  color: var(--sapContent_LabelColor);
+  text-align: center;
 }
