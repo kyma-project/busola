@@ -26,6 +26,7 @@ context('Test Companion Feedback Dialog', () => {
         body: mockResponse,
       });
     }).as('getChatFeedbackResponse');
+
     cy.mockFollowups();
     cy.clearLocalStorage();
   });
@@ -33,20 +34,24 @@ context('Test Companion Feedback Dialog', () => {
   it('Feedback dialog dismissal writes correct value to localStorage', () => {
     cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
+
     for (let i = 0; i < 5; i++) {
       cy.sendPrompt('Test');
       cy.wait('@getChatFeedbackResponse');
     }
+
     cy.get('.kyma-companion')
       .as('companion')
       .get('ui5-button[tooltip="Close"]')
       .click()
       .wait(500);
+
     cy.get('ui5-dialog[header-text="Joule Feedback"]')
       .find('ui5-button[design="Default"]')
       .contains('Close')
       .should('be.visible')
       .click({ force: true });
+
     cy.wait(1000);
     cy.window().then(win => {
       expect(win.localStorage.getItem('show-feedback-status')).to.eq(
@@ -58,34 +63,42 @@ context('Test Companion Feedback Dialog', () => {
   it('Second feedback dialog dismissal writes correct value to localStorage', () => {
     cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
+
     for (let i = 0; i < 5; i++) {
       cy.sendPrompt('Test');
       cy.wait('@getChatFeedbackResponse');
     }
+
     cy.get('.kyma-companion')
       .as('companion')
       .get('ui5-button[tooltip="Close"]')
       .click()
       .wait(500);
+
     cy.get('ui5-dialog[header-text="Joule Feedback"]')
       .find('ui5-button[design="Default"]')
       .contains('Close')
       .click({ force: true });
+
     cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
+
     for (let i = 0; i < 5; i++) {
       cy.sendPrompt('Test');
       cy.wait('@getChatFeedbackResponse');
     }
+
     cy.get('.kyma-companion')
       .as('companion')
       .get('ui5-button[tooltip="Close"]')
       .click()
       .wait(500);
+
     cy.get('ui5-dialog[header-text="Joule Feedback"]')
       .find('ui5-button[design="Default"]')
       .contains('Close')
       .click({ force: true });
+
     cy.wait(1000);
     cy.window().then(win => {
       expect(win.localStorage.getItem('show-feedback-status')).to.eq('NO_SHOW');
@@ -95,20 +108,24 @@ context('Test Companion Feedback Dialog', () => {
   it('Opening feedback survey writes correct value to localStorage', () => {
     cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
+
     for (let i = 0; i < 5; i++) {
       cy.sendPrompt('Test');
       cy.wait('@getChatFeedbackResponse');
     }
+
     cy.get('.kyma-companion')
       .as('companion')
       .get('ui5-button[tooltip="Close"]')
       .click()
       .wait(500);
+
     cy.get('ui5-dialog[header-text="Joule Feedback"]')
       .should('be.visible')
       .find('ui5-button[accessible-name="Give Feedback"]')
       .should('be.visible')
       .click({ force: true });
+
     cy.wait(1000);
     cy.window().then(win => {
       expect(win.localStorage.getItem('show-feedback-status')).to.eq('NO_SHOW');
