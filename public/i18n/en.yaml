@@ -924,7 +924,7 @@ modules:
       module-added: Community Module added
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
-      resources-delete-failure: 'Failed to delete the {{module}} because couldn''t delete following resources: {{resources}}'
+      resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
       success: '{{resourceType}} installed'
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
