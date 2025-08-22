@@ -38,7 +38,12 @@ export const AddSourceYamls = () => {
       (async function() {
         const allResources = await getSourceYAML(sourceURL);
         const allowedToApply = filterResources(allResources);
-        setResourcesToApply(allowedToApply);
+
+        const formatted = allowedToApply?.map((r: any) => {
+          return { value: r };
+        });
+
+        setResourcesToApply(formatted);
       })();
     }
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -46,9 +51,9 @@ export const AddSourceYamls = () => {
   const filterResources = (resources: any) => {
     return (resources || []).filter(
       (resource: any) =>
-        resource.kind === 'ModuleTemplate' ||
-        (resource.kind === 'CustomResourceDefinition' &&
-          resource.metadata.name ===
+        resource?.kind === 'ModuleTemplate' ||
+        (resource?.kind === 'CustomResourceDefinition' &&
+          resource?.metadata?.name ===
             'moduletemplates.operator.kyma-project.io'),
     );
   };
