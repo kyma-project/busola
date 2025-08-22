@@ -31,13 +31,16 @@ export default function FeedbackPopover() {
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [showNewIndicators, setShowNewIndicators] = useState(false);
+  const showFeedback = getShowFeedbackStorageKey();
 
   useEffect(() => {
-    const showFeedback = getShowFeedbackStorageKey();
     if (showFeedback === null || showFeedback === FEEDBACK_SHOW_TYPE.SHOW) {
       setShowNewIndicators(true);
     }
-  }, []);
+    if (showFeedback === FEEDBACK_SHOW_TYPE.NO_SHOW) {
+      setShowNewIndicators(false);
+    }
+  }, [showFeedback]);
 
   const handleNewFeedbackViewed = () => {
     if (showNewIndicators) {
