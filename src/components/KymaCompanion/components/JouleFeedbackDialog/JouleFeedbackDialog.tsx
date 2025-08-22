@@ -7,14 +7,11 @@ import {
 } from '@ui5/webcomponents-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
-import {
-  ShowKymaCompanion,
-  showKymaCompanionAtom,
-} from 'state/companion/showKymaCompanionAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 
 import './JouleFeedbackDialog.scss';
 import {
@@ -41,9 +38,7 @@ export default function JouleFeedbackDialog({
   );
 
   const { t } = useTranslation();
-  const [, setShowCompanion] = useAtom<ShowKymaCompanion>(
-    showKymaCompanionAtom,
-  );
+  const setShowCompanion = useSetAtom(showKymaCompanionAtom);
   const [shouldShowJouleFeedback, setShouldShowJouleFeedback] = useState(() =>
     getShowFeedbackStorageKey(),
   );
