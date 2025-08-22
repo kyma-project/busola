@@ -131,4 +131,42 @@ context('Test Companion Feedback Dialog', () => {
       expect(win.localStorage.getItem('show-feedback-status')).to.eq('NO_SHOW');
     });
   });
+
+  it('Dialog is not displayed when localStorage key "show-feedback-status" value is "NO_SHOW"', () => {
+    window.localStorage.setItem('show-feedback-status', 'NO_SHOW');
+    cy.openCompanion();
+    cy.get('.kyma-companion').as('companion');
+
+    for (let i = 0; i < 5; i++) {
+      cy.sendPrompt('Test');
+      cy.wait('@getChatFeedbackResponse');
+    }
+
+    cy.get('.kyma-companion')
+      .as('companion')
+      .get('ui5-button[tooltip="Close"]')
+      .click()
+      .wait(500);
+
+    cy.get('ui5-dialog[header-text="Joule Feedback"]').should('not.exist');
+  });
+
+  it('Dialog is displayed when there is localStorage key "show-feedback-status" value of "DISMISSED_ONCE', () => {
+    window.localStorage.setItem('show-feedback-status', 'DISMISSED_ONCE');
+    cy.openCompanion();
+    cy.get('.kyma-companion').as('companion');
+
+    for (let i = 0; i < 5; i++) {
+      cy.sendPrompt('Test');
+      cy.wait('@getChatFeedbackResponse');
+    }
+
+    cy.get('.kyma-companion')
+      .as('companion')
+      .get('ui5-button[tooltip="Close"]')
+      .click()
+      .wait(500);
+
+    cy.get('ui5-dialog[header-text="Joule Feedback"]').should('be.visible');
+  });
 });
