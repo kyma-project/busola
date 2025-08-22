@@ -238,16 +238,8 @@ export const KymaModulesList = ({
       moduleStatus?.resource?.apiVersion,
     );
 
-    setLayoutColumn({
-      startColumn: {
-        resourceType: hasExtension
-          ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
-          : moduleCrd?.metadata?.name,
-        rawResourceTypeName: moduleStatus?.resource?.kind,
-        namespaceId: moduleStatus?.resource?.metadata.namespace || '',
-        apiGroup: group,
-        apiVersion: version,
-      } as ColumnState,
+    setLayoutColumn(prev => ({
+      startColumn: prev.startColumn,
       midColumn: {
         resourceType: hasExtension
           ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
@@ -260,7 +252,7 @@ export const KymaModulesList = ({
       } as ColumnState,
       layout: 'TwoColumnsMidExpanded',
       endColumn: null,
-    });
+    }));
 
     navigate(`${path}?layout=TwoColumnsMidExpanded`);
   };

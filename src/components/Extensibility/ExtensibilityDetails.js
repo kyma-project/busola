@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
@@ -220,14 +220,25 @@ export const ExtensibilityDetailsCore = ({
   );
 };
 
-const ExtensibilityDetails = ({
+export default function ExtensibilityDetails({
   resourceName,
   resourceType,
   layoutCloseCreateUrl,
   namespaceId,
   isModule = false,
-}) => {
+  setResMetadata,
+}) {
   const resMetaData = useGetCRbyPath(resourceType);
+  useEffect(() => {
+    if (isModule && setResMetadata && resMetaData) {
+      setResMetadata({
+        group: resMetaData?.general?.resource?.group,
+        version: resMetaData?.general?.resource?.version,
+        kind: resMetaData?.general?.resource?.kind,
+      });
+    }
+  }, [resMetaData, isModule, setResMetadata]);
+
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
   const { deleteModuleButton: headerActions } = useContext(KymaModuleContext);
@@ -243,6 +254,7 @@ const ExtensibilityDetails = ({
           layoutNumber: 'midColumn',
           headerActions,
           isModule,
+          setResMetadata,
         }}
       />
     );
@@ -269,6 +281,4 @@ const ExtensibilityDetails = ({
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
   );
-};
-
-export default ExtensibilityDetails;
+}

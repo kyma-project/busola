@@ -1,5 +1,7 @@
 import jsyaml from 'js-yaml';
 import { useAtomValue } from 'jotai';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
@@ -7,8 +9,6 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export default function CustomResource({ params }) {
   const { t } = useTranslation();
@@ -19,6 +19,7 @@ export default function CustomResource({ params }) {
     resourceName,
     resourceNamespace,
     isModule,
+    setResMetadata,
     headerActions,
   } = params;
 
@@ -30,6 +31,25 @@ export default function CustomResource({ params }) {
     },
   );
 
+  const selectedVersion = useMemo(() => {
+    if (!data?.spec?.versions) return null;
+    const versions = data.spec.versions;
+    return (
+      versions.find(version => version.name === resourceVersion) ||
+      versions.find(version => version.storage)
+    );
+  }, [data?.spec?.versions, resourceVersion]);
+
+  useEffect(() => {
+    if (isModule && setResMetadata && data?.spec && selectedVersion) {
+      setResMetadata({
+        group: data.spec.group,
+        version: selectedVersion.name,
+        kind: data.spec.names?.kind,
+      });
+    }
+  }, [data, isModule, setResMetadata, selectedVersion]);
+
   const CRCreateWrapper = useCallback(
     props => <CRCreate {...props} crd={data} layoutNumber="midColumn" />,
     [data],
@@ -37,15 +57,10 @@ export default function CustomResource({ params }) {
 
   if (loading) return <Spinner />;
 
-  const versions = data?.spec?.versions;
-  const version =
-    versions?.find(version => version.name === resourceVersion) ||
-    versions?.find(version => version.storage);
-
   const crdName = customResourceDefinitionName?.split('.')[0];
   const crdGroup = customResourceDefinitionName?.replace(`${crdName}.`, '');
   const resourceUrl = resourceName
-    ? `/apis/${crdGroup}/${version?.name}/${
+    ? `/apis/${crdGroup}/${selectedVersion?.name}/${
         resourceNamespace
           ? `namespaces/${resourceNamespace}/`
           : namespace
