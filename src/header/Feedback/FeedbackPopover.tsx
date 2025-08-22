@@ -34,10 +34,13 @@ export default function FeedbackPopover() {
   const showFeedback = getShowFeedbackStorageKey();
 
   useEffect(() => {
-    if (showFeedback === null || showFeedback === FEEDBACK_SHOW_TYPE.SHOW) {
+    if (
+      showFeedback === null ||
+      showFeedback === FEEDBACK_SHOW_TYPE.SHOW ||
+      showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE
+    ) {
       setShowNewIndicators(true);
-    }
-    if (showFeedback === FEEDBACK_SHOW_TYPE.NO_SHOW) {
+    } else {
       setShowNewIndicators(false);
     }
   }, [showFeedback]);
