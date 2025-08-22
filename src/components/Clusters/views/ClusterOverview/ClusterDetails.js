@@ -103,7 +103,7 @@ export default function ClusterDetails({ currentCluster }) {
                 </DynamicPageComponent.Column>
               </>
             )}
-            {!environmentParametersLoading && (
+            {!environmentParametersLoading && !!natGatewayIps && (
               <DynamicPageComponent.Column
                 title={t('clusters.overview.nat-gateway-ips')}
               >
