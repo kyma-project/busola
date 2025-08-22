@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { useState, useEffect } from 'react';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 import { postForCommunityResources } from 'components/Modules/community/communityModulesHelpers';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
@@ -14,6 +15,7 @@ const DEFAULT_SOURCE_URL =
 
 export const AddSourceYamls = () => {
   const { t } = useTranslation();
+  const notification = useNotification();
   const post = usePost();
 
   const [showAddSource, setShowAddSource] = useState(false);
@@ -59,7 +61,17 @@ export const AddSourceYamls = () => {
   };
 
   const handleApplySourceYAMLs = async () => {
-    uploadResources();
+    try {
+      uploadResources();
+      notification.notifySuccess({
+        content: t('modules.community.messages.source-yaml-added'),
+      });
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        content: t('modules.community.messages.source-yaml-failed'),
+      });
+    }
   };
   return (
     <>
@@ -87,6 +99,7 @@ export const AddSourceYamls = () => {
               accessibleName="add-yamls"
               design="Emphasized"
               key="add-yamls"
+              disabled={!sourceURL.endsWith('.yaml')}
               onClick={async () => {
                 handleApplySourceYAMLs();
               }}

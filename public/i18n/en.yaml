@@ -920,6 +920,8 @@ modules:
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
       success: '{{resourceType}} installed'
+      source-yaml-added: Source YAML added
+      source-yaml-failed: Failed to add Source YAML
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
     no-modules-installed: No community modules installed
