@@ -12,5 +12,8 @@ export default async function retry(
       await new Promise(resolve => setTimeout(resolve, retryDelay));
     }
   }
+  if (!finished) {
+    throw new Error(`All retries failed`);
+  }
   return finished;
 }
