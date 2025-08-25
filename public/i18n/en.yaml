@@ -117,6 +117,7 @@ clusters:
     global-account-id: Global Account ID
     kubernetes-version: Kubernetes Version
     kyma-version: Kyma Version
+    nat-gateway-ips: NAT Gateway IP Addresses
     subaccount-id: Subaccount ID
     title-all-clusters: Clusters Overview
     title-current-cluster: Cluster Details
