@@ -785,6 +785,10 @@ jobs:
   tooltips:
     complete: Job completed
     not-complete: Job in progress
+joule-feedback:
+  description: Tell us about your experience with Joule in Kyma dashboard.
+  subtitle: How did Joule do?
+  title: Joule Feedback
 kubeconfig-id:
   error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.

@@ -13,8 +13,11 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { configFeaturesNames } from 'state/types';
 import './FeedbackPopover.scss';
-
-const FEEDBACK_VIEWED_STORAGE_KEY = 'feedback-new-indicators-viewed';
+import {
+  FEEDBACK_SHOW_TYPE,
+  getShowFeedbackStorageKey,
+  setNoFeedbackShowNextTime,
+} from 'components/KymaCompanion/components/JouleFeedbackDialog/helpers/feedbackViewHelpers';
 
 export default function FeedbackPopover() {
   const { isEnabled: isFeedbackEnabled, link: kymaFeedbackLink } = useFeature(
@@ -28,17 +31,23 @@ export default function FeedbackPopover() {
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [showNewIndicators, setShowNewIndicators] = useState(false);
+  const showFeedback = getShowFeedbackStorageKey();
 
   useEffect(() => {
-    const hasViewed = localStorage.getItem(FEEDBACK_VIEWED_STORAGE_KEY);
-    if (hasViewed !== 'true') {
+    if (
+      showFeedback === null ||
+      showFeedback === FEEDBACK_SHOW_TYPE.SHOW ||
+      showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE
+    ) {
       setShowNewIndicators(true);
+    } else {
+      setShowNewIndicators(false);
     }
-  }, []);
+  }, [showFeedback]);
 
   const handleNewFeedbackViewed = () => {
     if (showNewIndicators) {
-      localStorage.setItem(FEEDBACK_VIEWED_STORAGE_KEY, 'true');
+      setNoFeedbackShowNextTime();
       setShowNewIndicators(false);
     }
   };
