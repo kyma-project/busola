@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
@@ -5,7 +6,7 @@ import classNames from 'classnames';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { useGetTranslation, getTextSearchProperties } from '../helpers';
-import { useJsonata } from '../hooks/useJsonata';
+import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
 import { sortBy } from '../helpers/sortBy';
 import { Widget, InlineWidget } from './Widget';
 import { getSearchDetails, getSortDetails } from './helpers';
@@ -62,6 +63,9 @@ export function Table({
     arrayItems,
   });
 
+  const [title, setTitle] = useState('');
+  const getJsonata = useGetAsyncJsonata(jsonata);
+
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
@@ -71,7 +75,7 @@ export function Table({
   });
 
   const rowRenderer = (entry, index) => {
-    const makeTitle = () => {
+    const makeTitle = async () => {
       const defaultTitle =
         tExt(structure.name, {
           defaultValue: structure.name || structure.source,
@@ -80,7 +84,7 @@ export function Table({
         (index + 1);
       if (structure.collapsibleTitle) {
         try {
-          return jsonata(structure.collapsibleTitle, {
+          return await jsonata(structure.collapsibleTitle, {
             index: index,
             scope: entry,
             arrayItems: [...arrayItems, entry],
@@ -93,6 +97,7 @@ export function Table({
         return defaultTitle;
       }
     };
+    makeTitle().then(result => setTitle(result));
 
     const cells = (structure.children || []).map((column, cellIndex) => {
       return (
@@ -117,7 +122,7 @@ export function Table({
 
     return {
       cells,
-      title: makeTitle(),
+      title: title,
       collapseContent: (
         <div className={tdClassNames}>
           {structure.collapsible.map((child, cellIndex) => (
@@ -178,7 +183,7 @@ export function Table({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
+      sortBy={() => sortBy(getJsonata, sortOptions, tExt, {}, originalResource)}
       searchSettings={{
         showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,

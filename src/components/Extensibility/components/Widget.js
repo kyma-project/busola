@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
-import { useJsonata } from '../hooks/useJsonata';
+import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
@@ -52,6 +53,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       value: props.value,
       arrayItems: props.arrayItems,
     });
+    const getJsonata = useGetAsyncJsonata(jsonata);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
 
@@ -67,8 +69,9 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       props,
       Renderer,
       defaultCopyFunction,
-      jsonata,
+      getJsonata,
     );
+
     return (
       <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
         {children}
@@ -108,16 +111,32 @@ export function Widget({
     arrayItems,
   });
 
-  const [childValue] = jsonata(structure.source, {
-    index: index,
-  });
-  const [visible, visibilityError] = jsonata(
-    structure.visibility?.toString(),
-    {
-      value: childValue,
-    },
-    true,
-  );
+  const [childValue, setChildValue] = useState(null);
+  const [visible, setVisible] = useState(null);
+  const [visibilityError, setVisibilityError] = useState(null);
+
+  useEffect(() => {
+    jsonata(structure.source, {
+      index: index,
+    }).then(([result]) => {
+      setChildValue(result);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.source, index]);
+
+  useEffect(() => {
+    jsonata(
+      structure.visibility?.toString(),
+      {
+        value: childValue,
+      },
+      true,
+    ).then(([result, error]) => {
+      setVisible(result);
+      setVisibilityError(error);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.visibility, childValue]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

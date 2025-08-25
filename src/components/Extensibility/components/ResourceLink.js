@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'shared/components/Link/Link';
 
@@ -28,13 +29,36 @@ export function ResourceLink({
     arrayItems,
   });
 
+  const [name, setName] = useState(null);
+  const [nameError, setNameError] = useState(null);
+  const [namespace, setNamespace] = useState(null);
+  const [namespaceError, setNamespaceError] = useState(null);
+  const [kind, setKind] = useState(null);
+  const [kindError, setKindError] = useState(null);
+
+  useEffect(() => {
+    if (!value) {
+      return;
+    }
+    jsonata(structure.resource?.name).then(([res, error]) => {
+      setName(res);
+      setNameError(error);
+    });
+    jsonata(structure.resource?.namespace).then(([res, error]) => {
+      setNamespace(res);
+      setNamespaceError(error);
+    });
+    jsonata(structure.resource?.kind).then(([res, error]) => {
+      setKind(res);
+      setKindError(error);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(structure.resource)]);
+
   if (!value) {
     return emptyLeafPlaceholder;
   }
 
-  const [name, nameError] = jsonata(structure.resource?.name);
-  const [namespace, namespaceError] = jsonata(structure.resource?.namespace);
-  const [kind, kindError] = jsonata(structure.resource?.kind);
   const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {
     return t('extensibility.configuration-error', {

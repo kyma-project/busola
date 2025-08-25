@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
@@ -25,31 +25,37 @@ export function VisibilityHandler({
   const visibilityFormula = schema.get('visibility');
   const overwrite = schema.get('overwrite') ?? true;
 
-  if (triggers.enabled) {
-    let visible = true;
-    if (visibilityFormula) {
-      [visible] = jsonata(
-        visibilityFormula,
-        itemVars(resource, rule.itemVars, storeKeys),
-      );
-    } else if (visibilityFormula === false) {
-      visible = false;
-    }
+  useEffect(() => {
+    const setVisibility = async () => {
+      if (triggers.enabled) {
+        let visible = true;
+        if (visibilityFormula) {
+          [visible] = await jsonata(
+            visibilityFormula,
+            itemVars(resource, rule.itemVars, storeKeys),
+          );
+        } else if (visibilityFormula === false) {
+          visible = false;
+        }
 
-    if (!visible) {
-      if (value && overwrite) {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: {},
-        });
+        if (!visible) {
+          if (value && overwrite) {
+            onChange({
+              storeKeys,
+              scopes: ['value'],
+              type: 'set',
+              schema,
+              required,
+              data: {},
+            });
+          }
+          return null;
+        }
       }
-      return null;
-    }
-  }
+    };
+    setVisibility();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [triggers.enabled, visibilityFormula, rule.itemVars, storeKeys]);
 
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);

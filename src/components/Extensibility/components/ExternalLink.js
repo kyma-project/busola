@@ -3,13 +3,13 @@ import {
   useGetTranslation,
 } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
-import { useJsonata } from '../hooks/useJsonata';
+import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
 
 import { Button, Icon, Link } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 
-const makeHref = ({ jsonata, value, structure }) => {
-  const [link, linkError] = jsonata(structure.link);
+const makeHref = ({ getJsonata, value, structure }) => {
+  const [link, linkError] = getJsonata(structure.link);
   if (linkError) return linkError.message;
 
   let href;
@@ -45,7 +45,8 @@ export const ExternalLink = ({
     arrayItems,
   });
 
-  const href = makeHref({ jsonata, value, structure });
+  const getJsonata = useGetAsyncJsonata(jsonata);
+  const href = makeHref({ getJsonata, value, structure });
 
   if (isNil(value)) return emptyLeafPlaceholder;
 
@@ -88,6 +89,6 @@ export const ExternalLink = ({
 };
 ExternalLink.inline = true;
 ExternalLink.copyable = true;
-ExternalLink.copyFunction = ({ value, structure }, _, __, jsonata) => {
-  return makeHref({ jsonata, value, structure });
+ExternalLink.copyFunction = ({ value, structure }, _, __, getJsonata) => {
+  return makeHref({ getJsonata, value, structure });
 };
