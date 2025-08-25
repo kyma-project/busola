@@ -28,6 +28,7 @@ export const ResourceCreate = ({
   onlyYaml = false,
   protectedResource = false,
   protectedResourceWarning = null,
+  createFormRef = null,
 }) => {
   const { t } = useTranslation();
   const {
@@ -154,7 +155,11 @@ export const ResourceCreate = ({
           showYamlTab={disableEdit && onlyYaml}
           content={stickyHeaderHeight => (
             <>
-              <div className="create-form sap-margin-bottom-small">
+              <div
+                className="create-form sap-margin-bottom-small"
+                ref={createFormRef}
+                tabIndex={0}
+              >
                 {renderForm({
                   formElementRef,
                   isValid,
@@ -190,7 +195,7 @@ export const ResourceCreate = ({
         />
       )}
       {isEdit && (
-        <div className="edit-form">
+        <div className="edit-form" ref={createFormRef} tabIndex={0}>
           {renderForm({
             formElementRef,
             isValid,
