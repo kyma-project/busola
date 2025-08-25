@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
-import { useJsonata } from '../hooks/useJsonata';
+import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
@@ -53,32 +53,24 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       value: props.value,
       arrayItems: props.arrayItems,
     });
-    const [textToCopy, setTextToCopy] = useState(null);
-
-    useEffect(() => {
-      if (!props.structure.copyable || !isRendererCopyable) return;
-      const defaultCopyFunction = ({ value }) =>
-        typeof value === 'object' ? JSON.stringify(value) : value;
-
-      const copyFunction =
-        typeof Renderer.copyFunction === 'function'
-          ? Renderer.copyFunction
-          : defaultCopyFunction;
-
-      const getText = async () => {
-        const text = await copyFunction(
-          props,
-          Renderer,
-          defaultCopyFunction,
-          jsonata,
-        );
-        setTextToCopy(text);
-      };
-      getText();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isRendererCopyable, props]);
+    const getJsonata = useGetAsyncJsonata(jsonata);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
+
+    const defaultCopyFunction = ({ value }) =>
+      typeof value === 'object' ? JSON.stringify(value) : value;
+
+    const copyFunction =
+      typeof Renderer.copyFunction === 'function'
+        ? Renderer.copyFunction
+        : defaultCopyFunction;
+
+    const textToCopy = copyFunction(
+      props,
+      Renderer,
+      defaultCopyFunction,
+      getJsonata,
+    );
 
     return (
       <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>

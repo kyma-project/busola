@@ -1,7 +1,7 @@
-export const getSortingFunction = (jsonata, formula, originalResource) => {
-  return async (a, b) => {
-    const [aValue] = await jsonata(formula, { scope: a });
-    const [bValue] = await jsonata(formula, { scope: b });
+export const getSortingFunction = (getJsonata, formula, originalResource) => {
+  return (a, b) => {
+    const [aValue] = getJsonata(formula, { scope: a });
+    const [bValue] = getJsonata(formula, { scope: b });
 
     switch (typeof aValue) {
       case 'number':
@@ -22,22 +22,29 @@ export const getSortingFunction = (jsonata, formula, originalResource) => {
   };
 };
 
-export const applySortFormula = (jsonata, formula, t) => {
-  return async (a, b) => {
+export const applySortFormula = (getJsonata, formula, t) => {
+  return (a, b) => {
     if (a === undefined) return -1;
     if (b === undefined) return 1;
-    const result = await jsonata(formula, {
+    const [result] = getJsonata(formula, {
       scope: {
         first: a,
         second: b,
       },
     });
-    return result[0];
+    // Sometimes some expression variables are read correctly only after removing the $.
+    const [resultAfterReplace] = getJsonata(formula?.replaceAll('$', ''), {
+      scope: {
+        first: a,
+        second: b,
+      },
+    });
+    return result ?? resultAfterReplace;
   };
 };
 
 export const sortBy = (
-  jsonata,
+  getJsonata,
   sortOptions,
   t,
   defaultSortOptions = {},
@@ -49,15 +56,15 @@ export const sortBy = (
       const sortName = t(name, {
         defaultValue: name || source,
       });
-      let sortFn = getSortingFunction(jsonata, source, originalResource);
+      let sortFn = getSortingFunction(getJsonata, source, originalResource);
 
       if (sort.compareFunction) {
-        sortFn = async (a, b) => {
-          const [aValue] = await jsonata(source, { scope: a });
-          const [bValue] = await jsonata(source, { scope: b });
+        sortFn = (a, b) => {
+          const [aValue] = getJsonata(source, { scope: a });
+          const [bValue] = getJsonata(source, { scope: b });
 
           const sortFormula = applySortFormula(
-            jsonata,
+            getJsonata,
             sort.compareFunction,
             t,
           );

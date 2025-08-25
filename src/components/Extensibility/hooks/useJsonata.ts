@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { last, mapValues } from 'lodash';
 
@@ -9,7 +9,7 @@ import {
   Resource,
 } from '../contexts/DataSources';
 
-export type JsonataValue = [string, Error | null];
+export type JsonataValue = [string | null, Error | null];
 
 export type JsonataFunction = {
   (query: string, extras?: { [key: string]: any }, defaultValue?: any): Promise<
@@ -126,4 +126,35 @@ export function useJsonata({
   };
 
   return jsonata;
+}
+
+export function useGetAsyncJsonata(jsonata: JsonataFunction) {
+  const [jsonataValue, setJsonataValue] = useState<{
+    [key: string]: JsonataValue;
+  }>({});
+
+  const getValue = useCallback(
+    function(
+      query: string,
+      extras?: { [key: string]: any },
+      defaultValue?: any,
+    ) {
+      const params = [query, extras, defaultValue];
+      const value = jsonataValue?.[JSON.stringify(params)];
+
+      if (!value) {
+        jsonata(query, extras, defaultValue).then(value => {
+          setJsonataValue(prev => ({
+            ...prev,
+            [JSON.stringify(params)]: value,
+          }));
+        });
+        return [null, null];
+      }
+      return value;
+    },
+    [jsonataValue, jsonata],
+  );
+
+  return getValue;
 }

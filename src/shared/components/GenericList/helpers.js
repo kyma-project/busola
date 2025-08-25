@@ -82,9 +82,9 @@ const filterEntry = async (entry, query, searchProperties) => {
 export const filterEntries = async (entries, query, searchProperties) => {
   const result = await Promise.all(
     entries.map(async entry => {
-      const isMatch = filterEntry(entry, query, searchProperties);
+      const isMatch = await filterEntry(entry, query, searchProperties);
       return isMatch ? entry : isMatch;
     }),
   );
-  return result.filter(entry => filterEntry(entry, query, searchProperties));
+  return result.filter(Boolean);
 };
