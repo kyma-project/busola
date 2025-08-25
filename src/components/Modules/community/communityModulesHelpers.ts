@@ -151,17 +151,11 @@ export async function postForCommunityResources(post: PostFn, link: string) {
     return false;
   }
 
-  try {
-    const response = await post('/modules/community-resource', { link });
-    if (response?.length) {
-      return response;
-    }
-    console.error('Empty or invalid response:', response);
-    return false;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return false;
+  const response = await post('/modules/community-resource', { link });
+  if (!response?.length) {
+    throw new Error('Empty or invalid response:', response);
   }
+  return response;
 }
 
 export async function getAllResourcesYamls(links: string[], post: PostFn) {

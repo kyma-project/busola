@@ -19,7 +19,7 @@ export async function throwHttpError(response) {
     return new HttpError(
       parsed.message || 'Unknown error',
       parsed.status,
-      parsed.code,
+      parsed.code || response.status,
     );
   } catch (e) {
     try {
