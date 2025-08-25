@@ -1,7 +1,14 @@
-import { Button, Input, MessageBox, Label } from '@ui5/webcomponents-react';
+import {
+  Button,
+  FlexBox,
+  Input,
+  Label,
+  MessageBox,
+  MessageStrip,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useNotification } from 'shared/contexts/NotificationContext';
 
@@ -9,6 +16,9 @@ import { postForCommunityResources } from 'components/Modules/community/communit
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
 import 'components/Modules/community/components/AddSourceYamls.scss';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
+import IconDesign from '@ui5/webcomponents/dist/types/IconDesign';
+import { FlexBoxDirection } from '@ui5/webcomponents-react/dist/enums/FlexBoxDirection';
 
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
@@ -19,6 +29,7 @@ export const AddSourceYamls = () => {
   const post = usePost();
 
   const [showAddSource, setShowAddSource] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [sourceURL, setSourceURL] = useState(DEFAULT_SOURCE_URL);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
@@ -31,21 +42,27 @@ export const AddSourceYamls = () => {
     'default',
   );
 
-  const getSourceYAML = async (sourceURL: string) => {
-    return await postForCommunityResources(post, sourceURL);
-  };
-
   useEffect(() => {
     if (sourceURL.endsWith('.yaml')) {
       (async function() {
-        const allResources = await getSourceYAML(sourceURL);
-        const allowedToApply = filterResources(allResources);
-
-        const formatted = allowedToApply?.map((r: any) => {
-          return { value: r };
-        });
-
-        setResourcesToApply(formatted);
+        try {
+          //TODO: backend return 500 in case of not existing resource!!
+          const allResources = await postForCommunityResources(post, sourceURL);
+          const allowedToApply = filterResources(allResources);
+          const formatted = allowedToApply?.map((r: any) => {
+            return { value: r };
+          });
+          setError(null);
+          setResourcesToApply(formatted);
+        } catch (e) {
+          if (e instanceof HttpError) {
+            setError(
+              t('modules.community.messages.source-yaml-fetch-failed', {
+                code: e.code,
+              }),
+            );
+          }
+        }
       })();
     }
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -99,7 +116,7 @@ export const AddSourceYamls = () => {
               accessibleName="add-yamls"
               design="Emphasized"
               key="add-yamls"
-              disabled={!sourceURL.endsWith('.yaml')}
+              disabled={!sourceURL.endsWith('.yaml') || error !== null}
               onClick={async () => {
                 handleApplySourceYAMLs();
               }}
@@ -115,8 +132,7 @@ export const AddSourceYamls = () => {
             </Button>,
           ]}
         >
-          {' '}
-          <div className="bsl-col-md--12">
+          <FlexBox direction={FlexBoxDirection.Column} gap={'0.5rem'}>
             <Label for="source-url">
               {t('modules.community.source-yaml.source-yaml-url') + ':'}
             </Label>
@@ -134,7 +150,12 @@ export const AddSourceYamls = () => {
             <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
               {t('modules.community.source-yaml.example-format')}
             </Label>
-          </div>
+            {error && (
+              <MessageStrip design={IconDesign.Negative} hideCloseButton>
+                {error}
+              </MessageStrip>
+            )}
+          </FlexBox>
         </MessageBox>,
         document.body,
       )}
