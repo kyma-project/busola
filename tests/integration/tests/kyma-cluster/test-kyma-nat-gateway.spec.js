@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-context('Test Kyma version', () => {
+context('Test NAT Gateway IP Addresses display', () => {
   Cypress.skipAfterFail();
 
-  it('No Kyma Version when feature is disabled', () => {
+  it('Shows NAT Gateway IP Addresses in cluster details', () => {
     cy.loginAndSelectCluster();
     cy.getLeftNav()
       .contains('Cluster Details')
