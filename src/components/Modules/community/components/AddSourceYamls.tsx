@@ -46,7 +46,6 @@ export const AddSourceYamls = () => {
     if (sourceURL.endsWith('.yaml')) {
       (async function() {
         try {
-          //TODO: backend return 500 in case of not existing resource!!
           const allResources = await postForCommunityResources(post, sourceURL);
           const allowedToApply = filterResources(allResources);
           const formatted = allowedToApply?.map((r: any) => {
