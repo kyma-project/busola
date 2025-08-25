@@ -45,6 +45,9 @@ kubectl apply -f tests/integration/fixtures/test-crd-kyma.yaml
 kubectl apply -f tests/integration/fixtures/modules
 kubectl apply -f tests/integration/fixtures/community-modules
 
+echo "Apply Kyma provision fixture"
+kubectl apply -f tests/integration/fixtures/kyma-info-cm.yaml
+
 echo "Apply gardener resources"
 echo "Certificates"
 kubectl apply -f https://raw.githubusercontent.com/gardener/cert-management/master/pkg/apis/cert/crds/cert.gardener.cloud_certificates.yaml
