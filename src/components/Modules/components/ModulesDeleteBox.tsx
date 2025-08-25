@@ -8,14 +8,14 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import {
+  checkIfAllResourcesAreDeleted,
   checkIfAssociatedResourceLeft,
-  deleteAssociatedResources,
-  deleteCrResources,
+  deleteResources,
   fetchResourceCounts,
   generateAssociatedResourcesUrls,
   getAssociatedResources,
-  getCommunityResourceUrls,
   getCommunityResources,
+  getCommunityResourceUrls,
   getCRResource,
   handleItemClick,
 } from '../deleteModulesHelpers';
@@ -30,12 +30,13 @@ import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { SetStateAction, useAtomValue } from 'jotai';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
   moduleTemplates: ModuleTemplateListType;
   selectedModules: { name: string }[];
-  chosenModuleIndex: number | null;
+  chosenModuleIndex: number;
   kymaResource: KymaResourceType;
   kymaResourceState?: KymaResourceType;
   detailsOpen: boolean;
@@ -66,7 +67,7 @@ export const ModulesDeleteBox = ({
   const navigate = useNavigate();
   const getScope = useGetScope();
   const { clusterUrl, namespaceUrl } = useUrl();
-  const deleteResourceMutation = useDelete();
+  const deleteFn = useDelete();
   const fetchFn = useSingleGet();
   const post = usePost();
   const clusterNodes = useAtomValue(allNodesAtom).filter(
@@ -76,13 +77,19 @@ export const ModulesDeleteBox = ({
     node => node.namespaced,
   );
   const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});
-  const [forceDeleteUrls, setForceDeleteUrls] = useState<string[]>([]);
+  const [associatedResourcesUrls, setAssociatedResourcesUrls] = useState<
+    string[]
+  >([]);
   const [crUrls, setCrUrls] = useState<string[]>([]);
   const [communityResourcesUrls, setCommunityResourcesUrls] = useState<
     string[]
   >([]);
   const [allowForceDelete, setAllowForceDelete] = useState(false);
-  const [associatedResourceLeft, setAssociatedResourceLeft] = useState(false);
+  const [associatedResourceLeft, setAssociatedResourceLeft] = useState<
+    boolean | null
+  >(null);
+
+  const notification = useNotification();
 
   const associatedResources = useMemo(
     () =>
@@ -99,14 +106,10 @@ export const ModulesDeleteBox = ({
   useEffect(() => {
     const fetchCounts = async () => {
       const counts = await fetchResourceCounts(associatedResources, fetchFn);
-
       const urls = await generateAssociatedResourcesUrls(
         associatedResources,
         fetchFn,
-        clusterUrl,
         getScope,
-        namespaceUrl,
-        navigate,
       );
 
       const crUResources = getCRResource(
@@ -127,10 +130,7 @@ export const ModulesDeleteBox = ({
         : await generateAssociatedResourcesUrls(
             crUResources,
             fetchFn,
-            clusterUrl,
             getScope,
-            namespaceUrl,
-            navigate,
           );
 
       if (isCommunity) {
@@ -151,10 +151,9 @@ export const ModulesDeleteBox = ({
       }
 
       setResourceCounts(counts);
-      setForceDeleteUrls(urls);
+      setAssociatedResourcesUrls(urls);
       setCrUrls(Array.isArray(crUrl) ? crUrl : [crUrl]);
     };
-
     fetchCounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [associatedResources]);
@@ -171,8 +170,8 @@ export const ModulesDeleteBox = ({
   }, [resourceCounts, associatedResources]);
 
   const deleteAllResources = () => {
-    if (allowForceDelete && forceDeleteUrls.length > 0) {
-      deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
+    if (allowForceDelete && associatedResourcesUrls.length > 0) {
+      deleteResources(deleteFn, associatedResourcesUrls);
     }
     if (chosenModuleIndex != null) {
       selectedModules.splice(chosenModuleIndex, 1);
@@ -197,27 +196,46 @@ export const ModulesDeleteBox = ({
         endColumn: null,
       });
     }
-    if (allowForceDelete && forceDeleteUrls.length > 0) {
-      deleteCrResources(deleteResourceMutation, crUrls);
+    if (allowForceDelete && associatedResourcesUrls.length > 0) {
+      deleteResources(deleteFn, crUrls);
     }
   };
 
-  const deleteCommunityResources = async () => {
-    if (allowForceDelete && forceDeleteUrls.length) {
-      // Delete associated resources.
-      await deleteAssociatedResources(deleteResourceMutation, forceDeleteUrls);
+  const deleteCommunityResources = async (moduleName: string) => {
+    try {
+      if (allowForceDelete && associatedResourcesUrls.length) {
+        await deleteResources(deleteFn, associatedResourcesUrls);
+        const allStillExistingResources = await checkIfAllResourcesAreDeleted(
+          fetchFn,
+          associatedResourcesUrls,
+        );
+        if (allStillExistingResources.length !== 0) {
+          notification.notifyError({
+            content: t('modules.community.messages.resources-delete-failure', {
+              module: moduleName,
+              resources: allStillExistingResources.join(','),
+            }),
+          });
+          return;
+        }
+      }
+      if (allowForceDelete && crUrls?.length) {
+        await deleteResources(deleteFn, crUrls);
+      }
+      if (communityResourcesUrls?.length) {
+        await deleteResources(deleteFn, communityResourcesUrls);
+      }
+    } catch (e) {
+      console.warn(e);
+      notification.notifyError({
+        content: t('modules.community.messages.delete-failure', {
+          module: moduleName,
+          error: e instanceof Error && e?.message ? e.message : '',
+        }),
+      });
+      return;
     }
-    if ((allowForceDelete || !associatedResourceLeft) && crUrls?.length) {
-      // Delete spec.data.
-      await deleteCrResources(deleteResourceMutation, crUrls);
-    }
-    if (
-      (allowForceDelete || !associatedResourceLeft) &&
-      communityResourcesUrls?.length
-    ) {
-      // Delete community resources.
-      await deleteCrResources(deleteResourceMutation, communityResourcesUrls);
-    }
+
     if (detailsOpen) {
       setLayoutColumn({
         layout: 'OneColumn',
@@ -272,6 +290,18 @@ export const ModulesDeleteBox = ({
                   }) => {
                     const key = `${associatedResource.kind}-${associatedResource.group}-${associatedResource.version}`;
                     const resourceCount = resourceCounts[key];
+                    let additionalText = t(
+                      'modules.associated-resources.loading',
+                    );
+                    if (resourceCount !== undefined) {
+                      if (resourceCount === -1) {
+                        additionalText = t(
+                          'modules.associated-resources.error',
+                        );
+                      } else {
+                        additionalText = resourceCount;
+                      }
+                    }
                     return (
                       <ListItemStandard
                         onClick={e => {
@@ -288,10 +318,7 @@ export const ModulesDeleteBox = ({
                         }}
                         type="Active"
                         key={key}
-                        additionalText={
-                          (resourceCount === 0 ? '0' : resourceCount) ||
-                          t('common.headers.loading')
-                        }
+                        additionalText={additionalText}
                       >
                         {pluralize(associatedResource?.kind)}
                       </ListItemStandard>
@@ -322,16 +349,12 @@ export const ModulesDeleteBox = ({
           )}
         </>
       }
-      resourceTitle={
-        chosenModuleIndex != null
-          ? selectedModules[chosenModuleIndex]?.name
-          : ''
-      }
+      resourceTitle={selectedModules[chosenModuleIndex]?.name}
       deleteFn={() => {
         if (!isCommunity && kymaResource) {
           deleteAllResources();
         } else if (isCommunity) {
-          deleteCommunityResources();
+          deleteCommunityResources(selectedModules[chosenModuleIndex]?.name);
         }
       }}
     />

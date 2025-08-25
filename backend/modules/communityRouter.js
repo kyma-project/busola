@@ -17,7 +17,7 @@ async function handleGetCommunityResource(req, res) {
   try {
     const url = new URL(link);
     // Only allow HTTPS protocol and restrict to specific trusted domains.
-    const allowedDomains = ['github.com'];
+    const allowedDomains = ['github.com', 'github.io'];
     if (
       url.protocol !== 'https:' ||
       !allowedDomains.some(domain => url.hostname.endsWith(domain))

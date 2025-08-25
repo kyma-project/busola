@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kyma-info
+  namespace: kyma-system
+data:
+  cloud.natGatewayIps: 18.157.247.144, 3.74.173.24, 63.177.125.178

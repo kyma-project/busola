@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 
 const REPLICA_SET_NAME = 'test-replica-set';
 const REPLICAS_AMOUNT = 2;
-const DOCKER_IMAGE_TAG = 'bitnami/nginx';
+const DOCKER_IMAGE_TAG = 'nginx';
 
 const EDITED_REPLICAS_AMOUNT = 1;
 const EDITED_DOCKER_IMAGE_TAG = 'test-replica-set-image';
@@ -31,9 +31,7 @@ context('Test Replica Sets', () => {
       .type(REPLICAS_AMOUNT)
       .should('have.value', REPLICAS_AMOUNT);
 
-    cy.get(
-      '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
-    )
+    cy.get('[placeholder="Enter the Docker image tag, for example, nginx"]')
       .find('input')
       .clear()
       .type(DOCKER_IMAGE_TAG)
@@ -69,9 +67,7 @@ context('Test Replica Sets', () => {
 
     cy.inspectTab('Edit');
 
-    cy.get(
-      '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
-    )
+    cy.get('[placeholder="Enter the Docker image tag, for example, nginx"]')
       .find('input')
       .clear()
       .type(EDITED_DOCKER_IMAGE_TAG)

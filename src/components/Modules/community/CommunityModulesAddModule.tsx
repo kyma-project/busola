@@ -274,7 +274,7 @@ export default function CommunityModulesAddModule(props: any) {
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        content: t('modules.community.messages.failure', {
+        content: t('modules.community.messages.install-failure', {
           resourceType: 'Community Module',
           error: e instanceof Error && e?.message ? e.message : '',
         }),
