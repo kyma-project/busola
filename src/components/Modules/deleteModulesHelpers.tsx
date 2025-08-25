@@ -8,6 +8,8 @@ import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { NavNode } from 'state/types';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { postForCommunityResources } from 'components/Modules/community/communityModulesHelpers';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
+import retry from 'shared/utils/retry';
 
 interface Counts {
   [key: string]: number;
@@ -139,20 +141,15 @@ const getResources = async (
   group: string,
   version: string,
   fetchFn: Function,
-) => {
+): Promise<any> | never => {
   const url =
     group === 'v1'
       ? '/api/v1'
       : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
 
-  try {
-    const response = await fetchFn(url);
-    const json = await response.json();
-    return json.items;
-  } catch (e) {
-    console.warn(e);
-    return 'Error';
-  }
+  const response = await fetchFn(url);
+  const json = await response.json();
+  return json.items;
 };
 
 const getUrlsByNamespace = (resources: Resource[]) => {
@@ -171,26 +168,29 @@ const getUrlsByNamespace = (resources: Resource[]) => {
 export const generateAssociatedResourcesUrls = async (
   resources: Resource[],
   fetchFn: Function,
-  clusterUrl: Function,
   getScope: Function,
-  namespaceUrl: Function,
-  navigate: Function,
 ) => {
-  const allUrls = [];
+  const allUrls: string[] = [];
 
   for (const resource of resources) {
-    const isNamespaced = await getScope(
-      resource.group,
-      resource.version,
-      resource.kind,
-      clusterUrl,
-      getScope,
-      namespaceUrl,
-      navigate,
-    );
+    let isNamespaced = null;
+    try {
+      isNamespaced = await getScope(
+        resource.group,
+        resource.version,
+        resource.kind,
+      );
+    } catch (e) {
+      if (e instanceof HttpError && e.code === 404) {
+        continue;
+      }
+      console.warn('error while getting scope of resource', resource, e);
+      throw e;
+    }
+
     let resources,
-      urls = [];
-    if (isNamespaced) {
+      urls: string[] = [];
+    if (isNamespaced === true) {
       resources = await getResources(
         resource.kind,
         resource.group,
@@ -220,14 +220,26 @@ export const fetchResourceCounts = async (
 ) => {
   const counts: Counts = {};
   for (const resource of resources) {
-    const count = await getResources(
-      resource.kind,
-      resource.group,
-      resource.version,
-      fetchFn,
-    );
-
+    let count = [];
     const keyName = `${resource.kind}-${resource.group}-${resource.version}`;
+
+    try {
+      count = await getResources(
+        resource.kind,
+        resource.group,
+        resource.version,
+        fetchFn,
+      );
+    } catch (e) {
+      if (e instanceof HttpError && e.code === 404) {
+        counts[keyName] = 0;
+        continue;
+      }
+      console.warn('fetch resource failed', e);
+      counts[keyName] = -1;
+      continue;
+    }
+
     counts[keyName] = count.length;
   }
   return counts;
@@ -248,36 +260,51 @@ export const checkIfAssociatedResourceLeft = (
   return false;
 };
 
-export const deleteAssociatedResources = async (
+export const deleteResources = async (
   deleteResourceMutation: Function,
-  forceDeleteUrls: string[],
+  resourcesUrls: string[],
 ) => {
-  try {
-    await Promise.all(
-      forceDeleteUrls.map(async url => {
+  await Promise.all(
+    resourcesUrls.map(async url => {
+      try {
         return await deleteResourceMutation(url);
-      }),
-    );
-  } catch (e) {
-    console.warn(e);
-    return 'Error while deleting Associated Resources';
-  }
+      } catch (e) {
+        if (e instanceof HttpError && e.code === 404) {
+          return;
+        }
+        throw e;
+      }
+    }),
+  );
 };
 
-export const deleteCrResources = async (
-  deleteResourceMutation: Function,
-  crUrls: string[],
+export const checkIfAllResourcesAreDeleted = async (
+  fetchFn: Function,
+  resourcesUrls: string[],
 ) => {
-  try {
-    await Promise.all(
-      crUrls.map(async url => {
-        return await deleteResourceMutation(url);
-      }),
-    );
-  } catch (e) {
-    console.warn(e);
-    return 'Error while deleting Custom Resource';
-  }
+  const results = await Promise.all(
+    resourcesUrls.map(async url => {
+      const result = await retry(
+        async () => {
+          try {
+            const result = await fetchFn(url);
+            const resources = await result.json();
+            return resources?.items.length === 0;
+          } catch (e) {
+            if (e instanceof HttpError && e.code === 404) {
+              return true;
+            }
+            throw e;
+          }
+        },
+        3,
+        1000,
+      );
+      return { resource: url, result };
+    }),
+  );
+  console.log(results);
+  return results.filter(v => !v.result).map(r => r.resource);
 };
 
 export const getCommunityResourceUrls = async (

@@ -13,7 +13,7 @@ export type ToastProps = {
 type CloseFn = () => void;
 
 export type ErrorModalProps = ToastProps & {
-  header?: JSX.Element;
+  header?: JSX.Element | string;
   buttonDismissText?: string;
   close: CloseFn;
   actions?: (
