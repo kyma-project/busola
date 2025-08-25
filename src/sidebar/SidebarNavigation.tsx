@@ -131,7 +131,9 @@ export function SidebarNavigation() {
                           rawResourceTypeName:
                             prevState.startColumn?.resourceType ?? null,
                           resourceName:
-                            prevState.startColumn?.resourceName ?? null,
+                            prevState.startColumn?.resourceType === 'Namespaces'
+                              ? newNamespace
+                              : prevState.startColumn?.resourceName ?? null,
                           apiGroup: prevState.startColumn?.apiGroup ?? null,
                           apiVersion: prevState.startColumn?.apiVersion ?? null,
                           namespaceId: newNamespace,
