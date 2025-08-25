@@ -931,7 +931,7 @@ modules:
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
-      source-yaml-fetch-failed: 'Failed to download source yaml. The response code was: {{code}}'
+      source-yaml-fetch-failed: 'Failed to download source yaml. The reason: {{reason}}'
       success: '{{resourceType}} installed'
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.

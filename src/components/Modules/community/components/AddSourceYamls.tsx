@@ -55,10 +55,11 @@ export const AddSourceYamls = () => {
           setError(null);
           setResourcesToApply(formatted);
         } catch (e) {
+          console.log(e);
           if (e instanceof HttpError) {
             setError(
               t('modules.community.messages.source-yaml-fetch-failed', {
-                code: e.code,
+                reason: e.message,
               }),
             );
           }
