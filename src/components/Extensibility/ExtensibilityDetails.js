@@ -18,7 +18,7 @@ import {
   useCreateResourceDescription,
   useGetTranslation,
 } from './helpers';
-import { useJsonata } from './hooks/useJsonata';
+import { useGetAsyncJsonata, useJsonata } from './hooks/useJsonata';
 import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.details';
 import { resourcesConditionsAtom } from 'state/resourceConditionsAtom';
 import { KymaModuleContext } from 'components/Modules/providers/KymaModuleProvider';
@@ -44,6 +44,7 @@ export const ExtensibilityDetailsCore = ({
   });
 
   const jsonata = useJsonata({});
+  const getJsonata = useGetAsyncJsonata(jsonata);
 
   const description = useCreateResourceDescription(resourceDescription);
 
@@ -83,15 +84,15 @@ export const ExtensibilityDetailsCore = ({
   const dataSources = resMetaData?.dataSources || {};
   const general = resMetaData?.general || {};
 
-  const prepareVisibility = async (def, resource) => {
+  const prepareVisibility = (def, resource) => {
     setResourcesConditions(resource.status);
-    const [visible, error] = await jsonata(def.visibility, { resource }, true);
+    const [visible, error] = getJsonata(def.visibility, { resource }, true);
     return { visible, error };
   };
 
-  const prepareDisableEdit = async resource => {
+  const prepareDisableEdit = resource => {
     if (disableEdit && typeof disableEdit === 'string') {
-      const [isDisabled] = await jsonata(disableEdit, { resource });
+      const [isDisabled] = getJsonata(disableEdit, { resource });
       return typeof isDisabled === 'boolean' ? isDisabled : false;
     }
     return disableEdit;

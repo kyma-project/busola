@@ -55,7 +55,11 @@ export function ResourceButton({
       setKindError(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(structure.resource)]);
+  }, [
+    structure.resource?.name,
+    structure.resource?.namespace,
+    structure.resource?.kind,
+  ]);
 
   if (!value) {
     return emptyLeafPlaceholder;

@@ -4,7 +4,6 @@ import { useJsonata } from '../hooks/useJsonata';
 import { useTranslation } from 'react-i18next';
 import { getBadgeType } from 'components/Extensibility/helpers';
 import { Widget } from './Widget';
-import { AsyncValue } from 'components/AsyncValue/AsyncValue';
 
 export const ConditionList = ({
   value,
@@ -34,8 +33,8 @@ export const ConditionList = ({
     Promise.all(
       value.map(async v => {
         const override = structure?.highlights?.find(o => o.type === v.type);
-        const customContent = structure?.customContent
-          ?.map(c => {
+        const customContentPromise = await Promise.all(
+          structure?.customContent?.map(async c => {
             return {
               ...c,
               value:
@@ -49,11 +48,14 @@ export const ConditionList = ({
                     embedResource={embedResource}
                   />
                 ) : (
-                  <AsyncValue params={[c.value]} jsonata={jsonata} />
+                  await jsonata(c.value)
                 ),
             };
-          })
-          .filter(c => c.type === v.type);
+          }),
+        );
+        const customContent = customContentPromise.filter(
+          c => c.type === v.type,
+        );
 
         const badgeType = override
           ? await getBadgeType(override, v.status, jsonata, t)
@@ -69,23 +71,14 @@ export const ConditionList = ({
         };
       }),
     ).then(results => setConditions(results));
-  }, [
-    embedResource,
-    jsonata,
-    originalResource,
-    scope,
-    singleRootResource,
-    structure?.customContent,
-    structure?.highlights,
-    t,
-    value,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure?.customContent, structure?.highlights, value]);
 
   if (!Array.isArray(value) || value?.length === 0) {
     return null;
   }
 
-  return <ConditionListComponent conditions={conditions} />;
+  return conditions && <ConditionListComponent conditions={conditions} />;
 };
 
 ConditionList.array = true;

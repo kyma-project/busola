@@ -33,7 +33,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
     skip: !resourceUrl,
   });
 
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([{}]);
   const jsonata = useJsonata({});
 
   const dataSources = resMetaData?.dataSources || {};

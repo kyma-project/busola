@@ -2,7 +2,7 @@ import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { EventList as EventListComponent } from 'resources/Events/EventList';
 
 import { useGetTranslation } from '../helpers';
-import { useJsonata } from '../hooks/useJsonata';
+import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
@@ -25,6 +25,7 @@ export function EventList({
     value,
     arrayItems,
   });
+  const getJsonata = useGetAsyncJsonata(jsonata);
   const simpleEmptyListMessage = structure.simpleEmptyListMessage || false;
 
   const renameDefaultType = defaultType => {
@@ -46,17 +47,16 @@ export function EventList({
       ? `/api/v1/namespaces/${namespaceId}/events`
       : '/api/v1/events';
 
-  const filter = async res => {
+  const filter = res => {
     if (!structure.filter) return true;
 
     try {
-      await jsonata(structure.filter, {
+      const [eventFilter, eventFilterError] = getJsonata(structure.filter, {
         scope: res,
         arrayItems: [res],
-      }).then(([eventFilter, eventFilterError]) => {
-        if (eventFilterError) return false;
-        return !!eventFilter;
       });
+      if (eventFilterError) return false;
+      return !!eventFilter;
     } catch (e) {
       console.warn(e);
       return false;

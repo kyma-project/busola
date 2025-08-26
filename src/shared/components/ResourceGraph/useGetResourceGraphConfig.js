@@ -1,5 +1,5 @@
+import { useEffect, useMemo, useState } from 'react';
 import { jsonataWrapper } from 'components/Extensibility/helpers/jsonataWrapper';
-import { useEffect, useMemo } from 'react';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
 export function useAddStyle({ styleId }) {
@@ -23,8 +23,10 @@ export function useAddStyle({ styleId }) {
     element.sheet.insertRule(rule);
   };
 }
+
 export const useGetResourceGraphConfig = (extensions, addStyle) => {
   const builtinResourceDefs = getPerResourceDefs('resourceGraphConfig');
+  const [expressionResolved, setExpressionResolved] = useState({});
 
   const builtinResourceGraphConfig = useMemo(
     () =>
@@ -78,19 +80,29 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
                 relations: graphDataSources
                   .map(({ source }) => dataSources[source])
                   .filter(Boolean)
-                  .map(relation => {
+                  .map((relation, index) => {
                     if (!relation.filter) {
                       return { ...relation, filter: () => true };
                     }
 
                     const expression = jsonataWrapper(relation.filter);
-                    const filter = async (
+                    const filter = (
                       originalResource,
                       possiblyRelatedResource,
                     ) => {
                       expression.assign('root', originalResource);
                       expression.assign('item', possiblyRelatedResource);
-                      return await expression.evaluate();
+                      //return expression.evaluate();
+                      if (!expressionResolved[index]) {
+                        expression.evaluate().then(res => {
+                          setExpressionResolved(prev => ({
+                            ...prev,
+                            [index]: res,
+                          }));
+                        });
+                      }
+
+                      return expressionResolved[index] ?? (() => true);
                     };
 
                     return { ...relation, filter };

@@ -80,29 +80,32 @@ export function ResourceRefRender({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, filter]);
 
-  const setValue = async value => {
-    if (toExternal) {
-      const [external, error] = await jsonata(toExternal, {
-        scope: value,
-        value,
-      });
-      value = error ? {} : external;
-    }
-    const resource = (data ?? []).find(
-      res =>
-        res.metadata.namespace === value.namespace &&
-        res.metadata.name === value.name,
-    );
-    if (provideVar) setVar(`$.${provideVar}`, resource);
+  const setValue = value => {
+    const getValuAndChange = async () => {
+      if (toExternal) {
+        const [external, error] = await jsonata(toExternal, {
+          scope: value,
+          value,
+        });
+        value = error ? {} : external;
+      }
+      const resource = (data ?? []).find(
+        res =>
+          res.metadata.namespace === value.namespace &&
+          res.metadata.name === value.name,
+      );
+      if (provideVar) setVar(`$.${provideVar}`, resource);
 
-    onChange({
-      storeKeys: storeKeys,
-      scopes: ['value'],
-      type: 'set',
-      schema,
-      required: true,
-      data: { value: fromJS(value) },
-    });
+      onChange({
+        storeKeys: storeKeys,
+        scopes: ['value'],
+        type: 'set',
+        schema,
+        required: true,
+        data: { value: fromJS(value) },
+      });
+    };
+    getValuAndChange();
   };
 
   return (

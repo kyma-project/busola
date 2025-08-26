@@ -480,6 +480,7 @@ const SearchProps = PropTypes.shape({
     PropTypes.oneOfType([
       PropTypes.string.isRequired,
       PropTypes.func.isRequired,
+      PropTypes.any,
     ]),
   ),
   showSearchSuggestion: PropTypes.bool,

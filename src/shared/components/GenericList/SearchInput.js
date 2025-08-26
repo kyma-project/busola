@@ -20,6 +20,7 @@ SearchInput.propTypes = {
     PropTypes.oneOfType([
       PropTypes.string.isRequired,
       PropTypes.func.isRequired,
+      PropTypes.any,
     ]),
   ),
   showSuggestion: PropTypes.bool,

@@ -42,13 +42,15 @@ export function Badge({
       setTooltip(tooltip);
       setTooltipError(tooltipError);
     });
-  }, [jsonata, structure?.description]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure?.description]);
 
   useEffect(() => {
     getBadgeType(structure.highlights, value, jsonata, t).then(type =>
       setBadgeType(type),
     );
-  }, [jsonata, structure?.highlights, value, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure?.highlights, value]);
 
   const getTooltipContent = description => {
     if (tooltip && !tooltipError) {

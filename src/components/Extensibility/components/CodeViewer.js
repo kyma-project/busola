@@ -33,13 +33,14 @@ export function CodeViewer({
     arrayItems,
   });
 
-  const [language, setLanguage] = useState();
+  const [language, setLanguage] = useState(null);
 
   useEffect(() => {
     jsonata(structure?.language, {}, detectLanguage(value)).then(([lang]) => {
       setLanguage(lang?.toLowerCase());
     });
-  }, [jsonata, structure?.language, value]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure?.language, value]);
 
   const getValue = value => {
     if (!isNil(value)) {

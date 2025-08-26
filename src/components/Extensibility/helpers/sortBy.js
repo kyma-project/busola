@@ -1,7 +1,33 @@
+const isObject = (obj, key) => {
+  return typeof obj === 'object' && key in obj;
+};
+
+const calc = (formula, first, second) => {
+  const stringToCalc = formula
+    ?.replace('first', first)
+    ?.replace('second', second)
+    ?.replaceAll(' ', '')
+    ?.replaceAll('$', '');
+  if (!stringToCalc) {
+    return null;
+  }
+  // eslint-disable-next-line no-new-func
+  const calculated = Function(`return(${stringToCalc})`)();
+  if (!calculated || typeof calculated !== 'number') {
+    return null;
+  }
+  return calculated;
+};
+
 export const getSortingFunction = (getJsonata, formula, originalResource) => {
   return (a, b) => {
-    const [aValue] = getJsonata(formula, { scope: a });
-    const [bValue] = getJsonata(formula, { scope: b });
+    // If it is a simple object with key, we don't need to use jsonata which is expensive.
+    const [aValue] = isObject(a, formula)
+      ? [a[formula]]
+      : getJsonata(formula, { scope: a });
+    const [bValue] = isObject(b, formula)
+      ? [b[formula]]
+      : getJsonata(formula, { scope: b });
 
     switch (typeof aValue) {
       case 'number':
@@ -26,20 +52,17 @@ export const applySortFormula = (getJsonata, formula, t) => {
   return (a, b) => {
     if (a === undefined) return -1;
     if (b === undefined) return 1;
-    const [result] = getJsonata(formula, {
-      scope: {
-        first: a,
-        second: b,
-      },
-    });
-    // Sometimes some expression variables are read correctly only after removing the $.
-    const [resultAfterReplace] = getJsonata(formula?.replaceAll('$', ''), {
-      scope: {
-        first: a,
-        second: b,
-      },
-    });
-    return result ?? resultAfterReplace;
+    // If it is a simple math operation, we don't need to use jsonata which is expensive.
+    const calculated = calc(formula, a, b);
+    const [result] = calculated
+      ? [calculated]
+      : getJsonata(formula, {
+          scope: {
+            first: a,
+            second: b,
+          },
+        });
+    return result;
   };
 };
 
@@ -60,8 +83,13 @@ export const sortBy = (
 
       if (sort.compareFunction) {
         sortFn = (a, b) => {
-          const [aValue] = getJsonata(source, { scope: a });
-          const [bValue] = getJsonata(source, { scope: b });
+          // If it is a simple object with key, we don't need to use jsonata which is expensive.
+          const [aValue] = isObject(a, source)
+            ? [a[source]]
+            : getJsonata(source, { scope: a });
+          const [bValue] = isObject(b, source)
+            ? [b[source]]
+            : getJsonata(source, { scope: b });
 
           const sortFormula = applySortFormula(
             getJsonata,
