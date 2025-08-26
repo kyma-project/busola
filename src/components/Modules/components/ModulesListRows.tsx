@@ -213,7 +213,7 @@ export const ModulesListRows = ({
       </StatusBadge>
       {moduleStatus?.maintenance === true && (
         <StatusBadge
-          type="Information"
+          type="Critical"
           className="sap-margin-begin-tiny"
           key={`pending-maintenance-${resource.name}`}
           tooltipContent={t('kyma-modules.maintenance-tooltip')}
