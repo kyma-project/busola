@@ -218,7 +218,7 @@ export const ModulesListRows = ({
           key={`pending-maintenance-${resource.name}`}
           tooltipContent={t('kyma-modules.maintenance-tooltip')}
         >
-          {t('kyma-modules.pending-maintenance')}
+          {t('kyma-modules.maintenance-pending')}
         </StatusBadge>
       )}
     </>,

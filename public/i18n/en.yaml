@@ -861,6 +861,7 @@ kyma-modules:
   installation-state: Installation State
   installed-modules: Installed Modules
   kyma: Kyma
+  maintenance-pending: Pending Maintenance
   maintenance-tooltip: This module has a pending maintenance update, it might take a while to be applied.
   managed: Managed
   messages:
@@ -878,7 +879,6 @@ kyma-modules:
   no-modules-description: Customize your cluster by adding the modules you need.
   no-modules-installed: No modules installed
   no-version: No version available
-  pending-maintenance: Pending Maintenance
   predefined-channel: Predefined
   release-channel: Release channel
   release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
