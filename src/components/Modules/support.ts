@@ -53,6 +53,7 @@ export type KymaResourceStatusModuleType = {
     kind?: string;
   };
   message?: string;
+  maintenance?: boolean;
 };
 
 export type KymaResourceType = {

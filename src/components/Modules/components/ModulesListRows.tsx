@@ -82,6 +82,7 @@ export const ModulesListRows = ({
         channel: resource.channel,
         state: moduleResource?.status?.state,
         message: moduleResource?.status?.message,
+        maintenance: false,
       };
 
   const showDetailsLink = hasDetailsLink(resource);
@@ -186,26 +187,41 @@ export const ModulesListRows = ({
     // Version
     moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
     // Module State
-    <ModuleStatus key="module-state" resource={moduleStatus} />,
+    <ModuleStatus
+      key={`module-state-${resource.name}`}
+      resource={moduleStatus}
+    />,
     // Installation State
-    <StatusBadge
-      key="installation-state"
-      resourceKind="kymas"
-      type={resolveType(
-        kymaResource
+    <>
+      <StatusBadge
+        key={`installation-state-${resource.name}`}
+        resourceKind="kymas"
+        type={resolveType(
+          kymaResource
+            ? resolvedInstallationStateName
+            : managerResourceState?.state ?? '',
+        )}
+        tooltipContent={
+          kymaResource
+            ? moduleStatus?.message ?? managerResourceState?.message
+            : managerResourceState?.message
+        }
+      >
+        {kymaResource
           ? resolvedInstallationStateName
-          : managerResourceState?.state ?? '',
+          : managerResourceState?.state}
+      </StatusBadge>
+      {moduleStatus?.maintenance === true && (
+        <StatusBadge
+          type="Information"
+          className="sap-margin-begin-tiny"
+          key={`pending-maintenance-${resource.name}`}
+          tooltipContent={t('kyma-modules.maintenance-tooltip')}
+        >
+          {t('kyma-modules.pending-maintenance')}
+        </StatusBadge>
       )}
-      tooltipContent={
-        kymaResource
-          ? moduleStatus?.message ?? managerResourceState?.message
-          : managerResourceState?.message
-      }
-    >
-      {kymaResource
-        ? resolvedInstallationStateName
-        : managerResourceState?.state}
-    </StatusBadge>,
+    </>,
     // Documentation
     moduleDocs ? (
       <ExternalLink url={moduleDocs}>{t('common.headers.link')}</ExternalLink>
