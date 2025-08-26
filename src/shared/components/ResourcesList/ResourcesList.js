@@ -75,6 +75,7 @@ ResourcesList.propTypes = {
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
   filterFn: PropTypes.func,
+  createFormRef: PropTypes.object,
 };
 
 export function ResourcesList({
@@ -236,6 +237,7 @@ export function ResourceListRenderer({
   disableHiding,
   displayArrow = enableColumnLayout,
   accessibleName,
+  createFormRef = null,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -522,6 +524,12 @@ export function ResourceListRenderer({
           : '?layout=TwoColumnsMidExpanded'
       }&showCreate=true`,
     );
+
+    setTimeout(() => {
+      if (createFormRef?.current) {
+        createFormRef.current.focus();
+      }
+    }, 0);
   };
 
   const extraHeaderContent = listHeaderActions || [
