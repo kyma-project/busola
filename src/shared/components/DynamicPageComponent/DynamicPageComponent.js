@@ -279,6 +279,7 @@ export const DynamicPageComponent = ({
     <DynamicPageTitle
       className={inlineEditForm ? 'no-shadow' : ''}
       style={title === 'Clusters Overview' ? { display: 'none' } : null}
+      aria-label={title}
       heading={
         <FlexBox className="title-container" alignItems="Center">
           <Title
