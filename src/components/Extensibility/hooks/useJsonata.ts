@@ -153,7 +153,8 @@ export function useGetAsyncJsonata(jsonata: JsonataFunction) {
       }
       return value;
     },
-    [jsonataValue, jsonata],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [jsonataValue, JSON.stringify(jsonata)],
   );
 
   return getValue;

@@ -47,7 +47,10 @@ export const getEntryMatches = async (entry, query, searchProperties) => {
   const flattenedEntry = flattenProperties(entry);
   const flattenedSearchProperties = await Promise.all(
     searchProperties?.map(async property => {
-      if (typeof property === 'function') {
+      if (
+        typeof property === 'function' ||
+        typeof property?.then === 'function'
+      ) {
         return await property(entry, query);
       }
       if (property === 'metadata.labels' && entry.metadata?.labels) {
