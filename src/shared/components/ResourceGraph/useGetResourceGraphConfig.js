@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react';
 import { jsonataWrapper } from 'components/Extensibility/helpers/jsonataWrapper';
+import { useEffect, useMemo } from 'react';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
 export function useAddStyle({ styleId }) {
@@ -23,7 +23,6 @@ export function useAddStyle({ styleId }) {
     element.sheet.insertRule(rule);
   };
 }
-
 export const useGetResourceGraphConfig = (extensions, addStyle) => {
   const builtinResourceDefs = getPerResourceDefs('resourceGraphConfig');
 
@@ -79,7 +78,7 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
                 relations: graphDataSources
                   .map(({ source }) => dataSources[source])
                   .filter(Boolean)
-                  .map((relation, index) => {
+                  .map(relation => {
                     if (!relation.filter) {
                       return { ...relation, filter: () => true };
                     }
