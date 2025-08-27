@@ -120,14 +120,25 @@ async function cycle(
         }),
       );
 
-      const filterOnlyRelated = (possiblyRelatedResource: K8sResource) =>
-        store.current[resource.fromKind]!.some(oR =>
-          match(possiblyRelatedResource, oR, config),
+      const filterOnlyRelated = async (
+        possiblyRelatedResource: K8sResource,
+      ) => {
+        const matchArray = await Promise.all(
+          store.current[resource.fromKind]!.map(
+            async oR => !!(await match(possiblyRelatedResource, oR, config)),
+          ),
         );
+        return !!matchArray.filter(Boolean).length;
+      };
 
-      store.current[resource.kind] = allResourcesForKind.filter(
-        filterOnlyRelated,
+      const matched = await Promise.all(
+        allResourcesForKind.map(async (resource: K8sResource) => {
+          const didPass = await filterOnlyRelated(resource);
+          return didPass ? resource : false;
+        }),
       );
+
+      store.current[resource.kind] = matched.filter(Boolean);
     } catch (e) {
       console.warn(e);
     }

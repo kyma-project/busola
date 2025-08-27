@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { jsonataWrapper } from 'components/Extensibility/helpers/jsonataWrapper';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
@@ -26,7 +26,6 @@ export function useAddStyle({ styleId }) {
 
 export const useGetResourceGraphConfig = (extensions, addStyle) => {
   const builtinResourceDefs = getPerResourceDefs('resourceGraphConfig');
-  const [expressionResolved, setExpressionResolved] = useState({});
 
   const builtinResourceGraphConfig = useMemo(
     () =>
@@ -92,17 +91,7 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
                     ) => {
                       expression.assign('root', originalResource);
                       expression.assign('item', possiblyRelatedResource);
-                      //return expression.evaluate();
-                      if (!expressionResolved[index]) {
-                        expression.evaluate().then(res => {
-                          setExpressionResolved(prev => ({
-                            ...prev,
-                            [index]: res,
-                          }));
-                        });
-                      }
-
-                      return expressionResolved[index] ?? (() => true);
+                      return expression.evaluate();
                     };
 
                     return { ...relation, filter };

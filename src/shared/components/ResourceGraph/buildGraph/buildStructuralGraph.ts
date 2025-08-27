@@ -16,7 +16,7 @@ type Node = {
   fromKind?: string;
 };
 
-export function buildStructuralGraph(
+export async function buildStructuralGraph(
   {
     initialResource,
     store,
@@ -46,7 +46,7 @@ export function buildStructuralGraph(
           continue;
         }
 
-        if (!match(node.resource, relatedResource, config)) {
+        if (!(await match(node.resource, relatedResource, config))) {
           continue;
         }
 
