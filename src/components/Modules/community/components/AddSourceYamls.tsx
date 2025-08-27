@@ -4,7 +4,6 @@ import {
   Input,
   Label,
   MessageBox,
-  MessageStrip,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
@@ -17,7 +16,6 @@ import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadRes
 
 import 'components/Modules/community/components/AddSourceYamls.scss';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import IconDesign from '@ui5/webcomponents/dist/types/IconDesign';
 import { FlexBoxDirection } from '@ui5/webcomponents-react/dist/enums/FlexBoxDirection';
 
 const DEFAULT_SOURCE_URL =
@@ -54,7 +52,6 @@ export const AddSourceYamls = () => {
           setError(null);
           setResourcesToApply(formatted);
         } catch (e) {
-          console.log(e);
           if (e instanceof HttpError) {
             setError(
               t('modules.community.messages.source-yaml-fetch-failed', {
@@ -64,6 +61,8 @@ export const AddSourceYamls = () => {
           }
         }
       })();
+    } else {
+      setError(t('modules.community.messages.source-yaml-invalid-url'));
     }
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -78,6 +77,12 @@ export const AddSourceYamls = () => {
   };
 
   const handleApplySourceYAMLs = async () => {
+    if (error) {
+      notification.notifyError({
+        content: error,
+      });
+      return;
+    }
     try {
       uploadResources();
       notification.notifySuccess({
@@ -116,9 +121,8 @@ export const AddSourceYamls = () => {
               accessibleName="add-yamls"
               design="Emphasized"
               key="add-yamls"
-              disabled={!sourceURL.endsWith('.yaml') || error !== null}
               onClick={async () => {
-                handleApplySourceYAMLs();
+                await handleApplySourceYAMLs();
               }}
             >
               {t('common.buttons.add')}
@@ -150,11 +154,6 @@ export const AddSourceYamls = () => {
             <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
               {t('modules.community.source-yaml.example-format')}
             </Label>
-            {error && (
-              <MessageStrip design={IconDesign.Negative} hideCloseButton>
-                {error}
-              </MessageStrip>
-            )}
           </FlexBox>
         </MessageBox>,
         document.body,
