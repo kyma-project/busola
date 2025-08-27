@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   Card,
   CardHeader,
@@ -30,6 +31,7 @@ export function YamlResourcesList({ resourcesData }) {
   const { t } = useTranslation();
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const defaultNamespace = namespaceId || 'default';
+  const resourcesListRef = useRef(null);
 
   const resources = resourcesData?.filter(resource => resource !== null);
 
@@ -41,14 +43,16 @@ export function YamlResourcesList({ resourcesData }) {
     r => r.status && r.status !== STATE_WAITING,
   );
 
-  const getPercentage = () => {
+  const getPercentage = useCallback(() => {
     return (
       ((resources?.filter(r => r.status && r.status !== STATE_WAITING)
         ?.length || 0) /
         (resources?.length || 0)) *
       100
     );
-  };
+  }, [resources]);
+
+  const percentage = useMemo(() => getPercentage(), [getPercentage]);
 
   const getIcon = status => {
     switch (status) {
@@ -67,6 +71,22 @@ export function YamlResourcesList({ resourcesData }) {
   const getStatus = status => {
     return t(`upload-yaml.statuses.${status.toLowerCase()}`);
   };
+
+  const getPositiveResources = () => {
+    return resources?.filter(r =>
+      [STATE_CREATED, STATE_UPDATED].includes(r.status),
+    );
+  };
+
+  const getErrors = () => {
+    return resources?.filter(r => r.status === STATE_ERROR);
+  };
+
+  useEffect(() => {
+    if (resourcesListRef?.current && percentage === 100) {
+      resourcesListRef.current.focus();
+    }
+  }, [resourcesListRef, percentage]);
 
   if (!resources) {
     return null;
@@ -157,8 +177,19 @@ export function YamlResourcesList({ resourcesData }) {
                     width: '95%',
                   }}
                 />
+                <span aria-live="polite" className="hidden-announcement">
+                  {getPercentage() === 100 &&
+                    `${getPositiveResources().length} ${t(
+                      'upload-yaml.uploaded-resources',
+                    )}
+                    ${
+                      getErrors().length
+                        ? `${getErrors().length} ${t('upload-yaml.errors')}`
+                        : ''
+                    }`}
+                </span>
               </Card>
-              <List>
+              <List ref={resourcesListRef}>
                 {resources.map((r, idx) => (
                   <ListItemCustom key={idx} type="Inactive">
                     <FlexBox alignItems="Center">

@@ -930,9 +930,9 @@ modules:
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
-      success: '{{resourceType}} installed'
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
+      success: '{{resourceType}} installed'
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
     no-modules-installed: No community modules installed
@@ -1426,6 +1426,7 @@ storage-classes:
   name_singular: StorageClass
   title: Storage Classes
 upload-yaml:
+  errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
   labels:
     validate-resources: 'Validate resources:'
