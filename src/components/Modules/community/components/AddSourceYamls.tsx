@@ -88,6 +88,7 @@ export const AddSourceYamls = () => {
       notification.notifySuccess({
         content: t('modules.community.messages.source-yaml-added'),
       });
+      setShowAddSource(false);
     } catch (e) {
       console.error(e);
       notification.notifyError({
@@ -112,9 +113,9 @@ export const AddSourceYamls = () => {
         <MessageBox
           open={showAddSource}
           className="sourceurl-messagebox"
-          onClose={() => {
-            setShowAddSource(false);
-          }}
+          // onClose={() => {
+          //   setShowAddSource(false);
+          // }}
           titleText={t('modules.community.source-yaml.add-source-yaml')}
           actions={[
             <Button
@@ -131,6 +132,9 @@ export const AddSourceYamls = () => {
               accessibleName="cancel-add-yamls"
               design="Transparent"
               key="cancel-add-yamls"
+              onClick={() => {
+                setShowAddSource(false);
+              }}
             >
               {t('common.buttons.cancel')}
             </Button>,
