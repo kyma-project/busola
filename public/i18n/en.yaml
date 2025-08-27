@@ -862,7 +862,7 @@ kyma-modules:
   installed-modules: Installed Modules
   kyma: Kyma
   maintenance-pending: Pending Maintenance
-  maintenance-tooltip: This module has a pending maintenance update, it might take a while to be applied.
+  maintenance-tooltip: The module is currently being updated. This may take a few moments.
   managed: Managed
   messages:
     failure: 'Failed to install the {{resourceType}}: {{error}}'
