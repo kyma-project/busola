@@ -27,7 +27,7 @@ export function TriggerHandler({
         async ([name, formula]) => {
           const [value] = await jsonata(formula, {
             resource,
-            ...itemVars(resource, rule.itemVars, storeKeys),
+            ...itemVars(resource, rule?.itemVars, storeKeys),
           });
           return [name, value];
         },

@@ -32,7 +32,7 @@ export function VisibilityHandler({
         if (visibilityFormula) {
           [visible] = await jsonata(
             visibilityFormula,
-            itemVars(resource, rule.itemVars, storeKeys),
+            itemVars(resource, rule?.itemVars, storeKeys),
           );
         } else if (visibilityFormula === false) {
           visible = false;
@@ -55,7 +55,7 @@ export function VisibilityHandler({
     };
     setVisibility();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [triggers.enabled, visibilityFormula, rule.itemVars, storeKeys]);
+  }, [triggers.enabled, visibilityFormula, rule?.itemVars, storeKeys]);
 
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);

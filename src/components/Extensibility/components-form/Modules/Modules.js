@@ -59,7 +59,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       if (typeof propObject === 'string') {
         const [newEnum] = await jsonata(
           propObject,
-          itemVars(resource, rule.itemVars, storeKeys),
+          itemVars(resource, rule?.itemVars, storeKeys),
           [],
         );
         return newEnum;
@@ -82,7 +82,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       }),
     ).then(() => setParsedOptions(parsedOpt));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemVars, options, rule.itemVars, storeKeys]);
+  }, [itemVars, options, rule?.itemVars, storeKeys]);
 
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)

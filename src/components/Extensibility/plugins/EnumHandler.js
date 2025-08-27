@@ -28,14 +28,14 @@ export function EnumHandler({
     if (typeof schemaEnum === 'string') {
       jsonata(
         schemaEnum,
-        itemVars(resource, rule.itemVars, storeKeys),
+        itemVars(resource, rule?.itemVars, storeKeys),
         [],
       ).then(([newEnum]) => {
         setNewSchema(schema.set('enum', newEnum));
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schemaEnum, resource, rule.itemVars, storeKeys]);
+  }, [schemaEnum, resource, rule?.itemVars, storeKeys]);
 
   return (
     <Plugin

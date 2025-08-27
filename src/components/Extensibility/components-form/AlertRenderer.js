@@ -20,7 +20,7 @@ export function AlertRenderer({
   const { itemVars } = useVariables();
 
   const rule = schema.get('schemaRule');
-  const item = itemVars(resource, rule.itemVars, storeKeys);
+  const item = itemVars(resource, rule?.itemVars, storeKeys);
 
   const jsonata = useJsonata({
     resource: originalResource,
