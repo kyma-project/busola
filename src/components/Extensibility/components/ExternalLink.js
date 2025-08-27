@@ -1,16 +1,16 @@
+import { useEffect, useState } from 'react';
 import {
   useGetPlaceholder,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
-import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
+import { useJsonata } from '../hooks/useJsonata';
 
 import { Button, Icon, Link } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 
-const makeHref = ({ getJsonata, value, structure }) => {
-  const [link, linkError] = getJsonata(structure.link);
-  if (linkError) return linkError.message;
+const makeHref = ({ linkObject, value }) => {
+  if (linkObject?.linkError) return linkObject?.linkError?.message;
 
   let href;
   if (typeof value === 'string') {
@@ -20,7 +20,7 @@ const makeHref = ({ getJsonata, value, structure }) => {
         : `https://${value}`;
   }
 
-  return link || href;
+  return linkObject?.link || href;
 };
 
 export const ExternalLink = ({
@@ -44,9 +44,14 @@ export const ExternalLink = ({
     value,
     arrayItems,
   });
+  const [href, setHref] = useState('');
 
-  const getJsonata = useGetAsyncJsonata(jsonata);
-  const href = makeHref({ getJsonata, value, structure });
+  useEffect(() => {
+    jsonata(structure.link).then(linkObject => {
+      setHref(makeHref({ linkObject, value }));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure?.link, value]);
 
   if (isNil(value)) return emptyLeafPlaceholder;
 
@@ -89,6 +94,6 @@ export const ExternalLink = ({
 };
 ExternalLink.inline = true;
 ExternalLink.copyable = true;
-ExternalLink.copyFunction = ({ value, structure }, _, __, getJsonata) => {
-  return makeHref({ getJsonata, value, structure });
+ExternalLink.copyFunction = ({ value }, _, __, linkObject) => {
+  return makeHref({ linkObject, value });
 };

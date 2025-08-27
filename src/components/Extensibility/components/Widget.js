@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
-import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
+import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
@@ -53,9 +53,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       value: props.value,
       arrayItems: props.arrayItems,
     });
-    const getJsonata = useGetAsyncJsonata(jsonata);
-
-    if (!props.structure.copyable || !isRendererCopyable) return children;
+    const [textToCopy, setTextToCopy] = useState('');
 
     const defaultCopyFunction = ({ value }) =>
       typeof value === 'object' ? JSON.stringify(value) : value;
@@ -65,12 +63,17 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
         ? Renderer.copyFunction
         : defaultCopyFunction;
 
-    const textToCopy = copyFunction(
-      props,
-      Renderer,
-      defaultCopyFunction,
-      getJsonata,
-    );
+    useEffect(() => {
+      if (!props.structure.copyable || !isRendererCopyable) return;
+      jsonata(props?.structure?.link).then(linkObject => {
+        setTextToCopy(
+          copyFunction(props, Renderer, defaultCopyFunction, linkObject),
+        );
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props?.structure?.link, props.structure.copyable, isRendererCopyable]);
+
+    if (!props.structure.copyable || !isRendererCopyable) return children;
 
     return (
       <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
