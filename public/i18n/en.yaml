@@ -932,7 +932,7 @@ modules:
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
       source-yaml-fetch-failed: 'Failed to download source yaml: {{error}}'
-      source-yaml-invalid-url: Provided URL is not correct. It should end with ".yaml"
+      source-yaml-invalid-url: The URL you provided is not correct. Ensure it ends with ".yaml"
       success: '{{resourceType}} installed'
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
