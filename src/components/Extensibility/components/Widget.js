@@ -1,5 +1,6 @@
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
@@ -108,16 +109,26 @@ export function Widget({
     arrayItems,
   });
 
-  const [childValue] = jsonata(structure.source, {
-    index: index,
-  });
-  const [visible, visibilityError] = jsonata(
-    structure.visibility?.toString(),
-    {
-      value: childValue,
-    },
-    true,
-  );
+  const [childValue, setChildValue] = useState(null);
+  const [visible, setVisible] = useState(true);
+  const [visibilityError, setVisibilityError] = useState(null);
+
+  useEffect(() => {
+    const [evaluatedChildValue] = jsonata(structure.source, {
+      index: index,
+    });
+    setChildValue(evaluatedChildValue);
+
+    const [evaluatedVisible, evaluatedVisibilityError] = jsonata(
+      structure.visibility?.toString(),
+      {
+        value: evaluatedChildValue,
+      },
+      true,
+    );
+    setVisible(evaluatedVisible);
+    setVisibilityError(evaluatedVisibilityError);
+  }, [jsonata, structure.source, structure.visibility, index]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

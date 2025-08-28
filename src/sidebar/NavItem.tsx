@@ -40,14 +40,14 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const [jsonataError, setJsonataError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (node.externalUrl) {
-      const [link, error] = jsonata(node.externalUrl);
-      setJsonataLink(link || '');
-      setJsonataError(error);
-    } else {
+    if (!node.externalUrl) {
       setJsonataLink('');
       setJsonataError(null);
+      return;
     }
+    const [link, error] = jsonata(node.externalUrl);
+    setJsonataLink(link || '');
+    setJsonataError(error);
   }, [jsonata, node.externalUrl]);
 
   const { navigateSafely } = useFormNavigation();

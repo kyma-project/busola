@@ -23,7 +23,7 @@ export const KymaModuleContext = createContext({
   selectedModules: {},
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
-  deleteModuleButton: () => <></>,
+  deleteModuleButton: <></>,
 });
 
 export function KymaModuleContextProvider({
