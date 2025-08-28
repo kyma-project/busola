@@ -307,7 +307,7 @@ function handleListDataReceived(filter) {
           return (await filter(item)) ? item : false;
         }),
       );
-      newData.items = asyncForFilter.filter(filter);
+      newData.items = asyncForFilter.filter(Boolean);
     }
 
     newData.items = (newData.items || []).map(item => {
