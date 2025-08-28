@@ -61,11 +61,12 @@ export function AllNamespacesDetails() {
     <DynamicPageComponent
       title={t('navigation.all-namespaces')}
       content={
-        <>
+        <section aria-labelledby="monitoring-heading">
           <Title
             level="H3"
             size="H3"
             className="sap-margin-begin-medium sap-margin-y-medium"
+            id="monitoring-heading"
           >
             {t('common.headers.monitoring-and-health')}
           </Title>
@@ -76,7 +77,7 @@ export function AllNamespacesDetails() {
           {LimitrangesList}
           {ResourceQuotasList}
           {Events}
-        </>
+        </section>
       }
       actions={headerActions}
     />
