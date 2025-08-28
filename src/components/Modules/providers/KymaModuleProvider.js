@@ -102,7 +102,7 @@ export function KymaModuleContextProvider({
   const isMaintenancePending = findModuleStatus(kymaResource, getModuleName())
     ?.maintenance;
 
-  const maintenanceBadge = isMaintenancePending === true && (
+  const maintenanceBadge = (
     <StatusBadge
       type="Critical"
       key={`pending-maintenance-${getModuleName()}`}
@@ -113,12 +113,12 @@ export function KymaModuleContextProvider({
   );
 
   const customHeaderActions = (
-    <div>
+    <>
       {maintenanceBadge}
       <Button onClick={() => handleResourceDelete({})} design="Transparent">
         {t('common.buttons.delete-module')}
       </Button>
-    </div>
+    </>
   );
 
   return (
