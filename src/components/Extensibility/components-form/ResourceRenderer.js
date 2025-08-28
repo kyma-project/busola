@@ -7,7 +7,7 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { useVariables } from '../hooks/useVariables';
-import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
+import { useJsonata } from '../hooks/useJsonata';
 import { usePermittedUrl } from 'hooks/usePermittedUrl';
 
 import { useAtomValue } from 'jotai';
@@ -35,7 +35,6 @@ export function ResourceRenderer({
     scope: value,
     value,
   });
-  const getJsonata = useGetAsyncJsonata(jsonata);
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
@@ -57,9 +56,9 @@ export function ResourceRenderer({
         <K8sResourceSelectWithUseGetList
           data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
           url={url}
-          filter={item => {
+          filter={async item => {
             if (schema.get('filter')) {
-              const [value] = getJsonata(schema.get('filter'), {
+              const [value] = await jsonata(schema.get('filter'), {
                 item,
               });
               return value;

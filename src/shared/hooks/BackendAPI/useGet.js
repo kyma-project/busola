@@ -300,9 +300,14 @@ export const useGetList = filter => useGetHook(handleListDataReceived(filter));
 export const useGet = useGetHook(handleSingleDataReceived);
 
 function handleListDataReceived(filter) {
-  return (newData, oldData, setDataFn, lastResourceVersionRef) => {
+  return async (newData, oldData, setDataFn, lastResourceVersionRef) => {
     if (filter) {
-      newData.items = newData.items.filter(filter);
+      const asyncForFilter = await Promise.all(
+        newData.items.map(async item => {
+          return (await filter(item)) ? item : false;
+        }),
+      );
+      newData.items = asyncForFilter.filter(filter);
     }
 
     newData.items = (newData.items || []).map(item => {
