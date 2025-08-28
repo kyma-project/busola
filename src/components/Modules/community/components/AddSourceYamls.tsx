@@ -113,9 +113,6 @@ export const AddSourceYamls = () => {
         <MessageBox
           open={showAddSource}
           className="sourceurl-messagebox"
-          // onClose={() => {
-          //   setShowAddSource(false);
-          // }}
           titleText={t('modules.community.source-yaml.add-source-yaml')}
           actions={[
             <Button
