@@ -867,6 +867,9 @@ kyma-modules:
   installation-state: Installation State
   installed-modules: Installed Modules
   kyma: Kyma
+  maintenance: Maintenance
+  maintenance-pending: Pending Maintenance
+  maintenance-tooltip: The module is currently being updated. This may take a few moments.
   managed: Managed
   messages:
     failure: 'Failed to install the {{resourceType}}: {{error}}'
