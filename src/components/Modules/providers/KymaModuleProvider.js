@@ -102,7 +102,7 @@ export function KymaModuleContextProvider({
   const isMaintenancePending = findModuleStatus(kymaResource, getModuleName())
     ?.maintenance;
 
-  const maintenanceBadge = (
+  const maintenanceBadge = isMaintenancePending === true && (
     <StatusBadge
       type="Critical"
       key={`pending-maintenance-${getModuleName()}`}
