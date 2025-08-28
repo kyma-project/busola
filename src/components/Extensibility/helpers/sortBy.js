@@ -1,73 +1,45 @@
-const isObject = (obj, key) => {
-  return typeof obj === 'object' && key in obj;
-};
+export const getSortingFunction = (jsonata, formula, originalResource) => {
+  return {
+    asyncFn: async (a, b) => {
+      const [aValue] = await jsonata(formula, { scope: a });
+      const [bValue] = await jsonata(formula, { scope: b });
 
-const calc = (formula, first, second) => {
-  const stringToCalc = formula
-    ?.replace('first', first)
-    ?.replace('second', second)
-    ?.replaceAll(' ', '')
-    ?.replaceAll('$', '');
-  if (!stringToCalc) {
-    return null;
-  }
-  // eslint-disable-next-line no-new-func
-  const calculated = Function(`return(${stringToCalc})`)();
-  if (!calculated || typeof calculated !== 'number') {
-    return null;
-  }
-  return calculated;
-};
-
-export const getSortingFunction = (getJsonata, formula, originalResource) => {
-  return (a, b) => {
-    // If it is a simple object with key, we don't need to use jsonata which is expensive.
-    const [aValue] = isObject(a, formula)
-      ? [a[formula]]
-      : getJsonata(formula, { scope: a });
-    const [bValue] = isObject(b, formula)
-      ? [b[formula]]
-      : getJsonata(formula, { scope: b });
-
-    switch (typeof aValue) {
-      case 'number':
-      case 'boolean':
-      case 'undefined': {
-        if (aValue === undefined) return -1;
-        if (bValue === undefined) return 1;
-        return aValue - bValue;
-      }
-      case 'string': {
-        if (Date.parse(aValue)) {
-          return new Date(aValue).getTime() - new Date(bValue).getTime();
+      switch (typeof aValue) {
+        case 'number':
+        case 'boolean':
+        case 'undefined': {
+          if (aValue === undefined) return -1;
+          if (bValue === undefined) return 1;
+          return aValue - bValue;
         }
-        return aValue.localeCompare(bValue);
+        case 'string': {
+          if (Date.parse(aValue)) {
+            return new Date(aValue).getTime() - new Date(bValue).getTime();
+          }
+          return aValue.localeCompare(bValue);
+        }
+        default:
       }
-      default:
-    }
+    },
   };
 };
 
-export const applySortFormula = (getJsonata, formula, t) => {
-  return (a, b) => {
+export const applySortFormula = (jsonata, formula, t) => {
+  return async (a, b) => {
     if (a === undefined) return -1;
     if (b === undefined) return 1;
-    // If it is a simple math operation, we don't need to use jsonata which is expensive.
-    const calculated = calc(formula, a, b);
-    const [result] = calculated
-      ? [calculated]
-      : getJsonata(formula, {
-          scope: {
-            first: a,
-            second: b,
-          },
-        });
+    const result = await jsonata(formula, {
+      scope: {
+        first: a,
+        second: b,
+      },
+    })[0];
     return result;
   };
 };
 
 export const sortBy = (
-  getJsonata,
+  jsonata,
   sortOptions,
   t,
   defaultSortOptions = {},
@@ -79,24 +51,21 @@ export const sortBy = (
       const sortName = t(name, {
         defaultValue: name || source,
       });
-      let sortFn = getSortingFunction(getJsonata, source, originalResource);
+      let sortFn = getSortingFunction(jsonata, source, originalResource);
 
       if (sort.compareFunction) {
-        sortFn = (a, b) => {
-          // If it is a simple object with key, we don't need to use jsonata which is expensive.
-          const [aValue] = isObject(a, source)
-            ? [a[source]]
-            : getJsonata(source, { scope: a });
-          const [bValue] = isObject(b, source)
-            ? [b[source]]
-            : getJsonata(source, { scope: b });
+        sortFn = {
+          asyncFn: async (a, b) => {
+            const [aValue] = await jsonata(source, { scope: a });
+            const [bValue] = await jsonata(source, { scope: b });
 
-          const sortFormula = applySortFormula(
-            getJsonata,
-            sort.compareFunction,
-            t,
-          );
-          return sortFormula(aValue, bValue);
+            const sortFormula = applySortFormula(
+              jsonata,
+              sort.compareFunction,
+              t,
+            );
+            return await sortFormula(aValue, bValue);
+          },
         };
       }
 
@@ -112,4 +81,40 @@ export const sortBy = (
   );
 
   return { ...defaultSort, ...defaultSortOptions, ...sortingOptions };
+};
+
+export const asyncSort = async (array, asyncFn, isDesc = false) => {
+  let arrayOfSortPairs = [];
+  // Fake sort to get all pairs to sort.
+  array.sort((a, b) => {
+    arrayOfSortPairs = [
+      ...arrayOfSortPairs,
+      {
+        pair: [a, b],
+      },
+      {
+        pair: [b, a],
+      },
+    ];
+    return -1;
+  });
+  // Resolve async functions.
+  const resolved = await Promise.all(
+    arrayOfSortPairs.map(async el => {
+      const [a, b] = el.pair;
+      const resolvedResult = isDesc ? await asyncFn(b, a) : await asyncFn(a, b);
+      return {
+        pair: el.pair,
+        result: resolvedResult,
+      };
+    }),
+  );
+  // Final sort.
+  const final = array.sort((a, b) => {
+    const findResultForPair = resolved.find(
+      res => JSON.stringify([a, b]) === JSON.stringify(res.pair),
+    )?.result;
+    return findResultForPair;
+  });
+  return final;
 };

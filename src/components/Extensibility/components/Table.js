@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { useGetTranslation, getTextSearchProperties } from '../helpers';
-import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
+import { useJsonata } from '../hooks/useJsonata';
 import { sortBy } from '../helpers/sortBy';
 import { Widget, InlineWidget } from './Widget';
 import { getSearchDetails, getSortDetails } from './helpers';
@@ -64,7 +64,6 @@ export function Table({
   });
 
   const [title, setTitle] = useState('');
-  const getJsonata = useGetAsyncJsonata(jsonata);
 
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
@@ -183,7 +182,7 @@ export function Table({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(getJsonata, sortOptions, tExt, {}, originalResource)}
+      sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
       searchSettings={{
         showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,

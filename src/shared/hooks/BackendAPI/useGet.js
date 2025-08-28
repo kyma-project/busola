@@ -304,7 +304,8 @@ function handleListDataReceived(filter) {
     if (filter) {
       const asyncForFilter = await Promise.all(
         newData.items.map(async item => {
-          return (await filter(item)) ? item : false;
+          const filtered = await filter(item);
+          return filtered ? item : false;
         }),
       );
       newData.items = asyncForFilter.filter(Boolean);

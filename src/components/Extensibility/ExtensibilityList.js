@@ -22,7 +22,7 @@ import {
 import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
-import { useGetAsyncJsonata, useJsonata } from './hooks/useJsonata';
+import { useJsonata } from './hooks/useJsonata';
 import { useFeature } from 'hooks/useFeature';
 import { createPortal } from 'react-dom';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
@@ -39,7 +39,6 @@ export const ExtensibilityListCore = ({
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
   const jsonata = useJsonata({});
-  const getJsonata = useGetAsyncJsonata(jsonata);
 
   const { resource, description, features, filter: generalFilter } =
     resMetaData?.general ?? {};
@@ -132,7 +131,7 @@ export const ExtensibilityListCore = ({
       disableDelete={disableDelete}
       createResourceForm={ExtensibilityCreate}
       sortBy={defaultSortOptions =>
-        sortBy(getJsonata, sortOptions, t, defaultSortOptions)
+        sortBy(jsonata, sortOptions, t, defaultSortOptions)
       }
       searchSettings={{
         textSearchProperties: defaultSearchProperties =>

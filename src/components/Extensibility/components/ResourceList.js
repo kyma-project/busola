@@ -6,7 +6,7 @@ import { resources } from 'resources';
 
 import { getTextSearchProperties, useGetTranslation } from '../helpers';
 import { sortBy } from '../helpers/sortBy';
-import { useGetAsyncJsonata, useJsonata } from '../hooks/useJsonata';
+import { useJsonata } from '../hooks/useJsonata';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useAtomValue } from 'jotai';
@@ -53,7 +53,6 @@ export function ResourceList({
     value,
     arrayItems,
   });
-  const getJsonata = useGetAsyncJsonata(jsonata);
 
   const extensibilityResourceSchema = extensions?.find(
     cR => cR.general?.resource?.kind === kind,
@@ -63,7 +62,7 @@ export function ResourceList({
     r => r.resourceType.toLowerCase() === pluralKind,
   );
 
-  if (!structure.children && extensibilityResourceSchema)
+  if (!structure.children && extensibilityResourceSchema) {
     return (
       <Suspense fallback={<Spinner />}>
         <ExtensibilityList
@@ -84,6 +83,7 @@ export function ResourceList({
         />
       </Suspense>
     );
+  }
 
   const ListRenderer = PredefinedRenderer?.List || ResourcesList;
 
@@ -126,12 +126,7 @@ export function ResourceList({
         }
         columns={children}
         sortBy={defaultSortOptions =>
-          sortBy(
-            getJsonata,
-            sortOptions,
-            t,
-            defaultSort ? defaultSortOptions : {},
-          )
+          sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
         }
         simpleEmptyListMessage={simpleEmptyListMessage}
         searchSettings={{
