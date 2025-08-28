@@ -241,7 +241,7 @@ export default function ExtensibilityDetails({
 
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
-  const { deleteModuleButton: headerActions } = useContext(KymaModuleContext);
+  const { customHeaderActions: headerActions } = useContext(KymaModuleContext);
 
   if (!resMetaData) {
     return (

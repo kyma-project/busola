@@ -11,7 +11,7 @@ import { useSetAtom } from 'jotai';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 import { createPortal } from 'react-dom';
 import { deleteCluster } from 'components/Clusters/shared';
-import { Button, Title } from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
 import { ClusterNodes } from './ClusterNodes';
 import { ClusterValidation } from './ClusterValidation/ClusterValidation';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -117,13 +117,6 @@ export function ClusterOverview() {
               slot="details-top"
               root=""
             />
-            <Title
-              level="H3"
-              size="H3"
-              className="sap-margin-begin-medium sap-margin-y-medium"
-            >
-              {t('cluster-overview.headers.cluster-details')}
-            </Title>
             <ClusterDetails currentCluster={currentCluster} />
             <ClusterStats nodesData={nodes} />
             <ClusterNodes data={nodes} error={error} loading={loading} />

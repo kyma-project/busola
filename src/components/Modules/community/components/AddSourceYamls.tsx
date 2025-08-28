@@ -1,7 +1,13 @@
-import { Button, Input, MessageBox, Label } from '@ui5/webcomponents-react';
+import {
+  Button,
+  FlexBox,
+  Input,
+  Label,
+  MessageBox,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useNotification } from 'shared/contexts/NotificationContext';
 
@@ -9,6 +15,8 @@ import { postForCommunityResources } from 'components/Modules/community/communit
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
 import 'components/Modules/community/components/AddSourceYamls.scss';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
+import { FlexBoxDirection } from '@ui5/webcomponents-react/dist/enums/FlexBoxDirection';
 
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
@@ -19,6 +27,7 @@ export const AddSourceYamls = () => {
   const post = usePost();
 
   const [showAddSource, setShowAddSource] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [sourceURL, setSourceURL] = useState(DEFAULT_SOURCE_URL);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
@@ -31,22 +40,29 @@ export const AddSourceYamls = () => {
     'default',
   );
 
-  const getSourceYAML = async (sourceURL: string) => {
-    return await postForCommunityResources(post, sourceURL);
-  };
-
   useEffect(() => {
     if (sourceURL.endsWith('.yaml')) {
       (async function() {
-        const allResources = await getSourceYAML(sourceURL);
-        const allowedToApply = filterResources(allResources);
-
-        const formatted = allowedToApply?.map((r: any) => {
-          return { value: r };
-        });
-
-        setResourcesToApply(formatted);
+        try {
+          const allResources = await postForCommunityResources(post, sourceURL);
+          const allowedToApply = filterResources(allResources);
+          const formatted = allowedToApply?.map((r: any) => {
+            return { value: r };
+          });
+          setError(null);
+          setResourcesToApply(formatted);
+        } catch (e) {
+          if (e instanceof HttpError) {
+            setError(
+              t('modules.community.messages.source-yaml-fetch-failed', {
+                error: e.message,
+              }),
+            );
+          }
+        }
       })();
+    } else {
+      setError(t('modules.community.messages.source-yaml-invalid-url'));
     }
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -61,11 +77,18 @@ export const AddSourceYamls = () => {
   };
 
   const handleApplySourceYAMLs = async () => {
+    if (error) {
+      notification.notifyError({
+        content: error,
+      });
+      return;
+    }
     try {
       uploadResources();
       notification.notifySuccess({
         content: t('modules.community.messages.source-yaml-added'),
       });
+      setShowAddSource(false);
     } catch (e) {
       console.error(e);
       notification.notifyError({
@@ -90,18 +113,14 @@ export const AddSourceYamls = () => {
         <MessageBox
           open={showAddSource}
           className="sourceurl-messagebox"
-          onClose={() => {
-            setShowAddSource(false);
-          }}
           titleText={t('modules.community.source-yaml.add-source-yaml')}
           actions={[
             <Button
               accessibleName="add-yamls"
               design="Emphasized"
               key="add-yamls"
-              disabled={!sourceURL.endsWith('.yaml')}
               onClick={async () => {
-                handleApplySourceYAMLs();
+                await handleApplySourceYAMLs();
               }}
             >
               {t('common.buttons.add')}
@@ -110,13 +129,15 @@ export const AddSourceYamls = () => {
               accessibleName="cancel-add-yamls"
               design="Transparent"
               key="cancel-add-yamls"
+              onClick={() => {
+                setShowAddSource(false);
+              }}
             >
               {t('common.buttons.cancel')}
             </Button>,
           ]}
         >
-          {' '}
-          <div className="bsl-col-md--12">
+          <FlexBox direction={FlexBoxDirection.Column} gap={'0.5rem'}>
             <Label for="source-url">
               {t('modules.community.source-yaml.source-yaml-url') + ':'}
             </Label>
@@ -134,7 +155,7 @@ export const AddSourceYamls = () => {
             <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
               {t('modules.community.source-yaml.example-format')}
             </Label>
-          </div>
+          </FlexBox>
         </MessageBox>,
         document.body,
       )}
