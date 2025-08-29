@@ -155,9 +155,9 @@ export const useFetchModuleData = (
               namespaceNodes,
               singleGetFn,
             );
-            const url2 = `${resourceUrl}/${resource?.metadata?.name ||
+            const url = `${resourceUrl}/${resource?.metadata?.name ||
               resource?.name}`;
-            const response = await fetch({ relativeUrl: url2 });
+            const response = await fetch({ relativeUrl: url });
             const data = await response.json();
 
             return { name, data };
