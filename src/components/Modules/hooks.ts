@@ -236,15 +236,18 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
         try {
           const response = await fetch({ relativeUrl: path });
           const status = (await response.json())?.status;
+          console.log(status);
 
           if (status.state) {
             setData({ state: status.state, message: status?.message });
             return;
           }
 
-          const latest = status?.conditions
-            ?.filter((condition: ConditionType) => condition?.status === 'True')
-            ?.reduce(
+          const allNotTrue = status?.conditions?.filter(
+            (condition: ConditionType) => condition?.status !== 'True',
+          );
+          if (allNotTrue.lenght !== 0) {
+            const latestCondition = allNotTrue.reduce(
               (acc: ConditionType, condition: ConditionType) =>
                 new Date(acc?.lastUpdateTime).getTime() >
                 new Date(condition?.lastUpdateTime).getTime()
@@ -252,9 +255,20 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
                   : condition,
               {},
             );
-          if (latest?.type) {
-            setData({ state: latest.type, message: latest.message });
+            if (latestCondition?.type) {
+              setData({
+                type: latestCondition.type,
+                status: latestCondition.status,
+                message: latestCondition.message,
+              });
+              return;
+            }
           }
+          setData({
+            state: 'Ready',
+            message: 'All manager conditions are true',
+          });
+          return;
         } catch (error) {
           if (error instanceof Error) {
             setError(error);
