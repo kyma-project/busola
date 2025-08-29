@@ -6,6 +6,7 @@ import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
 import {
   ConditionType,
+  DEFAULT_K8S_NAMESPACE,
   getResourcePath,
   KymaResourceType,
   ModuleManagerType,
@@ -147,7 +148,9 @@ export const useFetchModuleData = (
           try {
             const resourceUrl = await getUrl(
               resource,
-              'default',
+              resource?.metadata?.namespace ||
+                resource?.namespace ||
+                DEFAULT_K8S_NAMESPACE,
               clusterNodes,
               namespaceNodes,
               singleGetFn,
