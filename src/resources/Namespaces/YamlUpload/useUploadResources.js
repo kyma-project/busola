@@ -184,7 +184,7 @@ async function uploadResource(url, resource, post) {
   } catch (e) {
     // 404 means that CRD is not available, but it can be uploaded in the same batch
     if (e instanceof HttpError && e.code === 404) {
-      return true;
+      return false;
     } else {
       throw e;
     }
