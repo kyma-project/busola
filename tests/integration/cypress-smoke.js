@@ -30,7 +30,6 @@ module.exports = defineConfig({
       return require('./plugins')(on, config);
     },
     specPattern: [
-      'tests/kyma-cluster/test-check-extensions.spec.js',
       'tests/kyma-namespace/a-run-before.spec.js',
       'tests/kyma-namespace/test-smoke-service-management.spec.js',
       'tests/kyma-namespace/test-check-extensions.spec.js',
