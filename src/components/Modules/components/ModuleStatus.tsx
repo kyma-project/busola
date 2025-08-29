@@ -2,10 +2,6 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useModuleStatus } from '../hooks';
 
 export const resolveType = (status: string) => {
-  if (typeof status !== 'string') {
-    return 'None';
-  }
-
   switch (status) {
     case 'Initial':
     case 'Pending':
