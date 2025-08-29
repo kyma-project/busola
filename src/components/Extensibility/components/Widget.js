@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -52,8 +53,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       value: props.value,
       arrayItems: props.arrayItems,
     });
-
-    if (!props.structure.copyable || !isRendererCopyable) return children;
+    const [textToCopy, setTextToCopy] = useState('');
 
     const defaultCopyFunction = ({ value }) =>
       typeof value === 'object' ? JSON.stringify(value) : value;
@@ -63,12 +63,18 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
         ? Renderer.copyFunction
         : defaultCopyFunction;
 
-    const textToCopy = copyFunction(
-      props,
-      Renderer,
-      defaultCopyFunction,
-      jsonata,
-    );
+    useEffect(() => {
+      if (!props.structure.copyable || !isRendererCopyable) return;
+      jsonata(props?.structure?.link).then(linkObject => {
+        setTextToCopy(
+          copyFunction(props, Renderer, defaultCopyFunction, linkObject),
+        );
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props?.structure?.link, props.structure.copyable, isRendererCopyable]);
+
+    if (!props.structure.copyable || !isRendererCopyable) return children;
+
     return (
       <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
         {children}
@@ -108,16 +114,46 @@ export function Widget({
     arrayItems,
   });
 
-  const [childValue] = jsonata(structure.source, {
-    index: index,
-  });
-  const [visible, visibilityError] = jsonata(
-    structure.visibility?.toString(),
-    {
-      value: childValue,
-    },
-    true,
-  );
+  const [childValue, setChildValue] = useState(null);
+  const [visible, setVisible] = useState(null);
+  const [visibilityError, setVisibilityError] = useState(null);
+
+  useEffect(() => {
+    jsonata(structure.source, {
+      index: index,
+    }).then(([result]) => {
+      if (JSON.stringify(childValue) !== JSON.stringify(result)) {
+        setChildValue(result);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    structure.source,
+    index,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    value,
+    arrayItems,
+  ]);
+
+  useEffect(() => {
+    jsonata(
+      structure.visibility?.toString(),
+      {
+        value: childValue,
+      },
+      true,
+    ).then(([result, error]) => {
+      if (JSON.stringify(result) !== JSON.stringify(visible)) {
+        setVisible(result);
+      }
+      if (JSON.stringify(error) !== JSON.stringify(visibilityError)) {
+        setVisibilityError(error);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.visibility, childValue]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

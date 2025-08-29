@@ -165,12 +165,13 @@ export function EventList({
       isCompact={isCompact}
       hasDetailsView
       readOnly
-      filter={res => {
+      filter={async res => {
         const typeFilter =
           displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
           res.type === displayType.key;
 
-        const propsFilter = typeof filter === 'function' ? filter(res) : true;
+        const propsFilter =
+          typeof filter === 'function' ? await filter(res) : true;
 
         return typeFilter && propsFilter;
       }}

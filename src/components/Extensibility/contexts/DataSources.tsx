@@ -164,19 +164,24 @@ export const DataSourcesContextProvider: FC<Props> = ({
         const expression = jsonataWrapper(filter);
         expression.assign('root', resource);
         if (data.items) {
-          data.items = data.items.filter((item: any) => {
+          // Await each filter result
+          const filteredItems = [];
+          for (const item of data.items) {
             expression.assign('item', item);
-            return expression.evaluate({});
-          });
+            if (await expression.evaluate({})) {
+              filteredItems.push(item);
+            }
+          }
+          data.items = filteredItems;
         } else {
           expression.assign('item', data);
-          if (!expression.evaluate({})) {
+          if (!(await expression.evaluate({}))) {
             data = null;
           }
         }
       }
 
-      if (!data.namespace) {
+      if (!data?.namespace) {
         data.namespace = dataSource.resource.namespace;
       }
       setStore(dataSourceName, {

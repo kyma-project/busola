@@ -40,7 +40,7 @@ export function makeRank(resources: K8sResource[]) {
     .join(' ')}}`;
 }
 
-export function match(
+export async function match(
   resourceA: K8sResource,
   resourceB: K8sResource,
   config: ResourceGraphConfig,
@@ -66,7 +66,7 @@ export function match(
 
   if (matcher) {
     try {
-      return matcher(resourceA, resourceB);
+      return await matcher(resourceA, resourceB);
     } catch (e) {
       console.debug(e);
     }
