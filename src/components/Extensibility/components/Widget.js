@@ -122,7 +122,9 @@ export function Widget({
     jsonata(structure.source, {
       index: index,
     }).then(([result]) => {
-      setChildValue(result);
+      if (JSON.stringify(childValue) !== JSON.stringify(result)) {
+        setChildValue(result);
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -143,19 +145,15 @@ export function Widget({
       },
       true,
     ).then(([result, error]) => {
-      setVisible(result);
-      setVisibilityError(error);
+      if (JSON.stringify(result) !== JSON.stringify(visible)) {
+        setVisible(result);
+      }
+      if (JSON.stringify(error) !== JSON.stringify(visibilityError)) {
+        setVisibilityError(error);
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure.visibility,
-    childValue,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    value,
-    arrayItems,
-  ]);
+  }, [structure.visibility, childValue]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {
