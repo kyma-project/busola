@@ -70,7 +70,7 @@ export const CommunityModulesList = ({
   );
 
   const navigate = useNavigate();
-  const { clusterUrl, namespaceUrl } = useUrl();
+  const { clusterUrl } = useUrl();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const { getItem: getModuleResource } = useFetchModuleData(

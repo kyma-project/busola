@@ -77,7 +77,7 @@ export const KymaModulesList = ({
   );
 
   const navigate = useNavigate();
-  const { clusterUrl, namespaceUrl } = useUrl();
+  const { clusterUrl } = useUrl();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const getScope = useGetScope();
