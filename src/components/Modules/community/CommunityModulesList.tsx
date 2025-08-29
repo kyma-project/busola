@@ -34,7 +34,6 @@ type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
   selectedModules: any[];
   modulesLoading: boolean;
-  namespaced: boolean;
   resourceUrl: string;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
@@ -48,7 +47,6 @@ export const CommunityModulesList = ({
   moduleTemplates,
   selectedModules: installedModules,
   modulesLoading,
-  namespaced,
   resourceUrl,
   setOpenedModuleIndex,
   handleResourceDelete,
@@ -237,9 +235,7 @@ export const CommunityModulesList = ({
       isNamespaced,
     );
 
-    const path = namespaced
-      ? namespaceUrl(partialPath)
-      : clusterUrl(partialPath);
+    const path = clusterUrl(partialPath);
 
     setLayoutColumn(prev => ({
       startColumn: prev.startColumn,

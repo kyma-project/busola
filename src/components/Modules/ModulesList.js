@@ -19,7 +19,7 @@ import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 
-export default function ModulesList({ namespaced }) {
+export default function ModulesList() {
   const { t } = useTranslation();
   const layoutState = useAtomValue(columnLayoutAtom);
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
@@ -91,7 +91,6 @@ export default function ModulesList({ namespaced }) {
               resourceName={resourceName}
               selectedModules={selectedModules}
               kymaResource={kymaResource}
-              namespaced={namespaced}
               resourceUrl={resourceUrl}
               setOpenedModuleIndex={setOpenedManagedModuleIndex}
               handleResourceDelete={handleResourceDelete}
@@ -105,7 +104,6 @@ export default function ModulesList({ namespaced }) {
               moduleTemplates={communityModuleTemplates}
               selectedModules={installedCommunityModules}
               modulesLoading={installedCommunityModulesLoading}
-              namespaced={namespaced}
               setOpenedModuleIndex={setOpenedCommunityModuleIndex}
               handleResourceDelete={handleCommunityModuleDelete}
               customSelectedEntry={selectedEntry}
