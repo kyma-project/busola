@@ -74,6 +74,7 @@ export const CommunityModulesList = ({
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.data ?? null,
     'resource',
+    modulesLoading,
   );
 
   const handleShowAddModule = () => {

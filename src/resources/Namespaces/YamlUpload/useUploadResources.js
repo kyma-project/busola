@@ -45,7 +45,10 @@ export const getUrl = async (
   } else if (hasNamespace) {
     return getResourceUrl(resource);
   } else if (isKnownNamespaceWide) {
-    return getResourceUrl(resource, namespaceId);
+    return getResourceUrl(
+      resource,
+      (resource?.metadata?.namespace || resource?.namespace) ?? namespaceId,
+    );
   } else {
     const response = await fetchFn(getResourceKindUrl(resource));
     const json = await response.json();
