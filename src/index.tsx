@@ -25,6 +25,8 @@ import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
 import { createRoot } from 'react-dom/client';
+import { DevTools } from 'jotai-devtools';
+import 'jotai-devtools/styles.css';
 
 i18next
   .use(initReactI18next)
@@ -62,6 +64,7 @@ root.render(
     <BrowserRouter>
       <Suspense fallback={<Spinner />}>
         <NotificationProvider>
+          <DevTools />
           <App />
         </NotificationProvider>
       </Suspense>
