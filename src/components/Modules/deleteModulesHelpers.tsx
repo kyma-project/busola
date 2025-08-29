@@ -304,7 +304,6 @@ export const checkIfAllResourcesAreDeleted = async (
       return { resource: url, result };
     }),
   );
-  console.log(results);
   return results.filter(v => !v.result).map(r => r.resource);
 };
 

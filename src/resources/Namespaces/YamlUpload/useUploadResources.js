@@ -45,7 +45,7 @@ export const getUrl = async (
   } else if (hasNamespace) {
     return getResourceUrl(resource);
   } else if (isKnownNamespaceWide) {
-    return getResourceUrl(resource, namespaceId);
+    return getResourceUrl(resource, namespaceId || 'default');
   } else {
     const response = await fetchFn(getResourceKindUrl(resource));
     const json = await response.json();
@@ -95,21 +95,34 @@ export function useUploadResources(
   };
 
   const fetchApiGroup = async (resource, index) => {
-    const url = await getUrl(
-      resource.value,
-      namespaceId,
-      clusterNodes,
-      namespaceNodes,
-      fetch,
-    );
+    const url = await retry(async () => {
+      try {
+        return await getUrl(
+          resource.value,
+          namespaceId,
+          clusterNodes,
+          namespaceNodes,
+          fetch,
+        );
+      } catch (e) {
+        if (e instanceof HttpError && e.code === 404) {
+          return null;
+        }
+        throw e;
+      }
+    });
     const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
     const existingResource = await fetchPossibleExistingResource(urlWithName);
     try {
       //add a new resource
       if (!existingResource) {
-        await retry(async () => {
-          return await uploadResource(url, resource, post);
-        });
+        await retry(
+          async () => {
+            return await uploadResource(url, resource, post);
+          },
+          3,
+          2000,
+        );
         updateState(index, STATE_CREATED);
         setLastOperationState(lastOperationState =>
           lastOperationState === OPERATION_STATE_WAITING
@@ -171,7 +184,7 @@ async function uploadResource(url, resource, post) {
   } catch (e) {
     // 404 means that CRD is not available, but it can be uploaded in the same batch
     if (e instanceof HttpError && e.code === 404) {
-      return false;
+      return true;
     } else {
       throw e;
     }
