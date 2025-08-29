@@ -135,6 +135,8 @@ context('Test OAuth2 Clients', () => {
       .contains('Back To Cluster Details')
       .click();
 
+    cy.wait(1000);
+
     cy.contains('Ory Hydra Deprecation').should('be.visible');
 
     cy.contains('ui5-panel', 'OAuth2Clients').within(_$genericList => {
