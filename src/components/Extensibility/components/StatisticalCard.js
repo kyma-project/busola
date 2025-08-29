@@ -50,7 +50,7 @@ export function StatisticalCard({
       setErr(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure?.mainValue?.source, originalResource, value]);
+  }, [structure?.mainValue?.source]);
 
   if (err) {
     return t('extensibility.configuration-error', {

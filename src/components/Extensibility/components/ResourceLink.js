@@ -44,26 +44,22 @@ export function ResourceLink({
       setName(res);
       setNameError(error);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.resource?.name]);
+  useEffect(() => {
     jsonata(structure.resource?.namespace).then(([res, error]) => {
       setNamespace(res);
       setNamespaceError(error);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [structure.resource?.namespace]);
+  useEffect(() => {
     jsonata(structure.resource?.kind).then(([res, error]) => {
       setKind(res);
       setKindError(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure.resource?.name,
-    structure.resource?.namespace,
-    structure.resource?.kind,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
-  ]);
+  }, [structure.resource?.kind]);
 
   if (!value) {
     return emptyLeafPlaceholder;

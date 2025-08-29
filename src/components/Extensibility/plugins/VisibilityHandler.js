@@ -55,13 +55,7 @@ export function VisibilityHandler({
     };
     setVisibility();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    triggers.enabled,
-    visibilityFormula,
-    rule?.itemVars,
-    storeKeys,
-    resource,
-  ]);
+  }, [triggers.enabled, visibilityFormula, rule?.itemVars, storeKeys]);
 
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);

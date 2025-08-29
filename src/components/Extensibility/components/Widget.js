@@ -71,17 +71,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
         );
       });
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-      props?.structure?.link,
-      props.structure.copyable,
-      isRendererCopyable,
-      props?.originalResource,
-      props?.singleRootResource,
-      props?.embedResource,
-      props.scope,
-      props?.value,
-      props?.arrayItems,
-    ]);
+    }, [props?.structure?.link, props.structure.copyable, isRendererCopyable]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
 

@@ -51,15 +51,7 @@ export const ExternalLink = ({
       setHref(makeHref({ linkObject, value }));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.link,
-    value,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    arrayItems,
-  ]);
+  }, [structure?.link]);
 
   if (isNil(value)) return emptyLeafPlaceholder;
 

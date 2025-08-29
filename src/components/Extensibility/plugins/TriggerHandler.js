@@ -59,7 +59,7 @@ export function TriggerHandler({
       setSubscriptions(subs);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, resource]);
+  }, [schema]);
 
   useSubscription(Object.fromEntries(subscriptions));
 

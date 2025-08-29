@@ -78,14 +78,7 @@ export function ResourceRefRender({
       setResources(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    data,
-    filter,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    value,
-  ]);
+  }, [data, filter]);
 
   const setValue = value => {
     const getValuAndChange = async () => {

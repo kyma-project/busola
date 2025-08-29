@@ -23,7 +23,7 @@ export const RadialChart = ({ structure, value, originalResource }) => {
       if (error) setError(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.maxValue, originalResource, value]);
+  }, [structure.maxValue]);
 
   useEffect(() => {
     jsonata(structure.additionalInfo, {
@@ -33,7 +33,7 @@ export const RadialChart = ({ structure, value, originalResource }) => {
       if (error) setError(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.additionalInfo, originalResource, value]);
+  }, [structure.additionalInfo]);
 
   if (error) {
     return t('extensibility.configuration-error', {
