@@ -108,11 +108,12 @@ export default function ClusterStats({ nodesData }) {
   const gpus = getAvailableNvidiaGPUs(nodesData);
 
   return (
-    <>
+    <section aria-labelledby="monitoring-heading">
       <Title
         level="H3"
         size="H3"
         className="sap-margin-begin-medium sap-margin-y-medium"
+        id="monitoring-heading"
       >
         {t('common.headers.monitoring-and-health')}
       </Title>
@@ -327,6 +328,6 @@ export default function ClusterStats({ nodesData }) {
         )}
         <Injections destination="ClusterOverview" slot="health" root="" />
       </div>
-    </>
+    </section>
   );
 }

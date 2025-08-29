@@ -475,11 +475,12 @@ function Resource({
               }
             />
             {!disableResourceDetailsCard && (
-              <>
+              <section aria-labelledby="namespace-details-heading">
                 <Title
                   level="H3"
                   size="H3"
                   className="sap-margin-begin-medium sap-margin-y-medium"
+                  id="namespace-details-heading"
                 >
                   {title ?? t('common.headers.resource-details')}
                 </Title>
@@ -499,7 +500,7 @@ function Resource({
                   customHealthCards={customOverviewCard}
                   showHealthCardsTitle={showHealthCardsTitle}
                 />
-              </>
+              </section>
             )}
             <Suspense fallback={<Spinner />}>
               <Injections

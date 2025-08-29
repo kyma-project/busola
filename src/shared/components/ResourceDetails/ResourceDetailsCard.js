@@ -8,7 +8,7 @@ export default function ResourceDetailsCard({
   className = '',
 }) {
   return (
-    <div className={`${wrapperClassname}`}>
+    <div className={wrapperClassname}>
       <Card
         accessibleName={titleText}
         className={className}

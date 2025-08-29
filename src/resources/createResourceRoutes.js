@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useMemo, useRef } from 'react';
 
 import { useAtomValue } from 'jotai';
 import { Route, useParams } from 'react-router';
@@ -33,6 +33,7 @@ export const createPath = (
 const ColumnWrapper = ({ list, details, create, ...props }) => {
   const layoutState = useAtomValue(columnLayoutAtom);
   const { resourceListUrl } = useUrl();
+  const createFormRef = useRef(null);
 
   const { t } = useTranslation();
 
@@ -104,6 +105,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     rawResourceType: props.resourceType,
     layoutCloseCreateUrl,
     enableColumnLayout: elementListProps.resourceType !== 'Namespaces',
+    createFormRef: createFormRef,
   });
   const detailsComponent = React.cloneElement(details, {
     ...elementDetailsProps,
@@ -138,6 +140,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
       title={elementCreateProps.resourceTitle}
       confirmText={t('common.buttons.create')}
       layoutCloseCreateUrl={layoutCloseCreateUrl}
+      createFormRef={createFormRef}
       renderForm={renderProps => {
         const createComponent =
           create &&
