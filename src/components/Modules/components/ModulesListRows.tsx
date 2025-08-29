@@ -200,7 +200,7 @@ export const ModulesListRows = ({
           resource?.name,
           t,
         )
-      : instalationStateColumn(managerResourceState),
+      : instalationStateColumn(managerResourceState, resource?.name),
     // Documentation
     moduleDocs ? (
       <ExternalLink url={moduleDocs}>{t('common.headers.link')}</ExternalLink>
@@ -210,7 +210,10 @@ export const ModulesListRows = ({
   ];
 };
 
-function instalationStateColumn(managerResourceState: any) {
+function instalationStateColumn(
+  managerResourceState: any,
+  resourceName: string,
+) {
   let type = 'None';
   if (managerResourceState.state) {
     type = resolveType(managerResourceState.state);
@@ -218,12 +221,12 @@ function instalationStateColumn(managerResourceState: any) {
     if (managerResourceState.status === 'True') {
       type = 'Positive';
     } else if (managerResourceState.status === 'False') {
-      type = 'Critical';
+      type = 'Warning';
     }
   }
   return (
     <StatusBadge
-      key="installation-state"
+      key={`installation-state-${resourceName}`}
       resourceKind="communnity-modules"
       type={type}
       tooltipContent={managerResourceState?.message}
@@ -243,7 +246,7 @@ function kymaInstalationStateColumn(
   return (
     <>
       <StatusBadge
-        key="installation-state"
+        key={`installation-state-${resourceName}`}
         resourceKind="kymas"
         type={resolveType(resolvedInstallationStateName)}
         tooltipContent={moduleStatus?.message ?? managerResourceState?.message}

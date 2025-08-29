@@ -236,8 +236,6 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
         try {
           const response = await fetch({ relativeUrl: path });
           const status = (await response.json())?.status;
-          console.log(status);
-
           if (status.state) {
             setData({ state: status.state, message: status?.message });
             return;
