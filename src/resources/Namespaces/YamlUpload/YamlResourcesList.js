@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import {
   Card,
   CardHeader,
@@ -43,7 +43,7 @@ export function YamlResourcesList({ resourcesData }) {
     r => r.status && r.status !== STATE_WAITING,
   );
 
-  const getPercentage = useCallback(() => {
+  const percentage = useMemo(() => {
     return (
       ((resources?.filter(r => r.status && r.status !== STATE_WAITING)
         ?.length || 0) /
@@ -51,8 +51,6 @@ export function YamlResourcesList({ resourcesData }) {
       100
     );
   }, [resources]);
-
-  const percentage = useMemo(() => getPercentage(), [getPercentage]);
 
   const getIcon = status => {
     switch (status) {
@@ -166,7 +164,7 @@ export function YamlResourcesList({ resourcesData }) {
                 }
               >
                 <ProgressIndicator
-                  value={getPercentage()}
+                  value={percentage}
                   valueState={
                     resources?.length === uploadedResources?.length
                       ? 'Positive'
@@ -178,7 +176,7 @@ export function YamlResourcesList({ resourcesData }) {
                   }}
                 />
                 <span aria-live="polite" className="hidden-announcement">
-                  {getPercentage() === 100 &&
+                  {percentage === 100 &&
                     `${getPositiveResources().length} ${t(
                       'upload-yaml.uploaded-resources',
                     )}
