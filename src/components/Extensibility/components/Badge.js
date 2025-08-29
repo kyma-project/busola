@@ -43,14 +43,30 @@ export function Badge({
       setTooltipError(tooltipError);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure?.description]);
+  }, [
+    structure?.description,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
+  ]);
 
   useEffect(() => {
     getBadgeType(structure.highlights, value, jsonata, t).then(type =>
       setBadgeType(type),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure?.highlights, value]);
+  }, [
+    structure?.highlights,
+    value,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    arrayItems,
+  ]);
 
   const getTooltipContent = description => {
     if (tooltip && !tooltipError) {

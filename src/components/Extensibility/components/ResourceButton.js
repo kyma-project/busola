@@ -59,6 +59,12 @@ export function ResourceButton({
     structure.resource?.name,
     structure.resource?.namespace,
     structure.resource?.kind,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
   ]);
 
   if (!value) {

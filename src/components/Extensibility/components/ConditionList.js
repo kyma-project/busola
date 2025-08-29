@@ -72,7 +72,16 @@ export const ConditionList = ({
       }),
     ).then(results => setConditions(results));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure?.customContent, structure?.highlights, value]);
+  }, [
+    structure?.customContent,
+    structure?.highlights,
+    value,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    arrayItems,
+  ]);
 
   if (!Array.isArray(value) || value?.length === 0) {
     return null;

@@ -71,7 +71,17 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
         );
       });
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props?.structure?.link, props.structure.copyable, isRendererCopyable]);
+    }, [
+      props?.structure?.link,
+      props.structure.copyable,
+      isRendererCopyable,
+      props?.originalResource,
+      props?.singleRootResource,
+      props?.embedResource,
+      props.scope,
+      props?.value,
+      props?.arrayItems,
+    ]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
 
@@ -125,7 +135,15 @@ export function Widget({
       setChildValue(result);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.source, index]);
+  }, [
+    structure.source,
+    index,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    value,
+    arrayItems,
+  ]);
 
   useEffect(() => {
     jsonata(
@@ -139,7 +157,15 @@ export function Widget({
       setVisibilityError(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.visibility, childValue]);
+  }, [
+    structure.visibility,
+    childValue,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    value,
+    arrayItems,
+  ]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

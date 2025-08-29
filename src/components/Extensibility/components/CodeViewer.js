@@ -40,7 +40,15 @@ export function CodeViewer({
       setLanguage(lang?.toLowerCase());
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure?.language, value]);
+  }, [
+    structure?.language,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
+  ]);
 
   const getValue = value => {
     if (!isNil(value)) {
