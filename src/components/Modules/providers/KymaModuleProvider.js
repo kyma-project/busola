@@ -24,7 +24,7 @@ export const KymaModuleContext = createContext({
   selectedModules: {},
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
-  customHeaderActions: () => <></>,
+  customHeaderActions: <></>,
 });
 
 export function KymaModuleContextProvider({

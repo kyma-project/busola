@@ -84,13 +84,16 @@ export function useNodeQuery(nodeName) {
     loading: metricsLoading,
   } = useGet(`/apis/metrics.k8s.io/v1beta1/nodes/${nodeName}`, {
     pollingInterval: 3000,
+    skip: !nodeName,
   });
 
-  const {
-    data: node,
-    error: nodeError,
-    loading: nodeLoading,
-  } = useGet(`/api/v1/nodes/${nodeName}`, { pollingInterval: 3000 });
+  const { data: node, error: nodeError, loading: nodeLoading } = useGet(
+    `/api/v1/nodes/${nodeName}`,
+    {
+      pollingInterval: 3000,
+      skip: !nodeName,
+    },
+  );
 
   useEffect(() => {
     if (node) {

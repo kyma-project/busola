@@ -20,7 +20,7 @@ export const usePrepareResourceUrl = ({
 }) => {
   const { namespaceId } = useParams();
 
-  if (!apiVersion) return;
+  if (!apiVersion || !resourceType) return;
 
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
   const resourceUrl = namespaceId
