@@ -29,12 +29,6 @@ config:
         trademark:
           default: https://www.sap.com/corporate/en/legal/trademark.html
           de: https://www.sap.com/corporate/de/legal/trademark.html
-    SSO_LOGIN:
-      isEnabled: false
-      config:
-        issuerUrl: https://kymatest.accounts400.ondemand.com
-        scope: openid
-        clientId: e69c0ad6-c283-4baf-9ad7-3714decef49d
     KUBECONFIG_ID:
       isEnabled: true
       config:

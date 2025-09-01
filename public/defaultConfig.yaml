@@ -20,12 +20,6 @@ config:
           default: https://kyma-project.io
         help-sap-com:
           default: https://help.sap.com/docs/btp/sap-business-technology-platform/btp-basic-platform-concepts?locale=en-US&profile=20054071
-    SSO_LOGIN:
-      isEnabled: false
-      config:
-        issuerUrl: https://apskyxzcl.accounts400.ondemand.com
-        scope: openid
-        clientId: d0316c58-b0fe-45cd-9960-0fea0708355a
     KUBECONFIG_ID:
       isEnabled: true
       config:

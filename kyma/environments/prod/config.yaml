@@ -31,12 +31,6 @@ config:
         trademark:
           default: https://www.sap.com/corporate/en/legal/trademark.html
           de: https://www.sap.com/corporate/de/legal/trademark.html
-    SSO_LOGIN:
-      isEnabled: false
-      config:
-        issuerUrl: https://kyma.accounts.ondemand.com
-        scope: openid
-        clientId: 12b13a26-d993-4d0c-aa08-5f5852bbdff6
     KUBECONFIG_ID:
       isEnabled: true
       config:
