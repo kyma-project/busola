@@ -7,13 +7,14 @@
 
 .cluster-stats {
   /*
-    The px values of row-height and column-width are specifically set to ensure that the following elements align well with each other in the grid.
+    The em and px values of row-height and column-width are specifically set to ensure that the following elements align well with each other in the grid.
+    The em values are used to ensure that the elements scale with font spacing changes - for accessibility reasons.
     - RadialdGraph (spans 4 columns and 2 rows)
     - CountingCard (spans 3 columns and 1 row)
     - CountingCard_extraInfo (spans 6 columns and 1 row)
     The rem values are set in order to together with padding ensure an equal grid gap of 1rem between all elements of different proportions.
   */
-  --grid-row-height: calc(150px + 0.5rem);
+  --grid-row-height: calc(9em + 0.5rem);
   --grid-column-width: calc(57.5px + 0.25rem);
 
   container-type: inline-size;
@@ -21,7 +22,7 @@
   margin-top: -0.5rem;
   display: grid;
   grid-auto-flow: dense;
-  grid-template-rows: repeat(auto-fill, var(--grid-row-height));
+  grid-auto-rows: minmax(var(--grid-row-height), auto);
   grid-template-columns: repeat(auto-fill, var(--grid-column-width));
 
   .item-wrapper {
@@ -39,19 +40,19 @@
 
 .card-tall {
   grid-row: span 2;
-  height: calc(var(--grid-row-height) * 2);
+  min-height: calc(var(--grid-row-height) * 2);
   grid-column: span 4;
   width: calc(var(--grid-column-width) * 4);
 }
 
 .card-wide {
-  height: var(--grid-row-height);
+  min-height: var(--grid-row-height);
   grid-column: span 6;
   width: calc(var(--grid-column-width) * 6);
 }
 
 .card-small {
-  height: var(--grid-row-height);
+  min-height: var(--grid-row-height);
   grid-column: span 3;
   width: calc(var(--grid-column-width) * 3);
 }
