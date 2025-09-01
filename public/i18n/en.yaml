@@ -1431,6 +1431,7 @@ storage-classes:
   name_singular: StorageClass
   title: Storage Classes
 upload-yaml:
+  errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
   labels:
     validate-resources: 'Validate resources:'
