@@ -250,18 +250,7 @@ function Resource({
           ?.filter(col => !col?.conditionComponent)
           ?.filter(col => !col?.fullWidth || col?.fullWidth === false);
         setFilteredStatusColumns(customCols);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customStatusColumns]);
 
-  useEffect(() => {
-    if (customStatusColumns?.length) {
-      Promise.all(
-        customStatusColumns.map(async col => {
-          return (await filterColumns(col)) ? col : false;
-        }),
-      ).then(res => {
         const customColsLong = res
           .filter(Boolean)
           ?.filter(col => !col?.conditionComponent)
