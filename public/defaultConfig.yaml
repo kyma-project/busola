@@ -36,8 +36,6 @@ config:
       config:
         namespaces:
           - kube-system
-    VISUAL_RESOURCES:
-      isEnabled: true
     EXTENSIBILITY:
       isEnabled: true
     EXTENSIBILITY_INJECTIONS:
