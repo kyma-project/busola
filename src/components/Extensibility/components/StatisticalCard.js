@@ -19,7 +19,7 @@ export function StatisticalCard({
 
   const [extraInfo, setExtraInfo] = useState([]);
   const [err, setErr] = useState(null);
-  const [mainValue, setMainValue] = useState(null);
+  const [mainValue, setMainValue] = useState(undefined);
 
   useEffect(() => {
     Promise.all(
