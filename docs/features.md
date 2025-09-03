@@ -230,16 +230,6 @@ SNOW:
   isEnabled: false
 ```
 
-- **TRACKING** - determines if simple application usage tracking is enabled.
-
-  ```yaml
-  TRACKING:
-    isEnabled: false
-  ```
-
-  > [!NOTE]
-  > This feature is enabled on the frontend and backend.
-
 ## Features List for Backend
 
 > [!NOTE]
@@ -262,13 +252,3 @@ GZIP:
   KYMA_COMPANION:
     link: ''
   ```
-
-  - **TRACKING** - determines if simple application usage tracking is enabled.
-
-  ```yaml
-  TRACKING:
-    isEnabled: false
-  ```
-
-  > [!NOTE]
-  > This feature is enabled on the frontend and backend.

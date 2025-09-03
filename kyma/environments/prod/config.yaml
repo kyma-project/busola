@@ -55,8 +55,6 @@ config:
           - kyma-system
     GZIP:
       isEnabled: true
-    TRACKING:
-      isEnabled: false
     EXTENSIBILITY:
       isEnabled: true
     EXTENSIBILITY_INJECTIONS:

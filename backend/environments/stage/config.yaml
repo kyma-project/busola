@@ -2,8 +2,6 @@ config:
   features:
     GZIP:
       isEnabled: true
-    TRACKING:
-      isEnabled: false
     KYMA_COMPANION:
       config:
         apiBaseUrl: 'https://companion.cp.stage.kyma.cloud.sap'
