@@ -11,7 +11,6 @@ export interface ConfigFeature {
 
 export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
-  ISTIO: 'ISTIO',
   LEGAL_LINKS: 'LEGAL_LINKS',
   GET_HELP_LINKS: 'GET_HELP_LINKS',
   SENTRY: 'SENTRY',

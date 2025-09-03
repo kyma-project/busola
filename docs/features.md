@@ -98,19 +98,6 @@ HIDDEN_NAMESPACES:
       - kube-system
 ```
 
-- **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  ISTIO:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: networking.istio.io
-  ```
-
 - **KYMA_COMPANION** - determines if the Kyma Companion chat window is available in Busola.
 
 Default settings:

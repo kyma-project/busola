@@ -74,8 +74,6 @@ config:
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
-    ISTIO:
-      isEnabled: true
     RESOURCE_VALIDATION:
       isEnabled: true
       config:
