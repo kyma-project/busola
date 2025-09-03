@@ -47,7 +47,6 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
     if (!resource && !isStatic) {
       return;
     }
-    console.log('test-kon_INJECTIONS');
     Promise.all(
       items.map(async item => {
         if (filter) {
