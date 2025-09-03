@@ -216,6 +216,9 @@ function Resource({
   const layoutColumn = useAtomValue(columnLayoutAtom);
   const protectedResource = isProtected(resource);
   const [filteredStatusColumns, setFilteredStatusColumns] = useState([]);
+  const [filteredStatusColumnsLong, setFilteredStatusColumnsLong] = useState(
+    [],
+  );
   const [
     filteredConditionsComponents,
     setFilteredConditionsComponents,
@@ -241,7 +244,30 @@ function Resource({
         customStatusColumns.map(async col => {
           return (await filterColumns(col)) ? col : false;
         }),
-      ).then(res => setFilteredStatusColumns(res.filter(Boolean)));
+      ).then(res => {
+        const customCols = res
+          .filter(Boolean)
+          ?.filter(col => !col?.conditionComponent)
+          ?.filter(col => !col?.fullWidth || col?.fullWidth === false);
+        setFilteredStatusColumns(customCols);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customStatusColumns]);
+
+  useEffect(() => {
+    if (customStatusColumns?.length) {
+      Promise.all(
+        customStatusColumns.map(async col => {
+          return (await filterColumns(col)) ? col : false;
+        }),
+      ).then(res => {
+        const customColsLong = res
+          .filter(Boolean)
+          ?.filter(col => !col?.conditionComponent)
+          ?.filter(col => col?.fullWidth && col?.fullWidth === true);
+        setFilteredStatusColumnsLong(customColsLong);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customStatusColumns]);
@@ -347,7 +373,7 @@ function Resource({
       customColumnsLong={
         customStatusColumns?.length ? (
           <ResourceCustomStatusColumns
-            filteredStatusColumns={filteredStatusColumns}
+            filteredStatusColumns={filteredStatusColumnsLong}
             resource={resource}
           />
         ) : null
