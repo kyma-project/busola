@@ -95,7 +95,7 @@ context('Test extensibility variables', () => {
         log: false,
       })
       .click();
-
+    cy.wait(500);
     cy.get('ui5-cb-item:visible')
       .contains('simple')
       .should('exist');
