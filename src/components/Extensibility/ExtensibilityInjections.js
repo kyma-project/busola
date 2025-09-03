@@ -47,6 +47,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
     if (!resource && !isStatic) {
       return;
     }
+    console.log('test-kon_INJECTIONS');
     Promise.all(
       items.map(async item => {
         if (filter) {
@@ -59,7 +60,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
       setFilteredItems(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resource, isStatic, filter, items]);
+  }, [resource, isStatic, filter, JSON.stringify(items)]);
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
   if (!resource && !isStatic) {
