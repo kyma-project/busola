@@ -201,6 +201,10 @@ context('Test extensibility variables', () => {
     cy.get('[data-testid="spec.arrayOfObjects.0.withoutValue"]:visible').should(
       'be.empty',
     );
+
+    cy.get('[accessible-name="Array Of Objects"]')
+      .eq(0)
+      .click();
   });
 
   it('Tests data sources and triggers', () => {
@@ -271,11 +275,11 @@ context('Test extensibility variables', () => {
 
     cy.get('@form')
       .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_1"]:visible')
-      .click({ force: true });
+      .click();
 
     cy.get('@form')
       .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_3"]:visible')
-      .click({ force: true });
+      .click();
 
     cy.get('[accessible-name="TestResource name"]', { log: false })
       .find('input')

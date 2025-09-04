@@ -55,7 +55,7 @@ export function ResourceRefRender({
         value = error ? {} : internal;
       });
     }
-  }, [toInternal, originalResource, singleRootResource, embedResource, value]);
+  }, [toInternal, originalResource, singleRootResource, embedResource]);
 
   const group = (schemaResource?.group || '').toLowerCase();
   const version = schemaResource?.version;
