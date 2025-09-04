@@ -35,7 +35,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   const emptyResource = useMemo(() => ({} as Resource), []);
   const jsonata = useJsonata({ resource: emptyResource });
-  const [jsonataLink, setJsonataLink] = useState('');
+  const [jsonataLink, setJsonataLink] = useState<string | null>('');
   const [jsonataError, setJsonataError] = useState<Error | null>(null);
   const { navigateSafely } = useFormNavigation();
 
@@ -45,7 +45,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
       setJsonataError(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [node.externalUrl]);
+  }, [node.externalUrl, emptyResource]);
 
   const isSelected = useMemo(() => {
     if (node.externalUrl) return false;

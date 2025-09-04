@@ -63,7 +63,7 @@ export function MonacoRenderer({
   useEffect(() => {
     getLanguage(jsonata, schema).then(res => setLanguage(res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema]);
+  }, [schema, resource, value]);
 
   const formatAsString = schema.get('formatAsString') ?? false;
   const formattedValue = formatValue(value, language, formatAsString);

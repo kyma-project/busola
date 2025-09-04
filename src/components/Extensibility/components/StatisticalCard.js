@@ -40,7 +40,7 @@ export function StatisticalCard({
       }),
     ).then(results => setExtraInfo(results));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.children]);
+  }, [structure.children, originalResource, value]);
 
   useEffect(() => {
     jsonata(structure?.mainValue?.source, {
@@ -50,7 +50,7 @@ export function StatisticalCard({
       setErr(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure?.mainValue?.source]);
+  }, [structure?.mainValue?.source, originalResource, value]);
 
   if (err) {
     return t('extensibility.configuration-error', {

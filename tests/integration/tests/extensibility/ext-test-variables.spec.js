@@ -95,7 +95,6 @@ context('Test extensibility variables', () => {
         log: false,
       })
       .click();
-    cy.wait(1000);
     cy.get('ui5-cb-item:visible')
       .contains('simple')
       .should('exist');
@@ -272,11 +271,11 @@ context('Test extensibility variables', () => {
 
     cy.get('@form')
       .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_1"]:visible')
-      .click();
+      .click({ force: true });
 
     cy.get('@form')
       .get('ui5-checkbox[data-testid="spec.arrayOfStrings.value_3"]:visible')
-      .click();
+      .click({ force: true });
 
     cy.get('[accessible-name="TestResource name"]', { log: false })
       .find('input')

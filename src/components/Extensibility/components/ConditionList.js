@@ -80,6 +80,7 @@ export const ConditionList = ({
     singleRootResource,
     embedResource,
     scope,
+    arrayItems,
   ]);
 
   if (!Array.isArray(value) || value?.length === 0) {

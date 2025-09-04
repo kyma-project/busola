@@ -48,11 +48,13 @@ export function ResourceRefRender({
   const defaultOpen = schema.get('defaultExpanded') ?? false;
   const filter = schema.get('filter');
 
-  if (toInternal) {
-    jsonata(toInternal).then(([internal, error]) => {
-      value = error ? {} : internal;
-    });
-  }
+  useEffect(() => {
+    if (toInternal) {
+      jsonata(toInternal).then(([internal, error]) => {
+        value = error ? {} : internal;
+      });
+    }
+  }, [toInternal, originalResource, singleRootResource, embedResource, value]);
 
   const group = (schemaResource?.group || '').toLowerCase();
   const version = schemaResource?.version;
@@ -69,8 +71,8 @@ export function ResourceRefRender({
     Promise.all(
       (data || []).map(async res => {
         if (filter) {
-          const [value] = await jsonata(filter, { item: res });
-          return value ? res : false;
+          const [val] = await jsonata(filter, { item: res });
+          return val ? res : false;
         }
         return res;
       }),
@@ -78,7 +80,14 @@ export function ResourceRefRender({
       setResources(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, filter]);
+  }, [
+    data,
+    filter,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    value,
+  ]);
 
   const setValue = value => {
     const getValuAndChange = async () => {
