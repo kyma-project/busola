@@ -51,6 +51,7 @@ export function ResourceRefRender({
   useEffect(() => {
     if (toInternal) {
       jsonata(toInternal).then(([internal, error]) => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         value = error ? {} : internal;
       });
     }
