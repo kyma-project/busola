@@ -1,12 +1,13 @@
 import fetch from 'node-fetch';
 import { URL } from 'url';
-import { readFile, lstatSync, readdirSync } from 'fs';
-import { load, dump } from 'js-yaml';
+import { lstatSync, readdirSync, readFile } from 'fs';
+import { dump, load } from 'js-yaml';
 
-import { task, src, dest } from 'gulp';
+import { dest, src, task } from 'gulp';
 import { obj as _obj } from 'through2';
 import concat from 'gulp-concat';
 import clean from 'gulp-clean';
+const util = require('gulp-util');
 
 const mapValues = (obj, fn) =>
   Object.fromEntries(
@@ -71,6 +72,7 @@ const loadExtensions = _obj(async function(extensionsFile, _, cb) {
 });
 
 const loadPreparedExtensions = _obj((file, _, cb) => {
+  util.log('Loading:', file.history);
   const convertYamlToObject = yamlString => {
     return load(yamlString, { json: true });
   };
@@ -99,9 +101,9 @@ const loadPreparedExtensions = _obj((file, _, cb) => {
 task('clean-extensions', () => {
   const env = process.env.ENV;
   return src(`environments/temp/${env}/extensions-local`, {
-      read: false,
-      allowEmpty: true,
-    })
+    read: false,
+    allowEmpty: true,
+  })
     .pipe(clean({ force: true }));
 });
 
@@ -126,9 +128,9 @@ task('pack-extensions', () => {
 task('clean-statics', () => {
   const env = process.env.ENV;
   return src(`environments/temp/${env}/extensions/statics-local`, {
-      read: false,
-      allowEmpty: true,
-    })
+    read: false,
+    allowEmpty: true,
+  })
     .pipe(clean());
 });
 
@@ -153,9 +155,9 @@ task('pack-statics', () => {
 task('clean-wizards', () => {
   const env = process.env.ENV;
   return src(`environments/temp/${env}/extensions/wizards-local`, {
-      read: false,
-      allowEmpty: true,
-    })
+    read: false,
+    allowEmpty: true,
+  })
     .pipe(clean());
 });
 
