@@ -66,6 +66,7 @@ context('Test DNS Entries', () => {
       .type('example.com', { force: true });
 
     cy.saveChanges('Edit');
+    cy.wait(1000);
     cy.getMidColumn().inspectTab('View');
 
     cy.getMidColumn().contains(/Targets.*, example\.com/);
