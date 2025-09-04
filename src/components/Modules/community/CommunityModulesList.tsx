@@ -34,6 +34,7 @@ type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
   selectedModules: any[];
   modulesLoading: boolean;
+  namespaced: boolean;
   resourceUrl: string;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
@@ -47,6 +48,7 @@ export const CommunityModulesList = ({
   moduleTemplates,
   selectedModules: installedModules,
   modulesLoading,
+  namespaced,
   resourceUrl,
   setOpenedModuleIndex,
   handleResourceDelete,
@@ -70,7 +72,7 @@ export const CommunityModulesList = ({
   );
 
   const navigate = useNavigate();
-  const { clusterUrl } = useUrl();
+  const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const { getItem: getModuleResource } = useFetchModuleData(
@@ -222,7 +224,7 @@ export const CommunityModulesList = ({
     const { group, version } = extractApiGroupVersion(
       moduleStatus?.resource?.apiVersion,
     );
-    const isNamespaced = await getScope(
+    const moduleIsNamespaced = await getScope(
       group,
       version,
       moduleStatus?.resource?.kind,
@@ -232,10 +234,12 @@ export const CommunityModulesList = ({
       hasExtension,
       moduleStatus.resource,
       moduleCrd,
-      isNamespaced,
+      moduleIsNamespaced,
     );
 
-    const path = clusterUrl(partialPath);
+    const path = namespaced
+      ? namespaceUrl(partialPath)
+      : clusterUrl(partialPath);
 
     setLayoutColumn(prev => ({
       startColumn: prev.startColumn,
@@ -244,7 +248,7 @@ export const CommunityModulesList = ({
           ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
           : moduleCrd?.metadata?.name,
         resourceName: moduleStatus?.resource?.metadata?.name,
-        namespaceId: isNamespaced
+        namespaceId: moduleIsNamespaced
           ? moduleStatus?.resource?.metadata.namespace || DEFAULT_K8S_NAMESPACE
           : '',
         apiGroup: group,

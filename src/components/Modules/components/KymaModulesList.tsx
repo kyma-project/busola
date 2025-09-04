@@ -39,6 +39,7 @@ type ModulesListProps = {
   resourceName: string;
   selectedModules: { name: string }[];
   kymaResource: KymaResourceType;
+  namespaced: boolean;
   resourceUrl: string;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
@@ -54,6 +55,7 @@ export const KymaModulesList = ({
   resourceName,
   selectedModules,
   kymaResource,
+  namespaced,
   resourceUrl,
   setOpenedModuleIndex,
   handleResourceDelete,
@@ -77,7 +79,7 @@ export const KymaModulesList = ({
   );
 
   const navigate = useNavigate();
-  const { clusterUrl } = useUrl();
+  const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const getScope = useGetScope();
@@ -245,7 +247,9 @@ export const KymaModulesList = ({
       isNamespaced,
     );
 
-    const path = clusterUrl(partialPath);
+    const path = namespaced
+      ? namespaceUrl(partialPath)
+      : clusterUrl(partialPath);
 
     setLayoutColumn(prev => ({
       startColumn: prev.startColumn,
