@@ -7,7 +7,6 @@ import { dest, src, task } from 'gulp';
 import { obj as _obj } from 'through2';
 import concat from 'gulp-concat';
 import clean from 'gulp-clean';
-import util from 'gulp-util';
 
 const mapValues = (obj, fn) =>
   Object.fromEntries(
@@ -72,7 +71,7 @@ const loadExtensions = _obj(async function(extensionsFile, _, cb) {
 });
 
 const loadPreparedExtensions = _obj((file, _, cb) => {
-  util.log('Loading:', file.history);
+  console.log('Loading:', file.history);
   const convertYamlToObject = yamlString => {
     return load(yamlString, { json: true });
   };
