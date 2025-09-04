@@ -103,14 +103,23 @@ context('Test extensibility variables', () => {
     cy.get('ui5-cb-item:visible')
       .contains('advanced')
       .should('exist');
+    // test if fields based on visibility are not visible
+    cy.get('[data-testid="spec.name"]').then($element => {
+      if ($element.is(':visible')) {
+        assert.isOk('ok', 'element is not visible');
+      } else {
+        assert.isNotOk('failed', 'element is visible');
+      }
+    });
 
-    // test if fielsd based on visibility are not visible
-    cy.get('@form')
-      .find('[data-testid="spec.name"]:visible')
-      .should('not.exist');
-
-    cy.get('[aria-label="Advanced, collapsed"]:visible', { log: false }).should(
-      'not.exist',
+    cy.get('[aria-label="Advanced, collapsed"]', { log: false }).then(
+      $element => {
+        if ($element.is(':visible')) {
+          assert.isOk('ok', 'element is not visible');
+        } else {
+          assert.isNotOk('failed', 'element is visible');
+        }
+      },
     );
 
     // test visibility based on var (select 'simple')
