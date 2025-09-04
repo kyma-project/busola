@@ -39,8 +39,6 @@ config:
       isEnabled: true
       config:
         dsn: https://016845744e4741cc9bea0caaabc0fe87@o399001.ingest.sentry.io/5953495
-    SHOW_GARDENER_METADATA:
-      isEnabled: true
     EXTERNAL_NODES:
       isEnabled: true
       stage: SECONDARY

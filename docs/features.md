@@ -207,13 +207,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
       dsn: ''
   ```
 
-- **SHOW_GARDENER_METADATA** - determines if the metadata taken from Gardener should be displayed. The displayed information is the value from the `shoot-info` ConfigMap based on the `kube-system` Namespace. If the ConfigMap doesn't exist, the information is not displayed.
-
-  ```yaml
-  SHOW_GARDENER_METADATA:
-    isEnabled: true
-  ```
-
 - **SNOW** - determines if the snow animation is enabled in Busola.
 
 Default settings:

@@ -39,8 +39,6 @@ config:
       isEnabled: false
       config:
         dsn: ''
-    SHOW_GARDENER_METADATA:
-      isEnabled: true
     EXTERNAL_NODES:
       isEnabled: true
       stage: SECONDARY
