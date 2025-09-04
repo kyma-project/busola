@@ -7,7 +7,7 @@ import { dest, src, task } from 'gulp';
 import { obj as _obj } from 'through2';
 import concat from 'gulp-concat';
 import clean from 'gulp-clean';
-const util = require('gulp-util');
+import util from 'gulp-util';
 
 const mapValues = (obj, fn) =>
   Object.fromEntries(
