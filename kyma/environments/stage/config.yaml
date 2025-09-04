@@ -37,8 +37,6 @@ config:
       isEnabled: true
       config:
         dsn: https://6b34a073f53c4949bf4f1fae1b788527@o399001.ingest.sentry.io/5953495
-    SHOW_KYMA_VERSION:
-      isEnabled: true
     SHOW_GARDENER_METADATA:
       isEnabled: true
     EXTERNAL_NODES:

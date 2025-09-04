@@ -214,13 +214,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     isEnabled: true
   ```
 
-- **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the **Cluster Details** page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the information is not displayed.
-
-  ```yaml
-  SHOW_KYMA_VERSION:
-    isEnabled: true
-  ```
-
 - **SNOW** - determines if the snow animation is enabled in Busola.
 
 Default settings:

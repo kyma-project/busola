@@ -39,8 +39,6 @@ config:
       isEnabled: false
       config:
         dsn: ''
-    SHOW_KYMA_VERSION:
-      isEnabled: true
     SHOW_GARDENER_METADATA:
       isEnabled: true
     EXTERNAL_NODES:
