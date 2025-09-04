@@ -34,6 +34,7 @@ export const configFeaturesNames = {
   FEEDBACK: 'FEEDBACK',
   SNOW: 'SNOW',
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',
+  JOTAI_DEVTOOLS: 'JOTAI_DEVTOOLS',
 } as const;
 
 export type ConfigFeatureList = {
