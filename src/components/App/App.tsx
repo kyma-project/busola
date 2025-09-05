@@ -58,8 +58,14 @@ import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
+import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from 'state/types';
+import JotaiDevTools from './JotaiDevTools';
 
 export default function App() {
+  const { isEnabled: isJotaiDevtoolsEnabled } = useFeature(
+    configFeaturesNames.JOTAI_DEVTOOLS,
+  );
   const theme = useAtomValue(themeAtom);
   const language = useAtomValue(languageAtom);
   const cluster = useAtomValue(clusterAtom);
@@ -144,6 +150,7 @@ export default function App() {
         }
       >
         <div id="html-wrap">
+          {isJotaiDevtoolsEnabled && <JotaiDevTools />}
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />

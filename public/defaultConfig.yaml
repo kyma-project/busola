@@ -78,3 +78,5 @@ config:
       isEnabled: false
     COMMUNITY_MODULES:
       isEnabled: true
+    JOTAI_DEVTOOLS:
+      isEnabled: true
