@@ -418,6 +418,7 @@ common:
     days-ago: days ago
   'yes': 'yes'
 components:
+  banner-carousel: Banner Carousel
   dropdown:
     empty-list: No resources available
   error-panel:

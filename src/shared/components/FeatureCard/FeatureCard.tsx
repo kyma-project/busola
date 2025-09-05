@@ -17,6 +17,7 @@ import {
 } from './types';
 
 import './FeaturedCard.scss';
+import { useTranslation } from 'react-i18next';
 
 const getIllustration = (
   illustration: IllustrationType,
@@ -64,6 +65,7 @@ export function FeatureCardBanner({
   titleIcon,
   className = '',
 }: FeatureCardBannerProps) {
+  const { t } = useTranslation();
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${id}`;
   const theme = useAtomValue(themeAtom);
@@ -107,6 +109,7 @@ export function FeatureCardBanner({
             icon="decline"
             className="decline-button"
             onClick={handleToggle}
+            accessibleName={t('common.buttons.close')}
           />
           <div className="outer-container">
             <div className="inner-container">

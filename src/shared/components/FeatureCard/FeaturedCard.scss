@@ -9,8 +9,11 @@
 }
 
 .banner-carousel {
+  position: relative;
+  top: 2px;
+  left: 2px;
   height: fit-content;
-  width: calc(100% - 1px);
+  width: calc(100% - 4px);
 }
 
 .feature-card {
