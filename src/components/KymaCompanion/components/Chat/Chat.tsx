@@ -435,13 +435,11 @@ export const Chat = ({
                           messageIndex === group.messages.length - 1;
 
                         return message.author === Author.AI ? (
-                          <>
+                          <React.Fragment key={`${groupIndex}-${messageIndex}`}>
                             {message.isFeedback ? (
                               <FeedbackMessage />
                             ) : (
-                              <React.Fragment
-                                key={`${groupIndex}-${messageIndex}`}
-                              >
+                              <>
                                 <Message
                                   author={message.author}
                                   messageChunks={message.messageChunks}
@@ -459,9 +457,9 @@ export const Chat = ({
                                     }
                                   />
                                 )}
-                              </React.Fragment>
+                              </>
                             )}
-                          </>
+                          </React.Fragment>
                         ) : (
                           <Message
                             author={Author.USER}
