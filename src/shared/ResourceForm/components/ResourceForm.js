@@ -248,10 +248,14 @@ export function ResourceForm({
     </Form>
   );
 
+  const handleReset = () => {
+    if (mode === 'MODE_YAML')
+      actionsEditor.setValue(jsyaml.dump(initialResource));
+    else setResource(initialResource);
+  };
+
   const renderResetButton = (
-    <Button onClick={() => setResource(initialResource)}>
-      {t('common.buttons.reset')}
-    </Button>
+    <Button onClick={handleReset}>{t('common.buttons.reset')}</Button>
   );
 
   return (
