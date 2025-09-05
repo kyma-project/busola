@@ -15,7 +15,7 @@ context('Test edit cluster', () => {
 
   it('Changes cluster name and adds description', () => {
     cy.visit(`${config.clusterAddress}/clusters`);
-
+    cy.wait(500);
     cy.get('ui5-table-cell')
       .eq(0)
       .then(el => (originalName = el.text()));

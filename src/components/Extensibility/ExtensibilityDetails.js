@@ -83,15 +83,15 @@ export const ExtensibilityDetailsCore = ({
   const dataSources = resMetaData?.dataSources || {};
   const general = resMetaData?.general || {};
 
-  const prepareVisibility = (def, resource) => {
+  const prepareVisibility = async (def, resource) => {
     setResourcesConditions(resource.status);
-    const [visible, error] = jsonata(def.visibility, { resource }, true);
+    const [visible, error] = await jsonata(def.visibility, { resource }, true);
     return { visible, error };
   };
 
-  const prepareDisableEdit = resource => {
+  const prepareDisableEdit = async resource => {
     if (disableEdit && typeof disableEdit === 'string') {
-      const [isDisabled] = jsonata(disableEdit, { resource });
+      const [isDisabled] = await jsonata(disableEdit, { resource });
       return typeof isDisabled === 'boolean' ? isDisabled : false;
     }
     return disableEdit;

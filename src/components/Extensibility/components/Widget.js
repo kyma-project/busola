@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
@@ -53,8 +53,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       value: props.value,
       arrayItems: props.arrayItems,
     });
-
-    if (!props.structure.copyable || !isRendererCopyable) return children;
+    const [textToCopy, setTextToCopy] = useState('');
 
     const defaultCopyFunction = ({ value }) =>
       typeof value === 'object' ? JSON.stringify(value) : value;
@@ -64,12 +63,28 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
         ? Renderer.copyFunction
         : defaultCopyFunction;
 
-    const textToCopy = copyFunction(
-      props,
-      Renderer,
-      defaultCopyFunction,
-      jsonata,
-    );
+    useEffect(() => {
+      if (!props.structure.copyable || !isRendererCopyable) return;
+      jsonata(props?.structure?.link).then(linkObject => {
+        setTextToCopy(
+          copyFunction(props, Renderer, defaultCopyFunction, linkObject),
+        );
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+      props?.structure?.link,
+      props.structure.copyable,
+      isRendererCopyable,
+      props.originalResource,
+      props.singleRootResource,
+      props.embedResource,
+      props.scope,
+      props.value,
+      props.arrayItems,
+    ]);
+
+    if (!props.structure.copyable || !isRendererCopyable) return children;
+
     return (
       <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
         {children}
@@ -114,21 +129,49 @@ export function Widget({
   const [visibilityError, setVisibilityError] = useState(null);
 
   useEffect(() => {
-    const [evaluatedChildValue] = jsonata(structure.source, {
+    jsonata(structure.source, {
       index: index,
+    }).then(([evaluatedChildValue]) => {
+      if (JSON.stringify(childValue) !== JSON.stringify(evaluatedChildValue)) {
+        setChildValue(evaluatedChildValue);
+      }
     });
-    setChildValue(evaluatedChildValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    structure.source,
+    index,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    value,
+    arrayItems,
+  ]);
 
-    const [evaluatedVisible, evaluatedVisibilityError] = jsonata(
+  useEffect(() => {
+    jsonata(
       structure.visibility?.toString(),
       {
-        value: evaluatedChildValue,
+        value: childValue,
       },
       true,
-    );
-    setVisible(evaluatedVisible);
-    setVisibilityError(evaluatedVisibilityError);
-  }, [jsonata, structure.source, structure.visibility, index]);
+    ).then(([result, error]) => {
+      if (JSON.stringify(result) !== JSON.stringify(visible)) {
+        setVisible(result);
+      }
+      if (JSON.stringify(error) !== JSON.stringify(visibilityError)) {
+        setVisibilityError(error);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    structure.visibility,
+    childValue,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    value,
+    arrayItems,
+  ]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

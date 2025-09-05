@@ -12,7 +12,7 @@ export type RelationResource = {
 
 type Relation = {
   resource: RelationResource;
-  filter: (resourceA: any, resourceB: any) => boolean;
+  filter: (resourceA: any, resourceB: any) => boolean | Promise<boolean>;
 };
 
 export type IHaveNoIdeaForNameHere = {

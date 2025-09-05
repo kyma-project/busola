@@ -16,10 +16,10 @@ export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
 });
 
-export const applyFormula = (value, formula, t, additionalSources) => {
+export const applyFormula = async (value, formula, t, additionalSources) => {
   try {
     const expression = jsonataWrapper(formula);
-    return expression.evaluate({ data: value, ...additionalSources });
+    return await expression.evaluate({ data: value, ...additionalSources });
   } catch (e) {
     return t('extensibility.configuration-error', { error: e.message });
   }
@@ -227,12 +227,12 @@ const isValueMatching = (value, input) => {
 
 const getSearchingFunction = (searchOption, originalResource) => {
   const { source, search } = searchOption;
-  return (entry, input) => {
+  return async (entry, input) => {
     try {
       const value =
-        jsonataWrapper(source).evaluate(originalResource ?? entry, {
+        (await jsonataWrapper(source).evaluate(originalResource ?? entry, {
           item: entry,
-        }) || '';
+        })) || '';
 
       if (!search?.searchFunction)
         return isValueMatching(value, input) ? value : null;
@@ -240,22 +240,25 @@ const getSearchingFunction = (searchOption, originalResource) => {
       const jsonata = jsonataWrapper(search?.searchFunction);
       jsonata.assign('input', input);
 
-      const foundValues = jsonata.evaluate(originalResource ?? entry, {
+      const foundValues = await jsonata.evaluate(originalResource ?? entry, {
         item: entry,
         input,
       });
 
       return foundValues;
     } catch (e) {
+      console.warn(e);
       return null;
     }
   };
 };
 
-const searchingFunctions = (searchOptions, originalResource) =>
-  (searchOptions || []).map(searchOption =>
+const searchingFunctions = (searchOptions, originalResource) => {
+  const res = (searchOptions || []).map(searchOption =>
     getSearchingFunction(searchOption, originalResource),
   );
+  return res;
+};
 
 export const getTextSearchProperties = ({
   searchOptions,
@@ -275,30 +278,31 @@ const TYPE_FALLBACK = new Map([
   ['info', 'Information'],
 ]);
 
-export const getBadgeType = (highlights, value, jsonata, t) => {
+export const getBadgeType = async (highlights, value, jsonata, t) => {
   let type = null;
   if (highlights) {
-    const match = Object.entries(highlights).find(([key, rule]) => {
-      if (key === 'type') {
-        return null;
-      }
+    for (const [key, rule] of Object.entries(highlights)) {
+      if (key === 'type') continue;
       if (Array.isArray(rule)) {
-        return rule.includes(value);
+        if (rule.includes(value)) {
+          type = key;
+          break;
+        }
       } else {
-        const [doesMatch, matchError] = jsonata(rule);
+        const [doesMatch, matchError] = await jsonata(rule);
         if (matchError) {
           console.error(
             t('extensibility.configuration-error', {
               error: matchError.message,
             }),
           );
-          return false;
+          continue;
         }
-        return doesMatch;
+        if (doesMatch) {
+          type = key;
+          break;
+        }
       }
-    });
-    if (match) {
-      type = match[0];
     }
   }
   if (type === 'negative') type = 'Critical';

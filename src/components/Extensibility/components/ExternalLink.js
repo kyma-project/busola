@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   useGetPlaceholder,
   useGetTranslation,
@@ -8,9 +9,8 @@ import { useJsonata } from '../hooks/useJsonata';
 import { Button, Icon, Link } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 
-const makeHref = ({ jsonata, value, structure }) => {
-  const [link, linkError] = jsonata(structure.link);
-  if (linkError) return linkError.message;
+const makeHref = ({ linkObject, value }) => {
+  if (linkObject?.linkError) return linkObject?.linkError?.message;
 
   let href;
   if (typeof value === 'string') {
@@ -20,7 +20,7 @@ const makeHref = ({ jsonata, value, structure }) => {
         : `https://${value}`;
   }
 
-  return link || href;
+  return linkObject?.link || href;
 };
 
 export const ExternalLink = ({
@@ -44,8 +44,22 @@ export const ExternalLink = ({
     value,
     arrayItems,
   });
+  const [href, setHref] = useState('');
 
-  const href = makeHref({ jsonata, value, structure });
+  useEffect(() => {
+    jsonata(structure.link).then(linkObject => {
+      setHref(makeHref({ linkObject, value }));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    structure?.link,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
+  ]);
 
   if (isNil(value)) return emptyLeafPlaceholder;
 
@@ -88,6 +102,6 @@ export const ExternalLink = ({
 };
 ExternalLink.inline = true;
 ExternalLink.copyable = true;
-ExternalLink.copyFunction = ({ value, structure }, _, __, jsonata) => {
-  return makeHref({ jsonata, value, structure });
+ExternalLink.copyFunction = ({ value }, _, __, linkObject) => {
+  return makeHref({ linkObject, value });
 };

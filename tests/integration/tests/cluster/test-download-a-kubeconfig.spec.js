@@ -13,7 +13,7 @@ context('Test Download a Kubeconfig', () => {
 
   it('Download a Kubeconfig from the Clusters list', () => {
     cy.changeCluster('all-clusters');
-
+    cy.wait(1000);
     cy.get('ui5-table-cell')
       .eq(0)
       .then(el => {

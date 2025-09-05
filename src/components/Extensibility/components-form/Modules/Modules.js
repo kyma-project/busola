@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useUIStore } from '@ui-schema/ui-schema';
 
 import { useJsonata } from '../../hooks/useJsonata';
@@ -51,32 +52,37 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const rule = schema.get('schemaRule');
 
   const options = schema.get('options');
-  let parsedOptions = {};
+  const [parsedOptions, setParsedOptions] = useState({});
 
-  function makeJsonata(propObject) {
-    if (typeof propObject === 'string') {
-      const [newEnum] = jsonata(
-        propObject,
-        itemVars(resource, rule.itemVars, storeKeys),
-        [],
-      );
-      return newEnum;
+  useEffect(() => {
+    async function makeJsonata(propObject) {
+      if (typeof propObject === 'string') {
+        const [newEnum] = await jsonata(
+          propObject,
+          itemVars(resource, rule?.itemVars, storeKeys),
+          [],
+        );
+        return newEnum;
+      }
+      console.warn('Widget::Modules');
+      return null;
     }
-    console.warn('Widget::Modules');
-    return null;
-  }
-
-  Object.keys(options).forEach(optionName => {
-    if (
-      optionName === 'name' &&
-      !Array.isArray(makeJsonata(options[optionName]))
-    ) {
-      let moduleName = makeJsonata(options[optionName]);
-      parsedOptions[optionName] = [moduleName];
-    } else {
-      parsedOptions[optionName] = makeJsonata(options[optionName]);
-    }
-  });
+    let parsedOpt = {};
+    Promise.all(
+      Object.keys(options).map(async optionName => {
+        if (
+          optionName === 'name' &&
+          !Array.isArray(await makeJsonata(options[optionName]))
+        ) {
+          let moduleName = await makeJsonata(options[optionName]);
+          parsedOpt[optionName] = [moduleName];
+        } else {
+          parsedOpt[optionName] = await makeJsonata(options[optionName]);
+        }
+      }),
+    ).then(() => setParsedOptions(parsedOpt));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemVars, options, rule?.itemVars, storeKeys, resource, value]);
 
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)

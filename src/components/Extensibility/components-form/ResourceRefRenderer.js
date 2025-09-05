@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import pluralize from 'pluralize';
 import { fromJS } from 'immutable';
 
@@ -48,10 +48,14 @@ export function ResourceRefRender({
   const defaultOpen = schema.get('defaultExpanded') ?? false;
   const filter = schema.get('filter');
 
-  if (toInternal) {
-    const [internal, error] = jsonata(toInternal);
-    value = error ? {} : internal;
-  }
+  useEffect(() => {
+    if (toInternal) {
+      jsonata(toInternal).then(([internal, error]) => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        value = error ? {} : internal;
+      });
+    }
+  }, [toInternal, originalResource, singleRootResource, embedResource]);
 
   const group = (schemaResource?.group || '').toLowerCase();
   const version = schemaResource?.version;
@@ -62,43 +66,66 @@ export function ResourceRefRender({
   });
 
   const { setVar } = useVariables();
+  const [resources, setResources] = useState([]);
+
+  useEffect(() => {
+    Promise.all(
+      (data || []).map(async res => {
+        if (filter) {
+          const [val] = await jsonata(filter, { item: res });
+          return val ? res : false;
+        }
+        return res;
+      }),
+    ).then(results => {
+      setResources(results.filter(Boolean));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    data,
+    filter,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    value,
+  ]);
+
+  const setValue = value => {
+    const getValuAndChange = async () => {
+      if (toExternal) {
+        const [external, error] = await jsonata(toExternal, {
+          scope: value,
+          value,
+        });
+        value = error ? {} : external;
+      }
+      const resource = (data ?? []).find(
+        res =>
+          res.metadata.namespace === value.namespace &&
+          res.metadata.name === value.name,
+      );
+      if (provideVar) setVar(`$.${provideVar}`, resource);
+
+      onChange({
+        storeKeys: storeKeys,
+        scopes: ['value'],
+        type: 'set',
+        schema,
+        required: true,
+        data: { value: fromJS(value) },
+      });
+    };
+    getValuAndChange();
+  };
+
   return (
     <ExternalResourceRef
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
       value={fromJS(value).toJS() || ''}
-      resources={(data || []).filter(res => {
-        if (filter) {
-          const [value] = jsonata(filter, { item: res });
-          return value;
-        }
-        return true;
-      })}
-      setValue={value => {
-        if (toExternal) {
-          const [external, error] = jsonata(toExternal, {
-            scope: value,
-            value,
-          });
-          value = error ? {} : external;
-        }
-        const resource = (data ?? []).find(
-          res =>
-            res.metadata.namespace === value.namespace &&
-            res.metadata.name === value.name,
-        );
-        if (provideVar) setVar(`$.${provideVar}`, resource);
-
-        onChange({
-          storeKeys: storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required: true,
-          data: { value: fromJS(value) },
-        });
-      }}
+      resources={resources}
+      setValue={setValue}
       required={required}
       loading={loading || !url}
       error={error}

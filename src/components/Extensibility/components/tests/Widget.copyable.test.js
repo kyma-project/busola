@@ -46,9 +46,8 @@ describe('Widget.copyable', () => {
       await act(async () => {
         // find copy button
         container.querySelector('button').click();
-
-        expect(copyToClipboard).toHaveBeenCalledWith('test-value');
       });
+      expect(copyToClipboard).toHaveBeenCalledWith('test-value');
     });
   });
 
@@ -100,9 +99,8 @@ describe('Widget.copyable', () => {
       await act(async () => {
         // find copy button
         container.querySelector('button').click();
-
-        expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
       });
+      expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
     });
   });
 });
