@@ -1,7 +1,25 @@
 import { useTranslation } from 'react-i18next';
 import { CheckBox, Input, MessageStrip } from '@ui5/webcomponents-react';
 
-export function ColumnsInput({ value: columns, setValue: setColumns }) {
+interface Column {
+  path?: string;
+  isSelected: boolean;
+  type: string;
+  name: string;
+  required?: boolean;
+  widget?: boolean;
+  source?: string;
+}
+
+interface ColumnsInputProps {
+  value: Column[];
+  setValue: (columns: Column[]) => void;
+}
+
+export function ColumnsInput({
+  value: columns,
+  setValue: setColumns,
+}: ColumnsInputProps) {
   const { t } = useTranslation();
 
   if (!columns?.length) {
