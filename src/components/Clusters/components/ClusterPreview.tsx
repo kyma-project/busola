@@ -7,11 +7,29 @@ import {
 } from '../views/EditCluster/EditCluster';
 import { getUserIndex } from '../shared';
 import { Tokens } from 'shared/components/Tokens';
+import {
+  Kubeconfig,
+  KubeconfigNonOIDCAuthToken,
+  KubeconfigOIDCAuth,
+} from 'types';
 
-export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
+interface ClusterPreviewProps {
+  kubeconfig: Kubeconfig;
+  storage: string;
+  setSelected: (selected: number) => void;
+  hasAuth: boolean;
+}
+
+export function ClusterPreview({
+  kubeconfig,
+  storage,
+  setSelected,
+  hasAuth,
+}: ClusterPreviewProps) {
   const { t } = useTranslation();
   const userIndex = getUserIndex(kubeconfig);
-  const authenticationType = kubeconfig?.users?.[userIndex]?.user?.exec
+  const authenticationType = (kubeconfig?.users?.[userIndex]
+    ?.user as KubeconfigOIDCAuth)?.exec
     ? 'oidc'
     : 'token';
 
@@ -72,7 +90,9 @@ export function ClusterPreview({ kubeconfig, storage, setSelected, hasAuth }) {
   };
 
   const TokenData = () => {
-    const token = kubeconfig?.users?.[userIndex]?.user?.token;
+    const token = (kubeconfig?.users?.[userIndex]
+      ?.user as KubeconfigNonOIDCAuthToken)?.token;
+
     return (
       <>
         <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
