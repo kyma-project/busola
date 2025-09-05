@@ -115,13 +115,13 @@ export function Editor({
             className="break-word sap-margin-small"
             role="alert"
           >
-            {warnings.map(m => (
+            {warnings.map((w, index) => (
               <span
                 className="line"
-                key={`${m.startLineNumber}-${m.startColumn}`}
+                key={`${w.startLineNumber}-${w.startColumn}-${index}`}
               >
-                {t('common.tooltips.line')} {m.startLineNumber},{' '}
-                {t('common.tooltips.column')} {m.startColumn}: {m.message}
+                {t('common.tooltips.line')} {w.startLineNumber},{' '}
+                {t('common.tooltips.column')} {w.startColumn}: {w.message}
               </span>
             ))}
           </MessageStrip>

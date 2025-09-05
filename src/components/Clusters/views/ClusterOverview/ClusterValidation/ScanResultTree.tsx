@@ -8,7 +8,7 @@ import {
   ScanNamespaceStatus,
 } from './ScanResult';
 
-type TreeItemState = 'Success' | 'Warning' | 'None';
+type TreeItemState = 'Positive' | 'Critical' | 'None';
 
 type WarningStateInput = {
   warningCount?: number;
@@ -35,14 +35,14 @@ const useWarningState = ({
   if (unauthorized === resourceCount)
     return {
       additionalText: t('cluster-validation.scan.unauthorized'),
-      additionalTextState: 'Warning',
+      additionalTextState: 'Critical',
     };
 
   const textSegments = [
     t('cluster-validation.scan.warning-count', { warningCount }),
   ];
   let state =
-    (warningCount ?? 0) > 0 ? 'Warning' : ('Success' as TreeItemState);
+    (warningCount ?? 0) > 0 ? 'Critical' : ('Positive' as TreeItemState);
 
   if (typeof unauthorized === 'number' && unauthorized > 0) {
     textSegments.unshift(
@@ -51,7 +51,7 @@ const useWarningState = ({
         resourceCount,
       }),
     );
-    state = 'Warning';
+    state = 'Critical';
   }
 
   if (
@@ -83,9 +83,9 @@ const ScanResultItemTree = ({ item }: { item: ScanItemStatus }) => {
     <TreeItem key={item.name} text={item.name} {...warningState}>
       {item.warnings?.map((warning, i) => (
         <TreeItem
-          key={typeof warning === 'string' ? warning : warning.key}
+          key={typeof warning === 'string' ? warning : warning.key ?? i}
           text={typeof warning === 'string' ? warning : warning.message}
-        ></TreeItem>
+        />
       ))}
     </TreeItem>
   );

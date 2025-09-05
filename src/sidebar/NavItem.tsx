@@ -37,11 +37,18 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const jsonata = useJsonata({ resource: emptyResource });
   const [jsonataLink, setJsonataLink] = useState<string | null>('');
   const [jsonataError, setJsonataError] = useState<Error | null>(null);
+
   const { navigateSafely } = useFormNavigation();
 
   useEffect(() => {
-    jsonata(node.externalUrl || '').then(([link, error]) => {
-      setJsonataLink(link);
+    if (!node.externalUrl) {
+      setJsonataLink('');
+      setJsonataError(null);
+      return;
+    }
+
+    jsonata(node.externalUrl).then(([link, error]) => {
+      setJsonataLink(link || '');
       setJsonataError(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

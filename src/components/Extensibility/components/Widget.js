@@ -125,15 +125,15 @@ export function Widget({
   });
 
   const [childValue, setChildValue] = useState(null);
-  const [visible, setVisible] = useState(null);
+  const [visible, setVisible] = useState(true);
   const [visibilityError, setVisibilityError] = useState(null);
 
   useEffect(() => {
     jsonata(structure.source, {
       index: index,
-    }).then(([result]) => {
-      if (JSON.stringify(childValue) !== JSON.stringify(result)) {
-        setChildValue(result);
+    }).then(([evaluatedChildValue]) => {
+      if (JSON.stringify(childValue) !== JSON.stringify(evaluatedChildValue)) {
+        setChildValue(evaluatedChildValue);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

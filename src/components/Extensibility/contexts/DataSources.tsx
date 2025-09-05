@@ -78,7 +78,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
 }) => {
   const fetch = useFetch();
   // store
-  const [store, setStore] = useObjectState<Store>();
+  const [store, updateStore] = useObjectState<Store>();
   // safer than useState for concurrency - we don't want to duplicate the requests
   const dataSourcesDict = useRef<DataSourcesDict>({});
   // refetch intervals
@@ -184,14 +184,14 @@ export const DataSourcesContextProvider: FC<Props> = ({
       if (!data?.namespace) {
         data.namespace = dataSource.resource.namespace;
       }
-      setStore(dataSourceName, {
+      updateStore(dataSourceName, {
         loading: false,
         error: null,
         data,
       });
       return data;
     } catch (e) {
-      setStore(dataSourceName, {
+      updateStore(dataSourceName, {
         loading: false,
         error: e,
         data: { error: e },
@@ -222,7 +222,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
       };
 
       const firstFetch = fetchResource(dataSource, dataSourceName, resource);
-      setStore(dataSourceName, {
+      updateStore(dataSourceName, {
         loading: true,
         data: { loading: true },
         firstFetch,
