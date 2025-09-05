@@ -4,7 +4,6 @@ import { useAtomValue } from 'jotai';
 
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
-import { useFeature } from 'hooks/useFeature';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
 import { Text, Title } from '@ui5/webcomponents-react';
@@ -13,7 +12,6 @@ import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetai
 import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { configFeaturesNames } from 'state/types';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { useGetEnvironmentParameters } from './useGetEnvironmentParameters';
@@ -21,15 +19,8 @@ import { Tokens } from 'shared/components/Tokens';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
-  const showGardenerMetadata = useFeature(
-    configFeaturesNames.SHOW_GARDENER_METADATA,
-  )?.isEnabled;
+  const provider = useGetGardenerProvider();
 
-  const provider = useGetGardenerProvider({
-    skip: !showGardenerMetadata,
-  });
-
-  if (!showGardenerMetadata) return null;
   if (!provider) return null;
 
   return (

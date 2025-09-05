@@ -58,8 +58,6 @@ COPY --chown=65532:65532 --from=configuration /kyma/build /app/core-ui/environme
 RUN npm ci --only=production
 
 # use sessionStorage as default
-# SHOW_KYMA_VERSION for production
-RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core-ui/defaultConfig.yaml
 RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/defaultConfig.yaml
 
 USER 65532:65532

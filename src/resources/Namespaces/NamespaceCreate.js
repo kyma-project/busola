@@ -68,12 +68,7 @@ export default function NamespaceCreate({
     [initialResource, layoutColumn?.showCreate?.resource],
   );
 
-  const {
-    isIstioFeatureOn,
-    isSidecarEnabled,
-    setSidecarEnabled,
-    setIsChanged,
-  } = useSidecar({
+  const { isSidecarEnabled, setSidecarEnabled, setIsChanged } = useSidecar({
     initialRes: initialResource,
     res: namespace,
     setRes: setNamespace,
@@ -230,18 +225,15 @@ export default function NamespaceCreate({
       }}
       className="namespace-create"
     >
-      {isIstioFeatureOn ? (
-        <ResourceForm.FormField
-          label={t('namespaces.create-modal.enable-sidecar')}
-          input={Inputs.Switch}
-          checked={isSidecarEnabled}
-          onChange={() => {
-            setSidecarEnabled(value => !value);
-            setIsChanged(true);
-          }}
-        />
-      ) : null}
-
+      <ResourceForm.FormField
+        label={t('namespaces.create-modal.enable-sidecar')}
+        input={Inputs.Switch}
+        checked={isSidecarEnabled}
+        onChange={() => {
+          setSidecarEnabled(value => !value);
+          setIsChanged(true);
+        }}
+      />
       {!isEdit ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-memory-quotas')}
