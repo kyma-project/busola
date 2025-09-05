@@ -4,6 +4,7 @@ import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
 import {
   createModulePartialPath,
+  DEFAULT_K8S_NAMESPACE,
   findCrd,
   findExtension,
   findModuleTemplate,
@@ -19,7 +20,11 @@ import {
 } from 'state/columnLayoutAtom';
 import { useSetAtom } from 'jotai';
 import { isFormOpenAtom } from 'state/formOpenAtom';
-import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
+import {
+  useGet,
+  useGetList,
+  useGetScope,
+} from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
 import { useFetchModuleData } from 'components/Modules/hooks';
@@ -74,7 +79,9 @@ export const CommunityModulesList = ({
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.data ?? null,
     'resource',
+    modulesLoading,
   );
+  const getScope = useGetScope();
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -166,7 +173,7 @@ export const CommunityModulesList = ({
     },
   ];
 
-  const handleClickResource = (
+  const handleClickResource = async (
     moduleName: string,
     moduleStatus: {
       name: string;
@@ -214,18 +221,25 @@ export const CommunityModulesList = ({
       return;
     }
 
+    const { group, version } = extractApiGroupVersion(
+      moduleStatus?.resource?.apiVersion,
+    );
+    const moduleIsNamespaced = await getScope(
+      group,
+      version,
+      moduleStatus?.resource?.kind,
+    );
+
     const partialPath = createModulePartialPath(
       hasExtension,
       moduleStatus.resource,
       moduleCrd,
+      moduleIsNamespaced,
     );
+
     const path = namespaced
       ? namespaceUrl(partialPath)
       : clusterUrl(partialPath);
-
-    const { group, version } = extractApiGroupVersion(
-      moduleStatus?.resource?.apiVersion,
-    );
 
     setLayoutColumn(prev => ({
       startColumn: prev.startColumn,
@@ -234,7 +248,9 @@ export const CommunityModulesList = ({
           ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
           : moduleCrd?.metadata?.name,
         resourceName: moduleStatus?.resource?.metadata?.name,
-        namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+        namespaceId: moduleIsNamespaced
+          ? moduleStatus?.resource?.metadata.namespace || DEFAULT_K8S_NAMESPACE
+          : '',
         apiGroup: group,
         apiVersion: version,
       } as ColumnState,

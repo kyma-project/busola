@@ -4,6 +4,7 @@ import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
 import {
   createModulePartialPath,
+  DEFAULT_K8S_NAMESPACE,
   findCrd,
   findExtension,
   findModuleStatus,
@@ -23,7 +24,11 @@ import {
 } from 'state/columnLayoutAtom';
 import { useSetAtom } from 'jotai';
 import { isFormOpenAtom } from 'state/formOpenAtom';
-import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
+import {
+  useGet,
+  useGetList,
+  useGetScope,
+} from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ModulesListRows } from './ModulesListRows';
 import { useNavigate } from 'react-router';
@@ -77,6 +82,7 @@ export const KymaModulesList = ({
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
+  const getScope = useGetScope();
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -178,7 +184,7 @@ export const KymaModulesList = ({
     },
   ];
 
-  const handleClickResource = (
+  const handleClickResource = async (
     moduleName: string,
     moduleStatus: {
       name: string;
@@ -224,19 +230,26 @@ export const KymaModulesList = ({
       return;
     }
 
+    const { group, version } = extractApiGroupVersion(
+      moduleStatus?.resource?.apiVersion,
+    );
+
+    const isNamespaced = await getScope(
+      group,
+      version,
+      moduleStatus?.resource?.kind,
+    );
+
     const partialPath = createModulePartialPath(
       hasExtension,
       moduleStatus.resource,
       moduleCrd,
+      isNamespaced,
     );
 
     const path = namespaced
       ? namespaceUrl(partialPath)
       : clusterUrl(partialPath);
-
-    const { group, version } = extractApiGroupVersion(
-      moduleStatus?.resource?.apiVersion,
-    );
 
     setLayoutColumn(prev => ({
       startColumn: prev.startColumn,
@@ -246,7 +259,9 @@ export const KymaModulesList = ({
           : moduleCrd?.metadata?.name,
         rawResourceTypeName: moduleStatus?.resource?.kind,
         resourceName: moduleStatus?.resource?.metadata?.name,
-        namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+        namespaceId: isNamespaced
+          ? moduleStatus?.resource?.metadata.namespace || DEFAULT_K8S_NAMESPACE
+          : '',
         apiGroup: group,
         apiVersion: version,
       } as ColumnState,
