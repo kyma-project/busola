@@ -6,7 +6,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import BusolaExtensionCreate from './BusolaExtensionCreate';
 
-export function BusolaPluginList({ layoutCloseCreateUrl }) {
+function BusolaExtensionList({ layoutCloseCreateUrl }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
@@ -50,4 +50,4 @@ export function BusolaPluginList({ layoutCloseCreateUrl }) {
     />
   );
 }
-export default BusolaPluginList;
+export default BusolaExtensionList;
