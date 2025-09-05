@@ -21,7 +21,7 @@ on:
       - "Dockerfile"
       - "nginx/nginx.conf"
   pull_request_target:
-    types: [opened, edited, synchronize, reopened, ready_for_review]
+    types: [ opened, edited, synchronize, reopened, ready_for_review ]
     paths:
       - ".github/workflows/busola-build.yml"
       - "kyma/**"
@@ -41,6 +41,12 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
+  rebase:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Merge with latest main
+        uses: ./.github/actions/merge
   build-busola-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     if: github.event.pull_request.draft == false
