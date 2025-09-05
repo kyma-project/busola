@@ -171,7 +171,9 @@ export function EventList({
           res.type === displayType.key;
 
         const propsFilter =
-          typeof filter === 'function' ? await filter(res) : true;
+          typeof filter === 'function' || typeof filter?.then === 'function'
+            ? await filter(res)
+            : true;
 
         return typeFilter && propsFilter;
       }}

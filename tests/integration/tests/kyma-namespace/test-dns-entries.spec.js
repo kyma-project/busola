@@ -63,13 +63,14 @@ context('Test DNS Entries', () => {
     // change from A to CNAME
     cy.get('input[placeholder^="Enter the A record target"]:visible')
       .last()
+      .find('input')
+      .click()
       .type('example.com', { force: true });
 
     cy.saveChanges('Edit');
     cy.wait(1000);
     cy.getMidColumn().inspectTab('View');
-    cy.wait(500);
-    cy.getMidColumn().should('contain', /Targets.*, example\.com/);
+    cy.getMidColumn().contains(/Targets.*, example\.com/);
   });
 
   it('Inspect list', () => {
