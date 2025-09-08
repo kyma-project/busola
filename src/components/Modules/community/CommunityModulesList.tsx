@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
@@ -57,19 +57,27 @@ export const CommunityModulesList = ({
 }: CommunityModulesListProps) => {
   const { t } = useTranslation();
 
-  const { data: communityExtentions } = useGetList(
+  const {
+    data: communityExtentions,
+    silentRefetch: getCommunityExtentions,
+  } = useGetList(
     (ext: { metadata: { labels: Record<string, string> } }) =>
       ext.metadata.labels['app.kubernetes.io/part-of'] !== 'Kyma',
   )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
     pollingInterval: 5000,
   } as any);
 
-  const { data: crds } = useGet(
+  const { data: crds, silentRefetch: getCrds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
     {
       pollingInterval: 5000,
     } as any,
   );
+  useEffect(() => {
+    getCommunityExtentions();
+    getCrds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [installedModules]);
 
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
@@ -139,7 +147,17 @@ export const CommunityModulesList = ({
 
     const hasResource = !!moduleResource;
 
-    return hasResource && (!isDeletionFailed || !isError);
+    const hasExtension = !!findExtension(
+      resource?.resource?.kind,
+      communityExtentions,
+    );
+    const moduleCrd = findCrd(resource?.resource?.kind, crds);
+
+    return (
+      hasResource &&
+      (!isDeletionFailed || !isError) &&
+      (hasExtension || !!moduleCrd)
+    );
   };
 
   const customColumnLayout = (resource: { name: string }) => {

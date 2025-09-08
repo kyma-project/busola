@@ -21,6 +21,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
+import { refreshExtenshionsAtom } from 'state/refreshExtenshionsAtom';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
@@ -121,6 +122,10 @@ export default function CommunityModulesAddModule(props: any) {
   const notification = useNotification();
   const post = usePost();
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
+  const [refreshExtenshionsCount, setRefreshExtenshions] = useAtom(
+    refreshExtenshionsAtom,
+  );
+
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
@@ -272,6 +277,7 @@ export default function CommunityModulesAddModule(props: any) {
         showCreate: null,
       });
       navigate(window.location.pathname, { replace: true });
+      setRefreshExtenshions(refreshExtenshionsCount + 1);
     } catch (e) {
       console.error(e);
       notification.notifyError({
