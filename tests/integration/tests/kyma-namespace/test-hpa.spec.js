@@ -92,7 +92,7 @@ context('Test HPA', () => {
     cy.clickGenericListLink(HPA_NAME);
 
     cy.contains('ui5-link', DEPLOYEMENT_NAME).click();
-
+    cy.wait(500);
     cy.url().should('match', /deployments/);
   });
 
