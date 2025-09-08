@@ -64,7 +64,6 @@ context('Test DNS Entries', () => {
     cy.get(
       'input[placeholder^="Enter the A record target or CNAME record"]:visible',
     )
-      .find('input')
       .last()
       .click()
       .type('example.com', { force: true });
