@@ -12,7 +12,6 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
-import { useAppTracking } from 'hooks/tracking';
 
 import { clusterAtom } from 'state/clusterAtom';
 import { languageAtom } from 'state/preferences/languageAtom';
@@ -100,7 +99,6 @@ export default function App() {
   }, [language, i18n]);
 
   useSentry();
-  useAppTracking();
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
