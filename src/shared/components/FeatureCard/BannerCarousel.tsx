@@ -1,7 +1,9 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Carousel } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
 export default function BannerCarousel({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
   const carouselRef = useRef<React.ElementRef<typeof Carousel>>(null);
   const [childrenLength, setChildrenLength] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -48,6 +50,7 @@ export default function BannerCarousel({ children }: { children: ReactNode }) {
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      accessibleName={t('components.banner-carousel')}
     >
       {children}
     </Carousel>
