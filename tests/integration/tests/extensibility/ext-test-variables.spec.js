@@ -95,6 +95,7 @@ context('Test extensibility variables', () => {
         log: false,
       })
       .click();
+
     cy.get('ui5-cb-item:visible')
       .contains('simple')
       .should('exist');
@@ -103,22 +104,12 @@ context('Test extensibility variables', () => {
       .contains('advanced')
       .should('exist');
     // test if fields based on visibility are not visible
-    cy.get('[data-testid="spec.name"]').then($element => {
-      if ($element.is(':visible')) {
-        assert.isOk('ok', 'element is not visible');
-      } else {
-        assert.isNotOk('failed', 'element is visible');
-      }
-    });
+    cy.get('@form')
+      .find('[data-testid="spec.name"]:visible')
+      .should('not.exist');
 
-    cy.get('[aria-label="Advanced, collapsed"]', { log: false }).then(
-      $element => {
-        if ($element.is(':visible')) {
-          assert.isOk('ok', 'element is not visible');
-        } else {
-          assert.isNotOk('failed', 'element is visible');
-        }
-      },
+    cy.get('[aria-label="Advanced, collapsed"]:visible', { log: false }).should(
+      'not.exist',
     );
 
     // test visibility based on var (select 'simple')
@@ -201,10 +192,6 @@ context('Test extensibility variables', () => {
     cy.get('[data-testid="spec.arrayOfObjects.0.withoutValue"]:visible').should(
       'be.empty',
     );
-
-    cy.get('[accessible-name="Array Of Objects"]')
-      .eq(0)
-      .click();
   });
 
   it('Tests data sources and triggers', () => {

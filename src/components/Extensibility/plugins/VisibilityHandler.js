@@ -48,21 +48,27 @@ export function VisibilityHandler({
     rule?.itemVars,
     storeKeys,
     resource,
+    value,
+    overwrite,
+    schema,
+    storeKeys,
+    currentPluginIndex,
+    resource,
+    onChange,
+    required,
+    jsonata,
   ]);
 
-  useEffect(() => {
-    if (!visible && value && overwrite) {
-      onChange({
-        storeKeys,
-        scopes: ['value'],
-        type: 'set',
-        schema,
-        required,
-        data: {},
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible]);
+  if (!visible && value && overwrite) {
+    onChange({
+      storeKeys,
+      scopes: ['value'],
+      type: 'set',
+      schema,
+      required,
+      data: {},
+    });
+  }
 
   if (!visible) {
     return null;
