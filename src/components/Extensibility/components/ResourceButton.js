@@ -42,42 +42,24 @@ export function ResourceButton({
     if (!value) {
       return;
     }
-    jsonata(structure.resource?.name).then(([res, error]) => {
-      setName(res);
-      setNameError(error);
-    });
+    const setStatesFromJsonata = async () => {
+      const [nameRes, nameErr] = await jsonata(structure.resource?.name);
+      const [namespaceRes, namespaceErr] = await jsonata(
+        structure.resource?.namespace,
+      );
+      const [kindRes, kindErr] = await jsonata(structure.resource?.kind);
+      setName(nameRes);
+      setNameError(nameErr);
+      setNamespace(namespaceRes);
+      setNamespaceError(namespaceErr);
+      setKind(kindRes);
+      setKindError(kindErr);
+    };
+    setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     structure.resource?.name,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
-  ]);
-  useEffect(() => {
-    jsonata(structure.resource?.namespace).then(([res, error]) => {
-      setNamespace(res);
-      setNamespaceError(error);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
     structure.resource?.namespace,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
-  ]);
-  useEffect(() => {
-    jsonata(structure.resource?.kind).then(([res, error]) => {
-      setKind(res);
-      setKindError(error);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
     structure.resource?.kind,
     originalResource,
     singleRootResource,

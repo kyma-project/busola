@@ -48,15 +48,6 @@ export function ResourceRefRender({
   const defaultOpen = schema.get('defaultExpanded') ?? false;
   const filter = schema.get('filter');
 
-  useEffect(() => {
-    if (toInternal) {
-      jsonata(toInternal).then(([internal, error]) => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        value = error ? {} : internal;
-      });
-    }
-  }, [toInternal, originalResource, singleRootResource, embedResource]);
-
   const group = (schemaResource?.group || '').toLowerCase();
   const version = schemaResource?.version;
   const resourceType = pluralize(schemaResource?.kind || '')?.toLowerCase();
@@ -69,6 +60,12 @@ export function ResourceRefRender({
   const [resources, setResources] = useState([]);
 
   useEffect(() => {
+    if (toInternal) {
+      jsonata(toInternal).then(([internal, error]) => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        value = error ? {} : internal;
+      });
+    }
     Promise.all(
       (data || []).map(async res => {
         if (filter) {
@@ -82,6 +79,7 @@ export function ResourceRefRender({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    toInternal,
     data,
     filter,
     originalResource,

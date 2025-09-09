@@ -22,35 +22,43 @@ export function StatisticalCard({
   const [mainValue, setMainValue] = useState(undefined);
 
   useEffect(() => {
-    Promise.all(
-      structure.children?.map(async child => {
-        const [childValue, err] = await jsonata(child.source, {
-          resource: value,
-        });
-        if (err) {
-          return t('extensibility.configuration-error', {
-            error: err.message,
+    const setStatesFromJsonata = async () => {
+      const extraInfoRes = await Promise.all(
+        structure.children?.map(async child => {
+          const [childValue, err] = await jsonata(child.source, {
+            resource: value,
           });
-        }
+          if (err) {
+            return t('extensibility.configuration-error', {
+              error: err.message,
+            });
+          }
 
-        return {
-          title: child.name,
-          value: childValue !== undefined ? childValue : EMPTY_TEXT_PLACEHOLDER,
-        };
-      }),
-    ).then(results => setExtraInfo(results));
+          return {
+            title: child.name,
+            value:
+              childValue !== undefined ? childValue : EMPTY_TEXT_PLACEHOLDER,
+          };
+        }),
+      );
+      const [mainValueRes, mainValueErr] = await jsonata(
+        structure?.mainValue?.source,
+        {
+          resource: value,
+        },
+      );
+      setExtraInfo(extraInfoRes);
+      setMainValue(mainValueRes);
+      setErr(mainValueErr);
+    };
+    setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.children, originalResource, value]);
-
-  useEffect(() => {
-    jsonata(structure?.mainValue?.source, {
-      resource: value,
-    }).then(([res, error]) => {
-      setMainValue(res);
-      setErr(error);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure?.mainValue?.source, originalResource, value]);
+  }, [
+    structure.children,
+    structure?.mainValue?.source,
+    originalResource,
+    value,
+  ]);
 
   if (err) {
     return t('extensibility.configuration-error', {

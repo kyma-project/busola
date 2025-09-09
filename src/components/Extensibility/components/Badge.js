@@ -38,27 +38,22 @@ export function Badge({
   const [badgeType, setBadgeType] = useState(null);
 
   useEffect(() => {
-    jsonata(structure?.description).then(([tooltip, tooltipError]) => {
-      setTooltip(tooltip);
-      setTooltipError(tooltipError);
-    });
+    const setStatesFromJsonata = async () => {
+      const [tooltipRes, tooltipErr] = await jsonata(structure?.description);
+      const typeRes = await getBadgeType(
+        structure.highlights,
+        value,
+        jsonata,
+        t,
+      );
+      setTooltip(tooltipRes);
+      setTooltipError(tooltipErr);
+      setBadgeType(typeRes);
+    };
+    setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     structure?.description,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
-  ]);
-
-  useEffect(() => {
-    getBadgeType(structure.highlights, value, jsonata, t).then(type =>
-      setBadgeType(type),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
     structure?.highlights,
     value,
     originalResource,

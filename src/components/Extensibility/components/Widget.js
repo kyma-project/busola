@@ -129,41 +129,26 @@ export function Widget({
   const [visibilityError, setVisibilityError] = useState(null);
 
   useEffect(() => {
-    jsonata(structure.source, {
-      index: index,
-    }).then(([evaluatedChildValue]) => {
-      if (JSON.stringify(childValue) !== JSON.stringify(evaluatedChildValue)) {
-        setChildValue(evaluatedChildValue);
-      }
-    });
+    const setStatesFromJsonata = async () => {
+      const [evaluatedChildValue] = await jsonata(structure.source, {
+        index: index,
+      });
+      const [result, error] = await jsonata(
+        structure.visibility?.toString(),
+        {
+          value: evaluatedChildValue,
+        },
+        true,
+      );
+      setChildValue(evaluatedChildValue);
+      setVisible(result);
+      setVisibilityError(error);
+    };
+    setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     structure.source,
     index,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    value,
-    arrayItems,
-  ]);
-
-  useEffect(() => {
-    jsonata(
-      structure.visibility?.toString(),
-      {
-        value: childValue,
-      },
-      true,
-    ).then(([result, error]) => {
-      if (JSON.stringify(result) !== JSON.stringify(visible)) {
-        setVisible(result);
-      }
-      if (JSON.stringify(error) !== JSON.stringify(visibilityError)) {
-        setVisibilityError(error);
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
     structure.visibility,
     childValue,
     originalResource,

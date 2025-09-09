@@ -16,24 +16,23 @@ export const RadialChart = ({ structure, value, originalResource }) => {
   const [additionalInfo, setAdditionalInfo] = useState(null);
 
   useEffect(() => {
-    jsonata(structure.maxValue, {
-      resource: originalResource,
-    }).then(([value, error]) => {
-      setMaxValue(value);
-      if (error) setError(error);
-    });
+    const setStatesFromJsonata = async () => {
+      const [maxValueRes, maxValueErr] = await jsonata(structure.maxValue, {
+        resource: originalResource,
+      });
+      const [additionalInfoRes, additionalInfoErr] = await jsonata(
+        structure.additionalInfo,
+        {
+          resource: originalResource,
+        },
+      );
+      setMaxValue(maxValueRes);
+      setAdditionalInfo(additionalInfoRes);
+      setError(maxValueErr ?? additionalInfoErr);
+    };
+    setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.maxValue, originalResource, value]);
-
-  useEffect(() => {
-    jsonata(structure.additionalInfo, {
-      resource: originalResource,
-    }).then(([value, error]) => {
-      setAdditionalInfo(value);
-      if (error) setError(error);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.additionalInfo, originalResource, value]);
+  }, [structure.maxValue, structure.additionalInfo, originalResource, value]);
 
   if (error) {
     return t('extensibility.configuration-error', {
