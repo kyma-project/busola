@@ -16,17 +16,5 @@
   },
   {
     "source": "https://raw.githubusercontent.com/kyma-project/eventing-manager/main/config/ui-extensions/subscriptions/subscriptions.yaml"
-  },
-  {
-    "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/logpipeline_busola_extension_cm.yaml"
-  },
-  {
-    "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/tracepipeline_busola_extension_cm.yaml"
-  },
-  {
-    "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/metricpipeline_busola_extension_cm.yaml"
-  },
-  {
-    "source": "https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/config/busola/telemetry_busola_extension_cm.yaml"
   }
 ]

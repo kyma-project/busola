@@ -8,9 +8,10 @@ import { t } from 'i18next';
 import { useKymaQuery } from '../kymaModulesQueries';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
-import { checkSelectedModule } from '../support';
+import { checkSelectedModule, findModuleStatus } from '../support';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export const KymaModuleContext = createContext({
   resourceName: null,
@@ -23,7 +24,7 @@ export const KymaModuleContext = createContext({
   selectedModules: {},
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
-  deleteModuleButton: () => <></>,
+  customHeaderActions: <></>,
 });
 
 export function KymaModuleContextProvider({
@@ -91,12 +92,33 @@ export function KymaModuleContextProvider({
     return index > -1 ? index : undefined;
   };
 
-  const deleteModuleButton = (
-    <div>
+  const getModuleName = () =>
+    getOpenedModuleIndex(openedModuleIndex, activeKymaModules) !== undefined
+      ? activeKymaModules[
+          getOpenedModuleIndex(openedModuleIndex, activeKymaModules)
+        ]?.name
+      : undefined;
+
+  const isMaintenancePending = findModuleStatus(kymaResource, getModuleName())
+    ?.maintenance;
+
+  const maintenanceBadge = isMaintenancePending === true && (
+    <StatusBadge
+      type="Critical"
+      key={`pending-maintenance-${getModuleName()}`}
+      tooltipContent={t('kyma-modules.maintenance-tooltip')}
+    >
+      {t('kyma-modules.maintenance-pending')}
+    </StatusBadge>
+  );
+
+  const customHeaderActions = (
+    <>
+      {maintenanceBadge}
       <Button onClick={() => handleResourceDelete({})} design="Transparent">
         {t('common.buttons.delete-module')}
       </Button>
-    </div>
+    </>
   );
 
   return (
@@ -114,7 +136,7 @@ export function KymaModuleContextProvider({
         DeleteMessageBox: DeleteMessageBox,
         handleResourceDelete: handleResourceDelete,
         showDeleteDialog: showDeleteDialog,
-        deleteModuleButton: deleteModuleButton,
+        customHeaderActions: customHeaderActions,
       }}
     >
       {createPortal(

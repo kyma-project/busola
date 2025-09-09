@@ -418,6 +418,7 @@ common:
     days-ago: days ago
   'yes': 'yes'
 components:
+  banner-carousel: Banner Carousel
   dropdown:
     empty-list: No resources available
   error-panel:
@@ -867,6 +868,9 @@ kyma-modules:
   installation-state: Installation State
   installed-modules: Installed Modules
   kyma: Kyma
+  maintenance: Maintenance
+  maintenance-pending: Pending Maintenance
+  maintenance-tooltip: The module is currently being updated. This may take a few moments.
   managed: Managed
   messages:
     failure: 'Failed to install the {{resourceType}}: {{error}}'
@@ -930,9 +934,11 @@ modules:
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
-      success: '{{resourceType}} installed'
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
+      source-yaml-fetch-failed: 'Failed to download source yaml: {{error}}'
+      source-yaml-invalid-url: Ensure your URL ends with ".yaml".
+      success: '{{resourceType}} installed'
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
     no-modules-installed: No community modules installed
@@ -1426,6 +1432,7 @@ storage-classes:
   name_singular: StorageClass
   title: Storage Classes
 upload-yaml:
+  errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
   labels:
     validate-resources: 'Validate resources:'

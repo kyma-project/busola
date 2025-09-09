@@ -19,7 +19,6 @@ context('Test navigation features', () => {
 
   before(() => {
     mockFeatures({
-      VISUAL_RESOURCES: { isEnabled: false },
       HIDDEN_NAMESPACES: {
         isEnabled: false,
       },
@@ -50,7 +49,5 @@ context('Test navigation features', () => {
       .click();
 
     cy.contains('disabled').should('exist');
-
-    cy.contains('Resource Graph').should('not.exist');
   });
 });

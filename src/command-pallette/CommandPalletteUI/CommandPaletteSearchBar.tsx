@@ -104,16 +104,11 @@ export function CommandPaletteSearchBar({
       '.ui5-shellbar-search-field',
     ) as HTMLElement;
 
-    if (
-      searchButton &&
-      searchField &&
-      shellbarWidth > SCREEN_SIZE_BREAKPOINT_M
-    ) {
+    if (searchButton && shellbarWidth > SCREEN_SIZE_BREAKPOINT_M) {
       searchButton.style.display = 'none';
 
       // search bar has to be always visible on big screen
       shellbarCurr?.setAttribute('show-search-field', '');
-      searchField.style.display = 'flex';
     } else if (searchButton && searchField) {
       searchButton.style.display = 'inline-block';
       shellbarCurr?.removeAttribute('show-search-field');

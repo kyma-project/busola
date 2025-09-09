@@ -52,11 +52,7 @@ export const EmptyListComponent = ({
           {titleText}
         </Title>
       }
-      subtitle={
-        <p className="emptyListComponent__subtitle sap-margin-top-small">
-          {subtitle}
-        </p>
-      }
+      subtitle={<span className="sap-margin-top-small">{subtitle}</span>}
     >
       <div className="emptyListComponent__buttons">
         {showButton && (

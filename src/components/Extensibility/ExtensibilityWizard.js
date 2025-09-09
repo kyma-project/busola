@@ -192,10 +192,11 @@ export function ExtensibilityWizardCore({
   return (
     <UIMetaProvider widgets={widgets}>
       <Wizard contentLayout="SingleStep" className="extensibility-wizard">
-        {resourceSchema.steps.map(step => {
+        {resourceSchema.steps.map((step, idx) => {
           selectedIndex = selectedIndex + 1;
           return (
             <WizardStep
+              key={idx}
               titleText={step.name}
               selected={selected === selectedIndex}
             >

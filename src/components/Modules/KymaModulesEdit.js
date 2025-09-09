@@ -32,7 +32,7 @@ import {
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from './kymaModulesQueries';
-import { findModuleSpec, findModuleStatus, setChannel } from './support';
+import { findModuleSpec, setChannel } from './support';
 import CommunityModulesEdit from 'components/Modules/community/CommunityModulesEdit';
 import { useSetAtom } from 'jotai';
 
@@ -235,9 +235,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
               onChange(module, event.detail.selectedOption.value, index);
             }}
             value={
-              findModuleSpec(kymaResource, module.name)?.channel ||
-              findModuleStatus(kymaResource, module.name)?.channel ||
-              'predefined'
+              findModuleSpec(kymaResource, module.name)?.channel || 'predefined'
             }
             className="channel-select"
           >

@@ -82,6 +82,7 @@ export const ModulesListRows = ({
         channel: resource.channel,
         state: moduleResource?.status?.state,
         message: moduleResource?.status?.message,
+        maintenance: false,
       };
 
   const showDetailsLink = hasDetailsLink(resource);
@@ -186,26 +187,20 @@ export const ModulesListRows = ({
     // Version
     moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
     // Module State
-    <ModuleStatus key="module-state" resource={moduleStatus} />,
+    <ModuleStatus
+      key={`module-state-${resource.name}`}
+      resource={moduleStatus}
+    />,
     // Installation State
-    <StatusBadge
-      key="installation-state"
-      resourceKind="kymas"
-      type={resolveType(
-        kymaResource
-          ? resolvedInstallationStateName
-          : managerResourceState?.state ?? '',
-      )}
-      tooltipContent={
-        kymaResource
-          ? moduleStatus?.message ?? managerResourceState?.message
-          : managerResourceState?.message
-      }
-    >
-      {kymaResource
-        ? resolvedInstallationStateName
-        : managerResourceState?.state}
-    </StatusBadge>,
+    kymaResource
+      ? kymaInstalationStateColumn(
+          resolvedInstallationStateName,
+          moduleStatus,
+          managerResourceState,
+          resource?.name,
+          t,
+        )
+      : instalationStateColumn(managerResourceState, resource?.name),
     // Documentation
     moduleDocs ? (
       <ExternalLink url={moduleDocs}>{t('common.headers.link')}</ExternalLink>
@@ -214,3 +209,60 @@ export const ModulesListRows = ({
     ),
   ];
 };
+
+function instalationStateColumn(
+  managerResourceState: any,
+  resourceName: string,
+) {
+  let type = 'None';
+  if (managerResourceState.state) {
+    type = resolveType(managerResourceState.state);
+  } else {
+    if (managerResourceState.status === 'True') {
+      type = 'Positive';
+    } else if (managerResourceState.status === 'False') {
+      type = 'Warning';
+    }
+  }
+  return (
+    <StatusBadge
+      key={`installation-state-${resourceName}`}
+      resourceKind="communnity-modules"
+      type={type}
+      tooltipContent={managerResourceState?.message}
+    >
+      {managerResourceState?.state ?? managerResourceState?.type}
+    </StatusBadge>
+  );
+}
+
+function kymaInstalationStateColumn(
+  resolvedInstallationStateName: string,
+  moduleStatus: any,
+  managerResourceState: any,
+  resourceName: string,
+  t: Function,
+) {
+  return (
+    <>
+      <StatusBadge
+        key={`installation-state-${resourceName}`}
+        resourceKind="kymas"
+        type={resolveType(resolvedInstallationStateName)}
+        tooltipContent={moduleStatus?.message ?? managerResourceState?.message}
+      >
+        {resolvedInstallationStateName}
+      </StatusBadge>
+      {moduleStatus?.maintenance === true && (
+        <StatusBadge
+          type="Critical"
+          className="sap-margin-begin-tiny"
+          key={`pending-maintenance-${resourceName}`}
+          tooltipContent={t('kyma-modules.maintenance-tooltip')}
+        >
+          {t('kyma-modules.maintenance')}
+        </StatusBadge>
+      )}
+    </>
+  );
+}
