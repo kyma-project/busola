@@ -4,6 +4,9 @@ import {
   ModuleTemplateType,
 } from 'components/Modules/support';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
+import { createPatch } from 'rfc6902';
+import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
+import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
 
 export type VersionInfo = {
   version: string;
@@ -148,6 +151,69 @@ function imageMatchVersion(image: string, version: string): boolean {
   return imgTag.includes(version);
 }
 
+export async function installCommunityModule(
+  moduleTpl: ModuleTemplateType,
+  clusterNodes: any,
+  namespaceNodes: any,
+  postRequest: PostFn,
+  patchRequest: MutationFn,
+) {
+  const name = getModuleName(moduleTpl);
+  // setState Downloading
+  console.log('Downloading:', name);
+
+  const allResourcesLinks =
+    moduleTpl.spec.resources?.map(resource => resource.link) || [];
+  const allResources = await getAllResourcesYamls(
+    allResourcesLinks,
+    postRequest,
+  );
+  console.log('Preparing:', name);
+
+  // setState preparing
+  const { crds, otherYamls } = extractCrds(allResources);
+
+  // setState uploading
+  console.log('Uploading CRDs:', name, crds);
+  await uploadResources(
+    crds,
+    clusterNodes,
+    namespaceNodes,
+    postRequest,
+    patchRequest,
+  );
+  console.log('Uploading other:', name, otherYamls);
+  await uploadResources(
+    otherYamls,
+    clusterNodes,
+    namespaceNodes,
+    postRequest,
+    patchRequest,
+  );
+  console.log('Finished:', name);
+  //   setState Finished
+}
+
+async function uploadResources(
+  resources: any[],
+  clusterNodes: any,
+  namespaceNodes: any,
+  postRequest: PostFn,
+  patchRequest: MutationFn,
+) {
+  const uploadPromises = resources.map(r => {
+    return uploadResource(
+      { value: r },
+      'default',
+      clusterNodes,
+      namespaceNodes,
+      postRequest,
+      patchRequest,
+    );
+  });
+  return Promise.allSettled(uploadPromises);
+}
+
 export async function postForCommunityResources(post: PostFn, link: string) {
   if (!link) {
     console.error('No link provided for community resource');
@@ -161,7 +227,10 @@ export async function postForCommunityResources(post: PostFn, link: string) {
   return response;
 }
 
-export async function getAllResourcesYamls(links: string[], post: PostFn) {
+export async function getAllResourcesYamls(
+  links: string[],
+  post: PostFn,
+): Promise<any[]> {
   if (links?.length) {
     const yamlRes = await Promise.all(
       links.map(async (link) => {
@@ -172,9 +241,10 @@ export async function getAllResourcesYamls(links: string[], post: PostFn) {
     );
     return yamlRes.flat();
   }
+  return [];
 }
 
-export function fetchResourcesToApply(
+export async function fetchResourcesToApply(
   communityModulesToApply: Map<string, ModuleTemplateType>,
   setResourcesToApply: Function,
   post: PostFn,
@@ -184,17 +254,78 @@ export function fetchResourcesToApply(
     .flat()
     .map((item) => item?.link || '');
 
-  (async function () {
-    try {
-      const yamls = await getAllResourcesYamls(resourcesLinks, post);
+  try {
+    const yamls = await getAllResourcesYamls(resourcesLinks, post);
 
-      const yamlsResources = yamls?.map((resource) => {
-        return { value: resource };
-      });
+    const yamlsResources = yamls?.map((resource) => {
+      return { value: resource };
+    });
 
-      setResourcesToApply(yamlsResources || []);
-    } catch (e) {
-      console.error(e);
+    setResourcesToApply(yamlsResources || []);
+  } catch (e) {
+    console.error(e);
+    return e;
+  }
+}
+
+export function extractCrds(yamls: any[]): { crds: any[]; otherYamls: any[] } {
+  const crds = yamls.filter(yaml => {
+    return yaml.kind === 'CustomResourceDefinition';
+  });
+
+  const otherYamls = yamls.filter(yaml => {
+    return yaml.kind !== 'CustomResourceDefinition';
+  });
+  return { crds, otherYamls };
+}
+
+const fetchPossibleExistingResource = async (url: string) => {
+  try {
+    const response = await fetch(url);
+    return await response.json();
+  } catch (_) {
+    // TODO: Fix that situation
+    return null;
+  }
+};
+
+export async function uploadResource(
+  resource: any,
+  namespaceId: string,
+  clusterNodes: any,
+  namespaceNodes: any,
+  post: PostFn,
+  patchRequest: MutationFn,
+) {
+  // TODO: getUrl may have a problem with PriorityClass
+  const url = await getUrl(
+    resource.value,
+    namespaceId,
+    clusterNodes,
+    namespaceNodes,
+    fetch,
+  );
+  console.log(url);
+  const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
+  const existingResource = await fetchPossibleExistingResource(urlWithName);
+  try {
+    //add a new resource
+    if (!existingResource) {
+      await post(url, resource.value);
+    } else {
+      if (
+        existingResource?.metadata?.resourceVersion &&
+        !resource?.value?.metadata?.resourceVersion
+      ) {
+        resource.value.metadata.resourceVersion =
+          existingResource.metadata.resourceVersion;
+      }
+      const diff = createPatch(existingResource, resource.value);
+      await patchRequest(urlWithName, diff);
     }
-  })();
+  } catch (e) {
+    console.warn(e);
+
+    return false;
+  }
 }

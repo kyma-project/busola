@@ -7,8 +7,8 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
-  fetchResourcesToApply,
   getAvailableCommunityModules,
+  installCommunityModule,
   VersionInfo,
 } from 'components/Modules/community/communityModulesHelpers';
 import {
@@ -20,14 +20,15 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
-import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import CommunityModuleCard from 'components/Modules/community/components/CommunityModuleCard';
-
+import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 
 import 'components/Modules/KymaModulesAddModule.scss';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useAtomValue } from 'jotai/index';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -117,19 +118,13 @@ export default function CommunityModulesAddModule(props: any) {
   const { isEnabled: isCommunityModulesEnabled } =
     useFeature('COMMUNITY_MODULES');
   const notification = useNotification();
-  const post = usePost();
+  const postRequest = usePost();
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
 
-  const uploadResources = useUploadResources(
-    resourcesToApply,
-    setResourcesToApply,
-    () => {},
-    'default',
-  );
   const [
     communityModulesTemplatesToApply,
     setCommunityModulesTemplatesToApply,
@@ -154,17 +149,17 @@ export default function CommunityModulesAddModule(props: any) {
     notInstalledCommunityModulesLoading,
   ]);
 
-  useEffect(() => {
-    fetchResourcesToApply(
-      communityModulesTemplatesToApply,
-      setResourcesToApply,
-      post,
-    );
-  }, [communityModulesTemplatesToApply]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const [columnsCount, setColumnsCount] = useState(2);
   const [cardsContainerRef, setCardsContainerRef] =
     useState<HTMLDivElement | null>(null);
+
+  const patchRequest = useUpdate();
+  const clusterNodes = useAtomValue(allNodesAtom).filter(
+    node => !node.namespaced,
+  );
+  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+    node => node.namespaced,
+  );
 
   const calculateColumns = useCallback(() => {
     if (cardsContainerRef?.clientWidth) {
@@ -251,32 +246,45 @@ export default function CommunityModulesAddModule(props: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    try {
-      uploadResources();
+    (async function() {
+      try {
+        const operationPromises = communityModulesTemplatesToApply
+          .values()
+          .map(moduleTemplate =>
+            installCommunityModule(
+              moduleTemplate,
+              clusterNodes,
+              namespaceNodes,
+              postRequest,
+              patchRequest,
+            ),
+          );
+        await Promise.allSettled(operationPromises);
 
-      notification.notifySuccess({
-        content: t('modules.community.messages.success', {
-          resourceType: 'Community Module',
-        }),
-      });
+        notification.notifySuccess({
+          content: t('modules.community.messages.success', {
+            resourceType: 'Community Module',
+          }),
+        });
 
-      setLayoutColumn({
-        ...layoutColumn,
-        layout: 'OneColumn',
-        midColumn: null,
-        endColumn: null,
-        showCreate: null,
-      });
-      navigate(window.location.pathname, { replace: true });
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t('modules.community.messages.install-failure', {
-          resourceType: 'Community Module',
-          error: e instanceof Error && e?.message ? e.message : '',
-        }),
-      });
-    }
+        setLayoutColumn({
+          ...layoutColumn,
+          layout: 'OneColumn',
+          midColumn: null,
+          endColumn: null,
+          showCreate: null,
+        });
+        navigate(window.location.pathname, { replace: true });
+      } catch (e) {
+        console.error(e);
+        notification.notifyError({
+          content: t('modules.community.messages.install-failure', {
+            resourceType: 'Community Module',
+            error: e instanceof Error && e?.message ? e.message : '',
+          }),
+        });
+      }
+    })();
   };
 
   if (isCommunityModulesEnabled) {
