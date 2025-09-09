@@ -1,15 +1,35 @@
 import { createContext, useContext } from 'react';
 import { useGetInstalledNotInstalledModules } from 'components/Modules/hooks';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
+import { ModuleTemplateListType } from 'components/Modules/support';
 
-export const CommunityModuleContext = createContext({
-  installedCommunityModules: [],
-  installedCommunityModuleTemplates: { items: [] },
-  notInstalledCommunityModuleTemplates: { items: [] },
-  installedCommunityModulesLoading: false,
-});
+interface CommunityModuleContextType {
+  installedCommunityModules: {
+    name: string;
+    moduleTemplateName: string;
+    namespace: string;
+    version: string;
+    resource: any;
+  }[];
+  installedCommunityModuleTemplates: ModuleTemplateListType;
+  notInstalledCommunityModuleTemplates: ModuleTemplateListType;
+  installedCommunityModulesLoading: boolean;
+}
 
-export function CommunityModuleContextProvider({ children }) {
+export const CommunityModuleContext = createContext<CommunityModuleContextType>(
+  {
+    installedCommunityModules: [],
+    installedCommunityModuleTemplates: { items: [] },
+    notInstalledCommunityModuleTemplates: { items: [] },
+    installedCommunityModulesLoading: false,
+  },
+);
+
+export function CommunityModuleContextProvider({
+  children,
+}: {
+  children: JSX.Element;
+}) {
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
@@ -31,7 +51,7 @@ export function CommunityModuleContextProvider({ children }) {
       value={{
         installedCommunityModules: installedCommunityModules,
         installedCommunityModuleTemplates: installedCommunityModuleTemplates,
-        communityModulesLoading: installedCommunityModulesLoading,
+        installedCommunityModulesLoading,
         notInstalledCommunityModuleTemplates: notInstalledCommunityModuleTemplates,
       }}
     >
@@ -40,7 +60,7 @@ export function CommunityModuleContextProvider({ children }) {
   );
 }
 
-function simplifyInstalledModules(installedModules) {
+function simplifyInstalledModules(installedModules: ModuleTemplateListType) {
   return (
     installedModules.items?.map(module => ({
       name:
