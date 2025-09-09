@@ -43,17 +43,18 @@ export const useResourceSchemas = () => {
       notification.notifyError({
         content: t('clusters.messages.connection-failed'),
       });
+
       navigate('/clusters');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     activeClusterName,
     cluster?.contextName,
     authData,
-    openApi,
+    openApi.state,
     isClusterList,
     navigate,
     t,
-    notification,
   ]);
 
   useEffect(() => {
