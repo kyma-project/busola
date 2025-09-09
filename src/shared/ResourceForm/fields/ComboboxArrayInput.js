@@ -28,15 +28,15 @@ export function ComboboxArrayInput({
 
     {key: '', text: 'empty'} -> {key: emptyStringKey, text: 'empty'}
   */
-  const toInternal = values =>
+  const toInternal = (values) =>
     (values || [])
-      .filter(v => v || (emptyStringKey && v === ''))
-      .map(v => (emptyStringKey && v === '' ? emptyStringKey : v));
+      .filter((v) => v || (emptyStringKey && v === ''))
+      .map((v) => (emptyStringKey && v === '' ? emptyStringKey : v));
 
-  const toExternal = values =>
+  const toExternal = (values) =>
     values
-      .filter(val => !!val)
-      .map(v => (emptyStringKey && v === emptyStringKey ? '' : v));
+      .filter((val) => !!val)
+      .map((v) => (emptyStringKey && v === emptyStringKey ? '' : v));
 
   return (
     <MultiInput

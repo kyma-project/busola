@@ -8,7 +8,7 @@ let validationRuleset: ValidationSchema;
 
 const ResourceValidation = {
   validate(resources: K8sResource[]) {
-    return resources.map(resource =>
+    return resources.map((resource) =>
       validateResourceBySchema(resource, validationRuleset, {
         base: 'https://dashboard.kyma.cloud.sap', // Workaround for jsonschema 1.5.0 - https://github.com/tdegrunt/jsonschema/issues/407
       }),
@@ -19,7 +19,7 @@ const ResourceValidation = {
   },
 };
 
-self.onmessage = event => {
+self.onmessage = (event) => {
   const [method, ...parameters] = event.data;
 
   if (method === 'validate') {

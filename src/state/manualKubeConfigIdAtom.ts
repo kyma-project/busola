@@ -7,7 +7,6 @@ export type ManualKubeConfigIdType = {
 
 const defaultValue = { formOpen: false, auth: null };
 
-export const manualKubeConfigIdAtom = atom<ManualKubeConfigIdType>(
-  defaultValue,
-);
+export const manualKubeConfigIdAtom =
+  atom<ManualKubeConfigIdType>(defaultValue);
 manualKubeConfigIdAtom.debugLabel = 'manualKubeConfigIdAtom';

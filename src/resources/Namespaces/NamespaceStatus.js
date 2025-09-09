@@ -1,7 +1,7 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function NamespaceStatus({ namespaceStatus }) {
-  const badgeType = status => {
+  const badgeType = (status) => {
     switch (status) {
       case 'Active':
         return 'Positive';

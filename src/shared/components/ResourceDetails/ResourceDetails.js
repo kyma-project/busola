@@ -34,12 +34,12 @@ import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
 // It doesn't affect the lighthouse score, but it prolongs the graph waiting time.
-const ResourceGraph = React.lazy(() =>
-  import('../ResourceGraph/ResourceGraph'),
+const ResourceGraph = React.lazy(
+  () => import('../ResourceGraph/ResourceGraph'),
 );
 
-const Injections = React.lazy(() =>
-  import('../../../components/Extensibility/ExtensibilityInjections'),
+const Injections = React.lazy(
+  () => import('../../../components/Extensibility/ExtensibilityInjections'),
 );
 
 ResourceDetails.propTypes = {
@@ -80,13 +80,15 @@ export function ResourceDetails(props) {
 export const ResourceDetailContext = createContext(false);
 
 function ResourceDetailsRenderer(props) {
-  const { loading = true, error, data: resource, silentRefetch } = useGet(
-    props.resourceUrl,
-    {
-      pollingInterval: 3000,
-      errorTolerancy: props.isModule ? 0 : undefined,
-    },
-  );
+  const {
+    loading = true,
+    error,
+    data: resource,
+    silentRefetch,
+  } = useGet(props.resourceUrl, {
+    pollingInterval: 3000,
+    errorTolerancy: props.isModule ? 0 : undefined,
+  });
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
@@ -186,11 +188,8 @@ function Resource({
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
-  const {
-    isProtected,
-    protectedResourceWarning,
-    protectedResourcePopover,
-  } = useProtectedResources();
+  const { isProtected, protectedResourceWarning, protectedResourcePopover } =
+    useProtectedResources();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -212,7 +211,7 @@ function Resource({
         />
       </Suspense>
       {headerActions}
-      {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
+      {resourceHeaderActions.map((resourceAction) => resourceAction(resource))}
       <div>
         {!disableDelete && (
           <>
@@ -243,7 +242,7 @@ function Resource({
     </>
   );
 
-  const filterColumns = col => {
+  const filterColumns = (col) => {
     const { visible, error } = col.visibility?.(resource) || {
       visible: true,
     };
@@ -286,9 +285,9 @@ function Resource({
           <>
             {customStatusColumns
               ?.filter(filterColumns)
-              .filter(col => !col?.conditionComponent)
-              ?.filter(col => !col?.fullWidth || col?.fullWidth === false)
-              ?.map(col => (
+              .filter((col) => !col?.conditionComponent)
+              ?.filter((col) => !col?.fullWidth || col?.fullWidth === false)
+              ?.map((col) => (
                 <DynamicPageComponent.Column
                   key={col.header}
                   title={col.header}
@@ -304,9 +303,9 @@ function Resource({
           <>
             {customStatusColumns
               ?.filter(filterColumns)
-              .filter(col => !col?.conditionComponent)
-              ?.filter(col => col?.fullWidth && col?.fullWidth === true)
-              ?.map(col => (
+              .filter((col) => !col?.conditionComponent)
+              ?.filter((col) => col?.fullWidth && col?.fullWidth === true)
+              ?.map((col) => (
                 <DynamicPageComponent.Column
                   key={col.header}
                   title={col.header}
@@ -379,7 +378,7 @@ function Resource({
               {renderUpdateDate(lastUpdate, t('common.value-units.days-ago'))}
             </DynamicPageComponent.Column>
           )}
-          {customColumns.filter(filterColumns).map(col => (
+          {customColumns.filter(filterColumns).map((col) => (
             <DynamicPageComponent.Column key={col.header} title={col.header}>
               {col.value(resource)}
             </DynamicPageComponent.Column>
@@ -412,9 +411,9 @@ function Resource({
     />
   );
 
-  const customOverviewCard = (
-    customHealthCards || []
-  ).map((healthCard, index) => healthCard(resource, index));
+  const customOverviewCard = (customHealthCards || []).map(
+    (healthCard, index) => healthCard(resource, index),
+  );
 
   return (
     <ResourceDetailContext.Provider value={true}>
@@ -476,7 +475,7 @@ function Resource({
                 root={resource}
               />
             </Suspense>
-            {(customComponents || []).map(component =>
+            {(customComponents || []).map((component) =>
               component(resource, resourceUrl),
             )}
             {children}
@@ -497,7 +496,7 @@ function Resource({
             </Suspense>
           </>
         }
-        inlineEditForm={stickyHeaderHeight => (
+        inlineEditForm={(stickyHeaderHeight) => (
           <ResourceCreate
             title={
               editActionLabel ||
@@ -511,7 +510,7 @@ function Resource({
             protectedResourceWarning={protectedResourceWarning(resource, true)}
             readOnly={readOnly}
             disableEdit={disableEdit}
-            renderForm={props => (
+            renderForm={(props) => (
               <ErrorBoundary>
                 <CreateResourceForm
                   resource={resource}

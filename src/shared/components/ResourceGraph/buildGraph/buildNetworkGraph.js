@@ -8,7 +8,7 @@ import {
 import { findCommonPrefix } from 'shared/utils/helpers';
 
 function isWorkloadLayer(layers) {
-  return (layers || []).some(layer => layer.kind === 'Pod');
+  return (layers || []).some((layer) => layer.kind === 'Pod');
 }
 const DEPLOYMENT_SUBGRAPH_ITEMS = [
   { kind: 'Pod', required: true, root: true },
@@ -18,7 +18,7 @@ const DEPLOYMENT_SUBGRAPH_ITEMS = [
 ];
 
 function canDrawWorkload(store) {
-  return DEPLOYMENT_SUBGRAPH_ITEMS.every(item => {
+  return DEPLOYMENT_SUBGRAPH_ITEMS.every((item) => {
     return item.required ? store[item.kind]?.length > 0 : true;
   });
 }
@@ -36,18 +36,20 @@ function getCombinedResourceName(resources) {
   return resources.length > 1
     ? findCommonPrefix(
         '',
-        resources.map(pod => pod.metadata.name),
+        resources.map((pod) => pod.metadata.name),
       ) + '*'
     : resources[0].metadata.name;
 }
 
 function getResourcesOnLayers(store, config, extract) {
-  const getResourcesForLayer = level => {
+  const getResourcesForLayer = (level) => {
     const resourcesOnLevel = [];
     for (const kind in store) {
       if (
         extract &&
-        DEPLOYMENT_SUBGRAPH_ITEMS.some(i => (i.root ? false : i.kind === kind))
+        DEPLOYMENT_SUBGRAPH_ITEMS.some((i) =>
+          i.root ? false : i.kind === kind,
+        )
       ) {
         continue;
       } else if (config[kind]?.networkFlowLevel === level) {
@@ -58,8 +60,8 @@ function getResourcesOnLayers(store, config, extract) {
   };
 
   const networkFlowLevels = Object.values(config)
-    .map(c => c.networkFlowLevel)
-    .filter(c => typeof c === 'number');
+    .map((c) => c.networkFlowLevel)
+    .filter((c) => typeof c === 'number');
   const minLevel = Math.min(...networkFlowLevels);
   const maxLevel = Math.max(...networkFlowLevels);
 
@@ -67,7 +69,7 @@ function getResourcesOnLayers(store, config, extract) {
   for (let i = minLevel; i <= maxLevel; i++) {
     layers.push(getResourcesForLayer(i));
   }
-  return layers.filter(layer => layer?.length);
+  return layers.filter((layer) => layer?.length);
 }
 
 export function buildNetworkGraph({ store }, config) {
@@ -121,7 +123,7 @@ export function buildNetworkGraph({ store }, config) {
 
         // edges for workoad layer: connect pod to resources below
         if (nextLayer) {
-          nextLayer.forEach(resource => {
+          nextLayer.forEach((resource) => {
             strEdges.push(makeEdge(podId, resource.metadata.uid));
           });
         }
@@ -154,7 +156,7 @@ export function buildNetworkGraph({ store }, config) {
           const podId = multiplePods
             ? 'composite-pod'
             : store['Pod'][0].metadata.uid;
-          currentLayer.forEach(svc => {
+          currentLayer.forEach((svc) => {
             if (!!deployment && store['Pod']?.length) {
               strEdges.push(
                 makeEdge(svc.metadata.uid, podId, {

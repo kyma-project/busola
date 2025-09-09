@@ -15,7 +15,7 @@ export function DataField({ title, ...props }) {
       input={{
         value: ({ setValue, ...props }) => (
           <TextArea
-            onChange={e => setValue(e.target.value)}
+            onChange={(e) => setValue(e.target.value)}
             growing
             growingMaxRows={'10'}
             {...props}

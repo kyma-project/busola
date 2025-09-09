@@ -26,21 +26,21 @@ export function prepareRules(schemaRules, disableOnEdit, t) {
 
   const nameField = {
     ...defaultNameField,
-    ...schemaRules.find(r => r.path === 'metadata.name'),
+    ...schemaRules.find((r) => r.path === 'metadata.name'),
   };
   const labelsField = {
     ...defaultLabelsField,
-    ...schemaRules.find(r => r.path === 'metadata.labels'),
+    ...schemaRules.find((r) => r.path === 'metadata.labels'),
   };
   const annotationsField = {
     ...defaultAnnotationsField,
-    ...schemaRules.find(r => r.path === 'metadata.annotations'),
+    ...schemaRules.find((r) => r.path === 'metadata.annotations'),
   };
 
   return [
     nameField,
     labelsField,
     annotationsField,
-    ...schemaRules.filter(r => !PREDEFINED_PATHS.includes(r.path)),
+    ...schemaRules.filter((r) => !PREDEFINED_PATHS.includes(r.path)),
   ];
 }

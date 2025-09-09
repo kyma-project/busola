@@ -20,9 +20,7 @@ describe('StatusBadge', () => {
     );
 
     cy.get('@consoleWarn').should('have.been.calledOnce');
-    cy.get('@consoleWarn')
-      .its('firstCall.args')
-      .should('exist');
+    cy.get('@consoleWarn').its('firstCall.args').should('exist');
   });
 
   it('renders status text without tooltip', () => {

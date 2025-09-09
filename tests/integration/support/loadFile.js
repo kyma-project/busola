@@ -2,8 +2,8 @@ import jsyaml from 'js-yaml';
 
 export function loadFile(FILE_NAME, single = true) {
   const load = single ? jsyaml.load : jsyaml.loadAll;
-  return new Promise(resolve => {
-    cy.fixture(FILE_NAME).then(fileContent => resolve(load(fileContent)));
+  return new Promise((resolve) => {
+    cy.fixture(FILE_NAME).then((fileContent) => resolve(load(fileContent)));
   });
 }
 
@@ -28,9 +28,9 @@ function parseYamlToJs(content) {
 }
 
 async function loadFiles(...fileNames) {
-  const getAFileFromDisk = fileName =>
-    new Promise(resolve =>
-      cy.fixture(fileName).then(content => resolve(parseYamlToJs(content))),
+  const getAFileFromDisk = (fileName) =>
+    new Promise((resolve) =>
+      cy.fixture(fileName).then((content) => resolve(parseYamlToJs(content))),
     );
   const filesContent = await Promise.all(fileNames.map(getAFileFromDisk));
 

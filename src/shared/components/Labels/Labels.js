@@ -34,7 +34,7 @@ export const Labels = ({
     separatedLabels.push(`${key}=${labels[key]}`);
   }
 
-  const shortenLabel = label => label.slice(0, SHORTENING_TRESHOLD) + '...';
+  const shortenLabel = (label) => label.slice(0, SHORTENING_TRESHOLD) + '...';
 
   return (
     <>

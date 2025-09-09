@@ -51,7 +51,7 @@ export default function SecretData({ secret }) {
 
     return (
       <>
-        {Object.keys(secret.data).map(key => (
+        {Object.keys(secret.data).map((key) => (
           <SecretComponent
             name={key}
             key={key}

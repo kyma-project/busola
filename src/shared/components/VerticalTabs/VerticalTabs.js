@@ -10,8 +10,10 @@ const childrenPropType = PropTypes.oneOfType([
   PropTypes.node,
 ]).isRequired;
 
-const tabIdPropType = PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-  .isRequired;
+const tabIdPropType = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.number,
+]).isRequired;
 
 VerticalTabs.propTypes = {
   tabs: PropTypes.arrayOf(

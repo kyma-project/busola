@@ -55,7 +55,7 @@ export function DetailsCard({
               : '';
 
             const node = nodes.find(
-              n =>
+              (n) =>
                 n.resourceType.toLowerCase() ===
                 pluralize(resource.kind!).toLowerCase(),
             )!;

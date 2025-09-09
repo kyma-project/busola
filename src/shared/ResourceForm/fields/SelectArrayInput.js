@@ -11,9 +11,9 @@ export function SelectArrayInput({
   options,
   ...props
 }) {
-  const toInternal = values => (values || []).filter(v => v);
+  const toInternal = (values) => (values || []).filter((v) => v);
 
-  const toExternal = values => values.filter(val => !!val);
+  const toExternal = (values) => values.filter((val) => !!val);
 
   return (
     <MultiInput

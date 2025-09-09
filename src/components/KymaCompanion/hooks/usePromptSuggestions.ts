@@ -27,7 +27,7 @@ const getResourceFromColumnnLayout = (
       prettifyNameSingular(column?.resourceType ?? ''),
     groupVersion: column?.apiGroup
       ? `${column?.apiGroup}/${column?.apiVersion}`
-      : column?.apiVersion ?? '',
+      : (column?.apiVersion ?? ''),
     resourceName: column?.resourceName ?? '',
   };
 };
@@ -53,12 +53,8 @@ export function usePromptSuggestions(
   });
 
   useEffect(() => {
-    const {
-      namespace,
-      resourceType,
-      groupVersion,
-      resourceName,
-    } = getResourceFromColumnnLayout(columnLayout);
+    const { namespace, resourceType, groupVersion, resourceName } =
+      getResourceFromColumnnLayout(columnLayout);
 
     setCurrentResource({
       namespace,
@@ -73,13 +69,10 @@ export function usePromptSuggestions(
       return;
     }
 
-    const {
-      namespace,
-      resourceType,
-      resourceName,
-      groupVersion,
-    } = currentResource;
-    const resourceKey = `${namespace}|${resourceType}|${groupVersion}|${resourceName}`.toLocaleLowerCase();
+    const { namespace, resourceType, resourceName, groupVersion } =
+      currentResource;
+    const resourceKey =
+      `${namespace}|${resourceType}|${groupVersion}|${resourceName}`.toLocaleLowerCase();
 
     async function fetchSuggestions() {
       setLoading(true);

@@ -1,7 +1,7 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function HelmReleaseStatus({ status }) {
-  const resolveType = status => {
+  const resolveType = (status) => {
     switch (status) {
       case 'deployed':
         return 'Positive';

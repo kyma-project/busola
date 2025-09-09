@@ -22,10 +22,7 @@ export function MultiType({
   const types = schema.get('type');
   const typeWidgets = schema.get('widgets')?.toJS();
 
-  let newSchema = schema
-    .delete('type')
-    .delete('widget')
-    .delete('widgets');
+  let newSchema = schema.delete('type').delete('widget').delete('widgets');
 
   let selectedType;
   if (isNil(value)) {
@@ -59,7 +56,7 @@ export function MultiType({
         }
         input={() => (
           <SegmentedButton>
-            {types.map(type => (
+            {types.map((type) => (
               <SegmentedButtonItem
                 compact
                 key={type}

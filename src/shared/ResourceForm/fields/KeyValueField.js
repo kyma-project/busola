@@ -41,7 +41,7 @@ export function KeyValueField({
     setValuesEncoded(!valuesEncoded);
   };
 
-  const dataValue = value => {
+  const dataValue = (value) => {
     if (!encodable || valuesEncoded) {
       return value?.val || initialValue;
     } else {
@@ -74,12 +74,12 @@ export function KeyValueField({
   return (
     <MultiInput
       defaultOpen={defaultOpen}
-      toInternal={value =>
+      toInternal={(value) =>
         Object.entries(value || {}).map(([key, val]) => ({ key, val }))
       }
-      toExternal={value =>
+      toExternal={(value) =>
         value
-          .filter(entry => !!entry?.key)
+          .filter((entry) => !!entry?.key)
           .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
       }
       inputs={[
@@ -96,12 +96,12 @@ export function KeyValueField({
               key: 'key',
               value: value?.key || '',
               ref: ref,
-              onChange: e =>
+              onChange: (e) =>
                 setValue({
                   val: value?.val || initialValue,
                   key: e.target.value,
                 }),
-              onKeyDown: e => focus(e, 1),
+              onKeyDown: (e) => focus(e, 1),
               onBlur: updateValue,
               placeholder: t('components.key-value-field.enter-key'),
               accessibleName: `${props.title} key`,
@@ -118,13 +118,13 @@ export function KeyValueField({
               fullWidth: true,
               className: 'value-input full-width',
               key: 'value',
-              onKeyDown: e => focus(e),
+              onKeyDown: (e) => focus(e),
               value: dataValue(value),
               placeholder: t('components.key-value-field.enter-value'),
               disabled:
                 lockedValues.includes(value?.key) ||
                 (disableOnEdit && editMode),
-              setValue: val => {
+              setValue: (val) => {
                 setValue({
                   ...value,
                   val: valuesEncoded || !encodable ? val : base64Encode(val),
@@ -150,7 +150,7 @@ export function KeyValueField({
             {readableFromFile ? (
               <Button
                 onClick={() =>
-                  readFromFile()?.then(result => {
+                  readFromFile()?.then((result) => {
                     setValue({
                       key: value?.key || result.name,
                       val: !encodable

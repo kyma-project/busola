@@ -10,7 +10,7 @@ export function scopePaths(storeKeys) {
 
   return [
     '',
-    ...indexes.map(index =>
+    ...indexes.map((index) =>
       storeKeys
         .slice(0, index + 1)
         .toArray()
@@ -28,7 +28,7 @@ function pathMatch(subKeys, triggerKeys, modifiers) {
     subPath = '';
   } else {
     modifiers
-      .filter(mod => mod === '$parent')
+      .filter((mod) => mod === '$parent')
       .forEach(() => (subPath = subPaths.pop()));
   }
 
@@ -53,19 +53,19 @@ export function TriggerContextProvider({ children }) {
     if (!enabled) return;
     setTimeout(() =>
       subs.current
-        .map(sub => sub.current[name])
-        .filter(sub => !!sub)
-        .filter(sub => pathMatch(sub.storeKeys, storeKeys, sub.modifiers))
-        .forEach(sub => sub.callback()),
+        .map((sub) => sub.current[name])
+        .filter((sub) => !!sub)
+        .filter((sub) => pathMatch(sub.storeKeys, storeKeys, sub.modifiers))
+        .forEach((sub) => sub.callback()),
     );
   };
 
-  const subscribe = sub => {
+  const subscribe = (sub) => {
     subs.current = [...subs.current, sub];
   };
 
-  const unsubscribe = sub => {
-    subs.current = subs.current.filter(s => s.sub !== sub);
+  const unsubscribe = (sub) => {
+    subs.current = subs.current.filter((s) => s.sub !== sub);
   };
 
   const disable = () => {

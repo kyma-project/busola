@@ -80,7 +80,7 @@ export function NetworkPolicyDetails(props) {
     ));
   };
 
-  const PodSelector = policy => {
+  const PodSelector = (policy) => {
     const { t } = useTranslation();
 
     return (

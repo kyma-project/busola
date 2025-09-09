@@ -24,7 +24,7 @@ export function Presets({
       label={label}
       onSelect={(e, preset) => {
         e.stopPropagation();
-        onSelect(presets.find(p => p.name === preset.key));
+        onSelect(presets.find((p) => p.name === preset.key));
       }}
     />
   );

@@ -31,12 +31,8 @@ export const ResourceCreate = ({
   createFormRef = null,
 }) => {
   const { t } = useTranslation();
-  const {
-    isValid,
-    formElementRef,
-    setCustomValid,
-    revalidate,
-  } = useCustomFormValidator();
+  const { isValid, formElementRef, setCustomValid, revalidate } =
+    useCustomFormValidator();
   const notificationManager = useNotification();
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
@@ -153,7 +149,7 @@ export const ResourceCreate = ({
             layoutNumber === 'endColumn' ? '?layout=TwoColumnsMidExpanded' : ''
           }`}
           showYamlTab={disableEdit && onlyYaml}
-          content={stickyHeaderHeight => (
+          content={(stickyHeaderHeight) => (
             <>
               <div
                 className="create-form sap-margin-bottom-small"

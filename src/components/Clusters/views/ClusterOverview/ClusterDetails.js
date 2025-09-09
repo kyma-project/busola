@@ -37,14 +37,12 @@ export default function ClusterDetails({ currentCluster }) {
   const config = currentCluster?.config;
   const kymaResourceLabels = useMemo(
     () =>
-      kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
-        .labels || kymaResources?.items[0]?.metadata?.labels,
+      kymaResources?.items.find((kymaResource) => kymaResource?.status)
+        ?.metadata.labels || kymaResources?.items[0]?.metadata?.labels,
     [kymaResources],
   );
-  const {
-    natGatewayIps,
-    environmentParametersLoading,
-  } = useGetEnvironmentParameters();
+  const { natGatewayIps, environmentParametersLoading } =
+    useGetEnvironmentParameters();
 
   return (
     <section aria-labelledby="cluster-details-heading">

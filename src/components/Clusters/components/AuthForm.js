@@ -23,7 +23,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
   return (
     <ResourceForm.Wrapper
       resource={auth}
-      setResource={auth => {
+      setResource={(auth) => {
         jp.value(
           resource,
           `$.users[${userIndex}].user.exec`,
@@ -82,7 +82,7 @@ const TokenForm = ({ resource, setResource, ...props }) => {
       <ResourceForm.FormField
         required
         value={token}
-        setValue={val => {
+        setValue={(val) => {
           setToken(val);
           jp.value(resource, `$.users[${userIndex}].user.token`, val);
         }}
@@ -152,7 +152,7 @@ export function AuthForm({
         )}
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.using-oidc')}
-          input={props => (
+          input={(props) => (
             <Switch
               {...props}
               className="sap-margin-top-tiny"

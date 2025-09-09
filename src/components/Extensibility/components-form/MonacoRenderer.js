@@ -11,7 +11,7 @@ import { useJsonata } from '../hooks/useJsonata';
 function getValue(storeKeys, resource) {
   let value = resource;
   const keys = storeKeys.toJS();
-  keys.forEach(key => {
+  keys.forEach((key) => {
     return (value = value?.[key]);
   });
   return value;
@@ -47,10 +47,10 @@ export function MonacoRenderer({
   nestingLevel = 0,
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
-  const value = useMemo(() => getValue(storeKeys, resource), [
-    storeKeys,
-    resource,
-  ]);
+  const value = useMemo(
+    () => getValue(storeKeys, resource),
+    [storeKeys, resource],
+  );
 
   const jsonata = useJsonata({
     resource,
@@ -64,7 +64,7 @@ export function MonacoRenderer({
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const handleChange = useCallback(
-    value => {
+    (value) => {
       let parsedValue = value;
       if (language === 'json' && !formatAsString) {
         try {

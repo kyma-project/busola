@@ -1,7 +1,7 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function PersistentVolumeStatus({ status }) {
-  const badgeType = status => {
+  const badgeType = (status) => {
     switch (status) {
       case 'Bound':
       case 'Available':

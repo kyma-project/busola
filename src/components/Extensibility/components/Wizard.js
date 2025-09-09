@@ -20,7 +20,7 @@ export function Wizard({ value, structure, singleRootResource }) {
   );
   const wizardName = structure?.wizard || '';
 
-  const handleCloseWithEscape = e => {
+  const handleCloseWithEscape = (e) => {
     if (e.key === 'Escape') handleCloseModal();
   };
 

@@ -79,9 +79,7 @@ context('Test Cron Jobs', () => {
 
     cy.get('ui5-combobox[value="IfNotPresent"]').click();
 
-    cy.get('ui5-cb-item:visible')
-      .contains('Always')
-      .click();
+    cy.get('ui5-cb-item:visible').contains('Always').click();
 
     cy.checkUnsavedDialog();
 
@@ -89,13 +87,9 @@ context('Test Cron Jobs', () => {
   });
 
   it('Checking details', () => {
-    cy.getMidColumn()
-      .contains('ui5-title', CRON_JOB_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
-    cy.getMidColumn()
-      .contains('0 0 1 * *')
-      .should('be.visible');
+    cy.getMidColumn().contains('0 0 1 * *').should('be.visible');
   });
 
   it('Edit Cron Job', () => {
@@ -145,9 +139,7 @@ context('Test Cron Jobs', () => {
 
     cy.get('ui5-combobox[value="Always"]').click();
 
-    cy.get('ui5-cb-item:visible')
-      .contains('Never')
-      .click();
+    cy.get('ui5-cb-item:visible').contains('Never').click();
 
     cy.checkUnsavedDialog();
 
@@ -157,13 +149,9 @@ context('Test Cron Jobs', () => {
   it('Checking updates details', () => {
     cy.getMidColumn().inspectTab('View');
 
-    cy.getMidColumn()
-      .contains('ui5-title', CRON_JOB_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
-    cy.getMidColumn()
-      .contains('0 * * * *')
-      .should('be.visible');
+    cy.getMidColumn().contains('0 * * * *').should('be.visible');
   });
 
   it('Inspect list', () => {

@@ -14,7 +14,7 @@ function VerbStatus({ rule, verb }) {
   );
 }
 
-export const Rules = resource => {
+export const Rules = (resource) => {
   const isNamespaced = resource.metadata.namespace;
   const { t } = useTranslation();
 
@@ -52,17 +52,17 @@ export const Rules = resource => {
     'deletecollection',
   ];
 
-  const displayArrayValue = v => v?.join(', ') || EMPTY_TEXT_PLACEHOLDER;
-  const rowRenderer = rule => {
+  const displayArrayValue = (v) => v?.join(', ') || EMPTY_TEXT_PLACEHOLDER;
+  const rowRenderer = (rule) => {
     const commonFields = [
-      ...standardVerbs.map(verb => ({
+      ...standardVerbs.map((verb) => ({
         content: <VerbStatus rule={rule} verb={verb} />,
         style: { textAlign: 'center' },
       })),
-      rule.verbs?.filter(v => !standardVerbs.includes(v)).join(', ') ||
+      rule.verbs?.filter((v) => !standardVerbs.includes(v)).join(', ') ||
         EMPTY_TEXT_PLACEHOLDER,
       displayArrayValue(
-        (rule.apiGroups || []).map(apiGroup =>
+        (rule.apiGroups || []).map((apiGroup) =>
           apiGroup ? apiGroup : '(core)',
         ),
       ),

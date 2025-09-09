@@ -14,17 +14,15 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Creates the EXT pizza orders config', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles(
       'examples/pizzas/configuration/pizza-orders-configmap.yaml',
       'examples/pizzas/configuration/pizza-orders-crd.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    ).then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
@@ -38,8 +36,8 @@ context('Accessibility test Pizza Orders', () => {
       .should('have.length', 2);
 
     cy.loadFiles('examples/pizzas/samples/pizza-orders-samples.yaml').then(
-      resources => {
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      (resources) => {
+        const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
       },
     );
@@ -69,13 +67,9 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.clickListLink('pizzas');
 
-    cy.getLeftNav()
-      .contains('Lunch')
-      .click();
+    cy.getLeftNav().contains('Lunch').click();
 
-    cy.getLeftNav()
-      .contains('Pizza Orders')
-      .click();
+    cy.getLeftNav().contains('Pizza Orders').click();
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
@@ -103,9 +97,7 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Acc test Pizza Orders details', () => {
-    cy.getLeftNav()
-      .contains('Pizza Orders')
-      .click();
+    cy.getLeftNav().contains('Pizza Orders').click();
 
     cy.clickGenericListLink('diavola-order');
 

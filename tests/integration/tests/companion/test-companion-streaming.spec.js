@@ -15,7 +15,7 @@ context('Test Companion Streaming Behavior', () => {
   });
 
   it('two pending tasks', () => {
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           event: 'agent_action',
@@ -47,7 +47,7 @@ context('Test Companion Streaming Behavior', () => {
       });
     }).as('getChatResponse');
     let followupCallCount = 0;
-    cy.intercept('POST', '/backend/ai-chat/followup', req => {
+    cy.intercept('POST', '/backend/ai-chat/followup', (req) => {
       followupCallCount++;
       req.reply({
         delay: 500,
@@ -97,7 +97,7 @@ context('Test Companion Streaming Behavior', () => {
   });
 
   it('one pending task, one completed task', () => {
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           event: 'agent_action',
@@ -129,7 +129,7 @@ context('Test Companion Streaming Behavior', () => {
       });
     }).as('getChatResponse');
     let followupCallCount = 0;
-    cy.intercept('POST', '/backend/ai-chat/followup', req => {
+    cy.intercept('POST', '/backend/ai-chat/followup', (req) => {
       followupCallCount++;
       req.reply({
         delay: 500,
@@ -183,7 +183,7 @@ context('Test Companion Streaming Behavior', () => {
   });
 
   it('two completed tasks', () => {
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           event: 'agent_action',
@@ -215,7 +215,7 @@ context('Test Companion Streaming Behavior', () => {
       });
     }).as('getChatResponse');
     let followupCallCount = 0;
-    cy.intercept('POST', '/backend/ai-chat/followup', req => {
+    cy.intercept('POST', '/backend/ai-chat/followup', (req) => {
       followupCallCount++;
       req.reply({
         delay: 500,
@@ -272,7 +272,7 @@ context('Test Companion Streaming Behavior', () => {
   });
 
   it('handles multiple complete JSON objects in single chunk', () => {
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       // Two complete JSON objects in one response
       const chunk1 =
         JSON.stringify({

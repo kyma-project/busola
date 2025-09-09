@@ -3,7 +3,7 @@ const eqPath = (a, b) => JSON.stringify(b) === JSON.stringify(a);
 function filterSchemaRules(allRuleDefs, filter) {
   if (!allRuleDefs) return undefined;
 
-  return allRuleDefs.filter(filter).map(item => ({
+  return allRuleDefs.filter(filter).map((item) => ({
     ...item,
     children: filterSchemaRules(item.children, filter),
   }));
@@ -21,22 +21,23 @@ export function prepareSchemaRules(allRuleDefs, filter = () => true) {
     index,
     widget,
   ) => {
-    const fullPath = (path
-      ? [
-          ...parentPath,
-          ...(Array.isArray(path)
-            ? path
-            : path?.replace(/\[]/g, '.[]')?.split('.') || []),
-        ]
-      : [
-          ...parentPath,
-          ...(varName
-            ? [`$${varName}`]
-            : widget === 'GenericList'
-            ? ['[]', `custom${index}`]
-            : [`custom${index}`]),
-        ]
-    ).filter(item => !!item);
+    const fullPath = (
+      path
+        ? [
+            ...parentPath,
+            ...(Array.isArray(path)
+              ? path
+              : path?.replace(/\[]/g, '.[]')?.split('.') || []),
+          ]
+        : [
+            ...parentPath,
+            ...(varName
+              ? [`$${varName}`]
+              : widget === 'GenericList'
+                ? ['[]', `custom${index}`]
+                : [`custom${index}`]),
+          ]
+    ).filter((item) => !!item);
 
     let lastArrayIndex;
     fullPath.reduce((acc, step, index) => {
@@ -76,7 +77,7 @@ export function prepareSchemaRules(allRuleDefs, filter = () => true) {
       if (varName) lastArrayRule.itemVars.push(varName);
       stack
         .slice(lastArrayIndex + 1)
-        .forEach(item => (item.itemVars = lastArrayRule.itemVars));
+        .forEach((item) => (item.itemVars = lastArrayRule.itemVars));
     }
 
     ruleDef.children?.forEach((subDef, index) =>

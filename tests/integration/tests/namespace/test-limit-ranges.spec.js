@@ -27,7 +27,7 @@ context('Test Limit Ranges', () => {
     cy.openCreate();
 
     cy.wrap(loadLR(LIMIT_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      LR_CONFIG => {
+      (LR_CONFIG) => {
         const LR = JSON.stringify(LR_CONFIG);
         cy.pasteToMonaco(LR);
       },
@@ -44,9 +44,7 @@ context('Test Limit Ranges', () => {
   });
 
   it('Checks the list view', () => {
-    cy.getLeftNav()
-      .contains('Limit Ranges')
-      .click();
+    cy.getLeftNav().contains('Limit Ranges').click();
 
     cy.clickGenericListLink(LIMIT_NAME);
 

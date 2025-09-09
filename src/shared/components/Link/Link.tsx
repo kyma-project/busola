@@ -48,7 +48,9 @@ export const Link = ({
       design={design}
       className={className}
       data-testid={dataTestId}
-      onClick={e => (onClick ? onClick(e) : handleOnlick(resetLayout, url, e))}
+      onClick={(e) =>
+        onClick ? onClick(e) : handleOnlick(resetLayout, url, e)
+      }
       href={url}
       target="_blank"
       style={style}

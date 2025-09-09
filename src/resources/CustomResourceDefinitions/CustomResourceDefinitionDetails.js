@@ -14,7 +14,7 @@ import { CRDSpecification } from './CRDSpecification';
 export function CustomResourceDefinitionDetails(props) {
   const { t } = useTranslation();
 
-  const ResourceNames = resource => {
+  const ResourceNames = (resource) => {
     const headerRenderer = () => [
       t('custom-resource-definitions.headers.kind'),
       t('custom-resource-definitions.headers.list-kind'),
@@ -22,7 +22,7 @@ export function CustomResourceDefinitionDetails(props) {
       t('custom-resource-definitions.headers.singular'),
       t('custom-resource-definitions.headers.short-names'),
     ];
-    const rowRenderer = entry => [
+    const rowRenderer = (entry) => [
       entry.kind,
       entry.listKind,
       entry.plural,
@@ -45,7 +45,7 @@ export function CustomResourceDefinitionDetails(props) {
   };
 
   const Events = ({ spec }) => {
-    const eventFilter = kind => e => {
+    const eventFilter = (kind) => (e) => {
       return kind === e.involvedObject?.kind;
     };
 
@@ -58,8 +58,8 @@ export function CustomResourceDefinitionDetails(props) {
     );
   };
 
-  const statusConditions = resource => {
-    return resource?.status?.conditions?.map(condition => {
+  const statusConditions = (resource) => {
+    return resource?.status?.conditions?.map((condition) => {
       return {
         header: { titleText: condition.type, status: condition.status },
         message: condition.message,

@@ -7,12 +7,12 @@ function configureLogger() {
 
   return PinoHttp({
     autoLogging: !!isDev, //to disable the automatic "request completed" and "request errored" logging.
-    genReqId: req => {
+    genReqId: (req) => {
       req.id = uuid();
       return req.id;
     },
     serializers: {
-      req: req => ({
+      req: (req) => ({
         id: req.id,
         method: req.method,
         url: req.url,

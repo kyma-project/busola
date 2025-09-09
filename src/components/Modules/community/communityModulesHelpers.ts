@@ -31,26 +31,26 @@ function fillModuleVersions(
   availableCommunityModules: Map<string, VersionInfo[]>,
   communityModulesTemplates: ModuleTemplateListType,
 ) {
-  (communityModulesTemplates?.items || []).reduce((acc, moduleTemplate): Map<
-    string,
-    VersionInfo[]
-  > => {
-    const moduleName = getModuleName(moduleTemplate);
-    const newVersionCandidate = createVersion(moduleTemplate);
+  (communityModulesTemplates?.items || []).reduce(
+    (acc, moduleTemplate): Map<string, VersionInfo[]> => {
+      const moduleName = getModuleName(moduleTemplate);
+      const newVersionCandidate = createVersion(moduleTemplate);
 
-    const moduleVersions = acc.get(moduleName);
-    if (moduleVersions) {
-      const foundVersion = moduleVersions.find(module => {
-        return module.version === newVersionCandidate.version;
-      });
-      if (!foundVersion) {
-        moduleVersions.push(newVersionCandidate);
+      const moduleVersions = acc.get(moduleName);
+      if (moduleVersions) {
+        const foundVersion = moduleVersions.find((module) => {
+          return module.version === newVersionCandidate.version;
+        });
+        if (!foundVersion) {
+          moduleVersions.push(newVersionCandidate);
+        }
+      } else {
+        acc.set(moduleName, [newVersionCandidate]);
       }
-    } else {
-      acc.set(moduleName, [newVersionCandidate]);
-    }
-    return acc;
-  }, availableCommunityModules);
+      return acc;
+    },
+    availableCommunityModules,
+  );
 }
 
 function createVersion(moduleTemplate: ModuleTemplateType): VersionInfo {
@@ -86,12 +86,12 @@ function markInstalledVersion(
   availableCommunityModules: Map<string, VersionInfo[]>,
   installedModuleTemplates: ModuleTemplateListType,
 ) {
-  (installedModuleTemplates?.items || []).forEach(installedModule => {
+  (installedModuleTemplates?.items || []).forEach((installedModule) => {
     const foundModuleVersions = availableCommunityModules.get(
       getModuleName(installedModule),
     );
     if (foundModuleVersions) {
-      const versionIdx = foundModuleVersions.findIndex(version => {
+      const versionIdx = foundModuleVersions.findIndex((version) => {
         return version.version === installedModule.spec.version;
       });
 
@@ -106,16 +106,17 @@ export function getInstalledModules(
   moduleTemplates: ModuleTemplateListType,
   managers: any,
 ): ModuleTemplateListType {
-  const installedModuleTemplates = moduleTemplates.items?.filter(module => {
+  const installedModuleTemplates = moduleTemplates.items?.filter((module) => {
     const foundManager = managers[module.metadata.name];
     if (!foundManager) {
       return false;
     }
-    const matchedManagerContainer = foundManager.spec?.template?.spec.containers.find(
-      (container: { image: string }) => {
-        return imageMatchVersion(container.image, module.spec.version);
-      },
-    );
+    const matchedManagerContainer =
+      foundManager.spec?.template?.spec.containers.find(
+        (container: { image: string }) => {
+          return imageMatchVersion(container.image, module.spec.version);
+        },
+      );
     return !!matchedManagerContainer;
   });
 
@@ -128,11 +129,13 @@ export function getNotInstalledModules(
   moduleTemplates: ModuleTemplateListType,
   managers: any,
 ): ModuleTemplateListType {
-  const notInstalledModuleTemplates = moduleTemplates.items?.filter(module => {
-    const foundManager = managers[module.metadata.name];
+  const notInstalledModuleTemplates = moduleTemplates.items?.filter(
+    (module) => {
+      const foundManager = managers[module.metadata.name];
 
-    return !foundManager;
-  });
+      return !foundManager;
+    },
+  );
 
   return {
     items: notInstalledModuleTemplates,
@@ -161,7 +164,7 @@ export async function postForCommunityResources(post: PostFn, link: string) {
 export async function getAllResourcesYamls(links: string[], post: PostFn) {
   if (links?.length) {
     const yamlRes = await Promise.all(
-      links.map(async link => {
+      links.map(async (link) => {
         if (link) {
           return await postForCommunityResources(post, link);
         }
@@ -177,15 +180,15 @@ export function fetchResourcesToApply(
   post: PostFn,
 ) {
   const resourcesLinks = [...communityModulesToApply.values()]
-    .map(moduleTpl => moduleTpl.spec.resources)
+    .map((moduleTpl) => moduleTpl.spec.resources)
     .flat()
-    .map(item => item?.link || '');
+    .map((item) => item?.link || '');
 
-  (async function() {
+  (async function () {
     try {
       const yamls = await getAllResourcesYamls(resourcesLinks, post);
 
-      const yamlsResources = yamls?.map(resource => {
+      const yamlsResources = yamls?.map((resource) => {
         return { value: resource };
       });
 

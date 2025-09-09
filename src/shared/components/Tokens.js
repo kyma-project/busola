@@ -4,7 +4,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 const Tokens = ({ tokens }) => (
   <>
     {tokens?.length
-      ? tokens.map(scope => (
+      ? tokens.map((scope) => (
           <Tag
             key={scope}
             className="sap-margin-end-tiny"

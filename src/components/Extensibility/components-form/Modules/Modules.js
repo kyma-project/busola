@@ -66,7 +66,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
     return null;
   }
 
-  Object.keys(options).forEach(optionName => {
+  Object.keys(options).forEach((optionName) => {
     if (
       optionName === 'name' &&
       !Array.isArray(makeJsonata(options[optionName]))
@@ -86,13 +86,13 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
         </MessageStrip>
       );
 
-    const isChecked = !!(value ? value.toJS() : []).find(v => {
+    const isChecked = !!(value ? value.toJS() : []).find((v) => {
       return v.name === name;
     });
 
     let channelModuleTemplate = [];
 
-    parsedOptions?.moduleTemplates?.map(moduleTemplate => {
+    parsedOptions?.moduleTemplates?.map((moduleTemplate) => {
       if (
         moduleTemplate?.metadata?.labels[
           'operator.kyma-project.io/module-name'
@@ -113,9 +113,9 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       }
     });
 
-    const link = parsedOptions?.moduleTemplates?.find(moduleTemplate => {
+    const link = parsedOptions?.moduleTemplates?.find((moduleTemplate) => {
       const channel = resource?.spec?.modules
-        ? resource?.spec?.modules[index]?.channel ?? resource?.spec?.channel
+        ? (resource?.spec?.modules[index]?.channel ?? resource?.spec?.channel)
         : resource?.spec?.channel;
 
       if (
@@ -129,7 +129,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
     })?.metadata?.annotations['operator.kyma-project.io/doc-url'];
 
     const isBeta = parsedOptions?.moduleTemplates?.find(
-      moduleTemplate =>
+      (moduleTemplate) =>
         moduleTemplate?.metadata?.labels[
           'operator.kyma-project.io/module-name'
         ] === name &&
@@ -147,14 +147,14 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             accessibleName={`${name}`}
             className="sap-margin-top-small"
             checked={isChecked}
-            onChange={e => {
+            onChange={(e) => {
               setCheckbox(
                 value,
                 'name',
                 name,
                 e.target.checked,
                 resource?.spec?.modules
-                  ? resource?.spec?.modules.findIndex(module => {
+                  ? resource?.spec?.modules.findIndex((module) => {
                       return module.name === name;
                     })
                   : index,
@@ -169,7 +169,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             placeholder={t(
               'extensibility.widgets.modules.module-channel-placeholder',
             )}
-            options={channelModuleTemplate.map(option => {
+            options={channelModuleTemplate.map((option) => {
               return {
                 text: `${option.text} ${option.additionalText}`,
                 key: option.text,
@@ -178,7 +178,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             selectedKey={
               resource?.spec?.modules
                 ? resource?.spec?.modules[
-                    resource?.spec?.modules.findIndex(module => {
+                    resource?.spec?.modules.findIndex((module) => {
                       return module.name === name;
                     })
                   ]?.channel
@@ -190,7 +190,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
                   storeKeys: storeKeys
                     .push(
                       resource?.spec?.modules
-                        ? resource?.spec?.modules.findIndex(module => {
+                        ? resource?.spec?.modules.findIndex((module) => {
                             return module.name === name;
                           })
                         : index,

@@ -6,8 +6,9 @@ import { ExternalResourceRef } from './ExternalResourceRef';
 
 export function SecretRef({ fieldSelector, labelSelector, ...props }) {
   const { t } = useTranslation();
-  const url = `/api/v1/secrets?labelSelector=${labelSelector ||
-    ''}&fieldSelector=${fieldSelector || ''}`;
+  const url = `/api/v1/secrets?labelSelector=${
+    labelSelector || ''
+  }&fieldSelector=${fieldSelector || ''}`;
   const { data: secrets, loading } = useGetList()(url);
 
   return (

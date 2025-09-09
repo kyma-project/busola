@@ -15,16 +15,16 @@ import { useUrl } from 'hooks/useUrl';
 import CRCreate from '../CustomResourceDefinitions/CRCreate';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
-const CustomResourcesByGroup = React.lazy(() =>
-  import('../../components/CustomResources/CustomResourcesByGroup'),
+const CustomResourcesByGroup = React.lazy(
+  () => import('../../components/CustomResources/CustomResourcesByGroup'),
 );
 
-const CustomResourcesOfType = React.lazy(() =>
-  import('../../components/CustomResources/CustomResourcesOfType'),
+const CustomResourcesOfType = React.lazy(
+  () => import('../../components/CustomResources/CustomResourcesOfType'),
 );
 
-const CustomResource = React.lazy(() =>
-  import('../CustomResourceDefinitions/CustomResources.details'),
+const CustomResource = React.lazy(
+  () => import('../CustomResourceDefinitions/CustomResources.details'),
 );
 
 export const ColumnWrapper = () => {
@@ -116,7 +116,7 @@ export const ColumnWrapper = () => {
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
-        renderForm={renderProps => {
+        renderForm={(renderProps) => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <CRCreate
               {...renderProps}
@@ -151,7 +151,7 @@ export const ColumnWrapper = () => {
         confirmText={t('common.buttons.create')}
         layoutNumber="endColumn"
         layoutCloseCreateUrl={layoutCloseCreateUrl}
-        renderForm={renderProps => {
+        renderForm={(renderProps) => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <CRCreate
               {...renderProps}

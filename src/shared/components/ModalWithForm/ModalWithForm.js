@@ -28,17 +28,13 @@ export const ModalWithForm = ({
   const { navigateSafely } = useFormNavigation();
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
-  const {
-    isValid,
-    formElementRef,
-    setCustomValid,
-    revalidate,
-  } = useCustomFormValidator();
+  const { isValid, formElementRef, setCustomValid, revalidate } =
+    useCustomFormValidator();
   const notificationManager = useNotification();
 
   confirmText = confirmText || t('common.buttons.create');
 
-  const setOpenStatus = status => {
+  const setOpenStatus = (status) => {
     if (status) {
       setTimeout(() => revalidate());
     }
@@ -88,7 +84,7 @@ export const ModalWithForm = ({
     }
   }
 
-  const renderModalOpeningComponent = _ =>
+  const renderModalOpeningComponent = (_) =>
     modalOpeningComponent ? (
       <div style={{ display: 'contents' }} onClick={() => setOpenStatus(true)}>
         {modalOpeningComponent}

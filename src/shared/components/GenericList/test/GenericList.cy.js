@@ -4,7 +4,7 @@ import { GenericList } from '../GenericList';
 const defaultNotFoundText = 'components.generic-list.messages.not-found';
 
 const mockHeaderRenderer = () => ['Id', 'Name', 'description'];
-const mockEntryRenderer = entry => [entry.id, entry.name, entry.description];
+const mockEntryRenderer = (entry) => [entry.id, entry.name, entry.description];
 
 const mockEntries = [
   {
@@ -104,17 +104,17 @@ describe('GenericList', () => {
       />,
     );
 
-    mockEntries.forEach(entry => {
+    mockEntries.forEach((entry) => {
       Object.keys(entry)
-        .filter(key => key !== 'metadata')
-        .forEach(key => {
+        .filter((key) => key !== 'metadata')
+        .forEach((key) => {
           cy.contains(entry[key]).should('exist');
         });
     });
   });
 
   it('Renders custom data using custom entryRenderer', () => {
-    const customEntryRenderer = entry => [entry.name, 'maskopatol'];
+    const customEntryRenderer = (entry) => [entry.name, 'maskopatol'];
 
     cy.mount(
       <GenericList
@@ -129,7 +129,7 @@ describe('GenericList', () => {
   });
 
   it('Renders collapse entries with collapse control', () => {
-    const mockCollapseEntryRenderer = entry => ({
+    const mockCollapseEntryRenderer = (entry) => ({
       cells: [entry.id, entry.name, entry.description],
       collapseContent: (
         <td colSpan="4" data-testid="collapse-content">
@@ -147,19 +147,17 @@ describe('GenericList', () => {
       />,
     );
 
-    mockEntries.forEach(entry => {
+    mockEntries.forEach((entry) => {
       Object.keys(entry)
-        .filter(key => key !== 'metadata')
-        .forEach(key => {
+        .filter((key) => key !== 'metadata')
+        .forEach((key) => {
           cy.contains(entry[key]).should('exist');
         });
     });
 
     cy.get('[data-testid="collapse-button-close"]').should('have.length', 2);
 
-    cy.get('[data-testid="collapse-button-close"]')
-      .first()
-      .click();
+    cy.get('[data-testid="collapse-button-close"]').first().click();
 
     cy.get('[data-testid="collapse-button-close"]').should('have.length', 1);
     cy.get('[data-testid="collapse-button-open"]').should('have.length', 1);
@@ -170,7 +168,7 @@ describe('GenericList', () => {
   });
 
   it('Renders collapse entries without collapse control', () => {
-    const mockCollapseEntryRenderer = entry => ({
+    const mockCollapseEntryRenderer = (entry) => ({
       cells: [entry.id, entry.name, entry.description],
       collapseContent: (
         <td colSpan="4" data-testid="collapse-content">
@@ -206,7 +204,7 @@ describe('GenericList', () => {
       />,
     );
 
-    mockHeaderRenderer().forEach(header => {
+    mockHeaderRenderer().forEach((header) => {
       cy.contains(header).should('exist');
     });
   });

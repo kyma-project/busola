@@ -94,7 +94,7 @@ export function GenericRoleBindingCreate({
       initialResource={initialResource}
       updateInitialResource={setInitialResource}
       nameProps={{ pattern: '.*', showHelp: false }}
-      handleNameChange={name => {
+      handleNameChange={(name) => {
         jp.value(binding, '$.metadata.name', name);
 
         setBinding({ ...binding });
@@ -125,7 +125,7 @@ export function GenericRoleBindingCreate({
         propertyPath="$.subjects"
         listTitle={t('role-bindings.create-modal.subjects')}
         nameSingular={t('role-bindings.create-modal.subject')}
-        entryTitle={subject => subject?.name}
+        entryTitle={(subject) => subject?.name}
         tooltipContent={t(subjectsDesc)}
         atLeastOneRequiredMessage={t(
           'role-bindings.create-modal.at-least-one-subject-required',

@@ -26,7 +26,7 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
     <div className="ui5-content-density-compact mode-selector">
       <SegmentedButton
         className="mode-selector__content"
-        onSelectionChange={event => {
+        onSelectionChange={(event) => {
           const mode = event.detail.selectedItems[0].getAttribute('data-mode');
           setMode(mode);
           if (preferencesViewType === 'MODE_DEFAULT') {
@@ -37,7 +37,7 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
           }
         }}
       >
-        {buttonsToDisplay.map(button => (
+        {buttonsToDisplay.map((button) => (
           <SegmentedButtonItem
             className="min-width-button"
             key={button.mode}

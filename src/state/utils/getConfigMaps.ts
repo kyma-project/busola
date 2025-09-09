@@ -31,8 +31,9 @@ export async function getConfigMaps(
   if (!fetchFn) return null;
 
   const clusterCMUrl = `/api/v1/configmaps?labelSelector=${labelSelector}`;
-  const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
-    kubeconfigNamespace}/configmaps?labelSelector=${labelSelector}`;
+  const namespacedCMUrl = `/api/v1/namespaces/${
+    currentNamespace ?? kubeconfigNamespace
+  }/configmaps?labelSelector=${labelSelector}`;
 
   const namespaceAccess = doesUserHavePermission(
     ['list'],
@@ -56,8 +57,8 @@ export async function getConfigMaps(
   const url = clusterAccess
     ? clusterCMUrl
     : namespaceAccess
-    ? namespacedCMUrl
-    : '';
+      ? namespacedCMUrl
+      : '';
 
   try {
     const response = await fetchFn({ relativeUrl: url });

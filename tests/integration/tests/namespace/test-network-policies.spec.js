@@ -2,9 +2,7 @@
 import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
 
-const RANDOM_NUMBER = Math.random()
-  .toString()
-  .substr(2, 8);
+const RANDOM_NUMBER = Math.random().toString().substr(2, 8);
 
 const NAME = 'test-' + RANDOM_NUMBER;
 async function loadNetworkPolicy(name, namespace) {
@@ -30,7 +28,7 @@ context('Test Network Policy', () => {
     cy.openCreate();
 
     cy.wrap(loadNetworkPolicy(NAME, Cypress.env('NAMESPACE_NAME'))).then(
-      NP_CONFIG => {
+      (NP_CONFIG) => {
         const NP = JSON.stringify(NP_CONFIG);
         cy.pasteToMonaco(NP);
       },
@@ -40,13 +38,9 @@ context('Test Network Policy', () => {
   });
 
   it('Check Network Policy details', () => {
-    cy.getMidColumn()
-      .contains('ui5-title', NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', NAME).should('be.visible');
 
-    cy.getMidColumn()
-      .contains(/CIDR/i)
-      .should('be.visible');
+    cy.getMidColumn().contains(/CIDR/i).should('be.visible');
 
     cy.getMidColumn()
       .contains(/Protocol/i)

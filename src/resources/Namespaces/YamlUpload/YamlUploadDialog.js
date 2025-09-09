@@ -56,11 +56,11 @@ export function YamlUploadDialog() {
     }
   }, [openAdd]);
 
-  const updateYamlContent = yaml => {
+  const updateYamlContent = (yaml) => {
     if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
     setResourcesData(yaml);
-    const nonEmptyResources = yaml?.filter(resource => resource !== null);
-    const resourcesWithStatus = nonEmptyResources?.map(value => ({
+    const nonEmptyResources = yaml?.filter((resource) => resource !== null);
+    const resourcesWithStatus = nonEmptyResources?.map((value) => ({
       value,
       status: '',
       message: '',

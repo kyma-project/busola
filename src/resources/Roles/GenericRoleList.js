@@ -13,8 +13,7 @@ export function GenericRoleList({
       {...otherParams}
       emptyListProps={{
         subtitleText: descriptionKey,
-        url:
-          'https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#user-authorization',
+        url: 'https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#user-authorization',
       }}
     />
   );

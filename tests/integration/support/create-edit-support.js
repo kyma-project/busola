@@ -1,7 +1,5 @@
 Cypress.Commands.add('openCreate', () => {
-  cy.get('ui5-panel')
-    .contains('ui5-button', 'Create')
-    .click();
+  cy.get('ui5-panel').contains('ui5-button', 'Create').click();
 });
 
 Cypress.Commands.add('saveChanges', (action = 'Create') => {
@@ -14,9 +12,7 @@ Cypress.Commands.add('saveChanges', (action = 'Create') => {
 });
 
 Cypress.Commands.add('checkUnsavedDialog', () => {
-  cy.getLeftNav()
-    .contains('Events')
-    .click();
+  cy.getLeftNav().contains('Events').click();
 
   cy.get('ui5-dialog[header-text="Discard Changes"]').should('be.visible');
 

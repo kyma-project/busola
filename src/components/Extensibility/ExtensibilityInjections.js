@@ -46,7 +46,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const filter = injection?.target.filter || injection?.filter || null;
 
   const items = data?.items || [];
-  const filteredItems = items.filter(item => {
+  const filteredItems = items.filter((item) => {
     if (filter) {
       const [value] = jsonata(filter, { item, root });
       return value;

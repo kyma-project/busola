@@ -71,9 +71,7 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().type('nodes ');
 
-    cy.contains('Cluster Details > Nodes')
-      .first()
-      .click();
+    cy.contains('Cluster Details > Nodes').first().click();
   });
 
   it('All namespaces', () => {
@@ -137,9 +135,7 @@ context('Test Command Palette navigation', () => {
 
     cy.contains('Workloads > Pods').should('not.exist');
 
-    cy.contains('p', 'Did you mean:')
-      .find('ui5-button')
-      .click();
+    cy.contains('p', 'Did you mean:').find('ui5-button').click();
 
     cy.contains('Pods').should('be.visible');
     closeCommandPalette();

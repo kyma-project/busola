@@ -37,7 +37,7 @@ export interface CustomResourceDefinition extends K8sResource {
 function getCRAliases(
   crds: CustomResourceDefinition[],
 ): { crd: CustomResourceDefinition; aliases: string[] }[] {
-  return crds.map(crd => {
+  return crds.map((crd) => {
     const names = crd.spec.names;
     // there's no "fn" shortname for function, why?
     const additionalAliasForFunctions =
@@ -117,10 +117,10 @@ function getAutocompleteEntries({
   const crdAliases = getCRAliases(crds);
   const suggestedALias = makeSuggestion(
     tokens[0],
-    crdAliases.flatMap(a => a.aliases),
+    crdAliases.flatMap((a) => a.aliases),
   );
 
-  const crdAlias = crdAliases.find(c => c.aliases.includes(suggestedALias));
+  const crdAlias = crdAliases.find((c) => c.aliases.includes(suggestedALias));
 
   const resources =
     (crdAlias && resourceCache[getResourceKey(crdAlias.crd, namespace)]) || [];
@@ -150,10 +150,10 @@ function getSuggestion({
   const crdAliases = getCRAliases(crds);
   const suggestedALias = makeSuggestion(
     type,
-    crdAliases.flatMap(a => a.aliases),
+    crdAliases.flatMap((a) => a.aliases),
   );
 
-  const crdAlias = crdAliases.find(c => c.aliases.includes(suggestedALias));
+  const crdAlias = crdAliases.find((c) => c.aliases.includes(suggestedALias));
   if (!crdAlias) return;
 
   const suggestedType = crdAlias.crd.spec.names.plural;
@@ -161,7 +161,7 @@ function getSuggestion({
   if (name) {
     const resourceKey = getResourceKey(crdAlias.crd, namespace);
     const resourceNames = (resourceCache[resourceKey] || []).map(
-      n => n.metadata.name,
+      (n) => n.metadata.name,
     );
     const suggestedName = makeSuggestion(name, resourceNames);
     return `${suggestedType || type}/${suggestedName || name}`;
@@ -171,13 +171,8 @@ function getSuggestion({
 }
 
 async function fetchResources(context: CommandPaletteContext) {
-  const {
-    fetch,
-    updateResourceCache,
-    resourceCache,
-    tokens,
-    namespace,
-  } = context;
+  const { fetch, updateResourceCache, resourceCache, tokens, namespace } =
+    context;
 
   let crds: CustomResourceDefinition[] = resourceCache[
     'customresourcedefinitions'
@@ -194,8 +189,8 @@ async function fetchResources(context: CommandPaletteContext) {
     }
   }
 
-  const crd = getCRAliases(crds).find(c =>
-    c.aliases.find(alias => alias === tokens[0]),
+  const crd = getCRAliases(crds).find((c) =>
+    c.aliases.find((alias) => alias === tokens[0]),
   )?.crd;
   if (!crd) return;
 
@@ -203,7 +198,7 @@ async function fetchResources(context: CommandPaletteContext) {
 
   if (!resourceCache[resourceKey]) {
     const groupVersion = `/apis/${crd.spec.group}/${
-      crd.spec.versions.find(v => v.served)!.name // "served" version will always be here
+      crd.spec.versions.find((v) => v.served)!.name // "served" version will always be here
     }`;
     const isNamespaced = crd.spec.scope === 'Namespaced';
     const namespacePart = isNamespaced ? `namespaces/${namespace}/` : '';
@@ -262,19 +257,13 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return null;
   }
 
-  const {
-    resourceCache,
-    tokens,
-    namespace,
-    t,
-    navigate,
-    activeClusterName,
-  } = context;
+  const { resourceCache, tokens, namespace, t, navigate, activeClusterName } =
+    context;
   const [, delimiter, name] = tokens;
 
   const crd = getCRAliases(
     resourceCache['customresourcedefinitions'] as CustomResourceDefinition[],
-  ).find(c => c.aliases.find(alias => alias === tokens[0]))?.crd;
+  ).find((c) => c.aliases.find((alias) => alias === tokens[0]))?.crd;
   if (!crd) return null;
 
   const listLabel = pluralize(prettifyKind(crd.spec.names.kind));
@@ -314,13 +303,13 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
   const resources = resourceCache[getResourceKey(crd, namespace)];
   const listItems = resources
-    ? resources.map(item => makeListItem({ crd, item, category, context }))
+    ? resources.map((item) => makeListItem({ crd, item, category, context }))
     : [notFound];
 
   if (name) {
     return resources
-      .filter(item => item.metadata.name.includes(name))
-      .map(item => makeListItem({ crd, item, category, context }));
+      .filter((item) => item.metadata.name.includes(name))
+      .map((item) => makeListItem({ crd, item, category, context }));
   } else if (delimiter) {
     return [...listItems];
   } else {
@@ -333,7 +322,7 @@ function getCRsHelp({ resourceCache }: CommandPaletteContext) {
     (resourceCache[
       'customresourcedefinitions'
     ] as CustomResourceDefinition[]) || []
-  ).map(t => ({
+  ).map((t) => ({
     name: t.metadata.name,
     shortNames: t.spec.names.shortNames || [t.spec.names.singular],
   }));

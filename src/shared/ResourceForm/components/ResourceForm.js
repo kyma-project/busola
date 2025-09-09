@@ -87,7 +87,7 @@ export function ResourceForm({
   );
 
   if (!handleNameChange) {
-    handleNameChange = name => {
+    handleNameChange = (name) => {
       jp.value(resource, '$.metadata.name', name);
       jp.value(resource, "$.metadata.labels['app.kubernetes.io/name']", name);
 
@@ -135,7 +135,7 @@ export function ResourceForm({
       ? editViewMode.dynamicViewType === ModeSelector.MODE_FORM
         ? ModeSelector.MODE_FORM
         : ModeSelector.MODE_YAML
-      : editViewMode.preferencesViewType ?? ModeSelector.MODE_FORM;
+      : (editViewMode.preferencesViewType ?? ModeSelector.MODE_FORM);
   };
 
   const [mode, setMode] = React.useState(handleInitialMode);
@@ -284,7 +284,7 @@ export function ResourceForm({
               {onlyYaml ? null : (
                 <ModeSelector
                   mode={mode}
-                  setMode={newMode => {
+                  setMode={(newMode) => {
                     setMode(newMode);
                     if (onModeChange) onModeChange(mode, newMode);
                   }}

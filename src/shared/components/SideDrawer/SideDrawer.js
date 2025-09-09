@@ -42,7 +42,7 @@ export const SideDrawer = ({
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
     const scale = document.body.clientWidth / 100;
 
-    setWidth(width =>
+    setWidth((width) =>
       clamp(
         // width in pixels - movement X, then scaled back to match vw units
         (width * scale - movementX) / scale,
@@ -52,7 +52,7 @@ export const SideDrawer = ({
     );
   }, []);
 
-  const onResizeStart = e => {
+  const onResizeStart = (e) => {
     e.preventDefault();
     const stopResizing = () =>
       document.removeEventListener('mousemove', doResize);

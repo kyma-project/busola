@@ -25,7 +25,7 @@ export const expandedCategoriesAtom = atom<
   [ExpandedCategories],
   void
 >(
-  get => {
+  (get) => {
     const expandedCategories = get(expandedCategoriesStorage);
     const cluster = get(clusterAtom);
     const clusterName = cluster?.name || '';

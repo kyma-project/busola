@@ -6,9 +6,9 @@ export function RelatedCRDsList(resource) {
   const { t } = useTranslation();
   const resourceUrl = '/apis/apiextensions.k8s.io/v1/customresourcedefinitions';
 
-  const filterByCategories = crd => {
+  const filterByCategories = (crd) => {
     return resource.spec.names.categories?.some(
-      category =>
+      (category) =>
         category !== 'all' &&
         crd.metadata.name !== resource.metadata.name &&
         crd.spec.scope === resource.spec.scope &&

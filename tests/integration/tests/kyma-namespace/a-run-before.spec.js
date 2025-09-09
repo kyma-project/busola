@@ -6,9 +6,7 @@ context('Create Namespace', () => {
   before(cy.loginAndSelectCluster);
 
   it('Create Namespace', () => {
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
+    cy.getLeftNav().contains('Namespaces').click();
 
     cy.openCreate();
 

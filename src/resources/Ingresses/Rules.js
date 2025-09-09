@@ -93,7 +93,7 @@ export const Rules = ({ rules }) => {
               t('ingresses.labels.path-type'),
               t('ingresses.labels.backend'),
             ]}
-            rowRenderer={path => [
+            rowRenderer={(path) => [
               path.path,
               path.pathType,
               <Backend backend={path.backend} services={services} />,

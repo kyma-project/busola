@@ -33,7 +33,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const cluster = useAtomValue(clusterAtom);
 
-  const emptyResource = useMemo(() => ({} as Resource), []);
+  const emptyResource = useMemo(() => ({}) as Resource, []);
   const jsonata = useJsonata({ resource: emptyResource });
 
   const [jsonataLink, setJsonataLink] = useState<string>('');
@@ -72,7 +72,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   const handleNavigation = () => {
     if (node.dataSources) {
       let link =
-        !jsonataError && jsonataLink ? jsonataLink : node.externalUrl ?? '';
+        !jsonataError && jsonataLink ? jsonataLink : (node.externalUrl ?? '');
       link = link.startsWith('http') ? link : `https://${link}`;
       const newWindow = window.open(link, 'noopener, noreferrer');
       if (newWindow) newWindow.opener = null;

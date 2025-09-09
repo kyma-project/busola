@@ -68,14 +68,14 @@ export function ResourceRefRender({
       defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
       value={fromJS(value).toJS() || ''}
-      resources={(data || []).filter(res => {
+      resources={(data || []).filter((res) => {
         if (filter) {
           const [value] = jsonata(filter, { item: res });
           return value;
         }
         return true;
       })}
-      setValue={value => {
+      setValue={(value) => {
         if (toExternal) {
           const [external, error] = jsonata(toExternal, {
             scope: value,
@@ -84,7 +84,7 @@ export function ResourceRefRender({
           value = error ? {} : external;
         }
         const resource = (data ?? []).find(
-          res =>
+          (res) =>
             res.metadata.namespace === value.namespace &&
             res.metadata.name === value.name,
         );

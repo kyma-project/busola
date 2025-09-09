@@ -117,7 +117,7 @@ export function useCreateResource({
     }
   };
 
-  const showError = error => {
+  const showError = (error) => {
     console.error(error);
     const previousActiveElement = document.activeElement;
     notification.notifyError({
@@ -171,7 +171,7 @@ export function useCreateResource({
         const response = await getRequest(createUrl);
         const updatedResource = await response.json();
 
-        const makeForceUpdateFn = closeModal => {
+        const makeForceUpdateFn = (closeModal) => {
           return async () => {
             resource.metadata.resourceVersion =
               initialResource?.metadata.resourceVersion;
@@ -212,7 +212,7 @@ export function useCreateResource({
     }
   };
 
-  return async e => {
+  return async (e) => {
     if (e) {
       e.preventDefault();
     }

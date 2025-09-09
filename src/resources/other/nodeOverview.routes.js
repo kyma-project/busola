@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import { Route, useParams } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-const NodeOverview = React.lazy(() =>
-  import('../../components/Nodes/NodeDetails/NodeDetails'),
+const NodeOverview = React.lazy(
+  () => import('../../components/Nodes/NodeDetails/NodeDetails'),
 );
 
 const RoutedNodeOverview = () => {

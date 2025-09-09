@@ -10,7 +10,7 @@ import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 
 window.MonacoEnvironment = {
-  getWorker: function(workerId, label) {
+  getWorker: function (workerId, label) {
     switch (label) {
       case 'json':
         return new JsonWorker();
@@ -44,7 +44,11 @@ export function useAutocompleteWorker({
     autocompletionDisabled = true;
   }
 
-  const { schema: fetchedSchema, loading, error } = useGetSchema({
+  const {
+    schema: fetchedSchema,
+    loading,
+    error,
+  } = useGetSchema({
     schemaId,
     skip: autocompletionDisabled || !!predefinedSchema,
   });

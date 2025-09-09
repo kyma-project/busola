@@ -31,7 +31,7 @@ export function InlineWidget({ children, value, structure, ...props }) {
     <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
   );
 }
-InlineWidget.copyable = Renderer => Renderer?.copyable;
+InlineWidget.copyable = (Renderer) => Renderer?.copyable;
 InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
   Renderer?.copyFunction
     ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)

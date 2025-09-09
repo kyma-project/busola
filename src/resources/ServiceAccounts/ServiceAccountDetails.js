@@ -12,12 +12,12 @@ import { filterByResource } from 'hooks/useMessageList';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-const ServiceAccountSecrets = serviceAccount => {
+const ServiceAccountSecrets = (serviceAccount) => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-secrets';
   const title = 'Secrets';
 
-  const filterBySecret = secret => {
+  const filterBySecret = (secret) => {
     const annotations = Object.entries(secret.metadata.annotations ?? {});
     return annotations.find(
       ([key, value]) =>
@@ -39,11 +39,11 @@ const ServiceAccountSecrets = serviceAccount => {
   );
 };
 
-const ServiceAccountImagePullSecrets = serviceAccount => {
+const ServiceAccountImagePullSecrets = (serviceAccount) => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-imagepullsecrets';
   const title = 'Image Pull Secrets';
-  const filterBySecret = secret =>
+  const filterBySecret = (secret) =>
     serviceAccount.imagePullSecrets.find(
       ({ name: secretName }) => secret.metadata.name === secretName,
     );
@@ -73,7 +73,7 @@ export default function ServiceAccountDetails(props) {
     />
   );
 
-  const Configuration = value => (
+  const Configuration = (value) => (
     <UI5Panel
       fixed
       keyComponent={'serviceaccount-configuration'}

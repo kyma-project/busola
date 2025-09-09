@@ -91,13 +91,13 @@ export function ExtensibilityCreateCore({
     [initialResource, layoutState?.showCreate?.resource],
   );
 
-  const updateStore = res => {
+  const updateStore = (res) => {
     readVars(res);
     const newStore = fromJS(res);
-    setStore(prevStore => prevStore.set('values', newStore));
+    setStore((prevStore) => prevStore.set('values', newStore));
   };
 
-  const afterCreatedFn = async defaultAfterCreatedFn => {
+  const afterCreatedFn = async (defaultAfterCreatedFn) => {
     if (createResource?.details) {
       defaultAfterCreatedFn();
     } else {
@@ -138,7 +138,7 @@ export function ExtensibilityCreateCore({
   }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNameChange = useCallback(
-    resourceName => {
+    (resourceName) => {
       jp.value(resource, '$.metadata.name', resourceName);
       jp.value(
         resource,
@@ -158,8 +158,8 @@ export function ExtensibilityCreateCore({
       pluralKind={resourceType}
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
-      setResource={v => setStore(getUIStoreFromResourceObj(v))}
-      onPresetSelected={presetValue => {
+      setResource={(v) => setStore(getUIStoreFromResourceObj(v))}
+      onPresetSelected={(presetValue) => {
         const updatedResource = merge(
           {},
           getResourceObjFromUIStore(store),
