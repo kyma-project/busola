@@ -3,18 +3,24 @@ import { Route, useParams } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const CRDetails = React.lazy(() =>
-  import(
-    '../../components/Predefined/Details/CustomResourceDefinitions/CustomResources.details'
-  ),
+  import('../../resources/CustomResourceDefinitions/CustomResources.details'),
 );
 
+type ParamsType = {
+  customResourceDefinitionName: string;
+  resourceVersion: string;
+  resourceName: string;
+};
+
 const RoutedCRDetails = () => {
-  const routerParams = useParams();
+  const routerParams = useParams<ParamsType>();
   const customResourceDefinitionName = decodeURIComponent(
-    routerParams.customResourceDefinitionName,
+    routerParams.customResourceDefinitionName || '',
   );
-  const resourceVersion = decodeURIComponent(routerParams.resourceVersion);
-  const resourceName = decodeURIComponent(routerParams.resourceName);
+  const resourceVersion = decodeURIComponent(
+    routerParams.resourceVersion || '',
+  );
+  const resourceName = decodeURIComponent(routerParams.resourceName || '');
 
   const params = {
     customResourceDefinitionName,
