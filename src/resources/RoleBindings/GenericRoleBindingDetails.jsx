@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { RoleSubjects } from './RoleSubjects.js';
-import { RoleRef } from './RoleRef';
+import { RoleRef } from './RoleRef.js';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 export function GenericRoleBindingDetails({
