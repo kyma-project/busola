@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Button, Text } from '@ui5/webcomponents-react';
@@ -183,13 +183,30 @@ function Resources(props) {
     skip: skipDataLoading,
   });
 
+  const [filteredResources, setFilteredResources] = useState([]);
+
+  useEffect(() => {
+    if (!filter) {
+      setFilteredResources(resources || []);
+    } else {
+      Promise.all(
+        (resources || []).map(async (resource) => {
+          const passThroughFilter = await filter(resource);
+          return passThroughFilter ? resource : false;
+        }),
+      ).then((results) => {
+        setFilteredResources(results.filter(Boolean));
+      });
+    }
+  }, [filter, resources]);
+
   return (
     <ResourceListRenderer
       loading={loading}
       error={error}
       silentRefetch={silentRefetch}
       {...props}
-      resources={filter ? (resources || []).filter(filter) : resources || []}
+      resources={filteredResources}
     />
   );
 }

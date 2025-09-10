@@ -72,7 +72,7 @@ function getResourcesOnLayers(store, config, extract) {
   return layers.filter((layer) => layer?.length);
 }
 
-export function buildNetworkGraph({ store }, config) {
+export async function buildNetworkGraph({ store }, config) {
   const isWorkload = canDrawWorkload(store);
   const layers = getResourcesOnLayers(store, config, isWorkload);
 
@@ -138,7 +138,7 @@ export function buildNetworkGraph({ store }, config) {
         for (const layerResource of currentLayer) {
           for (const nextLayerResource of nextLayer) {
             // connect if match exists
-            if (match(layerResource, nextLayerResource, config)) {
+            if (await match(layerResource, nextLayerResource, config)) {
               strEdges.push(
                 makeEdge(
                   layerResource.metadata.uid,

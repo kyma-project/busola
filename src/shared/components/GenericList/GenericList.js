@@ -29,6 +29,7 @@ import pluralize from 'pluralize';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { Table } from '@ui5/webcomponents-react';
 import './GenericList.scss';
+import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -91,12 +92,20 @@ export const GenericList = ({
     setEntrySelected(customSelectedEntry || '');
   }, [customSelectedEntry]);
 
-  const sorting = (sort, resources) => {
+  const sorting = async (sort, resources) => {
     if (!sortBy || isEmpty(sortBy)) return resources;
 
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
+
+    if (sortFunction?.asyncFn) {
+      if (sort.order === 'ASC') {
+        return await asyncSort([...resources], sortFunction.asyncFn);
+      } else {
+        return await asyncSort([...resources], sortFunction.asyncFn, true);
+      }
+    }
 
     if (sort.order === 'ASC') {
       return [...resources].sort(sortFunction);
@@ -120,9 +129,7 @@ export const GenericList = ({
   const { i18n, t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
 
-  const [filteredEntries, setFilteredEntries] = useState(() =>
-    sorting(sort, entries),
-  );
+  const [filteredEntries, setFilteredEntries] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -134,13 +141,16 @@ export const GenericList = ({
       }
     }
 
-    setFilteredEntries(
-      filterEntries(
-        sorting(sort, entries),
+    const getFilteredEntries = async () => {
+      const sorted = await sorting(sort, entries);
+      const filtered = await filterEntries(
+        sorted,
         searchQuery,
         searchSettings?.textSearchProperties,
-      ),
-    );
+      );
+      setFilteredEntries(filtered);
+    };
+    getFilteredEntries();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     searchQuery,
@@ -483,6 +493,7 @@ const SearchProps = PropTypes.shape({
     PropTypes.oneOfType([
       PropTypes.string.isRequired,
       PropTypes.func.isRequired,
+      PropTypes.any,
     ]),
   ),
   showSearchSuggestion: PropTypes.bool,

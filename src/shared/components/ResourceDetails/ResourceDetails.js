@@ -1,4 +1,4 @@
-import React, { createContext, Suspense, useState } from 'react';
+import React, { createContext, Suspense, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +30,7 @@ import { HintButton } from '../DescriptionHint/DescriptionHint';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
+import { ResourceCustomStatusColumns } from './ResourceCustomStatusColumns';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -92,6 +93,23 @@ function ResourceDetailsRenderer(props) {
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
+  const [disableEditState, setDisableEditState] = useState(false);
+
+  useEffect(() => {
+    const getDisableEdit = async () => {
+      if (
+        typeof props.disableEdit === 'function' ||
+        typeof props.disableEdit?.then === 'function'
+      ) {
+        const isDisabled = await props.disableEdit(resource);
+        setDisableEditState(isDisabled);
+      } else {
+        setDisableEditState(props.disableEdit);
+      }
+    };
+    getDisableEdit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(resource), props.disableEdit]);
 
   if (loading) return <Spinner />;
   if (error) {
@@ -127,11 +145,7 @@ function ResourceDetailsRenderer(props) {
           updateResourceMutation={updateResourceMutation}
           silentRefetch={silentRefetch}
           resource={resource}
-          disableEdit={
-            typeof props.disableEdit === 'function'
-              ? props.disableEdit(resource)
-              : props.disableEdit
-          }
+          disableEdit={disableEditState}
         />
       )}
     </>
@@ -200,6 +214,71 @@ function Resource({
 
   const layoutColumn = useAtomValue(columnLayoutAtom);
   const protectedResource = isProtected(resource);
+  const [filteredStatusColumns, setFilteredStatusColumns] = useState([]);
+  const [filteredStatusColumnsLong, setFilteredStatusColumnsLong] = useState(
+    [],
+  );
+  const [filteredConditionsComponents, setFilteredConditionsComponents] =
+    useState([]);
+  const [filteredDetailsCardColumns, setFilteredDetailsCardColumns] = useState(
+    [],
+  );
+
+  const filterColumns = async (col) => {
+    const { visible, error } = (await col.visibility?.(resource)) || {
+      visible: true,
+    };
+    if (error) {
+      col.value = () => t('common.messages.error', { error: error.message });
+      return true;
+    }
+    return visible;
+  };
+
+  useEffect(() => {
+    if (customStatusColumns?.length) {
+      Promise.all(
+        customStatusColumns.map(async (col) => {
+          return (await filterColumns(col)) ? col : false;
+        }),
+      ).then((res) => {
+        const customCols = res
+          .filter(Boolean)
+          ?.filter((col) => !col?.conditionComponent)
+          ?.filter((col) => !col?.fullWidth || col?.fullWidth === false);
+        setFilteredStatusColumns(customCols);
+
+        const customColsLong = res
+          .filter(Boolean)
+          ?.filter((col) => !col?.conditionComponent)
+          ?.filter((col) => col?.fullWidth && col?.fullWidth === true);
+        setFilteredStatusColumnsLong(customColsLong);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customStatusColumns]);
+
+  useEffect(() => {
+    if (customConditionsComponents?.length) {
+      Promise.all(
+        customConditionsComponents.map(async (col) => {
+          return (await filterColumns(col)) ? col : false;
+        }),
+      ).then((res) => setFilteredConditionsComponents(res.filter(Boolean)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customConditionsComponents]);
+
+  useEffect(() => {
+    if (customColumns?.length) {
+      Promise.all(
+        customColumns.map(async (col) => {
+          return (await filterColumns(col)) ? col : false;
+        }),
+      ).then((res) => setFilteredDetailsCardColumns(res.filter(Boolean)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customColumns]);
 
   const actions = readOnly ? null : (
     <>
@@ -242,17 +321,6 @@ function Resource({
     </>
   );
 
-  const filterColumns = (col) => {
-    const { visible, error } = col.visibility?.(resource) || {
-      visible: true,
-    };
-    if (error) {
-      col.value = () => t('common.messages.error', { error: error.message });
-      return true;
-    }
-    return visible;
-  };
-
   // https://stackoverflow.com/questions/70330862/how-to-get-the-latest-change-time-of-a-resource-instance-in-k8s
   let lastUpdate;
   const managedFields = resource.metadata?.managedFields;
@@ -282,56 +350,34 @@ function Resource({
       statusBadge={statusBadge ? statusBadge(resource) : null}
       customColumns={
         customStatusColumns?.length ? (
-          <>
-            {customStatusColumns
-              ?.filter(filterColumns)
-              .filter((col) => !col?.conditionComponent)
-              ?.filter((col) => !col?.fullWidth || col?.fullWidth === false)
-              ?.map((col) => (
-                <DynamicPageComponent.Column
-                  key={col.header}
-                  title={col.header}
-                >
-                  {col.value(resource)}
-                </DynamicPageComponent.Column>
-              ))}
-          </>
+          <ResourceCustomStatusColumns
+            filteredStatusColumns={filteredStatusColumns}
+            resource={resource}
+          />
         ) : null
       }
       customColumnsLong={
         customStatusColumns?.length ? (
-          <>
-            {customStatusColumns
-              ?.filter(filterColumns)
-              .filter((col) => !col?.conditionComponent)
-              ?.filter((col) => col?.fullWidth && col?.fullWidth === true)
-              ?.map((col) => (
-                <DynamicPageComponent.Column
-                  key={col.header}
-                  title={col.header}
-                >
-                  {col.value(resource)}
-                </DynamicPageComponent.Column>
-              ))}
-          </>
+          <ResourceCustomStatusColumns
+            filteredStatusColumns={filteredStatusColumnsLong}
+            resource={resource}
+          />
         ) : null
       }
       conditions={statusConditions ? statusConditions(resource) : null}
       customConditionsComponent={
         customConditionsComponents?.length ? (
           <>
-            {customConditionsComponents
-              ?.filter(filterColumns)
-              ?.map((component, index) => (
-                <React.Fragment
-                  key={`${component.header.replace(' ', '-')}-${index}`}
-                >
-                  <div className="title bsl-has-color-status-4 sap-margin-x-small">
-                    {component.header}:
-                  </div>
-                  {component.value(resource)}
-                </React.Fragment>
-              ))}
+            {filteredConditionsComponents?.map((component, index) => (
+              <React.Fragment
+                key={`${component.header.replace(' ', '-')}-${index}`}
+              >
+                <div className="title bsl-has-color-status-4 sap-margin-x-small">
+                  {component.header}:
+                </div>
+                {component.value(resource)}
+              </React.Fragment>
+            ))}
           </>
         ) : null
       }
@@ -378,7 +424,7 @@ function Resource({
               {renderUpdateDate(lastUpdate, t('common.value-units.days-ago'))}
             </DynamicPageComponent.Column>
           )}
-          {customColumns.filter(filterColumns).map((col) => (
+          {filteredDetailsCardColumns.map((col) => (
             <DynamicPageComponent.Column key={col.header} title={col.header}>
               {col.value(resource)}
             </DynamicPageComponent.Column>

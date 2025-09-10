@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import jsyaml from 'js-yaml';
 
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -29,11 +29,11 @@ function formatValue(value, language, formatAsString) {
   }
 }
 
-function getLanguage(jsonata, schema) {
+async function getLanguage(jsonata, schema) {
   const languageFormula = schema.get('language');
   if (!languageFormula) return 'json';
 
-  const [language, error] = jsonata(languageFormula);
+  const [language, error] = await jsonata(languageFormula);
   return error ? 'json' : (language || '').toLowerCase();
 }
 
@@ -58,7 +58,13 @@ export function MonacoRenderer({
     value,
   });
 
-  const language = getLanguage(jsonata, schema);
+  const [language, setLanguage] = useState('');
+
+  useEffect(() => {
+    getLanguage(jsonata, schema).then((res) => setLanguage(res));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema, resource, value]);
+
   const formatAsString = schema.get('formatAsString') ?? false;
   const formattedValue = formatValue(value, language, formatAsString);
   const defaultOpen = schema.get('defaultExpanded') ?? false;
