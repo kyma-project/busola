@@ -73,7 +73,7 @@ export function prepareSchemaRules(allRuleDefs, filter = () => true) {
 
     if (lastArrayIndex) {
       const lastArrayRule = stack[lastArrayIndex + 1];
-      if (varName) lastArrayRule.itemVars.push(varName);
+      if (varName) lastArrayRule?.itemVars?.push(varName);
       stack
         .slice(lastArrayIndex + 1)
         .forEach(item => (item.itemVars = lastArrayRule.itemVars));

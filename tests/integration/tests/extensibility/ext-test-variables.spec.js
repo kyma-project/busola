@@ -103,8 +103,7 @@ context('Test extensibility variables', () => {
     cy.get('ui5-cb-item:visible')
       .contains('advanced')
       .should('exist');
-
-    // test if fielsd based on visibility are not visible
+    // test if fields based on visibility are not visible
     cy.get('@form')
       .find('[data-testid="spec.name"]:visible')
       .should('not.exist');

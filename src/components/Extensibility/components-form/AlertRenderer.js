@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
@@ -19,7 +20,7 @@ export function AlertRenderer({
   const { itemVars } = useVariables();
 
   const rule = schema.get('schemaRule');
-  const item = itemVars(resource, rule.itemVars, storeKeys);
+  const item = itemVars(resource, rule?.itemVars, storeKeys);
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -40,16 +41,23 @@ export function AlertRenderer({
     schemaType = 'Positive';
   }
 
-  function alertJsonata(alertFormula, item) {
-    const [value, error] = jsonata(alertFormula, item);
-    if (error) {
-      console.warn('Widget::shouldBeVisible error:', error);
-      return error.message;
-    } else {
-      return value;
+  const [alertJsonata, setAlertJsonata] = useState('');
+
+  useEffect(() => {
+    async function getAlertJsonata(alertFormula, item) {
+      const [value, error] = await jsonata(alertFormula, item);
+      if (error) {
+        console.warn('Widget::shouldBeVisible error:', error);
+        return error.message;
+      } else {
+        return value;
+      }
     }
-  }
-  const alertLink = useCreateResourceDescription(alertJsonata(alert, item));
+    getAlertJsonata(alert, item).then(res => setAlertJsonata(res));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alert, item, originalResource, resource, embedResource, value]);
+
+  const alertLink = useCreateResourceDescription(alertJsonata);
   return (
     <MessageStrip
       design={schemaType}
