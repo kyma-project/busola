@@ -142,12 +142,12 @@ export function useAuthHandler() {
   const prevClusterRef = useRef<typeof cluster>(null);
 
   useEffect(() => {
-    if (isEqual(prevClusterRef.current, cluster)) return; // Skip if unchanged
-
     if (!cluster) {
       setAuth(null);
       setIsLoading(false);
     } else {
+      if (isEqual(prevClusterRef.current, cluster)) return; // Skip if unchanged
+
       const userCredentials = cluster.currentContext?.user?.user;
 
       if (hasNonOidcAuth(userCredentials)) {
