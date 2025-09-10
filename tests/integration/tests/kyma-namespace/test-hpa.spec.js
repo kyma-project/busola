@@ -101,7 +101,7 @@ context('Test HPA', () => {
 
     cy.wait(500).inspectTab('Edit');
 
-    cy.wait(2000);
+    cy.wait(3000);
 
     cy.getMidColumn()
       .get('[data-testid="spec.minReplicas"]:visible')
