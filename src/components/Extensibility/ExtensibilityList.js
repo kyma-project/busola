@@ -1,6 +1,6 @@
+import { useEffect } from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
@@ -97,8 +97,8 @@ export const ExtensibilityListCore = ({
     typeof resMetaData?.resource?.filter === 'string' ||
     typeof generalFilter === 'string';
 
-  const filterFn = value =>
-    applyFormula(
+  const filterFn = async value =>
+    await applyFormula(
       value,
       resMetaData?.resource?.filter || generalFilter,
       tBusola,

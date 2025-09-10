@@ -41,7 +41,7 @@ function ResourceGraph({
       initialResource: resource,
       store: resourcesStore.current,
     };
-    setDotSrc(buildGraph(data, config));
+    buildGraph(data, config).then(res => setDotSrc(res));
   };
 
   const onAllLoaded = () => {
