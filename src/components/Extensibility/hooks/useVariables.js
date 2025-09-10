@@ -118,7 +118,7 @@ export function useVariables() {
 
     const promises = Object.values(defs)
       .filter((def) => typeof vars[def.var] === 'undefined' || def.dynamicValue)
-      .map((def) => {
+      .map(async (def) => {
         return Promise.any([
           readVar(def, initial(def.path.split(/\.?\[\]\.?/))),
         ]).then((val) => {

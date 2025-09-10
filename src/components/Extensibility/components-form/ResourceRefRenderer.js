@@ -121,7 +121,7 @@ export function ResourceRefRender({
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
-      value={fromJS(value).toJS() || ''}
+      value={fromJS(value)?.toJS?.() || ''}
       resources={resources}
       setValue={setValue}
       required={required}
