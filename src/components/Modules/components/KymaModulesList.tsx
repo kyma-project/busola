@@ -309,7 +309,7 @@ export const KymaModulesList = ({
             hasDetailsLink,
           })
         }
-        noHideFields={['Name', '', 'Namespace']}
+        disableHiding={false}
         displayArrow
         title={'Modules'}
         sortBy={{
