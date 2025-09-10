@@ -29,6 +29,11 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import 'components/Modules/KymaModulesAddModule.scss';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useAtomValue } from 'jotai/index';
+import UploadDialog from 'components/Modules/community/components/UploadDialog';
+import {
+  State,
+  uploadStateAtom,
+} from 'components/Modules/community/components/uploadStateAtom';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -161,6 +166,9 @@ export default function CommunityModulesAddModule(props: any) {
     node => node.namespaced,
   );
 
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [uploadState, setUploadState] = useAtom(uploadStateAtom);
+
   const calculateColumns = useCallback(() => {
     if (cardsContainerRef?.clientWidth) {
       const containerWidth = cardsContainerRef?.clientWidth;
@@ -246,8 +254,42 @@ export default function CommunityModulesAddModule(props: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    setUploadModalOpen(true);
     (async function() {
       try {
+        const callBack = (
+          moduleName: string,
+          moduleState: State,
+          message?: string,
+        ) => {
+          console.log(moduleState);
+          const moduleStateToUpdate = uploadState?.find(
+            uploadState => uploadState.moduleName === moduleName,
+          );
+          if (!moduleStateToUpdate) {
+            const newUploadState = {
+              moduleName,
+              message: message || '',
+              state: moduleState,
+            };
+            setUploadState([...uploadState, newUploadState]);
+            console.log(newUploadState);
+            return;
+          }
+
+          const uploadStateToUpdate = uploadState?.map(uploadState => {
+            if (uploadState.moduleName === moduleName) {
+              uploadState.state = moduleState;
+              uploadState.message = message || '';
+              return uploadState;
+            } else {
+              return uploadState;
+            }
+          });
+          console.log(uploadStateToUpdate);
+          setUploadState(uploadStateToUpdate);
+        };
+
         const operationPromises = communityModulesTemplatesToApply
           .values()
           .map(moduleTemplate =>
@@ -257,6 +299,7 @@ export default function CommunityModulesAddModule(props: any) {
               namespaceNodes,
               postRequest,
               patchRequest,
+              callBack,
             ),
           );
         await Promise.allSettled(operationPromises);
@@ -267,6 +310,8 @@ export default function CommunityModulesAddModule(props: any) {
           }),
         });
 
+        setUploadModalOpen(false);
+        setUploadState([]);
         setLayoutColumn({
           ...layoutColumn,
           layout: 'OneColumn',
@@ -318,7 +363,8 @@ export default function CommunityModulesAddModule(props: any) {
             )}
           </>
         </ResourceForm>
-
+        {uploadModalOpen &&
+          createPortal(<UploadDialog state={uploadState} />, document.body)}
         {createPortal(<UnsavedMessageBox />, document.body)}
       </>
     );

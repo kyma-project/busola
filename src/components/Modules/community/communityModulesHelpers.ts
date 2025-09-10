@@ -7,6 +7,7 @@ import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { createPatch } from 'rfc6902';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
+import { State } from 'components/Modules/community/components/uploadStateAtom';
 
 export type VersionInfo = {
   version: string;
@@ -151,47 +152,68 @@ function imageMatchVersion(image: string, version: string): boolean {
   return imgTag.includes(version);
 }
 
+function sleep(lf_ms: number) {
+  return new Promise(resolve => setTimeout(resolve, lf_ms));
+}
+
 export async function installCommunityModule(
   moduleTpl: ModuleTemplateType,
   clusterNodes: any,
   namespaceNodes: any,
   postRequest: PostFn,
   patchRequest: MutationFn,
+  callback: Function,
 ) {
   const name = getModuleName(moduleTpl);
-  // setState Downloading
-  console.log('Downloading:', name);
 
-  const allResourcesLinks =
-    moduleTpl.spec.resources?.map(resource => resource.link) || [];
-  const allResources = await getAllResourcesYamls(
-    allResourcesLinks,
-    postRequest,
-  );
-  console.log('Preparing:', name);
+  try {
+    // setState Downloading
+    await sleep(2000);
+    callback(name, State.Downloading);
 
-  // setState preparing
-  const { crds, otherYamls } = extractCrds(allResources);
+    console.log('Downloading:', name);
 
-  // setState uploading
-  console.log('Uploading CRDs:', name, crds);
-  await uploadResources(
-    crds,
-    clusterNodes,
-    namespaceNodes,
-    postRequest,
-    patchRequest,
-  );
-  console.log('Uploading other:', name, otherYamls);
-  await uploadResources(
-    otherYamls,
-    clusterNodes,
-    namespaceNodes,
-    postRequest,
-    patchRequest,
-  );
-  console.log('Finished:', name);
-  //   setState Finished
+    const allResourcesLinks =
+      moduleTpl.spec.resources?.map(resource => resource.link) || [];
+    const allResources = await getAllResourcesYamls(
+      allResourcesLinks,
+      postRequest,
+    );
+    console.log('Preparing:', name);
+
+    // setState preparing
+    await sleep(2000);
+    callback(name, State.Preparing);
+
+    const { crds, otherYamls } = extractCrds(allResources);
+
+    // setState uploading
+    await sleep(2000);
+    callback(name, State.Uploading);
+
+    console.log('Uploading CRDs:', name, crds);
+    await uploadResources(
+      crds,
+      clusterNodes,
+      namespaceNodes,
+      postRequest,
+      patchRequest,
+    );
+    console.log('Uploading other:', name, otherYamls);
+    await uploadResources(
+      otherYamls,
+      clusterNodes,
+      namespaceNodes,
+      postRequest,
+      patchRequest,
+    );
+    console.log('Finished:', name);
+    //   setState Finished
+    await sleep(2000);
+    callback(name, State.Finished);
+  } catch (e) {
+    callback(name, State.Error, e);
+  }
 }
 
 async function uploadResources(
