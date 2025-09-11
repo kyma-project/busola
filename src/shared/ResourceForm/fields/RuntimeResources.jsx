@@ -3,7 +3,7 @@ import jp from 'jsonpath';
 import { ResourceForm } from '..';
 import * as Inputs from '../inputs';
 import { FlexBox } from '@ui5/webcomponents-react';
-import { Label } from '../../../shared/ResourceForm/components/Label';
+import { Label } from '../components/Label';
 import { MemoryInput } from 'resources/Namespaces/MemoryQuotas';
 
 import './RuntimeResources.scss';

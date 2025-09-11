@@ -1,4 +1,4 @@
-import { Label } from '../../../shared/ResourceForm/components/Label';
+import { Label } from '../components/Label';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';

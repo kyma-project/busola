@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, createRef } from 'react';
 import { Button, FlexBox } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Label } from '../../../shared/ResourceForm/components/Label';
+import { Label } from '../components/Label';
 
 import { ResourceForm } from '..';
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
