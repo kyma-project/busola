@@ -21,8 +21,8 @@ export function ResourceSchema({
   editMode = false,
 }) {
   const onChange = useCallback(
-    actions => {
-      setStore(prevStore => storeUpdater(actions)(prevStore));
+    (actions) => {
+      setStore((prevStore) => storeUpdater(actions)(prevStore));
     },
     [setStore],
   );

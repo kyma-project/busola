@@ -26,7 +26,7 @@ export default function NamespaceRoutes() {
   useEffect(() => {
     if (extensions?.length) {
       setExtensibilityRoutes(
-        extensions.map(extension =>
+        extensions.map((extension) =>
           createExtensibilityRoutes(extension, language),
         ),
       );

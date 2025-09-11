@@ -38,7 +38,7 @@ export default function ResourceValidationSettings() {
   const allOptions = useMemo(
     () =>
       validationSchemas?.policies
-        .map(policy => ({ key: policy.name, text: policy.name }))
+        .map((policy) => ({ key: policy.name, text: policy.name }))
         .sort((a, b) => (a.key < b.key ? -1 : 1)) ?? [],
     [validationSchemas],
   );
@@ -48,7 +48,7 @@ export default function ResourceValidationSettings() {
       (agg, name) => agg.add(name),
       new Set(),
     );
-    return allOptions.map(option => ({
+    return allOptions.map((option) => ({
       ...option,
       selected: selectedPolicySet.has(option.key),
     }));
@@ -83,7 +83,7 @@ export default function ResourceValidationSettings() {
     setValidateResources({
       isEnabled,
       choosePolicies,
-      policies: selectedPolicies.filter(policy => policy !== policyToDelete),
+      policies: selectedPolicies.filter((policy) => policy !== policyToDelete),
     });
   };
 
@@ -117,7 +117,7 @@ export default function ResourceValidationSettings() {
       )}
       {isEnabled &&
         (choosePolicies ||
-          policyList.filter(policy => policy.selected).length > 0) && (
+          policyList.filter((policy) => policy.selected).length > 0) && (
           <>
             <GenericList
               title={t(
@@ -127,10 +127,10 @@ export default function ResourceValidationSettings() {
               entries={
                 choosePolicies
                   ? policyList
-                  : policyList.filter(policy => policy.selected)
+                  : policyList.filter((policy) => policy.selected)
               }
               headerRenderer={() => ['policies']}
-              rowRenderer={entry => [
+              rowRenderer={(entry) => [
                 <div className="policy-row">
                   <span>{entry.text}</span>
                   {choosePolicies && (

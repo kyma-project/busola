@@ -64,23 +64,17 @@ context('Test HPA', () => {
 
     cy.saveChanges('Create');
 
-    cy.getMidColumn()
-      .contains('ui5-title', HPA_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', HPA_NAME).should('be.visible');
   });
 
   it('Check HPA details', () => {
-    cy.getMidColumn()
-      .contains('Deployment')
-      .should('be.visible');
+    cy.getMidColumn().contains('Deployment').should('be.visible');
 
     cy.getMidColumn()
       .contains('ui5-link', DEPLOYEMENT_NAME)
       .should('be.visible');
 
-    cy.getMidColumn()
-      .contains('Events')
-      .should('be.visible');
+    cy.getMidColumn().contains('Events').should('be.visible');
   });
 
   it('Check HPA list', () => {
@@ -90,9 +84,9 @@ context('Test HPA', () => {
 
   it('Check HPA subcomponent', () => {
     cy.clickGenericListLink(HPA_NAME);
-
+    cy.wait(500);
     cy.contains('ui5-link', DEPLOYEMENT_NAME).click();
-
+    cy.wait(500);
     cy.url().should('match', /deployments/);
   });
 
@@ -115,8 +109,6 @@ context('Test HPA', () => {
     cy.saveChanges('Edit');
     cy.inspectTab('View');
 
-    cy.contains('Min Replicas')
-      .parent()
-      .contains(MIN_REPLICAS);
+    cy.contains('Min Replicas').parent().contains(MIN_REPLICAS);
   });
 });

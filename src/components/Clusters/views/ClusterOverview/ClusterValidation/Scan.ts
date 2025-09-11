@@ -45,17 +45,17 @@ export class Scan {
       ? resources
       : await this.resourceLoader.loadResourceLists();
 
-    const listableResources = apiResources.filter(resource =>
+    const listableResources = apiResources.filter((resource) =>
       resource.verbs?.includes('list'),
     );
     const listableClusterResources = listableResources.filter(
-      resource => !resource.namespaced,
+      (resource) => !resource.namespaced,
     );
     const listableNamespaceResources = listableResources.filter(
-      resource => resource.namespaced,
+      (resource) => resource.namespaced,
     );
 
-    const clusterResourceStatus = listableClusterResources.map(resource => {
+    const clusterResourceStatus = listableClusterResources.map((resource) => {
       return {
         kind: resource.kind,
         endpoint: `${resource.base}/${resource.name}`,
@@ -74,23 +74,24 @@ export class Scan {
           ({ metadata: { name } }) => name,
         );
 
-    const namespaceList = namespaceNames.map(
-      (name): ScanNamespaceStatus => {
-        return {
-          name,
-          resources: listableNamespaceResources.map(resource => ({
-            kind: resource.kind,
-            endpoint: `${resource.base}/namespaces/${name}/${resource.name}`,
-            scanned: false,
-          })),
-        };
-      },
-    ) as ScanNamespaceStatus[];
+    const namespaceList = namespaceNames.map((name): ScanNamespaceStatus => {
+      return {
+        name,
+        resources: listableNamespaceResources.map((resource) => ({
+          kind: resource.kind,
+          endpoint: `${resource.base}/namespaces/${name}/${resource.name}`,
+          scanned: false,
+        })),
+      };
+    }) as ScanNamespaceStatus[];
 
-    this.result.namespaces = namespaceList.reduce((agg, curr) => {
-      agg[curr.name] = curr;
-      return agg;
-    }, {} as { [key: string]: ScanNamespaceStatus });
+    this.result.namespaces = namespaceList.reduce(
+      (agg, curr) => {
+        agg[curr.name] = curr;
+        return agg;
+      },
+      {} as { [key: string]: ScanNamespaceStatus },
+    );
   }
 
   initSummary() {
@@ -145,7 +146,7 @@ export class Scan {
     const summary = resource.summary;
     if (summary) {
       summary.warningCount = (
-        resource.items?.map(item => item.warnings?.length ?? 0) ?? []
+        resource.items?.map((item) => item.warnings?.length ?? 0) ?? []
       ).reduce(sum, 0);
       summary.scanned = resource.scanned ? 1 : 0;
       summary.unauthorized = resource.unauthorized ? 1 : 0;
@@ -176,7 +177,7 @@ export class Scan {
       return;
     }
 
-    summary.children?.forEach(child => {
+    summary.children?.forEach((child) => {
       this.calculateFullSummary(child);
     });
     this.calculateShallowSummary(summary);
@@ -247,7 +248,7 @@ export class Scan {
 
   *filterResourcesForScan(resources: ScanResourceStatus[], filter?: string[]) {
     yield* resources.filter(
-      resource =>
+      (resource) =>
         !resource.scanned &&
         !resource.unauthorized &&
         (!filter || filter.includes(resource.kind)),
@@ -320,7 +321,7 @@ export class Scan {
     setScanProgress({ total: toScan.length });
 
     await Promise.all(
-      toScan.map(async resource =>
+      toScan.map(async (resource) =>
         queue.add(async () => {
           await this.scanResource(resource);
           if (aborted) {
@@ -337,7 +338,7 @@ export class Scan {
   }
 
   abort() {
-    this.abortHandlers.forEach(abort => abort());
+    this.abortHandlers.forEach((abort) => abort());
     this.abortHandlers.length = 0;
   }
 }

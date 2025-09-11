@@ -40,28 +40,23 @@ function getAutocompleteEntries(context: CommandPaletteContext) {
   if (tokens.length > 1) return [];
 
   const options = createNonResourceOptions(context).map(
-    option => option.names[0],
+    (option) => option.names[0],
   );
 
-  return options.filter(o => o.startsWith(tokens[0]));
+  return options.filter((o) => o.startsWith(tokens[0]));
 }
 
 function createResults(context: CommandPaletteContext): Result[] | null {
   const options = createNonResourceOptions(context);
 
-  const option = options.find(o => o.names.includes(context.tokens[0]));
+  const option = options.find((o) => o.names.includes(context.tokens[0]));
 
   if (option) {
-    const {
-      activeClusterName,
-      clusterNames,
-      clustersInfo,
-      t,
-      navigate,
-    } = context;
+    const { activeClusterName, clusterNames, clustersInfo, t, navigate } =
+      context;
     switch (option.type) {
       case 'clusters':
-        return clusterNames.map(clusterName => ({
+        return clusterNames.map((clusterName) => ({
           label: t('command-palette.resource-names.cluster', {
             name: clusterName,
           }),
@@ -135,10 +130,10 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
 export const nonResourceHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestion: context =>
+  getSuggestion: (context) =>
     makeSuggestion(
       context.tokens[0],
-      createNonResourceOptions(context).flatMap(option => option.names),
+      createNonResourceOptions(context).flatMap((option) => option.names),
     ),
   createResults,
   getNavigationHelp: () => [{ name: 'clusters' }],

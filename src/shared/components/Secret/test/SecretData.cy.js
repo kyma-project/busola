@@ -12,14 +12,12 @@ describe('SecretData Component', () => {
 
   const empty_secret = {};
 
-  const mountComponent = secretProp => {
+  const mountComponent = (secretProp) => {
     cy.mount(<SecretData secret={secretProp} />);
   };
 
   const expectInitialState = () => {
-    cy.get('pre.secret')
-      .filter(':contains("*****")')
-      .should('have.length', 2);
+    cy.get('pre.secret').filter(':contains("*****")').should('have.length', 2);
 
     cy.contains(secret.data.client_id).should('not.exist');
     cy.contains(secret.data.client_secret).should('not.exist');
@@ -53,15 +51,11 @@ describe('SecretData Component', () => {
 
     expectInitialState();
 
-    cy.contains('secrets.buttons.decode')
-      .first()
-      .click();
+    cy.contains('secrets.buttons.decode').first().click();
 
     expectDecodedState();
 
-    cy.contains('secrets.buttons.encode')
-      .first()
-      .click();
+    cy.contains('secrets.buttons.encode').first().click();
 
     expectEncodedState();
   });

@@ -1,5 +1,4 @@
 import { handleK8sRequests } from './kubernetes/handler';
-import { handleTracking } from './tracking.js';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
@@ -81,13 +80,12 @@ if (isDocker) {
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
-  handleTracking(app);
   app.use('/backend/ai-chat', companionRouter);
   app.use('/backend/modules', communityRouter);
   app.use('/backend', handleRequest);
 }
 
-process.on('SIGINT', function() {
+process.on('SIGINT', function () {
   process.exit();
 });
 

@@ -44,7 +44,7 @@ export default function ReplicaSetCreate({
     setCustomValid(hasAnyContainers);
   }, [replicaset, setCustomValid]);
 
-  const handleNameChange = name => {
+  const handleNameChange = (name) => {
     jp.value(replicaset, '$.metadata.name', name);
     jp.value(replicaset, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(replicaset, '$.spec.template.spec.containers[0].name', name);

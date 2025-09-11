@@ -53,7 +53,7 @@ export function K8sResourceSelect({
   resourceType = resourceType || t('common.labels.resource');
   const pluralResourceType = pluralize(resourceType);
 
-  const resourceNames = (data || []).map(s => s.metadata.name);
+  const resourceNames = (data || []).map((s) => s.metadata.name);
   const options = resourceNames.map((name, idx) => ({ key: idx, text: name }));
 
   const getValidationState = () => {
@@ -87,8 +87,10 @@ export function K8sResourceSelect({
       };
   };
 
-  const onChange = event => {
-    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+  const onChange = (event) => {
+    const selectedOption = options.find(
+      (o) => o.text === event.target.value,
+    ) ?? {
       key: event.target._state.filterValue,
       text: event.target._state.filterValue,
     };
@@ -112,7 +114,7 @@ export function K8sResourceSelect({
       valueStateMessage={<Text>{getValidationState()?.text}</Text>}
       pattern={k8sNamePattern}
     >
-      {options.map(option => (
+      {options.map((option) => (
         <ComboBoxItem key={option.key} text={option.text} />
       ))}
     </ComboBox>

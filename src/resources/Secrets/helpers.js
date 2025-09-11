@@ -6,7 +6,7 @@ export const getSecretDefs = (t, features) => {
   const defs = getPerResourceDefs('secrets', t, features);
   return Object.entries(defs)
     .map(([kind, secretsPresets]) =>
-      secretsPresets.map(secretsPreset => ({
+      secretsPresets.map((secretsPreset) => ({
         ...secretsPreset,
         title:
           pluralize(prettifyKind(kind)) +

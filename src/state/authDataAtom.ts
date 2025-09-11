@@ -77,7 +77,7 @@ async function handleLogin({
         token: useAccessToken ? user?.access_token! : user?.id_token!,
       });
     });
-    userManager.events.addSilentRenewError(e => {
+    userManager.events.addSilentRenewError((e) => {
       console.warn('silent renew failed', e);
       setAuth(null);
       onError();
@@ -89,7 +89,7 @@ async function handleLogin({
     user: User | null,
     useAccessToken: boolean,
   ) => {
-    document.addEventListener('visibilitychange', async event => {
+    document.addEventListener('visibilitychange', async (event) => {
       if (document.visibilityState === 'visible') {
         if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
           user = await userManager.signinSilent();

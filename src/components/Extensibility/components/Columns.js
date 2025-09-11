@@ -13,7 +13,7 @@ export function Columns({ structure, inlineContext, ...props }) {
       className={`${classNames} sap-margin-small`}
       data-testid="extensibility-columns"
     >
-      {(structure.children || []).map(child => (
+      {(structure.children || []).map((child) => (
         <Widget
           structure={child}
           key={`column-${child.path || child.name}`}

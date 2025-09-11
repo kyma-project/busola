@@ -2,10 +2,10 @@ import React from 'react';
 
 const customWebComponents = ['monaco-editor', 'dynamic-page-component'];
 
-const isCustomWebComp = node =>
+const isCustomWebComp = (node) =>
   customWebComponents.includes(node.tagName.toLowerCase());
 
-const camelToKebabCase = str =>
+const camelToKebabCase = (str) =>
   str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 
 // Map event listeners to props
@@ -21,7 +21,7 @@ const mapEventListeners = (node, props) => {
 };
 
 // Map attributes to props
-const mapAttributes = node => {
+const mapAttributes = (node) => {
   const props = {};
   for (let { name, value } of node.attributes) {
     props[name === 'class' ? 'className' : name] = value;
@@ -34,7 +34,7 @@ export function parseHtmlToJsx(element) {
     throw new Error('Input must be an HTML element.');
   }
 
-  const parseElement = node => {
+  const parseElement = (node) => {
     if (node.nodeType === Node.TEXT_NODE) return node.textContent;
     if (!(node instanceof HTMLElement)) return null;
 
@@ -46,12 +46,12 @@ export function parseHtmlToJsx(element) {
 
     // Because of parsing issues with React.createElement on custom web components we are passing the props as attributes
     if (isCustomWebComp(node)) {
-      const parsedPropsNames = Object.entries(
-        node.getProps(),
-      ).map(([key, value]) => [`prop_${camelToKebabCase(key)}`, value]);
-      const parsedSlotsNames = Object.entries(
-        node.getSlots(),
-      ).map(([key, value]) => [`slot_${camelToKebabCase(key)}`, value]);
+      const parsedPropsNames = Object.entries(node.getProps()).map(
+        ([key, value]) => [`prop_${camelToKebabCase(key)}`, value],
+      );
+      const parsedSlotsNames = Object.entries(node.getSlots()).map(
+        ([key, value]) => [`slot_${camelToKebabCase(key)}`, value],
+      );
 
       props = {
         ...props,

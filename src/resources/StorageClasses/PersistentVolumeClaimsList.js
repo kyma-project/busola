@@ -12,7 +12,7 @@ export function PersistentVolumeClaimsList(storageclass) {
     resourceType: 'PersistentVolumeClaims',
     isCompact: true,
     showTitle: true,
-    filter: persistentvolumesclaim =>
+    filter: (persistentvolumesclaim) =>
       persistentvolumesclaim.spec.storageClassName ===
       storageclass.metadata.name,
   };

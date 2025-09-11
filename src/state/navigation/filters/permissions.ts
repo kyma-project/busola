@@ -31,7 +31,7 @@ export const doesUserHavePermission = (
   const resourceKindPlural = pluralize(resourceKind).toLocaleLowerCase();
   const resourceGroup = getResourceGroup(resourceGroupAndVersion);
 
-  const isPermitted = permissionSet.find(set => {
+  const isPermitted = permissionSet.find((set) => {
     const isSameApiGroup =
       set.apiGroups?.includes(resourceGroup) || set.apiGroups?.includes('*');
 
@@ -41,9 +41,9 @@ export const doesUserHavePermission = (
 
     // creates a regex such as '^\*$|^VERB1$|^VERB2' etc.
     const permissionRegex = new RegExp(
-      `^\\*$|${permissions.map(verb => '^' + verb + '$').join('|')}`,
+      `^\\*$|${permissions.map((verb) => '^' + verb + '$').join('|')}`,
     );
-    const areSufficientPermissions = set.verbs?.some(verb => {
+    const areSufficientPermissions = set.verbs?.some((verb) => {
       return permissionRegex.test(verb);
     });
 

@@ -13,7 +13,7 @@ export function GenericRoleBindingList({
   const { t } = useTranslation();
   const { clusterUrl, namespaceUrl } = useUrl();
 
-  const navigateToRole = role => {
+  const navigateToRole = (role) => {
     if (role.kind === 'ClusterRole') {
       return clusterUrl(`clusterroles/${role.name}`);
     } else {
@@ -21,7 +21,7 @@ export function GenericRoleBindingList({
     }
   };
 
-  const getSubject = subject => (
+  const getSubject = (subject) => (
     <div key={subject.kind + ' ' + subject.name}>
       {subject.name}{' '}
       <Tooltip delay={0} content={subject.kind}>
@@ -30,7 +30,7 @@ export function GenericRoleBindingList({
     </div>
   );
 
-  const getSubjectWithLink = subject => (
+  const getSubjectWithLink = (subject) => (
     <div key={subject.kind + ' ' + subject.name}>
       <Link
         url={namespaceUrl(`serviceaccounts/${subject.name}`, {
@@ -46,8 +46,8 @@ export function GenericRoleBindingList({
     </div>
   );
 
-  const getAllSubjects = binding => {
-    return binding.subjects?.map(subject =>
+  const getAllSubjects = (binding) => {
+    return binding.subjects?.map((subject) =>
       subject.kind === 'ServiceAccount'
         ? getSubjectWithLink(subject)
         : getSubject(subject),
@@ -57,7 +57,7 @@ export function GenericRoleBindingList({
   const customColumns = [
     {
       header: t('role-bindings.headers.role-ref'),
-      value: binding => (
+      value: (binding) => (
         <Link url={navigateToRole(binding.roleRef)}>
           {binding.roleRef.name}
         </Link>
@@ -65,14 +65,14 @@ export function GenericRoleBindingList({
     },
     {
       header: t('role-bindings.headers.subjects'),
-      value: binding => getAllSubjects(binding),
+      value: (binding) => getAllSubjects(binding),
     },
   ];
 
   const textSearchProperties = [
     'roleRef.name',
     (entry, query) => {
-      const matchingSubject = entry.subjects?.find(subject =>
+      const matchingSubject = entry.subjects?.find((subject) =>
         subject.name.toLowerCase().includes(query?.toLowerCase()),
       );
       return matchingSubject?.name || null;
@@ -89,8 +89,7 @@ export function GenericRoleBindingList({
       {...props}
       emptyListProps={{
         subtitleText: descriptionKey,
-        url:
-          'https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding',
+        url: 'https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding',
       }}
     />
   );

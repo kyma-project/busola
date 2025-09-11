@@ -19,7 +19,7 @@ export const ProgressIndicatorWithPercentage = ({
   rightTitle,
   accessibleName = 'Progress indicator',
 }) => {
-  const applyColors = progressRef => {
+  const applyColors = (progressRef) => {
     const dataBar = progressRef?.shadowRoot?.querySelector(
       '.ui5-progress-indicator-bar',
     );
@@ -47,7 +47,7 @@ export const ProgressIndicatorWithPercentage = ({
           accessibleName={accessibleName}
           displayValue={leftTitle}
           value={value}
-          ref={progress => applyColors(progress)}
+          ref={(progress) => applyColors(progress)}
           className="progress-indicator"
           style={{ position: 'relative', zIndex: '0' }}
         />

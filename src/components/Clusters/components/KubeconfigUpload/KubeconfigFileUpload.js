@@ -8,15 +8,15 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
   const { t } = useTranslation();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
 
-  const readFile = file => {
-    return new Promise(resolve => {
+  const readFile = (file) => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result);
+      reader.onload = (e) => resolve(e.target.result);
       reader.readAsText(file);
     });
   };
 
-  const onKubeconfigFileUploaded = async files => {
+  const onKubeconfigFileUploaded = async (files) => {
     const fileContent = await readFile(files[0]);
     onKubeconfigTextAdded(fileContent);
   };

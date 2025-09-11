@@ -24,7 +24,7 @@ export default function LanguageSettings() {
         accessibleName={t('settings.language')}
         onChange={onChange}
       >
-        {AVAILABLE_LANGUAGES.map(available_language => (
+        {AVAILABLE_LANGUAGES.map((available_language) => (
           <Option
             value={available_language.key}
             key={available_language.key}

@@ -78,7 +78,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
 }) => {
   const fetch = useFetch();
   // store
-  const [store, setStore] = useObjectState<Store>();
+  const [store, updateStore] = useObjectState<Store>();
   // safer than useState for concurrency - we don't want to duplicate the requests
   const dataSourcesDict = useRef<DataSourcesDict>({});
   // refetch intervals
@@ -88,7 +88,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   const [refetchSource, setRefetchSource] = useState('');
 
   const findUpdatedName = (conditionsArr: string[], storeArr: string[]) => {
-    return conditionsArr.find(item => storeArr.includes(item));
+    return conditionsArr.find((item) => storeArr.includes(item));
   };
 
   // clear timeouts on component unmount
@@ -164,29 +164,34 @@ export const DataSourcesContextProvider: FC<Props> = ({
         const expression = jsonataWrapper(filter);
         expression.assign('root', resource);
         if (data.items) {
-          data.items = data.items.filter((item: any) => {
+          // Await each filter result
+          const filteredItems = [];
+          for (const item of data.items) {
             expression.assign('item', item);
-            return expression.evaluate({});
-          });
+            if (await expression.evaluate({})) {
+              filteredItems.push(item);
+            }
+          }
+          data.items = filteredItems;
         } else {
           expression.assign('item', data);
-          if (!expression.evaluate({})) {
+          if (!(await expression.evaluate({}))) {
             data = null;
           }
         }
       }
 
-      if (!data.namespace) {
+      if (!data?.namespace) {
         data.namespace = dataSource.resource.namespace;
       }
-      setStore(dataSourceName, {
+      updateStore(dataSourceName, {
         loading: false,
         error: null,
         data,
       });
       return data;
     } catch (e) {
-      setStore(dataSourceName, {
+      updateStore(dataSourceName, {
         loading: false,
         error: e,
         data: { error: e },
@@ -195,7 +200,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   };
 
   const getRelatedResourceInPath = (path: string) => {
-    return Object.keys(dataSources).find(dataSourceName =>
+    return Object.keys(dataSources).find((dataSourceName) =>
       path.startsWith('$' + dataSourceName),
     );
   };
@@ -217,7 +222,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
       };
 
       const firstFetch = fetchResource(dataSource, dataSourceName, resource);
-      setStore(dataSourceName, {
+      updateStore(dataSourceName, {
         loading: true,
         data: { loading: true },
         firstFetch,

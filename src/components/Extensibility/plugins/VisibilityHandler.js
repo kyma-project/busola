@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
@@ -24,31 +24,54 @@ export function VisibilityHandler({
   // rule.visibility won't work for "var", we must use schema.get('visibility')
   const visibilityFormula = schema.get('visibility');
   const overwrite = schema.get('overwrite') ?? true;
+  const [visible, setVisible] = useState(true);
 
-  if (triggers.enabled) {
-    let visible = true;
-    if (visibilityFormula) {
-      [visible] = jsonata(
-        visibilityFormula,
-        itemVars(resource, rule.itemVars, storeKeys),
-      );
-    } else if (visibilityFormula === false) {
-      visible = false;
-    }
-
-    if (!visible) {
-      if (value && overwrite) {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: {},
-        });
+  useEffect(() => {
+    const setVisibility = async () => {
+      if (triggers.enabled) {
+        if (visibilityFormula) {
+          const [result] = await jsonata(
+            visibilityFormula,
+            itemVars(resource, rule?.itemVars, storeKeys),
+          );
+          setVisible(result);
+        } else if (visibilityFormula === false) {
+          setVisible(false);
+        }
       }
-      return null;
-    }
+    };
+    setVisibility();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    triggers.enabled,
+    visibilityFormula,
+    rule?.itemVars,
+    storeKeys,
+    resource,
+    value,
+    overwrite,
+    schema,
+    storeKeys,
+    currentPluginIndex,
+    resource,
+    onChange,
+    required,
+    jsonata,
+  ]);
+
+  if (!visible && value && overwrite) {
+    onChange({
+      storeKeys,
+      scopes: ['value'],
+      type: 'set',
+      schema,
+      required,
+      data: {},
+    });
+  }
+
+  if (!visible) {
+    return null;
   }
 
   const nextPluginIndex = currentPluginIndex + 1;

@@ -25,7 +25,7 @@ export function CronJobDetails(props) {
   const customStatusColumns = [
     {
       header: t('cron-jobs.last-schedule-time'),
-      value: resource => (
+      value: (resource) => (
         <CronJobLastScheduleTime
           lastScheduleTime={resource.status.lastScheduleTime}
         />
@@ -33,7 +33,7 @@ export function CronJobDetails(props) {
     },
     {
       header: t('cron-jobs.last-successful-time'),
-      value: resource => (
+      value: (resource) => (
         <ReadableCreationTimestamp
           timestamp={
             resource.status.lastSuccessfulTime ?? EMPTY_TEXT_PLACEHOLDER
@@ -43,7 +43,7 @@ export function CronJobDetails(props) {
     },
     {
       header: t('cron-jobs.last-job-execution'),
-      value: resource => {
+      value: (resource) => {
         if (!resource.status.active) {
           return t('cron-jobs.not-scheduled-yet');
         }
@@ -55,7 +55,7 @@ export function CronJobDetails(props) {
     },
     {
       header: t('cron-jobs.active'),
-      value: resource =>
+      value: (resource) =>
         resource.status.active?.length ? (
           <ReadableCreationTimestamp
             timestamp={resource.status.active?.length}
@@ -96,7 +96,7 @@ export function CronJobDetails(props) {
     />
   );
 
-  const CronJobPodTemplate = cronjob => (
+  const CronJobPodTemplate = (cronjob) => (
     <PodTemplate
       key="pod-template"
       template={cronjob.spec.jobTemplate.spec.template}

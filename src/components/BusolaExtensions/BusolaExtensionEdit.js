@@ -59,7 +59,7 @@ export function BusolaExtensionEdit({
         readOnly={true}
         propertyPath="$.metadata.name"
         kind="ConfigMap"
-        validate={value => !!value}
+        validate={(value) => !!value}
       />
       <ResourceForm.FormField
         required
@@ -79,7 +79,7 @@ export function BusolaExtensionEdit({
         input={Inputs.Text}
         pattern="^[0-9]+\.[0-9]+$"
       />
-      {SECTIONS.map(key => (
+      {SECTIONS.map((key) => (
         <ResourceForm.CollapsibleSection
           title={t(`extensibility.sections.${key}`)}
           defaultOpen

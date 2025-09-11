@@ -38,8 +38,13 @@ export function ResourceRenderer({
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
-  const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
-    fromJS(schema.get('resource')).toJS() || {};
+  const {
+    group,
+    version,
+    kind,
+    scope = 'cluster',
+    namespace = namespaceId,
+  } = fromJS(schema.get('resource')).toJS() || {};
   const provideVar = schema.get('provideVar');
 
   const url = usePermittedUrl(
@@ -56,9 +61,9 @@ export function ResourceRenderer({
         <K8sResourceSelectWithUseGetList
           data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
           url={url}
-          filter={item => {
+          filter={async (item) => {
             if (schema.get('filter')) {
-              const [value] = jsonata(schema.get('filter'), {
+              const [value] = await jsonata(schema.get('filter'), {
                 item,
               });
               return value;
@@ -66,7 +71,7 @@ export function ResourceRenderer({
           }}
           onSelect={(value, resources) => {
             const resource = (resources || []).find(
-              r => r.metadata.name === value,
+              (r) => r.metadata.name === value,
             );
             if (provideVar && resource) setVar(`$.${provideVar}`, resource);
 

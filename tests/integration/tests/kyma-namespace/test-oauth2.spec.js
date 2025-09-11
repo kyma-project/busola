@@ -50,41 +50,23 @@ context('Test OAuth2 Clients', () => {
   });
 
   it('Checking details', () => {
-    cy.getMidColumn()
-      .contains(CLIENT_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains(CLIENT_NAME).should('be.visible');
 
-    cy.getMidColumn()
-      .contains('id_token')
-      .should('be.visible');
+    cy.getMidColumn().contains('id_token').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('authorization_code')
-      .should('be.visible');
+    cy.getMidColumn().contains('authorization_code').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('implicit')
-      .should('be.visible');
+    cy.getMidColumn().contains('implicit').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('code')
-      .should('be.visible');
+    cy.getMidColumn().contains('code').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('openid')
-      .should('be.visible');
+    cy.getMidColumn().contains('openid').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('client_id')
-      .should('be.visible');
+    cy.getMidColumn().contains('client_id').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('client_secret')
-      .should('be.visible');
+    cy.getMidColumn().contains('client_secret').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('discontinued')
-      .should('be.visible');
+    cy.getMidColumn().contains('discontinued').should('be.visible');
   });
 
   it('Edit client', () => {
@@ -94,36 +76,22 @@ context('Test OAuth2 Clients', () => {
 
     cy.get(`ui5-checkbox[text="Authorization Code"]`).click();
 
-    cy.get('[value="openid"]')
-      .find('input')
-      .click()
-      .clear()
-      .type('read');
+    cy.get('[value="openid"]').find('input').click().clear().type('read');
 
     cy.saveChanges('Edit');
     cy.getMidColumn().inspectTab('View');
   });
 
   it('Checking updates details', () => {
-    cy.getMidColumn()
-      .contains('code')
-      .should('be.visible');
+    cy.getMidColumn().contains('code').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('implicit')
-      .should('be.visible');
+    cy.getMidColumn().contains('implicit').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('read')
-      .should('be.visible');
+    cy.getMidColumn().contains('read').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('client_id')
-      .should('be.visible');
+    cy.getMidColumn().contains('client_id').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('client_secret')
-      .should('be.visible');
+    cy.getMidColumn().contains('client_secret').should('be.visible');
   });
 
   it('Inpect list', () => {
@@ -131,13 +99,13 @@ context('Test OAuth2 Clients', () => {
   });
 
   it('Check deprecation note in Cluster Overview', () => {
-    cy.getLeftNav()
-      .contains('Back To Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Back To Cluster Details').click();
+
+    cy.wait(5000);
 
     cy.contains('Ory Hydra Deprecation').should('be.visible');
 
-    cy.contains('ui5-panel', 'OAuth2Clients').within(_$genericList => {
+    cy.contains('ui5-panel', 'OAuth2Clients').within((_$genericList) => {
       cy.get('ui5-input[id="search-input"]:visible')
         .find('input')
         .wait(1000)

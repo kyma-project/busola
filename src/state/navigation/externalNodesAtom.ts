@@ -48,7 +48,7 @@ const getExternalNodes = (
   );
 };
 
-export const externalNodesAtom = atom<NavNode[] | null>(get => {
+export const externalNodesAtom = atom<NavNode[] | null>((get) => {
   const configuration = get(configurationAtom);
   const features = configuration?.features;
   const fetchFn = getFetchFn(get);
@@ -64,6 +64,6 @@ export const externalNodesAtom = atom<NavNode[] | null>(get => {
     features[configFeaturesNames.EXTERNAL_NODES],
   );
 
-  return [...externalNodes.filter(n => n)];
+  return [...externalNodes.filter((n) => n)];
 });
 externalNodesAtom.debugLabel = 'externalNodesAtom';

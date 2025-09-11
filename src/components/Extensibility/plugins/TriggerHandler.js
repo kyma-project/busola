@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useTrigger, useSubscription } from '../hooks/useTriggers';
@@ -19,36 +19,47 @@ export function TriggerHandler({
   const rule = schema.get('schemaRule');
 
   const trigger = useTrigger();
+  const [subscriptions, setSubscriptions] = useState([]);
 
-  const subscriptions = Object.entries(schema.get('subscribe') ?? {}).map(
-    ([name, formula]) => {
-      const modifiers = name.split(/\./);
-      const id = modifiers.pop();
-      const callback = () => {
-        const [value] = jsonata(formula, {
-          resource,
-          ...itemVars(resource, rule.itemVars, storeKeys),
-        });
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value },
-        });
-      };
-
-      return [
-        id,
-        {
-          modifiers,
-          storeKeys,
-          callback,
+  useEffect(() => {
+    Promise.all(
+      Object.entries(schema.get('subscribe') ?? {}).map(
+        async ([name, formula]) => {
+          const [value] = await jsonata(formula, {
+            resource,
+            ...itemVars(resource, rule?.itemVars, storeKeys),
+          });
+          return [name, value];
         },
-      ];
-    },
-  );
+      ),
+    ).then((result) => {
+      const subs = result.map(([name, value]) => {
+        const modifiers = name.split(/\./);
+        const id = modifiers.pop();
+        const callback = () => {
+          onChange({
+            storeKeys,
+            scopes: ['value'],
+            type: 'set',
+            schema,
+            required,
+            data: { value },
+          });
+        };
+
+        return [
+          id,
+          {
+            modifiers,
+            storeKeys,
+            callback,
+          },
+        ];
+      });
+      setSubscriptions(subs);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema, resource]);
 
   useSubscription(Object.fromEntries(subscriptions));
 
@@ -56,9 +67,9 @@ export function TriggerHandler({
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
   const myChange = useMemo(
-    () => action => {
+    () => (action) => {
       if (action.scopes?.includes('value')) {
-        action.schema.get('trigger')?.forEach(t => trigger(t, storeKeys));
+        action.schema.get('trigger')?.forEach((t) => trigger(t, storeKeys));
       }
       onChange(action);
     },

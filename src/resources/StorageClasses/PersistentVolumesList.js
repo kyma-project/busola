@@ -12,7 +12,7 @@ export function PersistentVolumesList(storageclass) {
     resourceType: 'PersistentVolumes',
     isCompact: true,
     showTitle: true,
-    filter: persistentvolumes =>
+    filter: (persistentvolumes) =>
       persistentvolumes.spec.storageClassName === storageclass.metadata.name,
   };
 

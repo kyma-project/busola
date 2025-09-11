@@ -67,7 +67,7 @@ export const Pagination = ({
 
   const partitions = makePartitions(currentPage, pagesCount);
 
-  const onSelectionChange = event => {
+  const onSelectionChange = (event) => {
     const selectedSize = event.detail.selectedOption.value;
     setLocalPageSize(parseInt(selectedSize));
   };
@@ -79,7 +79,7 @@ export const Pagination = ({
           {t('settings.other.results-per-page') + ':'}
         </Text>
         <Select onChange={onSelectionChange} className="pagesize-selector">
-          {AVAILABLE_PAGE_SIZES.map(available_size => (
+          {AVAILABLE_PAGE_SIZES.map((available_size) => (
             <Option
               value={available_size.toString()}
               key={available_size}
@@ -142,7 +142,7 @@ export const Pagination = ({
               </Text>
               <Input
                 className="page-input"
-                onChange={event => {
+                onChange={(event) => {
                   const newValue = Number(event.target.typedInValue);
                   if (newValue >= 1 && newValue <= pagesCount)
                     onChangePage(newValue);

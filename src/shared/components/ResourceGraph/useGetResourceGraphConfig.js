@@ -13,7 +13,7 @@ export function useAddStyle({ styleId }) {
     [styleId],
   );
 
-  return rule => {
+  return (rule) => {
     let element = document.getElementById(styleId);
     if (!element) {
       element = document.createElement('style');
@@ -45,13 +45,13 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
       ? Object.fromEntries(
           extensions
             // gather necessary fields
-            ?.map(cR => ({
+            ?.map((cR) => ({
               resource: cR.general?.resource,
               dataSources: cR.dataSources,
               resourceGraph: cR.details?.resourceGraph,
             }))
             // all fields are required
-            .filter(o => Object.values(o).every(Boolean))
+            .filter((o) => Object.values(o).every(Boolean))
             .map(({ resourceGraph, resource, dataSources }) => {
               const {
                 depth,
@@ -78,7 +78,7 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
                 relations: graphDataSources
                   .map(({ source }) => dataSources[source])
                   .filter(Boolean)
-                  .map(relation => {
+                  .map((relation) => {
                     if (!relation.filter) {
                       return { ...relation, filter: () => true };
                     }

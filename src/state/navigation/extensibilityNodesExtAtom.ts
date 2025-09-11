@@ -29,11 +29,11 @@ const createExternalNode = (
 
 const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   const externalNodes = extensions
-    ?.filter(conf => {
+    ?.filter((conf) => {
       return conf.general?.externalNodes;
     })
-    ?.map(conf => {
-      return conf.general?.externalNodes?.map(ext => {
+    ?.map((conf) => {
+      return conf.general?.externalNodes?.map((ext) => {
         ext = {
           ...ext,
           dataSources: conf.dataSources ?? null,
@@ -63,7 +63,7 @@ const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   return nodes || [];
 };
 
-export const extensibilityNodesExtAtom = atom<NavNode[] | null>(get => {
+export const extensibilityNodesExtAtom = atom<NavNode[] | null>((get) => {
   const extensions = get(extensionsAtom) || [];
   const statics = get(staticsAtom) || [];
 
@@ -75,8 +75,8 @@ export const extensibilityNodesExtAtom = atom<NavNode[] | null>(get => {
   const extensibilityNodes = getExtensibilityNodesExt(extensions);
   const staticsNodes = getExtensibilityNodesExt(statics);
 
-  const filteredExtNodes = [...extensibilityNodes.filter(n => n)];
-  const filteresStaticsNodes = [...staticsNodes.filter(n => n)];
+  const filteredExtNodes = [...extensibilityNodes.filter((n) => n)];
+  const filteresStaticsNodes = [...staticsNodes.filter((n) => n)];
 
   return [...filteredExtNodes.concat(filteresStaticsNodes)];
 });

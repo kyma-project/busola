@@ -17,7 +17,11 @@ export default function CustomResourcesOfType({
 }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
-  const { data: crd, loading, error } = useGet(
+  const {
+    data: crd,
+    loading,
+    error,
+  } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/` + crdName,
     {
       skip: !crdName,
@@ -40,7 +44,7 @@ export default function CustomResourcesOfType({
         content={
           <CustomResources
             crd={crd}
-            version={crd.spec.versions.find(v => v.served)}
+            version={crd.spec.versions.find((v) => v.served)}
             showTitle={false}
             showNamespace={false}
             enableColumnLayout={enableColumnLayout}

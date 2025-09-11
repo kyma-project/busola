@@ -21,7 +21,7 @@ export default function TasksList({
   const allTasksCompleted =
     chunksLength > 0 &&
     messageChunks[chunksLength - 1]?.data?.answer?.tasks?.every(
-      task => task?.status === 'completed',
+      (task) => task?.status === 'completed',
     );
 
   return (

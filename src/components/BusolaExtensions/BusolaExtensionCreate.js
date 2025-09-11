@@ -46,7 +46,7 @@ export default function BusolaExtensionCreate({
         setResource={setState}
         className="resource-form--unset-height"
         createResource={async () => {
-          const onError = e =>
+          const onError = (e) =>
             notificationManager.notifyError({
               content: t('common.messages.error', { error: e.message }),
               title: t('extensibility.starter-modal.messages.error'),
@@ -94,15 +94,15 @@ export default function BusolaExtensionCreate({
           required
           label={t('extensibility.starter-modal.crd')}
           value={crd?.metadata.name}
-          setValue={value => {
-            const crd = crds.find(crd => crd.metadata.name === value);
+          setValue={(value) => {
+            const crd = crds.find((crd) => crd.metadata.name === value);
             if (crd) {
               setCrd(crd);
               setState(createExtensibilityTemplate(crd, t));
             }
           }}
           input={Inputs.ComboboxInput}
-          options={(crds ?? []).map(crd => ({
+          options={(crds ?? []).map((crd) => ({
             key: crd.metadata.name,
             text: crd.metadata.name,
           }))}

@@ -11,7 +11,7 @@ import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
 import { K8sNameField, KeyValueField } from '../fields';
 import jp from 'jsonpath';
-import { Form, FormItem } from '@ui5/webcomponents-react';
+import { Button, Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { useAtomValue } from 'jotai';
@@ -87,7 +87,7 @@ export function ResourceForm({
   );
 
   if (!handleNameChange) {
-    handleNameChange = name => {
+    handleNameChange = (name) => {
       jp.value(resource, '$.metadata.name', name);
       jp.value(resource, "$.metadata.labels['app.kubernetes.io/name']", name);
 
@@ -135,7 +135,7 @@ export function ResourceForm({
       ? editViewMode.dynamicViewType === ModeSelector.MODE_FORM
         ? ModeSelector.MODE_FORM
         : ModeSelector.MODE_YAML
-      : editViewMode.preferencesViewType ?? ModeSelector.MODE_FORM;
+      : (editViewMode.preferencesViewType ?? ModeSelector.MODE_FORM);
   };
 
   const [mode, setMode] = React.useState(handleInitialMode);
@@ -248,6 +248,16 @@ export function ResourceForm({
     </Form>
   );
 
+  const handleReset = () => {
+    if (mode === 'MODE_YAML')
+      actionsEditor.setValue(jsyaml.dump(initialResource));
+    else setResource(initialResource);
+  };
+
+  const renderResetButton = (
+    <Button onClick={handleReset}>{t('common.buttons.reset')}</Button>
+  );
+
   return (
     <section className={classnames('resource-form', className)}>
       {formWithoutPanel ? (
@@ -269,6 +279,7 @@ export function ResourceForm({
           headerActions={
             <>
               {actions}
+              {renderResetButton}
               <EditorActions
                 val={convertedResource}
                 editor={actionsEditor}
@@ -284,7 +295,7 @@ export function ResourceForm({
               {onlyYaml ? null : (
                 <ModeSelector
                   mode={mode}
-                  setMode={newMode => {
+                  setMode={(newMode) => {
                     setMode(newMode);
                     if (onModeChange) onModeChange(mode, newMode);
                   }}

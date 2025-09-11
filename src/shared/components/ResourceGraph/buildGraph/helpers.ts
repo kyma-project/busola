@@ -7,7 +7,7 @@ import { RelationResource, ResourceGraphConfig } from '../types';
 
 export function wrap(str: string, characterCount = 15) {
   return _.chunk(str.split(''), characterCount)
-    .map(s => s.join(''))
+    .map((s) => s.join(''))
     .join('\n');
 }
 
@@ -36,11 +36,11 @@ export function makeCluster(resource: K8sResource, content: string) {
 // {rank=same; "id1"; "id2"...}
 export function makeRank(resources: K8sResource[]) {
   return `{rank=same; ${resources
-    .map(resource => `"${resource.metadata.uid}";`)
+    .map((resource) => `"${resource.metadata.uid}";`)
     .join(' ')}}`;
 }
 
-export function match(
+export async function match(
   resourceA: K8sResource,
   resourceB: K8sResource,
   config: ResourceGraphConfig,
@@ -50,10 +50,10 @@ export function match(
 
   let matcher = null;
   const relationA = config[kindA]?.relations?.find(
-    r => r.resource.kind === kindB,
+    (r) => r.resource.kind === kindB,
   );
   const relationB = config[kindB]?.relations?.find(
-    r => r.resource.kind === kindA,
+    (r) => r.resource.kind === kindA,
   );
 
   if (relationA) {
@@ -66,7 +66,7 @@ export function match(
 
   if (matcher) {
     try {
-      return matcher(resourceA, resourceB);
+      return await matcher(resourceA, resourceB);
     } catch (e) {
       console.debug(e);
     }
@@ -99,7 +99,7 @@ export function findRelatedResources(
 
   // remove duplicates ("Pod -> Deployment" is the same as "Deployment -> Pod")
   return relations.filter(
-    (relation, i) => relations.findIndex(r => r.kind === relation.kind) === i,
+    (relation, i) => relations.findIndex((r) => r.kind === relation.kind) === i,
   );
 }
 
@@ -121,7 +121,7 @@ export function getApiPath(
 export function getApiPath2Todo(resource: { kind: string }, nodes: NavNode[]) {
   const resourceType = pluralize(resource.kind).toLowerCase();
 
-  const node = nodes.find(n => n.resourceType === resourceType);
+  const node = nodes.find((n) => n.resourceType === resourceType);
   if (!node) return undefined;
 
   if (node.apiGroup) {

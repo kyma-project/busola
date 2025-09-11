@@ -12,7 +12,6 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
-import { useAppTracking } from 'hooks/tracking';
 
 import { clusterAtom } from 'state/clusterAtom';
 import { languageAtom } from 'state/preferences/languageAtom';
@@ -106,7 +105,6 @@ export default function App() {
   }, [language, i18n]);
 
   useSentry();
-  useAppTracking();
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
@@ -114,7 +112,7 @@ export default function App() {
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();
     const auth = authFormState?.users?.find(
-      user => user?.user?.token || user?.user?.exec,
+      (user) => user?.user?.token || user?.user?.exec,
     )?.user;
     if (auth) {
       setManualKubeConfigId({
@@ -185,7 +183,7 @@ export default function App() {
                 <ContextChooserMessage
                   contextState={contextsState}
                   setValue={(value: string) =>
-                    setContextsState(state => ({
+                    setContextsState((state) => ({
                       ...state,
                       chosenContext: value,
                     }))

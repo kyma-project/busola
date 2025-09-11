@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import jsyaml from 'js-yaml';
 
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -11,7 +11,7 @@ import { useJsonata } from '../hooks/useJsonata';
 function getValue(storeKeys, resource) {
   let value = resource;
   const keys = storeKeys.toJS();
-  keys.forEach(key => {
+  keys.forEach((key) => {
     return (value = value?.[key]);
   });
   return value;
@@ -29,11 +29,11 @@ function formatValue(value, language, formatAsString) {
   }
 }
 
-function getLanguage(jsonata, schema) {
+async function getLanguage(jsonata, schema) {
   const languageFormula = schema.get('language');
   if (!languageFormula) return 'json';
 
-  const [language, error] = jsonata(languageFormula);
+  const [language, error] = await jsonata(languageFormula);
   return error ? 'json' : (language || '').toLowerCase();
 }
 
@@ -47,10 +47,10 @@ export function MonacoRenderer({
   nestingLevel = 0,
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
-  const value = useMemo(() => getValue(storeKeys, resource), [
-    storeKeys,
-    resource,
-  ]);
+  const value = useMemo(
+    () => getValue(storeKeys, resource),
+    [storeKeys, resource],
+  );
 
   const jsonata = useJsonata({
     resource,
@@ -58,13 +58,19 @@ export function MonacoRenderer({
     value,
   });
 
-  const language = getLanguage(jsonata, schema);
+  const [language, setLanguage] = useState('');
+
+  useEffect(() => {
+    getLanguage(jsonata, schema).then((res) => setLanguage(res));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schema, resource, value]);
+
   const formatAsString = schema.get('formatAsString') ?? false;
   const formattedValue = formatValue(value, language, formatAsString);
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const handleChange = useCallback(
-    value => {
+    (value) => {
       let parsedValue = value;
       if (language === 'json' && !formatAsString) {
         try {

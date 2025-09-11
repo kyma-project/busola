@@ -16,10 +16,10 @@ export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
 });
 
-export const applyFormula = (value, formula, t, additionalSources) => {
+export const applyFormula = async (value, formula, t, additionalSources) => {
   try {
     const expression = jsonataWrapper(formula);
-    return expression.evaluate({ data: value, ...additionalSources });
+    return await expression.evaluate({ data: value, ...additionalSources });
   } catch (e) {
     return t('extensibility.configuration-error', { error: e.message });
   }
@@ -30,7 +30,7 @@ export const useGetTranslation = () => {
   const { t, i18n } = useTranslation([translationBundle]);
   //doesn't always work, add `translationBundle.` at the beginning of a path
 
-  const exists = path => i18n.exists(`${translationBundle}::${path}`);
+  const exists = (path) => i18n.exists(`${translationBundle}::${path}`);
 
   const widgetT = (def, options = {}) => {
     let value = '';
@@ -56,7 +56,7 @@ export const useGetTranslation = () => {
   const tFromStoreKeys = (storeKeys, schema, options) => {
     return widgetT({
       ...schema.toJS(),
-      path: storeKeys.toArray().filter(el => typeof el === 'string'),
+      path: storeKeys.toArray().filter((el) => typeof el === 'string'),
     });
   };
 
@@ -68,8 +68,8 @@ export const useGetTranslation = () => {
       return translation === 'undefined'
         ? undefined
         : translation === 'null'
-        ? null
-        : translation;
+          ? null
+          : translation;
     },
     tFromStoreKeys,
     widgetT,
@@ -99,7 +99,7 @@ export function createTemplate(api, namespace, scope) {
 
 export function getDefaultPreset(presets, emptyTemplate) {
   if (!presets || !presets.length) return null;
-  const defaultPreset = presets.find(preset => preset.default === true);
+  const defaultPreset = presets.find((preset) => preset.default === true);
   return defaultPreset
     ? merge({}, { value: emptyTemplate }, defaultPreset)
     : null;
@@ -110,7 +110,7 @@ export function usePreparePresets(presets, emptyTemplate) {
 
   if (!presets || !presets.length) return null;
 
-  const preparedPresets = presets.map(preset => ({
+  const preparedPresets = presets.map((preset) => ({
     ...merge({}, { value: emptyTemplate }, preset),
     name: tExt(preset.name),
   }));
@@ -119,7 +119,7 @@ export function usePreparePresets(presets, emptyTemplate) {
   return preparedPresets;
 }
 
-export const useGetPlaceholder = structure => {
+export const useGetPlaceholder = (structure) => {
   const { t } = useGetTranslation();
   const { defaultResourcePlaceholder } = useContext(TranslationBundleContext);
 
@@ -156,7 +156,7 @@ export const getObjectValueWorkaround = (
   }
 };
 
-export const useCreateResourceDescription = descID => {
+export const useCreateResourceDescription = (descID) => {
   const { t, i18n } = useGetTranslation();
   if (!descID) return;
 
@@ -168,7 +168,7 @@ export const useCreateResourceDescription = descID => {
   }
 };
 
-export const getResourceDescAndUrl = descID => {
+export const getResourceDescAndUrl = (descID) => {
   if (!descID)
     return {
       description: null,
@@ -227,12 +227,12 @@ const isValueMatching = (value, input) => {
 
 const getSearchingFunction = (searchOption, originalResource) => {
   const { source, search } = searchOption;
-  return (entry, input) => {
+  return async (entry, input) => {
     try {
       const value =
-        jsonataWrapper(source).evaluate(originalResource ?? entry, {
+        (await jsonataWrapper(source).evaluate(originalResource ?? entry, {
           item: entry,
-        }) || '';
+        })) || '';
 
       if (!search?.searchFunction)
         return isValueMatching(value, input) ? value : null;
@@ -240,22 +240,25 @@ const getSearchingFunction = (searchOption, originalResource) => {
       const jsonata = jsonataWrapper(search?.searchFunction);
       jsonata.assign('input', input);
 
-      const foundValues = jsonata.evaluate(originalResource ?? entry, {
+      const foundValues = await jsonata.evaluate(originalResource ?? entry, {
         item: entry,
         input,
       });
 
       return foundValues;
     } catch (e) {
+      console.warn(e);
       return null;
     }
   };
 };
 
-const searchingFunctions = (searchOptions, originalResource) =>
-  (searchOptions || []).map(searchOption =>
+const searchingFunctions = (searchOptions, originalResource) => {
+  const res = (searchOptions || []).map((searchOption) =>
     getSearchingFunction(searchOption, originalResource),
   );
+  return res;
+};
 
 export const getTextSearchProperties = ({
   searchOptions,
@@ -275,30 +278,31 @@ const TYPE_FALLBACK = new Map([
   ['info', 'Information'],
 ]);
 
-export const getBadgeType = (highlights, value, jsonata, t) => {
+export const getBadgeType = async (highlights, value, jsonata, t) => {
   let type = null;
   if (highlights) {
-    const match = Object.entries(highlights).find(([key, rule]) => {
-      if (key === 'type') {
-        return null;
-      }
+    for (const [key, rule] of Object.entries(highlights)) {
+      if (key === 'type') continue;
       if (Array.isArray(rule)) {
-        return rule.includes(value);
+        if (rule.includes(value)) {
+          type = key;
+          break;
+        }
       } else {
-        const [doesMatch, matchError] = jsonata(rule);
+        const [doesMatch, matchError] = await jsonata(rule);
         if (matchError) {
           console.error(
             t('extensibility.configuration-error', {
               error: matchError.message,
             }),
           );
-          return false;
+          continue;
         }
-        return doesMatch;
+        if (doesMatch) {
+          type = key;
+          break;
+        }
       }
-    });
-    if (match) {
-      type = match[0];
     }
   }
   if (type === 'negative') type = 'Critical';

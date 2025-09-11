@@ -10,14 +10,9 @@ context('Test Events', () => {
   });
 
   it('Checking list', () => {
-    cy.getLeftNav()
-      .contains('Events')
-      .click();
+    cy.getLeftNav().contains('Events').click();
 
-    cy.get('ui5-table-row')
-      .find('ui5-table-cell')
-      .first()
-      .click();
+    cy.get('ui5-table-row').find('ui5-table-cell').first().click();
   });
 
   it('Check details', () => {
@@ -31,22 +26,12 @@ context('Test Events', () => {
       .next('.content')
       .should('not.be.empty');
 
-    cy.getMidColumn()
-      .contains('Type')
-      .next('.content')
-      .should('not.be.empty');
+    cy.getMidColumn().contains('Type').next('.content').should('not.be.empty');
 
-    cy.getMidColumn()
-      .contains('Count')
-      .next('.content')
-      .should('not.be.empty');
+    cy.getMidColumn().contains('Count').next('.content').should('not.be.empty');
 
-    cy.getMidColumn()
-      .contains('Message')
-      .should('be.visible');
+    cy.getMidColumn().contains('Message').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('Reason')
-      .should('be.visible');
+    cy.getMidColumn().contains('Reason').should('be.visible');
   });
 });

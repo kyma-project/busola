@@ -48,7 +48,7 @@ export const HeaderRenderer = ({
       </TableHeaderCell>
     );
   }
-  const checkCellImportance = h => {
+  const checkCellImportance = (h) => {
     if (h === 'Popin') {
       return -1;
     }
@@ -58,9 +58,9 @@ export const HeaderRenderer = ({
       return 0;
     }
   };
-  const setCellMinWidth = h => {
+  const setCellMinWidth = (h) => {
     if (Array.isArray(noHideFields) && noHideFields?.length) {
-      return noHideFields.find(field => field === h)
+      return noHideFields.find((field) => field === h)
         ? `calc(100%/${getColumnsLength()})`
         : '100px';
     } else if (h === 'Popin') {
@@ -104,7 +104,7 @@ export const RowRenderer = ({
   index,
   ...others
 }) => {
-  const filteredActions = actions?.filter(a =>
+  const filteredActions = actions?.filter((a) =>
     a.skipAction ? !a.skipAction(entry) : true,
   );
   const resolvedRowRenderer = rowRenderer(entry, index);

@@ -20,7 +20,7 @@ export function DaemonSetList(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: resource => (
+      value: (resource) => (
         <ControlledBy
           ownerReferences={resource.metadata.ownerReferences}
           kindOnly
@@ -29,13 +29,13 @@ export function DaemonSetList(props) {
     },
     {
       header: t('daemon-sets.node-selector'),
-      value: resource => (
+      value: (resource) => (
         <Labels labels={resource.spec.template.spec.nodeSelector} />
       ),
     },
     {
       header: t('common.headers.pods'),
-      value: resource => <DaemonSetStatus daemonSet={resource} />,
+      value: (resource) => <DaemonSetStatus daemonSet={resource} />,
     },
   ];
 

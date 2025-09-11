@@ -10,19 +10,19 @@ window.ResizeObserver = ResizeObserverPolyfill;
 
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
-export const ignoreConsoleErrors = patterns => {
+export const ignoreConsoleErrors = (patterns) => {
   console.error = (...data) => {
     for (const d of data) {
-      if (patterns.some(pattern => d.toString().includes(pattern))) return;
+      if (patterns.some((pattern) => d.toString().includes(pattern))) return;
     }
     originalConsoleError(...data);
   };
 };
 
-export const ignoreConsoleWarns = patterns => {
+export const ignoreConsoleWarns = (patterns) => {
   console.warn = (...data) => {
     for (const d of data) {
-      if (patterns.some(pattern => d.toString().includes(pattern))) return;
+      if (patterns.some((pattern) => d.toString().includes(pattern))) return;
     }
     originalConsoleWarn(...data);
   };
@@ -54,7 +54,7 @@ global.URL.createObjectURL = vi.fn();
 
 global.wait = async (ms = 0) => {
   await act(() => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   });
@@ -91,7 +91,7 @@ vi.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => {
     return {
-      t: key => {
+      t: (key) => {
         if (Array.isArray(key)) {
           return key[0];
         }

@@ -13,7 +13,7 @@ export function ServiceAccountList(props) {
   const customColumns = [
     {
       header: t('service-accounts.headers.auto-mount-token'),
-      value: value => (
+      value: (value) => (
         <ServiceAccountTokenStatus
           automount={value.automountServiceAccountToken}
         />

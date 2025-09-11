@@ -36,7 +36,7 @@ export const WelcomeScreen = () => {
       }, 600);
 
       setTimeout(() => {
-        setCurrentIndex(prev => (prev + 1) % messageVariants.length);
+        setCurrentIndex((prev) => (prev + 1) % messageVariants.length);
         setFade(false);
         setIsVisible(false);
       }, 650); // Duration of overlap

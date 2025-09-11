@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useUIStore } from '@ui-schema/ui-schema';
 
 import { useJsonata } from '../../hooks/useJsonata';
@@ -51,48 +52,57 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const rule = schema.get('schemaRule');
 
   const options = schema.get('options');
-  let parsedOptions = {};
+  const [parsedOptions, setParsedOptions] = useState({});
 
-  function makeJsonata(propObject) {
-    if (typeof propObject === 'string') {
-      const [newEnum] = jsonata(
-        propObject,
-        itemVars(resource, rule.itemVars, storeKeys),
-        [],
-      );
-      return newEnum;
+  useEffect(() => {
+    async function makeJsonata(propObject) {
+      if (typeof propObject === 'string') {
+        const [newEnum] = await jsonata(
+          propObject,
+          itemVars(resource, rule?.itemVars, storeKeys),
+          [],
+        );
+        return newEnum;
+      }
+      console.warn('Widget::Modules');
+      return null;
     }
-    console.warn('Widget::Modules');
-    return null;
-  }
-
-  Object.keys(options).forEach(optionName => {
-    if (
-      optionName === 'name' &&
-      !Array.isArray(makeJsonata(options[optionName]))
-    ) {
-      let moduleName = makeJsonata(options[optionName]);
-      parsedOptions[optionName] = [moduleName];
-    } else {
-      parsedOptions[optionName] = makeJsonata(options[optionName]);
-    }
-  });
+    let parsedOpt = {};
+    Promise.all(
+      Object.keys(options).map(async (optionName) => {
+        if (
+          optionName === 'name' &&
+          !Array.isArray(await makeJsonata(options[optionName]))
+        ) {
+          let moduleName = await makeJsonata(options[optionName]);
+          parsedOpt[optionName] = [moduleName];
+        } else {
+          parsedOpt[optionName] = await makeJsonata(options[optionName]);
+        }
+      }),
+    ).then(() => setParsedOptions(parsedOpt));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemVars, options, rule?.itemVars, storeKeys, resource, value]);
 
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)
       return (
-        <MessageStrip design="Critical" hideCloseButton>
+        <MessageStrip
+          key={`no-modules-${index}`}
+          design="Critical"
+          hideCloseButton
+        >
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
       );
 
-    const isChecked = !!(value ? value.toJS() : []).find(v => {
+    const isChecked = !!(value ? value.toJS() : []).find((v) => {
       return v.name === name;
     });
 
     let channelModuleTemplate = [];
 
-    parsedOptions?.moduleTemplates?.map(moduleTemplate => {
+    parsedOptions?.moduleTemplates?.map((moduleTemplate) => {
       if (
         moduleTemplate?.metadata?.labels[
           'operator.kyma-project.io/module-name'
@@ -113,9 +123,9 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       }
     });
 
-    const link = parsedOptions?.moduleTemplates?.find(moduleTemplate => {
+    const link = parsedOptions?.moduleTemplates?.find((moduleTemplate) => {
       const channel = resource?.spec?.modules
-        ? resource?.spec?.modules[index]?.channel ?? resource?.spec?.channel
+        ? (resource?.spec?.modules[index]?.channel ?? resource?.spec?.channel)
         : resource?.spec?.channel;
 
       if (
@@ -129,7 +139,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
     })?.metadata?.annotations['operator.kyma-project.io/doc-url'];
 
     const isBeta = parsedOptions?.moduleTemplates?.find(
-      moduleTemplate =>
+      (moduleTemplate) =>
         moduleTemplate?.metadata?.labels[
           'operator.kyma-project.io/module-name'
         ] === name &&
@@ -147,14 +157,14 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             accessibleName={`${name}`}
             className="sap-margin-top-small"
             checked={isChecked}
-            onChange={e => {
+            onChange={(e) => {
               setCheckbox(
                 value,
                 'name',
                 name,
                 e.target.checked,
                 resource?.spec?.modules
-                  ? resource?.spec?.modules.findIndex(module => {
+                  ? resource?.spec?.modules.findIndex((module) => {
                       return module.name === name;
                     })
                   : index,
@@ -169,7 +179,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             placeholder={t(
               'extensibility.widgets.modules.module-channel-placeholder',
             )}
-            options={channelModuleTemplate.map(option => {
+            options={channelModuleTemplate.map((option) => {
               return {
                 text: `${option.text} ${option.additionalText}`,
                 key: option.text,
@@ -178,7 +188,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             selectedKey={
               resource?.spec?.modules
                 ? resource?.spec?.modules[
-                    resource?.spec?.modules.findIndex(module => {
+                    resource?.spec?.modules.findIndex((module) => {
                       return module.name === name;
                     })
                   ]?.channel
@@ -190,7 +200,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
                   storeKeys: storeKeys
                     .push(
                       resource?.spec?.modules
-                        ? resource?.spec?.modules.findIndex(module => {
+                        ? resource?.spec?.modules.findIndex((module) => {
                             return module.name === name;
                           })
                         : index,

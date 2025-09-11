@@ -47,7 +47,7 @@ export function ObjectProperties({ def, expanded = false }) {
   return (
     <>
       {Object.entries(PROPERTIES)
-        .filter(handler => !!handler)
+        .filter((handler) => !!handler)
         .filter(([key]) => Object.keys(def).includes(key))
         .map(([key, handler]) => (
           <ObjectProperty
@@ -61,8 +61,8 @@ export function ObjectProperties({ def, expanded = false }) {
           />
         ))}
       {Object.keys(def)
-        .filter(key => !Object.keys(PROPERTIES).includes(key))
-        .map(key => (
+        .filter((key) => !Object.keys(PROPERTIES).includes(key))
+        .map((key) => (
           <ObjectProperty
             key={key}
             propKey={key}

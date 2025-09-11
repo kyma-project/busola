@@ -55,9 +55,7 @@ context('Test Protected Resources', () => {
       .find('input')
       .type(NAME, { force: true });
 
-    cy.get('.create-form')
-      .contains('Labels')
-      .click();
+    cy.get('.create-form').contains('Labels').click();
 
     cy.get('.multi-input')
       .find('ui5-input[placeholder="Enter key"][value=""]:visible')
@@ -76,9 +74,7 @@ context('Test Protected Resources', () => {
   });
 
   it('Protect a resource', () => {
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.getLeftNav().contains('Config Maps').click();
 
     cy.clickGenericListLink(NAME);
 
@@ -134,9 +130,7 @@ context('Test Protected Resources', () => {
   });
 
   it("Don't protect a resource", () => {
-    cy.getLeftNav()
-      .contains('Config Maps')
-      .click();
+    cy.getLeftNav().contains('Config Maps').click();
 
     cy.contains('ui5-table-row', NAME)
       .find('ui5-button[data-testid="delete"]')

@@ -68,12 +68,7 @@ export default function NamespaceCreate({
     [initialResource, layoutColumn?.showCreate?.resource],
   );
 
-  const {
-    isIstioFeatureOn,
-    isSidecarEnabled,
-    setSidecarEnabled,
-    setIsChanged,
-  } = useSidecar({
+  const { isSidecarEnabled, setSidecarEnabled, setIsChanged } = useSidecar({
     initialRes: initialResource,
     res: namespace,
     setRes: setNamespace,
@@ -124,7 +119,7 @@ export default function NamespaceCreate({
   }, [namespace.metadata?.name]);
 
   async function afterNamespaceCreated() {
-    setLayoutColumn(prevState => ({
+    setLayoutColumn((prevState) => ({
       layout: 'OneColumn',
       showCreate: null,
       showEdit: prevState.showEdit,
@@ -153,7 +148,7 @@ export default function NamespaceCreate({
 
     const additionalResults = await Promise.allSettled(additionalRequests);
     const rejectedRequest = additionalResults.find(
-      result => result.status === 'rejected',
+      (result) => result.status === 'rejected',
     );
 
     if (!rejectedRequest) {
@@ -230,18 +225,15 @@ export default function NamespaceCreate({
       }}
       className="namespace-create"
     >
-      {isIstioFeatureOn ? (
-        <ResourceForm.FormField
-          label={t('namespaces.create-modal.enable-sidecar')}
-          input={Inputs.Switch}
-          checked={isSidecarEnabled}
-          onChange={() => {
-            setSidecarEnabled(value => !value);
-            setIsChanged(true);
-          }}
-        />
-      ) : null}
-
+      <ResourceForm.FormField
+        label={t('namespaces.create-modal.enable-sidecar')}
+        input={Inputs.Switch}
+        checked={isSidecarEnabled}
+        onChange={() => {
+          setSidecarEnabled((value) => !value);
+          setIsChanged(true);
+        }}
+      />
       {!isEdit ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.apply-memory-quotas')}
@@ -259,7 +251,7 @@ export default function NamespaceCreate({
               />
               <MemoryPresets
                 presets={CONFIG.NS_MEMORY_QUOTAS_PRESET}
-                setValue={val => {
+                setValue={(val) => {
                   setMemory(val);
                 }}
                 disabled={!withMemory}
@@ -303,7 +295,7 @@ export default function NamespaceCreate({
               />
               <LimitPresets
                 presets={CONFIG.NS_CONTAINER_LIMITS_PRESET}
-                setValue={val => {
+                setValue={(val) => {
                   setLimits(val);
                 }}
                 disabled={!withLimits}

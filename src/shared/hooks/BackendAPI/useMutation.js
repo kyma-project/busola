@@ -2,7 +2,7 @@
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
 const useMutation = (method, headers) => {
-  return options => {
+  return (options) => {
     const fetch = useFetch();
 
     return async (relativeUrl, data) => {

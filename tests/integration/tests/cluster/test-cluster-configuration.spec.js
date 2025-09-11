@@ -49,9 +49,7 @@ context('Test Cluster configuration', () => {
     cy.contains('Category from target cluster').should('be.visible');
 
     // custom storage type should be set
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
   });
 
   it('Test pagination', () => {
@@ -59,9 +57,7 @@ context('Test Cluster configuration', () => {
 
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.get('ui5-table')
-      .find('ui5-table-row')
-      .should('have.length', 20);
+    cy.get('ui5-table').find('ui5-table-row').should('have.length', 20);
 
     cy.get('[title="Profile"]').click();
 
@@ -69,17 +65,11 @@ context('Test Cluster configuration', () => {
       .contains('Preferences')
       .click({ force: true });
 
-    cy.contains('Other')
-      .parentsUntil('[role=tab]')
-      .click({ force: true });
+    cy.contains('Other').parentsUntil('[role=tab]').click({ force: true });
 
-    cy.get('ui5-dialog')
-      .contains('20')
-      .click();
+    cy.get('ui5-dialog').contains('20').click();
 
-    cy.get('ui5-option:visible')
-      .contains('10')
-      .click();
+    cy.get('ui5-option:visible').contains('10').click();
 
     cy.contains('Close').click();
 

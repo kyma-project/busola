@@ -59,12 +59,7 @@ export default function DeploymentCreate({
     [initialResource, layoutState?.showCreate?.resource],
   );
 
-  const {
-    isIstioFeatureOn,
-    isSidecarEnabled,
-    setSidecarEnabled,
-    setIsChanged,
-  } = useSidecar({
+  const { isSidecarEnabled, setSidecarEnabled, setIsChanged } = useSidecar({
     initialRes: initialResource,
     res: deployment,
     setRes: setDeployment,
@@ -82,7 +77,7 @@ export default function DeploymentCreate({
     setCustomValid(hasAnyContainers);
   }, [deployment, setCustomValid]);
 
-  const handleNameChange = name => {
+  const handleNameChange = (name) => {
     jp.value(deployment, '$.metadata.name', name);
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(deployment, '$.spec.template.spec.containers[0].name', name);
@@ -101,7 +96,7 @@ export default function DeploymentCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       presets={!isEdit && createPresets(namespace, t)}
-      onPresetSelected={value => {
+      onPresetSelected={(value) => {
         setDeployment(value.deployment);
       }}
       // create modal on a namespace details doesn't have the resourceUrl
@@ -119,19 +114,15 @@ export default function DeploymentCreate({
         tooltipContent={t('replica-sets.create-modal.tooltips.replicas')}
         min={0}
       />
-
-      {isIstioFeatureOn ? (
-        <ResourceForm.FormField
-          label={t('namespaces.create-modal.enable-sidecar')}
-          input={Inputs.Switch}
-          checked={isSidecarEnabled}
-          onChange={() => {
-            setSidecarEnabled(value => !value);
-            setIsChanged(true);
-          }}
-        />
-      ) : null}
-
+      <ResourceForm.FormField
+        label={t('namespaces.create-modal.enable-sidecar')}
+        input={Inputs.Switch}
+        checked={isSidecarEnabled}
+        onChange={() => {
+          setSidecarEnabled((value) => !value);
+          setIsChanged(true);
+        }}
+      />
       <AdvancedContainersView
         resource={deployment}
         setResource={setDeployment}

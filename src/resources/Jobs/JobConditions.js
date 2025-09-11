@@ -13,7 +13,7 @@ export function JobConditions(job) {
     t('jobs.conditions.last-probe'),
     t('jobs.conditions.last-transition'),
   ];
-  const conditionTypeStatus = type => {
+  const conditionTypeStatus = (type) => {
     if (type === 'Complete') {
       return 'Positive';
     } else if (type === 'Failed') {
@@ -22,7 +22,7 @@ export function JobConditions(job) {
       return 'Information';
     }
   };
-  const rowRenderer = condition => {
+  const rowRenderer = (condition) => {
     return [
       <StatusBadge
         resourceKind="jobs"

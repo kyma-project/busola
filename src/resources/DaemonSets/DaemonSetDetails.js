@@ -12,7 +12,7 @@ import { ResourceDescription } from 'resources/DaemonSets';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from '../../hooks/useMessageList';
 
-const Tolerations = resource => {
+const Tolerations = (resource) => {
   const { t } = useTranslation();
 
   const headerRenderer = () => [
@@ -21,7 +21,7 @@ const Tolerations = resource => {
     t('daemon-sets.tolerations.effect'),
     t('daemon-sets.tolerations.toleration-seconds'),
   ];
-  const rowRenderer = entry => [
+  const rowRenderer = (entry) => [
     entry.key || EMPTY_TEXT_PLACEHOLDER,
     entry.operator || EMPTY_TEXT_PLACEHOLDER,
     entry.effect || EMPTY_TEXT_PLACEHOLDER,
@@ -63,7 +63,7 @@ export function DaemonSetDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: resource => (
+      value: (resource) => (
         <ControlledBy
           ownerReferences={resource.metadata.ownerReferences}
           namespace={resource.metadata.namespace}
@@ -75,48 +75,50 @@ export function DaemonSetDetails(props) {
   const customStatusColumns = [
     {
       header: t('daemon-sets.status.collision-count'),
-      value: resource => <div>{resource?.status?.collisionCount ?? 0} </div>,
+      value: (resource) => <div>{resource?.status?.collisionCount ?? 0} </div>,
     },
     {
       header: t('daemon-sets.status.current-number-scheduled'),
-      value: resource => (
+      value: (resource) => (
         <div>{resource?.status?.currentNumberScheduled ?? 0} </div>
       ),
     },
     {
       header: t('daemon-sets.status.desired-number-scheduled'),
-      value: resource => (
+      value: (resource) => (
         <div>{resource?.status?.desiredNumberScheduled ?? 0} </div>
       ),
     },
     {
       header: t('daemon-sets.status.number-available'),
-      value: resource => <div>{resource?.status?.numberAvailable ?? 0} </div>,
+      value: (resource) => <div>{resource?.status?.numberAvailable ?? 0} </div>,
     },
     {
       header: t('daemon-sets.status.number-misscheduled'),
-      value: resource => (
+      value: (resource) => (
         <div>{resource?.status?.numberMisscheduled ?? 0} </div>
       ),
     },
     {
       header: t('daemon-sets.status.number-ready'),
-      value: resource => <div>{resource?.status?.numberReady ?? 0} </div>,
+      value: (resource) => <div>{resource?.status?.numberReady ?? 0} </div>,
     },
     {
       header: t('daemon-sets.status.number-unavailable'),
-      value: resource => <div>{resource?.status?.numberUnavailable ?? 0} </div>,
+      value: (resource) => (
+        <div>{resource?.status?.numberUnavailable ?? 0} </div>
+      ),
     },
     {
       header: t('daemon-sets.status.updated-number-scheduled'),
-      value: resource => (
+      value: (resource) => (
         <div>{resource?.status?.updatedNumberScheduled ?? 0} </div>
       ),
     },
   ];
 
-  const statusConditions = resource => {
-    return resource?.status?.conditions?.map(condition => {
+  const statusConditions = (resource) => {
+    return resource?.status?.conditions?.map((condition) => {
       return {
         header: { titleText: condition.type, status: condition.status },
         message: condition.message,
@@ -124,7 +126,7 @@ export function DaemonSetDetails(props) {
     });
   };
 
-  const MatchSelector = daemonSet => (
+  const MatchSelector = (daemonSet) => (
     <Selector
       key="match-selector"
       namespace={daemonSet.metadata.namespace}
@@ -134,7 +136,7 @@ export function DaemonSetDetails(props) {
     />
   );
 
-  const DaemonSetPodTemplate = daemonSet => (
+  const DaemonSetPodTemplate = (daemonSet) => (
     <PodTemplate key="pod-template" template={daemonSet.spec.template} />
   );
 
@@ -149,7 +151,7 @@ export function DaemonSetDetails(props) {
       customColumns={customColumns}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
-      statusBadge={resource => <DaemonSetStatus daemonSet={resource} />}
+      statusBadge={(resource) => <DaemonSetStatus daemonSet={resource} />}
       createResourceForm={DaemonSetCreate}
       description={ResourceDescription}
       {...props}

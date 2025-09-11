@@ -141,7 +141,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
       confirmText={t('common.buttons.create')}
       layoutCloseCreateUrl={layoutCloseCreateUrl}
       createFormRef={createFormRef}
-      renderForm={renderProps => {
+      renderForm={(renderProps) => {
         const createComponent =
           create &&
           create?.type !== null &&

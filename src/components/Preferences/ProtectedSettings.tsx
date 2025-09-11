@@ -31,7 +31,9 @@ export default function ProtectedSettings() {
           id="disable-resource-protection-switch"
           accessibleName={t('settings.clusters.disableResourceProtection')}
           checked={disableResourceProtection}
-          onChange={() => setDisableResourceProtection(prevState => !prevState)}
+          onChange={() =>
+            setDisableResourceProtection((prevState) => !prevState)
+          }
         />
       </div>
     </div>
