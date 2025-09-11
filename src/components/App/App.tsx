@@ -60,6 +60,9 @@ import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 import JotaiDevTools from './JotaiDevTools';
 
 export default function App() {
+  const isDevMode =
+    window.location.hostname === 'localhost' &&
+    (window.location.port === '8080' || window.location.port === '8000');
   const theme = useAtomValue(themeAtom);
   const language = useAtomValue(languageAtom);
   const cluster = useAtomValue(clusterAtom);
@@ -143,7 +146,7 @@ export default function App() {
         }
       >
         <div id="html-wrap">
-          {process.env.NODE_ENV === 'development' && <JotaiDevTools />}
+          {isDevMode && <JotaiDevTools />}
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />
