@@ -6,7 +6,7 @@ interface ResourceDetailsCardProps {
   content: ReactNode;
   wrapperClassname: string;
   titleText: string;
-  className: string;
+  className?: string;
 }
 
 export default function ResourceDetailsCard({
