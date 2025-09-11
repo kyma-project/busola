@@ -143,7 +143,7 @@ export default function App() {
         }
       >
         <div id="html-wrap">
-          <JotaiDevTools />
+          {process.env.NODE_ENV === 'development' && <JotaiDevTools />}
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />
