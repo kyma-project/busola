@@ -5,7 +5,6 @@ import { Route, useParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
@@ -160,9 +159,4 @@ export const createExtensibilityRoutes = (extension, language, ...props) => {
       />
     </React.Fragment>
   );
-};
-
-createExtensibilityRoutes.propTypes = {
-  extension: PropTypes.object,
-  language: PropTypes.string,
 };
