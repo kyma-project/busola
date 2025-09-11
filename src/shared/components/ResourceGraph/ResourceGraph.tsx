@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
 import { useRelatedResources } from 'shared/components/ResourceGraph/useRelatedResources';
 import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
@@ -11,7 +10,6 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { TABLET, useMinWidth } from 'hooks/useMinWidth';
 import { SaveGraphControls } from './SaveGraphControls';
 import { DetailsCard } from './DetailsCard/DetailsCard';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
 import { Panel, Title } from '@ui5/webcomponents-react';
@@ -19,7 +17,6 @@ import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
 import './ResourceGraph.scss';
-import { configFeaturesNames } from 'state/types';
 
 function ResourceGraph({
   resource,
@@ -44,7 +41,7 @@ function ResourceGraph({
       initialResource: resource,
       store: resourcesStore.current,
     };
-    setDotSrc(buildGraph(data, config));
+    buildGraph(data, config).then(res => setDotSrc(res));
   };
 
   const onAllLoaded = () => {
@@ -87,9 +84,6 @@ function ResourceGraph({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBeenInView]);
-  if (!useFeature(configFeaturesNames.VISUAL_RESOURCES)?.isEnabled) {
-    return EMPTY_TEXT_PLACEHOLDER;
-  }
 
   const actions = !startedLoading && null;
 

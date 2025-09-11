@@ -62,7 +62,7 @@ export function ResourceList({
     r => r.resourceType.toLowerCase() === pluralKind,
   );
 
-  if (!structure.children && extensibilityResourceSchema)
+  if (!structure.children && extensibilityResourceSchema) {
     return (
       <Suspense fallback={<Spinner />}>
         <ExtensibilityList
@@ -83,6 +83,7 @@ export function ResourceList({
         />
       </Suspense>
     );
+  }
 
   const ListRenderer = PredefinedRenderer?.List || ResourcesList;
 
