@@ -1,12 +1,20 @@
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import './ResourceDetails.scss';
+import { ReactNode } from 'react';
+
+interface ResourceDetailsCardProps {
+  content: ReactNode;
+  wrapperClassname: string;
+  titleText: string;
+  className: string;
+}
 
 export default function ResourceDetailsCard({
   content,
   wrapperClassname,
   titleText,
   className = '',
-}) {
+}: ResourceDetailsCardProps) {
   return (
     <div className={wrapperClassname}>
       <Card
