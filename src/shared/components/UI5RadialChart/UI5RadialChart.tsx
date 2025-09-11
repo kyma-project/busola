@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
 import { Text } from '@ui5/webcomponents-react';
