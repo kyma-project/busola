@@ -90,7 +90,7 @@ context('Test HPA', () => {
 
   it('Check HPA subcomponent', () => {
     cy.clickGenericListLink(HPA_NAME);
-    cy.wait(500);
+    cy.wait(1000);
     cy.contains('ui5-link', DEPLOYEMENT_NAME).click();
     cy.wait(500);
     cy.url().should('match', /deployments/);
@@ -101,7 +101,7 @@ context('Test HPA', () => {
 
     cy.wait(500).inspectTab('Edit');
 
-    cy.wait(2000);
+    cy.wait(3000);
 
     cy.getMidColumn()
       .get('[data-testid="spec.minReplicas"]:visible')
