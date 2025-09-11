@@ -37,7 +37,7 @@ export function HintButton({
         id={`descriptionOpener-${ID}`}
         icon="hint"
         design="Transparent"
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           setShowTitleDescription(true);
         }}
@@ -49,7 +49,7 @@ export function HintButton({
         <Popover
           opener={`descriptionOpener-${ID}`}
           open={showTitleDescription}
-          onClose={e => {
+          onClose={(e) => {
             e.stopPropagation();
             setShowTitleDescription(false);
           }}

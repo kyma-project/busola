@@ -8,7 +8,7 @@ import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 
-const switchToPrevLayout = layout => {
+const switchToPrevLayout = (layout) => {
   switch (layout) {
     case 'endColumn':
       return 'TwoColumnsMidExpanded';
@@ -20,7 +20,7 @@ const switchToPrevLayout = layout => {
   }
 };
 
-const switchToCurrentLayout = layout => {
+const switchToCurrentLayout = (layout) => {
   switch (layout) {
     case 'startColumn':
       return 'OneColumn';
@@ -33,7 +33,7 @@ const switchToCurrentLayout = layout => {
   }
 };
 
-const switchToNextLayout = layout => {
+const switchToNextLayout = (layout) => {
   switch (layout) {
     case 'startColumn': {
       return 'TwoColumnsMidExpanded';

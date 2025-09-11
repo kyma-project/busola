@@ -6,7 +6,7 @@ import { Tokens } from 'shared/components/Tokens';
 export function Labels({ schema, value, structure }) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
-  const isSimpleType = value => {
+  const isSimpleType = (value) => {
     return (
       typeof value === 'boolean' ||
       typeof value === 'string' ||

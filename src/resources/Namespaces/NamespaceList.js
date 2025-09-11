@@ -26,13 +26,13 @@ export function NamespaceList(props) {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: namespace => (
+      value: (namespace) => (
         <NamespaceStatus namespaceStatus={namespace.status} />
       ),
     },
   ];
 
-  const namespaceFilter = namespace => {
+  const namespaceFilter = (namespace) => {
     return showHiddenNamespaces
       ? true
       : !hiddenNamespaces.includes(namespace.metadata.name);

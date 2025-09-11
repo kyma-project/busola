@@ -32,7 +32,7 @@ const TestComponent = () => {
   return <p data-testid="value">{JSON.stringify(value)}</p>;
 };
 
-const renderWithProviders = mockCrds => {
+const renderWithProviders = (mockCrds) => {
   return render(
     <JotaiProvider>
       <JotaiHydrator initialValues={[[allExtensionsAtom, mockCrds]]}>

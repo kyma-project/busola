@@ -35,7 +35,7 @@ export function PersistentVolumeDetails(props) {
   const { data: persistentVolumeClaims } = useGetList()(
     '/api/v1/persistentvolumeclaims',
   );
-  const findSecret = secretName =>
+  const findSecret = (secretName) =>
     secrets?.find(({ metadata }) => metadata.name === secretName);
 
   const PvDetails = ({ spec, metadata, status }) => (
@@ -139,14 +139,14 @@ export function PersistentVolumeDetails(props) {
   const customStatusColumns = [
     {
       header: t('pv.headers.lastPhaseTransitionTime'),
-      value: pv =>
+      value: (pv) =>
         getReadableTimestampWithTime(pv?.status?.lastPhaseTransitionTime),
     },
   ];
 
   return (
     <ResourceDetails
-      statusBadge={pv => <PersistentVolumeStatus status={pv?.status} />}
+      statusBadge={(pv) => <PersistentVolumeStatus status={pv?.status} />}
       customStatusColumns={customStatusColumns}
       customComponents={[PvDetails, Events]}
       description={ResourceDescription}

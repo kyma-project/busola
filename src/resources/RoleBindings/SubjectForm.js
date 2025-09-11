@@ -16,7 +16,7 @@ export function SingleSubjectForm({
 }) {
   const { t } = useTranslation();
 
-  const setKind = selected => {
+  const setKind = (selected) => {
     subject.kind = selected;
     switch (subject.kind) {
       case 'Group':
@@ -38,7 +38,7 @@ export function SingleSubjectForm({
     setSubjects([...subjects]);
   };
 
-  const setName = name => {
+  const setName = (name) => {
     subject.name = name;
     setSubjects([...subjects]);
   };
@@ -53,7 +53,7 @@ export function SingleSubjectForm({
     setSubjects([...subjects]);
   };
 
-  const onChange = event => {
+  const onChange = (event) => {
     const selectedKind = event.detail.selectedOption.value;
     setKind(selectedKind);
   };
@@ -70,7 +70,7 @@ export function SingleSubjectForm({
             className="bsl-col-md--12"
             data-testid="role-binding-kind"
           >
-            {SUBJECT_KINDS.map(kind => (
+            {SUBJECT_KINDS.map((kind) => (
               <Option
                 key={kind}
                 value={kind}

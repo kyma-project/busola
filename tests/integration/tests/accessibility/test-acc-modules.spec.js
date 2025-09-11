@@ -10,9 +10,7 @@ context('Accessibility test Modules view', () => {
   it('Acc test Modules view', () => {
     cy.wait(2000);
 
-    cy.get('ui5-card')
-      .contains('Modify Modules')
-      .click();
+    cy.get('ui5-card').contains('Modify Modules').click();
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
@@ -26,9 +24,7 @@ context('Accessibility test Modules view', () => {
   });
 
   it('Acc test add Modules view', () => {
-    cy.get('ui5-panel')
-      .contains('ui5-button', 'Add')
-      .click();
+    cy.get('ui5-panel').contains('ui5-button', 'Add').click();
 
     cy.wait(1000);
 
@@ -44,13 +40,9 @@ context('Accessibility test Modules view', () => {
   });
 
   it('Acc test edit Modules view', () => {
-    cy.get('ui5-card')
-      .contains('api-gateway')
-      .should('be.visible');
+    cy.get('ui5-card').contains('api-gateway').should('be.visible');
 
-    cy.get('ui5-title')
-      .contains('api-gateway')
-      .click();
+    cy.get('ui5-title').contains('api-gateway').click();
 
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
@@ -58,9 +50,7 @@ context('Accessibility test Modules view', () => {
 
     cy.wait(7000);
 
-    cy.get('ui5-table-row')
-      .contains('api-gateway')
-      .should('be.visible');
+    cy.get('ui5-table-row').contains('api-gateway').should('be.visible');
 
     cy.inspectTab('Edit');
 

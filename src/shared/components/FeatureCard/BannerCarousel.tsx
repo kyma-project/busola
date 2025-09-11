@@ -44,7 +44,7 @@ export default function BannerCarousel({ children }: { children: ReactNode }) {
       pageIndicatorBorderDesign="None"
       ref={carouselRef}
       style={childrenLength === 0 ? { display: 'none' } : {}}
-      onNavigate={event => {
+      onNavigate={(event) => {
         setIsUserChoice(true);
         setActiveIndex(event.detail.selectedIndex);
       }}

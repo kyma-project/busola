@@ -79,7 +79,7 @@ describe('Calculate resources for node', () => {
     },
   ];
 
-  testCases.forEach(tc => {
+  testCases.forEach((tc) => {
     test(tc.name, () => {
       //WHEN
       const resources = calcNodeResources(tc.pods);
@@ -93,7 +93,7 @@ describe('Calculate resources for node', () => {
 function fixPod(resources) {
   return {
     spec: {
-      containers: resources.map(item => {
+      containers: resources.map((item) => {
         return {
           resources: item,
         };

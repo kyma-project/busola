@@ -40,7 +40,7 @@ export async function retryFetch(
     if (error?.['statusCode'] === HTTPStatus.RATE_LIMIT_CODE) {
       break;
     } else if (!finished) {
-      await new Promise(resolve => setTimeout(resolve, retryDelay));
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
     } else {
       finished = true;
       break;

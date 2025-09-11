@@ -43,7 +43,7 @@ function getSuggestion({
   const [type, , name] = tokens;
   const suggestedType = makeSuggestion(
     type,
-    resourceTypes.flatMap(n => n.aliases),
+    resourceTypes.flatMap((n) => n.aliases),
   );
 
   if (name) {
@@ -52,7 +52,7 @@ function getSuggestion({
       resourceTypes,
     );
     const resourceNames = (resourceCache[fullResourceType] || [])?.map(
-      n => n.metadata.name,
+      (n) => n.metadata.name,
     );
     const suggestedName = makeSuggestion(name, resourceNames);
     return `${suggestedType || type} ${suggestedName || name}`;
@@ -195,7 +195,7 @@ function createAllResults(context: CommandPaletteContext) {
 
   return clusterNodes
     .filter((currentValue, index, arr) => arr.indexOf(currentValue) === index)
-    .map(clusterNode => {
+    .map((clusterNode) => {
       return {
         ...clusterNode,
         query: clusterNode.resourceType,
@@ -270,14 +270,14 @@ function createResults(context: CommandPaletteContext): Result[] {
     const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
 
     const results = resourceTypeList
-      .map(resourceType => {
+      .map((resourceType) => {
         const matchedNode = findNavigationNode(resourceType, clusterNodes);
 
         return matchedNode
           ? createSingleResult(context, resourceType, matchedNode)
           : null;
       })
-      .filter(r => r !== null) as Result[];
+      .filter((r) => r !== null) as Result[];
 
     return results ?? [];
   }
@@ -343,19 +343,19 @@ function createResults(context: CommandPaletteContext): Result[] {
   }
   if (resourceType === 'namespaces' && !showHiddenNamespaces) {
     resources = resources.filter(
-      ns => !hiddenNamespaces.includes(ns.metadata.name),
+      (ns) => !hiddenNamespaces.includes(ns.metadata.name),
     );
   }
 
   const pathElements = window.location.pathname
     .split('/')
-    .filter(e => e !== '');
+    .filter((e) => e !== '');
   const namespacesOverviewCase =
     window.location.pathname.includes('namespaces') &&
     pathElements.indexOf('namespaces') + 2 <= pathElements.length - 1;
 
   if (name) {
-    const matchedResources = resources.filter(item =>
+    const matchedResources = resources.filter((item) =>
       item.metadata.name.includes(name),
     );
     // special case for a single namespace
@@ -366,20 +366,22 @@ function createResults(context: CommandPaletteContext): Result[] {
     ) {
       return makeSingleNamespaceLinks(matchedResources[0], context);
     }
-    return matchedResources?.map(item =>
+    return matchedResources?.map((item) =>
       makeListItem(item, matchedNode, context, true),
     );
   } else if (delimiter) {
     //special case for namespace overview
     if (resourceType === 'namespaces' && namespacesOverviewCase) {
       return [
-        ...resources?.map(item =>
+        ...resources?.map((item) =>
           makeListItem(item, matchedNode, context, false),
         ),
       ];
     }
     return [
-      ...resources?.map(item => makeListItem(item, matchedNode, context, true)),
+      ...resources?.map((item) =>
+        makeListItem(item, matchedNode, context, true),
+      ),
     ];
   } else {
     return [linkToList];
@@ -393,6 +395,6 @@ export const clusterResourceHandler: Handler = {
   createResults,
   getNavigationHelp: ({ clusterNodes }: CommandPaletteContext) =>
     resourceTypes
-      .filter(rT => findNavigationNode(rT.resourceType, clusterNodes))
-      .map(rT => ({ name: rT.resourceType, aliases: extractShortNames(rT) })),
+      .filter((rT) => findNavigationNode(rT.resourceType, clusterNodes))
+      .map((rT) => ({ name: rT.resourceType, aliases: extractShortNames(rT) })),
 };

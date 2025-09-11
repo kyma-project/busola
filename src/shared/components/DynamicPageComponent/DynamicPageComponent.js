@@ -319,7 +319,7 @@ export const DynamicPageComponent = ({
       </DynamicPageHeader>
     ) : null;
 
-  const handlePageRef = dynamicPage => {
+  const handlePageRef = (dynamicPage) => {
     if (dynamicPageRef) {
       if (typeof dynamicPageRef === 'function') {
         dynamicPageRef(dynamicPage);
@@ -345,14 +345,14 @@ export const DynamicPageComponent = ({
         hidePinButton={true}
         titleArea={headerTitle}
         headerArea={customHeaderContent ?? headerContent}
-        ref={dynamicPage => handlePageRef(dynamicPage)}
+        ref={(dynamicPage) => handlePageRef(dynamicPage)}
       >
         <TabContainer
           className="tab-container"
           style={{ top: `${headerHeight}px` }}
           ref={tabContainerRef}
           collapsed
-          onTabSelect={e => {
+          onTabSelect={(e) => {
             if (customActionIfFormOpen) {
               customActionIfFormOpen(
                 isResourceEdited,
@@ -448,7 +448,7 @@ export const DynamicPageComponent = ({
       titleArea={headerTitle}
       headerArea={headerContent}
       footerArea={footer}
-      ref={dynamicPage => handlePageRef(dynamicPage)}
+      ref={(dynamicPage) => handlePageRef(dynamicPage)}
     >
       {typeof content === 'function' ? content(headerHeight) : content}
     </DynamicPage>

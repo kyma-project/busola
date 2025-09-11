@@ -19,13 +19,13 @@ function useEventUrl(resourceType, clusterView) {
   const { namespaceUrl, clusterUrl } = useUrl();
 
   if (clusterView) {
-    return resource => {
+    return (resource) => {
       return clusterUrl(
         `${pathSegment}/${resource.metadata.namespace}/${resource.metadata.name}`,
       );
     };
   }
-  return resource => {
+  return (resource) => {
     return namespaceUrl(`${resourceType}/${resource.metadata.name}`, {
       namespace: resource.metadata.namespace,
     });
@@ -56,7 +56,7 @@ export function EventList({
     ? {}
     : {
         header: t('events.headers.involved-object'),
-        value: e => FormatInvolvedObject(e.involvedObject),
+        value: (e) => FormatInvolvedObject(e.involvedObject),
       };
 
   const textSearchProperties = [
@@ -71,7 +71,7 @@ export function EventList({
   const customColumns = [
     {
       header: t('events.headers.type'),
-      value: e => (
+      value: (e) => (
         <div>
           {e.type === 'Warning' ? (
             <Tooltip content={e.type}>
@@ -99,11 +99,11 @@ export function EventList({
     },
     {
       header: t('events.headers.message'),
-      value: e => <p>{e.message}</p>,
+      value: (e) => <p>{e.message}</p>,
     },
     {
       header: t('common.headers.name'),
-      value: entry =>
+      value: (entry) =>
         isCompact && !props.displayArrow ? (
           <Link url={`${customUrl(entry)}`} style={{ fontWeight: 'bold' }}>
             {entry.metadata?.name}
@@ -119,7 +119,7 @@ export function EventList({
       ? [
           {
             header: t('common.headers.namespace'),
-            value: entry => entry.metadata.namespace,
+            value: (entry) => entry.metadata.namespace,
             id: 'namespace',
           },
         ]
@@ -129,19 +129,19 @@ export function EventList({
     },
     {
       header: t('events.headers.source'),
-      value: e => FormatSourceObject(e.source),
+      value: (e) => FormatSourceObject(e.source),
     },
     {
       header: t('events.headers.count'),
-      value: e => <p>{e.count || EMPTY_TEXT_PLACEHOLDER}</p>,
+      value: (e) => <p>{e.count || EMPTY_TEXT_PLACEHOLDER}</p>,
     },
     {
       header: t('events.headers.last-seen'),
-      value: e => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
+      value: (e) => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
     },
   ];
 
-  const sortByFn = defaultSort => {
+  const sortByFn = (defaultSort) => {
     const { name } = defaultSort;
     return {
       name,
@@ -165,7 +165,7 @@ export function EventList({
       isCompact={isCompact}
       hasDetailsView
       readOnly
-      filter={async res => {
+      filter={async (res) => {
         const typeFilter =
           displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
           res.type === displayType.key;

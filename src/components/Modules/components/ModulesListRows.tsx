@@ -48,7 +48,7 @@ export const ModulesListRows = ({
   });
   const findModuleReleaseMeta = (moduleName: string) => {
     return (moduleReleaseMetas as ModuleReleaseMetasType | null)?.items.find(
-      item => item.spec.moduleName === moduleName,
+      (item) => item.spec.moduleName === moduleName,
     );
   };
 
@@ -87,14 +87,12 @@ export const ModulesListRows = ({
 
   const showDetailsLink = hasDetailsLink(resource);
   const moduleIndex =
-    kymaResource?.spec?.modules?.findIndex(kymaResourceModule => {
+    kymaResource?.spec?.modules?.findIndex((kymaResourceModule) => {
       return kymaResourceModule?.name === resource?.name;
     }) ?? -1;
 
-  const {
-    data: managerResourceState,
-    error: managerResourceStateError,
-  } = useGetManagerStatus(currentModuleTemplate?.spec?.manager);
+  const { data: managerResourceState, error: managerResourceStateError } =
+    useGetManagerStatus(currentModuleTemplate?.spec?.manager);
   if (
     moduleStatus &&
     !moduleStatus.resource &&
@@ -167,10 +165,10 @@ export const ModulesListRows = ({
     <>
       {moduleStatus?.channel
         ? moduleStatus?.channel
-        : (kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
+        : ((kymaResource?.spec?.modules?.[moduleIndex]?.channel ||
             kymaResource?.spec?.channel ||
             currentModuleTemplate?.spec?.channel) ??
-          EMPTY_TEXT_PLACEHOLDER}
+          EMPTY_TEXT_PLACEHOLDER)}
       {isChannelOverridden ? (
         <Tag
           hideStateIcon

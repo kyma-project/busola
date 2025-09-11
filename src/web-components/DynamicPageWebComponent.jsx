@@ -9,7 +9,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Suspense } from 'react';
 
 function DynamicPageWithJotai(props) {
-  const transformedForm = stickyHeaderHeight => {
+  const transformedForm = (stickyHeaderHeight) => {
     if (props.inlineEditForm)
       return parseHtmlToJsx(props.inlineEditForm(stickyHeaderHeight));
     else return null;

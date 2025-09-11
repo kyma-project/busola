@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react';
 import { useFeature } from './useFeature';
 import { configFeaturesNames } from 'state/types';
 
-const initSentry = dsn => {
+const initSentry = (dsn) => {
   try {
     Sentry.init({
       dsn,

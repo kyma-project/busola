@@ -24,7 +24,7 @@ export function StatisticalCard({
   useEffect(() => {
     const setStatesFromJsonata = async () => {
       const extraInfoRes = await Promise.all(
-        structure.children?.map(async child => {
+        structure.children?.map(async (child) => {
           const [childValue, err] = await jsonata(child.source, {
             resource: value,
           });

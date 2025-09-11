@@ -49,7 +49,7 @@ export function AdvancedContainersView({
           input={() => (
             <K8sResourceSelectWithUseGetList
               url={`/api/v1/namespaces/${namespace}/secrets`}
-              onSelect={secretName => {
+              onSelect={(secretName) => {
                 jp.value(
                   resource,
                   '$.spec.template.spec.imagePullSecrets[0].name',
@@ -75,7 +75,7 @@ export function AdvancedContainersView({
           resource={resource}
           setResource={setResource}
           tooltipContent={containersDesc}
-          actions={setOpen => (
+          actions={(setOpen) => (
             <Button
               icon="add"
               onClick={() => {

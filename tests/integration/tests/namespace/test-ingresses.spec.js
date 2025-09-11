@@ -2,9 +2,7 @@
 import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
 
-const RANDOM_NUMBER = Math.random()
-  .toString()
-  .substr(2, 8);
+const RANDOM_NUMBER = Math.random().toString().substr(2, 8);
 
 const NAME = 'test-' + RANDOM_NUMBER;
 async function loadIngress(name, namespace) {
@@ -33,7 +31,7 @@ context('Test Ingresses', () => {
     cy.openCreate();
 
     cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
-      INGRESS_CONFIG => {
+      (INGRESS_CONFIG) => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
         cy.pasteToMonaco(INGRESS);
       },
@@ -43,17 +41,13 @@ context('Test Ingresses', () => {
   });
 
   it('Check Ingress details', () => {
-    cy.getMidColumn()
-      .contains('ui5-title', NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', NAME).should('be.visible');
 
     cy.getMidColumn()
       .contains(/specification/i)
       .should('be.visible');
 
-    cy.getMidColumn()
-      .contains(/tls/i)
-      .should('be.visible');
+    cy.getMidColumn().contains(/tls/i).should('be.visible');
 
     cy.getMidColumn()
       .get('ui5-table')
@@ -74,9 +68,7 @@ context('Test Ingresses', () => {
       .contains(/default backend/i)
       .should('be.visible');
 
-    cy.getMidColumn()
-      .contains(/paths/i)
-      .should('be.visible');
+    cy.getMidColumn().contains(/paths/i).should('be.visible');
 
     cy.getMidColumn()
       .contains(/web:8080/i)

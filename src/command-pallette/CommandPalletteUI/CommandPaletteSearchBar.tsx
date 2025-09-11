@@ -27,9 +27,8 @@ export function CommandPaletteSearchBar({
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
   const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
-  const [resourceCache, updateResourceCache] = useObjectState<
-    Record<string, K8sResource[]>
-  >();
+  const [resourceCache, updateResourceCache] =
+    useObjectState<Record<string, K8sResource[]>>();
   const showCompanion = useAtomValue(showKymaCompanionAtom);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
@@ -122,7 +121,7 @@ export function CommandPaletteSearchBar({
         id="command-palette-search-bar"
         accessibleName="command-palette-search-bar"
         onClick={() => setOpen(true)}
-        onInput={e => e.preventDefault()}
+        onInput={(e) => e.preventDefault()}
         showClearIcon
         className="search-with-display-more command-palette-search-bar"
         icon={<Icon name="slim-arrow-right" />}

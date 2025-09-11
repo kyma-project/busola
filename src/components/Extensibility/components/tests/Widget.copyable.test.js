@@ -8,8 +8,8 @@ import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 vi.mock('@ui5/webcomponents-react', () => {
   return {
-    Button: props => <button {...props}>{props.children}</button>,
-    Text: props => <p {...props}>{props.children}</p>,
+    Button: (props) => <button {...props}>{props.children}</button>,
+    Text: (props) => <p {...props}>{props.children}</p>,
   };
 });
 

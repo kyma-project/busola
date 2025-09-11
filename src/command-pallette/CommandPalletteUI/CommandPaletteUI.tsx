@@ -30,7 +30,7 @@ function Background({
     <div
       id="command-palette-background"
       className="command-palette-ui"
-      onClick={e => {
+      onClick={(e) => {
         if ((e.target as HTMLElement).id === 'command-palette-background') {
           hide();
         }
@@ -72,18 +72,14 @@ export function CommandPaletteUI({
 
   const commandPaletteRef = useRef<HTMLDivElement | null>(null);
 
-  const {
-    results,
-    suggestedQuery,
-    autocompletePhrase,
-    helpEntries,
-  } = useSearchResults({
-    query,
-    namespaceContext,
-    hideCommandPalette: hide,
-    resourceCache,
-    updateResourceCache,
-  });
+  const { results, suggestedQuery, autocompletePhrase, helpEntries } =
+    useSearchResults({
+      query,
+      namespaceContext,
+      hideCommandPalette: hide,
+      resourceCache,
+      updateResourceCache,
+    });
 
   useEffect(() => setNamespaceContext(namespace), [namespace]);
   useEffect(() => {

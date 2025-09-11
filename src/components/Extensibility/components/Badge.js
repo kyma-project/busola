@@ -64,7 +64,7 @@ export function Badge({
     arrayItems,
   ]);
 
-  const getTooltipContent = description => {
+  const getTooltipContent = (description) => {
     if (tooltip && !tooltipError) {
       return tooltip;
     }

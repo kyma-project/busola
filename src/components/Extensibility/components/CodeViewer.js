@@ -50,7 +50,7 @@ export function CodeViewer({
     arrayItems,
   ]);
 
-  const getValue = value => {
+  const getValue = (value) => {
     if (!isNil(value)) {
       try {
         switch (language) {
@@ -99,7 +99,7 @@ function stringifyIfObject(value) {
   return isNil(value)
     ? ''
     : typeof value !== 'string'
-    ? JSON.stringify(value, null, 2)
-    : value;
+      ? JSON.stringify(value, null, 2)
+      : value;
 }
 CodeViewer.array = true;

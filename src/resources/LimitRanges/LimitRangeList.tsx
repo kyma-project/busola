@@ -16,7 +16,7 @@ export default function LimitRangeList(props: any) {
     const typePriority = ['Pod', 'Container', 'PersistentVolumeClaim'];
 
     for (const type of typePriority) {
-      const index = obj.spec.limits.findIndex(limit => limit.type === type);
+      const index = obj.spec.limits.findIndex((limit) => limit.type === type);
       if (index !== -1) {
         return index;
       }

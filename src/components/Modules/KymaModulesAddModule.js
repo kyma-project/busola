@@ -34,9 +34,9 @@ export default function KymaModulesAddModule(props) {
   useEffect(() => {
     if (selectedModules && kymaResource) {
       const newModules = selectedModules.filter(
-        newModules =>
+        (newModules) =>
           !activeKymaModules.find(
-            activeModules => activeModules.name === newModules.name,
+            (activeModules) => activeModules.name === newModules.name,
           ),
       );
       const mergedModules = activeKymaModules.concat(newModules);
@@ -97,16 +97,16 @@ export default function KymaModulesAddModule(props) {
 
   const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
     const name = module.metadata.labels['operator.kyma-project.io/module-name'];
-    const existingModule = acc.find(item => item.name === name);
+    const existingModule = acc.find((item) => item.name === name);
     const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
-      installedModule => installedModule.name === name,
+      (installedModule) => installedModule.name === name,
     );
     const moduleMetaRelase = moduleReleaseMetas?.items.find(
-      item => item.spec.moduleName === name,
+      (item) => item.spec.moduleName === name,
     );
 
     const isModuleMetaRelease = acc.find(
-      item => item.name === moduleMetaRelase?.spec?.moduleName,
+      (item) => item.name === moduleMetaRelase?.spec?.moduleName,
     );
 
     if (module.spec.channel && !isModuleMetaRelease) {
@@ -141,8 +141,8 @@ export default function KymaModulesAddModule(props) {
       }
     } else {
       if (!existingModule && !isAlreadyInstalled) {
-        moduleMetaRelase?.spec.channels.forEach(channel => {
-          if (!acc.find(item => item.name === name)) {
+        moduleMetaRelase?.spec.channels.forEach((channel) => {
+          if (!acc.find((item) => item.name === name)) {
             acc.push({
               name: name,
               channels: [
@@ -161,7 +161,7 @@ export default function KymaModulesAddModule(props) {
             });
           } else {
             acc
-              .find(item => item.name === name)
+              .find((item) => item.name === name)
               .channels.push({
                 channel: channel.channel,
                 version: channel.version,
@@ -176,8 +176,8 @@ export default function KymaModulesAddModule(props) {
     return acc ?? [];
   }, []);
 
-  const isChecked = name => {
-    return !!selectedModules?.find(module => module.name === name);
+  const isChecked = (name) => {
+    return !!selectedModules?.find((module) => module.name === name);
   };
 
   const setCheckbox = (module, checked, index) => {
@@ -192,12 +192,12 @@ export default function KymaModulesAddModule(props) {
     setSelectedModules(newSelectedModules);
   };
 
-  const checkIfSelectedModuleIsBeta = moduleName => {
+  const checkIfSelectedModuleIsBeta = (moduleName) => {
     return selectedModules.some(({ name, channel }) => {
       if (moduleName && name !== moduleName) {
         return false;
       }
-      const moduleData = modulesAddData?.find(module => module.name === name);
+      const moduleData = modulesAddData?.find((module) => module.name === name);
 
       return moduleData
         ? moduleData.channels.some(
@@ -208,9 +208,9 @@ export default function KymaModulesAddModule(props) {
     });
   };
 
-  const checkIfStatusModuleIsBeta = moduleName => {
+  const checkIfStatusModuleIsBeta = (moduleName) => {
     return modulesAddData
-      ?.find(mod => mod.name === moduleName)
+      ?.find((mod) => mod.name === moduleName)
       ?.channels.some(
         ({ channel: ch, isBeta }) =>
           ch === findModuleStatus(kymaResource, moduleName)?.channel ||
@@ -222,7 +222,7 @@ export default function KymaModulesAddModule(props) {
     const columns = Array.from({ length: columnsCount }, () => []);
 
     modulesAddData?.forEach((module, i) => {
-      const index = selectedModules?.findIndex(kymaResourceModule => {
+      const index = selectedModules?.findIndex((kymaResourceModule) => {
         return kymaResourceModule.name === module?.name;
       });
 

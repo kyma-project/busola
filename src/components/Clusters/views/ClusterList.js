@@ -73,13 +73,13 @@ function ClusterList() {
 
   const { clusters, currentCluster } = clustersInfo;
 
-  const isClusterActive = entry => {
+  const isClusterActive = (entry) => {
     return (
       entry?.kubeconfig?.['current-context'] === currentCluster?.contextName
     );
   };
 
-  const downloadKubeconfig = entry => {
+  const downloadKubeconfig = (entry) => {
     if (entry?.kubeconfig) {
       try {
         const kubeconfigYaml = jsyaml.dump(entry.kubeconfig);
@@ -117,7 +117,7 @@ function ClusterList() {
     'currentContext.cluster.cluster.server',
   ];
 
-  const rowRenderer = entry => [
+  const rowRenderer = (entry) => [
     <Link
       design={isClusterActive(entry) ? 'Emphasized' : 'Default'}
       url={`/cluster/${encodeURIComponent(entry.contextName)}`}
@@ -134,7 +134,7 @@ function ClusterList() {
       name: t('common.buttons.edit'),
       icon: 'edit',
       tooltip: t('clusters.edit-cluster'),
-      handler: cluster => {
+      handler: (cluster) => {
         setEditedCluster(cluster);
         toggleFormFn(true);
       },
@@ -143,12 +143,12 @@ function ClusterList() {
       name: t('clusters.common.download-kubeconfig'),
       icon: 'download',
       tooltip: t('clusters.common.download-kubeconfig'),
-      handler: e => downloadKubeconfig(e),
+      handler: (e) => downloadKubeconfig(e),
     },
     {
       name: t('common.buttons.delete'),
       icon: 'delete',
-      handler: resource => {
+      handler: (resource) => {
         setChosenCluster(resource);
         handleResourceDelete({
           deleteFn: () => {
@@ -186,7 +186,7 @@ function ClusterList() {
       className="modal-size--l"
       title={t('clusters.edit-cluster')}
       id="edit-cluster"
-      renderForm={props => (
+      renderForm={(props) => (
         <EditCluster {...props} editedCluster={editedCluster} />
       )}
       modalOpeningComponent={<></>}
@@ -261,7 +261,7 @@ function ClusterList() {
               <DeleteMessageBox
                 resource={chosenCluster}
                 resourceTitle={chosenCluster?.kubeconfig['current-context']}
-                deleteFn={e => {
+                deleteFn={(e) => {
                   deleteCluster(e.name, clustersInfo);
                   notification.notifySuccess({
                     content: t('clusters.disconnect'),

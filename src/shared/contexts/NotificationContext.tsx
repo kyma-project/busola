@@ -37,13 +37,13 @@ export const NotificationProvider = ({
   const toast = useRef<ToastDomRef | null>(null);
 
   const methods = {
-    notifySuccess: function(notificationProps: ToastProps) {
+    notifySuccess: function (notificationProps: ToastProps) {
       setToastProps(notificationProps);
       if (toast.current && !toastProps?.parentContainer) {
         toast.current.open = true;
       }
     },
-    notifyError: function(notificationProps: Omit<ErrorModalProps, 'close'>) {
+    notifyError: function (notificationProps: Omit<ErrorModalProps, 'close'>) {
       setErrorProps({
         ...notificationProps,
         close: () => setErrorProps(null),
@@ -66,7 +66,7 @@ export const NotificationProvider = ({
             ref={toast}
             duration={defaultVisibilityTime}
             style={{ zIndex: 1 }}
-            onClose={e => {
+            onClose={(e) => {
               setToastProps(null);
               e.stopPropagation();
             }}

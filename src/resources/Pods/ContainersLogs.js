@@ -84,7 +84,7 @@ const ContainersLogs = ({ params }) => {
     }
   };
 
-  const changeSelectedLog = e => {
+  const changeSelectedLog = (e) => {
     if (e.key === 'Enter' || e.key === 'ArrowDown') {
       selectedLogIndex.current = selectedLogIndex.current + 1;
       scrollToSelectedLog();
@@ -95,14 +95,14 @@ const ContainersLogs = ({ params }) => {
   };
 
   const onSwitchChange = () => {
-    setShowTimestamps(prev => !prev);
+    setShowTimestamps((prev) => !prev);
   };
 
   const onReverseChange = () => {
-    setReverseLogs(prev => !prev);
+    setReverseLogs((prev) => !prev);
   };
 
-  const onLogTimeframeChange = timeValue => {
+  const onLogTimeframeChange = (timeValue) => {
     setSinceSeconds(timeValue);
   };
 
@@ -117,7 +117,7 @@ const ContainersLogs = ({ params }) => {
 
     try {
       const file = new Blob(
-        logsToSave.map(log => `${log}\n`),
+        logsToSave.map((log) => `${log}\n`),
         { type: 'text/plain' },
       );
       saveAs(file, `${podName}-${containerName}-${date}.txt`);
@@ -173,12 +173,12 @@ const ContainersLogs = ({ params }) => {
                 {t('pods.labels.filter-timeframe')}
               </Label>
               <Select
-                onChange={event => {
+                onChange={(event) => {
                   const selectedTimeFrame = event.detail.selectedOption.value;
                   onLogTimeframeChange(selectedTimeFrame);
                 }}
               >
-                {logTimeframeOptions.map(option => (
+                {logTimeframeOptions.map((option) => (
                   <Option
                     value={option.key}
                     selected={sinceSeconds.toString() === option.key}

@@ -13,13 +13,13 @@ const SelectorDetails = ({
   namespace,
   RelatedResources,
 }) => {
-  const filterByLabels = pod => {
+  const filterByLabels = (pod) => {
     if (!pod.metadata?.labels) return false;
 
     const podLabels = Object?.entries(pod.metadata?.labels);
     const resourceLabels = Object?.entries(labels);
-    return resourceLabels.every(resLabel =>
-      podLabels.some(podLabel => isEqual(resLabel, podLabel)),
+    return resourceLabels.every((resLabel) =>
+      podLabels.some((podLabel) => isEqual(resLabel, podLabel)),
     );
   };
 

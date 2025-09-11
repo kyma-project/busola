@@ -17,11 +17,11 @@ function getAutocompleteEntries({
       return [];
     case 3: // name
       const crdNames = (resourceCache['customresources'] || []).map(
-        n => n.metadata.name,
+        (n) => n.metadata.name,
       );
       return crdNames
-        .filter(name => name.startsWith(tokenToAutocomplete))
-        .map(name => `${tokens[0]} ${name} `);
+        .filter((name) => name.startsWith(tokenToAutocomplete))
+        .map((name) => `${tokens[0]} ${name} `);
     default:
       return [];
   }
@@ -36,7 +36,7 @@ function getSuggestion({ tokens, resourceCache }: CommandPaletteContext) {
 }
 
 function concernsCRDs({ tokens }: CommandPaletteContext) {
-  return customResourcesAliases.some(cra => cra.startsWith(tokens[0]));
+  return customResourcesAliases.some((cra) => cra.startsWith(tokens[0]));
 }
 
 function createResults(context: CommandPaletteContext): Result[] {

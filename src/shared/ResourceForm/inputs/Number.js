@@ -6,7 +6,7 @@ export function Number({ value = '', setValue, ...props }) {
     <Input
       type="Number"
       value={value}
-      onInput={e => setValue(parseInt(e.target.value) ?? null)}
+      onInput={(e) => setValue(parseInt(e.target.value) ?? null)}
       {...props}
     />
   );

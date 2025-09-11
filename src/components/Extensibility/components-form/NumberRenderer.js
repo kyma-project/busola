@@ -19,7 +19,7 @@ export function NumberRenderer({
   const schemaPlaceholder = schema.get('placeholder');
 
   const numberProps = Object.fromEntries(
-    ['min', 'max'].map(prop => [prop, schema.get(prop)]),
+    ['min', 'max'].map((prop) => [prop, schema.get(prop)]),
   );
 
   const disableOnEdit = schema.get('disableOnEdit');
@@ -40,8 +40,8 @@ export function NumberRenderer({
       }
 
       const displayOptions = enumOptions
-        .filter(option => typeof option === 'number')
-        .map(option => ({
+        .filter((option) => typeof option === 'number')
+        .map((option) => ({
           key: option,
           text: option,
         }));
@@ -59,7 +59,7 @@ export function NumberRenderer({
   return (
     <ResourceForm.FormField
       value={value}
-      setValue={value => {
+      setValue={(value) => {
         onChange({
           storeKeys,
           scopes: ['value'],

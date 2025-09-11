@@ -66,7 +66,7 @@ export function AddClusterWizard({
     }
   }, [kubeconfig]);
 
-  const updateKubeconfig = kubeconfig => {
+  const updateKubeconfig = (kubeconfig) => {
     if (!kubeconfig) {
       setKubeconfig(null);
       return;
@@ -116,7 +116,7 @@ export function AddClusterWizard({
         });
       } else {
         const context = kubeconfig.contexts.find(
-          context => context.name === contextName,
+          (context) => context.name === contextName,
         );
         addByContext({ kubeconfig, context, storage, config }, clustersInfo);
       }
@@ -132,11 +132,11 @@ export function AddClusterWizard({
     setShowWizard(false);
   };
 
-  const handleStepChange = e => {
+  const handleStepChange = (e) => {
     setSelected(Number(e.detail.step.dataset.step));
   };
 
-  const isCurrentStepInvalid = step => {
+  const isCurrentStepInvalid = (step) => {
     const invalidMultipleContexts = !hasOneContext && !chosenContext;
     switch (step) {
       case 1:
@@ -185,7 +185,7 @@ export function AddClusterWizard({
                 resource={kubeconfig}
                 setResource={setKubeconfig}
                 setCustomValid={setCustomValid}
-                createResource={e => {
+                createResource={(e) => {
                   e.preventDefault();
                 }}
                 className="cluster-wizard__auth-form"

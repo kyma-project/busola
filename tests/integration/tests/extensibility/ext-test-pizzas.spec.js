@@ -20,9 +20,7 @@ context('Test Pizzas', () => {
   });
 
   it('Creates the EXT pizza config', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
@@ -31,8 +29,8 @@ context('Test Pizzas', () => {
       'examples/pizzas/configuration/pizza-orders-configmap.yaml',
       'examples/pizzas/configuration/pizzas-crd.yaml',
       'examples/pizzas/configuration/pizza-orders-crd.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    ).then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
@@ -48,8 +46,8 @@ context('Test Pizzas', () => {
     cy.loadFiles(
       'examples/pizzas/samples/pizzas-samples.yaml',
       'examples/pizzas/samples/pizza-orders-samples.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    ).then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
@@ -78,13 +76,9 @@ context('Test Pizzas', () => {
 
     cy.clickListLink('pizzas');
 
-    cy.getLeftNav()
-      .contains('Lunch')
-      .click();
+    cy.getLeftNav().contains('Lunch').click();
 
-    cy.getLeftNav()
-      .contains('Pizza Orders')
-      .click();
+    cy.getLeftNav().contains('Pizza Orders').click();
 
     cy.contains('DELIVERY');
     cy.contains('CASH');
@@ -160,45 +154,29 @@ context('Test Pizzas', () => {
   });
 
   it('Test list sort-functionality', () => {
-    cy.get('ui5-table-row')
-      .eq(0)
-      .should('contain.text', 'margherita');
+    cy.get('ui5-table-row').eq(0).should('contain.text', 'margherita');
 
-    cy.get('ui5-table-row')
-      .eq(1)
-      .should('contain.text', 'diavola');
+    cy.get('ui5-table-row').eq(1).should('contain.text', 'diavola');
 
     cy.get('ui5-button[accessible-name="open-sort-modal"]').click();
 
     cy.get('ui5-radio-button[name="sortOrder"][value="DESC"]').click();
 
-    cy.get('ui5-button')
-      .contains('OK')
-      .click();
+    cy.get('ui5-button').contains('OK').click();
 
-    cy.get('ui5-table-row')
-      .eq(0)
-      .should('contain.text', 'diavola');
+    cy.get('ui5-table-row').eq(0).should('contain.text', 'diavola');
 
-    cy.get('ui5-table-row')
-      .eq(1)
-      .should('contain.text', 'margherita');
+    cy.get('ui5-table-row').eq(1).should('contain.text', 'margherita');
 
     cy.get('ui5-button[accessible-name="open-sort-modal"]').click();
 
     cy.get('ui5-radio-button[name="sortBy"][value="name"]').click('left');
 
-    cy.get('ui5-button')
-      .contains('OK')
-      .click();
+    cy.get('ui5-button').contains('OK').click();
 
-    cy.get('ui5-table-row')
-      .eq(0)
-      .should('contain.text', 'margherita');
+    cy.get('ui5-table-row').eq(0).should('contain.text', 'margherita');
 
-    cy.get('ui5-table-row')
-      .eq(1)
-      .should('contain.text', 'diavola');
+    cy.get('ui5-table-row').eq(1).should('contain.text', 'diavola');
   });
 
   it('Tests the Create Form', () => {
@@ -235,8 +213,6 @@ context('Test Pizzas', () => {
 
     cy.saveChanges('Create');
 
-    cy.getMidColumn()
-      .contains('ui5-title', PIZZA_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', PIZZA_NAME).should('be.visible');
   });
 });

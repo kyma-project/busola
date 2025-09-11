@@ -53,7 +53,7 @@ export function AlertRenderer({
         return value;
       }
     }
-    getAlertJsonata(alert, item).then(res => setAlertJsonata(res));
+    getAlertJsonata(alert, item).then((res) => setAlertJsonata(res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alert, item, originalResource, resource, embedResource, value]);
 

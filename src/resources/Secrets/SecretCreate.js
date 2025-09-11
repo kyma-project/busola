@@ -51,11 +51,11 @@ export default function SecretCreate({
   const secretDefs = getSecretDefs(t, features);
   const type = secret?.type;
   const currentDef =
-    type === 'Opaque' ? {} : secretDefs.find(def => def.type === type);
+    type === 'Opaque' ? {} : secretDefs.find((def) => def.type === type);
   const secretTypes = Array.from(
-    new Set(secretDefs.map(secret => secret.type || 'Opaque')),
+    new Set(secretDefs.map((secret) => secret.type || 'Opaque')),
   );
-  const options = secretTypes.map(type => ({ key: type, text: type }));
+  const options = secretTypes.map((type) => ({ key: type, text: type }));
 
   useEffect(() => {
     setLockedKeys(currentDef?.data || []);
@@ -75,7 +75,9 @@ export default function SecretCreate({
   const dataDesc = getDescription(schema, 'data');
 
   const onChangeInput = (event, setValue) => {
-    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+    const selectedOption = options.find(
+      (o) => o.text === event.target.value,
+    ) ?? {
       key: event.target._state.filterValue,
       text: event.target._state.filterValue,
     };
@@ -106,12 +108,12 @@ export default function SecretCreate({
             id="secrets-type-combobox"
             accessibleName="Secret's type's Combobox"
             placeholder={t('secrets.placeholders.type')}
-            value={options.find(o => o.key === value)?.text ?? value}
+            value={options.find((o) => o.key === value)?.text ?? value}
             disabled={isEdit || !options?.length}
-            onChange={event => onChangeInput(event, setValue)}
-            onInput={event => onChangeInput(event, setValue)}
+            onChange={(event) => onChangeInput(event, setValue)}
+            onInput={(event) => onChangeInput(event, setValue)}
           >
-            {options.map(option => (
+            {options.map((option) => (
               <ComboBoxItem id={option.key} text={option.text} />
             ))}
           </ComboBox>

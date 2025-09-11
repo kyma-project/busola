@@ -83,7 +83,7 @@ const ScanResultItemTree = ({ item }: { item: ScanItemStatus }) => {
     <TreeItem key={item.name} text={item.name} {...warningState}>
       {item.warnings?.map((warning, i) => (
         <TreeItem
-          key={typeof warning === 'string' ? warning : warning.key ?? i}
+          key={typeof warning === 'string' ? warning : (warning.key ?? i)}
           text={typeof warning === 'string' ? warning : warning.message}
         />
       ))}
@@ -112,7 +112,7 @@ const ScanResultResourcesTree = ({
   resources?: ScanResourceStatus[];
 }) => {
   const filteredResources = resources?.filter(
-    resource => resource.items && resource.items.length > 0,
+    (resource) => resource.items && resource.items.length > 0,
   );
   return (
     <>

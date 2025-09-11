@@ -106,7 +106,7 @@ export default function App() {
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();
     const auth = authFormState?.users?.find(
-      user => user?.user?.token || user?.user?.exec,
+      (user) => user?.user?.token || user?.user?.exec,
     )?.user;
     if (auth) {
       setManualKubeConfigId({
@@ -176,7 +176,7 @@ export default function App() {
                 <ContextChooserMessage
                   contextState={contextsState}
                   setValue={(value: string) =>
-                    setContextsState(state => ({
+                    setContextsState((state) => ({
                       ...state,
                       chosenContext: value,
                     }))

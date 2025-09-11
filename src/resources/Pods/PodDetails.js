@@ -33,7 +33,7 @@ export function PodDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: pod => (
+      value: (pod) => (
         <ControlledBy
           ownerReferences={pod.metadata.ownerReferences}
           namespace={pod.metadata.namespace}
@@ -45,34 +45,34 @@ export function PodDetails(props) {
   const customStatusColumns = [
     {
       header: t('common.labels.last-transition'),
-      value: pod => getLastTransitionTime(pod?.status?.conditions),
+      value: (pod) => getLastTransitionTime(pod?.status?.conditions),
     },
     {
       header: t('pods.status.host-ip'),
-      value: pod => pod.status?.hostIP ?? EMPTY_TEXT_PLACEHOLDER,
+      value: (pod) => pod.status?.hostIP ?? EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pods.status.pod-ip'),
-      value: pod => pod.status?.podIP ?? EMPTY_TEXT_PLACEHOLDER,
+      value: (pod) => pod.status?.podIP ?? EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pods.status.pod-ips'),
-      value: pod =>
-        pod.status?.podIPs?.map(ip => ip.ip).join(', ') ??
+      value: (pod) =>
+        pod.status?.podIPs?.map((ip) => ip.ip).join(', ') ??
         EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pods.status.nominated-node-name'),
-      value: pod => pod.status?.nominatedNodeName ?? EMPTY_TEXT_PLACEHOLDER,
+      value: (pod) => pod.status?.nominatedNodeName ?? EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pods.status.qos-class'),
-      value: pod => pod.status?.qosClass ?? EMPTY_TEXT_PLACEHOLDER,
+      value: (pod) => pod.status?.qosClass ?? EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
-  const statusConditions = pod => {
-    return pod?.status?.conditions?.map(condition => {
+  const statusConditions = (pod) => {
+    return pod?.status?.conditions?.map((condition) => {
       return {
         header: { titleText: condition.type, status: condition.status },
         message:
@@ -81,23 +81,24 @@ export function PodDetails(props) {
     });
   };
 
-  const VolumesList = resource => {
-    const headerRenderer = _ => [
+  const VolumesList = (resource) => {
+    const headerRenderer = (_) => [
       t('pods.headers.volume-name'),
       t('pods.headers.type'),
       t('common.headers.name'),
     ];
-    const rowRenderer = volume => {
-      const volumeType = Object.keys(volume).find(key => key !== 'name');
+    const rowRenderer = (volume) => {
+      const volumeType = Object.keys(volume).find((key) => key !== 'name');
       return [
         volume.name,
         volumeType,
         <Link
           url={namespaceUrl(
-            `${pluralize(volumeType.toLowerCase() || '')}/${volume[volumeType]
-              .name ||
+            `${pluralize(volumeType.toLowerCase() || '')}/${
+              volume[volumeType].name ||
               volume[volumeType].secretName ||
-              volume[volumeType].claimName}`,
+              volume[volumeType].claimName
+            }`,
           )}
         >
           {volume[volumeType].name ||
@@ -118,7 +119,7 @@ export function PodDetails(props) {
     );
   };
 
-  const Containers = resource => (
+  const Containers = (resource) => (
     <ContainersData
       key="containers"
       type={t('pods.labels.containers')}
@@ -126,7 +127,7 @@ export function PodDetails(props) {
       statuses={resource.status.containerStatuses}
     />
   );
-  const InitContainers = resource => (
+  const InitContainers = (resource) => (
     <ContainersData
       key="init-containers"
       type={t('pods.labels.init-containers')}
@@ -141,7 +142,7 @@ export function PodDetails(props) {
       customColumns={customColumns}
       description={ResourceDescription}
       createResourceForm={PodCreate}
-      statusBadge={pod => <PodStatus pod={pod} />}
+      statusBadge={(pod) => <PodStatus pod={pod} />}
       statusConditions={statusConditions}
       customStatusColumns={customStatusColumns}
       {...props}

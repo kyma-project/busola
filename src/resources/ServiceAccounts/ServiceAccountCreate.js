@@ -14,7 +14,7 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
-const createDefaultSecret = serviceAccountName => {
+const createDefaultSecret = (serviceAccountName) => {
   return {
     apiVersion: 'v1',
     kind: 'Secret',
@@ -84,8 +84,8 @@ export default function ServiceAccountCreate({
     setCustomValid(validateServiceAccount(serviceAccount));
   }, [serviceAccount, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleImageChange = images => {
-    const newImages = (images || []).map(image => {
+  const handleImageChange = (images) => {
+    const newImages = (images || []).map((image) => {
       return { name: image };
     });
     jp.value(serviceAccount, '$.imagePullSecrets', newImages);
@@ -134,9 +134,9 @@ export default function ServiceAccountCreate({
           'service-accounts.create-modal.tooltips.image-pull-secrets',
         )}
         propertyPath="$.imagePullSecrets"
-        setValue={value => handleImageChange(value)}
-        toInternal={values => (values || []).map(value => value?.name)}
-        options={(data || []).map(i => ({
+        setValue={(value) => handleImageChange(value)}
+        toInternal={(values) => (values || []).map((value) => value?.name)}
+        options={(data || []).map((i) => ({
           key: i.metadata.name,
           text: i.metadata.name,
         }))}
@@ -169,7 +169,7 @@ export default function ServiceAccountCreate({
         input={Inputs.Switch}
         disabled={isEdit}
         onChange={() =>
-          setShouldCreateSecret(shouldCreateSecret => !shouldCreateSecret)
+          setShouldCreateSecret((shouldCreateSecret) => !shouldCreateSecret)
         }
       />
       {shouldCreateSecret && (

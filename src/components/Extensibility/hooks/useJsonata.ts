@@ -12,9 +12,11 @@ import {
 export type JsonataValue = [string | null, Error | null];
 
 export type JsonataFunction = {
-  (query: string, extras?: { [key: string]: any }, defaultValue?: any): Promise<
-    JsonataValue
-  >;
+  (
+    query: string,
+    extras?: { [key: string]: any },
+    defaultValue?: any,
+  ): Promise<JsonataValue>;
   async: (
     query: string,
     extras: { [key: string]: any },
@@ -69,7 +71,7 @@ export function useJsonata({
       const value = await jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {
-          ...mapValues(dataSourceFetchers, dsf => dsf.value),
+          ...mapValues(dataSourceFetchers, (dsf) => dsf.value),
           root: extras.resource || resource,
           parent: parent,
           embedResource: embedResource,
@@ -101,7 +103,7 @@ export function useJsonata({
       const value = await jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {
-          ...mapValues(dataSourceFetchers, dsf => dsf.fetcher),
+          ...mapValues(dataSourceFetchers, (dsf) => dsf.fetcher),
           root: extras.resource || resource,
           parent: parent,
           embedResource: embedResource,

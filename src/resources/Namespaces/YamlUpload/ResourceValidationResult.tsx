@@ -96,7 +96,7 @@ const ValidationWarnings = ({
             />
             <ValidationWarning
               warning={
-                typeof warning === 'string' ? warning : warning.message ?? ''
+                typeof warning === 'string' ? warning : (warning.message ?? '')
               }
             />
           </FlexBox>

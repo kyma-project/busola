@@ -37,14 +37,14 @@ function createGithubLink(version: string): string {
 
 async function getBusolaVersion(t: TFunction): Promise<string> {
   return await fetch('/version.yaml')
-    .then(response => {
+    .then((response) => {
       return response.text();
     })
-    .then(text => {
+    .then((text) => {
       const versionFile = jsyaml.load(text) as Record<string, string>;
       return versionFile.version;
     })
-    .catch(e => {
+    .catch((e) => {
       console.warn(e);
       return t('common.statuses.unknown');
     });

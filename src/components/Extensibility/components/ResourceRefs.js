@@ -37,7 +37,7 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
     name,
   ];
 
-  const sortBy = defaultSort => {
+  const sortBy = (defaultSort) => {
     const { name } = defaultSort;
     return {
       name,

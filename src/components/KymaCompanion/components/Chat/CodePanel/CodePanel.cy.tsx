@@ -36,9 +36,7 @@ describe('CodePanel Component', () => {
     cy.mount(<CodePanel code={code} language={language} withAction={false} />);
 
     cy.get('.action-button').should('have.length', 1);
-    cy.get('.action-button')
-      .eq(0)
-      .should('have.attr', 'icon', 'copy');
+    cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
     cy.get('.action-button')
       .eq(0)
       .should('contain.text', t('common.buttons.copy'));
@@ -63,9 +61,7 @@ describe('CodePanel Component', () => {
     );
 
     cy.get('.action-button').should('have.length', 1);
-    cy.get('.action-button')
-      .eq(0)
-      .should('have.attr', 'icon', 'copy');
+    cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
     cy.get('.action-button')
       .eq(0)
       .should('contain.text', t('common.buttons.copy'));
@@ -100,9 +96,7 @@ describe('CodePanel Component', () => {
         'accessible-name',
         t('common.tooltips.copy-to-clipboard'),
       );
-    cy.get('.action-button')
-      .eq(1)
-      .should('have.attr', 'icon', 'sys-add');
+    cy.get('.action-button').eq(1).should('have.attr', 'icon', 'sys-add');
     cy.get('.action-button')
       .eq(1)
       .should('contain.text', t('common.buttons.place'));
@@ -128,12 +122,8 @@ describe('CodePanel Component', () => {
       />,
     );
 
-    cy.get('.action-button')
-      .eq(1)
-      .should('exist');
-    cy.get('.action-button')
-      .eq(1)
-      .should('have.attr', 'icon', 'sys-add');
+    cy.get('.action-button').eq(1).should('exist');
+    cy.get('.action-button').eq(1).should('have.attr', 'icon', 'sys-add');
     cy.get('.action-button')
       .eq(1)
       .should('contain.text', t('common.buttons.place'));
@@ -159,9 +149,7 @@ describe('CodePanel Component', () => {
     );
 
     cy.get('.action-button').should('have.length', 1);
-    cy.get('.action-button')
-      .eq(0)
-      .should('have.attr', 'icon', 'copy');
+    cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
     cy.get('.action-button')
       .eq(0)
       .should('contain.text', t('common.buttons.copy'));
@@ -187,9 +175,7 @@ describe('CodePanel Component', () => {
       />,
     );
 
-    cy.get('.action-button')
-      .eq(1)
-      .should('exist');
+    cy.get('.action-button').eq(1).should('exist');
     cy.get('.action-button')
       .eq(1)
       .should('have.attr', 'icon', 'fpa-icons/replace');
@@ -213,7 +199,7 @@ describe('CodePanel Component', () => {
   it('renders correctly with different languages', () => {
     const languages = ['javascript', 'python', 'yaml', 'json', 'bash'];
 
-    languages.forEach(lang => {
+    languages.forEach((lang) => {
       const code = `// Sample ${lang} code`;
       cy.mount(<CodePanel code={code} language={lang} />);
 
@@ -227,9 +213,7 @@ describe('CodePanel Component', () => {
     cy.mount(<CodePanel code="" language="javascript" />);
 
     cy.get('.code-panel').should('exist');
-    cy.get('pre')
-      .find('code')
-      .should('exist');
+    cy.get('pre').find('code').should('exist');
   });
 
   it('renders correctly with Update action type', () => {
@@ -252,9 +236,7 @@ describe('CodePanel Component', () => {
       />,
     );
 
-    cy.get('.action-button')
-      .eq(1)
-      .should('exist');
+    cy.get('.action-button').eq(1).should('exist');
   });
 
   it('renders panel header with correct title', () => {

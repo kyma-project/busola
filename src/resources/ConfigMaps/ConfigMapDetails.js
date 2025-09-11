@@ -10,9 +10,9 @@ import { ResourceDescription } from 'resources/ConfigMaps';
 export function ConfigMapDetails(props) {
   const { t } = useTranslation();
 
-  const ConfigMapEditor = resource => {
+  const ConfigMapEditor = (resource) => {
     const { data } = resource;
-    return Object.keys(data || {}).map(key => (
+    return Object.keys(data || {}).map((key) => (
       <ReadonlyEditorPanel
         title={key}
         value={data[key]}
@@ -21,9 +21,9 @@ export function ConfigMapDetails(props) {
     ));
   };
 
-  const ConfigMapBinaryDataEditor = resource => {
+  const ConfigMapBinaryDataEditor = (resource) => {
     const { binaryData } = resource;
-    return Object.keys(binaryData || {}).map(key => (
+    return Object.keys(binaryData || {}).map((key) => (
       <ReadonlyEditorPanel
         title={key}
         value={binaryData[key]}
@@ -36,7 +36,7 @@ export function ConfigMapDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: configMap => (
+      value: (configMap) => (
         <ControlledBy
           ownerReferences={configMap.metadata.ownerReferences}
           namespace={configMap.metadata.namespace}

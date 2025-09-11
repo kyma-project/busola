@@ -6,7 +6,7 @@ import { allNodesAtom } from 'state/navigation/allNodesAtom';
 
 export const useIsInCurrentNamespace = (resource: K8sResource) => {
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
-    node => node.namespaced,
+    (node) => node.namespaced,
   );
   const namespace = useAtomValue(activeNamespaceIdAtom);
 
@@ -15,7 +15,7 @@ export const useIsInCurrentNamespace = (resource: K8sResource) => {
   const hasCurrentNamespace =
     namespace && resourceNamespace ? resourceNamespace === namespace : true;
   const isKnownNamespaceWide = !!namespaceNodes?.find(
-    n => n.resourceType === resourceType,
+    (n) => n.resourceType === resourceType,
   );
 
   return !(isKnownNamespaceWide && !hasCurrentNamespace);

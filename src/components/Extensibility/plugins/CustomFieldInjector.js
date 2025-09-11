@@ -36,8 +36,8 @@ export function CustomFieldInjector({
 
   if (varName) {
     const varSuffix = storeKeys
-      .filter(item => typeof item === 'number')
-      .map(item => `[${item}]`)
+      .filter((item) => typeof item === 'number')
+      .map((item) => `[${item}]`)
       .join('');
     const varPath = `$.${varName}${varSuffix}`;
 
@@ -47,7 +47,7 @@ export function CustomFieldInjector({
         currentPluginIndex={nextPluginIndex}
         schema={schema}
         value={jp.value(vars, varPath)}
-        onChange={e => setVar(varPath, e.data.value)}
+        onChange={(e) => setVar(varPath, e.data.value)}
         storeKeys={storeKeys.set(-1, `$${varName}`)}
       />
     );
@@ -55,7 +55,7 @@ export function CustomFieldInjector({
     function getValue(storeKeys, resource) {
       let value = resource;
       const keys = storeKeys.toJS();
-      keys.filter(key => key !== '').forEach(key => (value = value?.[key]));
+      keys.filter((key) => key !== '').forEach((key) => (value = value?.[key]));
       return value;
     }
 

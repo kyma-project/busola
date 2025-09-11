@@ -21,7 +21,6 @@ Value preprocessors are used as a middleware between a value and the actual rend
 ### List of Value Preprocessors
 
 - **PendingWrapper** - useful when value resolves to a triple of `{loading, error, data}`:
-
   - For `loading` equal to `true`, it displays a loading indicator.
   - For truthy `error`, it displays an error message.
   - Otherwise, it passes `data` to the display component.

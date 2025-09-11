@@ -15,7 +15,7 @@ export function SecretList(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: secret => (
+      value: (secret) => (
         <ControlledBy
           ownerReferences={secret.metadata.ownerReferences}
           kindOnly
@@ -24,7 +24,7 @@ export function SecretList(props) {
     },
     {
       header: t('secrets.headers.type'),
-      value: secret => {
+      value: (secret) => {
         return secret.type;
       },
     },

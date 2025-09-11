@@ -119,7 +119,7 @@ export default function NamespaceCreate({
   }, [namespace.metadata?.name]);
 
   async function afterNamespaceCreated() {
-    setLayoutColumn(prevState => ({
+    setLayoutColumn((prevState) => ({
       layout: 'OneColumn',
       showCreate: null,
       showEdit: prevState.showEdit,
@@ -148,7 +148,7 @@ export default function NamespaceCreate({
 
     const additionalResults = await Promise.allSettled(additionalRequests);
     const rejectedRequest = additionalResults.find(
-      result => result.status === 'rejected',
+      (result) => result.status === 'rejected',
     );
 
     if (!rejectedRequest) {
@@ -230,7 +230,7 @@ export default function NamespaceCreate({
         input={Inputs.Switch}
         checked={isSidecarEnabled}
         onChange={() => {
-          setSidecarEnabled(value => !value);
+          setSidecarEnabled((value) => !value);
           setIsChanged(true);
         }}
       />
@@ -251,7 +251,7 @@ export default function NamespaceCreate({
               />
               <MemoryPresets
                 presets={CONFIG.NS_MEMORY_QUOTAS_PRESET}
-                setValue={val => {
+                setValue={(val) => {
                   setMemory(val);
                 }}
                 disabled={!withMemory}
@@ -295,7 +295,7 @@ export default function NamespaceCreate({
               />
               <LimitPresets
                 presets={CONFIG.NS_CONTAINER_LIMITS_PRESET}
-                setValue={val => {
+                setValue={(val) => {
                   setLimits(val);
                 }}
                 disabled={!withLimits}

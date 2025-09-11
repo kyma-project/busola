@@ -14,7 +14,7 @@ context('Test login - kubeconfigID', () => {
   });
 
   it('Adds cluster by kubeconfigID - no path, go to Cluster Overview', () => {
-    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
       cy.intercept(
         {
           method: 'GET',
@@ -30,7 +30,7 @@ context('Test login - kubeconfigID', () => {
   });
 
   it('Adds cluster by kubeconfigID - saves path', () => {
-    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
       cy.intercept(
         {
           method: 'GET',
@@ -54,7 +54,7 @@ context('Test login - kubeconfigID', () => {
 
     cy.contains('Local Storage').should('be.visible');
 
-    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
       cy.intercept(
         {
           method: 'GET',
@@ -94,7 +94,7 @@ context('Test login - kubeconfigID', () => {
       }),
     );
 
-    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
       cy.intercept(
         {
           method: 'GET',
@@ -107,9 +107,7 @@ context('Test login - kubeconfigID', () => {
       cy.get('ui5-button[data-testid="delete"]').click();
       cy.contains('ui5-button', 'Delete').click();
 
-      cy.contains('Load default cluster')
-        .should('be.visible')
-        .click();
+      cy.contains('Load default cluster').should('be.visible').click();
 
       cy.url().should('match', /overview$/);
 
@@ -127,7 +125,7 @@ context('Test login - kubeconfigID', () => {
   c:d`,
     );
     cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
-    Cypress.on('window:alert', alertContent =>
+    Cypress.on('window:alert', (alertContent) =>
       expect(alertContent).to.include('Error loading kubeconfig ID'),
     );
   });

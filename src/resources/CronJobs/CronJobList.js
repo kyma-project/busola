@@ -16,11 +16,13 @@ export function CronJobList(props) {
   const customColumns = [
     {
       header: t('cron-jobs.schedule'),
-      value: resource => <CronJobSchedule schedule={resource.spec.schedule} />,
+      value: (resource) => (
+        <CronJobSchedule schedule={resource.spec.schedule} />
+      ),
     },
     {
       header: t('cron-jobs.last-schedule-time'),
-      value: resource => (
+      value: (resource) => (
         <CronJobLastScheduleTime
           lastScheduleTime={resource.status.lastScheduleTime}
         />

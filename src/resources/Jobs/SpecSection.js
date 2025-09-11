@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
-const restartPolicyOptions = ['Never', 'OnFailure'].map(p => ({
+const restartPolicyOptions = ['Never', 'OnFailure'].map((p) => ({
   key: p,
   text: p,
 }));
 
-const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map(p => ({
+const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map((p) => ({
   key: p,
   text: p,
 }));

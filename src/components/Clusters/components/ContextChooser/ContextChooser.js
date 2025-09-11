@@ -34,7 +34,7 @@ export function ContextChooser(params) {
           value={params.chosenContext}
           propertyPath='$["current-context"]'
           label={t('clusters.wizard.context')}
-          validate={value => !!value}
+          validate={(value) => !!value}
           input={({ setValue }) => (
             <ContextButtons
               contexts={kubeconfig.contexts}
@@ -58,13 +58,13 @@ export function ContextButtons({
 }) {
   return (
     <List
-      onItemClick={e => {
+      onItemClick={(e) => {
         setValue(e?.detail?.item?.children[0]?.children[0].value);
         if (setChosenContext)
           setChosenContext(e?.detail?.item?.children[0]?.children[0].value);
       }}
     >
-      {contexts.map(context => {
+      {contexts.map((context) => {
         return (
           <ListItemCustom key={context.name} style={{}}>
             <div>
@@ -117,11 +117,11 @@ export function ContextChooserMessage({ contextState, setValue, onCancel }) {
       ]}
     >
       <List
-        onItemClick={e => {
+        onItemClick={(e) => {
           setChosenContext(e?.detail?.item?.children[0]?.children[0].value);
         }}
       >
-        {contextState.contexts.map(context => (
+        {contextState.contexts.map((context) => (
           <ListItemCustom key={context.name} style={{}}>
             <div>
               <RadioButton

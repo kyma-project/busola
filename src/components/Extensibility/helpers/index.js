@@ -30,7 +30,7 @@ export const useGetTranslation = () => {
   const { t, i18n } = useTranslation([translationBundle]);
   //doesn't always work, add `translationBundle.` at the beginning of a path
 
-  const exists = path => i18n.exists(`${translationBundle}::${path}`);
+  const exists = (path) => i18n.exists(`${translationBundle}::${path}`);
 
   const widgetT = (def, options = {}) => {
     let value = '';
@@ -56,7 +56,7 @@ export const useGetTranslation = () => {
   const tFromStoreKeys = (storeKeys, schema, options) => {
     return widgetT({
       ...schema.toJS(),
-      path: storeKeys.toArray().filter(el => typeof el === 'string'),
+      path: storeKeys.toArray().filter((el) => typeof el === 'string'),
     });
   };
 
@@ -68,8 +68,8 @@ export const useGetTranslation = () => {
       return translation === 'undefined'
         ? undefined
         : translation === 'null'
-        ? null
-        : translation;
+          ? null
+          : translation;
     },
     tFromStoreKeys,
     widgetT,
@@ -99,7 +99,7 @@ export function createTemplate(api, namespace, scope) {
 
 export function getDefaultPreset(presets, emptyTemplate) {
   if (!presets || !presets.length) return null;
-  const defaultPreset = presets.find(preset => preset.default === true);
+  const defaultPreset = presets.find((preset) => preset.default === true);
   return defaultPreset
     ? merge({}, { value: emptyTemplate }, defaultPreset)
     : null;
@@ -110,7 +110,7 @@ export function usePreparePresets(presets, emptyTemplate) {
 
   if (!presets || !presets.length) return null;
 
-  const preparedPresets = presets.map(preset => ({
+  const preparedPresets = presets.map((preset) => ({
     ...merge({}, { value: emptyTemplate }, preset),
     name: tExt(preset.name),
   }));
@@ -119,7 +119,7 @@ export function usePreparePresets(presets, emptyTemplate) {
   return preparedPresets;
 }
 
-export const useGetPlaceholder = structure => {
+export const useGetPlaceholder = (structure) => {
   const { t } = useGetTranslation();
   const { defaultResourcePlaceholder } = useContext(TranslationBundleContext);
 
@@ -156,7 +156,7 @@ export const getObjectValueWorkaround = (
   }
 };
 
-export const useCreateResourceDescription = descID => {
+export const useCreateResourceDescription = (descID) => {
   const { t, i18n } = useGetTranslation();
   if (!descID) return;
 
@@ -168,7 +168,7 @@ export const useCreateResourceDescription = descID => {
   }
 };
 
-export const getResourceDescAndUrl = descID => {
+export const getResourceDescAndUrl = (descID) => {
   if (!descID)
     return {
       description: null,
@@ -254,7 +254,7 @@ const getSearchingFunction = (searchOption, originalResource) => {
 };
 
 const searchingFunctions = (searchOptions, originalResource) => {
-  const res = (searchOptions || []).map(searchOption =>
+  const res = (searchOptions || []).map((searchOption) =>
     getSearchingFunction(searchOption, originalResource),
   );
   return res;

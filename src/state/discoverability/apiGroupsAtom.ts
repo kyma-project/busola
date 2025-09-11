@@ -9,7 +9,7 @@ export type ApiGroupState =
     }[]
   | null;
 
-export const apiGroupAtom = atom<Promise<ApiGroupState>>(async get => {
+export const apiGroupAtom = atom<Promise<ApiGroupState>>(async (get) => {
   const fetchFn = getFetchFn(get);
   if (!fetchFn) return null;
 

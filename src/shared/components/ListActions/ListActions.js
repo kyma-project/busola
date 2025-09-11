@@ -22,7 +22,7 @@ const StandaloneAction = ({ action, entry }) => {
   return (
     <Button
       data-testid={action.name.replace(' ', '').toLowerCase()}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         action.handler(entry);
       }}
@@ -53,7 +53,7 @@ const ListActions = ({ actions, entry }) => {
 
   return (
     <div className="list-actions">
-      {actions.slice(0, 3).map(a => (
+      {actions.slice(0, 3).map((a) => (
         <StandaloneAction key={a.name} action={a} entry={entry} />
       ))}
       {listItems.length ? (
@@ -72,7 +72,7 @@ const ListActions = ({ actions, entry }) => {
               setIsMenuOpen(false);
             }}
           >
-            {listItems.map(a => (
+            {listItems.map((a) => (
               <MenuItem
                 onClick={() => a.handler(entry)}
                 key={a.name}

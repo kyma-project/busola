@@ -40,13 +40,11 @@ export function insert18nLinks(text: string): ProcessedTranslation {
   }
 
   let processedText = text;
-  const components = links.map(
-    (link, idx): React.ReactElement => {
-      const i18NLink = createI18nLink(link.urlText, idx);
-      processedText = processedText.replace(link.matchedText, i18NLink);
-      return <ExternalLink url={link.url} key={idx} />;
-    },
-  );
+  const components = links.map((link, idx): React.ReactElement => {
+    const i18NLink = createI18nLink(link.urlText, idx);
+    processedText = processedText.replace(link.matchedText, i18NLink);
+    return <ExternalLink url={link.url} key={idx} />;
+  });
 
   return { processedText, components };
 }
@@ -82,7 +80,7 @@ const getI18nVarLink = (text: string) => {
   let links: MatchedLink[] = [];
 
   if (matches?.length) {
-    links = matches.map(link => {
+    links = matches.map((link) => {
       const { links: mdLinks } = getMarkdownLinks(link);
       if (mdLinks?.length) {
         const { url, urlText } = mdLinks[0];
@@ -106,7 +104,7 @@ const getMarkdownLinks = (text: string) => {
   let links: MatchedLink[] = [];
 
   if (matches?.length) {
-    links = matches.map(link => {
+    links = matches.map((link) => {
       const url = link[2];
       const urlText = link[1];
       text = text.replace(link[0], coveredLinkSign);

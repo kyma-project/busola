@@ -50,19 +50,13 @@ context('Test Companion UI', () => {
 
       cy.clickSuggestion(0);
 
-      cy.get('@companion')
-        .find('.chat-initial-screen')
-        .should('not.exist');
+      cy.get('@companion').find('.chat-initial-screen').should('not.exist');
 
       cy.resetCompanion();
 
-      cy.get('@companion')
-        .find('.chat-loading-screen')
-        .should('not.exist');
+      cy.get('@companion').find('.chat-loading-screen').should('not.exist');
 
-      cy.get('@companion')
-        .find('.ai-busy-indicator')
-        .should('be.visible');
+      cy.get('@companion').find('.ai-busy-indicator').should('be.visible');
 
       cy.closeCompanion();
     });
@@ -73,9 +67,7 @@ context('Test Companion UI', () => {
 
       cy.clickSuggestion(0);
 
-      cy.get('@companion')
-        .find('.chat-initial-screen')
-        .should('not.exist');
+      cy.get('@companion').find('.chat-initial-screen').should('not.exist');
 
       cy.resetCompanion();
 
@@ -94,20 +86,14 @@ context('Test Companion UI', () => {
 
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('ui5-title')
-        .contains('Cluster Details')
-        .should('be.visible');
+      cy.get('ui5-title').contains('Cluster Details').should('be.visible');
       cy.get('#companion_wrapper')
         .parent()
         .should('have.css', 'flex-basis', '30%');
 
-      cy.get('@companion')
-        .find('ui5-button[icon="full-screen"]')
-        .click();
+      cy.get('@companion').find('ui5-button[icon="full-screen"]').click();
 
-      cy.get('ui5-title')
-        .contains('Cluster Details')
-        .should('not.be.visible');
+      cy.get('ui5-title').contains('Cluster Details').should('not.be.visible');
       cy.get('#companion_wrapper')
         .parent()
         .should('have.css', 'flex-basis', '100%');
@@ -116,13 +102,9 @@ context('Test Companion UI', () => {
     it('exits fullscreen correctly', () => {
       cy.get('.kyma-companion').as('companion');
 
-      cy.get('@companion')
-        .find('ui5-button[icon="exit-full-screen"]')
-        .click();
+      cy.get('@companion').find('ui5-button[icon="exit-full-screen"]').click();
 
-      cy.get('ui5-title')
-        .contains('Cluster Details')
-        .should('be.visible');
+      cy.get('ui5-title').contains('Cluster Details').should('be.visible');
       cy.get('#companion_wrapper')
         .parent()
         .should('have.css', 'flex-basis', '30%');
@@ -133,13 +115,9 @@ context('Test Companion UI', () => {
     it('AI Banner should be visible when feature is enabled', () => {
       cy.get('ui5-card').as('featurecard');
 
-      cy.get('@featurecard')
-        .contains('Meet Joule')
-        .should('be.visible');
+      cy.get('@featurecard').contains('Meet Joule').should('be.visible');
 
-      cy.get('@featurecard')
-        .contains('ui5-button', 'Try Out Joule')
-        .click();
+      cy.get('@featurecard').contains('ui5-button', 'Try Out Joule').click();
 
       cy.get('.kyma-companion').as('companion');
 
@@ -156,9 +134,7 @@ context('Test Companion UI', () => {
 
       cy.get('ui5-card').as('featurecard');
 
-      cy.get('@featurecard')
-        .contains('Meet Joule')
-        .should('not.exist');
+      cy.get('@featurecard').contains('Meet Joule').should('not.exist');
     });
   });
 
@@ -168,9 +144,7 @@ context('Test Companion UI', () => {
       cy.reload();
       cy.get('ui5-shellbar').as('shellbar');
 
-      cy.get('@shellbar')
-        .find('.ui5-shellbar-menu-button')
-        .click();
+      cy.get('@shellbar').find('.ui5-shellbar-menu-button').click();
 
       cy.wait(1000);
 

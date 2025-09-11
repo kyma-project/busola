@@ -22,11 +22,11 @@ function getAutocompleteEntries(
       return null;
     case 3: // name
       const nodeNames = (resourceCache['nodes'] || []).map(
-        n => n.metadata.name,
+        (n) => n.metadata.name,
       );
       return nodeNames
-        .filter(name => name.startsWith(tokenToAutocomplete))
-        .map(nodeName => `${tokens[0]} ${nodeName} `);
+        .filter((name) => name.startsWith(tokenToAutocomplete))
+        .map((nodeName) => `${tokens[0]} ${nodeName} `);
     default:
       return [];
   }
@@ -96,15 +96,15 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
   const name = tokens[2];
   if (name) {
-    const matchedByName = nodes.filter(item =>
+    const matchedByName = nodes.filter((item) =>
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item, context));
+      return matchedByName.map((item) => makeListItem(item, context));
     }
     return null;
   } else {
-    return nodes.map(item => makeListItem(item, context));
+    return nodes.map((item) => makeListItem(item, context));
   }
 }
 
