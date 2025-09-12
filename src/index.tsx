@@ -25,7 +25,7 @@ import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
 import { createRoot } from 'react-dom/client';
-import JotaiDevTools from 'components/App/JotaiDevTools';
+import JotaiDevTools from 'components/JotaiDevTools/JotaiDevTools';
 
 i18next
   .use(initReactI18next)
