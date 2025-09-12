@@ -10,7 +10,7 @@ import {
 function getValue(storeKeys, resource) {
   let value = resource;
   const keys = storeKeys.toJS();
-  keys.forEach(key => (value = value?.[key]));
+  keys.forEach((key) => (value = value?.[key]));
   return value;
 }
 
@@ -39,7 +39,7 @@ export function MultiCheckbox({
   const getCheckboxesOptions = () => {
     const translationPath = storeKeys
       .toArray()
-      .filter(el => typeof el === 'string')
+      .filter((el) => typeof el === 'string')
       .join('.');
 
     let options = schema.toJS().options;
@@ -50,15 +50,15 @@ export function MultiCheckbox({
     if (!Array.isArray(options)) {
       options = [];
     }
-    const displayOptions = options.map(option => {
+    const displayOptions = options.map((option) => {
       if (typeof option === 'string') {
         return {
           key: option,
           text: exists(option)
             ? tExt(option)
             : exists(`${translationPath}.${option}`)
-            ? tExt(`${translationPath}.${option}`)
-            : option,
+              ? tExt(`${translationPath}.${option}`)
+              : option,
         };
       }
 
@@ -67,14 +67,14 @@ export function MultiCheckbox({
         text: option.name
           ? tExt(option.name)
           : exists(`${translationPath}.${option.key}`)
-          ? tExt(`${translationPath}.${option.key}`)
-          : option.key,
+            ? tExt(`${translationPath}.${option.key}`)
+            : option.key,
         description: option.description
           ? exists(option.description)
             ? tExt(option.description)
             : exists(`${translationPath}.${option.description}`)
-            ? tExt(`${translationPath}.${option.description}`)
-            : option.description
+              ? tExt(`${translationPath}.${option.description}`)
+              : option.description
           : null,
       };
     });
@@ -88,7 +88,7 @@ export function MultiCheckbox({
     <ResourceForm.Wrapper resource={resource}>
       <ResourceForm.FormField
         value={value}
-        setValue={value => {
+        setValue={(value) => {
           if (!onChange) return;
           onChange({
             storeKeys,

@@ -55,9 +55,7 @@ context('Test Roles', () => {
   });
 
   it('Check the Role details', () => {
-    cy.getMidColumn()
-      .contains('ui5-title', ROLE_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', ROLE_NAME).should('be.visible');
 
     cy.getMidColumn()
       .contains('ui5-panel', 'Rules')
@@ -92,9 +90,7 @@ context('Test Roles', () => {
   it('Check the Role details after edit', () => {
     cy.inspectTab('View');
 
-    cy.getMidColumn()
-      .contains('ui5-title', ROLE_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', ROLE_NAME).should('be.visible');
 
     cy.getMidColumn()
       .contains('ui5-panel', 'Rules')
@@ -117,9 +113,7 @@ context('Test Roles', () => {
   });
 
   it('Clone the Role', () => {
-    cy.getLeftNav()
-      .contains('Roles')
-      .click();
+    cy.getLeftNav().contains('Roles').click();
 
     cy.contains('ui5-table-row', ROLE_NAME)
       .find('ui5-button[data-testid="clone"]')
@@ -134,9 +128,7 @@ context('Test Roles', () => {
   });
 
   it('Check the clone details', () => {
-    cy.getMidColumn()
-      .contains('ui5-title', CLONE_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', CLONE_NAME).should('be.visible');
 
     cy.getMidColumn()
       .contains('ui5-panel', 'Rules')

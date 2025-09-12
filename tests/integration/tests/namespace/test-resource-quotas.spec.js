@@ -27,7 +27,7 @@ context('Test Resource Quotas', () => {
     cy.openCreate();
 
     cy.wrap(loadRQ(QUOTA_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      RQ_CONFIG => {
+      (RQ_CONFIG) => {
         const RQ = JSON.stringify(RQ_CONFIG);
         cy.pasteToMonaco(RQ);
       },
@@ -47,9 +47,7 @@ context('Test Resource Quotas', () => {
   });
 
   it('Checks the list view', () => {
-    cy.getLeftNav()
-      .contains('Resource Quotas')
-      .click();
+    cy.getLeftNav().contains('Resource Quotas').click();
 
     cy.clickGenericListLink(QUOTA_NAME);
 

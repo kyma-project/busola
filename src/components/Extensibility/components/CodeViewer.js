@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import jsyaml from 'js-yaml';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -31,10 +32,25 @@ export function CodeViewer({
     value,
     arrayItems,
   });
-  let [language] = jsonata(structure?.language, {}, detectLanguage(value));
-  language = language?.toLowerCase();
 
-  const getValue = value => {
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    jsonata(structure?.language, {}, detectLanguage(value)).then(([lang]) => {
+      setLanguage(lang?.toLowerCase());
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    structure?.language,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
+  ]);
+
+  const getValue = (value) => {
     if (!isNil(value)) {
       try {
         switch (language) {
@@ -83,7 +99,7 @@ function stringifyIfObject(value) {
   return isNil(value)
     ? ''
     : typeof value !== 'string'
-    ? JSON.stringify(value, null, 2)
-    : value;
+      ? JSON.stringify(value, null, 2)
+      : value;
 }
 CodeViewer.array = true;

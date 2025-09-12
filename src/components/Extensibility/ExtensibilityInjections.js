@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
 
@@ -32,27 +33,39 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
     skip: !resourceUrl,
   });
 
+  const [filteredItems, setFilteredItems] = useState([{}]);
   const jsonata = useJsonata({});
-
-  // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
-  if (!resource && !isStatic) {
-    return null;
-  }
 
   const dataSources = resMetaData?.dataSources || {};
   const general = resMetaData?.general || {};
   const injection = resMetaData?.injection;
   const injectionName = injection?.name;
   const filter = injection?.target.filter || injection?.filter || null;
-
   const items = data?.items || [];
-  const filteredItems = items.filter(item => {
-    if (filter) {
-      const [value] = jsonata(filter, { item, root });
-      return value;
+
+  useEffect(() => {
+    if (!resource && !isStatic) {
+      return;
     }
-    return true;
-  });
+    Promise.all(
+      items.map(async (item) => {
+        if (filter) {
+          const [value] = await jsonata(filter, { item, root });
+          return value ? item : false;
+        }
+        return item;
+      }),
+    ).then((results) => {
+      setFilteredItems(results.filter(Boolean));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resource, isStatic, filter, JSON.stringify(items)]);
+
+  // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
+  if (!resource && !isStatic) {
+    return null;
+  }
+
   return (
     <Widget
       key={injectionName}

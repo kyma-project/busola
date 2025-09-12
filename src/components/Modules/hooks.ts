@@ -61,7 +61,7 @@ export function useGetAllModulesStatuses(modules: any[]) {
       setLoading(true);
       try {
         const results = await Promise.all(
-          modules.map(async module => {
+          modules.map(async (module) => {
             const resource = module?.resource ?? module;
 
             if (!resource) return null;
@@ -114,10 +114,10 @@ export const useFetchModuleData = (
   const singleGetFn = useSingleGet();
 
   const clusterNodes = useAtomValue(allNodesAtom).filter(
-    node => !node.namespaced,
+    (node) => !node.namespaced,
   );
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
-    node => node.namespaced,
+    (node) => node.namespaced,
   );
   useEffect(() => {
     if (moduleTemplatesLoading) {
@@ -137,7 +137,7 @@ export const useFetchModuleData = (
       const errors: string[] = [];
 
       const results = await Promise.allSettled(
-        items.map(async moduleTemplate => {
+        items.map(async (moduleTemplate) => {
           const name = moduleTemplate?.metadata?.name;
           const resource = selector(moduleTemplate);
 
@@ -155,8 +155,9 @@ export const useFetchModuleData = (
               namespaceNodes,
               singleGetFn,
             );
-            const url = `${resourceUrl}/${resource?.metadata?.name ||
-              resource?.name}`;
+            const url = `${resourceUrl}/${
+              resource?.metadata?.name || resource?.name
+            }`;
             const response = await fetch({ relativeUrl: url });
             const data = await response.json();
 
@@ -205,7 +206,11 @@ export const useGetInstalledNotInstalledModules = (
   loading: boolean;
   error?: any;
 } => {
-  const { data: managers, loading, error } = useFetchModuleData(
+  const {
+    data: managers,
+    loading,
+    error,
+  } = useFetchModuleData(
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.manager ?? null,
     'manager',
@@ -258,15 +263,16 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
         try {
           const response = await fetch({ relativeUrl: path });
           const status = (await response.json())?.status;
-
           if (status.state) {
             setData({ state: status.state, message: status?.message });
             return;
           }
 
-          const latest = status?.conditions
-            ?.filter((condition: ConditionType) => condition?.status === 'True')
-            ?.reduce(
+          const allNotTrue = status?.conditions?.filter(
+            (condition: ConditionType) => condition?.status !== 'True',
+          );
+          if (allNotTrue.lenght !== 0) {
+            const latestCondition = allNotTrue.reduce(
               (acc: ConditionType, condition: ConditionType) =>
                 new Date(acc?.lastUpdateTime).getTime() >
                 new Date(condition?.lastUpdateTime).getTime()
@@ -274,9 +280,20 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
                   : condition,
               {},
             );
-          if (latest?.type) {
-            setData({ state: latest.type, message: latest.message });
+            if (latestCondition?.type) {
+              setData({
+                type: latestCondition.type,
+                status: latestCondition.status,
+                message: latestCondition.message,
+              });
+              return;
+            }
           }
+          setData({
+            state: 'Ready',
+            message: 'All manager conditions are true',
+          });
+          return;
         } catch (error) {
           if (error instanceof Error) {
             setError(error);

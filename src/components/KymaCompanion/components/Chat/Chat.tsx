@@ -67,15 +67,12 @@ export const Chat = ({
   const cluster = useAtomValue<any>(clusterAtom);
   const authData = useAtomValue<any>(authDataAtom);
 
-  const {
-    initialSuggestions,
-    initialSuggestionsLoading,
-    currentResource,
-  } = usePromptSuggestions(isReset, setIsReset, {
-    skip:
-      chatHistory.reduce((count, group) => count + group.messages.length, 0) >
-      1,
-  });
+  const { initialSuggestions, initialSuggestionsLoading, currentResource } =
+    usePromptSuggestions(isReset, setIsReset, {
+      skip:
+        chatHistory.reduce((count, group) => count + group.messages.length, 0) >
+        1,
+    });
 
   const getCurrentContext = useCallback(() => {
     if (!currentResource.resourceType) return undefined;
@@ -86,13 +83,13 @@ export const Chat = ({
 
   const addMessage = (message: MessageType) => {
     const currentContext = getCurrentContext();
-    setChatHistory(prevGroups =>
+    setChatHistory((prevGroups) =>
       chatHelpers.addMessage(prevGroups, message, currentContext),
     );
   };
 
   const updateLatestMessage = (updates: Partial<MessageType>) => {
-    setChatHistory(prevGroups =>
+    setChatHistory((prevGroups) =>
       chatHelpers.updateLatestMessage(prevGroups, updates),
     );
   };
@@ -102,7 +99,7 @@ export const Chat = ({
     isLoading: boolean,
     isFeedback: boolean,
   ) => {
-    setChatHistory(prevGroups =>
+    setChatHistory((prevGroups) =>
       chatHelpers.concatMsgToLatestMessage(
         prevGroups,
         response,
@@ -113,11 +110,13 @@ export const Chat = ({
   };
 
   const removeLastMessage = () => {
-    setChatHistory(prevGroups => chatHelpers.removeLastMessage(prevGroups));
+    setChatHistory((prevGroups) => chatHelpers.removeLastMessage(prevGroups));
   };
 
   const setErrorOnLastUserMsg = () => {
-    setChatHistory(prevGroups => chatHelpers.setErrorOnLastUserMsg(prevGroups));
+    setChatHistory((prevGroups) =>
+      chatHelpers.setErrorOnLastUserMsg(prevGroups),
+    );
   };
 
   const handleChatResponse = (response: MessageChunk) => {
@@ -127,13 +126,14 @@ export const Chat = ({
 
     if (!isLoading) {
       const hasError =
-        response.data.answer?.tasks?.some(task => task.status === 'error') ??
+        response.data.answer?.tasks?.some((task) => task.status === 'error') ??
         false;
 
       if (hasError) {
         const allTasksError =
-          response.data.answer?.tasks?.every(task => task.status === 'error') ??
-          false;
+          response.data.answer?.tasks?.every(
+            (task) => task.status === 'error',
+          ) ?? false;
         if (!allTasksError) {
           // handle partial error
           updateLatestMessage({ partialAIFailure: true });
@@ -330,7 +330,7 @@ export const Chat = ({
       if (initialSuggestionsLoading) {
         // Update the context of the first group
         const currentContext = getCurrentContext();
-        setChatHistory(prevGroups =>
+        setChatHistory((prevGroups) =>
           chatHelpers.updateFirstGroupContext(prevGroups, currentContext),
         );
         updateLatestMessage({
@@ -435,13 +435,11 @@ export const Chat = ({
                           messageIndex === group.messages.length - 1;
 
                         return message.author === Author.AI ? (
-                          <>
+                          <React.Fragment key={`${groupIndex}-${messageIndex}`}>
                             {message.isFeedback ? (
                               <FeedbackMessage />
                             ) : (
-                              <React.Fragment
-                                key={`${groupIndex}-${messageIndex}`}
-                              >
+                              <>
                                 <Message
                                   author={message.author}
                                   messageChunks={message.messageChunks}
@@ -459,9 +457,9 @@ export const Chat = ({
                                     }
                                   />
                                 )}
-                              </React.Fragment>
+                              </>
                             )}
-                          </>
+                          </React.Fragment>
                         ) : (
                           <Message
                             author={Author.USER}

@@ -20,7 +20,7 @@ async function handleGetCommunityResource(req, res) {
     const allowedDomains = ['github.com', 'github.io'];
     if (
       url.protocol !== 'https:' ||
-      !allowedDomains.some(domain => url.hostname.endsWith(domain))
+      !allowedDomains.some((domain) => url.hostname.endsWith(domain))
     ) {
       return res.status(400).json({
         message: 'Invalid or untrusted link provided.',

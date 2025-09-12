@@ -26,7 +26,7 @@ export function useVersionWarning({
     const group = urlSegments[2];
     const version = urlSegments[3];
 
-    const preferredVersion = (apiGroups || []).find(gV => gV.name === group)
+    const preferredVersion = (apiGroups || []).find((gV) => gV.name === group)
       ?.preferredVersion.version;
 
     if (preferredVersion && version !== preferredVersion) {

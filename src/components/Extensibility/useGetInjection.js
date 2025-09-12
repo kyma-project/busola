@@ -5,9 +5,9 @@ export const useGetInjections = (location, slot) => {
   const injections = useAtomValue(injectionsAtom);
   let filteredInjections = [];
 
-  (injections || []).forEach(injection => {
+  (injections || []).forEach((injection) => {
     const target = injection.injection.targets.find(
-      t =>
+      (t) =>
         t.location?.toLowerCase() === location?.toLowerCase() &&
         t.slot?.toLowerCase() === slot?.toLowerCase(),
     );

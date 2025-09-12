@@ -27,9 +27,7 @@ context('Test Issuers', () => {
   });
 
   it('Create an issuer', () => {
-    cy.getLeftNav()
-      .contains('Issuers')
-      .click();
+    cy.getLeftNav().contains('Issuers').click();
 
     cy.openCreate();
 
@@ -39,7 +37,7 @@ context('Test Issuers', () => {
       .type(ISSUER_NAME, { force: true });
 
     chooseComboboxOption('[placeholder="Select Issuer type"]', 'CA');
-
+    cy.wait(500);
     chooseComboboxOption(
       '[placeholder="Select namespace"]',
       Cypress.env('NAMESPACE_NAME'),
@@ -68,9 +66,7 @@ context('Test Issuers', () => {
       .clear()
       .type('ACME');
 
-    cy.get('ui5-cb-item:visible')
-      .contains('ACME')
-      .click({ force: true });
+    cy.get('ui5-cb-item:visible').contains('ACME').click({ force: true });
 
     cy.get('[placeholder="ACME Server URL"]:visible')
       .find('input')

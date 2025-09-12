@@ -43,7 +43,7 @@ describe('Bubbles Component', () => {
     cy.get('.bubbles-container').should('exist');
     cy.get('.bubble-button').should('have.length', suggestions.length);
 
-    suggestions.forEach(suggestion => {
+    suggestions.forEach((suggestion) => {
       cy.contains('.bubble-button', suggestion).should('exist');
     });
   });
@@ -94,7 +94,7 @@ describe('Bubbles Component', () => {
       'flex-start',
     );
 
-    cy.get('.bubble-button').each($btn => {
+    cy.get('.bubble-button').each(($btn) => {
       cy.wrap($btn).should('have.attr', 'design', 'Default');
     });
   });

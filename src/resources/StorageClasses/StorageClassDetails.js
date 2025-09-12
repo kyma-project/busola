@@ -16,7 +16,7 @@ import { ResourceDescription } from 'resources/StorageClasses';
 export function StorageClassDetails(props) {
   const { t } = useTranslation();
 
-  const StorageClassConfiguration = storageclass => {
+  const StorageClassConfiguration = (storageclass) => {
     const parameters = storageclass?.parameters || [];
 
     return (
@@ -48,7 +48,7 @@ export function StorageClassDetails(props) {
           title={t('storage-classes.headers.parameters')}
         >
           {Object.keys(parameters).length > 0 ? (
-            Object.entries(parameters).map(parameters => {
+            Object.entries(parameters).map((parameters) => {
               return (
                 <LayoutPanelRow
                   name={parameters[0]}

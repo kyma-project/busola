@@ -9,7 +9,7 @@ export default async function retry(
     if (finished) {
       break;
     } else {
-      await new Promise(resolve => setTimeout(resolve, retryDelay));
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
     }
   }
   if (!finished) {

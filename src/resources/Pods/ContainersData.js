@@ -92,11 +92,11 @@ export default function ContainersData({ type, containers, statuses }) {
 
   return (
     <UI5Panel title={type}>
-      {containers.map(container => (
+      {containers.map((container) => (
         <ContainerComponent
           key={container.name}
           container={container}
-          status={statuses?.find(status => status.name === container.name)}
+          status={statuses?.find((status) => status.name === container.name)}
         />
       ))}
     </UI5Panel>

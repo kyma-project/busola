@@ -1,20 +1,16 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 
-export type ObjectStateType<T> = [
-  T,
-  (key: string, value: any) => void,
-  Dispatch<SetStateAction<T>>,
-];
+export type ObjectStateType<T> = [T, (key: string, value: any) => void];
 
 export function useObjectState<T>(): ObjectStateType<T> {
   const [objectCache, setObjectCache] = useState<T>({} as T);
 
   const updateObjectCache = (key: string, value: any) => {
-    setObjectCache(rC => ({
-      ...rC,
+    setObjectCache((oC) => ({
+      ...oC,
       [key]: value,
     }));
   };
 
-  return [objectCache, updateObjectCache, setObjectCache];
+  return [objectCache, updateObjectCache];
 }

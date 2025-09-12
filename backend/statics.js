@@ -18,6 +18,6 @@ export const serveStaticApp = (app, requestPath, directoryPath) => {
   );
 };
 
-export const serveMonaco = app => {
+export const serveMonaco = (app) => {
   app.use('/vs', express.static(path.join(__dirname, '/core-ui/vs')));
 };

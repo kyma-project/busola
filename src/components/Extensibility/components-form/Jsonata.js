@@ -22,7 +22,7 @@ export function JsonataInput({
 }) {
   const validationProps = useValidation({
     inputRef,
-    onChange: [onChange, e => setValue && setValue(e.target.value)],
+    onChange: [onChange, (e) => setValue && setValue(e.target.value)],
   });
   if (!props.readOnly) delete props.readOnly;
 
@@ -31,7 +31,7 @@ export function JsonataInput({
       value={value || ''}
       {...props}
       {...validationProps}
-      onInput={onChange ?? (e => setValue && setValue(e.target.value))}
+      onInput={onChange ?? ((e) => setValue && setValue(e.target.value))}
       icon={<Icon accessibleName="Jsonata" name="source-code" />}
     />
   );
@@ -54,7 +54,7 @@ export function Jsonata({
   return (
     <ResourceForm.FormField
       value={value}
-      setValue={value => {
+      setValue={(value) => {
         onChange &&
           onChange({
             storeKeys,

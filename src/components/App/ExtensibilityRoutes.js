@@ -16,8 +16,8 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
 const List = React.lazy(() => import('../Extensibility/ExtensibilityList'));
-const Details = React.lazy(() =>
-  import('../Extensibility/ExtensibilityDetails'),
+const Details = React.lazy(
+  () => import('../Extensibility/ExtensibilityDetails'),
 );
 const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
@@ -86,7 +86,7 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
-        renderForm={renderProps => {
+        renderForm={(renderProps) => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <Create
               resourceSchema={extension}

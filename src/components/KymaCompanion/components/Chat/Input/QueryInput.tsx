@@ -180,13 +180,13 @@ export default function QueryInput({
           value={inputValue}
           valueState={getValueState()}
           valueStateMessage={getValueStateMessage()}
-          onKeyDown={e => {
+          onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               onSubmitInput();
             }
           }}
-          onInput={e => setInputValue(e.target.value)}
+          onInput={(e) => setInputValue(e.target.value)}
         />
         <div
           className={`query-input-actions${isMultiRowMode ? '__column' : ''}`}

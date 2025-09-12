@@ -16,14 +16,14 @@ export function CustomResourceDefinitionList(props) {
   const customColumns = [
     {
       header: t('custom-resource-definitions.headers.scope'),
-      value: crd => ({
+      value: (crd) => ({
         content: crd.spec.scope,
         style: { wordBreak: 'keep-all' },
       }),
     },
     {
       header: t('custom-resource-definitions.headers.categories'),
-      value: crd => <Tokens tokens={crd.spec.names?.categories} />,
+      value: (crd) => <Tokens tokens={crd.spec.names?.categories} />,
     },
   ];
 

@@ -53,9 +53,9 @@ export default function LimitRangeSpecification({
         'maxLimitRequestRatio',
       ];
 
-      keys.forEach(key => {
+      keys.forEach((key) => {
         if (limit[key]) {
-          Object.keys(limit[key]).forEach(resource => {
+          Object.keys(limit[key]).forEach((resource) => {
             resourceTypes.add(resource);
           });
         }
@@ -66,7 +66,7 @@ export default function LimitRangeSpecification({
           resource: resourceType,
         };
 
-        keys.forEach(key => {
+        keys.forEach((key) => {
           if (limit[key] && limit[key][resourceType] !== undefined) {
             entry[key] = limit[key][resourceType];
           }
@@ -75,7 +75,7 @@ export default function LimitRangeSpecification({
         return entry;
       });
 
-      return props.map(prop => {
+      return props.map((prop) => {
         return { type: limit.type, ...prop };
       });
     });
@@ -96,13 +96,13 @@ export default function LimitRangeSpecification({
       ];
 
       const resourceTypes = new Set<string>(
-        keys.flatMap(key => (limit[key] ? Object.keys(limit[key]) : [])),
+        keys.flatMap((key) => (limit[key] ? Object.keys(limit[key]) : [])),
       );
 
-      const props = Array.from(resourceTypes).map(resourceType => {
+      const props = Array.from(resourceTypes).map((resourceType) => {
         const entry: any = { resource: resourceType };
 
-        keys.forEach(key => {
+        keys.forEach((key) => {
           if (limit[key] && limit[key][resourceType] !== undefined) {
             entry[key] = limit[key][resourceType];
           }

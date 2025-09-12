@@ -10,7 +10,7 @@ context('Test Companion Chat Error Handling', () => {
 
   beforeEach(() => {
     cy.mockPromptSuggestions();
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           data: {
@@ -46,7 +46,7 @@ context('Test Companion Chat Error Handling', () => {
   });
 
   it('No feedback displayed on non-final chunks', () => {
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           data: {

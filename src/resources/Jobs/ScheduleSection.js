@@ -28,7 +28,7 @@ export function isCronExpressionValid(schedule) {
     parse(schedule);
     return (
       Object.keys(presets).includes(schedule) ||
-      schedule.split(' ').filter(e => e).length === 5
+      schedule.split(' ').filter((e) => e).length === 5
     );
   } catch (_) {
     return false;
@@ -38,7 +38,7 @@ export function isCronExpressionValid(schedule) {
 function TimeInput({ entries, index, name, setSchedule }) {
   const { t } = useTranslation();
 
-  const setValue = v => {
+  const setValue = (v) => {
     entries[index] = v;
     setSchedule(entries.join(' '));
   };

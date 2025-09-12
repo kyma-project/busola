@@ -21,17 +21,19 @@ function getAutocompleteEntries({
       }
       return [];
     case 2: // pod name
-      const podNames = pods.map(n => n.metadata.name);
+      const podNames = pods.map((n) => n.metadata.name);
       return podNames
-        .filter(podName => podName.startsWith(tokenToAutocomplete))
-        .map(podName => `${type} ${podName} `);
+        .filter((podName) => podName.startsWith(tokenToAutocomplete))
+        .map((podName) => `${type} ${podName} `);
     case 3: // container name
-      const pod = pods.find(n => n.metadata.name === name);
+      const pod = pods.find((n) => n.metadata.name === name);
       if (!pod) return [];
       return pod.spec.containers
-        .map(container => container.name)
-        .filter(containerName => containerName.startsWith(tokenToAutocomplete))
-        .map(containerName => `${type} ${name} ${containerName}`);
+        .map((container) => container.name)
+        .filter((containerName) =>
+          containerName.startsWith(tokenToAutocomplete),
+        )
+        .map((containerName) => `${type} ${name} ${containerName}`);
     default:
       return [];
   }
@@ -55,7 +57,7 @@ function makeListItem(
   const namespacePart = `namespaces/${pod.metadata.namespace}`;
 
   const containers = pod.spec.containers.filter(
-    c => !containerName || c.name.includes(containerName),
+    (c) => !containerName || c.name.includes(containerName),
   );
 
   return containers.map(({ name: containerName }) => {
@@ -113,17 +115,17 @@ function createResults(context: CommandPaletteContext): Result[] {
   const podName = tokens[1];
   const containerName = tokens[2];
   if (podName) {
-    const matchedByPodName = pods.filter(pod =>
+    const matchedByPodName = pods.filter((pod) =>
       pod.metadata.name.includes(podName),
     );
     if (matchedByPodName) {
-      return matchedByPodName.flatMap(pod =>
+      return matchedByPodName.flatMap((pod) =>
         makeListItem(pod, containerName, context),
       );
     }
     return [];
   } else {
-    return pods.flatMap(pod => makeListItem(pod, containerName, context));
+    return pods.flatMap((pod) => makeListItem(pod, containerName, context));
   }
 }
 

@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Input, Label, SuggestionItem } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
@@ -20,6 +20,7 @@ SearchInput.propTypes = {
     PropTypes.oneOfType([
       PropTypes.string.isRequired,
       PropTypes.func.isRequired,
+      PropTypes.any,
     ]),
   ),
   showSuggestion: PropTypes.bool,
@@ -44,7 +45,7 @@ export function SearchInput({
   const searchInputRef = useRef(null);
   const columnLayout = useAtomValue(columnLayoutAtom);
 
-  const onKeyPress = e => {
+  const onKeyPress = (e) => {
     const { key } = e;
     if (isDetailsView) return;
     const isCommandPalleteOpen = document.querySelector(
@@ -71,23 +72,26 @@ export function SearchInput({
   };
 
   useEventListener('keydown', onKeyPress, null, [disabled, allowSlashShortcut]);
+  const [suggestions, setSuggestions] = useState([]);
 
-  const renderSearchList = entries => {
-    const suggestions = getSearchSuggestions(entries);
+  useEffect(() => {
+    const getSearchSuggestions = async () => {
+      if (!filteredEntries) return [];
+      const resoled = await Promise.all(
+        filteredEntries.map(
+          async (entry) =>
+            await getEntryMatches(entry, searchQuery, suggestionProperties),
+        ),
+      );
+      return Array.from(new Set(resoled.flat()));
+    };
+    getSearchSuggestions().then((res) => setSuggestions(res));
+  }, [filteredEntries, searchQuery, suggestionProperties]);
 
+  const renderSearchList = () => {
     return suggestions.map((suggestion, index) => (
       <SuggestionItem key={index} id={suggestion} text={suggestion} />
     ));
-  };
-
-  const getSearchSuggestions = entries => {
-    if (!entries) return [];
-    const suggestions = entries
-      .flatMap(entry =>
-        getEntryMatches(entry, searchQuery, suggestionProperties),
-      )
-      .filter(suggestion => suggestion);
-    return Array.from(new Set(suggestions));
   };
 
   const openSearchList = () => {
@@ -109,10 +113,10 @@ export function SearchInput({
         icon={<Icon className="bsl-has-color-status-4" name="search" />}
         ref={searchInputRef}
         value={searchQuery}
-        onInput={e => handleQueryChange(e.target.value)}
+        onInput={(e) => handleQueryChange(e.target.value)}
         showSuggestions={showSuggestion}
       >
-        {showSuggestion && renderSearchList(filteredEntries)}
+        {showSuggestion && renderSearchList()}
       </Input>
     </div>
   );

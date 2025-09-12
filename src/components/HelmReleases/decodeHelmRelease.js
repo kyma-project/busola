@@ -6,7 +6,7 @@ export function decodeHelmRelease(encodedRelease) {
     const s = atob(atob(encodedRelease));
 
     // ungzip
-    const charArray = s.split('').map(c => c.charCodeAt(0));
+    const charArray = s.split('').map((c) => c.charCodeAt(0));
     const data = inflate(new Uint8Array(charArray));
 
     const decoder = new TextDecoder();

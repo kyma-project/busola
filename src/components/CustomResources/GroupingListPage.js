@@ -28,7 +28,7 @@ export function GroupingListPage({
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const { data, loading, error } = useGetList(filter)(resourceUrl);
-  const crdsByGroup = groupBy(data, e => e.spec.group);
+  const crdsByGroup = groupBy(data, (e) => e.spec.group);
 
   if (loading) {
     return <Spinner />;
@@ -44,7 +44,7 @@ export function GroupingListPage({
 
     const removeEmpty = ([, crds]) => crds.length;
 
-    const filterBySearchQuery = crd =>
+    const filterBySearchQuery = (crd) =>
       crd.metadata.name.includes(query) ||
       crd.spec.names.categories?.includes(query);
 
@@ -72,7 +72,7 @@ export function GroupingListPage({
               customColumns={[
                 {
                   header: t('custom-resource-definitions.headers.categories'),
-                  value: entry => (
+                  value: (entry) => (
                     <Tokens tokens={entry.spec.names.categories} />
                   ),
                 },
@@ -80,7 +80,7 @@ export function GroupingListPage({
                   ? [
                       {
                         header: t('scope'),
-                        value: entry => entry.spec.scope,
+                        value: (entry) => entry.spec.scope,
                       },
                     ]
                   : []),

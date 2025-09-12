@@ -28,7 +28,7 @@ export function ItemArray({
     values = [];
   }
 
-  const remove = index => setValues(values.filter((_, i) => index !== i));
+  const remove = (index) => setValues(values.filter((_, i) => index !== i));
 
   const renderItem = (item, index) =>
     itemRenderer({
@@ -74,7 +74,7 @@ export function ItemArray({
     <ResourceForm.CollapsibleSection
       title={listTitle}
       tooltipContent={tooltipContent}
-      actions={setOpen => (
+      actions={(setOpen) => (
         <Button
           icon="add"
           onClick={() => {

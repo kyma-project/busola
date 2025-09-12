@@ -15,7 +15,7 @@ import { Link } from 'shared/components/Link/Link';
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
 
-const Specification = event => {
+const Specification = (event) => {
   const { t } = useTranslation();
 
   return (
@@ -84,7 +84,7 @@ export default function EventDetails(props) {
   const customColumns = [
     {
       header: t('common.labels.namespace'),
-      value: event => (
+      value: (event) => (
         <Link
           data-testid="details-link"
           url={clusterUrl(
@@ -97,7 +97,7 @@ export default function EventDetails(props) {
     },
     {
       header: t('events.headers.last-seen'),
-      value: event => (
+      value: (event) => (
         <ReadableCreationTimestamp timestamp={event.lastTimestamp} />
       ),
     },

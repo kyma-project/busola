@@ -17,6 +17,9 @@
     position: absolute;
     top: calc(var(--_ui5-v2-11-0_shellbar_root_height) * -1);
     opacity: 0%; //prevent visually jumping
+    @media (min-width: 1040px) {
+      opacity: 100%;
+    }
   }
 
   &__content {
@@ -26,7 +29,8 @@
     background: var(--sapList_Background);
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 0 0 0.125rem 0
+    box-shadow:
+      0 0 0.125rem 0
         color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
       0 0.5rem 1rem 0
         color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);

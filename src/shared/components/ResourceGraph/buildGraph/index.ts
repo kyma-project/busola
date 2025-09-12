@@ -3,7 +3,7 @@ import { buildStructuralGraph } from 'shared/components/ResourceGraph/buildGraph
 import { K8sResource } from 'types';
 import { ResourceGraphConfig, ResourceGraphStore } from '../types';
 
-export function buildGraph(
+export async function buildGraph(
   data: { initialResource: K8sResource; store: ResourceGraphStore },
   config: ResourceGraphConfig,
 ) {
@@ -11,5 +11,5 @@ export function buildGraph(
     ? buildNetworkGraph
     : buildStructuralGraph;
 
-  return buildGraphFn(data, config);
+  return await buildGraphFn(data, config);
 }

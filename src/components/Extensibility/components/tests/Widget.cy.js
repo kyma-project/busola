@@ -79,9 +79,7 @@ describe('Widget Component', () => {
       );
 
       cy.contains('loading').should('not.exist');
-      cy.contains('test-value')
-        .should('be.visible')
-        .should('have.length', 1);
+      cy.contains('test-value').should('be.visible').should('have.length', 1);
     });
   });
 });

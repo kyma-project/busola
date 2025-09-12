@@ -30,7 +30,7 @@ export function ReplicaSetsDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: resource => (
+      value: (resource) => (
         <ControlledBy
           ownerReferences={resource.metadata.ownerReferences}
           namespace={resource.metadata.namespace}
@@ -59,7 +59,7 @@ export function ReplicaSetsDetails(props) {
             name={t('replica-sets.headers.limits')}
             value={
               <React.Fragment key="limits">
-                {containers.map(c => (
+                {containers.map((c) => (
                   <React.Fragment key={c.name}>
                     {t('replica-sets.cpu')}: {c.resources?.limits?.cpu}
                     <br />
@@ -76,7 +76,7 @@ export function ReplicaSetsDetails(props) {
             name={t('replica-sets.headers.requests')}
             value={
               <React.Fragment key="requests">
-                {containers.map(c => (
+                {containers.map((c) => (
                   <React.Fragment key={c.name}>
                     {t('replica-sets.cpu')}: {c.resources?.requests?.cpu}
                     <br />
@@ -95,17 +95,19 @@ export function ReplicaSetsDetails(props) {
   const customStatusColumns = [
     {
       header: t('replica-sets.status.available-replicas'),
-      value: resource => <div>{resource?.status?.availableReplicas ?? 0}</div>,
+      value: (resource) => (
+        <div>{resource?.status?.availableReplicas ?? 0}</div>
+      ),
     },
     {
       header: t('replica-sets.status.fully-labeled-replicas'),
-      value: resource => (
+      value: (resource) => (
         <div>{resource?.status?.fullyLabeledReplicas ?? 0}</div>
       ),
     },
     {
       header: t('replica-sets.status.observed-generation'),
-      value: resource => (
+      value: (resource) => (
         <div>
           {resource?.status?.observedGeneration ?? EMPTY_TEXT_PLACEHOLDER}{' '}
         </div>
@@ -113,15 +115,15 @@ export function ReplicaSetsDetails(props) {
     },
     {
       header: t('replica-sets.status.ready-replicas'),
-      value: resource => <div>{resource?.status?.readyReplicas ?? 0}</div>,
+      value: (resource) => <div>{resource?.status?.readyReplicas ?? 0}</div>,
     },
     {
       header: t('replica-sets.status.replicas'),
-      value: resource => <div>{resource?.status?.replicas ?? 0}</div>,
+      value: (resource) => <div>{resource?.status?.replicas ?? 0}</div>,
     },
   ];
-  const statusConditions = resource => {
-    return resource?.status?.conditions?.map(condition => {
+  const statusConditions = (resource) => {
+    return resource?.status?.conditions?.map((condition) => {
       const overridenStatus = () => {
         if (condition.type === 'ReplicaFailure')
           return condition.status === 'True' ? 'Negative' : 'Positive';
@@ -138,7 +140,7 @@ export function ReplicaSetsDetails(props) {
     });
   };
 
-  const MatchSelector = replicaset => (
+  const MatchSelector = (replicaset) => (
     <Selector
       key="match-selector"
       namespace={replicaset.metadata.namespace}
@@ -148,7 +150,7 @@ export function ReplicaSetsDetails(props) {
     />
   );
 
-  const ReplicaSetPodTemplate = replicaset => (
+  const ReplicaSetPodTemplate = (replicaset) => (
     <PodTemplate key="pod-template" template={replicaset.spec.template} />
   );
 
@@ -162,7 +164,7 @@ export function ReplicaSetsDetails(props) {
         ReplicaSetPodTemplate,
         Events,
       ]}
-      statusBadge={replicaSet => <ReplicaSetStatus replicaSet={replicaSet} />}
+      statusBadge={(replicaSet) => <ReplicaSetStatus replicaSet={replicaSet} />}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
       description={ResourceDescription}

@@ -11,7 +11,7 @@ export default function PodRestarts({ statuses }) {
     if (!restartCount) return t('pods.tooltips.no-restarts');
     return (
       <ul style={{ textAlign: 'left' }}>
-        {statuses.map(s => (
+        {statuses.map((s) => (
           <li key={s.name}>{`${s.name}: ${s.restartCount}`}</li>
         ))}
       </ul>

@@ -27,7 +27,7 @@ export default function EditViewSettings() {
         <Select
           id="editTypeComboBox"
           accessibleName={t('settings.clusters.edit-view.choose')}
-          onChange={e => {
+          onChange={(e) => {
             setEditViewMode({
               preferencesViewType: e.target.value ?? 'MODE_DEFAULT',
               dynamicViewType:

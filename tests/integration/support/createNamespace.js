@@ -1,4 +1,4 @@
-Cypress.Commands.add('createNamespace', namespaceName => {
+Cypress.Commands.add('createNamespace', (namespaceName) => {
   cy.log('Create a Namespace');
 
   cy.getLeftNav()

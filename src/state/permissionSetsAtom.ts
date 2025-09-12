@@ -18,7 +18,7 @@ export function hasAnyRoleBound(permissionSet: PermissionSetState) {
   // leave out ssrr permission, as it's always there
   permissionSet = permissionSet.filter(filterSelfSubjectRulesReview);
 
-  const verbs = permissionSet.flatMap(p => p.verbs);
+  const verbs = permissionSet.flatMap((p) => p.verbs);
 
   const usefulVerbs = [
     'get',
@@ -31,7 +31,7 @@ export function hasAnyRoleBound(permissionSet: PermissionSetState) {
     '*',
   ];
 
-  return verbs.some(v => usefulVerbs.includes(v));
+  return verbs.some((v) => usefulVerbs.includes(v));
 }
 
 export async function getPermissionResourceRules(
@@ -65,7 +65,7 @@ export type PermissionSet = {
 export type PermissionSetState = PermissionSet[];
 
 export const permissionSetsAtom = atom<Promise<PermissionSetState>>(
-  async get => {
+  async (get) => {
     const cluster = get(clusterAtom);
     const activeNamespaceId = get(activeNamespaceIdAtom) || '';
     const postFn = getPostFn(get);

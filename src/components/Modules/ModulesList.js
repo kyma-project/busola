@@ -39,10 +39,8 @@ export default function ModulesList({ namespaced }) {
   const { moduleTemplates, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
-  const {
-    installedCommunityModules,
-    installedCommunityModulesLoading,
-  } = useContext(CommunityModuleContext);
+  const { installedCommunityModules, installedCommunityModulesLoading } =
+    useContext(CommunityModuleContext);
 
   const {
     setOpenedModuleIndex: setOpenedCommunityModuleIndex,
@@ -58,7 +56,7 @@ export default function ModulesList({ namespaced }) {
       installedCommunityModules?.length
     ) {
       setSelectedEntry(
-        installedCommunityModules.find(moduleTemplate =>
+        installedCommunityModules.find((moduleTemplate) =>
           checkSelectedModule(moduleTemplate, layoutState),
         )?.name,
       );
@@ -123,7 +121,7 @@ export default function ModulesList({ namespaced }) {
             kymaResource,
             true,
           )}
-          renderForm={props => (
+          renderForm={(props) => (
             <ErrorBoundary>
               <Create
                 resource={kymaResource}

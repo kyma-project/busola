@@ -14,7 +14,7 @@ export const GenericSecrets = ({
   const { t } = useTranslation();
   const downloadKubeconfig = useDownloadKubeconfigWithToken();
 
-  const downloadSecretKubeconfig = secret => {
+  const downloadSecretKubeconfig = (secret) => {
     if (secret.type !== 'kubernetes.io/service-account-token') return;
     const name = secret.metadata.name;
     const serviceAccountToken = atob(secret.data.token);
@@ -27,7 +27,7 @@ export const GenericSecrets = ({
     {
       name: t('service-accounts.headers.download-kubeconfig'),
       icon: 'download',
-      disabledHandler: secret =>
+      disabledHandler: (secret) =>
         secret.type !== 'kubernetes.io/service-account-token',
       handler: downloadSecretKubeconfig,
       tooltip: t('service-accounts.headers.download-kubeconfig'),

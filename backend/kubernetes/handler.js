@@ -8,11 +8,11 @@ const escape = require('lodash.escape');
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
 
-const isHeaderDefined = headerValue => {
+const isHeaderDefined = (headerValue) => {
   return headerValue !== undefined && headerValue !== 'undefined';
 };
 
-const decodeHeaderToBuffer = headerValue => {
+const decodeHeaderToBuffer = (headerValue) => {
   return isHeaderDefined(headerValue)
     ? Buffer.from(headerValue, 'base64')
     : null;
@@ -21,7 +21,7 @@ const decodeHeaderToBuffer = headerValue => {
 // for some mysterious reason, request for node metrics
 // comes with "Connection: Upgrade" header, causing
 // "invalid upgrade response: status code 200" error
-const workaroundForNodeMetrics = req => {
+const workaroundForNodeMetrics = (req) => {
   if (req.originalUrl.includes('apis/metrics.k8s.io/v1beta1/nodes')) {
     req.headers['connection'] = 'close';
   }
@@ -39,7 +39,7 @@ export async function handleK8sRequests(req, res) {
   }
 
   try {
-    filters.forEach(filter => filter(req, headersData));
+    filters.forEach((filter) => filter(req, headersData));
   } catch (e) {
     req.log.error('Filters rejected the request: ' + e.message);
     res.contentType('text/plain; charset=utf-8');
@@ -65,7 +65,7 @@ export async function handleK8sRequests(req, res) {
   };
   workaroundForNodeMetrics(req);
 
-  const k8sRequest = https.request(options, function(k8sResponse) {
+  const k8sRequest = https.request(options, function (k8sResponse) {
     if (
       k8sResponse.headers &&
       (k8sResponse.headers['Content-Type']?.includes('\\') ||

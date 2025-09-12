@@ -43,7 +43,7 @@ export const AddSourceYamls = () => {
 
   useEffect(() => {
     if (sourceURL.endsWith('.yaml')) {
-      (async function() {
+      (async function () {
         try {
           const allResources = await postForCommunityResources(post, sourceURL);
           const allowedToApply = filterResources(allResources);

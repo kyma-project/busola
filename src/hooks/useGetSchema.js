@@ -53,11 +53,11 @@ export const useGetSchema = ({
         setLoading(false);
       },
     );
-    addWorkerListener('customError', err => {
+    addWorkerListener('customError', (err) => {
       setError(err);
       setLoading(false);
     });
-    addWorkerErrorListener(err => {
+    addWorkerErrorListener((err) => {
       setError(err);
       setLoading(false);
     });
@@ -75,10 +75,10 @@ export const useGetSchema = ({
 };
 
 // TODO error/loading
-export const useGetResourceSchemas = resources => {
+export const useGetResourceSchemas = (resources) => {
   const schemaIds = useMemo(
     () =>
-      mapValues(resources, resource => {
+      mapValues(resources, (resource) => {
         const { group, version, kind } = resource;
         if (!group) return `${version}/${kind}`;
         else return `${group}/${version}/${kind}`;
@@ -93,7 +93,7 @@ export const useGetResourceSchemas = resources => {
   const isWorkerOkay = isWorkerAvailable && !schemasError;
   const [schemas, setSchemas] = useState({});
   const setSchema = (schemaId, schema) =>
-    setSchemas(schemas => ({
+    setSchemas((schemas) => ({
       ...schemas,
       [schemaId]: schema,
     }));
@@ -104,7 +104,7 @@ export const useGetResourceSchemas = resources => {
 
   useEffect(() => {
     const hasSchemas = Object.keys(schemaIds).every(
-      schemaId => schemas.schemaId,
+      (schemaId) => schemas.schemaId,
     );
     if (!areSchemasComputed || hasSchemas || !isWorkerOkay) {
       return;
@@ -116,17 +116,17 @@ export const useGetResourceSchemas = resources => {
       addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {
         setSchema(key, schema);
         setError(undefined);
-        setLoading(loading => ({
+        setLoading((loading) => ({
           ...loading,
           [key]: false,
         }));
       });
     });
-    addWorkerListener('customError', err => {
+    addWorkerListener('customError', (err) => {
       setError(err);
       setLoading(mapValues(resources).map(() => false));
     });
-    addWorkerErrorListener(err => {
+    addWorkerErrorListener((err) => {
       setError(err);
       setLoading(mapValues(resources).map(() => false));
     });
@@ -140,7 +140,7 @@ export const useGetResourceSchemas = resources => {
 
   return {
     schemas,
-    loading: Object.values(loading).some(v => !!v),
+    loading: Object.values(loading).some((v) => !!v),
     error,
   };
 };

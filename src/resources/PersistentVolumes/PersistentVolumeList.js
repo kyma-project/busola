@@ -29,7 +29,7 @@ export function PersistentVolumeList(props) {
   const customColumns = [
     {
       header: t('pv.headers.storage-class'),
-      value: pv =>
+      value: (pv) =>
         storageClasses?.find(
           ({ metadata }) => metadata.name === pv.spec?.storageClassName,
         ) ? (
@@ -49,11 +49,11 @@ export function PersistentVolumeList(props) {
     },
     {
       header: t('pv.headers.capacity'),
-      value: pv => pv.spec?.capacity?.storage || EMPTY_TEXT_PLACEHOLDER,
+      value: (pv) => pv.spec?.capacity?.storage || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pv.headers.claim'),
-      value: pv =>
+      value: (pv) =>
         persistentVolumeClaims?.find(
           ({ metadata }) => metadata.name === pv.spec?.claimRef?.name,
         ) ? (
@@ -76,7 +76,7 @@ export function PersistentVolumeList(props) {
     },
     {
       header: t('common.headers.status'),
-      value: pv => (
+      value: (pv) => (
         <span style={{ wordBreak: 'keep-all' }}>
           <PersistentVolumeStatus status={pv.status} />
         </span>

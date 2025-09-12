@@ -107,7 +107,7 @@ export const KymaModulesList = ({
     navigate(
       `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true&createType=kyma`,
     );
-    setIsFormOpen(state => ({ ...state, formOpen: true }));
+    setIsFormOpen((state) => ({ ...state, formOpen: true }));
   };
 
   const headerRenderer = () => [
@@ -127,7 +127,7 @@ export const KymaModulesList = ({
     resource: { kind: string };
   }) => {
     const isInstalled =
-      selectedModules?.findIndex(kymaResourceModule => {
+      selectedModules?.findIndex((kymaResourceModule) => {
         return kymaResourceModule?.name === resource?.name;
       }) >= 0;
     const moduleStatus = findModuleStatus(kymaResource, resource.name);
@@ -169,13 +169,13 @@ export const KymaModulesList = ({
       tooltip: () => t('common.buttons.delete'),
       icon: 'delete',
       disabledHandler: (resource: { name: string }) => {
-        const index = selectedModules?.findIndex(kymaResourceModule => {
+        const index = selectedModules?.findIndex((kymaResourceModule) => {
           return kymaResourceModule.name === resource.name;
         });
         return index < 0;
       },
       handler: (resource: { name: string }) => {
-        const index = selectedModules?.findIndex(kymaResourceModule => {
+        const index = selectedModules?.findIndex((kymaResourceModule) => {
           return kymaResourceModule.name === resource.name;
         });
         setOpenedModuleIndex(index);
@@ -198,7 +198,7 @@ export const KymaModulesList = ({
     },
   ) => {
     setOpenedModuleIndex(
-      selectedModules.findIndex(entry => entry.name === moduleName),
+      selectedModules.findIndex((entry) => entry.name === moduleName),
     );
 
     setSelectedEntry?.(moduleName);
@@ -251,7 +251,7 @@ export const KymaModulesList = ({
       ? namespaceUrl(partialPath)
       : clusterUrl(partialPath);
 
-    setLayoutColumn(prev => ({
+    setLayoutColumn((prev) => ({
       startColumn: prev.startColumn,
       midColumn: {
         resourceType: hasExtension
@@ -276,9 +276,9 @@ export const KymaModulesList = ({
     statusModules: KymaResourceStatusModuleType[] = [],
     specModules: KymaResourceSpecModuleType[] = [],
   ) {
-    specModules.forEach(specItem => {
+    specModules.forEach((specItem) => {
       const exists = statusModules.some(
-        statusItem => statusItem?.name === specItem?.name,
+        (statusItem) => statusItem?.name === specItem?.name,
       );
 
       if (!exists) {
@@ -315,7 +315,7 @@ export const KymaModulesList = ({
           getEntries(resource?.status?.modules, resource?.spec?.modules) as any
         }
         headerRenderer={headerRenderer}
-        rowRenderer={resource =>
+        rowRenderer={(resource) =>
           ModulesListRows({
             resourceName,
             resource,
@@ -338,8 +338,7 @@ export const KymaModulesList = ({
               'kyma-modules.title',
             ).toLocaleLowerCase()}`,
             subtitleText: t('kyma-modules.no-modules-description'),
-            url:
-              'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
+            url: 'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-s-modular-approach?locale=en-US&state=DRAFT&version=Cloud',
             buttonText: t('common.buttons.add'),
             showButton: true,
             onClick: handleShowAddModule,

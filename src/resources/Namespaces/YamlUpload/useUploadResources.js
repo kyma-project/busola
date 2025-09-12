@@ -34,10 +34,10 @@ export const getUrl = async (
   const resourceType = pluralize(resource.kind.toLowerCase());
   const hasNamespace = !!resource?.metadata?.namespace;
   const isKnownClusterWide = !!clusterNodes.find(
-    n => n.resourceType === resourceType,
+    (n) => n.resourceType === resourceType,
   );
   const isKnownNamespaceWide = !!namespaceNodes.find(
-    n => n.resourceType === resourceType,
+    (n) => n.resourceType === resourceType,
   );
 
   if (isKnownClusterWide) {
@@ -50,7 +50,7 @@ export const getUrl = async (
     const response = await fetchFn(getResourceKindUrl(resource));
     const json = await response.json();
     const apiGroupResources = json?.resources;
-    const apiGroup = apiGroupResources.find(r => r?.kind === resource?.kind);
+    const apiGroup = apiGroupResources.find((r) => r?.kind === resource?.kind);
     return apiGroup?.namespaced
       ? getResourceUrl(resource, namespaceId)
       : getResourceUrl(resource);
@@ -68,24 +68,24 @@ export function useUploadResources(
   const patchRequest = useUpdate();
 
   const clusterNodes = useAtomValue(allNodesAtom).filter(
-    node => !node.namespaced,
+    (node) => !node.namespaced,
   );
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
-    node => node.namespaced,
+    (node) => node.namespaced,
   );
   const filteredResources = resources?.filter(
-    resource => resource?.value !== null,
+    (resource) => resource?.value !== null,
   );
 
   const updateState = (index, status, message = '') => {
-    setResourcesData(data => {
+    setResourcesData((data) => {
       if (!data) return null;
       data[index] = { ...data?.[index], status, message };
       return [...data];
     });
   };
 
-  const fetchPossibleExistingResource = async url => {
+  const fetchPossibleExistingResource = async (url) => {
     try {
       const response = await fetch(url);
       return await response.json();
@@ -124,7 +124,7 @@ export function useUploadResources(
           2000,
         );
         updateState(index, STATE_CREATED);
-        setLastOperationState(lastOperationState =>
+        setLastOperationState((lastOperationState) =>
           lastOperationState === OPERATION_STATE_WAITING
             ? OPERATION_STATE_SUCCEEDED
             : lastOperationState,
@@ -140,7 +140,7 @@ export function useUploadResources(
         const diff = createPatch(existingResource, resource.value);
         await patchRequest(urlWithName, diff);
         updateState(index, STATE_UPDATED);
-        setLastOperationState(lastOperationState =>
+        setLastOperationState((lastOperationState) =>
           lastOperationState === OPERATION_STATE_WAITING
             ? OPERATION_STATE_SUCCEEDED
             : lastOperationState,

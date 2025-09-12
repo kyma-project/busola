@@ -9,14 +9,14 @@ import {
   Resource,
 } from '../contexts/DataSources';
 
-type JsonataValue = [string, Error | null];
+export type JsonataValue = [string | null, Error | null];
 
-type JsonataFunction = {
+export type JsonataFunction = {
   (
     query: string,
     extras?: { [key: string]: any },
     defaultValue?: any,
-  ): JsonataValue;
+  ): Promise<JsonataValue>;
   async: (
     query: string,
     extras: { [key: string]: any },
@@ -58,7 +58,7 @@ export function useJsonata({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSourcesContext.store]);
 
-  const jsonata: JsonataFunction = (
+  const jsonata: JsonataFunction = async (
     query,
     extras = {},
     defaultValue = null,
@@ -68,10 +68,10 @@ export function useJsonata({
     }
 
     try {
-      const value = jsonataWrapper(query).evaluate(
+      const value = await jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {
-          ...mapValues(dataSourceFetchers, dsf => dsf.value),
+          ...mapValues(dataSourceFetchers, (dsf) => dsf.value),
           root: extras.resource || resource,
           parent: parent,
           embedResource: embedResource,
@@ -94,16 +94,16 @@ export function useJsonata({
     }
   };
 
-  jsonata.async = (query, extras = {}, defaultValue = null) => {
+  jsonata.async = async (query, extras = {}, defaultValue = null) => {
     if (!query) {
       return Promise.resolve([defaultValue, null]);
     }
 
-    return new Promise(resolve =>
-      jsonataWrapper(query).evaluate(
+    try {
+      const value = await jsonataWrapper(query).evaluate(
         extras.scope || scope || extras.resource || resource,
         {
-          ...mapValues(dataSourceFetchers, dsf => dsf.fetcher),
+          ...mapValues(dataSourceFetchers, (dsf) => dsf.fetcher),
           root: extras.resource || resource,
           parent: parent,
           embedResource: embedResource,
@@ -115,18 +115,16 @@ export function useJsonata({
             resource,
           ...extras,
         },
-        (err, val) => {
-          if (err) {
-            resolve([
-              t('extensibility.configuration-error', { error: err.message }),
-              err,
-            ]);
-          } else {
-            resolve([val, null]);
-          }
-        },
-      ),
-    );
+      );
+      return [value, null];
+    } catch (err) {
+      return [
+        t('extensibility.configuration-error', {
+          error: err instanceof Error && err?.message ? err?.message : '',
+        }),
+        err as Error,
+      ];
+    }
   };
 
   return jsonata;

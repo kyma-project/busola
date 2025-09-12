@@ -32,19 +32,19 @@ export const addWorkerListener = (message, messageHandlerFn) => {
     return;
   }
   listeners[message] = messageHandlerFn;
-  schemasWorker.onmessage = event => {
+  schemasWorker.onmessage = (event) => {
     const { type, ...rest } = event.data;
     listeners[type](rest);
   };
 };
 
 // a new listener will overwrite a previous one
-export const addWorkerErrorListener = errorHandlerFn => {
+export const addWorkerErrorListener = (errorHandlerFn) => {
   if (!schemasWorker || typeof errorHandlerFn !== 'function') {
     console.error('addWorkerErrorListener error');
     return;
   }
-  schemasWorker.onerror = err => {
+  schemasWorker.onerror = (err) => {
     errorHandlerFn(err);
   };
 };

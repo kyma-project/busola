@@ -32,7 +32,7 @@ export function SimpleList({
   const tooltipContent = schema.get('description');
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
-  const removeItem = index => {
+  const removeItem = (index) => {
     onChange({
       storeKeys,
       scopes: ['value', 'internal'],
@@ -43,7 +43,7 @@ export function SimpleList({
     });
   };
 
-  const isLast = index => index === listSize;
+  const isLast = (index) => index === listSize;
   const itemsSchema = schema.get('items');
 
   return (

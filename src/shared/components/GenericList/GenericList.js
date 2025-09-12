@@ -29,6 +29,7 @@ import pluralize from 'pluralize';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { Table } from '@ui5/webcomponents-react';
 import './GenericList.scss';
+import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -91,12 +92,20 @@ export const GenericList = ({
     setEntrySelected(customSelectedEntry || '');
   }, [customSelectedEntry]);
 
-  const sorting = (sort, resources) => {
+  const sorting = async (sort, resources) => {
     if (!sortBy || isEmpty(sortBy)) return resources;
 
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
+
+    if (sortFunction?.asyncFn) {
+      if (sort.order === 'ASC') {
+        return await asyncSort([...resources], sortFunction.asyncFn);
+      } else {
+        return await asyncSort([...resources], sortFunction.asyncFn, true);
+      }
+    }
 
     if (sort.order === 'ASC') {
       return [...resources].sort(sortFunction);
@@ -120,9 +129,7 @@ export const GenericList = ({
   const { i18n, t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
 
-  const [filteredEntries, setFilteredEntries] = useState(() =>
-    sorting(sort, entries),
-  );
+  const [filteredEntries, setFilteredEntries] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -134,13 +141,16 @@ export const GenericList = ({
       }
     }
 
-    setFilteredEntries(
-      filterEntries(
-        sorting(sort, entries),
+    const getFilteredEntries = async () => {
+      const sorted = await sorting(sort, entries);
+      const filtered = await filterEntries(
+        sorted,
         searchQuery,
         searchSettings?.textSearchProperties,
-      ),
-    );
+      );
+      setFilteredEntries(filtered);
+    };
+    getFilteredEntries();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     searchQuery,
@@ -153,7 +163,7 @@ export const GenericList = ({
   useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
-    const selected = entries.find(entry => {
+    const selected = entries.find((entry) => {
       const name = entry?.metadata?.name;
       return (
         name &&
@@ -291,14 +301,14 @@ export const GenericList = ({
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
-  const linkTo = entry => {
+  const linkTo = (entry) => {
     const overrides = namespace === '-all-' ? { namespace } : {};
     return customUrl
       ? customUrl(entry)
       : resourceUrlFn(entry, { resourceType, ...overrides });
   };
 
-  const handleRowClick = e => {
+  const handleRowClick = (e) => {
     const arrowColumnCount = displayArrow ? 1 : 0;
     const item = (
       e.detail.row.children[nameColIndex + arrowColumnCount].children[0]
@@ -308,12 +318,13 @@ export const GenericList = ({
 
     const hasNamepace = namespaceColIndex !== -1;
     const itemNamespace = hasNamepace
-      ? e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
+      ? (e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
           ?.children[0]?.innerText ??
-        e?.detail?.row.children[namespaceColIndex + arrowColumnCount]?.innerText
+        e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
+          ?.innerText)
       : '';
 
-    const selectedEntry = entries.find(entry => {
+    const selectedEntry = entries.find((entry) => {
       return (
         (entry?.metadata?.name === item ||
           pluralize(entry?.spec?.names?.kind ?? '') === item ||
@@ -336,7 +347,7 @@ export const GenericList = ({
         selectedEntry?.apiVersion,
       );
       const newLayout = enableColumnLayout
-        ? columnLayout ?? 'TwoColumnsMidExpanded'
+        ? (columnLayout ?? 'TwoColumnsMidExpanded')
         : 'OneColumn';
       setLayoutColumn(
         columnLayout
@@ -379,7 +390,7 @@ export const GenericList = ({
   };
 
   const setOverflowMode = () => {
-    const anyPopinHidden = headerRenderer().some(h => h === 'Popin');
+    const anyPopinHidden = headerRenderer().some((h) => h === 'Popin');
     if (!anyPopinHidden && !noHideFields && disableHiding) {
       return 'Scroll';
     }
@@ -436,7 +447,7 @@ export const GenericList = ({
         onMouseDown={() => {
           window.getSelection().removeAllRanges();
         }}
-        onRowClick={e => {
+        onRowClick={(e) => {
           const selection = window.getSelection().toString();
           if (!hasDetailsView || selection.length > 0) return;
           navigateSafely(() => handleRowClick(e));
@@ -482,6 +493,7 @@ const SearchProps = PropTypes.shape({
     PropTypes.oneOfType([
       PropTypes.string.isRequired,
       PropTypes.func.isRequired,
+      PropTypes.any,
     ]),
   ),
   showSearchSuggestion: PropTypes.bool,

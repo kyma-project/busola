@@ -7,7 +7,7 @@ import { ignoreConsoleErrors } from 'setupTests';
 
 vi.mock('@ui5/webcomponents-react', () => {
   return {
-    Button: props => <button {...props}>{props.children}</button>,
+    Button: (props) => <button {...props}>{props.children}</button>,
   };
 });
 

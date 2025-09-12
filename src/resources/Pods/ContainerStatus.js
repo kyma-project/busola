@@ -12,7 +12,7 @@ export function ContainerStatus({ status }) {
     state?.reason || Object.keys(status?.state || {})?.[0] || 'Unknown';
   const message = state?.message || null;
 
-  const badgeType = status => {
+  const badgeType = (status) => {
     switch (status?.toLowerCase()) {
       case 'running':
       case 'completed':

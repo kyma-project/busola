@@ -82,7 +82,7 @@ const isTheSameId = (
 
 const convertYamlToObject: (
   yamlString: string,
-) => Record<string, any> | null = yamlString => {
+) => Record<string, any> | null = (yamlString) => {
   try {
     return jsyaml.load(yamlString, { json: true }) as Record<string, any>;
   } catch (error) {
@@ -99,8 +99,9 @@ async function getConfigMapsWithSelector(
   selector: string,
 ): Promise<Array<ConfigMapResponse>> {
   const clusterCMUrl = `/api/v1/configmaps?labelSelector=${selector}`;
-  const namespacedCMUrl = `/api/v1/namespaces/${currentNamespace ??
-    kubeconfigNamespace}/configmaps?labelSelector=${selector}`;
+  const namespacedCMUrl = `/api/v1/namespaces/${
+    currentNamespace ?? kubeconfigNamespace
+  }/configmaps?labelSelector=${selector}`;
 
   const namespaceAccess = doesUserHavePermission(
     ['list'],
@@ -124,8 +125,8 @@ async function getConfigMapsWithSelector(
   const url = clusterAccess
     ? clusterCMUrl
     : namespaceAccess
-    ? namespacedCMUrl
-    : '';
+      ? namespacedCMUrl
+      : '';
 
   if (!currentNamespace) {
     try {
@@ -187,7 +188,7 @@ const getExtensionWizards = async (
 
         if (!extResourceWithMetadata.data) return accumulator;
 
-        const indexOfTheSameExtension = accumulator.findIndex(ext =>
+        const indexOfTheSameExtension = accumulator.findIndex((ext) =>
           isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
         );
 
@@ -208,8 +209,8 @@ const getExtensionWizards = async (
       [] as ExtResourceWithMetadata[],
     );
 
-    const defaultWizardsWithoutOverride = defaultWizards.filter(defExt => {
-      return configMapWizards.every(cmExt => {
+    const defaultWizardsWithoutOverride = defaultWizards.filter((defExt) => {
+      return configMapWizards.every((cmExt) => {
         const namespaces = ['kube-public', 'kyma-system', currentNamespace];
 
         if (
@@ -222,7 +223,7 @@ const getExtensionWizards = async (
       });
     });
     const configMapWizardsDataOnly: ExtResource[] = configMapWizards.map(
-      cm => cm.data,
+      (cm) => cm.data,
     );
     const combinedWizards = [
       ...defaultWizardsWithoutOverride,
@@ -280,7 +281,7 @@ const getStatics = async (
     );
 
     const configMapStaticsDataOnly: ExtResource[] = configMapStatics.map(
-      cm => cm.data,
+      (cm) => cm.data,
     );
     const combinedStatics = [...defaultStatics, ...configMapStaticsDataOnly];
     return combinedStatics;
@@ -340,7 +341,7 @@ const getExtensions = async (
         }
         if (!extResourceWithMetadata.data) return accumulator;
 
-        const indexOfTheSameExtension = accumulator.findIndex(ext =>
+        const indexOfTheSameExtension = accumulator.findIndex((ext) =>
           isTheSameNameAndUrl(ext.data, extResourceWithMetadata.data),
         );
 
@@ -362,8 +363,8 @@ const getExtensions = async (
     );
 
     const defaultExtensionsWithoutOverride = defaultExtensions.filter(
-      defExt => {
-        return configMapsExtensions.every(cmExt => {
+      (defExt) => {
+        return configMapsExtensions.every((cmExt) => {
           const namespaces = ['kube-public', 'kyma-system', currentNamespace];
 
           if (
@@ -377,14 +378,13 @@ const getExtensions = async (
       },
     );
 
-    const configMapsExtensionsDataOnly: ExtResource[] = configMapsExtensions.map(
-      cm => cm.data,
-    );
+    const configMapsExtensionsDataOnly: ExtResource[] =
+      configMapsExtensions.map((cm) => cm.data);
 
     const combinedExtensions = [
       ...defaultExtensionsWithoutOverride,
       ...configMapsExtensionsDataOnly,
-    ].filter(ext => !!ext.general);
+    ].filter((ext) => !!ext.general);
     return combinedExtensions;
   } catch (e) {
     console.warn('Cannot load extensions: ', e);
@@ -394,9 +394,8 @@ const getExtensions = async (
 
 const pushExtToEventTypes = (extensions: any) => {
   extensions.forEach((ext: any) => {
-    RESOURCE_PATH[
-      ext?.general?.resource?.kind as keyof typeof RESOURCE_PATH
-    ] = pluralize(ext?.general?.resource?.kind).toLocaleLowerCase();
+    RESOURCE_PATH[ext?.general?.resource?.kind as keyof typeof RESOURCE_PATH] =
+      pluralize(ext?.general?.resource?.kind).toLocaleLowerCase();
   });
 };
 
@@ -446,9 +445,11 @@ export const useGetExtensions = () => {
       }
 
       if (fetchFn) {
-        (window as Window & {
-          extensionProps?: ExtensionProps;
-        }).extensionProps = {
+        (
+          window as Window & {
+            extensionProps?: ExtensionProps;
+          }
+        ).extensionProps = {
           kymaFetchFn: (url: string, options: any) =>
             asRegularFetch(fetchFn, url, options),
         };
@@ -524,7 +525,7 @@ export const useGetExtensions = () => {
           configSet,
         );
 
-        filteredConfigs = configs.filter(node =>
+        filteredConfigs = configs.filter((node) =>
           !node?.general?.resource === null
             ? true
             : isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
@@ -540,8 +541,8 @@ export const useGetExtensions = () => {
         setInjections([]);
       } else {
         let injectionsConfigs: ExtInjectionConfig[] = [];
-        filteredConfigs.forEach(config =>
-          config?.injections?.map(injection =>
+        filteredConfigs.forEach((config) =>
+          config?.injections?.map((injection) =>
             injectionsConfigs.push({
               injection: injection,
               general: config.general,
@@ -549,8 +550,8 @@ export const useGetExtensions = () => {
             }),
           ),
         );
-        (statics || []).forEach(config =>
-          config?.injections?.map(injection =>
+        (statics || []).forEach((config) =>
+          config?.injections?.map((injection) =>
             injectionsConfigs.push({
               injection: injection,
               general: {

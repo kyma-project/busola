@@ -24,12 +24,12 @@ export const RoleForm = ({
       required
       label={t('role-bindings.create-modal.role-type')}
       propertyPath="$.roleRef.kind"
-      input={props => (
+      input={(props) => (
         <Dropdown
           selectedKey={props.value}
-          options={['Role', 'ClusterRole'].map(v => ({ key: v, text: v }))}
+          options={['Role', 'ClusterRole'].map((v) => ({ key: v, text: v }))}
           {...props}
-          setValue={value => {
+          setValue={(value) => {
             binding.roleRef.name = '';
             props.setValue(value);
           }}
@@ -41,13 +41,15 @@ export const RoleForm = ({
 
   const rolesForCurrentType =
     binding.roleRef?.kind === 'ClusterRole' ? clusterRoles : roles;
-  const options = (rolesForCurrentType || []).map(r => ({
+  const options = (rolesForCurrentType || []).map((r) => ({
     key: r.metadata.name,
     text: r.metadata.name,
   }));
 
   const onChange = (event, props) => {
-    const selectedOption = options.find(o => o.text === event.target.value) ?? {
+    const selectedOption = options.find(
+      (o) => o.text === event.target.value,
+    ) ?? {
       key: event.target._state.filterValue,
       text: event.target._state.filterValue,
     };
@@ -59,7 +61,7 @@ export const RoleForm = ({
       required
       label={t('role-bindings.create-modal.role')}
       propertyPath="$.roleRef.name"
-      input={props => (
+      input={(props) => (
         <ComboBox
           id="role"
           accessibleName="Role Combobox"
@@ -73,11 +75,13 @@ export const RoleForm = ({
                 : 'roles.name_singular',
             ),
           })}
-          value={options.find(o => o.key === props.value)?.text ?? props.value}
-          onChange={event => onChange(event, props)}
-          onInput={event => onChange(event, props)}
+          value={
+            options.find((o) => o.key === props.value)?.text ?? props.value
+          }
+          onChange={(event) => onChange(event, props)}
+          onInput={(event) => onChange(event, props)}
         >
-          {options.map(option => (
+          {options.map((option) => (
             <ComboBoxItem id={option.key} text={option.text} />
           ))}
         </ComboBox>

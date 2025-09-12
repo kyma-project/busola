@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { themeAtom } from 'state/preferences/themeAtom';
 
-export const getEditorTheme = theme => {
+export const getEditorTheme = (theme) => {
   switch (theme) {
     case 'sap_horizon_dark':
       return 'vs-dark';

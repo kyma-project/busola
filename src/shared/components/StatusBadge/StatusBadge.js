@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import './StatusBadge.scss';
 import { PopoverBadge } from '../PopoverBadge/PopoverBadge';
 
-const resolveType = status => {
+const resolveType = (status) => {
   if (typeof status !== 'string') {
     console.warn(
       `'autoResolveType' prop requires 'children' prop to be a string.`,

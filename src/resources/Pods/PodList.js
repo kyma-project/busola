@@ -22,7 +22,7 @@ export function PodList(params) {
   let customColumns = [
     {
       header: t('common.headers.owner'),
-      value: pod => {
+      value: (pod) => {
         return (
           <ControlledBy
             ownerReferences={pod.metadata.ownerReferences}
@@ -33,11 +33,11 @@ export function PodList(params) {
     },
     {
       header: t('common.headers.status'),
-      value: pod => <PodStatus pod={pod} />,
+      value: (pod) => <PodStatus pod={pod} />,
     },
     {
       header: t('pods.restarts'),
-      value: pod => <PodRestarts statuses={pod.status.containerStatuses} />,
+      value: (pod) => <PodRestarts statuses={pod.status.containerStatuses} />,
     },
   ];
 
@@ -46,7 +46,7 @@ export function PodList(params) {
       ...customColumns,
       {
         header: t('pods.node'),
-        value: pod => (
+        value: (pod) => (
           <Link url={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}>
             {pod.spec.nodeName}
           </Link>
@@ -60,7 +60,7 @@ export function PodList(params) {
       disableMargin={params.disableMargin}
       customColumns={customColumns}
       description={ResourceDescription}
-      sortBy={defaultSort => ({
+      sortBy={(defaultSort) => ({
         ...defaultSort,
         status: (a, b) =>
           calculatePodState(a).status.localeCompare(

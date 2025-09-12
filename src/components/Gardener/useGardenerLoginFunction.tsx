@@ -49,12 +49,12 @@ export function useGardenerLogin(setReport: (report: string) => void) {
       ...new Set(
         ssrResult.status.resourceRules
           .filter(
-            r =>
+            (r) =>
               r.apiGroups.includes('core.gardener.cloud') &&
               r.resources.includes('projects') &&
               r.resourceNames,
           )
-          .flatMap(r => r.resourceNames),
+          .flatMap((r) => r.resourceNames),
       ),
     ] as [];
   };
@@ -111,13 +111,13 @@ export function useGardenerLogin(setReport: (report: string) => void) {
   const addKubeconfig = (kubeconfig: ValidKubeconfig) => {
     const contextName = kubeconfig['current-context'];
     const context =
-      kubeconfig.contexts?.find(ctx => ctx.name === contextName) ||
+      kubeconfig.contexts?.find((ctx) => ctx.name === contextName) ||
       kubeconfig.contexts?.[0];
     const currentContext = {
       cluster: kubeconfig.clusters.find(
-        c => c.name === context.context.cluster,
+        (c) => c.name === context.context.cluster,
       )!,
-      user: kubeconfig.users.find(u => u.name === context.context.user)!,
+      user: kubeconfig.users.find((u) => u.name === context.context.user)!,
     };
 
     const cluster: NonNullable<ActiveClusterState> = {

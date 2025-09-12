@@ -1,7 +1,7 @@
 import { calculatePodState } from 'resources/Pods/PodStatus';
 
 export function getHealthyReplicasCount(resource) {
-  return resource?.filter(r => {
+  return resource?.filter((r) => {
     const running = r.status.readyReplicas || 0;
     const expected = r.status.replicas || r.spec.replicas || 0;
 
@@ -19,7 +19,7 @@ export function getStatusesPodCount(pods) {
   if (!pods) {
     return new Map();
   }
-  const statusData = Map.groupBy(pods, pod => {
+  const statusData = Map.groupBy(pods, (pod) => {
     const podState = calculatePodState(pod);
     return getPodState(podState.status);
   });
@@ -48,14 +48,14 @@ function getPodState(status) {
 
 export function getHealthyStatusesCount(pods) {
   const successStatuses = ['running', 'succeeded'];
-  return pods?.filter(p =>
+  return pods?.filter((p) =>
     successStatuses.includes(p.status.phase.toLowerCase()),
   )?.length;
 }
 
 export function getHealthyDaemonsets(daemonsets) {
   return daemonsets?.filter(
-    ds =>
+    (ds) =>
       ds.status.currentNumberScheduled === ds.status.desiredNumberScheduled &&
       ds.status.desiredNumberScheduled === ds.status.numberAvailable &&
       ds.status.numberAvailable === ds.status.numberReady &&

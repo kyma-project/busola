@@ -23,7 +23,7 @@ context('Test Custom Resources', () => {
 
     getQueryInput().type('up{enter}');
 
-    cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
+    cy.wrap(loadFile(FILE_NAME)).then((CRD_CONFIG) => {
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.pasteToMonaco(CRD);
     });
@@ -57,26 +57,20 @@ context('Test Custom Resources', () => {
 
     cy.get('ui5-table').should('have.length', 1);
 
-    cy.get('ui5-table-row')
-      .contains('Tnamespaces')
-      .should('be.visible');
+    cy.get('ui5-table-row').contains('Tnamespaces').should('be.visible');
   });
 
   it('Check single CR list', () => {
     cy.clickGenericListLink('Tnamespaces');
 
-    cy.getMidColumn()
-      .contains('ui5-title', 'Tnamespaces')
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', 'Tnamespaces').should('be.visible');
 
     cy.getMidColumn()
       .contains('ui5-button', /Create/i)
       .should('be.visible');
 
     cy.url().should('match', /customresources/);
-    cy.getMidColumn()
-      .contains('tnamespace.cypress.example.com')
-      .click();
+    cy.getMidColumn().contains('tnamespace.cypress.example.com').click();
 
     cy.url().should('match', /customresourcedefinitions/);
 

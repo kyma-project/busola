@@ -33,8 +33,12 @@ export const ExtensibilityDetailsCore = ({
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const setResourcesConditions = useSetAtom(resourcesConditionsAtom);
-  const { urlPath, resource, features, description: resourceDescription } =
-    resMetaData?.general ?? {};
+  const {
+    urlPath,
+    resource,
+    features,
+    description: resourceDescription,
+  } = resMetaData?.general ?? {};
   let { disableEdit, disableDelete } = features?.actions || {};
   if (isModule) disableDelete = true;
 
@@ -83,15 +87,15 @@ export const ExtensibilityDetailsCore = ({
   const dataSources = resMetaData?.dataSources || {};
   const general = resMetaData?.general || {};
 
-  const prepareVisibility = (def, resource) => {
+  const prepareVisibility = async (def, resource) => {
     setResourcesConditions(resource.status);
-    const [visible, error] = jsonata(def.visibility, { resource }, true);
+    const [visible, error] = await jsonata(def.visibility, { resource }, true);
     return { visible, error };
   };
 
-  const prepareDisableEdit = resource => {
+  const prepareDisableEdit = async (resource) => {
     if (disableEdit && typeof disableEdit === 'string') {
-      const [isDisabled] = jsonata(disableEdit, { resource });
+      const [isDisabled] = await jsonata(disableEdit, { resource });
       return typeof isDisabled === 'boolean' ? isDisabled : false;
     }
     return disableEdit;
@@ -108,8 +112,8 @@ export const ExtensibilityDetailsCore = ({
         Array.isArray(header)
           ? header.map((def, i) => ({
               header: widgetT(def),
-              visibility: resource => prepareVisibility(def, resource),
-              value: resource => (
+              visibility: (resource) => prepareVisibility(def, resource),
+              value: (resource) => (
                 <Widget
                   key={i}
                   value={resource}
@@ -142,12 +146,12 @@ export const ExtensibilityDetailsCore = ({
       customStatusColumns={
         Array.isArray(statusBody)
           ? statusBody
-              .filter(def => def.widget !== 'ConditionList')
+              .filter((def) => def.widget !== 'ConditionList')
               .map((def, i) => ({
                 header: widgetT(def),
                 fullWidth: def.fullWidth,
-                visibility: resource => prepareVisibility(def, resource),
-                value: resource => (
+                visibility: (resource) => prepareVisibility(def, resource),
+                value: (resource) => (
                   <Widget
                     key={i}
                     structure={def}
@@ -163,11 +167,11 @@ export const ExtensibilityDetailsCore = ({
       customConditionsComponents={
         Array.isArray(statusBody)
           ? statusBody
-              .filter(def => def.widget === 'ConditionList')
+              .filter((def) => def.widget === 'ConditionList')
               .map((def, i) => ({
                 header: widgetT(def),
-                visibility: resource => prepareVisibility(def, resource),
-                value: resource => (
+                visibility: (resource) => prepareVisibility(def, resource),
+                value: (resource) => (
                   <Widget
                     key={i}
                     structure={def}
@@ -182,7 +186,7 @@ export const ExtensibilityDetailsCore = ({
       }
       statusBadge={
         statusHeader
-          ? resource => (
+          ? (resource) => (
               <Widget
                 value={resource}
                 structure={statusHeader}

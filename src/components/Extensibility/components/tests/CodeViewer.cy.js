@@ -25,15 +25,9 @@ describe('CodeViewer Component', () => {
     cy.mount(<CodeViewer value={value} structure={structure} />);
 
     cy.get('ui5-panel').should('have.length', 1);
-    cy.get('.view-lines')
-      .contains('{')
-      .should('be.visible');
-    cy.get('.view-lines')
-      .contains('"key": "value"')
-      .should('be.visible');
-    cy.get('.view-lines')
-      .contains('}')
-      .should('be.visible');
+    cy.get('.view-lines').contains('{').should('be.visible');
+    cy.get('.view-lines').contains('"key": "value"').should('be.visible');
+    cy.get('.view-lines').contains('}').should('be.visible');
   });
 
   it('Renders CodeViewer component without an empty value', () => {

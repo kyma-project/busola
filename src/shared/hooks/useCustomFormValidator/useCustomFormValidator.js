@@ -7,9 +7,8 @@ export function useCustomFormValidator() {
   const [customValid, setCustomValid] = useState(true);
 
   const revalidate = (cv = customValid) => {
-    let formContainer = formElementRef.current?.querySelector(
-      'div.resource-form',
-    );
+    let formContainer =
+      formElementRef.current?.querySelector('div.resource-form');
 
     if (formContainer) {
       setValid(cv && validateFormElement(formContainer, true).valid);
@@ -19,7 +18,7 @@ export function useCustomFormValidator() {
   return {
     isValid,
     formElementRef,
-    setCustomValid: val => {
+    setCustomValid: (val) => {
       setCustomValid(val);
       revalidate(val);
     },

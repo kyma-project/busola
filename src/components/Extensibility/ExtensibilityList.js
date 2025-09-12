@@ -1,6 +1,6 @@
+import { useEffect } from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
@@ -40,8 +40,12 @@ export const ExtensibilityListCore = ({
   const { t: tBusola } = useTranslation();
   const jsonata = useJsonata({});
 
-  const { resource, description, features, filter: generalFilter } =
-    resMetaData?.general ?? {};
+  const {
+    resource,
+    description,
+    features,
+    filter: generalFilter,
+  } = resMetaData?.general ?? {};
 
   const { disableCreate, disableDelete } = features?.actions ?? {
     disableCreate: props.disableCreate,
@@ -79,7 +83,7 @@ export const ExtensibilityListCore = ({
   listProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
         header: widgetT(column),
-        value: resource => (
+        value: (resource) => (
           <Widget
             key={i}
             value={resource}
@@ -97,8 +101,8 @@ export const ExtensibilityListCore = ({
     typeof resMetaData?.resource?.filter === 'string' ||
     typeof generalFilter === 'string';
 
-  const filterFn = value =>
-    applyFormula(
+  const filterFn = async (value) =>
+    await applyFormula(
       value,
       resMetaData?.resource?.filter || generalFilter,
       tBusola,
@@ -106,9 +110,11 @@ export const ExtensibilityListCore = ({
 
   listProps.filter = isFilterAString ? filterFn : filterFunction;
 
-  const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
+  const sortOptions = (resMetaData?.list || []).filter(
+    (element) => element.sort,
+  );
   const searchOptions = (resMetaData?.list || []).filter(
-    element => element.search,
+    (element) => element.search,
   );
 
   const textSearchProperties = getTextSearchProperties({
@@ -116,10 +122,8 @@ export const ExtensibilityListCore = ({
     defaultSearch: true,
   });
 
-  const {
-    description: subtitleText,
-    url: emptyListUrl,
-  } = getResourceDescAndUrl(description);
+  const { description: subtitleText, url: emptyListUrl } =
+    getResourceDescAndUrl(description);
 
   return (
     <ResourcesList
@@ -130,11 +134,11 @@ export const ExtensibilityListCore = ({
       disableCreate={disableCreate}
       disableDelete={disableDelete}
       createResourceForm={ExtensibilityCreate}
-      sortBy={defaultSortOptions =>
+      sortBy={(defaultSortOptions) =>
         sortBy(jsonata, sortOptions, t, defaultSortOptions)
       }
       searchSettings={{
-        textSearchProperties: defaultSearchProperties =>
+        textSearchProperties: (defaultSearchProperties) =>
           textSearchProperties(defaultSearchProperties),
       }}
       emptyListProps={{
@@ -176,7 +180,7 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
         URL.revokeObjectURL(blobURL);
       };
 
-      script.onerror = e => {
+      script.onerror = (e) => {
         console.error('Script loading or execution error:', e);
       };
       document.head.appendChild(script);

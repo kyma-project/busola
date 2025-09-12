@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-export const getResourceKindUrl = resource => {
+export const getResourceKindUrl = (resource) => {
   const apiVersion =
     resource?.apiVersion || `${resource?.group}/${resource?.version}`;
   return `/${apiVersion === 'v1' ? 'api' : 'apis'}/${apiVersion}`;

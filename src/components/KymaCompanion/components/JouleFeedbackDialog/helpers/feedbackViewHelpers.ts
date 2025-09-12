@@ -7,7 +7,8 @@ export const FEEDBACK_SHOW_TYPE = {
 } as const;
 
 //eslint-disable-next-line @typescript-eslint/no-redeclare
-export type FEEDBACK_SHOW_TYPE = typeof FEEDBACK_SHOW_TYPE[keyof typeof FEEDBACK_SHOW_TYPE];
+export type FEEDBACK_SHOW_TYPE =
+  (typeof FEEDBACK_SHOW_TYPE)[keyof typeof FEEDBACK_SHOW_TYPE];
 
 export const getShowFeedbackStorageKey = () => {
   return (localStorage.getItem(SHOW_FEEDBACK_STORAGE_KEY) ||

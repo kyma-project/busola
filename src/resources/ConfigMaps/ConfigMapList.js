@@ -17,7 +17,7 @@ export function ConfigMapList(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: resource => (
+      value: (resource) => (
         <ControlledBy
           ownerReferences={resource.metadata.ownerReferences}
           kindOnly

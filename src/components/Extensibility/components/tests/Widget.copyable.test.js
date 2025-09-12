@@ -8,8 +8,8 @@ import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
 vi.mock('@ui5/webcomponents-react', () => {
   return {
-    Button: props => <button {...props}>{props.children}</button>,
-    Text: props => <p {...props}>{props.children}</p>,
+    Button: (props) => <button {...props}>{props.children}</button>,
+    Text: (props) => <p {...props}>{props.children}</p>,
   };
 });
 
@@ -46,9 +46,8 @@ describe('Widget.copyable', () => {
       await act(async () => {
         // find copy button
         container.querySelector('button').click();
-
-        expect(copyToClipboard).toHaveBeenCalledWith('test-value');
       });
+      expect(copyToClipboard).toHaveBeenCalledWith('test-value');
     });
   });
 
@@ -100,9 +99,8 @@ describe('Widget.copyable', () => {
       await act(async () => {
         // find copy button
         container.querySelector('button').click();
-
-        expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
       });
+      expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
     });
   });
 });

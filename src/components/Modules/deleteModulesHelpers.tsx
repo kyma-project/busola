@@ -266,7 +266,7 @@ export const deleteResources = async (
   resourcesUrls: string[],
 ) => {
   await Promise.all(
-    resourcesUrls.map(async url => {
+    resourcesUrls.map(async (url) => {
       try {
         return await deleteResourceMutation(url);
       } catch (e) {
@@ -284,7 +284,7 @@ export const checkIfAllResourcesAreDeleted = async (
   resourcesUrls: string[],
 ) => {
   const results = await Promise.all(
-    resourcesUrls.map(async url => {
+    resourcesUrls.map(async (url) => {
       const result = await retry(
         async () => {
           try {
@@ -304,7 +304,7 @@ export const checkIfAllResourcesAreDeleted = async (
       return { resource: url, result };
     }),
   );
-  return results.filter(v => !v.result).map(r => r.resource);
+  return results.filter((v) => !v.result).map((r) => r.resource);
 };
 
 export const getCommunityResourceUrls = async (

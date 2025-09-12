@@ -1,12 +1,13 @@
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 import { User, UserManager } from 'oidc-client-ts';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { clusterAtom } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
 import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
+import { isEqual } from 'lodash';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -77,7 +78,7 @@ async function handleLogin({
         token: useAccessToken ? user?.access_token! : user?.id_token!,
       });
     });
-    userManager.events.addSilentRenewError(e => {
+    userManager.events.addSilentRenewError((e) => {
       console.warn('silent renew failed', e);
       setAuth(null);
       onError();
@@ -89,7 +90,7 @@ async function handleLogin({
     user: User | null,
     useAccessToken: boolean,
   ) => {
-    document.addEventListener('visibilitychange', async event => {
+    document.addEventListener('visibilitychange', async (event) => {
       if (document.visibilityState === 'visible') {
         if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
           user = await userManager.signinSilent();
@@ -138,27 +139,24 @@ export function useAuthHandler() {
   const navigate = useNavigate();
   const setLastFetched = useSetAtom(openapiLastFetchedAtom);
   const [isLoading, setIsLoading] = useState(true);
+  const prevClusterRef = useRef<typeof cluster>(null);
 
   useEffect(() => {
-    console.log(
-      'currentCluster reference changed, TODO make sure to deeply compare',
-    );
-
     if (!cluster) {
       setAuth(null);
       setIsLoading(false);
     } else {
-      // don't do the auth flow on cluster list (e.g. after refresh, while the OIDC cluster is still connected)
-      if (window.location.pathname === '/clusters') {
-        setIsLoading(false);
-        return;
-      }
+      if (isEqual(prevClusterRef.current, cluster)) return; // Skip if unchanged
+
       const userCredentials = cluster.currentContext?.user?.user;
+
       if (hasNonOidcAuth(userCredentials)) {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
         setIsLoading(false);
       } else {
         const onAfterLogin = () => {
+          setIsLoading(false);
+
           if (!getPreviousPath() || getPreviousPath() === '/clusters') {
             if (cluster.currentContext.namespace) {
               navigate(
@@ -170,8 +168,8 @@ export function useAuthHandler() {
               navigate('/cluster/' + encodeURIComponent(cluster.name));
             }
           }
-          setIsLoading(false);
         };
+
         const onError = () => {
           navigate('/clusters');
           setIsLoading(false);

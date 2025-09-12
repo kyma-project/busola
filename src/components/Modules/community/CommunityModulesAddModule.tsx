@@ -60,7 +60,7 @@ function onVersionChange(
 
     const [name, namespace] = value.split('|');
     const newModuleTemplateToApply = moduleTemplates.items.find(
-      item =>
+      (item) =>
         item.metadata.namespace === namespace && item.metadata.name === name,
     );
     if (!newModuleTemplateToApply) {
@@ -98,7 +98,7 @@ function transformDataForDisplay(
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     return {
       name: moduleName,
-      versions: versions.map(v => ({
+      versions: versions.map((v) => ({
         moduleTemplate: {
           name: v.moduleTemplateName,
           namespace: v.moduleTemplateNamespace,
@@ -116,9 +116,8 @@ function transformDataForDisplay(
 export default function CommunityModulesAddModule(props: any) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isEnabled: isCommunityModulesEnabled } = useFeature(
-    'COMMUNITY_MODULES',
-  );
+  const { isEnabled: isCommunityModulesEnabled } =
+    useFeature('COMMUNITY_MODULES');
   const notification = useNotification();
   const post = usePost();
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
@@ -170,10 +169,8 @@ export default function CommunityModulesAddModule(props: any) {
   }, [communityModulesTemplatesToApply]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [columnsCount, setColumnsCount] = useState(2);
-  const [
-    cardsContainerRef,
-    setCardsContainerRef,
-  ] = useState<HTMLDivElement | null>(null);
+  const [cardsContainerRef, setCardsContainerRef] =
+    useState<HTMLDivElement | null>(null);
 
   const calculateColumns = useCallback(() => {
     if (cardsContainerRef?.clientWidth) {
