@@ -3,6 +3,8 @@ import jsyaml from 'js-yaml';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { resolveType } from './components/ModuleStatus';
 
+export const DEFAULT_K8S_NAMESPACE: string = 'default';
+
 export const enum ModuleTemplateStatus {
   Ready = 'Ready',
   Processing = 'Processing',
@@ -278,6 +280,7 @@ export const createModulePartialPath = (
     metadata: { name: string; namespace: string };
   },
   moduleCrd?: { metadata?: { name: string } },
+  isNamespaced?: boolean,
 ) => {
   // Taking info for path from extension or crd
   const pathName = `${
@@ -288,8 +291,10 @@ export const createModulePartialPath = (
       : `${moduleCrd?.metadata?.name}/${moduleStatusResource?.metadata?.name}`
   }`;
 
-  const partialPath = moduleStatusResource?.metadata?.namespace
-    ? `kymamodules/namespaces/${moduleStatusResource?.metadata?.namespace}/${pathName}`
+  const partialPath = isNamespaced
+    ? `kymamodules/namespaces/${
+        moduleStatusResource?.metadata?.namespace ?? DEFAULT_K8S_NAMESPACE
+      }/${pathName}`
     : `kymamodules/${pathName}`;
 
   return partialPath;
