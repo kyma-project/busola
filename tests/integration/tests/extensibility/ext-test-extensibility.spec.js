@@ -19,15 +19,13 @@ context('Test Extensibility Create/Update', () => {
   });
 
   it('Upload test resources', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles('examples/extensions/configuration/potatoes-crd.yaml').then(
-      resources => {
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      (resources) => {
+        const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
       },
     );
@@ -41,10 +39,12 @@ context('Test Extensibility Create/Update', () => {
       .find('.status-message-success')
       .should('have.length', 1);
 
-    cy.loadFiles('examples/extensions/samples/potato.yaml').then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-      cy.pasteToMonaco(input);
-    });
+    cy.loadFiles('examples/extensions/samples/potato.yaml').then(
+      (resources) => {
+        const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
+        cy.pasteToMonaco(input);
+      },
+    );
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Upload')
@@ -56,9 +56,7 @@ context('Test Extensibility Create/Update', () => {
       .should('have.length', 1);
 
     cy.get('ui5-dialog[header-text="Upload YAML"]').within(() => {
-      cy.contains('ui5-button', 'Close')
-        .should('be.visible')
-        .click();
+      cy.contains('ui5-button', 'Close').should('be.visible').click();
     });
   });
 
@@ -83,9 +81,7 @@ context('Test Extensibility Create/Update', () => {
         .clear()
         .type(FIRST_DESCRIPTION);
 
-      cy.get('ui5-checkbox[data-testid="spec.weight"]')
-        .last()
-        .click();
+      cy.get('ui5-checkbox[data-testid="spec.weight"]').last().click();
     });
 
     cy.saveChanges('Create');
@@ -101,9 +97,7 @@ context('Test Extensibility Create/Update', () => {
       .contains('li', EXTENSION_NAME)
       .click();
 
-    cy.get('ui5-table-row')
-      .contains(EXTENSION_NAME)
-      .should('be.visible');
+    cy.get('ui5-table-row').contains(EXTENSION_NAME).should('be.visible');
   });
 
   it('Check if extension is displayed correctly', () => {
@@ -137,8 +131,8 @@ context('Test Extensibility Create/Update', () => {
 
     cy.loadFiles(
       'examples/extensions/configuration/potatoes-updates-details-view.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    ).then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
 
       cy.get('@form')
         .get('[data-testid="details-view"]')
@@ -166,8 +160,6 @@ context('Test Extensibility Create/Update', () => {
     cy.contains(UPDATED_DESCRIPTION);
     cy.contains(SECOND_DETAIL);
 
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
   });
 });

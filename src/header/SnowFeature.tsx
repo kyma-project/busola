@@ -45,7 +45,7 @@ export function SnowFeature() {
         isSnowEnabled &&
         createPortal(
           <div className="snowflakes" aria-hidden="true">
-            {[...Array(10).keys()].map(key => (
+            {[...Array(10).keys()].map((key) => (
               <div key={`snowflake-${key}`} className="snowflake">
                 ❅
               </div>

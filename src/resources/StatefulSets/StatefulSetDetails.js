@@ -27,7 +27,7 @@ export function StatefulSetDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: set => (
+      value: (set) => (
         <ControlledBy
           ownerReferences={set.metadata.ownerReferences}
           namespace={set.metadata.namespace}
@@ -36,7 +36,7 @@ export function StatefulSetDetails(props) {
     },
   ];
 
-  const MatchSelector = statefulset => (
+  const MatchSelector = (statefulset) => (
     <Selector
       key="match-selector"
       namespace={statefulset.metadata.namespace}
@@ -46,26 +46,28 @@ export function StatefulSetDetails(props) {
     />
   );
 
-  const StatefulSetPodTemplate = statefulset => (
+  const StatefulSetPodTemplate = (statefulset) => (
     <PodTemplate key="pod-template" template={statefulset.spec.template} />
   );
 
   const customStatusColumns = [
     {
       header: t('stateful-sets.status.available-replicas'),
-      value: resource => <div>{resource?.status?.availableReplicas ?? 0}</div>,
+      value: (resource) => (
+        <div>{resource?.status?.availableReplicas ?? 0}</div>
+      ),
     },
     {
       header: t('stateful-sets.status.collision-count'),
-      value: resource => <div>{resource?.status?.collisionCount ?? 0} </div>,
+      value: (resource) => <div>{resource?.status?.collisionCount ?? 0} </div>,
     },
     {
       header: t('stateful-sets.status.current-replicas'),
-      value: resource => <div>{resource?.status?.currentReplicas ?? 0}</div>,
+      value: (resource) => <div>{resource?.status?.currentReplicas ?? 0}</div>,
     },
     {
       header: t('stateful-sets.status.current-revision'),
-      value: resource => (
+      value: (resource) => (
         <div>
           {resource?.status?.currentRevision ?? EMPTY_TEXT_PLACEHOLDER}{' '}
         </div>
@@ -73,7 +75,7 @@ export function StatefulSetDetails(props) {
     },
     {
       header: t('stateful-sets.status.observed-generation'),
-      value: resource => (
+      value: (resource) => (
         <div>
           {resource?.status?.observedGeneration ?? EMPTY_TEXT_PLACEHOLDER}{' '}
         </div>
@@ -81,26 +83,26 @@ export function StatefulSetDetails(props) {
     },
     {
       header: t('stateful-sets.status.ready-replicas'),
-      value: resource => <div>{resource?.status?.readyReplicas ?? 0}</div>,
+      value: (resource) => <div>{resource?.status?.readyReplicas ?? 0}</div>,
     },
     {
       header: t('stateful-sets.status.replicas'),
-      value: resource => <div>{resource?.status?.replicas ?? 0}</div>,
+      value: (resource) => <div>{resource?.status?.replicas ?? 0}</div>,
     },
     {
       header: t('stateful-sets.status.updated-replicas'),
-      value: resource => <div>{resource?.status?.updatedReplicas ?? 0}</div>,
+      value: (resource) => <div>{resource?.status?.updatedReplicas ?? 0}</div>,
     },
     {
       header: t('stateful-sets.status.update-revision'),
-      value: resource => (
+      value: (resource) => (
         <div>{resource?.status?.updateRevision ?? EMPTY_TEXT_PLACEHOLDER}</div>
       ),
     },
   ];
 
-  const statusConditions = resource => {
-    return resource?.status?.conditions?.map(condition => {
+  const statusConditions = (resource) => {
+    return resource?.status?.conditions?.map((condition) => {
       return {
         header: { titleText: condition.type, status: condition.status },
         message: condition.message,
@@ -119,7 +121,7 @@ export function StatefulSetDetails(props) {
       ]}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
-      statusBadge={set => <StatefulSetPods key="replicas" set={set} />}
+      statusBadge={(set) => <StatefulSetPods key="replicas" set={set} />}
       description={ResourceDescription}
       createResourceForm={StatefulSetCreate}
       {...props}

@@ -52,8 +52,8 @@ export async function loadKubeconfigById(
 ): Promise<ValidKubeconfig> {
   const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
   const payload: any = await fetch(url)
-    .then(res => res.text())
-    .then(text => jsyaml.load(text));
+    .then((res) => res.text())
+    .then((text) => jsyaml.load(text));
 
   if (!payload || typeof payload !== 'object') {
     throw Error(t('kubeconfig-id.must-be-an-object'));
@@ -90,7 +90,7 @@ const addClusters = async (
     !showClustersOverview && (isOnlyOneCluster || isK8CurrentCluster(name));
 
   try {
-    kubeconfig.contexts.forEach(context => {
+    kubeconfig.contexts.forEach((context) => {
       const previousStorageMethod: ClusterStorage =
         clusters![context.name]?.config?.storage || 'sessionStorage';
       if (currentContext === context.name)
@@ -152,7 +152,7 @@ const loadKubeconfigIdCluster = async (
     }
 
     if (kubeconfig.contexts.length > 1 && setContextsState) {
-      setContextsState(state => ({
+      setContextsState((state) => ({
         ...state,
         ...kubeconfig,
       }));
@@ -199,9 +199,8 @@ export function useLoginWithKubeconfigID() {
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
   const { setCurrentCluster } = clusterInfo;
-  const [handledKubeconfigId, setHandledKubeconfigId] = useState<
-    KubeconfigIdHandleState
-  >('not started');
+  const [handledKubeconfigId, setHandledKubeconfigId] =
+    useState<KubeconfigIdHandleState>('not started');
 
   useEffect(() => {
     if (contextsState?.chosenContext) {
@@ -241,7 +240,7 @@ export function useLoginWithKubeconfigID() {
         t,
         setContextsState,
         { manualKubeConfigId, setManualKubeConfigId },
-      ).then(val => {
+      ).then((val) => {
         if (val === 'done') {
           setHandledKubeconfigId('done');
         }
@@ -277,7 +276,7 @@ export function useLoginWithKubeconfigID() {
       t,
       setContextsState,
       { manualKubeConfigId, setManualKubeConfigId },
-    ).then(val => {
+    ).then((val) => {
       if (val === 'done') {
         setHandledKubeconfigId('done');
       }

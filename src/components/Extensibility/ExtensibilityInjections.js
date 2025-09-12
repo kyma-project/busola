@@ -48,14 +48,14 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
       return;
     }
     Promise.all(
-      items.map(async item => {
+      items.map(async (item) => {
         if (filter) {
           const [value] = await jsonata(filter, { item, root });
           return value ? item : false;
         }
         return item;
       }),
-    ).then(results => {
+    ).then((results) => {
       setFilteredItems(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

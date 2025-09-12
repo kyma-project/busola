@@ -13,10 +13,12 @@ export function SingleContainerForm({
 }) {
   const { t } = useTranslation();
 
-  const imagePullPolicyOptions = ['IfNotPresent', 'Always', 'Never'].map(o => ({
-    key: o,
-    text: o,
-  }));
+  const imagePullPolicyOptions = ['IfNotPresent', 'Always', 'Never'].map(
+    (o) => ({
+      key: o,
+      text: o,
+    }),
+  );
 
   return (
     <ResourceForm.Wrapper

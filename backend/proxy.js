@@ -12,7 +12,7 @@ function isLocalDomain(hostname) {
     return true;
   }
 
-  return localSuffixes.some(suffix => hostname.endsWith(suffix));
+  return localSuffixes.some((suffix) => hostname.endsWith(suffix));
 }
 
 function isValidHost(hostname) {
@@ -97,7 +97,7 @@ async function proxyHandler(req, res) {
       timeout: 30000,
     };
 
-    const proxyReq = httpsRequest(options, proxyRes => {
+    const proxyReq = httpsRequest(options, (proxyRes) => {
       res.writeHead(proxyRes.statusCode, proxyRes.headers);
       proxyRes.pipe(res);
     });

@@ -53,7 +53,7 @@ export function AIBanner({
           <Button
             key="try-joule"
             design="Emphasized"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               setShowCompanion({
                 show: true,

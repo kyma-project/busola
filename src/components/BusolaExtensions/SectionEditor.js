@@ -33,8 +33,8 @@ export function SectionEditor({
   const schemaMap = useMemo(() => createOrderedMap(schema), [schema]);
   const [initialResource] = useState(resource);
 
-  const onChange = actions => {
-    setStore(prevStore => storeUpdater(actions)(prevStore));
+  const onChange = (actions) => {
+    setStore((prevStore) => storeUpdater(actions)(prevStore));
   };
 
   return (

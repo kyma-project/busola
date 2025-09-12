@@ -4,7 +4,7 @@ import { act, render, waitFor } from '@testing-library/react';
 
 vi.mock('@ui5/webcomponents-react', () => {
   return {
-    ObjectStatus: props => <div role={props.role}>{props.children}</div>,
+    ObjectStatus: (props) => <div role={props.role}>{props.children}</div>,
     Popover: forwardRef((props, ref) => <div ref={ref}>{props.children}</div>),
   };
 });

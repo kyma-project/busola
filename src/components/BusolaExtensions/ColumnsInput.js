@@ -12,13 +12,13 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
     );
   }
 
-  return columns.map(value => {
+  return columns.map((value) => {
     return (
       <div key={value.path} className="columns-input">
         <CheckBox
           data-testid={value?.path}
           checked={value.isSelected}
-          onChange={e => {
+          onChange={(e) => {
             value.isSelected = e.target.checked;
             setColumns([...columns]);
           }}
@@ -26,7 +26,7 @@ export function ColumnsInput({ value: columns, setValue: setColumns }) {
         />
         <Input
           value={value.name}
-          onInput={e => {
+          onInput={(e) => {
             value.name = e.target.value;
             setColumns([...columns]);
           }}

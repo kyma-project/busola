@@ -21,7 +21,7 @@ context('Test Custom Resources', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadFile(FILE_NAME)).then(CRD_CONFIG => {
+    cy.wrap(loadFile(FILE_NAME)).then((CRD_CONFIG) => {
       const CRD = JSON.stringify(CRD_CONFIG);
       cy.pasteToMonaco(CRD);
     });
@@ -32,9 +32,7 @@ context('Test Custom Resources', () => {
   });
 
   it('Check CR groups list with slash shortcut', () => {
-    cy.getLeftNav()
-      .contains('Custom Resources')
-      .click();
+    cy.getLeftNav().contains('Custom Resources').click();
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
@@ -49,15 +47,11 @@ context('Test Custom Resources', () => {
 
     cy.get('ui5-table').should('have.length', 1);
 
-    cy.get('ui5-table-row')
-      .contains('Tclusters')
-      .should('be.visible');
+    cy.get('ui5-table-row').contains('Tclusters').should('be.visible');
   });
 
   it('Check single CR list', () => {
-    cy.get('ui5-table-row')
-      .contains('Tclusters')
-      .click();
+    cy.get('ui5-table-row').contains('Tclusters').click();
 
     cy.contains('ui5-title', 'Tclusters').should('be.visible');
 
@@ -69,9 +63,7 @@ context('Test Custom Resources', () => {
   });
 
   it('Create Tcluster', () => {
-    cy.getLeftNav()
-      .contains('Custom Resources')
-      .click();
+    cy.getLeftNav().contains('Custom Resources').click();
 
     cy.wait(500)
       .get('ui5-input[id="search-input"]:visible')
@@ -82,7 +74,7 @@ context('Test Custom Resources', () => {
 
     cy.contains('ui5-button', 'Create').click();
 
-    cy.wrap(loadFile(TCLUSTER_FILE_NAME)).then(TC_CONFIG => {
+    cy.wrap(loadFile(TCLUSTER_FILE_NAME)).then((TC_CONFIG) => {
       const TC = JSON.stringify(TC_CONFIG);
       cy.pasteToMonaco(TC);
     });
@@ -96,9 +88,7 @@ context('Test Custom Resources', () => {
     cy.reload();
     cy.wait(2000);
 
-    cy.getLeftNav()
-      .contains('Custom Resources')
-      .click();
+    cy.getLeftNav().contains('Custom Resources').click();
 
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
@@ -149,9 +139,7 @@ context('Test Custom Resources', () => {
 
     cy.getEndColumn().should('not.be.visible');
 
-    cy.getMidColumn()
-      .contains('tcluster.cypress.example.com')
-      .click();
+    cy.getMidColumn().contains('tcluster.cypress.example.com').click();
 
     cy.url().should('match', /customresourcedefinitions/);
 

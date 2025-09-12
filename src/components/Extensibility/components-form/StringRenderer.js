@@ -47,7 +47,7 @@ export function StringRenderer({
     if (schema.get('enum')) {
       const translationPath = storeKeys
         .toArray()
-        .filter(el => typeof el === 'string')
+        .filter((el) => typeof el === 'string')
         .join('.');
 
       let enumOptions = schema.toJS().enum;
@@ -63,15 +63,15 @@ export function StringRenderer({
         }
       }
 
-      const displayOptions = enumOptions.map(option => {
+      const displayOptions = enumOptions.map((option) => {
         if (typeof option === 'string') {
           return {
             key: option,
             text: exists(option)
               ? tExt(option)
               : exists(`${translationPath}.${option}`)
-              ? tExt(`${translationPath}.${option}`)
-              : option,
+                ? tExt(`${translationPath}.${option}`)
+                : option,
           };
         }
 
@@ -80,8 +80,8 @@ export function StringRenderer({
           text: option.name
             ? tExt(option.name)
             : exists(`${translationPath}.${option.key}`)
-            ? tExt(`${translationPath}.${option.key}`)
-            : option.key,
+              ? tExt(`${translationPath}.${option.key}`)
+              : option.key,
         };
       });
 
@@ -95,7 +95,7 @@ export function StringRenderer({
       return { input: Inputs.Text };
     } else {
       return {
-        input: params => (
+        input: (params) => (
           <>
             <Inputs.Text {...params} />
             {decodable && (
@@ -126,7 +126,7 @@ export function StringRenderer({
     <ResourceForm.Wrapper resource={props?.resource}>
       <ResourceForm.FormField
         value={value}
-        setValue={value => {
+        setValue={(value) => {
           if (decodable && decoded) {
             value = base64Encode(value);
           }
@@ -143,8 +143,8 @@ export function StringRenderer({
                     ? isNaN(value)
                       ? value
                       : value.endsWith('.') || value.endsWith('.0')
-                      ? value
-                      : parseFloat(value)
+                        ? value
+                        : parseFloat(value)
                     : value,
               },
             });

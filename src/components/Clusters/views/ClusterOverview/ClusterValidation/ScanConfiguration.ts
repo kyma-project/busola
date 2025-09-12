@@ -20,7 +20,7 @@ export const getDefaultScanConfiguration = (
   policies: string[],
 ): ScanConfiguration => {
   const userNamespaces =
-    namespaces?.filter(name => !systemNamespaces.includes(name)) ?? [];
+    namespaces?.filter((name) => !systemNamespaces.includes(name)) ?? [];
   return {
     namespaces: userNamespaces,
     policies,

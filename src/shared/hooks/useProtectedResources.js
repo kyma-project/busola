@@ -29,8 +29,8 @@ export function useProtectedResources() {
     ? protectedResourcesFeature?.config?.resources || []
     : [];
 
-  const getEntryProtection = entry => {
-    return protectedResourceRules.filter(rule =>
+  const getEntryProtection = (entry) => {
+    return protectedResourceRules.filter((rule) =>
       Object.entries(rule?.match || {}).every(([pattern, value]) =>
         !!rule?.regex
           ? jp.value(entry, pattern) &&
@@ -40,7 +40,7 @@ export function useProtectedResources() {
     );
   };
 
-  const isProtected = entry =>
+  const isProtected = (entry) =>
     !disableResourceProtection && !!getEntryProtection(entry).length;
 
   const protectedResourceWarning = (entry, withText) => {
@@ -51,7 +51,7 @@ export function useProtectedResources() {
     }
 
     const message = matchedRules
-      .map(rule => {
+      .map((rule) => {
         if (rule.message) {
           return rule.message;
         } else if (rule.messageSrc) {
@@ -65,7 +65,7 @@ export function useProtectedResources() {
     return (
       <Button
         design="Transparent"
-        onClick={e => {
+        onClick={(e) => {
           setPopoverMessage(message);
           popoverRef?.current?.showAt(e?.target);
         }}

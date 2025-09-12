@@ -19,13 +19,13 @@ const getEnumComponent = (
 ) => {
   if (!Array.isArray(enumValues)) return input;
 
-  const options = enumValues.map(opt => ({ key: opt, text: opt }));
+  const options = enumValues.map((opt) => ({ key: opt, text: opt }));
   return ({ onChange, setValue, onBlur, value, ...props }) => (
     <Dropdown
       {...props}
       value={value}
       options={options}
-      setValue={v => {
+      setValue={(v) => {
         isKeyInput
           ? onChange({
               target: {
@@ -39,7 +39,7 @@ const getEnumComponent = (
   );
 };
 
-const getValueComponent = valueInfo => {
+const getValueComponent = (valueInfo) => {
   const { type, keyEnum: valuKeyEnum, valueEnum } = valueInfo || {};
 
   switch (type) {
@@ -52,7 +52,7 @@ const getValueComponent = valueInfo => {
         <KeyValueField
           className="nested-key-value-pair"
           value={value}
-          setValue={v => {
+          setValue={(v) => {
             setValue(v);
           }}
           input={{
@@ -107,7 +107,7 @@ export function KeyValuePairRenderer({
     <KeyValueField
       nestingLevel={nestingLevel}
       value={value}
-      setValue={value => {
+      setValue={(value) => {
         onChange({
           storeKeys,
           scopes: ['value'],

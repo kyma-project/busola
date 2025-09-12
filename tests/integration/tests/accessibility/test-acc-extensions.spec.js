@@ -14,17 +14,15 @@ context('Accessibility test Extensions view', () => {
 
     cy.createNamespace('pizzas');
 
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.loadFiles(
       'examples/pizzas/configuration/pizzas-configmap.yaml',
       'examples/pizzas/configuration/pizzas-crd.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    ).then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 
@@ -71,9 +69,7 @@ context('Accessibility test Extensions view', () => {
   });
 
   it('Acc test Extensions details', () => {
-    cy.getLeftNav()
-      .contains('Extensions')
-      .click();
+    cy.getLeftNav().contains('Extensions').click();
 
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
@@ -106,8 +102,6 @@ context('Accessibility test Extensions view', () => {
       searchInPlainTableText: true,
     });
 
-    cy.get('ui5-table-row')
-      .find('.status-badge')
-      .contains('Terminating');
+    cy.get('ui5-table-row').find('.status-badge').contains('Terminating');
   });
 });

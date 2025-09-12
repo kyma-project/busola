@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import { Route } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-const NoPermissions = React.lazy(() =>
-  import('../../components/NoPermissions/NoPermissions'),
+const NoPermissions = React.lazy(
+  () => import('../../components/NoPermissions/NoPermissions'),
 );
 
 export default (

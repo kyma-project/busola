@@ -109,7 +109,6 @@ KYMA_COMPANION:
 
 - **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
   If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
-
   - **showClustersOverview** - optional configuration to instruct Busola to show **Clusters Overview** rather than the current context cluster, after the clusters are loaded.
 
   - **defaultKubeconfig** - define the optional default **KUBECONFIG_ID** to load this kubeconfig when you visit Busola homepage `/` and there are no memorized clusters in the application.

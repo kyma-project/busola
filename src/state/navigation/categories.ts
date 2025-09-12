@@ -1,6 +1,7 @@
 import { NavNode } from '../types';
 
-export type PredefinedCategories = typeof predefinedCategories[keyof typeof predefinedCategories];
+export type PredefinedCategories =
+  (typeof predefinedCategories)[keyof typeof predefinedCategories];
 
 export const predefinedCategories = {
   workloads: 'Workloads',

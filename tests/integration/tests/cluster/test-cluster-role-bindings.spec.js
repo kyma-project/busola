@@ -32,9 +32,7 @@ context('Test Cluster Role Bindings', () => {
       .click()
       .type('admin');
 
-    cy.get('ui5-cb-item:visible')
-      .contains('cluster-admin')
-      .click();
+    cy.get('ui5-cb-item:visible').contains('cluster-admin').click();
 
     cy.get('[accessible-name="User name"]')
       .find('input')
@@ -53,9 +51,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.clickGenericListLink(CRB_NAME);
 
-    cy.getMidColumn()
-      .contains('ui5-table-cell', 'User')
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-table-cell', 'User').should('be.visible');
 
     cy.getMidColumn()
       .contains('ui5-table-cell', USER_NAME)
@@ -102,9 +98,7 @@ context('Test Cluster Role Bindings', () => {
       .contains('Group')
       .should('be.visible');
 
-    cy.getMidColumn()
-      .contains('test-group')
-      .should('be.visible');
+    cy.getMidColumn().contains('test-group').should('be.visible');
   });
 
   it('Test column layout functionality', () => {

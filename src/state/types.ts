@@ -9,7 +9,8 @@ export interface ConfigFeature {
   [key: string]: any;
 }
 
-export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof configFeaturesNames];
+export type ConfigFeaturesNames =
+  (typeof configFeaturesNames)[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
   LEGAL_LINKS: 'LEGAL_LINKS',
   GET_HELP_LINKS: 'GET_HELP_LINKS',

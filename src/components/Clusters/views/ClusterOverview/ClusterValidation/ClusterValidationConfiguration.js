@@ -22,7 +22,7 @@ const setNested = (obj, newVal, next, ...path) => {
 
 const useNested = (obj, setObj, ...path) => {
   const val = useMemo(() => getNested(obj, ...path), [obj, path]);
-  const setter = newVal => setObj(setNested(obj, newVal, ...path));
+  const setter = (newVal) => setObj(setNested(obj, newVal, ...path));
   return [val, setter];
 };
 
@@ -73,13 +73,16 @@ const ConfigurationForm = ({
     'parallelRequests',
   );
 
-  const namespaceOptions = namespaces?.map(name => ({ key: name, text: name }));
-  const policyOptions = policies?.map(name => ({ key: name, text: name }));
+  const namespaceOptions = namespaces?.map((name) => ({
+    key: name,
+    text: name,
+  }));
+  const policyOptions = policies?.map((name) => ({ key: name, text: name }));
 
   return (
     <ResourceForm
       resource={configuration}
-      setResource={val => {
+      setResource={(val) => {
         setConfiguration(val);
       }}
       initialResource={configuration}
@@ -91,7 +94,7 @@ const ConfigurationForm = ({
           input={Inputs.Text}
           value={description}
           defaultValue={description}
-          setValue={val => setDescription(val)}
+          setValue={(val) => setDescription(val)}
         ></FormField>
       </div>
 
@@ -110,7 +113,7 @@ const ConfigurationForm = ({
             label={t('common.headers.namespaces')}
             input={Inputs.Checkboxes}
             options={namespaceOptions ?? []}
-            setValue={val => setSelectedNamespaces(val)}
+            setValue={(val) => setSelectedNamespaces(val)}
             value={selectedNamespaces}
           ></FormField>
         </div>
@@ -130,7 +133,7 @@ const ConfigurationForm = ({
             label={t('common.headers.policies')}
             input={Inputs.Checkboxes}
             options={policyOptions ?? []}
-            setValue={val => setSelectedPolicies(val)}
+            setValue={(val) => setSelectedPolicies(val)}
             value={selectedPolicies}
           ></FormField>
         </div>
@@ -143,7 +146,7 @@ const ConfigurationForm = ({
           <FormField
             label={t('cluster-validation.scan.configuration.parallel-requests')}
             input={Inputs.Number}
-            setValue={val =>
+            setValue={(val) =>
               setParallelRequests(Number.isInteger(val) ? val : undefined)
             }
             value={parallelRequests ?? ''}

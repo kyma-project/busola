@@ -2,20 +2,20 @@ import React from 'react';
 import { FileInput } from 'shared/components/FileInput/FileInput';
 
 export function YamlFileUploader({ onYamlContentAdded }) {
-  const readFile = file => {
-    return new Promise(resolve => {
+  const readFile = (file) => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result);
+      reader.onload = (e) => resolve(e.target.result);
       reader.readAsText(file);
     });
   };
 
-  const onYamlContentUploaded = files => {
+  const onYamlContentUploaded = (files) => {
     void Promise.all([...files]?.map(readFile))
-      .then(contents => {
+      .then((contents) => {
         onYamlContentAdded(contents.join('\n---\n'));
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   };
 
   return (

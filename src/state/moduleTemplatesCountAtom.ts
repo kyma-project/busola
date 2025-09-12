@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { getFetchFn } from './utils/getFetchFn';
 import { clusterAtom } from './clusterAtom';
 
-export const moduleTemplatesCountAtom = atom<Promise<number>>(async get => {
+export const moduleTemplatesCountAtom = atom<Promise<number>>(async (get) => {
   // Track cluster changes by getting the cluster atom
   const _cluster = get(clusterAtom); // eslint-disable-line @typescript-eslint/no-unused-vars
   const fetchFn = getFetchFn(get);

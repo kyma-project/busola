@@ -100,7 +100,7 @@ export const asyncSort = async (array, asyncFn, isDesc = false) => {
   });
   // Resolve async functions.
   const resolved = await Promise.all(
-    arrayOfSortPairs.map(async el => {
+    arrayOfSortPairs.map(async (el) => {
       const [a, b] = el.pair;
       const resolvedResult = isDesc ? await asyncFn(b, a) : await asyncFn(a, b);
       return {
@@ -112,7 +112,7 @@ export const asyncSort = async (array, asyncFn, isDesc = false) => {
   // Final sort.
   const final = array.sort((a, b) => {
     const findResultForPair = resolved.find(
-      res => JSON.stringify([a, b]) === JSON.stringify(res.pair),
+      (res) => JSON.stringify([a, b]) === JSON.stringify(res.pair),
     )?.result;
     return findResultForPair;
   });

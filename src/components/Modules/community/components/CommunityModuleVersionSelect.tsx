@@ -24,7 +24,7 @@ export default function CommunityModuleVersionSelect({
   module,
   onChange,
 }: ModuleInfoProps) {
-  const installedVersion = module.versions.find(v => v.installed);
+  const installedVersion = module.versions.find((v) => v.installed);
   if (!installedVersion) {
     return <></>;
   }
@@ -34,7 +34,7 @@ export default function CommunityModuleVersionSelect({
       <Label>{`${module.name}:`}</Label>
       <Select
         accessibleName={`${module.name} version select`}
-        onChange={event => {
+        onChange={(event) => {
           onChange(event.detail.selectedOption.value);
         }}
         value={`${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}

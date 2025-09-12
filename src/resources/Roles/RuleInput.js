@@ -70,11 +70,11 @@ export function RuleInput({ rule, rules, setRules, schema }) {
 
   // there's no endpoint for "all resources" - add just a '*' and specific resources
   // for already choosen apiGroups
-  const getAvailableResources = resourcesCache =>
+  const getAvailableResources = (resourcesCache) =>
     unique([
       ...(rule.apiGroups
-        .flatMap(apiGroup => resourcesCache[apiGroup] || [])
-        .map(r => r.name) || []),
+        .flatMap((apiGroup) => resourcesCache[apiGroup] || [])
+        .map((r) => r.name) || []),
       '*',
     ]);
   const availableResources = getAvailableResources(resourcesCache);
@@ -83,19 +83,19 @@ export function RuleInput({ rule, rules, setRules, schema }) {
     jp.value(rule, '$.apiGroups', [
       '',
       ...apiGroupsInputOptions
-        .map(g => g.key)
-        .filter(k => k !== EMPTY_API_GROUP_KEY),
+        .map((g) => g.key)
+        .filter((k) => k !== EMPTY_API_GROUP_KEY),
     ]);
     setRules([...rules]);
   };
 
   const addAllResources = () => {
-    fetchResources()?.then(resourcesCache => {
+    fetchResources()?.then((resourcesCache) => {
       const availableResources = getAvailableResources(resourcesCache);
       jp.value(
         rule,
         '$.resources',
-        availableResources.filter(r => r !== '*'),
+        availableResources.filter((r) => r !== '*'),
       );
       setRules([...rules]);
     });
@@ -105,7 +105,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
     jp.value(
       rule,
       '$.verbs',
-      verbs.filter(r => r !== '*'),
+      verbs.filter((r) => r !== '*'),
     );
     setRules([...rules]);
   };
@@ -137,7 +137,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
         sectionTooltipContent={t(resourcesDesc)}
-        options={availableResources.map(i => ({ key: i, text: i }))}
+        options={availableResources.map((i) => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
         newItemActionWidth={2}
@@ -181,7 +181,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
         sectionTooltipContent={t(verbsDesc)}
-        options={verbs.map(i => ({ key: i, text: i }))}
+        options={verbs.map((i) => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
         actions={[
@@ -202,7 +202,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
           propertyPath="$.nonResourceURLs"
           sectionTooltipContent={t(nonResourceURLsDesc)}
           nestingLevel={2}
-          options={nonResourceUrls.map(i => ({ key: i, text: i }))}
+          options={nonResourceUrls.map((i) => ({ key: i, text: i }))}
         />
       )}
       <InvalidRoleError rule={rule} />

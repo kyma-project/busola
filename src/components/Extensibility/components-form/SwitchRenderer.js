@@ -24,7 +24,7 @@ export function SwitchRenderer({
   return (
     <ResourceForm.FormField
       value={value}
-      setValue={value => {
+      setValue={(value) => {
         onChange({
           storeKeys,
           scopes: ['value'],

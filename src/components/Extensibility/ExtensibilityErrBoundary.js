@@ -24,8 +24,9 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      const message = `${this.props.customMessage ||
-        this.props.t('extensibility.error')} ${this.state.error.message}`;
+      const message = `${
+        this.props.customMessage || this.props.t('extensibility.error')
+      } ${this.state.error.message}`;
 
       const hasCause = this.state.error.cause !== undefined;
 

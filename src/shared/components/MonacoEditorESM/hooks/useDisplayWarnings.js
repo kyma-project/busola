@@ -9,7 +9,7 @@ export const useDisplayWarnings = ({ autocompletionDisabled, descriptor }) => {
     if (autocompletionDisabled) {
       return;
     }
-    const onDidChangeMarkers = editor.onDidChangeMarkers(markers => {
+    const onDidChangeMarkers = editor.onDidChangeMarkers((markers) => {
       if (markers.length) {
         const descriptiveMarkers = editor.getModelMarkers({
           resource: descriptor.current,

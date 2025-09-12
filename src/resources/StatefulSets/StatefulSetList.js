@@ -18,13 +18,13 @@ export function StatefulSetList(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: set => (
+      value: (set) => (
         <ControlledBy ownerReferences={set.metadata.ownerReferences} kindOnly />
       ),
     },
     {
       header: t('common.headers.pods'),
-      value: set => <StatefulSetPods key="replicas" set={set} />,
+      value: (set) => <StatefulSetPods key="replicas" set={set} />,
     },
   ];
 

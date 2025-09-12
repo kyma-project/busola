@@ -9,7 +9,7 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
   const { namespaceUrl } = useUrl();
 
   secrets = secrets.filter(
-    s => s.metadata.name !== releaseSecret.metadata.name,
+    (s) => s.metadata.name !== releaseSecret.metadata.name,
   );
   secrets = secrets.sort(
     (a, b) => b.metadata.labels.version - a.metadata.labels.version,

@@ -22,7 +22,7 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
     t('custom-resource-definitions.headers.json-path'),
   ];
 
-  const rowRenderer = entry => [
+  const rowRenderer = (entry) => [
     { content: entry.name, style: { wordBreak: 'keep-all' } },
     { content: entry.type, style: { wordBreak: 'keep-all' } },
     entry.description || EMPTY_TEXT_PLACEHOLDER,
@@ -40,13 +40,13 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
   );
 };
 
-export const CurrentCRDVersion = resource => {
+export const CurrentCRDVersion = (resource) => {
   const { t } = useTranslation();
 
   if (!resource) return null;
   const { versions } = resource.spec;
 
-  const storageVersion = versions.find(v => v.storage);
+  const storageVersion = versions.find((v) => v.storage);
 
   return (
     <UI5Panel

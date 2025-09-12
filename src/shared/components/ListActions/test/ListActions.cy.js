@@ -14,7 +14,7 @@ describe('ListActions', () => {
 
     cy.get('[accessible-name="more-actions"]').should('not.exist');
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       cy.get(`[accessible-name="${action.name}"]`)
         .should('be.visible')
         .and('have.attr', 'accessible-name', action.name);

@@ -23,7 +23,7 @@ export function NameRenderer({
       value={value}
       kind={resource.kind}
       readOnly={editMode && disableOnEdit}
-      setValue={value => {
+      setValue={(value) => {
         extraPaths
           ? onChange([
               {
@@ -34,11 +34,11 @@ export function NameRenderer({
                 required,
                 data: { value },
               },
-              ...extraPaths.map(path => ({
+              ...extraPaths.map((path) => ({
                 storeKeys: List(
                   Array.isArray(path)
                     ? path
-                    : jp.parse(path).map(e => e.expression.value),
+                    : jp.parse(path).map((e) => e.expression.value),
                 ),
                 scopes: ['value'],
                 type: 'set',
@@ -56,7 +56,7 @@ export function NameRenderer({
               data: { value },
             });
       }}
-      validate={value => !!value}
+      validate={(value) => !!value}
       {...getPropsFromSchema(schema, required, tExt)}
     />
   );

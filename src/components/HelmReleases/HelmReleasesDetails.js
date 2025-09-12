@@ -24,7 +24,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
       ? `/api/v1/secrets?labelSelector=name==${releaseName}`
       : `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`;
 
-  const { data, loading } = useGetList(s => s.type === 'helm.sh/release.v1')(
+  const { data, loading } = useGetList((s) => s.type === 'helm.sh/release.v1')(
     resourceUrl,
   );
 
@@ -99,7 +99,7 @@ function HelmReleasesDetails({ releaseName, namespace }) {
             isEdit={true}
             confirmText={t('common.buttons.save')}
             disableEdit={true}
-            renderForm={props => (
+            renderForm={(props) => (
               <ErrorBoundary>
                 <HelmReleasesYaml
                   resource={releaseSecret}

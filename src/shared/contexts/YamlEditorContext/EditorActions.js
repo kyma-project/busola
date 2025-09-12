@@ -47,7 +47,7 @@ export function EditorActions({
     // definition of read only fields
 
     let arrayOfPositions = [];
-    READONLY_FIELDS.forEach(fieldName => {
+    READONLY_FIELDS.forEach((fieldName) => {
       if (!!editor.getModel()) {
         arrayOfPositions = arrayOfPositions.concat(
           editor
@@ -62,7 +62,7 @@ export function EditorActions({
   };
 
   const toggleReadOnlyLines = (fieldsPosition, hide) => {
-    fieldsPosition.forEach(match => {
+    fieldsPosition.forEach((match) => {
       setTimeout(() => {
         editor.setPosition({
           column: match.range.startColumn,

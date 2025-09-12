@@ -13,7 +13,7 @@ export function BTPResourceStatus({ status, resourceKind }) {
     );
   }
 
-  const message = conditions.find(c => c.message)?.message || '';
+  const message = conditions.find((c) => c.message)?.message || '';
   const type =
     lastCondition.reason === 'NotProvisioned' ? 'Information' : 'Error';
 

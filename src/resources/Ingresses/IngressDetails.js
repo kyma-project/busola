@@ -18,12 +18,12 @@ export function IngressDetails(props) {
   const [totalPorts, setTotalPorts] = useState(0);
   const [healthyPorts, setHealthyPorts] = useState(0);
 
-  const calculatePorts = ingress => {
+  const calculatePorts = (ingress) => {
     let allPorts = 0;
     let healthyPorts = 0;
 
-    ingress?.status?.loadBalancer?.ingress?.forEach(element => {
-      element?.ports?.forEach(port => {
+    ingress?.status?.loadBalancer?.ingress?.forEach((element) => {
+      element?.ports?.forEach((port) => {
         allPorts++;
         if (!port.error) healthyPorts++;
       });
@@ -36,13 +36,13 @@ export function IngressDetails(props) {
   const customComponents = [];
 
   customComponents.push(
-    resource =>
+    (resource) =>
       (resource.spec?.ingressClassName || resource.spec?.tls) && (
         <IngressSpecification key="ingress-specification" resource={resource} />
       ),
   );
 
-  customComponents.push(resource =>
+  customComponents.push((resource) =>
     resource.spec.defaultBackend ? (
       <DefaultBackendPanel
         key="default-backend"
@@ -51,7 +51,7 @@ export function IngressDetails(props) {
       />
     ) : null,
   );
-  customComponents.push(resource =>
+  customComponents.push((resource) =>
     resource.spec.rules ? (
       <Rules key="rules" rules={resource.spec.rules} />
     ) : null,
@@ -66,14 +66,14 @@ export function IngressDetails(props) {
     />
   ));
 
-  const statusBadge = resource => {
+  const statusBadge = (resource) => {
     calculatePorts(resource);
     const portsStatus =
       totalPorts === 0
         ? 'Information'
         : totalPorts === healthyPorts
-        ? 'Positive'
-        : 'Negative';
+          ? 'Positive'
+          : 'Negative';
 
     return (
       <StatusBadge
@@ -92,7 +92,7 @@ export function IngressDetails(props) {
       customConditionsComponents={[
         {
           header: t('ingresses.labels.load-balancers'),
-          value: resource => <IngressStatus resource={resource} />,
+          value: (resource) => <IngressStatus resource={resource} />,
         },
       ]}
       {...props}

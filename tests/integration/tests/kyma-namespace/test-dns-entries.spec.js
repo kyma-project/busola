@@ -1,8 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-const random = Math.random()
-  .toString()
-  .substr(2, 8);
+const random = Math.random().toString().substr(2, 8);
 const DNS_ENTRY_NAME = 'dns-entry-' + random;
 const DNS_NAME = 'dns-name-' + random;
 const TTL = 200;

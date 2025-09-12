@@ -73,7 +73,7 @@ async function cycle(
     for (const relatedResource of findRelatedResources(kind, config)) {
       const alreadyInStore = !!store.current[relatedResource.kind];
       const alreadyToFetch = !!resourcesToFetch.find(
-        r => r.kind === relatedResource.kind,
+        (r) => r.kind === relatedResource.kind,
       );
 
       if (!alreadyInStore && !alreadyToFetch) {
@@ -125,7 +125,7 @@ async function cycle(
       ) => {
         const matchArray = await Promise.all(
           store.current[resource.fromKind]!.map(
-            async oR => !!(await match(possiblyRelatedResource, oR, config)),
+            async (oR) => !!(await match(possiblyRelatedResource, oR, config)),
           ),
         );
         return !!matchArray.filter(Boolean).length;
@@ -172,10 +172,10 @@ export function useRelatedResources({
   events,
 }: useRelatedResourcesProps): useRelatedResourcesReturnValue {
   const clusterNodes = useAtomValue(allNodesAtom).filter(
-    node => !node.namespaced,
+    (node) => !node.namespaced,
   );
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
-    node => node.namespaced,
+    (node) => node.namespaced,
   );
   const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();

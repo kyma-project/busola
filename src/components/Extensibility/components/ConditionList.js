@@ -31,10 +31,10 @@ export const ConditionList = ({
       return;
     }
     Promise.all(
-      value.map(async v => {
-        const override = structure?.highlights?.find(o => o.type === v.type);
+      value.map(async (v) => {
+        const override = structure?.highlights?.find((o) => o.type === v.type);
         const customContentPromise = await Promise.all(
-          structure?.customContent?.map(async c => {
+          structure?.customContent?.map(async (c) => {
             return {
               ...c,
               value:
@@ -54,7 +54,7 @@ export const ConditionList = ({
           }),
         );
         const customContent = customContentPromise.filter(
-          c => c.type === v.type,
+          (c) => c.type === v.type,
         );
 
         const badgeType = override
@@ -70,7 +70,7 @@ export const ConditionList = ({
           customContent: customContent ?? [],
         };
       }),
-    ).then(results => setConditions(results));
+    ).then((results) => setConditions(results));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     structure?.customContent,

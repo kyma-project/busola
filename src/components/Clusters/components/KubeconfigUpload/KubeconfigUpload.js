@@ -13,7 +13,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
   const { t } = useTranslation();
 
   const updateKubeconfig = useCallback(
-    text => {
+    (text) => {
       try {
         const config = jsyaml.load(text);
 
@@ -36,14 +36,14 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
     <div className="kubeconfig-upload">
       <div className="add-cluster__content-container sap-margin-bottom-small">
         <KubeconfigFileUpload
-          onKubeconfigTextAdded={text => {
+          onKubeconfigTextAdded={(text) => {
             updateKubeconfig(text);
           }}
         />
       </div>
       <ClusterDataForm
         kubeconfig={kubeconfig}
-        setResource={modified => {
+        setResource={(modified) => {
           if (modified) setKubeconfig({ ...modified });
         }}
         onChange={updateKubeconfig}

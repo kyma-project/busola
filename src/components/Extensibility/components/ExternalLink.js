@@ -47,7 +47,7 @@ export const ExternalLink = ({
   const [href, setHref] = useState('');
 
   useEffect(() => {
-    jsonata(structure.link).then(linkObject => {
+    jsonata(structure.link).then((linkObject) => {
       setHref(makeHref({ linkObject, value }));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

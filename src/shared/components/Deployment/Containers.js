@@ -26,7 +26,7 @@ function SingleContainerSection({ container, setContainer }) {
     <ResourceForm.Wrapper resource={container} setResource={setContainer}>
       <K8sNameField
         propertyPath="$.name"
-        setValue={name => {
+        setValue={(name) => {
           jp.value(container, '$.name', name);
           setContainer(container);
         }}
@@ -71,7 +71,7 @@ function SingleContainerSection({ container, setContainer }) {
 export function Containers({ value: containers, setValue: setContainers }) {
   const { t } = useTranslation();
 
-  const removeContainer = index => {
+  const removeContainer = (index) => {
     setContainers(containers.filter((_, i) => index !== i));
   };
 
@@ -89,7 +89,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
     return (
       <SingleContainerSection
         container={containers[0]}
-        setContainer={newContainer => {
+        setContainer={(newContainer) => {
           containers.splice(0, 1, newContainer);
           setContainers(containers);
         }}
@@ -114,7 +114,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
     >
       <SingleContainerSection
         container={container || {}}
-        setContainer={newContainer => {
+        setContainer={(newContainer) => {
           containers.splice(i, 1, newContainer);
           setContainers(containers);
         }}

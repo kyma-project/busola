@@ -15,9 +15,7 @@ context(
     });
 
     it('Check sections of namespace details', () => {
-      cy.contains('ui5-link', LIMIT_NAME)
-        .scrollIntoView()
-        .should('be.visible');
+      cy.contains('ui5-link', LIMIT_NAME).scrollIntoView().should('be.visible');
 
       cy.get('ui5-panel')
         .get('ui5-table-row')
@@ -26,29 +24,17 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('ui5-link', QUOTA_NAME)
-        .scrollIntoView()
-        .should('be.visible');
+      cy.contains('ui5-link', QUOTA_NAME).scrollIntoView().should('be.visible');
 
-      cy.contains('Pods Overview')
-        .scrollIntoView()
-        .should('be.visible');
+      cy.contains('Pods Overview').scrollIntoView().should('be.visible');
 
-      cy.contains('Deployments Overview')
-        .scrollIntoView()
-        .should('be.visible');
+      cy.contains('Deployments Overview').scrollIntoView().should('be.visible');
 
-      cy.contains('Events')
-        .scrollIntoView()
-        .should('be.visible');
+      cy.contains('Events').scrollIntoView().should('be.visible');
 
-      cy.contains('CPU Usage')
-        .scrollIntoView()
-        .should('be.visible');
+      cy.contains('CPU Usage').scrollIntoView().should('be.visible');
 
-      cy.contains('Memory Usage')
-        .scrollIntoView()
-        .should('be.visible');
+      cy.contains('Memory Usage').scrollIntoView().should('be.visible');
     });
   },
 );

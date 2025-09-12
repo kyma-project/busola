@@ -23,7 +23,7 @@ export function JSONSchema({
           )}
           {types &&
             types
-              .map(type => {
+              .map((type) => {
                 if (type !== 'array') {
                   return type;
                 } else if (Array.isArray(def.items.type)) {
@@ -32,7 +32,7 @@ export function JSONSchema({
                   return `${def.items.type}[]`;
                 }
               })
-              .map(type => (
+              .map((type) => (
                 <ObjectStatus key={type} inverted>
                   {type.toUpperCase()}
                 </ObjectStatus>

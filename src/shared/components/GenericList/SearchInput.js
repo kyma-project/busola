@@ -45,7 +45,7 @@ export function SearchInput({
   const searchInputRef = useRef(null);
   const columnLayout = useAtomValue(columnLayoutAtom);
 
-  const onKeyPress = e => {
+  const onKeyPress = (e) => {
     const { key } = e;
     if (isDetailsView) return;
     const isCommandPalleteOpen = document.querySelector(
@@ -79,13 +79,13 @@ export function SearchInput({
       if (!filteredEntries) return [];
       const resoled = await Promise.all(
         filteredEntries.map(
-          async entry =>
+          async (entry) =>
             await getEntryMatches(entry, searchQuery, suggestionProperties),
         ),
       );
       return Array.from(new Set(resoled.flat()));
     };
-    getSearchSuggestions().then(res => setSuggestions(res));
+    getSearchSuggestions().then((res) => setSuggestions(res));
   }, [filteredEntries, searchQuery, suggestionProperties]);
 
   const renderSearchList = () => {
@@ -113,7 +113,7 @@ export function SearchInput({
         icon={<Icon className="bsl-has-color-status-4" name="search" />}
         ref={searchInputRef}
         value={searchQuery}
-        onInput={e => handleQueryChange(e.target.value)}
+        onInput={(e) => handleQueryChange(e.target.value)}
         showSuggestions={showSuggestion}
       >
         {showSuggestion && renderSearchList()}

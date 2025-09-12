@@ -22,12 +22,14 @@ function HelmReleaseDataWrapper(secret) {
 
 export function SecretDetails(props) {
   const { t } = useTranslation();
-  const Secret = resource => <SecretData key="secret-data" secret={resource} />;
+  const Secret = (resource) => (
+    <SecretData key="secret-data" secret={resource} />
+  );
 
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: secret => (
+      value: (secret) => (
         <ControlledBy
           ownerReferences={secret.metadata.ownerReferences}
           namespace={secret.metadata.namespace}
@@ -45,7 +47,7 @@ export function SecretDetails(props) {
     />
   );
 
-  const Configuration = secret => (
+  const Configuration = (secret) => (
     <UI5Panel
       fixed
       keyComponent={'secret-configuration'}

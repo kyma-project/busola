@@ -34,7 +34,7 @@ export function Editor({
   }, [value, language, convert]);
 
   const handleChange = useCallback(
-    text => {
+    (text) => {
       const placeholer = document.getElementsByClassName(
         'resource-form__placeholder',
       )[0];

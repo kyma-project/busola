@@ -27,7 +27,7 @@ export function EventList({
   });
   const simpleEmptyListMessage = structure.simpleEmptyListMessage || false;
 
-  const renameDefaultType = defaultType => {
+  const renameDefaultType = (defaultType) => {
     switch ((defaultType || '').toLowerCase()) {
       case 'information':
         return 'NORMAL';
@@ -46,7 +46,7 @@ export function EventList({
       ? `/api/v1/namespaces/${namespaceId}/events`
       : '/api/v1/events';
 
-  const filter = async res => {
+  const filter = async (res) => {
     if (!structure.filter) return true;
 
     try {

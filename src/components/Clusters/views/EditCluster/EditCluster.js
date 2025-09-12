@@ -21,7 +21,7 @@ import { ContextButtons } from 'components/Clusters/components/ContextChooser/Co
 
 export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
   const elementsWithId =
-    kubeconfig?.users?.[userIndex]?.user?.exec?.args.filter(el =>
+    kubeconfig?.users?.[userIndex]?.user?.exec?.args.filter((el) =>
       el?.includes(id),
     ) || [];
   const regex = new RegExp(`${id}=(?<value>.*)`);
@@ -39,9 +39,9 @@ export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
 
 export const findInitialValue = (kubeconfig, id, userIndex = 0) => {
   if (kubeconfig?.users?.[userIndex]?.user?.exec?.args) {
-    const elementWithId = kubeconfig?.users?.[
-      userIndex
-    ]?.user?.exec?.args.find(el => el?.includes(id));
+    const elementWithId = kubeconfig?.users?.[userIndex]?.user?.exec?.args.find(
+      (el) => el?.includes(id),
+    );
     const regex = new RegExp(`${id}=(?<value>.*)`);
     return regex.exec(elementWithId)?.groups?.value || '';
   }
@@ -92,7 +92,7 @@ export const ClusterDataForm = ({
       required
       onChange={onChange}
       value={kubeconfig?.users?.[userIndex]?.user?.token}
-      setValue={val => {
+      setValue={(val) => {
         jp.value(kubeconfig, `$.users[${userIndex}].user.token`, val);
         setResource({ ...kubeconfig });
       }}
@@ -112,7 +112,7 @@ export const ClusterDataForm = ({
         `--oidc-client-id=${config.clientId}`,
         `--oidc-client-secret=${config.clientSecret}`,
         ...(config.scopes?.length
-          ? config.scopes.map(scope => `--oidc-extra-scope=${scope || ''}`)
+          ? config.scopes.map((scope) => `--oidc-extra-scope=${scope || ''}`)
           : [`--oidc-extra-scope=openid`]),
         '--grant-type=auto',
       ],
@@ -129,7 +129,7 @@ export const ClusterDataForm = ({
         required
         value={issuerUrl}
         onChange={onChange}
-        setValue={val => {
+        setValue={(val) => {
           createOIDC('issuerUrl', val);
         }}
       />
@@ -139,7 +139,7 @@ export const ClusterDataForm = ({
         required
         value={clientId}
         onChange={onChange}
-        setValue={val => {
+        setValue={(val) => {
           createOIDC('clientId', val);
         }}
       />
@@ -147,7 +147,7 @@ export const ClusterDataForm = ({
         label={t('clusters.labels.client-secret')}
         input={Inputs.Text}
         value={clientSecret}
-        setValue={val => {
+        setValue={(val) => {
           createOIDC('clientSecret', val);
         }}
       />
@@ -157,7 +157,7 @@ export const ClusterDataForm = ({
         title={t('clusters.labels.scopes')}
         value={scopes}
         toExternal={onChange}
-        setValue={val => {
+        setValue={(val) => {
           createOIDC('scopes', val);
         }}
       />
@@ -189,7 +189,7 @@ export const ClusterDataForm = ({
           value={
             kubeconfig ? jp.value(kubeconfig, '$["current-context"]') : null
           }
-          setValue={name => {
+          setValue={(name) => {
             if (kubeconfig) {
               jp.value(kubeconfig, '$["current-context"]', name);
               jp.value(kubeconfig, `$.contexts[${userIndex}].name`, name);
@@ -204,8 +204,8 @@ export const ClusterDataForm = ({
             value={chosenContext}
             propertyPath='$["current-context"]'
             label={t('clusters.labels.context')}
-            validate={value => !!value}
-            setValue={context => {
+            validate={(value) => !!value}
+            setValue={(context) => {
               jp.value(kubeconfig, '$["current-context"]', context);
               if (!getUser(kubeconfig) && kubeconfig?.users?.length) {
                 jp.value(kubeconfig, `$.users`, [
@@ -233,7 +233,7 @@ export const ClusterDataForm = ({
           key={t('clusters.auth-type')}
           required
           value={authenticationType}
-          setValue={type => {
+          setValue={(type) => {
             onChange();
             if (type === 'token') {
               delete kubeconfig?.users[userIndex]?.user?.exec;
@@ -275,7 +275,7 @@ function EditClusterComponent({
   const setAuth = useSetAtom(authDataAtom);
   const originalName = useRef(kubeconfig?.['current-context'] || '');
 
-  const setWholeResource = newKubeconfig => {
+  const setWholeResource = (newKubeconfig) => {
     jp.value(resource, '$.kubeconfig', newKubeconfig);
     setResource({ ...resource });
   };
@@ -316,7 +316,7 @@ function EditClusterComponent({
         </Title>
         <ChooseStorage
           storage={resource.config?.storage}
-          setStorage={type => {
+          setStorage={(type) => {
             jp.value(resource, '$.config.storage', type);
             setResource({ ...resource });
           }}
@@ -328,7 +328,7 @@ function EditClusterComponent({
           input={Inputs.Text}
           placeholder={t('clusters.description-visibility')}
           value={resource.config?.description || ''}
-          setValue={value => {
+          setValue={(value) => {
             jp.value(resource, '$.config.description', value);
             setResource({ ...resource });
           }}

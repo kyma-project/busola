@@ -16,7 +16,7 @@ describe('Check path', () => {
     },
   ];
 
-  tests.forEach(test => {
+  tests.forEach((test) => {
     it(test.name, () => {
       //WHEN
       const result = joinPaths(...test.arguments);

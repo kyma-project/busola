@@ -8,9 +8,7 @@ context('Clean up Namespace', () => {
     cy.loginAndSelectCluster();
   });
   it('Delete the Namespace (step 1)', () => {
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
+    cy.getLeftNav().contains('Namespaces').click();
 
     cy.wait(1000);
 
@@ -23,9 +21,7 @@ context('Clean up Namespace', () => {
   });
 
   it('Check if the Namespace is terminated (step 2)', { retries: 3 }, () => {
-    cy.get('ui5-table-row')
-      .find('.status-badge')
-      .contains('Terminating');
+    cy.get('ui5-table-row').find('.status-badge').contains('Terminating');
 
     cy.get('ui5-table')
       .contains(Cypress.env('NAMESPACE_NAME'))

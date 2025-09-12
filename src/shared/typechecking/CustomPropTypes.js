@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 const ref = PropTypes.shape({ current: PropTypes.any });
 
-const button = function(props, propName, componentName) {
+const button = function (props, propName, componentName) {
   if (!props[propName]) return false;
 
   const buttonProps = new Map([
@@ -42,7 +42,7 @@ const button = function(props, propName, componentName) {
   return null;
 };
 
-const listActions = PropTypes.arrayOf(function(props, index, componentName) {
+const listActions = PropTypes.arrayOf(function (props, index, componentName) {
   const element = props[index];
   if (!element.name) {
     return new Error(`name is a required prop in '${componentName}'!`);

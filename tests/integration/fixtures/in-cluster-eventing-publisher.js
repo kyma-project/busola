@@ -19,7 +19,7 @@ function sendEvent(type) {
 }
 
 module.exports = {
-  main: async function(event, context) {
+  main: async function (event, context) {
     try {
       const response = await sendEvent(
         'sap.kyma.custom.nonexistingapp.order.created.v1',

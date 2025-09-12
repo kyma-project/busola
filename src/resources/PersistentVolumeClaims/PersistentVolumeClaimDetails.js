@@ -27,13 +27,13 @@ const RelatedVolumes = ({ labels }) => {
     hasDetailsView: true,
     resourceUrl: '/api/v1/persistentvolumes',
     resourceType: 'persistentVolumes',
-    filter: pv => {
+    filter: (pv) => {
       if (!pv.metadata?.labels) return false;
 
       const pvLabels = Object?.entries(pv.metadata?.labels);
       const pvcLabels = Object?.entries(labels);
-      return pvcLabels.every(pvcLabel =>
-        pvLabels.some(pvLabel => isEqual(pvcLabel, pvLabel)),
+      return pvcLabels.every((pvcLabel) =>
+        pvLabels.some((pvLabel) => isEqual(pvcLabel, pvLabel)),
       );
     },
     isCompact: true,
@@ -61,7 +61,7 @@ function PVCSelectorSpecification(pvc) {
   );
 }
 
-export const PVCConfiguration = pvc => {
+export const PVCConfiguration = (pvc) => {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
@@ -85,21 +85,23 @@ export const PVCConfiguration = pvc => {
           >
             {pvc.spec.resources?.requests && (
               <div>
-                {Object.entries(pvc.spec.resources?.requests).map(requests => {
-                  return (
-                    <LayoutPanelRow
-                      name={requests[0] + ' Requests'}
-                      value={requests[1] || EMPTY_TEXT_PLACEHOLDER}
-                      key={requests[0]}
-                      capitalize={true}
-                    />
-                  );
-                })}
+                {Object.entries(pvc.spec.resources?.requests).map(
+                  (requests) => {
+                    return (
+                      <LayoutPanelRow
+                        name={requests[0] + ' Requests'}
+                        value={requests[1] || EMPTY_TEXT_PLACEHOLDER}
+                        key={requests[0]}
+                        capitalize={true}
+                      />
+                    );
+                  },
+                )}
               </div>
             )}
             {pvc.spec.resources?.limits && (
               <div>
-                {Object.entries(pvc.spec.resources?.limits).map(limits => {
+                {Object.entries(pvc.spec.resources?.limits).map((limits) => {
                   return (
                     <LayoutPanelRow
                       name={limits[0] + ' Limits'}
@@ -174,7 +176,7 @@ export function PersistentVolumeClaimDetails(props) {
   const customStatusColumns = [
     {
       header: t('persistent-volume-claims.headers.access-modes'),
-      value: pvc => <Tokens tokens={pvc?.status?.accessModes} />,
+      value: (pvc) => <Tokens tokens={pvc?.status?.accessModes} />,
     },
   ];
 
@@ -187,10 +189,10 @@ export function PersistentVolumeClaimDetails(props) {
     />
   );
 
-  const PVCPods = pvc => {
+  const PVCPods = (pvc) => {
     const filterByClaim = ({ spec }) =>
       spec?.volumes?.find(
-        volume =>
+        (volume) =>
           volume?.persistentVolumeClaim?.claimName === pvc.metadata.name,
       );
 
@@ -205,7 +207,7 @@ export function PersistentVolumeClaimDetails(props) {
 
   return (
     <ResourceDetails
-      statusBadge={pvc =>
+      statusBadge={(pvc) =>
         <PersistentVolumeClaimStatus phase={pvc?.status.phase} /> || {
           EMPTY_TEXT_PLACEHOLDER,
         }
@@ -213,9 +215,9 @@ export function PersistentVolumeClaimDetails(props) {
       customConditionsComponents={[
         {
           header: t('persistent-volume-claims.headers.capacity'),
-          value: pvc =>
+          value: (pvc) =>
             pvc.status.capacity ? (
-              Object.entries(pvc?.status?.capacity).map(capacity => {
+              Object.entries(pvc?.status?.capacity).map((capacity) => {
                 return (
                   <LayoutPanelRow
                     name={capacity[0]}

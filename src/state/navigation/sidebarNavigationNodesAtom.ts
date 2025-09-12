@@ -15,7 +15,7 @@ import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode
 import { extensibilityNodesExtAtom } from './extensibilityNodesExtAtom';
 
 export const sidebarNavigationNodesAtom = atom<Promise<Category[]>>(
-  async get => {
+  async (get) => {
     const navNodes: NavNode[] = await get(clusterAndNsNodesAtom);
     const activeNamespaceId = get(activeNamespaceIdAtom);
     const externalNodes = get(externalNodesAtom);
@@ -33,7 +33,9 @@ export const sidebarNavigationNodesAtom = atom<Promise<Category[]>>(
     const isExtensibilityOn =
       features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;
     if (isExtensibilityOn && extResources) {
-      const extNavNodes = extResources.map(ext => mapExtResourceToNavNode(ext));
+      const extNavNodes = extResources.map((ext) =>
+        mapExtResourceToNavNode(ext),
+      );
       allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
     }
 
@@ -43,9 +45,8 @@ export const sidebarNavigationNodesAtom = atom<Promise<Category[]>>(
     const nodesFromCurrentScope = partial(hasCurrentScope, scope);
     const filteredNodes = allNodes.filter(nodesFromCurrentScope);
 
-    const assignedToCategories: Category[] = assignNodesToCategories(
-      filteredNodes,
-    );
+    const assignedToCategories: Category[] =
+      assignNodesToCategories(filteredNodes);
 
     return assignedToCategories;
   },
@@ -58,7 +59,7 @@ export const mergeInExtensibilityNav = (
 ) => {
   const busolaNodeList = [...nodes];
 
-  extensionNodes.forEach(extNode => {
+  extensionNodes.forEach((extNode) => {
     if (isLabelAndPathDefined(extNode)) {
       const busolaNodeSameAsExtNodeFn = partial(isTheSameLabelAndPath, extNode);
       const elToBeReplacedIndex = busolaNodeList.findIndex(

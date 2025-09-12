@@ -62,11 +62,10 @@ async function createJSONSchemas(openAPISchemas, clusterName) {
   const schema = openapiSchemaToJsonSchema(resolved, { cloneSchema: false });
   jsonSchemas[clusterName] = {};
 
-  Object.values(schema.result.definitions).forEach(definition => {
+  Object.values(schema.result.definitions).forEach((definition) => {
     if (definition['x-kubernetes-group-version-kind']) {
-      const { group, kind, version } = definition[
-        'x-kubernetes-group-version-kind'
-      ][0];
+      const { group, kind, version } =
+        definition['x-kubernetes-group-version-kind'][0];
       const prefix = group ? `${group}/` : '';
       const schemaId = `${prefix}${version}/${kind}`;
 
@@ -77,7 +76,7 @@ async function createJSONSchemas(openAPISchemas, clusterName) {
   });
 }
 
-self.onmessage = $event => {
+self.onmessage = ($event) => {
   const message = $event.data[0];
 
   if (message === 'sendingOpenapi') {
@@ -92,7 +91,7 @@ self.onmessage = $event => {
           type: 'computedToJSON',
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         self.postMessage({
           type: 'customError',
