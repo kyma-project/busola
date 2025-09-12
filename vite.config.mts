@@ -58,11 +58,6 @@ export default defineConfig({
   },
   optimizeDeps: {
     force: true,
-    esbuildOptions: {
-      loader: {
-        '.js': 'jsx',
-      },
-    },
     include: [
       '@openapi-contrib/openapi-schema-to-json-schema',
       '@stoplight/json-ref-resolver',
