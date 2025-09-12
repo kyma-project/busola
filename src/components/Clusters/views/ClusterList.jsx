@@ -21,7 +21,7 @@ import { Link } from 'shared/components/Link/Link';
 
 import { Button } from '@ui5/webcomponents-react';
 
-import { deleteCluster } from './../shared';
+import { deleteCluster } from '../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';

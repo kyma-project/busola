@@ -1,8 +1,17 @@
 import { useState } from 'react';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 import { useTranslation } from 'react-i18next';
+import { ClusterStorage } from 'state/types';
 
-export function ClusterStorageType({ clusterConfig }) {
+interface ClusterConfigType {
+  storage: ClusterStorage;
+}
+
+interface ClusterStorageTypeProps {
+  clusterConfig: ClusterConfigType;
+}
+
+export function ClusterStorageType({ clusterConfig }: ClusterStorageTypeProps) {
   const { t } = useTranslation();
   const storage = clusterConfig?.storage;
   const [showDescription, setShowDescription] = useState(false);

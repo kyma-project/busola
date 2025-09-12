@@ -2,7 +2,12 @@ import { FlexBox, Label, RadioButton } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ChooseStorage.scss';
 
-export function ChooseStorage({ storage, setStorage }) {
+interface ChooseStorageProps {
+  storage: string;
+  setStorage: (storage: string) => void;
+}
+
+export function ChooseStorage({ storage, setStorage }: ChooseStorageProps) {
   const { t } = useTranslation();
 
   return (

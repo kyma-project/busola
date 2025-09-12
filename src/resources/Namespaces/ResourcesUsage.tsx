@@ -12,7 +12,7 @@ import {
 } from 'resources/Pods/podQueries';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-export const ResourcesUsage = ({ namespace }) => {
+export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
   const { t } = useTranslation();
   const { podsMetrics, error, loading } = usePodsMetricsQuery(namespace);
   const { cpu, memory } = calculateMetrics(podsMetrics);

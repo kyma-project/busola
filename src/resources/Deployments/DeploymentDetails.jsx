@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { Selector } from 'shared/components/Selector/Selector.js';
+import { Selector } from 'shared/components/Selector/Selector';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 import { DeploymentStatus } from './DeploymentStatus';

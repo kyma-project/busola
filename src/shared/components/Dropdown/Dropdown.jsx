@@ -1,6 +1,6 @@
 import { ComboBox, ComboBoxItem, FlexBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { Label } from '../../../shared/ResourceForm/components/Label';
+import { Label } from '../../ResourceForm/components/Label';
 import { useRef } from 'react';
 
 export function Dropdown({

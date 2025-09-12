@@ -23,7 +23,7 @@ import {
   getMigrationFunctions,
   getSupportedVersions,
   migrateToLatest,
-} from '../../components/Extensibility/migration';
+} from '../Extensibility/migration';
 import { SectionEditor } from './SectionEditor';
 
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';

@@ -1,9 +1,17 @@
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
 import { Text } from '@ui5/webcomponents-react';
 
 import './UI5RadialChart.scss';
+
+interface UI5RadialChartProps {
+  size?: number;
+  value: number;
+  max: number;
+  color?: string;
+  onClick?: () => void;
+  additionalInfo?: string;
+}
 
 export const UI5RadialChart = ({
   size = 200,
@@ -12,7 +20,7 @@ export const UI5RadialChart = ({
   color = 'var(--sapBrandColor)',
   onClick,
   additionalInfo = '',
-}) => {
+}: UI5RadialChartProps) => {
   const percent = max && value ? Math.round((value * 100) / max) : 0;
   const text = (percent > 10_000 ? percent.toPrecision(3) : percent) + '%';
   const textSize = size / Math.max(3.5, text.length) + 'px';
@@ -49,12 +57,4 @@ export const UI5RadialChart = ({
       )}
     </div>
   );
-};
-
-UI5RadialChart.propTypes = {
-  size: PropTypes.number,
-  color: PropTypes.string,
-  value: PropTypes.number.isRequired,
-  max: PropTypes.number.isRequired,
-  onClick: PropTypes.func,
 };
