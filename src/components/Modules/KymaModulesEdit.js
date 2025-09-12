@@ -36,17 +36,17 @@ import { findModuleSpec, setChannel } from './support';
 import CommunityModulesEdit from 'components/Modules/community/CommunityModulesEdit';
 import { useSetAtom } from 'jotai';
 
-const addChannelsToModules = moduleReleaseMetas => {
+const addChannelsToModules = (moduleReleaseMetas) => {
   return (acc, module) => {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
-    const existingModule = acc.find(item => item.name === name);
+    const existingModule = acc.find((item) => item.name === name);
     const moduleMetaRelase = moduleReleaseMetas?.items.find(
-      item => item.spec.moduleName === name,
+      (item) => item.spec.moduleName === name,
     );
 
     const isModuleMetaRelease = acc.find(
-      item => item.name === moduleMetaRelase?.spec?.moduleName,
+      (item) => item.name === moduleMetaRelase?.spec?.moduleName,
     );
 
     if (module.spec.channel && !isModuleMetaRelease) {
@@ -77,8 +77,8 @@ const addChannelsToModules = moduleReleaseMetas => {
       }
     } else {
       if (!existingModule) {
-        moduleMetaRelase?.spec.channels.forEach(channel => {
-          if (!acc.find(item => item.name === name)) {
+        moduleMetaRelase?.spec.channels.forEach((channel) => {
+          if (!acc.find((item) => item.name === name)) {
             acc.push({
               name: name,
               channels: [
@@ -93,7 +93,7 @@ const addChannelsToModules = moduleReleaseMetas => {
             });
           } else {
             acc
-              .find(item => item.name === name)
+              .find((item) => item.name === name)
               .channels.push({
                 channel: channel.channel,
                 version: channel.version,
@@ -118,18 +118,14 @@ export default function KymaModulesEdit({ resource, ...props }) {
 
   const resourceName = kymaResource?.metadata.name;
 
-  const {
-    data: moduleReleaseMetas,
-    loading: loadingModulesReleaseMetas,
-  } = useModulesReleaseQuery({
-    skip: !resourceName,
-  });
-  const {
-    data: moduleTemplates,
-    loading: loadingModuleTemplates,
-  } = useModuleTemplatesQuery({
-    skip: !resourceName,
-  });
+  const { data: moduleReleaseMetas, loading: loadingModulesReleaseMetas } =
+    useModulesReleaseQuery({
+      skip: !resourceName,
+    });
+  const { data: moduleTemplates, loading: loadingModuleTemplates } =
+    useModuleTemplatesQuery({
+      skip: !resourceName,
+    });
 
   const notification = useNotification();
 
@@ -138,9 +134,8 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const [selectedModules, setSelectedModules] = useState(
     cloneDeep(initialResource?.spec?.modules) ?? [],
   );
-  const [showChannelChangeWarning, setShowChannelChangeWarning] = useState(
-    false,
-  );
+  const [showChannelChangeWarning, setShowChannelChangeWarning] =
+    useState(false);
   const [isManagedChanged, setIsManagedChanged] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState({
     isOpen: false,
@@ -172,11 +167,11 @@ export default function KymaModulesEdit({ resource, ...props }) {
     setShowManagedBox({ isOpen: true, onSave: false });
   };
 
-  const installedModules = moduleTemplates?.items.filter(module => {
+  const installedModules = moduleTemplates?.items.filter((module) => {
     const name =
       module.metadata?.labels['operator.kyma-project.io/module-name'];
     return (
-      selectedModules?.findIndex(kymaResourceModule => {
+      selectedModules?.findIndex((kymaResourceModule) => {
         return kymaResourceModule.name === name;
       }) !== -1
     );
@@ -187,12 +182,14 @@ export default function KymaModulesEdit({ resource, ...props }) {
     [],
   );
 
-  const checkIfSelectedModuleIsBeta = moduleName => {
+  const checkIfSelectedModuleIsBeta = (moduleName) => {
     return selectedModules.some(({ name, channel }) => {
       if (moduleName && name !== moduleName) {
         return false;
       }
-      const moduleData = modulesEditData?.find(module => module.name === name);
+      const moduleData = modulesEditData?.find(
+        (module) => module.name === name,
+      );
 
       return moduleData
         ? moduleData.channels.some(
@@ -218,9 +215,13 @@ export default function KymaModulesEdit({ resource, ...props }) {
   const renderModules = () => {
     const modulesList = [];
     modulesEditData?.forEach((module, i) => {
-      const index = selectedModules?.findIndex(selectedModule => {
+      const index = selectedModules?.findIndex((selectedModule) => {
         return selectedModule.name === module?.name;
       });
+
+      const moduleChannelVersion = module.channels?.filter(
+        (channel) => channel.channel === kymaResource?.spec?.channel,
+      )[0]?.version;
 
       const mod = (
         <FlexBox
@@ -231,7 +232,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
           <Label>{`${module.name}:`}</Label>
           <Select
             accessibleName={`${module.name} channel select`}
-            onChange={event => {
+            onChange={(event) => {
               onChange(module, event.detail.selectedOption.value, index);
             }}
             value={
@@ -239,28 +240,26 @@ export default function KymaModulesEdit({ resource, ...props }) {
             }
             className="channel-select"
           >
-            <Option
-              selected={
-                !module.channels?.filter(
-                  channel =>
-                    channel.channel ===
-                    findModuleSpec(kymaResource, module.name)?.channel,
-                )
-              }
-              value={'predefined'}
-              key={`predefined-${module.name}`}
-            >
-              {`${t(
-                'kyma-modules.predefined-channel',
-              )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
-                1,
-              )} v${
-                module.channels?.filter(
-                  channel => channel.channel === kymaResource?.spec?.channel,
-                )[0]?.version
-              })`}
-            </Option>
-            {module.channels?.map(channel => (
+            {!!moduleChannelVersion && (
+              <Option
+                selected={
+                  !module.channels?.filter(
+                    (channel) =>
+                      channel.channel ===
+                      findModuleSpec(kymaResource, module.name)?.channel,
+                  )
+                }
+                value={'predefined'}
+                key={`predefined-${module.name}`}
+              >
+                {`${t(
+                  'kyma-modules.predefined-channel',
+                )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
+                  1,
+                )} v${moduleChannelVersion})`}
+              </Option>
+            )}
+            {module.channels?.map((channel) => (
               <Option
                 selected={
                   channel.channel ===
@@ -284,7 +283,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
             accessibleName={`${module.name} managed checkbox`}
             text={t('kyma-modules.managed')}
             checked={findModuleSpec(kymaResource, module.name)?.managed}
-            onChange={event => {
+            onChange={(event) => {
               setManaged(event.target.checked, index);
             }}
           />
@@ -296,7 +295,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
     return <div className="gridbox-editModule">{modulesList}</div>;
   };
 
-  const showError = error => {
+  const showError = (error) => {
     console.error(error);
     notification.notifyError({
       content: t('common.create-form.messages.patch-failure', {
@@ -334,7 +333,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
         const response = await getRequest(props.resourceUrl);
         const updatedResource = await response.json();
 
-        const makeForceUpdateFn = closeModal => {
+        const makeForceUpdateFn = (closeModal) => {
           return async () => {
             kymaResource.metadata.resourceVersion =
               initialUnchangedResource?.metadata.resourceVersion;
