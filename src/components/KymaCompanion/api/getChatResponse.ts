@@ -183,7 +183,10 @@ export async function readChunk(
 
 export function extractJsonObjectsFromChunk(
   text: string,
-): { completeObjects: string[]; remainingBuffer: string } {
+): {
+  completeObjects: string[];
+  remainingBuffer: string;
+} {
   const completeObjects: string[] = [];
   let remainingBuffer = text;
 

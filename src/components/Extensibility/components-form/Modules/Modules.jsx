@@ -87,7 +87,11 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)
       return (
-        <MessageStrip design="Critical" hideCloseButton>
+        <MessageStrip
+          key={`no-modules-${index}`}
+          design="Critical"
+          hideCloseButton
+        >
           {t('extensibility.widgets.modules.no-modules')}
         </MessageStrip>
       );

@@ -73,7 +73,10 @@ const ConfigurationForm = ({
     'parallelRequests',
   );
 
-  const namespaceOptions = namespaces?.map(name => ({ key: name, text: name }));
+  const namespaceOptions = namespaces?.map(name => ({
+    key: name,
+    text: name,
+  }));
   const policyOptions = policies?.map(name => ({ key: name, text: name }));
 
   return (
