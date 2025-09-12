@@ -25,6 +25,7 @@ import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
 import { createRoot } from 'react-dom/client';
+import JotaiDevTools from 'components/App/JotaiDevTools';
 
 i18next
   .use(initReactI18next)
@@ -56,6 +57,9 @@ savePreviousPath();
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
+const isDevMode =
+  window.location.hostname === 'localhost' &&
+  (window.location.port === '8080' || window.location.port === '8000');
 
 root.render(
   <ThemeProvider>
@@ -63,6 +67,7 @@ root.render(
       <Suspense fallback={<Spinner />}>
         <NotificationProvider>
           <App />
+          {isDevMode && <JotaiDevTools />}
         </NotificationProvider>
       </Suspense>
     </BrowserRouter>
