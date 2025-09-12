@@ -9,7 +9,7 @@ describe('Error Boundary', () => {
   });
 
   it('Renders error component', () => {
-    cy.on('uncaught:exception', err => {
+    cy.on('uncaught:exception', (err) => {
       if (err.message.includes('test')) {
         return false;
       }

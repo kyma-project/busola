@@ -42,7 +42,7 @@ function getSuggestion({
 
   const suggestedType = makeSuggestion(
     type,
-    resourceTypes.flatMap(n => n.aliases),
+    resourceTypes.flatMap((n) => n.aliases),
   );
   if (name) {
     const resourceType = toFullResourceType(
@@ -51,7 +51,7 @@ function getSuggestion({
     );
     const resourceNames = (
       resourceCache[`${namespace}/${resourceType}`] || []
-    ).map(n => n.metadata.name);
+    ).map((n) => n.metadata.name);
     const suggestedName = makeSuggestion(name, resourceNames);
     return `${suggestedType || type}/${suggestedName || name}`;
   } else {
@@ -91,13 +91,8 @@ function makeListItem(
 }
 
 async function fetchNamespacedResource(context: CommandPaletteContext) {
-  const {
-    fetch,
-    namespace,
-    tokens,
-    namespaceNodes,
-    updateResourceCache,
-  } = context;
+  const { fetch, namespace, tokens, namespaceNodes, updateResourceCache } =
+    context;
   const apiPath = getApiPathForQuery(tokens, namespaceNodes, resourceTypes);
   if (!apiPath) {
     return;
@@ -127,7 +122,7 @@ function createAllResults(context: CommandPaletteContext) {
 
   return namespaceNodes
     .filter((currentValue, index, arr) => arr.indexOf(currentValue) === index)
-    .map(namespaceNode => {
+    .map((namespaceNode) => {
       return {
         ...namespaceNode,
         query: namespaceNode.resourceType,
@@ -186,13 +181,13 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   if (!delimiter) {
     const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
     const results = resourceTypeList
-      .map(resourceType => {
+      .map((resourceType) => {
         const matchedNode = findNavigationNode(resourceType, namespaceNodes);
         return matchedNode
           ? createSingleResult(context, resourceType, matchedNode)
           : null;
       })
-      .filter(r => r !== null) as Result[];
+      .filter((r) => r !== null) as Result[];
 
     if (!results) return null;
 
@@ -222,10 +217,12 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
   if (name) {
     return resources
-      .filter(item => item.metadata.name.includes(name))
-      .map(item => makeListItem(item, matchedNode, context));
+      .filter((item) => item.metadata.name.includes(name))
+      .map((item) => makeListItem(item, matchedNode, context));
   } else if (delimiter) {
-    return [...resources.map(item => makeListItem(item, matchedNode, context))];
+    return [
+      ...resources.map((item) => makeListItem(item, matchedNode, context)),
+    ];
   } else {
     return [linkToList];
   }
@@ -238,6 +235,6 @@ export const namespacedResourceHandler: Handler = {
   createResults,
   getNavigationHelp: ({ namespaceNodes }: CommandPaletteContext) =>
     resourceTypes
-      .filter(rT => findNavigationNode(rT.resourceType, namespaceNodes))
-      .map(rT => ({ name: rT.resourceType, aliases: extractShortNames(rT) })),
+      .filter((rT) => findNavigationNode(rT.resourceType, namespaceNodes))
+      .map((rT) => ({ name: rT.resourceType, aliases: extractShortNames(rT) })),
 };

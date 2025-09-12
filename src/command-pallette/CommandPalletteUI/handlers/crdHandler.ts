@@ -21,11 +21,11 @@ function getAutocompleteEntries({
       return [];
     case 3: // name
       const crdNames = (resourceCache['customresourcedefinitions'] || []).map(
-        n => n.metadata.name,
+        (n) => n.metadata.name,
       );
       return crdNames
-        .filter(name => name.startsWith(tokenToAutocomplete))
-        ?.map(name => `${tokens[0]} ${name} `);
+        .filter((name) => name.startsWith(tokenToAutocomplete))
+        ?.map((name) => `${tokens[0]} ${name} `);
     default:
       return [];
   }
@@ -59,7 +59,7 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
 }
 
 function concernsCRDs({ tokens }: CommandPaletteContext) {
-  return crdResourceTypes.some(crt => crt.startsWith(tokens[0]));
+  return crdResourceTypes.some((crt) => crt.startsWith(tokens[0]));
 }
 
 async function fetchCRDs(context: CommandPaletteContext) {
@@ -110,15 +110,15 @@ function createResults(context: CommandPaletteContext): Result[] {
 
   const [, delimiter, name] = tokens;
   if (name) {
-    const matchedByName = crds.filter(item =>
+    const matchedByName = crds.filter((item) =>
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item, context));
+      return matchedByName.map((item) => makeListItem(item, context));
     }
     return [];
   } else if (delimiter) {
-    return [...crds.map(item => makeListItem(item, context))];
+    return [...crds.map((item) => makeListItem(item, context))];
   } else {
     return [linkToList];
   }

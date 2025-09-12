@@ -35,8 +35,8 @@ export default function CustomResource({ params }) {
     if (!data?.spec?.versions) return null;
     const versions = data.spec.versions;
     return (
-      versions.find(version => version.name === resourceVersion) ||
-      versions.find(version => version.storage)
+      versions.find((version) => version.name === resourceVersion) ||
+      versions.find((version) => version.storage)
     );
   }, [data?.spec?.versions, resourceVersion]);
 
@@ -51,7 +51,7 @@ export default function CustomResource({ params }) {
   }, [data, isModule, setResMetadata, selectedVersion]);
 
   const CRCreateWrapper = useCallback(
-    props => <CRCreate {...props} crd={data} layoutNumber="midColumn" />,
+    (props) => <CRCreate {...props} crd={data} layoutNumber="midColumn" />,
     [data],
   );
 
@@ -64,20 +64,20 @@ export default function CustomResource({ params }) {
         resourceNamespace
           ? `namespaces/${resourceNamespace}/`
           : namespace
-          ? `namespaces/${namespace}/`
-          : ''
+            ? `namespaces/${namespace}/`
+            : ''
       }${crdName}/${resourceName}`
     : '';
 
   const customColumns = [
     {
       header: t('custom-resources.headers.api-version'),
-      value: resource => resource.apiVersion,
+      value: (resource) => resource.apiVersion,
     },
   ];
-  const yamlPreview = resource => {
+  const yamlPreview = (resource) => {
     return Object.keys(resource || {})
-      ?.map(key => {
+      ?.map((key) => {
         if (typeof resource[key] === 'object' && key !== 'metadata') {
           return (
             <ReadonlyEditorPanel

@@ -19,7 +19,7 @@ const getAllocatable = (
   limits: ResourceList,
   nodesItems?: NodeListItem[],
 ) => {
-  const node = nodesItems?.find(node => node.metadata.name === nodeName);
+  const node = nodesItems?.find((node) => node.metadata.name === nodeName);
   // If a pod has no limits set, it uses the available capacity from its node.
   const getCapacityFromNode = (
     isUse: boolean,
@@ -48,10 +48,10 @@ const sumValuesFromUsageContainers = (
 ) => {
   // Sum all values ​​from the container. If all are undefined, we leave them as they are, because it will be important later.
   const isAllCpuUndefined = usageContainers?.every(
-    container => container?.usage?.cpu === undefined,
+    (container) => container?.usage?.cpu === undefined,
   );
   const isAllMemoryUndefined = usageContainers?.every(
-    container => container?.usage?.memory === undefined,
+    (container) => container?.usage?.memory === undefined,
   );
 
   const defaultValue = {
@@ -86,10 +86,10 @@ const sumValuesFromLimitsContainers = (
 ) => {
   // Sum all values ​​from the container. If all are undefined, we leave them as they are, because it will be important later.
   const isAllCpuUndefined = limitsContainers?.every(
-    container => container?.resources?.limits?.cpu === undefined,
+    (container) => container?.resources?.limits?.cpu === undefined,
   );
   const isAllMemoryUndefined = limitsContainers?.every(
-    container => container?.resources?.limits?.memory === undefined,
+    (container) => container?.resources?.limits?.memory === undefined,
   );
 
   const defaultValue = {
@@ -150,7 +150,7 @@ export function usePodsMetricsQuery(namespace?: string) {
       const podsWithMetrics = pods?.items?.reduce(
         (acc: UsageMetrics[], pod) => {
           const metricsForPod = podMetrics?.items?.find(
-            metrics =>
+            (metrics) =>
               pod?.metadata?.name &&
               pod?.metadata?.name === metrics?.metadata?.name,
           );

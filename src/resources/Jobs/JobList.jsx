@@ -11,16 +11,16 @@ import {
   docsURL,
 } from 'resources/Jobs';
 
-export const JobList = props => {
+export const JobList = (props) => {
   const { t } = useTranslation();
   const customColumns = [
     {
       header: t('jobs.completions'),
-      value: job => <JobCompletions job={job} />,
+      value: (job) => <JobCompletions job={job} />,
     },
     {
       header: t('common.headers.owner'),
-      value: job => (
+      value: (job) => (
         <ControlledBy
           ownerReferences={job.metadata.ownerReferences}
           namespace={job.metadata.namespace}

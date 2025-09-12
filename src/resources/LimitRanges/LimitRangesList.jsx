@@ -18,7 +18,7 @@ export function LimitRangesList(props) {
   const customColumns = [
     {
       header: 'Popin',
-      value: limit => <LimitRangeSpecification resource={limit} isCompact />,
+      value: (limit) => <LimitRangeSpecification resource={limit} isCompact />,
     },
   ];
 

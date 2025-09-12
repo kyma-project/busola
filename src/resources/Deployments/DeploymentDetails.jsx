@@ -18,7 +18,7 @@ export function DeploymentDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: deployment => (
+      value: (deployment) => (
         <ControlledBy
           ownerReferences={deployment.metadata.ownerReferences}
           namespace={deployment.metadata.namespace}
@@ -30,39 +30,41 @@ export function DeploymentDetails(props) {
   const customStatusColumns = [
     {
       header: t('common.labels.last-transition'),
-      value: deployment =>
+      value: (deployment) =>
         getLastTransitionTime(deployment?.status?.conditions),
     },
     {
       header: t('deployments.status.replicas'),
-      value: deployment => <div>{deployment?.status?.replicas ?? 0}</div>,
+      value: (deployment) => <div>{deployment?.status?.replicas ?? 0}</div>,
     },
     {
       header: t('deployments.status.updated-replicas'),
-      value: deployment => (
+      value: (deployment) => (
         <div>{deployment?.status?.updatedReplicas ?? 0}</div>
       ),
     },
     {
       header: t('deployments.status.available-replicas'),
-      value: deployment => (
+      value: (deployment) => (
         <div>{deployment?.status?.availableReplicas ?? 0}</div>
       ),
     },
     {
       header: t('deployments.status.unavailable-replicas'),
-      value: deployment => (
+      value: (deployment) => (
         <div>{deployment?.status?.unavailableReplicas ?? 0}</div>
       ),
     },
     {
       header: t('deployments.status.collision-count'),
-      value: deployment => <div>{deployment?.status?.collisionCount ?? 0}</div>,
+      value: (deployment) => (
+        <div>{deployment?.status?.collisionCount ?? 0}</div>
+      ),
     },
   ];
 
-  const statusConditions = deployment => {
-    return deployment?.status?.conditions?.map(condition => {
+  const statusConditions = (deployment) => {
+    return deployment?.status?.conditions?.map((condition) => {
       const overridenStatus = () => {
         if (condition.type === 'ReplicaFailure')
           return condition.status === 'True' ? 'Negative' : 'Positive';
@@ -79,7 +81,7 @@ export function DeploymentDetails(props) {
     });
   };
 
-  const MatchSelector = deployment => (
+  const MatchSelector = (deployment) => (
     <Selector
       key="match-selector"
       namespace={deployment.metadata.namespace}
@@ -89,7 +91,7 @@ export function DeploymentDetails(props) {
     />
   );
 
-  const DeploymentPodTemplate = deployment => (
+  const DeploymentPodTemplate = (deployment) => (
     <PodTemplate key="pod-template" template={deployment.spec.template} />
   );
 
@@ -112,7 +114,7 @@ export function DeploymentDetails(props) {
       ]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}
-      statusBadge={deployment => <DeploymentStatus deployment={deployment} />}
+      statusBadge={(deployment) => <DeploymentStatus deployment={deployment} />}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
       description={ResourceDescription}

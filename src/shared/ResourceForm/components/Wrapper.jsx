@@ -22,7 +22,7 @@ export function ResourceFormWrapper({
     );
   }, [children]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const isValid = child => {
+  const isValid = (child) => {
     if (!child.props.validate) {
       return true;
     } else if (child.props.propertyPath) {
@@ -33,7 +33,7 @@ export function ResourceFormWrapper({
     }
   };
 
-  const errorMessage = child => {
+  const errorMessage = (child) => {
     if (!child.props.validateMessage) {
       return t('common.errors.generic');
     } else if (typeof child.props.validateMessage !== 'function') {
@@ -54,9 +54,8 @@ export function ResourceFormWrapper({
         const valid = isValid(child);
 
         if (inputRef?.current) {
-          const input = inputRef.current?.shadowRoot?.querySelector(
-            '.ui5-input-inner',
-          );
+          const input =
+            inputRef.current?.shadowRoot?.querySelector('.ui5-input-inner');
           if (!valid) {
             input?.setCustomValidity(errorMessage(child));
           } else {
@@ -100,7 +99,7 @@ export function ResourceFormWrapper({
           return child;
         }
       } else {
-        const valueSetter = value => {
+        const valueSetter = (value) => {
           jp.value(resource, child.props.propertyPath, value);
           setResource({ ...resource });
         };
@@ -108,11 +107,11 @@ export function ResourceFormWrapper({
         const value =
           typeof child.props.value !== 'undefined'
             ? child.props.value
-            : jp.value(resource, child.props.propertyPath) ??
-              child.props.defaultValue;
+            : (jp.value(resource, child.props.propertyPath) ??
+              child.props.defaultValue);
 
         const setValue = child.props.setValue
-          ? value => child.props.setValue(value, valueSetter)
+          ? (value) => child.props.setValue(value, valueSetter)
           : valueSetter;
 
         return React.cloneElement(child, {

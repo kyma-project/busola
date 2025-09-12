@@ -15,7 +15,7 @@ context('Test Companion Chat Error Handling', () => {
   });
 
   it('error handling of followups', () => {
-    cy.intercept('POST', '/backend/ai-chat/followup', req => {
+    cy.intercept('POST', '/backend/ai-chat/followup', (req) => {
       req.reply({
         statusCode: 500,
         body: {
@@ -66,7 +66,7 @@ context('Test Companion Chat Error Handling', () => {
   });
 
   it('error handling of messages', () => {
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       req.reply({
         statusCode: 500,
         body: {
@@ -109,9 +109,7 @@ context('Test Companion Chat Error Handling', () => {
 
     cy.sendPrompt('Test');
 
-    cy.get('@companion')
-      .find('.message-error')
-      .should('have.length', 1);
+    cy.get('@companion').find('.message-error').should('have.length', 1);
     cy.get('@companion')
       .find('.chat-list > .context-group')
       .should('have.length', 1)
@@ -126,7 +124,7 @@ context('Test Companion Chat Error Handling', () => {
       .find('ui5-icon[name="error"]')
       .should('be.visible');
 
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           data: {
@@ -171,7 +169,7 @@ context('Test Companion Chat Error Handling', () => {
       .should('contain.text', 'Retry')
       .should('be.visible');
 
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           data: {
@@ -224,7 +222,7 @@ context('Test Companion Chat Error Handling', () => {
       .should('contain.text', 'Retry')
       .click();
 
-    cy.wait('@getChatResponse').then(interception => {
+    cy.wait('@getChatResponse').then((interception) => {
       expect(interception.request.body.query).to.equal('Test');
     });
     cy.wait(1000);
@@ -259,7 +257,7 @@ context('Test Companion Chat Error Handling', () => {
 
   it('check error status code handling message', () => {
     // Test for 401 Unauthorized.
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       req.reply({
         statusCode: 401,
         body: {
@@ -302,7 +300,7 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
 
     // Test for 429 Too Many Requests.
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       req.reply({
         statusCode: 429,
         body: {
@@ -349,7 +347,7 @@ context('Test Companion Chat Error Handling', () => {
       .should('be.visible');
 
     // Test for 422 Validation error.
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       req.reply({
         statusCode: 422,
         body: {
@@ -394,7 +392,7 @@ context('Test Companion Chat Error Handling', () => {
 
   it('error handling of partial AI task failures', () => {
     // Mock a response where some tasks succeed and some fail
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           data: {

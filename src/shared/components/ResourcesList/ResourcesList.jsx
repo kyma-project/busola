@@ -29,8 +29,8 @@ import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from '../Link/Link';
 
-const Injections = React.lazy(() =>
-  import('../../../components/Extensibility/ExtensibilityInjections'),
+const Injections = React.lazy(
+  () => import('../../../components/Extensibility/ExtensibilityInjections'),
 );
 
 /* to allow cloning of a resource set the following on the resource create component:
@@ -173,13 +173,15 @@ function Resources(props) {
     skip: isCompact,
   });
 
-  const { loading, error, data: resources, silentRefetch } = useGetList()(
-    resourceUrl,
-    {
-      pollingInterval: 3000,
-      skip: skipDataLoading,
-    },
-  );
+  const {
+    loading,
+    error,
+    data: resources,
+    silentRefetch,
+  } = useGetList()(resourceUrl, {
+    pollingInterval: 3000,
+    skip: skipDataLoading,
+  });
 
   const [filteredResources, setFilteredResources] = useState([]);
 
@@ -188,11 +190,11 @@ function Resources(props) {
       setFilteredResources(resources || []);
     } else {
       Promise.all(
-        (resources || []).map(async resource => {
+        (resources || []).map(async (resource) => {
           const passThroughFilter = await filter(resource);
           return passThroughFilter ? resource : false;
         }),
-      ).then(results => {
+      ).then((results) => {
         setFilteredResources(results.filter(Boolean));
       });
     }
@@ -233,7 +235,7 @@ export function ResourceListRenderer({
   error,
   resources,
   resourceUrlPrefix,
-  nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
+  nameSelector = (entry) => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate = false,
   disableDelete = false,
   disableMargin = false,
@@ -261,11 +263,8 @@ export function ResourceListRenderer({
     resourceType,
   });
   const { t } = useTranslation();
-  const {
-    isProtected,
-    protectedResourceWarning,
-    protectedResourcePopover,
-  } = useProtectedResources();
+  const { isProtected, protectedResourceWarning, protectedResourcePopover } =
+    useProtectedResources();
   const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
 
@@ -285,7 +284,7 @@ export function ResourceListRenderer({
   );
   const { resourceUrl: resourceUrlFn } = useUrl();
 
-  const linkTo = entry => {
+  const linkTo = (entry) => {
     const overrides = namespace === '-all-' ? { namespace } : {};
     return customUrl
       ? customUrl(entry)
@@ -317,7 +316,7 @@ export function ResourceListRenderer({
   const defaultColumns = [
     {
       header: t('common.headers.name'),
-      value: entry =>
+      value: (entry) =>
         hasDetailsView ? (
           enableColumnLayout ? (
             <Text style={{ fontWeight: 'bold', color: 'var(--sapTextColor)' }}>
@@ -326,7 +325,7 @@ export function ResourceListRenderer({
           ) : (
             <Link
               url={`${linkTo(entry)}`}
-              onClick={e => onLinkClick(entry, e)}
+              onClick={(e) => onLinkClick(entry, e)}
               style={{ fontWeight: 'bold' }}
             >
               {nameSelector(entry)}
@@ -339,12 +338,12 @@ export function ResourceListRenderer({
     },
     {
       header: t('common.headers.namespace'),
-      value: entry => entry.metadata.namespace,
+      value: (entry) => entry.metadata.namespace,
       id: 'namespace',
     },
     {
       header: t('common.headers.created'),
-      value: entry => (
+      value: (entry) => (
         <ReadableCreationTimestamp
           timestamp={entry.metadata.creationTimestamp}
         />
@@ -355,13 +354,13 @@ export function ResourceListRenderer({
 
   const isNamespaceAll = namespace === '-all-';
   if (isNamespaceAll) {
-    omitColumnsIds = omitColumnsIds.filter(id => id !== 'namespace');
+    omitColumnsIds = omitColumnsIds.filter((id) => id !== 'namespace');
   }
 
   customColumns =
     columns ||
     [...defaultColumns, ...customColumns].filter(
-      col => !omitColumnsIds.includes(col.id),
+      (col) => !omitColumnsIds.includes(col.id),
     );
 
   const prepareResourceUrl = (resourceUrl, resource) => {
@@ -385,7 +384,7 @@ export function ResourceListRenderer({
       : `${resourceUrlPrefix}/${pluralKind}/${encodedName}`;
   };
 
-  const handleResourceClone = resource => {
+  const handleResourceClone = (resource) => {
     let activeResource = cloneDeep(resource);
     jp.value(activeResource, '$.metadata.name', '');
     delete activeResource.metadata.uid;
@@ -396,7 +395,7 @@ export function ResourceListRenderer({
     delete activeResource.status;
 
     if (Array.isArray(CreateResourceForm.sanitizeClone)) {
-      CreateResourceForm.sanitizeClone.forEach(path =>
+      CreateResourceForm.sanitizeClone.forEach((path) =>
         jp.remove(activeResource, path),
       );
     } else if (typeof CreateResourceForm.sanitizeClone === 'function') {
@@ -448,21 +447,21 @@ export function ResourceListRenderer({
           ? {
               name: t('common.buttons.clone'),
               tooltip: t('common.buttons.clone'),
-              icon: entry => 'duplicate',
+              icon: (entry) => 'duplicate',
               handler: handleResourceClone,
             }
           : null,
         {
           name: t('common.buttons.delete'),
-          tooltip: entry =>
+          tooltip: (entry) =>
             isProtected(entry)
               ? t('common.tooltips.protected-resources-info')
               : disableDelete
-              ? t('common.buttons.button-disabled')
-              : t('common.buttons.delete'),
+                ? t('common.buttons.button-disabled')
+                : t('common.buttons.delete'),
           icon: 'delete',
-          disabledHandler: entry => isProtected(entry) || disableDelete,
-          handler: resource => {
+          disabledHandler: (entry) => isProtected(entry) || disableDelete,
+          handler: (resource) => {
             handleResourceDelete({
               resourceUrl: prepareResourceUrl(resourceUrl, resource),
             });
@@ -470,18 +469,18 @@ export function ResourceListRenderer({
           },
         },
         ...customListActions,
-      ].filter(e => e);
+      ].filter((e) => e);
 
-  const nameColIndex = customColumns.findIndex(col => col?.id === 'name');
+  const nameColIndex = customColumns.findIndex((col) => col?.id === 'name');
   const namespaceColIndex = customColumns.findIndex(
-    col => col?.id === 'namespace',
+    (col) => col?.id === 'namespace',
   );
 
   const headerRenderer = () => {
-    return customColumns?.map(col => col?.header || null);
+    return customColumns?.map((col) => col?.header || null);
   };
 
-  const rowRenderer = entry => {
+  const rowRenderer = (entry) => {
     const rowColumns = customColumns?.map((col, index) => {
       if (col?.value && index === nameColIndex) {
         return (
@@ -574,11 +573,11 @@ export function ResourceListRenderer({
     ];
   };
 
-  const processTitle = title => {
+  const processTitle = (title) => {
     const words = title.split(' ');
     let uppercaseCount = 0;
 
-    const processedWords = words?.map(word => {
+    const processedWords = words?.map((word) => {
       for (let i = 0; i < word.length; i++) {
         if (word[i] === word[i].toUpperCase()) {
           uppercaseCount++;

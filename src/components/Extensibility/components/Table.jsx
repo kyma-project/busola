@@ -96,7 +96,7 @@ export function Table({
         return defaultTitle;
       }
     };
-    makeTitle().then(result => setTitle(result));
+    makeTitle().then((result) => setTitle(result));
 
     const cells = (structure.children || []).map((column, cellIndex) => {
       return (

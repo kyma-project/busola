@@ -6,7 +6,7 @@ export function CronJobJobs(cronJob) {
   const jobsUrl = `/apis/batch/v1/namespaces/${namespace}/jobs`;
   const filterByOwnerRef = ({ metadata }) =>
     metadata.ownerReferences?.find(
-      ref => ref.kind === 'CronJob' && ref.name === cronJob.metadata.name,
+      (ref) => ref.kind === 'CronJob' && ref.name === cronJob.metadata.name,
     );
 
   return (

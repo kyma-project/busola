@@ -33,7 +33,7 @@ test('Busola Lighthouse audit', async () => {
 
   // fix opening "connect cluster" modal
   await page.evaluate(() => {
-    return new Promise(resolve => setTimeout(resolve, 5000));
+    return new Promise((resolve) => setTimeout(resolve, 5000));
   });
 
   // add a cluster

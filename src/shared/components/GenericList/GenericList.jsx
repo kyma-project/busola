@@ -163,7 +163,7 @@ export const GenericList = ({
   useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
-    const selected = entries.find(entry => {
+    const selected = entries.find((entry) => {
       const name = entry?.metadata?.name;
       return (
         name &&
@@ -301,14 +301,14 @@ export const GenericList = ({
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
-  const linkTo = entry => {
+  const linkTo = (entry) => {
     const overrides = namespace === '-all-' ? { namespace } : {};
     return customUrl
       ? customUrl(entry)
       : resourceUrlFn(entry, { resourceType, ...overrides });
   };
 
-  const handleRowClick = e => {
+  const handleRowClick = (e) => {
     const arrowColumnCount = displayArrow ? 1 : 0;
     const item = (
       e.detail.row.children[nameColIndex + arrowColumnCount].children[0]
@@ -318,12 +318,13 @@ export const GenericList = ({
 
     const hasNamepace = namespaceColIndex !== -1;
     const itemNamespace = hasNamepace
-      ? e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
+      ? (e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
           ?.children[0]?.innerText ??
-        e?.detail?.row.children[namespaceColIndex + arrowColumnCount]?.innerText
+        e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
+          ?.innerText)
       : '';
 
-    const selectedEntry = entries.find(entry => {
+    const selectedEntry = entries.find((entry) => {
       return (
         (entry?.metadata?.name === item ||
           pluralize(entry?.spec?.names?.kind ?? '') === item ||
@@ -346,7 +347,7 @@ export const GenericList = ({
         selectedEntry?.apiVersion,
       );
       const newLayout = enableColumnLayout
-        ? columnLayout ?? 'TwoColumnsMidExpanded'
+        ? (columnLayout ?? 'TwoColumnsMidExpanded')
         : 'OneColumn';
       setLayoutColumn(
         columnLayout
@@ -389,7 +390,7 @@ export const GenericList = ({
   };
 
   const setOverflowMode = () => {
-    const anyPopinHidden = headerRenderer().some(h => h === 'Popin');
+    const anyPopinHidden = headerRenderer().some((h) => h === 'Popin');
     if (!anyPopinHidden && !noHideFields && disableHiding) {
       return 'Scroll';
     }
@@ -446,7 +447,7 @@ export const GenericList = ({
         onMouseDown={() => {
           window.getSelection().removeAllRanges();
         }}
-        onRowClick={e => {
+        onRowClick={(e) => {
           const selection = window.getSelection().toString();
           if (!hasDetailsView || selection.length > 0) return;
           navigateSafely(() => handleRowClick(e));

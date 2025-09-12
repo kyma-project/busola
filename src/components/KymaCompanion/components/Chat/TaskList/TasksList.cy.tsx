@@ -55,21 +55,12 @@ describe('TasksList Component', () => {
       .and('have.attr', 'class')
       .and('match', /objectStatus.*positive.*large/);
 
-    cy.get('.loading-item')
-      .eq(0)
-      .find('.ai-steps-loader')
-      .should('not.exist');
+    cy.get('.loading-item').eq(0).find('.ai-steps-loader').should('not.exist');
 
     cy.contains('.text', 'Task 2').should('exist');
-    cy.get('.loading-item')
-      .eq(1)
-      .find('.ai-steps-loader')
-      .should('exist');
+    cy.get('.loading-item').eq(1).find('.ai-steps-loader').should('exist');
     cy.contains('.text', 'Task 3').should('exist');
-    cy.get('.loading-item')
-      .eq(2)
-      .find('.ai-steps-loader')
-      .should('exist');
+    cy.get('.loading-item').eq(2).find('.ai-steps-loader').should('exist');
   });
 
   it('shows "preparing final answer" message when all tasks are completed', () => {
@@ -104,10 +95,7 @@ describe('TasksList Component', () => {
     cy.contains('.text', 'kyma-companion.opener.preparing-final-answer').should(
       'exist',
     );
-    cy.get('.loading-item')
-      .eq(2)
-      .find('.ai-steps-loader')
-      .should('exist');
+    cy.get('.loading-item').eq(2).find('.ai-steps-loader').should('exist');
   });
 
   it('does not show "preparing final answer" message when not all tasks are completed', () => {

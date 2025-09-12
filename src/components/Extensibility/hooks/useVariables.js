@@ -5,11 +5,11 @@ import jp from 'jsonpath';
 import { useJsonata } from './useJsonata';
 import { VarStoreContext } from '../contexts/VarStore';
 
-const pathToJP = path =>
+const pathToJP = (path) =>
   '$' +
   trim(path, '.')
     .split(/\./)
-    .map(item => `["${item}"]`)
+    .map((item) => `["${item}"]`)
     .join('');
 
 const applyDefaults = (def, val) => {
@@ -31,7 +31,7 @@ export function extractVariables(varStore, vars, indexes) {
 
   return vars
     ? Object.fromEntries(
-        vars.map(varName => [
+        vars.map((varName) => [
           varName,
           indexes.reduce((acc, index) => acc?.[index], varStore[varName]),
         ]),
@@ -52,7 +52,7 @@ export function useVariables() {
 
     const itemIndexes = indexes.map(({ item, index }) => index);
 
-    const items = itemIndexes.map(index =>
+    const items = itemIndexes.map((index) =>
       storeKeys
         .slice(0, index + 1)
         .toArray()
@@ -76,9 +76,9 @@ export function useVariables() {
     };
   };
 
-  const prepareVars = rules => {
+  const prepareVars = (rules) => {
     const getLevel = (rules, path = '') =>
-      rules.forEach(rule => {
+      rules.forEach((rule) => {
         const rulePath = path ? `${path}.${rule.path}` : rule.path;
         if (rule.var) {
           defs[rule.var] = {
@@ -94,13 +94,13 @@ export function useVariables() {
     setDefs({ ...defs });
   };
 
-  const readVars = resource => {
+  const readVars = (resource) => {
     const readVar = (def, path, base = resource) => {
       if (path.length) {
         const value = jp.value(base, pathToJP(path[0])) ?? [];
-        const promises = value.map(item => readVar(def, tail(path), item));
-        return Promise.all(promises).then(vars =>
-          vars.map(v => applyDefaults(def, v)),
+        const promises = value.map((item) => readVar(def, tail(path), item));
+        return Promise.all(promises).then((vars) =>
+          vars.map((v) => applyDefaults(def, v)),
         );
       } else if (def.defaultValue) {
         return def.defaultValue;
@@ -117,17 +117,17 @@ export function useVariables() {
     };
 
     const promises = Object.values(defs)
-      .filter(def => typeof vars[def.var] === 'undefined' || def.dynamicValue)
-      .map(async def => {
+      .filter((def) => typeof vars[def.var] === 'undefined' || def.dynamicValue)
+      .map(async (def) => {
         return Promise.any([
           readVar(def, initial(def.path.split(/\.?\[\]\.?/))),
-        ]).then(val => {
+        ]).then((val) => {
           const newval = applyDefaults(def, val);
           return [def, newval];
         });
       });
 
-    return Promise.all(promises).then(values => {
+    return Promise.all(promises).then((values) => {
       values.forEach(([def, val]) => (vars[def.var] = applyDefaults(def, val)));
       setVars({ ...vars });
     });

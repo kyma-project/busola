@@ -8,7 +8,7 @@ type OpenapiState = {
   error: true | undefined;
 } | null;
 
-const asyncOpenapiAtom = atom<Promise<OpenapiState>>(async get => {
+const asyncOpenapiAtom = atom<Promise<OpenapiState>>(async (get) => {
   const fetchFn = getFetchFn(get);
   if (!fetchFn) return null;
   const response = await fetchFn({ relativeUrl: '/openapi/v2' });

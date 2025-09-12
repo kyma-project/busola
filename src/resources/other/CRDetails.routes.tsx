@@ -2,8 +2,9 @@ import React, { Suspense } from 'react';
 import { Route, useParams } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-const CRDetails = React.lazy(() =>
-  import('../../resources/CustomResourceDefinitions/CustomResources.details'),
+const CRDetails = React.lazy(
+  () =>
+    import('../../resources/CustomResourceDefinitions/CustomResources.details'),
 );
 
 type ParamsType = {

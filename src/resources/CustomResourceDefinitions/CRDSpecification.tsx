@@ -73,7 +73,7 @@ export const CRDSpecification = ({ spec }: { spec: any }) => {
             t('custom-resource-definitions.status.served'),
             t('custom-resource-definitions.status.storage'),
           ]}
-          rowRenderer={version => [
+          rowRenderer={(version) => [
             version?.name ?? EMPTY_TEXT_PLACEHOLDER,
             version?.served.toString() ?? EMPTY_TEXT_PLACEHOLDER,
             version?.storage.toString() ?? EMPTY_TEXT_PLACEHOLDER,

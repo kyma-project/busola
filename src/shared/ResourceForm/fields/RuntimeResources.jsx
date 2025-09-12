@@ -17,7 +17,7 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
     value *= 1000;
   }
 
-  const setValue = val => {
+  const setValue = (val) => {
     jp.value(container, propertyPath, val);
     setContainer(container);
   };
@@ -33,7 +33,7 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
       <Inputs.Number
         min="0"
         value={value}
-        setValue={value => setValue(value + 'm')}
+        setValue={(value) => setValue(value + 'm')}
         className="full-width"
         required
         accessibleName={label}
@@ -76,7 +76,7 @@ export function RuntimeResources({
         presets && (
           <ResourceForm.Presets
             presets={mappedPresets}
-            onSelect={preset => setValue(preset.value)}
+            onSelect={(preset) => setValue(preset.value)}
           />
         )
       }

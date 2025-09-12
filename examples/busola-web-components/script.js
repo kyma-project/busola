@@ -55,7 +55,7 @@ class MyCustomPage extends HTMLElement {
     monacoEditor.setAttribute('language', 'javascript');
     monacoEditor.setAttribute('height', '200px');
     monacoEditor.setAttribute('placeholder', 'Write something!');
-    monacoEditor.setProp('on-change', value => {
+    monacoEditor.setProp('on-change', (value) => {
       this.setAttribute('value', value);
     });
 
@@ -82,7 +82,7 @@ class MyCustomPage extends HTMLElement {
     nameInput.setAttribute('name', 'name');
     nameInput.setAttribute('value', 'John Doe');
     nameInput.setAttribute('placeholder', 'Enter your name');
-    nameInput.addEventListener('input', event => {
+    nameInput.addEventListener('input', (event) => {
       console.log('Change!');
     });
     namePanel.appendChild(nameInput);
@@ -90,7 +90,7 @@ class MyCustomPage extends HTMLElement {
     const submitButton = document.createElement('ui5-button');
     submitButton.textContent = 'Submit';
     submitButton.setAttribute('type', 'submit');
-    submitButton.addEventListener('click', event => {
+    submitButton.addEventListener('click', (event) => {
       event.preventDefault();
       console.log('Submit!');
     });

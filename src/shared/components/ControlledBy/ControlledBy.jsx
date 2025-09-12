@@ -19,9 +19,11 @@ export const GoToDetailsLink = ({
   const { namespaceUrl, clusterUrl } = useUrl();
 
   let path = null;
-  const resource = resources.find(res => res.resourceType === pluralize(kind));
+  const resource = resources.find(
+    (res) => res.resourceType === pluralize(kind),
+  );
   const extResource = extensions?.find(
-    cr => cr.general?.resource?.kind === kind,
+    (cr) => cr.general?.resource?.kind === kind,
   );
 
   if (resource) {
@@ -88,7 +90,7 @@ export const ControlledBy = ({
 
   return (
     <ul className="controlled-by-list">
-      {ownerReferences.filter(Boolean).map(owner => (
+      {ownerReferences.filter(Boolean).map((owner) => (
         <li key={owner.kind + owner.name}>
           <OwnerRef owner={owner} />
         </li>

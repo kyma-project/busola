@@ -76,7 +76,7 @@ class MyCustomElement extends HTMLElement {
     });
 
     // Fetch and update weather data
-    fetchMunichWeatherData().then(weatherData => {
+    fetchMunichWeatherData().then((weatherData) => {
       this.updateWeatherUI(weatherData, weatherContainer);
     });
   }
@@ -87,7 +87,7 @@ class MyCustomElement extends HTMLElement {
       const namespaces = await getNamespaces();
 
       // Populate namespace dropdown
-      namespaces.forEach(namespace => {
+      namespaces.forEach((namespace) => {
         const option = document.createElement('ui5-option');
         option.value = namespace.metadata.name;
         option.innerHTML = namespace.metadata.name;
@@ -114,7 +114,7 @@ class MyCustomElement extends HTMLElement {
       deploymentsList.innerHTML = '';
 
       // Add deployment to list
-      deployments.forEach(deployment => {
+      deployments.forEach((deployment) => {
         const deploymentItem = document.createElement('div');
         deploymentItem.className = 'deployment-item';
         deploymentItem.innerHTML = `

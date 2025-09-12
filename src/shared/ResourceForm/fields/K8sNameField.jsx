@@ -40,8 +40,8 @@ export function K8sNameField({
                 compact
                 required={required}
                 showLabel={false}
-                onChange={e => setValue(e.target.value)}
-                onInput={e => setValue(e.target.value)}
+                onChange={(e) => setValue(e.target.value)}
+                onInput={(e) => setValue(e.target.value)}
                 value={value}
                 readOnly={readOnly}
                 pattern={pattern}

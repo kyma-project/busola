@@ -22,7 +22,6 @@ The apps you started run at the following addresses:
 When developing new features in Busola, adhere to the following rules. This will help you to mitigate any security-related threats.
 
 1. Prevent cross-site request forgery (XSRF).
-
    - Do not store the authentication token as a cookie. Make sure the token is sent to Busola backend as a bearer token.
    - Make sure that the state-changing operations (`POST`, `PUT`, `DELETE`, and `UPDATE` requests) are only triggered upon explicit user interactions, such as form submissions.
    - Keep in mind that UI rendering in response to the user navigating between views is only allowed to trigger read-only operations (`GET` requests) without any data mutations.

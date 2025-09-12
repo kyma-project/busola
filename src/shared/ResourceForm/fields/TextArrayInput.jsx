@@ -6,8 +6,8 @@ export function TextArrayInput({
   inputProps: _inputProps,
   sectionTooltipContent,
   placeholder,
-  toInternal = value => value || [],
-  toExternal = value => value.filter(val => typeof val === 'string'),
+  toInternal = (value) => value || [],
+  toExternal = (value) => value.filter((val) => typeof val === 'string'),
   readOnly,
   customFormatFn,
   ariaLabel,
@@ -30,7 +30,7 @@ export function TextArrayInput({
             key={index}
             value={value || ''}
             ref={ref}
-            onInput={e => {
+            onInput={(e) => {
               setValue(e.target.value);
               updateValue();
             }}

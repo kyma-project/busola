@@ -4,11 +4,7 @@ import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-persistent-volume-claim.yaml';
 
-const PVC_NAME =
-  'test-' +
-  Math.random()
-    .toString()
-    .substr(2, 8);
+const PVC_NAME = 'test-' + Math.random().toString().substr(2, 8);
 
 const CAPACITY_VALUE = '1Gi';
 const ACCESS_MODES_VALUE = 'ReadWriteOnce';
@@ -45,7 +41,7 @@ context('Test Persistent Volume Claims', () => {
         Cypress.env('STORAGE_CLASS_NAME'),
         FILE_NAME,
       ),
-    ).then(PVC_CONFIG => {
+    ).then((PVC_CONFIG) => {
       const PVC = JSON.stringify(PVC_CONFIG);
       cy.pasteToMonaco(PVC);
     });
@@ -56,17 +52,11 @@ context('Test Persistent Volume Claims', () => {
   });
 
   it('Check the Persistent Volume Claims details', () => {
-    cy.getMidColumn()
-      .contains(CAPACITY_VALUE)
-      .should('be.visible');
+    cy.getMidColumn().contains(CAPACITY_VALUE).should('be.visible');
 
-    cy.getMidColumn()
-      .contains(ACCESS_MODES_VALUE)
-      .should('be.visible');
+    cy.getMidColumn().contains(ACCESS_MODES_VALUE).should('be.visible');
 
-    cy.getMidColumn()
-      .contains(VOLUME_MODE_VALUE)
-      .should('be.visible');
+    cy.getMidColumn().contains(VOLUME_MODE_VALUE).should('be.visible');
 
     cy.getMidColumn()
       .contains('ui5-panel', Cypress.env('STORAGE_CLASS_NAME'))
@@ -76,16 +66,11 @@ context('Test Persistent Volume Claims', () => {
       .find('ui5-button[accessible-name="enter-full-screen"]')
       .click();
 
-    cy.getMidColumn()
-      .contains('Events')
-      .scrollIntoView()
-      .should('be.visible');
+    cy.getMidColumn().contains('Events').scrollIntoView().should('be.visible');
   });
 
   it('Check the Persistent Volume Claims list and delete', () => {
-    cy.getLeftNav()
-      .contains('Persistent Volume Claims')
-      .click();
+    cy.getLeftNav().contains('Persistent Volume Claims').click();
 
     cy.contains(CAPACITY_VALUE);
 

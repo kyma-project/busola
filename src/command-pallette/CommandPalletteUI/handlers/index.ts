@@ -27,7 +27,7 @@ export function getSuggestions(context: CommandPaletteContext): string[] {
     return [];
   }
   const suggestions = allHandlers
-    .map(handler => handler.getSuggestion(context))
+    .map((handler) => handler.getSuggestion(context))
     .filter(Boolean) as string[];
 
   // don't suggest anything if correct word is already here
@@ -45,7 +45,7 @@ export function getAutocompleteEntries(
   }
 
   const allEntries = allHandlers
-    .flatMap(handler => handler.getAutocompleteEntries(context))
+    .flatMap((handler) => handler.getAutocompleteEntries(context))
     .filter(Boolean);
 
   // don't try to autocomplete if correct word is already here
@@ -63,7 +63,7 @@ export async function fetchResources(
   if (context.activeClusterName) {
     await Promise.all(
       allHandlers
-        .map(handler => handler.fetchResources?.(context))
+        .map((handler) => handler.fetchResources?.(context))
         .filter(Boolean),
     );
   }
@@ -71,8 +71,8 @@ export async function fetchResources(
 
 export function createResults(context: CommandPaletteContext): Result[] {
   const results = allHandlers
-    .flatMap(handler => handler.createResults(context))
-    .filter(h => h !== null) as Result[];
+    .flatMap((handler) => handler.createResults(context))
+    .filter((h) => h !== null) as Result[];
   return results.filter(
     (currentValue, index, arr) => arr.indexOf(currentValue) === index,
   );
@@ -81,17 +81,17 @@ export function createResults(context: CommandPaletteContext): Result[] {
 export function getHelpEntries(context: CommandPaletteContext): HelpEntries {
   const helpEntries: HelpEntries = {
     navigation: allHandlers
-      .map(handler => handler.getNavigationHelp?.(context) || [])
+      .map((handler) => handler.getNavigationHelp?.(context) || [])
       .filter(Boolean)
-      .flatMap(e => e),
+      .flatMap((e) => e),
     others: allHandlers
-      .map(handler => handler.getOthersHelp?.(context) || [])
+      .map((handler) => handler.getOthersHelp?.(context) || [])
       .filter(Boolean)
-      .flatMap(e => e),
+      .flatMap((e) => e),
     crds: allHandlers
-      .map(handler => handler.getCRsHelp?.(context) || [])
+      .map((handler) => handler.getCRsHelp?.(context) || [])
       .filter(Boolean)
-      .flatMap(e => e),
+      .flatMap((e) => e),
   };
 
   helpEntries.navigation.sort((a, b) => a.name.localeCompare(b.name));

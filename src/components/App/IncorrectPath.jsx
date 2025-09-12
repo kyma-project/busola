@@ -23,8 +23,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const { namespaceResourceName = '' } =
     useMatch({
-      path:
-        '/cluster/:cluster/namespaces/:namespace/:namespaceResourceType/:namespaceResourceName',
+      path: '/cluster/:cluster/namespaces/:namespace/:namespaceResourceType/:namespaceResourceName',
       end: false,
     })?.params ?? {};
 
@@ -50,7 +49,7 @@ export function IncorrectPath({ to, title = '', message = '' }) {
   const resourceName = namespace ? namespaceResourceName : clusterResourceName;
 
   const { data, loading } = useGetList(
-    crd => pluralize(crd.spec.names.kind.toLowerCase()) === resourceType,
+    (crd) => pluralize(crd.spec.names.kind.toLowerCase()) === resourceType,
   )(resourceUrl, { skip: !extensions?.length });
 
   if (!extensions?.length && extensions?.length !== 0) return null;

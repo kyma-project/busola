@@ -88,7 +88,7 @@ function createFunctions(failedAttempt: number) {
 function createFetchFunction(failedAttempts: number): fetchFn {
   const fetchFnFactory = (): fetchFn => {
     let called = 0;
-    return async function(
+    return async function (
       handleSuccess: handleChatResponseFn,
       handleError: handleChatErrorResponseFn,
     ) {

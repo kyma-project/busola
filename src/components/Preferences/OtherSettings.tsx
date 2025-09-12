@@ -26,7 +26,7 @@ export default function OtherSettings() {
         accessibleName={t('settings.other.default-page-size')}
         onChange={onChange}
       >
-        {AVAILABLE_PAGE_SIZES.map(available_size => (
+        {AVAILABLE_PAGE_SIZES.map((available_size) => (
           <Option
             value={available_size.toString()}
             key={available_size}

@@ -67,14 +67,14 @@ export function ResourceRefRender({
       });
     }
     Promise.all(
-      (data || []).map(async res => {
+      (data || []).map(async (res) => {
         if (filter) {
           const [val] = await jsonata(filter, { item: res });
           return val ? res : false;
         }
         return res;
       }),
-    ).then(results => {
+    ).then((results) => {
       setResources(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,7 +88,7 @@ export function ResourceRefRender({
     value,
   ]);
 
-  const setValue = value => {
+  const setValue = (value) => {
     const getValuAndChange = async () => {
       if (toExternal) {
         const [external, error] = await jsonata(toExternal, {
@@ -98,7 +98,7 @@ export function ResourceRefRender({
         value = error ? {} : external;
       }
       const resource = (data ?? []).find(
-        res =>
+        (res) =>
           res.metadata.namespace === value.namespace &&
           res.metadata.name === value.name,
       );

@@ -13,10 +13,10 @@ import {
 export function IngressList(props) {
   const { t } = useTranslation();
 
-  const getLoadBalancer = service => {
+  const getLoadBalancer = (service) => {
     if (service.status.loadBalancer?.ingress) {
       return service.status.loadBalancer?.ingress
-        .map(endpoint => endpoint.ip || endpoint.hostname)
+        .map((endpoint) => endpoint.ip || endpoint.hostname)
         .join(', ');
     } else {
       return EMPTY_TEXT_PLACEHOLDER;

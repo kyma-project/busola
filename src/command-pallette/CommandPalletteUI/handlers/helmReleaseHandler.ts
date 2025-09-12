@@ -28,10 +28,10 @@ function getAutocompleteEntries({
     case 3: // name
       const helmReleaseNames = (
         resourceCache[`${namespace}/helmreleases`] || []
-      ).map(n => n.metadata.name);
+      ).map((n) => n.metadata.name);
       return helmReleaseNames
-        .filter(name => name.startsWith(tokenToAutocomplete))
-        .map(name => `${tokens[0]} ${name} `);
+        .filter((name) => name.startsWith(tokenToAutocomplete))
+        .map((name) => `${tokens[0]} ${name} `);
     default:
       return [];
   }
@@ -68,7 +68,7 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
 
 function concernsHelmReleases({ tokens }: CommandPaletteContext) {
   return (
-    helmReleaseAliases.some(hra => hra.startsWith(tokens[0])) ||
+    helmReleaseAliases.some((hra) => hra.startsWith(tokens[0])) ||
     tokens[0] === helmReleaseResourceType
   );
 }
@@ -87,7 +87,7 @@ async function fetchHelmReleases(context: CommandPaletteContext) {
     );
 
     const recentReleases = Object.values(
-      groupBy(allReleases, r => r.metadata.labels.name),
+      groupBy(allReleases, (r) => r.metadata.labels.name),
     ).map(findRecentRelease);
 
     updateResourceCache(`${namespace}/helmreleases`, recentReleases);
@@ -101,14 +101,8 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return null;
   }
 
-  const {
-    resourceCache,
-    tokens,
-    namespace,
-    navigate,
-    t,
-    activeClusterName,
-  } = context;
+  const { resourceCache, tokens, namespace, navigate, t, activeClusterName } =
+    context;
   const helmReleases = resourceCache[`${namespace}/helmreleases`];
 
   const linkToList = {
@@ -131,15 +125,15 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
   const [, delimiter, name] = tokens;
   if (name) {
-    const matchedByName = helmReleases.filter(item =>
+    const matchedByName = helmReleases.filter((item) =>
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item, context));
+      return matchedByName.map((item) => makeListItem(item, context));
     }
     return null;
   } else if (delimiter) {
-    return [...helmReleases.map(item => makeListItem(item, context))];
+    return [...helmReleases.map((item) => makeListItem(item, context))];
   } else {
     return [linkToList];
   }

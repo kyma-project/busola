@@ -20,8 +20,8 @@ import {
 import './ClusterStats.scss';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 
-const Injections = React.lazy(() =>
-  import('../../../Extensibility/ExtensibilityInjections'),
+const Injections = React.lazy(
+  () => import('../../../Extensibility/ExtensibilityInjections'),
 );
 
 export default function ClusterStats({ nodesData }) {

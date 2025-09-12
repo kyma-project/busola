@@ -50,7 +50,7 @@ context('Test Companion Initial Suggestions Error Handling', () => {
       )
       .should('be.visible');
 
-    cy.intercept('POST', '/backend/ai-chat/suggestions', req => {
+    cy.intercept('POST', '/backend/ai-chat/suggestions', (req) => {
       req.reply({
         statusCode: 500,
         body: {
@@ -72,13 +72,11 @@ context('Test Companion Initial Suggestions Error Handling', () => {
       )
       .should('be.visible');
 
-    cy.get('@companion')
-      .find('.bubbles-container')
-      .should('not.exist');
+    cy.get('@companion').find('.bubbles-container').should('not.exist');
   });
 
   it('companion remains functional after error of fetching initial suggestions', () => {
-    cy.intercept('POST', '/backend/ai-chat/followup', req => {
+    cy.intercept('POST', '/backend/ai-chat/followup', (req) => {
       req.reply({
         delay: 100,
         body: {

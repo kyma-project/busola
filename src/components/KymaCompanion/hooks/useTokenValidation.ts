@@ -89,7 +89,7 @@ export const useTokenValidation = (
           updateTokenState(count);
         } catch (err) {
           console.error('Tokenization failed', err);
-          setState(prev => ({
+          setState((prev) => ({
             ...prev,
             tokenError: true,
           }));

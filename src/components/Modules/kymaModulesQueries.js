@@ -19,17 +19,18 @@ export function useKymaQuery() {
   );
 
   const resourceName =
-    kymaResources?.items.find(kymaResource => kymaResource?.status)?.metadata
+    kymaResources?.items.find((kymaResource) => kymaResource?.status)?.metadata
       .name || kymaResources?.items[0]?.metadata?.name;
   const kymaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
 
-  const { data: kymaResource, loading: loadingKyma, error: errorKyma } = useGet(
-    kymaResourceUrl,
-    {
-      pollingInterval: 3000,
-      skip: !resourceName || errorKymaResources,
-    },
-  );
+  const {
+    data: kymaResource,
+    loading: loadingKyma,
+    error: errorKyma,
+  } = useGet(kymaResourceUrl, {
+    pollingInterval: 3000,
+    skip: !resourceName || errorKymaResources,
+  });
 
   return {
     data: kymaResource,

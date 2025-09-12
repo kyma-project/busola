@@ -31,7 +31,7 @@ export function InlineWidget({ children, value, structure, ...props }) {
     <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
   );
 }
-InlineWidget.copyable = Renderer => Renderer?.copyable;
+InlineWidget.copyable = (Renderer) => Renderer?.copyable;
 InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
   Renderer?.copyFunction
     ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
@@ -65,7 +65,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
 
     useEffect(() => {
       if (!props.structure.copyable || !isRendererCopyable) return;
-      jsonata(props?.structure?.link).then(linkObject => {
+      jsonata(props?.structure?.link).then((linkObject) => {
         setTextToCopy(
           copyFunction(props, Renderer, defaultCopyFunction, linkObject),
         );

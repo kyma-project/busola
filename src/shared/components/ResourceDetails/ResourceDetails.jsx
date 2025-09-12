@@ -35,12 +35,12 @@ import { ResourceCustomStatusColumns } from './ResourceCustomStatusColumns';
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
 // It doesn't affect the lighthouse score, but it prolongs the graph waiting time.
-const ResourceGraph = React.lazy(() =>
-  import('../ResourceGraph/ResourceGraph'),
+const ResourceGraph = React.lazy(
+  () => import('../ResourceGraph/ResourceGraph'),
 );
 
-const Injections = React.lazy(() =>
-  import('../../../components/Extensibility/ExtensibilityInjections'),
+const Injections = React.lazy(
+  () => import('../../../components/Extensibility/ExtensibilityInjections'),
 );
 
 ResourceDetails.propTypes = {
@@ -81,13 +81,15 @@ export function ResourceDetails(props) {
 export const ResourceDetailContext = createContext(false);
 
 function ResourceDetailsRenderer(props) {
-  const { loading = true, error, data: resource, silentRefetch } = useGet(
-    props.resourceUrl,
-    {
-      pollingInterval: 3000,
-      errorTolerancy: props.isModule ? 0 : undefined,
-    },
-  );
+  const {
+    loading = true,
+    error,
+    data: resource,
+    silentRefetch,
+  } = useGet(props.resourceUrl, {
+    pollingInterval: 3000,
+    errorTolerancy: props.isModule ? 0 : undefined,
+  });
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
@@ -200,11 +202,8 @@ function Resource({
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
-  const {
-    isProtected,
-    protectedResourceWarning,
-    protectedResourcePopover,
-  } = useProtectedResources();
+  const { isProtected, protectedResourceWarning, protectedResourcePopover } =
+    useProtectedResources();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -219,15 +218,13 @@ function Resource({
   const [filteredStatusColumnsLong, setFilteredStatusColumnsLong] = useState(
     [],
   );
-  const [
-    filteredConditionsComponents,
-    setFilteredConditionsComponents,
-  ] = useState([]);
+  const [filteredConditionsComponents, setFilteredConditionsComponents] =
+    useState([]);
   const [filteredDetailsCardColumns, setFilteredDetailsCardColumns] = useState(
     [],
   );
 
-  const filterColumns = async col => {
+  const filterColumns = async (col) => {
     const { visible, error } = (await col.visibility?.(resource)) || {
       visible: true,
     };
@@ -241,20 +238,20 @@ function Resource({
   useEffect(() => {
     if (customStatusColumns?.length) {
       Promise.all(
-        customStatusColumns.map(async col => {
+        customStatusColumns.map(async (col) => {
           return (await filterColumns(col)) ? col : false;
         }),
-      ).then(res => {
+      ).then((res) => {
         const customCols = res
           .filter(Boolean)
-          ?.filter(col => !col?.conditionComponent)
-          ?.filter(col => !col?.fullWidth || col?.fullWidth === false);
+          ?.filter((col) => !col?.conditionComponent)
+          ?.filter((col) => !col?.fullWidth || col?.fullWidth === false);
         setFilteredStatusColumns(customCols);
 
         const customColsLong = res
           .filter(Boolean)
-          ?.filter(col => !col?.conditionComponent)
-          ?.filter(col => col?.fullWidth && col?.fullWidth === true);
+          ?.filter((col) => !col?.conditionComponent)
+          ?.filter((col) => col?.fullWidth && col?.fullWidth === true);
         setFilteredStatusColumnsLong(customColsLong);
       });
     }
@@ -264,10 +261,10 @@ function Resource({
   useEffect(() => {
     if (customConditionsComponents?.length) {
       Promise.all(
-        customConditionsComponents.map(async col => {
+        customConditionsComponents.map(async (col) => {
           return (await filterColumns(col)) ? col : false;
         }),
-      ).then(res => setFilteredConditionsComponents(res.filter(Boolean)));
+      ).then((res) => setFilteredConditionsComponents(res.filter(Boolean)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customConditionsComponents]);
@@ -275,10 +272,10 @@ function Resource({
   useEffect(() => {
     if (customColumns?.length) {
       Promise.all(
-        customColumns.map(async col => {
+        customColumns.map(async (col) => {
           return (await filterColumns(col)) ? col : false;
         }),
-      ).then(res => setFilteredDetailsCardColumns(res.filter(Boolean)));
+      ).then((res) => setFilteredDetailsCardColumns(res.filter(Boolean)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customColumns]);
@@ -293,7 +290,7 @@ function Resource({
         />
       </Suspense>
       {headerActions}
-      {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
+      {resourceHeaderActions.map((resourceAction) => resourceAction(resource))}
       <div>
         {!disableDelete && (
           <>
@@ -427,7 +424,7 @@ function Resource({
               {renderUpdateDate(lastUpdate, t('common.value-units.days-ago'))}
             </DynamicPageComponent.Column>
           )}
-          {filteredDetailsCardColumns.map(col => (
+          {filteredDetailsCardColumns.map((col) => (
             <DynamicPageComponent.Column key={col.header} title={col.header}>
               {col.value(resource)}
             </DynamicPageComponent.Column>
@@ -460,9 +457,9 @@ function Resource({
     />
   );
 
-  const customOverviewCard = (
-    customHealthCards || []
-  ).map((healthCard, index) => healthCard(resource, index));
+  const customOverviewCard = (customHealthCards || []).map(
+    (healthCard, index) => healthCard(resource, index),
+  );
 
   return (
     <ResourceDetailContext.Provider value={true}>
@@ -524,7 +521,7 @@ function Resource({
                 root={resource}
               />
             </Suspense>
-            {(customComponents || []).map(component =>
+            {(customComponents || []).map((component) =>
               component(resource, resourceUrl),
             )}
             {children}
@@ -545,7 +542,7 @@ function Resource({
             </Suspense>
           </>
         }
-        inlineEditForm={stickyHeaderHeight => (
+        inlineEditForm={(stickyHeaderHeight) => (
           <ResourceCreate
             title={
               editActionLabel ||
@@ -559,7 +556,7 @@ function Resource({
             protectedResourceWarning={protectedResourceWarning(resource, true)}
             readOnly={readOnly}
             disableEdit={disableEdit}
-            renderForm={props => (
+            renderForm={(props) => (
               <ErrorBoundary>
                 <CreateResourceForm
                   resource={resource}

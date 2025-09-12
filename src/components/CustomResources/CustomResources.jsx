@@ -54,14 +54,14 @@ export function CustomResources({
     }
   };
 
-  const customColumns = version.additionalPrinterColumns?.map(column => ({
+  const customColumns = version.additionalPrinterColumns?.map((column) => ({
     header: column.name,
-    value: resource => getJsonPath(resource, column.jsonPath),
+    value: (resource) => getJsonPath(resource, column.jsonPath),
   }));
   // CRD can have infinite number of additionalPrinterColumns what would be impossible to fit into the table
   if (customColumns?.length > 5) customColumns.length = 5;
 
-  const customColumnLayout = resource => {
+  const customColumnLayout = (resource) => {
     const { group, version } = extractApiGroupVersion(crd?.apiVersion);
     return {
       resourceName: resource?.metadata?.name,
@@ -84,7 +84,7 @@ export function CustomResources({
     testid: 'crd-custom-resources',
     omitColumnsIds,
     hideCreateOption,
-    createResourceForm: props => (
+    createResourceForm: (props) => (
       <CRCreate {...props} crd={crd} layoutNumber="midColumn" />
     ),
     resourceUrlPrefix: `/apis/${group}/${version.name}`,

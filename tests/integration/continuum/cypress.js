@@ -7,12 +7,13 @@ const {
   ModuleManagementStrategy,
 } = require('@continuum/continuum-javascript-professional');
 
-const accessEngineFilePath = `${__dirname}/../node_modules/@continuum/continuum-javascript-professional/AccessEngine.professional.js`.replace(
-  /^\//,
-  '',
-); // versions of Cypress prior to 5 include a leading forward slash in __dirname
+const accessEngineFilePath =
+  `${__dirname}/../node_modules/@continuum/continuum-javascript-professional/AccessEngine.professional.js`.replace(
+    /^\//,
+    '',
+  ); // versions of Cypress prior to 5 include a leading forward slash in __dirname
 
-const setUpContinuum = configFilePath =>
+const setUpContinuum = (configFilePath) =>
   // Using the Continuum JavaScript SDK requires us to load the following files before invoking `Continuum.setUp`:
   // * the Continuum configuration file (continuum.conf.js) specified by `configFilePath`
   // * Access Engine (AccessEngine.professional.js), the underlying accessibility testing engine Continuum uses
@@ -20,12 +21,12 @@ const setUpContinuum = configFilePath =>
 
   cy
     .readFile(configFilePath)
-    .then(configFileContents => window.eval(configFileContents))
+    .then((configFileContents) => window.eval(configFileContents))
     .window()
-    .then(windowUnderTest =>
+    .then((windowUnderTest) =>
       cy
         .readFile(accessEngineFilePath)
-        .then(accessEngineFileContents =>
+        .then((accessEngineFileContents) =>
           windowUnderTest.eval(
             Continuum.createInjectableAccessEngineCode(
               accessEngineFileContents,
@@ -40,12 +41,12 @@ const runAllAccessibilityTests = () =>
 
   cy
     .window()
-    .then(windowUnderTest =>
+    .then((windowUnderTest) =>
       cy.then(() => {
         if (!windowUnderTest.LevelAccess_Continuum_AccessEngine) {
           return cy
             .readFile(accessEngineFilePath)
-            .then(accessEngineFileContents =>
+            .then((accessEngineFileContents) =>
               windowUnderTest.eval(
                 Continuum.createInjectableAccessEngineCode(
                   accessEngineFileContents,
@@ -63,17 +64,16 @@ const printAccessibilityTestResults = () => {
   if (accessibilityConcerns.length > 0) {
     // print out some information about each accessibility concern,
     // highlighting offending elements along the way
-    accessibilityConcerns.forEach(accessibilityConcern => {
+    accessibilityConcerns.forEach((accessibilityConcern) => {
       // if the element to highlight is in shadow DOM, highlight its shadow root nearest the light DOM;
       // there's an outstanding defect preventing us from directly highlighting elements in shadow DOM: https://github.com/cypress-io/cypress/issues/8843
-      const modifiedAccessibilityConcernPath = accessibilityConcern.path?.split(
-        '|:host>',
-      )[0]; // "|:host>" in the path indicates the element is in shadow DOM
+      const modifiedAccessibilityConcernPath =
+        accessibilityConcern.path?.split('|:host>')[0]; // "|:host>" in the path indicates the element is in shadow DOM
 
       if (modifiedAccessibilityConcernPath) {
         let originalNodeBorder;
         cy.get(modifiedAccessibilityConcernPath)
-          .then(node => {
+          .then((node) => {
             originalNodeBorder = node.css('border');
             node.css('border', '2px solid magenta');
           })
@@ -81,7 +81,7 @@ const printAccessibilityTestResults = () => {
             `Accessibility Concern: ${accessibilityConcern.attribute} [${accessibilityConcern.bestPracticeDetailsUrl}](${accessibilityConcern.bestPracticeDetailsUrl})`,
           )
           .get(modifiedAccessibilityConcernPath, { log: false })
-          .then(node => {
+          .then((node) => {
             node.css('border', originalNodeBorder);
           });
       }
@@ -109,8 +109,8 @@ const submitAccessibilityConcernsToAMP = (
 
   cy.log('Submitting accessibility concerns to AMP...');
 
-  cy.title({ log: false }).then(pageTitle => {
-    cy.url({ log: false }).then({ timeout: 30000 }, async pageUrl => {
+  cy.title({ log: false }).then((pageTitle) => {
+    cy.url({ log: false }).then({ timeout: 30000 }, async (pageUrl) => {
       const ampReportingService = Continuum.AMPReportingService;
 
       await ampReportingService.setActiveOrganization(10274); // ID of AMP organization to submit test results to

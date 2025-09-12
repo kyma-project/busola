@@ -52,7 +52,8 @@ export function CommunityModuleContextProvider({
         installedCommunityModules: installedCommunityModules,
         installedCommunityModuleTemplates: installedCommunityModuleTemplates,
         installedCommunityModulesLoading,
-        notInstalledCommunityModuleTemplates: notInstalledCommunityModuleTemplates,
+        notInstalledCommunityModuleTemplates:
+          notInstalledCommunityModuleTemplates,
       }}
     >
       {children}
@@ -62,7 +63,7 @@ export function CommunityModuleContextProvider({
 
 function simplifyInstalledModules(installedModules: ModuleTemplateListType) {
   return (
-    installedModules.items?.map(module => ({
+    installedModules.items?.map((module) => ({
       name:
         module.metadata?.labels['operator.kyma-project.io/module-name'] ??
         module.spec.moduleName,

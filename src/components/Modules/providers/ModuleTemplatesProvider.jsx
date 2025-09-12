@@ -17,15 +17,11 @@ export const ModuleTemplatesContext = createContext({
 
 export function ModuleTemplatesContextProvider({ children }) {
   // Fetching all Module Templates can be replaced with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
-  const {
-    data: allModuleTemplates,
-    loading: moduleTemplatesLoading,
-  } = useModuleTemplatesQuery({});
+  const { data: allModuleTemplates, loading: moduleTemplatesLoading } =
+    useModuleTemplatesQuery({});
 
-  const {
-    data: moduleReleaseMetas,
-    loading: moduleReleaseMetasLoading,
-  } = useModulesReleaseQuery({});
+  const { data: moduleReleaseMetas, loading: moduleReleaseMetasLoading } =
+    useModulesReleaseQuery({});
 
   const {
     communityTemplates: communityModuleTemplates,

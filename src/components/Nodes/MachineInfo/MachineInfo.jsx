@@ -64,13 +64,13 @@ export function MachineInfo({ nodeInfo, capacity, addresses, spec, gpus }) {
           <DynamicPageComponent.Column
             title={t('node-details.machine-info.internal-ip')}
           >
-            {addresses.find(a => a.type === 'InternalIP')?.address ||
+            {addresses.find((a) => a.type === 'InternalIP')?.address ||
               EMPTY_TEXT_PLACEHOLDER}
           </DynamicPageComponent.Column>
           <DynamicPageComponent.Column
             title={t('node-details.machine-info.hostname')}
           >
-            {addresses.find(a => a.type === 'Hostname').address ||
+            {addresses.find((a) => a.type === 'Hostname').address ||
               EMPTY_TEXT_PLACEHOLDER}
           </DynamicPageComponent.Column>
         </>

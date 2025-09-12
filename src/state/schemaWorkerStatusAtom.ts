@@ -10,7 +10,6 @@ const defaultValue = {
   schemasError: null,
 };
 
-export const schemaWorkerStatusAtom = atom<SchemaWorkerStatusState>(
-  defaultValue,
-);
+export const schemaWorkerStatusAtom =
+  atom<SchemaWorkerStatusState>(defaultValue);
 schemaWorkerStatusAtom.debugLabel = 'schemaWorkerStatusAtom';

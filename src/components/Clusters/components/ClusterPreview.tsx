@@ -28,8 +28,9 @@ export function ClusterPreview({
 }: ClusterPreviewProps) {
   const { t } = useTranslation();
   const userIndex = getUserIndex(kubeconfig);
-  const authenticationType = (kubeconfig?.users?.[userIndex]
-    ?.user as KubeconfigOIDCAuth)?.exec
+  const authenticationType = (
+    kubeconfig?.users?.[userIndex]?.user as KubeconfigOIDCAuth
+  )?.exec
     ? 'oidc'
     : 'token';
 
@@ -90,8 +91,9 @@ export function ClusterPreview({
   };
 
   const TokenData = () => {
-    const token = (kubeconfig?.users?.[userIndex]
-      ?.user as KubeconfigNonOIDCAuthToken)?.token;
+    const token = (
+      kubeconfig?.users?.[userIndex]?.user as KubeconfigNonOIDCAuthToken
+    )?.token;
 
     return (
       <>

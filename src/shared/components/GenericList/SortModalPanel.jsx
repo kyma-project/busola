@@ -47,7 +47,7 @@ export const SortModalPanel = ({
           {t('common.buttons.reset')}
         </Button>
       }
-      actions={onClose => [
+      actions={(onClose) => [
         <Button
           design="Emphasized"
           onClick={() => {
@@ -67,7 +67,7 @@ export const SortModalPanel = ({
     >
       <List
         separators="All"
-        onItemClick={e => {
+        onItemClick={(e) => {
           setOrder(e?.detail?.item?.children[0]?.value);
         }}
         accessibleName="sortOrderList"
@@ -78,7 +78,7 @@ export const SortModalPanel = ({
             name="sortOrder"
             value="ASC"
             checked={order === 'ASC'}
-            onChange={event => setOrder(event.target.value)}
+            onChange={(event) => setOrder(event.target.value)}
           />
           <Text>{t('common.sorting.asc')}</Text>
         </ListItemCustom>
@@ -87,14 +87,14 @@ export const SortModalPanel = ({
             name="sortOrder"
             value="DESC"
             checked={order === 'DESC'}
-            onChange={event => setOrder(event.target.value)}
+            onChange={(event) => setOrder(event.target.value)}
           />
           <Text>{t('common.sorting.desc')}</Text>
         </ListItemCustom>
       </List>
       <List
         separators="All"
-        onItemClick={e => {
+        onItemClick={(e) => {
           setName(e?.detail?.item?.children[0]?.value);
         }}
         accessibleName="sortByList"
@@ -109,7 +109,7 @@ export const SortModalPanel = ({
                     name="sortBy"
                     value={value}
                     checked={name === value}
-                    onChange={event => setName(event.target.value)}
+                    onChange={(event) => setName(event.target.value)}
                   />
                   <Text>
                     {i18n.exists(`common.sorting.${value}`)

@@ -48,21 +48,17 @@ export function useDeleteResource({
     resourceType,
   );
 
-  const {
-    prevLayout,
-    prevQuery,
-    currentLayout,
-    currentQuery,
-  } = usePrepareLayout(layoutNumber);
+  const { prevLayout, prevQuery, currentLayout, currentQuery } =
+    usePrepareLayout(layoutNumber);
 
-  const performCancel = cancelFn => {
+  const performCancel = (cancelFn) => {
     if (cancelFn) {
       cancelFn();
     }
     setShowDeleteDialog(false);
   };
   const performDelete = async (resource, resourceUrl, deleteFn) => {
-    const withoutQueryString = path => path?.split('?')?.[0];
+    const withoutQueryString = (path) => path?.split('?')?.[0];
     const url = withoutQueryString(resourceUrl);
 
     const forceRedirect =
@@ -199,7 +195,7 @@ export function useDeleteResource({
             {t(
               resourceIsCluster
                 ? 'common.buttons.disconnect'
-                : customDeleteText ?? 'common.buttons.delete',
+                : (customDeleteText ?? 'common.buttons.delete'),
             )}
           </Button>,
           <Button
@@ -242,7 +238,7 @@ export function useDeleteResource({
             <CheckBox
               accessibleName={t('common.delete-dialog.delete-confirm')}
               checked={dontConfirmDelete}
-              onChange={() => setDontConfirmDelete(prevState => !prevState)}
+              onChange={() => setDontConfirmDelete((prevState) => !prevState)}
               text={t('common.delete-dialog.delete-confirm')}
             />
           )}

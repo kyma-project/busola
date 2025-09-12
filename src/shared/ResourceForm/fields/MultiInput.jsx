@@ -70,13 +70,13 @@ export function MultiInput({
     setInternalValue([...toInternal(valueRef.current), null]);
   }
 
-  const isLast = index => index === internalValue.length - 1;
+  const isLast = (index) => index === internalValue.length - 1;
 
-  const updateValue = val => {
+  const updateValue = (val) => {
     setValue(toExternal(val));
   };
 
-  const removeValue = index => {
+  const removeValue = (index) => {
     /* 
       Removing one of the inputs decreases the next inputs keys by one, so the last input has the previous input value instead of being empty.
       We force rerender by changing keys.
@@ -91,7 +91,7 @@ export function MultiInput({
     setInternalValue([...internalValue]);
   };
 
-  const focus = ref => {
+  const focus = (ref) => {
     if (ref?.current?.focus) {
       ref.current.focus();
     }
@@ -100,8 +100,8 @@ export function MultiInput({
 
   useEffect(() => {
     internalValue.forEach((entry, index) => {
-      const isValid = child => child.props.validate(entry) ?? true;
-      const errorMessage = child => {
+      const isValid = (child) => child.props.validate(entry) ?? true;
+      const errorMessage = (child) => {
         if (!child.props.validateMessage) {
           return t('common.errors.generic');
         } else if (typeof child.props.validateMessage !== 'function') {
@@ -127,7 +127,7 @@ export function MultiInput({
       input({
         index: (index + 1) * keys,
         value: entry,
-        setValue: entry => setEntry(entry, index),
+        setValue: (entry) => setEntry(entry, index),
         ref: refs[index]?.[inputIndex],
         updateValue: () => updateValue(internalValue),
         internalValue,

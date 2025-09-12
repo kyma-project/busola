@@ -12,7 +12,7 @@ export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
   if (!commandData || !commandData.args) throw new Error('No args provided');
   let output: any = {};
 
-  commandData.args.forEach(arg => {
+  commandData.args.forEach((arg) => {
     /**
      * The regular expression defined below is tailored to parse command line arguments, capturing both arguments that
      * include values and those without values. The regex facilitates the extraction of both the keys and optionally
@@ -87,7 +87,7 @@ export function createLoginCommand(
       `--oidc-client-id=${oidcConfig.clientId || ''}`,
       `--oidc-client-secret=${oidcConfig.clientSecret || ''}`,
       ...(oidcConfig.scopes?.length
-        ? oidcConfig.scopes.map(scope => `--oidc-extra-scope=${scope || ''}`)
+        ? oidcConfig.scopes.map((scope) => `--oidc-extra-scope=${scope || ''}`)
         : [`--oidc-extra-scope=openid`]),
       '--grant-type=auto',
     ],

@@ -3,7 +3,7 @@ context('Test resource validation', () => {
 
   before(() => {
     cy.loginAndSelectCluster();
-    cy.fixture('examples/resource-validation/rule-set.yaml').then(ruleSet => {
+    cy.fixture('examples/resource-validation/rule-set.yaml').then((ruleSet) => {
       cy.mockConfigMap({
         label: 'busola.io/resource-validation=rule-set',
         data: ruleSet,
@@ -16,7 +16,7 @@ context('Test resource validation', () => {
   it('Check for default policies', () => {
     cy.contains('ui5-button', 'Upload YAML').click();
 
-    cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
+    cy.fixture('examples/resource-validation/pod.yaml').then((podConfig) => {
       cy.pasteToMonaco(podConfig);
     });
 
@@ -63,7 +63,7 @@ context('Test resource validation', () => {
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
-    cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
+    cy.fixture('examples/resource-validation/pod.yaml').then((podConfig) => {
       cy.pasteToMonaco(podConfig);
     });
 
@@ -116,7 +116,7 @@ context('Test resource validation', () => {
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
-    cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
+    cy.fixture('examples/resource-validation/pod.yaml').then((podConfig) => {
       cy.pasteToMonaco(podConfig);
     });
 
@@ -173,7 +173,7 @@ context('Test resource validation', () => {
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
-    cy.fixture('examples/resource-validation/pod.yaml').then(podConfig => {
+    cy.fixture('examples/resource-validation/pod.yaml').then((podConfig) => {
       cy.pasteToMonaco(podConfig);
     });
 

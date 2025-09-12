@@ -78,7 +78,7 @@ async function fetchResponse(
     body,
     method: 'POST',
   })
-    .then(async response => {
+    .then(async (response) => {
       if (!response.ok) {
         const respJson = await response?.json();
         throw new HttpError(
@@ -101,7 +101,7 @@ async function fetchResponse(
       );
       return true;
     })
-    .catch(error => {
+    .catch((error) => {
       if (
         error instanceof HttpError &&
         error.statusCode !== HTTPStatus.RATE_LIMIT_CODE
@@ -149,11 +149,10 @@ export async function readChunk(
       }
       const receivedString = decoder.decode(value, { stream: true });
       const combinedData = buffer + receivedString;
-      const { completeObjects, remainingBuffer } = extractJsonObjectsFromChunk(
-        combinedData,
-      );
+      const { completeObjects, remainingBuffer } =
+        extractJsonObjectsFromChunk(combinedData);
 
-      completeObjects.forEach(message => {
+      completeObjects.forEach((message) => {
         const chunk = JSON.parse(message);
         // Custom error provided by busola backend during streaming, not by companion backend
         if (chunk?.streamingError) {
@@ -172,7 +171,7 @@ export async function readChunk(
         remainingBuffer,
       );
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Error reading stream:', error);
       handleError({
         message: error.message,
@@ -181,9 +180,7 @@ export async function readChunk(
     });
 }
 
-export function extractJsonObjectsFromChunk(
-  text: string,
-): {
+export function extractJsonObjectsFromChunk(text: string): {
   completeObjects: string[];
   remainingBuffer: string;
 } {
@@ -255,7 +252,7 @@ export default async function getChatResponse({
   );
   fillAuthHeaders(headers, clusterAuth);
 
-  const fetchWrapper = async function(
+  const fetchWrapper = async function (
     handleResponse: handleChatResponseFn,
     handleError: handleChatErrorResponseFn,
   ): Promise<boolean> {

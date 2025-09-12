@@ -22,7 +22,9 @@ export default function ConfirmationSettings() {
           id="dont-confirm-delete-switch"
           accessibleName={t('settings.clusters.dontConfirmDelete')}
           checked={dontConfirmDelete}
-          onChange={() => setDontConfirmDelete(previousState => !previousState)}
+          onChange={() =>
+            setDontConfirmDelete((previousState) => !previousState)
+          }
         />
       </div>
     </div>

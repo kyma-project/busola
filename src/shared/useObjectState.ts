@@ -6,7 +6,7 @@ export function useObjectState<T>(): ObjectStateType<T> {
   const [objectCache, setObjectCache] = useState<T>({} as T);
 
   const updateObjectCache = (key: string, value: any) => {
-    setObjectCache(oC => ({
+    setObjectCache((oC) => ({
       ...oC,
       [key]: value,
     }));

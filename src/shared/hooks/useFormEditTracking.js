@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 
-const excludeStatus = resource => {
+const excludeStatus = (resource) => {
   if (!resource) return null;
   const modifiedResource = cloneDeep(resource);
   delete modifiedResource.status;
@@ -35,7 +35,7 @@ export function useFormEditTracking(
 
   useEffect(() => {
     if (formOpen && isEdited) {
-      setIsResourceEdited(prevState => ({ ...prevState, isEdited: true }));
+      setIsResourceEdited((prevState) => ({ ...prevState, isEdited: true }));
     } else {
       setIsResourceEdited({ isEdited: false });
     }

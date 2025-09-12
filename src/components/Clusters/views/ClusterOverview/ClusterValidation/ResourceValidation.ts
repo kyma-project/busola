@@ -11,10 +11,10 @@ const queue = new PQueue({ concurrency: 1 });
 
 const executeInWorker = (...args: any[]) =>
   queue.add(() => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       worker.addEventListener(
         'message',
-        event => {
+        (event) => {
           resolve(event.data);
         },
         { once: true },

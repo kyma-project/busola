@@ -7,7 +7,7 @@ import { YamlFileUploader } from './YamlFileUploader';
 import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
 import { FlexBox } from '@ui5/webcomponents-react';
 
-const isK8sResource = resource => {
+const isK8sResource = (resource) => {
   if (!resource) return true;
   return resource.apiVersion && resource.kind && resource.metadata;
 };
@@ -21,7 +21,7 @@ function YamlUpload({
   const [editor, setEditor] = useState(null);
   const { t } = useTranslation();
   const yamlContentString = resourcesData
-    ?.map(y => jsyaml.dump(y, { noRefs: true }) || undefined)
+    ?.map((y) => jsyaml.dump(y, { noRefs: true }) || undefined)
     ?.join('---\n');
 
   useEffect(() => {
@@ -29,14 +29,14 @@ function YamlUpload({
   }, [editor, yamlContentString]);
 
   const updateYamlContent = useCallback(
-    text => {
+    (text) => {
       try {
         const files = jsyaml.loadAll(text);
 
         setLastOperationState(OPERATION_STATE_INITIAL);
-        if (files.some(file => typeof file !== 'object')) {
+        if (files.some((file) => typeof file !== 'object')) {
           setError(t('clusters.wizard.not-an-object'));
-        } else if (files.some(file => !isK8sResource(file))) {
+        } else if (files.some((file) => !isK8sResource(file))) {
           setError(t('upload-yaml.messages.not-a-k8s-resource'));
         } else {
           setResourcesData(files);
@@ -64,7 +64,7 @@ function YamlUpload({
       direction={'Column'}
     >
       <YamlFileUploader
-        onYamlContentAdded={val => {
+        onYamlContentAdded={(val) => {
           updateYamlContent(val);
           editor.getModel().setValue(val);
         }}

@@ -55,11 +55,11 @@ export function ResourceList({
   });
 
   const extensibilityResourceSchema = extensions?.find(
-    cR => cR.general?.resource?.kind === kind,
+    (cR) => cR.general?.resource?.kind === kind,
   );
 
   const PredefinedRenderer = resources.find(
-    r => r.resourceType.toLowerCase() === pluralKind,
+    (r) => r.resourceType.toLowerCase() === pluralKind,
   );
 
   if (!structure.children && extensibilityResourceSchema) {
@@ -100,7 +100,7 @@ export function ResourceList({
 
   // make sure "kind" is present on resources
   if (Array.isArray(value?.items)) {
-    value.items = value.items.map(d => ({ ...d, kind }));
+    value.items = value.items.map((d) => ({ ...d, kind }));
   }
 
   return (
@@ -125,12 +125,12 @@ export function ResourceList({
           structure.hasDetailsView ?? !!PredefinedRenderer?.Details
         }
         columns={children}
-        sortBy={defaultSortOptions =>
+        sortBy={(defaultSortOptions) =>
           sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
         }
         simpleEmptyListMessage={simpleEmptyListMessage}
         searchSettings={{
-          textSearchProperties: defaultSortOptions =>
+          textSearchProperties: (defaultSortOptions) =>
             textSearchProperties(defaultSortOptions),
         }}
         {...structure}

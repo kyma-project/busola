@@ -34,9 +34,7 @@ describe('Dropdown Component', () => {
     cy.mount(<Dropdown {...defaultProps} onSelect={onSelect} />);
 
     cy.get('[data-testid="test-dropdown"]').click();
-    cy.get('ui5-cb-item')
-      .eq(1)
-      .click();
+    cy.get('ui5-cb-item').eq(1).click();
 
     cy.get('@onSelect').should('have.been.calledOnce');
     cy.get('@onSelect').should(
@@ -88,10 +86,7 @@ describe('Dropdown Component', () => {
   it('opens popover on focus', () => {
     cy.mount(<Dropdown {...defaultProps} />);
 
-    cy.get('[data-testid="test-dropdown"]')
-      .shadow()
-      .find('input')
-      .focus();
+    cy.get('[data-testid="test-dropdown"]').shadow().find('input').focus();
 
     cy.get('ui5-responsive-popover').should('have.attr', 'open');
   });
@@ -99,10 +94,7 @@ describe('Dropdown Component', () => {
   it('opens popover on input click', () => {
     cy.mount(<Dropdown {...defaultProps} />);
 
-    cy.get('[data-testid="test-dropdown"]')
-      .shadow()
-      .find('input')
-      .click();
+    cy.get('[data-testid="test-dropdown"]').shadow().find('input').click();
 
     cy.get('ui5-responsive-popover').should('have.attr', 'open');
   });

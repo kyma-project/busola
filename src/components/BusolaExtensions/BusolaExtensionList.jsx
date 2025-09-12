@@ -13,7 +13,7 @@ function BusolaExtensionList({ layoutCloseCreateUrl }) {
   const customColumns = [
     {
       header: t('common.headers.namespace'),
-      value: resource => resource.metadata.namespace,
+      value: (resource) => resource.metadata.namespace,
     },
   ];
 
@@ -37,15 +37,14 @@ function BusolaExtensionList({ layoutCloseCreateUrl }) {
       resourceUrlPrefix="/api/v1"
       hasDetailsView={true}
       layoutCloseCreateUrl={layoutCloseCreateUrl}
-      customUrl={extension =>
+      customUrl={(extension) =>
         clusterUrl(
           `busolaextensions/${extension.metadata.namespace}/${extension.metadata.name}`,
         )
       }
       emptyListProps={{
         subtitleText: t('extensibility.description'),
-        url:
-          'https://github.com/kyma-project/busola/tree/main/docs/extensibility',
+        url: 'https://github.com/kyma-project/busola/tree/main/docs/extensibility',
       }}
     />
   );

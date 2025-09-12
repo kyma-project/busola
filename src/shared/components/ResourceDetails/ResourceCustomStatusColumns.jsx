@@ -6,7 +6,7 @@ export function ResourceCustomStatusColumns({
 }) {
   return (
     <>
-      {filteredStatusColumns?.map(col => (
+      {filteredStatusColumns?.map((col) => (
         <DynamicPageComponent.Column key={col.header} title={col.header}>
           {col.value(resource)}
         </DynamicPageComponent.Column>

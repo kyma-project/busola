@@ -16,14 +16,14 @@ export function ClusterNodes({ data, error, loading }) {
   const { clusterUrl } = useUrl();
   const { t } = useTranslation();
 
-  const getStatusType = status => {
+  const getStatusType = (status) => {
     if (status === 'Ready') return 'Positive';
     return undefined;
   };
 
-  const getStatus = status => {
+  const getStatus = (status) => {
     const conditions = status?.conditions || [];
-    const currentStatus = conditions.find(c => c?.status === 'True');
+    const currentStatus = conditions.find((c) => c?.status === 'True');
     return currentStatus ? (
       <StatusBadge
         additionalContent={currentStatus.message}
@@ -48,7 +48,7 @@ export function ClusterNodes({ data, error, loading }) {
     t('common.headers.zone'),
   ];
 
-  const rowRenderer = entry => {
+  const rowRenderer = (entry) => {
     const { cpu, memory } = entry?.metrics || {};
 
     return [
