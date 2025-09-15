@@ -23,11 +23,14 @@ export const usePrepareResourceUrl = ({
   if (!apiVersion || !resourceType) return;
 
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
-  const resourceUrl = namespaceId
-    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
-    : `/${api}/${resourceType?.toLowerCase()}`;
+  const resourceUrl = !apiVersion
+    ? ''
+    : namespaceId && namespaceId !== '-all-'
+      ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
+      : `/${api}/${resourceType?.toLowerCase()}`;
   return resourceUrl;
 };
+
 export const usePrepareListProps = ({
   resourceCustomType,
   resourceType,
@@ -41,8 +44,9 @@ export const usePrepareListProps = ({
   const { i18n, t } = useTranslation();
 
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
-  const resourceUrl =
-    namespaceId && namespaceId !== '-all-'
+  const resourceUrl = !apiVersion
+    ? ''
+    : namespaceId && namespaceId !== '-all-'
       ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
       : `/${api}/${resourceType?.toLowerCase()}`;
 
@@ -71,11 +75,13 @@ export const usePrepareDetailsProps = ({
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
-  const resourceUrl = resourceName
-    ? namespaceId
-      ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${encodedResourceName}`
-      : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`
-    : '';
+  const resourceUrl = !apiVersion
+    ? ''
+    : resourceName
+      ? namespaceId && namespaceId !== '-all-'
+        ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${encodedResourceName}`
+        : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`
+      : '';
 
   const extensions = useAtomValue(extensionsAtom);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
@@ -107,8 +113,9 @@ export const usePrepareCreateProps = ({
   const { i18n, t } = useTranslation();
 
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
-  const resourceUrl =
-    namespaceId && namespaceId !== '-all-'
+  const resourceUrl = !apiVersion
+    ? ''
+    : namespaceId && namespaceId !== '-all-'
       ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
       : `/${api}/${resourceType?.toLowerCase()}`;
 

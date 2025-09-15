@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useParams } from 'react-router';
+import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 
@@ -16,7 +16,12 @@ const HelmReleaseDetails = React.lazy(
 
 const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   const layoutState = useAtomValue(columnLayoutAtom);
-  const { namespaceId, releaseName } = useParams();
+  const { namespaceId: rawNamespaceId, releaseName } = useParams();
+  const [searchParams] = useSearchParams();
+  const namespaceId =
+    rawNamespaceId === '-all-'
+      ? searchParams.get('resourceNamespace')
+      : rawNamespaceId;
 
   usePrepareLayoutColumns({
     resourceType: 'HelmReleases',
