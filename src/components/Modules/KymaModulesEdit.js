@@ -219,7 +219,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
         return selectedModule.name === module?.name;
       });
 
-      const moduleChannelVersion = module.channels?.filter(
+      const modulePredefinedVersion = module.channels?.filter(
         (channel) => channel.channel === kymaResource?.spec?.channel,
       )[0]?.version;
 
@@ -240,7 +240,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
             }
             className="channel-select"
           >
-            {!!moduleChannelVersion && (
+            {!!modulePredefinedVersion && (
               <Option
                 selected={
                   !module.channels?.filter(
@@ -256,7 +256,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
                   'kyma-modules.predefined-channel',
                 )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
                   1,
-                )} v${moduleChannelVersion})`}
+                )} v${modulePredefinedVersion})`}
               </Option>
             )}
             {module.channels?.map((channel) => (
