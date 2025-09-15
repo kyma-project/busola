@@ -69,7 +69,7 @@ context('Test Community Modules views', () => {
   it('Test Modules Add view', () => {
     cy.get('ui5-panel[data-testid="kyma-modules-list"]')
       .contains('ui5-button', 'Add')
-      .click();
+      .click({ force: true });
 
     cy.wait(1000);
 
