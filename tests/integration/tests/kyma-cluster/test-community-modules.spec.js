@@ -40,7 +40,13 @@ context('Test Community Modules views', () => {
 
     cy.wait(1000);
 
+    cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
+
     cy.get('ui5-card').contains('busola').should('be.visible');
+
+    cy.get('ui5-card').contains('Documentation').should('be.visible');
+
+    cy.get('ui5-panel').contains('Advanced').should('be.visible');
 
     cy.get('ui5-title').contains('busola').click();
 
@@ -58,6 +64,20 @@ context('Test Community Modules views', () => {
 
     // Check if already installed module is not visible
     cy.get('.create-form').contains('No community modules available');
+  });
+
+  it('Test Modules Add view', () => {
+    cy.get('ui5-panel[data-testid="kyma-modules-list"]')
+      .contains('ui5-button', 'Add')
+      .click();
+
+    cy.wait(1000);
+
+    cy.get('ui5-title').contains('Add Modules').should('be.visible');
+
+    cy.get('ui5-card').contains('Documentation').should('be.visible');
+
+    cy.get('ui5-panel').contains('Advanced').should('be.visible');
   });
 
   it('Test number of Modules in Modules Overview card', () => {
