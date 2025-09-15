@@ -1,10 +1,12 @@
 import { NestedPartial } from 'types';
 
+export type KubeconfigNonOIDCAuthToken = {
+  token: string;
+};
+
 export type KubeconfigNonOIDCAuth =
   | { 'client-certificate-data': string; 'client-key-data': string }
-  | {
-      token: string;
-    };
+  | KubeconfigNonOIDCAuthToken;
 
 export type LoginCommand = {
   apiVersion: 'client.authentication.k8s.io/v1beta1';
