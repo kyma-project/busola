@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { FlexBox } from '@ui5/webcomponents-react';
-import { Label } from '../../../shared/ResourceForm/components/Label';
+import { Label } from './Label';
 import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';

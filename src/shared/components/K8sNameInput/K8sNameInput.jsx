@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
 import { Input } from '@ui5/webcomponents-react';
-import { Label } from '../../../shared/ResourceForm/components/Label';
+import { Label } from '../../ResourceForm/components/Label';
 
 export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 
