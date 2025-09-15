@@ -53,6 +53,7 @@ export const ClusterDataForm = ({
   setResource,
   onChange,
   onSubmit,
+  resourceUrl,
   formElementRef,
   className = '',
   modeSelectorDisabled = false,
@@ -172,6 +173,7 @@ export const ClusterDataForm = ({
       initialResource={kubeconfig}
       onChange={onChange}
       formElementRef={formElementRef}
+      createUrl={resourceUrl}
       onSubmit={onSubmit}
       autocompletionDisabled
       disableDefaultFields={true}
