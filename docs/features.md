@@ -69,7 +69,8 @@ EXTENSIBILITY_INJECTIONS:
   ```yaml
   FEEDBACK:
     isEnabled: true
-    link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    config:
+      link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   ```
 
 - **GET_HELP_LINKS** – is used to show or hide helper links. You can find all the available links in the following example.
