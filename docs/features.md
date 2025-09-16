@@ -236,5 +236,6 @@ GZIP:
 
   ```yaml
   KYMA_COMPANION:
-    link: ''
+    config:
+      link: ''
   ```
