@@ -62,13 +62,13 @@ export const CommunityModulesList = ({
       (ext: { metadata: { labels: Record<string, string> } }) =>
         ext.metadata.labels['app.kubernetes.io/part-of'] !== 'Kyma',
     )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
-      pollingInterval: 5000,
+      pollingInterval: 0,
     } as any);
 
   const { data: crds, silentRefetch: getCrds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
     {
-      pollingInterval: 5000,
+      pollingInterval: 0,
     } as any,
   );
   useEffect(() => {
