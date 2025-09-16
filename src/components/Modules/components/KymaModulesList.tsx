@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
@@ -64,20 +64,25 @@ export const KymaModulesList = ({
 }: ModulesListProps) => {
   const { t } = useTranslation();
 
-  const { data: kymaExt } = useGetList(
+  const { data: kymaExt, silentRefetch: getKymaExt } = useGetList(
     (ext: { metadata: { labels: Record<string, string> } }) =>
       ext.metadata.labels['app.kubernetes.io/part-of'] === 'Kyma',
   )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
-    pollingInterval: 5000,
+    pollingInterval: 0,
   } as any);
 
-  const { data: crds } = useGet(
+  const { data: crds, silentRefetch: getCrds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
     {
-      pollingInterval: 5000,
+      pollingInterval: 0,
     } as any,
   );
 
+  useEffect(() => {
+    getKymaExt();
+    getCrds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedModules]);
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
