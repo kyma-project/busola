@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useState, useContext, useEffect } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 import { fromJS } from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +29,7 @@ import {
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
-import { merge } from 'lodash';
+import { cloneDeep, merge } from 'lodash';
 
 import { TriggerContext, TriggerContextProvider } from './contexts/Trigger';
 import { useAtomValue } from 'jotai';
@@ -69,6 +76,7 @@ export function ExtensibilityCreateCore({
   const [initialResource, setInitialResource] = useState(
     initialExtensibilityResource,
   );
+  const hasSetInitialResource = useRef(false);
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
@@ -85,9 +93,24 @@ export function ExtensibilityCreateCore({
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
+  useEffect(() => {
+    if (
+      !initialResource &&
+      !initialExtensibilityResource &&
+      !hasSetInitialResource.current &&
+      resource
+    ) {
+      const excludedResource = cloneDeep(resource);
+      delete excludedResource.status;
+      delete excludedResource.metadata;
+      setInitialResource(excludedResource);
+      hasSetInitialResource.current = true;
+    }
+  }, [initialExtensibilityResource, initialResource, resource]);
+
   const isEdit = useMemo(
     () =>
-      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+      !!initialResource?.metadata?.name && !layoutState?.showCreate?.resource,
     [initialResource, layoutState?.showCreate?.resource],
   );
 
