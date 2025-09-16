@@ -19,7 +19,7 @@ export default defineConfig({
       clientFiles: [
         'cypress/support/component.jsx',
         'src/**/*.cy.{js,jsx,ts,tsx}',
-      ]
+      ],
     },
     proxy: {
       // with options
@@ -28,25 +28,12 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/proxy': {
-      target: 'http://localhost:3001',
-      changeOrigin: true,
-    },
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
     },
   },
   plugins: [
-    {
-      name: 'treat-js-files-as-jsx',
-      async transform(code, id) {
-        if (!id.match(/src\/.*\.js$/)) return null;
-
-        // Use the exposed transform from vite, instead of directly
-        // transforming with esbuild
-        return transformWithEsbuild(code, id, {
-          loader: 'jsx',
-          jsx: 'automatic',
-        });
-      },
-    },
     react(),
     viteTsconfigPaths(),
     svgr({
@@ -64,22 +51,17 @@ export default defineConfig({
         },
       ],
     }),
-    eslint()
+    eslint(),
   ],
   worker: {
     plugins: () => [viteTsconfigPaths()],
   },
   optimizeDeps: {
     force: true,
-    esbuildOptions: {
-      loader: {
-        '.js': 'jsx',
-      },
-    },
     include: [
       '@openapi-contrib/openapi-schema-to-json-schema',
       '@stoplight/json-ref-resolver',
-      'monaco-yaml/yaml.worker.js'
+      'monaco-yaml/yaml.worker.js',
     ],
   },
   define: {
@@ -87,12 +69,12 @@ export default defineConfig({
   },
 });
 
-function mergeYamlFiles (filesPath) {
+function mergeYamlFiles(filesPath) {
   let mergedYamlContent = '';
 
   const files = glob.sync(filesPath);
 
-  files.forEach(file => {
+  files.forEach((file) => {
     const content = fs.readFileSync(file, 'utf-8');
     mergedYamlContent += `---\n${content}\n`;
   });

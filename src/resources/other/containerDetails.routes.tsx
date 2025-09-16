@@ -4,10 +4,16 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const ContainersLogs = React.lazy(() => import('../Pods/ContainersLogs'));
 
+type ParamsType = {
+  podName: string;
+  containerName: string;
+  namespaceId: string;
+};
+
 const RoutedContainerDetails = () => {
-  const params = useParams();
-  const decodedPodName = decodeURIComponent(params.podName);
-  const decodedContainerName = decodeURIComponent(params.containerName);
+  const params = useParams<ParamsType>();
+  const decodedPodName = decodeURIComponent(params.podName || '');
+  const decodedContainerName = decodeURIComponent(params.containerName || '');
   return (
     <ContainersLogs
       params={{

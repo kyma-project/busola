@@ -12,7 +12,7 @@ import { ResourceList } from './ResourceList';
 import { ResourceButton } from './ResourceButton';
 import { ExternalLinkButton } from './ExternalLinkButton';
 import { EventList } from './EventList';
-import { ResourceLink } from './ResourceLink.js';
+import { ResourceLink } from './ResourceLink';
 import { Labels } from './Labels';
 import { Alert } from './Alert';
 import { ConditionList } from './ConditionList';
