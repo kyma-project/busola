@@ -13,11 +13,14 @@
     display: flex;
     justify-content: flex-end;
     box-sizing: border-box;
+    gap: 0.5rem;
+    flex-wrap: wrap;
     padding: 0.5rem;
     border: 1px solid var(--sapGroup_TitleBorderColor);
     border-radius: var(--sapElement_BorderCornerRadius);
     background-color: var(--sapGroup_TitleBackground);
-    box-shadow: 0 0 0.125rem 0
+    box-shadow:
+      0 0 0.125rem 0
         color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent),
       0 0.5rem 1rem 0
         color-mix(in srgb, var(--sapContent_ShadowColor) 16%, transparent);
