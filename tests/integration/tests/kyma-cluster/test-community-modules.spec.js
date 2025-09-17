@@ -40,7 +40,13 @@ context('Test Community Modules views', () => {
 
     cy.wait(1000);
 
+    cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
+
     cy.get('ui5-card').contains('busola').should('be.visible');
+
+    cy.get('ui5-card').contains('Documentation').should('be.visible');
+
+    cy.get('ui5-panel').contains('Advanced').should('be.visible');
 
     cy.get('ui5-title').contains('busola').click();
 
