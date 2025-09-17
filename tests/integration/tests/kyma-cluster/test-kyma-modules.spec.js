@@ -28,6 +28,20 @@ context('Test Kyma Modules views', () => {
     cy.inspectTab('View');
   });
 
+  it('Test Modules Add view', () => {
+    cy.get('ui5-panel[data-testid="kyma-modules-list"]')
+      .contains('ui5-button', 'Add')
+      .click({ force: true });
+
+    cy.wait(1000);
+
+    cy.get('ui5-title').contains('Add Modules').should('be.visible');
+
+    cy.get('ui5-card').contains('Documentation').should('be.visible');
+
+    cy.get('ui5-panel').contains('Advanced').should('be.visible');
+  });
+
   it('Test adding Modules', () => {
     cy.get('ui5-panel[data-testid="kyma-modules-list"]')
       .find('ui5-table')
