@@ -6,6 +6,7 @@ import { ExtInjectionConfig, ExtResource } from '../types';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { clusterAtom } from '../clusterAtom';
 import { authDataAtom } from '../authDataAtom';
+import { refreshExtenshionsAtom } from '../refreshExtenshionsAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { openapiPathIdListAtom } from 'state/openapi/openapiPathIdAtom';
@@ -401,6 +402,7 @@ const pushExtToEventTypes = (extensions: any) => {
 export const useGetExtensions = () => {
   const cluster = useAtomValue(clusterAtom);
   const auth = useAtomValue(authDataAtom);
+  const refreshExtenshions = useAtomValue(refreshExtenshionsAtom);
   const setExtensions = useSetAtom(extensionsAtom);
   const setStatics = useSetAtom(staticsAtom);
   const setAllExtensions = useSetAtom(allExtensionsAtom);
@@ -568,7 +570,15 @@ export const useGetExtensions = () => {
     };
     void manageExtensions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, auth, permissionSet, namespace, openapiPathIdList, features]);
+  }, [
+    cluster,
+    auth,
+    permissionSet,
+    namespace,
+    openapiPathIdList,
+    features,
+    refreshExtenshions,
+  ]);
 };
 
 // null for defaultValue,

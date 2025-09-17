@@ -188,6 +188,10 @@ export const ModulesDeleteBox = ({
       setInitialUnchangedResource(cloneDeep(kymaResourceState));
     }
 
+    if (allowForceDelete && associatedResourcesUrls.length > 0) {
+      deleteResources(deleteFn, crUrls);
+    }
+
     if (detailsOpen) {
       setLayoutColumn({
         layout: 'OneColumn',
@@ -195,9 +199,6 @@ export const ModulesDeleteBox = ({
         midColumn: null,
         endColumn: null,
       });
-    }
-    if (allowForceDelete && associatedResourcesUrls.length > 0) {
-      deleteResources(deleteFn, crUrls);
     }
   };
 

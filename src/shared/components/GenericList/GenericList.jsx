@@ -263,7 +263,7 @@ export const GenericList = ({
       ) {
         // Workaround for modules like btp-operator on refresh
         const resourceType = layoutState.midColumn.resourceType;
-        const resourceTypeDotIndex = resourceType.indexOf('.');
+        const resourceTypeDotIndex = resourceType?.indexOf('.') || -1;
         const resourceTypeBase =
           resourceTypeDotIndex !== -1
             ? resourceType.substring(0, resourceTypeDotIndex)
