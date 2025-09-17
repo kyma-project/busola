@@ -237,5 +237,8 @@ GZIP:
   ```yaml
   KYMA_COMPANION:
     config:
-      link: ''
+      feedbackLink: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+      documentationLink: https://help.sap.com/
+      model: 'gpt-4.1'
+      queryMaxTokens: 8000
   ```
