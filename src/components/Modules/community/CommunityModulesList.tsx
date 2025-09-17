@@ -307,7 +307,7 @@ export const CommunityModulesList = ({
             hasDetailsLink,
           })
         }
-        noHideFields={['Name', '', 'Namespace']}
+        disableHiding={false}
         displayArrow
         title={'Community Modules'}
         sortBy={{

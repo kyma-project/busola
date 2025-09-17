@@ -219,6 +219,10 @@ export default function KymaModulesEdit({ resource, ...props }) {
         return selectedModule.name === module?.name;
       });
 
+      const modulePredefinedVersion = module.channels?.filter(
+        (channel) => channel.channel === kymaResource?.spec?.channel,
+      )[0]?.version;
+
       const mod = (
         <FlexBox
           direction="Column"
@@ -236,27 +240,25 @@ export default function KymaModulesEdit({ resource, ...props }) {
             }
             className="channel-select"
           >
-            <Option
-              selected={
-                !module.channels?.filter(
-                  (channel) =>
-                    channel.channel ===
-                    findModuleSpec(kymaResource, module.name)?.channel,
-                )
-              }
-              value={'predefined'}
-              key={`predefined-${module.name}`}
-            >
-              {`${t(
-                'kyma-modules.predefined-channel',
-              )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
-                1,
-              )} v${
-                module.channels?.filter(
-                  (channel) => channel.channel === kymaResource?.spec?.channel,
-                )[0]?.version
-              })`}
-            </Option>
+            {!!modulePredefinedVersion && (
+              <Option
+                selected={
+                  !module.channels?.filter(
+                    (channel) =>
+                      channel.channel ===
+                      findModuleSpec(kymaResource, module.name)?.channel,
+                  )
+                }
+                value={'predefined'}
+                key={`predefined-${module.name}`}
+              >
+                {`${t(
+                  'kyma-modules.predefined-channel',
+                )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
+                  1,
+                )} v${modulePredefinedVersion})`}
+              </Option>
+            )}
             {module.channels?.map((channel) => (
               <Option
                 selected={
