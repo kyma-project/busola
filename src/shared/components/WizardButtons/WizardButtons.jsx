@@ -28,7 +28,6 @@ export function WizardButtons({
         <Button
           design="Transparent"
           onClick={goToPreviousStep}
-          className="sap-margin-end-tiny"
           accessibleName="previous-step"
         >
           {t('clusters.buttons.previous-step')}
@@ -38,7 +37,6 @@ export function WizardButtons({
         design="Emphasized"
         onClick={lastStep ? onComplete : goToNextStep}
         disabled={invalid}
-        className="sap-margin-end-tiny"
         accessibleName={lastStep ? 'last-step' : 'next-step'}
       >
         {lastStep
