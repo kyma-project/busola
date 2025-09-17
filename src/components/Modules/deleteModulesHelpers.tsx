@@ -282,6 +282,7 @@ export const checkIfAllResourcesAreDeleted = async (
   fetchFn: Function,
   resourcesUrls: string[],
 ) => {
+  let urlDuringError = '';
   const results = await Promise.all(
     resourcesUrls.map(async (url) => {
       const result = await retry(
@@ -289,6 +290,7 @@ export const checkIfAllResourcesAreDeleted = async (
           try {
             const result = await fetchFn(url);
             const resources = await result.json();
+            urlDuringError = url;
             return resources?.items.length === 0;
           } catch (e) {
             if (e instanceof HttpError && e.code === 404) {
@@ -297,13 +299,14 @@ export const checkIfAllResourcesAreDeleted = async (
             throw e;
           }
         },
-        3,
-        1000,
+        5,
+        3000,
       );
       return { resource: url, result };
     }),
-  );
-  console.log(results);
+  ).catch((e) => {
+    return [{ resource: urlDuringError, result: false }];
+  });
   return results.filter((v) => !v.result).map((r) => r.resource);
 };
 
