@@ -329,14 +329,9 @@ function Resource({
     lastUpdate = lastOp.time;
   }
 
-  const renderUpdateDate = (lastUpdate, valueUnit) => {
+  const renderUpdateDate = (lastUpdate) => {
     if (lastUpdate) {
-      return (
-        <ReadableElapsedTimeFromNow
-          timestamp={lastUpdate}
-          valueUnit={valueUnit}
-        />
-      );
+      return <ReadableElapsedTimeFromNow timestamp={lastUpdate} />;
     }
     return EMPTY_TEXT_PLACEHOLDER;
   };
@@ -413,7 +408,6 @@ function Resource({
           >
             <ReadableElapsedTimeFromNow
               timestamp={resource.metadata.creationTimestamp}
-              valueUnit={t('common.value-units.days')}
             />
           </DynamicPageComponent.Column>
           {!hideLastUpdate && (
@@ -421,7 +415,7 @@ function Resource({
               key="Last Update"
               title={t('common.headers.last-update')}
             >
-              {renderUpdateDate(lastUpdate, t('common.value-units.days-ago'))}
+              {renderUpdateDate(lastUpdate)}
             </DynamicPageComponent.Column>
           )}
           {filteredDetailsCardColumns.map((col) => (

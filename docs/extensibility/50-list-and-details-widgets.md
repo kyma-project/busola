@@ -346,6 +346,12 @@ See the following example:
 
 The `TimeFromNow` widget calculates the time difference between the date provided in **source** and the current time and displays it in the format X days ago.
 
+These are the available `TimeFromNow` widget parameters:
+
+| Parameter              | Required | Type                 | Description                                                                                                         |
+| ---------------------- | -------- | -------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **roundingResultType** | No       | ROUNDING_RESULT_TYPE | Determines if the result is rounded to days/hours/minutes/seconds. Available values: DAYS, HOURS, MINUTES, SECONDS. |
+
 See the following example:
 
 ```yaml

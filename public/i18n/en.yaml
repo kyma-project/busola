@@ -416,6 +416,9 @@ common:
   value-units:
     days: days
     days-ago: days ago
+    hours-ago: hours ago
+    minutes-ago: minutes ago
+    seconds-ago: seconds ago
   'yes': 'yes'
 components:
   banner-carousel: Banner Carousel
