@@ -105,7 +105,11 @@ export function EditorActions({
         className="action-button"
         tooltip={t('common.tooltips.download')}
       />
-      <CopyButton val={val} className="action-button" resourceName={title} />
+      <CopyButton
+        contentToCopy={val}
+        buttonClassName="action-button"
+        resourceName={title}
+      />
       <Button
         design="Transparent"
         icon={visible ? 'hide' : 'show'}
