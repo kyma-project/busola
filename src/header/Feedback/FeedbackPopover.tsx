@@ -20,9 +20,8 @@ import {
 } from 'components/KymaCompanion/components/JouleFeedbackDialog/helpers/feedbackViewHelpers';
 
 export default function FeedbackPopover() {
-  const { isEnabled: isFeedbackEnabled, link: kymaFeedbackLink } = useFeature(
-    configFeaturesNames.FEEDBACK,
-  );
+  const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
+    useFeature(configFeaturesNames.FEEDBACK);
   const {
     isEnabled: isKymaCompanionEnabled,
     config: { feedbackLink: companionFeedbackLink } = {},
@@ -163,7 +162,7 @@ export default function FeedbackPopover() {
               }
               onClick={() => {
                 const newWindow = window.open(
-                  kymaFeedbackLink,
+                  kymaFeedbackConfig.link,
                   '_blank',
                   'noopener, noreferrer',
                 );

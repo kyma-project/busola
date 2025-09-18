@@ -25,7 +25,9 @@ const config__onlyKymaFeedback = {
         features: {
           FEEDBACK: {
             isEnabled: true,
-            link: 'https://www.google.com/',
+            config: {
+              link: 'https://www.google.com/',
+            },
           },
         },
       },
@@ -40,7 +42,9 @@ const config__KymaAndJouleFeedback = {
         features: {
           FEEDBACK: {
             isEnabled: true,
-            link: 'https://www.google.com/',
+            config: {
+              link: 'https://www.google.com/',
+            },
           },
           KYMA_COMPANION: {
             isEnabled: true,
