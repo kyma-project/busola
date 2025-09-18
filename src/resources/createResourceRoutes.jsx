@@ -1,7 +1,7 @@
-import React, { Suspense, useMemo, useRef } from 'react';
+import React, { Suspense, useRef } from 'react';
 
 import { useAtomValue } from 'jotai';
-import { Route, useParams } from 'react-router';
+import { Route, useParams, useSearchParams } from 'react-router';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,19 +37,16 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
 
   const { t } = useTranslation();
 
-  const {
-    resourceName: resourceNameFromParams,
-    namespaceId: namespaceIdFromParams,
-  } = useParams();
+  const { resourceName: resourceNameFromParams, namespaceId: rawNamespaceId } =
+    useParams();
+  const [searchParams] = useSearchParams();
 
-  const resourceName = useMemo(
-    () => props.resourceName ?? resourceNameFromParams,
-    [props.resourceName, resourceNameFromParams],
-  );
-  const namespaceId = useMemo(
-    () => props.namespaceId ?? namespaceIdFromParams,
-    [props.namespaceId, namespaceIdFromParams],
-  );
+  const resourceName = props.resourceName ?? resourceNameFromParams;
+  const namespaceId =
+    props.namespaceId ??
+    (rawNamespaceId === '-all-'
+      ? searchParams.get('resourceNamespace')
+      : rawNamespaceId);
 
   usePrepareLayoutColumns({
     resourceType: props.resourceType,

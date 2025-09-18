@@ -97,6 +97,7 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Acc test Pizza Orders details', () => {
+    cy.wait(1000);
     cy.getLeftNav().contains('Pizza Orders').click();
 
     cy.clickGenericListLink('diavola-order');

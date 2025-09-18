@@ -46,6 +46,10 @@ const ContainersLogs = ({ params }) => {
   const streamData = useGetStream(url);
 
   useEffect(() => {
+    setLogsToSave(streamData.data || []);
+  }, [streamData.data]);
+
+  useEffect(() => {
     selectedLogIndex.current = 0;
     scrollToSelectedLog();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,7 +137,6 @@ const ContainersLogs = ({ params }) => {
   const LogsPanel = ({ streamData, containerName }) => {
     const { error, data } = streamData;
     if (error) return <div className="empty-logs">{error.message}</div>;
-    setLogsToSave(data || []);
 
     if (data.length === 0)
       return (
@@ -180,6 +183,7 @@ const ContainersLogs = ({ params }) => {
               >
                 {logTimeframeOptions.map((option) => (
                   <Option
+                    key={option.key}
                     value={option.key}
                     selected={sinceSeconds.toString() === option.key}
                   >

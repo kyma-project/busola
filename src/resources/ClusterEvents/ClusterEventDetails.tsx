@@ -17,10 +17,12 @@ export default function ClusterEventDetails({
 }: ClusterEventDetailsProps) {
   const params = useParams();
   const overriddenNamespace = params.namespace ?? namespace;
-  const overriddenResourceUrl = resourceUrl
-    ? `/api/v1/namespaces/${overriddenNamespace}/events/${resourceName}`
-    : undefined;
+  const overriddenResourceUrl =
+    resourceUrl && overriddenNamespace && resourceName
+      ? `/api/v1/namespaces/${overriddenNamespace}/events/${resourceName}`
+      : undefined;
   const { clusterUrl } = useUrl();
+
   return (
     <EventDetails
       {...props}

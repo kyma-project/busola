@@ -1,5 +1,5 @@
 import React, { Suspense, useMemo } from 'react';
-import { Route, useParams } from 'react-router';
+import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,12 @@ export const ColumnWrapper = () => {
   const { t } = useTranslation();
 
   const { crdName, crName } = useParams();
-  const { namespace, scopedUrl } = useUrl();
+  const { namespace: rawNamespace, scopedUrl } = useUrl();
+  const [searchParams] = useSearchParams();
+  const namespace =
+    rawNamespace === '-all-'
+      ? searchParams.get('resourceNamespace')
+      : rawNamespace;
 
   usePrepareLayoutColumns({
     resourceType: 'CustomResourceDefinition',

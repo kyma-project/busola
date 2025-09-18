@@ -16,7 +16,7 @@ import { decodeHelmRelease } from './decodeHelmRelease';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
-function HelmReleasesDetails({ releaseName, namespace }) {
+export default function HelmReleasesDetails({ releaseName, namespace }) {
   const { t } = useTranslation();
 
   const resourceUrl =
@@ -82,39 +82,35 @@ function HelmReleasesDetails({ releaseName, namespace }) {
   );
 
   return (
-    <>
-      <ResourceDetails
-        description={ResourceDescription}
-        resourceType="HelmReleases"
-        namespace={namespace}
-        resourceName={releaseName}
-        customTitle={releaseName}
-        resourceUrl={resourceUrl}
-        resource={releaseSecret}
-        customStatusColumns={customStatusColumns}
-        statusBadge={statusBadge}
-        createResourceForm={() => (
-          <ResourceCreate
-            title={'HelmRelease'}
-            isEdit={true}
-            confirmText={t('common.buttons.save')}
-            disableEdit={true}
-            renderForm={(props) => (
-              <ErrorBoundary>
-                <HelmReleasesYaml
-                  resource={releaseSecret}
-                  editMode={true}
-                  {...props}
-                />
-              </ErrorBoundary>
-            )}
-          />
-        )}
-        customComponents={customComponents}
-        disableDelete
-      />
-    </>
+    <ResourceDetails
+      description={ResourceDescription}
+      resourceType="HelmReleases"
+      namespace={namespace}
+      resourceName={releaseName}
+      customTitle={releaseName}
+      resourceUrl={resourceUrl}
+      resource={releaseSecret}
+      customStatusColumns={customStatusColumns}
+      statusBadge={statusBadge}
+      createResourceForm={() => (
+        <ResourceCreate
+          title={'HelmRelease'}
+          isEdit={true}
+          confirmText={t('common.buttons.save')}
+          disableEdit={true}
+          renderForm={(props) => (
+            <ErrorBoundary>
+              <HelmReleasesYaml
+                resource={releaseSecret}
+                editMode={true}
+                {...props}
+              />
+            </ErrorBoundary>
+          )}
+        />
+      )}
+      customComponents={customComponents}
+      disableDelete
+    />
   );
 }
-
-export default HelmReleasesDetails;

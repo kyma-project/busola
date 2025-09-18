@@ -110,8 +110,8 @@ export function CommandPalletteHelp({
       </Title>
       <br className="help-divider" />
       <div className="help-text">
-        {helpEntries.navigation.map(({ name, aliases }) => (
-          <div key={name}>
+        {helpEntries.navigation.map(({ name, aliases }, idx) => (
+          <div key={`${name}-${idx}`}>
             <p className="help-text__name">{name}</p>
             <pre className="key">
               {aliases?.join(', ') || EMPTY_TEXT_PLACEHOLDER}

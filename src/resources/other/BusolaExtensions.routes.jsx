@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useParams } from 'react-router';
+import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,12 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
 
   const { t } = useTranslation();
 
-  const { namespace, name } = useParams();
+  const { namespace: rawNamespace, name } = useParams();
+  const [searchParams] = useSearchParams();
+  const namespace =
+    rawNamespace === '-all-'
+      ? searchParams.get('resourceNamespace')
+      : rawNamespace;
 
   usePrepareLayoutColumns({
     resourceType: 'Extensions',

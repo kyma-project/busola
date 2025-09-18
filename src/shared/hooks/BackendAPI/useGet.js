@@ -22,11 +22,13 @@ const useGetHook = (processDataFn) =>
       compareEntireResource = false,
     } = {},
   ) {
+    const shouldSkip = skip || !path;
+
     const authData = useAtomValue(authDataAtom);
     const lastAuthData = useRef(null);
     const lastResourceVersion = useRef(null);
     const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(!skip);
+    const [loading, setLoading] = useState(!shouldSkip);
     const [error, setError] = useState(null);
     const fetch = useFetch();
     const abortController = useRef(new AbortController());
@@ -38,7 +40,11 @@ const useGetHook = (processDataFn) =>
 
     const refetch = useCallback(
       (isSilent, currentData) => async () => {
-        if (skip || !authData || previousRequestNotFinished.current === path)
+        if (
+          shouldSkip ||
+          !authData ||
+          previousRequestNotFinished.current === path
+        )
           return;
         if (!isSilent) setTimeout((_) => setLoading(true));
 
@@ -121,14 +127,22 @@ const useGetHook = (processDataFn) =>
 
       cleanupPolling();
       // POLLING
-      if (!pollingInterval || receivedForbidden || skip) return;
+      if (!pollingInterval || receivedForbidden || shouldSkip) return;
       intervalIdRef.current = setInterval(refetch(true, data), pollingInterval);
       return cleanupPolling;
-    }, [path, pollingInterval, data, error, skip, refetch, cleanupPolling]);
+    }, [
+      path,
+      pollingInterval,
+      data,
+      error,
+      shouldSkip,
+      refetch,
+      cleanupPolling,
+    ]);
 
     useEffect(() => {
       // INITIAL FETCH on path being set/changed
-      if (lastAuthData.current && path && !skip) refetch(false, null)();
+      if (lastAuthData.current && path && !shouldSkip) refetch(false, null)();
       return (_) => {
         if (loading) setLoading(false);
       };
@@ -136,11 +150,11 @@ const useGetHook = (processDataFn) =>
 
     useEffect(() => {
       // silent refetch once 'skip' has been disabled
-      if (lastAuthData.current && path && !skip) refetch(true, null)();
+      if (lastAuthData.current && path && !shouldSkip) refetch(true, null)();
       return (_) => {
         if (loading) setLoading(false);
       };
-    }, [skip]);
+    }, [shouldSkip]);
 
     useEffect(() => {
       if (JSON.stringify(lastAuthData.current) !== JSON.stringify(authData)) {

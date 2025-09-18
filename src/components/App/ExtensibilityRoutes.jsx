@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import pluralize from 'pluralize';
 import i18next from 'i18next';
-import { Route, useParams } from 'react-router';
+import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +27,12 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
 
   const { t } = useTranslation();
 
-  const { namespaceId, resourceName } = useParams();
+  const { namespaceId: rawNamespaceId, resourceName } = useParams();
+  const [searchParams] = useSearchParams();
+  const namespaceId =
+    rawNamespaceId === '-all-'
+      ? searchParams.get('resourceNamespace')
+      : rawNamespaceId;
 
   const defaultColumn = resourceName ? 'details' : 'list';
 
@@ -127,7 +132,7 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
   );
 };
 
-export const createExtensibilityRoutes = (extension, language, ...props) => {
+export const createExtensibilityRoutes = (extension, language) => {
   const urlPath =
     extension?.general?.urlPath ||
     pluralize(extension?.general?.resource?.kind?.toLowerCase() || '');

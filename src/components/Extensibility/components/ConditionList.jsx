@@ -34,7 +34,7 @@ export const ConditionList = ({
       value.map(async (v) => {
         const override = structure?.highlights?.find((o) => o.type === v.type);
         const customContentPromise = await Promise.all(
-          structure?.customContent?.map(async (c) => {
+          (structure?.customContent || []).map(async (c) => {
             return {
               ...c,
               value:
