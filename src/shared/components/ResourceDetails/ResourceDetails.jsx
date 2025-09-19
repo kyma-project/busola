@@ -31,6 +31,9 @@ import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { ResourceCustomStatusColumns } from './ResourceCustomStatusColumns';
+import DiscoveryBanner from './DiscoveryBanner';
+import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from 'state/types';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -460,6 +463,11 @@ function Resource({
   const customOverviewCard = (customHealthCards || []).map(
     (healthCard, index) => healthCard(resource, index),
   );
+  const [hideDiscoveryBanner, setHideDiscoveryBanner] = useState(false);
+  const {
+    isEnabled: isDiscoveryBannerEnabled,
+    config: { link: discoveryBannerLink } = {},
+  } = useFeature(configFeaturesNames.DISCOVERY_BANNER);
 
   return (
     <ResourceDetailContext.Provider value={true}>
@@ -486,6 +494,12 @@ function Resource({
                 />
               }
             />
+            {isDiscoveryBannerEnabled && !hideDiscoveryBanner && (
+              <DiscoveryBanner
+                setHideDiscoveryBanner={setHideDiscoveryBanner}
+                discoveryBannerLink={discoveryBannerLink}
+              />
+            )}
             {!disableResourceDetailsCard && (
               <section aria-labelledby="namespace-details-heading">
                 <Title

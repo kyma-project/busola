@@ -30,6 +30,8 @@ export const configFeaturesNames = {
   FEEDBACK: 'FEEDBACK',
   SNOW: 'SNOW',
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',
+  DISCOVERY_BANNER: 'DISCOVERY_BANNER',
+  DISCOVERY_ANNOUNCEMENT: 'DISCOVERY_ANNOUNCEMENT',
 } as const;
 
 export type ConfigFeatureList = {
