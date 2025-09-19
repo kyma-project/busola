@@ -26,6 +26,11 @@ export default function FeedbackPopover() {
     isEnabled: isKymaCompanionEnabled,
     config: { feedbackLink: companionFeedbackLink } = {},
   } = useFeature(configFeaturesNames.KYMA_COMPANION);
+  const {
+    isEnabled: isDiscoveryAnnouncementEnabled,
+    config: { link: discoveryAnnouncementLink } = {},
+  } = useFeature(configFeaturesNames.DISCOVERY_ANNOUNCEMENT);
+  console.log(isDiscoveryAnnouncementEnabled, 'isDiscoveryAnnouncementEnabled');
 
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -94,6 +99,44 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
+          {isDiscoveryAnnouncementEnabled && (
+            <FlexBox
+              alignItems="Start"
+              direction="Column"
+              justifyContent="Start"
+              gap={16}
+              className="sap-margin-bottom-medium"
+            >
+              <FlexBox direction="Row" alignItems="Center" gap={12}>
+                <Title level="H6" size="H6">
+                  {t('feedback.discovery.title')}
+                </Title>
+                <ObjectStatus state="Information" inverted>
+                  {t('feedback.new')}
+                </ObjectStatus>
+              </FlexBox>
+              <Text className="info-text" style={{ textAlign: 'start' }}>
+                {t('feedback.discovery.info')}
+              </Text>
+              <Button
+                accessibleRole="Link"
+                accessibleName={t('feedback.discovery.join-our-research')}
+                accessibleDescription="Open in new tab link"
+                endIcon="inspect"
+                design="Emphasized"
+                onClick={() => {
+                  const newWindow = window.open(
+                    discoveryAnnouncementLink,
+                    '_blank',
+                    'noopener, noreferrer',
+                  );
+                  if (newWindow) newWindow.opener = null;
+                }}
+              >
+                {t('feedback.discovery.join-our-research')}
+              </Button>
+            </FlexBox>
+          )}
           {isKymaCompanionEnabled &&
             companionFeedbackLink &&
             window.location.pathname !== '/clusters' && (
