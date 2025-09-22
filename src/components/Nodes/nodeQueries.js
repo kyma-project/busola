@@ -165,11 +165,11 @@ export function calcNodeResources(pods) {
   return {
     limits: {
       cpu: nodeResources.limits.cpu,
-      memory: nodeResources.limits.memory / Math.pow(1024, 3),
+      memory: nodeResources.limits.memory,
     },
     requests: {
       cpu: nodeResources.requests.cpu,
-      memory: nodeResources.requests.memory / Math.pow(1024, 3),
+      memory: nodeResources.requests.memory,
     },
   };
 }
