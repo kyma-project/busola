@@ -41,7 +41,7 @@ export const useUpdate = (options?: Record<string, any>): MutationFn => {
   });
 };
 
-export const useDelete = (options: Record<string, any>): MutationFn => {
+export const useDelete = (options?: Record<string, any>): MutationFn => {
   const fetch = useFetch();
   return useMutation('DELETE', fetch, options);
 };
