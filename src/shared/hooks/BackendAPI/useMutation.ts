@@ -3,7 +3,7 @@ import { FetchFn, useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
 export type MutationFn = (
   url: string,
-  data: Record<string, any>,
+  data?: Record<string, any>,
 ) => Promise<Record<string, any>>;
 
 const useMutation = (

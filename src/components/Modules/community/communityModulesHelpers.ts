@@ -154,7 +154,7 @@ function imageMatchVersion(image: string, version: string): boolean {
 }
 
 function sleep(lf_ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, lf_ms));
+  return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
 export async function installCommunityModule(

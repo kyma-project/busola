@@ -236,8 +236,11 @@ export const ModulesDeleteBox = ({
       if (communityResourcesUrls?.length) {
         await deleteResources(deleteFn, communityResourcesUrls);
       }
-    } catch (e) {
-      console.warn(e);
+    } catch (e: unknown) {
+      console.warn('Error while deleting community module', e);
+      if (e instanceof SyntaxError) {
+        console.warn(e);
+      }
       notification.notifyError({
         content: t('modules.community.messages.delete-failure', {
           module: moduleName,

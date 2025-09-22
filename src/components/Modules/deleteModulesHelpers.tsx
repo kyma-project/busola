@@ -11,6 +11,7 @@ import { postForCommunityResources } from 'components/Modules/community/communit
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import retry from 'shared/utils/retry';
 import { TFunction } from 'i18next';
+import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
 
 interface Counts {
   [key: string]: number;
@@ -262,7 +263,7 @@ export const checkIfAssociatedResourceLeft = (
 };
 
 export const deleteResources = async (
-  deleteResourceMutation: Function,
+  deleteResourceMutation: MutationFn,
   resourcesUrls: string[],
 ) => {
   await Promise.all(
@@ -291,7 +292,7 @@ export const checkIfAllResourcesAreDeleted = async (
       const result = await retry(
         async () => {
           try {
-            const result = await fetchFn(url);
+            const result = await fetchFn({ relativeUrl: url });
             const resources = await result.json();
             urlDuringError = url;
             isDeletionInProgress =
