@@ -55,7 +55,6 @@ context('Test Stateful Sets', () => {
   it('Check if Copy button works correctly', () => {
     grantClipboardPermissions();
     cy.inspectTab('Edit');
-    cy.wait(2000);
 
     // Stub window.prompt so browser popup never shows
     cy.window().then((win) => {
