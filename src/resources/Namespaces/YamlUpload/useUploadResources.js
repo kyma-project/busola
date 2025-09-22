@@ -29,7 +29,7 @@ export const getUrl = async (
   namespaceId,
   clusterNodes,
   namespaceNodes,
-  fetchFn,
+  signleGet,
 ) => {
   const resourceType = pluralize(resource.kind.toLowerCase());
   const hasNamespace = !!resource?.metadata?.namespace;
@@ -48,7 +48,7 @@ export const getUrl = async (
     return getResourceUrl(resource, namespaceId);
   } else {
     const resourceKindUrl = getResourceKindUrl(resource);
-    const response = await fetchFn({ relativeUrl: resourceKindUrl });
+    const response = await signleGet(resourceKindUrl);
     const text = await response.text();
     console.log(text);
     const json = JSON.parse(text);

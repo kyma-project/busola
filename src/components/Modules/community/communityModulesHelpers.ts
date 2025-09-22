@@ -163,7 +163,7 @@ export async function installCommunityModule(
   namespaceNodes: any,
   postRequest: PostFn,
   patchRequest: MutationFn,
-  fetchRequest: FetchFn,
+  singleGet: Function,
   callback: Function,
 ) {
   const name = getModuleName(moduleTpl);
@@ -200,7 +200,7 @@ export async function installCommunityModule(
       namespaceNodes,
       postRequest,
       patchRequest,
-      fetchRequest,
+      singleGet,
     );
     console.log('Uploading other:', name, otherYamls);
     const result = await uploadResources(
@@ -209,7 +209,7 @@ export async function installCommunityModule(
       namespaceNodes,
       postRequest,
       patchRequest,
-      fetchRequest,
+      singleGet,
     );
     console.log(result);
     // if(result.)
@@ -228,7 +228,7 @@ async function uploadResources(
   namespaceNodes: any,
   postRequest: PostFn,
   patchRequest: MutationFn,
-  fetchRequest: FetchFn,
+  singleGet: Function,
 ) {
   const uploadPromises = resources.map((r) => {
     return uploadResource(
@@ -238,7 +238,7 @@ async function uploadResources(
       namespaceNodes,
       postRequest,
       patchRequest,
-      fetchRequest,
+      singleGet,
     );
   });
   return Promise.allSettled(uploadPromises);
@@ -326,7 +326,7 @@ export async function uploadResource(
   namespaceNodes: any,
   post: PostFn,
   patchRequest: MutationFn,
-  fetchFn: FetchFn,
+  singleGet: Function,
 ) {
   // TODO: getUrl may have a problem with PriorityClass
   let url;
@@ -336,7 +336,7 @@ export async function uploadResource(
       namespaceId,
       clusterNodes,
       namespaceNodes,
-      fetchFn,
+      singleGet,
     );
   } catch (e) {
     throw e;

@@ -34,7 +34,7 @@ import {
   State,
   uploadStateAtom,
 } from 'components/Modules/community/components/uploadStateAtom';
-import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -125,7 +125,7 @@ export default function CommunityModulesAddModule(props: any) {
     useFeature('COMMUNITY_MODULES');
   const notification = useNotification();
   const postRequest = usePost();
-  const fetchRequest = useFetch();
+  const singleGet = useSingleGet();
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
@@ -301,7 +301,7 @@ export default function CommunityModulesAddModule(props: any) {
               namespaceNodes,
               postRequest,
               patchRequest,
-              fetchRequest,
+              singleGet,
               callBack,
             ),
           );
