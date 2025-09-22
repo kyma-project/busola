@@ -10,6 +10,7 @@ import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { postForCommunityResources } from 'components/Modules/community/communityModulesHelpers';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import retry from 'shared/utils/retry';
+import { TFunction } from 'i18next';
 
 interface Counts {
   [key: string]: number;
@@ -281,8 +282,10 @@ export const deleteResources = async (
 export const checkIfAllResourcesAreDeleted = async (
   fetchFn: Function,
   resourcesUrls: string[],
+  t: TFunction,
 ) => {
   let urlDuringError = '';
+  let isDeletionInProgress = false;
   const results = await Promise.all(
     resourcesUrls.map(async (url) => {
       const result = await retry(
@@ -291,6 +294,8 @@ export const checkIfAllResourcesAreDeleted = async (
             const result = await fetchFn(url);
             const resources = await result.json();
             urlDuringError = url;
+            isDeletionInProgress =
+              !!resources?.items?.[0]?.metadata?.deletionTimestamp;
             return resources?.items.length === 0;
           } catch (e) {
             if (e instanceof HttpError && e.code === 404) {
@@ -305,6 +310,12 @@ export const checkIfAllResourcesAreDeleted = async (
       return { resource: url, result };
     }),
   ).catch((e) => {
+    console.warn(e);
+    if (isDeletionInProgress) {
+      throw new Error(
+        t('modules.community.messages.resources-delete-in-progress'),
+      );
+    }
     return [{ resource: urlDuringError, result: false }];
   });
   return results.filter((v) => !v.result).map((r) => r.resource);

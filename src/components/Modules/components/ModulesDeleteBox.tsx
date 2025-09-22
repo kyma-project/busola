@@ -208,6 +208,7 @@ export const ModulesDeleteBox = ({
         const allStillExistingResources = await checkIfAllResourcesAreDeleted(
           fetchFn,
           associatedResourcesUrls,
+          t,
         );
         if (allStillExistingResources.length !== 0) {
           notification.notifyError({
