@@ -148,7 +148,7 @@ const getResources = async (
       ? '/api/v1'
       : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
 
-  const response = await fetchFn(url);
+  const response = await fetchFn({ relativeUrl: url });
   const json = await response.json();
   return json.items;
 };

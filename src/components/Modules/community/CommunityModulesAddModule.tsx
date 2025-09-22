@@ -34,6 +34,7 @@ import {
   State,
   uploadStateAtom,
 } from 'components/Modules/community/components/uploadStateAtom';
+import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -124,6 +125,7 @@ export default function CommunityModulesAddModule(props: any) {
     useFeature('COMMUNITY_MODULES');
   const notification = useNotification();
   const postRequest = usePost();
+  const fetchRequest = useFetch();
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
@@ -160,10 +162,10 @@ export default function CommunityModulesAddModule(props: any) {
 
   const patchRequest = useUpdate();
   const clusterNodes = useAtomValue(allNodesAtom).filter(
-    node => !node.namespaced,
+    (node) => !node.namespaced,
   );
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
-    node => node.namespaced,
+    (node) => node.namespaced,
   );
 
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -255,7 +257,7 @@ export default function CommunityModulesAddModule(props: any) {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setUploadModalOpen(true);
-    (async function() {
+    (async function () {
       try {
         const callBack = (
           moduleName: string,
@@ -264,7 +266,7 @@ export default function CommunityModulesAddModule(props: any) {
         ) => {
           console.log(moduleState);
           const moduleStateToUpdate = uploadState?.find(
-            uploadState => uploadState.moduleName === moduleName,
+            (uploadState) => uploadState.moduleName === moduleName,
           );
           if (!moduleStateToUpdate) {
             const newUploadState = {
@@ -277,7 +279,7 @@ export default function CommunityModulesAddModule(props: any) {
             return;
           }
 
-          const uploadStateToUpdate = uploadState?.map(uploadState => {
+          const uploadStateToUpdate = uploadState?.map((uploadState) => {
             if (uploadState.moduleName === moduleName) {
               uploadState.state = moduleState;
               uploadState.message = message || '';
@@ -292,13 +294,14 @@ export default function CommunityModulesAddModule(props: any) {
 
         const operationPromises = communityModulesTemplatesToApply
           .values()
-          .map(moduleTemplate =>
+          .map((moduleTemplate) =>
             installCommunityModule(
               moduleTemplate,
               clusterNodes,
               namespaceNodes,
               postRequest,
               patchRequest,
+              fetchRequest,
               callBack,
             ),
           );

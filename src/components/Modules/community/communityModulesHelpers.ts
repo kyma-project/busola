@@ -8,6 +8,7 @@ import { createPatch } from 'rfc6902';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
+import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 export type VersionInfo = {
   version: string;
@@ -153,7 +154,7 @@ function imageMatchVersion(image: string, version: string): boolean {
 }
 
 function sleep(lf_ms: number) {
-  return new Promise(resolve => setTimeout(resolve, lf_ms));
+  return new Promise((resolve) => setTimeout(resolve, lf_ms));
 }
 
 export async function installCommunityModule(
@@ -162,6 +163,7 @@ export async function installCommunityModule(
   namespaceNodes: any,
   postRequest: PostFn,
   patchRequest: MutationFn,
+  fetchRequest: FetchFn,
   callback: Function,
 ) {
   const name = getModuleName(moduleTpl);
@@ -174,7 +176,7 @@ export async function installCommunityModule(
     console.log('Downloading:', name);
 
     const allResourcesLinks =
-      moduleTpl.spec.resources?.map(resource => resource.link) || [];
+      moduleTpl.spec.resources?.map((resource) => resource.link) || [];
     const allResources = await getAllResourcesYamls(
       allResourcesLinks,
       postRequest,
@@ -198,15 +200,19 @@ export async function installCommunityModule(
       namespaceNodes,
       postRequest,
       patchRequest,
+      fetchRequest,
     );
     console.log('Uploading other:', name, otherYamls);
-    await uploadResources(
+    const result = await uploadResources(
       otherYamls,
       clusterNodes,
       namespaceNodes,
       postRequest,
       patchRequest,
+      fetchRequest,
     );
+    console.log(result);
+    // if(result.)
     console.log('Finished:', name);
     //   setState Finished
     await sleep(2000);
@@ -222,8 +228,9 @@ async function uploadResources(
   namespaceNodes: any,
   postRequest: PostFn,
   patchRequest: MutationFn,
+  fetchRequest: FetchFn,
 ) {
-  const uploadPromises = resources.map(r => {
+  const uploadPromises = resources.map((r) => {
     return uploadResource(
       { value: r },
       'default',
@@ -231,6 +238,7 @@ async function uploadResources(
       namespaceNodes,
       postRequest,
       patchRequest,
+      fetchRequest,
     );
   });
   return Promise.allSettled(uploadPromises);
@@ -291,11 +299,11 @@ export async function fetchResourcesToApply(
 }
 
 export function extractCrds(yamls: any[]): { crds: any[]; otherYamls: any[] } {
-  const crds = yamls.filter(yaml => {
+  const crds = yamls.filter((yaml) => {
     return yaml.kind === 'CustomResourceDefinition';
   });
 
-  const otherYamls = yamls.filter(yaml => {
+  const otherYamls = yamls.filter((yaml) => {
     return yaml.kind !== 'CustomResourceDefinition';
   });
   return { crds, otherYamls };
@@ -318,16 +326,22 @@ export async function uploadResource(
   namespaceNodes: any,
   post: PostFn,
   patchRequest: MutationFn,
+  fetchFn: FetchFn,
 ) {
   // TODO: getUrl may have a problem with PriorityClass
-  const url = await getUrl(
-    resource.value,
-    namespaceId,
-    clusterNodes,
-    namespaceNodes,
-    fetch,
-  );
-  console.log(url);
+  let url;
+  try {
+    url = await getUrl(
+      resource.value,
+      namespaceId,
+      clusterNodes,
+      namespaceNodes,
+      fetchFn,
+    );
+  } catch (e) {
+    throw e;
+  }
+
   const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
   const existingResource = await fetchPossibleExistingResource(urlWithName);
   try {

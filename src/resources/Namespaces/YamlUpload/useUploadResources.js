@@ -47,8 +47,12 @@ export const getUrl = async (
   } else if (isKnownNamespaceWide) {
     return getResourceUrl(resource, namespaceId);
   } else {
-    const response = await fetchFn(getResourceKindUrl(resource));
-    const json = await response.json();
+    const resourceKindUrl = getResourceKindUrl(resource);
+    const response = await fetchFn({ relativeUrl: resourceKindUrl });
+    const text = await response.text();
+    console.log(text);
+    const json = JSON.parse(text);
+    // const json = await response.json();
     const apiGroupResources = json?.resources;
     const apiGroup = apiGroupResources.find((r) => r?.kind === resource?.kind);
     return apiGroup?.namespaced
