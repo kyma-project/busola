@@ -1,3 +1,4 @@
+import { grantClipboardPermissions } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-stateful-sets.yaml';
@@ -49,6 +50,29 @@ context('Test Stateful Sets', () => {
     cy.getMidColumn().contains('registry.k8s.io/nginx-slim:0.8');
     cy.getMidColumn().contains('/usr/share/nginx/html');
     cy.getMidColumn().contains('web:80/TCP');
+  });
+
+  it('Check if Copy button works correctly', () => {
+    grantClipboardPermissions();
+    cy.inspectTab('Edit');
+
+    // Stub window.prompt so browser popup never shows
+    cy.window().then((win) => {
+      cy.stub(win, 'prompt')
+        .callsFake((msg, value) => {
+          expect(value).to.contain('kind: StatefulSet');
+          return value;
+        })
+        .as('copyPrompt');
+    });
+
+    cy.get('ui5-button[icon="copy"]:visible').click({ force: true });
+
+    cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('be.visible');
+    cy.wait(2100);
+    cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('not.exist');
+
+    cy.get('@copyPrompt').should('have.been.called');
   });
 
   it('Inspect list', () => {
