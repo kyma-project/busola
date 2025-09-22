@@ -59,15 +59,16 @@ export default function CustomResource({ params }) {
 
   const crdName = customResourceDefinitionName?.split('.')[0];
   const crdGroup = customResourceDefinitionName?.replace(`${crdName}.`, '');
-  const resourceUrl = resourceName
-    ? `/apis/${crdGroup}/${selectedVersion?.name}/${
-        resourceNamespace
-          ? `namespaces/${resourceNamespace}/`
-          : namespace
-            ? `namespaces/${namespace}/`
-            : ''
-      }${crdName}/${resourceName}`
-    : '';
+  const resourceUrl =
+    resourceName && crdGroup && selectedVersion?.name && crdName
+      ? `/apis/${crdGroup}/${selectedVersion?.name}/${
+          resourceNamespace
+            ? `namespaces/${resourceNamespace}/`
+            : namespace
+              ? `namespaces/${namespace}/`
+              : ''
+        }${crdName}/${resourceName}`
+      : '';
 
   const customColumns = [
     {
