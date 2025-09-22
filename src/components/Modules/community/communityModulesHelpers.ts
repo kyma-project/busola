@@ -8,7 +8,6 @@ import { createPatch } from 'rfc6902';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
-import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 export type VersionInfo = {
   version: string;
@@ -157,6 +156,12 @@ function sleep(lf_ms: number) {
   return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
+export type CallbackFn = (
+  moduleName: string,
+  moduleState: State,
+  message?: string,
+) => void;
+
 export async function installCommunityModule(
   moduleTpl: ModuleTemplateType,
   clusterNodes: any,
@@ -164,7 +169,7 @@ export async function installCommunityModule(
   postRequest: PostFn,
   patchRequest: MutationFn,
   singleGet: Function,
-  callback: Function,
+  callback: CallbackFn,
 ) {
   const name = getModuleName(moduleTpl);
 
@@ -173,15 +178,12 @@ export async function installCommunityModule(
     await sleep(2000);
     callback(name, State.Downloading);
 
-    console.log('Downloading:', name);
-
     const allResourcesLinks =
       moduleTpl.spec.resources?.map((resource) => resource.link) || [];
     const allResources = await getAllResourcesYamls(
       allResourcesLinks,
       postRequest,
     );
-    console.log('Preparing:', name);
 
     // setState preparing
     await sleep(2000);
@@ -193,7 +195,6 @@ export async function installCommunityModule(
     await sleep(2000);
     callback(name, State.Uploading);
 
-    console.log('Uploading CRDs:', name, crds);
     await uploadResources(
       crds,
       clusterNodes,
@@ -202,7 +203,6 @@ export async function installCommunityModule(
       patchRequest,
       singleGet,
     );
-    console.log('Uploading other:', name, otherYamls);
     const result = await uploadResources(
       otherYamls,
       clusterNodes,
@@ -211,10 +211,10 @@ export async function installCommunityModule(
       patchRequest,
       singleGet,
     );
-    console.log(result);
-    // if(result.)
-    console.log('Finished:', name);
-    //   setState Finished
+    if (result.filter((r) => r.status !== 'fulfilled').length !== 0) {
+      callback(name, State.Error, 'Upload error');
+    }
+
     await sleep(2000);
     callback(name, State.Finished);
   } catch (e) {

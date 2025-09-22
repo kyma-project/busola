@@ -49,10 +49,7 @@ export const getUrl = async (
   } else {
     const resourceKindUrl = getResourceKindUrl(resource);
     const response = await signleGet(resourceKindUrl);
-    const text = await response.text();
-    console.log(text);
-    const json = JSON.parse(text);
-    // const json = await response.json();
+    const json = await response.json();
     const apiGroupResources = json?.resources;
     const apiGroup = apiGroupResources.find((r) => r?.kind === resource?.kind);
     return apiGroup?.namespaced
