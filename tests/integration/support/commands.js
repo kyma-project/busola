@@ -333,11 +333,3 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   if (checkIfNotExist) cy.getEndColumn().should('not.exist');
   else cy.getEndColumn().should('not.be.visible');
 });
-
-Cypress.Commands.add('assertValueInClipboard', (value) => {
-  cy.window().then((win) => {
-    win.navigator.clipboard.readText().then((text) => {
-      expect(text).to.contain(value);
-    });
-  });
-});
