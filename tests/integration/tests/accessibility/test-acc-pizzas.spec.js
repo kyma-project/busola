@@ -101,6 +101,8 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.clickGenericListLink('diavola-order');
 
+    cy.wait(1000);
+
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
     if (Cypress.env('IS_PR') === 'true')
