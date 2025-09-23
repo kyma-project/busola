@@ -14,6 +14,7 @@ export const CommunityModulesDeleteBoxContext = createContext({
   openedModuleIndex: undefined,
   deleteModuleButton: <></>,
   handleResourceDelete: () => {},
+  namespaced: false,
 });
 
 export function CommunityModulesDeleteBoxContextProvider({
@@ -23,6 +24,7 @@ export function CommunityModulesDeleteBoxContextProvider({
   layoutState,
   setLayoutColumn,
   children,
+  namespaced,
 }) {
   const { t } = useTranslation();
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
@@ -90,6 +92,7 @@ export function CommunityModulesDeleteBoxContextProvider({
               setChosenModuleIndex={setOpenedModuleIndex}
               setLayoutColumn={setLayoutColumn}
               isCommunity={true}
+              namespaced={namespaced}
             />
           ),
         document.body,
