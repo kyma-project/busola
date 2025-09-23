@@ -15,7 +15,7 @@ The Busola project contains additional sub-projects:
 - [`Kyma`](./kyma) - Kyma-specific configuration for Busola
 
 ## Prerequisites
-
+<!-- markdown-link-check-disable-next-line -->
 - [`npm`](https://www.npmjs.com/) in version 11.5.x
 - [`node`](https://nodejs.org/en/) in version 22.x
 
