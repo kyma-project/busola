@@ -934,7 +934,7 @@ modules:
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
-      resources-delete-in-progress: Time is up but associated resource deletion is still in progress. Please try again.
+      resources-delete-in-progress: Resources are still being deleted. Try again later.
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
       source-yaml-fetch-failed: 'Failed to download source yaml: {{error}}'
