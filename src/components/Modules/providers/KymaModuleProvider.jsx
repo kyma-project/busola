@@ -78,9 +78,8 @@ export function KymaModuleContextProvider({
       }),
   });
 
-  const { kymaModuleTemplates, moduleTemplatesLoading } = useContext(
-    ModuleTemplatesContext,
-  );
+  const { moduleTemplates: kymaModuleTemplates, moduleTemplatesLoading } =
+    useContext(ModuleTemplatesContext);
 
   const getOpenedModuleIndex = (moduleIndex, activeModules) => {
     const index =
