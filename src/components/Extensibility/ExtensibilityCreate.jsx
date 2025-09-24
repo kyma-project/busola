@@ -102,7 +102,6 @@ export function ExtensibilityCreateCore({
     ) {
       const excludedResource = cloneDeep(resource);
       delete excludedResource.status;
-      delete excludedResource.metadata;
       setInitialResource(excludedResource);
       hasSetInitialResource.current = true;
     }
