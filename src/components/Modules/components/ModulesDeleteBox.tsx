@@ -201,8 +201,6 @@ export const ModulesDeleteBox = ({
     }
 
     if (detailsOpen) {
-      console.log('detailsOpen', detailsOpen, 'layoutColumn', layoutColumn);
-
       setLayoutColumn({
         ...layoutColumn,
         layout: 'OneColumn',
@@ -249,8 +247,6 @@ export const ModulesDeleteBox = ({
     }
 
     if (detailsOpen) {
-      console.log('detailsOpen', detailsOpen, 'layoutColumn', layoutColumn);
-
       setLayoutColumn({
         ...layoutColumn,
         layout: 'OneColumn',
