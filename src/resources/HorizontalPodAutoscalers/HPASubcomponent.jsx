@@ -27,7 +27,8 @@ export const HPASubcomponent = (props) => {
     : '';
   const hpaFilter = (hpa) => {
     return (
-      hpa.spec?.scaleTargetRef?.kind === resourceKind &&
+      hpa.spec?.scaleTargetRef?.kind.toLowerCase() ===
+        resourceKind.toLowerCase() &&
       hpa.spec?.scaleTargetRef?.name === resourceName
     );
   };
