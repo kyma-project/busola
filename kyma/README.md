@@ -34,7 +34,7 @@ The entries for extensibility can be `relative path to Kyma directory` or `URL t
 The `extensions` directory contains a general extensibility configuration to avoid duplication in each environment configuration directory.
 
 ## Prerequisites
-
+<!-- markdown-link-check-disable-next-line -->
 - [`npm`](https://www.npmjs.com/) in version 11.5.x
 - [Node.js](https://nodejs.org/en/) in version 22.x
 - [Make](https://www.gnu.org/software/make/)
