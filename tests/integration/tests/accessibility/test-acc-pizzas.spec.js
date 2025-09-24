@@ -84,7 +84,7 @@ context('Accessibility test Pizza Orders', () => {
 
   it('Acc test Pizza Orders create', () => {
     cy.contains('ui5-button', 'Create').click();
-    cy.wait(1000);
+
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
     if (Cypress.env('IS_PR') === 'true')
@@ -101,8 +101,6 @@ context('Accessibility test Pizza Orders', () => {
     cy.getLeftNav().contains('Pizza Orders').click();
 
     cy.clickGenericListLink('diavola-order');
-
-    cy.wait(1000);
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
