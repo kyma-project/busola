@@ -22,6 +22,11 @@ export function CustomResources({
   const name = names.plural;
   const customUrl = useCustomResourceUrl(crd);
   const { namespace } = useUrl();
+
+  if (!group || !version.name) {
+    return null;
+  }
+
   const resourceUrl =
     namespace && namespace !== '-all-'
       ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`

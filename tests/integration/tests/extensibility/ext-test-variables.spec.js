@@ -63,8 +63,8 @@ context('Test extensibility variables', () => {
       .contains('Namespaces')
       .click();
 
-    cy.wait(500)
-      .get('ui5-input[id="search-input"]:visible')
+    cy.wait(1000);
+    cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
       .type(NAMESPACE);
 
@@ -254,6 +254,8 @@ context('Test extensibility variables', () => {
       .find('input')
       .type(NAME)
       .click();
+
+    cy.wait(500);
 
     cy.get('@form')
       .contains('ui5-segmented-button-item:visible', 'YAML')

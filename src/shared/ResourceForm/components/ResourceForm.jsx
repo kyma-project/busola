@@ -67,7 +67,7 @@ export function ResourceForm({
 
   const isEdit = useMemo(
     () =>
-      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+      !!initialResource?.metadata?.name && !layoutState?.showCreate?.resource,
     [initialResource, layoutState?.showCreate?.resource],
   );
 

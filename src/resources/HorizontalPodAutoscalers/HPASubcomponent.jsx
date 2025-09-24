@@ -22,7 +22,9 @@ export const HPASubcomponent = (props) => {
     (cR) => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
   );
 
-  const url = `/apis/autoscaling/v2/namespaces/${namespace}/horizontalpodautoscalers`;
+  const url = namespace
+    ? `/apis/autoscaling/v2/namespaces/${namespace}/horizontalpodautoscalers`
+    : '';
   const hpaFilter = (hpa) => {
     return (
       hpa.spec?.scaleTargetRef?.kind === resourceKind &&

@@ -18,7 +18,7 @@ export function useResourcesForApiGroups(apiGroups = []) {
     return groupVersions.filter((gV) => gV.startsWith(apiGroup + '/'));
   };
 
-  const fetchApiGroup = async (groupVersion, apiGroup) => {
+  const fetchApiGroup = async (groupVersion) => {
     const url = groupVersion === 'v1' ? '/api/v1' : `/apis/${groupVersion}`;
     try {
       const response = await fetch(url);

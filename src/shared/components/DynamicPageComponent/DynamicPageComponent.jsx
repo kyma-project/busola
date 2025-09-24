@@ -371,53 +371,32 @@ export const DynamicPageComponent = ({
             navigateSafely(() => {
               setSelectedTab(newTabName);
 
+              const params = new URLSearchParams(window.location.search);
+              let showEdit = null;
+
               if (newTabName === 'edit') {
-                const params = new URLSearchParams();
-                let showEdit = {
-                  resource: null,
-                };
+                showEdit = { resource: null };
+
                 if (layoutColumn.layout !== 'OneColumn') {
-                  params.set('layout', layoutColumn.layout);
                   if (isFirstColumnWithEdit) {
                     params.set('editColumn', 'startColumn');
                     showEdit = layoutColumn?.showEdit;
-                  } else if (editColumn === 'startColumn') {
-                    params.set('editColumn', 'startColumn');
-                    params.set('showEdit', 'true');
                   } else {
+                    params.set('editColumn', 'startColumn');
                     params.set('showEdit', 'true');
                   }
                 } else {
                   params.set('showEdit', 'true');
                 }
-
-                setLayoutColumn({
-                  ...layoutColumn,
-                  showEdit,
-                });
-                navigate(`${window.location.pathname}?${params.toString()}`);
               } else {
-                let showEdit = null;
-                const params = new URLSearchParams();
-                if (isFirstColumnWithEdit) {
-                  showEdit = layoutColumn?.showEdit;
-                } else if (editColumn === 'startColumn') {
-                  params.set('editColumn', 'startColumn');
-                }
-                setLayoutColumn({
-                  ...layoutColumn,
-                  showEdit,
-                });
-                navigate(
-                  `${window.location.pathname}${
-                    layoutColumn.layout === 'OneColumn'
-                      ? ''
-                      : '?layout=' +
-                        layoutColumn.layout +
-                        `${params ? '&' + params.toString() : ''}`
-                  }`,
-                );
+                params.delete('showEdit');
               }
+
+              setLayoutColumn({
+                ...layoutColumn,
+                showEdit,
+              });
+              navigate(`${window.location.pathname}?${params.toString()}`);
             });
           }}
         >

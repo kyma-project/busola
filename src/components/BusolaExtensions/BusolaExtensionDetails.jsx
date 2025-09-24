@@ -43,7 +43,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
   const updateResourceMutation = useUpdate(resourceUrl);
   const notification = useNotification();
 
-  if (!name) {
+  if (!name || !namespace) {
     return null;
   }
 
