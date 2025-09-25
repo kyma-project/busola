@@ -107,10 +107,12 @@ export function ExtensibilityCreateCore({
     }
   }, [initialExtensibilityResource, initialResource, resource]);
 
+  const queryParams = new URLSearchParams(window.location.search);
+  const showEditParam = queryParams.get('showEdit');
+
   const isEdit = useMemo(
-    () =>
-      !!initialResource?.metadata?.name && !layoutState?.showCreate?.resource,
-    [initialResource, layoutState?.showCreate?.resource],
+    () => !layoutState?.showCreate?.resource && !!showEditParam,
+    [layoutState?.showCreate?.resource, showEditParam],
   );
 
   const updateStore = (res) => {
