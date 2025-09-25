@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useMemo } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -10,6 +10,7 @@ import { RuleTitle } from './RuleTitle';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useAtomValue } from 'jotai';
+import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 export function GenericRoleCreate({
   onChange,
@@ -37,11 +38,7 @@ export function GenericRoleCreate({
     setInitialResource(initialRole || createTemplate());
   }, [initialRole, createTemplate, layoutState?.showEdit?.resource]);
 
-  const isEdit = useMemo(
-    () =>
-      !!initialResource?.metadata?.name && !layoutState?.showCreate?.resource,
-    [initialResource, layoutState?.showCreate?.resource],
-  );
+  const isEdit = useIsEdit(layoutState);
 
   useEffect(() => {
     setCustomValid(validateRole(role));

@@ -15,7 +15,7 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
-import { useMemo } from 'react';
+import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 export function useCreateResource({
   singularName,
@@ -43,11 +43,7 @@ export function useCreateResource({
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
-  const isEdit = useMemo(
-    () =>
-      !!initialResource?.metadata?.name && !layoutColumn?.showCreate?.resource,
-    [initialResource, layoutColumn?.showCreate?.resource],
-  );
+  const isEdit = useIsEdit(layoutColumn);
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({

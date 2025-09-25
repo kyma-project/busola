@@ -37,6 +37,7 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { TranslationBundleContext } from './helpers';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -107,13 +108,7 @@ export function ExtensibilityCreateCore({
     }
   }, [initialExtensibilityResource, initialResource, resource]);
 
-  const queryParams = new URLSearchParams(window.location.search);
-  const showEditParam = queryParams.get('showEdit');
-
-  const isEdit = useMemo(
-    () => !layoutState?.showCreate?.resource && !!showEditParam,
-    [layoutState?.showCreate?.resource, showEditParam],
-  );
+  const isEdit = useIsEdit(layoutState);
 
   const updateStore = (res) => {
     readVars(res);

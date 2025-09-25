@@ -21,7 +21,10 @@ import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMe
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import { useFormEditTracking } from 'shared/hooks/useFormEditTracking';
+import {
+  useFormEditTracking,
+  useIsEdit,
+} from 'shared/hooks/useFormEditTracking';
 import './ResourceForm.scss';
 
 export function ResourceForm({
@@ -65,11 +68,7 @@ export function ResourceForm({
 }) {
   const layoutState = useAtomValue(columnLayoutAtom);
 
-  const isEdit = useMemo(
-    () =>
-      !!initialResource?.metadata?.name && !layoutState?.showCreate?.resource,
-    [initialResource, layoutState?.showCreate?.resource],
-  );
+  const isEdit = useIsEdit(layoutState);
 
   useEffect(() => {
     if (layoutState?.showCreate?.resource) {

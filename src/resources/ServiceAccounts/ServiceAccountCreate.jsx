@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -13,6 +13,7 @@ import { validateServiceAccount } from './helpers';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 const createDefaultSecret = (serviceAccountName) => {
   return {
@@ -62,11 +63,7 @@ export default function ServiceAccountCreate({
     );
   }, [initialServiceAccount, namespace, layoutState?.showEdit?.resource]);
 
-  const isEdit = useMemo(
-    () =>
-      !!initialResource?.metadata?.name && !layoutState?.showCreate?.resource,
-    [initialResource, layoutState?.showCreate?.resource],
-  );
+  const isEdit = useIsEdit(layoutState);
 
   const [shouldCreateSecret, setShouldCreateSecret] = useState(false);
 
