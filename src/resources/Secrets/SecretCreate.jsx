@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
 
@@ -11,7 +11,6 @@ import { useAtomValue } from 'jotai';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 export default function SecretCreate({
   namespace,
@@ -39,7 +38,11 @@ export default function SecretCreate({
     setInitialResource(initialSecret || createSecretTemplate(namespace || ''));
   }, [initialSecret, namespace, layoutState?.showEdit?.resource]);
 
-  const isEdit = useIsEdit(layoutState);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.uid && !layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const [lockedKeys, setLockedKeys] = useState([]);
 

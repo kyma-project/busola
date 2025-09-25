@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -23,7 +23,6 @@ import { useAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
 import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
-import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
@@ -62,7 +61,11 @@ export default function NamespaceCreate({
     setInitialResource(initialNamespace || createNamespaceTemplate());
   }, [initialNamespace, layoutColumn?.showEdit?.resource]);
 
-  const isEdit = useIsEdit(layoutColumn);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.uid && !layoutColumn?.showCreate?.resource,
+    [initialResource, layoutColumn?.showCreate?.resource],
+  );
 
   const { isSidecarEnabled, setSidecarEnabled, setIsChanged } = useSidecar({
     initialRes: initialResource,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { cloneDeep } from 'lodash';
 
@@ -13,7 +13,6 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { BusyIndicator } from '@ui5/webcomponents-react';
 import { useAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 function CRCreateForm({
   onChange,
@@ -41,7 +40,12 @@ function CRCreateForm({
     setInitialResource(initialCustomResource || createTemplate(crd));
   }, [initialCustomResource, crd, layoutColumn?.showEdit?.resource]);
 
-  const isEdit = useIsEdit(layoutColumn);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.uid && !layoutColumn?.showCreate?.resource,
+    [initialResource, layoutColumn?.showCreate?.resource],
+  );
+
   const customUrl = useCustomResourceUrl(crd);
 
   const navigate = useNavigate();

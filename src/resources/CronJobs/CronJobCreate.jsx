@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
@@ -17,7 +17,6 @@ import {
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -58,7 +57,11 @@ export default function CronJobCreate({
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
-  const isEdit = useIsEdit(layoutState);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.uid && !layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const schema = useContext(SchemaContext);
   const scheduleDesc = getDescription(schema, 'spec.schedule');

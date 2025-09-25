@@ -42,15 +42,3 @@ export function useFormEditTracking(
     }
   }, [formOpen, isEdited, setIsResourceEdited]);
 }
-
-export const useIsEdit = (layoutColumn) => {
-  const queryParams = new URLSearchParams(window.location.search);
-  const showEditParam = queryParams.get('showEdit');
-
-  const isEdit = useMemo(
-    () => !layoutColumn?.showCreate?.resource && !!showEditParam,
-    [layoutColumn?.showCreate?.resource, showEditParam],
-  );
-
-  return isEdit;
-};

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -14,7 +14,6 @@ import {
 } from './templates';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
@@ -54,7 +53,11 @@ export default function DeploymentCreate({
     );
   }, [initialDeployment, namespace, layoutState?.showEdit?.resource]);
 
-  const isEdit = useIsEdit(layoutState);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.uid && !layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   const { isSidecarEnabled, setSidecarEnabled, setIsChanged } = useSidecar({
     initialRes: initialResource,

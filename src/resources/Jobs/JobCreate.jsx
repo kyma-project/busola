@@ -13,7 +13,6 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import { useIsEdit } from 'shared/hooks/useFormEditTracking';
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -70,7 +69,11 @@ export default function JobCreate({
     layoutState?.showEdit?.resource,
   ]);
 
-  const isEdit = useIsEdit(layoutState);
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.uid && !layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
 
   useEffect(() => {
     setCustomValid(isJobValid(job));
