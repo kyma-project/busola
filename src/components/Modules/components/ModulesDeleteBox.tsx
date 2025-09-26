@@ -71,7 +71,7 @@ export const ModulesDeleteBox = ({
   const getScope = useGetScope();
   const { clusterUrl, namespaceUrl } = useUrl();
   const deleteFn = useDelete();
-  const fetchFn = useSingleGet();
+  const singleGet = useSingleGet();
   const post = usePost();
   const clusterNodes = useAtomValue(allNodesAtom).filter(
     (node) => !node.namespaced,
@@ -113,10 +113,10 @@ export const ModulesDeleteBox = ({
 
   useEffect(() => {
     const fetchCounts = async () => {
-      const counts = await fetchResourceCounts(associatedResources, fetchFn);
+      const counts = await fetchResourceCounts(associatedResources, singleGet);
       const urls = await generateAssociatedResourcesUrls(
         associatedResources,
-        fetchFn,
+        singleGet,
         getScope,
       );
 
@@ -133,11 +133,11 @@ export const ModulesDeleteBox = ({
             crUResources,
             clusterNodes,
             namespaceNodes,
-            fetchFn,
+            singleGet,
           )
         : await generateAssociatedResourcesUrls(
             crUResources,
-            fetchFn,
+            singleGet,
             getScope,
           );
 
@@ -153,7 +153,7 @@ export const ModulesDeleteBox = ({
           communityResources,
           clusterNodes,
           namespaceNodes,
-          fetchFn,
+          singleGet,
         );
         setCommunityResourcesUrls(communityUrls);
       }
@@ -216,7 +216,7 @@ export const ModulesDeleteBox = ({
       if (allowForceDelete && associatedResourcesUrls.length) {
         await deleteResources(deleteFn, associatedResourcesUrls);
         const allStillExistingResources = await checkIfAllResourcesAreDeleted(
-          fetchFn,
+          singleGet,
           associatedResourcesUrls,
           t,
         );
@@ -236,8 +236,11 @@ export const ModulesDeleteBox = ({
       if (communityResourcesUrls?.length) {
         await deleteResources(deleteFn, communityResourcesUrls);
       }
-    } catch (e) {
-      console.warn(e);
+    } catch (e: unknown) {
+      console.warn('Error while deleting community module', e);
+      if (e instanceof SyntaxError) {
+        console.warn(e);
+      }
       notification.notifyError({
         content: t('modules.community.messages.delete-failure', {
           module: moduleName,
