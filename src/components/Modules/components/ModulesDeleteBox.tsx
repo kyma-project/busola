@@ -31,6 +31,7 @@ import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { SetStateAction, useAtomValue } from 'jotai';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
@@ -41,6 +42,7 @@ type ModulesListDeleteBoxProps = {
   kymaResourceState?: KymaResourceType;
   detailsOpen: boolean;
   isCommunity?: boolean;
+  namespaced: boolean;
   setLayoutColumn: (update: SetStateAction<ColumnLayoutState>) => void;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
@@ -57,6 +59,7 @@ export const ModulesDeleteBox = ({
   kymaResourceState,
   detailsOpen,
   isCommunity,
+  namespaced,
   setLayoutColumn,
   handleModuleUninstall,
   setChosenModuleIndex,
@@ -89,7 +92,12 @@ export const ModulesDeleteBox = ({
     boolean | null
   >(null);
 
+  const layoutColumn = useAtomValue(columnLayoutAtom);
   const notification = useNotification();
+
+  const kymaModulesUrl = namespaced
+    ? namespaceUrl('kymamodules')
+    : clusterUrl('kymamodules');
 
   const associatedResources = useMemo(
     () =>
@@ -188,16 +196,18 @@ export const ModulesDeleteBox = ({
       setInitialUnchangedResource(cloneDeep(kymaResourceState));
     }
 
+    if (allowForceDelete && associatedResourcesUrls.length > 0) {
+      deleteResources(deleteFn, crUrls);
+    }
+
     if (detailsOpen) {
       setLayoutColumn({
+        ...layoutColumn,
         layout: 'OneColumn',
-        startColumn: null,
         midColumn: null,
         endColumn: null,
       });
-    }
-    if (allowForceDelete && associatedResourcesUrls.length > 0) {
-      deleteResources(deleteFn, crUrls);
+      navigate(kymaModulesUrl);
     }
   };
 
@@ -238,11 +248,13 @@ export const ModulesDeleteBox = ({
 
     if (detailsOpen) {
       setLayoutColumn({
+        ...layoutColumn,
         layout: 'OneColumn',
         startColumn: null,
         midColumn: null,
         endColumn: null,
       });
+      navigate(kymaModulesUrl);
     }
   };
 

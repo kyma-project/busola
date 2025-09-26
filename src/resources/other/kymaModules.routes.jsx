@@ -191,6 +191,7 @@ const ColumnWrapper = ({
         DeleteMessageBox={DeleteMessageBox}
         handleResourceDelete={handleResourceDelete}
         showDeleteDialog={showDeleteDialog}
+        namespaced={namespaced}
       >
         <CommunityModuleContextProvider>
           <CommunityModulesDeleteBoxContextProvider
@@ -199,6 +200,7 @@ const ColumnWrapper = ({
             DeleteMessageBox={DeleteMessageBox}
             handleResourceDelete={handleResourceDelete}
             showDeleteDialog={showDeleteDialog}
+            namespaced={namespaced}
           >
             <Suspense fallback={<Spinner />}>
               <FlexibleColumnLayout
