@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
+
 import {
   ConditionType,
+  DEFAULT_K8S_NAMESPACE,
   getResourcePath,
   KymaResourceType,
   ModuleManagerType,
@@ -13,6 +18,7 @@ import {
   getInstalledModules,
   getNotInstalledModules,
 } from 'components/Modules/community/communityModulesHelpers';
+import { allNodesAtom } from 'state/navigation/allNodesAtom';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
@@ -105,7 +111,14 @@ export const useFetchModuleData = (
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(true);
   const fetch = useFetch();
+  const singleGetFn = useSingleGet();
 
+  const clusterNodes = useAtomValue(allNodesAtom).filter(
+    (node) => !node.namespaced,
+  );
+  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+    (node) => node.namespaced,
+  );
   useEffect(() => {
     if (moduleTemplatesLoading) {
       return;
@@ -133,8 +146,18 @@ export const useFetchModuleData = (
           }
 
           try {
-            const url = getResourcePath(resource);
-
+            const resourceUrl = await getUrl(
+              resource,
+              resource?.metadata?.namespace ||
+                resource?.namespace ||
+                DEFAULT_K8S_NAMESPACE,
+              clusterNodes,
+              namespaceNodes,
+              singleGetFn,
+            );
+            const url = `${resourceUrl}/${
+              resource?.metadata?.name || resource?.name
+            }`;
             const response = await fetch({ relativeUrl: url });
             const data = await response.json();
 
