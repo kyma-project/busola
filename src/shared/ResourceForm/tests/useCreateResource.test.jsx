@@ -52,7 +52,7 @@ describe('useCreateResource', () => {
     createUrl: 'mock-create-url',
   };
 
-  it('Fires POST if initial resource name does not exist', async () => {
+  it('Fires POST if initial resource UID does not exist', async () => {
     mockFetch.mockReturnValue(
       Promise.resolve({ json: () => Promise.resolve({}) }),
     );
@@ -77,8 +77,8 @@ describe('useCreateResource', () => {
     });
   });
 
-  it('Fires PATCH if initial resource name exists', async () => {
-    const initialResource = { metadata: { name: 'test-name' } };
+  it('Fires PATCH if initial resource UID exists', async () => {
+    const initialResource = { metadata: { name: 'test-name', uid: '1234abc' } };
     mockFetch.mockReturnValue(
       Promise.resolve({ json: () => Promise.resolve({}) }),
     );

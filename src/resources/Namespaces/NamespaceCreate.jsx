@@ -63,7 +63,7 @@ export default function NamespaceCreate({
 
   const isEdit = useMemo(
     () =>
-      !!initialResource?.metadata?.name && !layoutColumn?.showCreate?.resource,
+      !!initialResource?.metadata?.uid && !layoutColumn?.showCreate?.resource,
     [initialResource, layoutColumn?.showCreate?.resource],
   );
 
