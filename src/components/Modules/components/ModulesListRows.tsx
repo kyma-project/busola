@@ -22,6 +22,7 @@ type RowResourceType = {
   channel: string;
   version: string;
   resource: { kind: string };
+  fakeStatus: any;
 };
 
 type ModuleReleaseMetasType = {
@@ -43,6 +44,7 @@ export const ModulesListRows = ({
   hasDetailsLink,
   kymaResource,
 }: ModulesListRowsProps) => {
+  console.log('RESOURCE', resource);
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
@@ -92,8 +94,11 @@ export const ModulesListRows = ({
       return kymaResourceModule?.name === resource?.name;
     }) ?? -1;
 
-  const { data: managerResourceState, error: managerResourceStateError } =
+  let { data: managerResourceState, error: managerResourceStateError } =
     useGetManagerStatus(currentModuleTemplate?.spec?.manager);
+  if (resource.fakeStatus) {
+    managerResourceState = resource.fakeStatus;
+  }
   if (
     moduleStatus &&
     !moduleStatus.resource &&

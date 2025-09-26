@@ -153,13 +153,13 @@ function imageMatchVersion(image: string, version: string): boolean {
 }
 
 function sleep(lf_ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, 0));
+  return new Promise((resolve) => setTimeout(resolve, lf_ms));
 }
 
 export type CallbackFn = (
-  moduleName: string,
+  moduleTpl: ModuleTemplateType,
   moduleState: State,
-  message?: string,
+  message?: string | any,
 ) => void;
 
 export async function installCommunityModule(
@@ -171,12 +171,10 @@ export async function installCommunityModule(
   singleGet: Function,
   callback: CallbackFn,
 ) {
-  const name = getModuleName(moduleTpl);
-
   try {
     // setState Downloading
     await sleep(2000);
-    callback(name, State.Downloading);
+    callback(moduleTpl, State.Downloading);
 
     const allResourcesLinks =
       moduleTpl.spec.resources?.map((resource) => resource.link) || [];
@@ -187,13 +185,13 @@ export async function installCommunityModule(
 
     // setState preparing
     await sleep(2000);
-    callback(name, State.Preparing);
+    callback(moduleTpl, State.Preparing);
 
     const { crds, otherYamls } = extractCrds(allResources);
 
     // setState uploading
     await sleep(2000);
-    callback(name, State.Uploading);
+    callback(moduleTpl, State.Uploading);
 
     await uploadResources(
       crds,
@@ -211,14 +209,19 @@ export async function installCommunityModule(
       patchRequest,
       singleGet,
     );
-    if (result.filter((r) => r.status !== 'fulfilled').length !== 0) {
-      callback(name, State.Error, 'Upload error');
+    const failedResults = result.filter((r) => r.status !== 'fulfilled');
+    if (failedResults.length !== 0) {
+      callback(
+        moduleTpl,
+        State.Error,
+        `Upload error: ${failedResults[0].reason}`,
+      );
     }
 
     await sleep(2000);
-    callback(name, State.Finished);
+    callback(moduleTpl, State.Finished);
   } catch (e) {
-    callback(name, State.Error, e);
+    callback(moduleTpl, State.Error, e);
   }
 }
 

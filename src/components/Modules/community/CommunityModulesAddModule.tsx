@@ -30,11 +30,9 @@ import 'components/Modules/KymaModulesAddModule.scss';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useAtomValue } from 'jotai/index';
 import UploadDialog from 'components/Modules/community/components/UploadDialog';
-import {
-  State,
-  uploadStateAtom,
-} from 'components/Modules/community/components/uploadStateAtom';
+import { uploadStateAtom } from 'components/Modules/community/components/uploadStateAtom';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
+import { CommunityModulesInstallationContext } from 'components/Modules/providers/CommunitModulesInstalationProvider';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -127,9 +125,6 @@ export default function CommunityModulesAddModule(props: any) {
   const postRequest = usePost();
   const singleGet = useSingleGet();
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
-  const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
-    [],
-  );
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   const [
@@ -141,6 +136,8 @@ export default function CommunityModulesAddModule(props: any) {
     notInstalledCommunityModuleTemplates,
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
+
+  const { callback } = useContext(CommunityModulesInstallationContext);
 
   const availableCommunityModules = useMemo(() => {
     if (!notInstalledCommunityModulesLoading) {
@@ -167,9 +164,6 @@ export default function CommunityModulesAddModule(props: any) {
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
     (node) => node.namespaced,
   );
-
-  const [uploadModalOpen, setUploadModalOpen] = useState(false);
-  const [uploadState, setUploadState] = useAtom(uploadStateAtom);
 
   const calculateColumns = useCallback(() => {
     if (cardsContainerRef?.clientWidth) {
@@ -256,42 +250,8 @@ export default function CommunityModulesAddModule(props: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    setUploadModalOpen(true);
     (async function () {
       try {
-        const callBack = (
-          moduleName: string,
-          moduleState: State,
-          message?: string,
-        ) => {
-          console.log(moduleState);
-          const moduleStateToUpdate = uploadState?.find(
-            (uploadState) => uploadState.moduleName === moduleName,
-          );
-          if (!moduleStateToUpdate) {
-            const newUploadState = {
-              moduleName,
-              message: message || '',
-              state: moduleState,
-            };
-            setUploadState([...uploadState, newUploadState]);
-            console.log(newUploadState);
-            return;
-          }
-
-          const uploadStateToUpdate = uploadState?.map((uploadState) => {
-            if (uploadState.moduleName === moduleName) {
-              uploadState.state = moduleState;
-              uploadState.message = message || '';
-              return uploadState;
-            } else {
-              return uploadState;
-            }
-          });
-          console.log(uploadStateToUpdate);
-          setUploadState(uploadStateToUpdate);
-        };
-
         const operationPromises = communityModulesTemplatesToApply
           .values()
           .map((moduleTemplate) =>
@@ -302,7 +262,7 @@ export default function CommunityModulesAddModule(props: any) {
               postRequest,
               patchRequest,
               singleGet,
-              callBack,
+              callback,
             ),
           );
         await Promise.allSettled(operationPromises);
@@ -313,8 +273,7 @@ export default function CommunityModulesAddModule(props: any) {
           }),
         });
 
-        setUploadModalOpen(false);
-        setUploadState([]);
+        // setUploadState([]);
         setLayoutColumn({
           ...layoutColumn,
           layout: 'OneColumn',
@@ -322,7 +281,6 @@ export default function CommunityModulesAddModule(props: any) {
           endColumn: null,
           showCreate: null,
         });
-        navigate(window.location.pathname, { replace: true });
       } catch (e) {
         console.error(e);
         notification.notifyError({
@@ -333,6 +291,8 @@ export default function CommunityModulesAddModule(props: any) {
         });
       }
     })();
+    console.log('Navigate');
+    navigate(window.location.pathname, { replace: true });
   };
 
   if (isCommunityModulesEnabled) {
@@ -366,9 +326,9 @@ export default function CommunityModulesAddModule(props: any) {
             )}
           </>
         </ResourceForm>
-        {uploadModalOpen &&
-          createPortal(<UploadDialog state={uploadState} />, document.body)}
-        {createPortal(<UnsavedMessageBox />, document.body)}
+        {/*{uploadModalOpen &&*/}
+        {/*  createPortal(<UploadDialog state={uploadState} />, document.body)}*/}
+        {/*{createPortal(<UnsavedMessageBox />, document.body)}*/}
       </>
     );
   } else {

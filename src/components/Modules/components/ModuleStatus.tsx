@@ -6,6 +6,11 @@ export const resolveType = (status: string): ValueState => {
   switch (status) {
     case 'Initial':
     case 'Pending':
+    //   FakeStatus
+    case 'Uploading':
+    case 'Preparing':
+    case 'Downloading':
+    //
     case 'Released':
       return ValueState.Information;
     case 'Available':
@@ -15,6 +20,7 @@ export const resolveType = (status: string): ValueState => {
     case 'Success':
     case 'Succeeded':
     case 'Progressing':
+    case 'Finished':
     case 'Ok':
       return ValueState.Positive;
     case 'Processing':

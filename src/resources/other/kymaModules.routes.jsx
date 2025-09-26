@@ -16,6 +16,7 @@ import { ModuleTemplatesContextProvider } from 'components/Modules/providers/Mod
 import { CommunityModulesDeleteBoxContextProvider } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 import { AddSourceYamls } from 'components/Modules/community/components/AddSourceYamls';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
+import { CommunityModulesUploadProvider } from 'components/Modules/providers/CommunitModulesInstalationProvider';
 
 const KymaModulesList = React.lazy(
   () => import('components/Modules/ModulesList'),
@@ -202,14 +203,16 @@ const ColumnWrapper = ({
             showDeleteDialog={showDeleteDialog}
             namespaced={namespaced}
           >
-            <Suspense fallback={<Spinner />}>
-              <FlexibleColumnLayout
-                style={{ height: '100%' }}
-                layout={layoutState?.layout}
-                startColumn={startColumnComponent}
-                midColumn={midColumnComponent}
-              />
-            </Suspense>
+            <CommunityModulesUploadProvider>
+              <Suspense fallback={<Spinner />}>
+                <FlexibleColumnLayout
+                  style={{ height: '100%' }}
+                  layout={layoutState?.layout}
+                  startColumn={startColumnComponent}
+                  midColumn={midColumnComponent}
+                />
+              </Suspense>
+            </CommunityModulesUploadProvider>
           </CommunityModulesDeleteBoxContextProvider>
         </CommunityModuleContextProvider>
       </KymaModuleContextProvider>
