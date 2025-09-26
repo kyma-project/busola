@@ -1,12 +1,13 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useModuleStatus } from '../hooks';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 
-export const resolveType = (status: string) => {
+export const resolveType = (status: string): ValueState => {
   switch (status) {
     case 'Initial':
     case 'Pending':
     case 'Released':
-      return 'Information';
+      return ValueState.Information;
     case 'Available':
     case 'Ready':
     case 'Bound':
@@ -15,21 +16,21 @@ export const resolveType = (status: string) => {
     case 'Succeeded':
     case 'Progressing':
     case 'Ok':
-      return 'Positive';
+      return ValueState.Positive;
     case 'Processing':
     case 'Deleting':
     case 'Unknown':
     case 'Unmanaged':
-      return 'None';
+      return ValueState.None;
     case 'Warning':
-      return 'Critical';
+      return ValueState.Critical;
     case 'Failed':
     case 'Error':
     case 'Failure':
     case 'Invalid':
-      return 'Negative';
+      return ValueState.Negative;
     default:
-      return 'None';
+      return ValueState.None;
   }
 };
 
