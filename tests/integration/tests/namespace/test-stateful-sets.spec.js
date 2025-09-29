@@ -87,7 +87,7 @@ context('Test Stateful Sets', () => {
       },
     );
 
-    cy.get('body').click();
+    cy.findMonaco().blur();
 
     cy.findMonaco().should('include.value', SS_NAME);
 
@@ -96,7 +96,7 @@ context('Test Stateful Sets', () => {
 
     cy.get('ui5-dialog[header-text="Discard Changes"]:visible')
       .find('ui5-button')
-      .contains('Reset')
+      .contains('Discard')
       .click();
 
     cy.findMonaco().should('include.value', "name: ''");
