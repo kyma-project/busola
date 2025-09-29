@@ -87,7 +87,7 @@ context('Test Stateful Sets', () => {
       },
     );
 
-    cy.findMonaco().blur();
+    cy.get('body').click();
 
     cy.findMonaco().should('include.value', SS_NAME);
 
