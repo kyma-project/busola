@@ -75,6 +75,33 @@ context('Test Stateful Sets', () => {
     cy.get('@copyPrompt').should('have.been.called');
   });
 
+  it('Check if Reset button works correctly', () => {
+    cy.navigateTo('Workloads', 'Stateful Sets');
+
+    cy.openCreate();
+
+    cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
+      (SS_CONFIG) => {
+        const SS = JSON.stringify(SS_CONFIG);
+        cy.pasteToMonaco(SS);
+      },
+    );
+
+    cy.get('body').click();
+
+    cy.findMonaco().should('include.value', SS_NAME);
+
+    cy.get('ui5-button:visible').contains('Reset').click();
+    cy.get('ui5-dialog[header-text="Discard Changes"]').should('be.visible');
+
+    cy.get('ui5-dialog[header-text="Discard Changes"]:visible')
+      .find('ui5-button')
+      .contains('Reset')
+      .click();
+
+    cy.findMonaco().should('include.value', "name: ''");
+  });
+
   it('Inspect list', () => {
     cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.inspectList(SS_NAME);
