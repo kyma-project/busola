@@ -44,7 +44,7 @@ export const ModulesListRows = ({
   hasDetailsLink,
   kymaResource,
 }: ModulesListRowsProps) => {
-  console.log('RESOURCE', resource);
+  // console.log('RESOURCE', resource);
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,

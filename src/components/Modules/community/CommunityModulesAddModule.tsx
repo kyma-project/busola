@@ -17,8 +17,6 @@ import {
   ModuleTemplateType,
 } from 'components/Modules/support';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
-import { createPortal } from 'react-dom';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
@@ -29,8 +27,6 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import 'components/Modules/KymaModulesAddModule.scss';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useAtomValue } from 'jotai/index';
-import UploadDialog from 'components/Modules/community/components/UploadDialog';
-import { uploadStateAtom } from 'components/Modules/community/components/uploadStateAtom';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { CommunityModulesInstallationContext } from 'components/Modules/providers/CommunitModulesInstalationProvider';
 
@@ -137,7 +133,9 @@ export default function CommunityModulesAddModule(props: any) {
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
-  const { callback } = useContext(CommunityModulesInstallationContext);
+  const { callback, setModulesTemplatesToUpload } = useContext(
+    CommunityModulesInstallationContext,
+  );
 
   const availableCommunityModules = useMemo(() => {
     if (!notInstalledCommunityModulesLoading) {
@@ -249,50 +247,54 @@ export default function CommunityModulesAddModule(props: any) {
   };
 
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    (async function () {
-      try {
-        const operationPromises = communityModulesTemplatesToApply
-          .values()
-          .map((moduleTemplate) =>
-            installCommunityModule(
-              moduleTemplate,
-              clusterNodes,
-              namespaceNodes,
-              postRequest,
-              patchRequest,
-              singleGet,
-              callback,
-            ),
-          );
-        await Promise.allSettled(operationPromises);
-
-        notification.notifySuccess({
-          content: t('modules.community.messages.success', {
-            resourceType: 'Community Module',
-          }),
-        });
-
-        // setUploadState([]);
-        setLayoutColumn({
-          ...layoutColumn,
-          layout: 'OneColumn',
-          midColumn: null,
-          endColumn: null,
-          showCreate: null,
-        });
-      } catch (e) {
-        console.error(e);
-        notification.notifyError({
-          content: t('modules.community.messages.install-failure', {
-            resourceType: 'Community Module',
-            error: e instanceof Error && e?.message ? e.message : '',
-          }),
-        });
-      }
-    })();
+    // const upload = async function () {
+    //   try {
+    //     const operationPromises = communityModulesTemplatesToApply
+    //       .values()
+    //       .map((moduleTemplate) =>
+    //         installCommunityModule(
+    //           moduleTemplate,
+    //           clusterNodes,
+    //           namespaceNodes,
+    //           postRequest,
+    //           patchRequest,
+    //           singleGet,
+    //           callback,
+    //         ),
+    //       );
+    //     await Promise.allSettled(operationPromises);
+    //
+    //     notification.notifySuccess({
+    //       content: t('modules.community.messages.success', {
+    //         resourceType: 'Community Module',
+    //       }),
+    //     });
+    //
+    //     // setUploadState([]);
+    //     setLayoutColumn({
+    //       ...layoutColumn,
+    //       layout: 'OneColumn',
+    //       midColumn: null,
+    //       endColumn: null,
+    //       showCreate: null,
+    //     });
+    //   } catch (e) {
+    //     console.error(e);
+    //     notification.notifyError({
+    //       content: t('modules.community.messages.install-failure', {
+    //         resourceType: 'Community Module',
+    //         error: e instanceof Error && e?.message ? e.message : '',
+    //       }),
+    //     });
+    //   }
+    // };
+    // upload();
+    // setModulesTemplatesToUpload(communityModulesTemplatesToApply)
     console.log('Navigate');
+    e.preventDefault();
     navigate(window.location.pathname, { replace: true });
+    setModulesTemplatesToUpload(communityModulesTemplatesToApply);
+    console.log('Koniec');
   };
 
   if (isCommunityModulesEnabled) {
