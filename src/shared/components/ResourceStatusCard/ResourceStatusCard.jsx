@@ -36,7 +36,10 @@ export function ResourceStatusCard({
         )}
         {conditions && (
           <>
-            <div className="title bsl-has-color-status-4 sap-margin-x-small">
+            <div
+              className="title bsl-has-color-status-4 sap-margin-x-small"
+              tabIndex={0}
+            >
               {`${t('common.headers.conditions')}:`}
             </div>
             <ConditionList conditions={conditions} />
