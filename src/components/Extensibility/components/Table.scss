@@ -12,7 +12,11 @@ ui5-table-row.collapse-content {
 
   .extensibility-table {
     ui5-table {
-      min-width: unset;
+      min-width: auto;
+
+      ui5-table-cell {
+        min-width: min-content;
+      }
     }
   }
 }

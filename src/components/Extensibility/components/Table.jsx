@@ -72,7 +72,9 @@ const rowRenderer = (
     }
   };
   makeTitle().then((result) => {
-    if (title !== result) setTitle(result);
+    if (result && JSON.stringify(title) !== JSON.stringify(result)) {
+      setTitle(result);
+    }
   });
 
   const cells = (structure.children || []).map((column, cellIndex) => {
