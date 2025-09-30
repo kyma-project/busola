@@ -9,7 +9,7 @@ export function TimeFromNow({
   roundingResultType,
 }: {
   value: string;
-  roundingResultType: ROUNDING_RESULT_TYPE;
+  roundingResultType?: ROUNDING_RESULT_TYPE;
 }) {
   if (!value || value === EMPTY_TEXT_PLACEHOLDER) {
     return EMPTY_TEXT_PLACEHOLDER;

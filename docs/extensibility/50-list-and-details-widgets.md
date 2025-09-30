@@ -344,7 +344,7 @@ See the following example:
 
 ### `TimeFromNow`
 
-The `TimeFromNow` widget calculates the time difference between the date provided in **source** and the current time and displays it in the format X days ago.
+The `TimeFromNow` widget calculates the time difference between the date provided in **source** and the current time and displays it in the format X days/hours/minutes/seconds ago. The unit is specified in parameter **roundingResultType** or decided automatically.
 
 These are the available `TimeFromNow` widget parameters:
 

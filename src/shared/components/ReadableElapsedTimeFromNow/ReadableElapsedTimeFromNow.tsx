@@ -18,57 +18,53 @@ export const ROUNDING_RESULT_TYPE = {
 export type ROUNDING_RESULT_TYPE =
   (typeof ROUNDING_RESULT_TYPE)[keyof typeof ROUNDING_RESULT_TYPE];
 
-export const getElapsedTime = (
-  timestamp: string,
-  valueUnit: string,
-  roundingResultType: ROUNDING_RESULT_TYPE,
-): string => {
-  if (!timestamp) {
-    return EMPTY_TEXT_PLACEHOLDER;
-  }
-
-  const startDate = new Date(timestamp);
-  const now = new Date();
-  const timeDiff = now.valueOf() - startDate.valueOf();
-
-  const timeElapsed = (function () {
-    switch (roundingResultType) {
-      case ROUNDING_RESULT_TYPE.SECONDS:
-        return timeDiff / toSeconds;
-      case ROUNDING_RESULT_TYPE.MINUTES:
-        return timeDiff / toSeconds / toMinutes;
-      case ROUNDING_RESULT_TYPE.HOURS:
-        return timeDiff / toSeconds / toMinutes / toHours;
-      default:
-        return timeDiff / toSeconds / toMinutes / toHours / toDays;
-    }
-  })();
-
-  const timeDiffRounded = Math.round(timeElapsed);
-
-  return timeDiffRounded.toString() + ' ' + valueUnit;
+const formatResult = (value: number, valueUnit: string) => {
+  return <>{Math.round(value).toString() + ' ' + valueUnit}</>;
 };
 
 export const ReadableElapsedTimeFromNow = ({
   timestamp,
-  roundingResultType = ROUNDING_RESULT_TYPE.DAYS,
+  roundingResultType,
 }: {
   timestamp: string;
   roundingResultType?: ROUNDING_RESULT_TYPE;
 }): JSX.Element => {
   const { t } = useTranslation();
-  const valueUnit = useMemo(() => {
-    switch (roundingResultType) {
-      case ROUNDING_RESULT_TYPE.SECONDS:
-        return t('common.value-units.seconds-ago');
-      case ROUNDING_RESULT_TYPE.MINUTES:
-        return t('common.value-units.minutes-ago');
-      case ROUNDING_RESULT_TYPE.HOURS:
-        return t('common.value-units.hours-ago');
-      default:
-        return t('common.value-units.days-ago');
-    }
-  }, [roundingResultType, t]);
 
-  return <>{getElapsedTime(timestamp, valueUnit, roundingResultType)}</>;
+  const result = useMemo(() => {
+    if (!timestamp) {
+      return <>{EMPTY_TEXT_PLACEHOLDER}</>;
+    }
+
+    const startDate = new Date(timestamp);
+    const now = new Date();
+    const timeDiff = now.valueOf() - startDate.valueOf();
+
+    const seconds = timeDiff / toSeconds;
+    const minutes = seconds / toMinutes;
+    const hours = minutes / toHours;
+    const days = hours / toDays;
+    console.log('rrt', !!roundingResultType, roundingResultType);
+    if (
+      (!!roundingResultType &&
+        roundingResultType === ROUNDING_RESULT_TYPE.SECONDS) ||
+      (!roundingResultType && seconds < 60)
+    )
+      return formatResult(seconds, t('common.value-units.seconds-ago'));
+    else if (
+      (!!roundingResultType &&
+        roundingResultType === ROUNDING_RESULT_TYPE.MINUTES) ||
+      (!roundingResultType && minutes < 60)
+    )
+      return formatResult(minutes, t('common.value-units.minutes-ago'));
+    else if (
+      (!!roundingResultType &&
+        roundingResultType === ROUNDING_RESULT_TYPE.HOURS) ||
+      (!roundingResultType && hours < 24)
+    )
+      return formatResult(hours, t('common.value-units.hours-ago'));
+    else return formatResult(days, t('common.value-units.days-ago'));
+  }, [timestamp, roundingResultType, t]);
+
+  return result;
 };
