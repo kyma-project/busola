@@ -26,13 +26,13 @@ export function useFormNavigation() {
   );
 
   const confirmDiscard = useCallback(
-    (leaveFromOpen = false) => {
+    (leaveFormOpen = false) => {
       if (isResourceEdited.discardAction) {
         isResourceEdited.discardAction();
       }
 
       // Reset states
-      setIsFormOpen({ formOpen: leaveFromOpen, leavingForm: false });
+      setIsFormOpen({ formOpen: leaveFormOpen, leavingForm: false });
       setIsResourceEdited({ isEdited: false });
     },
     [isResourceEdited, setIsFormOpen, setIsResourceEdited],
