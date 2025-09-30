@@ -72,8 +72,8 @@ const rowRenderer = (
     }
   };
   makeTitle().then((result) => {
-    if (result && JSON.stringify(title) !== JSON.stringify(result)) {
-      setTitle(result);
+    if (result && JSON.stringify(title?.[index]) !== JSON.stringify(result)) {
+      setTitle((prev) => ({ ...prev, [index]: result }));
     }
   });
 
@@ -100,7 +100,7 @@ const rowRenderer = (
 
   return {
     cells,
-    title,
+    title: title?.[index] ?? '',
     collapseContent: (
       <div className={tdClassNames}>
         {structure.collapsible.map((child, cellIndex) => (
@@ -154,7 +154,7 @@ export function Table({
     arrayItems,
   });
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState({});
 
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
