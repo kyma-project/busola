@@ -32,6 +32,95 @@ const handleTableValue = (value, t) => {
   }
 };
 
+const rowRenderer = (
+  entry,
+  index,
+  structure,
+  tExt,
+  jsonata,
+  arrayItems,
+  title,
+  setTitle,
+  schema,
+  originalResource,
+  singleRootResource,
+  props,
+) => {
+  const tdClassNames = classNames({
+    'collapsible-panel': !structure.disablePadding,
+  });
+  const makeTitle = async () => {
+    const defaultTitle =
+      tExt(structure.name, {
+        defaultValue: structure.name || structure.source,
+      }) +
+      ' #' +
+      (index + 1);
+    if (structure.collapsibleTitle) {
+      try {
+        return await jsonata(structure.collapsibleTitle, {
+          index: index,
+          scope: entry,
+          arrayItems: [...arrayItems, entry],
+        });
+      } catch (e) {
+        console.warn(e);
+        return defaultTitle;
+      }
+    } else {
+      return defaultTitle;
+    }
+  };
+  makeTitle().then((result) => {
+    if (title !== result) setTitle(result);
+  });
+
+  const cells = (structure.children || []).map((column, cellIndex) => {
+    return (
+      <Widget
+        {...props}
+        key={cellIndex}
+        value={entry}
+        scope={entry}
+        arrayItems={[...arrayItems, entry]}
+        structure={column}
+        schema={schema}
+        originalResource={originalResource}
+        singleRootResource={singleRootResource}
+        index={index}
+      />
+    );
+  });
+
+  if (!structure.collapsible) {
+    return cells;
+  }
+
+  return {
+    cells,
+    title,
+    collapseContent: (
+      <div className={tdClassNames}>
+        {structure.collapsible.map((child, cellIndex) => (
+          <Widget
+            {...props}
+            key={cellIndex}
+            value={entry}
+            scope={entry}
+            arrayItems={[...arrayItems, entry]}
+            structure={child}
+            schema={schema}
+            inlineRenderer={InlineWidget}
+            originalResource={originalResource}
+            singleRootResource={singleRootResource}
+            index={index}
+          />
+        ))}
+      </div>
+    ),
+  };
+};
+
 export function Table({
   value,
   structure,
@@ -69,81 +158,6 @@ export function Table({
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
-  const tdClassNames = classNames({
-    'collapsible-panel': !structure.disablePadding,
-  });
-
-  const rowRenderer = (entry, index) => {
-    const makeTitle = async () => {
-      const defaultTitle =
-        tExt(structure.name, {
-          defaultValue: structure.name || structure.source,
-        }) +
-        ' #' +
-        (index + 1);
-      if (structure.collapsibleTitle) {
-        try {
-          return await jsonata(structure.collapsibleTitle, {
-            index: index,
-            scope: entry,
-            arrayItems: [...arrayItems, entry],
-          });
-        } catch (e) {
-          console.warn(e);
-          return defaultTitle;
-        }
-      } else {
-        return defaultTitle;
-      }
-    };
-    makeTitle().then((result) => setTitle(result));
-
-    const cells = (structure.children || []).map((column, cellIndex) => {
-      return (
-        <Widget
-          {...props}
-          key={cellIndex}
-          value={entry}
-          scope={entry}
-          arrayItems={[...arrayItems, entry]}
-          structure={column}
-          schema={schema}
-          originalResource={originalResource}
-          singleRootResource={singleRootResource}
-          index={index}
-        />
-      );
-    });
-
-    if (!structure.collapsible) {
-      return cells;
-    }
-
-    return {
-      cells,
-      title: title,
-      collapseContent: (
-        <div className={tdClassNames}>
-          {structure.collapsible.map((child, cellIndex) => (
-            <Widget
-              {...props}
-              key={cellIndex}
-              value={entry}
-              scope={entry}
-              arrayItems={[...arrayItems, entry]}
-              structure={child}
-              schema={schema}
-              inlineRenderer={InlineWidget}
-              originalResource={originalResource}
-              singleRootResource={singleRootResource}
-              index={index}
-            />
-          ))}
-        </div>
-      ),
-    };
-  };
-
   const { sortOptions } = getSortDetails(structure);
 
   const { searchOptions, defaultSearch } = getSearchDetails(structure);
@@ -180,7 +194,22 @@ export function Table({
       })}
       extraHeaderContent={extraHeaderContent}
       headerRenderer={headerRenderer}
-      rowRenderer={rowRenderer}
+      rowRenderer={(entry, index) =>
+        rowRenderer(
+          entry,
+          index,
+          structure,
+          tExt,
+          jsonata,
+          arrayItems,
+          title,
+          setTitle,
+          schema,
+          originalResource,
+          singleRootResource,
+          props,
+        )
+      }
       {...handleTableValue(value, t)}
       sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
       searchSettings={{

@@ -9,6 +9,12 @@
 ui5-table-row.collapse-content {
   overflow-x: auto;
   display: block;
+
+  .extensibility-table {
+    ui5-table {
+      min-width: unset;
+    }
+  }
 }
 
 .collapsible-panel {
