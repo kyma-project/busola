@@ -35,7 +35,7 @@ export function useFormEditTracking(
   }, [excludedResource, excludedInitialResource, editorError]);
 
   useEffect(() => {
-    if (formOpen && isEdited) {
+    if (formOpen && !!isEdited) {
       setIsResourceEdited((prevState) => ({ ...prevState, isEdited: true }));
     } else {
       setIsResourceEdited({ isEdited: false });

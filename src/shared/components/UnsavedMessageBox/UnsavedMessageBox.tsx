@@ -6,9 +6,17 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 type UnsavedMessageBoxProps = {
   isOpen?: boolean;
+  isReset?: boolean;
+  setIsReset?: (value: boolean) => void;
+  customMessage?: string;
 };
 
-export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
+export function UnsavedMessageBox({
+  isOpen,
+  isReset = false,
+  setIsReset,
+  customMessage,
+}: UnsavedMessageBoxProps) {
   const { t } = useTranslation();
   const { formOpen, leavingForm } = useAtomValue(isFormOpenAtom);
   const { confirmDiscard, cancelDiscard } = useFormNavigation();
@@ -18,9 +26,17 @@ export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
     escapedPressed?: true | undefined,
   ) => {
     if (action === '0: custom action') {
-      confirmDiscard();
+      confirmDiscard(isReset);
+
+      if (setIsReset) {
+        setIsReset(false);
+      }
     } else if (action === '1: custom action' || escapedPressed) {
       cancelDiscard();
+
+      if (setIsReset) {
+        setIsReset(false);
+      }
     }
   };
 
@@ -39,7 +55,7 @@ export function UnsavedMessageBox({ isOpen }: UnsavedMessageBoxProps) {
         </Button>,
       ]}
     >
-      {t('common.messages.discard-changes-warning')}
+      {customMessage ?? t('common.messages.discard-changes-warning')}
     </MessageBox>
   );
 }
