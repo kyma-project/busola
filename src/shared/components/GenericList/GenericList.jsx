@@ -181,7 +181,7 @@ export const GenericList = ({
     <>
       {searchSettings?.showSearchField && (
         <SearchInput
-          entriesKind={title || ''}
+          entriesKind={title || resourceType || ''}
           searchQuery={searchQuery}
           filteredEntries={filteredEntries}
           handleQueryChange={setSearchQuery}

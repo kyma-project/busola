@@ -102,6 +102,7 @@ export function GroupingListPage({
         description={description}
         actions={
           <SearchInput
+            entriesKind={title}
             value={searchQuery}
             handleQueryChange={setSearchQuery}
             allowSlashShortcut
