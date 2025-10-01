@@ -20,7 +20,7 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.getLeftNav().contains('Namespaces').click();
 
-    cy.get('ui5-input[id="search-input"]:visible')
+    cy.get('ui5-input[id^=search-]:visible')
       .find('input')
       .wait(1000)
       .type(NAMESPACE_NAME);

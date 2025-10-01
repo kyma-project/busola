@@ -64,9 +64,7 @@ context('Test extensibility variables', () => {
       .click();
 
     cy.wait(1000);
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .type(NAMESPACE);
+    cy.get('ui5-input[id^=search-]:visible').find('input').type(NAMESPACE);
 
     cy.clickListLink(NAMESPACE);
 

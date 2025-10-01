@@ -96,7 +96,7 @@ context('Test reduced permissions 2', () => {
       .click();
 
     cy.wait(500)
-      .get('ui5-input[id="search-input"]:visible')
+      .get('ui5-input[id^=search-]:visible')
       .find('input')
       .type('kube-public');
 

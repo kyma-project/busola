@@ -100,7 +100,7 @@ context('Test Kyma Modules views', () => {
     cy.wait(1000);
 
     cy.get('.modules-list')
-      .find('ui5-input[id="search-input"]:visible')
+      .find('ui5-input[id^=search-]:visible')
       .find('input')
       .wait(1000)
       .type('api-gateway');
@@ -119,7 +119,7 @@ context('Test Kyma Modules views', () => {
     // cy.closeMidColumn();
 
     cy.get('.modules-list')
-      .find('ui5-input[id="search-input"]:visible')
+      .find('ui5-input[id^=search-]:visible')
       .find('input')
       .clearInput();
 
@@ -207,7 +207,7 @@ context('Test Kyma Modules views', () => {
     });
 
     // Uncomment after adding local KLM
-    // cy.get('ui5-input[id="search-input"]:visible')
+    // cy.get('ui5-input[id^=search-]:visible')
     //   .find('input')
     //   .wait(1000)
     //   .type('api-gateway');
@@ -220,7 +220,7 @@ context('Test Kyma Modules views', () => {
     //
     // cy.wait(20000);
     //
-    // cy.get('ui5-input[id="search-input"]:visible')
+    // cy.get('ui5-input[id^=search-]:visible')
     //   .find('input')
     //   .clear();
     //

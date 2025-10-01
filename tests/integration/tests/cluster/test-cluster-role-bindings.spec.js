@@ -107,7 +107,7 @@ context('Test Cluster Role Bindings', () => {
 
   it('Delete Cluster Role Binding', () => {
     cy.wait(500)
-      .get('ui5-input[id="search-input"]:visible')
+      .get('ui5-input[id^=search-]:visible')
       .find('input')
       .type(CRB_NAME);
 
