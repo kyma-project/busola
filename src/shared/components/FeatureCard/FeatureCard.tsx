@@ -7,6 +7,7 @@ import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';
 import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
 import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
 import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
+import DiscoveryIllustration from './assets/Discovery/Team.png';
 import { useAtomValue } from 'jotai';
 import {
   BackgroundStyle,
@@ -26,6 +27,8 @@ const getIllustration = (
   switch (illustration) {
     case 'None':
       return null;
+    case 'Discovery':
+      return DiscoveryIllustration;
     case 'AI':
       switch (theme) {
         case 'sap_horizon_hcw':
@@ -87,6 +90,15 @@ export function FeatureCardBanner({
             'linear-gradient(to right, var(--sapLegendBackgroundColor6), var(--sapLegendBackgroundColor5))',
         };
       case 'information-2':
+        return {
+          background:
+            'linear-gradient(to right, var(--sapLegendBackgroundColor20), var(--sapLegendBackgroundColor5))',
+        };
+      case 'information-3':
+        return {
+          background:
+            'linear-gradient(to right, var(--sapContent_Illustrative_Color25), var(--sapContent_Illustrative_Color27))',
+        };
       default:
         return {
           background:

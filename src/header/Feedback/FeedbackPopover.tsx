@@ -29,8 +29,7 @@ export default function FeedbackPopover() {
   const {
     isEnabled: isDiscoveryAnnouncementEnabled,
     config: { link: discoveryAnnouncementLink } = {},
-  } = useFeature(configFeaturesNames.DISCOVERY_ANNOUNCEMENT);
-  console.log(isDiscoveryAnnouncementEnabled, 'isDiscoveryAnnouncementEnabled');
+  } = useFeature(configFeaturesNames.DISCOVERY_BANNER);
 
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
