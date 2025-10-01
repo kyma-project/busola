@@ -311,8 +311,8 @@ export const GenericList = ({
   const handleRowClick = (e) => {
     const arrowColumnCount = displayArrow ? 1 : 0;
     const item = (
-      e.detail.row.children[nameColIndex + arrowColumnCount].children[0]
-        .innerText ??
+      e.detail.row.children[nameColIndex + arrowColumnCount]?.children?.[0]
+        ?.innerText ??
       e.detail.row.children[nameColIndex + arrowColumnCount].innerText
     )?.trimEnd();
 

@@ -217,11 +217,11 @@ export const CommunityModulesList = ({
     if (!moduleStatus.resource) {
       const moduleResource = moduleTemplate?.spec?.data;
       moduleStatus.resource = {
-        kind: moduleResource.kind,
-        apiVersion: moduleResource.apiVersion,
+        kind: moduleResource?.kind ?? '',
+        apiVersion: moduleResource?.apiVersion ?? '',
         metadata: {
-          name: moduleResource.metadata.name,
-          namespace: moduleResource.metadata.namespace,
+          name: moduleResource?.metadata?.name ?? '',
+          namespace: moduleResource?.metadata?.namespace ?? '',
         },
       };
     }
