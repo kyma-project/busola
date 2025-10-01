@@ -14,7 +14,9 @@ import './SearchInput.scss';
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
   entriesKind: PropTypes.string,
-  filteredEntries: PropTypes.arrayOf(PropTypes.object.isRequired),
+  filteredEntries: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  ),
   handleQueryChange: PropTypes.func.isRequired,
   suggestionProperties: PropTypes.arrayOf(
     PropTypes.oneOfType([

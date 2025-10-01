@@ -42,6 +42,12 @@ context('Test Kyma Modules views', () => {
 
     cy.wait(1000);
 
+    cy.get('ui5-title').contains('Add Modules').should('be.visible');
+
+    cy.get('ui5-card').contains('Documentation').should('be.visible');
+
+    cy.get('ui5-panel').contains('Advanced').should('be.visible');
+
     cy.get('ui5-card').contains('api-gateway').should('be.visible');
 
     cy.get('ui5-title').contains('api-gateway').click();

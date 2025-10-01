@@ -71,7 +71,7 @@ export default function JobCreate({
 
   const isEdit = useMemo(
     () =>
-      !!initialResource?.metadata?.name && !!!layoutState?.showCreate?.resource,
+      !!initialResource?.metadata?.uid && !layoutState?.showCreate?.resource,
     [initialResource, layoutState?.showCreate?.resource],
   );
 

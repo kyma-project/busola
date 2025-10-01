@@ -253,6 +253,7 @@ common:
     reset: Reset
     restart: Restart
     retry: Retry
+    revert: Revert
     save: Save
     submit: Submit
     update: Update
@@ -352,10 +353,12 @@ common:
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
     no-instances-found-namespace: No matching {{value}} found in this Namespace
+    reset-changes-warning: You haven't saved your changes. Resetting will discard them.
     resource-name-error: Requested resource with this name not found in the selected Namespace.
     resource-namespace-error: Requested Namespace not found
     restart-failure: Connected Pods have failed to restart.
     restart-success: Connected Pods have been restarted.
+    revert-changes-warning: You haven't saved your changes. Reverting will discard them.
     type-to-select: Start typing to select {{value}} from the list
     validation-error: Validation error
   placeholders:
@@ -934,6 +937,7 @@ modules:
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
+      resources-delete-in-progress: Resources are still being deleted. Try again later.
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
       source-yaml-fetch-failed: 'Failed to download source yaml: {{error}}'

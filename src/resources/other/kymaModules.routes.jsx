@@ -1,6 +1,6 @@
 import { FlexibleColumnLayout, MessageStrip } from '@ui5/webcomponents-react';
 import React, { Suspense, useDeferredValue, useEffect, useState } from 'react';
-import { Route, useParams } from 'react-router';
+import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtom } from 'jotai';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
@@ -41,7 +41,12 @@ const ColumnWrapper = ({
     ? namespaceUrl('kymamodules')
     : clusterUrl('kymamodules');
 
-  const { resourceName, resourceType, namespace } = useParams();
+  const { resourceName, resourceType, namespace: rawNamespace } = useParams();
+  const [searchParams] = useSearchParams();
+  const namespace =
+    rawNamespace === '-all-'
+      ? searchParams.get('resourceNamespace')
+      : rawNamespace;
   const [resMetadata, setResMetadata] = useState(null);
 
   useEffect(() => {
@@ -83,12 +88,7 @@ const ColumnWrapper = ({
           layoutCloseCreateUrl={url}
           resourceName={layoutState?.midColumn?.resourceName || resourceName}
           resourceType={layoutState?.midColumn?.resourceType || resourceType}
-          namespaceId={
-            layoutState?.midColumn?.namespaceId ||
-            layoutState?.midColumn?.namespaceId === ''
-              ? layoutState?.midColumn?.namespaceId
-              : namespace
-          }
+          namespaceId={layoutState?.midColumn?.namespaceId ?? namespace}
           isModule={true}
         />
       ) : (
@@ -191,6 +191,7 @@ const ColumnWrapper = ({
         DeleteMessageBox={DeleteMessageBox}
         handleResourceDelete={handleResourceDelete}
         showDeleteDialog={showDeleteDialog}
+        namespaced={namespaced}
       >
         <CommunityModuleContextProvider>
           <CommunityModulesDeleteBoxContextProvider
@@ -199,6 +200,7 @@ const ColumnWrapper = ({
             DeleteMessageBox={DeleteMessageBox}
             handleResourceDelete={handleResourceDelete}
             showDeleteDialog={showDeleteDialog}
+            namespaced={namespaced}
           >
             <Suspense fallback={<Spinner />}>
               <FlexibleColumnLayout

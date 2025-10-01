@@ -13,7 +13,7 @@ import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 ContainersData.propTypes = {
-  containers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  containers: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default function ContainersData({ type, containers, statuses }) {

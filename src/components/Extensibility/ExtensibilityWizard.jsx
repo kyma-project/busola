@@ -53,17 +53,10 @@ function FormContainer({ children }) {
 const FormStack = injectPluginStack(FormContainer);
 
 export function ExtensibilityWizardCore({
-  formElementRef,
-  setCustomValid,
-  resourceType,
-  resourceUrl,
   resource: initialResource,
   resourceSchema,
-  toggleFormFn,
-  resourceName,
   onCancel,
   disableOnEdit = false,
-  ...props
 }) {
   const { prepareVars, setVar } = useVariables();
   const { t } = useTranslation();

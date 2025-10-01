@@ -15,6 +15,7 @@ import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 
 type RowResourceType = {
   name: string;
@@ -191,14 +192,14 @@ export const ModulesListRows = ({
     />,
     // Installation State
     kymaResource
-      ? kymaInstalationStateColumn(
+      ? kymaInstallationStateColumn(
           resolvedInstallationStateName,
           moduleStatus,
           managerResourceState,
           resource?.name,
           t,
         )
-      : instalationStateColumn(managerResourceState, resource?.name),
+      : installationStateColumn(managerResourceState, resource?.name),
     // Documentation
     moduleDocs ? (
       <ExternalLink url={moduleDocs}>{t('common.headers.link')}</ExternalLink>
@@ -208,24 +209,22 @@ export const ModulesListRows = ({
   ];
 };
 
-function instalationStateColumn(
+function installationStateColumn(
   managerResourceState: any,
   resourceName: string,
 ) {
-  let type = 'None';
+  let type: ValueState = ValueState.None;
   if (managerResourceState.state) {
     type = resolveType(managerResourceState.state);
-  } else {
-    if (managerResourceState.status === 'True') {
-      type = 'Positive';
-    } else if (managerResourceState.status === 'False') {
-      type = 'Warning';
-    }
+  } else if (managerResourceState.status === 'True') {
+    type = ValueState.Positive;
+  } else if (managerResourceState.status === 'False') {
+    type = ValueState.Critical;
   }
   return (
     <StatusBadge
       key={`installation-state-${resourceName}`}
-      resourceKind="communnity-modules"
+      resourceKind="community-modules"
       type={type}
       tooltipContent={managerResourceState?.message}
     >
@@ -234,7 +233,7 @@ function instalationStateColumn(
   );
 }
 
-function kymaInstalationStateColumn(
+function kymaInstallationStateColumn(
   resolvedInstallationStateName: string,
   moduleStatus: any,
   managerResourceState: any,

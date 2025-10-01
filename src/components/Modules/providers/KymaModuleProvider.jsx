@@ -25,6 +25,7 @@ export const KymaModuleContext = createContext({
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
   customHeaderActions: <></>,
+  namespaced: false,
 });
 
 export function KymaModuleContextProvider({
@@ -34,6 +35,7 @@ export function KymaModuleContextProvider({
   DeleteMessageBox,
   handleResourceDelete,
   showDeleteDialog,
+  namespaced,
 }) {
   const {
     data: kymaResource,
@@ -78,9 +80,8 @@ export function KymaModuleContextProvider({
       }),
   });
 
-  const { kymaModuleTemplates, moduleTemplatesLoading } = useContext(
-    ModuleTemplatesContext,
-  );
+  const { moduleTemplates: kymaModuleTemplates, moduleTemplatesLoading } =
+    useContext(ModuleTemplatesContext);
 
   const getOpenedModuleIndex = (moduleIndex, activeModules) => {
     const index =
@@ -163,6 +164,7 @@ export function KymaModuleContextProvider({
               setChosenModuleIndex={setOpenedModuleIndex}
               handleModuleUninstall={handleModuleUninstall}
               setLayoutColumn={setLayoutColumn}
+              namespaced={namespaced}
             />
           ),
         document.body,
