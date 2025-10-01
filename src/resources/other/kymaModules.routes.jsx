@@ -16,7 +16,7 @@ import { ModuleTemplatesContextProvider } from 'components/Modules/providers/Mod
 import { CommunityModulesDeleteBoxContextProvider } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 import { AddSourceYamls } from 'components/Modules/community/components/AddSourceYamls';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
-import { CommunityModulesUploadProvider } from 'components/Modules/providers/CommunitModulesInstalationProvider';
+import { CommunityModulesUploadProvider } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 
 const KymaModulesList = React.lazy(
   () => import('components/Modules/ModulesList'),

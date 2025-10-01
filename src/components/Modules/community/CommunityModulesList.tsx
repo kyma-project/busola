@@ -28,7 +28,7 @@ import { ModulesListRows } from 'components/Modules/components/ModulesListRows';
 import {
   CommunityModulesInstallationContext,
   ModuleDuringUpload,
-} from 'components/Modules/providers/CommunitModulesInstalationProvider';
+} from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 
