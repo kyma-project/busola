@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { fromJS } from 'immutable';
 
@@ -38,6 +38,8 @@ export function ResourceRefRender({
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
+  const valueRef = useRef(value);
+
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
 
@@ -62,8 +64,7 @@ export function ResourceRefRender({
   useEffect(() => {
     if (toInternal) {
       jsonata(toInternal).then(([internal, error]) => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        value = error ? {} : internal;
+        valueRef.current = error ? {} : internal;
       });
     }
     Promise.all(
@@ -89,7 +90,7 @@ export function ResourceRefRender({
   ]);
 
   const setValue = (value) => {
-    const getValuAndChange = async () => {
+    const getValueAndChange = async () => {
       if (toExternal) {
         const [external, error] = await jsonata(toExternal, {
           scope: value,
@@ -113,7 +114,7 @@ export function ResourceRefRender({
         data: { value: fromJS(value) },
       });
     };
-    getValuAndChange();
+    getValueAndChange();
   };
 
   return (
@@ -121,7 +122,7 @@ export function ResourceRefRender({
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
-      value={fromJS(value)?.toJS?.() || ''}
+      value={fromJS(valueRef.current)?.toJS?.() || ''}
       resources={resources}
       setValue={setValue}
       required={required}
