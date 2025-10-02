@@ -1,5 +1,7 @@
 import {
   Button,
+  ComboBox,
+  ComboBoxItem,
   FlexBox,
   Input,
   Label,
@@ -17,6 +19,9 @@ import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadRes
 import 'components/Modules/community/components/AddSourceYamls.scss';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { FlexBoxDirection } from '@ui5/webcomponents-react/dist/enums/FlexBoxDirection';
+import { namespacesAtom } from 'state/namespacesAtom';
+import { useAtomValue } from 'jotai';
+import { HintButton } from 'shared/components/HintButton/HintButton';
 
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
@@ -32,6 +37,9 @@ export const AddSourceYamls = () => {
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
+  const [showDescription, setShowDescription] = useState(false);
+
+  const allNamespaces = useAtomValue(namespacesAtom);
 
   const uploadResources = useUploadResources(
     resourcesToApply,
@@ -39,6 +47,18 @@ export const AddSourceYamls = () => {
     () => {},
     'default',
   );
+
+  const applyNamespace = (namespace: string) => {
+    const namespacedResources = resourcesToApply.map((resource) => ({
+      ...resource,
+      value: {
+        ...resource.value,
+        metadata: { ...resource.value.metadata, namespace },
+      },
+    }));
+
+    setResourcesToApply(namespacedResources);
+  };
 
   useEffect(() => {
     if (sourceURL.endsWith('.yaml')) {
@@ -49,6 +69,7 @@ export const AddSourceYamls = () => {
           const formatted = allowedToApply?.map((r: any) => {
             return { value: r };
           });
+
           setError(null);
           setResourcesToApply(formatted);
         } catch (e) {
@@ -96,6 +117,7 @@ export const AddSourceYamls = () => {
       });
     }
   };
+
   return (
     <>
       <Button
@@ -152,9 +174,37 @@ export const AddSourceYamls = () => {
               showClearIcon
               className="full-width"
             />
-            <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+            <Label wrappingType="Normal">
               {t('modules.community.source-yaml.example-format')}
             </Label>
+          </FlexBox>
+          <FlexBox
+            direction={FlexBoxDirection.Column}
+            gap={'0.5rem'}
+            className="sap-margin-top-small"
+          >
+            <FlexBox direction={FlexBoxDirection.Row} alignItems="Center">
+              <Label for="source-url">
+                {t('common.headers.namespace') + ':'}
+              </Label>
+              <HintButton
+                setShowTitleDescription={setShowDescription}
+                showTitleDescription={showDescription}
+                description={
+                  t(
+                    'modules.community.source-yaml.namespace-description',
+                  ) as string
+                }
+              ></HintButton>
+            </FlexBox>
+            <ComboBox
+              id="yaml-namespace-combobox"
+              onChange={(e) => applyNamespace(e.target.value)}
+            >
+              {allNamespaces?.map((ns) => (
+                <ComboBoxItem text={ns} key={ns} />
+              ))}
+            </ComboBox>
           </FlexBox>
         </MessageBox>,
         document.body,

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FileInput } from 'shared/components/FileInput/FileInput';
 import { Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
+import { HintButton } from 'shared/components/HintButton/HintButton';
 
 export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
   const { t } = useTranslation();

@@ -950,6 +950,7 @@ modules:
     source-yaml:
       add-source-yaml: Add Source YAML
       example-format: 'Example format: http://github.com/project/repo/file.yaml'
+      namespace-description: Namespace where Module Templates will be applied. If left empty, the namespace defined in the Module Templates will be used.
       source-yaml-url: Source YAML URL
     title: Community Modules
 namespaces:
