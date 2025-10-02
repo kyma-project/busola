@@ -7,9 +7,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
-  CallbackFn,
   getAvailableCommunityModules,
-  installCommunityModule,
   VersionInfo,
 } from 'components/Modules/community/communityModulesHelpers';
 import {
@@ -39,6 +37,10 @@ import { CommunityModulesInstallationContext } from 'components/Modules/communit
 import { MutationFn, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useAtomValue } from 'jotai/index';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import {
+  CallbackFn,
+  installCommunityModule,
+} from 'components/Modules/community/communityModulesInstallHelpers';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -142,6 +144,7 @@ async function upload(
   }
 
   try {
+    // TODO: inform about errorgit
     const operationPromises = communityModulesTemplatesToUpload.map
       .values()
       .map((moduleTemplate) =>

@@ -1,5 +1,5 @@
 import React, { createContext, SetStateAction, useState } from 'react';
-import { CallbackFn } from 'components/Modules/community/communityModulesHelpers';
+import { CallbackFn } from 'components/Modules/community/communityModulesInstallHelpers';
 import { getModuleName, ModuleTemplateType } from 'components/Modules/support';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 
@@ -33,6 +33,7 @@ export function CommunityModulesUploadProvider({ children }: any) {
     const moduleDuringInstalation = modulesDuringInstallation?.find(
       (module) => getModuleName(module.moduleTpl) === moduleName,
     );
+    console.log(message);
     if (!moduleDuringInstalation) {
       const newModuleDuringInstallation = {
         moduleTpl,

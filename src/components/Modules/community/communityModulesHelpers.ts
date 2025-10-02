@@ -4,10 +4,6 @@ import {
   ModuleTemplateType,
 } from 'components/Modules/support';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
-import { createPatch } from 'rfc6902';
-import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
-import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
-import { State } from 'components/Modules/community/components/uploadStateAtom';
 
 export type VersionInfo = {
   version: string;
@@ -152,101 +148,6 @@ function imageMatchVersion(image: string, version: string): boolean {
   return imgTag.includes(version);
 }
 
-function sleep(lf_ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, lf_ms));
-}
-
-export type CallbackFn = (
-  moduleTpl: ModuleTemplateType,
-  moduleState: State,
-  message?: string | any,
-) => void;
-
-export async function installCommunityModule(
-  moduleTpl: ModuleTemplateType,
-  clusterNodes: any,
-  namespaceNodes: any,
-  postRequest: PostFn,
-  patchRequest: MutationFn,
-  singleGet: Function,
-  callback: CallbackFn,
-) {
-  try {
-    // setState Downloading
-    await sleep(2000);
-    callback(moduleTpl, State.Downloading);
-
-    const allResourcesLinks =
-      moduleTpl.spec.resources?.map((resource) => resource.link) || [];
-    const allResources = await getAllResourcesYamls(
-      allResourcesLinks,
-      postRequest,
-    );
-
-    // setState preparing
-    await sleep(2000);
-    callback(moduleTpl, State.Preparing);
-
-    const { crds, otherYamls } = extractCrds(allResources);
-
-    // setState uploading
-    await sleep(2000);
-    callback(moduleTpl, State.Uploading);
-
-    await uploadResources(
-      crds,
-      clusterNodes,
-      namespaceNodes,
-      postRequest,
-      patchRequest,
-      singleGet,
-    );
-    const result = await uploadResources(
-      otherYamls,
-      clusterNodes,
-      namespaceNodes,
-      postRequest,
-      patchRequest,
-      singleGet,
-    );
-    const failedResults = result.filter((r) => r.status !== 'fulfilled');
-    if (failedResults.length !== 0) {
-      callback(
-        moduleTpl,
-        State.Error,
-        `Upload error: ${failedResults[0].reason}`,
-      );
-    }
-
-    await sleep(2000);
-    callback(moduleTpl, State.Finished);
-  } catch (e) {
-    callback(moduleTpl, State.Error, e);
-  }
-}
-
-async function uploadResources(
-  resources: any[],
-  clusterNodes: any,
-  namespaceNodes: any,
-  postRequest: PostFn,
-  patchRequest: MutationFn,
-  singleGet: Function,
-) {
-  const uploadPromises = resources.map((r) => {
-    return uploadResource(
-      { value: r },
-      'default',
-      clusterNodes,
-      namespaceNodes,
-      postRequest,
-      patchRequest,
-      singleGet,
-    );
-  });
-  return Promise.allSettled(uploadPromises);
-}
-
 export async function postForCommunityResources(post: PostFn, link: string) {
   if (!link) {
     console.error('No link provided for community resource');
@@ -258,23 +159,6 @@ export async function postForCommunityResources(post: PostFn, link: string) {
     throw new Error('Empty or invalid response:', response);
   }
   return response;
-}
-
-export async function getAllResourcesYamls(
-  links: string[],
-  post: PostFn,
-): Promise<any[]> {
-  if (links?.length) {
-    const yamlRes = await Promise.all(
-      links.map(async (link) => {
-        if (link) {
-          return await postForCommunityResources(post, link);
-        }
-      }),
-    );
-    return yamlRes.flat();
-  }
-  return [];
 }
 
 export async function fetchResourcesToApply(
@@ -301,70 +185,19 @@ export async function fetchResourcesToApply(
   }
 }
 
-export function extractCrds(yamls: any[]): { crds: any[]; otherYamls: any[] } {
-  const crds = yamls.filter((yaml) => {
-    return yaml.kind === 'CustomResourceDefinition';
-  });
-
-  const otherYamls = yamls.filter((yaml) => {
-    return yaml.kind !== 'CustomResourceDefinition';
-  });
-  return { crds, otherYamls };
-}
-
-const fetchPossibleExistingResource = async (url: string) => {
-  try {
-    const response = await fetch(url);
-    return await response.json();
-  } catch (_) {
-    // TODO: Fix that situation
-    return null;
-  }
-};
-
-export async function uploadResource(
-  resource: any,
-  namespaceId: string,
-  clusterNodes: any,
-  namespaceNodes: any,
+export async function getAllResourcesYamls(
+  links: string[],
   post: PostFn,
-  patchRequest: MutationFn,
-  singleGet: Function,
-) {
-  // TODO: getUrl may have a problem with PriorityClass
-  let url;
-  try {
-    url = await getUrl(
-      resource.value,
-      namespaceId,
-      clusterNodes,
-      namespaceNodes,
-      singleGet,
+): Promise<any[]> {
+  if (links?.length) {
+    const yamlRes = await Promise.all(
+      links.map(async (link) => {
+        if (link) {
+          return await postForCommunityResources(post, link);
+        }
+      }),
     );
-  } catch (e) {
-    throw e;
+    return yamlRes.flat();
   }
-
-  const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
-  const existingResource = await fetchPossibleExistingResource(urlWithName);
-  try {
-    //add a new resource
-    if (!existingResource) {
-      await post(url, resource.value);
-    } else {
-      if (
-        existingResource?.metadata?.resourceVersion &&
-        !resource?.value?.metadata?.resourceVersion
-      ) {
-        resource.value.metadata.resourceVersion =
-          existingResource.metadata.resourceVersion;
-      }
-      const diff = createPatch(existingResource, resource.value);
-      await patchRequest(urlWithName, diff);
-    }
-  } catch (e) {
-    console.warn(e);
-
-    return false;
-  }
+  return [];
 }
