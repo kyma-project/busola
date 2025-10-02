@@ -11,7 +11,6 @@ import { State } from 'components/Modules/community/components/uploadStateAtom';
 export type CommunityModulesUpload = {
   callback: CallbackFn;
   modulesDuringUpload: ModuleDuringUpload[];
-  setModulesDuringUpload: React.Dispatch<SetStateAction<ModuleDuringUpload[]>>;
 };
 
 export type ModuleDuringUpload = {
@@ -24,7 +23,6 @@ export const CommunityModulesInstallationContext =
   createContext<CommunityModulesUpload>({
     callback: () => {},
     modulesDuringUpload: [],
-    setModulesDuringUpload: () => [],
   });
 
 export function CommunityModulesUploadProvider({ children }: any) {
@@ -62,7 +60,7 @@ export function CommunityModulesUploadProvider({ children }: any) {
     );
     setModulesDuringInstallation(updatedModulesDuringInstallation);
     setModuleInstallState(undefined);
-  }, [moduleInstallState]);
+  }, [moduleInstallState, modulesDuringInstallation]);
 
   const callbackFn: CallbackFn = (moduleTpl, moduleState, message) => {
     setModuleInstallState({
@@ -77,7 +75,6 @@ export function CommunityModulesUploadProvider({ children }: any) {
       value={{
         callback: callbackFn,
         modulesDuringUpload: modulesDuringInstallation,
-        setModulesDuringUpload: setModulesDuringInstallation,
       }}
       children={children}
     />

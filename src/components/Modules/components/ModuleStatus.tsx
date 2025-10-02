@@ -6,11 +6,9 @@ export const resolveType = (status: string): ValueState => {
   switch (status) {
     case 'Initial':
     case 'Pending':
-    //   FakeStatus
-    case 'Uploading':
+    case 'Uploading': //This is a not existing Status created for Community Modules Upload
     case 'Preparing':
     case 'Downloading':
-    //
     case 'Released':
       return ValueState.Information;
     case 'Available':
