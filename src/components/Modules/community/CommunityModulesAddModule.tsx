@@ -146,6 +146,12 @@ async function upload(
     let errorOccurred = false;
     for (const module of communityModulesTemplatesToUpload.map.values()) {
       try {
+        notification.notifySuccess({
+          content: t('modules.community.messages.upload', {
+            resourceType: getModuleName(module),
+          }),
+        });
+
         await installCommunityModule(
           module,
           clusterNodes,
@@ -320,13 +326,6 @@ export default function CommunityModulesAddModule(props: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-
-    notification.notifySuccess({
-      content: t('modules.community.messages.upload', {
-        resourceType: 'Community Module',
-      }),
-    });
-
     upload(
       t,
       communityModulesTemplatesToApply,
