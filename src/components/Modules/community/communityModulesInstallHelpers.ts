@@ -101,11 +101,6 @@ async function uploadResources(
     resourcesToUpload = filteresResources;
     notUploadedResources = otherResources;
   }
-  console.log(
-    kindFilter,
-    resourcesToUpload.map((a) => a.kind),
-    notUploadedResources.map((a) => a.kind),
-  );
 
   const uploadPromises = resourcesToUpload.map((r) => {
     return uploadResource(
@@ -184,7 +179,6 @@ async function checkIfResourceExist(
   singleGet: Function,
 ): Promise<any> {
   try {
-    console.log(url);
     const response = await singleGet(url);
     return await response.json();
   } catch (_) {

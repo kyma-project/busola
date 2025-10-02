@@ -98,7 +98,7 @@ export const CommunityModulesList = ({
     'resource',
   );
 
-  const { modulesDuringUpload, setModulesDuringUpload } = useContext(
+  const { modulesDuringUpload } = useContext(
     CommunityModulesInstallationContext,
   );
 
@@ -106,10 +106,9 @@ export const CommunityModulesList = ({
     useState<any[]>(installedModules);
 
   useEffect(() => {
-    //   TODO: try to find common list and use it to display data. We can remove finished modules instalation if isntalledModules contains it.
     const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
       return !installedModules.find((installedModule) => {
-        return installedModule.metadata?.name === m.moduleTpl.metadata?.name;
+        return installedModule.moduleTemplateName === m.moduleTpl.metadata.name;
       });
     });
 
@@ -119,12 +118,11 @@ export const CommunityModulesList = ({
     }
 
     const moduleTemplatesDuringUpload = modulesDuringProcessing
-      // .filter((m) => m.state !== State.Finished)
+      .filter((m) => m.state !== State.Finished)
       .map((m) => createFakeModuleTemplateWithStatus(m));
-
-    const a = [...installedModules].concat(moduleTemplatesDuringUpload);
-    console.log('After concat', a);
-    setModulesToDisplay(a);
+    setModulesToDisplay(
+      [...installedModules].concat(moduleTemplatesDuringUpload),
+    );
   }, [installedModules, modulesDuringUpload]);
 
   const handleShowAddModule = () => {

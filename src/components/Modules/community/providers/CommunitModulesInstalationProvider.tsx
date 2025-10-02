@@ -48,7 +48,6 @@ export function CommunityModulesUploadProvider({ children }: any) {
         ...modulesDuringInstallation,
         moduleInstallState,
       ]);
-      console.log('Installations', moduleName, modulesDuringInstallation);
       return;
     }
 
@@ -61,7 +60,6 @@ export function CommunityModulesUploadProvider({ children }: any) {
         return module;
       },
     );
-    console.log(updatedModulesDuringInstallation);
     setModulesDuringInstallation(updatedModulesDuringInstallation);
     setModuleInstallState(undefined);
   }, [moduleInstallState]);

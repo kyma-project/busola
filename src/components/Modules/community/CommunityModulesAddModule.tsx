@@ -320,7 +320,6 @@ export default function CommunityModulesAddModule(props: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log('START');
 
     notification.notifySuccess({
       content: t('modules.community.messages.upload', {
