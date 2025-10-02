@@ -72,6 +72,9 @@ const rowRenderer = (
     }
   };
   makeTitle().then((result) => {
+    if (!structure.collapsible) {
+      return;
+    }
     if (result && JSON.stringify(title?.[index]) !== JSON.stringify(result)) {
       setTitle((prev) => ({ ...prev, [index]: result }));
     }
