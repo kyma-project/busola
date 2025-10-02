@@ -30,7 +30,6 @@ import {
   ModuleDuringUpload,
 } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
-import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -99,7 +98,7 @@ export const CommunityModulesList = ({
     'resource',
   );
 
-  const { moduleDuringUpload, setModulesDuringUpload } = useContext(
+  const { modulesDuringUpload, setModulesDuringUpload } = useContext(
     CommunityModulesInstallationContext,
   );
 
@@ -107,30 +106,26 @@ export const CommunityModulesList = ({
     useState<any[]>(installedModules);
 
   useEffect(() => {
-    // console.log('Modules To Display',modulesToDisplay)
-    // console.log('Modules during upload', moduleDuringUpload)
     //   TODO: try to find common list and use it to display data. We can remove finished modules instalation if isntalledModules contains it.
-    const modulesDuringProcessing = moduleDuringUpload.filter((m) => {
+    const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
       return !installedModules.find((installedModule) => {
         return installedModule.metadata?.name === m.moduleTpl.metadata?.name;
       });
     });
 
-    // console.log(modulesDuringProcessing);
     if (modulesDuringProcessing.length === 0) {
       setModulesToDisplay(installedModules);
       return;
     }
 
-    const moduleTemplatesDuringUpload = modulesDuringProcessing.map((m) =>
-      createFakeModuleTemplateWithStatus(m),
-    );
-    // TODO: Clean Finished modules if installedModules has them.
+    const moduleTemplatesDuringUpload = modulesDuringProcessing
+      .filter((m) => m.state !== State.Finished)
+      .map((m) => createFakeModuleTemplateWithStatus(m));
 
     const a = [...installedModules].concat(moduleTemplatesDuringUpload);
     console.log('After concat', a);
     setModulesToDisplay(a);
-  }, [installedModules, moduleDuringUpload]);
+  }, [installedModules, modulesDuringUpload]);
 
   const handleShowAddModule = () => {
     setLayoutColumn({

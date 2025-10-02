@@ -101,6 +101,11 @@ async function uploadResources(
     resourcesToUpload = filteresResources;
     notUploadedResources = otherResources;
   }
+  console.log(
+    kindFilter,
+    resourcesToUpload.map((a) => a.kind),
+    notUploadedResources.map((a) => a.kind),
+  );
 
   const uploadPromises = resourcesToUpload.map((r) => {
     return uploadResource(
@@ -113,12 +118,10 @@ async function uploadResources(
       singleGet,
     );
   });
-  // TODO: check all promises and raise exception
-
   const result = await Promise.allSettled(uploadPromises);
-  const failedCRDUploadResults = result.filter((r) => r.status !== 'fulfilled');
-  if (failedCRDUploadResults.length !== 0) {
-    throw new Error(`Upload failed: ${failedCRDUploadResults[0].reason}`);
+  const failedUploads = result.filter((r) => r.status !== 'fulfilled');
+  if (failedUploads.length !== 0) {
+    throw new Error(`Upload failed: ${failedUploads[0].reason.message}`);
   }
   return notUploadedResources;
 }
@@ -155,7 +158,11 @@ async function uploadResource(
   );
 
   const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
-  const existingResource = await singleGet(urlWithName);
+  let existingResource;
+  try {
+    const response = await singleGet(url);
+    existingResource = await response.json();
+  } catch (_) {}
   try {
     if (!existingResource) {
       await post(url, resource.value);
@@ -172,7 +179,6 @@ async function uploadResource(
     }
   } catch (e) {
     console.warn(e);
-
     return false;
   }
 }
