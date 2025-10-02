@@ -12,10 +12,6 @@ export type CallbackFn = (
   message?: string,
 ) => void;
 
-function sleep(lf_ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, lf_ms));
-}
-
 export async function installCommunityModule(
   moduleTpl: ModuleTemplateType,
   clusterNodes: any,
@@ -26,8 +22,6 @@ export async function installCommunityModule(
   callback: CallbackFn,
 ) {
   try {
-    // setState Downloading
-    await sleep(2000);
     callback(moduleTpl, State.Downloading);
 
     const allResourcesLinks =
@@ -37,12 +31,8 @@ export async function installCommunityModule(
       postRequest,
     );
 
-    // setState preparing
-    await sleep(2000);
     callback(moduleTpl, State.Preparing);
 
-    // setState uploading
-    await sleep(2000);
     callback(moduleTpl, State.Uploading);
 
     let notUploadedResources = await uploadResources(
@@ -74,7 +64,6 @@ export async function installCommunityModule(
       singleGet,
     );
 
-    await sleep(2000);
     callback(moduleTpl, State.Finished);
   } catch (e) {
     if (e instanceof Error) {
