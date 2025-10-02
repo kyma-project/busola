@@ -20,7 +20,7 @@ const isARequiredFeatureDisabled = (
   configFeatures: ConfigFeatureList,
 ) => {
   return node.requiredFeatures?.find(
-    resourceRequiredFeatureKey =>
+    (resourceRequiredFeatureKey) =>
       configFeatures[resourceRequiredFeatureKey]?.isEnabled === false,
   );
 };

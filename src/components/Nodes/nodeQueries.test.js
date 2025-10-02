@@ -12,6 +12,8 @@ vi.mock('@ui5/webcomponents-react', () => {
   };
 });
 
+const MiB = 1024 * 1024;
+
 describe('Calculate resources for node', () => {
   const testCases = [
     {
@@ -25,11 +27,11 @@ describe('Calculate resources for node', () => {
       expectedValue: {
         limits: {
           cpu: 0.01,
-          memory: 100.0 / 1024,
+          memory: 100.0 * MiB,
         },
         requests: {
           cpu: 0.02,
-          memory: 200.0 / 1024,
+          memory: 200.0 * MiB,
         },
       },
     },
@@ -50,11 +52,11 @@ describe('Calculate resources for node', () => {
       expectedValue: {
         limits: {
           cpu: 0.022,
-          memory: 220.0 / 1024,
+          memory: 220.0 * MiB,
         },
         requests: {
           cpu: 0.045,
-          memory: 450.0 / 1024,
+          memory: 450.0 * MiB,
         },
       },
     },
@@ -69,17 +71,17 @@ describe('Calculate resources for node', () => {
       expectedValue: {
         limits: {
           cpu: 0.007,
-          memory: 70.0 / 1024,
+          memory: 70.0 * MiB,
         },
         requests: {
           cpu: 0.014,
-          memory: 140.0 / 1024,
+          memory: 140.0 * MiB,
         },
       },
     },
   ];
 
-  testCases.forEach(tc => {
+  testCases.forEach((tc) => {
     test(tc.name, () => {
       //WHEN
       const resources = calcNodeResources(tc.pods);
@@ -93,7 +95,7 @@ describe('Calculate resources for node', () => {
 function fixPod(resources) {
   return {
     spec: {
-      containers: resources.map(item => {
+      containers: resources.map((item) => {
         return {
           resources: item,
         };

@@ -6,17 +6,13 @@ context('Test Community Modules views', () => {
   it('Test Community Modules Overview card', () => {
     cy.wait(2000);
 
-    cy.get('ui5-card')
-      .contains('Modules Overview')
-      .should('be.visible');
+    cy.get('ui5-card').contains('Modules Overview').should('be.visible');
 
     cy.contains('ui5-card', 'Community Modules')
       .contains('0')
       .should('be.visible');
 
-    cy.get('ui5-card')
-      .contains('Modify Modules')
-      .click();
+    cy.get('ui5-card').contains('Modify Modules').click();
 
     cy.url().should('match', /.*\/kymamodules/);
   });
@@ -44,13 +40,15 @@ context('Test Community Modules views', () => {
 
     cy.wait(1000);
 
-    cy.get('ui5-card')
-      .contains('busola')
-      .should('be.visible');
+    cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
 
-    cy.get('ui5-title')
-      .contains('busola')
-      .click();
+    cy.get('ui5-card').contains('busola').should('be.visible');
+
+    cy.get('ui5-card').contains('Documentation').should('be.visible');
+
+    cy.get('ui5-panel').contains('Advanced').should('be.visible');
+
+    cy.get('ui5-title').contains('busola').click();
 
     // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
     // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
@@ -69,9 +67,7 @@ context('Test Community Modules views', () => {
   });
 
   it('Test number of Modules in Modules Overview card', () => {
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Cluster Details').click();
 
     cy.contains('ui5-card', 'Installed Modules')
       .contains('1')
@@ -81,9 +77,7 @@ context('Test Community Modules views', () => {
       .contains('1')
       .should('be.visible');
 
-    cy.get('ui5-card')
-      .contains('Modify Modules')
-      .click();
+    cy.get('ui5-card').contains('Modify Modules').click();
   });
 
   it('Test Community Modules list', () => {
@@ -108,16 +102,11 @@ context('Test Community Modules views', () => {
 
     cy.contains('ui5-label', 'busola').should('be.visible');
 
-    cy.contains('ui5-label', 'busola')
-      .parent()
-      .find('ui5-select')
-      .click();
+    cy.contains('ui5-label', 'busola').parent().find('ui5-select').click();
 
     cy.wait(500);
 
-    cy.get('ui5-option:visible')
-      .contains('0.0.12')
-      .click();
+    cy.get('ui5-option:visible').contains('0.0.12').click();
 
     // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
     // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download

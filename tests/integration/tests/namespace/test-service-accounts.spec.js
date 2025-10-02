@@ -26,16 +26,10 @@ context('Test Service Accounts', () => {
       .type(SERVICE_NAME);
 
     // Toggle 'Automount Token' switch
-    cy.get('ui5-switch')
-      .find('input')
-      .eq(0)
-      .click({ force: true });
+    cy.get('ui5-switch').find('input').eq(0).click({ force: true });
 
     // Toggle 'Create associated Secret' switch
-    cy.get('ui5-switch')
-      .find('input')
-      .eq(1)
-      .click({ force: true });
+    cy.get('ui5-switch').find('input').eq(1).click({ force: true });
 
     cy.contains('The associated Secret contains long-lived API token').should(
       'be.visible',
@@ -45,13 +39,9 @@ context('Test Service Accounts', () => {
   });
 
   it('Checking details', () => {
-    cy.getMidColumn()
-      .contains('ui5-title', SERVICE_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', SERVICE_NAME).should('be.visible');
 
-    cy.getMidColumn()
-      .contains('enabled')
-      .should('be.visible');
+    cy.getMidColumn().contains('enabled').should('be.visible');
 
     cy.getMidColumn()
       .contains('kubernetes.io/service-account-token')
@@ -61,9 +51,7 @@ context('Test Service Accounts', () => {
   it('Edit', () => {
     cy.inspectTab('Edit');
 
-    cy.get('.edit-form')
-      .contains('Labels')
-      .click();
+    cy.get('.edit-form').contains('Labels').click();
 
     cy.get('[placeholder="Enter key"]:visible')
       .find('input')
@@ -77,10 +65,7 @@ context('Test Service Accounts', () => {
       .type('test-value');
 
     // Toggle 'Automount Token' switch
-    cy.get('ui5-switch:visible')
-      .find('input')
-      .eq(0)
-      .click({ force: true });
+    cy.get('ui5-switch:visible').find('input').eq(0).click({ force: true });
 
     cy.saveChanges('Edit');
   });
@@ -88,19 +73,13 @@ context('Test Service Accounts', () => {
   it('Checking updated details', () => {
     cy.inspectTab('View');
 
-    cy.getMidColumn()
-      .contains('disabled')
-      .should('be.visible');
+    cy.getMidColumn().contains('disabled').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('test.key=test-value')
-      .should('be.visible');
+    cy.getMidColumn().contains('test.key=test-value').should('be.visible');
   });
 
   it('Generate TokenRequest', () => {
-    cy.getMidColumn()
-      .contains('ui5-button', 'Generate TokenRequest')
-      .click();
+    cy.getMidColumn().contains('ui5-button', 'Generate TokenRequest').click();
 
     cy.contains('TokenRequest generated').should('be.visible');
 

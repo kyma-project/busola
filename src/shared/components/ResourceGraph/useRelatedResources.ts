@@ -73,7 +73,7 @@ async function cycle(
     for (const relatedResource of findRelatedResources(kind, config)) {
       const alreadyInStore = !!store.current[relatedResource.kind];
       const alreadyToFetch = !!resourcesToFetch.find(
-        r => r.kind === relatedResource.kind,
+        (r) => r.kind === relatedResource.kind,
       );
 
       if (!alreadyInStore && !alreadyToFetch) {
@@ -120,14 +120,25 @@ async function cycle(
         }),
       );
 
-      const filterOnlyRelated = (possiblyRelatedResource: K8sResource) =>
-        store.current[resource.fromKind]!.some(oR =>
-          match(possiblyRelatedResource, oR, config),
+      const filterOnlyRelated = async (
+        possiblyRelatedResource: K8sResource,
+      ) => {
+        const matchArray = await Promise.all(
+          store.current[resource.fromKind]!.map(
+            async (oR) => !!(await match(possiblyRelatedResource, oR, config)),
+          ),
         );
+        return !!matchArray.filter(Boolean).length;
+      };
 
-      store.current[resource.kind] = allResourcesForKind.filter(
-        filterOnlyRelated,
+      const matched = await Promise.all(
+        allResourcesForKind.map(async (resource: K8sResource) => {
+          const didPass = await filterOnlyRelated(resource);
+          return didPass ? resource : false;
+        }),
       );
+
+      store.current[resource.kind] = matched.filter(Boolean);
     } catch (e) {
       console.warn(e);
     }
@@ -161,10 +172,10 @@ export function useRelatedResources({
   events,
 }: useRelatedResourcesProps): useRelatedResourcesReturnValue {
   const clusterNodes = useAtomValue(allNodesAtom).filter(
-    node => !node.namespaced,
+    (node) => !node.namespaced,
   );
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
-    node => node.namespaced,
+    (node) => node.namespaced,
   );
   const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();

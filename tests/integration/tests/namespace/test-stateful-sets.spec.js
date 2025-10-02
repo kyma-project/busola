@@ -1,12 +1,9 @@
+import { grantClipboardPermissions } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-stateful-sets.yaml';
 
-const SS_NAME =
-  'test-' +
-  Math.random()
-    .toString()
-    .substr(2, 8);
+const SS_NAME = 'test-' + Math.random().toString().substr(2, 8);
 
 async function loadSS(name, namespace, fileName) {
   const resource = await loadFile(fileName);
@@ -32,7 +29,7 @@ context('Test Stateful Sets', () => {
     cy.openCreate();
 
     cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      SS_CONFIG => {
+      (SS_CONFIG) => {
         const SS = JSON.stringify(SS_CONFIG);
         cy.pasteToMonaco(SS);
       },
@@ -53,6 +50,56 @@ context('Test Stateful Sets', () => {
     cy.getMidColumn().contains('registry.k8s.io/nginx-slim:0.8');
     cy.getMidColumn().contains('/usr/share/nginx/html');
     cy.getMidColumn().contains('web:80/TCP');
+  });
+
+  it('Check if Copy button works correctly', () => {
+    grantClipboardPermissions();
+    cy.inspectTab('Edit');
+
+    // Stub window.prompt so browser popup never shows
+    cy.window().then((win) => {
+      cy.stub(win, 'prompt')
+        .callsFake((msg, value) => {
+          expect(value).to.contain('kind: StatefulSet');
+          return value;
+        })
+        .as('copyPrompt');
+    });
+
+    cy.get('ui5-button[icon="copy"]:visible').click({ force: true });
+
+    cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('be.visible');
+    cy.wait(2100);
+    cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('not.exist');
+
+    cy.get('@copyPrompt').should('have.been.called');
+  });
+
+  it('Check if Reset button works correctly', () => {
+    cy.navigateTo('Workloads', 'Stateful Sets');
+
+    cy.openCreate();
+
+    cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
+      (SS_CONFIG) => {
+        const SS = JSON.stringify(SS_CONFIG);
+        cy.pasteToMonaco(SS);
+      },
+    );
+
+    cy.get('body').click();
+
+    cy.findMonaco().should('include.value', SS_NAME);
+
+    cy.get('ui5-button:visible').contains('Reset').click();
+    cy.get('ui5-dialog[header-text="Discard Changes"]').should('be.visible');
+
+    cy.get('ui5-dialog[header-text="Discard Changes"]:visible')
+      .find('ui5-button')
+      .contains('Discard')
+      .click();
+
+    cy.findMonaco().should('include.value', "name: ''");
   });
 
   it('Inspect list', () => {

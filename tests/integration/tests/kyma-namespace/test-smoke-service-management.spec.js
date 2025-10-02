@@ -17,8 +17,8 @@ context('Test Service Management category', () => {
     cy.loadFiles(
       'examples/service-binding-mock-crd.yaml',
       'examples/service-instance-mock-crd.yaml',
-    ).then(resources => {
-      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+    ).then((resources) => {
+      const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
 

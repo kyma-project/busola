@@ -22,7 +22,7 @@ function mockPermissionsCall2(namespacePermissions, clusterPermissions) {
       method: 'POST',
       url: '/backend/apis/authorization.k8s.io/v1/selfsubjectrulesreviews',
     },
-    req => {
+    (req) => {
       if (req.body.spec.namespace !== '*') {
         req.reply({
           kind: 'SelfSubjectRulesReview',
@@ -70,40 +70,25 @@ context('Test reduced permissions 2', () => {
     mockClusterPermissions();
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .should('exist');
+    cy.getLeftNav().contains('Namespaces').should('exist');
 
-    cy.getLeftNav()
-      .contains('Events')
-      .should('not.exist');
+    cy.getLeftNav().contains('Events').should('not.exist');
 
     // check out "normal" namespace view - expect only Pods here
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .should('not.exist');
+    cy.getLeftNav().contains('Discovery and Network').should('not.exist');
 
-    cy.getLeftNav()
-      .contains('Workloads')
-      .should('exist')
-      .click();
+    cy.getLeftNav().contains('Workloads').should('exist').click();
 
-    cy.getLeftNav()
-      .contains('Pods')
-      .should('exist');
+    cy.getLeftNav().contains('Pods').should('exist');
 
-    cy.getLeftNav()
-      .contains('Deployments')
-      .should('not.exist');
+    cy.getLeftNav().contains('Deployments').should('not.exist');
 
     // check out "special" namespace view - expect Pods and Services here
     mockNamespacePermissions();
 
-    cy.getLeftNav()
-      .contains('Back To Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Back To Cluster Details').click();
 
     cy.getLeftNav()
       .find('ui5-side-navigation-item')
@@ -117,30 +102,20 @@ context('Test reduced permissions 2', () => {
 
     cy.clickListLink('kube-public');
 
-    cy.getLeftNav()
-      .contains('Pods')
-      .should('exist');
+    cy.getLeftNav().contains('Pods').should('exist');
 
-    cy.getLeftNav()
-      .contains('Storage')
-      .should('exist')
-      .click();
+    cy.getLeftNav().contains('Storage').should('exist').click();
 
-    cy.getLeftNav()
-      .contains('Persistent Volume Claims')
-      .should('exist');
+    cy.getLeftNav().contains('Persistent Volume Claims').should('exist');
 
-    cy.getLeftNav()
-      .contains('Secrets')
-      .should('not.exist');
+    cy.getLeftNav().contains('Secrets').should('not.exist');
   });
 
   it('Test extension CMs call - user has access to clusterwide CMs', () => {
     //spy na fetching CMs in the cluster-context, you have access
     cy.intercept({
       method: 'GET',
-      url:
-        '/backend/api/v1/configmaps?labelSelector=busola.io/extension=resource',
+      url: '/backend/api/v1/configmaps?labelSelector=busola.io/extension=resource',
     }).as('clusterwide CM call');
 
     cy.loginAndSelectCluster();

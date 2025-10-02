@@ -20,13 +20,11 @@ For more information about extensibility in Busola, see [Configure a Config Map 
 1. In Kyma dashboard, in the cluster view, choose **Configuration > Extensions** and click **Create**.
 
 2. Complete the following fields:
-
    - **Resource** - choose your module's resource from the list of resources existing in the cluster
    - **Name** - enter the UI component name displayed in the Kyma dashboard navigation
    - **Category** - enter the UI component category displayed in the Kyma dashboard navigation
 
 3. The CustomResourceDefinition (CRD) of the chosen resource predefines the details that appear in the following sections:
-
    - **Form Fields** - defines fields visible in the edit and create pages.
    - **List Columns** - defines columns visible on the UI component's entry page, also known as the list page. The **Name** and **Created** columns are added by default.
    - **Details Summary** - defines fields visible in the body of the details page of specific CRs. You can access the details page by clicking on a specific resource on the list page.

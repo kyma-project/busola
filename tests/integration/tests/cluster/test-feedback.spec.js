@@ -25,7 +25,9 @@ const config__onlyKymaFeedback = {
         features: {
           FEEDBACK: {
             isEnabled: true,
-            link: 'https://www.google.com/',
+            config: {
+              link: 'https://www.google.com/',
+            },
           },
         },
       },
@@ -40,7 +42,9 @@ const config__KymaAndJouleFeedback = {
         features: {
           FEEDBACK: {
             isEnabled: true,
-            link: 'https://www.google.com/',
+            config: {
+              link: 'https://www.google.com/',
+            },
           },
           KYMA_COMPANION: {
             isEnabled: true,
@@ -77,7 +81,7 @@ context('Test Feedback Popover', () => {
 
     cy.wait(2000);
 
-    cy.window().then(win => {
+    cy.window().then((win) => {
       cy.stub(win, 'open').as('windowOpen');
     });
 
@@ -86,9 +90,7 @@ context('Test Feedback Popover', () => {
       .as('opener')
       .should('be.visible');
 
-    cy.get('@opener')
-      .find('ui5-button-badge[text="1"]')
-      .should('not.exist');
+    cy.get('@opener').find('ui5-button-badge[text="1"]').should('not.exist');
 
     cy.get('@opener').click();
 
@@ -113,7 +115,7 @@ context('Test Feedback Popover', () => {
 
     cy.wait(2000);
 
-    cy.window().then(win => {
+    cy.window().then((win) => {
       cy.stub(win, 'open').as('windowOpen');
     });
 
@@ -122,9 +124,7 @@ context('Test Feedback Popover', () => {
       .as('opener')
       .should('be.visible');
 
-    cy.get('@opener')
-      .find('ui5-button-badge[text="1"]')
-      .should('be.visible');
+    cy.get('@opener').find('ui5-button-badge[text="1"]').should('be.visible');
 
     cy.get('@opener').click();
 
@@ -145,9 +145,7 @@ context('Test Feedback Popover', () => {
 
     cy.get('@windowOpen').should('be.calledWith', 'https://kyma-project.io/');
 
-    cy.get('@opener')
-      .find('ui5-button-badge[text="1"]')
-      .should('not.exist');
+    cy.get('@opener').find('ui5-button-badge[text="1"]').should('not.exist');
 
     cy.get('@popover').should('not.contain.text', 'New');
 

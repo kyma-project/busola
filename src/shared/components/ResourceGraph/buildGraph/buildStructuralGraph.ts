@@ -16,7 +16,7 @@ type Node = {
   fromKind?: string;
 };
 
-export function buildStructuralGraph(
+export async function buildStructuralGraph(
   {
     initialResource,
     store,
@@ -46,14 +46,14 @@ export function buildStructuralGraph(
           continue;
         }
 
-        if (!match(node.resource, relatedResource, config)) {
+        if (!(await match(node.resource, relatedResource, config))) {
           continue;
         }
 
         // add node if not exists
         if (
           !nodes.find(
-            g => g.resource.metadata.uid === relatedResource.metadata.uid,
+            (g) => g.resource.metadata.uid === relatedResource.metadata.uid,
           )
         ) {
           const newNode = {
@@ -76,7 +76,7 @@ export function buildStructuralGraph(
   return `graph "Graph" {
     fontname="sans-serif";
 
-    ${nodes.map(node => makeNode(node.resource)).join('\n\t')}
-    ${edges.map(e => makeEdge(e.fromId, e.toId)).join('\n\t')}
+    ${nodes.map((node) => makeNode(node.resource)).join('\n\t')}
+    ${edges.map((e) => makeEdge(e.fromId, e.toId)).join('\n\t')}
 }`;
 }

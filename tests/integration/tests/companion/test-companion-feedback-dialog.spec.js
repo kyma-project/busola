@@ -10,7 +10,7 @@ context('Test Companion Feedback Dialog', () => {
 
   beforeEach(() => {
     cy.mockPromptSuggestions();
-    cy.intercept('POST', '/backend/ai-chat/messages', req => {
+    cy.intercept('POST', '/backend/ai-chat/messages', (req) => {
       const mockResponse =
         JSON.stringify({
           data: {
@@ -53,7 +53,7 @@ context('Test Companion Feedback Dialog', () => {
       .click({ force: true });
 
     cy.wait(1000);
-    cy.window().then(win => {
+    cy.window().then((win) => {
       expect(win.localStorage.getItem('show-feedback-status')).to.eq(
         'DISMISSED_ONCE',
       );
@@ -100,7 +100,7 @@ context('Test Companion Feedback Dialog', () => {
       .click({ force: true });
 
     cy.wait(1000);
-    cy.window().then(win => {
+    cy.window().then((win) => {
       expect(win.localStorage.getItem('show-feedback-status')).to.eq('NO_SHOW');
     });
   });
@@ -127,7 +127,7 @@ context('Test Companion Feedback Dialog', () => {
       .click({ force: true });
 
     cy.wait(1000);
-    cy.window().then(win => {
+    cy.window().then((win) => {
       expect(win.localStorage.getItem('show-feedback-status')).to.eq('NO_SHOW');
     });
   });

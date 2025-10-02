@@ -18,9 +18,7 @@ context('Accessibility test Cron Jobs', () => {
   it('Acc test Cron Jobs list', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
+    cy.getLeftNav().contains('Namespaces').click();
 
     cy.get('ui5-input[id="search-input"]:visible')
       .find('input')
@@ -126,15 +124,11 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.get('ui5-combobox[value="IfNotPresent"]').click();
 
-    cy.get('ui5-cb-item:visible')
-      .contains('Always')
-      .click();
+    cy.get('ui5-cb-item:visible').contains('Always').click();
 
     cy.saveChanges('Create');
 
-    cy.getMidColumn()
-      .contains('ui5-title', CRON_JOB_NAME)
-      .should('be.visible');
+    cy.getMidColumn().contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 

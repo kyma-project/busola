@@ -69,7 +69,8 @@ EXTENSIBILITY_INJECTIONS:
   ```yaml
   FEEDBACK:
     isEnabled: true
-    link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    config:
+      link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   ```
 
 - **GET_HELP_LINKS** – is used to show or hide helper links. You can find all the available links in the following example.
@@ -98,19 +99,6 @@ HIDDEN_NAMESPACES:
       - kube-system
 ```
 
-- **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  ISTIO:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: networking.istio.io
-  ```
-
 - **KYMA_COMPANION** - determines if the Kyma Companion chat window is available in Busola.
 
 Default settings:
@@ -122,7 +110,6 @@ KYMA_COMPANION:
 
 - **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
   If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
-
   - **showClustersOverview** - optional configuration to instruct Busola to show **Clusters Overview** rather than the current context cluster, after the clusters are loaded.
 
   - **defaultKubeconfig** - define the optional default **KUBECONFIG_ID** to load this kubeconfig when you visit Busola homepage `/` and there are no memorized clusters in the application.
@@ -220,20 +207,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
       dsn: ''
   ```
 
-- **SHOW_GARDENER_METADATA** - determines if the metadata taken from Gardener should be displayed. The displayed information is the value from the `shoot-info` ConfigMap based on the `kube-system` Namespace. If the ConfigMap doesn't exist, the information is not displayed.
-
-  ```yaml
-  SHOW_GARDENER_METADATA:
-    isEnabled: true
-  ```
-
-- **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the **Cluster Details** page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the information is not displayed.
-
-  ```yaml
-  SHOW_KYMA_VERSION:
-    isEnabled: true
-  ```
-
 - **SNOW** - determines if the snow animation is enabled in Busola.
 
 Default settings:
@@ -242,23 +215,6 @@ Default settings:
 SNOW:
   isEnabled: false
 ```
-
-- **TRACKING** - determines if simple application usage tracking is enabled.
-
-  ```yaml
-  TRACKING:
-    isEnabled: false
-  ```
-
-  > [!NOTE]
-  > This feature is enabled on the frontend and backend.
-
-* **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at the resource details view.
-
-  ```yaml
-  VISUAL_RESOURCES:
-    isEnabled: true
-  ```
 
 ## Features List for Backend
 
@@ -280,15 +236,9 @@ GZIP:
 
   ```yaml
   KYMA_COMPANION:
-    link: ''
+    config:
+      feedbackLink: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+      documentationLink: https://help.sap.com/
+      model: 'gpt-4.1'
+      queryMaxTokens: 8000
   ```
-
-  - **TRACKING** - determines if simple application usage tracking is enabled.
-
-  ```yaml
-  TRACKING:
-    isEnabled: false
-  ```
-
-  > [!NOTE]
-  > This feature is enabled on the frontend and backend.

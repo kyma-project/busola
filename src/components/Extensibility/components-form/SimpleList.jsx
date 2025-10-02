@@ -1,0 +1,102 @@
+import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
+import { Button, FlexBox } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
+import {
+  useCreateResourceDescription,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
+
+import { ResourceForm } from 'shared/ResourceForm';
+import { Label } from '../../../shared/ResourceForm/components/Label';
+
+export function SimpleList({
+  storeKeys,
+  onChange,
+  schema,
+  schemaKeys,
+  showValidity,
+  required,
+  readOnly,
+  level,
+  widgets,
+  nestingLevel = 0,
+  ...props
+}) {
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { t } = useTranslation();
+  const { store } = useUIStore();
+  const { value } = store?.extractValues(storeKeys) || {};
+  const listSize = value?.size || 0;
+  const schemaPlaceholder = schema.get('placeholder');
+  const inputInfo = useCreateResourceDescription(schema.get('inputInfo'));
+  const tooltipContent = schema.get('description');
+  const defaultOpen = schema.get('defaultExpanded') ?? false;
+
+  const removeItem = (index) => {
+    onChange({
+      storeKeys,
+      scopes: ['value', 'internal'],
+      type: 'list-item-delete',
+      index,
+      schema,
+      required,
+    });
+  };
+
+  const isLast = (index) => index === listSize;
+  const itemsSchema = schema.get('items');
+
+  return (
+    <ResourceForm.CollapsibleSection
+      defaultOpen={defaultOpen}
+      container
+      title={tFromStoreKeys(storeKeys, schema)}
+      required={required}
+      nestingLevel={nestingLevel}
+      tooltipContent={tExt(tooltipContent)}
+      {...props}
+    >
+      <ul className="multi-input">
+        {Array(listSize + 1)
+          .fill(null)
+          .map((_val, index) => {
+            const ownKeys = storeKeys.push(index);
+            return (
+              <li key={index}>
+                <FlexBox alignItems="Center">
+                  <div className="bsl-col-md--11 simple-list">
+                    <PluginStack
+                      showValidity={showValidity}
+                      schema={itemsSchema}
+                      parentSchema={schema}
+                      storeKeys={ownKeys}
+                      level={level + 1}
+                      schemaKeys={schemaKeys?.push('items')}
+                      placeholder={tExt(schemaPlaceholder)}
+                      isListItem
+                      inputInfo={inputInfo}
+                    />
+                  </div>
+                  {!isLast(index) && (
+                    <Button
+                      disabled={readOnly}
+                      className="sap-margin-top-tiny"
+                      icon="delete"
+                      design="Transparent"
+                      onClick={() => removeItem(index)}
+                      accessibleName={t('common.buttons.delete')}
+                    />
+                  )}
+                </FlexBox>
+                {isLast(index) && inputInfo && (
+                  <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+                    {inputInfo}
+                  </Label>
+                )}
+              </li>
+            );
+          })}
+      </ul>
+    </ResourceForm.CollapsibleSection>
+  );
+}

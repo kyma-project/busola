@@ -94,9 +94,7 @@ context('Test Deployments', () => {
   });
 
   it('Edit a deployment', () => {
-    cy.getLeftNav()
-      .contains('Deployments')
-      .click();
+    cy.getLeftNav().contains('Deployments').click();
 
     cy.clickGenericListLink(DEPLOYMENT_NAME);
 

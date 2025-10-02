@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 
-export const useComponentDidMount = onMountHandler => {
+export const useComponentDidMount = (onMountHandler) => {
   const componentDidMount = useRef(false);
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import { createContext } from 'react';
  */
 export function getDescription(schema: any, path: string): string | null {
   let contextSchema = schema;
-  path.split('.').forEach(pathItem => {
+  path.split('.').forEach((pathItem) => {
     //Check if it's array as it has fields under `items`
     contextSchema = contextSchema?.items ? contextSchema.items : contextSchema;
     contextSchema = contextSchema?.properties?.[pathItem];
@@ -27,7 +27,7 @@ export function getDescription(schema: any, path: string): string | null {
 export function getPartialSchema(schema: any, path: string): object {
   let contextSchema = schema;
 
-  path.split('.').forEach(pathItem => {
+  path.split('.').forEach((pathItem) => {
     contextSchema = contextSchema?.properties?.[pathItem];
   });
 

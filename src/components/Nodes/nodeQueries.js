@@ -53,15 +53,15 @@ export function useNodesQuery(skip = false) {
 
   useEffect(() => {
     if (nodes) {
-      const getNodeMetrics = node => {
+      const getNodeMetrics = (node) => {
         const metricsForNode = nodeMetrics.items.find(
-          metrics => node.metadata.name === metrics.metadata.name,
+          (metrics) => node.metadata.name === metrics.metadata.name,
         );
         return createUsageMetrics(node, metricsForNode);
       };
 
       setData(
-        nodes.items?.map(n => ({
+        nodes.items?.map((n) => ({
           ...n,
           metrics: nodeMetrics ? getNodeMetrics(n) : {},
         })),
@@ -87,13 +87,14 @@ export function useNodeQuery(nodeName) {
     skip: !nodeName,
   });
 
-  const { data: node, error: nodeError, loading: nodeLoading } = useGet(
-    `/api/v1/nodes/${nodeName}`,
-    {
-      pollingInterval: 3000,
-      skip: !nodeName,
-    },
-  );
+  const {
+    data: node,
+    error: nodeError,
+    loading: nodeLoading,
+  } = useGet(`/api/v1/nodes/${nodeName}`, {
+    pollingInterval: 3000,
+    skip: !nodeName,
+  });
 
   useEffect(() => {
     if (node) {
@@ -164,18 +165,22 @@ export function calcNodeResources(pods) {
   return {
     limits: {
       cpu: nodeResources.limits.cpu,
-      memory: nodeResources.limits.memory / Math.pow(1024, 3),
+      memory: nodeResources.limits.memory,
     },
     requests: {
       cpu: nodeResources.requests.cpu,
-      memory: nodeResources.requests.memory / Math.pow(1024, 3),
+      memory: nodeResources.requests.memory,
     },
   };
 }
 
 export function useResourceByNode(nodeName) {
   const [data, setData] = useState(null);
-  const { data: pods, error, loading } = useGet(
+  const {
+    data: pods,
+    error,
+    loading,
+  } = useGet(
     `/api/v1/pods?fieldSelector=spec.nodeName=${nodeName},status.phase!=Failed,status.phase!=Succeeded&limit=500`,
   );
 

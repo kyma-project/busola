@@ -37,9 +37,8 @@ export default function KymaCompanion() {
     displayRetry: false,
   });
   const [time, setTime] = useState<Date>(new Date());
-  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState<boolean>(
-    false,
-  );
+  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] =
+    useState<boolean>(false);
 
   function handleRefresh() {
     setChatHistory(
@@ -60,7 +59,7 @@ export default function KymaCompanion() {
       return;
     }
     const promptsNumber = chatHistory[0].messages.filter(
-      message => message.author === Author.USER,
+      (message) => message.author === Author.USER,
     ).length;
     if (promptsNumber > 4) setIsFeedbackDialogOpen(true);
     else setShowCompanion({ show: false, fullScreen: false });

@@ -9,7 +9,7 @@ export function getAvailableNvidiaGPUs(nodesData: Node[]): Number {
     return 0;
   }
   return nodesData
-    .map(node => node.status.allocatable)
+    .map((node) => node.status.allocatable)
     .reduce((partialSum, item) => {
       const nvidiaGpus = item['nvidia.com/gpu'];
       if (nvidiaGpus) {

@@ -10,7 +10,7 @@ import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
 import { moduleTemplatesCountAtom } from 'state/moduleTemplatesCountAtom';
 
-export const clusterAndNsNodesAtom = atom<Promise<NavNode[]>>(async get => {
+export const clusterAndNsNodesAtom = atom<Promise<NavNode[]>>(async (get) => {
   const resourceList: NavNode[] = get(resourceListAtom);
   const activeNamespaceId = get(activeNamespaceIdAtom);
   const openapiPathIdList = get(openapiPathIdListAtom);

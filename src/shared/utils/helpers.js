@@ -13,13 +13,13 @@ export function matchBySelector(ownerSelector, labels) {
 
 export function matchByOwnerReference({ resource, owner }) {
   return resource.metadata.ownerReferences?.some(
-    oR => oR.kind === owner.kind && oR.name === owner.metadata.name,
+    (oR) => oR.kind === owner.kind && oR.name === owner.metadata.name,
   );
 }
 
 export function getApiPath(resourceType, nodes) {
   const matchedNode = nodes.find(
-    n =>
+    (n) =>
       n.resourceType === resourceType || n.navigationContext === resourceType,
   );
   try {
@@ -81,11 +81,11 @@ export function isPrimitive(type = null) {
   );
 }
 
-const capitalize = str => {
+const capitalize = (str) => {
   return str?.charAt(0)?.toUpperCase() + str?.slice(1);
 };
 
-const splitName = name => {
+const splitName = (name) => {
   if (!name) return '';
   const nameArray = name.match(/[A-Z][a-z]+/g);
   return (nameArray || []).join(' ');
@@ -99,7 +99,7 @@ export const prettifyNameSingular = (resourceName, resourceType) => {
   return pluralize(resources, 1);
 };
 
-export const prettifyKind = kind => {
+export const prettifyKind = (kind) => {
   const r = /([A-Z]+(?![a-z])|[A-Z][a-z]+)/g;
   const parts = kind?.match(r);
   return parts?.join(' ') || '';
@@ -116,9 +116,10 @@ export const getErrorMessage = (error, message = null) => {
   return errorNotification;
 };
 
-export const intersperse = (arr, sep) => arr.flatMap(el => [sep, el]).slice(1);
+export const intersperse = (arr, sep) =>
+  arr.flatMap((el) => [sep, el]).slice(1);
 
-export const stringifyIfBoolean = val =>
+export const stringifyIfBoolean = (val) =>
   typeof val === 'boolean' ? JSON.stringify(val) : val;
 
 export function buildPathsFromObject(object, path = '') {

@@ -3,9 +3,7 @@ import jsyaml from 'js-yaml';
 
 import { chooseComboboxOption } from '../../support/helpers';
 
-const id = Math.random()
-  .toString()
-  .substr(2, 8);
+const id = Math.random().toString().substr(2, 8);
 
 const SA_NAME = 'test-sa-' + id;
 const CR_NAME = 'test-cr-' + id;
@@ -136,9 +134,7 @@ context('Test reduced permissions', () => {
 
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav()
-      .contains('Service Accounts')
-      .click();
+    cy.getLeftNav().contains('Service Accounts').click();
 
     cy.clickGenericListLink(SA_NAME);
 
@@ -158,8 +154,10 @@ context('Test reduced permissions', () => {
     cy.wait(200);
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
-      fileNames => {
-        let kubeconfigFileName = fileNames.find(name => name.includes(SA_NAME));
+      (fileNames) => {
+        let kubeconfigFileName = fileNames.find((name) =>
+          name.includes(SA_NAME),
+        );
 
         // make sure we don't take temporary Chrome download file
         kubeconfigFileName = kubeconfigFileName.replace('.crdownload', '');
@@ -170,7 +168,7 @@ context('Test reduced permissions', () => {
         // make sure .crdownload is not here anymore
         cy.wait(100)
           .readFile(tempKubeconfigPath)
-          .then(kubeconfigStr => {
+          .then((kubeconfigStr) => {
             // change kubeconfig cluster name
             const kubeconfig = jsyaml.load(kubeconfigStr);
 
@@ -195,39 +193,27 @@ context('Test reduced permissions', () => {
   });
 
   it('Inspect reduced permissions view', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
+    cy.getLeftNav().contains('Workloads').click();
 
-    cy.getLeftNav()
-      .contains('Deployments')
-      .should('be.visible');
+    cy.getLeftNav().contains('Deployments').should('be.visible');
 
-    cy.getLeftNav()
-      .contains('Back To Cluster Details')
-      .click();
+    cy.getLeftNav().contains('Back To Cluster Details').click();
 
-    cy.getLeftNav()
-      .contains('Configuration')
-      .should('not.exist');
+    cy.getLeftNav().contains('Configuration').should('not.exist');
   });
 
   it('Cleanup', () => {
     cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
-    cy.getLeftNav()
-      .contains('Cluster Role Bindings')
-      .click();
+    cy.getLeftNav().contains('Cluster Role Bindings').click();
 
     cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME, {
       selectSearchResult: true,
     });
 
     // delete role
-    cy.getLeftNav()
-      .contains('Cluster Roles')
-      .click();
+    cy.getLeftNav().contains('Cluster Roles').click();
 
     cy.deleteFromGenericList('Cluster Role', CR_NAME, {
       selectSearchResult: true,

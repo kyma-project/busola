@@ -1,0 +1,78 @@
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { EventList as EventListComponent } from 'resources/Events/EventList';
+
+import { useGetTranslation } from '../helpers';
+import { useJsonata } from '../hooks/useJsonata';
+import { useAtomValue } from 'jotai';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+
+export function EventList({
+  structure,
+  originalResource,
+  scope,
+  value,
+  arrayItems,
+  singleRootResource,
+  embedResource,
+}) {
+  const namespaceId = useAtomValue(activeNamespaceIdAtom);
+  const { widgetT } = useGetTranslation();
+  const jsonata = useJsonata({
+    resource: originalResource,
+    parent: singleRootResource,
+    embedResource: embedResource,
+    scope,
+    value,
+    arrayItems,
+  });
+  const simpleEmptyListMessage = structure.simpleEmptyListMessage || false;
+
+  const renameDefaultType = (defaultType) => {
+    switch ((defaultType || '').toLowerCase()) {
+      case 'information':
+        return 'NORMAL';
+      case 'warning':
+        return 'WARNING';
+      default:
+        return 'ALL';
+    }
+  };
+
+  const defaultType =
+    EVENT_MESSAGE_TYPE[renameDefaultType(structure.defaultType)];
+
+  const resourceUrl =
+    namespaceId && namespaceId !== '-all-'
+      ? `/api/v1/namespaces/${namespaceId}/events`
+      : '/api/v1/events';
+
+  const filter = async (res) => {
+    if (!structure.filter) return true;
+
+    try {
+      const [eventFilter, eventFilterError] = await jsonata(structure.filter, {
+        scope: res,
+        arrayItems: [res],
+      });
+      if (eventFilterError) return false;
+      return !!eventFilter;
+    } catch (e) {
+      console.warn(e);
+      return false;
+    }
+  };
+
+  const eventsParams = {
+    namespace: namespaceId,
+    resourceUrl: resourceUrl,
+    resourceType: 'Events',
+    hideInvolvedObjects: structure?.hideInvolvedObjects,
+    isCompact: true,
+    title: widgetT(structure),
+    simpleEmptyListMessage: simpleEmptyListMessage,
+    defaultType,
+    filter,
+  };
+
+  return <EventListComponent {...eventsParams} />;
+}

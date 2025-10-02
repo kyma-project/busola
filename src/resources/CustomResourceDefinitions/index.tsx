@@ -18,9 +18,9 @@ export const ResourceDescription = (
 );
 
 export const List = React.lazy(() => import('./CustomResourceDefinitionList'));
-export const Details = React.lazy(() =>
-  import('./CustomResourceDefinitionDetails'),
+export const Details = React.lazy(
+  () => import('./CustomResourceDefinitionDetails'),
 );
-export const Create = React.lazy(() =>
-  import('./CustomResourceDefinitionCreate'),
+export const Create = React.lazy(
+  () => import('./CustomResourceDefinitionCreate'),
 );

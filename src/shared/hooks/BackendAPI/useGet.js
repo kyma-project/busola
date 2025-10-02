@@ -11,8 +11,8 @@ import { authDataAtom } from '../../../state/authDataAtom';
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
 
-const useGetHook = processDataFn =>
-  function(
+const useGetHook = (processDataFn) =>
+  function (
     path,
     {
       pollingInterval,
@@ -22,11 +22,13 @@ const useGetHook = processDataFn =>
       compareEntireResource = false,
     } = {},
   ) {
+    const shouldSkip = skip || !path;
+
     const authData = useAtomValue(authDataAtom);
     const lastAuthData = useRef(null);
     const lastResourceVersion = useRef(null);
     const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(!skip);
+    const [loading, setLoading] = useState(!shouldSkip);
     const [error, setError] = useState(null);
     const fetch = useFetch();
     const abortController = useRef(new AbortController());
@@ -38,9 +40,13 @@ const useGetHook = processDataFn =>
 
     const refetch = useCallback(
       (isSilent, currentData) => async () => {
-        if (skip || !authData || previousRequestNotFinished.current === path)
+        if (
+          shouldSkip ||
+          !authData ||
+          previousRequestNotFinished.current === path
+        )
           return;
-        if (!isSilent) setTimeout(_ => setLoading(true));
+        if (!isSilent) setTimeout((_) => setLoading(true));
 
         abortController.current = new AbortController();
 
@@ -73,7 +79,7 @@ const useGetHook = processDataFn =>
 
           const currentRequest = requestData.current[currentRequestId];
           const newerRequests = Object.values(requestData.current).filter(
-            request => request.start > currentRequest.start,
+            (request) => request.start > currentRequest.start,
           );
           if (newerRequests.length) {
             // don't override returned value with stale data
@@ -85,9 +91,9 @@ const useGetHook = processDataFn =>
           if (typeof onDataReceived === 'function') {
             onDataReceived({ data: payload });
           }
-          if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
+          if (error) setTimeout((_) => setError(null)); // bring back the data and clear the error once the connection started working again
           errorTolerancyCounter.current = 0;
-          setTimeout(_ =>
+          setTimeout((_) =>
             processDataFn(
               payload,
               currentData,
@@ -100,11 +106,11 @@ const useGetHook = processDataFn =>
           previousRequestNotFinished.current = null;
           if (typeof onDataReceived === 'function')
             onDataReceived({ error: e });
-          setTimeout(_ => processError(e));
+          setTimeout((_) => processError(e));
         }
 
         if (!isSilent && !abortController.current.signal.aborted)
-          setTimeout(_ => setLoading(false));
+          setTimeout((_) => setLoading(false));
       },
       [fetch, authData],
     );
@@ -121,26 +127,34 @@ const useGetHook = processDataFn =>
 
       cleanupPolling();
       // POLLING
-      if (!pollingInterval || receivedForbidden || skip) return;
+      if (!pollingInterval || receivedForbidden || shouldSkip) return;
       intervalIdRef.current = setInterval(refetch(true, data), pollingInterval);
       return cleanupPolling;
-    }, [path, pollingInterval, data, error, skip, refetch, cleanupPolling]);
+    }, [
+      path,
+      pollingInterval,
+      data,
+      error,
+      shouldSkip,
+      refetch,
+      cleanupPolling,
+    ]);
 
     useEffect(() => {
       // INITIAL FETCH on path being set/changed
-      if (lastAuthData.current && path && !skip) refetch(false, null)();
-      return _ => {
+      if (lastAuthData.current && path && !shouldSkip) refetch(false, null)();
+      return (_) => {
         if (loading) setLoading(false);
       };
     }, [path]);
 
     useEffect(() => {
       // silent refetch once 'skip' has been disabled
-      if (lastAuthData.current && path && !skip) refetch(true, null)();
-      return _ => {
+      if (lastAuthData.current && path && !shouldSkip) refetch(true, null)();
+      return (_) => {
         if (loading) setLoading(false);
       };
-    }, [skip]);
+    }, [shouldSkip]);
 
     useEffect(() => {
       if (JSON.stringify(lastAuthData.current) !== JSON.stringify(authData)) {
@@ -151,7 +165,7 @@ const useGetHook = processDataFn =>
       }
     }, [authData]);
 
-    useEffect(_ => _ => abortController.current.abort(), []);
+    useEffect((_) => (_) => abortController.current.abort(), []);
 
     return {
       data,
@@ -162,7 +176,7 @@ const useGetHook = processDataFn =>
     };
   };
 
-export const useGetStream = path => {
+export const useGetStream = (path) => {
   const lastAuthData = useRef(null);
   const initialPath = useRef(true);
   const timeoutRef = useRef();
@@ -173,18 +187,18 @@ export const useGetStream = path => {
   const readerRef = useRef(null);
   const abortController = useRef(new AbortController());
 
-  const processError = error => {
+  const processError = (error) => {
     console.error(error);
     setError(error);
   };
 
-  const processData = data => {
+  const processData = (data) => {
     const string = new TextDecoder().decode(data);
-    const streams = string?.split('\n').filter(stream => stream !== '');
-    setData(prevData => [...prevData, ...streams]);
+    const streams = string?.split('\n').filter((stream) => stream !== '');
+    setData((prevData) => [...prevData, ...streams]);
   };
 
-  const fetchData = async _ => {
+  const fetchData = async (_) => {
     if (!authData) return;
 
     try {
@@ -273,7 +287,7 @@ export const useGetStream = path => {
     refetchData();
   }, [path]);
 
-  useEffect(_ => {
+  useEffect((_) => {
     cancelOldData();
     return () => {
       cancelOldData();
@@ -296,16 +310,23 @@ export const useGetStream = path => {
   };
 };
 
-export const useGetList = filter => useGetHook(handleListDataReceived(filter));
+export const useGetList = (filter) =>
+  useGetHook(handleListDataReceived(filter));
 export const useGet = useGetHook(handleSingleDataReceived);
 
 function handleListDataReceived(filter) {
-  return (newData, oldData, setDataFn, lastResourceVersionRef) => {
+  return async (newData, oldData, setDataFn, lastResourceVersionRef) => {
     if (filter) {
-      newData.items = newData.items.filter(filter);
+      const asyncForFilter = await Promise.all(
+        newData.items.map(async (item) => {
+          const filtered = await filter(item);
+          return filtered ? item : false;
+        }),
+      );
+      newData.items = asyncForFilter.filter(Boolean);
     }
 
-    newData.items = (newData.items || []).map(item => {
+    newData.items = (newData.items || []).map((item) => {
       if (!item.kind && newData.kind?.endsWith('List')) {
         item = {
           kind: newData.kind.substring(0, newData.kind.length - 4),
@@ -356,7 +377,7 @@ function handleSingleDataReceived(
 
 export const useSingleGet = () => {
   const fetch = useFetch();
-  return url => fetch({ relativeUrl: url });
+  return (url) => fetch({ relativeUrl: url });
 };
 
 export const useGetScope = () => {
@@ -367,6 +388,6 @@ export const useGetScope = () => {
     });
     const openApiSpec = await response.json();
 
-    return openApiSpec.resources.find(r => r.kind === kind)?.namespaced;
+    return openApiSpec.resources.find((r) => r.kind === kind)?.namespaced;
   };
 };

@@ -31,12 +31,6 @@ config:
         trademark:
           default: https://www.sap.com/corporate/en/legal/trademark.html
           de: https://www.sap.com/corporate/de/legal/trademark.html
-    SSO_LOGIN:
-      isEnabled: false
-      config:
-        issuerUrl: https://kyma.accounts.ondemand.com
-        scope: openid
-        clientId: 12b13a26-d993-4d0c-aa08-5f5852bbdff6
     KUBECONFIG_ID:
       isEnabled: true
       config:
@@ -45,10 +39,6 @@ config:
       isEnabled: false
       config:
         dsn: ''
-    SHOW_KYMA_VERSION:
-      isEnabled: true
-    SHOW_GARDENER_METADATA:
-      isEnabled: true
     EXTERNAL_NODES:
       isEnabled: true
       stage: SECONDARY
@@ -61,8 +51,6 @@ config:
           - kyma-system
     GZIP:
       isEnabled: true
-    TRACKING:
-      isEnabled: false
     EXTENSIBILITY:
       isEnabled: true
     EXTENSIBILITY_INJECTIONS:
@@ -81,8 +69,6 @@ config:
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
-    ISTIO:
-      isEnabled: true
     RESOURCE_VALIDATION:
       isEnabled: false
       config:
@@ -92,9 +78,8 @@ config:
       isEnabled: false
     FEEDBACK:
       isEnabled: true
-      link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_2gcfdw3EYYOIz5A?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
-    COLUMN_LAYOUT:
-      isEnabled: true
+      config:
+        link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_2gcfdw3EYYOIz5A?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
     SNOW:
       isEnabled: false
     COMMUNITY_MODULES:

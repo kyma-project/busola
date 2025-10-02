@@ -52,7 +52,7 @@ export class ResourceLoader {
       ),
     ];
 
-    const requests = groups.map(endpoint => ({
+    const requests = groups.map((endpoint) => ({
       endpoint,
       request: this.fetchData(endpoint),
     }));

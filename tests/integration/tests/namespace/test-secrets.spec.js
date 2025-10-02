@@ -44,9 +44,7 @@ context('Test Secrets', () => {
       .eq(1)
       .type(`${SECRET2_VALUE}`, { force: true });
 
-    cy.contains('Encode')
-      .filter(':visible')
-      .click();
+    cy.contains('Encode').filter(':visible').click();
 
     cy.contains(window.btoa(SECRET_VALUE));
 
@@ -66,9 +64,7 @@ context('Test Secrets', () => {
       .contains('.layout-panel-row', SECRET_KEY)
       .contains('*****');
 
-    cy.getMidColumn()
-      .contains('Decode')
-      .click();
+    cy.getMidColumn().contains('Decode').click();
 
     cy.getMidColumn()
       .contains('.layout-panel-row', SECRET2_KEY)
@@ -78,9 +74,7 @@ context('Test Secrets', () => {
       .contains('.layout-panel-row', SECRET_KEY)
       .contains(SECRET_VALUE);
 
-    cy.getMidColumn()
-      .contains('ui5-button', 'Encode')
-      .click();
+    cy.getMidColumn().contains('ui5-button', 'Encode').click();
 
     cy.getMidColumn()
       .contains('.layout-panel-row', SECRET2_KEY)
@@ -110,9 +104,7 @@ context('Test Secrets', () => {
       .eq(2)
       .type(`${SECRET3_VALUE}`, { force: true });
 
-    cy.get('[accessible-name="Delete"]:visible')
-      .eq(1)
-      .click();
+    cy.get('[accessible-name="Delete"]:visible').eq(1).click();
 
     cy.saveChanges('Edit');
   });
