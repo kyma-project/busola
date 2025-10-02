@@ -26,12 +26,11 @@ import pluralize from 'pluralize';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { cloneDeep } from 'lodash';
 import { KymaResourceType, ModuleTemplateListType } from '../support';
-import { ColumnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { SetStateAction, useAtomValue } from 'jotai';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
@@ -238,9 +237,6 @@ export const ModulesDeleteBox = ({
       }
     } catch (e: unknown) {
       console.warn('Error while deleting community module', e);
-      if (e instanceof SyntaxError) {
-        console.warn(e);
-      }
       notification.notifyError({
         content: t('modules.community.messages.delete-failure', {
           module: moduleName,
