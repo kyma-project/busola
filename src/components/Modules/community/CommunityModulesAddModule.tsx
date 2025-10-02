@@ -144,28 +144,36 @@ async function upload(
   }
 
   try {
-    // TODO: inform about errorgit
-    const operationPromises = communityModulesTemplatesToUpload.map
-      .values()
-      .map((moduleTemplate) =>
-        installCommunityModule(
-          moduleTemplate,
+    let errorOccurred = false;
+    for (const module of communityModulesTemplatesToUpload.map.values()) {
+      try {
+        await installCommunityModule(
+          module,
           clusterNodes,
           namespaceNodes,
           postRequest,
           patchRequest,
           singleGet,
           callback,
-        ),
-      );
-    await Promise.allSettled(operationPromises);
+        );
+      } catch (e) {
+        errorOccurred = true;
+        notification.notifyError({
+          content: t('modules.community.messages.install-failure', {
+            resourceType: 'Community Module',
+            error: e instanceof Error && e?.message ? e.message : '',
+          }),
+        });
+      }
+    }
     setModulesTemplatesToUpload({ map: new Map() });
-
-    notification.notifySuccess({
-      content: t('modules.community.messages.success', {
-        resourceType: 'Community Module',
-      }),
-    });
+    if (!errorOccurred) {
+      notification.notifySuccess({
+        content: t('modules.community.messages.success', {
+          resourceType: 'Community Module',
+        }),
+      });
+    }
   } catch (e) {
     console.error(e);
     notification.notifyError({
