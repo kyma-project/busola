@@ -158,11 +158,7 @@ async function uploadResource(
   );
 
   const urlWithName = `${url}/${resource?.value?.metadata?.name}`;
-  let existingResource;
-  try {
-    const response = await singleGet(url);
-    existingResource = await response.json();
-  } catch (_) {}
+  const existingResource = await checkIfResourceExist(urlWithName, singleGet);
   try {
     if (!existingResource) {
       await post(url, resource.value);
@@ -180,5 +176,18 @@ async function uploadResource(
   } catch (e) {
     console.warn(e);
     return false;
+  }
+}
+
+async function checkIfResourceExist(
+  url: string,
+  singleGet: Function,
+): Promise<any> {
+  try {
+    console.log(url);
+    const response = await singleGet(url);
+    return await response.json();
+  } catch (_) {
+    return null;
   }
 }

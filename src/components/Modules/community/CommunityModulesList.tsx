@@ -119,7 +119,7 @@ export const CommunityModulesList = ({
     }
 
     const moduleTemplatesDuringUpload = modulesDuringProcessing
-      .filter((m) => m.state !== State.Finished)
+      // .filter((m) => m.state !== State.Finished)
       .map((m) => createFakeModuleTemplateWithStatus(m));
 
     const a = [...installedModules].concat(moduleTemplatesDuringUpload);
