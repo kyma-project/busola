@@ -7,27 +7,14 @@ const toMinutes = 60;
 const toHours = 60;
 const toDays = 24;
 
-export const ROUNDING_RESULT_TYPE = {
-  SECONDS: 'SECONDS',
-  MINUTES: 'MINUTES',
-  HOURS: 'HOURS',
-  DAYS: 'DAYS',
-} as const;
-
-//eslint-disable-next-line @typescript-eslint/no-redeclare
-export type ROUNDING_RESULT_TYPE =
-  (typeof ROUNDING_RESULT_TYPE)[keyof typeof ROUNDING_RESULT_TYPE];
-
 const formatResult = (value: number, valueUnit: string) => {
   return <>{Math.round(value).toString() + ' ' + valueUnit}</>;
 };
 
 export const ReadableElapsedTimeFromNow = ({
   timestamp,
-  roundingResultType,
 }: {
   timestamp: string;
-  roundingResultType?: ROUNDING_RESULT_TYPE;
 }): JSX.Element => {
   const { t } = useTranslation();
 
@@ -45,26 +32,14 @@ export const ReadableElapsedTimeFromNow = ({
     const hours = minutes / toHours;
     const days = hours / toDays;
 
-    if (
-      (!!roundingResultType &&
-        roundingResultType === ROUNDING_RESULT_TYPE.SECONDS) ||
-      (!roundingResultType && seconds < 60)
-    )
+    if (seconds < 60)
       return formatResult(seconds, t('common.value-units.seconds-ago'));
-    else if (
-      (!!roundingResultType &&
-        roundingResultType === ROUNDING_RESULT_TYPE.MINUTES) ||
-      (!roundingResultType && minutes < 60)
-    )
+    else if (minutes < 60)
       return formatResult(minutes, t('common.value-units.minutes-ago'));
-    else if (
-      (!!roundingResultType &&
-        roundingResultType === ROUNDING_RESULT_TYPE.HOURS) ||
-      (!roundingResultType && hours < 24)
-    )
+    else if (hours < 24)
       return formatResult(hours, t('common.value-units.hours-ago'));
     else return formatResult(days, t('common.value-units.days-ago'));
-  }, [timestamp, roundingResultType, t]);
+  }, [timestamp, t]);
 
   return result;
 };
