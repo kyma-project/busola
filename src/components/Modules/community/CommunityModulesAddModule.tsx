@@ -165,7 +165,7 @@ async function upload(
         errorOccurred = true;
         notification.notifyError({
           content: t('modules.community.messages.install-failure', {
-            resourceType: 'Community Module',
+            resourceType: getModuleName(module),
             error: e instanceof Error && e?.message ? e.message : '',
           }),
         });

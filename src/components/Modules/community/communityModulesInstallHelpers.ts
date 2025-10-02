@@ -73,6 +73,20 @@ export async function installCommunityModule(
   }
 }
 
+function filterResourcesByKind(
+  resourceKind: string,
+  yamls: any[],
+): { resources: any[]; otherResources: any[] } {
+  const resources = yamls.filter((yaml) => {
+    return yaml.kind === resourceKind;
+  });
+
+  const otherResources = yamls.filter((yaml) => {
+    return yaml.kind !== resourceKind;
+  });
+  return { resources, otherResources };
+}
+
 async function uploadResources(
   resources: any[],
   clusterNodes: any,
@@ -108,20 +122,6 @@ async function uploadResources(
     throw new Error(`Upload failed: ${failedUploads[0].reason.message}`);
   }
   return notUploadedResources;
-}
-
-export function filterResourcesByKind(
-  resourceKind: string,
-  yamls: any[],
-): { resources: any[]; otherResources: any[] } {
-  const resources = yamls.filter((yaml) => {
-    return yaml.kind === resourceKind;
-  });
-
-  const otherResources = yamls.filter((yaml) => {
-    return yaml.kind !== resourceKind;
-  });
-  return { resources, otherResources };
 }
 
 async function uploadResource(
