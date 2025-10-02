@@ -139,7 +139,6 @@ async function upload(
   callback: CallbackFn,
 ) {
   if (communityModulesTemplatesToUpload.map.size === 0) {
-    console.log('SZALENSTWO');
     return;
   }
 

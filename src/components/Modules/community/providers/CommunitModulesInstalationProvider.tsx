@@ -1,4 +1,9 @@
-import React, { createContext, SetStateAction, useState } from 'react';
+import React, {
+  createContext,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { CallbackFn } from 'components/Modules/community/communityModulesInstallHelpers';
 import { getModuleName, ModuleTemplateType } from 'components/Modules/support';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
@@ -23,42 +28,50 @@ export const CommunityModulesInstallationContext =
   });
 
 export function CommunityModulesUploadProvider({ children }: any) {
+  const [moduleInstallState, setModuleInstallState] =
+    useState<ModuleDuringUpload>();
+
   const [modulesDuringInstallation, setModulesDuringInstallation] = useState<
     ModuleDuringUpload[]
   >([]);
 
-  const callbackFn: CallbackFn = (moduleTpl, moduleState, message) => {
-    console.log(moduleState);
-    const moduleName = getModuleName(moduleTpl);
-    const moduleDuringInstalation = modulesDuringInstallation?.find(
+  useEffect(() => {
+    if (!moduleInstallState) {
+      return;
+    }
+    const moduleName = getModuleName(moduleInstallState?.moduleTpl);
+    const moduleDuringInstallation = modulesDuringInstallation?.find(
       (module) => getModuleName(module.moduleTpl) === moduleName,
     );
-    console.log(message);
-    if (!moduleDuringInstalation) {
-      const newModuleDuringInstallation = {
-        moduleTpl,
-        message: message || '',
-        state: moduleState,
-      };
+    if (!moduleDuringInstallation) {
       setModulesDuringInstallation([
         ...modulesDuringInstallation,
-        newModuleDuringInstallation,
+        moduleInstallState,
       ]);
-      console.log(newModuleDuringInstallation);
+      console.log('Installations', moduleName, modulesDuringInstallation);
       return;
     }
 
     const updatedModulesDuringInstallation = modulesDuringInstallation?.map(
       (module) => {
         if (getModuleName(module.moduleTpl) === moduleName) {
-          module.state = moduleState;
-          module.message = message || '';
+          module.state = moduleInstallState.state;
+          module.message = moduleInstallState.message || '';
         }
         return module;
       },
     );
     console.log(updatedModulesDuringInstallation);
     setModulesDuringInstallation(updatedModulesDuringInstallation);
+    setModuleInstallState(undefined);
+  }, [moduleInstallState]);
+
+  const callbackFn: CallbackFn = (moduleTpl, moduleState, message) => {
+    setModuleInstallState({
+      moduleTpl,
+      state: moduleState,
+      message: message || '',
+    });
   };
 
   return (

@@ -79,10 +79,8 @@ export async function installCommunityModule(
   } catch (e) {
     if (e instanceof Error) {
       callback(moduleTpl, State.Error, e.message);
-      throw e;
-    } else {
-      console.error(e);
     }
+    throw e;
   }
 }
 
