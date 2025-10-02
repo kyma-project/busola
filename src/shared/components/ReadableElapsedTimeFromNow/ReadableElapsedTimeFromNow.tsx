@@ -44,7 +44,7 @@ export const ReadableElapsedTimeFromNow = ({
     const minutes = seconds / toMinutes;
     const hours = minutes / toHours;
     const days = hours / toDays;
-    console.log('rrt', !!roundingResultType, roundingResultType);
+
     if (
       (!!roundingResultType &&
         roundingResultType === ROUNDING_RESULT_TYPE.SECONDS) ||
