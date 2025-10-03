@@ -60,9 +60,7 @@ context('Test Custom Resources', () => {
   it('Create Tcluster', () => {
     cy.getLeftNav().contains('Custom Resources').click();
 
-    cy.wait(500);
-
-    cy.typeInSearch('cypress');
+    cy.wait(500).typeInSearch('cypress');
 
     cy.wait(500).clickGenericListLink('Tclusters');
 

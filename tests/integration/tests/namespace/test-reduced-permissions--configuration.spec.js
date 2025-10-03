@@ -95,9 +95,7 @@ context('Test reduced permissions 2', () => {
       .contains('Namespaces')
       .click();
 
-    cy.wait(500);
-
-    cy.typeInSearch('kube-public');
+    cy.wait(500).typeInSearch('kube-public');
 
     cy.clickListLink('kube-public');
 

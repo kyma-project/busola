@@ -69,9 +69,7 @@ context('Test Pizzas', () => {
       .contains('Namespaces')
       .click();
 
-    cy.wait(500);
-
-    cy.typeInSearch('pizzas');
+    cy.wait(500).typeInSearch('pizzas');
 
     cy.clickListLink('pizzas');
 

@@ -106,9 +106,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.wait(500);
-
-    cy.typeInSearch(CRB_NAME);
+    cy.wait(500).typeInSearch(CRB_NAME);
 
     cy.clickGenericListLink(CRB_NAME);
 
