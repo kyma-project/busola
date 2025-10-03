@@ -98,44 +98,47 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
-          {isDiscoveryAnnouncementEnabled && (
-            <FlexBox
-              alignItems="Start"
-              direction="Column"
-              justifyContent="Start"
-              gap={16}
-              className="sap-margin-bottom-medium"
-            >
-              <FlexBox direction="Row" alignItems="Center" gap={12}>
-                <Title level="H6" size="H6">
-                  {t('feedback.discovery.title')}
-                </Title>
-                <ObjectStatus state="Information" inverted>
-                  {t('feedback.new')}
-                </ObjectStatus>
-              </FlexBox>
-              <Text className="info-text" style={{ textAlign: 'start' }}>
-                {t('feedback.discovery.info')}
-              </Text>
-              <Button
-                accessibleRole="Link"
-                accessibleName={t('feedback.discovery.join-our-research')}
-                accessibleDescription="Open in new tab link"
-                endIcon="inspect"
-                design="Emphasized"
-                onClick={() => {
-                  const newWindow = window.open(
-                    discoveryAnnouncementLink,
-                    '_blank',
-                    'noopener, noreferrer',
-                  );
-                  if (newWindow) newWindow.opener = null;
-                }}
+          {isDiscoveryAnnouncementEnabled &&
+            window.location.pathname !== '/clusters' && (
+              <FlexBox
+                alignItems="Start"
+                direction="Column"
+                justifyContent="Start"
+                gap={16}
+                className="sap-margin-bottom-medium"
               >
-                {t('feedback.discovery.join-our-research')}
-              </Button>
-            </FlexBox>
-          )}
+                <FlexBox direction="Row" alignItems="Center" gap={12}>
+                  <Title level="H6" size="H6">
+                    {t('feedback.discovery.title')}
+                  </Title>
+                  {showNewIndicators && (
+                    <ObjectStatus state="Information" inverted>
+                      {t('feedback.new')}
+                    </ObjectStatus>
+                  )}
+                </FlexBox>
+                <Text className="info-text">
+                  {t('feedback.discovery.info')}
+                </Text>
+                <Button
+                  accessibleRole="Link"
+                  accessibleName={t('feedback.discovery.join-our-research')}
+                  accessibleDescription="Open in new tab link"
+                  endIcon="inspect"
+                  design="Emphasized"
+                  onClick={() => {
+                    const newWindow = window.open(
+                      discoveryAnnouncementLink,
+                      '_blank',
+                      'noopener, noreferrer',
+                    );
+                    if (newWindow) newWindow.opener = null;
+                  }}
+                >
+                  {t('feedback.discovery.join-our-research')}
+                </Button>
+              </FlexBox>
+            )}
           {isKymaCompanionEnabled &&
             companionFeedbackLink &&
             window.location.pathname !== '/clusters' && (
@@ -155,18 +158,13 @@ export default function FeedbackPopover() {
                   <Title level="H6" size="H6">
                     {t('feedback.joule.title')}
                   </Title>
-                  {showNewIndicators && (
-                    <ObjectStatus state="Information" inverted>
-                      {t('feedback.new')}
-                    </ObjectStatus>
-                  )}
                 </FlexBox>
                 <Text className="info-text">{t('feedback.joule.info')}</Text>
                 <Button
                   accessibleRole="Link"
                   accessibleName={t('feedback.give-feedback')}
                   accessibleDescription="Open in new tab link"
-                  design="Emphasized"
+                  design="Default"
                   endIcon="inspect"
                   onClick={() => {
                     handleNewFeedbackViewed();
