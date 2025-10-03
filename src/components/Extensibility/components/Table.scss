@@ -38,8 +38,6 @@ ui5-table-row.collapse-content {
   display: inherit;
 
   > :first-child {
-    display: contents;
-    min-width: max-content;
     overflow: auto;
 
     &:not(ui5-panel) {
