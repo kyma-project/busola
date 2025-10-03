@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import pluralize from 'pluralize';
-import { fromJS } from 'immutable';
+import { fromJS, isImmutable } from 'immutable';
 
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
@@ -41,7 +41,7 @@ export function ResourceRefRender({
     [schema, resource, storeKeys, value],
   );
 
-  const valueRef = useRef(memoizedValue);
+  const valueRef = useRef();
 
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
@@ -120,15 +120,17 @@ export function ResourceRefRender({
     getValueAndChange();
   };
 
+  const checkImmutable = (val) => (isImmutable(val) ? val.toJS() : val);
+
   return (
     <ExternalResourceRef
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
       value={
-        valueRef.current.size
-          ? fromJS(valueRef.current)?.toJS()
-          : fromJS(memoizedValue)?.toJS() || ''
+        valueRef.current
+          ? checkImmutable(fromJS(valueRef.current))
+          : checkImmutable(fromJS(memoizedValue)) || ''
       }
       resources={resources}
       setValue={setValue}
