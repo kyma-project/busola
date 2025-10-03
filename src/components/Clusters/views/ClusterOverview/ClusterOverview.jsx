@@ -102,14 +102,14 @@ export function ClusterOverview() {
           <>
             <BannerCarousel>
               <>
+                {isDiscoveryBannerEnabled && (
+                  <DiscoveryBanner discoveryBannerLink={discoveryBannerLink} />
+                )}
                 {isKymaCompanionEnabled && isSAPUser && (
                   <AIBanner
                     feedbackUrl={companionConfig?.feedbackLink}
                     documentationUrl={companionConfig?.documentationLink}
                   />
-                )}
-                {isDiscoveryBannerEnabled && (
-                  <DiscoveryBanner discoveryBannerLink={discoveryBannerLink} />
                 )}
                 <Injections
                   destination="ClusterOverview"
