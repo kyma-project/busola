@@ -196,9 +196,7 @@ export default function FeedbackPopover() {
               accessibleDescription="Open in new tab link"
               endIcon="inspect"
               design={
-                !isKymaCompanionEnabled || !companionFeedbackLink
-                  ? 'Emphasized'
-                  : 'Default'
+                !isDiscoveryAnnouncementEnabled ? 'Emphasized' : 'Default'
               }
               onClick={() => {
                 const newWindow = window.open(
