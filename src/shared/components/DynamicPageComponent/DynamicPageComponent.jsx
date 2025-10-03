@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import { HintButton } from '../DescriptionHint/DescriptionHint';
+import { HintButton } from '../HintButton/HintButton';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useNavigate, useSearchParams } from 'react-router';

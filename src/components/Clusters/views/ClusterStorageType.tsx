@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
+import { HintButton } from 'shared/components/HintButton/HintButton';
 import { useTranslation } from 'react-i18next';
 import { ClusterStorage } from 'state/types';
 

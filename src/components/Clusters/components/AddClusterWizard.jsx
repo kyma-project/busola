@@ -23,7 +23,7 @@ import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
 
 import './AddClusterWizard.scss';
-import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
+import { HintButton } from 'shared/components/HintButton/HintButton';
 
 export function AddClusterWizard({
   kubeconfig,
