@@ -17,11 +17,13 @@
 }
 
 ui5-table-row.collapse-content {
+  padding: 1rem;
   overflow-x: auto;
   display: block;
   height: fit-content;
 
   .extensibility-table {
+    margin: 0;
     ui5-table {
       min-width: auto;
 
