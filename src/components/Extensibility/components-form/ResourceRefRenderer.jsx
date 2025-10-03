@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { fromJS } from 'immutable';
 
@@ -36,9 +36,12 @@ export function ResourceRefRender({
   const { namespace } = useUrl();
   const { tFromStoreKeys } = useGetTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
-  value = getObjectValueWorkaround(schema, resource, storeKeys, value);
+  const memoizedValue = useMemo(
+    () => getObjectValueWorkaround(schema, resource, storeKeys, value),
+    [schema, resource, storeKeys, value],
+  );
 
-  const valueRef = useRef(value);
+  const valueRef = useRef(memoizedValue);
 
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
@@ -86,7 +89,7 @@ export function ResourceRefRender({
     originalResource,
     singleRootResource,
     embedResource,
-    value,
+    memoizedValue,
   ]);
 
   const setValue = (value) => {
@@ -122,7 +125,11 @@ export function ResourceRefRender({
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
-      value={fromJS(valueRef.current)?.toJS?.() || ''}
+      value={
+        valueRef.current.size
+          ? fromJS(valueRef.current)?.toJS()
+          : fromJS(memoizedValue)?.toJS() || ''
+      }
       resources={resources}
       setValue={setValue}
       required={required}
