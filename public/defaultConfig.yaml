@@ -68,7 +68,7 @@ config:
     DISCOVERY_BANNER:
       isEnabled: true
       config:
-        link: ''
+        link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
     SNOW:
       isEnabled: false
     COMMUNITY_MODULES:
