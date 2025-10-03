@@ -333,3 +333,10 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   if (checkIfNotExist) cy.getEndColumn().should('not.exist');
   else cy.getEndColumn().should('not.be.visible');
 });
+
+Cypress.Commands.add('typeInSearch', (searchPhrase, force) => {
+  cy.get('ui5-input[id^=search-]:visible')
+    .find('input')
+    .wait(1000)
+    .type(searchPhrase, { force });
+});

@@ -60,10 +60,9 @@ context('Accessibility test Pizza Orders', () => {
       .contains('Namespaces')
       .click();
 
-    cy.wait(500)
-      .get('ui5-input[id^=search-]:visible')
-      .find('input')
-      .type('pizzas');
+    cy.wait(500);
+
+    cy.typeInSearch('pizzas');
 
     cy.clickListLink('pizzas');
 

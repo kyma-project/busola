@@ -207,10 +207,7 @@ context('Test Kyma Modules views', () => {
     });
 
     // Uncomment after adding local KLM
-    // cy.get('ui5-input[id^=search-]:visible')
-    //   .find('input')
-    //   .wait(1000)
-    //   .type('api-gateway');
+    // cy.typeInSearch('api-gateway');
     //
     // cy.get('ui5-table-row')
     //   .contains('api-gateway')
