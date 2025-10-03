@@ -48,12 +48,7 @@ context('Test Custom Resources', () => {
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .wait(1000)
-      .type('cypress', {
-        force: true,
-      });
+    cy.typeInSearch('cypress', true);
 
     cy.get('ui5-table').should('have.length', 1);
 

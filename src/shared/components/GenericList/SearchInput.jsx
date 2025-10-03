@@ -104,11 +104,11 @@ export function SearchInput({
 
   return (
     <div className="search-input-container">
-      <Label for="search-input" showColon>
+      <Label for={`search-${entriesKind}`} showColon>
         {t('common.tooltips.search')}
       </Label>
       <Input
-        id="search-input"
+        id={`search-${entriesKind}`}
         accessibleName={`search-${entriesKind}`}
         role="search"
         type="Text"

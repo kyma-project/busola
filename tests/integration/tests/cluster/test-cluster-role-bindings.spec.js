@@ -106,10 +106,7 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Delete Cluster Role Binding', () => {
-    cy.wait(500)
-      .get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .type(CRB_NAME);
+    cy.wait(500).typeInSearch(CRB_NAME);
 
     cy.clickGenericListLink(CRB_NAME);
 
