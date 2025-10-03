@@ -21,6 +21,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner';
+import DiscoveryBanner from '../../components/DiscoveryBanner/DiscoveryBanner';
 
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
@@ -45,6 +46,10 @@ export function ClusterOverview() {
   });
   const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
   const isSAPUser = useCheckSAPUser();
+  const {
+    isEnabled: isDiscoveryBannerEnabled,
+    config: { link: discoveryBannerLink } = {},
+  } = useFeature(configFeaturesNames.DISCOVERY_BANNER);
 
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   useEffect(() => {
@@ -102,6 +107,9 @@ export function ClusterOverview() {
                     feedbackUrl={companionConfig?.feedbackLink}
                     documentationUrl={companionConfig?.documentationLink}
                   />
+                )}
+                {isDiscoveryBannerEnabled && (
+                  <DiscoveryBanner discoveryBannerLink={discoveryBannerLink} />
                 )}
                 <Injections
                   destination="ClusterOverview"
