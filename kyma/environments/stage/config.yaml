@@ -81,7 +81,7 @@ config:
     DISCOVERY_BANNER:
       isEnabled: true
       config:
-        link: ''
+        link: https://sapit-home-prod-004.launchpad.cfapps.eu10.hana.ondemand.com/site#my-events?sap-ui-app-id-hint=5cc2dc3b-651c-488f-be2d-3e9b3ca02ebb&/ig=15176066
     SNOW:
       isEnabled: false
     COMMUNITY_MODULES:
