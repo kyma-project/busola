@@ -207,7 +207,15 @@ const ColumnWrapper = ({
                 style={{ height: '100%' }}
                 layout={layoutState?.layout}
                 startColumn={startColumnComponent}
-                midColumn={midColumnComponent}
+                midColumn={
+                  midColumnComponent?.props?.children?.some(
+                    (component) => !!component,
+                  ) ? (
+                    midColumnComponent
+                  ) : (
+                    <Spinner />
+                  )
+                }
               />
             </Suspense>
           </CommunityModulesDeleteBoxContextProvider>
