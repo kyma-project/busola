@@ -120,7 +120,7 @@ export function ExternalResourceRef({
             }}
             required={required}
             value={value?.namespace || ''}
-            valueState={namespaceValid ? null : 'Negative'}
+            valueState={namespaceValid ? 'None' : 'Negative'}
             valueStateMessage={
               <Text>
                 {namespaceValid
@@ -165,7 +165,7 @@ export function ExternalResourceRef({
               }}
               required={required}
               value={value?.name || ''}
-              valueState={nameValid ? null : 'Negative'}
+              valueState={nameValid ? 'None' : 'Negative'}
               valueStateMessage={
                 <Text>
                   {nameValid ? '' : t('common.messages.resource-name-error')}
