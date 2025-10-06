@@ -29,7 +29,6 @@ export const resolveType = (status: string): ValueState => {
     case 'Invalid':
       return ValueState.Negative;
     case 'Uploading': //Those statuses are doesn't exist in Modules. Statuses created for Community Modules Upload
-    case 'Preparing':
     case 'Downloading':
     case 'Released':
       return ValueState.Information;

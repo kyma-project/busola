@@ -1,9 +1,7 @@
 import { atom } from 'jotai/index';
 
-// TODO: use trasnlation
 export enum State {
   Downloading = 'Downloading',
-  Preparing = 'Preparing',
   Uploading = 'Uploading',
   Finished = 'Finished',
   Error = 'Error',

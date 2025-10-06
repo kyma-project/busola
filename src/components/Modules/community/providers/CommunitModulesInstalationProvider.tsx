@@ -55,7 +55,7 @@ export function CommunityModulesUploadProvider({ children }: any) {
     );
     setModulesDuringInstallation(updatedModulesDuringInstallation);
     setModuleInstallState(undefined);
-  }, [moduleInstallState, modulesDuringInstallation]);
+  }, [moduleInstallState]);
 
   const callbackFn: CallbackFn = (moduleTpl, moduleState, message) => {
     setModuleInstallState({

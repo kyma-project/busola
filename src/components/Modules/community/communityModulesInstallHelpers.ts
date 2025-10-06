@@ -1,4 +1,4 @@
-import { ModuleTemplateType } from 'components/Modules/support';
+import { getModuleName, ModuleTemplateType } from 'components/Modules/support';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
@@ -31,8 +31,6 @@ export async function installCommunityModule(
       postRequest,
     );
 
-    callback(moduleTpl, State.Preparing);
-
     callback(moduleTpl, State.Uploading);
 
     let notUploadedResources = await uploadResources(
@@ -63,12 +61,16 @@ export async function installCommunityModule(
       patchRequest,
       singleGet,
     );
-
     callback(moduleTpl, State.Finished);
+    // This wait is implemented to give time react to calculate changes in callback.
+    await new Promise((resolve) => setTimeout(resolve, 1_000));
   } catch (e) {
-    if (e instanceof Error) {
-      callback(moduleTpl, State.Error, e.message);
-    }
+    console.log('error');
+    callback(
+      moduleTpl,
+      State.Error,
+      e instanceof Error ? e.message : 'Unknown Error',
+    );
     throw e;
   }
 }
