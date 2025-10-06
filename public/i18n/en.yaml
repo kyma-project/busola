@@ -675,7 +675,7 @@ extensibility:
     upload: Upload
 feedback:
   discovery:
-    info: Let’s have a discussion about how we can improve your experience with BTP runtimes.
+    info: Let’s discuss how we can improve your experience with BTP runtimes.
     join-discovery: Join Our Discovery
     join-our-research: Join Our Research
     register: Register in SAP Sign Up
