@@ -11,18 +11,15 @@ export default function DiscoveryBanner({
 }: DiscoveryBannerProps) {
   const { t } = useTranslation();
 
-  const title = t('feedback.discovery.join-discovery');
-  const description = t('feedback.discovery.text');
-  const design = 'information-3';
   const buttonText = t('feedback.discovery.register');
 
   return (
     <FeatureCardBanner
       id="discovery-banner"
-      title={title}
-      description={description}
+      title={t('feedback.discovery.join-discovery')}
+      description={t('feedback.discovery.text')}
       image="Discovery"
-      design={design}
+      design="information-3"
       buttons={
         <Button
           design="Emphasized"
