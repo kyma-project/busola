@@ -12,9 +12,6 @@ const config__noFeedback = {
           KYMA_COMPANION: {
             isEnabled: false,
           },
-          DISCOVERY_BANNER: {
-            isEnabled: false,
-          },
         },
       },
     }),

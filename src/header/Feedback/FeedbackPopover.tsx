@@ -158,13 +158,20 @@ export default function FeedbackPopover() {
                   <Title level="H6" size="H6">
                     {t('feedback.joule.title')}
                   </Title>
+                  {showNewIndicators && !isDiscoveryAnnouncementEnabled && (
+                    <ObjectStatus state="Information" inverted>
+                      {t('feedback.new')}
+                    </ObjectStatus>
+                  )}
                 </FlexBox>
                 <Text className="info-text">{t('feedback.joule.info')}</Text>
                 <Button
                   accessibleRole="Link"
                   accessibleName={t('feedback.give-feedback')}
                   accessibleDescription="Open in new tab link"
-                  design="Default"
+                  design={
+                    !isDiscoveryAnnouncementEnabled ? 'Emphasized' : 'Default'
+                  }
                   endIcon="inspect"
                   onClick={() => {
                     handleNewFeedbackViewed();
@@ -196,7 +203,9 @@ export default function FeedbackPopover() {
               accessibleDescription="Open in new tab link"
               endIcon="inspect"
               design={
-                !isDiscoveryAnnouncementEnabled ? 'Emphasized' : 'Default'
+                !isDiscoveryAnnouncementEnabled && !isKymaCompanionEnabled
+                  ? 'Emphasized'
+                  : 'Default'
               }
               onClick={() => {
                 const newWindow = window.open(
