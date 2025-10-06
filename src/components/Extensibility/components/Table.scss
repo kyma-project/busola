@@ -11,8 +11,11 @@
     min-height: fit-content;
     height: auto;
     * {
-      height: fit-content;
+      min-height: fit-content;
       height: auto;
+    }
+    ui5-icon {
+      min-width: 1rem;
     }
   }
   ui5-table-cell {
