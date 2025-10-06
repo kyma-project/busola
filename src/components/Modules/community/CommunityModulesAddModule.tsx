@@ -41,6 +41,8 @@ import {
   CallbackFn,
   installCommunityModule,
 } from 'components/Modules/community/communityModulesInstallHelpers';
+import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
+import { createPortal } from 'react-dom';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -379,6 +381,7 @@ export default function CommunityModulesAddModule(props: any) {
             )}
           </>
         </ResourceForm>
+        {createPortal(<UnsavedMessageBox />, document.body)}
       </>
     );
   } else {

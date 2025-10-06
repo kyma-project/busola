@@ -6,10 +6,6 @@ export const resolveType = (status: string): ValueState => {
   switch (status) {
     case 'Initial':
     case 'Pending':
-    case 'Uploading': //This is a not existing Status created for Community Modules Upload
-    case 'Preparing':
-    case 'Downloading':
-    case 'Released':
       return ValueState.Information;
     case 'Available':
     case 'Ready':
@@ -18,7 +14,6 @@ export const resolveType = (status: string): ValueState => {
     case 'Success':
     case 'Succeeded':
     case 'Progressing':
-    case 'Finished':
     case 'Ok':
       return ValueState.Positive;
     case 'Processing':
@@ -33,6 +28,14 @@ export const resolveType = (status: string): ValueState => {
     case 'Failure':
     case 'Invalid':
       return ValueState.Negative;
+    case 'Uploading': //Those statuses are doesn't exist in Modules. Statuses created for Community Modules Upload
+    case 'Preparing':
+    case 'Downloading':
+    case 'Released':
+      return ValueState.Information;
+    case 'Finished':
+      return ValueState.Positive;
+
     default:
       return ValueState.None;
   }

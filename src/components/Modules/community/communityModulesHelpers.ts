@@ -181,7 +181,7 @@ export async function fetchResourcesToApply(
     setResourcesToApply(yamlsResources || []);
   } catch (e) {
     console.error(e);
-    return e;
+    throw e;
   }
 }
 
