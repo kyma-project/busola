@@ -38,12 +38,7 @@ context('Test Custom Resources', () => {
 
     openSearchWithSlashShortcut();
 
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .click()
-      .type('cypress', {
-        force: true,
-      });
+    cy.typeInSearch('cypress', true);
 
     cy.get('ui5-table').should('have.length', 1);
 
@@ -65,10 +60,7 @@ context('Test Custom Resources', () => {
   it('Create Tcluster', () => {
     cy.getLeftNav().contains('Custom Resources').click();
 
-    cy.wait(500)
-      .get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .type('cypress');
+    cy.wait(500).typeInSearch('cypress');
 
     cy.wait(500).clickGenericListLink('Tclusters');
 
@@ -90,18 +82,14 @@ context('Test Custom Resources', () => {
 
     cy.getLeftNav().contains('Custom Resources').click();
 
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .wait(1000)
-      .type('cypress');
+    cy.typeInSearch('cypress');
+
     cy.clickGenericListLink('Tclusters');
 
     cy.testMidColumnLayout('Tclusters', false);
 
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .wait(1000)
-      .type('cypress');
+    cy.typeInSearch('cypress');
+
     cy.clickGenericListLink('Tclusters');
 
     cy.getMidColumn()

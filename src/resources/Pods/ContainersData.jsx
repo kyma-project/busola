@@ -61,12 +61,7 @@ export default function ContainersData({ type, containers, statuses }) {
         />
         <LayoutPanelRow
           name={t('common.headers.started-at')}
-          value={
-            <ReadableElapsedTimeFromNow
-              timestamp={state?.startedAt}
-              valueUnit={t('common.value-units.days-ago')}
-            />
-          }
+          value={<ReadableElapsedTimeFromNow timestamp={state?.startedAt} />}
         />
         {container.image && (
           <LayoutPanelRow

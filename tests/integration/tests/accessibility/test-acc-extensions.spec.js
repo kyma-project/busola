@@ -71,10 +71,7 @@ context('Accessibility test Extensions view', () => {
   it('Acc test Extensions details', () => {
     cy.getLeftNav().contains('Extensions').click();
 
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .wait(1000)
-      .type('pizzas');
+    cy.typeInSearch('pizzas');
 
     cy.clickGenericListLink('pizzas');
 
