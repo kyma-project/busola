@@ -27,7 +27,7 @@ import { useFetchModuleData } from 'components/Modules/hooks';
 import { ModulesListRows } from 'components/Modules/components/ModulesListRows';
 import {
   CommunityModulesInstallationContext,
-  ModuleDuringUpload,
+  moduleInstallationState,
 } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 
@@ -46,17 +46,17 @@ type CommunityModulesListProps = {
 };
 
 function createFakeModuleTemplateWithStatus(
-  moduleDuringUpload: ModuleDuringUpload,
+  moduleState: moduleInstallationState,
 ) {
   return {
-    name: getModuleName(moduleDuringUpload.moduleTpl),
-    namespace: moduleDuringUpload.moduleTpl.metadata.namespace,
-    moduleTemplateName: moduleDuringUpload.moduleTpl.metadata.name,
-    version: moduleDuringUpload.moduleTpl.spec.version,
+    name: getModuleName(moduleState.moduleTpl),
+    namespace: moduleState.moduleTpl.metadata.namespace,
+    moduleTemplateName: moduleState.moduleTpl.metadata.name,
+    version: moduleState.moduleTpl.spec.version,
     fakeStatus: {
-      type: moduleDuringUpload.state,
-      state: moduleDuringUpload.state,
-      message: moduleDuringUpload.message,
+      type: moduleState.state,
+      state: moduleState.state,
+      message: moduleState.message,
     },
   };
 }

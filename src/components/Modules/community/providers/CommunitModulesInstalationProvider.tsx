@@ -5,10 +5,10 @@ import { State } from 'components/Modules/community/components/uploadStateAtom';
 
 export type CommunityModulesUpload = {
   callback: CallbackFn;
-  modulesDuringUpload: ModuleDuringUpload[];
+  modulesDuringUpload: moduleInstallationState[];
 };
 
-export type ModuleDuringUpload = {
+export type moduleInstallationState = {
   moduleTpl: ModuleTemplateType;
   state: State;
   message: string;
@@ -20,49 +20,65 @@ export const CommunityModulesInstallationContext =
     modulesDuringUpload: [],
   });
 
+function isStateEqual(
+  stateA: moduleInstallationState,
+  stateB: moduleInstallationState,
+): boolean {
+  return (
+    stateA.message === stateB.message &&
+    stateA.state === stateB.state &&
+    getModuleName(stateA.moduleTpl) === getModuleName(stateB.moduleTpl)
+  );
+}
+
 export function CommunityModulesUploadProvider({ children }: any) {
-  const [moduleInstallState, setModuleInstallState] =
-    useState<ModuleDuringUpload>();
+  const [moduleInstallState, setModuleInstallState] = useState<
+    moduleInstallationState[]
+  >([]);
 
   const [modulesDuringInstallation, setModulesDuringInstallation] = useState<
-    ModuleDuringUpload[]
+    moduleInstallationState[]
   >([]);
 
   useEffect(() => {
-    if (!moduleInstallState) {
+    if (!moduleInstallState || moduleInstallState.length === 0) {
       return;
     }
-    const moduleName = getModuleName(moduleInstallState?.moduleTpl);
+    const moduleState = moduleInstallState[0];
+
+    const moduleName = getModuleName(moduleState?.moduleTpl);
     const moduleDuringInstallation = modulesDuringInstallation?.find(
       (module) => getModuleName(module.moduleTpl) === moduleName,
     );
     if (!moduleDuringInstallation) {
-      setModulesDuringInstallation([
-        ...modulesDuringInstallation,
-        moduleInstallState,
-      ]);
+      setModulesDuringInstallation([...modulesDuringInstallation, moduleState]);
       return;
     }
 
     const updatedModulesDuringInstallation = modulesDuringInstallation?.map(
       (module) => {
         if (getModuleName(module.moduleTpl) === moduleName) {
-          module.state = moduleInstallState.state;
-          module.message = moduleInstallState.message || '';
+          module.state = moduleState.state;
+          module.message = moduleState.message || '';
         }
         return module;
       },
     );
     setModulesDuringInstallation(updatedModulesDuringInstallation);
-    setModuleInstallState(undefined);
-  }, [moduleInstallState]);
+    setModuleInstallState((moduleStates) => {
+      return moduleStates.filter((state) => !isStateEqual(state, moduleState));
+    });
+  }, [moduleInstallState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const callbackFn: CallbackFn = (moduleTpl, moduleState, message) => {
-    setModuleInstallState({
-      moduleTpl,
-      state: moduleState,
-      message: message || '',
-    });
+    setModuleInstallState((moduleStates) => [
+      ...moduleStates,
+      {
+        moduleTpl,
+        state: moduleState,
+        message: message || '',
+      },
+    ]);
   };
 
   return (

@@ -62,8 +62,6 @@ export async function installCommunityModule(
       singleGet,
     );
     callback(moduleTpl, State.Finished);
-    // This wait is implemented to give time react to calculate changes in callback.
-    await new Promise((resolve) => setTimeout(resolve, 1_000));
   } catch (e) {
     console.log('error');
     callback(
