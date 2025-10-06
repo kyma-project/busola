@@ -7,6 +7,14 @@
 }
 
 .extensibility-table {
+  ui5-table-row {
+    min-height: fit-content;
+    height: auto;
+    * {
+      height: fit-content;
+      height: auto;
+    }
+  }
   ui5-table-cell {
     div {
       min-height: fit-content;
