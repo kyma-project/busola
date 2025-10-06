@@ -1,4 +1,4 @@
-import { getModuleName, ModuleTemplateType } from 'components/Modules/support';
+import { ModuleTemplateType } from 'components/Modules/support';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
@@ -63,7 +63,6 @@ export async function installCommunityModule(
     );
     callback(moduleTpl, State.Finished);
   } catch (e) {
-    console.log('error');
     callback(
       moduleTpl,
       State.Error,
