@@ -11,6 +11,23 @@ const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
 const config = require('./config.js');
+const crypto = require('crypto');
+
+try {
+  // MD5 is not a FIPS-validated algorithm for hashing.
+  // This line should throw an error in FIPS mode.
+  crypto.createHash('md5');
+  console.log('MD5 algorithm is available. FIPS mode is NOT active. ❌');
+} catch (err) {
+  // The specific error message may vary, but it will indicate the algorithm is disabled.
+  console.log('MD5 algorithm is disabled, as expected in FIPS mode. ✅');
+  console.error('Caught expected error:', err.message);
+}
+
+const tls = require('tls');
+tls.DEFAULT_MIN_VERSION = 'TLSv1.3';
+tls.DEFAULT_MAX_VERSION = 'TLSv1.3';
+console.log('TLS 1.3 enforcement enabled for outgoing connections');
 
 const app = express();
 app.disable('x-powered-by');
@@ -54,6 +71,8 @@ if (
   const options = {
     key: fs.readFileSync(process.env.BUSOLA_SSL_KEY_FILE),
     cert: fs.readFileSync(process.env.BUSOLA_SSL_CRT_FILE),
+    minVersion: 'TLSv1.3',
+    maxVersion: 'TLSv1.3',
   };
   server = https.createServer(options, app);
 } else {

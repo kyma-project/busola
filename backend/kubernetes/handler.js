@@ -62,6 +62,8 @@ export async function handleK8sRequests(req, res) {
     ca,
     cert,
     key,
+    minVersion: 'TLSv1.3',
+    maxVersion: 'TLSv1.3',
   };
   workaroundForNodeMetrics(req);
 

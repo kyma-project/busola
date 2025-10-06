@@ -95,6 +95,8 @@ async function proxyHandler(req, res) {
       method: req.method,
       headers: { ...req.headers, host: parsedUrl.host },
       timeout: 30000,
+      minVersion: 'TLSv1.3',
+      maxVersion: 'TLSv1.3',
     };
 
     const proxyReq = httpsRequest(options, (proxyRes) => {
