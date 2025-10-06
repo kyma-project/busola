@@ -180,12 +180,12 @@ Cypress.Commands.add(
     cy.wait(1000);
     if (parentSelector) {
       cy.get(parentSelector)
-        .find('ui5-input[id="search-input"]:visible')
+        .find('ui5-input[id^=search-]:visible')
         .find('input')
         .should('not.be.disabled', { timeout: 5000 })
         .type(resourceName);
     } else {
-      cy.get('ui5-input[id="search-input"]:visible')
+      cy.get('ui5-input[id^=search-]:visible')
         .find('input')
         .should('not.be.disabled', { timeout: 5000 })
         .type(resourceName);
@@ -236,12 +236,12 @@ Cypress.Commands.add(
     if (clearSearch) {
       if (parentSelector) {
         cy.get(parentSelector)
-          .find('ui5-input[id="search-input"]:visible')
+          .find('ui5-input[id^=search-]:visible')
           .find('input')
           .wait(1000)
           .clear();
       } else {
-        cy.get('ui5-input[id="search-input"]:visible')
+        cy.get('ui5-input[id^=search-]:visible')
           .find('input')
           .wait(1000)
           .clear();
@@ -332,4 +332,11 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
 
   if (checkIfNotExist) cy.getEndColumn().should('not.exist');
   else cy.getEndColumn().should('not.be.visible');
+});
+
+Cypress.Commands.add('typeInSearch', (searchPhrase, force) => {
+  cy.get('ui5-input[id^=search-]:visible')
+    .find('input')
+    .wait(1000)
+    .type(searchPhrase, { force });
 });

@@ -54,6 +54,13 @@ export const ExpandableListItem = ({
       <ListItemStandard
         onClick={() => setExpanded(!expanded)}
         className="expandable-item"
+        aria-expanded={expanded}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setExpanded(!expanded);
+          }
+        }}
       >
         <div className="expandable-item__header">
           {expanded ? (

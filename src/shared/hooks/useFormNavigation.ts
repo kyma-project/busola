@@ -25,15 +25,18 @@ export function useFormNavigation() {
     [formOpen, isResourceEdited, setIsFormOpen, setIsResourceEdited],
   );
 
-  const confirmDiscard = useCallback(() => {
-    if (isResourceEdited.discardAction) {
-      isResourceEdited.discardAction();
-    }
+  const confirmDiscard = useCallback(
+    (leaveFormOpen = false) => {
+      if (isResourceEdited.discardAction) {
+        isResourceEdited.discardAction();
+      }
 
-    // Reset states
-    setIsFormOpen({ formOpen: false, leavingForm: false });
-    setIsResourceEdited({ isEdited: false });
-  }, [isResourceEdited, setIsFormOpen, setIsResourceEdited]);
+      // Reset states
+      setIsFormOpen({ formOpen: leaveFormOpen, leavingForm: false });
+      setIsResourceEdited({ isEdited: false });
+    },
+    [isResourceEdited, setIsFormOpen, setIsResourceEdited],
+  );
 
   const cancelDiscard = useCallback(() => {
     setIsFormOpen({ formOpen: true, leavingForm: false });

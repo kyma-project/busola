@@ -14,7 +14,7 @@ import jp from 'jsonpath';
 import { Button, Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { editViewModeAtom } from 'state/preferences/editViewModeAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
@@ -23,6 +23,9 @@ import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFormEditTracking } from 'shared/hooks/useFormEditTracking';
 import './ResourceForm.scss';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
+import { isFormOpenAtom } from 'state/formOpenAtom';
+import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
 export function ResourceForm({
   pluralKind, // used for the request path
@@ -67,7 +70,7 @@ export function ResourceForm({
 
   const isEdit = useMemo(
     () =>
-      !!initialResource?.metadata?.name && !layoutState?.showCreate?.resource,
+      !!initialResource?.metadata?.uid && !layoutState?.showCreate?.resource,
     [initialResource, layoutState?.showCreate?.resource],
   );
 
@@ -248,14 +251,29 @@ export function ResourceForm({
     </Form>
   );
 
+  const isResourceEdited = useAtomValue(isResourceEditedAtom);
+  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenAtom);
+  const { navigateSafely } = useFormNavigation();
+  const [resetBtnClicked, setResetBtnClicked] = useState(false);
+
   const handleReset = () => {
-    if (mode === 'MODE_YAML')
-      actionsEditor.setValue(jsyaml.dump(initialResource));
-    else setResource(initialResource);
+    setResetBtnClicked(true);
+    if (isResourceEdited?.isEdited) {
+      setIsFormOpen({ ...isFormOpen, leavingForm: true });
+    }
+    navigateSafely(() => {
+      setIsFormOpen({ isOpen: true, leavingForm: false });
+
+      if (mode === 'MODE_YAML')
+        actionsEditor.setValue(jsyaml.dump(initialResource));
+      else setResource(initialResource);
+    });
   };
 
   const renderResetButton = (
-    <Button onClick={handleReset}>{t('common.buttons.reset')}</Button>
+    <Button onClick={handleReset}>
+      {isEdit ? t('common.buttons.revert') : t('common.buttons.reset')}
+    </Button>
   );
 
   return (
@@ -319,7 +337,20 @@ export function ResourceForm({
           </form>
         </UI5Panel>
       )}
-      {createPortal(<UnsavedMessageBox />, document.body)}
+      {createPortal(
+        <UnsavedMessageBox
+          isReset={resetBtnClicked}
+          setIsReset={setResetBtnClicked}
+          customMessage={
+            resetBtnClicked
+              ? isEdit
+                ? t('common.messages.revert-changes-warning')
+                : t('common.messages.reset-changes-warning')
+              : undefined
+          }
+        />,
+        document.body,
+      )}
     </section>
   );
 }

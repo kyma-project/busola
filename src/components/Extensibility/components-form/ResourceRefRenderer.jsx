@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import pluralize from 'pluralize';
-import { fromJS } from 'immutable';
+import { fromJS, isImmutable } from 'immutable';
 
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
@@ -36,7 +36,12 @@ export function ResourceRefRender({
   const { namespace } = useUrl();
   const { tFromStoreKeys } = useGetTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
-  value = getObjectValueWorkaround(schema, resource, storeKeys, value);
+  const memoizedValue = useMemo(
+    () => getObjectValueWorkaround(schema, resource, storeKeys, value),
+    [schema, resource, storeKeys, value],
+  );
+
+  const valueRef = useRef();
 
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
@@ -62,8 +67,7 @@ export function ResourceRefRender({
   useEffect(() => {
     if (toInternal) {
       jsonata(toInternal).then(([internal, error]) => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        value = error ? {} : internal;
+        valueRef.current = error ? {} : internal;
       });
     }
     Promise.all(
@@ -85,11 +89,11 @@ export function ResourceRefRender({
     originalResource,
     singleRootResource,
     embedResource,
-    value,
+    memoizedValue,
   ]);
 
   const setValue = (value) => {
-    const getValuAndChange = async () => {
+    const getValueAndChange = async () => {
       if (toExternal) {
         const [external, error] = await jsonata(toExternal, {
           scope: value,
@@ -113,15 +117,21 @@ export function ResourceRefRender({
         data: { value: fromJS(value) },
       });
     };
-    getValuAndChange();
+    getValueAndChange();
   };
+
+  const checkImmutable = (val) => (isImmutable(val) ? val.toJS() : val);
 
   return (
     <ExternalResourceRef
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}
       title={tFromStoreKeys(storeKeys, schema)}
-      value={fromJS(value)?.toJS?.() || ''}
+      value={
+        valueRef.current
+          ? checkImmutable(fromJS(valueRef.current))
+          : checkImmutable(fromJS(memoizedValue)) || ''
+      }
       resources={resources}
       setValue={setValue}
       required={required}

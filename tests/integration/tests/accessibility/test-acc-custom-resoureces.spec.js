@@ -66,10 +66,8 @@ context('Accessibility test Custom Resources', () => {
   it('Acc test Tcluster Custom Resource details', () => {
     cy.getLeftNav().contains('Custom Resources').click();
 
-    cy.get('ui5-input[id="search-input"]:visible')
-      .find('input')
-      .wait(1000)
-      .type('cypress');
+    cy.typeInSearch('cypress');
+
     cy.clickGenericListLink('Tclusters');
 
     cy.contains('ui5-button', 'Create').click();
