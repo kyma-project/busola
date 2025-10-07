@@ -677,6 +677,13 @@ extensibility:
     summary: Summary
     upload: Upload
 feedback:
+  discovery:
+    info: Let’s discuss how we can improve your experience with BTP runtimes.
+    join-discovery: Join Our Discovery
+    join-our-research: Join Our Research
+    register: Register in SAP Sign Up
+    text: We’re on a mission to enhance the runtime experience in BTP. Talk to us and share your honest opinions, so we can build a product you truly love.
+    title: Runtimes Discovery
   feedback: Feedback
   give-feedback: Give Feedback
   intro:
