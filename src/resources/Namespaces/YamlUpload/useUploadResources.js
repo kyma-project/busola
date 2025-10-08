@@ -29,7 +29,7 @@ export const getUrl = async (
   namespaceId,
   clusterNodes,
   namespaceNodes,
-  signleGet,
+  singleGet,
 ) => {
   const resourceType = pluralize(resource.kind.toLowerCase());
   const hasNamespace = !!resource?.metadata?.namespace;
@@ -48,7 +48,7 @@ export const getUrl = async (
     return getResourceUrl(resource, namespaceId);
   } else {
     const resourceKindUrl = getResourceKindUrl(resource);
-    const response = await signleGet(resourceKindUrl);
+    const response = await singleGet(resourceKindUrl);
     const json = await response.json();
     const apiGroupResources = json?.resources;
     const apiGroup = apiGroupResources.find((r) => r?.kind === resource?.kind);

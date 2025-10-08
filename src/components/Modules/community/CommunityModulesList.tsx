@@ -45,6 +45,7 @@ type CommunityModulesListProps = {
   setSelectedEntry?: React.Dispatch<React.SetStateAction<any>>;
 };
 
+// This function create fake module templates which is treated as installed to show progress of module upload
 function createFakeModuleTemplateWithStatus(
   moduleState: moduleInstallationState,
 ) {

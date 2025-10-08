@@ -98,9 +98,9 @@ async function uploadResources(
   let resourcesToUpload: any[] = resources;
   let notUploadedResources: any[] = [];
   if (kindFilter) {
-    const { resources: filteresResources, otherResources } =
+    const { resources: filteredResources, otherResources } =
       filterResourcesByKind(kindFilter, resources);
-    resourcesToUpload = filteresResources;
+    resourcesToUpload = filteredResources;
     notUploadedResources = otherResources;
   }
 
