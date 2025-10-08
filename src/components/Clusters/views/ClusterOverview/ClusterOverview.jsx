@@ -64,34 +64,37 @@ export function ClusterOverview() {
     });
   }, [setLayoutColumn]);
 
-  const actions = [
-    <Button
-      key="upload-yaml"
-      icon="add"
-      onClick={() => {
-        setShowAdd(true);
-      }}
-    >
-      {t('upload-yaml.title')}
-    </Button>,
-    <Button
-      key="disconnect"
-      design="Transparent"
-      onClick={() => {
-        handleResourceDelete({
-          deleteFn: () => {
-            deleteCluster(clustersInfo?.currentCluster?.name, clustersInfo);
-            notification.notifySuccess({
-              content: t('clusters.disconnect'),
-            });
-            navigate('/clusters');
-          },
-        });
-      }}
-    >
-      {t('common.buttons.disconnect')}
-    </Button>,
-  ];
+  const actions = (
+    <section aria-label={currentCluster?.currentContext?.cluster?.name}>
+      <Button
+        key="upload-yaml"
+        icon="add"
+        onClick={() => {
+          setShowAdd(true);
+        }}
+      >
+        {t('upload-yaml.title')}
+      </Button>
+      ,
+      <Button
+        key="disconnect"
+        design="Transparent"
+        onClick={() => {
+          handleResourceDelete({
+            deleteFn: () => {
+              deleteCluster(clustersInfo?.currentCluster?.name, clustersInfo);
+              notification.notifySuccess({
+                content: t('clusters.disconnect'),
+              });
+              navigate('/clusters');
+            },
+          });
+        }}
+      >
+        {t('common.buttons.disconnect')}
+      </Button>
+    </section>
+  );
 
   return (
     <>
