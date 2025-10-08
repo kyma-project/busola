@@ -75,7 +75,6 @@ export function ClusterOverview() {
       >
         {t('upload-yaml.title')}
       </Button>
-      ,
       <Button
         key="disconnect"
         design="Transparent"
