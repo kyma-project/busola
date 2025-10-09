@@ -1,4 +1,7 @@
-import { ModuleTemplateType } from 'components/Modules/support';
+import {
+  DEFAULT_K8S_NAMESPACE,
+  ModuleTemplateType,
+} from 'components/Modules/support';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
@@ -107,7 +110,7 @@ async function uploadResources(
   const uploadPromises = resourcesToUpload.map((r) => {
     return uploadResource(
       { value: r },
-      'default',
+      DEFAULT_K8S_NAMESPACE,
       clusterNodes,
       namespaceNodes,
       postRequest,
