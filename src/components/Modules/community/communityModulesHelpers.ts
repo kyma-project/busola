@@ -161,7 +161,34 @@ export async function postForCommunityResources(post: PostFn, link: string) {
   return response;
 }
 
-export async function getAllResourcesYamls(links: string[], post: PostFn) {
+export async function fetchResourcesToApply(
+  communityModulesToApply: Map<string, ModuleTemplateType>,
+  setResourcesToApply: Function,
+  post: PostFn,
+) {
+  const resourcesLinks = [...communityModulesToApply.values()]
+    .map((moduleTpl) => moduleTpl.spec.resources)
+    .flat()
+    .map((item) => item?.link || '');
+
+  try {
+    const yamls = await getAllResourcesYamls(resourcesLinks, post);
+
+    const yamlsResources = yamls?.map((resource) => {
+      return { value: resource };
+    });
+
+    setResourcesToApply(yamlsResources || []);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}
+
+export async function getAllResourcesYamls(
+  links: string[],
+  post: PostFn,
+): Promise<any[]> {
   if (links?.length) {
     const yamlRes = await Promise.all(
       links.map(async (link) => {
@@ -172,29 +199,5 @@ export async function getAllResourcesYamls(links: string[], post: PostFn) {
     );
     return yamlRes.flat();
   }
-}
-
-export function fetchResourcesToApply(
-  communityModulesToApply: Map<string, ModuleTemplateType>,
-  setResourcesToApply: Function,
-  post: PostFn,
-) {
-  const resourcesLinks = [...communityModulesToApply.values()]
-    .map((moduleTpl) => moduleTpl.spec.resources)
-    .flat()
-    .map((item) => item?.link || '');
-
-  (async function () {
-    try {
-      const yamls = await getAllResourcesYamls(resourcesLinks, post);
-
-      const yamlsResources = yamls?.map((resource) => {
-        return { value: resource };
-      });
-
-      setResourcesToApply(yamlsResources || []);
-    } catch (e) {
-      console.error(e);
-    }
-  })();
+  return [];
 }

@@ -26,12 +26,11 @@ import pluralize from 'pluralize';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { cloneDeep } from 'lodash';
 import { KymaResourceType, ModuleTemplateListType } from '../support';
-import { ColumnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { SetStateAction, useAtomValue } from 'jotai';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 type ModulesListDeleteBoxProps = {
   DeleteMessageBox: React.FC<any>;
@@ -71,7 +70,7 @@ export const ModulesDeleteBox = ({
   const getScope = useGetScope();
   const { clusterUrl, namespaceUrl } = useUrl();
   const deleteFn = useDelete();
-  const fetchFn = useSingleGet();
+  const singleGet = useSingleGet();
   const post = usePost();
   const clusterNodes = useAtomValue(allNodesAtom).filter(
     (node) => !node.namespaced,
@@ -113,10 +112,10 @@ export const ModulesDeleteBox = ({
 
   useEffect(() => {
     const fetchCounts = async () => {
-      const counts = await fetchResourceCounts(associatedResources, fetchFn);
+      const counts = await fetchResourceCounts(associatedResources, singleGet);
       const urls = await generateAssociatedResourcesUrls(
         associatedResources,
-        fetchFn,
+        singleGet,
         getScope,
       );
 
@@ -133,11 +132,11 @@ export const ModulesDeleteBox = ({
             crUResources,
             clusterNodes,
             namespaceNodes,
-            fetchFn,
+            singleGet,
           )
         : await generateAssociatedResourcesUrls(
             crUResources,
-            fetchFn,
+            singleGet,
             getScope,
           );
 
@@ -153,7 +152,7 @@ export const ModulesDeleteBox = ({
           communityResources,
           clusterNodes,
           namespaceNodes,
-          fetchFn,
+          singleGet,
         );
         setCommunityResourcesUrls(communityUrls);
       }
@@ -216,7 +215,7 @@ export const ModulesDeleteBox = ({
       if (allowForceDelete && associatedResourcesUrls.length) {
         await deleteResources(deleteFn, associatedResourcesUrls);
         const allStillExistingResources = await checkIfAllResourcesAreDeleted(
-          fetchFn,
+          singleGet,
           associatedResourcesUrls,
           t,
         );
@@ -236,8 +235,8 @@ export const ModulesDeleteBox = ({
       if (communityResourcesUrls?.length) {
         await deleteResources(deleteFn, communityResourcesUrls);
       }
-    } catch (e) {
-      console.warn(e);
+    } catch (e: unknown) {
+      console.warn('Error while deleting community module', e);
       notification.notifyError({
         content: t('modules.community.messages.delete-failure', {
           module: moduleName,

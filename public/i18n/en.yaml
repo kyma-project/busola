@@ -953,6 +953,7 @@ modules:
       source-yaml-fetch-failed: 'Failed to download source yaml: {{error}}'
       source-yaml-invalid-url: Ensure your URL ends with ".yaml".
       success: '{{resourceType}} installed'
+      upload: Start {{resourceType}} upload
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
     no-modules-installed: No community modules installed

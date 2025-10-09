@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
@@ -8,6 +8,7 @@ import {
   findCrd,
   findExtension,
   findModuleTemplate,
+  getModuleName,
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/Modules/support';
@@ -29,6 +30,11 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
 import { useFetchModuleData } from 'components/Modules/hooks';
 import { ModulesListRows } from 'components/Modules/components/ModulesListRows';
+import {
+  CommunityModulesInstallationContext,
+  moduleInstallationState,
+} from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
+import { State } from 'components/Modules/community/components/uploadStateAtom';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -43,6 +49,23 @@ type CommunityModulesListProps = {
   customSelectedEntry?: string;
   setSelectedEntry?: React.Dispatch<React.SetStateAction<any>>;
 };
+
+// This function create fake module templates which is treated as installed to show progress of module upload
+function createFakeModuleTemplateWithStatus(
+  moduleState: moduleInstallationState,
+) {
+  return {
+    name: getModuleName(moduleState.moduleTpl),
+    namespace: moduleState.moduleTpl.metadata.namespace,
+    moduleTemplateName: moduleState.moduleTpl.metadata.name,
+    version: moduleState.moduleTpl.spec.version,
+    fakeStatus: {
+      type: moduleState.state,
+      state: moduleState.state,
+      message: moduleState.message,
+    },
+  };
+}
 
 export const CommunityModulesList = ({
   moduleTemplates,
@@ -88,6 +111,33 @@ export const CommunityModulesList = ({
     modulesLoading,
   );
   const getScope = useGetScope();
+
+  const { modulesDuringUpload } = useContext(
+    CommunityModulesInstallationContext,
+  );
+
+  const [modulesToDisplay, setModulesToDisplay] =
+    useState<any[]>(installedModules);
+
+  useEffect(() => {
+    const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
+      return !installedModules.find((installedModule) => {
+        return installedModule.moduleTemplateName === m.moduleTpl.metadata.name;
+      });
+    });
+
+    if (modulesDuringProcessing.length === 0) {
+      setModulesToDisplay(installedModules);
+      return;
+    }
+
+    const moduleTemplatesDuringUpload = modulesDuringProcessing
+      .filter((m) => m.state !== State.Finished)
+      .map((m) => createFakeModuleTemplateWithStatus(m));
+    setModulesToDisplay(
+      [...installedModules].concat(moduleTemplatesDuringUpload),
+    );
+  }, [installedModules, modulesDuringUpload]);
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -296,7 +346,7 @@ export const CommunityModulesList = ({
         customColumnLayout={customColumnLayout as any}
         enableColumnLayout
         hasDetailsView
-        entries={installedModules as any}
+        entries={modulesToDisplay as any}
         serverDataLoading={modulesLoading}
         headerRenderer={headerRenderer}
         rowRenderer={(resource) =>
