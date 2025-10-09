@@ -23,6 +23,7 @@ import React, {
   useState,
 } from 'react';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
+import { refreshExtenshionsAtom } from 'state/refreshExtenshionsAtom';
 import { PostFn, usePost } from 'shared/hooks/BackendAPI/usePost';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import CommunityModuleCard from 'components/Modules/community/components/CommunityModuleCard';
@@ -199,6 +200,9 @@ export default function CommunityModulesAddModule(props: any) {
     useFeature('COMMUNITY_MODULES');
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
 
+  const [refreshExtenshionsCount, setRefreshExtenshions] = useAtom(
+    refreshExtenshionsAtom,
+  );
   const notification = useNotification();
   const postRequest = usePost();
   const patchRequest = useUpdate();
@@ -341,6 +345,7 @@ export default function CommunityModulesAddModule(props: any) {
       callback,
     );
     navigate(window.location.pathname, { replace: true });
+    setRefreshExtenshions(refreshExtenshionsCount + 1);
     setLayoutColumn({
       ...layoutColumn,
       layout: 'OneColumn',

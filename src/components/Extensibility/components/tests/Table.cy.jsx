@@ -64,7 +64,7 @@ describe('Table Component', () => {
 
         cy.mount(<Table value={null} structure={structure} />);
 
-        cy.get('input[aria-label="search-input"]').should('not.exist');
+        cy.get('input[aria-label^=search-]').should('not.exist');
       });
 
       it('Renders Table with a search input', () => {
@@ -74,9 +74,7 @@ describe('Table Component', () => {
 
         cy.mount(<Table value={elements} structure={structure} />);
 
-        cy.get('ui5-input[id="search-input"]')
-          .should('be.visible')
-          .and('exist');
+        cy.get('ui5-input[id^=search-]').should('be.visible').and('exist');
         cy.contains('first').should('exist');
       });
     });

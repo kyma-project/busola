@@ -150,7 +150,6 @@ export const getLastTransitionTime = (
   return (
     <ReadableElapsedTimeFromNow
       timestamp={clonedConditions[0] ? clonedConditions[0][[keyValue]] : null}
-      valueUnit="days ago"
     />
   );
 };

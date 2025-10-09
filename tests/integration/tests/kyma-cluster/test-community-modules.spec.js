@@ -84,7 +84,7 @@ context('Test Community Modules views', () => {
     cy.wait(1000);
 
     cy.get('.community-modules-list')
-      .find('ui5-input[id="search-input"]:visible')
+      .find('ui5-input[id^=search-]:visible')
       .find('input')
       .wait(1000)
       .type('busola');

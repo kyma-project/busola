@@ -6,9 +6,43 @@
   }
 }
 
+.extensibility-table {
+  ui5-table-row {
+    min-height: fit-content;
+    height: auto;
+    * {
+      min-height: fit-content;
+      height: auto;
+    }
+    ui5-icon {
+      min-width: 1rem;
+    }
+  }
+  ui5-table-cell {
+    div {
+      min-height: fit-content;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+  }
+}
+
 ui5-table-row.collapse-content {
+  padding: 1rem;
   overflow-x: auto;
   display: block;
+  height: fit-content;
+
+  .extensibility-table {
+    margin: 0;
+    ui5-table {
+      min-width: auto;
+
+      ui5-table-cell {
+        min-width: min-content;
+      }
+    }
+  }
 }
 
 .collapsible-panel {
@@ -17,8 +51,6 @@ ui5-table-row.collapse-content {
   display: inherit;
 
   > :first-child {
-    display: contents;
-    min-width: max-content;
     overflow: auto;
 
     &:not(ui5-panel) {

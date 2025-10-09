@@ -1,5 +1,6 @@
 import pluralize from 'pluralize';
 import {
+  DEFAULT_K8S_NAMESPACE,
   findModuleStatus,
   findModuleTemplate,
   ModuleTemplateListType,
@@ -337,7 +338,9 @@ export const getCommunityResourceUrls = async (
 
       const url = await getUrl(
         resource,
-        'default',
+        resource?.metadata?.namespace ||
+          resource?.namespace ||
+          DEFAULT_K8S_NAMESPACE,
         clusterNodes,
         namespaceNodes,
         singleGet,

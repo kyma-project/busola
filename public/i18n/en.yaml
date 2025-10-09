@@ -253,6 +253,7 @@ common:
     reset: Reset
     restart: Restart
     retry: Retry
+    revert: Revert
     save: Save
     submit: Submit
     update: Update
@@ -352,10 +353,12 @@ common:
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
     no-instances-found-namespace: No matching {{value}} found in this Namespace
+    reset-changes-warning: You haven't saved your changes. Resetting will discard them.
     resource-name-error: Requested resource with this name not found in the selected Namespace.
     resource-namespace-error: Requested Namespace not found
     restart-failure: Connected Pods have failed to restart.
     restart-success: Connected Pods have been restarted.
+    revert-changes-warning: You haven't saved your changes. Reverting will discard them.
     type-to-select: Start typing to select {{value}} from the list
     validation-error: Validation error
   placeholders:
@@ -416,6 +419,9 @@ common:
   value-units:
     days: days
     days-ago: days ago
+    hours-ago: hours ago
+    minutes-ago: minutes ago
+    seconds-ago: seconds ago
   'yes': 'yes'
 components:
   banner-carousel: Banner Carousel
@@ -671,6 +677,13 @@ extensibility:
     summary: Summary
     upload: Upload
 feedback:
+  discovery:
+    info: Let’s discuss how we can improve your experience with BTP runtimes.
+    join-discovery: Join Our Discovery
+    join-our-research: Join Our Research
+    register: Register in SAP Sign Up
+    text: We’re on a mission to enhance the runtime experience in BTP. Talk to us and share your honest opinions, so we can build a product you truly love.
+    title: Runtimes Discovery
   feedback: Feedback
   give-feedback: Give Feedback
   intro:

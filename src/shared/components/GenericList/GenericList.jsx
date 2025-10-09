@@ -181,7 +181,7 @@ export const GenericList = ({
     <>
       {searchSettings?.showSearchField && (
         <SearchInput
-          entriesKind={title || ''}
+          entriesKind={title || resourceType || ''}
           searchQuery={searchQuery}
           filteredEntries={filteredEntries}
           handleQueryChange={setSearchQuery}
@@ -263,7 +263,7 @@ export const GenericList = ({
       ) {
         // Workaround for modules like btp-operator on refresh
         const resourceType = layoutState.midColumn.resourceType;
-        const resourceTypeDotIndex = resourceType.indexOf('.');
+        const resourceTypeDotIndex = resourceType?.indexOf('.') || -1;
         const resourceTypeBase =
           resourceTypeDotIndex !== -1
             ? resourceType.substring(0, resourceTypeDotIndex)
@@ -311,8 +311,8 @@ export const GenericList = ({
   const handleRowClick = (e) => {
     const arrowColumnCount = displayArrow ? 1 : 0;
     const item = (
-      e.detail.row.children[nameColIndex + arrowColumnCount].children[0]
-        .innerText ??
+      e.detail.row.children[nameColIndex + arrowColumnCount]?.children?.[0]
+        ?.innerText ??
       e.detail.row.children[nameColIndex + arrowColumnCount].innerText
     )?.trimEnd();
 
