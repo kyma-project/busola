@@ -12,6 +12,7 @@ import {
   VersionInfo,
 } from 'components/Modules/community/communityModulesHelpers';
 import {
+  DEFAULT_K8S_NAMESPACE,
   getModuleName,
   ModuleTemplateListType,
   ModuleTemplateType,
@@ -155,7 +156,7 @@ export default function CommunityModulesEdit() {
     resourcesToApply,
     setResourcesToApply,
     () => {},
-    'default',
+    DEFAULT_K8S_NAMESPACE,
   );
   const [
     communityModulesTemplatesToApply,

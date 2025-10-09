@@ -18,6 +18,7 @@ import 'components/Modules/community/components/AddSourceYamls.scss';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { FlexBoxDirection } from '@ui5/webcomponents-react/dist/enums/FlexBoxDirection';
 
+import { DEFAULT_K8S_NAMESPACE } from 'components/Modules/support';
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
 
@@ -37,7 +38,7 @@ export const AddSourceYamls = () => {
     resourcesToApply,
     setResourcesToApply,
     () => {},
-    'default',
+    DEFAULT_K8S_NAMESPACE,
   );
 
   useEffect(() => {

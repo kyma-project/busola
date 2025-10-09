@@ -1,8 +1,8 @@
 import pluralize from 'pluralize';
 export const getResourceKindUrl = (resource) => {
-  return `/${resource?.apiVersion === 'v1' ? 'api' : 'apis'}/${
-    resource?.apiVersion
-  }`;
+  const apiVersion =
+    resource?.apiVersion || `${resource?.group}/${resource?.version}`;
+  return `/${apiVersion === 'v1' ? 'api' : 'apis'}/${apiVersion}`;
 };
 
 export const getResourceUrl = (resource, namespace) => {
