@@ -108,14 +108,7 @@ export function YamlUploadDialog() {
       className="yaml-upload-modal__dialog"
     >
       <Suspense fallback={<Spinner />}>
-        <div
-          className={'yaml-upload-modal__layout'}
-          style={{
-            overflowY: 'hidden',
-            height: '80vh',
-            width: '80vw',
-          }}
-        >
+        <div className={'yaml-upload-modal__layout'}>
           <YamlUpload
             resourcesData={resourcesData}
             setResourcesData={updateYamlContent}
