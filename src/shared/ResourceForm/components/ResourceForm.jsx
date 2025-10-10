@@ -156,13 +156,12 @@ export function ResourceForm({
   }, [setCustomValid, resource, children, mode]);
 
   const convertedResource = jsyaml.dump(resource);
-
   const presetsSelector = presets?.length && (
     <Presets
       presets={presets}
-      onSelect={({ value }) => {
+      onSelect={({ value, variables }) => {
         if (onPresetSelected) {
-          onPresetSelected(value);
+          onPresetSelected({ ...value, variables });
         } else {
           setResource(value);
         }

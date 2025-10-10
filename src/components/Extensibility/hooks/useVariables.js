@@ -128,7 +128,14 @@ export function useVariables() {
       });
 
     return Promise.all(promises).then((values) => {
-      values.forEach(([def, val]) => (vars[def.var] = applyDefaults(def, val)));
+      values.forEach(([def, val]) => {
+        const foundVar = resource?.variables?.find((v) => v?.name === def.var);
+        if (resource?.variables && foundVar) {
+          vars[def.var] = foundVar.value;
+        } else {
+          vars[def.var] = applyDefaults(def, val);
+        }
+      });
       setVars({ ...vars });
     });
   };
