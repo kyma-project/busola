@@ -4,23 +4,30 @@ The **presets** section contains a list of objects that define which preset and 
 
 ## Available Parameters
 
-| Parameter   | Required | Type    | Description                                                                                      |
-| ----------- | -------- | ------- | ------------------------------------------------------------------------------------------------ |
-| **name**    | **Yes**  | string  | A name to display on the preset's dropdown.                                                      |
-| **value**   | **Yes**  |         | It contains the fields that are set when you choose the given preset from the list.              |
-| **default** | No       | boolean | If set to `true`, it prefills the form with values defined in **value**. It defaults to `false`. |
+| Parameter     | Required | Type   | Description                                                                                                |
+| ------------- | -------- | ------ | ---------------------------------------------------------------------------------------------------------- |
+| **name**      | **Yes**  | string | A name to display on the preset's dropdown.                                                                |
+| **value**     | **Yes**  |        | It contains the fields that are set when you choose the given preset from the list.                        |
+| **variables** | No       |        | Contains the names of the variables (var) that will be overwritten and the values ​​that will be assigned. |
+| **default**   | No       |        | If set to `true`, it prefills the form with values defined in **value**. It defaults to `false`.           |
 
 ## Example
 
 ```yaml
 - name: Cash Delivery
   default: true
+  variables:
+    - name: AdditionalBag
+      value: no
   value:
     metadata:
       name: delivery-cash
     spec:
       description: Delivery with cash payment
 - name: Card Pickup
+  variables:
+    - name: AdditionalBag
+      value: yes
   value:
     metadata:
       name: card-pickup
