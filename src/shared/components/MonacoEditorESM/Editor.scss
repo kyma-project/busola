@@ -38,12 +38,6 @@
       z-index: 100;
       position: absolute;
     }
-
-    .margin {
-      @media screen and (max-width: 380px) {
-        width: 10px;
-      }
-    }
   }
 }
 
