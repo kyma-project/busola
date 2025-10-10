@@ -1,5 +1,6 @@
 import pluralize from 'pluralize';
 import {
+  DEFAULT_K8S_NAMESPACE,
   findModuleStatus,
   findModuleTemplate,
   ModuleTemplateListType,
@@ -11,6 +12,7 @@ import { postForCommunityResources } from 'components/Modules/community/communit
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import retry from 'shared/utils/retry';
 import { TFunction } from 'i18next';
+import { MutationFn } from 'shared/hooks/BackendAPI/useMutation';
 
 interface Counts {
   [key: string]: number;
@@ -141,14 +143,14 @@ const getResources = async (
   kind: string,
   group: string,
   version: string,
-  fetchFn: Function,
+  singleGet: Function,
 ): Promise<any> | never => {
   const url =
     group === 'v1'
       ? '/api/v1'
       : `/apis/${group}/${version}/${pluralize(kind.toLowerCase())}`;
 
-  const response = await fetchFn(url);
+  const response = await singleGet(url);
   const json = await response.json();
   return json.items;
 };
@@ -168,7 +170,7 @@ const getUrlsByNamespace = (resources: Resource[]) => {
 
 export const generateAssociatedResourcesUrls = async (
   resources: Resource[],
-  fetchFn: Function,
+  singleGet: Function,
   getScope: Function,
 ) => {
   const allUrls: string[] = [];
@@ -196,7 +198,7 @@ export const generateAssociatedResourcesUrls = async (
         resource.kind,
         resource.group,
         resource.version,
-        fetchFn,
+        singleGet,
       );
       urls = getUrlsByNamespace(resources);
     } else {
@@ -262,7 +264,7 @@ export const checkIfAssociatedResourceLeft = (
 };
 
 export const deleteResources = async (
-  deleteResourceMutation: Function,
+  deleteResourceMutation: MutationFn,
   resourcesUrls: string[],
 ) => {
   await Promise.all(
@@ -280,7 +282,7 @@ export const deleteResources = async (
 };
 
 export const checkIfAllResourcesAreDeleted = async (
-  fetchFn: Function,
+  singleGet: Function,
   resourcesUrls: string[],
   t: TFunction,
 ) => {
@@ -291,7 +293,7 @@ export const checkIfAllResourcesAreDeleted = async (
       const result = await retry(
         async () => {
           try {
-            const result = await fetchFn(url);
+            const result = await singleGet(url);
             const resources = await result.json();
             urlDuringError = url;
             isDeletionInProgress =
@@ -325,7 +327,7 @@ export const getCommunityResourceUrls = async (
   resources: any,
   clusterNodes: NavNode[],
   namespaceNodes: NavNode[],
-  fetchFn: Function,
+  singleGet: Function,
 ) => {
   if (!resources?.length) return [];
 
@@ -336,10 +338,12 @@ export const getCommunityResourceUrls = async (
 
       const url = await getUrl(
         resource,
-        'default',
+        resource?.metadata?.namespace ||
+          resource?.namespace ||
+          DEFAULT_K8S_NAMESPACE,
         clusterNodes,
         namespaceNodes,
-        fetchFn,
+        singleGet,
       );
       return `${url}/${resourceName}`;
     }),

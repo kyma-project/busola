@@ -23,6 +23,7 @@ import { namespacesAtom } from 'state/namespacesAtom';
 import { useAtomValue } from 'jotai';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
+import { DEFAULT_K8S_NAMESPACE } from 'components/Modules/support';
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
 
@@ -45,7 +46,7 @@ export const AddSourceYamls = () => {
     resourcesToApply,
     setResourcesToApply,
     () => {},
-    'default',
+    DEFAULT_K8S_NAMESPACE,
   );
 
   const applyNamespace = (namespace: string) => {

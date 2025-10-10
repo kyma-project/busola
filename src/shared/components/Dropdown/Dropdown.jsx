@@ -50,9 +50,6 @@ export function Dropdown({
       placeholder={placeholder || label}
       disabled={disabled || !options?.length}
       required={required}
-      onKeyDown={(event) => {
-        event.preventDefault();
-      }}
       onClick={() => {
         const popover = comboboxRef?.current?.shadowRoot?.querySelector(
           'ui5-responsive-popover',
@@ -70,6 +67,19 @@ export function Dropdown({
         popover.open = true;
       }}
       onSelectionChange={onSelectionChange}
+      onChange={() => {
+        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
+          'ui5-responsive-popover',
+        );
+        popover.open = false;
+      }}
+      onClose={() => {
+        const currentOption = options.find((o) => o.key === selectedKey);
+
+        if (comboboxRef?.current?.value !== currentOption?.text) {
+          comboboxRef.current.value = currentOption?.text || '';
+        }
+      }}
       value={options.find((o) => o.key === selectedKey)?.text}
       {...props}
     >

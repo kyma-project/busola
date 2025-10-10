@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
 import {
   createModulePartialPath,
+  DEFAULT_K8S_NAMESPACE,
   findCrd,
   findExtension,
   findModuleTemplate,
+  getModuleName,
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/Modules/support';
@@ -19,11 +21,20 @@ import {
 } from 'state/columnLayoutAtom';
 import { useSetAtom } from 'jotai';
 import { isFormOpenAtom } from 'state/formOpenAtom';
-import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
+import {
+  useGet,
+  useGetList,
+  useGetScope,
+} from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useNavigate } from 'react-router';
 import { useFetchModuleData } from 'components/Modules/hooks';
 import { ModulesListRows } from 'components/Modules/components/ModulesListRows';
+import {
+  CommunityModulesInstallationContext,
+  moduleInstallationState,
+} from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
+import { State } from 'components/Modules/community/components/uploadStateAtom';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -39,6 +50,23 @@ type CommunityModulesListProps = {
   setSelectedEntry?: React.Dispatch<React.SetStateAction<any>>;
 };
 
+// This function create fake module templates which is treated as installed to show progress of module upload
+function createFakeModuleTemplateWithStatus(
+  moduleState: moduleInstallationState,
+) {
+  return {
+    name: getModuleName(moduleState.moduleTpl),
+    namespace: moduleState.moduleTpl.metadata.namespace,
+    moduleTemplateName: moduleState.moduleTpl.metadata.name,
+    version: moduleState.moduleTpl.spec.version,
+    fakeStatus: {
+      type: moduleState.state,
+      state: moduleState.state,
+      message: moduleState.message,
+    },
+  };
+}
+
 export const CommunityModulesList = ({
   moduleTemplates,
   selectedModules: installedModules,
@@ -52,19 +80,25 @@ export const CommunityModulesList = ({
 }: CommunityModulesListProps) => {
   const { t } = useTranslation();
 
-  const { data: communityExtentions } = useGetList(
-    (ext: { metadata: { labels: Record<string, string> } }) =>
-      ext.metadata.labels['app.kubernetes.io/part-of'] !== 'Kyma',
-  )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
-    pollingInterval: 5000,
-  } as any);
+  const { data: communityExtentions, silentRefetch: getCommunityExtentions } =
+    useGetList(
+      (ext: { metadata: { labels: Record<string, string> } }) =>
+        ext.metadata.labels['app.kubernetes.io/part-of'] !== 'Kyma',
+    )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
+      pollingInterval: 0,
+    } as any);
 
-  const { data: crds } = useGet(
+  const { data: crds, silentRefetch: getCrds } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
     {
-      pollingInterval: 5000,
+      pollingInterval: 0,
     } as any,
   );
+  useEffect(() => {
+    getCommunityExtentions();
+    getCrds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [installedModules]);
 
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
@@ -74,7 +108,36 @@ export const CommunityModulesList = ({
     moduleTemplates,
     (module: ModuleTemplateType) => module?.spec?.data ?? null,
     'resource',
+    modulesLoading,
   );
+  const getScope = useGetScope();
+
+  const { modulesDuringUpload } = useContext(
+    CommunityModulesInstallationContext,
+  );
+
+  const [modulesToDisplay, setModulesToDisplay] =
+    useState<any[]>(installedModules);
+
+  useEffect(() => {
+    const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
+      return !installedModules.find((installedModule) => {
+        return installedModule.moduleTemplateName === m.moduleTpl.metadata.name;
+      });
+    });
+
+    if (modulesDuringProcessing.length === 0) {
+      setModulesToDisplay(installedModules);
+      return;
+    }
+
+    const moduleTemplatesDuringUpload = modulesDuringProcessing
+      .filter((m) => m.state !== State.Finished)
+      .map((m) => createFakeModuleTemplateWithStatus(m));
+    setModulesToDisplay(
+      [...installedModules].concat(moduleTemplatesDuringUpload),
+    );
+  }, [installedModules, modulesDuringUpload]);
 
   const handleShowAddModule = () => {
     setLayoutColumn({
@@ -132,7 +195,17 @@ export const CommunityModulesList = ({
 
     const hasResource = !!moduleResource;
 
-    return hasResource && (!isDeletionFailed || !isError);
+    const hasExtension = !!findExtension(
+      resource?.resource?.kind,
+      communityExtentions,
+    );
+    const moduleCrd = findCrd(resource?.resource?.kind, crds);
+
+    return (
+      hasResource &&
+      (!isDeletionFailed || !isError) &&
+      (hasExtension || !!moduleCrd)
+    );
   };
 
   const customColumnLayout = (resource: { name: string }) => {
@@ -166,7 +239,7 @@ export const CommunityModulesList = ({
     },
   ];
 
-  const handleClickResource = (
+  const handleClickResource = async (
     moduleName: string,
     moduleStatus: {
       name: string;
@@ -194,11 +267,11 @@ export const CommunityModulesList = ({
     if (!moduleStatus.resource) {
       const moduleResource = moduleTemplate?.spec?.data;
       moduleStatus.resource = {
-        kind: moduleResource.kind,
-        apiVersion: moduleResource.apiVersion,
+        kind: moduleResource?.kind ?? '',
+        apiVersion: moduleResource?.apiVersion ?? '',
         metadata: {
-          name: moduleResource.metadata.name,
-          namespace: moduleResource.metadata.namespace,
+          name: moduleResource?.metadata?.name ?? '',
+          namespace: moduleResource?.metadata?.namespace ?? '',
         },
       };
     }
@@ -214,18 +287,25 @@ export const CommunityModulesList = ({
       return;
     }
 
+    const { group, version } = extractApiGroupVersion(
+      moduleStatus?.resource?.apiVersion,
+    );
+    const moduleIsNamespaced = await getScope(
+      group,
+      version,
+      moduleStatus?.resource?.kind,
+    );
+
     const partialPath = createModulePartialPath(
       hasExtension,
       moduleStatus.resource,
       moduleCrd,
+      moduleIsNamespaced,
     );
+
     const path = namespaced
       ? namespaceUrl(partialPath)
       : clusterUrl(partialPath);
-
-    const { group, version } = extractApiGroupVersion(
-      moduleStatus?.resource?.apiVersion,
-    );
 
     setLayoutColumn((prev) => ({
       startColumn: prev.startColumn,
@@ -234,7 +314,9 @@ export const CommunityModulesList = ({
           ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
           : moduleCrd?.metadata?.name,
         resourceName: moduleStatus?.resource?.metadata?.name,
-        namespaceId: moduleStatus?.resource?.metadata.namespace || '',
+        namespaceId: moduleIsNamespaced
+          ? moduleStatus?.resource?.metadata.namespace || DEFAULT_K8S_NAMESPACE
+          : '',
         apiGroup: group,
         apiVersion: version,
       } as ColumnState,
@@ -264,7 +346,7 @@ export const CommunityModulesList = ({
         customColumnLayout={customColumnLayout as any}
         enableColumnLayout
         hasDetailsView
-        entries={installedModules as any}
+        entries={modulesToDisplay as any}
         serverDataLoading={modulesLoading}
         headerRenderer={headerRenderer}
         rowRenderer={(resource) =>

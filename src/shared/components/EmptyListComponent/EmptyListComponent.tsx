@@ -43,33 +43,35 @@ export const EmptyListComponent = ({
   }
 
   return (
-    <IllustratedMessage
-      className="emptyListComponent"
-      name={image}
-      design="Auto"
-      title={
-        <Title level="H2" size="H2">
-          {titleText}
-        </Title>
-      }
-      subtitle={<span className="sap-margin-top-small">{subtitle}</span>}
-    >
-      <div className="emptyListComponent__buttons">
-        {showButton && (
-          <Button design="Emphasized" onClick={onClick}>
-            {buttonText}
-          </Button>
-        )}
-        {url && (
-          <ExternalLink
-            text="Learn More"
-            url={url}
-            buttonDesign="Transparent"
-            type="button"
-          />
-        )}
-      </div>
-      {children}
-    </IllustratedMessage>
+    <section aria-labelledby="empty-list-title">
+      <IllustratedMessage
+        className="emptyListComponent"
+        name={image}
+        design="Auto"
+        title={
+          <Title level="H2" size="H2" id="empty-list-title">
+            {titleText}
+          </Title>
+        }
+        subtitle={<span className="sap-margin-top-small">{subtitle}</span>}
+      >
+        <div className="emptyListComponent__buttons">
+          {showButton && (
+            <Button design="Emphasized" onClick={onClick}>
+              {buttonText}
+            </Button>
+          )}
+          {url && (
+            <ExternalLink
+              text="Learn More"
+              url={url}
+              buttonDesign="Transparent"
+              type="button"
+            />
+          )}
+        </div>
+        {children}
+      </IllustratedMessage>
+    </section>
   );
 };
