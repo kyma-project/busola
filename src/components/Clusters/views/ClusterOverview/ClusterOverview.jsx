@@ -65,7 +65,7 @@ export function ClusterOverview() {
   }, [setLayoutColumn]);
 
   const actions = (
-    <section aria-label={currentCluster?.currentContext?.cluster?.name}>
+    <section aria-label="Cluster actions" role="toolbar">
       <Button
         key="upload-yaml"
         icon="add"
