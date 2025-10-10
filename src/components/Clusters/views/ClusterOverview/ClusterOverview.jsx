@@ -65,7 +65,7 @@ export function ClusterOverview() {
   }, [setLayoutColumn]);
 
   const actions = (
-    <section aria-label="Cluster actions" role="toolbar">
+    <section aria-label="Cluster actions">
       <Button
         key="upload-yaml"
         icon="add"
