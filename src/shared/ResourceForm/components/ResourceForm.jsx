@@ -161,7 +161,7 @@ export function ResourceForm({
       presets={presets}
       onSelect={({ value, variables }) => {
         if (onPresetSelected) {
-          onPresetSelected({ ...value, variables });
+          onPresetSelected(value, variables);
         } else {
           setResource(value);
         }
