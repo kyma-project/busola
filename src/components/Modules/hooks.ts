@@ -17,8 +17,12 @@ import {
 import {
   getInstalledModules,
   getNotInstalledModules,
+  postForCommunityResources,
 } from 'components/Modules/community/communityModulesHelpers';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
+import { PostFn } from 'shared/hooks/BackendAPI/usePost';
+import { useTranslation } from 'react-i18next';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
@@ -338,3 +342,61 @@ export const useGetModuleResource = (resource: any) => {
 
   return { data, loading, error };
 };
+
+export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
+  const { t } = useTranslation();
+  const [resources, setResources] = useState([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const filterResources = (resources: any) => {
+    return (resources || []).filter(
+      (resource: any) =>
+        resource?.kind === 'ModuleTemplate' ||
+        (resource?.kind === 'CustomResourceDefinition' &&
+          resource?.metadata?.name ===
+            'moduletemplates.operator.kyma-project.io'),
+    );
+  };
+
+  useEffect(() => {
+    if (!!!sourceURL) {
+      setResources([]);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    if (sourceURL.endsWith('.yaml')) {
+      (async function () {
+        setLoading(true);
+        try {
+          const allResources = await postForCommunityResources(post, sourceURL);
+          const allowedToApply = filterResources(allResources);
+          const formatted = allowedToApply?.map((r: any) => {
+            return { value: r };
+          });
+
+          setError(null);
+
+          setResources(formatted);
+        } catch (e) {
+          if (e instanceof HttpError) {
+            setError(
+              t('modules.community.messages.source-yaml-fetch-failed', {
+                error: e.message,
+              }),
+            );
+          }
+        } finally {
+          setLoading(false);
+        }
+      })();
+    } else {
+      setError(t('modules.community.messages.source-yaml-invalid-url'));
+      setLoading(false);
+    }
+  }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return { resources, error, loading };
+}
