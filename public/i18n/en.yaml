@@ -961,6 +961,11 @@ modules:
     source-yaml:
       add-source-yaml: Add Source YAML
       example-format: 'Example format: http://github.com/project/repo/file.yaml'
+      module-already-exists: <0> {{moduleTemplate}} </0> already exists in the <0> {{namespace}} </0> namespace.
+      module-templates-to-add: ModuleTemplates to add
+      modules-wont-be-added: Following ModuleTemplates already exist in the cluster and cannot be added.
+      namespace-description: Namespace where ModuleTemplates are applied. If left empty, the namespace defined in the ModuleTemplates is used.
+      no-module-templates: No ModuleTemplates to add.
       source-yaml-url: Source YAML URL
     title: Community Modules
 namespaces:

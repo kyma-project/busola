@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import { FlexBox } from '@ui5/webcomponents-react';
 import { Label } from './Label';
-import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
+import { HintButton } from 'shared/components/HintButton/HintButton';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 import { useState } from 'react';
