@@ -347,6 +347,7 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
   const { t } = useTranslation();
   const [resources, setResources] = useState([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const filterResources = (resources: any) => {
     return (resources || []).filter(
@@ -362,11 +363,13 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
     if (!!!sourceURL) {
       setResources([]);
       setError(null);
+      setLoading(false);
       return;
     }
 
     if (sourceURL.endsWith('.yaml')) {
       (async function () {
+        setLoading(true);
         try {
           const allResources = await postForCommunityResources(post, sourceURL);
           const allowedToApply = filterResources(allResources);
@@ -385,12 +388,15 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
               }),
             );
           }
+        } finally {
+          setLoading(false);
         }
       })();
     } else {
       setError(t('modules.community.messages.source-yaml-invalid-url'));
+      setLoading(false);
     }
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return { resources, error };
+  return { resources, error, loading };
 }

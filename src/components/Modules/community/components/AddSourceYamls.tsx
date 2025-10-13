@@ -31,6 +31,7 @@ import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router';
 import { useGetYAMLModuleTemplates } from 'components/Modules/hooks';
 import 'components/Modules/community/components/AddSourceYamls.scss';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
@@ -49,10 +50,11 @@ export const AddSourceYamls = () => {
   );
   const [showDescription, setShowDescription] = useState(false);
 
-  const { resources: fetchedResources, error } = useGetYAMLModuleTemplates(
-    sourceURL,
-    post,
-  );
+  const {
+    resources: fetchedResources,
+    error,
+    loading,
+  } = useGetYAMLModuleTemplates(sourceURL, post);
   const allNamespaces = useAtomValue(namespacesAtom);
   const { communityModuleTemplates } = useContext(ModuleTemplatesContext);
 
@@ -102,6 +104,8 @@ export const AddSourceYamls = () => {
 
       return;
     }
+
+    setResourcesToApply(fetchedResources);
   }, [fetchedResources, existingModuleTemplates]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleApplySourceYAMLs = async () => {
@@ -232,79 +236,89 @@ export const AddSourceYamls = () => {
                 ))}
               </ComboBox>
             </FlexBox>
-            {existingModuleTemplates.length > 0 && (
-              <FlexBox
-                direction={FlexBoxDirection.Column}
-                gap={'0.5rem'}
-                className="sap-margin-top-small"
-              >
-                <MessageStrip design="Critical" hideCloseButton>
-                  {t('modules.community.source-yaml.modules-wont-be-added')}
-                </MessageStrip>
-                <List>
-                  {existingModuleTemplates?.map((mt: any) => {
-                    return (
-                      <ListItemCustom
-                        key={mt?.metadata.uid}
-                        onClick={() => {
-                          handleItemClick(
-                            mt.metadata.name,
-                            mt?.metadata.namespace,
-                          );
-                        }}
-                      >
-                        <Text>
-                          <Trans
-                            i18nKey={
-                              'modules.community.source-yaml.module-already-exists'
-                            }
-                            values={{
-                              moduleTemplate: `${mt.metadata.name} ${mt.spec.version ? ` (v${mt.spec.version})` : ''}`,
-                              namespace: mt?.metadata.namespace,
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                {existingModuleTemplates.length > 0 && (
+                  <FlexBox
+                    direction={FlexBoxDirection.Column}
+                    gap={'0.5rem'}
+                    className="sap-margin-top-small"
+                  >
+                    <MessageStrip design="Critical" hideCloseButton>
+                      {t('modules.community.source-yaml.modules-wont-be-added')}
+                    </MessageStrip>
+                    <List>
+                      {existingModuleTemplates?.map((mt: any) => {
+                        return (
+                          <ListItemCustom
+                            key={mt?.metadata.uid}
+                            onClick={() => {
+                              handleItemClick(
+                                mt.metadata.name,
+                                mt?.metadata.namespace,
+                              );
                             }}
                           >
-                            <span style={{ fontWeight: 'bold' }}></span>
-                          </Trans>
-                        </Text>
-                      </ListItemCustom>
-                    );
-                  })}
-                </List>
-              </FlexBox>
-            )}
-            <FlexBox
-              direction={FlexBoxDirection.Column}
-              gap={'0.5rem'}
-              className="sap-margin-top-small"
-            >
-              <List
-                header={
-                  <Text className="to-add-list-header">
-                    {t('modules.community.source-yaml.module-templates-to-add')}
-                  </Text>
-                }
-              >
-                {resourcesToApply.length === 0 && (
-                  <ListItemStandard>
-                    <Text>
-                      {t('modules.community.source-yaml.no-module-templates')}
-                    </Text>
-                  </ListItemStandard>
+                            <Text>
+                              <Trans
+                                i18nKey={
+                                  'modules.community.source-yaml.module-already-exists'
+                                }
+                                values={{
+                                  moduleTemplate: `${mt.metadata.name} ${mt.spec.version ? ` (v${mt.spec.version})` : ''}`,
+                                  namespace: mt?.metadata.namespace,
+                                }}
+                              >
+                                <span style={{ fontWeight: 'bold' }}></span>
+                              </Trans>
+                            </Text>
+                          </ListItemCustom>
+                        );
+                      })}
+                    </List>
+                  </FlexBox>
                 )}
-                {resourcesToApply?.map((mt) => {
-                  return (
-                    <ListItemCustom key={mt.value.metadata.uid}>
-                      <Text>
-                        {mt.value.metadata.name}
-                        {mt.value.spec.version
-                          ? ` (v${mt.value.spec.version})`
-                          : ''}
+                <FlexBox
+                  direction={FlexBoxDirection.Column}
+                  gap={'0.5rem'}
+                  className="sap-margin-top-small"
+                >
+                  <List
+                    header={
+                      <Text className="to-add-list-header">
+                        {t(
+                          'modules.community.source-yaml.module-templates-to-add',
+                        )}
                       </Text>
-                    </ListItemCustom>
-                  );
-                })}
-              </List>
-            </FlexBox>
+                    }
+                  >
+                    {resourcesToApply.length === 0 && (
+                      <ListItemStandard>
+                        <Text>
+                          {t(
+                            'modules.community.source-yaml.no-module-templates',
+                          )}
+                        </Text>
+                      </ListItemStandard>
+                    )}
+                    {resourcesToApply?.map((mt) => {
+                      return (
+                        <ListItemCustom key={mt.value.metadata.uid}>
+                          <Text>
+                            {mt.value.metadata.name}
+                            {mt.value.spec.version
+                              ? ` (v${mt.value.spec.version})`
+                              : ''}
+                          </Text>
+                        </ListItemCustom>
+                      );
+                    })}
+                  </List>
+                </FlexBox>
+              </>
+            )}
           </MessageBox>,
           document.body,
         )}
