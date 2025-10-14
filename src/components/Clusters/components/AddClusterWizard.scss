@@ -49,6 +49,10 @@ ui5-wizard {
   height: 100%;
   width: 75vw;
 
+  @media screen and (max-width: 380px) {
+    width: 100%;
+  }
+
   .cluster-wizard {
     &__token-info,
     &__storage-preference {
