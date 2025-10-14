@@ -17,11 +17,7 @@ export default function ResourceDetailsCard({
 }: ResourceDetailsCardProps) {
   return (
     <div className={wrapperClassname}>
-      <Card
-        accessibleName={titleText}
-        className={className}
-        header={<CardHeader titleText={titleText} />}
-      >
+      <Card className={className} header={<CardHeader titleText={titleText} />}>
         <div className="cluster-overview__details-grid sap-margin-small sap-margin-top-tiny">
           {content}
         </div>
