@@ -96,3 +96,9 @@ ui5-wizard {
     }
   }
 }
+
+@media screen and (max-width: 380px) {
+  ui5-wizard {
+    width: 100%;
+  }
+}
