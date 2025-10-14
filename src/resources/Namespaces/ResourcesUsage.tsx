@@ -70,7 +70,6 @@ export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
       </div>
       <div className="item-wrapper card-tall">
         <Card
-          role="group"
           className="radial-chart-card item"
           header={
             <CardHeader
