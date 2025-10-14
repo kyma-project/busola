@@ -38,13 +38,42 @@ COPY /kyma /kyma
 RUN npm ci
 RUN make prepare-configuration
 
-# ---- Serve ----
-FROM alpine:3.22.1
+# ---- Serve (FIPS Compliant Alpine) ----
+FROM ghcr.io/nginx/alpine-fips AS release
 WORKDIR /app
 
+# Install dependencies, including nodejs and openssl
 RUN apk --no-cache upgrade && \
-  apk --no-cache --update add nginx nodejs npm yq
-WORKDIR /app
+  apk --no-cache --update add nginx nodejs npm yq openssl
+
+# Set OpenSSL environment variables globally for the runtime
+ENV OPENSSL_MODULES=/usr/lib/ossl-modules
+ENV OPENSSL_CONF=/etc/ssl/fips/nodejs.cnf
+
+# Set up OpenSSL FIPS configuration (identical to your backend Dockerfile)
+RUN mkdir -p /etc/ssl/fips && \
+    openssl fipsinstall -out /etc/ssl/fips/fipsmodule.cnf -module $OPENSSL_MODULES/fips.so
+
+# Create OpenSSL configuration file for Node.js to load the FIPS provider. (identical to your backend Dockerfile)
+RUN echo "nodejs_conf = nodejs_init" > $OPENSSL_CONF && \
+    echo ".include /etc/ssl/fips/fipsmodule.cnf" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[nodejs_init]" >> $OPENSSL_CONF && \
+    echo "providers = provider_sect" >> $OPENSSL_CONF && \
+    echo "alg_section = algorithm_sect" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[provider_sect]" >> $OPENSSL_CONF && \
+    echo "fips = fips_sect" >> $OPENSSL_CONF && \
+    echo "default = default_sect" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[fips_sect]" >> $OPENSSL_CONF && \
+    echo "activate = 1" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[default_sect]" >> $OPENSSL_CONF && \
+    echo "activate = 1" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[algorithm_sect]" >> $OPENSSL_CONF && \
+    echo "default_properties = fips=yes" >> $OPENSSL_CONF
 
 COPY --chown=65532:65532 --from=builder /app/build /app/core-ui
 COPY --chown=65532:65532 --from=builder /app/backend/backend-production.js /app/backend-production.js

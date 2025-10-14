@@ -3,10 +3,10 @@ import { v4 as uuid } from 'uuid';
 import escape from 'lodash.escape';
 
 function configureLogger() {
-  const isDev = process.env.NODE_ENV !== 'production';
+  //const isDev = process.env.NODE_ENV !== 'production';
 
   return PinoHttp({
-    autoLogging: !!isDev, //to disable the automatic "request completed" and "request errored" logging.
+    autoLogging: true, //to disable the automatic "request completed" and "request errored" logging.
     genReqId: (req) => {
       req.id = uuid();
       return req.id;

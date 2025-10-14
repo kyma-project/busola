@@ -5,6 +5,12 @@ import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 import escape from 'lodash.escape';
 import addLogger from '../logging';
+import https from 'https';
+
+const httpsAgent = new https.Agent({
+  minVersion: 'TLSv1.3',
+  maxVersion: 'TLSv1.3',
+});
 
 const config = require('../config.js');
 
@@ -90,6 +96,7 @@ async function handlePromptSuggestions(req, res) {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
+      agent: httpsAgent,
     });
 
     const data = await response.json();
@@ -142,6 +149,7 @@ async function handleChatMessage(req, res) {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
+      agent: httpsAgent,
     });
 
     if (!response.ok) {
@@ -201,6 +209,7 @@ async function handleFollowUpSuggestions(req, res) {
     const response = await fetch(endpointUrl, {
       method: 'GET',
       headers,
+      agent: httpsAgent,
     });
 
     const data = await response.json();

@@ -1,10 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import jsyaml from 'js-yaml';
+import https from 'https';
 
 const router = express.Router();
 router.use(express.json());
 router.use(cors());
+
+const httpsAgent = new https.Agent({
+  minVersion: 'TLSv1.3',
+  maxVersion: 'TLSv1.3',
+});
 
 async function handleGetCommunityResource(req, res) {
   const { link } = JSON.parse(req.body.toString());
@@ -26,7 +32,9 @@ async function handleGetCommunityResource(req, res) {
         message: 'Invalid or untrusted link provided.',
       });
     } else {
-      const response = await fetch(link);
+      const response = await fetch(link, {
+        agent: httpsAgent,
+      });
       if (response.status === 404) {
         return res.status(404).json({
           message: `The resource doesn't exist`,

@@ -1,0 +1,50 @@
+# ---- Base UBI with Node.js ----
+FROM registry.access.redhat.com/ubi9/nodejs-20-minimal AS base
+
+# Switch to the root user to run privileged commands
+USER root
+
+# Install the fips tool, enable fips, then remove the tool and clean up
+RUN microdnf install -y fips-mode-setup && \
+    fips-mode-setup --enable && \
+    microdnf remove -y fips-mode-setup && \
+    microdnf clean all
+
+# ---- Install dependencies ----
+FROM base AS build
+WORKDIR /app
+COPY . .
+RUN npm ci
+
+# build to a naked Javascript
+RUN npm run build
+
+# ---- Serve ----
+FROM base AS release
+WORKDIR /app
+
+# Define the user and group ID from your original Dockerfile for consistency
+ARG APP_UID=65532
+ARG APP_GID=65532
+
+# As the base image doesn't have this user, we create it.
+# Then we give it ownership of the app directory.
+RUN groupadd -g $APP_GID nonroot && \
+    useradd -u $APP_UID -g $APP_GID -m -s /bin/bash nonroot && \
+    chown -R $APP_UID:$APP_GID /app
+
+# Copy the built artifact from the 'build' stage
+COPY --chown=$APP_UID:$APP_GID --from=build /app/backend-production.js ./
+COPY --chown=$APP_UID:$APP_GID settings settings/
+COPY --chown=$APP_UID:$APP_GID environments environments/
+COPY --chown=$APP_UID:$APP_GID certs.pem certs.pem
+COPY --chown=$APP_UID:$APP_GID package* ./
+
+# Use microdnf to clean up after install
+RUN npm ci --only=production && microdnf clean all
+
+# Switch to the non-root user for security
+USER $APP_UID:$APP_GID
+
+EXPOSE 3001
+CMD [ "npm", "run", "start:prod" ]

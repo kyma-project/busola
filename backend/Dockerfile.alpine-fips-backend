@@ -1,0 +1,61 @@
+# ---- Base Alpine with Node ----
+FROM alpine:3.22.1 AS base
+# install node
+RUN apk add --update nodejs npm
+
+# ---- Install dependencies ----
+FROM base AS build
+WORKDIR /app
+COPY . .
+RUN npm ci
+
+# build to a naked Javascript
+RUN npm run build
+
+# ---- Serve (FIPS Compliant Alpine) ----
+FROM ghcr.io/nginx/alpine-fips AS release
+# Install node and npm
+RUN apk add --update nodejs npm openssl
+WORKDIR /app
+
+# Set OpenSSL environment variables globally for the build and runtime
+ENV OPENSSL_MODULES=/usr/lib/ossl-modules
+ENV OPENSSL_CONF=/etc/ssl/fips/nodejs.cnf
+
+# Set up OpenSSL FIPS configuration
+RUN mkdir -p /etc/ssl/fips && \
+    openssl fipsinstall -out /etc/ssl/fips/fipsmodule.cnf -module $OPENSSL_MODULES/fips.so
+
+# Create OpenSSL configuration file for Node.js to load the FIPS provider.
+RUN echo "nodejs_conf = nodejs_init" > $OPENSSL_CONF && \
+    echo ".include /etc/ssl/fips/fipsmodule.cnf" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[nodejs_init]" >> $OPENSSL_CONF && \
+    echo "providers = provider_sect" >> $OPENSSL_CONF && \
+    echo "alg_section = algorithm_sect" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[provider_sect]" >> $OPENSSL_CONF && \
+    echo "fips = fips_sect" >> $OPENSSL_CONF && \
+    echo "default = default_sect" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[fips_sect]" >> $OPENSSL_CONF && \
+    echo "activate = 1" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[default_sect]" >> $OPENSSL_CONF && \
+    echo "activate = 1" >> $OPENSSL_CONF && \
+    echo "" >> $OPENSSL_CONF && \
+    echo "[algorithm_sect]" >> $OPENSSL_CONF && \
+    echo "default_properties = fips=yes" >> $OPENSSL_CONF
+
+# Copy the built artifact from the 'build' stage
+COPY --chown=65532:65532 --from=build /app/backend-production.js ./
+COPY --chown=65532:65532 settings settings/
+COPY --chown=65532:65532 environments environments/
+COPY --chown=65532:65532 certs.pem certs.pem
+COPY --chown=65532:65532 package* ./
+RUN npm ci --only=production
+
+USER 65532:65532
+
+EXPOSE 3001
+CMD [ "npm", "run", "start:prod-fips" ]
