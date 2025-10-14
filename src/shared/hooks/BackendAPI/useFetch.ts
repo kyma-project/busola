@@ -44,16 +44,11 @@ export const createFetchFn =
     };
     const { backendAddress } = getClusterConfig();
 
-    try {
-      const response = await fetch(backendAddress + relativeUrl, init);
-      if (response.ok) {
-        return response;
-      } else {
-        throw await throwHttpError(response);
-      }
-    } catch (e) {
-      console.error(`Fetch failed (${relativeUrl}): ${e}`);
-      throw e;
+    const response = await fetch(backendAddress + relativeUrl, init);
+    if (response.ok) {
+      return response;
+    } else {
+      throw await throwHttpError(response);
     }
   };
 

@@ -60,7 +60,6 @@ const useGetHook = (processDataFn) =>
                 : ERROR_TOLERANCY;
 
             if (errorTolerancyCounter.current > errorLimit || !data) {
-              console.error(error);
               setError(error);
             }
           }
