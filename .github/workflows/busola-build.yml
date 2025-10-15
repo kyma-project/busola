@@ -51,6 +51,7 @@ jobs:
       - name: Merge with latest main
         uses: ./.github/actions/merge
   build-busola-image:
+    needs: rebase
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     if: github.event.pull_request.draft == false
     with:
