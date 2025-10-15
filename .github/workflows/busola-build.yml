@@ -4,34 +4,34 @@ on:
   workflow_call:
     inputs:
       tag:
-        description: "Additional tag for built images"
+        description: 'Additional tag for built images'
         required: true
         type: string
   push:
     branches:
       - main
     paths:
-      - ".github/workflows/busola-build.yml"
-      - "backend/**"
-      - "kyma/**"
-      - "public/**"
-      - "src/**"
-      - "package.json"
-      - "Makefile"
-      - "Dockerfile"
-      - "nginx/nginx.conf"
+      - '.github/workflows/busola-build.yml'
+      - 'backend/**'
+      - 'kyma/**'
+      - 'public/**'
+      - 'src/**'
+      - 'package.json'
+      - 'Makefile'
+      - 'Dockerfile'
+      - 'nginx/nginx.conf'
   pull_request_target:
-    types: [ opened, edited, synchronize, reopened, ready_for_review ]
+    types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/busola-build.yml"
-      - "kyma/**"
-      - "backend/**"
-      - "public/**"
-      - "src/**"
-      - "package.json"
-      - "Makefile"
-      - "Dockerfile*"
-      - "nginx/**"
+      - '.github/workflows/busola-build.yml'
+      - 'kyma/**'
+      - 'backend/**'
+      - 'public/**'
+      - 'src/**'
+      - 'package.json'
+      - 'Makefile'
+      - 'Dockerfile*'
+      - 'nginx/**'
       - '.github/workflows/pull-kyma-intergation-tests.yml'
       - 'resources/**'
       - 'tests/integration/**'
@@ -45,6 +45,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Merge with latest main
         uses: ./.github/actions/merge
   build-busola-image:
