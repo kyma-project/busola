@@ -39,7 +39,8 @@ jobs:
         uses: ./.github/actions/merge
   build-backend-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
-    if: github.event.pull_request.draft == false
+    needs: [rebase]
+    if: ${{ github.event.pull_request.draft == false && needs.rebase.result == 'success' }}
     with:
       name: busola-backend
       dockerfile: Dockerfile
