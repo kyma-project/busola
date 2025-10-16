@@ -59,7 +59,9 @@ export default function ClusterRoutes() {
       navigate('/clusters');
       return;
     }
-    setAuth(null);
+    if (cluster?.name) {
+      setAuth(null);
+    }
     setCluster(currentCluster);
   }, [
     currentClusterName,
