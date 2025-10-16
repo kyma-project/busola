@@ -5,10 +5,10 @@ import classNames from 'classnames';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { useGetTranslation, getTextSearchProperties } from '../helpers';
+import { getTextSearchProperties, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 import { sortBy } from '../helpers/sortBy';
-import { Widget, InlineWidget } from './Widget';
+import { InlineWidget, Widget } from './Widget';
 import { getSearchDetails, getSortDetails } from './helpers';
 
 import './Table.scss';
@@ -36,7 +36,7 @@ const rowRenderer = (
   entry,
   index,
   structure,
-  tExt,
+  i18n,
   jsonata,
   arrayItems,
   title,
@@ -50,12 +50,9 @@ const rowRenderer = (
     'collapsible-panel': !structure.disablePadding,
   });
   const makeTitle = async () => {
-    const defaultTitle =
-      tExt(structure.name, {
-        defaultValue: structure.name || structure.source,
-      }) +
-      ' #' +
-      (index + 1);
+    const defaultTitle = i18n.exists(structure.name)
+      ? i18n.t(structure.name)
+      : structure.name || structure.source + ' #' + (index + 1);
     if (structure.collapsibleTitle) {
       try {
         return await jsonata(structure.collapsibleTitle, {
@@ -147,7 +144,7 @@ export function Table({
   }
 
   const { t } = useTranslation();
-  const { t: tExt } = useGetTranslation();
+  const { i18n } = useGetTranslation();
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
@@ -159,7 +156,9 @@ export function Table({
 
   const [title, setTitle] = useState({});
 
-  const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
+  const coreHeaders = (structure.children || []).map(({ name }) =>
+    i18n.t(name),
+  );
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
@@ -194,9 +193,11 @@ export function Table({
       displayArrow={false}
       disableMargin={structure.disablePadding}
       className={'extensibility-table'}
-      title={tExt(structure.name, {
-        defaultValue: structure.name || structure.source,
-      })}
+      title={
+        i18n.exists(structure.name)
+          ? i18n.t(structure.name)
+          : structure.name || structure.source
+      }
       extraHeaderContent={extraHeaderContent}
       headerRenderer={headerRenderer}
       rowRenderer={(entry, index) =>
@@ -204,7 +205,7 @@ export function Table({
           entry,
           index,
           structure,
-          tExt,
+          i18n,
           jsonata,
           arrayItems,
           title,
@@ -216,7 +217,7 @@ export function Table({
         )
       }
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
+      sortBy={() => sortBy(jsonata, sortOptions, i18n, {}, originalResource)}
       searchSettings={{
         showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,
@@ -225,4 +226,5 @@ export function Table({
     />
   );
 }
+
 Table.array = true;

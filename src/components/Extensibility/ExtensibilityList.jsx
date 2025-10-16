@@ -37,7 +37,7 @@ export const ExtensibilityListCore = ({
   ...props
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
-  const { t: tBusola } = useTranslation();
+  const { t: tBusola, i18n } = useTranslation();
   const jsonata = useJsonata({});
 
   const {
@@ -135,7 +135,7 @@ export const ExtensibilityListCore = ({
       disableDelete={disableDelete}
       createResourceForm={ExtensibilityCreate}
       sortBy={(defaultSortOptions) =>
-        sortBy(jsonata, sortOptions, t, defaultSortOptions)
+        sortBy(jsonata, sortOptions, i18n, defaultSortOptions)
       }
       searchSettings={{
         textSearchProperties: (defaultSearchProperties) =>

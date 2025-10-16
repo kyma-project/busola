@@ -30,8 +30,10 @@ export function CategoryItem({
   expandedCategories,
   handleExpandedCategories,
 }: CategoryItemProps) {
-  const { t } = useTranslation();
-  const categoryName = t(category.label, { defaultValue: category.label });
+  const { t, i18n } = useTranslation();
+  const categoryName = i18n.exists(category.label)
+    ? t(category.label)
+    : category.label;
   const expanded = expandedCategories.includes(category.key);
   const isSidebarCondensed = useAtomValue(isSidebarCondensedAtom);
 
