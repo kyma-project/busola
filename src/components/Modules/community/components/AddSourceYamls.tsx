@@ -48,6 +48,9 @@ export const AddSourceYamls = () => {
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
+  const [templatesNamespace, setTemplatesNamespace] = useState<string>(
+    DEFAULT_K8S_NAMESPACE,
+  );
   const [showDescription, setShowDescription] = useState(false);
 
   const {
@@ -74,7 +77,7 @@ export const AddSourceYamls = () => {
     resourcesToApply,
     setResourcesToApply,
     () => {},
-    DEFAULT_K8S_NAMESPACE,
+    templatesNamespace,
   );
 
   const applyNamespace = (namespace: string) => {
@@ -82,9 +85,11 @@ export const AddSourceYamls = () => {
       ...resource,
       value: {
         ...resource.value,
-        metadata: { ...resource.value.metadata, namespace },
+        metadata: { ...resource.value.metadata, namespace: namespace },
       },
     }));
+
+    setTemplatesNamespace(namespace);
 
     setResourcesToApply(namespacedResources);
   };
