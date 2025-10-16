@@ -13,6 +13,11 @@
     justify-content: start;
     gap: 30px;
     width: 100%;
+
+    @media screen and (max-width: 380px) {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   &__token {
@@ -31,6 +36,10 @@
   &__edit-button {
     align-self: flex-end;
     width: 80%;
+
+    @media screen and (max-width: 380px) {
+      align-self: center;
+    }
   }
 
   &__storage-container {

@@ -30,9 +30,13 @@ export const UI5RadialChart = ({
   });
 
   return (
-    <div className={classnames} onClick={onClick}>
+    <div
+      className={classnames}
+      onClick={onClick}
+      aria-label={'Radial chart'}
+      role="img"
+    >
       <RadialChart
-        aria-label={'Radial chart'}
         displayValue={text}
         displayValueStyle={{
           fontSize: textSize,

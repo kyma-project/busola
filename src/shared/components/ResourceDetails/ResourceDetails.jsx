@@ -26,7 +26,7 @@ import { ResourceHealthCard } from '../ResourceHealthCard/ResourceHealthCard';
 import { ResourceStatusCard } from '../ResourceStatusCard/ResourceStatusCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
-import { HintButton } from '../DescriptionHint/DescriptionHint';
+import { HintButton } from '../HintButton/HintButton';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';

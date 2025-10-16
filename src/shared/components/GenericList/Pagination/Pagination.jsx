@@ -5,7 +5,7 @@ import { Button, Text, Icon, Input, FlexBox } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 import { Select, Option } from '@ui5/webcomponents-react';
 import { AVAILABLE_PAGE_SIZES } from 'state/preferences/pageSizeAtom';
-import { HintButton } from 'shared/components/DescriptionHint/DescriptionHint';
+import { HintButton } from 'shared/components/HintButton/HintButton';
 import './Pagination.scss';
 
 const makePartitions = (currentPage, pagesCount) => {
