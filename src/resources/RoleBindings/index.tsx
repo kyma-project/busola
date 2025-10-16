@@ -28,7 +28,9 @@ export const resourceGraphConfig = (): ResourceRelationConfig => ({
       filter: (rb, sa) =>
         rb.subjects?.find(
           (sub: any) =>
-            sub.kind === 'ServiceAccount' && sub.name === sa.metadata.name,
+            sub.kind === 'ServiceAccount' &&
+            sub.name === sa.metadata.name &&
+            sub.namespace === sa.metadata.namespace,
         ),
     },
   ],

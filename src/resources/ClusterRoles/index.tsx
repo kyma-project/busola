@@ -31,7 +31,7 @@ export const resourceGraphConfig = (): ResourceRelationConfig => ({
         crb.roleRef.name === cr.metadata.name,
     },
     {
-      resource: { kind: 'RoleBinding', namespace: null },
+      resource: { kind: 'RoleBinding' },
       filter: (cr, rb) =>
         rb.roleRef.kind === 'ClusterRole' &&
         rb.roleRef.name === cr.metadata.name,

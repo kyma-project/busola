@@ -10,7 +10,7 @@ import { useAtomValue } from 'jotai';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { NavNode } from 'state/types';
 import {
-  IHaveNoIdeaForNameHere,
+  FetchRequest,
   ResourceGraphConfig,
   ResourceGraphContext,
   ResourceGraphEvents,
@@ -64,7 +64,9 @@ async function cycle(
   const { fetch, namespaceNodes, clusterNodes, namespace, events } = context;
   const kindsToHandle = Object.keys(store.current);
 
-  const resourcesToFetch: IHaveNoIdeaForNameHere[] = [];
+  const resourcesToFetch: {
+    [key: string]: FetchRequest & { fromKind: string[] };
+  } = {};
   for (const kind of kindsToHandle) {
     // skip fetching relations if there's no original resource
     if (store.current[kind]?.length === 0) {
@@ -72,32 +74,38 @@ async function cycle(
     }
     for (const relatedResource of findRelatedResources(kind, config)) {
       const alreadyInStore = !!store.current[relatedResource.kind];
-      const alreadyToFetch = !!resourcesToFetch.find(
-        (r) => r.kind === relatedResource.kind,
-      );
 
-      if (!alreadyInStore && !alreadyToFetch) {
-        // resource does not exist in store
+      if (!alreadyInStore) {
         const resourceType = pluralize(relatedResource.kind.toLowerCase());
         const apiPath = getApiPath2Todo(relatedResource, [
           ...namespaceNodes,
           ...clusterNodes,
         ]);
 
-        if (apiPath) {
-          resourcesToFetch.push({
-            fromKind: kind,
+        if (!apiPath) continue;
+
+        // If this kind is already being fetched, just add the new "fromKind"
+        if (resourcesToFetch[relatedResource.kind]) {
+          if (!resourcesToFetch[relatedResource.kind].fromKind.includes(kind)) {
+            resourcesToFetch[relatedResource.kind].fromKind.push(kind);
+          }
+        } else {
+          // Otherwise, create a new entry for this fetch
+          resourcesToFetch[relatedResource.kind] = {
+            fromKind: [kind],
             resourceType,
             kind: relatedResource.kind,
             clusterwide: relatedResource.namespace === null,
             apiPath,
-          });
+          };
         }
       }
     }
   }
 
-  const fetchResource = async (resource: IHaveNoIdeaForNameHere) => {
+  const fetchResource = async (
+    resource: FetchRequest & { fromKind: string[] },
+  ) => {
     const namespacePart = getNamespacePart({
       resourceToFetch: resource,
       currentNamespace: namespace,
@@ -123,12 +131,21 @@ async function cycle(
       const filterOnlyRelated = async (
         possiblyRelatedResource: K8sResource,
       ) => {
-        const matchArray = await Promise.all(
-          store.current[resource.fromKind]!.map(
-            async (oR) => !!(await match(possiblyRelatedResource, oR, config)),
-          ),
-        );
-        return !!matchArray.filter(Boolean).length;
+        // Iterate over all fromKinds that initiated this fetch
+        for (const fromKind of resource.fromKind) {
+          const originalResources = store.current[fromKind] || [];
+          const matchArray = await Promise.all(
+            originalResources.map(
+              async (oR) =>
+                !!(await match(possiblyRelatedResource, oR, config)),
+            ),
+          );
+          // If it matches any resource from this fromKind, it's a valid relation
+          if (matchArray.some(Boolean)) {
+            return true;
+          }
+        }
+        return false;
       };
 
       const matched = await Promise.all(
@@ -144,10 +161,10 @@ async function cycle(
     }
   };
 
-  await Promise.all(resourcesToFetch.map(fetchResource));
+  await Promise.all(Object.values(resourcesToFetch).map(fetchResource));
 
   events.onRelatedResourcesRefresh();
-  if (resourcesToFetch.length && depth - 1 > 0) {
+  if (Object.keys(resourcesToFetch).length && depth - 1 > 0) {
     cycle(store, depth - 1, config, context);
   } else {
     events.onAllLoaded();
