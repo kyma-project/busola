@@ -11,13 +11,15 @@ export const createTranslationTextWithLinks = (
 ): string | React.ReactElement => {
   const { processedText, components } = insert18nLinks(text);
   if (components?.length) {
-    return (
+    return i18n.exists(processedText) ? (
       <Trans
         i18nKey={processedText}
         i18n={i18n}
         t={t}
         components={components}
       />
+    ) : (
+      <>{components}</>
     );
   }
   return text;
