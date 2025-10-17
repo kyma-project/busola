@@ -59,7 +59,7 @@ export function TriggerHandler({
       setSubscriptions(subs);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, resource]);
+  }, [schema, resource, jsonata]);
 
   useSubscription(Object.fromEntries(subscriptions));
 
@@ -68,13 +68,13 @@ export function TriggerHandler({
 
   const myChange = useMemo(
     () => (action) => {
+      console.log('TEST-kon');
       if (action.scopes?.includes('value')) {
         action.schema.get('trigger')?.forEach((t) => trigger(t, storeKeys));
       }
       onChange(action);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onChange, trigger, storeKeys, resource],
+    [onChange, trigger, storeKeys],
   );
 
   return (
