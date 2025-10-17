@@ -32,7 +32,7 @@ context('Test Roles', () => {
       API_GROUP,
     );
 
-    cy.get('[accessible-name="roles.buttons.load"]:visible', {
+    cy.get('[accessible-name="Load resources"]:visible', {
       log: false,
     }).click();
 

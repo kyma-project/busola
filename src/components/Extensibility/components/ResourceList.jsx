@@ -36,7 +36,7 @@ export function ResourceList({
   arrayItems,
   ...props
 }) {
-  const { widgetT, t } = useGetTranslation();
+  const { widgetT, t, i18n } = useGetTranslation();
   const extensions = useAtomValue(extensionsAtom);
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const kind = (value?.kind ?? '').replace(/List$/, '');
@@ -126,7 +126,12 @@ export function ResourceList({
         }
         columns={children}
         sortBy={(defaultSortOptions) =>
-          sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
+          sortBy(
+            jsonata,
+            sortOptions,
+            i18n,
+            defaultSort ? defaultSortOptions : {},
+          )
         }
         simpleEmptyListMessage={simpleEmptyListMessage}
         searchSettings={{

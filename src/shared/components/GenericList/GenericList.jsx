@@ -44,6 +44,15 @@ const defaultSearch = {
   noSearchResultMessage: 'components.generic-list.messages.no-search-results',
 };
 
+function renderMessage(i18n, titleText, notFoundMessage) {
+  if (titleText) {
+    return i18n.exists(titleText) ? i18n.t(titleText) : titleText;
+  }
+  return i18n.exists(notFoundMessage)
+    ? i18n.t(notFoundMessage)
+    : notFoundMessage;
+}
+
 export const GenericList = ({
   entries = [],
   actions = [],
@@ -422,12 +431,10 @@ export const GenericList = ({
                 />
               ) : (
                 <p>
-                  {emptyListProps?.titleText ? (
-                    <Trans i18nKey={emptyListProps?.titleText} />
-                  ) : i18n.exists(notFoundMessage) ? (
-                    t(notFoundMessage)
-                  ) : (
-                    notFoundMessage
+                  {renderMessage(
+                    i18n,
+                    emptyListProps?.titleText,
+                    notFoundMessage,
                   )}
                 </p>
               )

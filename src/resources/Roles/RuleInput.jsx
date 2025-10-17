@@ -45,7 +45,7 @@ const verbs = [
 export function RuleInput({ rule, rules, setRules, schema }) {
   const groupVersions = useAtomValue(groupVersionsAtom);
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const apiGroupDesc = getDescription(schema, 'rules.apiGroups');
   const resourcesDesc = getDescription(schema, 'rules.resources');
@@ -120,7 +120,9 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         filterOptions
         title={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
-        sectionTooltipContent={t(apiGroupDesc)}
+        sectionTooltipContent={
+          i18n.exists(apiGroupDesc) ? t(apiGroupDesc) : apiGroupDesc
+        }
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
@@ -136,7 +138,9 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         filterOptions
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
-        sectionTooltipContent={t(resourcesDesc)}
+        sectionTooltipContent={
+          i18n.exists(resourcesDesc) ? t(resourcesDesc) : resourcesDesc
+        }
         options={availableResources.map((i) => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
@@ -149,7 +153,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
               design="Transparent"
               onClick={fetchResources}
               disabled={!loadable}
-              accessibleName={t('roles.buttons.load')}
+              accessibleName={t('roles.buttons.load-resources')}
               tooltip={t('roles.tooltips.load')}
             >
               {t('roles.buttons.load-resources')}
@@ -180,7 +184,9 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         filterOptions
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
-        sectionTooltipContent={t(verbsDesc)}
+        sectionTooltipContent={
+          i18n.exists(verbsDesc) ? t(verbsDesc) : verbsDesc
+        }
         options={verbs.map((i) => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
@@ -193,14 +199,22 @@ export function RuleInput({ rule, rules, setRules, schema }) {
       <TextArrayInput
         title={t('roles.headers.resource-names')}
         propertyPath="$.resourceNames"
-        sectionTooltipContent={t(resourceNamesDesc)}
+        sectionTooltipContent={
+          i18n.exists(resourceNamesDesc)
+            ? t(resourceNamesDesc)
+            : resourceNamesDesc
+        }
         nestingLevel={2}
       />
       {!namespaceId && (
         <ComboboxArrayInput
           title={t('roles.headers.non-resource-urls')}
           propertyPath="$.nonResourceURLs"
-          sectionTooltipContent={t(nonResourceURLsDesc)}
+          sectionTooltipContent={
+            i18n.exists(nonResourceURLsDesc)
+              ? t(nonResourceURLsDesc)
+              : nonResourceURLsDesc
+          }
           nestingLevel={2}
           options={nonResourceUrls.map((i) => ({ key: i, text: i }))}
         />

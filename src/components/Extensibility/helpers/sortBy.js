@@ -41,16 +41,18 @@ export const applySortFormula = (jsonata, formula, t) => {
 export const sortBy = (
   jsonata,
   sortOptions,
-  t,
+  i18n,
   defaultSortOptions = {},
   originalResource = null,
 ) => {
   let defaultSort = {};
   const sortingOptions = (sortOptions || []).reduce(
     (acc, { name, source, sort }) => {
-      const sortName = t(name, {
-        defaultValue: name || source,
-      });
+      const sortName = i18n.exists(name)
+        ? i18n.t(name)
+        : i18n.exists(source)
+          ? i18n.t(source)
+          : name;
       let sortFn = getSortingFunction(jsonata, source, originalResource);
 
       if (sort.compareFunction) {
@@ -62,7 +64,7 @@ export const sortBy = (
             const sortFormula = applySortFormula(
               jsonata,
               sort.compareFunction,
-              t,
+              i18n.t,
             );
             return await sortFormula(aValue, bValue);
           },
