@@ -15,8 +15,8 @@ type Relation = {
   filter: (resourceA: any, resourceB: any) => boolean | Promise<boolean>;
 };
 
-export type IHaveNoIdeaForNameHere = {
-  fromKind: string;
+export type FetchRequest = {
+  fromKind: string[];
   resourceType: string;
   kind: string;
   clusterwide: boolean;

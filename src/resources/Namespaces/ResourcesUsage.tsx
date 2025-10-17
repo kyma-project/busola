@@ -37,7 +37,6 @@ export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
     <>
       <div className="item-wrapper card-tall">
         <Card
-          accessibleName={t('cluster-overview.statistics.cpu-usage')}
           className="radial-chart-card item"
           header={
             <CardHeader
@@ -71,7 +70,6 @@ export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
       </div>
       <div className="item-wrapper card-tall">
         <Card
-          accessibleName={t('cluster-overview.statistics.memory-usage')}
           className="radial-chart-card item"
           header={
             <CardHeader
