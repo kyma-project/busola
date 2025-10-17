@@ -196,7 +196,9 @@ export function Table({
       title={
         i18n.exists(structure.name)
           ? i18n.t(structure.name)
-          : structure.name || structure.source
+          : i18n.exists(structure.source)
+            ? i18n.t(structure.source)
+            : structure.name
       }
       extraHeaderContent={extraHeaderContent}
       headerRenderer={headerRenderer}

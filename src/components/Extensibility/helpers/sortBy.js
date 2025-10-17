@@ -48,7 +48,11 @@ export const sortBy = (
   let defaultSort = {};
   const sortingOptions = (sortOptions || []).reduce(
     (acc, { name, source, sort }) => {
-      const sortName = i18n.exist(name) ? i18n.t(name) : name || source;
+      const sortName = i18n.exist(name)
+        ? i18n.t(name)
+        : i18n.exists(source)
+          ? i18n.t(source)
+          : name;
       let sortFn = getSortingFunction(jsonata, source, originalResource);
 
       if (sort.compareFunction) {
