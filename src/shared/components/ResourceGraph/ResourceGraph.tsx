@@ -18,7 +18,7 @@ import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/T
 
 import './ResourceGraph.scss';
 
-function ResourceGraph({
+export default function ResourceGraph({
   resource,
   config,
 }: {
@@ -132,5 +132,3 @@ function ResourceGraph({
     </Panel>
   );
 }
-
-export default ResourceGraph;
