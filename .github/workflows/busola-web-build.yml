@@ -4,32 +4,32 @@ on:
   workflow_call:
     inputs:
       tag:
-        description: "Additional tag for built images"
+        description: 'Additional tag for built images'
         required: true
         type: string
   push:
     branches:
       - main
     paths:
-      - ".github/workflows/busola-web-build.yml"
-      - "kyma/**"
-      - "public/**"
-      - "src/**"
-      - "package.json"
-      - "Makefile"
-      - "Dockerfile.web"
-      - "nginx/nginx.conf"
+      - '.github/workflows/busola-web-build.yml'
+      - 'kyma/**'
+      - 'public/**'
+      - 'src/**'
+      - 'package.json'
+      - 'Makefile'
+      - 'Dockerfile.web'
+      - 'nginx/nginx.conf'
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/busola-web-build.yml"
-      - "kyma/**"
-      - "public/**"
-      - "src/**"
-      - "package.json"
-      - "Makefile"
-      - "Dockerfile.web"
-      - "nginx/nginx.conf"
+      - '.github/workflows/busola-web-build.yml'
+      - 'kyma/**'
+      - 'public/**'
+      - 'src/**'
+      - 'package.json'
+      - 'Makefile'
+      - 'Dockerfile.web'
+      - 'nginx/nginx.conf'
 
 permissions:
   id-token: write # This is required for requesting the JWT token
@@ -44,8 +44,6 @@ jobs:
       dockerfile: Dockerfile.web
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
-      platforms: |
-        linux/amd64
 
   extract-image-tag:
     name: Extract image tag
@@ -84,9 +82,9 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
-          commit-message: "chore: pr deploy busola-web image to ${{ needs.extract-image-tag.outputs.image_tag }}"
+          commit-message: 'chore: pr deploy busola-web image to ${{ needs.extract-image-tag.outputs.image_tag }}'
           branch: pr-deploy-busola-web-image-${{ needs.extract-image-tag.outputs.image_tag }}
-          title: "chore: pr deploy busola-web image to ${{ needs.extract-image-tag.outputs.image_tag }}"
+          title: 'chore: pr deploy busola-web image to ${{ needs.extract-image-tag.outputs.image_tag }}'
           labels: pr-deploy
           body: |
             This PR updates the Busola web image version in dev/main.tf to ${{ needs.extract-image-tag.outputs.image_tag }}.
