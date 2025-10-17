@@ -23,7 +23,7 @@ type NavItemProps = {
 };
 
 export function NavItem({ node, subItem = false }: NavItemProps) {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const urlGenerators = useUrl();
   const navigate = useNavigate();
   const location = useLocation();
@@ -111,7 +111,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
-    text: i18n.exists(node.label) ? t(node.label) : node.label,
+    text: i18n.exists(node.label) ? i18n.t(node.label) : node.label,
     selected: isSelected,
     onClick: (e: Event) => {
       e.stopPropagation();
