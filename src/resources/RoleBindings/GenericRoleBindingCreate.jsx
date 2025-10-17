@@ -11,8 +11,8 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import {
   createBindingTemplate,
-  newSubject,
   DEFAULT_APIGROUP,
+  newSubject,
 } from './templates';
 import { SingleSubjectForm } from './SubjectForm';
 import { validateBinding } from './helpers';
@@ -32,7 +32,7 @@ export function GenericRoleBindingCreate({
   singularName,
   ...props
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [hasPermissionsForClusterRoles] = useHasPermissionsFor([
     [DEFAULT_APIGROUP, 'clusterroles'],
   ]);
@@ -126,7 +126,9 @@ export function GenericRoleBindingCreate({
         listTitle={t('role-bindings.create-modal.subjects')}
         nameSingular={t('role-bindings.create-modal.subject')}
         entryTitle={(subject) => subject?.name}
-        tooltipContent={t(subjectsDesc)}
+        tooltipContent={
+          i18n.exists(subjectsDesc) ? t(subjectsDesc) : subjectsDesc
+        }
         atLeastOneRequiredMessage={t(
           'role-bindings.create-modal.at-least-one-subject-required',
           { resource: singularName },
