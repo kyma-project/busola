@@ -490,6 +490,8 @@ export function ResourceListRenderer({
               alignItems: 'center',
               gap: '4px',
               wordBreak: 'break-word',
+              height: '100%',
+              width: '100%',
             }}
           >
             {col.value(entry)}

@@ -105,7 +105,16 @@ export function EventList({
       header: t('common.headers.name'),
       value: (entry) =>
         isCompact && !props.displayArrow ? (
-          <Link url={`${customUrl(entry)}`} style={{ fontWeight: 'bold' }}>
+          <Link
+            url={`${customUrl(entry)}`}
+            style={{
+              fontWeight: 'bold',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
             {entry.metadata?.name}
           </Link>
         ) : (
