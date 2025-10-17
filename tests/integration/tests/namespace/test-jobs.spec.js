@@ -107,7 +107,7 @@ context('Test Jobs', () => {
     cy.contains(/Imagenode:14-alpine/);
 
     // controlled-by
-    cy.get('ui5-card[accessible-name="Metadata"]')
+    cy.get('ui5-card')
       .should('contain.text', 'Controlled By')
       .find('ul.controlled-by-list')
       .should('contain.text', 'Job')
@@ -132,7 +132,7 @@ context('Test Jobs', () => {
     });
 
     // back to job
-    cy.get('ui5-card[accessible-name="Metadata"]')
+    cy.get('ui5-card')
       .find('ul.controlled-by-list')
       .should('contain.text', 'Job')
       .find('ui5-link')
@@ -178,9 +178,7 @@ context('Test Jobs', () => {
 
     cy.inspectTab('View');
 
-    cy.get('ui5-card[accessible-name="Metadata"]')
-      .contains('a=b', { timeout: 10000 })
-      .should('be.visible');
+    cy.get('ui5-card').contains('a=b', { timeout: 10000 }).should('be.visible');
   });
 
   it('Inspect list', () => {
