@@ -36,7 +36,12 @@ export function FormField({
       style={style}
     >
       {!isListItem && label && (
-        <FlexBox wrap="Wrap" alignItems="Center" className="bsl-col-md--12">
+        <FlexBox
+          key={'labels-flexbox'}
+          wrap="Wrap"
+          alignItems="Center"
+          className="bsl-col-md--12"
+        >
           <Label
             forElement={label.replace(' ', '-').toLowerCase()}
             required={required && !disabled}
@@ -54,7 +59,12 @@ export function FormField({
           )}
         </FlexBox>
       )}
-      <FlexBox wrap="Wrap" alignItems="Center" className="full-width">
+      <FlexBox
+        key={'messagestrip-flexbox'}
+        wrap="Wrap"
+        alignItems="Center"
+        className="full-width"
+      >
         {messageStrip
           ? messageStrip
           : input({

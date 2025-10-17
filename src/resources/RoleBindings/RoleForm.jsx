@@ -82,7 +82,7 @@ export const RoleForm = ({
           onInput={(event) => onChange(event, props)}
         >
           {options.map((option) => (
-            <ComboBoxItem id={option.key} text={option.text} />
+            <ComboBoxItem key={option.key} id={option.key} text={option.text} />
           ))}
         </ComboBox>
       )}
