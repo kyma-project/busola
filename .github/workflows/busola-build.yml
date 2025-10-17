@@ -4,34 +4,34 @@ on:
   workflow_call:
     inputs:
       tag:
-        description: "Additional tag for built images"
+        description: 'Additional tag for built images'
         required: true
         type: string
   push:
     branches:
       - main
     paths:
-      - ".github/workflows/busola-build.yml"
-      - "backend/**"
-      - "kyma/**"
-      - "public/**"
-      - "src/**"
-      - "package.json"
-      - "Makefile"
-      - "Dockerfile"
-      - "nginx/nginx.conf"
+      - '.github/workflows/busola-build.yml'
+      - 'backend/**'
+      - 'kyma/**'
+      - 'public/**'
+      - 'src/**'
+      - 'package.json'
+      - 'Makefile'
+      - 'Dockerfile'
+      - 'nginx/nginx.conf'
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/busola-build.yml"
-      - "kyma/**"
-      - "backend/**"
-      - "public/**"
-      - "src/**"
-      - "package.json"
-      - "Makefile"
-      - "Dockerfile*"
-      - "nginx/**"
+      - '.github/workflows/busola-build.yml'
+      - 'kyma/**'
+      - 'backend/**'
+      - 'public/**'
+      - 'src/**'
+      - 'package.json'
+      - 'Makefile'
+      - 'Dockerfile*'
+      - 'nginx/**'
       - '.github/workflows/pull-kyma-intergation-tests.yml'
       - 'resources/**'
       - 'tests/integration/**'
@@ -49,5 +49,3 @@ jobs:
       dockerfile: Dockerfile
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
-      platforms: |
-        linux/amd64
