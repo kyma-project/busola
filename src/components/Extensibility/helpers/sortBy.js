@@ -48,7 +48,7 @@ export const sortBy = (
   let defaultSort = {};
   const sortingOptions = (sortOptions || []).reduce(
     (acc, { name, source, sort }) => {
-      const sortName = i18n.exist(name)
+      const sortName = i18n.exists(name)
         ? i18n.t(name)
         : i18n.exists(source)
           ? i18n.t(source)
