@@ -65,7 +65,7 @@ async function cycle(
   const kindsToHandle = Object.keys(store.current);
 
   const resourcesToFetch: {
-    [key: string]: FetchRequest & { fromKind: string[] };
+    [key: string]: FetchRequest;
   } = {};
   for (const kind of kindsToHandle) {
     // skip fetching relations if there's no original resource
@@ -103,9 +103,7 @@ async function cycle(
     }
   }
 
-  const fetchResource = async (
-    resource: FetchRequest & { fromKind: string[] },
-  ) => {
+  const fetchResource = async (resource: FetchRequest) => {
     const namespacePart = getNamespacePart({
       resourceToFetch: resource,
       currentNamespace: namespace,
