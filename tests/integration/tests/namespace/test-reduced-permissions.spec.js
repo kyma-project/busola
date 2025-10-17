@@ -44,9 +44,7 @@ context('Test reduced permissions', () => {
       'apps',
     );
 
-    cy.get(
-      'ui5-button[accessible-name="roles.buttons.load-resources"]:visible',
-    ).click();
+    cy.get('ui5-button[accessible-name="Load resources"]:visible').click();
     cy.wait(500);
 
     // resources
