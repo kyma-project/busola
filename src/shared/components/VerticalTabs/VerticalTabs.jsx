@@ -2,9 +2,9 @@ import { useRef, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { TileButton } from 'shared/components/TileButton/TileButton';
+import { useEventListener } from 'hooks/useEventListener';
 
 import './VerticalTabs.scss';
-import { useEventListener } from 'hooks/useEventListener';
 
 const childrenPropType = PropTypes.oneOfType([
   PropTypes.arrayOf(PropTypes.node),
