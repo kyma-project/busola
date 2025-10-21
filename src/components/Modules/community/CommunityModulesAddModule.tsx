@@ -373,6 +373,13 @@ export default function CommunityModulesAddModule(props: any) {
           onSubmit={handleSubmit}
         >
           <>
+            <MessageStrip
+              design="Information"
+              hideCloseButton
+              className="sap-margin-top-small"
+            >
+              {t('modules.community.sla-warning')}
+            </MessageStrip>
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
             ) : (
