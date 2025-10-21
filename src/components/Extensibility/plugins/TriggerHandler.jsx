@@ -73,7 +73,8 @@ export function TriggerHandler({
       }
       onChange(action);
     },
-    [onChange, trigger, storeKeys],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [onChange, trigger, storeKeys, subscriptions],
   );
 
   return (

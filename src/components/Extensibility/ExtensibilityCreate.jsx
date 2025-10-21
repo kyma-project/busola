@@ -181,14 +181,14 @@ export function ExtensibilityCreateCore({
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
       setResource={(v) => setStore(getUIStoreFromResourceObj(v))}
-      onPresetSelected={(presetValue) => {
+      onPresetSelected={(presetValue, variables) => {
         const updatedResource = merge(
           {},
           getResourceObjFromUIStore(store),
           presetValue,
         );
         setStore(getUIStoreFromResourceObj(updatedResource));
-        readVars(updatedResource);
+        readVars(updatedResource, variables);
         triggers.trigger('init', []);
       }}
       onReset={() => {
