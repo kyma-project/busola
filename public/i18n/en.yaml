@@ -958,7 +958,7 @@ modules:
     no-modules-description: Customize your cluster by adding the modules you need.
     no-modules-installed: No community modules installed
     release-channel: Release channel
-    sla-warning: Community modules are contributed by the Kyma community and are not automatically updated or maintained. Additionally, they are not covered by any service level agreement (SLA). Use them at your own risk.
+    sla-warning: <0>Community modules</0> are contributed by the Kyma community and are not automatically updated or maintained. Additionally, they are not covered by any service level agreement (SLA). Use them at your own risk.
     source-yaml:
       add-source-yaml: Add Source YAML
       example-format: 'Example format: http://github.com/project/repo/file.yaml'

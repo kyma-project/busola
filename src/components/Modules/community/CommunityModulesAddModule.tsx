@@ -44,6 +44,7 @@ import {
 } from 'components/Modules/community/communityModulesInstallHelpers';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
+import { Description } from 'shared/components/Description/Description';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -378,7 +379,12 @@ export default function CommunityModulesAddModule(props: any) {
               hideCloseButton
               className="sap-margin-top-small"
             >
-              {t('modules.community.sla-warning')}
+              <Description
+                i18nKey={'modules.community.sla-warning'}
+                url={
+                  'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-modules?locale=en-US&version=Cloud#community-modules'
+                }
+              />
             </MessageStrip>
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
