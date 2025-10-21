@@ -8,7 +8,7 @@ The **presets** section contains a list of objects that define which preset and 
 | ------------- | -------- | ------ | ---------------------------------------------------------------------------------------------------------- |
 | **name**      | **Yes**  | string | A name to display on the preset's dropdown.                                                                |
 | **value**     | **Yes**  |        | It contains the fields that are set when you choose the given preset from the list.                        |
-| **variables** | No       |        | Contains the names of the variables (var) that will be overwritten and the values ​​that will be assigned. |
+| **variables** | No       |        | It contains the names of the variables (`var`) that are overwritten and the values ​​that are assigned. |
 | **default**   | No       |        | If set to `true`, it prefills the form with values defined in **value**. It defaults to `false`.           |
 
 ## Example
