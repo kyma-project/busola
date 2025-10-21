@@ -4,22 +4,22 @@ on:
   workflow_call:
     inputs:
       tag:
-        description: "Additional tag for built images"
+        description: 'Additional tag for built images'
         required: true
         type: string
   push:
     branches:
       - main
     paths:
-      - ".github/workflows/busola-backend-build.yml"
-      - "backend/**"
-      - "package.json"
+      - '.github/workflows/busola-backend-build.yml'
+      - 'backend/**'
+      - 'package.json'
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/busola-backend-build.yml"
-      - "backend/**"
-      - "package.json"
+      - '.github/workflows/busola-backend-build.yml'
+      - 'backend/**'
+      - 'package.json'
 
 permissions:
   id-token: write # This is required for requesting the JWT token
@@ -34,9 +34,7 @@ jobs:
       dockerfile: Dockerfile
       context: backend
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
-      platforms: |
-        linux/amd64
-        
+
   extract-image-tag:
     name: Extract image tag
     runs-on: ubuntu-latest
@@ -74,9 +72,9 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
-          commit-message: "chore: pr deploy busola image to ${{ needs.extract-image-tag.outputs.image_tag }}"
+          commit-message: 'chore: pr deploy busola image to ${{ needs.extract-image-tag.outputs.image_tag }}'
           branch: pr-deploy-busola-image-${{ needs.extract-image-tag.outputs.image_tag }}
-          title: "chore: pr deploy busola image to ${{ needs.extract-image-tag.outputs.image_tag }}"
+          title: 'chore: pr deploy busola image to ${{ needs.extract-image-tag.outputs.image_tag }}'
           labels: pr-deploy
           body: |
             This PR updates the Busola image version in dev/main.tf to ${{ needs.extract-image-tag.outputs.image_tag }}.
