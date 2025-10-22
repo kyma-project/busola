@@ -50,12 +50,6 @@ export function Dropdown({
       placeholder={placeholder || label}
       disabled={disabled || !options?.length}
       required={required}
-      onClick={() => {
-        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
-          'ui5-responsive-popover',
-        );
-        popover.open = true;
-      }}
       onFocus={() => {
         comboboxRef?.current?.shadowRoot
           ?.querySelector('input')
@@ -74,11 +68,11 @@ export function Dropdown({
         popover.open = false;
       }}
       onClose={() => {
-        const currentOption = options.find((o) => o.key === selectedKey);
+        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
+          'ui5-responsive-popover',
+        );
 
-        if (comboboxRef?.current?.value !== currentOption?.text) {
-          comboboxRef.current.value = currentOption?.text || '';
-        }
+        popover.open = false;
       }}
       value={options.find((o) => o.key === selectedKey)?.text}
       {...props}
