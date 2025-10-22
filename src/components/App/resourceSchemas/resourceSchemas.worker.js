@@ -80,10 +80,14 @@ self.onmessage = ($event) => {
   const message = $event.data[0];
 
   if (message === 'sendingOpenapi') {
-    const openApiData = $event.data[1];
-    const activeClusterName = $event.data[2];
-
-    if (!openApiData || !activeClusterName) throw new Error();
+    if ($event.data.length > 2) {
+      const openApiData = $event.data[1];
+      const activeClusterName = $event.data[2];
+      if (!openApiData || !activeClusterName)
+        throw new Error('openApiData or activeCluster name is empty');
+    } else {
+      throw new Error('event data size is less than 2');
+    }
 
     createJSONSchemas(openApiData, activeClusterName)
       .then(() => {
