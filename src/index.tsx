@@ -50,12 +50,13 @@ i18next
     saveMissing: true,
     missingKeyHandler: (_lngs, _ns, key, fallback, _, opts) => {
       if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        if (opts.defaultValue || opts.defaultValue !== EMPTY_DEFAULT_VALUE) {
+        if (!opts.defaultValue || opts.defaultValue === EMPTY_DEFAULT_VALUE) {
           console.warn(
             'Missing translation key:',
             key,
             'Fallback value:',
             fallback,
+            'Opts',
             opts,
           );
         }
