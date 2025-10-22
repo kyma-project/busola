@@ -40,6 +40,13 @@ export function Dropdown({
     if (selectedOption) onSelect(event, selectedOption);
   };
 
+  const handlePopover = (open = false) => {
+    const popover = comboboxRef?.current?.shadowRoot?.querySelector(
+      'ui5-responsive-popover',
+    );
+    popover.open = open;
+  };
+
   const combobox = (
     <ComboBox
       className={className}
@@ -50,29 +57,16 @@ export function Dropdown({
       placeholder={placeholder || label}
       disabled={disabled || !options?.length}
       required={required}
-      onClick={() => {
-        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
-          'ui5-responsive-popover',
-        );
-        popover.open = true;
-      }}
+      onClick={() => handlePopover(true)}
       onFocus={() => {
         comboboxRef?.current?.shadowRoot
           ?.querySelector('input')
           ?.setAttribute('autocomplete', 'off');
 
-        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
-          'ui5-responsive-popover',
-        );
-        popover.open = true;
+        handlePopover(true);
       }}
       onSelectionChange={onSelectionChange}
-      onChange={() => {
-        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
-          'ui5-responsive-popover',
-        );
-        popover.open = false;
-      }}
+      onChange={() => handlePopover()}
       onClose={() => {
         const currentOption = options.find((o) => o.key === selectedKey);
 
@@ -80,6 +74,7 @@ export function Dropdown({
           comboboxRef.current.value = currentOption?.text || '';
         }
       }}
+      onBlur={() => handlePopover()}
       value={options.find((o) => o.key === selectedKey)?.text}
       {...props}
     >
