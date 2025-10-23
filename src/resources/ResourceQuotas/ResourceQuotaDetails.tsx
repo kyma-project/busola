@@ -104,18 +104,14 @@ export default function ResourceQuotaDetails(props: any) {
                   key={`${chartData.headerTitle}-${index}`}
                   className="item-wrapper card-tall"
                 >
-                  <Card
-                    className="radial-chart-card"
+                  <UI5RadialChart
+                    color={chartData.color}
+                    value={chartData.value}
+                    max={chartData.max}
+                    titleText={t(chartData.headerTitle)}
+                    additionalInfo={chartData.additionalInfo}
                     accessibleName={t(chartData.headerTitle)}
-                    header={<CardHeader titleText={t(chartData.headerTitle)} />}
-                  >
-                    <UI5RadialChart
-                      color={chartData.color}
-                      value={chartData.value}
-                      max={chartData.max}
-                      additionalInfo={chartData.additionalInfo}
-                    />
-                  </Card>
+                  />
                 </div>
               ))}
             </div>

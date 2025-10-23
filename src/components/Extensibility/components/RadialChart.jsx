@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { useJsonata } from '../hooks/useJsonata';
@@ -42,20 +41,16 @@ export const RadialChart = ({ structure, value, originalResource }) => {
 
   return (
     <div className="item-wrapper card-tall">
-      <Card
-        className="radial-chart-card"
+      <UI5RadialChart
+        color={structure.color}
+        value={value}
+        max={maxValue ? maxValue : structure?.maxValue}
+        titleText={t(structure?.name)}
+        additionalInfo={
+          additionalInfo ? additionalInfo : structure?.additionalInfo
+        }
         accessibleName={t(structure?.name)}
-        header={<CardHeader titleText={t(structure?.name)} />}
-      >
-        <UI5RadialChart
-          color={structure.color}
-          value={value}
-          max={maxValue ? maxValue : structure?.maxValue}
-          additionalInfo={
-            additionalInfo ? additionalInfo : structure?.additionalInfo
-          }
-        />
-      </Card>
+      />
     </div>
   );
 };
