@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
-import { Card, CardHeader } from '@ui5/webcomponents-react';
 import './NodeResources.scss';
 import {
   bytesToHumanReadable,

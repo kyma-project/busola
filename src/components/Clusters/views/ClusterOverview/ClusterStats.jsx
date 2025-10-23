@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
-import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
+import { Title } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import {
   bytesToHumanReadable,

@@ -7,7 +7,7 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
-import { Card, CardHeader, Text, Title } from '@ui5/webcomponents-react';
+import { Text, Title } from '@ui5/webcomponents-react';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import {
   mapLimitsAndRequestsToChartsData,
