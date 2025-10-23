@@ -43,9 +43,18 @@ i18next
       }),
     },
     saveMissing: true,
-    missingKeyHandler: (_lngs, _ns, key) => {
+    missingKeyHandler: (_lngs, _ns, key, fallback, _, opts) => {
       if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        console.warn(key);
+        if (!opts.defaultValue) {
+          console.warn(
+            'Missing translation key:',
+            key,
+            'Fallback value:',
+            fallback,
+            'Opts',
+            opts,
+          );
+        }
       }
     },
     interpolation: {

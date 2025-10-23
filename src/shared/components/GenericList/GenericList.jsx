@@ -423,11 +423,12 @@ export const GenericList = ({
               ) : (
                 <p>
                   {emptyListProps?.titleText ? (
-                    <Trans i18nKey={emptyListProps?.titleText} />
-                  ) : i18n.exists(notFoundMessage) ? (
-                    t(notFoundMessage)
+                    <Trans
+                      i18nKey={emptyListProps?.titleText}
+                      defaults={emptyListProps?.titleText}
+                    />
                   ) : (
-                    notFoundMessage
+                    t(notFoundMessage, { defaultValue: notFoundMessage })
                   )}
                 </p>
               )
