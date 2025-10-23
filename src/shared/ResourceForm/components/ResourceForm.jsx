@@ -63,6 +63,7 @@ export function ResourceForm({
   yamlSearchDisabled,
   yamlHideDisabled,
   stickyHeaderHeight,
+  title,
   resetLayout,
   formWithoutPanel,
 }) {
@@ -292,6 +293,7 @@ export function ResourceForm({
           className="resource-form--panel card-shadow sap-margin-y-small"
           disableMargin
           stickyHeader={true}
+          title={title}
           headerTop={stickyHeaderHeight + 'px'}
           headerActions={
             <>
