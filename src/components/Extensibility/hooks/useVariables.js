@@ -94,7 +94,7 @@ export function useVariables() {
     setDefs({ ...defs });
   };
 
-  const readVars = (resource) => {
+  const readVars = (resource, variables) => {
     const readVar = (def, path, base = resource) => {
       if (path.length) {
         const value = jp.value(base, pathToJP(path[0])) ?? [];
@@ -129,6 +129,13 @@ export function useVariables() {
 
     return Promise.all(promises).then((values) => {
       values.forEach(([def, val]) => (vars[def.var] = applyDefaults(def, val)));
+      if (variables?.length) {
+        variables.forEach((v) => {
+          if (v.name && vars.hasOwnProperty(v.name)) {
+            vars[v.name] = v.value;
+          }
+        });
+      }
       setVars({ ...vars });
     });
   };
