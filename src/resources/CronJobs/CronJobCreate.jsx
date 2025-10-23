@@ -11,8 +11,8 @@ import {
 } from 'resources/Jobs/ScheduleSection';
 import { ContainersSection } from 'resources/Jobs/ContainersSection';
 import {
-  createCronJobTemplate,
   createCronJobPresets,
+  createCronJobTemplate,
 } from 'resources/Jobs/templates';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { useAtomValue } from 'jotai';
@@ -87,7 +87,7 @@ export default function CronJobCreate({
       <CronJobSpecSection propertyPath="$.spec" />
       <ScheduleSection
         propertyPath="$.spec.schedule"
-        tooltipContent={t(scheduleDesc)}
+        tooltipContent={t(scheduleDesc, { defaultValue: scheduleDesc })}
       />
       <ContainersSection
         defaultOpen

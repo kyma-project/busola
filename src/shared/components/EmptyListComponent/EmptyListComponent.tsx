@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Button, IllustratedMessage, Title } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-fiori/dist/illustrations/AllIllustrations';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
@@ -29,7 +29,11 @@ export const EmptyListComponent = ({
 }: EmptyListComponentProps) => {
   const { t } = useTranslation();
   const subtitle = subtitleText ? (
-    <Trans i18nKey={subtitleText} components={[<ExternalLink url={url} />]} />
+    <Trans
+      i18nKey={subtitleText}
+      defaults={subtitleText}
+      components={[<ExternalLink url={url} />]}
+    />
   ) : (
     ''
   );

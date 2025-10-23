@@ -62,7 +62,7 @@ export default function ConfigMapCreate({
       <RichEditorDataField
         defaultOpen
         propertyPath="$.data"
-        tooltipContent={t(dataDesc)}
+        tooltipContent={t(dataDesc, { defaultValue: dataDesc })}
       />
     </ResourceForm>
   );

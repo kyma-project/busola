@@ -14,6 +14,7 @@ export const createTranslationTextWithLinks = (
     return (
       <Trans
         i18nKey={processedText}
+        defaults={processedText}
         i18n={i18n}
         t={t}
         components={components}

@@ -120,7 +120,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         filterOptions
         title={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
-        sectionTooltipContent={t(apiGroupDesc)}
+        sectionTooltipContent={t(apiGroupDesc, { defaultValue: apiGroupDesc })}
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
@@ -136,7 +136,9 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         filterOptions
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
-        sectionTooltipContent={t(resourcesDesc)}
+        sectionTooltipContent={t(resourcesDesc, {
+          defaultValue: resourcesDesc,
+        })}
         options={availableResources.map((i) => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
@@ -149,7 +151,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
               design="Transparent"
               onClick={fetchResources}
               disabled={!loadable}
-              accessibleName={t('roles.buttons.load')}
+              accessibleName={t('roles.buttons.load-resources')}
               tooltip={t('roles.tooltips.load')}
             >
               {t('roles.buttons.load-resources')}
@@ -180,7 +182,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         filterOptions
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
-        sectionTooltipContent={t(verbsDesc)}
+        sectionTooltipContent={t(verbsDesc, { defaultValue: verbsDesc })}
         options={verbs.map((i) => ({ key: i, text: i }))}
         defaultOpen
         nestingLevel={2}
@@ -193,14 +195,18 @@ export function RuleInput({ rule, rules, setRules, schema }) {
       <TextArrayInput
         title={t('roles.headers.resource-names')}
         propertyPath="$.resourceNames"
-        sectionTooltipContent={t(resourceNamesDesc)}
+        sectionTooltipContent={t(resourceNamesDesc, {
+          defaultValue: resourceNamesDesc,
+        })}
         nestingLevel={2}
       />
       {!namespaceId && (
         <ComboboxArrayInput
           title={t('roles.headers.non-resource-urls')}
           propertyPath="$.nonResourceURLs"
-          sectionTooltipContent={t(nonResourceURLsDesc)}
+          sectionTooltipContent={t(nonResourceURLsDesc, {
+            defaultValue: nonResourceURLsDesc,
+          })}
           nestingLevel={2}
           options={nonResourceUrls.map((i) => ({ key: i, text: i }))}
         />

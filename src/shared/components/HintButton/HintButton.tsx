@@ -1,7 +1,6 @@
 import { Button, Popover, Text } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
-import React, { ReactNode, useState } from 'react';
-import { uniqueId } from 'lodash';
+import React, { ReactNode, useId } from 'react';
 import { createTranslationTextWithLinks } from '../../helpers/linkExtractor';
 import { useTranslation } from 'react-i18next'; // this regex catch 2 things, markdown URL or normal URL
 
@@ -22,7 +21,7 @@ export function HintButton({
   ariaTitle = '',
   className,
 }: HintButtonProps) {
-  const [ID] = useState(uniqueId('id-')); //todo: migrate to useID from react after upgrade to version 18+
+  const [ID] = useId();
   const { t, i18n } = useTranslation();
   let desc = description;
 

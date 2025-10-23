@@ -11,8 +11,8 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import {
   createBindingTemplate,
-  newSubject,
   DEFAULT_APIGROUP,
+  newSubject,
 } from './templates';
 import { SingleSubjectForm } from './SubjectForm';
 import { validateBinding } from './helpers';
@@ -126,7 +126,7 @@ export function GenericRoleBindingCreate({
         listTitle={t('role-bindings.create-modal.subjects')}
         nameSingular={t('role-bindings.create-modal.subject')}
         entryTitle={(subject) => subject?.name}
-        tooltipContent={t(subjectsDesc)}
+        tooltipContent={t(subjectsDesc, { defaultValue: subjectsDesc })}
         atLeastOneRequiredMessage={t(
           'role-bindings.create-modal.at-least-one-subject-required',
           { resource: singularName },
