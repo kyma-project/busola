@@ -46,7 +46,7 @@ export const UI5RadialChart = ({
       <div
         className={classnames}
         onClick={onClick}
-        aria-label={`Radial chart, ${text}${additionalInfo ? `. ${additionalInfo}` : ''}`}
+        aria-label={`${accessibleName}, radial chart, ${text}${additionalInfo ? `, ${additionalInfo}` : ''}`}
         role="img"
       >
         <RadialChart
