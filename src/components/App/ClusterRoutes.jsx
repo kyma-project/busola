@@ -33,6 +33,7 @@ export default function ClusterRoutes() {
   const { t } = useTranslation();
   const language = useAtomValue(languageAtom);
   const setAuth = useSetAtom(authDataAtom);
+  const auth = useAtomValue(authDataAtom);
   const clusters = useAtomValue(clustersAtom);
   const extensions = useAtomValue(extensionsAtom);
   const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
@@ -56,8 +57,9 @@ export default function ClusterRoutes() {
       navigationNodes.filter((nn) => nn.items?.length > 0) || [];
     if (
       cluster &&
+      cluster?.name === currentClusterName &&
       !filteredNavigationNodes?.length &&
-      cluster?.name === currentClusterName
+      !auth
     ) {
       navigate(0, { replace: true });
     }
@@ -83,6 +85,7 @@ export default function ClusterRoutes() {
     setAuth,
     search,
     navigationNodes,
+    auth,
   ]);
 
   return (
