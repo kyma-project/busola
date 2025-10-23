@@ -5,7 +5,7 @@ import { chooseComboboxOption } from '../../support/helpers';
 const HPA_NAME = 'test-hpa';
 const DOCKER_IMAGE = 'nginx';
 const DEPLOYEMENT_NAME = 'no-pod';
-const MIN_REPLICAS = 1;
+const MIN_REPLICAS = 2;
 const MAX_REPLICAS = 3;
 const SCALE_TARGET_REF_KIND = 'Deployment';
 const SCALE_TARGET_REF_NAME = 'no-pod';
@@ -110,6 +110,7 @@ context('Test HPA', () => {
     cy.saveChanges('Edit');
     cy.inspectTab('View');
 
+    cy.wait(1000);
     cy.contains('Min Replicas').parent().contains(MIN_REPLICAS);
   });
 });
