@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import yaml from 'js-yaml';
 import { Suspense } from 'react';
-import { initReactI18next, setDefaults } from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
 import { savePreviousPath } from 'state/useAfterInitHook';
@@ -27,11 +27,6 @@ import './styles/fiori-helpers.scss';
 import { createRoot } from 'react-dom/client';
 import JotaiDevTools from 'components/JotaiDevTools/JotaiDevTools';
 
-const EMPTY_DEFAULT_VALUE = 'EMPTY_DEFAULT_VALUE';
-setDefaults({
-  transEmptyNodeValue: EMPTY_DEFAULT_VALUE,
-});
-
 i18next
   .use(initReactI18next)
   .use(i18nextBackend)
@@ -50,7 +45,7 @@ i18next
     saveMissing: true,
     missingKeyHandler: (_lngs, _ns, key, fallback, _, opts) => {
       if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        if (!opts.defaultValue || opts.defaultValue === EMPTY_DEFAULT_VALUE) {
+        if (!opts.defaultValue) {
           console.warn(
             'Missing translation key:',
             key,
