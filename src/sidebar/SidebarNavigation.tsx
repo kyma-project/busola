@@ -20,7 +20,6 @@ import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-import { clusterAtom } from 'state/clusterAtom';
 
 export function SidebarNavigation() {
   const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
@@ -30,7 +29,7 @@ export function SidebarNavigation() {
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
-  const cluster = useAtomValue(clusterAtom);
+
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
     useMatch({
@@ -78,10 +77,6 @@ export function SidebarNavigation() {
       layout: 'OneColumn',
     });
   };
-
-  if (cluster && !topLevelNodes?.length && !categoryNodes?.length) {
-    navigate(0);
-  }
 
   return (
     <SideNavigation
