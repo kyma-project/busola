@@ -102,6 +102,7 @@ context('Test HPA', () => {
       .eq(0)
       .find('input')
       .click()
+      .wait(1000)
       .clear()
       .wait(1000)
       .type(MIN_REPLICAS);
