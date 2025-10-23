@@ -168,6 +168,7 @@ export const ClusterDataForm = ({
     <ResourceForm
       pluralKind="clusters"
       singularName={t(`clusters.name_singular`)}
+      title={t('clusters.wizard.kubeconfig')}
       resource={kubeconfig}
       setResource={setResource}
       initialResource={kubeconfig}
