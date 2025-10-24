@@ -24,14 +24,14 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
   return (
     <div>
       <Title level="H5" className="sap-margin-bottom-tiny">
-        {t('clusters.wizard.kubeconfig')}
+        {t('clusters.wizard.kubeconfig-provide')}
         <>
           <HintButton
             setShowTitleDescription={setShowTitleDescription}
             showTitleDescription={showTitleDescription}
             description={t('clusters.wizard.intro')}
             className="sap-margin-begin-tiny"
-            ariaTitle={t('clusters.wizard.kubeconfig')}
+            ariaTitle={t('clusters.wizard.kubeconfig-provide')}
           />
         </>
       </Title>
