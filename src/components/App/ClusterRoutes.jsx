@@ -55,13 +55,18 @@ export default function ClusterRoutes() {
   useEffect(() => {
     const filteredNavigationNodes =
       navigationNodes.filter((nn) => nn.items?.length > 0) || [];
+    const pathname = `/cluster/${encodeURIComponent(
+      currentClusterName,
+    )}/overview`;
     if (
       cluster &&
       cluster?.name === currentClusterName &&
       !filteredNavigationNodes?.length &&
-      !auth
+      !auth &&
+      window.location.href.includes(pathname)
     ) {
       navigate(0, { replace: true });
+      return;
     }
     if (cluster?.name === currentClusterName) return;
     const currentCluster = clusters?.[currentClusterName];
