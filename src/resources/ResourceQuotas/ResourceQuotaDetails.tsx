@@ -7,7 +7,7 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
-import { Card, CardHeader, Text, Title } from '@ui5/webcomponents-react';
+import { Text, Title } from '@ui5/webcomponents-react';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import {
   mapLimitsAndRequestsToChartsData,
@@ -104,18 +104,14 @@ export default function ResourceQuotaDetails(props: any) {
                   key={`${chartData.headerTitle}-${index}`}
                   className="item-wrapper card-tall"
                 >
-                  <Card
-                    className="radial-chart-card"
+                  <UI5RadialChart
+                    color={chartData.color}
+                    value={chartData.value}
+                    max={chartData.max}
+                    titleText={t(chartData.headerTitle)}
+                    additionalInfo={chartData.additionalInfo}
                     accessibleName={t(chartData.headerTitle)}
-                    header={<CardHeader titleText={t(chartData.headerTitle)} />}
-                  >
-                    <UI5RadialChart
-                      color={chartData.color}
-                      value={chartData.value}
-                      max={chartData.max}
-                      additionalInfo={chartData.additionalInfo}
-                    />
-                  </Card>
+                  />
                 </div>
               ))}
             </div>

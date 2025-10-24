@@ -36,56 +36,44 @@ export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
   return (
     <>
       <div className="item-wrapper card-tall">
-        <Card
-          className="radial-chart-card item"
-          header={
-            <CardHeader
-              titleText={t('cluster-overview.statistics.cpu-usage')}
-            />
+        <UI5RadialChart
+          cardClassName="item"
+          color="var(--sapChart_OrderedColor_5)"
+          value={
+            cpusToHumanReadable(cpu.usage, {
+              unit: 'm',
+            }).value
           }
-        >
-          <UI5RadialChart
-            color="var(--sapChart_OrderedColor_5)"
-            value={
-              cpusToHumanReadable(cpu.usage, {
-                unit: 'm',
-              }).value
-            }
-            max={
-              cpusToHumanReadable(cpu.capacity, {
-                unit: 'm',
-              }).value
-            }
-            additionalInfo={`${
-              cpusToHumanReadable(cpu.usage, {
-                unit: 'm',
-              }).string
-            } / ${
-              cpusToHumanReadable(cpu.capacity, {
-                unit: 'm',
-              }).string
-            }`}
-          />
-        </Card>
+          max={
+            cpusToHumanReadable(cpu.capacity, {
+              unit: 'm',
+            }).value
+          }
+          titleText={t('cluster-overview.statistics.cpu-usage')}
+          additionalInfo={`${
+            cpusToHumanReadable(cpu.usage, {
+              unit: 'm',
+            }).string
+          } / ${
+            cpusToHumanReadable(cpu.capacity, {
+              unit: 'm',
+            }).string
+          }`}
+          accessibleName={t('cluster-overview.statistics.cpu-usage')}
+        />
       </div>
       <div className="item-wrapper card-tall">
-        <Card
-          className="radial-chart-card item"
-          header={
-            <CardHeader
-              titleText={t('cluster-overview.statistics.memory-usage')}
-            />
-          }
-        >
-          <UI5RadialChart
-            color="var(--sapChart_OrderedColor_6)"
-            value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}
-            max={bytesToHumanReadable(memory.capacity, { unit: 'Mi' }).value}
-            additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
-              bytesToHumanReadable(memory.capacity).string
-            }`}
-          />
-        </Card>
+        <UI5RadialChart
+          cardClassName="item"
+          color="var(--sapChart_OrderedColor_6)"
+          value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}
+          max={bytesToHumanReadable(memory.capacity, { unit: 'Mi' }).value}
+          titleText={t('cluster-overview.statistics.memory-usage')}
+          additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
+            bytesToHumanReadable(memory.capacity).string
+          }`}
+          accessibleName={t('cluster-overview.statistics.memory-usage')}
+        />
       </div>
     </>
   );
