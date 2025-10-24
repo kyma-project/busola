@@ -1,8 +1,5 @@
-import { useRef, useState } from 'react';
-
 import PropTypes from 'prop-types';
 import { TileButton } from 'shared/components/TileButton/TileButton';
-import { useEventListener } from 'hooks/useEventListener';
 
 import './VerticalTabs.scss';
 
@@ -26,27 +23,18 @@ VerticalTabs.propTypes = {
     }),
   ).isRequired,
   children: childrenPropType,
+  listRef: PropTypes.any.isRequired,
+  tabId: PropTypes.number.isRequired,
+  onSetTabId: PropTypes.func.isRequired,
 };
 
-export function VerticalTabs({ tabs, children }) {
-  const [tabId, setTabId] = useState(children[0]?.props.id || 0);
-  const listRef = useRef(null);
-
-  useEventListener(
-    'keydown',
-    (e) => {
-      const { key } = e;
-      if (key === 'ArrowDown' && tabId <= tabs?.length - 1) {
-        setTabId(tabId + 1);
-        listRef.current.children[tabId].children[0].focus();
-      } else if (key === 'ArrowUp' && tabId > 1) {
-        setTabId(tabId - 1);
-        listRef.current.children[tabId - 2].children[0].focus();
-      }
-    },
-    [tabId, tabs],
-  );
-
+export function VerticalTabs({
+  tabs,
+  children,
+  listRef,
+  tabId,
+  onSetTabId: handleSetTabId,
+}) {
   return (
     <section className="vertical-tabs-wrapper">
       <ul ref={listRef}>
@@ -55,7 +43,7 @@ export function VerticalTabs({ tabs, children }) {
             key={id}
             {...props}
             isActive={id === tabId}
-            handleClick={() => setTabId(id)}
+            handleClick={() => handleSetTabId(id)}
           />
         ))}
       </ul>

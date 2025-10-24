@@ -1,4 +1,10 @@
-import { Button, Icon, Dialog, Bar } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Icon,
+  Dialog,
+  Bar,
+  TabContainerDomRef,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 
@@ -18,10 +24,15 @@ import ThemeChooser from './ThemeChooser';
 
 import './Preferences.scss';
 import EditViewSettings from './EditViewSettings';
+import { useRef, useState } from 'react';
 
 export function Preferences() {
   const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useAtom(isPreferencesOpenAtom);
+  const tabsListRef = useRef<TabContainerDomRef>(null);
+  const listRef = useRef<TabContainerDomRef>(null);
+  const [tabId, setTabId] = useState(1);
+  const [isRightPanel, setIsRightPanel] = useState(false);
 
   const tabs = [
     {
@@ -52,6 +63,32 @@ export function Preferences() {
     },
   ];
 
+  useEventListener(
+    'keydown',
+    (e) => {
+      //@ts-ignore
+      const { key } = e;
+      if (key === 'ArrowDown' && tabId <= tabs?.length - 1) {
+        if (!isRightPanel) {
+          setTabId(tabId + 1);
+          //@ts-ignore
+          listRef?.current?.children[tabId].children[0].focus();
+        }
+      } else if (key === 'ArrowUp' && tabId > 1) {
+        if (!isRightPanel) {
+          setTabId(tabId - 1);
+          //@ts-ignore
+          listRef?.current?.children[tabId - 2].children[0].focus();
+        }
+      } else if (key === 'ArrowRight') {
+        setIsRightPanel(true);
+      } else if (key === 'ArrowLeft') {
+        setIsRightPanel(false);
+      }
+    },
+    [tabId, tabs],
+  );
+
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -81,18 +118,27 @@ export function Preferences() {
       }
       className="preferences-dialog"
     >
-      <VerticalTabs tabs={tabs}>
+      <VerticalTabs
+        tabs={tabs}
+        listRef={listRef}
+        tabId={tabId}
+        onSetTabId={setTabId}
+      >
         <VerticalTabs.Content id={1}>
           <TabContainer
             tabLayout="Inline"
             contentBackgroundDesign="Transparent"
+            ref={tabsListRef}
           >
             <Tab
               style={{ padding: '-16px -32px' }}
               key="theme-settings"
               text={t('settings.theme')}
             >
-              <ThemeChooser />
+              <ThemeChooser
+                keyNavigationEnabled={isRightPanel}
+                tabsListRef={tabsListRef}
+              />
             </Tab>
             <Tab key="language-settings" text={t('settings.language')}>
               <LanguageSettings />
