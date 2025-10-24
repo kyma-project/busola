@@ -22,7 +22,11 @@
     <meta name="theme-color" content="#000000" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="font-src 'self' https://sdk.openui5.org/; script-src 'self' 'unsafe-eval' blob:; object-src 'self';"
+      content="
+    font-src 'self' https://sdk.openui5.org/ data:;
+    script-src 'self' 'unsafe-eval' blob:;
+    object-src 'self';
+  "
     />
     <title>Busola</title>
   </head>
