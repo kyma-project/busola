@@ -53,21 +53,25 @@ export default function ClusterRoutes() {
   }, [extensions, language]);
 
   useEffect(() => {
-    const filteredNavigationNodes =
-      navigationNodes.filter((nn) => nn.items?.length > 0) || [];
-    const pathname = `/cluster/${encodeURIComponent(
-      currentClusterName,
-    )}/overview`;
-    if (
-      cluster &&
-      cluster?.name === currentClusterName &&
-      !filteredNavigationNodes?.length &&
-      !auth &&
-      window.location.href.includes(pathname)
-    ) {
-      navigate(0, { replace: true });
-      return;
-    }
+    // Some browsers (e.g., Firefox) have a problem with authentication redirects.
+    // If the redirect doesn't occur, refreshing to reload helps.
+    setTimeout(() => {
+      const pathname = `/cluster/${encodeURIComponent(
+        currentClusterName,
+      )}/overview`;
+      if (
+        cluster &&
+        cluster?.name === currentClusterName &&
+        !navigationNodes?.length &&
+        !auth &&
+        window.location.href.includes(pathname)
+      ) {
+        navigate(0, { replace: true });
+      }
+    }, 2000);
+  }, [currentClusterName, cluster, navigate, navigationNodes, auth]);
+
+  useEffect(() => {
     if (cluster?.name === currentClusterName) return;
     const currentCluster = clusters?.[currentClusterName];
     const kubeconfigId = search.get('kubeconfigID');
@@ -89,8 +93,6 @@ export default function ClusterRoutes() {
     setCluster,
     setAuth,
     search,
-    navigationNodes,
-    auth,
   ]);
 
   return (

@@ -24,10 +24,10 @@ export const sidebarNavigationNodesAtom = atom<Promise<Category[]>>(
     const features = configuration?.features;
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    if (!navNodes && !externalNodes) {
+    if (!navNodes || !externalNodes) {
       return [];
     }
-    let allNodes = [...(navNodes || []), ...(externalNodes || [])];
+    let allNodes = [...navNodes, ...externalNodes];
 
     const extResources = get(extensionsAtom);
     const isExtensibilityOn =
