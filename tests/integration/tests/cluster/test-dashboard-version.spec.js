@@ -8,7 +8,7 @@ context('Test Kyma Dashboard Version link', () => {
   });
 
   it('Check Kyma Dashboard Version link', () => {
-    cy.get('[title="Profile"]').click();
+    cy.get('[tooltip="Profile"]').click({ force: true });
 
     cy.get('ui5-menu')
       .find('ui5-menu-item:visible')

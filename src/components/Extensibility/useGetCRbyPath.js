@@ -13,7 +13,7 @@ export const useGetCRbyPath = (resourceType) => {
   const { name: clusterName } = useAtomValue(clusterAtom) || {};
   const layoutState = useAtomValue(columnLayoutAtom);
   const resource = useMemo(() => {
-    return extensions.find((el) => {
+    return extensions?.find((el) => {
       const { scope, urlPath, resource } = el.general || {};
       const extensionPath = urlPath || pluralize(resource?.kind?.toLowerCase());
 

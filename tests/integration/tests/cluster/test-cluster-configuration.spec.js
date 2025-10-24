@@ -59,7 +59,7 @@ context('Test Cluster configuration', () => {
 
     cy.get('ui5-table').find('ui5-table-row').should('have.length', 20);
 
-    cy.get('[title="Profile"]').click();
+    cy.get('[tooltip="Profile"]').click({ force: true });
 
     cy.get('ui5-menu-item:visible')
       .contains('Preferences')
