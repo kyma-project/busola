@@ -64,7 +64,6 @@ export default function ThemeChooser({
         if (key === 'ArrowDown' && tabId <= availableThemesArray.length - 2) {
           setTabId(tabId + 1);
           setUsedTheme(getThemeName(tabId + 1) || 'sap_horizon');
-          console.log(tabsListRef?.current?.children[tabId].children[0]);
           //@ts-ignore
           tabsListRef?.current?.children[tabId + 1].children[0].focus();
         } else if (key === 'ArrowUp' && tabId >= 1) {
