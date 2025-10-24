@@ -9,7 +9,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Deletes without confirmation', () => {
-    cy.get('[tooltip="Profile"]').click();
+    cy.get('[tooltip="Profile"]').click({ force: true });
 
     cy.get('ui5-menu-item:visible')
       .contains('Preferences')
@@ -49,7 +49,7 @@ context('Test app settings and preferences', () => {
     cy.contains('Are you sure you want to delete').should('not.be.visible');
 
     // disable "deletion without confirmation" to not mess other tests
-    cy.get('[tooltip="Profile"]').click();
+    cy.get('[tooltip="Profile"]').click({ force: true });
 
     cy.get('ui5-menu-item:visible')
       .contains('Preferences')
@@ -69,7 +69,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Changes application theme', () => {
-    cy.get('[tooltip="Profile"]').click();
+    cy.get('[tooltip="Profile"]').click({ force: true });
 
     cy.get('ui5-menu-item:visible')
       .contains('Preferences')
@@ -94,7 +94,7 @@ context('Test app settings and preferences', () => {
   });
 
   it('Shows hidden namespaces', () => {
-    cy.get('[tooltip="Profile"]').click();
+    cy.get('[tooltip="Profile"]').click({ force: true });
 
     cy.get('ui5-menu-item:visible')
       .contains('Preferences')

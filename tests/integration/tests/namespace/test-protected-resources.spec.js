@@ -112,7 +112,7 @@ context('Test Protected Resources', () => {
   });
 
   it('Change protection setting', () => {
-    cy.get('[tooltip="Profile"]').click();
+    cy.get('[tooltip="Profile"]').click({ force: true });
 
     cy.get('ui5-menu-item:visible')
       .contains('Preferences')
