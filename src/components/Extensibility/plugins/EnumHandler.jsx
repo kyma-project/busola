@@ -35,7 +35,7 @@ export function EnumHandler({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schemaEnum, resource, rule?.itemVars, storeKeys]);
+  }, [schemaEnum, resource, rule?.itemVars, storeKeys, jsonata]);
 
   return (
     <Plugin

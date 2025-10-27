@@ -90,6 +90,7 @@ export function ResourceRefRender({
     singleRootResource,
     embedResource,
     memoizedValue,
+    jsonata,
   ]);
 
   const setValue = (value) => {

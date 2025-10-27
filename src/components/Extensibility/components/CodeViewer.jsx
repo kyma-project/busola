@@ -48,6 +48,7 @@ export function CodeViewer({
     scope,
     value,
     arrayItems,
+    jsonata,
   ]);
 
   const getValue = (value) => {

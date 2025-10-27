@@ -65,6 +65,7 @@ export function ResourceLink({
     scope,
     value,
     arrayItems,
+    jsonata,
   ]);
 
   if (!value) {

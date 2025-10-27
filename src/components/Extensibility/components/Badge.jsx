@@ -62,6 +62,7 @@ export function Badge({
     scope,
     value,
     arrayItems,
+    jsonata,
   ]);
 
   const getTooltipContent = (description) => {

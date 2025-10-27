@@ -67,6 +67,7 @@ export function ResourceButton({
     scope,
     value,
     arrayItems,
+    jsonata,
   ]);
 
   if (!value) {

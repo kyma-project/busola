@@ -32,7 +32,13 @@ export const RadialChart = ({ structure, value, originalResource }) => {
     };
     setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.maxValue, structure.additionalInfo, originalResource, value]);
+  }, [
+    structure.maxValue,
+    structure.additionalInfo,
+    originalResource,
+    value,
+    jsonata,
+  ]);
 
   if (error) {
     return t('extensibility.configuration-error', {

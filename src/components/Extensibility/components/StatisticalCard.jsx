@@ -58,6 +58,7 @@ export function StatisticalCard({
     structure?.mainValue?.source,
     originalResource,
     value,
+    jsonata,
   ]);
 
   if (err) {

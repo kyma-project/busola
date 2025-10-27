@@ -82,7 +82,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       }),
     ).then(() => setParsedOptions(parsedOpt));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemVars, options, rule?.itemVars, storeKeys, resource, value]);
+  }, [itemVars, options, rule?.itemVars, storeKeys, resource, value, jsonata]);
 
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)

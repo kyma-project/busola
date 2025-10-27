@@ -59,7 +59,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
       setFilteredItems(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resource, isStatic, filter, JSON.stringify(items)]);
+  }, [resource, isStatic, filter, JSON.stringify(items), jsonata]);
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
   if (!resource && !isStatic) {
