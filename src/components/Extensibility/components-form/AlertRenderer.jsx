@@ -55,7 +55,7 @@ export function AlertRenderer({
     }
     getAlertJsonata(alert, item).then((res) => setAlertJsonata(res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [alert, item, originalResource, resource, embedResource, value, jsonata]);
+  }, [alert, item, originalResource, resource, embedResource, value]);
 
   const alertLink = useCreateResourceDescription(alertJsonata);
   return (

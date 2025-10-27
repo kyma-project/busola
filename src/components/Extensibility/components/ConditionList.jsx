@@ -81,7 +81,6 @@ export const ConditionList = ({
     embedResource,
     scope,
     arrayItems,
-    jsonata,
   ]);
 
   if (!Array.isArray(value) || value?.length === 0) {

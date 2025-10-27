@@ -81,7 +81,6 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       props.scope,
       props.value,
       props.arrayItems,
-      jsonata,
     ]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;

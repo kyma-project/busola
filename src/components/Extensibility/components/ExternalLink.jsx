@@ -59,7 +59,6 @@ export const ExternalLink = ({
     scope,
     value,
     arrayItems,
-    jsonata,
   ]);
 
   if (isNil(value)) return emptyLeafPlaceholder;
