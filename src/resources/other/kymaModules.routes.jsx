@@ -1,5 +1,7 @@
 import { FlexibleColumnLayout, MessageStrip } from '@ui5/webcomponents-react';
 import React, { Suspense, useDeferredValue, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+
 import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtom } from 'jotai';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -17,6 +19,7 @@ import { CommunityModulesDeleteBoxContextProvider } from 'components/Modules/com
 import { AddSourceYamls } from 'components/Modules/community/components/AddSourceYamls';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { CommunityModulesUploadProvider } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 const KymaModulesList = React.lazy(
   () => import('components/Modules/ModulesList'),
@@ -205,6 +208,7 @@ const ColumnWrapper = ({
           >
             <CommunityModulesUploadProvider>
               <Suspense fallback={<Spinner />}>
+                {createPortal(<YamlUploadDialog />, document.body)}
                 <FlexibleColumnLayout
                   style={{ height: '100%' }}
                   layout={layoutState?.layout}
