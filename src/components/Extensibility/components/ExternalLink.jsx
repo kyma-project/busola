@@ -10,7 +10,8 @@ import { Button, Icon, Link } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 
 const makeHref = ({ linkObject, value }) => {
-  if (linkObject?.linkError) return linkObject?.linkError?.message;
+  const [link, linkError] = linkObject;
+  if (linkError) return linkError;
 
   let href;
   if (typeof value === 'string') {
@@ -19,8 +20,7 @@ const makeHref = ({ linkObject, value }) => {
         ? value
         : `https://${value}`;
   }
-
-  return linkObject?.link || href;
+  return link || href;
 };
 
 export const ExternalLink = ({
