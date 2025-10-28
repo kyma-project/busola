@@ -65,15 +65,9 @@ export function Dropdown({
         handlePopover(true);
       }}
       onSelectionChange={onSelectionChange}
-      onChange={() => handlePopover()}
-      onClose={() => {
-        const popover = comboboxRef?.current?.shadowRoot?.querySelector(
-          'ui5-responsive-popover',
-        );
-
-        popover.open = false;
-      }}
-      onBlur={() => handlePopover()}
+      onChange={() => handlePopover(false)}
+      onClose={() => handlePopover(false)}
+      onBlur={() => handlePopover(false)}
       value={options.find((o) => o.key === selectedKey)?.text}
       {...props}
     >
