@@ -24,6 +24,7 @@ import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { IncorrectPath } from './IncorrectPath';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { useUrl } from 'hooks/useUrl';
+import { sidebarNavigationNodesAtom } from 'state/navigation/sidebarNavigationNodesAtom';
 
 export default function ClusterRoutes() {
   let { currentClusterName } = useParams() || {};
@@ -32,8 +33,10 @@ export default function ClusterRoutes() {
   const { t } = useTranslation();
   const language = useAtomValue(languageAtom);
   const setAuth = useSetAtom(authDataAtom);
+  const auth = useAtomValue(authDataAtom);
   const clusters = useAtomValue(clustersAtom);
   const extensions = useAtomValue(extensionsAtom);
+  const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
   const [cluster, setCluster] = useAtom(clusterAtom);
   const [search] = useSearchParams();
   const [extensibilityRoutes, setExtensibilityRoutes] = useState(null);
@@ -50,6 +53,25 @@ export default function ClusterRoutes() {
   }, [extensions, language]);
 
   useEffect(() => {
+    // Some browsers (e.g., Firefox) have a problem with authentication redirects.
+    // If the redirect doesn't occur, refreshing to reload helps.
+    setTimeout(() => {
+      const pathname = `/cluster/${encodeURIComponent(
+        currentClusterName,
+      )}/overview`;
+      if (
+        cluster &&
+        cluster?.name === currentClusterName &&
+        !navigationNodes?.length &&
+        !auth &&
+        window.location.href.includes(pathname)
+      ) {
+        navigate(0, { replace: true });
+      }
+    }, 2000);
+  }, [currentClusterName, cluster, navigate, navigationNodes, auth]);
+
+  useEffect(() => {
     if (cluster?.name === currentClusterName) return;
     const currentCluster = clusters?.[currentClusterName];
     const kubeconfigId = search.get('kubeconfigID');
@@ -59,7 +81,9 @@ export default function ClusterRoutes() {
       navigate('/clusters');
       return;
     }
-    setAuth(null);
+    if (cluster?.name) {
+      setAuth(null);
+    }
     setCluster(currentCluster);
   }, [
     currentClusterName,

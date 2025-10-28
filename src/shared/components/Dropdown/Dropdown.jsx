@@ -57,7 +57,6 @@ export function Dropdown({
       placeholder={placeholder || label}
       disabled={disabled || !options?.length}
       required={required}
-      onClick={() => handlePopover(true)}
       onFocus={() => {
         comboboxRef?.current?.shadowRoot
           ?.querySelector('input')
@@ -66,15 +65,9 @@ export function Dropdown({
         handlePopover(true);
       }}
       onSelectionChange={onSelectionChange}
-      onChange={() => handlePopover()}
-      onClose={() => {
-        const currentOption = options.find((o) => o.key === selectedKey);
-
-        if (comboboxRef?.current?.value !== currentOption?.text) {
-          comboboxRef.current.value = currentOption?.text || '';
-        }
-      }}
-      onBlur={() => handlePopover()}
+      onChange={() => handlePopover(false)}
+      onClose={() => handlePopover(false)}
+      onBlur={() => handlePopover(false)}
       value={options.find((o) => o.key === selectedKey)?.text}
       {...props}
     >
