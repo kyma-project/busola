@@ -49,11 +49,11 @@ cluster-overview:
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
-  title: Cluster Role Bindings
+  title: ClusterRoleBindings
 cluster-roles:
   description: <0>ClusterRole</0> is a set of cluster-level resources and permissions that can be assigned to a user.
   name_singular: ClusterRole
-  title: Cluster Roles
+  title: ClusterRoles
 cluster-validation:
   scan:
     buttons:
@@ -480,7 +480,7 @@ config-maps:
     migrate: Migrate
   description: <0>ConfigMap</0> is an object that allows for storing non-sensitive data in key-value pairs.
   name_singular: ConfigMap
-  title: Config Maps
+  title: ConfigMaps
 configuration:
   title: Configuration
 cron-jobs:
@@ -516,7 +516,7 @@ cron-jobs:
   name_singular: CronJob
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
-  title: Cron Jobs
+  title: CronJobs
 custom-resource-definitions:
   description: <0>CustomResourceDefinition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
@@ -549,12 +549,12 @@ custom-resource-definitions:
     related-crds: Related CRDs
     schema: Schema
     version: Version
-  title: Custom Resource Definitions
+  title: CustomResourceDefinitions
 custom-resources:
   description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResourceDefinition</1> first.
   headers:
     api-version: API Version
-  title: Custom Resources
+  title: CustomResources
 daemon-sets:
   description: <0>DaemonSet</0> ensures that replicated Pods are running across a set of available nodes.
   name_singular: DaemonSet
@@ -568,7 +568,7 @@ daemon-sets:
     number-ready: Number Ready
     number-unavailable: Number Unavailable
     updated-number-scheduled: Updated Number Scheduled
-  title: Daemon Sets
+  title: DaemonSets
   tolerations:
     effect: Effect
     key: Key
@@ -704,7 +704,7 @@ get-help:
   help-sap-com: help.sap.com
   kyma-project-io: kyma-project.io
 helm-releases:
-  description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
+  description: <0>HelmRelease</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
     app-version: App Version
     chart: Chart
@@ -722,7 +722,7 @@ helm-releases:
     revision: Revision
   messages:
     cannot-decode: Cannot decode the given Helm Release
-  title: Helm Releases
+  title: HelmReleases
 horizontal-pod-autoscalers: Horizontal Pod Autoscalers
 ingresses:
   description: <0>Ingress</0> describes the routing rules for traffic to services within a cluster. The routing is managed by the Ingress resource.
@@ -915,7 +915,7 @@ legal:
   privacy: Privacy
   trademark: Trademark
 limit-ranges:
-  description: <0> Limit Range </0> is a policy to constrain the resource allocations that you can specify for each applicable object kind in a namespace.
+  description: <0>LimitRange</0> is a policy to constrain the resource allocations that you can specify for each applicable object kind in a namespace.
   headers:
     default: Default
     default-request: Default Request
@@ -926,7 +926,7 @@ limit-ranges:
     resource: Resource
     type: Type
   name_singular: LimitRange
-  title: Limit Ranges
+  title: LimitRanges
 match-expressions:
   headers:
     key: Key
@@ -1028,7 +1028,7 @@ network-policies:
     values: Values
   name_singular: NetworkPolicy
   present-but-empty: Present but empty selector selects all pods / namespaces.
-  title: Network Policies
+  title: NetworkPolicies
 no-permissions:
   enter-namespace-name: 'If you expect to have access to a Namespace, please enter its name here:'
   enter-namespace-name-placeholder: Enter Namespace name
@@ -1075,7 +1075,7 @@ persistent-volume-claims:
   message:
     empty-selector: Matches all PersistentVolumes
   name_singular: PersistentVolumeClaim
-  title: Persistent Volume Claims
+  title: PersistentVolumeClaims
   tooltips:
     bound: Binding between PersistentVolume and PersistentVolumeClaim established
     lost: Lost binding between PersistentVolume and PersistentVolumeClaim
@@ -1171,7 +1171,7 @@ pv:
     path: Path
     server: Server
     type: Network File System
-  title: Persistent Volumes
+  title: PersistentVolumes
 replica-sets:
   cpu: CPU
   create-modal:
@@ -1197,7 +1197,7 @@ replica-sets:
     observed-generation: Observed Generation
     ready-replicas: Ready Replicas
     replicas: Replicas
-  title: Replica Sets
+  title: ReplicaSets
 resource-graph:
   buttons:
     go-to-details: Go to details
@@ -1205,7 +1205,7 @@ resource-graph:
   save-as-dot: DOT format
   title: Resource Graph
 resource-quotas:
-  description: A <0>Resource Quota</0> provides constraints that limit aggregate resource consumption per namespace.
+  description: A <0>ResourceQuota</0> provides constraints that limit aggregate resource consumption per namespace.
   headers:
     hard: Hard
     limits:
@@ -1222,7 +1222,7 @@ resource-quotas:
     used: Used
     values: Values
   name_singular: Resource Quota
-  title: Resource Quotas
+  title: ResourceQuotas
 role-bindings:
   create-modal:
     api-group: API Group
@@ -1246,7 +1246,7 @@ role-bindings:
   name_singular: RoleBinding
   placeholders:
     api-group: API Group
-  title: Role Bindings
+  title: RoleBindings
 roles:
   buttons:
     load-resources: Load resources
@@ -1362,7 +1362,7 @@ service-accounts:
     image-pull-secrets: Image Pull Secrets
   name_singular: ServiceAccount
   service-account: Service Account
-  title: Service Accounts
+  title: ServiceAccounts
   token-request:
     expiration-seconds: Expiration seconds
     generate: Generate TokenRequest
@@ -1439,7 +1439,7 @@ stateful-sets:
     replicas: Replicas
     update-revision: Update Revision
     updated-replicas: Updated Replicas
-  title: Stateful Sets
+  title: StatefulSets
 storage:
   title: Storage
 storage-classes:
@@ -1452,7 +1452,7 @@ storage-classes:
     reclaim-policy: Reclaim Policy
     volume-binding-mode: Volume Binding Mode
   name_singular: StorageClass
-  title: Storage Classes
+  title: StorageClasses
 upload-yaml:
   errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
