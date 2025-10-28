@@ -10,8 +10,8 @@ import {
   Title,
   Toolbar,
   ToolbarSpacer,
+  ToolbarSeparator,
 } from '@ui5/webcomponents-react';
-import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
 import { useEffect, useRef, useState } from 'react';
