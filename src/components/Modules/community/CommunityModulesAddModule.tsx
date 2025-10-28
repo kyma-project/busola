@@ -375,15 +375,13 @@ export default function CommunityModulesAddModule(props: any) {
         >
           <>
             <MessageStrip
-              design="Critical"
+              design="Critical "
               hideCloseButton
               className="sap-margin-top-small"
             >
               <Description
                 i18nKey={'modules.community.sla-warning'}
-                url={
-                  'https://kyma-project.io/#/community-modules/user/README'
-                }
+                url={'https://kyma-project.io/#/community-modules/user/README'}
               />
             </MessageStrip>
             {communityModulesToDisplay?.length !== 0 ? (
