@@ -375,7 +375,7 @@ export default function CommunityModulesAddModule(props: any) {
         >
           <>
             <MessageStrip
-              design="Information"
+              design="Critical"
               hideCloseButton
               className="sap-margin-top-small"
             >
