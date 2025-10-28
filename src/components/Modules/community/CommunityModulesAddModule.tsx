@@ -382,7 +382,7 @@ export default function CommunityModulesAddModule(props: any) {
               <Description
                 i18nKey={'modules.community.sla-warning'}
                 url={
-                  'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-modules?locale=en-US&version=Cloud#community-modules'
+                  'https://kyma-project.io/#/community-modules/user/README'
                 }
               />
             </MessageStrip>
