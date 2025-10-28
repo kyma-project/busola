@@ -24,7 +24,8 @@ context(
         .scrollIntoView()
         .should('be.visible');
 
-      cy.contains('ui5-link', QUOTA_NAME).scrollIntoView().should('be.visible');
+      cy.get('.ui5-dynamic-page-scroll-container').scrollTo('center');
+      cy.contains('ui5-link', QUOTA_NAME).should('be.visible');
 
       cy.contains('Pods Overview').scrollIntoView().should('be.visible');
 
