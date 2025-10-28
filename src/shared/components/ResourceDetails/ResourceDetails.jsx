@@ -112,7 +112,7 @@ function ResourceDetailsRenderer(props) {
   }, [JSON.stringify(resource), props.disableEdit]);
 
   if (loading) return <Spinner />;
-  if (error) {
+  if (error && !resource) {
     if (error.code === 404) {
       return (
         <ResourceNotFound
