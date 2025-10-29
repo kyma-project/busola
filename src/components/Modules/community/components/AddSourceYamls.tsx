@@ -34,7 +34,9 @@ import 'components/Modules/community/components/AddSourceYamls.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   OPERATION_STATE_INITIAL,
+  OPERATION_STATE_SOME_FAILED,
   OPERATION_STATE_SUCCEEDED,
+  OPERATION_STATE_WAITING,
 } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 const DEFAULT_SOURCE_URL =
@@ -103,10 +105,20 @@ export const AddSourceYamls = () => {
   };
 
   useEffect(() => {
+    if (lastOperationState === OPERATION_STATE_SOME_FAILED) {
+      setAddYamlsLoader(false);
+      notification.notifyError({
+        content: t('modules.community.messages.source-yaml-failed'),
+      });
+    }
     if (lastOperationState === OPERATION_STATE_SUCCEEDED) {
       setAddYamlsLoader(false);
       setShowAddSource(false);
+      notification.notifySuccess({
+        content: t('modules.community.messages.source-yaml-added'),
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastOperationState]);
 
   useEffect(() => {
@@ -138,9 +150,6 @@ export const AddSourceYamls = () => {
     }
     try {
       uploadResources();
-      notification.notifySuccess({
-        content: t('modules.community.messages.source-yaml-added'),
-      });
     } catch (e) {
       setAddYamlsLoader(false);
       console.error(e);
@@ -160,6 +169,12 @@ export const AddSourceYamls = () => {
   };
 
   const handleClose = () => {
+    if (
+      lastOperationState === OPERATION_STATE_WAITING ||
+      lastOperationState === OPERATION_STATE_INITIAL
+    ) {
+      return;
+    }
     setSourceURL(DEFAULT_SOURCE_URL);
     setResourcesToApply([]);
     setShowDescription(false);
