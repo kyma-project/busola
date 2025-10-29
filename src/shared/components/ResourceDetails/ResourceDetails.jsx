@@ -31,6 +31,7 @@ import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { ResourceCustomStatusColumns } from './ResourceCustomStatusColumns';
+import { isEmpty } from 'lodash';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -112,7 +113,7 @@ function ResourceDetailsRenderer(props) {
   }, [JSON.stringify(resource), props.disableEdit]);
 
   if (loading) return <Spinner />;
-  if (error) {
+  if (error && isEmpty(resource)) {
     if (error.code === 404) {
       return (
         <ResourceNotFound

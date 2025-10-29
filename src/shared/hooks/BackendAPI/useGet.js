@@ -105,7 +105,9 @@ const useGetHook = (processDataFn) =>
           previousRequestNotFinished.current = null;
           if (typeof onDataReceived === 'function')
             onDataReceived({ error: e });
-          setTimeout((_) => processError(e));
+          // Let's wait a moment, because the current request may load
+          // and showing the error to the user will not be necessary.
+          setTimeout((_) => processError(e), 100);
         }
 
         if (!isSilent && !abortController.current.signal.aborted)
