@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Button } from '@ui5/webcomponents-react';
+import { Button, ToolbarButton } from '@ui5/webcomponents-react';
 
 import { cloneDeep } from 'lodash';
 import { t } from 'i18next';
@@ -118,9 +118,12 @@ export function KymaModuleContextProvider({
   const customHeaderActions = (
     <>
       {maintenanceBadge}
-      <Button onClick={() => handleResourceDelete({})} design="Transparent">
+      <ToolbarButton
+        onClick={() => handleResourceDelete({})}
+        design="Transparent"
+      >
         {t('common.buttons.delete-module')}
-      </Button>
+      </ToolbarButton>
     </>
   );
 
