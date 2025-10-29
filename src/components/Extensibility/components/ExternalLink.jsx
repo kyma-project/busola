@@ -79,7 +79,7 @@ export const ExternalLink = ({
           if (newWindow) newWindow.opener = null;
         }}
         text={tExt(value)}
-      ></ToolbarButton>
+      />
     );
   }
   if (structure.type === 'button') {

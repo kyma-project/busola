@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import {
-  Button,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,

@@ -2,7 +2,7 @@ import React, { createContext, Suspense, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Button, Title } from '@ui5/webcomponents-react';
+import { Title, ToolbarButton } from '@ui5/webcomponents-react';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -294,7 +294,7 @@ function Resource({
       <div>
         {!disableDelete && (
           <>
-            <Button
+            <ToolbarButton
               disabled={protectedResource}
               onClick={() => handleResourceDelete({ resourceUrl })}
               design="Transparent"
@@ -303,9 +303,8 @@ function Resource({
                   ? t('common.tooltips.protected-resources-info')
                   : null
               }
-            >
-              {t('common.buttons.delete')}
-            </Button>
+              text={t('common.buttons.delete')}
+            />
 
             {createPortal(
               <DeleteMessageBox

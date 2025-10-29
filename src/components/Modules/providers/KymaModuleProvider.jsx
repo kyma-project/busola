@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Button, ToolbarButton } from '@ui5/webcomponents-react';
+import { ToolbarButton } from '@ui5/webcomponents-react';
 
 import { cloneDeep } from 'lodash';
 import { t } from 'i18next';
@@ -121,9 +121,8 @@ export function KymaModuleContextProvider({
       <ToolbarButton
         onClick={() => handleResourceDelete({})}
         design="Transparent"
-      >
-        {t('common.buttons.delete-module')}
-      </ToolbarButton>
+        text={t('common.buttons.delete-module')}
+      />
     </>
   );
 
