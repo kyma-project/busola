@@ -110,8 +110,7 @@ export function SearchInput({
       <Input
         id={`search-${entriesKind}`}
         accessibleName={`search-${entriesKind}`}
-        role="search"
-        type="Text"
+        type="Search"
         icon={<Icon className="bsl-has-color-status-4" name="search" />}
         ref={searchInputRef}
         value={searchQuery}
