@@ -2,10 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
-import {
-  ShowKymaCompanion,
-  showKymaCompanionAtom,
-} from 'state/companion/showKymaCompanionAtom';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { Chat } from './Chat/Chat';
 import { chatHelpers } from './Chat/chatHelper';
 import { AIError, Author, ChatGroup } from './Chat/types';
@@ -21,7 +18,7 @@ import JouleFeedbackDialog from './JouleFeedbackDialog/JouleFeedbackDialog';
 export default function KymaCompanion() {
   const { t } = useTranslation();
 
-  const [showCompanion, setShowCompanion] = useAtom<ShowKymaCompanion>(
+  const [showCompanion, setShowCompanion] = useAtom<boolean>(
     showKymaCompanionAtom,
   );
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
@@ -55,14 +52,14 @@ export default function KymaCompanion() {
 
   const handleCloseChat = () => {
     if (getShowFeedbackStorageKey() === FEEDBACK_SHOW_TYPE.NO_SHOW) {
-      setShowCompanion({ show: false, fullScreen: false });
+      setShowCompanion(false);
       return;
     }
     const promptsNumber = chatHistory[0].messages.filter(
       (message) => message.author === Author.USER,
     ).length;
     if (promptsNumber > 4) setIsFeedbackDialogOpen(true);
-    else setShowCompanion({ show: false, fullScreen: false });
+    else setShowCompanion(false);
   };
 
   useEffect(() => {
@@ -102,18 +99,9 @@ export default function KymaCompanion() {
               {!initialLoading && (
                 <Button
                   design="Transparent"
-                  icon={
-                    showCompanion.fullScreen
-                      ? 'exit-full-screen'
-                      : 'full-screen'
-                  }
+                  icon={showCompanion ? 'exit-full-screen' : 'full-screen'}
                   className="action"
-                  onClick={() =>
-                    setShowCompanion({
-                      show: true,
-                      fullScreen: !showCompanion.fullScreen,
-                    })
-                  }
+                  onClick={() => setShowCompanion(true)}
                 />
               )}
               {!showDisclaimer && !initialLoading && (

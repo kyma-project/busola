@@ -30,14 +30,7 @@ import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { multipleContextsAtom } from 'state/multipleContextsAtom';
 
-import {
-  Button,
-  Dialog,
-  SplitterElement,
-  SplitterLayout,
-} from '@ui5/webcomponents-react';
-import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
-import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
+import { Button, Dialog } from '@ui5/webcomponents-react';
 import { Preferences } from 'components/Preferences/Preferences';
 import { Header } from 'header/Header';
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
@@ -57,6 +50,7 @@ import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
+import JouleChat from 'components/KymaCompanion/JouleChat';
 
 export default function App() {
   const theme = useAtomValue(themeAtom);
@@ -101,8 +95,6 @@ export default function App() {
   useSentry();
   useAfterInitHook(kubeconfigIdState);
 
-  const showCompanion = useAtomValue(showKymaCompanionAtom);
-
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();
     const auth = authFormState?.users?.find(
@@ -130,107 +122,81 @@ export default function App() {
   initTheme(theme);
 
   return (
-    <SplitterLayout id="splitter-layout">
-      <SplitterElement
-        resizable={showCompanion.show}
-        size={
-          showCompanion.show
-            ? showCompanion.fullScreen
-              ? '0%'
-              : '70%'
-            : '100%'
-        }
-      >
-        <div id="html-wrap">
-          <Header />
-          <div id="page-wrap">
-            <Sidebar key={cluster?.name} />
-            {search.get('kubeconfigID') &&
-              manualKubeConfigId.formOpen &&
-              createPortal(
-                <Dialog open={true}>
-                  {/*@ts-ignore*/}
-                  <ResourceForm.Single
-                    formElementRef={authFormRef}
-                    createResource={updateManualKubeConfigIdState}
-                  >
-                    <AuthForm
-                      resource={authFormState}
-                      setResource={setAuthFormState}
-                      checkRequiredInputs={checkRequiredInputs}
-                    />
-                    <div className="auth-form-dialog-footer">
-                      <Button disabled={hasInvalidInputs} type="Submit">
-                        {t('clusters.add.title')}
-                      </Button>
-                    </div>
-                    {/*@ts-ignore*/}
-                  </ResourceForm.Single>
-                </Dialog>,
-                document.body,
-              )}
-            {search.get('kubeconfigID') &&
-              !!contextsState?.contexts?.length &&
-              kubeconfigIdState === 'loading' &&
-              createPortal(
-                <ContextChooserMessage
-                  contextState={contextsState}
-                  setValue={(value: string) =>
-                    setContextsState((state) => ({
-                      ...state,
-                      chosenContext: value,
-                    }))
-                  }
-                  onCancel={() => {
-                    setContextsState({} as any);
-                    removePreviousPath();
-                    navigate('/clusters');
-                  }}
-                />,
-                document.body,
-              )}
-            <ContentWrapper>
-              <Routes key={cluster?.name}>
-                {kubeconfigIdState !== 'loading' &&
-                  !search.get('kubeconfigID') && (
-                    <Route
-                      path="*"
-                      element={
-                        <IncorrectPath
-                          to="/clusters"
-                          message={t(
-                            'components.incorrect-path.message.clusters',
-                          )}
-                        />
-                      }
-                    />
-                  )}
-                <Route path="clusters" element={<ClusterList />} />
-                <Route
-                  path="cluster/:currentClusterName"
-                  element={<Navigate to="overview" />}
+    <div id="html-wrap">
+      <JouleChat />
+      <Header />
+      <div id="page-wrap">
+        <Sidebar key={cluster?.name} />
+        {search.get('kubeconfigID') &&
+          manualKubeConfigId.formOpen &&
+          createPortal(
+            <Dialog open={true}>
+              {/*@ts-ignore*/}
+              <ResourceForm.Single
+                formElementRef={authFormRef}
+                createResource={updateManualKubeConfigIdState}
+              >
+                <AuthForm
+                  resource={authFormState}
+                  setResource={setAuthFormState}
+                  checkRequiredInputs={checkRequiredInputs}
                 />
-                <Route path="cluster/:currentClusterName">
-                  <Route path="*" element={<ClusterRoutes />} />
-                </Route>
-                {makeGardenerLoginRoute()}
-              </Routes>
-              <Preferences />
-            </ContentWrapper>
-          </div>
-        </div>
-      </SplitterElement>
-      {showCompanion.show ? (
-        <SplitterElement
-          resizable={!showCompanion.fullScreen}
-          size={showCompanion.fullScreen ? '100%' : '30%'}
-          minSize={400}
-        >
-          <KymaCompanion />
-        </SplitterElement>
-      ) : (
-        <></>
-      )}
-    </SplitterLayout>
+                <div className="auth-form-dialog-footer">
+                  <Button disabled={hasInvalidInputs} type="Submit">
+                    {t('clusters.add.title')}
+                  </Button>
+                </div>
+                {/*@ts-ignore*/}
+              </ResourceForm.Single>
+            </Dialog>,
+            document.body,
+          )}
+        {search.get('kubeconfigID') &&
+          !!contextsState?.contexts?.length &&
+          kubeconfigIdState === 'loading' &&
+          createPortal(
+            <ContextChooserMessage
+              contextState={contextsState}
+              setValue={(value: string) =>
+                setContextsState((state) => ({
+                  ...state,
+                  chosenContext: value,
+                }))
+              }
+              onCancel={() => {
+                setContextsState({} as any);
+                removePreviousPath();
+                navigate('/clusters');
+              }}
+            />,
+            document.body,
+          )}
+        <ContentWrapper>
+          <Routes key={cluster?.name}>
+            {kubeconfigIdState !== 'loading' && !search.get('kubeconfigID') && (
+              <Route
+                path="*"
+                element={
+                  <IncorrectPath
+                    to="/clusters"
+                    message={t('components.incorrect-path.message.clusters')}
+                  />
+                }
+              />
+            )}
+            <Route path="clusters" element={<ClusterList />} />
+            <Route
+              path="cluster/:currentClusterName"
+              element={<Navigate to="overview" />}
+            />
+            <Route path="cluster/:currentClusterName">
+              <Route path="*" element={<ClusterRoutes />} />
+            </Route>
+            {makeGardenerLoginRoute()}
+          </Routes>
+          <Preferences />
+        </ContentWrapper>
+      </div>
+    </div>
   );
 }
