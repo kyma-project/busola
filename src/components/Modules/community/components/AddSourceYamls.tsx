@@ -104,17 +104,17 @@ export const AddSourceYamls = () => {
   };
 
   useEffect(() => {
-    if (lastOperationState === OPERATION_STATE_SOME_FAILED) {
-      setAddYamlsLoader(false);
-      notification.notifyError({
-        content: t('modules.community.messages.source-yaml-failed'),
-      });
-    }
     if (lastOperationState === OPERATION_STATE_SUCCEEDED) {
       setAddYamlsLoader(false);
       setShowAddSource(false);
       notification.notifySuccess({
         content: t('modules.community.messages.source-yaml-added'),
+      });
+    }
+    if (lastOperationState === OPERATION_STATE_SOME_FAILED) {
+      setAddYamlsLoader(false);
+      notification.notifyError({
+        content: t('modules.community.messages.source-yaml-failed'),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,6 +149,7 @@ export const AddSourceYamls = () => {
     }
     try {
       uploadResources();
+      // Closing and notification for success is made when checking lastOperationState (useEffect).
     } catch (e) {
       setAddYamlsLoader(false);
       console.error(e);
@@ -168,10 +169,11 @@ export const AddSourceYamls = () => {
   };
 
   const handleClose = (action?: string) => {
+    // It fires on every action, but we want to show the loader when adding.
     const isAddButton =
       typeof action === 'string' &&
       action.includes('custom action') &&
-      action.includes('0');
+      action.includes('0'); // String contains the action index.
     if (isAddButton) {
       return;
     }
