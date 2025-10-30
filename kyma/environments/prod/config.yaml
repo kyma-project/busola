@@ -80,10 +80,6 @@ config:
       isEnabled: true
       config:
         link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_2gcfdw3EYYOIz5A?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
-    DISCOVERY_BANNER:
-      isEnabled: false
-      config:
-        link: ''
     SNOW:
       isEnabled: false
     COMMUNITY_MODULES:

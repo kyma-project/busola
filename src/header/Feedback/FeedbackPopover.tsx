@@ -26,10 +26,6 @@ export default function FeedbackPopover() {
     isEnabled: isKymaCompanionEnabled,
     config: { feedbackLink: companionFeedbackLink } = {},
   } = useFeature(configFeaturesNames.KYMA_COMPANION);
-  const {
-    isEnabled: isDiscoveryAnnouncementEnabled,
-    config: { link: discoveryAnnouncementLink } = {},
-  } = useFeature(configFeaturesNames.DISCOVERY_BANNER);
 
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -98,47 +94,6 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
-          {isDiscoveryAnnouncementEnabled &&
-            window.location.pathname !== '/clusters' && (
-              <FlexBox
-                alignItems="Start"
-                direction="Column"
-                justifyContent="Start"
-                gap={16}
-                className="sap-margin-bottom-medium"
-              >
-                <FlexBox direction="Row" alignItems="Center" gap={12}>
-                  <Title level="H6" size="H6">
-                    {t('feedback.discovery.title')}
-                  </Title>
-                  {showNewIndicators && (
-                    <ObjectStatus state="Information" inverted>
-                      {t('feedback.new')}
-                    </ObjectStatus>
-                  )}
-                </FlexBox>
-                <Text className="info-text">
-                  {t('feedback.discovery.info')}
-                </Text>
-                <Button
-                  accessibleRole="Link"
-                  accessibleName={t('feedback.discovery.join-our-research')}
-                  accessibleDescription="Open in new tab link"
-                  endIcon="inspect"
-                  design="Emphasized"
-                  onClick={() => {
-                    const newWindow = window.open(
-                      discoveryAnnouncementLink,
-                      '_blank',
-                      'noopener, noreferrer',
-                    );
-                    if (newWindow) newWindow.opener = null;
-                  }}
-                >
-                  {t('feedback.discovery.join-our-research')}
-                </Button>
-              </FlexBox>
-            )}
           {isKymaCompanionEnabled &&
             companionFeedbackLink &&
             window.location.pathname !== '/clusters' && (
@@ -158,7 +113,7 @@ export default function FeedbackPopover() {
                   <Title level="H6" size="H6">
                     {t('feedback.joule.title')}
                   </Title>
-                  {showNewIndicators && !isDiscoveryAnnouncementEnabled && (
+                  {showNewIndicators && (
                     <ObjectStatus state="Information" inverted>
                       {t('feedback.new')}
                     </ObjectStatus>
@@ -169,9 +124,7 @@ export default function FeedbackPopover() {
                   accessibleRole="Link"
                   accessibleName={t('feedback.give-feedback')}
                   accessibleDescription="Open in new tab link"
-                  design={
-                    !isDiscoveryAnnouncementEnabled ? 'Emphasized' : 'Default'
-                  }
+                  design="Emphasized"
                   endIcon="inspect"
                   onClick={() => {
                     handleNewFeedbackViewed();
@@ -203,7 +156,7 @@ export default function FeedbackPopover() {
               accessibleDescription="Open in new tab link"
               endIcon="inspect"
               design={
-                !isDiscoveryAnnouncementEnabled && !isKymaCompanionEnabled
+                !isKymaCompanionEnabled || !companionFeedbackLink
                   ? 'Emphasized'
                   : 'Default'
               }
