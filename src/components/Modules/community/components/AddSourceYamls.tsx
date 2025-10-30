@@ -32,6 +32,11 @@ import { useNavigate } from 'react-router';
 import { useGetYAMLModuleTemplates } from 'components/Modules/hooks';
 import 'components/Modules/community/components/AddSourceYamls.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import {
+  OPERATION_STATE_INITIAL,
+  OPERATION_STATE_SOME_FAILED,
+  OPERATION_STATE_SUCCEEDED,
+} from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
@@ -44,6 +49,10 @@ export const AddSourceYamls = () => {
   const navigate = useNavigate();
 
   const [showAddSource, setShowAddSource] = useState(false);
+  const [addYamlsLoader, setAddYamlsLoader] = useState(false);
+  const [lastOperationState, setLastOperationState] = useState(
+    OPERATION_STATE_INITIAL,
+  );
   const [sourceURL, setSourceURL] = useState(DEFAULT_SOURCE_URL);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
@@ -76,7 +85,7 @@ export const AddSourceYamls = () => {
   const uploadResources = useUploadResources(
     resourcesToApply,
     setResourcesToApply,
-    () => {},
+    setLastOperationState,
     templatesNamespace,
   );
 
@@ -93,6 +102,23 @@ export const AddSourceYamls = () => {
 
     setResourcesToApply(namespacedResources);
   };
+
+  useEffect(() => {
+    if (lastOperationState === OPERATION_STATE_SUCCEEDED) {
+      setAddYamlsLoader(false);
+      setShowAddSource(false);
+      notification.notifySuccess({
+        content: t('modules.community.messages.source-yaml-added'),
+      });
+    }
+    if (lastOperationState === OPERATION_STATE_SOME_FAILED) {
+      setAddYamlsLoader(false);
+      notification.notifyError({
+        content: t('modules.community.messages.source-yaml-failed'),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastOperationState]);
 
   useEffect(() => {
     if (existingModuleTemplates.length > 0) {
@@ -115,6 +141,7 @@ export const AddSourceYamls = () => {
 
   const handleApplySourceYAMLs = async () => {
     if (error) {
+      setAddYamlsLoader(false);
       notification.notifyError({
         content: error,
       });
@@ -122,11 +149,9 @@ export const AddSourceYamls = () => {
     }
     try {
       uploadResources();
-      notification.notifySuccess({
-        content: t('modules.community.messages.source-yaml-added'),
-      });
-      setShowAddSource(false);
+      // Closing and notification for success is made when checking lastOperationState (useEffect).
     } catch (e) {
+      setAddYamlsLoader(false);
       console.error(e);
       notification.notifyError({
         content: t('modules.community.messages.source-yaml-failed'),
@@ -143,11 +168,20 @@ export const AddSourceYamls = () => {
     navigate(link);
   };
 
-  const handleClose = () => {
+  const handleClose = (action?: string) => {
+    /* It fires on every action, but we want to show the loader when adding.
+      `0: custom action` - Add
+      `1: custom action` - Cancel
+      undefined - ESC
+    */
+    if (action === '0: custom action') {
+      return;
+    }
     setSourceURL(DEFAULT_SOURCE_URL);
     setResourcesToApply([]);
     setShowDescription(false);
     setShowAddSource(false);
+    setAddYamlsLoader(false);
   };
 
   return (
@@ -171,17 +205,22 @@ export const AddSourceYamls = () => {
             titleText={t('modules.community.source-yaml.add-source-yaml')}
             onClose={handleClose}
             actions={[
-              <Button
-                accessibleName="add-yamls"
-                design="Emphasized"
-                key="add-yamls"
-                disabled={!!error || resourcesToApply.length === 0}
-                onClick={async () => {
-                  await handleApplySourceYAMLs();
-                }}
-              >
-                {t('common.buttons.add')}
-              </Button>,
+              addYamlsLoader ? (
+                <Spinner key="add-yamls-loader" />
+              ) : (
+                <Button
+                  accessibleName="add-yamls"
+                  design="Emphasized"
+                  key="add-yamls"
+                  disabled={!!error || resourcesToApply.length === 0}
+                  onClick={async () => {
+                    setAddYamlsLoader(true);
+                    await handleApplySourceYAMLs();
+                  }}
+                >
+                  {t('common.buttons.add')}
+                </Button>
+              ),
               <Button
                 accessibleName="cancel-add-yamls"
                 design="Transparent"
