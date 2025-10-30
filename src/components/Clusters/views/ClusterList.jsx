@@ -53,10 +53,7 @@ function ClusterList() {
   const setShowCompanion = useSetAtom(showKymaCompanionAtom);
 
   useEffect(() => {
-    setShowCompanion({
-      show: false,
-      fullScreen: false,
-    });
+    setShowCompanion(false);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps,
 
   useEffect(() => {
