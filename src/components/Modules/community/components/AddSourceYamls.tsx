@@ -179,6 +179,7 @@ export const AddSourceYamls = () => {
     setResourcesToApply([]);
     setShowDescription(false);
     setShowAddSource(false);
+    setAddYamlsLoader(false);
   };
 
   return (
@@ -201,34 +202,34 @@ export const AddSourceYamls = () => {
             className="sourceurl-messagebox"
             titleText={t('modules.community.source-yaml.add-source-yaml')}
             onClose={handleClose}
-            actions={
-              addYamlsLoader
-                ? [<Spinner key="add-yamls-loader" />]
-                : [
-                    <Button
-                      accessibleName="add-yamls"
-                      design="Emphasized"
-                      key="add-yamls"
-                      disabled={!!error || resourcesToApply.length === 0}
-                      onClick={async () => {
-                        setAddYamlsLoader(true);
-                        await handleApplySourceYAMLs();
-                      }}
-                    >
-                      {t('common.buttons.add')}
-                    </Button>,
-                    <Button
-                      accessibleName="cancel-add-yamls"
-                      design="Transparent"
-                      key="cancel-add-yamls"
-                      onClick={() => {
-                        setShowAddSource(false);
-                      }}
-                    >
-                      {t('common.buttons.cancel')}
-                    </Button>,
-                  ]
-            }
+            actions={[
+              addYamlsLoader ? (
+                <Spinner key="add-yamls-loader" />
+              ) : (
+                <Button
+                  accessibleName="add-yamls"
+                  design="Emphasized"
+                  key="add-yamls"
+                  disabled={!!error || resourcesToApply.length === 0}
+                  onClick={async () => {
+                    setAddYamlsLoader(true);
+                    await handleApplySourceYAMLs();
+                  }}
+                >
+                  {t('common.buttons.add')}
+                </Button>
+              ),
+              <Button
+                accessibleName="cancel-add-yamls"
+                design="Transparent"
+                key="cancel-add-yamls"
+                onClick={() => {
+                  setShowAddSource(false);
+                }}
+              >
+                {t('common.buttons.cancel')}
+              </Button>,
+            ]}
           >
             <FlexBox direction={FlexBoxDirection.Column} gap={'0.5rem'}>
               <Label for="source-url">
