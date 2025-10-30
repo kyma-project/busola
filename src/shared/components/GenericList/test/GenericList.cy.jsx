@@ -292,7 +292,7 @@ describe('GenericList', () => {
         />,
       );
 
-      cy.get('[role="search"]').should('exist');
+      cy.get('[type="Search"]').should('exist');
     });
 
     it("Doesn't show search field when showSearchField is set to false", () => {
@@ -307,7 +307,7 @@ describe('GenericList', () => {
         />,
       );
 
-      cy.get('[role="search"]').should('not.exist');
+      cy.get('[type="Search"]').should('not.exist');
     });
 
     it('Shows server error message if dataError prop is true', () => {

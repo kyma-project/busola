@@ -127,7 +127,7 @@ export function FeatureCardBanner({
             <div className="inner-container">
               <div style={{ width: '100%' }} className="title-container">
                 <Title
-                  level="H1"
+                  level="H2"
                   size="H1"
                   wrappingType="Normal"
                   style={{
