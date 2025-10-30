@@ -12,8 +12,7 @@ export const mapBusolaResourceToNavNode = (resource: PartialNavNode) => {
   node.pathSegment = (
     resource.pathSegment || resource.resourceType
   ).toLowerCase();
-  node.label =
-    resource.label || resource.resourceType.split(/(?=[A-Z])/).join(' ');
+  node.label = resource.label || resource.resourceType;
   node.namespaced = !!resource.namespaced;
   node.requiredFeatures = resource.requiredFeatures || [];
   node.apiGroup = resource.apiGroup || '';
