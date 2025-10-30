@@ -36,7 +36,6 @@ import {
   OPERATION_STATE_INITIAL,
   OPERATION_STATE_SOME_FAILED,
   OPERATION_STATE_SUCCEEDED,
-  OPERATION_STATE_WAITING,
 } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 const DEFAULT_SOURCE_URL =
@@ -168,11 +167,12 @@ export const AddSourceYamls = () => {
     navigate(link);
   };
 
-  const handleClose = () => {
-    if (
-      lastOperationState === OPERATION_STATE_WAITING ||
-      lastOperationState === OPERATION_STATE_INITIAL
-    ) {
+  const handleClose = (action?: string) => {
+    const isAddButton =
+      typeof action === 'string' &&
+      action.includes('custom action') &&
+      action.includes('0');
+    if (isAddButton) {
       return;
     }
     setSourceURL(DEFAULT_SOURCE_URL);
