@@ -169,12 +169,12 @@ export const AddSourceYamls = () => {
   };
 
   const handleClose = (action?: string) => {
-    // It fires on every action, but we want to show the loader when adding.
-    const isAddButton =
-      typeof action === 'string' &&
-      action.includes('custom action') &&
-      action.includes('0'); // String contains the action index.
-    if (isAddButton) {
+    /* It fires on every action, but we want to show the loader when adding.
+      `0: custom action` - Add
+      `1: custom action` - Cancel
+      undefined - ESC
+    */
+    if (action === '0: custom action') {
       return;
     }
     setSourceURL(DEFAULT_SOURCE_URL);
