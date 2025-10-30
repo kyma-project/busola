@@ -3,11 +3,18 @@ import { useAtom } from 'jotai';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 
 export default function JouleChat() {
-  const [showKymaCompanion] = useAtom(showKymaCompanionAtom);
+  const [showKymaCompanion, setShowKymaCompanion] = useAtom(
+    showKymaCompanionAtom,
+  );
 
   useEffect(() => {
     window.sapdas = window.sapdas || {};
     window.sapdas.webclientBridge = window.sapdas.webclientBridge || {};
+
+    // Register the onClose callback to sync state when Joule closes
+    window.sapdas.webclientBridge.onClose = () => {
+      setShowKymaCompanion(false);
+    };
 
     // tenant configuration
     const dasProps = {
@@ -40,17 +47,21 @@ export default function JouleChat() {
       if (script.parentNode) {
         script.parentNode.removeChild(script);
       }
+      if (window.sapdas?.webclientBridge) {
+        delete window.sapdas.webclientBridge.onClose;
+      }
     };
   }, []);
 
   // Control visibility based on Jotai state
   useEffect(() => {
-    if (window.sap?.das?.webclient) {
-      if (showKymaCompanion) {
-        window.sap.das.webclient.show();
-      } else {
-        window.sap.das.webclient.hide();
-      }
+    const webclient = window.sap?.das?.webclient;
+    if (!webclient) return;
+
+    if (showKymaCompanion && !webclient.isOpen()) {
+      webclient.show();
+    } else if (!showKymaCompanion && webclient.isOpen()) {
+      webclient.hide();
     }
   }, [showKymaCompanion]);
 
