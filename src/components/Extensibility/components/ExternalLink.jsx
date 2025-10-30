@@ -72,7 +72,6 @@ export const ExternalLink = ({
         accessibleRole="Link"
         accessibleName={tExt(value)}
         accessibleDescription="Open in new tab link"
-        className="sap-margin-x-tiny"
         endIcon="inspect"
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
