@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button } from '@ui5/webcomponents-react';
+import { ToolbarButton } from '@ui5/webcomponents-react';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EventsList } from 'shared/components/EventsList';
@@ -57,14 +57,13 @@ export default function NamespaceDetails(props) {
   );
 
   const headerActions = (
-    <Button
+    <ToolbarButton
       icon="add"
       onClick={() => {
         setShowAdd(true);
       }}
-    >
-      {t('upload-yaml.title')}
-    </Button>
+      text={t('upload-yaml.title')}
+    ></ToolbarButton>
   );
 
   const customColumns = [

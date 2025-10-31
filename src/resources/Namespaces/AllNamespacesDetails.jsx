@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
-import { Button, Title } from '@ui5/webcomponents-react';
+import { Title, ToolbarButton } from '@ui5/webcomponents-react';
 import LimitRangeList from 'resources/LimitRanges/LimitRangeList';
 import { EventsList } from 'shared/components/EventsList';
 import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
@@ -44,17 +44,16 @@ export function AllNamespacesDetails() {
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
   const headerActions = (
-    <div>
-      <Button
+    <>
+      <ToolbarButton
         icon="add"
         onClick={() => {
           setShowAdd(true);
         }}
-      >
-        {t('upload-yaml.title')}
-      </Button>
+        text={t('upload-yaml.title')}
+      ></ToolbarButton>
       {createPortal(<YamlUploadDialog />, document.body)}
-    </div>
+    </>
   );
 
   return (

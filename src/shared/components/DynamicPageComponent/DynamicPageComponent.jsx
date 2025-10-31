@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import {
-  Button,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
@@ -8,10 +7,11 @@ import {
   Tab,
   TabContainer,
   Title,
+  Toolbar,
+  ToolbarSpacer,
+  ToolbarSeparator,
+  ToolbarButton,
 } from '@ui5/webcomponents-react';
-import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
-import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
-import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
 import { useEffect, useRef, useState } from 'react';
@@ -212,7 +212,7 @@ export const DynamicPageComponent = ({
               ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
                 layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
                 layoutNumber !== 'midColumn') ? (
-                <Button
+                <ToolbarButton
                   accessibleName="enter-full-screen"
                   design="Transparent"
                   icon="full-screen"
@@ -236,7 +236,7 @@ export const DynamicPageComponent = ({
               ) : null}
               {layoutColumn.layout === 'MidColumnFullScreen' ||
               layoutColumn.layout === 'EndColumnFullScreen' ? (
-                <Button
+                <ToolbarButton
                   accessibleName="close-full-screen"
                   design="Transparent"
                   icon="exit-full-screen"
@@ -260,7 +260,7 @@ export const DynamicPageComponent = ({
                   }}
                 />
               ) : null}
-              <Button
+              <ToolbarButton
                 accessibleName="close-column"
                 design="Transparent"
                 icon="decline"

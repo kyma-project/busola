@@ -6,7 +6,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useJsonata } from '../hooks/useJsonata';
 
-import { Button, Icon, Link } from '@ui5/webcomponents-react';
+import { Button, Icon, Link, ToolbarButton } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 
 const makeHref = ({ linkObject, value }) => {
@@ -63,6 +63,24 @@ export const ExternalLink = ({
 
   if (isNil(value)) return emptyLeafPlaceholder;
 
+  if (
+    structure.type === 'button' &&
+    structure.targets.find((t) => t.slot === 'details-header')
+  ) {
+    return (
+      <ToolbarButton
+        accessibleRole="Link"
+        accessibleName={tExt(value)}
+        accessibleDescription="Open in new tab link"
+        endIcon="inspect"
+        onClick={() => {
+          const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
+          if (newWindow) newWindow.opener = null;
+        }}
+        text={tExt(value)}
+      />
+    );
+  }
   if (structure.type === 'button') {
     return (
       <Button

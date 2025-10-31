@@ -2,7 +2,7 @@ import React, { createContext, Suspense, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Button, Title } from '@ui5/webcomponents-react';
+import { Title, ToolbarButton } from '@ui5/webcomponents-react';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -292,33 +292,27 @@ function Resource({
       </Suspense>
       {headerActions}
       {resourceHeaderActions.map((resourceAction) => resourceAction(resource))}
-      <div>
-        {!disableDelete && (
-          <>
-            <Button
-              disabled={protectedResource}
-              onClick={() => handleResourceDelete({ resourceUrl })}
-              design="Transparent"
-              tooltip={
-                protectedResource
-                  ? t('common.tooltips.protected-resources-info')
-                  : null
-              }
-            >
-              {t('common.buttons.delete')}
-            </Button>
-
-            {createPortal(
-              <DeleteMessageBox
-                resource={resource}
-                resourceUrl={resourceUrl}
-              />,
-              document.body,
-            )}
-          </>
-        )}
-        {createPortal(<YamlUploadDialog />, document.body)}
-      </div>
+      {!disableDelete && (
+        <>
+          <ToolbarButton
+            disabled={protectedResource}
+            onClick={() => handleResourceDelete({ resourceUrl })}
+            design="Transparent"
+            tooltip={
+              protectedResource
+                ? t('common.tooltips.protected-resources-info')
+                : null
+            }
+            text={t('common.buttons.delete')}
+          />
+          {createPortal(
+            <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
+            document.body,
+          )}
+          \
+        </>
+      )}
+      {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );
 
