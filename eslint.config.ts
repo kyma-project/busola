@@ -8,14 +8,14 @@ export default defineConfig([
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     plugins: { js },
+    ignores: ['tests/*'],
     extends: ['js/recommended'],
     languageOptions: { globals: globals.browser },
-  },
-  {
     rules: {
       'no-unused-vars': 'warn',
     },
   },
   tseslint.configs.recommended,
+  // @ts-expect-error https://github.com/jsx-eslint/eslint-plugin-react/issues/3956
   pluginReact.configs.flat.recommended,
 ]);

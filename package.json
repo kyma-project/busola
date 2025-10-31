@@ -21,24 +21,6 @@
     "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done",
     "prepare": "husky"
   },
-  "eslintConfig": {
-    "extends": "react-app",
-    "rules": {},
-    "ignorePatterns": "tests/*",
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts?(x)"
-        ],
-        "rules": {
-          "@typescript-eslint/no-unused-vars": "warn"
-        }
-      }
-    ],
-    "globals": {
-      "vi": "readonly"
-    }
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -150,7 +132,7 @@
     "typescript-eslint": "^8.46.2",
     "uuid": "^11.1.0",
     "vite": "^6.2.6",
-    "vite-plugin-eslint": "^1.8.1",
+    "@nabla/vite-plugin-eslint": "^2.0.6",
     "vite-plugin-static-copy": "^2.3.2",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4",
