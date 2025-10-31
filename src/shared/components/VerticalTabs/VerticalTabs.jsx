@@ -1,5 +1,3 @@
-import React from 'react';
-
 import PropTypes from 'prop-types';
 import { TileButton } from 'shared/components/TileButton/TileButton';
 
@@ -25,20 +23,27 @@ VerticalTabs.propTypes = {
     }),
   ).isRequired,
   children: childrenPropType,
+  listRef: PropTypes.any.isRequired,
+  tabId: PropTypes.number.isRequired,
+  onSetTabId: PropTypes.func.isRequired,
 };
 
-export function VerticalTabs({ tabs, children }) {
-  const [tabId, setTabId] = React.useState(children[0]?.props.id || 0);
-
+export function VerticalTabs({
+  tabs,
+  children,
+  listRef,
+  tabId,
+  onSetTabId: handleSetTabId,
+}) {
   return (
     <section className="vertical-tabs-wrapper">
-      <ul>
+      <ul ref={listRef}>
         {tabs.map(({ id, ...props }) => (
           <TileButton
             key={id}
             {...props}
             isActive={id === tabId}
-            handleClick={() => setTabId(id)}
+            handleClick={() => handleSetTabId(id)}
           />
         ))}
       </ul>
