@@ -170,11 +170,11 @@ export const AddSourceYamls = () => {
 
   const handleClose = (action?: string) => {
     /* It fires on every action, but we want to show the loader when adding.
-      `0: custom action` - Add
-      `1: custom action` - Cancel
+      `1: custom action` - Add
+      `2: custom action` - Cancel
       undefined - ESC
     */
-    if (action === '0: custom action') {
+    if (action === '1: custom action') {
       return;
     }
     setSourceURL(DEFAULT_SOURCE_URL);
@@ -205,22 +205,21 @@ export const AddSourceYamls = () => {
             titleText={t('modules.community.source-yaml.add-source-yaml')}
             onClose={handleClose}
             actions={[
-              addYamlsLoader ? (
-                <Spinner key="add-yamls-loader" />
-              ) : (
-                <Button
-                  accessibleName="add-yamls"
-                  design="Emphasized"
-                  key="add-yamls"
-                  disabled={!!error || resourcesToApply.length === 0}
-                  onClick={async () => {
-                    setAddYamlsLoader(true);
-                    await handleApplySourceYAMLs();
-                  }}
-                >
-                  {t('common.buttons.add')}
-                </Button>
-              ),
+              addYamlsLoader ? <Spinner key="add-yamls-loader" /> : null,
+              <Button
+                accessibleName="add-yamls"
+                design="Emphasized"
+                key="add-yamls"
+                disabled={
+                  !!error || resourcesToApply.length === 0 || addYamlsLoader
+                }
+                onClick={async () => {
+                  setAddYamlsLoader(true);
+                  await handleApplySourceYAMLs();
+                }}
+              >
+                {t('common.buttons.add')}
+              </Button>,
               <Button
                 accessibleName="cancel-add-yamls"
                 design="Transparent"
