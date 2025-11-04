@@ -408,8 +408,10 @@ export const GenericList = ({
       <Table
         noData={
           <div>
-            {!serverDataError && !serverDataLoading && !entries?.length ? (
-              emptyListProps?.simpleEmptyListMessage === false ||
+            {!serverDataError &&
+              !serverDataLoading &&
+              !entries?.length &&
+              (emptyListProps?.simpleEmptyListMessage === false ||
               (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
                 <EmptyListComponent
                   titleText={emptyListProps.titleText}
@@ -431,10 +433,7 @@ export const GenericList = ({
                     t(notFoundMessage, { defaultValue: notFoundMessage })
                   )}
                 </p>
-              )
-            ) : (
-              <Spinner />
-            )}
+              ))}
           </div>
         }
         overflowMode={setOverflowMode()}
