@@ -8,7 +8,7 @@ context('Test Links from Statics - sap-logging example', () => {
     cy.loginAndSelectCluster();
   });
 
-  it('Check Cluster Overview details', () => {
+  it('Check Cluster Overview sap-logging links', () => {
     cy.wait(500);
     cy.getLeftNav().contains('SAP Cloud Logging').click();
 
