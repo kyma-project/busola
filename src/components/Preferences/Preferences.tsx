@@ -3,8 +3,9 @@ import {
   Icon,
   Dialog,
   Bar,
-  TabContainerDomRef,
+  ListDomRef,
 } from '@ui5/webcomponents-react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 
@@ -24,15 +25,12 @@ import ThemeChooser from './ThemeChooser';
 
 import './Preferences.scss';
 import EditViewSettings from './EditViewSettings';
-import { useRef, useState } from 'react';
 
 export function Preferences() {
   const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useAtom(isPreferencesOpenAtom);
-  const tabsListRef = useRef<TabContainerDomRef>(null);
-  const listRef = useRef<TabContainerDomRef>(null);
+  const listRef = useRef<ListDomRef>(null);
   const [tabId, setTabId] = useState(1);
-  const [isRightPanel, setIsRightPanel] = useState(false);
 
   const tabs = [
     {
@@ -47,6 +45,9 @@ export function Preferences() {
         />
       ),
       id: 1,
+      onActivate: () => {
+        (listRef?.current?.children[0] as HTMLElement).focus();
+      },
     },
     {
       title: t('settings.clusters.title'),
@@ -62,32 +63,6 @@ export function Preferences() {
       id: 2,
     },
   ];
-
-  useEventListener(
-    'keydown',
-    (e) => {
-      //@ts-ignore
-      const { key } = e;
-      if (key === 'ArrowDown' && tabId <= tabs?.length - 1) {
-        if (!isRightPanel) {
-          setTabId(tabId + 1);
-          //@ts-ignore
-          listRef?.current?.children[tabId].children[0].focus();
-        }
-      } else if (key === 'ArrowUp' && tabId > 1) {
-        if (!isRightPanel) {
-          setTabId(tabId - 1);
-          //@ts-ignore
-          listRef?.current?.children[tabId - 2].children[0].focus();
-        }
-      } else if (key === 'ArrowRight') {
-        setIsRightPanel(true);
-      } else if (key === 'ArrowLeft') {
-        setIsRightPanel(false);
-      }
-    },
-    [tabId, tabs],
-  );
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -118,27 +93,18 @@ export function Preferences() {
       }
       className="preferences-dialog"
     >
-      <VerticalTabs
-        tabs={tabs}
-        listRef={listRef}
-        tabId={tabId}
-        onSetTabId={setTabId}
-      >
+      <VerticalTabs tabs={tabs} tabId={tabId} onSetTabId={setTabId}>
         <VerticalTabs.Content id={1}>
           <TabContainer
             tabLayout="Inline"
             contentBackgroundDesign="Transparent"
-            ref={tabsListRef}
           >
             <Tab
               style={{ padding: '-16px -32px' }}
               key="theme-settings"
               text={t('settings.theme')}
             >
-              <ThemeChooser
-                keyNavigationEnabled={isRightPanel}
-                tabsListRef={tabsListRef}
-              />
+              <ThemeChooser listRef={listRef} />
             </Tab>
             <Tab key="language-settings" text={t('settings.language')}>
               <LanguageSettings />

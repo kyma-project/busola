@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { List } from '@ui5/webcomponents-react';
 import { TileButton } from 'shared/components/TileButton/TileButton';
 
 import './VerticalTabs.scss';
@@ -20,10 +21,10 @@ VerticalTabs.propTypes = {
       title: PropTypes.string.isRequired,
       description: PropTypes.string,
       icon: PropTypes.node.isRequired,
+      onActivate: PropTypes.func,
     }),
   ).isRequired,
   children: childrenPropType,
-  listRef: PropTypes.any.isRequired,
   tabId: PropTypes.number.isRequired,
   onSetTabId: PropTypes.func.isRequired,
 };
@@ -31,22 +32,25 @@ VerticalTabs.propTypes = {
 export function VerticalTabs({
   tabs,
   children,
-  listRef,
   tabId,
   onSetTabId: handleSetTabId,
 }) {
+  const handleActivateTabWithId = (id, onActivate) => {
+    handleSetTabId(id);
+    if (onActivate) onActivate();
+  };
   return (
     <section className="vertical-tabs-wrapper">
-      <ul ref={listRef}>
-        {tabs.map(({ id, ...props }) => (
+      <List>
+        {tabs.map(({ id, onActivate: handleActivate, ...props }) => (
           <TileButton
             key={id}
             {...props}
             isActive={id === tabId}
-            handleClick={() => handleSetTabId(id)}
+            onActivate={() => handleActivateTabWithId(id, handleActivate)}
           />
         ))}
-      </ul>
+      </List>
       {children.filter(({ props }) => props.id === tabId)}
     </section>
   );
