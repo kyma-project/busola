@@ -411,6 +411,8 @@ export const GenericList = ({
             {!serverDataError &&
               !serverDataLoading &&
               !entries?.length &&
+              !searchQuery &&
+              !filteredEntries?.length &&
               (emptyListProps?.simpleEmptyListMessage === false ||
               (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
                 <EmptyListComponent
