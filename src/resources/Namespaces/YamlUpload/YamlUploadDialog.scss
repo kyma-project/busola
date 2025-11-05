@@ -4,11 +4,12 @@
   }
 
   &__layout {
-    overflow-y: 'hidden';
-    height: '80vh';
-    width: '80vw';
+    overflow-y: hidden;
+    height: 80vh;
+    width: 80vw;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 1em;
   }
 
   &__content {
@@ -16,7 +17,7 @@
     border-radius: var(--sapElement_BorderCornerRadius);
   }
 
-  @media screen and (max-width: 550px) {
+  @media (max-width: 560px) {
     &__layout {
       height: auto;
       width: 100%;
