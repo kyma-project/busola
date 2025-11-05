@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Widget } from './Widget';
 
 export function Plain({ structure, ...props }) {

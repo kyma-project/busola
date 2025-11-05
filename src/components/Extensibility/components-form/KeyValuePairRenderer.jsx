@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { useGetTranslation } from 'components/Extensibility/helpers';

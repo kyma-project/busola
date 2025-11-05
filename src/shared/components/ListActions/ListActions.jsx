@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Menu, MenuItem } from '@ui5/webcomponents-react';
 
 import PropTypes from 'prop-types';

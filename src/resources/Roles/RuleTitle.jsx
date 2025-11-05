@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isRuleInvalid, hasRuleRequiredProperties } from './helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';

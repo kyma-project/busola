@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import React, { createContext, useState, useRef } from 'react';
+import { createContext, useState, useRef } from 'react';
 
 export function scopePaths(storeKeys) {
   const indexes = fromJS(storeKeys)

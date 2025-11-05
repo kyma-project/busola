@@ -1,4 +1,3 @@
-import React from 'react';
 import JobList from 'resources/Jobs/JobList';
 
 export function CronJobJobs(cronJob) {
