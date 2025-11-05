@@ -437,7 +437,8 @@ components:
     uploaded: uploaded
   generic-list:
     messages:
-      no-search-results: Couldn't find resources matching this query.
+      no-search-results-subtitle: Try changing your search criteria.
+      no-search-results-title: No results found
       not-found: No entries found
   incorrect-path:
     message:

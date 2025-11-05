@@ -174,9 +174,10 @@ export default function ResourceValidationSettings() {
               }
               searchSettings={{
                 showSearchSuggestion: false,
-                noSearchResultMessage: t(
+                noSearchResultTitle: t(
                   'settings.clusters.resourcesValidation.no-policies-found',
                 ),
+                noSearchResultSubtitle: '',
                 textSearchProperties: ['key', 'text'],
                 showSearchField: true,
                 allowSlashShortcut: true,

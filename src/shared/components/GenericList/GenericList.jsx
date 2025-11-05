@@ -27,7 +27,7 @@ import { useUrl } from 'hooks/useUrl';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
-import { Table } from '@ui5/webcomponents-react';
+import { IllustratedMessage, Table } from '@ui5/webcomponents-react';
 import './GenericList.scss';
 import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 
@@ -41,7 +41,10 @@ const defaultSearch = {
   textSearchProperties: ['name', 'description'],
   showSearchSuggestion: true,
   allowSlashShortcut: true,
-  noSearchResultMessage: 'components.generic-list.messages.no-search-results',
+  noSearchResultTitle:
+    'components.generic-list.messages.no-search-results-title',
+  noSearchResultSubtitle:
+    'components.generic-list.messages.no-search-results-subtitle',
 };
 
 export const GenericList = ({
@@ -232,11 +235,19 @@ export const GenericList = ({
       if (searchQuery) {
         return (
           <BodyFallback>
-            <p>
-              {i18n.exists(searchSettings.noSearchResultMessage)
-                ? t(searchSettings.noSearchResultMessage)
-                : searchSettings.noSearchResultMessage}
-            </p>
+            <IllustratedMessage
+              name="NoSearchResults"
+              titleText={
+                i18n.exists(searchSettings.noSearchResultTitle)
+                  ? t(searchSettings.noSearchResultTitle)
+                  : searchSettings.noSearchResultTitle
+              }
+              subtitleText={
+                i18n.exists(searchSettings.noSearchResultSubtitle)
+                  ? t(searchSettings.noSearchResultSubtitle)
+                  : searchSettings.noSearchResultSubtitle
+              }
+            />
           </BodyFallback>
         );
       }
@@ -500,7 +511,8 @@ const SearchProps = PropTypes.shape({
   ),
   showSearchSuggestion: PropTypes.bool,
   allowSlashShortcut: PropTypes.bool,
-  noSearchResultMessage: PropTypes.string,
+  noSearchResultTitle: PropTypes.string,
+  noSearchResultSubtitle: PropTypes.string,
 });
 
 GenericList.propTypes = {
