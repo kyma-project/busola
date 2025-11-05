@@ -57,7 +57,15 @@ const pluginStack = [
 
 export const widgets = {
   RootRenderer: ({ children }) => <div>{children}</div>,
-  GroupRenderer: ({ children }) => children,
+  GroupRenderer: ({ children }) => {
+    if (!children?._iter?._tail?.array?.length) return children;
+    const arr = children._iter._tail.array.map((child, i) => ({
+      ...child,
+      key: `${child.key}-${i}`,
+    }));
+    children._iter._tail.array = arr;
+    return children;
+  },
   WidgetRenderer: ({ schema, required, ...props }) => {
     required = schema.get('required') ?? required;
     return WidgetRenderer({ schema, required, ...props });
