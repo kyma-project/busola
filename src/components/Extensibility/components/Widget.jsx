@@ -62,6 +62,12 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       typeof Renderer.copyFunction === 'function'
         ? Renderer.copyFunction
         : defaultCopyFunction;
+    const itemsDeps = JSON.stringify(props.arrayItems);
+    const valueDeps = JSON.stringify(props.value);
+    const scopeDeps = JSON.stringify(props.scope);
+    const embedResourceDeps = JSON.stringify(props.embedResource);
+    const singleRootResourceDeps = JSON.stringify(props.singleRootResource);
+    const originalResourceDeps = JSON.stringify(props.originalResource);
 
     useEffect(() => {
       if (!props.structure.copyable || !isRendererCopyable) return;
@@ -73,14 +79,14 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       props?.structure?.link,
-      props.structure.copyable,
+      props?.structure?.copyable,
       isRendererCopyable,
-      props.originalResource,
-      props.singleRootResource,
-      props.embedResource,
-      props.scope,
-      props.value,
-      props.arrayItems,
+      itemsDeps,
+      valueDeps,
+      scopeDeps,
+      embedResourceDeps,
+      singleRootResourceDeps,
+      originalResourceDeps,
     ]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
@@ -127,6 +133,12 @@ export function Widget({
   const [childValue, setChildValue] = useState(null);
   const [visible, setVisible] = useState(true);
   const [visibilityError, setVisibilityError] = useState(null);
+  const sourceDependency = JSON.stringify(structure.source);
+  const itemsDeps = JSON.stringify(arrayItems);
+  const valueDeps = JSON.stringify(value);
+  const embedResourceDeps = JSON.stringify(embedResource);
+  const singleRootResourceDeps = JSON.stringify(singleRootResource);
+  const originalResourceDeps = JSON.stringify(originalResource);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
@@ -147,15 +159,14 @@ export function Widget({
     setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    structure.source,
+    sourceDependency,
     index,
     structure.visibility,
-    childValue,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    value,
-    arrayItems,
+    itemsDeps,
+    valueDeps,
+    embedResourceDeps,
+    singleRootResourceDeps,
+    originalResourceDeps,
   ]);
 
   if (visibilityError) {
@@ -209,7 +220,7 @@ export function Widget({
   return Array.isArray(sanitizedValue) && !Renderer.array ? (
     sanitizedValue.map((valueItem, index) => (
       <SingleWidget
-        key={index}
+        key={'test' + index}
         {...props}
         inlineRenderer={inlineRenderer}
         Renderer={Renderer}

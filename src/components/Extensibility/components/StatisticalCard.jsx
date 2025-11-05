@@ -20,6 +20,8 @@ export function StatisticalCard({
   const [extraInfo, setExtraInfo] = useState([]);
   const [err, setErr] = useState(null);
   const [mainValue, setMainValue] = useState(undefined);
+  const valueDeps = JSON.stringify(value);
+  const originalResourceDeps = JSON.stringify(originalResource);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
@@ -56,8 +58,8 @@ export function StatisticalCard({
   }, [
     structure.children,
     structure?.mainValue?.source,
-    originalResource,
-    value,
+    valueDeps,
+    originalResourceDeps,
   ]);
 
   if (err) {

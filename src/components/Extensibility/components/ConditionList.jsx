@@ -25,6 +25,12 @@ export const ConditionList = ({
   });
 
   const [conditions, setConditions] = useState(null);
+  const arrayItemsDeps = JSON.stringify(arrayItems);
+  const originalResourceDeps = JSON.stringify(originalResource);
+  const singleRootResourceDeps = JSON.stringify(singleRootResource);
+  const embedResourceDeps = JSON.stringify(embedResource);
+  const valueDeps = JSON.stringify(value);
+  const scopeDeps = JSON.stringify(scope);
 
   useEffect(() => {
     if (!Array.isArray(value) || value?.length === 0) {
@@ -75,12 +81,12 @@ export const ConditionList = ({
   }, [
     structure?.customContent,
     structure?.highlights,
-    value,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    arrayItems,
+    valueDeps,
+    scopeDeps,
+    arrayItemsDeps,
+    originalResourceDeps,
+    singleRootResourceDeps,
+    embedResourceDeps,
   ]);
 
   if (!Array.isArray(value) || value?.length === 0) {

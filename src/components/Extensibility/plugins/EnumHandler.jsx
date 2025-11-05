@@ -23,6 +23,10 @@ export function EnumHandler({
   const schemaEnum = schema.get('enum');
 
   const [newSchema, setNewSchema] = useState(schema);
+  const itemVarsDeps = JSON.stringify(
+    itemVars(resource, rule?.itemVars, storeKeys),
+  );
+  const resourceDeps = JSON.stringify(resource);
 
   useEffect(() => {
     if (typeof schemaEnum === 'string') {
@@ -35,7 +39,7 @@ export function EnumHandler({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schemaEnum, resource, rule?.itemVars, storeKeys]);
+  }, [schemaEnum, itemVarsDeps, resourceDeps]);
 
   return (
     <Plugin

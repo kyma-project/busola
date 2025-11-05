@@ -42,6 +42,11 @@ export function AlertRenderer({
   }
 
   const [alertJsonata, setAlertJsonata] = useState('');
+  const valueDeps = JSON.stringify(value);
+  const embedResourceDeps = JSON.stringify(embedResource);
+  const resourceDeps = JSON.stringify(resource);
+  const originalResourceDeps = JSON.stringify(originalResource);
+  const itemsDeps = JSON.stringify(item);
 
   useEffect(() => {
     async function getAlertJsonata(alertFormula, item) {
@@ -55,7 +60,14 @@ export function AlertRenderer({
     }
     getAlertJsonata(alert, item).then((res) => setAlertJsonata(res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [alert, item, originalResource, resource, embedResource, value]);
+  }, [
+    alert,
+    itemsDeps,
+    valueDeps,
+    embedResourceDeps,
+    resourceDeps,
+    originalResourceDeps,
+  ]);
 
   const alertLink = useCreateResourceDescription(alertJsonata);
   return (

@@ -25,7 +25,10 @@ export function VisibilityHandler({
   const visibilityFormula = schema.get('visibility');
   const overwrite = schema.get('overwrite') ?? true;
   const [visible, setVisible] = useState(true);
-
+  const itemVarsDependency = JSON.stringify(
+    itemVars(resource, rule?.itemVars, storeKeys),
+  );
+  const resourceDeps = JSON.stringify(resource);
   useEffect(() => {
     const setVisibility = async () => {
       if (triggers.enabled) {
@@ -42,22 +45,7 @@ export function VisibilityHandler({
     };
     setVisibility();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    triggers.enabled,
-    visibilityFormula,
-    rule?.itemVars,
-    storeKeys,
-    resource,
-    value,
-    overwrite,
-    schema,
-    storeKeys,
-    currentPluginIndex,
-    resource,
-    onChange,
-    required,
-    jsonata,
-  ]);
+  }, [triggers.enabled, visibilityFormula, itemVarsDependency, resourceDeps]);
 
   if (!visible && value && overwrite) {
     onChange({

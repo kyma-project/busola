@@ -52,7 +52,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
       setJsonataError(error);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [node.externalUrl, emptyResource, jsonata]);
+  }, [node.externalUrl, emptyResource]);
 
   const isSelected = useMemo(() => {
     if (node.externalUrl) return false;

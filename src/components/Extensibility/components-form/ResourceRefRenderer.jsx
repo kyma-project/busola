@@ -63,6 +63,10 @@ export function ResourceRefRender({
 
   const { setVar } = useVariables();
   const [resources, setResources] = useState([]);
+  const originalResourceDep = JSON.stringify(originalResource);
+  const singleRootResourceDep = JSON.stringify(singleRootResource);
+  const embedResourceDep = JSON.stringify(embedResource);
+  const valueDep = JSON.stringify(value);
 
   useEffect(() => {
     if (toInternal) {
@@ -86,10 +90,10 @@ export function ResourceRefRender({
     toInternal,
     data,
     filter,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    memoizedValue,
+    originalResourceDep,
+    singleRootResourceDep,
+    embedResourceDep,
+    valueDep,
   ]);
 
   const setValue = (value) => {

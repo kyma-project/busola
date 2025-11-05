@@ -34,6 +34,12 @@ export function CodeViewer({
   });
 
   const [language, setLanguage] = useState(null);
+  const itemsDeps = JSON.stringify(arrayItems);
+  const valueDeps = JSON.stringify(value);
+  const scopeDeps = JSON.stringify(scope);
+  const embedResourceDeps = JSON.stringify(embedResource);
+  const singleRootResourceDeps = JSON.stringify(singleRootResource);
+  const originalResourceDeps = JSON.stringify(originalResource);
 
   useEffect(() => {
     jsonata(structure?.language, {}, detectLanguage(value)).then(([lang]) => {
@@ -42,12 +48,12 @@ export function CodeViewer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     structure?.language,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
+    itemsDeps,
+    valueDeps,
+    scopeDeps,
+    embedResourceDeps,
+    singleRootResourceDeps,
+    originalResourceDeps,
   ]);
 
   const getValue = (value) => {

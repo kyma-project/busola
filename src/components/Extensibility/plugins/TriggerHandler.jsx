@@ -20,6 +20,11 @@ export function TriggerHandler({
 
   const trigger = useTrigger();
   const [subscriptions, setSubscriptions] = useState([]);
+  const itemVarsDependency = JSON.stringify(
+    itemVars(resource, rule?.itemVars, storeKeys),
+  );
+  const storeKeysDependency = JSON.stringify(storeKeys);
+  const resourceDeps = JSON.stringify(resource);
 
   useEffect(() => {
     Promise.all(
@@ -59,7 +64,7 @@ export function TriggerHandler({
       setSubscriptions(subs);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, resource]);
+  }, [schema, itemVarsDependency, storeKeysDependency, required, resourceDeps]);
 
   useSubscription(Object.fromEntries(subscriptions));
 
@@ -74,7 +79,7 @@ export function TriggerHandler({
       onChange(action);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onChange, trigger, storeKeys, subscriptions],
+    [onChange, trigger, storeKeys],
   );
 
   return (
