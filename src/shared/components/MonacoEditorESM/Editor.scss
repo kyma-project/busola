@@ -38,6 +38,10 @@
       z-index: 100;
       position: absolute;
     }
+    .view-overlays .current-line-exact {
+      border: var(--sapContent_FocusWidth) var(--sapContent_FocusStyle)
+        var(--sapField_Active_BorderColor);
+    }
   }
 }
 
