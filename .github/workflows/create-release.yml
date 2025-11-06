@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'Release name ( e.g. "2.1.3" )'
+        description: 'Test Release name ( e.g. "2.1.3" )'
         default: ''
         required: true
       latest_release:
@@ -17,68 +17,71 @@ permissions: # used by build images steps
   contents: write # This is required for actions/checkout and builds
 
 jobs:
-  build-busola-web:
-    name: Build Busola web
-    uses: ./.github/workflows/busola-web-build.yml
-    with:
-      tag: ${{ github.event.inputs.name }}
-  build-busola:
-    name: Build Busola
-    uses: ./.github/workflows/busola-build.yml
-    with:
-      tag: ${{ github.event.inputs.name }}
-  build-busola-backend:
-    name: Build busola backend
-    uses: ./.github/workflows/busola-backend-build.yml
-    with:
-      tag: ${{ github.event.inputs.name }}
+  # build-busola-web:
+  #   name: Build Busola web
+  #   uses: ./.github/workflows/busola-web-build.yml
+  #   with:
+  #     tag: ${{ github.event.inputs.name }}
+  # build-busola:
+  #   name: Build Busola
+  #   uses: ./.github/workflows/busola-build.yml
+  #   with:
+  #     tag: ${{ github.event.inputs.name }}
+  # build-busola-backend:
+  #   name: Build busola backend
+  #   uses: ./.github/workflows/busola-backend-build.yml
+  #   with:
+  #     tag: ${{ github.event.inputs.name }}
 
   create-release:
     name: Create release [${{ github.event.inputs.name }}]
-    needs: [build-busola-web, build-busola-backend, build-busola]
+    # needs: [build-busola-web, build-busola-backend, build-busola]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
-      - name: Create changelog
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PULL_BASE_REF: ${{ github.event.inputs.name }}
-        run: ./.github/scripts/create_changelog.sh ${{ github.event.inputs.name }}
-
-      - name: Create tag
+      - name: TEST [${{ github.event.inputs.name }}]
         run: |
-          git tag ${{ github.event.inputs.name }}
-          git push origin ${{ github.event.inputs.name }}
+          echo "Var1: ${{ github.event.inputs.var1 }}"
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
+      #   with:
+      #     fetch-depth: 0
+      #     ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
+    #   - name: Create changelog
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #       PULL_BASE_REF: ${{ github.event.inputs.name }}
+    #     run: ./.github/scripts/create_changelog.sh ${{ github.event.inputs.name }}
 
-      - name: Create draft release
-        id: create-draft
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          RELEASE_ID=$(./.github/scripts/create_draft_release.sh ${{ github.event.inputs.name }})
-          echo $RELEASE_ID
-          echo "release_id=$RELEASE_ID" >> $GITHUB_OUTPUT
+    #   - name: Create tag
+    #     run: |
+    #       git tag ${{ github.event.inputs.name }}
+    #       git push origin ${{ github.event.inputs.name }}
 
-      - name: Upload release assets
-        id: upload-assets
-        env:
-          RELEASE_TAG: ${{ github.event.inputs.name }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
-        run: ./.github/scripts/upload_assets.sh
+    #   - name: Create draft release
+    #     id: create-draft
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     run: |
+    #       RELEASE_ID=$(./.github/scripts/create_draft_release.sh ${{ github.event.inputs.name }})
+    #       echo $RELEASE_ID
+    #       echo "release_id=$RELEASE_ID" >> $GITHUB_OUTPUT
 
-      - name: Publish release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IS_LATEST_RELEASE: ${{ github.event.inputs.latest_release }}
-          RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
-        run: ./.github/scripts/publish_release.sh
-    outputs:
-      release_id: ${{ steps.create-draft.outputs.release_id }}
+    #   - name: Upload release assets
+    #     id: upload-assets
+    #     env:
+    #       RELEASE_TAG: ${{ github.event.inputs.name }}
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #       RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
+    #     run: ./.github/scripts/upload_assets.sh
+
+    #   - name: Publish release
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #       IS_LATEST_RELEASE: ${{ github.event.inputs.latest_release }}
+    #       RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
+    #     run: ./.github/scripts/publish_release.sh
+    # outputs:
+    #   release_id: ${{ steps.create-draft.outputs.release_id }}
 
   promote-to-busola-deploy:
     name: Promote image version ${{ github.event.inputs.name }} to busola-deploy/dev
@@ -86,30 +89,33 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.name != '' }}
     steps:
-      # Checkout the target busola-deploy repository on the dev branch
-      - name: Checkout busola-deploy repo
-        uses: actions/checkout@v4
-        with:
-          repository: kyma/busola-deploy
-          github-server-url: 'https://github.tools.sap'
-          ref: dev
-          token: ${{ secrets.BUSOLA_DEPLOY_PAT }} # Needs write access
-
-      # Update the version part of the image tags in dev/main.tf
-      - name: Update image versions in main.tf
+      - name: TEST [${{ github.event.inputs.name }}]
         run: |
-          sed -i -E 's|(busola_backend_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
-          sed -i -E 's|(busola_web_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
+          echo "Var1: ${{ github.event.inputs.var1 }}"
+      # # Checkout the target busola-deploy repository on the dev branch
+      # - name: Checkout busola-deploy repo
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: kyma/busola-deploy
+      #     github-server-url: 'https://github.tools.sap'
+      #     ref: dev
+      #     token: ${{ secrets.BUSOLA_DEPLOY_PAT }} # Needs write access
 
-      # Open a pull request to the dev branch with the updated image versions
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
-          commit-message: 'chore: promote busola images to ${{ github.event.inputs.name }}'
-          branch: promote-busola-images-${{ github.event.inputs.name }}
-          title: 'chore: promote busola images to ${{ github.event.inputs.name }}'
-          labels: promote-to-dev-pending
-          body: |
-            This PR updates the Busola image versions in dev/main.tf to ${{ github.event.inputs.name }}.
-          base: dev
+      # # Update the version part of the image tags in dev/main.tf
+      # - name: Update image versions in main.tf
+      #   run: |
+      #     sed -i -E 's|(busola_backend_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
+      #     sed -i -E 's|(busola_web_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
+
+      # # Open a pull request to the dev branch with the updated image versions
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v7
+      #   with:
+      #     token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
+      #     commit-message: 'chore: promote busola images to ${{ github.event.inputs.name }}'
+      #     branch: promote-busola-images-${{ github.event.inputs.name }}
+      #     title: 'chore: promote busola images to ${{ github.event.inputs.name }}'
+      #     labels: promote-to-dev-pending
+      #     body: |
+      #       This PR updates the Busola image versions in dev/main.tf to ${{ github.event.inputs.name }}.
+      #     base: dev
