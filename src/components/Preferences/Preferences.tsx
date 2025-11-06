@@ -46,7 +46,9 @@ export function Preferences() {
       ),
       id: 1,
       onActivate: () => {
-        (listRef?.current?.children[0] as HTMLElement).focus();
+        setTimeout(() => {
+          (listRef?.current?.children[0] as HTMLElement)?.focus();
+        }, 0);
       },
     },
     {
