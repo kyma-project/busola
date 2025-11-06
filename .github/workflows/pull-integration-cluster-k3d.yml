@@ -57,7 +57,6 @@ jobs:
           kubectl create namespace sap-cloud-logging-integration
           kubectl apply -f tests/integration/fixtures/sap-logging-secret.yaml
           kubectl apply -f tests/integration/fixtures/sap-loggging-config-map.yaml
-          kubectl apply -f https://raw.githubusercontent.com/kyma-project/telemetry-manager/main/docs/user/integration/sap-cloud-logging/kyma-dashboard-configmap.yaml
       - name: Run tests
         shell: bash
         run: |
