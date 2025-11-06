@@ -63,7 +63,7 @@ export default function NamespaceDetails(props) {
         setShowAdd(true);
       }}
       text={t('upload-yaml.title')}
-    ></ToolbarButton>
+    />
   );
 
   const customColumns = [

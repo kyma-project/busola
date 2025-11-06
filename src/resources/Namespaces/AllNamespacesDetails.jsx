@@ -51,7 +51,7 @@ export function AllNamespacesDetails() {
           setShowAdd(true);
         }}
         text={t('upload-yaml.title')}
-      ></ToolbarButton>
+      />
       {createPortal(<YamlUploadDialog />, document.body)}
     </>
   );

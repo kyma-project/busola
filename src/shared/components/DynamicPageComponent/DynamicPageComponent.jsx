@@ -185,12 +185,7 @@ export const DynamicPageComponent = ({
   };
 
   const actionsBar = (
-    <Toolbar
-      design="Transparent"
-      toolbarStyle="Clear"
-      numberOfAlwaysVisibleItems={1}
-    >
-      <ToolbarSpacer />
+    <Toolbar design="Transparent" toolbarStyle="Clear">
       {actions && (
         <>
           {actions}
@@ -202,75 +197,72 @@ export const DynamicPageComponent = ({
           ) : null}
         </>
       )}
-      {window.location.search.includes('layout') ||
-      (!window.location.search.includes('layout') &&
-        layoutColumn?.showCreate?.resourceType) ? (
-        layoutColumn.layout !== 'OneColumn' ? (
-          layoutNumber !== 'startColumn' ? (
-            <>
-              {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-              ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-                layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-                layoutNumber !== 'midColumn') ? (
-                <ToolbarButton
-                  accessibleName="enter-full-screen"
-                  design="Transparent"
-                  icon="full-screen"
-                  onClick={() => {
-                    const newLayout =
-                      layoutNumber === 'midColumn'
-                        ? 'MidColumnFullScreen'
-                        : 'EndColumnFullScreen';
-                    setLayoutColumn({
-                      ...layoutColumn,
-                      layout: newLayout,
-                    });
-                    const link = `${window.location.pathname}${
-                      layoutColumn?.showCreate?.resourceType
-                        ? '?layout=' + newLayout + '&showCreate=true'
-                        : '?layout=' + newLayout
-                    }`;
-                    navigate(link);
-                  }}
-                />
-              ) : null}
-              {layoutColumn.layout === 'MidColumnFullScreen' ||
-              layoutColumn.layout === 'EndColumnFullScreen' ? (
-                <ToolbarButton
-                  accessibleName="close-full-screen"
-                  design="Transparent"
-                  icon="exit-full-screen"
-                  onClick={() => {
-                    const newLayout =
-                      layoutNumber === 'midColumn'
-                        ? layoutColumn.endColumn === null
-                          ? 'TwoColumnsMidExpanded'
-                          : 'ThreeColumnsMidExpanded'
-                        : 'ThreeColumnsEndExpanded';
-                    setLayoutColumn({
-                      ...layoutColumn,
-                      layout: newLayout,
-                    });
-                    const link = `${window.location.pathname}${
-                      layoutColumn?.showCreate?.resourceType
-                        ? '?layout=' + newLayout + '&showCreate=true'
-                        : '?layout=' + newLayout
-                    }`;
-                    navigate(link);
-                  }}
-                />
-              ) : null}
-              <ToolbarButton
-                accessibleName="close-column"
-                design="Transparent"
-                icon="decline"
-                onClick={() => {
-                  navigateSafely(() => handleColumnClose());
-                }}
-              />
-            </>
-          ) : null
-        ) : null
+      {(window.location.search.includes('layout') ||
+        layoutColumn?.showCreate?.resourceType) &&
+      layoutColumn.layout !== 'OneColumn' &&
+      layoutNumber !== 'startColumn' ? (
+        <>
+          {(layoutColumn.layout === 'TwoColumnsMidExpanded' ||
+            ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+              layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
+              layoutNumber !== 'midColumn')) && (
+            <ToolbarButton
+              accessibleName="enter-full-screen"
+              design="Transparent"
+              icon="full-screen"
+              onClick={() => {
+                const newLayout =
+                  layoutNumber === 'midColumn'
+                    ? 'MidColumnFullScreen'
+                    : 'EndColumnFullScreen';
+                setLayoutColumn({
+                  ...layoutColumn,
+                  layout: newLayout,
+                });
+                const link = `${window.location.pathname}${
+                  layoutColumn?.showCreate?.resourceType
+                    ? '?layout=' + newLayout + '&showCreate=true'
+                    : '?layout=' + newLayout
+                }`;
+                navigate(link);
+              }}
+            />
+          )}
+          {(layoutColumn.layout === 'MidColumnFullScreen' ||
+            layoutColumn.layout === 'EndColumnFullScreen') && (
+            <ToolbarButton
+              accessibleName="close-full-screen"
+              design="Transparent"
+              icon="exit-full-screen"
+              onClick={() => {
+                const newLayout =
+                  layoutNumber === 'midColumn'
+                    ? layoutColumn.endColumn === null
+                      ? 'TwoColumnsMidExpanded'
+                      : 'ThreeColumnsMidExpanded'
+                    : 'ThreeColumnsEndExpanded';
+                setLayoutColumn({
+                  ...layoutColumn,
+                  layout: newLayout,
+                });
+                const link = `${window.location.pathname}${
+                  layoutColumn?.showCreate?.resourceType
+                    ? '?layout=' + newLayout + '&showCreate=true'
+                    : '?layout=' + newLayout
+                }`;
+                navigate(link);
+              }}
+            />
+          )}
+          <ToolbarButton
+            accessibleName="close-column"
+            design="Transparent"
+            icon="decline"
+            onClick={() => {
+              navigateSafely(() => handleColumnClose());
+            }}
+          />
+        </>
       ) : null}
     </Toolbar>
   );
