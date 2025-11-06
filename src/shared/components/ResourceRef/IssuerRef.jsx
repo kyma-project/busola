@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useTranslation } from 'react-i18next';
 

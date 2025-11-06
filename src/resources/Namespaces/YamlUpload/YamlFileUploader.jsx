@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileInput } from 'shared/components/FileInput/FileInput';
 
 export function YamlFileUploader({ onYamlContentAdded }) {

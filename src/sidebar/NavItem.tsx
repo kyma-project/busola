@@ -72,17 +72,9 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
   ]);
 
   const handleNavigation = () => {
-    if (node.dataSources) {
-      let link =
-        !jsonataError && jsonataLink ? jsonataLink : (node.externalUrl ?? '');
-      link = link.startsWith('http') ? link : `https://${link}`;
-      const newWindow = window.open(link, 'noopener, noreferrer');
-      if (newWindow) newWindow.opener = null;
-    } else if (node.externalUrl) {
-      const link = node.externalUrl.startsWith('http')
-        ? node.externalUrl
-        : `https://${node.externalUrl}`;
-      const newWindow = window.open(link, 'noopener, noreferrer');
+    if (node.dataSources || node.externalUrl) {
+      const link = getURL();
+      const newWindow = window.open(link, '_blank', 'noopener,noreferrer');
       if (newWindow) newWindow.opener = null;
     } else {
       navigateSafely(() => {
@@ -109,11 +101,27 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     }
   };
 
+  const getURL = () => {
+    let link;
+    if (node.dataSources) {
+      link =
+        !jsonataError && jsonataLink ? jsonataLink : (node.externalUrl ?? '');
+      link = link.startsWith('http') ? link : `https://${link}`;
+    } else if (node.externalUrl) {
+      link = node.externalUrl.startsWith('http')
+        ? node.externalUrl
+        : `https://${node.externalUrl}`;
+    }
+    return link || undefined;
+  };
+
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
     text: t(node.label, { defaultValue: node.label }),
     selected: isSelected,
+    href: node.dataSources || node.externalUrl ? getURL() : undefined,
     onClick: (e: Event) => {
+      e.preventDefault();
       e.stopPropagation();
       handleNavigation();
     },

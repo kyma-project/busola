@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tokens } from 'shared/components/Tokens';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';

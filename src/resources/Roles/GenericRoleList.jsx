@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 export function GenericRoleList({

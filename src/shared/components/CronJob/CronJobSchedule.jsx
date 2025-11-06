@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { toString as cRonstrue } from 'cronstrue/i18n';
 import { useTranslation } from 'react-i18next';

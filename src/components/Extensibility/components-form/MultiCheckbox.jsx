@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {

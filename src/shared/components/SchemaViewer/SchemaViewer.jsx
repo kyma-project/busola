@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
 import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';

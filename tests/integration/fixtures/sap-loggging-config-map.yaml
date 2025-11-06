@@ -1,0 +1,25 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: sap-cloud-logging
+  namespace: kube-public
+  labels:
+    busola.io/extension: statics
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    clsSecret:
+      resource:
+        kind: Secret
+        version: v1
+        namespace: sap-cloud-logging-integration
+        name: sap-cloud-logging
+  general: |-
+    externalNodes:
+    - category: SAP Cloud Logging
+      icon: display
+      children:
+        - label: "Dashboards"
+          link: "$string('https://') & $base64decode($string($clsSecret().data.'dashboards-endpoint')) & \"/app/dashboards#/view/maintained-by-perfx_kyma-content-package_Kyma-Overview\""
+        - label: "Discover Logs"
+          link: "$string('https://') & $base64decode($string($clsSecret().data.'dashboards-endpoint')) & \"/app/discover?security_tenant=global#/?_g=(filters:!(),refreshInterval:(pause:!t,value:5000),time:(from:now-7d,to:now))&_a=(columns:!(kubernetes.pod_name,kubernetes.container_name,log),index:maintained-by-perfx_kyma-content-package_index-pattern-logs-json-kyma)\""
