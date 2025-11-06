@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
 
@@ -11,7 +11,7 @@ import { usePrepareResourceUrl } from 'resources/helpers';
 import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
-export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
+export function ExtensibilityInjectionCore({ resMetaData, root }) {
   const isStatic = resMetaData?.general?.type === 'static';
   const staticResource = {
     kind: root?.kind || 'Namespace',
@@ -28,7 +28,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
     resourceType: pluralize(resource?.kind || '').toLowerCase(),
   });
 
-  const { data } = useGet(resourceUrl, {
+  const { data, loading } = useGet(resourceUrl, {
     pollingInterval: 3000,
     skip: !resourceUrl,
   });
@@ -61,6 +61,10 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resource, isStatic, filter, JSON.stringify(items)]);
 
+  if (loading && !data) {
+    return null;
+  }
+
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
   if (!resource && !isStatic) {
     return null;
@@ -80,22 +84,15 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
       context={injection.target}
     />
   );
-};
+}
 
-const ExtensibilityInjections = ({ destination, slot, root }) => {
+export default function ExtensibilityInjections({ destination, slot, root }) {
   const injections = useGetInjections(destination, slot);
-  let itemList = [];
-  (injections || []).forEach((injection, index) => {
-    itemList.push(
-      <ExtensibilityInjection
-        resMetaData={injection}
-        root={root}
-        key={index}
-      />,
-    );
-  });
-  return itemList;
-};
+
+  return (injections || []).map((injection, index) => (
+    <ExtensibilityInjection resMetaData={injection} root={root} key={index} />
+  ));
+}
 
 const ExtensibilityInjection = ({ resMetaData, root }) => {
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
@@ -114,5 +111,3 @@ const ExtensibilityInjection = ({ resMetaData, root }) => {
     </TranslationBundleContext.Provider>
   );
 };
-
-export default ExtensibilityInjections;
