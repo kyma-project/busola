@@ -42,8 +42,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const injectionName = injection?.name;
   const filter = injection?.target.filter || injection?.filter || null;
   const items = data?.items || [];
-  const itemsDeps = JSON.stringify(items);
-  const rootDeps = JSON.stringify(root);
+  const stringifiedDeps = JSON.stringify([items, root, resource, filter]);
 
   useEffect(() => {
     if (!resource && !isStatic) {
@@ -61,7 +60,7 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
       setFilteredItems(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resource, isStatic, filter, itemsDeps, rootDeps]);
+  }, [isStatic, stringifiedDeps]);
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
   if (!resource && !isStatic) {

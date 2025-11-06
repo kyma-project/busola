@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useTrigger, useSubscription } from '../hooks/useTriggers';
@@ -20,11 +20,12 @@ export function TriggerHandler({
 
   const trigger = useTrigger();
   const [subscriptions, setSubscriptions] = useState([]);
-  const itemVarsDependency = JSON.stringify(
+  const stringifiedDeps = JSON.stringify([
     itemVars(resource, rule?.itemVars, storeKeys),
-  );
-  const storeKeysDependency = JSON.stringify(storeKeys);
-  const resourceDeps = JSON.stringify(resource);
+    storeKeys,
+    resource,
+    schema,
+  ]);
 
   useEffect(() => {
     Promise.all(
@@ -64,21 +65,20 @@ export function TriggerHandler({
       setSubscriptions(subs);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, itemVarsDependency, storeKeysDependency, required, resourceDeps]);
+  }, [stringifiedDeps, required]);
 
   useSubscription(Object.fromEntries(subscriptions));
 
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
-  const myChange = useMemo(
-    () => (action) => {
+  const myChange = useCallback(
+    (action) => {
       if (action.scopes?.includes('value')) {
         action.schema.get('trigger')?.forEach((t) => trigger(t, storeKeys));
       }
       onChange(action);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [onChange, trigger, storeKeys],
   );
 

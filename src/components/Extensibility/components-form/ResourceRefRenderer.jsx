@@ -63,10 +63,12 @@ export function ResourceRefRender({
 
   const { setVar } = useVariables();
   const [resources, setResources] = useState([]);
-  const originalResourceDep = JSON.stringify(originalResource);
-  const singleRootResourceDep = JSON.stringify(singleRootResource);
-  const embedResourceDep = JSON.stringify(embedResource);
-  const valueDep = JSON.stringify(value);
+  const stringifiedDeps = JSON.stringify([
+    originalResource,
+    singleRootResource,
+    embedResource,
+    value,
+  ]);
 
   useEffect(() => {
     if (toInternal) {
@@ -86,15 +88,7 @@ export function ResourceRefRender({
       setResources(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    toInternal,
-    data,
-    filter,
-    originalResourceDep,
-    singleRootResourceDep,
-    embedResourceDep,
-    valueDep,
-  ]);
+  }, [toInternal, data, filter, stringifiedDeps]);
 
   const setValue = (value) => {
     const getValueAndChange = async () => {

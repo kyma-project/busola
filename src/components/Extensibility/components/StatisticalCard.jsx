@@ -20,8 +20,7 @@ export function StatisticalCard({
   const [extraInfo, setExtraInfo] = useState([]);
   const [err, setErr] = useState(null);
   const [mainValue, setMainValue] = useState(undefined);
-  const valueDeps = JSON.stringify(value);
-  const originalResourceDeps = JSON.stringify(originalResource);
+  const stringifiedDeps = JSON.stringify([value, originalResource]);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
@@ -55,12 +54,7 @@ export function StatisticalCard({
     };
     setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure.children,
-    structure?.mainValue?.source,
-    valueDeps,
-    originalResourceDeps,
-  ]);
+  }, [structure.children, structure?.mainValue?.source, stringifiedDeps]);
 
   if (err) {
     return t('extensibility.configuration-error', {

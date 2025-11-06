@@ -45,27 +45,21 @@ export const ExternalLink = ({
     arrayItems,
   });
   const [href, setHref] = useState('');
-  const arrayItemsDeps = JSON.stringify(arrayItems);
-  const originalResourceDeps = JSON.stringify(originalResource);
-  const singleRootResourceDeps = JSON.stringify(singleRootResource);
-  const embedResourceDeps = JSON.stringify(embedResource);
-  const valueDeps = JSON.stringify(value);
-  const scopeDeps = JSON.stringify(scope);
+  const stringifiedDeps = JSON.stringify([
+    arrayItems,
+    value,
+    scope,
+    embedResource,
+    singleRootResource,
+    originalResource,
+  ]);
 
   useEffect(() => {
     jsonata(structure.link).then((linkObject) => {
       setHref(makeHref({ linkObject, value }));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.link,
-    valueDeps,
-    scopeDeps,
-    arrayItemsDeps,
-    originalResourceDeps,
-    singleRootResourceDeps,
-    embedResourceDeps,
-  ]);
+  }, [structure?.link, stringifiedDeps]);
 
   if (isNil(value)) return emptyLeafPlaceholder;
 

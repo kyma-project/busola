@@ -62,12 +62,14 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       typeof Renderer.copyFunction === 'function'
         ? Renderer.copyFunction
         : defaultCopyFunction;
-    const itemsDeps = JSON.stringify(props.arrayItems);
-    const valueDeps = JSON.stringify(props.value);
-    const scopeDeps = JSON.stringify(props.scope);
-    const embedResourceDeps = JSON.stringify(props.embedResource);
-    const singleRootResourceDeps = JSON.stringify(props.singleRootResource);
-    const originalResourceDeps = JSON.stringify(props.originalResource);
+    const stringifiedDeps = JSON.stringify([
+      props.arrayItems,
+      props.value,
+      props.scope,
+      props.embedResource,
+      props.singleRootResource,
+      props.originalResource,
+    ]);
 
     useEffect(() => {
       if (!props.structure.copyable || !isRendererCopyable) return;
@@ -81,12 +83,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       props?.structure?.link,
       props?.structure?.copyable,
       isRendererCopyable,
-      itemsDeps,
-      valueDeps,
-      scopeDeps,
-      embedResourceDeps,
-      singleRootResourceDeps,
-      originalResourceDeps,
+      stringifiedDeps,
     ]);
 
     if (!props.structure.copyable || !isRendererCopyable) return children;
@@ -133,12 +130,14 @@ export function Widget({
   const [childValue, setChildValue] = useState(null);
   const [visible, setVisible] = useState(true);
   const [visibilityError, setVisibilityError] = useState(null);
-  const sourceDependency = JSON.stringify(structure.source);
-  const itemsDeps = JSON.stringify(arrayItems);
-  const valueDeps = JSON.stringify(value);
-  const embedResourceDeps = JSON.stringify(embedResource);
-  const singleRootResourceDeps = JSON.stringify(singleRootResource);
-  const originalResourceDeps = JSON.stringify(originalResource);
+  const stringifiedDeps = JSON.stringify([
+    structure.source,
+    arrayItems,
+    value,
+    embedResource,
+    singleRootResource,
+    originalResource,
+  ]);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
@@ -158,16 +157,7 @@ export function Widget({
     };
     setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    sourceDependency,
-    index,
-    structure.visibility,
-    itemsDeps,
-    valueDeps,
-    embedResourceDeps,
-    singleRootResourceDeps,
-    originalResourceDeps,
-  ]);
+  }, [index, structure.visibility, stringifiedDeps]);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

@@ -37,12 +37,14 @@ export function ResourceButton({
   const [namespaceError, setNamespaceError] = useState(null);
   const [kind, setKind] = useState(null);
   const [kindError, setKindError] = useState(null);
-  const itemsDeps = JSON.stringify(arrayItems);
-  const valueDeps = JSON.stringify(value);
-  const scopeDeps = JSON.stringify(scope);
-  const embedResourceDeps = JSON.stringify(embedResource);
-  const singleRootResourceDeps = JSON.stringify(singleRootResource);
-  const originalResourceDeps = JSON.stringify(originalResource);
+  const stringifiedDeps = JSON.stringify([
+    arrayItems,
+    scope,
+    embedResource,
+    singleRootResource,
+    value,
+    originalResource,
+  ]);
 
   useEffect(() => {
     if (!value) {
@@ -67,12 +69,7 @@ export function ResourceButton({
     structure.resource?.name,
     structure.resource?.namespace,
     structure.resource?.kind,
-    itemsDeps,
-    valueDeps,
-    scopeDeps,
-    embedResourceDeps,
-    singleRootResourceDeps,
-    originalResourceDeps,
+    stringifiedDeps,
   ]);
 
   if (!value) {

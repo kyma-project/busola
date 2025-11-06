@@ -53,12 +53,12 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
 
   const options = schema.get('options');
   const [parsedOptions, setParsedOptions] = useState({});
-  const resourceDep = JSON.stringify(resource);
-  const itemVarsDep = JSON.stringify(
+  const stringifiedDeps = JSON.stringify([
+    resource,
     itemVars(resource, rule?.itemVars, storeKeys),
-  );
-  const valueDep = JSON.stringify(value);
-  const optionsDep = JSON.stringify(options);
+    value,
+    options,
+  ]);
 
   useEffect(() => {
     async function makeJsonata(propObject) {
@@ -88,7 +88,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       }),
     ).then(() => setParsedOptions(parsedOpt));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resourceDep, itemVarsDep, valueDep, optionsDep]);
+  }, [stringifiedDeps]);
 
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)

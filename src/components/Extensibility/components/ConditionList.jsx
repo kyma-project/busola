@@ -25,12 +25,14 @@ export const ConditionList = ({
   });
 
   const [conditions, setConditions] = useState(null);
-  const arrayItemsDeps = JSON.stringify(arrayItems);
-  const originalResourceDeps = JSON.stringify(originalResource);
-  const singleRootResourceDeps = JSON.stringify(singleRootResource);
-  const embedResourceDeps = JSON.stringify(embedResource);
-  const valueDeps = JSON.stringify(value);
-  const scopeDeps = JSON.stringify(scope);
+  const stringifiedDeps = JSON.stringify([
+    arrayItems,
+    value,
+    scope,
+    embedResource,
+    singleRootResource,
+    originalResource,
+  ]);
 
   useEffect(() => {
     if (!Array.isArray(value) || value?.length === 0) {
@@ -78,16 +80,7 @@ export const ConditionList = ({
       }),
     ).then((results) => setConditions(results));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.customContent,
-    structure?.highlights,
-    valueDeps,
-    scopeDeps,
-    arrayItemsDeps,
-    originalResourceDeps,
-    singleRootResourceDeps,
-    embedResourceDeps,
-  ]);
+  }, [structure?.customContent, structure?.highlights, stringifiedDeps]);
 
   if (!Array.isArray(value) || value?.length === 0) {
     return null;

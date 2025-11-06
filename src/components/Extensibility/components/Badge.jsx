@@ -36,12 +36,14 @@ export function Badge({
   const [tooltip, setTooltip] = useState(null);
   const [tooltipError, setTooltipError] = useState(null);
   const [badgeType, setBadgeType] = useState(null);
-  const itemsDeps = JSON.stringify(arrayItems);
-  const valueDeps = JSON.stringify(value);
-  const scopeDeps = JSON.stringify(scope);
-  const embedResourceDeps = JSON.stringify(embedResource);
-  const singleRootResourceDeps = JSON.stringify(singleRootResource);
-  const originalResourceDeps = JSON.stringify(originalResource);
+  const stringifiedDeps = JSON.stringify([
+    arrayItems,
+    value,
+    scope,
+    embedResource,
+    singleRootResource,
+    originalResource,
+  ]);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
@@ -58,16 +60,7 @@ export function Badge({
     };
     setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.description,
-    structure?.highlights,
-    itemsDeps,
-    valueDeps,
-    scopeDeps,
-    embedResourceDeps,
-    singleRootResourceDeps,
-    originalResourceDeps,
-  ]);
+  }, [structure?.description, structure?.highlights, stringifiedDeps]);
 
   const getTooltipContent = (description) => {
     if (tooltip && !tooltipError) {

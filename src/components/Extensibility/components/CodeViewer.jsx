@@ -34,27 +34,21 @@ export function CodeViewer({
   });
 
   const [language, setLanguage] = useState(null);
-  const itemsDeps = JSON.stringify(arrayItems);
-  const valueDeps = JSON.stringify(value);
-  const scopeDeps = JSON.stringify(scope);
-  const embedResourceDeps = JSON.stringify(embedResource);
-  const singleRootResourceDeps = JSON.stringify(singleRootResource);
-  const originalResourceDeps = JSON.stringify(originalResource);
+  const stringifiedDeps = JSON.stringify([
+    arrayItems,
+    value,
+    scope,
+    embedResource,
+    singleRootResource,
+    originalResource,
+  ]);
 
   useEffect(() => {
     jsonata(structure?.language, {}, detectLanguage(value)).then(([lang]) => {
       setLanguage(lang?.toLowerCase());
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.language,
-    itemsDeps,
-    valueDeps,
-    scopeDeps,
-    embedResourceDeps,
-    singleRootResourceDeps,
-    originalResourceDeps,
-  ]);
+  }, [structure?.language, stringifiedDeps]);
 
   const getValue = (value) => {
     if (!isNil(value)) {
