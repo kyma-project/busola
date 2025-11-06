@@ -1,13 +1,18 @@
 import { useAtom } from 'jotai';
+import { RefObject } from 'react';
+import { useTranslation } from 'react-i18next';
+import { List, ListDomRef } from '@ui5/webcomponents-react';
+import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
+
 import {
   Theme,
   isSystemThemeDark,
   themeAtom,
 } from 'state/preferences/themeAtom';
-import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
 import { TileButton } from 'shared/components/TileButton/TileButton';
+
 import { ThemePreview } from './ThemePreview/ThemePreview';
-import { useTranslation } from 'react-i18next';
+import './ThemeChooser.scss';
 
 const AVAILABLE_THEMES: Theme[] = [
   'light_dark',
@@ -17,12 +22,16 @@ const AVAILABLE_THEMES: Theme[] = [
   'sap_horizon_hcb',
 ];
 
-export default function ThemeChooser() {
+interface ThemeChooserProps {
+  listRef: RefObject<ListDomRef>;
+}
+
+export default function ThemeChooser({ listRef }: ThemeChooserProps) {
   const { t } = useTranslation();
   const [theme, setUsedTheme] = useAtom(themeAtom);
 
   return (
-    <>
+    <List ref={listRef}>
       {AVAILABLE_THEMES.map((themeName) => {
         return (
           <TileButton
@@ -33,7 +42,7 @@ export default function ThemeChooser() {
             )}
             icon={<ThemePreview theme={themeName} />}
             isActive={themeName === theme}
-            handleClick={() => {
+            onActivate={() => {
               setUsedTheme(themeName);
               if (theme === 'light_dark') {
                 if (isSystemThemeDark()) setTheme('sap_horizon_dark');
@@ -45,6 +54,6 @@ export default function ThemeChooser() {
           />
         );
       })}
-    </>
+    </List>
   );
 }

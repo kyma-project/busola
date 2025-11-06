@@ -1,6 +1,5 @@
-import React, { ReactNode } from 'react';
-import classNames from 'classnames';
-import { Text } from '@ui5/webcomponents-react';
+import { ReactNode } from 'react';
+import { ListItemCustom, Text } from '@ui5/webcomponents-react';
 
 import './TileButton.scss';
 
@@ -9,7 +8,7 @@ type TileButtonProps = {
   description: string;
   icon: ReactNode;
   isActive: boolean;
-  handleClick: React.MouseEventHandler;
+  onActivate: () => void;
 };
 
 export function TileButton({
@@ -17,18 +16,25 @@ export function TileButton({
   description,
   icon,
   isActive,
-  handleClick,
+  onActivate: handleActivate,
 }: TileButtonProps) {
-  const className = classNames('tile-button', { 'tile--active': isActive });
   return (
-    <li className={className}>
-      <button onClick={handleClick}>
-        {icon}
-        <div className="tile-button__text">
+    <ListItemCustom
+      selected={isActive}
+      onClick={handleActivate}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          handleActivate();
+        }
+      }}
+    >
+      <div className="theme-tile">
+        <div className="icon-container">{icon}</div>
+        <div className="theme-tile__text">
           <Text>{title}</Text>
           <Text className="bsl-has-color-status-4">{description}</Text>
         </div>
-      </button>
-    </li>
+      </div>
+    </ListItemCustom>
   );
 }
