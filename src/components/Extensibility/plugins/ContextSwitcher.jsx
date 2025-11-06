@@ -1,4 +1,3 @@
-import React from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 export function ContextSwitcher({ currentPluginIndex, ...props }) {

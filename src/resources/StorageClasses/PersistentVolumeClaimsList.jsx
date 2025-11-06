@@ -1,5 +1,3 @@
-import React from 'react';
-
 import PersistentVolumeClaimsListComponent from 'resources/PersistentVolumeClaims/PersistentVolumeClaimList';
 
 export function PersistentVolumeClaimsList(storageclass) {

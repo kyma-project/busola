@@ -1,5 +1,3 @@
-import React from 'react';
-
 import RoleBindingCreate from './RoleBindingCreate';
 import { GenericRoleBindingList } from './GenericRoleBindingList';
 import {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';

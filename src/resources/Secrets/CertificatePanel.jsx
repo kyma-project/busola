@@ -1,4 +1,3 @@
-import React from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
