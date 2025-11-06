@@ -1,3 +1,4 @@
+import React from 'react';
 import { WidgetRenderer } from '@ui-schema/ui-schema/WidgetRenderer';
 
 import {
@@ -58,13 +59,13 @@ const pluginStack = [
 export const widgets = {
   RootRenderer: ({ children }) => <div>{children}</div>,
   GroupRenderer: ({ children }) => {
-    if (!children?._iter?._tail?.array?.length) return children;
-    const arr = children._iter._tail.array.map((child, i) => ({
-      ...child,
-      key: `${child.key}-${i}`,
-    }));
-    children._iter._tail.array = arr;
-    return children;
+    return (
+      <>
+        {React.Children.map(children, (child, i) =>
+          React.cloneElement(child, { key: `group-child-${i}` }),
+        )}
+      </>
+    );
   },
   WidgetRenderer: ({ schema, required, ...props }) => {
     required = schema.get('required') ?? required;
