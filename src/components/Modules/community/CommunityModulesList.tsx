@@ -371,7 +371,7 @@ export const CommunityModulesList = ({
               'modules.community.title',
             ).toLocaleLowerCase()}`,
             subtitleText: t('modules.community.no-modules-description'),
-            url: 'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-modules?locale=en-US&version=Cloud#community-modules',
+            url: 'https://kyma-project.io/#/community-modules/user/README',
             buttonText: t('common.buttons.add'),
             showButton: true,
             onClick: handleShowAddModule,

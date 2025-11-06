@@ -53,7 +53,6 @@ function YamlUpload({
 
   return (
     <FlexBox
-      className="sap-margin-end-small"
       style={{
         gap: '1rem',
         // when using solution from: https://github.com/microsoft/monaco-editor/issues/3393

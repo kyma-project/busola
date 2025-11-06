@@ -12,6 +12,7 @@ Cypress.Commands.add('saveChanges', (action = 'Create') => {
 });
 
 Cypress.Commands.add('checkUnsavedDialog', () => {
+  cy.wait(500);
   cy.getLeftNav().contains('Events').click();
 
   cy.get('ui5-dialog[header-text="Discard Changes"]').should('be.visible');

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Theme } from 'state/preferences/themeAtom';
 import './ThemePreview.scss';
 

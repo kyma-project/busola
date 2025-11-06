@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { isEmpty } from 'lodash';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';

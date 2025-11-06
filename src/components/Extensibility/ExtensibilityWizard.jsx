@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
 import { Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { mapValues } from 'lodash';
 import jsyaml from 'js-yaml';

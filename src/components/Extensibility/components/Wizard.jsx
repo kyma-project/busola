@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Dialog } from '@ui5/webcomponents-react';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';

@@ -56,6 +56,8 @@ export const useCreateEditor = ({
       scrollbar: {
         alwaysConsumeMouseWheel: false,
       },
+      accessibilityPageSize: 10,
+      ariaLabel: 'Code editor',
       ...options,
     });
 

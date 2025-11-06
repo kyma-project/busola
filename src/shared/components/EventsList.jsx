@@ -1,4 +1,3 @@
-import React from 'react';
 import { EventList as EventListComponent } from 'resources/Events/EventList';
 
 export function EventsList({

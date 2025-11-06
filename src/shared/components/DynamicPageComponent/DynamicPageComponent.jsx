@@ -283,7 +283,7 @@ export const DynamicPageComponent = ({
       heading={
         <FlexBox className="title-container" alignItems="Center">
           <Title
-            level="H3"
+            level="H2"
             size="H3"
             className="bold-title"
             wrappingType="None"
