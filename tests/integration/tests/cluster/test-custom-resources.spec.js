@@ -82,11 +82,15 @@ context('Test Custom Resources', () => {
 
     cy.getLeftNav().contains('Custom Resources').click();
 
+    cy.get('ui5-input[id^=search-]:visible').find('input').wait(1000).clear();
+
     cy.typeInSearch('cypress');
 
     cy.clickGenericListLink('Tclusters');
 
     cy.testMidColumnLayout('Tclusters', false);
+
+    cy.get('ui5-input[id^=search-]:visible').find('input').wait(1000).clear();
 
     cy.typeInSearch('cypress');
 
