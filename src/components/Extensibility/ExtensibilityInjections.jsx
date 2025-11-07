@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
 
@@ -43,23 +43,39 @@ export const ExtensibilityInjectionCore = ({ resMetaData, root }) => {
   const filter = injection?.target.filter || injection?.filter || null;
   const items = data?.items || [];
 
+  const stableFilter = useMemo(() => filter, [filter]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableItems = useMemo(() => [...items], [items.length]); // shallow-stable
+  const stableRoot = useMemo(() => root, [root]);
+
   useEffect(() => {
-    if (!resource && !isStatic) {
-      return;
-    }
-    Promise.all(
-      items.map(async (item) => {
-        if (filter) {
-          const [value] = await jsonata(filter, { item, root });
-          return value ? item : false;
-        }
-        return item;
-      }),
-    ).then((results) => {
-      setFilteredItems(results.filter(Boolean));
-    });
+    if (!resource && !isStatic) return;
+
+    let canceled = false;
+
+    const run = async () => {
+      const results = await Promise.all(
+        stableItems.map(async (item) => {
+          if (stableFilter) {
+            const [value] = await jsonata(stableFilter, {
+              item,
+              root: stableRoot,
+            });
+            return value ? item : false;
+          }
+          return item;
+        }),
+      );
+
+      if (!canceled) setFilteredItems(results.filter(Boolean));
+    };
+
+    run();
+    return () => {
+      canceled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resource, isStatic, filter, JSON.stringify(items)]);
+  }, [resource, isStatic, stableFilter, stableItems, stableRoot]);
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
   if (!resource && !isStatic) {

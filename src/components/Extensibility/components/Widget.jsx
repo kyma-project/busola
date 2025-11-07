@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -128,34 +128,47 @@ export function Widget({
   const [visible, setVisible] = useState(true);
   const [visibilityError, setVisibilityError] = useState(null);
 
+  const stableStructure = useMemo(
+    () => structure,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [structure?.source, structure?.visibility],
+  );
+  const stableIndex = useMemo(() => index, [index]);
+  const stableValue = useMemo(() => value, [value]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableArrayItems = useMemo(() => arrayItems, [arrayItems?.length]);
+
   useEffect(() => {
+    let canceled = false;
+
     const setStatesFromJsonata = async () => {
-      const [evaluatedChildValue] = await jsonata(structure.source, {
-        index: index,
+      const [evaluatedChildValue] = await jsonata(stableStructure.source, {
+        index: stableIndex,
       });
       const [result, error] = await jsonata(
-        structure.visibility?.toString(),
-        {
-          value: evaluatedChildValue,
-        },
+        stableStructure.visibility?.toString(),
+        { value: evaluatedChildValue },
         true,
       );
+      if (canceled) return;
       setChildValue(evaluatedChildValue);
       setVisible(result);
       setVisibilityError(error);
     };
+
     setStatesFromJsonata();
+    return () => {
+      canceled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    structure.source,
-    index,
-    structure.visibility,
-    childValue,
+    stableStructure,
+    stableIndex,
+    stableValue,
+    stableArrayItems,
     originalResource,
     singleRootResource,
     embedResource,
-    value,
-    arrayItems,
   ]);
 
   if (visibilityError) {
