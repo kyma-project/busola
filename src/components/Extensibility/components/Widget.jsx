@@ -71,7 +71,7 @@ const CopyableWrapper = memo(function CopyableWrapper({
             linkObject,
           )
         : defaultCopyFunction(props, Renderer, defaultCopyFunction, linkObject),
-    [Renderer],
+    [],
   );
 
   useEffect(() => {

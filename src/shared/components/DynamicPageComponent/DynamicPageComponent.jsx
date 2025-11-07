@@ -8,7 +8,6 @@ import {
   TabContainer,
   Title,
   Toolbar,
-  ToolbarSpacer,
   ToolbarSeparator,
   ToolbarButton,
 } from '@ui5/webcomponents-react';

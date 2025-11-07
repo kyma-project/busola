@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
 
