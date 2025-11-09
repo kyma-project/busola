@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 
+import { getCurrentResource } from 'components/KymaCompanion/utils/useResource';
+
 export default function JouleChat() {
   const [showKymaCompanion, setShowKymaCompanion] = useAtom(
     showKymaCompanionAtom,
@@ -20,6 +22,22 @@ export default function JouleChat() {
     const dasProps = {
       url: 'https://tan-eu12-ss.eu12.sapdas.cloud.sap/resources/public/webclient/bootstrap.js',
       botname: 'kyma_companion',
+    };
+
+    const myBridgeImpl = {
+      getApplicationContext: (botName) => {
+        return getCurrentResource();
+      },
+      // etc
+    };
+
+    window.sapdas = window.sapdas || {};
+    window.sapdas.webclientPreregistration =
+      window.sapdas.webclientPreregistration || {};
+    window.sapdas.webclientPreregistration.myAppId = {
+      callbacks: myBridgeImpl,
+      thisContext: this, // provide the JS this context for your functions, if needed
+      priority: 3, // default prio, higher values are higher prio
     };
 
     // Check if script already exists to avoid duplicates
