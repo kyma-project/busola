@@ -253,7 +253,7 @@ function ClusterList() {
               searchSettings={{
                 textSearchProperties,
                 showSearchSuggestion: false,
-                noSearchResultMessage: t('clusters.list.no-clusters-found'),
+                noSearchResultTitle: t('clusters.list.no-clusters-found'),
               }}
               hasDetailsView
             />

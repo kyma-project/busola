@@ -1,35 +1,42 @@
 import { useAtomValue } from 'jotai';
 import { injectionsAtom } from 'state/navigation/extensionsAtom';
+import { useMemo } from 'react';
 
 export const useGetInjections = (location, slot) => {
   const injections = useAtomValue(injectionsAtom);
-  let filteredInjections = [];
 
-  (injections || []).forEach((injection) => {
-    const target = injection.injection.targets.find(
-      (t) =>
-        t.location?.toLowerCase() === location?.toLowerCase() &&
-        t.slot?.toLowerCase() === slot?.toLowerCase(),
-    );
-    if (target) {
-      filteredInjections.push({
-        ...injection,
-        injection: {
-          ...injection.injection,
-          target: target,
-        },
+  const filteredInjections = useMemo(() => {
+    let filteredInjections = [];
+
+    (injections || []).forEach((injection) => {
+      const target = injection.injection.targets.find(
+        (t) =>
+          t.location?.toLowerCase() === location?.toLowerCase() &&
+          t.slot?.toLowerCase() === slot?.toLowerCase(),
+      );
+      if (target) {
+        filteredInjections.push({
+          ...injection,
+          injection: {
+            ...injection.injection,
+            target: target,
+          },
+        });
+      }
+    });
+
+    if (filteredInjections.length !== 0) {
+      filteredInjections.sort((a, b) => {
+        if (a.injection?.order != null && b.injection?.order != null)
+          return a.injection?.order - b.injection?.order;
+        else if (a.injection.name && b.injection.name)
+          return a.injection.name.localeCompare(b.injection.name);
+        else return a;
       });
     }
-  });
-  if (filteredInjections.length !== 0) {
-    filteredInjections.sort((a, b) => {
-      if (a.injection?.order != null && b.injection?.order != null)
-        return a.injection?.order - b.injection?.order;
-      else if (a.injection.name && b.injection.name)
-        return a.injection.name.localeCompare(b.injection.name);
-      else return a;
-    });
-  }
+
+    return filteredInjections;
+  }, [injections, location, slot]);
 
   return filteredInjections;
 };
