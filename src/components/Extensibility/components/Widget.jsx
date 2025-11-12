@@ -136,23 +136,27 @@ export function Widget({
 }) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
-  const stableStructure = useMemo(() => structure, [structure]);
-  const stableIndex = useMemo(() => index, [index]);
-  const stableValue = useMemo(() => value, [value]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const stableArrayItems = useMemo(() => arrayItems, [arrayItems?.length]);
-
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
     embedResource: embedResource,
-    scope: stableValue,
-    stableArrayItems,
+    scope: value,
+    arrayItems,
   });
 
   const [childValue, setChildValue] = useState(null);
   const [visible, setVisible] = useState(true);
   const [visibilityError, setVisibilityError] = useState(null);
+
+  const stableStructure = useMemo(
+    () => structure,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [structure?.source, structure?.visibility],
+  );
+  const stableIndex = useMemo(() => index, [index]);
+  const stableValue = useMemo(() => value, [value]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableArrayItems = useMemo(() => arrayItems, [arrayItems?.length]);
 
   useEffect(() => {
     let canceled = false;
