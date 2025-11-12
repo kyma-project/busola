@@ -45,7 +45,7 @@ export function ExtensibilityInjectionCore({ resMetaData, root }) {
 
   const stableFilter = useMemo(() => filter, [filter]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const stableItems = useMemo(() => [...items], [items.length]); // shallow-stable
+  const stableItems = useMemo(() => [...items], [items.length]);
   const stableRoot = useMemo(() => root, [root]);
 
   useEffect(() => {
