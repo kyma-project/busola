@@ -12,24 +12,22 @@ export const ResourceNotFound = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <>
-      <DynamicPageComponent
-        title=""
-        content={
-          <UI5Panel
-            title={
-              customMessage
-                ? customMessage
-                : t('components.resource-not-found.messages.not-found', {
-                    resource,
-                  })
-            }
-          />
-        }
-        layoutCloseUrl={layoutCloseUrl}
-        layoutNumber={layoutNumber}
-      />
-    </>
+    <DynamicPageComponent
+      title=""
+      content={
+        <UI5Panel
+          title={
+            customMessage
+              ? customMessage
+              : t('components.resource-not-found.messages.not-found', {
+                  resource,
+                })
+          }
+        />
+      }
+      layoutCloseUrl={layoutCloseUrl}
+      layoutNumber={layoutNumber}
+    />
   );
 };
 

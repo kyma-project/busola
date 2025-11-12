@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -37,71 +37,91 @@ InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
     ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
     : defaultCopyFunction(props, Renderer, defaultCopyFunction);
 
-function SingleWidget({ inlineRenderer, Renderer, ...props }) {
-  const InlineRenderer = inlineRenderer || SimpleRenderer;
-  const CopyableWrapper = ({ children }) => {
-    const isRendererCopyable =
-      typeof Renderer.copyable === 'function'
-        ? Renderer.copyable(Renderer)
-        : Renderer.copyable;
+const defaultCopyFunction = ({ value }) =>
+  typeof value === 'object' ? JSON.stringify(value) : value;
 
-    const jsonata = useJsonata({
-      resource: props.originalResource,
-      parent: props.singleRootResource,
-      embedResource: props.embedResource,
-      scope: props.scope,
-      value: props.value,
-      arrayItems: props.arrayItems,
-    });
-    const [textToCopy, setTextToCopy] = useState('');
+const CopyableWrapper = memo(function CopyableWrapper({
+  children,
+  Renderer,
+  ...props
+}) {
+  const isRendererCopyable = useMemo(() => {
+    return typeof Renderer.copyable === 'function'
+      ? Renderer.copyable(Renderer)
+      : Renderer.copyable;
+  }, [Renderer]);
 
-    const defaultCopyFunction = ({ value }) =>
-      typeof value === 'object' ? JSON.stringify(value) : value;
+  const jsonata = useJsonata({
+    resource: props.originalResource,
+    parent: props.singleRootResource,
+    embedResource: props.embedResource,
+    scope: props.scope,
+    value: props.value,
+    arrayItems: props.arrayItems,
+  });
+  const [textToCopy, setTextToCopy] = useState('');
 
-    const copyFunction =
+  const copyFunction = useCallback(
+    (props, Renderer, defaultCopyFunction, linkObject) =>
       typeof Renderer.copyFunction === 'function'
-        ? Renderer.copyFunction
-        : defaultCopyFunction;
+        ? Renderer.copyFunction(
+            props,
+            Renderer,
+            defaultCopyFunction,
+            linkObject,
+          )
+        : defaultCopyFunction(props, Renderer, defaultCopyFunction, linkObject),
+    [],
+  );
 
-    useEffect(() => {
-      if (!props.structure.copyable || !isRendererCopyable) return;
-      jsonata(props?.structure?.link).then((linkObject) => {
-        setTextToCopy(
-          copyFunction(props, Renderer, defaultCopyFunction, linkObject),
-        );
-      });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-      props?.structure?.link,
-      props.structure.copyable,
-      isRendererCopyable,
-      props.originalResource,
-      props.singleRootResource,
-      props.embedResource,
-      props.scope,
-      props.value,
-      props.arrayItems,
-    ]);
+  useEffect(() => {
+    if (!props.structure.copyable || !isRendererCopyable) return;
+    jsonata(props?.structure?.link).then((linkObject) => {
+      setTextToCopy(
+        copyFunction(props, Renderer, defaultCopyFunction, linkObject),
+      );
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    props?.structure?.link,
+    props.structure.copyable,
+    isRendererCopyable,
+    props.originalResource,
+    props.singleRootResource,
+    props.embedResource,
+    props.scope,
+    props.value,
+    props.arrayItems,
+    copyFunction,
+    jsonata,
+  ]);
 
-    if (!props.structure.copyable || !isRendererCopyable) return children;
+  if (!props.structure.copyable || !isRendererCopyable) return children;
 
-    return (
-      <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
-        {children}
-      </CopiableText>
-    );
-  };
+  return (
+    <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
+      {children}
+    </CopiableText>
+  );
+});
+
+const SingleWidget = memo(function SingleWidget({
+  inlineRenderer,
+  Renderer,
+  ...props
+}) {
+  const InlineRenderer = inlineRenderer || SimpleRenderer;
 
   return Renderer.inline ? (
     <InlineRenderer {...props}>
-      <CopyableWrapper structure={props.structure} value={props.value}>
+      <CopyableWrapper {...props} Renderer={Renderer}>
         <Renderer {...props} />
       </CopyableWrapper>
     </InlineRenderer>
   ) : (
     <Renderer {...props} />
   );
-}
+});
 
 export function Widget({
   structure,
