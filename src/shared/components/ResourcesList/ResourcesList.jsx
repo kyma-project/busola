@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Button, Text } from '@ui5/webcomponents-react';
@@ -110,15 +110,8 @@ export function ResourcesList({
 
   const content = (
     <>
-      <BannerCarousel
-        children={
-          <Injections
-            destination={resourceType}
-            slot="banner"
-            root={resources}
-          />
-        }
-      />
+      <BannerCarousel />
+      <Injections destination={resourceType} slot="banner" root={resources} />
       {resources ? (
         <ResourceListRenderer
           resources={(resources || []).filter(filterFn)}
@@ -184,6 +177,9 @@ function Resources(props) {
   });
 
   const [filteredResources, setFilteredResources] = useState([]);
+  const setResources = useCallback((resources) =>
+    setFilteredResources(resources),
+  );
 
   useEffect(() => {
     if (!filter) {
@@ -485,6 +481,7 @@ export function ResourceListRenderer({
       if (col?.value && index === nameColIndex) {
         return (
           <div
+            key={index}
             style={{
               display: 'flex',
               alignItems: 'center',

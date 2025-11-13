@@ -12,24 +12,20 @@ const useMutation = (
   headers?: any,
 ): MutationFn => {
   return async (relativeUrl, data) => {
-    try {
-      const response = await fetch({
-        relativeUrl,
-        init: {
-          method,
-          headers: {
-            Accept: 'application/json',
-            ...headers,
-          },
-          body: JSON.stringify(data),
+    const response = await fetch({
+      relativeUrl,
+      init: {
+        method,
+        headers: {
+          Accept: 'application/json',
+          ...headers,
         },
-      });
+        body: JSON.stringify(data),
+      },
+    });
 
-      if (typeof options?.refetch === 'function') options.refetch();
-      return await response.json();
-    } catch (e) {
-      throw e;
-    }
+    if (typeof options?.refetch === 'function') options.refetch();
+    return await response.json();
   };
 };
 
