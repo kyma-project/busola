@@ -274,9 +274,10 @@ export const AddSourceYamls = () => {
                 id="yaml-namespace-combobox"
                 onChange={(e) => applyNamespace(e.target.value)}
               >
-                {allNamespaces?.map((ns) => (
-                  <ComboBoxItem text={ns} key={ns} />
-                ))}
+                {allNamespaces?.map((ns) => {
+                  if (ns === 'kyma-system') return null;
+                  return <ComboBoxItem text={ns} key={ns} />;
+                })}
               </ComboBox>
             </FlexBox>
             {loading ? (
