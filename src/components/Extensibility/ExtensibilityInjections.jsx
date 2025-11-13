@@ -42,7 +42,6 @@ export function ExtensibilityInjectionCore({ resMetaData, root }) {
   const injectionName = injection?.name;
   const filter = injection?.target.filter || injection?.filter || null;
   const items = data?.items || [];
-  const stringifiedDeps = JSON.stringify([items, root, resource, filter]);
 
   const stableFilter = useMemo(() => filter, [filter]);
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -43,6 +43,13 @@ const defaultCopyFunction = ({ value }) =>
 const CopyableWrapper = memo(function CopyableWrapper({
   children,
   Renderer,
+  originalResource,
+  singleRootResource,
+  embedResource,
+  scope,
+  value,
+  arrayItems,
+  structure,
   ...props
 }) {
   const isRendererCopyable = useMemo(() => {
@@ -52,12 +59,12 @@ const CopyableWrapper = memo(function CopyableWrapper({
   }, [Renderer]);
 
   const jsonata = useJsonata({
-    resource: props.originalResource,
-    parent: props.singleRootResource,
-    embedResource: props.embedResource,
-    scope: props.scope,
-    value: props.value,
-    arrayItems: props.arrayItems,
+    resource: originalResource,
+    parent: singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
   });
   const [textToCopy, setTextToCopy] = useState('');
 
@@ -75,28 +82,28 @@ const CopyableWrapper = memo(function CopyableWrapper({
   );
 
   useEffect(() => {
-    if (!props.structure.copyable || !isRendererCopyable) return;
-    jsonata(props?.structure?.link).then((linkObject) => {
+    if (!structure?.copyable || !isRendererCopyable) return;
+    jsonata(structure?.link).then((linkObject) => {
       setTextToCopy(
         copyFunction(props, Renderer, defaultCopyFunction, linkObject),
       );
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    props?.structure?.link,
-    props.structure.copyable,
+    structure?.link,
+    structure?.copyable,
     isRendererCopyable,
-    props.originalResource,
-    props.singleRootResource,
-    props.embedResource,
-    props.scope,
-    props.value,
-    props.arrayItems,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
     copyFunction,
     jsonata,
   ]);
 
-  if (!props.structure.copyable || !isRendererCopyable) return children;
+  if (!structure?.copyable || !isRendererCopyable) return children;
 
   return (
     <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>

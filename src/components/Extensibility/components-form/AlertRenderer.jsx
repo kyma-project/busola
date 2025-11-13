@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
@@ -21,14 +21,17 @@ export function AlertRenderer({
 
   const rule = schema.get('schemaRule');
   const item = itemVars(resource, rule?.itemVars, storeKeys);
-
-  const jsonata = useJsonata({
-    resource: originalResource,
-    parent: resource,
-    embedResource: embedResource,
-    scope: value,
-    value,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      parent: resource,
+      embedResource: embedResource,
+      scope: value,
+      value,
+    }),
+    [originalResource, resource, embedResource, value],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
   const alert = schema.get('alert');
   const severity = schema.get('severity');
 
@@ -42,13 +45,6 @@ export function AlertRenderer({
   }
 
   const [alertJsonata, setAlertJsonata] = useState('');
-  const stringifiedDeps = JSON.stringify([
-    value,
-    embedResource,
-    originalResource,
-    resource,
-    item,
-  ]);
 
   useEffect(() => {
     async function getAlertJsonata(alertFormula, item) {
@@ -62,7 +58,7 @@ export function AlertRenderer({
     }
     getAlertJsonata(alert, item).then((res) => setAlertJsonata(res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [alert, stringifiedDeps]);
+  }, [alert, item, stableJsonataDeps]);
 
   const alertLink = useCreateResourceDescription(alertJsonata);
   return (

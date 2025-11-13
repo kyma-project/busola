@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useJsonata } from '../hooks/useJsonata';
 import { useGetTranslation } from '../helpers';
@@ -11,21 +11,24 @@ export function StatisticalCard({
   general,
   context,
 }) {
-  const jsonata = useJsonata({
-    resource: originalResource,
-    value,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      value,
+    }),
+    [originalResource, value],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
   const { t } = useGetTranslation();
 
   const [extraInfo, setExtraInfo] = useState([]);
   const [err, setErr] = useState(null);
   const [mainValue, setMainValue] = useState(undefined);
-  const stringifiedDeps = JSON.stringify([value, originalResource]);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
       const extraInfoRes = await Promise.all(
-        structure.children?.map(async (child) => {
+        structure?.children?.map(async (child) => {
           const [childValue, err] = await jsonata(child.source, {
             resource: value,
           });
@@ -54,7 +57,7 @@ export function StatisticalCard({
     };
     setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.children, structure?.mainValue?.source, stringifiedDeps]);
+  }, [structure?.children, structure?.mainValue?.source, stableJsonataDeps]);
 
   if (err) {
     return t('extensibility.configuration-error', {

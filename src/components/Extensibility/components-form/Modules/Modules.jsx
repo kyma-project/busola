@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useUIStore } from '@ui-schema/ui-schema';
 
 import { useJsonata } from '../../hooks/useJsonata';
@@ -43,22 +43,19 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || [];
   const { itemVars } = useVariables();
-  const jsonata = useJsonata({
-    resource,
-    scope: value,
-    value,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource,
+      scope: value,
+      value,
+    }),
+    [resource, value],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
 
   const rule = schema.get('schemaRule');
-
   const options = schema.get('options');
   const [parsedOptions, setParsedOptions] = useState({});
-  const stringifiedDeps = JSON.stringify([
-    resource,
-    itemVars(resource, rule?.itemVars, storeKeys),
-    value,
-    options,
-  ]);
 
   useEffect(() => {
     async function makeJsonata(propObject) {
@@ -88,7 +85,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       }),
     ).then(() => setParsedOptions(parsedOpt));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stringifiedDeps]);
+  }, [stableJsonataDeps, rule?.itemVars, storeKeys, options]);
 
   const Items = parsedOptions?.name?.map((name, index) => {
     if (!name)

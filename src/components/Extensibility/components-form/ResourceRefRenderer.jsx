@@ -26,13 +26,17 @@ export function ResourceRefRender({
   embedResource,
   ...props
 }) {
-  const jsonata = useJsonata({
-    resource: originalResource,
-    parent: singleRootResource,
-    embedResource: embedResource,
-    scope: value,
-    value,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      parent: singleRootResource,
+      embedResource: embedResource,
+      scope: value,
+      value,
+    }),
+    [originalResource, singleRootResource, embedResource, value],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
   const { namespace } = useUrl();
   const { tFromStoreKeys } = useGetTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
@@ -63,12 +67,6 @@ export function ResourceRefRender({
 
   const { setVar } = useVariables();
   const [resources, setResources] = useState([]);
-  const stringifiedDeps = JSON.stringify([
-    originalResource,
-    singleRootResource,
-    embedResource,
-    value,
-  ]);
 
   useEffect(() => {
     if (toInternal) {
@@ -88,7 +86,7 @@ export function ResourceRefRender({
       setResources(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toInternal, data, filter, stringifiedDeps]);
+  }, [toInternal, data, filter, stableJsonataDeps]);
 
   const setValue = (value) => {
     const getValueAndChange = async () => {

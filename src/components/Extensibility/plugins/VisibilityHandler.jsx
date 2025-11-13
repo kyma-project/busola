@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
@@ -17,7 +17,13 @@ export function VisibilityHandler({
 }) {
   const triggers = useContext(TriggerContext);
   const { itemVars } = useVariables();
-  const jsonata = useJsonata({ resource });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource,
+    }),
+    [resource],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
 
   const rule = schema.get('schemaRule');
 
@@ -25,11 +31,6 @@ export function VisibilityHandler({
   const visibilityFormula = schema.get('visibility');
   const overwrite = schema.get('overwrite') ?? true;
   const [visible, setVisible] = useState(true);
-  const stringifiedDeps = JSON.stringify([
-    itemVars(resource, rule?.itemVars, storeKeys),
-    resource,
-    visibilityFormula,
-  ]);
 
   useEffect(() => {
     const setVisibility = async () => {
@@ -47,7 +48,13 @@ export function VisibilityHandler({
     };
     setVisibility();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [triggers.enabled, stringifiedDeps]);
+  }, [
+    triggers.enabled,
+    stableJsonataDeps,
+    rule?.itemVars,
+    storeKeys,
+    visibilityFormula,
+  ]);
 
   if (!visible && value && overwrite) {
     onChange({

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useTrigger, useSubscription } from '../hooks/useTriggers';
@@ -15,17 +15,17 @@ export function TriggerHandler({
   ...props
 }) {
   const { itemVars } = useVariables();
-  const jsonata = useJsonata({ resource });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource,
+    }),
+    [resource],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
   const rule = schema.get('schemaRule');
 
   const trigger = useTrigger();
   const [subscriptions, setSubscriptions] = useState([]);
-  const stringifiedDeps = JSON.stringify([
-    itemVars(resource, rule?.itemVars, storeKeys),
-    storeKeys,
-    resource,
-    schema,
-  ]);
 
   useEffect(() => {
     Promise.all(
@@ -65,7 +65,7 @@ export function TriggerHandler({
       setSubscriptions(subs);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stringifiedDeps, required]);
+  }, [stableJsonataDeps, required, rule?.itemVars, storeKeys, schema]);
 
   useSubscription(Object.fromEntries(subscriptions));
 
