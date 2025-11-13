@@ -10,6 +10,7 @@
     "busola": "npm run copy-themes; BROWSER=none GENERATE_SOURCEMAP=false vite",
     "backend": "cd backend && npm run start",
     "eslint-check": "eslint --max-warnings 0 src/ backend/",
+    "eslint-fix": "eslint --fix src/ backend/",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged --concurrent=false",
