@@ -89,7 +89,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
   };
 
   // clear timeouts on component unmount
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
   useEffect(
     () => () => {

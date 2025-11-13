@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { FetchFn, useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
 export type MutationFn = (
