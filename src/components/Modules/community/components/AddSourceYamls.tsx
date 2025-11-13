@@ -280,6 +280,15 @@ export const AddSourceYamls = () => {
                 })}
               </ComboBox>
             </FlexBox>
+            {/* <FlexBox
+              direction={FlexBoxDirection.Column}
+              gap={'0.5rem'}
+              className="sap-margin-top-small"
+            >
+              <MessageStrip design="Information" hideCloseButton>
+                {t('modules.community.source-yaml.kyma-system-restricted')}
+              </MessageStrip>
+            </FlexBox> */}
             {loading ? (
               <Spinner />
             ) : (
