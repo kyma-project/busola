@@ -274,11 +274,21 @@ export const AddSourceYamls = () => {
                 id="yaml-namespace-combobox"
                 onChange={(e) => applyNamespace(e.target.value)}
               >
-                {allNamespaces?.map((ns) => (
-                  <ComboBoxItem text={ns} key={ns} />
-                ))}
+                {allNamespaces?.map((ns) => {
+                  if (ns === 'kyma-system') return null;
+                  return <ComboBoxItem text={ns} key={ns} />;
+                })}
               </ComboBox>
             </FlexBox>
+            {/* <FlexBox
+              direction={FlexBoxDirection.Column}
+              gap={'0.5rem'}
+              className="sap-margin-top-small"
+            >
+              <MessageStrip design="Information" hideCloseButton>
+                {t('modules.community.source-yaml.kyma-system-restricted')}
+              </MessageStrip>
+            </FlexBox> */}
             {loading ? (
               <Spinner />
             ) : (
