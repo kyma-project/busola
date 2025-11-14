@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Button, Text } from '@ui5/webcomponents-react';
+import { Text, ToolbarButton } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import jp from 'jsonpath';
 import pluralize from 'pluralize';
@@ -552,14 +552,13 @@ export function ResourceListRenderer({
 
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
-      <Button
+      <ToolbarButton
         key={`create-${resourceType}`}
         data-testid={`create-${resourceType}`}
         design="Emphasized"
         onClick={handleShowCreate}
-      >
-        {createActionLabel || t('components.resources-list.create')}
-      </Button>
+        text={createActionLabel || t('components.resources-list.create')}
+      />
     ),
   ];
 

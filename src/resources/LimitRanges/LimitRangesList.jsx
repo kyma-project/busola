@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import LimitRangeCreate from './LimitRangeCreate';
 import LimitRangeSpecification from './LimitRangeSpecification';
-import { Button } from '@ui5/webcomponents-react';
+import { ToolbarButton } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router';
 import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
@@ -51,14 +51,13 @@ export function LimitRangesList(props) {
   };
 
   const createButton = (
-    <Button
+    <ToolbarButton
       key={`create-limit-ranges`}
       data-testid={`create-limit-ranges`}
       design="Emphasized"
       onClick={handleShowCreate}
-    >
-      {t('components.resources-list.create')}
-    </Button>
+      text={t('components.resources-list.create')}
+    />
   );
 
   return (
