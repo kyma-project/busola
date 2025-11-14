@@ -226,6 +226,7 @@ command-palette:
     remove-ns-context: Remove Namespace context
 common:
   ariaLabel:
+    code-preview: Code Preview
     editor: editor
     new-tab-link: This link will be opened in a new tab.
   buttons:
