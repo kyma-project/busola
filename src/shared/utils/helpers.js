@@ -85,14 +85,12 @@ const capitalize = (str) => {
   return str?.charAt(0)?.toUpperCase() + str?.slice(1);
 };
 
-const splitName = (name) => {
-  if (!name) return '';
-  const nameArray = name.match(/[A-Z][a-z]+/g);
-  return (nameArray || []).join(' ');
+export const joinName = (resourceName) => {
+  return resourceName?.split(' ').join('');
 };
 
 export const prettifyNamePlural = (resourceName, resourceType) => {
-  return capitalize(resourceName) || splitName(capitalize(resourceType));
+  return joinName(capitalize(resourceName || resourceType));
 };
 export const prettifyNameSingular = (resourceName, resourceType) => {
   const resources = prettifyNamePlural(resourceName, resourceType);

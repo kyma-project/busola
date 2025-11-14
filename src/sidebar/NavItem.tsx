@@ -16,6 +16,7 @@ import {
 import { useJsonata } from 'components/Extensibility/hooks/useJsonata';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { joinName } from 'shared/utils/helpers';
 
 type NavItemProps = {
   node: NavNode;
@@ -117,7 +118,9 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
-    text: t(node.label, { defaultValue: node.label }),
+    text: t(node.label, {
+      defaultValue: node.externalUrl ? node.label : joinName(node.label),
+    }),
     selected: isSelected,
     href: node.dataSources || node.externalUrl ? getURL() : undefined,
     onClick: (e: Event) => {
