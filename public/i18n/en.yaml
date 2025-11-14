@@ -952,6 +952,7 @@ modules:
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
     no-modules-installed: No community modules installed
+    origin: Origin
     release-channel: Release channel
     sla-warning: Community modules are contributed by the Kyma community and are not automatically updated or maintained. Additionally, they are not covered by any service level agreement (SLA). Use them at your own risk. <0>Learn more</0>
     source-yaml:
