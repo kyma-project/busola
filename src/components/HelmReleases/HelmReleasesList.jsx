@@ -93,7 +93,7 @@ function HelmReleasesList() {
         ],
       }}
       emptyListProps={{
-        subtitleText: ResourceDescription,
+        subtitleText: t('helm-releases.description'),
         url: docsURL,
         showButton: false,
       }}
