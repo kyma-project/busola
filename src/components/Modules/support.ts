@@ -190,6 +190,7 @@ export const findModuleTemplate = (
   moduleName: string,
   channel: string,
   version: string,
+  namespace?: string,
 ) => {
   // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
   const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
@@ -197,7 +198,9 @@ export const findModuleTemplate = (
       moduleName ===
         moduleTemplate.metadata.labels[
           'operator.kyma-project.io/module-name'
-        ] && moduleTemplate.spec.channel === channel,
+        ] &&
+      moduleTemplate.spec.channel === channel &&
+      (!namespace || moduleTemplate.metadata.namespace === namespace),
   );
   const moduleWithInfo = moduleTemplates?.items?.find(
     (moduleTemplate) =>
@@ -206,7 +209,8 @@ export const findModuleTemplate = (
           'operator.kyma-project.io/module-name'
         ] &&
       !moduleTemplate.spec.channel &&
-      moduleTemplate.spec.version === version,
+      moduleTemplate.spec.version === version &&
+      (!namespace || moduleTemplate.metadata.namespace === namespace),
   );
 
   return moduleWithInfo ?? moduleTemplateWithoutInfo;

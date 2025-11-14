@@ -39,7 +39,11 @@ function fillModuleVersions(
       const moduleVersions = acc.get(moduleName);
       if (moduleVersions) {
         const foundVersion = moduleVersions.find((module) => {
-          return module.version === newVersionCandidate.version;
+          return (
+            module.version === newVersionCandidate.version &&
+            module.moduleTemplateNamespace ===
+              newVersionCandidate.moduleTemplateNamespace
+          );
         });
         if (!foundVersion) {
           moduleVersions.push(newVersionCandidate);
@@ -90,9 +94,15 @@ function markInstalledVersion(
     const foundModuleVersions = availableCommunityModules.get(
       getModuleName(installedModule),
     );
+
+    const installedNamespace = installedModule.metadata.namespace;
+
     if (foundModuleVersions) {
       const versionIdx = foundModuleVersions.findIndex((version) => {
-        return version.version === installedModule.spec.version;
+        return (
+          version.version === installedModule.spec.version &&
+          version.moduleTemplateNamespace === installedNamespace
+        );
       });
 
       if (versionIdx > -1) {
@@ -114,7 +124,10 @@ export function getInstalledModules(
     const matchedManagerContainer =
       foundManager.spec?.template?.spec.containers.find(
         (container: { image: string }) => {
-          return imageMatchVersion(container.image, module.spec.version);
+          return (
+            imageMatchVersion(container.image, module.spec.version) &&
+            foundManager.metadata.namespace === module.spec.manager.namespace
+          );
         },
       );
     return !!matchedManagerContainer;
