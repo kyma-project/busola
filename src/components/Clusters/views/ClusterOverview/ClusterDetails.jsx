@@ -84,14 +84,14 @@ export default function ClusterDetails({ currentCluster }) {
                 </Text>
               </DynamicPageComponent.Column>
               <GardenerProvider />
-              {!!kymaResourceLabels['kyma-project.io/global-account-id'] && (
+              {!!kymaResourceLabels?.['kyma-project.io/global-account-id'] && (
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.global-account-id')}
                 >
                   {kymaResourceLabels['kyma-project.io/global-account-id']}
                 </DynamicPageComponent.Column>
               )}
-              {!!kymaResourceLabels['kyma-project.io/subaccount-id'] && (
+              {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.subaccount-id')}
                 >
