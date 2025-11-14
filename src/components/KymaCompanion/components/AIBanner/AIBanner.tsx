@@ -55,10 +55,7 @@ export function AIBanner({
             design="Emphasized"
             onClick={(e) => {
               e.preventDefault();
-              setShowCompanion({
-                show: true,
-                fullScreen: false,
-              });
+              setShowCompanion(true);
             }}
           >
             {t('kyma-companion.banner.buttons.try-joule')}
