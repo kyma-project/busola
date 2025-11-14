@@ -51,19 +51,22 @@ export function MonacoRenderer({
     () => getValue(storeKeys, resource),
     [storeKeys, resource],
   );
-
-  const jsonata = useJsonata({
-    resource,
-    scope: value,
-    value,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource,
+      scope: value,
+      value,
+    }),
+    [resource, value],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
 
   const [language, setLanguage] = useState('');
 
   useEffect(() => {
     getLanguage(jsonata, schema).then((res) => setLanguage(res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, resource, value]);
+  }, [schema, stableJsonataDeps]);
 
   const formatAsString = schema.get('formatAsString') ?? false;
   const formattedValue = formatValue(value, language, formatAsString);

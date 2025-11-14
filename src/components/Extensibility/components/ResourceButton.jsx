@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
@@ -21,15 +21,25 @@ export function ResourceButton({
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { resourceUrl, clusterUrl } = useUrl();
   const navigate = useNavigate();
-
-  const jsonata = useJsonata({
-    resource: originalResource,
-    parent: singleRootResource,
-    embedResource: embedResource,
-    scope,
-    value,
-    arrayItems,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      parent: singleRootResource,
+      embedResource: embedResource,
+      scope,
+      value,
+      arrayItems,
+    }),
+    [
+      originalResource,
+      singleRootResource,
+      embedResource,
+      scope,
+      value,
+      arrayItems,
+    ],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
 
   const [name, setName] = useState(null);
   const [nameError, setNameError] = useState(null);
@@ -61,12 +71,7 @@ export function ResourceButton({
     structure.resource?.name,
     structure.resource?.namespace,
     structure.resource?.kind,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
+    stableJsonataDeps,
   ]);
 
   if (!value) {

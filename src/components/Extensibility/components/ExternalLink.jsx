@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   useGetPlaceholder,
   useGetTranslation,
@@ -36,14 +36,25 @@ export const ExternalLink = ({
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
 
-  const jsonata = useJsonata({
-    resource: originalResource,
-    parent: singleRootResource,
-    embedResource: embedResource,
-    scope,
-    value,
-    arrayItems,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      parent: singleRootResource,
+      embedResource: embedResource,
+      scope,
+      value,
+      arrayItems,
+    }),
+    [
+      originalResource,
+      singleRootResource,
+      embedResource,
+      scope,
+      value,
+      arrayItems,
+    ],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
   const [href, setHref] = useState('');
 
   useEffect(() => {
@@ -51,15 +62,7 @@ export const ExternalLink = ({
       setHref(makeHref({ linkObject, value }));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.link,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
-  ]);
+  }, [structure?.link, stableJsonataDeps]);
 
   if (isNil(value)) return emptyLeafPlaceholder;
 

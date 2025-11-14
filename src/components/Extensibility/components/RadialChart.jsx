@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { useJsonata } from '../hooks/useJsonata';
 
 export const RadialChart = ({ structure, value, originalResource }) => {
   const { t } = useTranslation();
-  const jsonata = useJsonata({
-    resource: originalResource,
-    value,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      value,
+    }),
+    [originalResource, value],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
 
   const [error, setError] = useState(null);
   const [maxValue, setMaxValue] = useState(null);
@@ -31,7 +35,7 @@ export const RadialChart = ({ structure, value, originalResource }) => {
     };
     setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structure.maxValue, structure.additionalInfo, originalResource, value]);
+  }, [structure.maxValue, structure.additionalInfo, stableJsonataDeps]);
 
   if (error) {
     return t('extensibility.configuration-error', {

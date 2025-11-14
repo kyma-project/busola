@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import jsyaml from 'js-yaml';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -21,17 +21,26 @@ export function CodeViewer({
 }) {
   const { widgetT } = useGetTranslation();
   const { t } = useTranslation();
-
   const notification = useNotification();
-
-  const jsonata = useJsonata({
-    resource: originalResource,
-    parent: singleRootResource,
-    embedResource: embedResource,
-    scope,
-    value,
-    arrayItems,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      parent: singleRootResource,
+      embedResource: embedResource,
+      scope,
+      value,
+      arrayItems,
+    }),
+    [
+      originalResource,
+      singleRootResource,
+      embedResource,
+      scope,
+      value,
+      arrayItems,
+    ],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
 
   const [language, setLanguage] = useState(null);
 
@@ -40,15 +49,7 @@ export function CodeViewer({
       setLanguage(lang?.toLowerCase());
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.language,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
-  ]);
+  }, [structure?.language, stableJsonataDeps]);
 
   const getValue = (value) => {
     if (!isNil(value)) {

@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
-import { useTrigger, useSubscription } from '../hooks/useTriggers';
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { TriggerContext } from '../contexts/Trigger';
 
 export function TriggerHandler({
   currentPluginIndex,
@@ -12,16 +12,25 @@ export function TriggerHandler({
   storeKeys,
   onChange,
   resource,
+  value,
   ...props
 }) {
+  const nextPluginIndex = currentPluginIndex + 1;
+  const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
   const { itemVars } = useVariables();
-  const jsonata = useJsonata({ resource });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource,
+    }),
+    [resource],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
   const rule = schema.get('schemaRule');
-
-  const trigger = useTrigger();
-  const [subscriptions, setSubscriptions] = useState([]);
+  const triggers = useContext(TriggerContext);
 
   useEffect(() => {
+    const subsFromSchema = Object.entries(schema.get('subscribe') ?? {});
+    if (!subsFromSchema.length) return;
     Promise.all(
       Object.entries(schema.get('subscribe') ?? {}).map(
         async ([name, formula]) => {
@@ -46,7 +55,6 @@ export function TriggerHandler({
             data: { value },
           });
         };
-
         return [
           id,
           {
@@ -56,29 +64,29 @@ export function TriggerHandler({
           },
         ];
       });
-      setSubscriptions(subs);
+      //setSubscriptions(subs);
+      const test = Object.fromEntries(subs);
+      triggers.subscribe({ current: test });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema, resource]);
+  }, [stableJsonataDeps, required, rule?.itemVars, storeKeys, itemVars]);
 
-  useSubscription(Object.fromEntries(subscriptions));
-
-  const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
-
-  const myChange = useMemo(
-    () => (action) => {
+  const myChange = useCallback(
+    (action) => {
       if (action.scopes?.includes('value')) {
-        action.schema.get('trigger')?.forEach((t) => trigger(t, storeKeys));
+        action.schema
+          .get('trigger')
+          ?.forEach((t) => triggers.trigger(t, storeKeys));
       }
       onChange(action);
     },
-    [onChange, trigger, storeKeys],
+    [onChange, triggers, storeKeys],
   );
 
   return (
     <Plugin
       {...props}
+      value={value}
       currentPluginIndex={nextPluginIndex}
       onChange={myChange}
       schema={schema}
