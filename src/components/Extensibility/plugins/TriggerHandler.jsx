@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
-import { useTrigger, useSubscription } from '../hooks/useTriggers';
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { TriggerContext } from '../contexts/Trigger';
 
 export function TriggerHandler({
   currentPluginIndex,
@@ -15,6 +15,8 @@ export function TriggerHandler({
   value,
   ...props
 }) {
+  const nextPluginIndex = currentPluginIndex + 1;
+  const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
   const { itemVars } = useVariables();
   const stableJsonataDeps = useMemo(
     () => ({
@@ -24,9 +26,7 @@ export function TriggerHandler({
   );
   const jsonata = useJsonata(stableJsonataDeps);
   const rule = schema.get('schemaRule');
-
-  const trigger = useTrigger();
-  const [subscriptions, setSubscriptions] = useState([]);
+  const triggers = useContext(TriggerContext);
 
   useEffect(() => {
     const subsFromSchema = Object.entries(schema.get('subscribe') ?? {});
@@ -42,47 +42,45 @@ export function TriggerHandler({
         },
       ),
     ).then((result) => {
-      setSubscriptions(result);
+      const subs = result.map(([name, value]) => {
+        const modifiers = name.split(/\./);
+        const id = modifiers.pop();
+        const callback = () => {
+          onChange({
+            storeKeys,
+            scopes: ['value'],
+            type: 'set',
+            schema,
+            required,
+            data: { value },
+          });
+        };
+        return [
+          id,
+          {
+            modifiers,
+            storeKeys,
+            callback,
+          },
+        ];
+      });
+      //setSubscriptions(subs);
+      const test = Object.fromEntries(subs);
+      triggers.subscribe({ current: test });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stableJsonataDeps, required, rule?.itemVars, storeKeys, value, itemVars]);
-
-  const subs = subscriptions.map(([name, value]) => {
-    const modifiers = name.split(/\./);
-    const id = modifiers.pop();
-    const callback = () => {
-      onChange({
-        storeKeys,
-        scopes: ['value'],
-        type: 'set',
-        schema,
-        required,
-        data: { value },
-      });
-    };
-    return [
-      id,
-      {
-        modifiers,
-        storeKeys,
-        callback,
-      },
-    ];
-  });
-
-  useSubscription(Object.fromEntries(subs));
-
-  const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
+  }, [stableJsonataDeps, required, rule?.itemVars, storeKeys, itemVars]);
 
   const myChange = useCallback(
     (action) => {
       if (action.scopes?.includes('value')) {
-        action.schema.get('trigger')?.forEach((t) => trigger(t, storeKeys));
+        action.schema
+          .get('trigger')
+          ?.forEach((t) => triggers.trigger(t, storeKeys));
       }
       onChange(action);
     },
-    [onChange, trigger, storeKeys],
+    [onChange, triggers, storeKeys],
   );
 
   return (
