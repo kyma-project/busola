@@ -12,6 +12,7 @@ export function TriggerHandler({
   storeKeys,
   onChange,
   resource,
+  value,
   ...props
 }) {
   const { itemVars } = useVariables();
@@ -28,6 +29,8 @@ export function TriggerHandler({
   const [subscriptions, setSubscriptions] = useState([]);
 
   useEffect(() => {
+    const subsFromSchema = Object.entries(schema.get('subscribe') ?? {});
+    if (!subsFromSchema.length) return;
     Promise.all(
       Object.entries(schema.get('subscribe') ?? {}).map(
         async ([name, formula]) => {
@@ -39,35 +42,35 @@ export function TriggerHandler({
         },
       ),
     ).then((result) => {
-      const subs = result.map(([name, value]) => {
-        const modifiers = name.split(/\./);
-        const id = modifiers.pop();
-        const callback = () => {
-          onChange({
-            storeKeys,
-            scopes: ['value'],
-            type: 'set',
-            schema,
-            required,
-            data: { value },
-          });
-        };
-
-        return [
-          id,
-          {
-            modifiers,
-            storeKeys,
-            callback,
-          },
-        ];
-      });
-      setSubscriptions(subs);
+      setSubscriptions(result);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stableJsonataDeps, required, rule?.itemVars, storeKeys, schema]);
+  }, [stableJsonataDeps, required, rule?.itemVars, storeKeys, value, itemVars]);
 
-  useSubscription(Object.fromEntries(subscriptions));
+  const subs = subscriptions.map(([name, value]) => {
+    const modifiers = name.split(/\./);
+    const id = modifiers.pop();
+    const callback = () => {
+      onChange({
+        storeKeys,
+        scopes: ['value'],
+        type: 'set',
+        schema,
+        required,
+        data: { value },
+      });
+    };
+    return [
+      id,
+      {
+        modifiers,
+        storeKeys,
+        callback,
+      },
+    ];
+  });
+
+  useSubscription(Object.fromEntries(subs));
 
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
@@ -85,6 +88,7 @@ export function TriggerHandler({
   return (
     <Plugin
       {...props}
+      value={value}
       currentPluginIndex={nextPluginIndex}
       onChange={myChange}
       schema={schema}
