@@ -49,7 +49,7 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
         onChange={updateKubeconfig}
         formElementRef={formRef}
         modeSelectorDisabled={
-          kubeconfig ? !Object.keys(kubeconfig)?.length : !!!kubeconfig
+          kubeconfig ? !Object.keys(kubeconfig)?.length : !kubeconfig
         }
         initialMode={'MODE_YAML'}
         className="kubeconfig-upload__form add-cluster__content-container"

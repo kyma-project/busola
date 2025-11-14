@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-globals */
-
 import { validateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
 import { ValidationSchema } from 'state/validationSchemasAtom';
 import { K8sResource } from 'types';

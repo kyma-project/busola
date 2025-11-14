@@ -67,7 +67,7 @@ function onVersionChange(
       return;
     }
 
-    let moduleName = getModuleName(newModuleTemplateToApply);
+    const moduleName = getModuleName(newModuleTemplateToApply);
     const moduleTemplateToApply = moduleTemplatesToApply.get(moduleName);
 
     if (moduleTemplateToApply) {

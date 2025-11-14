@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-globals */
-
 import openapiSchemaToJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import jp from 'jsonpath';

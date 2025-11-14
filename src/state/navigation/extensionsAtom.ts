@@ -509,7 +509,7 @@ export const useGetExtensions = () => {
         // TODO wizard injections
       }
 
-      let filteredConfigs: ExtResource[] = [];
+      const filteredConfigs: ExtResource[] = [];
       if (!configs) {
         setExtensions([]);
         setAllExtensions([]);
@@ -525,8 +525,8 @@ export const useGetExtensions = () => {
           configSet,
         );
 
-        filteredConfigs = configs.filter((node) =>
-          !node?.general?.resource === null
+        const filteredConfigs = configs.filter((node) =>
+          !(node?.general?.resource === null)
             ? true
             : isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
         );
@@ -540,7 +540,7 @@ export const useGetExtensions = () => {
         setStatics([]);
         setInjections([]);
       } else {
-        let injectionsConfigs: ExtInjectionConfig[] = [];
+        const injectionsConfigs: ExtInjectionConfig[] = [];
         filteredConfigs.forEach((config) =>
           config?.injections?.map((injection) =>
             injectionsConfigs.push({

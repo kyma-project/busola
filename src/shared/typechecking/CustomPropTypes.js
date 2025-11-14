@@ -14,8 +14,8 @@ const button = function (props, propName, componentName) {
   ]);
   function hasTextOrLabel() {
     return (
-      !props[propName].hasOwnProperty('text') &&
-      !props[propName].hasOwnProperty('label') &&
+      !Object.prototype.hasOwnProperty.call(props[propName], 'text') &&
+      !Object.prototype.hasOwnProperty.call(props[propName], 'label') &&
       new Error(`Either "text" or "label" is required`)
     );
   }
@@ -23,7 +23,7 @@ const button = function (props, propName, componentName) {
   function checkTypes() {
     for (const [key, type] of buttonProps.entries()) {
       if (
-        props[propName].hasOwnProperty(key) &&
+        Object.prototype.hasOwnProperty.call(props[propName], key) &&
         typeof props[propName][key] !== type
       ) {
         return new Error(

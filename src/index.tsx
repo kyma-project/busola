@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import yaml from 'js-yaml';
-import { Suspense } from 'react';
+import { StrictMode, Suspense } from 'react';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
@@ -75,7 +75,9 @@ root.render(
     <BrowserRouter>
       <Suspense fallback={<Spinner />}>
         <NotificationProvider>
-          <App />
+          <StrictMode>
+            <App />
+          </StrictMode>
           {isDevMode && <JotaiDevTools />}
         </NotificationProvider>
       </Suspense>

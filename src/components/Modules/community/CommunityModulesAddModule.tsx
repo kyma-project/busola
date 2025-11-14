@@ -83,7 +83,7 @@ function onVersionChange(
       return;
     }
 
-    let moduleName = getModuleName(newModuleTemplateToApply);
+    const moduleName = getModuleName(newModuleTemplateToApply);
 
     if (shouldRemove) {
       newModulesTemplatesToApply.delete(moduleName);

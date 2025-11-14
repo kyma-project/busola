@@ -52,7 +52,6 @@ const ContainersLogs = ({ params }) => {
   useEffect(() => {
     selectedLogIndex.current = 0;
     scrollToSelectedLog();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
   function highlightSearch(log, searchText) {

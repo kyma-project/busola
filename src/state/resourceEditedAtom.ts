@@ -1,8 +1,10 @@
 import { atom } from 'jotai';
 
+export type DiscardFn = {};
+
 export interface IsResourceEditedState {
   isEdited: boolean;
-  discardAction?: Function;
+  discardAction?: DiscardFn;
 }
 
 const defaultValue = { isEdited: false };
