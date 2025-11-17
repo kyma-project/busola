@@ -5,6 +5,58 @@ import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
 import { TriggerContext } from '../contexts/Trigger';
 
+const getSubscriptions = (
+  schema,
+  jsonata,
+  resource,
+  itemVars,
+  rule,
+  storeKeys,
+  onChange,
+  required,
+  triggers,
+) => {
+  const subsFromSchema = Object.entries(schema.get('subscribe') ?? {});
+  if (!subsFromSchema.length) return;
+  Promise.all(
+    Object.entries(schema.get('subscribe') ?? {}).map(
+      async ([name, formula]) => {
+        const [value] = await jsonata(formula, {
+          resource,
+          ...itemVars(resource, rule?.itemVars, storeKeys),
+        });
+        return [name, value];
+      },
+    ),
+  ).then((result) => {
+    const subs = result.map(([name, value]) => {
+      const modifiers = name.split(/\./);
+      const id = modifiers.pop();
+      const callback = () => {
+        onChange({
+          storeKeys,
+          scopes: ['value'],
+          type: 'set',
+          schema,
+          required,
+          data: { value },
+        });
+      };
+      return [
+        id,
+        {
+          modifiers,
+          storeKeys,
+          callback,
+        },
+      ];
+    });
+    //setSubscriptions(subs);
+    const subsObject = Object.fromEntries(subs);
+    triggers.subscribe({ current: subsObject });
+  });
+};
+
 export function TriggerHandler({
   currentPluginIndex,
   schema,
@@ -29,45 +81,17 @@ export function TriggerHandler({
   const triggers = useContext(TriggerContext);
 
   useEffect(() => {
-    const subsFromSchema = Object.entries(schema.get('subscribe') ?? {});
-    if (!subsFromSchema.length) return;
-    Promise.all(
-      Object.entries(schema.get('subscribe') ?? {}).map(
-        async ([name, formula]) => {
-          const [value] = await jsonata(formula, {
-            resource,
-            ...itemVars(resource, rule?.itemVars, storeKeys),
-          });
-          return [name, value];
-        },
-      ),
-    ).then((result) => {
-      const subs = result.map(([name, value]) => {
-        const modifiers = name.split(/\./);
-        const id = modifiers.pop();
-        const callback = () => {
-          onChange({
-            storeKeys,
-            scopes: ['value'],
-            type: 'set',
-            schema,
-            required,
-            data: { value },
-          });
-        };
-        return [
-          id,
-          {
-            modifiers,
-            storeKeys,
-            callback,
-          },
-        ];
-      });
-      //setSubscriptions(subs);
-      const test = Object.fromEntries(subs);
-      triggers.subscribe({ current: test });
-    });
+    getSubscriptions(
+      schema,
+      jsonata,
+      resource,
+      itemVars,
+      rule,
+      storeKeys,
+      onChange,
+      required,
+      triggers,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stableJsonataDeps, required, rule?.itemVars, storeKeys, itemVars]);
 

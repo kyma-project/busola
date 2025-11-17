@@ -86,7 +86,7 @@ export function ResourceRefRender({
       setResources(results.filter(Boolean));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toInternal, data, filter, stableJsonataDeps]);
+  }, [toInternal, data, filter, stableJsonataDeps, memoizedValue]);
 
   const setValue = (value) => {
     const getValueAndChange = async () => {

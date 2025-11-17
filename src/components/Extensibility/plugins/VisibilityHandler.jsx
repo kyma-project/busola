@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
@@ -17,13 +17,7 @@ export function VisibilityHandler({
 }) {
   const triggers = useContext(TriggerContext);
   const { itemVars } = useVariables();
-  const stableJsonataDeps = useMemo(
-    () => ({
-      resource,
-    }),
-    [resource],
-  );
-  const jsonata = useJsonata(stableJsonataDeps);
+  const jsonata = useJsonata({ resource });
 
   const rule = schema.get('schemaRule');
 
@@ -50,10 +44,19 @@ export function VisibilityHandler({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     triggers.enabled,
-    stableJsonataDeps,
+    visibilityFormula,
     rule?.itemVars,
     storeKeys,
-    visibilityFormula,
+    resource,
+    value,
+    overwrite,
+    schema,
+    storeKeys,
+    currentPluginIndex,
+    resource,
+    onChange,
+    required,
+    jsonata,
   ]);
 
   if (!visible && value && overwrite) {
