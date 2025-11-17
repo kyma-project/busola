@@ -50,7 +50,6 @@ const CopyableWrapper = memo(function CopyableWrapper({
   value,
   arrayItems,
   structure,
-  ...props
 }) {
   const isRendererCopyable = useMemo(() => {
     return typeof Renderer.copyable === 'function'
@@ -69,15 +68,20 @@ const CopyableWrapper = memo(function CopyableWrapper({
   const [textToCopy, setTextToCopy] = useState('');
 
   const copyFunction = useCallback(
-    (props, Renderer, defaultCopyFunction, linkObject) =>
+    ({ value, structure }, Renderer, defaultCopyFunction, linkObject) =>
       typeof Renderer.copyFunction === 'function'
         ? Renderer.copyFunction(
-            props,
+            { value, structure },
             Renderer,
             defaultCopyFunction,
             linkObject,
           )
-        : defaultCopyFunction(props, Renderer, defaultCopyFunction, linkObject),
+        : defaultCopyFunction(
+            { value, structure },
+            Renderer,
+            defaultCopyFunction,
+            linkObject,
+          ),
     [],
   );
 
@@ -85,7 +89,12 @@ const CopyableWrapper = memo(function CopyableWrapper({
     if (!structure?.copyable || !isRendererCopyable) return;
     jsonata(structure?.link).then((linkObject) => {
       setTextToCopy(
-        copyFunction(props, Renderer, defaultCopyFunction, linkObject),
+        copyFunction(
+          { value, structure },
+          Renderer,
+          defaultCopyFunction,
+          linkObject,
+        ),
       );
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
