@@ -110,8 +110,9 @@ export function ResourcesList({
 
   const content = (
     <>
-      <BannerCarousel />
-      <Injections destination={resourceType} slot="banner" root={resources} />
+      <BannerCarousel>
+        <Injections destination={resourceType} slot="banner" root={resources} />
+      </BannerCarousel>
       {resources ? (
         <ResourceListRenderer
           resources={(resources || []).filter(filterFn)}
