@@ -23,6 +23,6 @@
     "cypress": "^14.5.0",
     "cypress-file-upload": "^5.0.8",
     "cypress-plugin-tab": "^1.0.5",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.1"
   }
 }
