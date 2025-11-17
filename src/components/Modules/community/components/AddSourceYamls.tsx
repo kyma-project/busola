@@ -1,7 +1,5 @@
 import {
   Button,
-  ComboBox,
-  ComboBoxItem,
   FlexBox,
   Input,
   Label,
@@ -10,7 +8,10 @@ import {
   ListItemStandard,
   MessageBox,
   MessageStrip,
+  Option,
   Text,
+  Select,
+  Icon,
 } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
@@ -270,25 +271,42 @@ export const AddSourceYamls = () => {
                   }
                 ></HintButton>
               </FlexBox>
-              <ComboBox
+              <Select
                 id="yaml-namespace-combobox"
                 onChange={(e) => applyNamespace(e.target.value)}
+                className="namespace-select"
               >
+                <Option key="Empty namespace"></Option>
                 {allNamespaces?.map((ns) => {
-                  if (ns === 'kyma-system') return null;
-                  return <ComboBoxItem text={ns} key={ns} />;
+                  if (ns === 'kyma-system')
+                    return (
+                      <Option
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        disabled
+                        value={ns}
+                        key={ns}
+                        tooltip={t(
+                          'modules.community.messages.protected-namespace',
+                        )}
+                      >
+                        <FlexBox
+                          direction={FlexBoxDirection.Row}
+                          justifyContent="End"
+                        >
+                          {ns}
+                          <Icon name="locked" className="additional-icon" />
+                        </FlexBox>
+                      </Option>
+                    );
+                  return (
+                    <Option value={ns} key={ns}>
+                      {ns}
+                    </Option>
+                  );
                 })}
-              </ComboBox>
+              </Select>
             </FlexBox>
-            {/* <FlexBox
-              direction={FlexBoxDirection.Column}
-              gap={'0.5rem'}
-              className="sap-margin-top-small"
-            >
-              <MessageStrip design="Information" hideCloseButton>
-                {t('modules.community.source-yaml.kyma-system-restricted')}
-              </MessageStrip>
-            </FlexBox> */}
             {loading ? (
               <Spinner />
             ) : (

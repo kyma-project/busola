@@ -941,6 +941,7 @@ modules:
       module-added: Community Module added
       module-uninstall: Community Module deleted
       modules-updated: Community Modules updated
+      protected-namespace: This namespace is protected, so you can’t edit it.
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
       resources-delete-in-progress: Resources are still being deleted. Try again later.
       source-yaml-added: Source YAML added
@@ -957,7 +958,6 @@ modules:
     source-yaml:
       add-source-yaml: Add Source YAML
       example-format: 'Example format: http://github.com/project/repo/file.yaml'
-      kyma-system-restricted: Resources cannot be created in the kyma-system namespace.
       module-already-exists: <0> {{moduleTemplate}} </0> already exists in the <0> {{namespace}} </0> namespace.
       module-templates-to-add: ModuleTemplates to add
       modules-wont-be-added: Following ModuleTemplates already exist in the cluster and cannot be added.
