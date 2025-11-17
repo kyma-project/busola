@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
@@ -13,13 +13,7 @@ export function EnumHandler({
   ...props
 }) {
   const { itemVars } = useVariables();
-  const stableJsonataDeps = useMemo(
-    () => ({
-      resource,
-    }),
-    [resource],
-  );
-  const jsonata = useJsonata(stableJsonataDeps);
+  const jsonata = useJsonata({ resource });
 
   const rule = schema.get('schemaRule');
 
@@ -41,7 +35,7 @@ export function EnumHandler({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schemaEnum, stableJsonataDeps, rule?.itemVars, storeKeys]);
+  }, [schemaEnum, resource, rule?.itemVars, storeKeys]);
 
   return (
     <Plugin

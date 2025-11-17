@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
@@ -70,13 +70,7 @@ export function TriggerHandler({
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
   const { itemVars } = useVariables();
-  const stableJsonataDeps = useMemo(
-    () => ({
-      resource,
-    }),
-    [resource],
-  );
-  const jsonata = useJsonata(stableJsonataDeps);
+  const jsonata = useJsonata({ resource });
   const rule = schema.get('schemaRule');
   const triggers = useContext(TriggerContext);
 
@@ -93,7 +87,7 @@ export function TriggerHandler({
       triggers,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stableJsonataDeps, required, rule?.itemVars, storeKeys, itemVars]);
+  }, [resource, required, rule?.itemVars, storeKeys, itemVars]);
 
   const myChange = useCallback(
     (action) => {
