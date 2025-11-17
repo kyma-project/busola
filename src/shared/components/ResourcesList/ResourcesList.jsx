@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Button, Text } from '@ui5/webcomponents-react';
@@ -177,9 +177,6 @@ function Resources(props) {
   });
 
   const [filteredResources, setFilteredResources] = useState([]);
-  const setResources = useCallback((resources) =>
-    setFilteredResources(resources),
-  );
 
   useEffect(() => {
     if (!filter) {

@@ -60,3 +60,5 @@ public/active.env
 
 extensions/downloads/*
 bin
+
+.eslintcache
