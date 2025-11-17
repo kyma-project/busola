@@ -47,6 +47,7 @@ kubectl apply -f tests/integration/fixtures/community-modules
 
 echo "Apply Kyma provision fixture"
 kubectl apply -f tests/integration/fixtures/kyma-info-cm.yaml
+kubectl apply -f tests/integration/fixtures/shoot-info-cm.yaml
 
 echo "Apply gardener resources"
 echo "Certificates"
