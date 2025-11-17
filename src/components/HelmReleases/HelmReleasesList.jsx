@@ -6,7 +6,11 @@ import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
-import { ResourceDescription, docsURL } from 'components/HelmReleases';
+import {
+  ResourceDescription,
+  docsURL,
+  i18nDescriptionKey,
+} from 'components/HelmReleases';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 
@@ -93,7 +97,7 @@ function HelmReleasesList() {
         ],
       }}
       emptyListProps={{
-        subtitleText: t('helm-releases.description'),
+        subtitleText: t(i18nDescriptionKey),
         url: docsURL,
         showButton: false,
       }}
