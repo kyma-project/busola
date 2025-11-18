@@ -21,10 +21,8 @@ export function validateFormElement(element, isRequired) {
     let validationFunction, args;
     switch (true) {
       // Validates the CollapsibleSection (GenericList/ResourceForm) by recursively calling this function
-      case child.classList.contains(
-        'resource-form__collapsible-section',
-      ): // Finds the children's container and checks if it is required
-      {
+      case child.classList.contains('resource-form__collapsible-section'): {
+        // Finds the children's container and checks if it is required
         const required = child.classList.contains('required');
         const content = child.querySelector('div.content');
         const contentWrapper = child.querySelector(
