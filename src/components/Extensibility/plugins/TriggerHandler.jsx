@@ -51,7 +51,6 @@ const getSubscriptions = (
         },
       ];
     });
-    //setSubscriptions(subs);
     const subsObject = Object.fromEntries(subs);
     triggers.subscribe({ current: subsObject });
   });
