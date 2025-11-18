@@ -287,7 +287,7 @@ export const AddSourceYamls = () => {
                         value={ns}
                         key={ns}
                       >
-                        <div className="optionContent">
+                        <div className="option-content">
                           {ns}
                           <Icon name="locked" />
                         </div>
