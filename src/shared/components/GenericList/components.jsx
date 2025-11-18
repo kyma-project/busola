@@ -331,27 +331,21 @@ export const TableBody = ({
 
       // Check if the entry is selected using click or refresh
       isModuleSelected = entrySelected
-        ? entrySelected === e?.name
+        ? entrySelected instanceof Array
+          ? entrySelected.some((entry) => entry === e?.name)
+          : entrySelected === e?.name
         : pluralize(e?.name?.replace('-', '') || '') === resourceTypeBase;
     }
-    console.log('test-kon:', {
-      'layoutState?.midColumn?.resourceName':
-        layoutState?.midColumn?.resourceName,
-      'layoutState?.endColumn?.resourceName':
-        layoutState?.endColumn?.resourceName,
-      entrySelected: entrySelected,
-      'e?.metadata?.name': e?.metadata?.name,
-      entrySelectedNamespace: entrySelectedNamespace,
-      'e?.metadata?.namespace': e?.metadata?.namespace,
-      isModuleSelected: isModuleSelected,
-    });
+    const entrySelectedMatches =
+      entrySelected instanceof Array
+        ? entrySelected.some((entry) => entry === e?.metadata?.name)
+        : entrySelected === e?.metadata?.name;
     return (
       <RowRenderer
         isSelected={
-          // TODO: in functions: e?.metadata?.name is with dot and some id and that's why is different then resourceName
           ((layoutState?.midColumn?.resourceName === e.metadata?.name ||
             layoutState?.endColumn?.resourceName === e.metadata?.name) &&
-            entrySelected === e?.metadata?.name &&
+            entrySelectedMatches &&
             (entrySelectedNamespace === '' ||
               entrySelectedNamespace === e?.metadata?.namespace)) ||
           isModuleSelected

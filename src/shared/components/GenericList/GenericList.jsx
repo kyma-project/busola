@@ -163,17 +163,18 @@ export const GenericList = ({
   useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
-    const selected = entries.find((entry) => {
-      const name = entry?.metadata?.name;
-      return (
-        name &&
-        window.location.href.includes(name) &&
-        window.location.href.includes(resourceType.toLowerCase())
-      );
-    })?.metadata?.name;
-
-    if (selected) {
-      setEntrySelected(selected);
+    const selected = entries
+      .filter((entry) => {
+        const name = entry?.metadata?.name;
+        return (
+          name &&
+          window.location.href.includes(name) &&
+          window.location.href.includes(resourceType.toLowerCase())
+        );
+      })
+      ?.map((entry) => entry?.metadata?.name);
+    if (selected?.length) {
+      setEntrySelected(selected?.length === 1 ? selected[0] : selected);
     }
   }, [entries, resourceType]);
 
