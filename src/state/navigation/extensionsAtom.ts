@@ -525,11 +525,13 @@ export const useGetExtensions = () => {
           configSet,
         );
 
-        const filteredConfigs = configs.filter((node) =>
-          !(node?.general?.resource === null)
-            ? true
-            : isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
-        );
+        configs
+          .filter((node) =>
+            !(node?.general?.resource === null)
+              ? true
+              : isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
+          )
+          .forEach((i) => filteredConfigs.push(i));
 
         setExtensions(filteredConfigs);
         setAllExtensions(configs);
