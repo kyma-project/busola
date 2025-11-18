@@ -8,7 +8,7 @@ import {
   ListItemStandard,
   MessageBox,
   MessageStrip,
-  Option,
+  OptionCustom,
   Text,
   Select,
   Icon,
@@ -276,33 +276,27 @@ export const AddSourceYamls = () => {
                 onChange={(e) => applyNamespace(e.target.value)}
                 className="namespace-select"
               >
-                <Option key="Empty namespace"></Option>
+                <OptionCustom key="Empty namespace"></OptionCustom>
                 {allNamespaces?.map((ns) => {
                   if (ns === 'kyma-system')
                     return (
-                      <Option
+                      <OptionCustom
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         disabled
                         value={ns}
                         key={ns}
-                        tooltip={t(
-                          'modules.community.messages.protected-namespace',
-                        )}
                       >
-                        <FlexBox
-                          direction={FlexBoxDirection.Row}
-                          justifyContent="End"
-                        >
+                        <div className="optionContent">
                           {ns}
-                          <Icon name="locked" className="additional-icon" />
-                        </FlexBox>
-                      </Option>
+                          <Icon name="locked" />
+                        </div>
+                      </OptionCustom>
                     );
                   return (
-                    <Option value={ns} key={ns}>
+                    <OptionCustom value={ns} key={ns}>
                       {ns}
-                    </Option>
+                    </OptionCustom>
                   );
                 })}
               </Select>

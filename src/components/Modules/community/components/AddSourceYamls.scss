@@ -13,8 +13,10 @@
 .namespace-select {
   width: 100%;
 }
-.additional-icon {
+
+.optionContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  position: absolute;
-  right: calc((50% - 30px) * -1);
 }
