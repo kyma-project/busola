@@ -75,9 +75,7 @@ root.render(
     <BrowserRouter>
       <Suspense fallback={<Spinner />}>
         <NotificationProvider>
-          <StrictMode>
-            <App />
-          </StrictMode>
+          <App />
           {isDevMode && <JotaiDevTools />}
         </NotificationProvider>
       </Suspense>
