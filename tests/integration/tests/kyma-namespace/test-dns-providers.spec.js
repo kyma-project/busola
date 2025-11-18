@@ -39,6 +39,7 @@ context('Test DNS Providers', () => {
     chooseComboboxOption(
       '[placeholder="Select name"]',
       'serverless-registry-config-default',
+      true,
     );
 
     // include domains
