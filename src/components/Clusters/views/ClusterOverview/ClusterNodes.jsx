@@ -53,7 +53,13 @@ export function ClusterNodes({ data, error, loading }) {
 
     return [
       <Link
-        style={{ fontWeight: 'bold' }}
+        style={{
+          fontWeight: 'bold',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+        }}
         data-testid={`node-details-link-${entry.metadata?.name}`}
         url={clusterUrl(`overview/nodes/${entry.metadata?.name}`)}
       >
