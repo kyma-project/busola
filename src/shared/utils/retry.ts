@@ -1,5 +1,7 @@
+export type FunctionToRetry = () => any;
+
 export default async function retry(
-  fn: Function,
+  fn: FunctionToRetry,
   maxAttempts = 3,
   retryDelay = 500,
 ): Promise<boolean> {
