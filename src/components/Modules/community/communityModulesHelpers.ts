@@ -107,7 +107,8 @@ export function getInstalledModules(
   managers: any,
 ): ModuleTemplateListType {
   const installedModuleTemplates = moduleTemplates.items?.filter((module) => {
-    const foundManager = managers[module.metadata.name];
+    const foundManager =
+      managers[`${module.metadata.name}:${module.spec.manager.namespace}`];
     if (!foundManager) {
       return false;
     }
@@ -131,7 +132,12 @@ export function getNotInstalledModules(
 ): ModuleTemplateListType {
   const notInstalledModuleTemplates = moduleTemplates.items?.filter(
     (module) => {
-      const foundManager = managers[module.metadata.name];
+      const foundManager = managers?.items?.find((manager: any) => {
+        return (
+          manager.metadata.name === module.metadata.name &&
+          manager.metadata.namespace === module.metadata.namespace
+        );
+      });
 
       return !foundManager;
     },
