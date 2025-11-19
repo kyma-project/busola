@@ -3,7 +3,7 @@ export function chooseComboboxOption(selector, optionText, force = false) {
     .find('input')
     .filterWithNoValue()
     .as('comboboxInput')
-    .click();
+    .click({ force });
   cy.get('@comboboxInput').type(optionText);
 
   cy.get('ui5-cb-item:visible').contains(optionText).click({ force: force });
