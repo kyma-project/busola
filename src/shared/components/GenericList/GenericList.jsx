@@ -174,6 +174,9 @@ export const GenericList = ({
       })
       ?.map((entry) => entry?.metadata?.name);
     if (selected?.length) {
+      // There is often more than one match due to similar names (e.g. `test`, `test123`),
+      // so entrySelected can be a string or an array of strings.
+      // This (the correct one) is resolved in TableBody.
       setEntrySelected(selected?.length === 1 ? selected[0] : selected);
     }
   }, [entries, resourceType]);
