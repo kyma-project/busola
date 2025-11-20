@@ -30,7 +30,9 @@ export function useProtectedResources() {
     : [];
 
   const getEntryProtection = (entry) => {
-    return protectedResourceRules?.filter((rule) =>
+    if (!entry) return [];
+
+    return protectedResourceRules.filter((rule) =>
       Object.entries(rule?.match || {}).every(([pattern, value]) =>
         !!rule?.regex
           ? jp.value(entry, pattern) &&
