@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import { chooseComboboxOption } from '../../support/helpers';
-import { loadFile } from '../../support/loadFile';
 
 const PROVIDER_NAME = 'test-provider';
 const PROVIDER_TYPE = 'cloudflare-dns';
@@ -10,46 +9,16 @@ const PROVIDER_INCLUDED_DOMAIN = 'test.kyma.local';
 const PROVIDER_INCLUDED_DOMAIN_2 = 'test2.kyma.local';
 const PROVIDER_EXCLUDED_DOMAIN = 'sth.kyma.local';
 
-const FILE_NAME = 'test-secret.yaml';
-
-async function loadSecret(namespace, fileName) {
-  const resource = await loadFile(fileName);
-  const newResource = { ...resource };
-
-  newResource.metadata.namespace = namespace;
-
-  return newResource;
-}
-
 context('Test DNS Providers', () => {
   Cypress.skipAfterFail();
 
   before(() => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
-
-    cy.navigateTo('Configuration', 'Secrets');
-    cy.openCreate();
-    cy.get('.create-form')
-      .contains('ui5-segmented-button-item:visible', 'YAML')
-      .click();
-    cy.wrap(loadSecret(Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      (SECRET_CONFIG) => {
-        const secret = JSON.stringify(SECRET_CONFIG);
-        cy.pasteToMonaco(secret);
-      },
-    );
-    cy.saveChanges('Create');
-    cy.contains('ui5-title', 'secret-test').should('be.visible');
   });
 
   it('Create DNS Provider', () => {
     cy.navigateTo('Configuration', 'DNS Providers');
-
-    cy.openCreate();
-    cy.get('.create-form')
-      .contains('ui5-segmented-button-item:visible', 'Form')
-      .click();
 
     // type
     chooseComboboxOption(
@@ -58,17 +27,11 @@ context('Test DNS Providers', () => {
     );
 
     // secret
-    chooseComboboxOption(
-      '[placeholder="Select namespace"]',
-      Cypress.env('NAMESPACE_NAME'),
-    );
+    chooseComboboxOption('[placeholder="Select namespace"]', 'default');
 
     cy.wait(500);
 
-    chooseComboboxOption(
-      '[placeholder="Select name"]',
-      'serverless-registry-config-default',
-    );
+    chooseComboboxOption('[placeholder="Select name"]', 'secret-test');
 
     // include domains
     cy.get('[placeholder="Domain that is allowed"]:visible', { log: false })
