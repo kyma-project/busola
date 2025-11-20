@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ConditionList as ConditionListComponent } from 'shared/components/ConditionList/ConditionList';
 import { useJsonata } from '../hooks/useJsonata';
 import { useTranslation } from 'react-i18next';
@@ -15,14 +15,25 @@ export const ConditionList = ({
   embedResource,
 }) => {
   const { t } = useTranslation();
-  const jsonata = useJsonata({
-    resource: originalResource,
-    parent: singleRootResource,
-    embedResource: embedResource,
-    scope,
-    value,
-    arrayItems,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      parent: singleRootResource,
+      embedResource: embedResource,
+      scope,
+      value,
+      arrayItems,
+    }),
+    [
+      originalResource,
+      singleRootResource,
+      embedResource,
+      scope,
+      value,
+      arrayItems,
+    ],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
 
   const [conditions, setConditions] = useState(null);
 
@@ -72,16 +83,7 @@ export const ConditionList = ({
       }),
     ).then((results) => setConditions(results));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.customContent,
-    structure?.highlights,
-    value,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    arrayItems,
-  ]);
+  }, [structure?.customContent, structure?.highlights, stableJsonataDeps]);
 
   if (!Array.isArray(value) || value?.length === 0) {
     return null;
