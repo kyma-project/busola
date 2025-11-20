@@ -34,6 +34,8 @@ context('Test DNS Providers', () => {
       Cypress.env('NAMESPACE_NAME'),
     );
 
+    cy.get('body').click(0, 0);
+
     cy.wait(1000);
 
     chooseComboboxOption(
