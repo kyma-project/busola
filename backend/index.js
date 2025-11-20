@@ -4,6 +4,7 @@ import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import addLogger from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
+import { fillActiveEnvForFrontend } from './utils/other';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
 const express = require('express');
@@ -35,6 +36,10 @@ if (gzipEnabled)
       },
     }),
   );
+
+if (process.env.ENVIRONMENT) {
+  fillActiveEnvForFrontend(process.env.ENVIRONMENT);
+}
 
 if (process.env.NODE_ENV === 'development') {
   console.log('Use development settings of cors');
