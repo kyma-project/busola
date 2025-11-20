@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import { chooseComboboxOption } from '../../support/helpers';
+import { loadFile } from '../../support/loadFile';
 
 const PROVIDER_NAME = 'test-provider';
 const PROVIDER_TYPE = 'cloudflare-dns';
