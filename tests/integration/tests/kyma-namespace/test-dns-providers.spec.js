@@ -28,8 +28,6 @@ context('Test DNS Providers', () => {
       PROVIDER_TYPE_PRETTY,
     );
 
-    cy.wait(1000);
-
     // secret
     chooseComboboxOption(
       '[placeholder="Select namespace"]',
