@@ -20,6 +20,8 @@ context('Test DNS Providers', () => {
   it('Create DNS Provider', () => {
     cy.navigateTo('Configuration', 'DNS Providers');
 
+    cy.openCreate();
+
     // type
     chooseComboboxOption(
       '[placeholder="Choose Provider type"]',
