@@ -30,6 +30,9 @@ context('Test DNS Providers', () => {
 
     cy.navigateTo('Configuration', 'Secrets');
     cy.openCreate();
+    cy.get('.create-form')
+      .contains('ui5-segmented-button-item:visible', 'YAML')
+      .click();
     cy.wrap(loadSecret(Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
       (SECRET_CONFIG) => {
         const secret = JSON.stringify(SECRET_CONFIG);
@@ -44,6 +47,9 @@ context('Test DNS Providers', () => {
     cy.navigateTo('Configuration', 'DNS Providers');
 
     cy.openCreate();
+    cy.get('.create-form')
+      .contains('ui5-segmented-button-item:visible', 'Form')
+      .click();
 
     // type
     chooseComboboxOption(
