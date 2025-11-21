@@ -39,7 +39,11 @@ function fillModuleVersions(
       const moduleVersions = acc.get(moduleName);
       if (moduleVersions) {
         const foundVersion = moduleVersions.find((module) => {
-          return module.version === newVersionCandidate.version;
+          return (
+            module.version === newVersionCandidate.version &&
+            module.moduleTemplateNamespace ===
+              newVersionCandidate.moduleTemplateNamespace
+          );
         });
         if (!foundVersion) {
           moduleVersions.push(newVersionCandidate);
@@ -90,9 +94,15 @@ function markInstalledVersion(
     const foundModuleVersions = availableCommunityModules.get(
       getModuleName(installedModule),
     );
+
+    const installedNamespace = installedModule.metadata.namespace;
+
     if (foundModuleVersions) {
       const versionIdx = foundModuleVersions.findIndex((version) => {
-        return version.version === installedModule.spec.version;
+        return (
+          version.version === installedModule.spec.version &&
+          version.moduleTemplateNamespace === installedNamespace
+        );
       });
 
       if (versionIdx > -1) {
@@ -107,14 +117,18 @@ export function getInstalledModules(
   managers: any,
 ): ModuleTemplateListType {
   const installedModuleTemplates = moduleTemplates.items?.filter((module) => {
-    const foundManager = managers[module.metadata.name];
+    const foundManager =
+      managers[`${module.metadata.name}:${module.spec.manager.namespace}`];
     if (!foundManager) {
       return false;
     }
     const matchedManagerContainer =
       foundManager.spec?.template?.spec.containers.find(
         (container: { image: string }) => {
-          return imageMatchVersion(container.image, module.spec.version);
+          return (
+            imageMatchVersion(container.image, module.spec.version) &&
+            foundManager.metadata.namespace === module.spec.manager.namespace
+          );
         },
       );
     return !!matchedManagerContainer;
@@ -131,7 +145,12 @@ export function getNotInstalledModules(
 ): ModuleTemplateListType {
   const notInstalledModuleTemplates = moduleTemplates.items?.filter(
     (module) => {
-      const foundManager = managers[module.metadata.name];
+      const foundManager = managers?.items?.find((manager: any) => {
+        return (
+          manager.metadata.name === module.metadata.name &&
+          manager.metadata.namespace === module.metadata.namespace
+        );
+      });
 
       return !foundManager;
     },

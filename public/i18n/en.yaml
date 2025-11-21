@@ -47,11 +47,11 @@ cluster-overview:
     cpu-used-percentage: 'CPU used: {{percentage}}'
     memory-used-percentage: 'Memory used: {{percentage}}'
 cluster-role-bindings:
-  description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
+  description: <0>Cluster Role Binding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
   title: Cluster Role Bindings
 cluster-roles:
-  description: <0>ClusterRole</0> is a set of cluster-level resources and permissions that can be assigned to a user.
+  description: <0>Cluster Role</0> is a set of cluster-level resources and permissions that can be assigned to a user.
   name_singular: ClusterRole
   title: Cluster Roles
 cluster-validation:
@@ -480,7 +480,7 @@ components:
 config-maps:
   buttons:
     migrate: Migrate
-  description: <0>ConfigMap</0> is an object that allows for storing non-sensitive data in key-value pairs.
+  description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
   name_singular: ConfigMap
   title: Config Maps
 configuration:
@@ -511,7 +511,7 @@ cron-jobs:
       hour: 0 to 23 (always UTC)
       minute: 0 to 59
       month: 1 to 12
-  description: <0>CronJob</0> is a job that is run according to a specified schedule.
+  description: <0>Cron Job</0> is a job that is run according to a specified schedule.
   last-job-execution: Last Job execution
   last-schedule-time: Last Schedule Time
   last-successful-time: Last Successful Time
@@ -520,7 +520,7 @@ cron-jobs:
   schedule: Schedule
   title: Cron Jobs
 custom-resource-definitions:
-  description: <0>CustomResourceDefinition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
+  description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
     categories: Categories
     conversion: Conversion
@@ -553,12 +553,12 @@ custom-resource-definitions:
     version: Version
   title: Custom Resource Definitions
 custom-resources:
-  description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResourceDefinition</1> first.
+  description: <0>Custom Resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResourceDefinition</1> first.
   headers:
     api-version: API Version
   title: Custom Resources
 daemon-sets:
-  description: <0>DaemonSet</0> ensures that replicated Pods are running across a set of available nodes.
+  description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   name_singular: DaemonSet
   node-selector: Node Selector
   status:
@@ -953,6 +953,7 @@ modules:
     no-modules: No community modules available
     no-modules-description: Customize your cluster by adding the modules you need.
     no-modules-installed: No community modules installed
+    origin: Origin
     release-channel: Release channel
     sla-warning: Community modules are contributed by the Kyma community and are not automatically updated or maintained. Additionally, they are not covered by any service level agreement (SLA). Use them at your own risk. <0>Learn more</0>
     source-yaml:
@@ -1001,7 +1002,7 @@ navigation:
   upload-yaml:
     title: Upload YAML
 network-policies:
-  description: <0>NetworkPolicy</0> allows you to control how a Pod communicates with different network entities.
+  description: <0>Network Policy</0> allows you to control how a Pod communicates with different network entities.
   headers:
     cidr: CIDR
     egress: Egress
@@ -1054,7 +1055,7 @@ nodes:
   title: Nodes
   title_details: Node {{nodeName}}
 persistent-volume-claims:
-  description: <0>PersistentVolumeClaim (PVC)</0> is a request for the PersistentVolume resources.
+  description: <0>Persistent Volume Claim (PVC)</0> is a request for the PersistentVolume resources.
   headers:
     access-modes: Access Modes
     capacity: Capacity
@@ -1123,7 +1124,7 @@ pv:
     type: Container Storage Interface
     volumeAttributes: Volume Attributes
     volumeHandle: Volume Handle
-  description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
+  description: <0>Persistent Volume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
   fc:
     fsType: FSType
     lun: LUN
@@ -1179,7 +1180,7 @@ replica-sets:
     tooltips:
       min-ready-seconds: Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing in order to be considered available.
       replicas: Number of desired replicas
-  description: <0>ReplicaSet</0> maintains a number of replica Pods running at any given time.
+  description: <0>Replica Set</0> maintains a number of replica Pods running at any given time.
   headers:
     images: Images
     limits: Limits
@@ -1231,7 +1232,7 @@ role-bindings:
     tooltips:
       kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
     user-name: User name
-  description: <0>RoleBinding</0> assigns the permissions defined in a Role to a user.
+  description: <0>Role Binding</0> assigns the permissions defined in a Role to a user.
   headers:
     kind: Kind
     role-ref: Role Reference
@@ -1350,7 +1351,7 @@ service-accounts:
       associated-secret: Creates a long-lived API token for a ServiceAccount which data is kept in the associated Secret.
       auto-mount-token: When set to true, it automatically mounts the ServiceAccount token within each container of a given Pod. For security reasons, don't enable automount if you don't need it.
       image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
-  description: <0>ServiceAccount</0> enables processes to run on a Pod to communicate and authenticate to the API server.
+  description: <0>Service Account</0> enables processes to run on a Pod to communicate and authenticate to the API server.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
@@ -1422,7 +1423,7 @@ settings:
     total-items: '{{itemsCount}} items'
   theme: Theme
 stateful-sets:
-  description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
+  description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
   name_singular: StatefulSet
   status:
     available-replicas: Available Replicas
@@ -1438,7 +1439,7 @@ stateful-sets:
 storage:
   title: Storage
 storage-classes:
-  description: <0>StorageClass</0> provides a way for administrators to describe the "classes" of storage they offer.
+  description: <0>Storage Class</0> provides a way for administrators to describe the "classes" of storage they offer.
   headers:
     allow-volume-expansion: Allow Volume Expansion
     configuration: Configuration

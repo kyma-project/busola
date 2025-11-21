@@ -121,9 +121,10 @@ export const CommunityModulesList = ({
 
   useEffect(() => {
     const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
-      return !installedModules.find((installedModule) => {
-        return installedModule.moduleTemplateName === m.moduleTpl.metadata.name;
-      });
+      return !installedModules.find(
+        (installed) =>
+          installed.moduleTemplateName === m.moduleTpl.metadata.name,
+      );
     });
 
     if (modulesDuringProcessing.length === 0) {
@@ -134,9 +135,8 @@ export const CommunityModulesList = ({
     const moduleTemplatesDuringUpload = modulesDuringProcessing
       .filter((m) => m.state !== State.Finished)
       .map((m) => createFakeModuleTemplateWithStatus(m));
-    setModulesToDisplay(
-      [...installedModules].concat(moduleTemplatesDuringUpload),
-    );
+
+    setModulesToDisplay([...installedModules, ...moduleTemplatesDuringUpload]);
   }, [installedModules, modulesDuringUpload]);
 
   const handleShowAddModule = () => {
@@ -179,15 +179,21 @@ export const CommunityModulesList = ({
     name: string;
     channel: string;
     version: string;
-    resource: { kind: string };
+    namespace?: string;
+    resource: { kind: string; metadata: { namespace: string } };
   }) => {
-    const moduleTemplateName = findModuleTemplate(
+    const currentModuleTemplate = findModuleTemplate(
       moduleTemplates,
       resource.name,
       resource.channel,
       resource.version,
-    )?.metadata?.name;
-    const moduleResource = getModuleResource(moduleTemplateName ?? '');
+      resource.namespace,
+    );
+
+    const moduleResource = getModuleResource(
+      currentModuleTemplate?.metadata?.name ?? '',
+      currentModuleTemplate?.spec?.manager?.namespace ?? '',
+    );
 
     const moduleStatus = moduleResource?.status;
     const isDeletionFailed = moduleStatus?.state === 'Warning';
@@ -208,8 +214,11 @@ export const CommunityModulesList = ({
     );
   };
 
-  const customColumnLayout = (resource: { name: string }) => {
-    const moduleResource = getModuleResource(resource.name);
+  const customColumnLayout = (resource: {
+    name: string;
+    namespace: string;
+  }) => {
+    const moduleResource = getModuleResource(resource.name, resource.namespace);
 
     return {
       resourceName: resource?.name,
@@ -245,6 +254,7 @@ export const CommunityModulesList = ({
       name: string;
       channel: string;
       version: string;
+      namespace: string;
       resource: {
         kind: string;
         apiVersion: string;
@@ -359,7 +369,7 @@ export const CommunityModulesList = ({
         }
         disableHiding={false}
         displayArrow
-        title={'Community Modules'}
+        title={t('modules.community.installed-modules')}
         sortBy={{
           name: (a: { name: any }, b: { name: any }) =>
             a.name?.localeCompare(b.name),
@@ -378,6 +388,7 @@ export const CommunityModulesList = ({
           } as any
         }
         customSelectedEntry={customSelectedEntry}
+        namespaceColIndex={1}
       />
     </React.Fragment>
   );

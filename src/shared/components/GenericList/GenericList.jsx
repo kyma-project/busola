@@ -247,7 +247,10 @@ export const GenericList = ({
         (entry?.metadata?.name === item ||
           pluralize(entry?.spec?.names?.kind ?? '') === item ||
           entry?.name === item) &&
-        (!hasNamepace || entry?.metadata?.namespace === itemNamespace)
+        (!hasNamepace ||
+          entry?.metadata?.namespace === itemNamespace ||
+          // special case for Community Modules
+          entry?.resource?.metadata?.namespace === itemNamespace)
       );
     });
 
@@ -259,7 +262,9 @@ export const GenericList = ({
       setEntrySelected(
         selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
       );
-      setEntrySelectedNamespace(selectedEntry?.metadata?.namespace ?? '');
+      setEntrySelectedNamespace(
+        selectedEntry?.metadata?.namespace ?? selectedEntry.namespace ?? '',
+      );
 
       const { group, version } = extractApiGroupVersion(
         selectedEntry?.apiVersion,

@@ -21,8 +21,9 @@ type RowResourceType = {
   name: string;
   channel: string;
   version: string;
-  resource: { kind: string };
+  resource: { kind: string; metadata: { namespace: string } };
   fakeStatus: any;
+  namespace?: string;
 };
 
 type ModuleReleaseMetasType = {
@@ -69,6 +70,7 @@ export const ModulesListRows = ({
     resource?.name,
     resource?.channel || kymaResource?.spec?.channel || '',
     resource?.version,
+    resource?.namespace,
   );
 
   const { data: moduleResource } = useGetModuleResource(

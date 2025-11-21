@@ -332,8 +332,12 @@ export const TableBody = ({
       // Check if the entry is selected using click or refresh
       isModuleSelected = entrySelected
         ? entrySelected instanceof Array
-          ? entrySelected.some((entry) => entry === e?.name)
-          : entrySelected === e?.name
+          ? entrySelected.some((entry) => entry === e?.name) &&
+            (entrySelectedNamespace === e?.namespace ||
+              entrySelectedNamespace === e?.resource?.metadata?.namespace)
+          : entrySelected === e?.name &&
+            (entrySelectedNamespace === e?.namespace ||
+              entrySelectedNamespace === e?.resource?.metadata?.namespace)
         : pluralize(e?.name?.replace('-', '') || '') === resourceTypeBase;
     }
     const entrySelectedMatches =
