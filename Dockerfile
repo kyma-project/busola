@@ -1,32 +1,30 @@
 FROM --platform=$BUILDPLATFORM node:22.20-alpine3.22 AS builder
-#FROM node:22.20-alpine3.22 AS builder
 
 ARG default_tag
 ARG tag
-
-WORKDIR /app
 
 RUN apk update && \
   apk upgrade && \
   apk add --no-cache make yq
 
-# ---- JavaScript build ----
-# Set env variables
-ENV PRODUCTION=true
-ENV CI=true
-#ENV NODE_ENV=production
-
 COPY . /app
+# ---- Frontend build ----
+WORKDIR /app
+RUN npm clean-install
 
 RUN export TAG=${tag:-$default_tag} &&  yq -i '.version = "'${TAG}'"' public/version.yaml
-RUN npm ci
-
 # use sessionStorage as default
 RUN yq eval -i '.config.defaultStorage = "sessionStorage"' public/defaultConfig.yaml
 
 RUN npm run build:docker
-RUN cd /app/backend && npm run build
-RUN cd /app/backend && npm ci --omit=dev
+
+# ---- Backend build ----
+WORKDIR /app/backend
+RUN npm clean-install
+RUN npm run build
+
+#Remove devDependencies
+RUN npm prune --omit=dev
 
 # ---- Environments Configuration ----
 FROM --platform=$BUILDPLATFORM node:22.20-alpine3.22 AS configuration
@@ -57,6 +55,6 @@ COPY --chown=65532:65532 --from=configuration /kyma/build /app/core-ui/environme
 USER 65532:65532
 
 EXPOSE 3001
-ENV ADDRESS=0.0.0.0 IS_DOCKER=true ENVIRONMENT=""
+ENV ADDRESS=0.0.0.0 IS_DOCKER=true ENVIRONMENT="" NODE_ENV=production
 
 CMD ["backend-production.js"]
