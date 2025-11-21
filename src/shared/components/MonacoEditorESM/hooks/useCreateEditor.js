@@ -43,7 +43,11 @@ export const useCreateEditor = ({
 
     const model =
       editor.getModel(modelUri) ||
-      editor.createModel(value, language, modelUri);
+      editor.createModel(
+        typeof value === 'string' ? value : JSON.stringify(value ?? ''),
+        language,
+        modelUri,
+      );
 
     // create editor and assign model with value and autocompletion
     const instance = editor.create(divRef.current, {
