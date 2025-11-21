@@ -6,6 +6,7 @@ import {
   List,
   RadioButton,
   Text,
+  ToolbarButton,
 } from '@ui5/webcomponents-react';
 import { Modal } from '../Modal/Modal';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +25,7 @@ export const SortModalPanel = ({
   const { i18n, t } = useTranslation();
 
   const sortOpeningComponent = (
-    <Button
+    <ToolbarButton
       disabled={disabled}
       design="Transparent"
       icon="sort"

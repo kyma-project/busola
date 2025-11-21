@@ -1,4 +1,3 @@
-import React from 'react';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { UI5Panel } from '../UI5Panel/UI5Panel';

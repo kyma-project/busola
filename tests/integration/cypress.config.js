@@ -54,6 +54,7 @@ module.exports = defineConfig({
       'tests/cluster/test-command-palette.spec.js',
       'tests/cluster/test-custom-resources.spec.js',
       'tests/cluster/test-navigation-features.spec.js',
+      'tests/extensibility/ext-test-statics-jsonata-links.spec.js',
       'tests/extensibility/ext-test-pizzas.spec.js',
       'tests/extensibility/ext-test-services.spec.js',
       'tests/extensibility/ext-test-variables.spec.js',

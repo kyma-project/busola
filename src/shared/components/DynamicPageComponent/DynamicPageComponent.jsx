@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import {
-  Button,
   DynamicPage,
   DynamicPageHeader,
   DynamicPageTitle,
@@ -8,10 +7,10 @@ import {
   Tab,
   TabContainer,
   Title,
+  Toolbar,
+  ToolbarSeparator,
+  ToolbarButton,
 } from '@ui5/webcomponents-react';
-import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
-import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
-import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 
 import './DynamicPageComponent.scss';
 import { useEffect, useRef, useState } from 'react';
@@ -185,12 +184,7 @@ export const DynamicPageComponent = ({
   };
 
   const actionsBar = (
-    <Toolbar
-      design="Transparent"
-      toolbarStyle="Clear"
-      numberOfAlwaysVisibleItems={1}
-    >
-      <ToolbarSpacer />
+    <Toolbar design="Transparent" toolbarStyle="Clear">
       {actions && (
         <>
           {actions}
@@ -202,75 +196,72 @@ export const DynamicPageComponent = ({
           ) : null}
         </>
       )}
-      {window.location.search.includes('layout') ||
-      (!window.location.search.includes('layout') &&
-        layoutColumn?.showCreate?.resourceType) ? (
-        layoutColumn.layout !== 'OneColumn' ? (
-          layoutNumber !== 'startColumn' ? (
-            <>
-              {layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-              ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-                layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-                layoutNumber !== 'midColumn') ? (
-                <Button
-                  accessibleName="enter-full-screen"
-                  design="Transparent"
-                  icon="full-screen"
-                  onClick={() => {
-                    const newLayout =
-                      layoutNumber === 'midColumn'
-                        ? 'MidColumnFullScreen'
-                        : 'EndColumnFullScreen';
-                    setLayoutColumn({
-                      ...layoutColumn,
-                      layout: newLayout,
-                    });
-                    const link = `${window.location.pathname}${
-                      layoutColumn?.showCreate?.resourceType
-                        ? '?layout=' + newLayout + '&showCreate=true'
-                        : '?layout=' + newLayout
-                    }`;
-                    navigate(link);
-                  }}
-                />
-              ) : null}
-              {layoutColumn.layout === 'MidColumnFullScreen' ||
-              layoutColumn.layout === 'EndColumnFullScreen' ? (
-                <Button
-                  accessibleName="close-full-screen"
-                  design="Transparent"
-                  icon="exit-full-screen"
-                  onClick={() => {
-                    const newLayout =
-                      layoutNumber === 'midColumn'
-                        ? layoutColumn.endColumn === null
-                          ? 'TwoColumnsMidExpanded'
-                          : 'ThreeColumnsMidExpanded'
-                        : 'ThreeColumnsEndExpanded';
-                    setLayoutColumn({
-                      ...layoutColumn,
-                      layout: newLayout,
-                    });
-                    const link = `${window.location.pathname}${
-                      layoutColumn?.showCreate?.resourceType
-                        ? '?layout=' + newLayout + '&showCreate=true'
-                        : '?layout=' + newLayout
-                    }`;
-                    navigate(link);
-                  }}
-                />
-              ) : null}
-              <Button
-                accessibleName="close-column"
-                design="Transparent"
-                icon="decline"
-                onClick={() => {
-                  navigateSafely(() => handleColumnClose());
-                }}
-              />
-            </>
-          ) : null
-        ) : null
+      {(window.location.search.includes('layout') ||
+        layoutColumn?.showCreate?.resourceType) &&
+      layoutColumn.layout !== 'OneColumn' &&
+      layoutNumber !== 'startColumn' ? (
+        <>
+          {(layoutColumn.layout === 'TwoColumnsMidExpanded' ||
+            ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+              layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
+              layoutNumber !== 'midColumn')) && (
+            <ToolbarButton
+              accessibleName="enter-full-screen"
+              design="Transparent"
+              icon="full-screen"
+              onClick={() => {
+                const newLayout =
+                  layoutNumber === 'midColumn'
+                    ? 'MidColumnFullScreen'
+                    : 'EndColumnFullScreen';
+                setLayoutColumn({
+                  ...layoutColumn,
+                  layout: newLayout,
+                });
+                const link = `${window.location.pathname}${
+                  layoutColumn?.showCreate?.resourceType
+                    ? '?layout=' + newLayout + '&showCreate=true'
+                    : '?layout=' + newLayout
+                }`;
+                navigate(link);
+              }}
+            />
+          )}
+          {(layoutColumn.layout === 'MidColumnFullScreen' ||
+            layoutColumn.layout === 'EndColumnFullScreen') && (
+            <ToolbarButton
+              accessibleName="close-full-screen"
+              design="Transparent"
+              icon="exit-full-screen"
+              onClick={() => {
+                const newLayout =
+                  layoutNumber === 'midColumn'
+                    ? layoutColumn.endColumn === null
+                      ? 'TwoColumnsMidExpanded'
+                      : 'ThreeColumnsMidExpanded'
+                    : 'ThreeColumnsEndExpanded';
+                setLayoutColumn({
+                  ...layoutColumn,
+                  layout: newLayout,
+                });
+                const link = `${window.location.pathname}${
+                  layoutColumn?.showCreate?.resourceType
+                    ? '?layout=' + newLayout + '&showCreate=true'
+                    : '?layout=' + newLayout
+                }`;
+                navigate(link);
+              }}
+            />
+          )}
+          <ToolbarButton
+            accessibleName="close-column"
+            design="Transparent"
+            icon="decline"
+            onClick={() => {
+              navigateSafely(() => handleColumnClose());
+            }}
+          />
+        </>
       ) : null}
     </Toolbar>
   );
@@ -283,7 +274,7 @@ export const DynamicPageComponent = ({
       heading={
         <FlexBox className="title-container" alignItems="Center">
           <Title
-            level="H3"
+            level="H2"
             size="H3"
             className="bold-title"
             wrappingType="None"

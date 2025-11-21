@@ -108,7 +108,7 @@ export default function CommunityModuleCard({
         data-testid={`module-settings-panel-${module.name}`}
       >
         <div className="settings-panel__content sap-margin-y-small">
-          <Label>{t('modules.community.release-channel') + ':'} </Label>
+          <Label>{t('modules.community.origin') + ':'} </Label>
           <Select
             accessibleName={`${module.name} version select`}
             onChange={(event) => {
@@ -124,7 +124,7 @@ export default function CommunityModuleCard({
                 value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
                 additionalText={version.beta ? 'Beta' : ''}
               >
-                {version.textToDisplay}
+                {`${version.textToDisplay} (namespace: ${version.moduleTemplate.namespace})`}
               </Option>
             ))}
           </Select>

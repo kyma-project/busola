@@ -1,4 +1,3 @@
-import React from 'react';
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
 import { PluginStack } from '@ui-schema/ui-schema';
 import { isNil } from 'lodash';

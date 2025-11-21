@@ -486,8 +486,8 @@ These are the available `FeatureCard` widget parameters:
 | **description**  | No       | string    | Renders the description.                                                                                                                                          |
 | **id**           | **Yes**  | string    | Defines the banner's **(unique!)** identifier.                                                                                                                    |
 | **children**     | No       | []objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. The maximum number of objects is 2. |
-| **illustration** | No       | string    | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI`, `None`                                                   |
-| **design**       | No       | string    | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`.                                     |
+| **illustration** | No       | string    | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI`, `Discovery`, `None`                                      |
+| **design**       | No       | string    | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`, `information-3`.                    |
 
 See the following example:
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -37,71 +37,107 @@ InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
     ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
     : defaultCopyFunction(props, Renderer, defaultCopyFunction);
 
-function SingleWidget({ inlineRenderer, Renderer, ...props }) {
-  const InlineRenderer = inlineRenderer || SimpleRenderer;
-  const CopyableWrapper = ({ children }) => {
-    const isRendererCopyable =
-      typeof Renderer.copyable === 'function'
-        ? Renderer.copyable(Renderer)
-        : Renderer.copyable;
+const defaultCopyFunction = ({ value }) =>
+  typeof value === 'object' ? JSON.stringify(value) : value;
 
-    const jsonata = useJsonata({
-      resource: props.originalResource,
-      parent: props.singleRootResource,
-      embedResource: props.embedResource,
-      scope: props.scope,
-      value: props.value,
-      arrayItems: props.arrayItems,
-    });
-    const [textToCopy, setTextToCopy] = useState('');
+const CopyableWrapper = memo(function CopyableWrapper({
+  children,
+  Renderer,
+  originalResource,
+  singleRootResource,
+  embedResource,
+  scope,
+  value,
+  arrayItems,
+  structure,
+}) {
+  const isRendererCopyable = useMemo(() => {
+    return typeof Renderer.copyable === 'function'
+      ? Renderer.copyable(Renderer)
+      : Renderer.copyable;
+  }, [Renderer]);
 
-    const defaultCopyFunction = ({ value }) =>
-      typeof value === 'object' ? JSON.stringify(value) : value;
+  const jsonata = useJsonata({
+    resource: originalResource,
+    parent: singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
+  });
+  const [textToCopy, setTextToCopy] = useState('');
 
-    const copyFunction =
+  const copyFunction = useCallback(
+    ({ value, structure }, Renderer, defaultCopyFunction, linkObject) =>
       typeof Renderer.copyFunction === 'function'
-        ? Renderer.copyFunction
-        : defaultCopyFunction;
+        ? Renderer.copyFunction(
+            { value, structure },
+            Renderer,
+            defaultCopyFunction,
+            linkObject,
+          )
+        : defaultCopyFunction(
+            { value, structure },
+            Renderer,
+            defaultCopyFunction,
+            linkObject,
+          ),
+    [],
+  );
 
-    useEffect(() => {
-      if (!props.structure.copyable || !isRendererCopyable) return;
-      jsonata(props?.structure?.link).then((linkObject) => {
-        setTextToCopy(
-          copyFunction(props, Renderer, defaultCopyFunction, linkObject),
-        );
-      });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-      props?.structure?.link,
-      props.structure.copyable,
-      isRendererCopyable,
-      props.originalResource,
-      props.singleRootResource,
-      props.embedResource,
-      props.scope,
-      props.value,
-      props.arrayItems,
-    ]);
+  useEffect(() => {
+    if (!structure?.copyable || !isRendererCopyable) return;
+    jsonata(structure?.link).then((linkObject) => {
+      setTextToCopy(
+        copyFunction(
+          { value, structure },
+          Renderer,
+          defaultCopyFunction,
+          linkObject,
+        ),
+      );
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    structure?.link,
+    structure?.copyable,
+    isRendererCopyable,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
+    copyFunction,
+    jsonata,
+  ]);
 
-    if (!props.structure.copyable || !isRendererCopyable) return children;
+  if (!structure?.copyable || !isRendererCopyable) return children;
 
-    return (
-      <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
-        {children}
-      </CopiableText>
-    );
-  };
+  return (
+    <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
+      {children}
+    </CopiableText>
+  );
+});
+
+const SingleWidget = memo(function SingleWidget({
+  inlineRenderer,
+  Renderer,
+  ...props
+}) {
+  const InlineRenderer = inlineRenderer || SimpleRenderer;
 
   return Renderer.inline ? (
     <InlineRenderer {...props}>
-      <CopyableWrapper structure={props.structure} value={props.value}>
+      <CopyableWrapper {...props} Renderer={Renderer}>
         <Renderer {...props} />
       </CopyableWrapper>
     </InlineRenderer>
   ) : (
     <Renderer {...props} />
   );
-}
+});
 
 export function Widget({
   structure,
@@ -128,34 +164,47 @@ export function Widget({
   const [visible, setVisible] = useState(true);
   const [visibilityError, setVisibilityError] = useState(null);
 
+  const stableStructure = useMemo(
+    () => structure,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [structure?.source, structure?.visibility],
+  );
+  const stableIndex = useMemo(() => index, [index]);
+  const stableValue = useMemo(() => value, [value]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableArrayItems = useMemo(() => arrayItems, [arrayItems?.length]);
+
   useEffect(() => {
+    let canceled = false;
+
     const setStatesFromJsonata = async () => {
-      const [evaluatedChildValue] = await jsonata(structure.source, {
-        index: index,
+      const [evaluatedChildValue] = await jsonata(stableStructure.source, {
+        index: stableIndex,
       });
       const [result, error] = await jsonata(
-        structure.visibility?.toString(),
-        {
-          value: evaluatedChildValue,
-        },
+        stableStructure.visibility?.toString(),
+        { value: evaluatedChildValue },
         true,
       );
+      if (canceled) return;
       setChildValue(evaluatedChildValue);
       setVisible(result);
       setVisibilityError(error);
     };
+
     setStatesFromJsonata();
+    return () => {
+      canceled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    structure.source,
-    index,
-    structure.visibility,
-    childValue,
+    stableStructure,
+    stableIndex,
+    stableValue,
+    stableArrayItems,
     originalResource,
     singleRootResource,
     embedResource,
-    value,
-    arrayItems,
   ]);
 
   if (visibilityError) {

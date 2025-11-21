@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ObjectStatus } from '@ui5/webcomponents-react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';

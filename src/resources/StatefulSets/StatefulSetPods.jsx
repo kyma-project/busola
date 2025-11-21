@@ -1,4 +1,3 @@
-import React from 'react';
 import { RunningPodsStatus } from 'shared/components/RunningPodsStatus';
 
 export function StatefulSetPods({ set }) {

@@ -75,7 +75,7 @@ export const UI5Panel = ({
         >
           {icon && icon}
           {typeof title === 'string' ? (
-            <Title level="H5">{title}</Title>
+            <Title level="H4">{title}</Title>
           ) : (
             title
           )}

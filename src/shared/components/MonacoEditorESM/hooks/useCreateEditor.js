@@ -56,8 +56,20 @@ export const useCreateEditor = ({
       scrollbar: {
         alwaysConsumeMouseWheel: false,
       },
+      accessibilityPageSize: 10,
+      ariaLabel: 'Code editor',
       ...options,
     });
+
+    if (divRef.current) {
+      const minimapElement = divRef.current.querySelector('.minimap');
+      if (minimapElement) {
+        minimapElement.setAttribute(
+          'title',
+          t('common.ariaLabel.code-preview'),
+        );
+      }
+    }
 
     setEditorInstance(instance);
 

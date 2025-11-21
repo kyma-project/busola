@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   useGetPlaceholder,
   useGetTranslation,
@@ -6,7 +6,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useJsonata } from '../hooks/useJsonata';
 
-import { Button, Icon, Link } from '@ui5/webcomponents-react';
+import { Button, Icon, Link, ToolbarButton } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
 
 const makeHref = ({ linkObject, value }) => {
@@ -36,14 +36,25 @@ export const ExternalLink = ({
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
 
-  const jsonata = useJsonata({
-    resource: originalResource,
-    parent: singleRootResource,
-    embedResource: embedResource,
-    scope,
-    value,
-    arrayItems,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      parent: singleRootResource,
+      embedResource: embedResource,
+      scope,
+      value,
+      arrayItems,
+    }),
+    [
+      originalResource,
+      singleRootResource,
+      embedResource,
+      scope,
+      value,
+      arrayItems,
+    ],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
   const [href, setHref] = useState('');
 
   useEffect(() => {
@@ -51,18 +62,28 @@ export const ExternalLink = ({
       setHref(makeHref({ linkObject, value }));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.link,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
-  ]);
+  }, [structure?.link, stableJsonataDeps]);
 
   if (isNil(value)) return emptyLeafPlaceholder;
 
+  if (
+    structure.type === 'button' &&
+    structure.targets.find((t) => t.slot === 'details-header')
+  ) {
+    return (
+      <ToolbarButton
+        accessibleRole="Link"
+        accessibleName={tExt(value)}
+        accessibleDescription="Open in new tab link"
+        endIcon="inspect"
+        onClick={() => {
+          const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
+          if (newWindow) newWindow.opener = null;
+        }}
+        text={tExt(value)}
+      />
+    );
+  }
   if (structure.type === 'button') {
     return (
       <Button

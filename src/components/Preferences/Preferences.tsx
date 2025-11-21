@@ -1,4 +1,11 @@
-import { Button, Icon, Dialog, Bar } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Icon,
+  Dialog,
+  Bar,
+  ListDomRef,
+} from '@ui5/webcomponents-react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 
@@ -22,6 +29,8 @@ import EditViewSettings from './EditViewSettings';
 export function Preferences() {
   const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useAtom(isPreferencesOpenAtom);
+  const listRef = useRef<ListDomRef>(null);
+  const [tabId, setTabId] = useState(1);
 
   const tabs = [
     {
@@ -36,6 +45,11 @@ export function Preferences() {
         />
       ),
       id: 1,
+      onActivate: () => {
+        setTimeout(() => {
+          (listRef?.current?.children[0] as HTMLElement)?.focus();
+        }, 0);
+      },
     },
     {
       title: t('settings.clusters.title'),
@@ -81,7 +95,7 @@ export function Preferences() {
       }
       className="preferences-dialog"
     >
-      <VerticalTabs tabs={tabs}>
+      <VerticalTabs tabs={tabs} tabId={tabId} onSetTabId={setTabId}>
         <VerticalTabs.Content id={1}>
           <TabContainer
             tabLayout="Inline"
@@ -92,7 +106,7 @@ export function Preferences() {
               key="theme-settings"
               text={t('settings.theme')}
             >
-              <ThemeChooser />
+              <ThemeChooser listRef={listRef} />
             </Tab>
             <Tab key="language-settings" text={t('settings.language')}>
               <LanguageSettings />

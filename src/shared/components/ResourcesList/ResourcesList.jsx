@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Button, Text } from '@ui5/webcomponents-react';
+import { Text, ToolbarButton } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import jp from 'jsonpath';
 import pluralize from 'pluralize';
@@ -552,14 +552,13 @@ export function ResourceListRenderer({
 
   const extraHeaderContent = listHeaderActions || [
     CreateResourceForm && !disableCreate && !isNamespaceAll && (
-      <Button
+      <ToolbarButton
         key={`create-${resourceType}`}
         data-testid={`create-${resourceType}`}
         design="Emphasized"
         onClick={handleShowCreate}
-      >
-        {createActionLabel || t('components.resources-list.create')}
-      </Button>
+        text={createActionLabel || t('components.resources-list.create')}
+      />
     ),
   ];
 
@@ -573,28 +572,6 @@ export function ResourceListRenderer({
       ...defaultSearchProperties,
       ...(searchSettings?.textSearchProperties || []),
     ];
-  };
-
-  const processTitle = (title) => {
-    const words = title.split(' ');
-    let uppercaseCount = 0;
-
-    const processedWords = words?.map((word) => {
-      for (let i = 0; i < word.length; i++) {
-        if (word[i] === word[i].toUpperCase()) {
-          uppercaseCount++;
-
-          if (uppercaseCount > 1) {
-            uppercaseCount = 0;
-            return word;
-          }
-        }
-      }
-      uppercaseCount = 0;
-      return word.toLowerCase();
-    });
-
-    return processedWords.join(' ');
   };
 
   return (
@@ -639,8 +616,9 @@ export function ResourceListRenderer({
               textSearchProperties: textSearchProperties(),
             }}
             emptyListProps={{
-              titleText: `${t('common.labels.no')} ${processTitle(
-                prettifyNamePlural(resourceTitle, resourceType),
+              titleText: `${t('common.labels.no')} ${prettifyNamePlural(
+                resourceTitle,
+                resourceType,
               )}`,
               onClick: handleShowCreate,
               showButton: !disableCreate && namespace !== '-all-',

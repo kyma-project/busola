@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function ContainerStatus({ status }) {

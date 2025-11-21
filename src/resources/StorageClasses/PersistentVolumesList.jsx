@@ -1,5 +1,3 @@
-import React from 'react';
-
 import PersistentVolumesListComponent from 'resources/PersistentVolumes/PersistentVolumeList';
 
 export function PersistentVolumesList(storageclass) {

@@ -1,12 +1,12 @@
 import pluralize from 'pluralize';
-import { createContext, useEffect, useRef, FC, useState } from 'react';
+import { createContext, FC, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import { useObjectState } from 'shared/useObjectState';
 import jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { useObjectState } from 'shared/useObjectState';
 import { resourcesConditionsAtom } from 'state/resourceConditionsAtom';
 
 export interface Resource {
@@ -57,10 +57,7 @@ export interface DataSourcesContextType {
   store: Store;
   dataSources: DataSources;
   getRelatedResourceInPath: (path: string) => string | undefined;
-  requestRelatedResource: (
-    resource: Resource,
-    dataSourceName: string,
-  ) => Promise<any>;
+  requestRelatedResource: (resource: Resource, dataSourceName: string) => any;
 }
 
 export const DataSourcesContext = createContext<DataSourcesContextType>(
@@ -243,7 +240,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
     } else if (store?.[dataSourceName]?.loading) {
       return store?.[dataSourceName]?.firstFetch;
     } else {
-      return Promise.resolve(store?.[dataSourceName]?.data);
+      return store?.[dataSourceName]?.data;
     }
   };
 

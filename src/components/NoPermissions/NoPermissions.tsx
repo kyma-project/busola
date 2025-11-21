@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Icon, Input, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { addCluster } from 'components/Clusters/shared';

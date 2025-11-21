@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import React, { createContext, useState, useRef } from 'react';
+import { createContext, useState, useRef } from 'react';
 
 export function scopePaths(storeKeys) {
   const indexes = fromJS(storeKeys)
@@ -43,6 +43,7 @@ export const TriggerContext = createContext({
   disable: () => {},
   enable: () => {},
   enabled: true,
+  subs: [],
 });
 
 export function TriggerContextProvider({ children }) {
@@ -85,6 +86,7 @@ export function TriggerContextProvider({ children }) {
         disable,
         enable,
         enabled,
+        subs,
       }}
     >
       {children}
