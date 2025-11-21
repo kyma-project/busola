@@ -1,5 +1,5 @@
-#FROM --platform=$BUILDPLATFORM node:22.20-alpine3.22 AS builder
-FROM node:22.20-alpine3.22 AS builder
+FROM --platform=$BUILDPLATFORM node:22.20-alpine3.22 AS builder
+#FROM node:22.20-alpine3.22 AS builder
 
 ARG default_tag
 ARG tag
@@ -29,8 +29,7 @@ RUN cd /app/backend && npm run build
 RUN cd /app/backend && npm ci --omit=dev
 
 # ---- Environments Configuration ----
-#FROM --platform=$BUILDPLATFORM node:22.20-alpine3.22 AS configuration
-FROM node:22.20-alpine3.22 AS configuration
+FROM --platform=$BUILDPLATFORM node:22.20-alpine3.22 AS configuration
 WORKDIR /kyma
 
 RUN apk add make
@@ -60,5 +59,4 @@ USER 65532:65532
 EXPOSE 3001
 ENV ADDRESS=0.0.0.0 IS_DOCKER=true ENVIRONMENT=""
 
-#TODO: environment is not set!!
 CMD ["backend-production.js"]
