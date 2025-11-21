@@ -10,9 +10,13 @@ import {
   Text,
   TableHeaderCell,
   TableRowActionNavigation,
+  IllustratedMessage,
 } from '@ui5/webcomponents-react';
 
 import ListActions from 'shared/components/ListActions/ListActions';
+import pluralize from 'pluralize';
+import { getErrorMessage } from 'shared/utils/helpers';
+import { Spinner } from '../Spinner/Spinner';
 
 export const BodyFallback = ({ children }) => (
   <TableCell slot="noData" style={{ width: '100%' }}>
@@ -239,4 +243,126 @@ const CollapsedRowRenderer = ({
       {collapseRow}
     </>
   );
+};
+
+export const TableBody = ({
+  serverDataError,
+  serverDataLoading,
+  filteredEntries,
+  searchQuery,
+  searchSettings,
+  entries,
+  pagination,
+  currentPage,
+  layoutState,
+  entrySelected,
+  entrySelectedNamespace,
+  actions,
+  rowRenderer,
+  displayArrow,
+  hasDetailsView,
+  enableColumnLayout,
+}) => {
+  const { i18n, t } = useTranslation();
+
+  if (serverDataError) {
+    return (
+      <BodyFallback key="tableErrorMessage">
+        <p>{getErrorMessage(serverDataError)}</p>
+      </BodyFallback>
+    );
+  }
+
+  if (serverDataLoading) {
+    return (
+      <BodyFallback key="tableDataLoading">
+        <Spinner />
+      </BodyFallback>
+    );
+  }
+  if (!filteredEntries.length) {
+    if (searchQuery) {
+      return (
+        <BodyFallback>
+          <IllustratedMessage
+            name="NoSearchResults"
+            titleText={
+              i18n.exists(searchSettings.noSearchResultTitle)
+                ? t(searchSettings.noSearchResultTitle)
+                : searchSettings.noSearchResultTitle
+            }
+            subtitleText={
+              i18n.exists(searchSettings.noSearchResultSubtitle)
+                ? t(searchSettings.noSearchResultSubtitle)
+                : searchSettings.noSearchResultSubtitle
+            }
+          />
+        </BodyFallback>
+      );
+    }
+
+    if (!entries.length) {
+      return;
+    }
+  }
+
+  let pagedItems = filteredEntries;
+  if (pagination) {
+    pagedItems = filteredEntries.slice(
+      (currentPage - 1) * pagination.itemsPerPage,
+      currentPage * pagination.itemsPerPage,
+    );
+  }
+
+  return pagedItems.map((e, index) => {
+    // Special case for Kyma modules
+    let isModuleSelected;
+    if (
+      window.location.href.includes('kymamodules') &&
+      layoutState?.midColumn
+    ) {
+      // Workaround for modules like btp-operator on refresh
+      const resourceType = layoutState.midColumn.resourceType;
+      const resourceTypeDotIndex = resourceType?.indexOf('.') || -1;
+      const resourceTypeBase =
+        resourceTypeDotIndex !== -1
+          ? resourceType.substring(0, resourceTypeDotIndex)
+          : resourceType;
+
+      // Check if the entry is selected using click or refresh
+      isModuleSelected = entrySelected
+        ? entrySelected instanceof Array
+          ? entrySelected.some((entry) => entry === e?.name) &&
+            (entrySelectedNamespace === e?.namespace ||
+              entrySelectedNamespace === e?.resource?.metadata?.namespace)
+          : entrySelected === e?.name &&
+            (entrySelectedNamespace === e?.namespace ||
+              entrySelectedNamespace === e?.resource?.metadata?.namespace)
+        : pluralize(e?.name?.replace('-', '') || '') === resourceTypeBase;
+    }
+    const entrySelectedMatches =
+      entrySelected instanceof Array
+        ? entrySelected.some((entry) => entry === e?.metadata?.name)
+        : entrySelected === e?.metadata?.name;
+    return (
+      <RowRenderer
+        isSelected={
+          ((layoutState?.midColumn?.resourceName === e.metadata?.name ||
+            layoutState?.endColumn?.resourceName === e.metadata?.name) &&
+            entrySelectedMatches &&
+            (entrySelectedNamespace === '' ||
+              entrySelectedNamespace === e?.metadata?.namespace)) ||
+          isModuleSelected
+        }
+        index={index}
+        key={`${e.metadata?.uid || e.name || e.metadata?.name}-${index}`}
+        entry={e}
+        actions={actions}
+        rowRenderer={rowRenderer}
+        displayArrow={displayArrow}
+        hasDetailsView={hasDetailsView}
+        enableColumnLayout={enableColumnLayout}
+      />
+    );
+  });
 };
