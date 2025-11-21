@@ -172,8 +172,9 @@ export function ExternalResourceRef({
                 </Text>
               }
             >
-              {filteredResourcesOptions.map((filteredResource) => (
+              {filteredResourcesOptions.map((filteredResource, idx) => (
                 <ComboBoxItem
+                  key={idx}
                   id={filteredResource.key}
                   text={filteredResource.text}
                 />

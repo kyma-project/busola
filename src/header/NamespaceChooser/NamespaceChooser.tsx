@@ -20,7 +20,7 @@ export function NamespaceChooser() {
       end: false,
     })?.params ?? {};
 
-  let namespaces = [
+  const namespaces = [
     <SideNavigationSubItem
       key="all-namespaces"
       text={t('navigation.all-namespaces')}

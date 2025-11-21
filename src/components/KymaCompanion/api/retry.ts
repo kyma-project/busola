@@ -21,7 +21,6 @@ export async function retryFetch(
   let finished = false;
   let error: ErrResponse | null = null;
   for (let i = 0; i < maxAttempts; i++) {
-    // eslint-disable-next-line no-loop-func
     const handleErrWrapper = (errResponse: ErrResponse) => {
       errResponse.maxAttempts =
         errResponse?.statusCode === HTTPStatus.RATE_LIMIT_CODE

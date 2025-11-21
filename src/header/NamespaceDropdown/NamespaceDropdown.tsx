@@ -9,7 +9,7 @@ export function NamespaceDropdown() {
   const { t } = useTranslation();
   const allNamespaces = useAtomValue(namespacesAtom);
 
-  let namespaces = [];
+  const namespaces = [];
 
   if (allNamespaces && allNamespaces.length > 0) {
     namespaces.push(

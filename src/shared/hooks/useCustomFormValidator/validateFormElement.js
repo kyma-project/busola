@@ -15,13 +15,13 @@ export function validateFormElement(element, isRequired) {
   let isPartiallyFilled = false; // tracks if at least one child has been filled out (important for the validation of non-required FormGroups)
   let isComplete = true; // tracks if all children have been filled out (important for the validation of non-required GenericLists)
 
-  for (const child of element?.children) {
+  for (const child of element?.children || []) {
     if (isRequired && !isValid) break;
 
     let validationFunction, args;
     switch (true) {
       // Validates the CollapsibleSection (GenericList/ResourceForm) by recursively calling this function
-      case child.classList.contains('resource-form__collapsible-section'):
+      case child.classList.contains('resource-form__collapsible-section'): {
         // Finds the children's container and checks if it is required
         const required = child.classList.contains('required');
         const content = child.querySelector('div.content');
@@ -48,6 +48,7 @@ export function validateFormElement(element, isRequired) {
           isValid = isValid && valid;
         }
         continue;
+      }
       // Validates the KeyValuePair
       case child.classList.contains('multi-input'):
         validationFunction = validateKeyValuePairs;

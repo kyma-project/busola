@@ -45,7 +45,7 @@ export const clustersAtomEffectOnSet = atomEffect((get, _set) => {
 
   for (const key in clusters) {
     const clusterName: string = clusters[key as keyof ClustersState][0];
-    let cluster = clusters[key as keyof ClustersState][1] as Cluster;
+    const cluster = clusters[key as keyof ClustersState][1] as Cluster;
     const storage: ClusterStorage = cluster.config
       ? cluster.config.storage || 'sessionStorage'
       : 'sessionStorage';

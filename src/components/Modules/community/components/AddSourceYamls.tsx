@@ -137,7 +137,7 @@ export const AddSourceYamls = () => {
     }
 
     setResourcesToApply(fetchedResources);
-  }, [fetchedResources, existingModuleTemplates]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetchedResources, existingModuleTemplates]);
 
   const handleApplySourceYAMLs = async () => {
     if (error) {

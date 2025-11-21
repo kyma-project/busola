@@ -142,7 +142,7 @@ export const KymaModulesList = ({
     const hasExtension = !!findExtension(resource?.resource?.kind, kymaExt);
     const hasCrd = !!findCrd(resource?.resource?.kind, crds);
 
-    let hasModuleTpl = !!findModuleTemplate(
+    const hasModuleTpl = !!findModuleTemplate(
       moduleTemplates,
       resource.name,
       resource.channel,

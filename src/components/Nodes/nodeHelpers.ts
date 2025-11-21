@@ -4,7 +4,7 @@ type Node = {
   };
 };
 
-export function getAvailableNvidiaGPUs(nodesData: Node[]): Number {
+export function getAvailableNvidiaGPUs(nodesData: Node[]): number {
   if (!nodesData) {
     return 0;
   }

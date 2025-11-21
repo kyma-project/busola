@@ -466,15 +466,13 @@ function Resource({
         protectedResourceWarning={protectedResourceWarning(resource)}
         content={
           <>
-            <BannerCarousel
-              children={
-                <Injections
-                  destination={resourceType}
-                  slot="banner"
-                  root={resource}
-                />
-              }
-            />
+            <BannerCarousel>
+              <Injections
+                destination={resourceType}
+                slot="banner"
+                root={resource}
+              />
+            </BannerCarousel>
             {!disableResourceDetailsCard && (
               <section aria-labelledby="namespace-details-heading">
                 <Title
