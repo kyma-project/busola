@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue } from 'jotai';
 
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import {
   BodyFallback,
@@ -30,6 +30,7 @@ import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { IllustratedMessage, Table } from '@ui5/webcomponents-react';
 import './GenericList.scss';
 import { asyncSort } from 'components/Extensibility/helpers/sortBy';
+import { useDebounce } from 'hooks/useDebounce';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -133,7 +134,18 @@ export const GenericList = ({
   const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
 
   const [filteredEntries, setFilteredEntries] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParam = searchParams.get('search');
+  const [searchQuery, setSearchQuery] = useState(searchParam ?? '');
+  const debounceValue = useDebounce(searchQuery, 3000);
+
+  useEffect(() => {
+    if (debounceValue) {
+      searchParams.set('search', debounceValue);
+      setSearchParams(searchParams);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounceValue]);
 
   useEffect(() => {
     if (pagination) {
@@ -389,7 +401,7 @@ export const GenericList = ({
       );
       const link = `${linkTo(selectedEntry)}${
         enableColumnLayout
-          ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
+          ? `?${searchQuery === '' ? '' : `search=${searchQuery}&`}layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
               namespace === '-all-' && selectedEntry?.metadata?.namespace
                 ? `&resourceNamespace=${selectedEntry?.metadata?.namespace}`
                 : ''
