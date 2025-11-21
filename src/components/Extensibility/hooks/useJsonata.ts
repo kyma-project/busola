@@ -72,6 +72,7 @@ export function useJsonata({
         extras.scope || scope || extras.resource || resource,
         {
           ...mapValues(dataSourceFetchers, (dsf) => dsf.value),
+          ...mapValues(dataSourceFetchers, (dsf) => dsf.fetcher),
           root: extras.resource || resource,
           parent: parent,
           embedResource: embedResource,
