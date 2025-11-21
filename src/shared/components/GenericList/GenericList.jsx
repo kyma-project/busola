@@ -137,15 +137,15 @@ export const GenericList = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get('search');
   const [searchQuery, setSearchQuery] = useState(searchParam ?? '');
-  const debounceValue = useDebounce(searchQuery, 3000);
+  const debouncedSearch = useDebounce(searchQuery, 3000);
 
   useEffect(() => {
-    if (debounceValue) {
-      searchParams.set('search', debounceValue);
+    if (debouncedSearch) {
+      searchParams.set('search', debouncedSearch);
       setSearchParams(searchParams);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounceValue]);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     if (pagination) {
