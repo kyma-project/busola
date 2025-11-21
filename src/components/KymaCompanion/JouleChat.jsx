@@ -1,13 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAtom } from 'jotai';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 
-import { getCurrentResource } from 'components/KymaCompanion/utils/useResource';
+import { useCurrentResource } from 'components/KymaCompanion/utils/useResource';
 
 export default function JouleChat() {
   const [showKymaCompanion, setShowKymaCompanion] = useAtom(
     showKymaCompanionAtom,
   );
+
+  const currentResource = useCurrentResource();
+  const resourceRef = useRef(currentResource);
+  useEffect(() => {
+    resourceRef.current = currentResource;
+  }, [currentResource]);
 
   useEffect(() => {
     window.sapdas = window.sapdas || {};
@@ -25,18 +31,16 @@ export default function JouleChat() {
     };
 
     const myBridgeImpl = {
-      getApplicationContext: (botName) => {
-        return getCurrentResource();
+      getApplicationContext: () => {
+        return resourceRef.current;
       },
       // etc
     };
 
-    window.sapdas = window.sapdas || {};
     window.sapdas.webclientPreregistration =
       window.sapdas.webclientPreregistration || {};
     window.sapdas.webclientPreregistration.myAppId = {
       callbacks: myBridgeImpl,
-      thisContext: this, // provide the JS this context for your functions, if needed
       priority: 3, // default prio, higher values are higher prio
     };
 
