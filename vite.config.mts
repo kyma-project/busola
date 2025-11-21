@@ -1,5 +1,5 @@
 /// <reference types="vitest/config" />
-import { defineConfig, transformWithEsbuild } from 'vite';
+import { defineConfig } from 'vite';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
@@ -69,7 +69,7 @@ export default defineConfig({
   },
 });
 
-function mergeYamlFiles(filesPath) {
+function mergeYamlFiles(filesPath: string | string[]) {
   let mergedYamlContent = '';
 
   const files = glob.sync(filesPath);
