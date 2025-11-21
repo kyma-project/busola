@@ -9,3 +9,14 @@
   line-height: 2rem !important;
   font-size: var(--sapFontHeader5Size);
 }
+
+.namespace-select {
+  width: 100%;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
