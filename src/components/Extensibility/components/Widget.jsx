@@ -178,10 +178,13 @@ export function Widget({
     let canceled = false;
 
     const setStatesFromJsonata = async () => {
-      const [evaluatedChildValue] = await jsonata(stableStructure.source, {
-        index: stableIndex,
-      });
-      const [result, error] = await jsonata(
+      const [evaluatedChildValue] = await jsonata.async(
+        stableStructure.source,
+        {
+          index: stableIndex,
+        },
+      );
+      const [result, error] = await jsonata.async(
         stableStructure.visibility?.toString(),
         { value: evaluatedChildValue },
         true,
