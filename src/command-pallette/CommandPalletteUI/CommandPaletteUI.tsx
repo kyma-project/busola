@@ -13,7 +13,6 @@ import { ResultsList } from './ResultsList/ResultsList';
 import { useSearchResults } from './useSearchResults';
 import { K8sResource } from 'types';
 import { Button, Icon, Input } from '@ui5/webcomponents-react';
-import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { activateResult, isResultGoingToRedirect } from './helpers';
@@ -68,7 +67,6 @@ export function CommandPaletteUI({
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(0);
-  const showCompanion = useAtomValue(showKymaCompanionAtom);
 
   const commandPaletteRef = useRef<HTMLDivElement | null>(null);
 
@@ -229,9 +227,7 @@ export function CommandPaletteUI({
     <Background hide={hide}>
       <div
         className={`command-palette-ui__wrapper ${
-          showCompanion.show && shellbarWidth < SCREEN_SIZE_BREAKPOINT_M
-            ? 'full-size'
-            : ''
+          shellbarWidth < SCREEN_SIZE_BREAKPOINT_M ? 'full-size' : ''
         }`}
         role="dialog"
         ref={commandPaletteRef}

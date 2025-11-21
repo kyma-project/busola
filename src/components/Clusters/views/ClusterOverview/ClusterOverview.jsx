@@ -34,6 +34,7 @@ export function ClusterOverview() {
   const { t } = useTranslation();
   const { isEnabled: isKymaCompanionEnabled, config: companionConfig } =
     useFeature(configFeaturesNames.KYMA_COMPANION);
+  console.log('COMPANION DEBUG:', isKymaCompanionEnabled, companionConfig);
   const clusterValidation = useFeature(configFeaturesNames.CLUSTER_VALIDATION);
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;

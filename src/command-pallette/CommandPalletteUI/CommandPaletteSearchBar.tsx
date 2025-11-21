@@ -1,13 +1,11 @@
 import { useEffect, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { useAtomValue } from 'jotai';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
 import { useEventListener } from 'hooks/useEventListener';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
-import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { SCREEN_SIZE_BREAKPOINT_M } from './types';
 import './CommandPaletteSearchBar.scss';
 
@@ -26,10 +24,9 @@ export function CommandPaletteSearchBar({
 }: CommandPaletteSearchBarProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
-  const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
+  const [shellbarWidth] = useState(window.innerWidth);
   const [resourceCache, updateResourceCache] =
     useObjectState<Record<string, K8sResource[]>>();
-  const showCompanion = useAtomValue(showKymaCompanionAtom);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const htmlWrapEl = document.getElementById('html-wrap');
@@ -66,33 +63,6 @@ export function CommandPaletteSearchBar({
   };
 
   useEventListener('keydown', onKeyPress, [shouldShowDialog]);
-
-  let timer: ReturnType<typeof setTimeout>;
-  function handleChangedWidth() {
-    clearTimeout(timer);
-
-    timer = setTimeout(() => {
-      setShellbarWidth(
-        showCompanion.show
-          ? shellbarRef?.current?.getBoundingClientRect().width || 0
-          : window.innerWidth,
-      );
-    }, 0);
-  }
-
-  useEffect(() => {
-    const elementObserver = new ResizeObserver(() => {
-      handleChangedWidth();
-    });
-
-    if (htmlWrapEl) {
-      elementObserver.observe(htmlWrapEl);
-    }
-    return () => {
-      elementObserver.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showCompanion]);
 
   useEffect(() => {
     const shellbarCurr = shellbarRef?.current;
