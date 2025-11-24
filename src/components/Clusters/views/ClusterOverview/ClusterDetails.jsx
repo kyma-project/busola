@@ -11,7 +11,6 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { useGetEnvironmentParameters } from './useGetEnvironmentParameters';
@@ -85,21 +84,19 @@ export default function ClusterDetails({ currentCluster }) {
                 </Text>
               </DynamicPageComponent.Column>
               <GardenerProvider />
-              {kymaResourceLabels && (
-                <>
-                  <DynamicPageComponent.Column
-                    title={t('clusters.overview.global-account-id')}
-                  >
-                    {kymaResourceLabels['kyma-project.io/global-account-id'] ??
-                      EMPTY_TEXT_PLACEHOLDER}
-                  </DynamicPageComponent.Column>
-                  <DynamicPageComponent.Column
-                    title={t('clusters.overview.subaccount-id')}
-                  >
-                    {kymaResourceLabels['kyma-project.io/subaccount-id'] ??
-                      EMPTY_TEXT_PLACEHOLDER}
-                  </DynamicPageComponent.Column>
-                </>
+              {!!kymaResourceLabels?.['kyma-project.io/global-account-id'] && (
+                <DynamicPageComponent.Column
+                  title={t('clusters.overview.global-account-id')}
+                >
+                  {kymaResourceLabels['kyma-project.io/global-account-id']}
+                </DynamicPageComponent.Column>
+              )}
+              {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
+                <DynamicPageComponent.Column
+                  title={t('clusters.overview.subaccount-id')}
+                >
+                  {kymaResourceLabels['kyma-project.io/subaccount-id']}
+                </DynamicPageComponent.Column>
               )}
               {!environmentParametersLoading && !!natGatewayIps && (
                 <DynamicPageComponent.Column

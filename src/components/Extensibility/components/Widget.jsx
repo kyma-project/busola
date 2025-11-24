@@ -43,7 +43,13 @@ const defaultCopyFunction = ({ value }) =>
 const CopyableWrapper = memo(function CopyableWrapper({
   children,
   Renderer,
-  ...props
+  originalResource,
+  singleRootResource,
+  embedResource,
+  scope,
+  value,
+  arrayItems,
+  structure,
 }) {
   const isRendererCopyable = useMemo(() => {
     return typeof Renderer.copyable === 'function'
@@ -52,51 +58,61 @@ const CopyableWrapper = memo(function CopyableWrapper({
   }, [Renderer]);
 
   const jsonata = useJsonata({
-    resource: props.originalResource,
-    parent: props.singleRootResource,
-    embedResource: props.embedResource,
-    scope: props.scope,
-    value: props.value,
-    arrayItems: props.arrayItems,
+    resource: originalResource,
+    parent: singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
   });
   const [textToCopy, setTextToCopy] = useState('');
 
   const copyFunction = useCallback(
-    (props, Renderer, defaultCopyFunction, linkObject) =>
+    ({ value, structure }, Renderer, defaultCopyFunction, linkObject) =>
       typeof Renderer.copyFunction === 'function'
         ? Renderer.copyFunction(
-            props,
+            { value, structure },
             Renderer,
             defaultCopyFunction,
             linkObject,
           )
-        : defaultCopyFunction(props, Renderer, defaultCopyFunction, linkObject),
+        : defaultCopyFunction(
+            { value, structure },
+            Renderer,
+            defaultCopyFunction,
+            linkObject,
+          ),
     [],
   );
 
   useEffect(() => {
-    if (!props.structure.copyable || !isRendererCopyable) return;
-    jsonata(props?.structure?.link).then((linkObject) => {
+    if (!structure?.copyable || !isRendererCopyable) return;
+    jsonata(structure?.link).then((linkObject) => {
       setTextToCopy(
-        copyFunction(props, Renderer, defaultCopyFunction, linkObject),
+        copyFunction(
+          { value, structure },
+          Renderer,
+          defaultCopyFunction,
+          linkObject,
+        ),
       );
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    props?.structure?.link,
-    props.structure.copyable,
+    structure?.link,
+    structure?.copyable,
     isRendererCopyable,
-    props.originalResource,
-    props.singleRootResource,
-    props.embedResource,
-    props.scope,
-    props.value,
-    props.arrayItems,
+    originalResource,
+    singleRootResource,
+    embedResource,
+    scope,
+    value,
+    arrayItems,
     copyFunction,
     jsonata,
   ]);
 
-  if (!props.structure.copyable || !isRendererCopyable) return children;
+  if (!structure?.copyable || !isRendererCopyable) return children;
 
   return (
     <CopiableText textToCopy={textToCopy} disabled={!textToCopy}>
@@ -148,33 +164,47 @@ export function Widget({
   const [visible, setVisible] = useState(true);
   const [visibilityError, setVisibilityError] = useState(null);
 
+  const stableStructure = useMemo(
+    () => structure,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [structure?.source, structure?.visibility],
+  );
+  const stableIndex = useMemo(() => index, [index]);
+  const stableValue = useMemo(() => value, [value]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableArrayItems = useMemo(() => arrayItems, [arrayItems?.length]);
+
   useEffect(() => {
+    let canceled = false;
+
     const setStatesFromJsonata = async () => {
-      const [evaluatedChildValue] = await jsonata(structure.source, {
-        index: index,
+      const [evaluatedChildValue] = await jsonata(stableStructure.source, {
+        index: stableIndex,
       });
       const [result, error] = await jsonata(
-        structure.visibility?.toString(),
-        {
-          value: evaluatedChildValue,
-        },
+        stableStructure.visibility?.toString(),
+        { value: evaluatedChildValue },
         true,
       );
+      if (canceled) return;
       setChildValue(evaluatedChildValue);
       setVisible(result);
       setVisibilityError(error);
     };
+
     setStatesFromJsonata();
+    return () => {
+      canceled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    structure.source,
-    index,
-    structure.visibility,
+    stableStructure,
+    stableIndex,
+    stableValue,
+    stableArrayItems,
     originalResource,
     singleRootResource,
     embedResource,
-    value,
-    arrayItems,
   ]);
 
   if (visibilityError) {

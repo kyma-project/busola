@@ -35,6 +35,7 @@ jobs:
         run: curl --silent --fail $K3D_URL | bash
       - name: Setup Kyma
         run: |
+          set -o pipefail
           ./.github/scripts/provision_k3d_for_kyma.sh | tee kyma-provision.log
           ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4

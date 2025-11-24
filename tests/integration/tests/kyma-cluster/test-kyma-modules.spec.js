@@ -20,10 +20,13 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Check if edit is empty', () => {
-    cy.wait(500);
+    cy.wait(1000);
+
     cy.inspectTab('Edit');
 
     cy.contains('No modules installed').should('be.visible');
+
+    cy.wait(1000);
 
     cy.inspectTab('View');
   });

@@ -1,3 +1,4 @@
+import { Children, cloneElement } from 'react';
 import { WidgetRenderer } from '@ui-schema/ui-schema/WidgetRenderer';
 
 import {
@@ -57,7 +58,13 @@ const pluginStack = [
 
 export const widgets = {
   RootRenderer: ({ children }) => <div>{children}</div>,
-  GroupRenderer: ({ children }) => children,
+  GroupRenderer: ({ children }) => (
+    <>
+      {Children.map(children, (child, i) =>
+        cloneElement(child, { key: `group-child-${i}` }),
+      )}
+    </>
+  ),
   WidgetRenderer: ({ schema, required, ...props }) => {
     required = schema.get('required') ?? required;
     return WidgetRenderer({ schema, required, ...props });
