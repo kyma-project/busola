@@ -272,7 +272,8 @@ export const AddSourceYamls = () => {
                 ></HintButton>
               </FlexBox>
               <Select
-                id="yaml-namespace-combobox"
+                id="yaml-namespace-select"
+                data-testid="yaml-namespace-select"
                 onChange={(e) => applyNamespace(e.target.value)}
                 className="namespace-select"
               >
