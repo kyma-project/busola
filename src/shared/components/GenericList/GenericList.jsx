@@ -139,7 +139,7 @@ export const GenericList = ({
   const setSearchFieldFromURL =
     layoutState?.startColumn?.resourceType === resourceType;
   const [searchQuery, setSearchQuery] = useState(
-    setSearchFieldFromURL ? searchParam : '',
+    setSearchFieldFromURL && !!searchParam ? searchParam : '',
   );
   const debouncedSearch = useDebounce(searchQuery, 3000);
 
