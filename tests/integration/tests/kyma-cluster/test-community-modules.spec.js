@@ -67,11 +67,6 @@ context('Test Community Modules views', () => {
   });
 
   it('Test adding source YAML', () => {
-    // Open add community module
-    cy.get('ui5-panel[data-testid="community-modules-list"]')
-      .contains('ui5-button', 'Add')
-      .click();
-
     // Open Add YAML
     cy.get('[accessible-name="add-yamls"]').click();
     cy.get(`[header-text="Add Source YAML"]:visible`)
