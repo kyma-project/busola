@@ -43,7 +43,11 @@ export const useCreateEditor = ({
 
     const model =
       editor.getModel(modelUri) ||
-      editor.createModel(value, language, modelUri);
+      editor.createModel(
+        typeof value === 'string' ? value : JSON.stringify(value ?? ''),
+        language,
+        modelUri,
+      );
 
     // create editor and assign model with value and autocompletion
     const instance = editor.create(divRef.current, {
@@ -60,6 +64,16 @@ export const useCreateEditor = ({
       ariaLabel: 'Code editor',
       ...options,
     });
+
+    if (divRef.current) {
+      const minimapElement = divRef.current.querySelector('.minimap');
+      if (minimapElement) {
+        minimapElement.setAttribute(
+          'title',
+          t('common.ariaLabel.code-preview'),
+        );
+      }
+    }
 
     setEditorInstance(instance);
 

@@ -1,11 +1,26 @@
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 export function useGetEnvironmentParameters() {
-  const { data: environmentParameters, loading: environmentParametersLoading } =
-    useGet('/api/v1/namespaces/kyma-system/configmaps/kyma-info');
+  const {
+    data: environmentParametersFromShootInfoCM,
+    loading: environmentParametersFromShootInfoCMLoading,
+  } = useGet('/api/v1/namespaces/kube-system/configmaps/shoot-info');
 
-  const natGatewayIps =
-    environmentParameters?.data['cloud.natGatewayIps'].split(', ');
+  const {
+    data: environmentParametersFromKymaInfoCM,
+    loading: environmentParametersFromKymaInfoCMLoading,
+  } = useGet('/api/v1/namespaces/kyma-system/configmaps/kyma-info');
 
-  return { natGatewayIps, environmentParametersLoading };
+  const natGatewayIps = !!environmentParametersFromShootInfoCM
+    ? environmentParametersFromShootInfoCM?.data['egressCIDRs']?.split(',')
+    : environmentParametersFromKymaInfoCM?.data['cloud.natGatewayIps']?.split(
+        ', ',
+      );
+
+  return {
+    natGatewayIps,
+    environmentParametersLoading:
+      environmentParametersFromShootInfoCMLoading |
+      environmentParametersFromKymaInfoCMLoading,
+  };
 }

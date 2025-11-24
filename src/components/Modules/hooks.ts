@@ -181,7 +181,7 @@ export const useFetchModuleData = (
         if (result.status === 'fulfilled') {
           const { name, data } = result.value || {};
           if (name && data) {
-            cache[name] = data;
+            cache[`${name}:${result.value.data.metadata.namespace}`] = data;
           }
         }
       }
@@ -195,8 +195,10 @@ export const useFetchModuleData = (
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moduleTemplates]);
-
-  const getItem = useCallback((name: string) => data[name], [data]);
+  const getItem = useCallback(
+    (name: string, namespace: string) => data[`${name}:${namespace}`],
+    [data],
+  );
 
   return { loading, error, data, getItem };
 };

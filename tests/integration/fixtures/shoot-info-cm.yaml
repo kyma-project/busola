@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: shoot-info
+  namespace: kube-system
+data:
+  egressCIDRs: 3.74.173.24/32,63.177.125.178/32,18.157.247.144/32

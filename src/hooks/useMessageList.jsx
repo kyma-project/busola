@@ -41,6 +41,13 @@ export let RESOURCE_PATH = {
   VirtualService: 'virtualservices',
 };
 
+const linkStyle = {
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+};
+
 export const filterByResource = (resourceKind, resourceName) => (e) =>
   e.involvedObject?.name === resourceName &&
   e.involvedObject?.kind === resourceKind;
@@ -54,7 +61,9 @@ export const FormatInvolvedObject = (obj) => {
   const { scopedUrl } = useUrl();
   const path = `${RESOURCE_PATH[obj.kind]}/${obj.name}`;
   return isLink ? (
-    <Link url={scopedUrl(path, namespaceOverride)}>{text}</Link>
+    <Link style={linkStyle} url={scopedUrl(path, namespaceOverride)}>
+      {text}
+    </Link>
   ) : (
     text
   );
@@ -64,7 +73,9 @@ export const FormatSourceObject = (obj) => {
   const { clusterUrl } = useUrl();
   if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
-    <Link url={clusterUrl(`overview/nodes/${obj.host}`)}>{obj.host}</Link>
+    <Link style={linkStyle} url={clusterUrl(`overview/nodes/${obj.host}`)}>
+      {obj.host}
+    </Link>
   ) : (
     obj.component
   );
