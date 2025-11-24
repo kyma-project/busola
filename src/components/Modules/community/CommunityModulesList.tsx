@@ -121,24 +121,17 @@ export const CommunityModulesList = ({
 
   // When there are multiple same module templates in different namespaces, we want to display one instance of the module
   function dedupeByModuleManager(modules: any[]) {
-    const map = new Map();
+    const seen = new Set<string>();
 
-    for (const m of modules) {
-      const resourceName = m?.resource?.metadata?.name;
-      const resourceNamespace = m?.resource?.metadata?.namespace;
+    return modules.filter((module) => {
+      const { name, namespace } = module?.resource?.metadata || {};
 
-      if (!resourceName || !resourceNamespace) {
-        map.set(Symbol(), m);
-        continue;
-      }
+      if (!name || !namespace) return true;
 
-      const key = `${resourceName}::${resourceNamespace}`;
-      if (!map.has(key)) {
-        map.set(key, m);
-      }
-    }
+      const key = `${name}::${namespace}`;
 
-    return Array.from(map.values());
+      return seen.has(key) ? false : seen.add(key);
+    });
   }
 
   useEffect(() => {
