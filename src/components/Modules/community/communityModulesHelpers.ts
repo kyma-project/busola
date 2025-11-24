@@ -118,7 +118,7 @@ export function getInstalledModules(
 ): ModuleTemplateListType {
   const installedModuleTemplates = moduleTemplates.items?.filter((module) => {
     const foundManager =
-      managers[`${module.metadata.name}:${module.spec.manager.namespace}`];
+      managers[`${module.metadata.name}:${module.spec?.manager?.namespace}`];
     if (!foundManager) {
       return false;
     }
@@ -127,7 +127,7 @@ export function getInstalledModules(
         (container: { image: string }) => {
           return (
             imageMatchVersion(container.image, module.spec.version) &&
-            foundManager.metadata.namespace === module.spec.manager.namespace
+            foundManager.metadata.namespace === module.spec.manager?.namespace
           );
         },
       );
@@ -145,12 +145,8 @@ export function getNotInstalledModules(
 ): ModuleTemplateListType {
   const notInstalledModuleTemplates = moduleTemplates.items?.filter(
     (module) => {
-      const foundManager = managers?.items?.find((manager: any) => {
-        return (
-          manager.metadata.name === module.metadata.name &&
-          manager.metadata.namespace === module.metadata.namespace
-        );
-      });
+      const foundManager =
+        managers[`${module.metadata.name}:${module.spec?.manager?.namespace}`];
 
       return !foundManager;
     },
