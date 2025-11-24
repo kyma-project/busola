@@ -20,7 +20,7 @@ export default defineConfig(
     ]),
 
     {
-      files: ['**/*.{js,jsx,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+      files: ['**/*.{js,jsx,mjs,cjs,ts,mts,cts,tsx}'],
       languageOptions: {
         globals: globals.browser,
       },

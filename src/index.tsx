@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import yaml from 'js-yaml';
-import { StrictMode, Suspense } from 'react';
+import { Suspense } from 'react';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
