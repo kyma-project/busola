@@ -132,15 +132,19 @@ export const GenericList = ({
 
   const { i18n, t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
-
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const [filteredEntries, setFilteredEntries] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get('search');
-  const [searchQuery, setSearchQuery] = useState(searchParam ?? '');
+  const setSearchFieldFromURL =
+    layoutState?.startColumn?.resourceType === resourceType;
+  const [searchQuery, setSearchQuery] = useState(
+    setSearchFieldFromURL ? searchParam : '',
+  );
   const debouncedSearch = useDebounce(searchQuery, 3000);
 
   useEffect(() => {
-    if (debouncedSearch) {
+    if (setSearchFieldFromURL && debouncedSearch) {
       searchParams.set('search', debouncedSearch);
       setSearchParams(searchParams);
     }
@@ -321,7 +325,6 @@ export const GenericList = ({
     });
   };
 
-  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
   const linkTo = (entry) => {
