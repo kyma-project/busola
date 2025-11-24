@@ -119,7 +119,7 @@ export const CommunityModulesList = ({
   const [modulesToDisplay, setModulesToDisplay] =
     useState<any[]>(installedModules);
 
-  // When there are multiple same module templates in different namespaces, we want to display one instance of the module
+  // When multiple instances of the same module templates exist in different namespaces, we want to display only one instance of the module
   function dedupeByModuleManager(modules: any[]) {
     const seen = new Set<string>();
 
