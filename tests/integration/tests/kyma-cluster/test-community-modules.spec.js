@@ -61,7 +61,9 @@ context('Test Community Modules views', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
-    y.wait(2000);
+
+    cy.wait(2000);
+
     // Check if already installed module is not visible
     cy.get('.create-form').contains('No community modules available');
   });
