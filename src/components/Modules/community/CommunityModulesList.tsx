@@ -119,16 +119,40 @@ export const CommunityModulesList = ({
   const [modulesToDisplay, setModulesToDisplay] =
     useState<any[]>(installedModules);
 
+  // When there are multiple same module templates in different namespaces, we want to display one instance of the module
+  function dedupeByModuleManager(modules: any[]) {
+    const map = new Map();
+
+    for (const m of modules) {
+      const resourceName = m?.resource?.metadata?.name;
+      const resourceNamespace = m?.resource?.metadata?.namespace;
+
+      if (!resourceName || !resourceNamespace) {
+        map.set(Symbol(), m);
+        continue;
+      }
+
+      const key = `${resourceName}::${resourceNamespace}`;
+      if (!map.has(key)) {
+        map.set(key, m);
+      }
+    }
+
+    return Array.from(map.values());
+  }
+
   useEffect(() => {
+    const uniqueInstalled = dedupeByModuleManager(installedModules);
+
     const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
-      return !installedModules.find(
+      return !uniqueInstalled.find(
         (installed) =>
           installed.moduleTemplateName === m.moduleTpl.metadata.name,
       );
     });
 
     if (modulesDuringProcessing.length === 0) {
-      setModulesToDisplay(installedModules);
+      setModulesToDisplay(uniqueInstalled);
       return;
     }
 
@@ -136,7 +160,7 @@ export const CommunityModulesList = ({
       .filter((m) => m.state !== State.Finished)
       .map((m) => createFakeModuleTemplateWithStatus(m));
 
-    setModulesToDisplay([...installedModules, ...moduleTemplatesDuringUpload]);
+    setModulesToDisplay([...uniqueInstalled, ...moduleTemplatesDuringUpload]);
   }, [installedModules, modulesDuringUpload]);
 
   const handleShowAddModule = () => {
