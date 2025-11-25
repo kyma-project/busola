@@ -11,5 +11,5 @@ spec:
     port: 3001
   rules:
     - path: /{**}
-      methods: ['GET']
+      methods: ['GET', 'POST', 'PATCH', 'DELETE']
       noAuth: true
