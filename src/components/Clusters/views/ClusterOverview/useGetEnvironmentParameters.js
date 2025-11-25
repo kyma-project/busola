@@ -18,7 +18,6 @@ export function useGetEnvironmentParameters() {
     : environmentParametersFromKymaInfoCM?.data['cloud.natGatewayIps']?.split(
         ', ',
       );
-  console.log(environmentParametersFromShootInfoCM);
 
   return {
     natGatewayIps,
