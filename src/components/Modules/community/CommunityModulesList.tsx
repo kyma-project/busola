@@ -124,11 +124,12 @@ export const CommunityModulesList = ({
     const seen = new Set<string>();
 
     return modules.filter((module) => {
-      const { name, namespace } = module?.resource?.metadata || {};
+      const { name: managerName, namespace: managerNamespace } =
+        module?.resource?.metadata || {};
 
-      if (!name || !namespace) return true;
+      if (!managerName || !managerNamespace) return true;
 
-      const key = `${name}::${namespace}`;
+      const key = `${module?.name}::${module?.version}::${managerName}::${managerNamespace}`;
 
       return seen.has(key) ? false : seen.add(key);
     });
