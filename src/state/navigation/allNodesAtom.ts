@@ -18,7 +18,7 @@ export const allNodesAtom = atom<Promise<NavNode[]>>(async (get) => {
   }
   let allNodes: NavNode[] = [];
 
-  let extResources = get(extensionsAtom);
+  const extResources = get(extensionsAtom);
 
   const isExtensibilityOn =
     features?.[configFeaturesNames.EXTENSIBILITY]?.isEnabled;

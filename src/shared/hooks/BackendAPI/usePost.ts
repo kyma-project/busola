@@ -8,23 +8,19 @@ export type PostFn = (
 
 export const createPostFn: (fetch: FetchFn) => PostFn =
   (fetch) => async (url: string, data, options) => {
-    try {
-      const response = await fetch({
-        relativeUrl: url,
-        init: {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify(data),
+    const response = await fetch({
+      relativeUrl: url,
+      init: {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
-      });
-      if (typeof options?.refetch === 'function') options.refetch();
-      return await response.json();
-    } catch (e) {
-      throw e;
-    }
+        body: JSON.stringify(data),
+      },
+    });
+    if (typeof options?.refetch === 'function') options.refetch();
+    return await response.json();
   };
 
 export const usePost = () => {

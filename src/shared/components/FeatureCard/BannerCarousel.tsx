@@ -2,7 +2,11 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Carousel } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
-export default function BannerCarousel({ children }: { children: ReactNode }) {
+export default function BannerCarousel({
+  children,
+}: {
+  children: ReactNode | ReactNode[];
+}) {
   const { t } = useTranslation();
   const carouselRef = useRef<React.ElementRef<typeof Carousel>>(null);
   const [childrenLength, setChildrenLength] = useState(0);

@@ -110,15 +110,9 @@ export function ResourcesList({
 
   const content = (
     <>
-      <BannerCarousel
-        children={
-          <Injections
-            destination={resourceType}
-            slot="banner"
-            root={resources}
-          />
-        }
-      />
+      <BannerCarousel>
+        <Injections destination={resourceType} slot="banner" root={resources} />
+      </BannerCarousel>
       {resources ? (
         <ResourceListRenderer
           resources={(resources || []).filter(filterFn)}
@@ -485,6 +479,7 @@ export function ResourceListRenderer({
       if (col?.value && index === nameColIndex) {
         return (
           <div
+            key={index}
             style={{
               display: 'flex',
               alignItems: 'center',

@@ -56,7 +56,7 @@ function CRCreateForm({
     crd.spec.scope === 'Namespaced'
       ? `/namespaces/${cr.metadata?.namespace || ''}`
       : '';
-  const createUrlResourceName = !!initialCustomResource?.metadata?.name
+  const createUrlResourceName = initialCustomResource?.metadata?.name
     ? '/' + initialCustomResource.metadata.name
     : '';
 

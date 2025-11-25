@@ -87,7 +87,7 @@ export function findRelatedResources(
 
     for (const otherRelation of otherConfig?.relations || []) {
       if (otherRelation.resource.kind === originalResourceKind) {
-        let otherResource = cloneDeep(config[otherKind]!.resource); // clone the resource since it's an immutable object
+        const otherResource = cloneDeep(config[otherKind]!.resource); // clone the resource since it's an immutable object
 
         if (otherRelation.resource.namespace !== undefined) {
           otherResource.namespace = null;

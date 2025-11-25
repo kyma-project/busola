@@ -76,8 +76,8 @@ export const extractLinks = (text: string) => {
 
 const getI18nVarLink = (text: string) => {
   const i18VarRegex = /{{.*?}}/g;
-  let matchesIterator = text?.matchAll(i18VarRegex);
-  let matches = matchesIterator ? [...matchesIterator].flat() : [];
+  const matchesIterator = text?.matchAll(i18VarRegex);
+  const matches = matchesIterator ? [...matchesIterator].flat() : [];
   let links: MatchedLink[] = [];
 
   if (matches?.length) {
@@ -100,8 +100,8 @@ const getI18nVarLink = (text: string) => {
 
 const getMarkdownLinks = (text: string) => {
   const mdLinkRegex = /\[([^\]]*)]\(([^)]*)\)/g;
-  let matchesIterator = text?.matchAll(mdLinkRegex);
-  let matches = matchesIterator ? [...matchesIterator] : [];
+  const matchesIterator = text?.matchAll(mdLinkRegex);
+  const matches = matchesIterator ? [...matchesIterator] : [];
   let links: MatchedLink[] = [];
 
   if (matches?.length) {
@@ -121,8 +121,8 @@ const getMarkdownLinks = (text: string) => {
 
 const getHTMLLinks = (text: string) => {
   const httpRegex = /\bhttps?:\/\/\S*\b/g;
-  let matchesIterator = text?.matchAll(httpRegex);
-  let matches = matchesIterator ? [...matchesIterator].flat() : [];
+  const matchesIterator = text?.matchAll(httpRegex);
+  const matches = matchesIterator ? [...matchesIterator].flat() : [];
   let links: MatchedLink[] = [];
 
   if (matches?.length) {
