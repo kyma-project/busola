@@ -1,7 +1,7 @@
 # this is a Dockerfile for single deployment app - both backend and frontends
 
 # ---- Base Alpine with Node ----
-FROM --platform=$BUILDPLATFORM node:22.20-alpine3.22 AS builder
+FROM --platform=$BUILDPLATFORM node:22.21-alpine3.22 AS builder
 ARG default_tag
 ARG tag
 
