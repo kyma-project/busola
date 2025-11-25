@@ -404,7 +404,7 @@ export const GenericList = ({
       );
       const link = `${linkTo(selectedEntry)}${
         enableColumnLayout
-          ? `?${searchQuery === '' ? '' : `search=${searchQuery}&`}layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
+          ? `?${searchQuery === '' ? '' : `search=${searchParam}&`}layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
               namespace === '-all-' && selectedEntry?.metadata?.namespace
                 ? `&resourceNamespace=${selectedEntry?.metadata?.namespace}`
                 : ''
