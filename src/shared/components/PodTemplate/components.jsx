@@ -2,16 +2,16 @@ import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
 import { useUrl } from 'hooks/useUrl';
 import {
-  List,
   Label,
-  Text,
-  Title,
+  List,
   ListItemGroup,
   Table,
-  TableHeaderRow,
-  TableRow,
   TableCell,
   TableHeaderCell,
+  TableHeaderRow,
+  TableRow,
+  Text,
+  Title,
 } from '@ui5/webcomponents-react';
 import { Labels } from '../Labels/Labels';
 import { PodTemplateRow } from './PodTemplateRow';
@@ -170,9 +170,10 @@ function VolumeComponent({ volume }) {
         return t('config-maps.name_singular');
       case !!secret:
         return t('secrets.name_singular');
-      default:
+      default: {
         const volumeType = Object.keys(volume).find((key) => key !== 'name');
         return volumeType;
+      }
     }
   };
 

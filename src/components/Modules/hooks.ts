@@ -362,7 +362,7 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
   };
 
   useEffect(() => {
-    if (!!!sourceURL) {
+    if (!sourceURL) {
       setResources([]);
       setError(null);
       setLoading(false);

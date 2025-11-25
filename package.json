@@ -9,7 +9,8 @@
     "start": "concurrently -c cyan,green npm:busola npm:backend",
     "busola": "npm run copy-themes; BROWSER=none GENERATE_SOURCEMAP=false vite",
     "backend": "cd backend && npm run start",
-    "eslint-check": "eslint src/ backend/",
+    "eslint-check": "eslint --quiet src/ backend/",
+    "eslint-fix": "eslint --fix src/ backend/",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged --concurrent=false",
@@ -20,24 +21,6 @@
     "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false NODE_OPTIONS=--max-old-space-size=8192 IS_DOCKER=true vite build",
     "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done",
     "prepare": "husky"
-  },
-  "eslintConfig": {
-    "extends": "react-app",
-    "rules": {},
-    "ignorePatterns": "tests/*",
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts?(x)"
-        ],
-        "rules": {
-          "@typescript-eslint/no-unused-vars": "warn"
-        }
-      }
-    ],
-    "globals": {
-      "vi": "readonly"
-    }
   },
   "browserslist": {
     "production": [
@@ -82,6 +65,7 @@
     "cronstrue": "^2.56.0",
     "didyoumean": "^1.2.2",
     "file-saver": "^2.0.2",
+    "glob": "^11.0.3",
     "graphviz-react": "^1.2.5",
     "http-status-codes": "^2.3.0",
     "i18next": "^25.6.0",
@@ -117,6 +101,8 @@
     "url": "^0.11.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@nabla/vite-plugin-eslint": "^2.0.6",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^16.0.1",
     "@types/didyoumean": "^1.2.0",
@@ -129,23 +115,29 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "@types/uuid": "^9.0.0",
+    "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-preset-vite": "^1.1.3",
     "concurrently": "^7.6.0",
     "cypress": "^13.17.0",
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.4.0",
-    "eslint-config-react-app": "^7.0.1",
+    "eslint": "^9.38.0",
+    "eslint-formatter-summary": "^2.0.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.4.0",
     "husky": "^9.1.7",
+    "jiti": "^2.6.1",
     "jotai-devtools": "^0.12.0",
     "jsdom-worker-fix": "^0.1.8",
     "lint-staged": "^16.1.5",
     "prettier": "^3.6.2",
     "sass": "^1.86.3",
     "typescript": "^5.8.2",
+    "typescript-eslint": "^8.46.2",
     "uuid": "^11.1.0",
     "vite": "^6.2.6",
-    "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-static-copy": "^2.3.2",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4",
