@@ -167,19 +167,25 @@ export const DynamicPageComponent = ({
     const searchField = searchParams.get('search');
 
     if (layoutCloseUrl) {
-      const link = `${layoutCloseUrl}?${editColumn ? `showEdit=${!!layoutColumn.showEdit}&` : ''}${!!searchField && searchField !== '' ? `search=${searchField}` : ''}`;
+      const showEdit = editColumn ? `showEdit=${!!layoutColumn.showEdit}&` : '';
+      const showSearch =
+        searchField && searchField !== '' ? `search=${searchField}` : '';
+      const link = `${layoutCloseUrl}?${showEdit}${showSearch}`;
       navigate(link);
       return;
     }
 
-    const link = `${window.location.pathname.slice(
+    const linkBase = window.location.pathname.slice(
       0,
       window.location.pathname.lastIndexOf('/'),
-    )}?${
+    );
+    const layoutType =
       layoutNumber === 'midColumn' || layoutColumn?.showCreate?.resourceType
         ? ''
-        : 'layout=TwoColumnsMidExpanded&'
-    }${!!searchField && searchField !== '' ? `search=${searchField}` : ''}`;
+        : 'layout=TwoColumnsMidExpanded&';
+    const showSearch =
+      searchField && searchField !== '' ? `search=${searchField}` : '';
+    const link = `${linkBase}?${layoutType}${showSearch}`;
     navigate(link);
   };
 
