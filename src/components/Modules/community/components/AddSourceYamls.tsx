@@ -1,7 +1,5 @@
 import {
   Button,
-  ComboBox,
-  ComboBoxItem,
   FlexBox,
   Input,
   Label,
@@ -10,7 +8,10 @@ import {
   ListItemStandard,
   MessageBox,
   MessageStrip,
+  OptionCustom,
   Text,
+  Select,
+  Icon,
 } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
@@ -270,14 +271,36 @@ export const AddSourceYamls = () => {
                   }
                 ></HintButton>
               </FlexBox>
-              <ComboBox
-                id="yaml-namespace-combobox"
+              <Select
+                id="yaml-namespace-select"
+                data-testid="yaml-namespace-select"
                 onChange={(e) => applyNamespace(e.target.value)}
+                className="namespace-select"
               >
-                {allNamespaces?.map((ns) => (
-                  <ComboBoxItem text={ns} key={ns} />
-                ))}
-              </ComboBox>
+                <OptionCustom key="Empty namespace"></OptionCustom>
+                {allNamespaces?.map((ns) => {
+                  if (ns === 'kyma-system')
+                    return (
+                      <OptionCustom
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        disabled
+                        value={ns}
+                        key={ns}
+                      >
+                        <div className="option-content">
+                          {ns}
+                          <Icon name="locked" />
+                        </div>
+                      </OptionCustom>
+                    );
+                  return (
+                    <OptionCustom value={ns} key={ns}>
+                      {ns}
+                    </OptionCustom>
+                  );
+                })}
+              </Select>
             </FlexBox>
             {loading ? (
               <Spinner />
