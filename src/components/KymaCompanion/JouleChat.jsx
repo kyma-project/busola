@@ -11,13 +11,9 @@ export default function JouleChat() {
     showKymaCompanionAtom,
   );
 
-  const { jouleConfig } = useFeature(configFeaturesNames.KYMA_COMPANION);
-
-  // tenant configuration
-  const dasProps = {
-    url: jouleConfig.url,
-    botname: jouleConfig.botname,
-  };
+  const { isEnabled, jouleConfig } = useFeature(
+    configFeaturesNames.KYMA_COMPANION,
+  );
 
   const currentResource = useCurrentResource();
   const resourceRef = useRef(currentResource);
@@ -26,10 +22,18 @@ export default function JouleChat() {
   }, [currentResource]);
 
   useEffect(() => {
+    if (!isEnabled || !jouleConfig?.url || !jouleConfig?.botname) {
+      return;
+    }
+
+    const dasProps = {
+      url: jouleConfig.url,
+      botname: jouleConfig.botname,
+    };
+
     window.sapdas = window.sapdas || {};
     window.sapdas.webclientBridge = window.sapdas.webclientBridge || {};
 
-    // Register the onClose callback to sync state when Joule closes
     window.sapdas.webclientBridge.onClose = () => {
       setShowKymaCompanion((prevState) => ({
         ...prevState,
@@ -80,10 +84,12 @@ export default function JouleChat() {
         delete window.sapdas.webclientBridge.onClose;
       }
     };
-  }, []);
+  }, [isEnabled, jouleConfig, setShowKymaCompanion]);
 
   // Control visibility based on Jotai state
   useEffect(() => {
+    if (!isEnabled) return;
+
     const webclient = window.sap?.das?.webclient;
     if (!webclient) return;
 
@@ -93,10 +99,10 @@ export default function JouleChat() {
       !webclient.isOpen()
     ) {
       webclient.show();
-    } else if (!showKymaCompanion && webclient.isOpen()) {
+    } else if (!showKymaCompanion.show && webclient.isOpen()) {
       webclient.hide();
     }
-  }, [showKymaCompanion]);
+  }, [isEnabled, showKymaCompanion]);
 
   return null;
 }
