@@ -341,7 +341,7 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
 });
 
 Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
-  cy.wait(500);
+  cy.wait(1000);
   cy.get('ui5-input[id^=search-]:visible')
     .find('input')
     .wait(500)
