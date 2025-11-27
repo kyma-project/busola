@@ -129,6 +129,10 @@ Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside');
 });
 
+Cypress.Commands.add('getStartColumn', () => {
+  return cy.get('div[slot="startColumn"]');
+});
+
 Cypress.Commands.add('getMidColumn', () => {
   return cy.get('div[slot="midColumn"]');
 });
