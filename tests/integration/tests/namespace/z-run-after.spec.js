@@ -17,6 +17,8 @@ context('Clean up Namespace', () => {
       searchInPlainTableText: true,
     });
 
+    cy.wait(1000);
+
     cy.get('ui5-table-row').find('.status-badge').contains('Terminating');
   });
 

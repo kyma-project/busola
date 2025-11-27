@@ -18,13 +18,22 @@ context('Clean up Namespace', () => {
       selectSearchResult: true,
       searchInPlainTableText: true,
     });
-  });
 
-  it('Check if the Namespace is terminated (step 2)', { retries: 3 }, () => {
     cy.get('ui5-table-row').find('.status-badge').contains('Terminating');
-
-    cy.get('ui5-table')
-      .contains(Cypress.env('NAMESPACE_NAME'))
-      .should('not.exist', { timeout: 50000 });
   });
+
+  it(
+    'Check if the Namespace is terminated (step 2)',
+    {
+      retries: {
+        runMode: 3,
+        openMode: 3,
+      },
+    },
+    () => {
+      cy.get('ui5-table')
+        .contains(Cypress.env('NAMESPACE_NAME'), { timeout: 60000 })
+        .should('not.exist');
+    },
+  );
 });
