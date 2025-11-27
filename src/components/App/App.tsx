@@ -143,7 +143,7 @@ export default function App() {
         }
       >
         <div id="html-wrap">
-          <JouleChat />
+          {showCompanion.useJoule && <JouleChat />}
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />
