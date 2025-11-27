@@ -19,6 +19,8 @@ export function EditorActions({
   isProtected,
   searchDisabled = false,
   hideDisabled = false,
+  onRevert,
+  revertHidden = true,
 }) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
@@ -98,6 +100,16 @@ export function EditorActions({
 
   return (
     <section>
+      {!revertHidden && (
+        <Button
+          onClick={() => {
+            onRevert();
+            !visible ? hideReadOnlyLines() : showReadOnlyLines();
+          }}
+        >
+          {t('common.buttons.revert')}
+        </Button>
+      )}
       <Button
         design="Transparent"
         icon="download"
