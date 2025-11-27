@@ -229,7 +229,9 @@ export function CommandPaletteUI({
     <Background hide={hide}>
       <div
         className={`command-palette-ui__wrapper ${
-          showCompanion.show && shellbarWidth < SCREEN_SIZE_BREAKPOINT_M
+          showCompanion.show &&
+          !showCompanion.useJoule &&
+          shellbarWidth < SCREEN_SIZE_BREAKPOINT_M
             ? 'full-size'
             : ''
         }`}

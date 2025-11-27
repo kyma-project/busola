@@ -51,6 +51,10 @@ config:
         documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
         model: 'gpt-4.1'
         queryMaxTokens: 8000
+      useJoule: false
+      jouleConfig:
+        url: 'https://tan-eu12-ss.eu12.sapdas.cloud.sap/resources/public/webclient/bootstrap.js'
+        botname: 'kyma_companion'
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null

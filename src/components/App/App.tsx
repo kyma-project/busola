@@ -57,6 +57,7 @@ import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
+import JouleChat from 'components/KymaCompanion/JouleChat';
 
 export default function App() {
   const theme = useAtomValue(themeAtom);
@@ -132,9 +133,9 @@ export default function App() {
   return (
     <SplitterLayout id="splitter-layout">
       <SplitterElement
-        resizable={showCompanion.show}
+        resizable={showCompanion.show && !showCompanion.useJoule}
         size={
-          showCompanion.show
+          showCompanion.show && !showCompanion.useJoule
             ? showCompanion.fullScreen
               ? '0%'
               : '70%'
@@ -142,6 +143,7 @@ export default function App() {
         }
       >
         <div id="html-wrap">
+          <JouleChat />
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />
@@ -220,7 +222,7 @@ export default function App() {
           </div>
         </div>
       </SplitterElement>
-      {showCompanion.show ? (
+      {showCompanion.show && !showCompanion.useJoule ? (
         <SplitterElement
           resizable={!showCompanion.fullScreen}
           size={showCompanion.fullScreen ? '100%' : '30%'}
