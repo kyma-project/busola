@@ -6,10 +6,8 @@ import { useAtom, useAtomValue } from 'jotai';
 
 import { useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-import {
-  HeaderRenderer,
-  TableBody,
-} from 'shared/components/GenericList/components';
+import { HeaderRenderer } from './components/HeaderRenderer';
+import { TableBody } from './components/TableBody';
 import { filterEntries } from 'shared/components/GenericList/helpers';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
