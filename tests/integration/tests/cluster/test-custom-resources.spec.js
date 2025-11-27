@@ -85,7 +85,7 @@ context('Test Custom Resources', () => {
     cy.getStartColumn()
       .find('ui5-input[id^=search-]:visible')
       .find('input')
-      .wait(1000)
+      .wait(500)
       .clear();
 
     cy.typeInSearch('cypress');
@@ -97,7 +97,7 @@ context('Test Custom Resources', () => {
     cy.getStartColumn()
       .find('ui5-input[id^=search-]:visible')
       .find('input')
-      .wait(1000)
+      .wait(500)
       .clear();
 
     cy.typeInSearch('cypress');
@@ -108,7 +108,8 @@ context('Test Custom Resources', () => {
       .get('ui5-table-row')
       .find('ui5-table-cell')
       .contains('ui5-text', 'tcluster-test')
-      .click();
+      .click()
+      .wait(500);
 
     cy.testEndColumnLayout('tcluster-test', false);
 
@@ -116,7 +117,8 @@ context('Test Custom Resources', () => {
       .get('ui5-table-row')
       .find('ui5-table-cell')
       .contains('ui5-text', 'tcluster-test')
-      .click();
+      .click()
+      .wait(500);
 
     cy.getMidColumn()
       .find('ui5-button[accessible-name="enter-full-screen"]')

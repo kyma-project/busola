@@ -52,6 +52,8 @@ Cypress.Commands.add('clickGenericListLink', (resourceName) => {
     .find('ui5-table-cell')
     .contains('ui5-text', resourceName)
     .click();
+
+  cy.wait(500);
 });
 
 Cypress.Commands.add('clickListLink', (resourceName) => {
@@ -339,8 +341,9 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
 });
 
 Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
+  cy.wait(500);
   cy.get('ui5-input[id^=search-]:visible')
     .find('input')
-    .wait(1000)
+    .wait(500)
     .type(searchPhrase, { force });
 });
