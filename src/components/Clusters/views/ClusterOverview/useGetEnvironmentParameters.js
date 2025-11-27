@@ -11,7 +11,9 @@ export function useGetEnvironmentParameters() {
     loading: environmentParametersFromKymaInfoCMLoading,
   } = useGet('/api/v1/namespaces/kyma-system/configmaps/kyma-info');
 
-  const natGatewayIps = environmentParametersFromShootInfoCM
+  const natGatewayIps = environmentParametersFromShootInfoCM?.data[
+    'egressCIDRs'
+  ]
     ? environmentParametersFromShootInfoCM?.data['egressCIDRs']?.split(',')
     : environmentParametersFromKymaInfoCM?.data['cloud.natGatewayIps']?.split(
         ', ',
