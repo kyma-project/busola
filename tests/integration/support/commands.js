@@ -338,7 +338,7 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   else cy.getEndColumn().should('not.be.visible');
 });
 
-Cypress.Commands.add('typeInSearch', (searchPhrase, force) => {
+Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
   cy.get('ui5-input[id^=search-]:visible')
     .find('input')
     .wait(1000)
