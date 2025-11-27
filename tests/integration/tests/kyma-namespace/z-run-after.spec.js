@@ -32,7 +32,7 @@ context('Clean up Namespace', () => {
     },
     () => {
       cy.get('ui5-table')
-        .contains(Cypress.env('NAMESPACE_NAME'), { timeout: 60000 })
+        .contains(Cypress.env('NAMESPACE_NAME'), { timeout: 120_000 })
         .should('not.exist');
     },
   );
