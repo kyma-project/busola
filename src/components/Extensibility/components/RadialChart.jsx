@@ -49,11 +49,11 @@ export const RadialChart = ({ structure, value, originalResource }) => {
         color={structure.color}
         value={value}
         max={maxValue ? maxValue : structure?.maxValue}
-        titleText={t(structure?.name)}
+        titleText={t(structure?.name, structure?.name ?? '')}
         additionalInfo={
           additionalInfo ? additionalInfo : structure?.additionalInfo
         }
-        accessibleName={t(structure?.name)}
+        accessibleName={t(structure?.name, structure?.name ?? '')}
       />
     </div>
   );
