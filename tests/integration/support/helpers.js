@@ -3,8 +3,10 @@ export function chooseComboboxOption(selector, optionText, force = false) {
     .find('input')
     .filterWithNoValue()
     .as('comboboxInput')
-    .click();
-  cy.get('@comboboxInput').type(optionText);
+    .click()
+    .wait(500);
+
+  cy.get('@comboboxInput').type(optionText).wait(500);
 
   cy.get('ui5-cb-item:visible').contains(optionText).click({ force: force });
 
