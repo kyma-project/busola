@@ -111,7 +111,7 @@ export function SearchInput({
         id={`search-${entriesKind}`}
         accessibleName={`search-${entriesKind}`}
         type="Search"
-        icon={<Icon className="bsl-has-color-status-4" name="search" />}
+        icon={<Icon name="search" />}
         ref={searchInputRef}
         value={searchQuery}
         onInput={(e) => handleQueryChange(e.target.value)}
