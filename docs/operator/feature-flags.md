@@ -12,11 +12,13 @@ Initialisation of the Busola features is based on the **stage** property, which 
 If the **stage** property is not set, the feature is loaded only on demand, most often by the iframe. Use the `useFeature` hook to request usage of such a feature.
 
 > ### Note
+> 
 > Some features must be run before the application starts the bootstrap process, so they are out of the ordinary feature flow.
 
 ## Configurable Flags for Frontend
 
 > ### Tip
+> 
 > The list is ordered alphabetically.
 
 This table lists the frontend configurable feature flags, their descriptions, and default values.
@@ -41,6 +43,7 @@ This table lists the frontend configurable feature flags, their descriptions, an
 ## Configurable Flags for Backend
 
 > ### Note
+> 
 > Backend features cannot be modified at the cluster's ConfigMap level.
 
 | Feature flag |                                                                       Description | Default value     |
