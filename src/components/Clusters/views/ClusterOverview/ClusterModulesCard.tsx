@@ -9,13 +9,14 @@ import { useContext, useMemo } from 'react';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
 
 const CountStatuseByType = (
   statuses: Record<string, any>,
   loadingStatuses: boolean,
   statusesError: Error | null,
 ) => {
-  if (statuses && !loadingStatuses && !statusesError) {
+  if (statuses?.length && !loadingStatuses && !statusesError) {
     return statuses.reduce(
       (
         acc: {
@@ -62,7 +63,7 @@ export default function ClusterModulesCard() {
   );
 
   const display =
-    (!error || error?.code === 404) &&
+    (!error || (error as HttpError)?.code === 404) &&
     !loadingModules &&
     modules &&
     !installedCommunityModulesLoading;

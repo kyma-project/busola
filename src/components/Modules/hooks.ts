@@ -68,7 +68,8 @@ export function useGetAllModulesStatuses(modules: any[]) {
           modules.map(async (module) => {
             const resource = module?.resource ?? module;
 
-            if (!resource) return null;
+            if (!resource || (!resource?.apiVersion && !resource?.group))
+              return null;
             const path = getResourcePath(resource);
 
             try {
