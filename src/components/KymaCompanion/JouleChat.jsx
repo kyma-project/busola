@@ -45,7 +45,6 @@ export default function JouleChat() {
       getApplicationContext: () => {
         return resourceRef.current;
       },
-      // etc
     };
 
     window.sapdas.webclientPreregistration =
