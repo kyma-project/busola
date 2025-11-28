@@ -17,6 +17,11 @@ runs:
     - name: Update origin/main
       run: |
         git fetch origin main
+        # Fetch PR head if available (for pull_request_target)
+        # Use pull/<number>/head ref to support PRs from forks
+        if [ -n "${{ github.event.pull_request.number }}" ]; then
+          git fetch origin pull/${{ github.event.pull_request.number }}/head
+        fi
         git checkout origin/main
         git checkout -B main
         git pull origin main
