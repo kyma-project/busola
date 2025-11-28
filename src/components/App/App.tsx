@@ -57,7 +57,6 @@ import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
-import JouleChat from 'components/KymaCompanion/JouleChat';
 
 export default function App() {
   const theme = useAtomValue(themeAtom);
@@ -143,7 +142,6 @@ export default function App() {
         }
       >
         <div id="html-wrap">
-          {showCompanion.useJoule && <JouleChat />}
           <Header />
           <div id="page-wrap">
             <Sidebar key={cluster?.name} />
