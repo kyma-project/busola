@@ -181,6 +181,7 @@ export const useGetStream = (path) => {
   const lastAuthData = useRef(null);
   const initialPath = useRef(true);
   const timeoutRef = useRef();
+  const k8sErrorRetryCount = useRef(0);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const authData = useAtomValue(authDataAtom);
@@ -196,6 +197,23 @@ export const useGetStream = (path) => {
   const processData = (data) => {
     const string = new TextDecoder().decode(data);
     const streams = string?.split('\n').filter((stream) => stream !== '');
+
+    // Detect Kubernetes API errors returned as stream content
+    // These have the format: Get "https://...". EOF or similar
+    const hasK8sError = streams.some((line) =>
+      /^Get "https?:\/\/[^"]+"\.\s*(EOF|connection refused|i\/o timeout)/i.test(
+        line,
+      ),
+    );
+
+    if (hasK8sError && k8sErrorRetryCount.current < 5) {
+      k8sErrorRetryCount.current++;
+      setTimeout(refetchData, 1000);
+      return;
+      // After 5 retries, display the error as log content
+    }
+
+    k8sErrorRetryCount.current = 0;
     setData((prevData) => [...prevData, ...streams]);
   };
 
