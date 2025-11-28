@@ -73,7 +73,7 @@ export function CommandPaletteSearchBar({
 
     timer = setTimeout(() => {
       setShellbarWidth(
-        showCompanion.show
+        showCompanion.show && !showCompanion.useJoule
           ? shellbarRef?.current?.getBoundingClientRect().width || 0
           : window.innerWidth,
       );
@@ -81,6 +81,8 @@ export function CommandPaletteSearchBar({
   }
 
   useEffect(() => {
+    if (showCompanion.useJoule) return;
+
     const elementObserver = new ResizeObserver(() => {
       handleChangedWidth();
     });

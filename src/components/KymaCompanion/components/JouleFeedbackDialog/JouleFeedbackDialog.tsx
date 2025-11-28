@@ -47,7 +47,11 @@ export default function JouleFeedbackDialog({
     setNoFeedbackShowNextTime();
     setShouldShowJouleFeedback(FEEDBACK_SHOW_TYPE.NO_SHOW);
     handleSetDialogClosed();
-    setShowCompanion({ show: false, fullScreen: false });
+    setShowCompanion((prevState) => ({
+      ...prevState,
+      show: false,
+      fullScreen: false,
+    }));
   };
 
   const handleDissmissFeedback = () => {
@@ -59,7 +63,11 @@ export default function JouleFeedbackDialog({
       dismissFeedbackRequestFirstTime();
     }
     handleSetDialogClosed();
-    setShowCompanion({ show: false, fullScreen: false });
+    setShowCompanion((prevState) => ({
+      ...prevState,
+      show: false,
+      fullScreen: false,
+    }));
   };
 
   const actions = (

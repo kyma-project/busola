@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
@@ -48,11 +48,19 @@ export function Header() {
   const cluster = useAtomValue(clusterAtom);
   const clusters = useAtomValue(clustersAtom);
 
-  const { isEnabled: isKymaCompanionEnabled } = useFeature(
+  const { isEnabled: isKymaCompanionEnabled, useJoule: usesJoule } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
   );
 
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
+
+  useEffect(() => {
+    setShowCompanion((prevState) => ({
+      ...prevState,
+      useJoule: usesJoule,
+    }));
+  }, [usesJoule]);
+
   const shellbarRef = useRef(null);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
@@ -86,10 +94,11 @@ export function Header() {
         }
         onLogoClick={() => {
           navigateSafely(() => navigate('/clusters'));
-          setShowCompanion({
+          setShowCompanion((prevState) => ({
+            ...prevState,
             show: false,
             fullScreen: false,
-          });
+          }));
         }}
         logo={<Logo />}
         primaryTitle={
@@ -109,10 +118,11 @@ export function Header() {
                   )}`,
                 );
           });
-          setShowCompanion({
+          setShowCompanion((prevState) => ({
+            ...prevState,
             show: false,
             fullScreen: false,
-          });
+          }));
         }}
         profile={
           <Avatar
@@ -153,10 +163,11 @@ export function Header() {
               icon={showCompanion.show ? 'da-2' : 'da'}
               onClick={(e) => {
                 e.preventDefault();
-                setShowCompanion({
+                setShowCompanion((prevState) => ({
+                  ...prevState,
                   show: true,
                   fullScreen: false,
-                });
+                }));
               }}
               pressed={showCompanion.show}
               slot="assistant"
