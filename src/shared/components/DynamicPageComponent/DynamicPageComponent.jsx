@@ -168,8 +168,7 @@ export const DynamicPageComponent = ({
 
     if (layoutCloseUrl) {
       const showEdit = editColumn ? `showEdit=${!!layoutColumn.showEdit}&` : '';
-      const showSearch =
-        searchField && searchField !== '' ? `search=${searchField}` : '';
+      const showSearch = searchField ? `search=${searchField}` : '';
       const link = `${layoutCloseUrl}?${showEdit}${showSearch}`;
       navigate(link);
       return;
@@ -183,8 +182,7 @@ export const DynamicPageComponent = ({
       layoutNumber === 'midColumn' || layoutColumn?.showCreate?.resourceType
         ? ''
         : 'layout=TwoColumnsMidExpanded&';
-    const showSearch =
-      searchField && searchField !== '' ? `search=${searchField}` : '';
+    const showSearch = searchField ? `search=${searchField}` : '';
     const link = `${linkBase}?${layoutType}${showSearch}`;
     navigate(link);
   };
