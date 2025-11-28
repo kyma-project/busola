@@ -85,6 +85,7 @@ export const GenericList = ({
   searchSettings = { ...defaultSearch, ...searchSettings };
   const [entrySelected, setEntrySelected] = useState(customSelectedEntry || '');
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
+  const [searchParams] = useSearchParams();
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
@@ -193,7 +194,10 @@ export const GenericList = ({
 
     if (selected) {
       setEntrySelected(selected);
+      const namespaceParam = searchParams.get('resourceNamespace');
+      if (namespaceParam) setEntrySelectedNamespace(namespaceParam);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entries, resourceType]);
 
   const headerActions = (
@@ -298,7 +302,9 @@ export const GenericList = ({
 
         // Check if the entry is selected using click or refresh
         isModuleSelected = entrySelected
-          ? entrySelected === e?.name
+          ? entrySelected === e?.name &&
+            (entrySelectedNamespace === e?.namespace ||
+              entrySelectedNamespace === e?.resource?.metadata?.namespace)
           : pluralize(e?.name?.replace('-', '') || '') === resourceTypeBase;
       }
 
@@ -355,7 +361,10 @@ export const GenericList = ({
         (entry?.metadata?.name === item ||
           pluralize(entry?.spec?.names?.kind ?? '') === item ||
           entry?.name === item) &&
-        (!hasNamepace || entry?.metadata?.namespace === itemNamespace)
+        (!hasNamepace ||
+          entry?.metadata?.namespace === itemNamespace ||
+          // special case for Community Modules
+          entry?.resource?.metadata?.namespace === itemNamespace)
       );
     });
 
@@ -367,7 +376,9 @@ export const GenericList = ({
       setEntrySelected(
         selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
       );
-      setEntrySelectedNamespace(selectedEntry?.metadata?.namespace ?? '');
+      setEntrySelectedNamespace(
+        selectedEntry?.metadata?.namespace ?? selectedEntry.namespace ?? '',
+      );
 
       const { group, version } = extractApiGroupVersion(
         selectedEntry?.apiVersion,

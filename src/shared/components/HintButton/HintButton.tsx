@@ -21,7 +21,7 @@ export function HintButton({
   ariaTitle = '',
   className,
 }: HintButtonProps) {
-  const [ID] = useId();
+  const ID = useId();
   const { t, i18n } = useTranslation();
   let desc = description;
 

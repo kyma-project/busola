@@ -33,7 +33,6 @@ export const useGetSchema = ({
     setSchema(null);
     setError(null);
     setLoading(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schemaId]);
 
   useEffect(() => {

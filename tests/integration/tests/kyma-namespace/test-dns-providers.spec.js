@@ -29,17 +29,11 @@ context('Test DNS Providers', () => {
     );
 
     // secret
-    chooseComboboxOption(
-      '[placeholder="Select namespace"]',
-      Cypress.env('NAMESPACE_NAME'),
-    );
+    chooseComboboxOption('[placeholder="Select namespace"]', 'default');
 
     cy.wait(500);
 
-    chooseComboboxOption(
-      '[placeholder="Select name"]',
-      'serverless-registry-config-default',
-    );
+    chooseComboboxOption('[placeholder="Select name"]', 'secret-test');
 
     // include domains
     cy.get('[placeholder="Domain that is allowed"]:visible', { log: false })

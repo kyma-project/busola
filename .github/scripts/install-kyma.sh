@@ -47,12 +47,15 @@ kubectl apply -f tests/integration/fixtures/community-modules
 
 echo "Apply Kyma provision fixture"
 kubectl apply -f tests/integration/fixtures/kyma-info-cm.yaml
+kubectl apply -f tests/integration/fixtures/shoot-info-cm.yaml
 
 echo "Apply gardener resources"
 echo "Certificates"
 kubectl apply -f https://raw.githubusercontent.com/gardener/cert-management/master/pkg/apis/cert/crds/cert.gardener.cloud_certificates.yaml
 echo "DNS Providers"
 kubectl apply -f https://raw.githubusercontent.com/gardener/external-dns-management/master/pkg/apis/dns/crds/dns.gardener.cloud_dnsproviders.yaml
+echo "Apply Secret for DNS Providers"
+kubectl apply -f tests/integration/fixtures/test-secret.yaml
 echo "DNS Entries"
 kubectl apply -f https://raw.githubusercontent.com/gardener/external-dns-management/master/pkg/apis/dns/crds/dns.gardener.cloud_dnsentries.yaml
 echo "Issuers"

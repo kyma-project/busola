@@ -179,7 +179,7 @@ export const addByContext = (
     if (!cluster) throw Error('cluster not found');
 
     let user = findUser();
-    let haveAuth = hasKubeconfigAuth(kubeconfig);
+    const haveAuth = hasKubeconfigAuth(kubeconfig);
     const authIndex = (kubeconfig?.users as Users)?.findIndex(
       (user) => user?.user?.token || user?.user?.exec,
     );
@@ -190,7 +190,7 @@ export const addByContext = (
           users: [],
         };
       }
-      let auth = manualKubeConfigId?.manualKubeConfigId?.auth;
+      const auth = manualKubeConfigId?.manualKubeConfigId?.auth;
       if (!auth && manualKubeConfigId?.setManualKubeConfigId) {
         manualKubeConfigId.setManualKubeConfigId?.(
           (prev: ManualKubeConfigIdType) => ({

@@ -10,7 +10,7 @@ const OIDC_PARAM_NAMES = new Map([
 
 export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
   if (!commandData || !commandData.args) throw new Error('No args provided');
-  let output: any = {};
+  const output: any = {};
 
   commandData.args.forEach((arg) => {
     /**

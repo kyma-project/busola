@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { isNil } from 'lodash';
 import { useJsonata } from '../hooks/useJsonata';
 import { useTranslation } from 'react-i18next';
@@ -24,14 +24,25 @@ export function Badge({
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-  const jsonata = useJsonata({
-    resource: originalResource,
-    parent: singleRootResource,
-    embedResource: embedResource,
-    scope,
-    value,
-    arrayItems,
-  });
+  const stableJsonataDeps = useMemo(
+    () => ({
+      resource: originalResource,
+      parent: singleRootResource,
+      embedResource: embedResource,
+      scope,
+      value,
+      arrayItems,
+    }),
+    [
+      originalResource,
+      singleRootResource,
+      embedResource,
+      scope,
+      value,
+      arrayItems,
+    ],
+  );
+  const jsonata = useJsonata(stableJsonataDeps);
 
   const [tooltip, setTooltip] = useState(null);
   const [tooltipError, setTooltipError] = useState(null);
@@ -52,17 +63,7 @@ export function Badge({
     };
     setStatesFromJsonata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    structure?.description,
-    structure?.highlights,
-    value,
-    originalResource,
-    singleRootResource,
-    embedResource,
-    scope,
-    value,
-    arrayItems,
-  ]);
+  }, [structure?.description, structure?.highlights, stableJsonataDeps]);
 
   const getTooltipContent = (description) => {
     if (tooltip && !tooltipError) {

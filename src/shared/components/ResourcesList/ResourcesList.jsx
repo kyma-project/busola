@@ -110,15 +110,9 @@ export function ResourcesList({
 
   const content = (
     <>
-      <BannerCarousel
-        children={
-          <Injections
-            destination={resourceType}
-            slot="banner"
-            root={resources}
-          />
-        }
-      />
+      <BannerCarousel>
+        <Injections destination={resourceType} slot="banner" root={resources} />
+      </BannerCarousel>
       {resources ? (
         <ResourceListRenderer
           resources={(resources || []).filter(filterFn)}
@@ -485,6 +479,7 @@ export function ResourceListRenderer({
       if (col?.value && index === nameColIndex) {
         return (
           <div
+            key={index}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -574,28 +569,6 @@ export function ResourceListRenderer({
     ];
   };
 
-  const processTitle = (title) => {
-    const words = title.split(' ');
-    let uppercaseCount = 0;
-
-    const processedWords = words?.map((word) => {
-      for (let i = 0; i < word.length; i++) {
-        if (word[i] === word[i].toUpperCase()) {
-          uppercaseCount++;
-
-          if (uppercaseCount > 1) {
-            uppercaseCount = 0;
-            return word;
-          }
-        }
-      }
-      uppercaseCount = 0;
-      return word.toLowerCase();
-    });
-
-    return processedWords.join(' ');
-  };
-
   return (
     <>
       {createPortal(
@@ -638,8 +611,9 @@ export function ResourceListRenderer({
               textSearchProperties: textSearchProperties(),
             }}
             emptyListProps={{
-              titleText: `${t('common.labels.no')} ${processTitle(
-                prettifyNamePlural(resourceTitle, resourceType),
+              titleText: `${t('common.labels.no')} ${prettifyNamePlural(
+                resourceTitle,
+                resourceType,
               )}`,
               onClick: handleShowCreate,
               showButton: !disableCreate && namespace !== '-all-',

@@ -82,7 +82,7 @@ export default function ServiceAccountCreate({
 
   React.useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
-  }, [serviceAccount, setCustomValid]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [serviceAccount, setCustomValid]);
 
   const handleImageChange = (images) => {
     const newImages = (images || []).map((image) => {
