@@ -24,6 +24,8 @@ function formatValue(value, language, formatAsString) {
     return typeof value === 'undefined'
       ? ''
       : jsyaml.dump(value, { lineWidth: -1 });
+  } else if (language === '') {
+    return '';
   } else {
     return value;
   }
@@ -69,7 +71,11 @@ export function MonacoRenderer({
   }, [schema, stableJsonataDeps]);
 
   const formatAsString = schema.get('formatAsString') ?? false;
-  const formattedValue = formatValue(value, language, formatAsString);
+  const formattedValue = useMemo(
+    () => formatValue(value, language, formatAsString),
+    [value, language, formatAsString],
+  );
+
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const handleChange = useCallback(
