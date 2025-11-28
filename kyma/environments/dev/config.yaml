@@ -67,7 +67,7 @@ config:
         queryMaxTokens: 8000
       useJoule: false
       jouleConfig:
-        url: 'https://tan-eu12-ss.eu12.sapdas.cloud.sap/resources/public/webclient/bootstrap.js'
+        url: 'https://kcp-dev-joule-vfglrzqg.eu12.sapdas.cloud.sap/resources/public/webclient/bootstrap.js'
         botname: 'kyma_companion'
     GARDENER_LOGIN:
       isEnabled: false
