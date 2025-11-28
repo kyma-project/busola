@@ -6,7 +6,6 @@ export const FEEDBACK_SHOW_TYPE = {
   SHOW: 'SHOW', //AI chat feedback not yet viewed
 } as const;
 
-//eslint-disable-next-line @typescript-eslint/no-redeclare
 export type FEEDBACK_SHOW_TYPE =
   (typeof FEEDBACK_SHOW_TYPE)[keyof typeof FEEDBACK_SHOW_TYPE];
 

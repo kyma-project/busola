@@ -33,7 +33,7 @@ export async function buildStructuralGraph(
   const queue: Node[] = [rootNode];
 
   // BFS
-  while (!!queue.length) {
+  while (queue.length) {
     const node = queue.pop()!;
     if (node.depth <= 0) continue;
 

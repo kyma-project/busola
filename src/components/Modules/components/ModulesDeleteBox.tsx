@@ -172,8 +172,6 @@ export const ModulesDeleteBox = ({
     );
 
     setAssociatedResourceLeft(resourcesLeft);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourceCounts, associatedResources]);
 
   const deleteAllResources = () => {

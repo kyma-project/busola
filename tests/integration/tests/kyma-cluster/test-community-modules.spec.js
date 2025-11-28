@@ -62,8 +62,30 @@ context('Test Community Modules views', () => {
       .contains('ui5-button', 'Add')
       .click();
 
+    cy.wait(2000);
+
     // Check if already installed module is not visible
     cy.get('.create-form').contains('No community modules available');
+  });
+
+  it('Test adding source YAML', () => {
+    // Open Add YAML
+    cy.get('[accessible-name="add-yamls"]').click();
+    cy.get(`[header-text="Add Source YAML"]:visible`)
+      .find('[data-testid="yaml-namespace-select"]')
+      .click();
+
+    // Check if kyma-system has locked icon
+    cy.get('ui5-option-custom:visible')
+      .get('.option-content')
+      .contains('kyma-system')
+      .find('ui5-icon[name="locked"]')
+      .should('exist');
+
+    // Click of default namespace
+    cy.get('ui5-option-custom:visible').contains('default').click();
+
+    cy.get('ui5-button:visible').contains('Cancel').click();
   });
 
   it('Test number of Modules in Modules Overview card', () => {

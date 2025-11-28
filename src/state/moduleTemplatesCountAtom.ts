@@ -4,7 +4,8 @@ import { clusterAtom } from './clusterAtom';
 
 export const moduleTemplatesCountAtom = atom<Promise<number>>(async (get) => {
   // Track cluster changes by getting the cluster atom
-  const _cluster = get(clusterAtom); // eslint-disable-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  const _cluster = get(clusterAtom);
   const fetchFn = getFetchFn(get);
 
   if (!fetchFn) return null;
