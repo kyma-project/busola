@@ -86,10 +86,7 @@ export function Header() {
         }
         onLogoClick={() => {
           navigateSafely(() => navigate('/clusters'));
-          setShowCompanion({
-            show: false,
-            fullScreen: false,
-          });
+          setShowCompanion(false);
         }}
         logo={<Logo />}
         primaryTitle={
@@ -109,10 +106,7 @@ export function Header() {
                   )}`,
                 );
           });
-          setShowCompanion({
-            show: false,
-            fullScreen: false,
-          });
+          setShowCompanion(false);
         }}
         profile={
           <Avatar
@@ -150,15 +144,12 @@ export function Header() {
           window.location.pathname !== '/clusters' && (
             <ToggleButton
               accessibleName="Kyma Companion"
-              icon={showCompanion.show ? 'da-2' : 'da'}
+              icon={showCompanion ? 'da-2' : 'da'}
               onClick={(e) => {
                 e.preventDefault();
-                setShowCompanion({
-                  show: true,
-                  fullScreen: false,
-                });
+                setShowCompanion(true);
               }}
-              pressed={showCompanion.show}
+              pressed={showCompanion}
               slot="assistant"
             />
           )}
