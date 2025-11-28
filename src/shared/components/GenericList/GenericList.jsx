@@ -6,20 +6,15 @@ import { useAtom, useAtomValue } from 'jotai';
 
 import { useNavigate, useSearchParams } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-import {
-  BodyFallback,
-  HeaderRenderer,
-  RowRenderer,
-} from 'shared/components/GenericList/components';
+import { HeaderRenderer } from './components/HeaderRenderer';
+import { TableBody } from './components/TableBody';
 import { filterEntries } from 'shared/components/GenericList/helpers';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import ListActions from 'shared/components/ListActions/ListActions';
-import { Spinner } from 'shared/components/Spinner/Spinner';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { SortModalPanel } from './SortModalPanel';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
-import { getErrorMessage } from 'shared/utils/helpers';
 import { pageSizeAtom } from 'state/preferences/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
@@ -27,7 +22,7 @@ import { useUrl } from 'hooks/useUrl';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
-import { IllustratedMessage, Table } from '@ui5/webcomponents-react';
+import { Table } from '@ui5/webcomponents-react';
 import './GenericList.scss';
 import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 import { useDebounce } from 'hooks/useDebounce';
@@ -130,7 +125,7 @@ export const GenericList = ({
     return undefined;
   }, [pageSize, pagination]);
 
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const [filteredEntries, setFilteredEntries] = useState([]);
@@ -182,17 +177,21 @@ export const GenericList = ({
   useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
-    const selected = entries.find((entry) => {
-      const name = entry?.metadata?.name;
-      return (
-        name &&
-        window.location.href.includes(name) &&
-        window.location.href.includes(resourceType.toLowerCase())
-      );
-    })?.metadata?.name;
-
-    if (selected) {
-      setEntrySelected(selected);
+    const selected = entries
+      .filter((entry) => {
+        const name = entry?.metadata?.name;
+        return (
+          name &&
+          window.location.href.includes(name) &&
+          window.location.href.includes(resourceType.toLowerCase())
+        );
+      })
+      ?.map((entry) => entry?.metadata?.name);
+    if (selected?.length) {
+      // There is often more than one match due to similar names (e.g. `test`, `test123`),
+      // so entrySelected can be a string or an array of strings.
+      // This (the correct one) is resolved in TableBody.
+      setEntrySelected(selected?.length === 1 ? selected[0] : selected);
       const namespaceParam = searchParams.get('resourceNamespace');
       if (namespaceParam) setEntrySelectedNamespace(namespaceParam);
     }
@@ -233,102 +232,6 @@ export const GenericList = ({
     !searchSettings?.showSearchField &&
     !(sortBy && !isEmpty(sortBy)) &&
     !(extraHeaderContent && !isEmpty(extraHeaderContent));
-
-  const renderTableBody = () => {
-    if (serverDataError) {
-      return (
-        <BodyFallback key="tableErrorMessage">
-          <p>{getErrorMessage(serverDataError)}</p>
-        </BodyFallback>
-      );
-    }
-
-    if (serverDataLoading) {
-      return (
-        <BodyFallback key="tableDataLoading">
-          <Spinner />
-        </BodyFallback>
-      );
-    }
-    if (!filteredEntries.length) {
-      if (searchQuery) {
-        return (
-          <BodyFallback>
-            <IllustratedMessage
-              name="NoSearchResults"
-              titleText={
-                i18n.exists(searchSettings.noSearchResultTitle)
-                  ? t(searchSettings.noSearchResultTitle)
-                  : searchSettings.noSearchResultTitle
-              }
-              subtitleText={
-                i18n.exists(searchSettings.noSearchResultSubtitle)
-                  ? t(searchSettings.noSearchResultSubtitle)
-                  : searchSettings.noSearchResultSubtitle
-              }
-            />
-          </BodyFallback>
-        );
-      }
-
-      if (!entries.length) {
-        return;
-      }
-    }
-
-    let pagedItems = filteredEntries;
-    if (pagination) {
-      pagedItems = filteredEntries.slice(
-        (currentPage - 1) * pagination.itemsPerPage,
-        currentPage * pagination.itemsPerPage,
-      );
-    }
-
-    return pagedItems.map((e, index) => {
-      // Special case for Kyma modules
-      let isModuleSelected;
-      if (
-        window.location.href.includes('kymamodules') &&
-        layoutState?.midColumn
-      ) {
-        // Workaround for modules like btp-operator on refresh
-        const resourceType = layoutState.midColumn.resourceType;
-        const resourceTypeDotIndex = resourceType?.indexOf('.') || -1;
-        const resourceTypeBase =
-          resourceTypeDotIndex !== -1
-            ? resourceType.substring(0, resourceTypeDotIndex)
-            : resourceType;
-
-        // Check if the entry is selected using click or refresh
-        isModuleSelected = entrySelected
-          ? entrySelected === e?.name &&
-            (entrySelectedNamespace === e?.namespace ||
-              entrySelectedNamespace === e?.resource?.metadata?.namespace)
-          : pluralize(e?.name?.replace('-', '') || '') === resourceTypeBase;
-      }
-
-      return (
-        <RowRenderer
-          isSelected={
-            ((layoutState?.midColumn?.resourceName === e.metadata?.name ||
-              layoutState?.endColumn?.resourceName === e.metadata?.name) &&
-              entrySelected === e?.metadata?.name &&
-              (entrySelectedNamespace === '' ||
-                entrySelectedNamespace === e?.metadata?.namespace)) ||
-            isModuleSelected
-          }
-          index={index}
-          key={`${e.metadata?.uid || e.name || e.metadata?.name}-${index}`}
-          entry={e}
-          actions={actions}
-          rowRenderer={rowRenderer}
-          displayArrow={displayArrow}
-          hasDetailsView={hasDetailsView}
-          enableColumnLayout={enableColumnLayout}
-        />
-      );
-    });
-  };
 
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
@@ -500,7 +403,24 @@ export const GenericList = ({
           />
         }
       >
-        {renderTableBody()}
+        <TableBody
+          serverDataError={serverDataError}
+          serverDataLoading={serverDataLoading}
+          filteredEntries={filteredEntries}
+          searchQuery={searchQuery}
+          searchSettings={searchSettings}
+          entries={entries}
+          pagination={pagination}
+          currentPage={currentPage}
+          layoutState={layoutState}
+          entrySelected={entrySelected}
+          entrySelectedNamespace={entrySelectedNamespace}
+          actions={actions}
+          rowRenderer={rowRenderer}
+          displayArrow={displayArrow}
+          hasDetailsView={hasDetailsView}
+          enableColumnLayout={enableColumnLayout}
+        />
       </Table>
       {pagination &&
         (!pagination.autoHide ||
