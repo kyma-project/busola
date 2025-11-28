@@ -85,7 +85,6 @@ export const GenericList = ({
   searchSettings = { ...defaultSearch, ...searchSettings };
   const [entrySelected, setEntrySelected] = useState(customSelectedEntry || '');
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
-  const [searchParams] = useSearchParams();
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
