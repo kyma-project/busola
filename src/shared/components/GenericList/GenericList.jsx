@@ -30,6 +30,7 @@ import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { IllustratedMessage, Table } from '@ui5/webcomponents-react';
 import './GenericList.scss';
 import { asyncSort } from 'components/Extensibility/helpers/sortBy';
+import { useDebounce } from 'hooks/useDebounce';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -84,7 +85,6 @@ export const GenericList = ({
   searchSettings = { ...defaultSearch, ...searchSettings };
   const [entrySelected, setEntrySelected] = useState(customSelectedEntry || '');
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
-  const [searchParams] = useSearchParams();
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
@@ -132,9 +132,24 @@ export const GenericList = ({
 
   const { i18n, t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
-
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const [filteredEntries, setFilteredEntries] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParam = searchParams.get('search');
+  const setSearchFieldFromURL =
+    layoutState?.startColumn?.resourceType === resourceType;
+  const [searchQuery, setSearchQuery] = useState(
+    setSearchFieldFromURL && searchParam ? searchParam : '',
+  );
+  const debouncedSearch = useDebounce(searchQuery, 3000);
+
+  useEffect(() => {
+    if (setSearchFieldFromURL && debouncedSearch) {
+      searchParams.set('search', debouncedSearch);
+      setSearchParams(searchParams);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch]);
 
   useEffect(() => {
     if (pagination) {
@@ -315,7 +330,6 @@ export const GenericList = ({
     });
   };
 
-  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
   const linkTo = (entry) => {
@@ -400,7 +414,7 @@ export const GenericList = ({
       );
       const link = `${linkTo(selectedEntry)}${
         enableColumnLayout
-          ? `?layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
+          ? `?${searchQuery === '' ? '' : `search=${searchParam}&`}layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
               namespace === '-all-' && selectedEntry?.metadata?.namespace
                 ? `&resourceNamespace=${selectedEntry?.metadata?.namespace}`
                 : ''
