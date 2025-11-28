@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue } from 'jotai';
 
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import {
   BodyFallback,
@@ -84,6 +84,7 @@ export const GenericList = ({
   searchSettings = { ...defaultSearch, ...searchSettings };
   const [entrySelected, setEntrySelected] = useState(customSelectedEntry || '');
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
+  const [searchParams] = useSearchParams();
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
@@ -177,7 +178,10 @@ export const GenericList = ({
 
     if (selected) {
       setEntrySelected(selected);
+      const namespaceParam = searchParams.get('resourceNamespace');
+      if (namespaceParam) setEntrySelectedNamespace(namespaceParam);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entries, resourceType]);
 
   const headerActions = (
