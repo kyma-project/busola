@@ -26,6 +26,7 @@ import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import {
   getResourceObjFromUIStore,
   getUIStoreFromResourceObj,
+  cleanResource,
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
@@ -91,7 +92,18 @@ export function ExtensibilityCreateCore({
   }, [initialExtensibilityResource, layoutState?.showEdit?.resource]);
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
-  const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
+
+  // The template to compare against for cleaning: use the initial resource if editing,
+  // otherwise use the default preset value or empty template
+  const cleaningTemplate = useMemo(
+    () => initialExtensibilityResource || defaultPreset?.value || emptyTemplate,
+    [initialExtensibilityResource, defaultPreset?.value, emptyTemplate],
+  );
+
+  const resource = useMemo(
+    () => cleanResource(getResourceObjFromUIStore(store), cleaningTemplate),
+    [store, cleaningTemplate],
+  );
 
   useEffect(() => {
     if (
