@@ -1,28 +1,28 @@
-# Configuration
+# Busola Configuration
 
 Learn about the default configuration in Busola and how to change it.
 
 ## Configuration Sources
 
-Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence:
+Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence.
 
 ### Backend
 
-- Busola backend default cluster configuration, acquired from the [defaultConfig.yaml](../../backend/settings/defaultConfig.yaml) file.
+- Busola backend default cluster configuration, acquired from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/backend/settings/defaultConfig.yaml) file.
 - Busola cluster configuration, available in the Busola cluster in the ConfigMap `busola/busola-config` under the key **config**.
   This data is mounted to the `busola` Pods, and during the local development,
-  the [defaultConfig.yaml](../../backend/settings/defaultConfig.yaml) file is used.
+  the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/backend/settings/defaultConfig.yaml) file is used.
 
 ### Frontend
 
 - Built-in, hardcoded defaults.
-- Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](../../public/defaultConfig.yaml) file.
+- Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/public/defaultConfig.yaml) file.
 - Busola cluster configuration, available in the Busola cluster in the ConfigMap `busola/busola-config` under the key **config**.
   This data is mounted to the `busola` Pods, and during the local development,
-  the [defaultConfig.yaml](../../public/defaultConfig.yaml) file is used.
+  the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/public/defaultConfig.yaml) file is used.
 - Target cluster configuration, available in the target cluster in ConfigMap `kube-public/busola-config` under the key **config**. Busola performs a request for that resource during the bootstrap process.
 - Busola active environment, `active.env` file is used.
-- Custom configuration with `extensibility` and `config` located in `public/environments`, [read more](#environment-specific-settings).
+- Custom configuration with `extensibility` and `config` located in `public/environments`. See [Environment-Specific Settings](#environment-specific-settings).
 
 ## Changing the Configuration
 
@@ -36,7 +36,7 @@ Features comprise the following elements:
 - `selector`: The Kubernetes resources that can activate the feature
 - `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
 
-See the available Busola [feature flags](../features.md) for more information.
+For more information, see the available Busola [feature flags](../features.md).
 
 ### Environment-Specific Settings
 
@@ -52,10 +52,10 @@ custom-env/
     └── wizards.yaml
 ```
 
-> [!WARNING]
+> ### Warning
 > The `extensions.yaml`, `statics.yaml`, `wizards.yaml`, and `config.yaml` files are necessary for Busola to work properly.
 
-To activate your environment configuration, create or edit the `active.env` file in the [public directory](../../public).
+To activate your environment configuration, create or edit the `active.env` file in the [public directory](https://github.com/kyma-project/busola/tree/main/public).
 Follow this example of the `active.env` file:
 
 ```dotenv
@@ -63,6 +63,6 @@ ENVIRONMENT=your-environment-name
 ```
 
 When **ENVIRONMENT** is set to `my-env`, Busola looks for your custom configuration in `public/environments/my-env`.
-If **ENVIRONMENT** is not set, Busola fetches the default configuration with the same structure as the custom configuration located in the [public directory](../../public).
+If **ENVIRONMENT** is not set, Busola fetches the default configuration with the same structure as the custom configuration located in the [public directory](https://github.com/kyma-project/busola/tree/main/public).
 
 In the case of the Docker image, the `active.env` file is created at the startup of the image from the environment specified in the **ENVIRONMENT** variable.
