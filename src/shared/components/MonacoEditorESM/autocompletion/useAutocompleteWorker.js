@@ -3,7 +3,6 @@ import { Uri } from 'monaco-editor';
 import * as monaco from 'monaco-editor';
 import { configureMonacoYaml } from 'monaco-yaml';
 import { useGetSchema } from 'hooks/useGetSchema';
-import { v4 as uuid } from 'uuid';
 import YamlWorker from './yaml.worker.js?worker';
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
 import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
@@ -35,7 +34,8 @@ export function useAutocompleteWorker({
   schema: predefinedSchema,
 }) {
   const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
-  const [schemaUri] = useState(`file://kubernetes.io/${uuid()}`);
+  // Use schemaId for URI to ensure same resource types share the same schema URI
+  const schemaUri = `file://kubernetes.io/${schemaId}`;
 
   if (!autocompletionDisabled && !predefinedSchemaId) {
     console.warn(
@@ -85,7 +85,7 @@ export function useAutocompleteWorker({
     return {
       modelUri,
     };
-  }, [schema, schemaId, schemaUri, readOnly]);
+  }, [schema, schemaId, readOnly]);
 
   const cleanupSchema = useCallback(() => {
     schemasMap.delete(schemaId);
