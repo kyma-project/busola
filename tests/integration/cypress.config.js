@@ -37,7 +37,7 @@ module.exports = defineConfig({
       'tests/accessibility/test-acc-performance.spec.js',
       'tests/accessibility/test-acc-extensions.spec.js',
       'tests/accessibility/test-acc-pizzas.spec.js',
-      'tests/accessibility/test-acc-custom-resoureces.spec.js',
+      'tests/accessibility/test-acc-custom-resources.spec.js',
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-edit-cluster.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',

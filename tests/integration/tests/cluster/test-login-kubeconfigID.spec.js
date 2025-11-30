@@ -66,6 +66,8 @@ context('Test login - kubeconfigID', () => {
       cy.visit(`${config.clusterAddress}/?kubeconfigID=tests`);
       cy.url().should('match', /overview$/);
 
+      cy.wait(1000);
+
       cy.contains('Session Storage').should('not.exist');
 
       cy.contains('Local Storage').should('be.visible');

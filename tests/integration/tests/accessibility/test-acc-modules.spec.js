@@ -12,6 +12,8 @@ context('Accessibility test Modules view', () => {
 
     cy.get('ui5-card').contains('Modify Modules').click();
 
+    cy.wait(1000);
+
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
     if (Cypress.env('IS_PR') === 'true')

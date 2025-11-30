@@ -1,5 +1,6 @@
 Cypress.Commands.add('openCreate', () => {
   cy.get('ui5-panel').contains('ui5-button', 'Create').click();
+  cy.wait(500);
 });
 
 Cypress.Commands.add('saveChanges', (action = 'Create') => {
