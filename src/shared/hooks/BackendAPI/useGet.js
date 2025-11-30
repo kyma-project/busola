@@ -181,17 +181,30 @@ export const useGetStream = (path) => {
   const lastAuthData = useRef(null);
   const initialPath = useRef(true);
   const timeoutRef = useRef();
-  const k8sErrorRetryCount = useRef(0);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const authData = useAtomValue(authDataAtom);
   const fetch = useFetch();
   const readerRef = useRef(null);
   const abortController = useRef(new AbortController());
+  const k8sErrorRetryCount = useRef(0);
 
   const processError = (error) => {
     console.error(error);
     setError(error);
+  };
+
+  // Unified retry logic for both text-based and exception-based errors
+  const handleTransientError = (e) => {
+    if (k8sErrorRetryCount.current < 5) {
+      console.warn(`Transient stream error detected (${e}), retrying...`);
+      k8sErrorRetryCount.current++;
+
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(refetchData, 1000);
+    } else {
+      processError(e);
+    }
   };
 
   const processData = (data) => {
@@ -206,11 +219,9 @@ export const useGetStream = (path) => {
       ),
     );
 
-    if (hasK8sError && k8sErrorRetryCount.current < 5) {
-      k8sErrorRetryCount.current++;
-      setTimeout(refetchData, 1000);
+    if (hasK8sError) {
+      handleTransientError(new Error('Stream contained Kubernetes API Error'));
       return;
-      // After 5 retries, display the error as log content
     }
 
     k8sErrorRetryCount.current = 0;
@@ -253,14 +264,16 @@ export const useGetStream = (path) => {
 
               return push();
             } catch (e) {
-              processError(e);
+              // Handle stream read errors (network-level)
+              handleTransientError(e);
             }
           };
           push();
         },
       });
     } catch (e) {
-      if (!e.toString().includes('abort')) processError(e);
+      // Handle connection errors (network-level)
+      if (!e.toString().includes('abort')) handleTransientError(e);
     }
   };
 
