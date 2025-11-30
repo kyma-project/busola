@@ -64,7 +64,7 @@ context('Test Custom Resources', () => {
 
     cy.wait(500).clickGenericListLink('Tclusters');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.wrap(loadFile(TCLUSTER_FILE_NAME)).then((TC_CONFIG) => {
       const TC = JSON.stringify(TC_CONFIG);

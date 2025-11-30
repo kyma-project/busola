@@ -82,7 +82,7 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Acc test Pizza Orders create', () => {
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
