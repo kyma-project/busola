@@ -27,6 +27,10 @@ context('Accessibility test Custom Resources', () => {
     cy.saveChanges('Create');
   });
 
+  beforeEach(() => {
+    cy.wait(500);
+  });
+
   it('Acc test Custom Resources overview', () => {
     cy.getLeftNav().contains('Custom Resources').click();
 

@@ -7,6 +7,10 @@ context('Accessibility test Modules view', () => {
     cy.setUpContinuum('continuum/continuum.conf.js');
   });
 
+  beforeEach(() => {
+    cy.wait(500);
+  });
+
   it('Acc test Modules view', () => {
     cy.wait(2000);
 
