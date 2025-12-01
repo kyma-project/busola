@@ -8,16 +8,6 @@ export function Text({ key, ...props }) {
 export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
   if (!props.readOnly) delete props.readOnly;
 
-  const {
-    validationRef,
-    internalValue,
-    setMultiValue,
-    setResource,
-    validateMessage,
-    accessibleName,
-    ...inputProps
-  } = props;
-
   const validationProps = useValidation({
     inputRef,
     onChange: [onChange, (e) => setValue && setValue(e.target.value)],
@@ -27,7 +17,7 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
     <Input
       value={value || ''}
       onInput={onChange ?? ((e) => setValue && setValue(e.target.value))}
-      {...inputProps}
+      {...props}
       {...validationProps}
     />
   );

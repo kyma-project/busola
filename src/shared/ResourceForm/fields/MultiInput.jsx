@@ -87,8 +87,9 @@ export function MultiInput({
   };
 
   const setEntry = (newVal, index) => {
-    internalValue[index] = newVal;
-    setInternalValue([...internalValue]);
+    const tempInternalVal = [...internalValue];
+    tempInternalVal[index] = newVal;
+    setInternalValue(tempInternalVal);
   };
 
   const focus = (ref) => {
@@ -97,6 +98,21 @@ export function MultiInput({
     }
   };
   const open = defaultOpen ?? false;
+
+  const inputComponents = internalValue.map((entry, index) =>
+    inputs.map((input, inputIndex) =>
+      input({
+        index: (index + 1) * keys,
+        value: entry,
+        setValue: (entry) => setEntry(entry, index),
+        ref: refs[index]?.[inputIndex],
+        updateValue: () => updateValue(internalValue),
+        internalValue,
+        setMultiValue: setValue,
+        focus: (e, target) => handleFocusMove(e, target, index),
+      }),
+    ),
+  );
 
   useEffect(() => {
     internalValue.forEach((entry, index) => {
@@ -122,32 +138,19 @@ export function MultiInput({
     });
   }, [inputs, internalValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const inputComponents = internalValue.map((entry, index) =>
-    inputs.map((input, inputIndex) =>
-      input({
-        index: (index + 1) * keys,
-        value: entry,
-        setValue: (entry) => setEntry(entry, index),
-        ref: refs[index]?.[inputIndex],
-        updateValue: () => updateValue(internalValue),
-        internalValue,
-        setMultiValue: setValue,
-        focus: (e, target) => {
-          if (e.key === 'Enter') {
-            if (typeof target === 'undefined') {
-              focus(refs[index + 1]?.[0]);
-            } else {
-              focus(refs[index][target]);
-            }
-          } else if (e.key === 'ArrowDown') {
-            focus(refs[index + 1]?.[0]);
-          } else if (e.key === 'ArrowUp') {
-            focus(refs[index - 1]?.[0]);
-          }
-        },
-      }),
-    ),
-  );
+  const handleFocusMove = (e, target, index) => {
+    if (e.key === 'Enter') {
+      if (typeof target === 'undefined') {
+        focus(refs[index + 1]?.[0]);
+      } else {
+        focus(refs[index][target]);
+      }
+    } else if (e.key === 'ArrowDown') {
+      focus(refs[index + 1]?.[0]);
+    } else if (e.key === 'ArrowUp') {
+      focus(refs[index - 1]?.[0]);
+    }
+  };
 
   return (
     <ResourceForm.CollapsibleSection
