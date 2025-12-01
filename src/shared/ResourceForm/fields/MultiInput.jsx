@@ -87,9 +87,8 @@ export function MultiInput({
   };
 
   const setEntry = (newVal, index) => {
-    const tempInternalVal = [...internalValue];
-    tempInternalVal[index] = newVal;
-    setInternalValue(tempInternalVal);
+    internalValue[index] = newVal;
+    setInternalValue([...internalValue]);
   };
 
   const focus = (ref) => {
