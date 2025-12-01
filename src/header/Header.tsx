@@ -29,6 +29,7 @@ import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
 import FeedbackPopover from './Feedback/FeedbackPopover';
+import JouleChat from 'components/KymaCompanion/JouleChat';
 
 import './Header.scss';
 
@@ -161,20 +162,23 @@ export function Header() {
         {isKymaCompanionEnabled &&
           isSAPUser &&
           window.location.pathname !== '/clusters' && (
-            <ToggleButton
-              accessibleName="Kyma Companion"
-              icon={showCompanion.show ? 'da-2' : 'da'}
-              onClick={(e) => {
-                e.preventDefault();
-                setShowCompanion((prevState) => ({
-                  ...prevState,
-                  show: true,
-                  fullScreen: false,
-                }));
-              }}
-              pressed={showCompanion.show}
-              slot="assistant"
-            />
+            <>
+              <ToggleButton
+                accessibleName="Kyma Companion"
+                icon={showCompanion.show ? 'da-2' : 'da'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowCompanion((prevState) => ({
+                    ...prevState,
+                    show: true,
+                    fullScreen: false,
+                  }));
+                }}
+                pressed={showCompanion.show}
+                slot="assistant"
+              />
+              {showCompanion.useJoule && <JouleChat />}
+            </>
           )}
       </ShellBar>
       <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
