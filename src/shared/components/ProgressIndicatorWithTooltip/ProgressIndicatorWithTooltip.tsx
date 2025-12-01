@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { ProgressIndicator } from '@ui5/webcomponents-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import './ProgressIndicatorWithTooltip.scss';
@@ -8,10 +8,7 @@ type TooltipWrapperProps = {
   children: ReactNode;
 };
 
-const TooltipWrapper: FC<TooltipWrapperProps> = ({
-  tooltipProps,
-  children,
-}) => {
+const TooltipWrapper = ({ tooltipProps, children }: TooltipWrapperProps) => {
   if (tooltipProps?.content) {
     return <Tooltip {...tooltipProps}>{children}</Tooltip>;
   }
@@ -25,14 +22,12 @@ export type ProgressIndicatorWithTooltipProps = {
   accessibleName?: string;
 };
 
-export const ProgressIndicatorWithTooltip: FC<
-  ProgressIndicatorWithTooltipProps
-> = ({
+export const ProgressIndicatorWithTooltip = ({
   value,
   tooltip,
   displayValue,
   accessibleName = 'Progress indicator',
-}) => {
+}: ProgressIndicatorWithTooltipProps) => {
   const tooltipProps = tooltip
     ? { ...tooltip, style: { width: '100%' } }
     : undefined;
