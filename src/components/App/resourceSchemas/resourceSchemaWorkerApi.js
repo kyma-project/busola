@@ -10,7 +10,7 @@ if (typeof Worker !== 'undefined') {
   );
 }
 
-export let isWorkerAvailable = !!schemasWorker;
+export const isWorkerAvailable = !!schemasWorker;
 export const terminateWorker = () => {
   schemasWorker?.terminate();
 };

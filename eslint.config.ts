@@ -60,7 +60,7 @@ export default defineConfig(
         'no-irregular-whitespace': 'warn',
         'no-prototype-builtins': 'warn',
         'no-unsafe-optional-chaining': 'warn',
-        'prefer-const': 'warn',
+        'prefer-const': 'error',
       },
     },
   ],
