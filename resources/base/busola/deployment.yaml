@@ -38,6 +38,17 @@ spec:
             httpGet:
               port: 3001
               path: /
+          readinessProbe:
+            initialDelaySeconds: 5
+            httpGet:
+              port: 3001
+              path: /
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            httpGet:
+              port: 3001
+              path: /
       volumes:
         - name: config
           configMap:
