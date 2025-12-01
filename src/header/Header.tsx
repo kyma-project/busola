@@ -29,6 +29,7 @@ import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
 import FeedbackPopover from './Feedback/FeedbackPopover';
+import JouleChat from 'components/KymaCompanion/JouleChat';
 
 import './Header.scss';
 
@@ -66,16 +67,20 @@ export function Header() {
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     (name) => name !== cluster?.name,
   );
+  const title =
+    window.location.pathname !== '/clusters'
+      ? cluster?.contextName || cluster?.name
+      : '';
 
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
       return (
-        <ListItemStandard accessibleName={name} data-key={index}>
+        <ListItemStandard key={name} accessibleName={name} data-key={index}>
           {name}
         </ListItemStandard>
       );
     }),
-    <ListItemStandard accessibleName="all-clusters">
+    <ListItemStandard key="all-clusters" accessibleName="all-clusters">
       {t('clusters.overview.title-all-clusters')}
     </ListItemStandard>,
   ];
@@ -87,6 +92,9 @@ export function Header() {
         accessibilityAttributes={{
           logo: {
             name: 'SAP Kyma logo',
+          },
+          branding: {
+            name: `Selected cluster: ${title}`,
           },
         }}
         startButton={
@@ -101,11 +109,7 @@ export function Header() {
           }));
         }}
         logo={<Logo />}
-        primaryTitle={
-          window.location.pathname !== '/clusters'
-            ? cluster?.contextName || cluster?.name
-            : ''
-        }
+        primaryTitle={title}
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={(e) => {
           navigateSafely(() => {
@@ -158,20 +162,23 @@ export function Header() {
         {isKymaCompanionEnabled &&
           isSAPUser &&
           window.location.pathname !== '/clusters' && (
-            <ToggleButton
-              accessibleName="Kyma Companion"
-              icon={showCompanion.show ? 'da-2' : 'da'}
-              onClick={(e) => {
-                e.preventDefault();
-                setShowCompanion((prevState) => ({
-                  ...prevState,
-                  show: true,
-                  fullScreen: false,
-                }));
-              }}
-              pressed={showCompanion.show}
-              slot="assistant"
-            />
+            <>
+              <ToggleButton
+                accessibleName="Kyma Companion"
+                icon={showCompanion.show ? 'da-2' : 'da'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowCompanion((prevState) => ({
+                    ...prevState,
+                    show: true,
+                    fullScreen: false,
+                  }));
+                }}
+                pressed={showCompanion.show}
+                slot="assistant"
+              />
+              {showCompanion.useJoule && <JouleChat />}
+            </>
           )}
       </ShellBar>
       <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
