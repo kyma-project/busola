@@ -31,3 +31,9 @@
   display: flex;
   justify-content: flex-end;
 }
+
+// Joule/SAP DAS Web Client z-index override
+// Ensures the external Joule chat overlay appears above Busola UI components
+#cai-webclient-main {
+  z-index: 10000 !important;
+}
