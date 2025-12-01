@@ -66,16 +66,20 @@ export function Header() {
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     (name) => name !== cluster?.name,
   );
+  const title =
+    window.location.pathname !== '/clusters'
+      ? cluster?.contextName || cluster?.name
+      : '';
 
   const clustersList = [
     ...inactiveClusterNames.map((name, index) => {
       return (
-        <ListItemStandard accessibleName={name} data-key={index}>
+        <ListItemStandard key={name} accessibleName={name} data-key={index}>
           {name}
         </ListItemStandard>
       );
     }),
-    <ListItemStandard accessibleName="all-clusters">
+    <ListItemStandard key="all-clusters" accessibleName="all-clusters">
       {t('clusters.overview.title-all-clusters')}
     </ListItemStandard>,
   ];
@@ -87,6 +91,9 @@ export function Header() {
         accessibilityAttributes={{
           logo: {
             name: 'SAP Kyma logo',
+          },
+          branding: {
+            name: `Selected cluster: ${title}`,
           },
         }}
         startButton={
@@ -101,11 +108,7 @@ export function Header() {
           }));
         }}
         logo={<Logo />}
-        primaryTitle={
-          window.location.pathname !== '/clusters'
-            ? cluster?.contextName || cluster?.name
-            : ''
-        }
+        primaryTitle={title}
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={(e) => {
           navigateSafely(() => {
