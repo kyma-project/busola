@@ -53,7 +53,7 @@ custom-env/
 ```
 
 > ### Warning
-> 
+>
 > The `extensions.yaml`, `statics.yaml`, `wizards.yaml`, and `config.yaml` files are necessary for Busola to work properly.
 
 To activate your environment configuration, create or edit the `active.env` file in the [public directory](https://github.com/kyma-project/busola/tree/main/public).
