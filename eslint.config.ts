@@ -39,7 +39,6 @@ export default defineConfig(
         'react-hooks/preserve-manual-memoization': 'warn',
         'react-hooks/immutability': 'warn',
         'react-hooks/purity': 'warn',
-        'react-hooks/static-components': 'warn',
         'react-hooks/use-memo': 'warn',
 
         // TypeScript

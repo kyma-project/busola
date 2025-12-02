@@ -21,6 +21,7 @@ export function CustomFieldInjector({
 
   if (path || !storeKeys.size) {
     return (
+      // eslint-disable-next-line react-hooks/static-components
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
@@ -42,6 +43,7 @@ export function CustomFieldInjector({
     const varPath = `$.${varName}${varSuffix}`;
 
     return (
+      // eslint-disable-next-line react-hooks/static-components
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
@@ -60,6 +62,7 @@ export function CustomFieldInjector({
     }
 
     return (
+      // eslint-disable-next-line react-hooks/static-components
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
