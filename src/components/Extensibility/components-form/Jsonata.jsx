@@ -55,6 +55,7 @@ export function Jsonata({
     <ResourceForm.FormField
       value={value}
       setValue={(value) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onChange &&
           onChange({
             storeKeys,

@@ -93,6 +93,7 @@ export const ResourceCreate = ({
               : '?layout=TwoColumnsMidExpanded'
           }`,
     );
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     layoutNumber === 'midColumn'
       ? setLayoutColumn({
           ...layoutColumn,

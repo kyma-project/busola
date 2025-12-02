@@ -191,6 +191,7 @@ export function ClusterPreview({
           <Button
             design="Transparent"
             onClick={() => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               hasAuth ? setSelected(2) : setSelected(3);
             }}
             className="cluster-preview__edit-button"

@@ -48,7 +48,6 @@ export default defineConfig(
         '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'warn',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
-        '@typescript-eslint/no-unused-expressions': 'warn',
         '@typescript-eslint/ban-ts-comment': 'warn',
         '@typescript-eslint/no-require-imports': 'warn',
         // Misc

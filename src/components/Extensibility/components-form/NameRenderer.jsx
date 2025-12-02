@@ -2,8 +2,10 @@ import { List } from 'immutable';
 import jp from 'jsonpath';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';
-import { useGetTranslation } from 'components/Extensibility/helpers';
-import { getPropsFromSchema } from 'components/Extensibility/helpers';
+import {
+  getPropsFromSchema,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 
 export function NameRenderer({
   storeKeys,
@@ -24,6 +26,7 @@ export function NameRenderer({
       kind={resource.kind}
       readOnly={editMode && disableOnEdit}
       setValue={(value) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         extraPaths
           ? onChange([
               {

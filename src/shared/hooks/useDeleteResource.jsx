@@ -108,6 +108,7 @@ export function useDeleteResource({
               );
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             goToLayout === 'TwoColumnsMidExpanded'
               ? setLayoutColumn({
                   ...layoutColumn,

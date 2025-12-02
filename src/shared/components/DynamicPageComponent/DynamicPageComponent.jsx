@@ -148,6 +148,7 @@ export const DynamicPageComponent = ({
   );
 
   const handleColumnClose = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     layoutNumber === 'midColumn'
       ? setLayoutColumn({
           ...layoutColumn,

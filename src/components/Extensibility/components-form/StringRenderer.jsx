@@ -130,6 +130,8 @@ export function StringRenderer({
           if (decodable && decoded) {
             value = base64Encode(value);
           }
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           onChange &&
             onChange({
               storeKeys,
