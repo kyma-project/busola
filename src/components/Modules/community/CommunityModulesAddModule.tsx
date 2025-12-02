@@ -4,12 +4,7 @@ import { SetStateAction, useAtom, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  Card,
-  List,
-  ListItemStandard,
-  MessageStrip,
-} from '@ui5/webcomponents-react';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   getAvailableCommunityModules,
@@ -50,6 +45,7 @@ import {
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
+import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -389,34 +385,6 @@ export default function CommunityModulesAddModule(props: any) {
                 url={'https://kyma-project.io/#/community-modules/user/README'}
               />
             </MessageStrip>
-            <Card className="addModuleCard">
-              <List
-                growing="None"
-                headerText={t(
-                  'modules.community.source-yaml.source-yamls-header',
-                )}
-                onItemDelete={(e) => console.log('TEST', e)}
-                selectionMode="Delete"
-                separators="All"
-              >
-                {
-                  // TODO: It's fake data for testing:
-                  [
-                    {
-                      name: 'https://kyma-project.github.io/community-modules/all-modules.yaml',
-                    },
-                    {
-                      name: 'https://test-fake-notworking.github.io/community-modules/all-modules.yaml',
-                    },
-                  ].map((sourceYaml, ind) => (
-                    <ListItemStandard
-                      key={`${ind}-${sourceYaml.name}`}
-                      text={sourceYaml.name}
-                    />
-                  ))
-                }
-              </List>
-            </Card>
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
             ) : (
@@ -428,6 +396,7 @@ export default function CommunityModulesAddModule(props: any) {
                 {t('modules.community.no-modules')}
               </MessageStrip>
             )}
+            <CommunityModulesSourcesList />
           </>
         </ResourceForm>
         {createPortal(<UnsavedMessageBox />, document.body)}
