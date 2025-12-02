@@ -214,7 +214,7 @@ export const useGetStream = (path) => {
     // Detect Kubernetes API errors returned as stream content
     // These have the format: Get "https://...". EOF or similar
     const hasK8sError = streams.some((line) =>
-      /Get "https?:\/\/[^"]+"\.\s*(EOF|connection refused|i\/o timeout)/i.test(
+      /Get "https?:\/\/[^"]+"[.:]\s*(EOF|connection refused|i\/o timeout)/i.test(
         line,
       ),
     );
