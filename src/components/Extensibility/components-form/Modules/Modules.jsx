@@ -70,14 +70,14 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       console.warn('Widget::Modules');
       return null;
     }
-    let parsedOpt = {};
+    const parsedOpt = {};
     Promise.all(
       Object.keys(options).map(async (optionName) => {
         if (
           optionName === 'name' &&
           !Array.isArray(await makeJsonata(options[optionName]))
         ) {
-          let moduleName = await makeJsonata(options[optionName]);
+          const moduleName = await makeJsonata(options[optionName]);
           parsedOpt[optionName] = [moduleName];
         } else {
           parsedOpt[optionName] = await makeJsonata(options[optionName]);
@@ -103,7 +103,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       return v.name === name;
     });
 
-    let channelModuleTemplate = [];
+    const channelModuleTemplate = [];
 
     parsedOptions?.moduleTemplates?.map((moduleTemplate) => {
       if (

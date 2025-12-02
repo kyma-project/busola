@@ -22,7 +22,7 @@ export function ExtensibilityInjectionCore({ resMetaData, root }) {
     resource: isStatic ? staticResource : resource,
   });
 
-  let resourceUrl = usePrepareResourceUrl({
+  const resourceUrl = usePrepareResourceUrl({
     apiGroup: resource?.group,
     apiVersion: resource?.version,
     resourceType: pluralize(resource?.kind || '').toLowerCase(),

@@ -39,7 +39,8 @@ export const ExtensibilityDetailsCore = ({
     features,
     description: resourceDescription,
   } = resMetaData?.general ?? {};
-  let { disableEdit, disableDelete } = features?.actions || {};
+  let { disableDelete } = features?.actions || {};
+  const { disableEdit } = features?.actions || {};
   if (isModule) disableDelete = true;
 
   const { schema } = useGetSchema({
