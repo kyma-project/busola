@@ -44,7 +44,14 @@ export default defineConfig(
 
         // TypeScript
         '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-unused-vars': 'warn',
+        '@typescript-eslint/no-unused-vars': [
+          'warn',
+          {
+            varsIgnorePattern: '^_',
+            argsIgnorePattern: '^_',
+            caughtErrorsIgnorePattern: '^_',
+          },
+        ],
         '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'warn',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
@@ -52,7 +59,14 @@ export default defineConfig(
         '@typescript-eslint/ban-ts-comment': 'warn',
         '@typescript-eslint/no-require-imports': 'warn',
         // Misc
-        'no-unused-vars': 'warn',
+        'no-unused-vars': [
+          'warn',
+          {
+            varsIgnorePattern: '^_',
+            argsIgnorePattern: '^_',
+            caughtErrorsIgnorePattern: '^_',
+          },
+        ],
         'no-undef': 'warn',
         'no-case-declarations': 'warn',
         'no-constant-binary-expression': 'warn',
