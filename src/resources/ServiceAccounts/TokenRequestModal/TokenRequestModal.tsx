@@ -39,7 +39,7 @@ const ComboboxInputWithSeconds = ({
   generateTokenRequest: () => void;
 }) => {
   return (
-    //@ts-ignore
+    //@ts-expect-error Mismatch between js and ts
     <ComboboxInput
       id="event-version-combobox"
       required
@@ -121,12 +121,12 @@ export function TokenRequestModal({
         />
       }
     >
-      {/*@ts-ignore*/}
+      {/*@ts-expect-error Todo: check error reason*/}
       <ResourceForm.Single
         resource={tokenRequest}
         setResource={setTokenRequest}
       >
-        {/*@ts-ignore*/}
+        {/*@ts-expect-error Todo: check error reason*/}
         <ResourceForm.FormField
           required
           propertyPath="$.spec.expirationSeconds"
@@ -155,7 +155,6 @@ export function TokenRequestModal({
               justifyContent: 'flex-end',
             }}
           >
-            {/*@ts-ignore*/}
             <CopiableText
               iconOnly
               buttonText={t('common.buttons.copy')}
@@ -172,7 +171,7 @@ export function TokenRequestModal({
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>
           </div>
-          {/*@ts-ignore*/}
+          {/*@ts-expect-error Todo: check error */}
           <Editor
             value={kubeconfigYaml}
             updateValueOnParentChange
@@ -182,7 +181,7 @@ export function TokenRequestModal({
             language="yaml"
           />
         </div>
-        {/*@ts-ignore*/}
+        {/*@ts-expect-error As above*/}
       </ResourceForm.Single>
     </Dialog>
   );

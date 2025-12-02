@@ -283,7 +283,7 @@ export const AddSourceYamls = () => {
                     return (
                       <OptionCustom
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
+                        // @ts-expect-error
                         disabled
                         value={ns}
                         key={ns}

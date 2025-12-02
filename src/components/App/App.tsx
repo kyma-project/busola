@@ -149,7 +149,7 @@ export default function App() {
               manualKubeConfigId.formOpen &&
               createPortal(
                 <Dialog open={true}>
-                  {/*@ts-ignore*/}
+                  {/*@ts-expect-error Todo: check error reason*/}
                   <ResourceForm.Single
                     formElementRef={authFormRef}
                     createResource={updateManualKubeConfigIdState}
@@ -164,7 +164,7 @@ export default function App() {
                         {t('clusters.add.title')}
                       </Button>
                     </div>
-                    {/*@ts-ignore*/}
+                    {/*@ts-expect-error Todo: check error reason*/}
                   </ResourceForm.Single>
                 </Dialog>,
                 document.body,

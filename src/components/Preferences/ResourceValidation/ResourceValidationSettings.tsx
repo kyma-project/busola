@@ -123,7 +123,7 @@ export default function ResourceValidationSettings() {
               title={t(
                 'settings.clusters.resourcesValidation.enabled-policies',
               )}
-              //@ts-ignore
+              //@ts-expect-error Type mismatch between js and ts
               entries={
                 choosePolicies
                   ? policyList
