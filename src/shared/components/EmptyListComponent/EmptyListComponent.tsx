@@ -61,7 +61,7 @@ export const EmptyListComponent = ({
       >
         <div className="emptyListComponent__buttons">
           {showButton && (
-            <Button design="Emphasized" onClick={onClick}>
+            <Button design="Default" onClick={onClick}>
               {buttonText}
             </Button>
           )}

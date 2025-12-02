@@ -365,7 +365,7 @@ export const CommunityModulesList = ({
         extraHeaderContent={[
           <Button
             key="add-community-module"
-            design="Emphasized"
+            design="Default"
             onClick={handleShowAddModule}
           >
             {t('common.buttons.add')}
