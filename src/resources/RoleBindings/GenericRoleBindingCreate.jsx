@@ -44,6 +44,7 @@ export function GenericRoleBindingCreate({
   );
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace);
     setInitialResource(initialRoleBinding || createBindingTemplate(namespace));
   }, [initialRoleBinding, namespace]);

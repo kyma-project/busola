@@ -24,6 +24,7 @@ const getEnumComponent = (
       value={value}
       options={options}
       setValue={(v) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         isKeyInput
           ? onChange({
               target: {

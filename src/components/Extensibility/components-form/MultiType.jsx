@@ -61,6 +61,7 @@ export function MultiType({
                 key={type}
                 selected={type === selectedType}
                 onClick={() => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                   onChange &&
                     onChange({
                       storeKeys,

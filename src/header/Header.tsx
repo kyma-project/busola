@@ -113,6 +113,7 @@ export function Header() {
         menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
         onMenuItemClick={(e) => {
           navigateSafely(() => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             e.detail.item.textContent ===
             t('clusters.overview.title-all-clusters')
               ? navigate('/clusters')
