@@ -301,6 +301,7 @@ export function ResourceForm({
                 hideDisabled={yamlHideDisabled || mode === 'MODE_FORM'}
                 revertHidden={false}
                 onRevert={handleRevert}
+                resetBtnClicked={resetBtnClicked}
               />
             </>
           }
