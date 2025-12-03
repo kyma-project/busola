@@ -37,6 +37,15 @@ type handleLoginProps = {
   onError: () => void;
 };
 
+function getToken(user: User | null, useAccessToken: boolean): string {
+  if (!user) {
+    return 'not-found-token';
+  }
+  return useAccessToken
+    ? user.access_token
+    : user.id_token || 'not-found-id-token';
+}
+
 export function createUserManager(
   oidcParams: {
     issuerUrl: string;
@@ -75,7 +84,7 @@ async function handleLogin({
     userManager.events.addAccessTokenExpiring(async () => {
       const user = await userManager.signinSilent();
       setAuth({
-        token: useAccessToken ? user?.access_token! : user?.id_token!,
+        token: getToken(user, useAccessToken),
       });
     });
     userManager.events.addSilentRenewError((e) => {
@@ -95,7 +104,7 @@ async function handleLogin({
         if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
           user = await userManager.signinSilent();
           setAuth({
-            token: useAccessToken ? user?.access_token! : user?.id_token!,
+            token: getToken(user, useAccessToken),
           });
         }
       }
@@ -113,7 +122,7 @@ async function handleLogin({
       storedUser && !storedUser.expired
         ? storedUser
         : await userManager.signinRedirectCallback(window.location.href);
-    setAuth({ token: useAccessToken ? user?.access_token : user?.id_token! });
+    setAuth({ token: getToken(user, useAccessToken) });
     setupAuthEventsHooks(userManager, useAccessToken);
     setupVisibilityEventsHooks(userManager, user, useAccessToken);
     onAfterLogin();

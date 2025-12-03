@@ -114,7 +114,8 @@ export function getUserIndex(kubeconfig?: Kubeconfig) {
     contextName === '-all-'
       ? kubeconfig?.contexts?.[0]?.context
       : kubeconfig?.contexts?.find((c) => c?.name === contextName)?.context;
-  const index = kubeconfig?.users?.findIndex((u) => u?.name === context?.user)!;
+  const index =
+    kubeconfig?.users?.findIndex((u) => u?.name === context?.user) || -1;
   return index > 0 ? index : 0;
 }
 
