@@ -11,6 +11,12 @@ import { authDataAtom } from '../../../state/authDataAtom';
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
 
+// Regex to detect Kubernetes API errors returned as stream content
+// These have the format: Get "https://...". EOF or similar
+const K8S_STREAM_ERROR_REGEX =
+  /Get "https?:\/\/[^"]+"[.:]\s*(EOF|connection refused|i\/o timeout)/i;
+const MAX_LINE_LENGTH_TO_CHECK = 1000;
+
 const useGetHook = (processDataFn) =>
   function (
     path,
@@ -211,13 +217,11 @@ export const useGetStream = (path) => {
     const string = new TextDecoder().decode(data);
     const streams = string?.split('\n').filter((stream) => stream !== '');
 
-    // Detect Kubernetes API errors returned as stream content
-    // These have the format: Get "https://...". EOF or similar
-    const hasK8sError = streams.some((line) =>
-      /Get "https?:\/\/[^"]+"[.:]\s*(EOF|connection refused|i\/o timeout)/i.test(
-        line,
-      ),
-    );
+    const hasK8sError = streams.some((line) => {
+      if (line.length > MAX_LINE_LENGTH_TO_CHECK) return false;
+
+      return K8S_STREAM_ERROR_REGEX.test(line);
+    });
 
     if (hasK8sError) {
       handleTransientError(new Error('Stream contained Kubernetes API Error'));
