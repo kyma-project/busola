@@ -17,8 +17,9 @@ context(
     it('Check sections of namespace details', () => {
       cy.contains('ui5-link', LIMIT_NAME).scrollIntoView().should('be.visible');
 
-      cy.get('ui5-panel')
-        .get('ui5-table-row')
+      cy.get('ui5-table[accessible-name="Limit Ranges"]')
+        .find('ui5-panel')
+        .find('ui5-table-row')
         .find('ui5-table-cell')
         .contains('Container')
         .scrollIntoView()

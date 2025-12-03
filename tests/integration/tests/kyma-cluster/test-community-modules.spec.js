@@ -18,7 +18,7 @@ context('Test Community Modules views', () => {
   });
 
   it('Check if edit is empty', () => {
-    cy.wait(500);
+    cy.wait(2000);
     cy.inspectTab('Edit');
 
     cy.contains('No community modules installed').should('be.visible');

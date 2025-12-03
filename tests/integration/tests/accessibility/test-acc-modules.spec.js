@@ -7,10 +7,16 @@ context('Accessibility test Modules view', () => {
     cy.setUpContinuum('continuum/continuum.conf.js');
   });
 
+  beforeEach(() => {
+    cy.wait(500);
+  });
+
   it('Acc test Modules view', () => {
     cy.wait(2000);
 
     cy.get('ui5-card').contains('Modify Modules').click();
+
+    cy.wait(1000);
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 

@@ -52,6 +52,8 @@ Cypress.Commands.add('clickGenericListLink', (resourceName) => {
     .find('ui5-table-cell')
     .contains('ui5-text', resourceName)
     .click();
+
+  cy.wait(500);
 });
 
 Cypress.Commands.add('clickListLink', (resourceName) => {
@@ -127,6 +129,10 @@ function paste(subject, { pastePayload }) {
 
 Cypress.Commands.add('getLeftNav', () => {
   return cy.get('aside');
+});
+
+Cypress.Commands.add('getStartColumn', () => {
+  return cy.get('div[slot="startColumn"]');
 });
 
 Cypress.Commands.add('getMidColumn', () => {
@@ -334,9 +340,10 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
   else cy.getEndColumn().should('not.be.visible');
 });
 
-Cypress.Commands.add('typeInSearch', (searchPhrase, force) => {
+Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
+  cy.wait(500);
   cy.get('ui5-input[id^=search-]:visible')
     .find('input')
-    .wait(1000)
+    .should('be.visible')
     .type(searchPhrase, { force });
 });

@@ -6,7 +6,7 @@ const JOB_NAME = 'test-job-' + Math.random().toString().substr(2, 8);
 const SECOND_CONTAINER_NAME = JOB_NAME + '-node';
 
 function checkJobLogs({ showLogsSelector, expectedLogs }) {
-  cy.wait(10_000);
+  cy.wait(1000);
   cy.get(showLogsSelector).click({ force: true });
 
   cy.contains(expectedLogs, { timeout: 5000 });

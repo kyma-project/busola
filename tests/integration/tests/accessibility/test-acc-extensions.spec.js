@@ -36,6 +36,10 @@ context('Accessibility test Extensions view', () => {
       .should('have.length', 2);
   });
 
+  beforeEach(() => {
+    cy.wait(500);
+  });
+
   it('Acc test Extensions list', () => {
     cy.loginAndSelectCluster();
 

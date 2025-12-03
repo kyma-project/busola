@@ -6,7 +6,10 @@ context('Create Namespace', () => {
   before(cy.loginAndSelectCluster);
 
   it('Create Namespace', () => {
-    cy.getLeftNav().contains('Namespaces').click();
+    cy.getLeftNav()
+      .find('ui5-side-navigation-item')
+      .contains('Namespaces')
+      .click();
 
     cy.openCreate();
 
@@ -28,9 +31,12 @@ context('Create Namespace', () => {
       .find('li', 'XL (limits: 9Gi, requests: 8.4Gi)')
       .click({ force: true });
 
+    cy.wait(1000);
+
     cy.get('.create-form')
-      .find('[accessible-name="Namespace name"]:visible')
+      .find('ui5-input[accessible-name="Namespace name"]:visible')
       .find('input')
+      .should('not.be.disabled', { timeout: 5000 })
       .type(Cypress.env('NAMESPACE_NAME'));
 
     cy.saveChanges('Create');

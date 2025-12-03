@@ -27,6 +27,10 @@ context('Accessibility test Custom Resources', () => {
     cy.saveChanges('Create');
   });
 
+  beforeEach(() => {
+    cy.wait(500);
+  });
+
   it('Acc test Custom Resources overview', () => {
     cy.getLeftNav().contains('Custom Resources').click();
 
@@ -70,7 +74,7 @@ context('Accessibility test Custom Resources', () => {
 
     cy.clickGenericListLink('Tclusters');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.wrap(loadFile(TCLUSTER_FILE_NAME)).then((TC_CONFIG) => {
       const TC = JSON.stringify(TC_CONFIG);
