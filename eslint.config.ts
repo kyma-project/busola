@@ -56,7 +56,7 @@ export default defineConfig(
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'warn',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
         '@typescript-eslint/no-unused-expressions': 'warn',
-        '@typescript-eslint/ban-ts-comment': 'warn',
+        '@typescript-eslint/ban-ts-comment': 'error',
         '@typescript-eslint/no-require-imports': 'warn',
         // Misc
         'no-unused-vars': [

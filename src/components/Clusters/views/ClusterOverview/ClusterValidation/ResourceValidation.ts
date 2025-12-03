@@ -19,7 +19,7 @@ const executeInWorker = (...args: any[]) =>
         },
         { once: true },
       );
-      // @ts-ignore
+      // @ts-expect-error args are of type any[], no easy fix
       worker.postMessage(...args);
     });
   });

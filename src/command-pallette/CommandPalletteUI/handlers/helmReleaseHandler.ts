@@ -119,7 +119,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   };
 
   if (typeof helmReleases !== 'object') {
-    //@ts-ignore todo: how to handle 'type' in Result[]?
+    //@ts-expect-error Todo: handle 'type' in Result[]
     return [linkToList, { type: LOADING_INDICATOR }];
   }
 

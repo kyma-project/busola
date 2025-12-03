@@ -136,7 +136,7 @@ function sendNamespaceSwitchMessage(
     );
   if (!matchedRoute) return;
 
-  // @ts-ignore
+  //@ts-expect-error Property is accessible
   const resourceType = matchedRoute.params.resourceType || '';
 
   navigate(
@@ -338,7 +338,7 @@ function createResults(context: CommandPaletteContext): Result[] {
   let resources = resourceCache[resourceType];
 
   if (typeof resources !== 'object') {
-    //@ts-ignore  TODO: handle typein Result
+    //@ts-expect-error TODO: handle type in Result
     return [linkToList, { type: LOADING_INDICATOR }];
   }
   if (resourceType === 'namespaces' && !showHiddenNamespaces) {
