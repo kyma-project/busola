@@ -76,7 +76,7 @@ export function ResourceQuotasList(props: any) {
     <Button
       key={`create-resource-quotas`}
       data-testid={`create-resource-quotas`}
-      design="Emphasized"
+      design="Default"
       onClick={handleShowCreate}
     >
       {t('components.resources-list.create')}
