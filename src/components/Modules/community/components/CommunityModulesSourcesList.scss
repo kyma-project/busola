@@ -1,3 +1,12 @@
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+
+  .card-header-title > * {
+    padding-bottom: 0.25rem;
+  }
+}
 .list-top-separator {
   border-top: 1px solid var(--sapGroup_TitleBorderColor);
 }

@@ -1,23 +1,50 @@
 import { useTranslation } from 'react-i18next';
 import {
   Card,
-  CardHeader,
+  Link,
   List,
   ListItemStandard,
+  Title,
 } from '@ui5/webcomponents-react';
 import 'components/Modules/community/components/CommunityModulesSourcesList.scss';
 import { AddSourceYamls } from './AddSourceYamls';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { HintButton } from 'shared/components/HintButton/HintButton';
+
+const ListElements = ({ sources }: { sources: string[] }) => {
+  const { t } = useTranslation();
+
+  if (!sources.length) {
+    return (
+      <ListItemStandard
+        text={t('modules.community.source-yaml.no-source-yaml')}
+      />
+    );
+  }
+  return (
+    <>
+      {sources.map((sourceYaml, ind) => (
+        <ListItemStandard key={`${ind}-${sourceYaml}`}>
+          <Link design="Default" href={sourceYaml} target="_blank">
+            {sourceYaml}
+          </Link>
+        </ListItemStandard>
+      ))}
+    </>
+  );
+};
 
 export const CommunityModulesSourcesList = () => {
   const { t } = useTranslation();
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
+  const [showTitleDescription, setShowTitleDescription] = useState(false);
 
   const getSources = () => {
-    const sources = communityModuleTemplates?.items
+    const sources = (communityModuleTemplates?.items ?? [])
       .map((item: any) => {
         return item?.metadata?.annotations?.source;
       })
@@ -30,22 +57,35 @@ export const CommunityModulesSourcesList = () => {
       className="sap-margin-top-small"
       accessibleName={t('modules.community.source-yaml.source-yamls-header')}
       header={
-        <CardHeader
-          titleText={t('modules.community.source-yaml.source-yamls-header')}
-          action={<AddSourceYamls />}
-        />
+        <div className="card-header">
+          <Title level="H5" className="card-header-title">
+            {t('modules.community.source-yaml.source-yamls-header')}
+            <HintButton
+              className="sap-margin-begin-tiny"
+              setShowTitleDescription={setShowTitleDescription}
+              description={t(
+                'modules.community.source-yaml.add-source-yaml-info',
+              )}
+              showTitleDescription={showTitleDescription}
+              ariaTitle={t('modules.community.source-yaml.source-yamls-header')}
+            />
+          </Title>
+          <AddSourceYamls />
+        </div>
       }
     >
       <List
-        // TODO: Deleting is not ready.
-        onItemDelete={(e) => console.log('TEST', e)}
-        selectionMode="Delete"
+        // TODO: Delete will be implemented in the next task.
+        onItemDelete={(e) => console.log('DELETE', e)}
+        selectionMode="None" // change to => 'Delete' once deleting is implemented
         separators="Inner"
         className="list-top-separator"
       >
-        {getSources().map((sourceYaml, ind) => (
-          <ListItemStandard key={`${ind}-${sourceYaml}`} text={sourceYaml} />
-        ))}
+        {moduleTemplatesLoading ? (
+          <Spinner />
+        ) : (
+          <ListElements sources={getSources()} />
+        )}
       </List>
     </Card>
   );

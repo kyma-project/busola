@@ -385,6 +385,7 @@ export default function CommunityModulesAddModule(props: any) {
                 url={'https://kyma-project.io/#/community-modules/user/README'}
               />
             </MessageStrip>
+            <CommunityModulesSourcesList />
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
             ) : (
@@ -396,7 +397,6 @@ export default function CommunityModulesAddModule(props: any) {
                 {t('modules.community.no-modules')}
               </MessageStrip>
             )}
-            <CommunityModulesSourcesList />
           </>
         </ResourceForm>
         {createPortal(<UnsavedMessageBox />, document.body)}
