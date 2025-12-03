@@ -121,12 +121,12 @@ export function TokenRequestModal({
         />
       }
     >
-      {/*@ts-expect-error Todo: check error reason*/}
+      {/*@ts-expect-error Type mismatch between js and ts*/}
       <ResourceForm.Single
         resource={tokenRequest}
         setResource={setTokenRequest}
       >
-        {/*@ts-expect-error Todo: check error reason*/}
+        {/*@ts-expect-error Type mismatch between js and ts*/}
         <ResourceForm.FormField
           required
           propertyPath="$.spec.expirationSeconds"
@@ -171,7 +171,7 @@ export function TokenRequestModal({
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>
           </div>
-          {/*@ts-expect-error Todo: check error */}
+          {/*@ts-expect-error Type mismatch between js and ts */}
           <Editor
             value={kubeconfigYaml}
             updateValueOnParentChange
@@ -181,7 +181,7 @@ export function TokenRequestModal({
             language="yaml"
           />
         </div>
-        {/*@ts-expect-error As above*/}
+        {/*@ts-expect-error Type mismatch between js and ts*/}
       </ResourceForm.Single>
     </Dialog>
   );
