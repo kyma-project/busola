@@ -39,11 +39,15 @@ type handleLoginProps = {
 
 function getToken(user: User | null, useAccessToken: boolean): string {
   if (!user) {
-    return 'not-found-token';
+    throw new Error('user is null');
   }
-  return useAccessToken
-    ? user.access_token
-    : user.id_token || 'not-found-id-token';
+  if (useAccessToken) {
+    return user.access_token;
+  }
+  if (user.id_token) {
+    return user.id_token;
+  }
+  throw new Error('id_token is empty');
 }
 
 export function createUserManager(
