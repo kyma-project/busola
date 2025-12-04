@@ -73,7 +73,6 @@ export default defineConfig(
         'no-empty': 'warn',
         'no-irregular-whitespace': 'warn',
         'no-prototype-builtins': 'warn',
-        'no-unsafe-optional-chaining': 'warn',
         'prefer-const': 'error',
       },
     },
