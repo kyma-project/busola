@@ -58,8 +58,10 @@ export const CommunityModulesSourcesList = () => {
       accessibleName={t('modules.community.source-yaml.source-yamls-header')}
       header={
         <div className="card-header">
-          <Title level="H5" className="card-header-title">
-            {t('modules.community.source-yaml.source-yamls-header')}
+          <div className="card-header__title">
+            <Title level="H5">
+              {t('modules.community.source-yaml.source-yamls-header')}
+            </Title>
             <HintButton
               className="sap-margin-begin-tiny"
               setShowTitleDescription={setShowTitleDescription}
@@ -69,7 +71,7 @@ export const CommunityModulesSourcesList = () => {
               showTitleDescription={showTitleDescription}
               ariaTitle={t('modules.community.source-yaml.source-yamls-header')}
             />
-          </Title>
+          </div>
           <AddSourceYamls />
         </div>
       }
