@@ -52,6 +52,7 @@ export function SchemaRulesInjector({
   }
 
   return (
+    // eslint-disable-next-line react-hooks/static-components
     <Plugin
       {...props}
       currentPluginIndex={nextPluginIndex}
