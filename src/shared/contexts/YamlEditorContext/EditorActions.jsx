@@ -40,10 +40,12 @@ export function EditorActions({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor]);
   useEffect(() => {
-    if (!visible) {
-      setTimeout(() => hideReadOnlyLines(), 500);
-    } else {
-      setTimeout(() => showReadOnlyLines(), 500);
+    if (editor) {
+      if (!visible) {
+        setTimeout(() => hideReadOnlyLines(), 500);
+      } else {
+        setTimeout(() => showReadOnlyLines(), 500);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetBtnClicked]);
@@ -59,7 +61,7 @@ export function EditorActions({
 
     let arrayOfPositions = [];
     READONLY_FIELDS.forEach((fieldName) => {
-      if (editor?.getModel()) {
+      if (editor.getModel()) {
         arrayOfPositions = arrayOfPositions.concat(
           editor
             .getModel()
