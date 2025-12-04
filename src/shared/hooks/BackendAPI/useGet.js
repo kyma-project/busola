@@ -11,6 +11,12 @@ import { authDataAtom } from '../../../state/authDataAtom';
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
 
+// Regex to detect Kubernetes API errors returned as stream content
+// These have the format: Get "https://...". EOF or similar
+const K8S_STREAM_ERROR_REGEX =
+  /Get "https?:\/\/[^"]+"[.:]\s*(EOF|connection refused|i\/o timeout)/i;
+const MAX_LINE_LENGTH_TO_CHECK = 1000;
+
 const useGetHook = (processDataFn) =>
   function (
     path,
@@ -187,15 +193,42 @@ export const useGetStream = (path) => {
   const fetch = useFetch();
   const readerRef = useRef(null);
   const abortController = useRef(new AbortController());
+  const k8sErrorRetryCount = useRef(0);
 
   const processError = (error) => {
     console.error(error);
     setError(error);
   };
 
+  // Unified retry logic for both text-based and exception-based errors
+  const handleTransientError = (e) => {
+    if (k8sErrorRetryCount.current < 5) {
+      console.warn(`Transient stream error detected (${e}), retrying...`);
+      k8sErrorRetryCount.current++;
+
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(refetchData, 1000);
+    } else {
+      processError(e);
+    }
+  };
+
   const processData = (data) => {
     const string = new TextDecoder().decode(data);
     const streams = string?.split('\n').filter((stream) => stream !== '');
+
+    const hasK8sError = streams.some((line) => {
+      if (line.length > MAX_LINE_LENGTH_TO_CHECK) return false;
+
+      return K8S_STREAM_ERROR_REGEX.test(line);
+    });
+
+    if (hasK8sError) {
+      handleTransientError(new Error('Stream contained Kubernetes API Error'));
+      return;
+    }
+
+    k8sErrorRetryCount.current = 0;
     setData((prevData) => [...prevData, ...streams]);
   };
 
@@ -235,14 +268,16 @@ export const useGetStream = (path) => {
 
               return push();
             } catch (e) {
-              processError(e);
+              // Handle stream read errors (network-level)
+              handleTransientError(e);
             }
           };
           push();
         },
       });
     } catch (e) {
-      if (!e.toString().includes('abort')) processError(e);
+      // Handle connection errors (network-level)
+      if (!e.toString().includes('abort')) handleTransientError(e);
     }
   };
 

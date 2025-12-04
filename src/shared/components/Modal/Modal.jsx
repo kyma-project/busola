@@ -79,7 +79,7 @@ export function Modal({
       t(confirmText)
     );
 
-    let output = [
+    const output = [
       <Button
         design="Emphasized"
         onClick={handleConfirmClicked}

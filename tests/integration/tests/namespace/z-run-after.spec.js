@@ -17,6 +17,8 @@ context('Clean up Namespace', () => {
       searchInPlainTableText: true,
     });
 
+    cy.wait(1000);
+
     cy.get('ui5-table-row').find('.status-badge').contains('Terminating');
   });
 
@@ -30,7 +32,7 @@ context('Clean up Namespace', () => {
     },
     () => {
       cy.get('ui5-table')
-        .contains(Cypress.env('NAMESPACE_NAME'), { timeout: 60000 })
+        .contains(Cypress.env('NAMESPACE_NAME'), { timeout: 180_000 })
         .should('not.exist');
     },
   );

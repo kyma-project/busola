@@ -64,7 +64,7 @@ context('Test Custom Resources', () => {
 
     cy.wait(500).clickGenericListLink('Tclusters');
 
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.wrap(loadFile(TCLUSTER_FILE_NAME)).then((TC_CONFIG) => {
       const TC = JSON.stringify(TC_CONFIG);
@@ -82,7 +82,11 @@ context('Test Custom Resources', () => {
 
     cy.getLeftNav().contains('Custom Resources').click();
 
-    cy.get('ui5-input[id^=search-]:visible').find('input').wait(1000).clear();
+    cy.getStartColumn()
+      .find('ui5-input[id^=search-]:visible')
+      .find('input')
+      .wait(500)
+      .clear();
 
     cy.typeInSearch('cypress');
 
@@ -90,7 +94,11 @@ context('Test Custom Resources', () => {
 
     cy.testMidColumnLayout('Tclusters', false);
 
-    cy.get('ui5-input[id^=search-]:visible').find('input').wait(1000).clear();
+    cy.getStartColumn()
+      .find('ui5-input[id^=search-]:visible')
+      .find('input')
+      .wait(500)
+      .clear();
 
     cy.typeInSearch('cypress');
 
@@ -100,7 +108,8 @@ context('Test Custom Resources', () => {
       .get('ui5-table-row')
       .find('ui5-table-cell')
       .contains('ui5-text', 'tcluster-test')
-      .click();
+      .click()
+      .wait(500);
 
     cy.testEndColumnLayout('tcluster-test', false);
 
@@ -108,7 +117,8 @@ context('Test Custom Resources', () => {
       .get('ui5-table-row')
       .find('ui5-table-cell')
       .contains('ui5-text', 'tcluster-test')
-      .click();
+      .click()
+      .wait(500);
 
     cy.getMidColumn()
       .find('ui5-button[accessible-name="enter-full-screen"]')

@@ -108,7 +108,7 @@ function createResults(context: CommandPaletteContext): Result[] {
   const { resourceCache, tokens, namespace } = context;
   const pods = resourceCache[`${namespace}/pods`] as Pod[];
   if (typeof pods !== 'object') {
-    //@ts-ignore  TODO: handle typein Result
+    //@ts-expect-error  TODO: handle type in Result
     return [{ type: LOADING_INDICATOR }];
   }
 

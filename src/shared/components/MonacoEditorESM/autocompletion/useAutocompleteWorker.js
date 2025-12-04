@@ -3,14 +3,13 @@ import { Uri } from 'monaco-editor';
 import * as monaco from 'monaco-editor';
 import { configureMonacoYaml } from 'monaco-yaml';
 import { useGetSchema } from 'hooks/useGetSchema';
-import { v4 as uuid } from 'uuid';
 import YamlWorker from './yaml.worker.js?worker';
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
 import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 
 window.MonacoEnvironment = {
-  getWorker: function (workerId, label) {
+  getWorker: function (_workerId, label) {
     switch (label) {
       case 'json':
         return new JsonWorker();
@@ -25,17 +24,18 @@ window.MonacoEnvironment = {
   },
 };
 
-const schemas = [];
+// Map to track schemas by schemaId to prevent unbounded growth
+const schemasMap = new Map();
 
 export function useAutocompleteWorker({
-  value,
   schemaId: predefinedSchemaId,
   autocompletionDisabled,
   readOnly,
-  language,
   schema: predefinedSchema,
 }) {
   const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
+  // Use schemaId for URI to ensure same resource types share the same schema URI
+  const schemaUri = `file://kubernetes.io/${schemaId}`;
 
   if (!autocompletionDisabled && !predefinedSchemaId) {
     console.warn(
@@ -62,13 +62,15 @@ export function useAutocompleteWorker({
     const modelUri = Uri.parse(schemaId);
 
     if (schema) {
-      schemas.push({
+      schemasMap.set(schemaId, {
         //by monaco-yaml docs, this is not only uri but also a name that must be unique. Resources with the same uri will share one schema.
-        uri: `file://kubernetes.io/${uuid()}`,
+        uri: schemaUri,
         fileMatch: [String(modelUri)],
         schema: schema || {},
       });
     }
+
+    const schemas = Array.from(schemasMap.values());
 
     configureMonacoYaml(monaco, {
       enableSchemaRequest: false,
@@ -85,8 +87,13 @@ export function useAutocompleteWorker({
     };
   }, [schema, schemaId, readOnly]);
 
+  const cleanupSchema = useCallback(() => {
+    schemasMap.delete(schemaId);
+  }, [schemaId]);
+
   return {
     setAutocompleteOptions,
+    cleanupSchema,
     error,
     loading,
   };

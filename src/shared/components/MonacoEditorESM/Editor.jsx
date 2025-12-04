@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
@@ -37,16 +38,24 @@ export function Editor({
   // prepare autocompletion
   const {
     setAutocompleteOptions,
+    cleanupSchema,
     error: schemaError,
     loading,
   } = useAutocompleteWorker({
-    value,
     schemaId,
     autocompletionDisabled,
     readOnly,
-    language,
     schema,
   });
+
+  // Cleanup schemas on unmount
+  useEffect(() => {
+    return () => {
+      if (cleanupSchema) {
+        cleanupSchema();
+      }
+    };
+  }, [cleanupSchema]);
 
   // Initialize editor instance
   const { editorInstance, divRef, descriptor } = useCreateEditor({

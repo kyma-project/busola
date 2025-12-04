@@ -24,7 +24,6 @@ export function KeyValueField({
   required,
   disableOnEdit,
   editMode,
-  accessibleName,
   ...props
 }) {
   const { t } = useTranslation();
@@ -60,6 +59,7 @@ export function KeyValueField({
     actions = [
       ...actions,
       <Button
+        key="button-encode"
         design="Transparent"
         icon={valuesEncoded ? 'show' : 'hide'}
         onClick={toggleEncoding}

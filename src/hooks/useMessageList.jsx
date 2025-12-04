@@ -13,7 +13,7 @@ export const EVENT_MESSAGE_TYPE = {
   WARNING: { key: 'Warning', text: 'warnings' },
 };
 
-export let RESOURCE_PATH = {
+export const RESOURCE_PATH = {
   Certificate: 'certificates',
   ConfigMap: 'configmaps',
   CronJob: 'cronjobs',

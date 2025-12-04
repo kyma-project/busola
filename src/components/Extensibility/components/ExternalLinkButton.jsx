@@ -13,7 +13,12 @@ export function ExternalLinkButton({ structure }) {
       design={structure?.emphasized ? 'Emphasized' : 'Default'}
       inline={true}
       onClick={() => {
-        window.open(structure?.link, '_blank');
+        const newWindow = window.open(
+          structure?.link,
+          '_blank',
+          'noopener, noreferrer',
+        );
+        if (newWindow) newWindow.opener = null;
       }}
     >
       {structure?.name ?? t('common.buttons.learn-more')}

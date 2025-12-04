@@ -55,14 +55,14 @@ export default function KymaCompanion() {
 
   const handleCloseChat = () => {
     if (getShowFeedbackStorageKey() === FEEDBACK_SHOW_TYPE.NO_SHOW) {
-      setShowCompanion({ show: false, fullScreen: false });
+      setShowCompanion({ show: false, fullScreen: false, useJoule: false });
       return;
     }
     const promptsNumber = chatHistory[0].messages.filter(
       (message) => message.author === Author.USER,
     ).length;
     if (promptsNumber > 4) setIsFeedbackDialogOpen(true);
-    else setShowCompanion({ show: false, fullScreen: false });
+    else setShowCompanion({ show: false, fullScreen: false, useJoule: false });
   };
 
   useEffect(() => {
@@ -112,6 +112,7 @@ export default function KymaCompanion() {
                     setShowCompanion({
                       show: true,
                       fullScreen: !showCompanion.fullScreen,
+                      useJoule: false,
                     })
                   }
                 />

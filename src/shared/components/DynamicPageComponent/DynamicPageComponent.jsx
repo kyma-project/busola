@@ -164,22 +164,26 @@ export const DynamicPageComponent = ({
           showEdit: null,
         });
 
+    const searchField = searchParams.get('search');
+
     if (layoutCloseUrl) {
-      navigate(
-        layoutCloseUrl +
-          (editColumn ? `?showEdit=${!!layoutColumn.showEdit}` : ''),
-      );
+      const showEdit = editColumn ? `showEdit=${!!layoutColumn.showEdit}&` : '';
+      const showSearch = searchField ? `search=${searchField}` : '';
+      const link = `${layoutCloseUrl}?${showEdit}${showSearch}`;
+      navigate(link);
       return;
     }
 
-    const link = `${window.location.pathname.slice(
+    const linkBase = window.location.pathname.slice(
       0,
       window.location.pathname.lastIndexOf('/'),
-    )}${
+    );
+    const layoutType =
       layoutNumber === 'midColumn' || layoutColumn?.showCreate?.resourceType
         ? ''
-        : '?layout=TwoColumnsMidExpanded'
-    }`;
+        : 'layout=TwoColumnsMidExpanded&';
+    const showSearch = searchField ? `search=${searchField}` : '';
+    const link = `${linkBase}?${layoutType}${showSearch}`;
     navigate(link);
   };
 

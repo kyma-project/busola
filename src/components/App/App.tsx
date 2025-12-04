@@ -132,9 +132,9 @@ export default function App() {
   return (
     <SplitterLayout id="splitter-layout">
       <SplitterElement
-        resizable={showCompanion.show}
+        resizable={showCompanion.show && !showCompanion.useJoule}
         size={
-          showCompanion.show
+          showCompanion.show && !showCompanion.useJoule
             ? showCompanion.fullScreen
               ? '0%'
               : '70%'
@@ -149,7 +149,7 @@ export default function App() {
               manualKubeConfigId.formOpen &&
               createPortal(
                 <Dialog open={true}>
-                  {/*@ts-ignore*/}
+                  {/*@ts-expect-error Type mismatch between js and ts*/}
                   <ResourceForm.Single
                     formElementRef={authFormRef}
                     createResource={updateManualKubeConfigIdState}
@@ -164,7 +164,7 @@ export default function App() {
                         {t('clusters.add.title')}
                       </Button>
                     </div>
-                    {/*@ts-ignore*/}
+                    {/*@ts-expect-error Type mismatch between js and ts*/}
                   </ResourceForm.Single>
                 </Dialog>,
                 document.body,
@@ -220,7 +220,7 @@ export default function App() {
           </div>
         </div>
       </SplitterElement>
-      {showCompanion.show ? (
+      {showCompanion.show && !showCompanion.useJoule ? (
         <SplitterElement
           resizable={!showCompanion.fullScreen}
           size={showCompanion.fullScreen ? '100%' : '30%'}
