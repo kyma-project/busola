@@ -335,7 +335,7 @@ function createResults(context: CommandPaletteContext): Result[] {
     }
   }
 
-  let resources = resourceCache[resourceType];
+  let resources = resourceCache[resourceType] || [];
 
   if (typeof resources !== 'object') {
     //@ts-expect-error TODO: handle type in Result
@@ -373,13 +373,13 @@ function createResults(context: CommandPaletteContext): Result[] {
     //special case for namespace overview
     if (resourceType === 'namespaces' && namespacesOverviewCase) {
       return [
-        ...resources?.map((item) =>
+        ...resources.map((item) =>
           makeListItem(item, matchedNode, context, false),
         ),
       ];
     }
     return [
-      ...resources?.map((item) =>
+      ...resources.map((item) =>
         makeListItem(item, matchedNode, context, true),
       ),
     ];
