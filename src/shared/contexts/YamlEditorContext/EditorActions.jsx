@@ -80,6 +80,7 @@ export function EditorActions({
           lineNumber: match.range.startLineNumber,
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         hide
           ? editor.trigger('fold', 'editor.fold')
           : editor.trigger('unfold', 'editor.unfold');
@@ -113,6 +114,7 @@ export function EditorActions({
         <Button
           onClick={() => {
             onRevert();
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             !visible ? hideReadOnlyLines() : showReadOnlyLines();
           }}
         >
