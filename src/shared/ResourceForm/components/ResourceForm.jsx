@@ -11,7 +11,7 @@ import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
 import { K8sNameField, KeyValueField } from '../fields';
 import jp from 'jsonpath';
-import { Button, Form, FormItem } from '@ui5/webcomponents-react';
+import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { useAtom, useAtomValue } from 'jotai';
