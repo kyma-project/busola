@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
-import { Uri } from 'monaco-editor';
 import * as monaco from 'monaco-editor';
+import { Uri } from 'monaco-editor';
 import { configureMonacoYaml } from 'monaco-yaml';
 import { useGetSchema } from 'hooks/useGetSchema';
 import YamlWorker from './yaml.worker.js?worker';
@@ -33,7 +33,8 @@ export function useAutocompleteWorker({
   readOnly,
   schema: predefinedSchema,
 }) {
-  const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
+  const [randomID] = useState(() => Math.random().toString());
+  const [schemaId] = useState(predefinedSchemaId || randomID);
   // Use schemaId for URI to ensure same resource types share the same schema URI
   const schemaUri = `file://kubernetes.io/${schemaId}`;
 
