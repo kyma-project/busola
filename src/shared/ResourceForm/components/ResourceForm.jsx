@@ -11,7 +11,7 @@ import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
 import { K8sNameField, KeyValueField } from '../fields';
 import jp from 'jsonpath';
-import { Button, Form, FormItem } from '@ui5/webcomponents-react';
+import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { useAtom, useAtomValue } from 'jotai';
@@ -256,7 +256,7 @@ export function ResourceForm({
   const { navigateSafely } = useFormNavigation();
   const [resetBtnClicked, setResetBtnClicked] = useState(false);
 
-  const handleReset = () => {
+  const handleRevert = () => {
     setResetBtnClicked(true);
     if (isResourceEdited?.isEdited) {
       setIsFormOpen({ ...isFormOpen, leavingForm: true });
@@ -269,12 +269,6 @@ export function ResourceForm({
       else setResource(initialResource);
     });
   };
-
-  const renderResetButton = (
-    <Button onClick={handleReset}>
-      {isEdit ? t('common.buttons.revert') : t('common.buttons.reset')}
-    </Button>
-  );
 
   return (
     <section className={classnames('resource-form', className)}>
@@ -298,7 +292,6 @@ export function ResourceForm({
           headerActions={
             <>
               {actions}
-              {renderResetButton}
               <EditorActions
                 val={convertedResource}
                 editor={actionsEditor}
@@ -306,6 +299,9 @@ export function ResourceForm({
                 saveHidden
                 searchDisabled={yamlSearchDisabled || mode === 'MODE_FORM'}
                 hideDisabled={yamlHideDisabled || mode === 'MODE_FORM'}
+                revertHidden={false}
+                onRevert={handleRevert}
+                resetBtnClicked={resetBtnClicked}
               />
             </>
           }
