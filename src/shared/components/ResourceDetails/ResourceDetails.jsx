@@ -283,6 +283,7 @@ function Resource({
 
   const actions = readOnly ? null : (
     <>
+      {headerActions}
       <Suspense fallback={<Spinner />}>
         <Injections
           destination={resourceType}
@@ -290,7 +291,6 @@ function Resource({
           root={resource}
         />
       </Suspense>
-      {headerActions}
       {resourceHeaderActions.map((resourceAction) => resourceAction(resource))}
       {!disableDelete && (
         <>
