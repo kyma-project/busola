@@ -12,35 +12,23 @@ import { useContext, useState } from 'react';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { HintButton } from 'shared/components/HintButton/HintButton';
-
-const ListElements = ({ sources }: { sources: string[] }) => {
-  const { t } = useTranslation();
-
-  if (!sources.length) {
-    return (
-      <ListItemStandard
-        text={t('modules.community.source-yaml.no-source-yaml')}
-      />
-    );
-  }
-  return (
-    <>
-      {sources.map((sourceYaml, ind) => (
-        <ListItemStandard key={`${ind}-${sourceYaml}`}>
-          <Link design="Default" href={sourceYaml} target="_blank">
-            {sourceYaml}
-          </Link>
-        </ListItemStandard>
-      ))}
-    </>
-  );
-};
+import { CommunityModuleContext } from '../providers/CommunityModuleProvider';
 
 export const CommunityModulesSourcesList = () => {
   const { t } = useTranslation();
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
+  const {
+    installedCommunityModules,
+    installedCommunityModuleTemplates,
+    notInstalledCommunityModuleTemplates,
+  } = useContext(CommunityModuleContext);
+  console.log('test-modules: ', {
+    installedCommunityModules,
+    installedCommunityModuleTemplates,
+    notInstalledCommunityModuleTemplates,
+  });
   const [showTitleDescription, setShowTitleDescription] = useState(false);
 
   const getSources = () => {
@@ -77,9 +65,10 @@ export const CommunityModulesSourcesList = () => {
       }
     >
       <List
-        // TODO: Delete will be implemented in the next task.
-        onItemDelete={(e) => console.log('DELETE', e)}
-        selectionMode="None" // change to => 'Delete' once deleting is implemented
+        onItemDelete={(e) =>
+          onSourceDelete(e.detail.item.textContent, communityModuleTemplates)
+        }
+        selectionMode="Delete"
         separators="Inner"
         className="list-top-separator"
       >
@@ -90,5 +79,35 @@ export const CommunityModulesSourcesList = () => {
         )}
       </List>
     </Card>
+  );
+};
+
+const onSourceDelete = (sourceName: string, communityModuleTemplates: any) => {
+  const templatesToDelete = communityModuleTemplates.items.filter(
+    (item: any) => item?.metadata?.annotations?.source === sourceName,
+  );
+  console.log('test-Del: ', templatesToDelete);
+};
+
+const ListElements = ({ sources }: { sources: string[] }) => {
+  const { t } = useTranslation();
+
+  if (!sources.length) {
+    return (
+      <ListItemStandard
+        text={t('modules.community.source-yaml.no-source-yaml')}
+      />
+    );
+  }
+  return (
+    <>
+      {sources.map((sourceYaml, ind) => (
+        <ListItemStandard key={`${ind}-${sourceYaml}`}>
+          <Link design="Default" href={sourceYaml} target="_blank">
+            {sourceYaml}
+          </Link>
+        </ListItemStandard>
+      ))}
+    </>
   );
 };
