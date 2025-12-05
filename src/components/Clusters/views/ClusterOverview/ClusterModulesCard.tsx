@@ -107,10 +107,7 @@ export default function ClusterModulesCard() {
               : null,
           ]}
           additionalContent={
-            <Button
-              design="Emphasized"
-              onClick={() => navigate(clusterUrl('kymamodules'))}
-            >
+            <Button onClick={() => navigate(clusterUrl('kymamodules'))}>
               {t('kyma-modules.modify-modules')}
             </Button>
           }
