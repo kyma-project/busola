@@ -9,7 +9,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useUrl } from 'hooks/useUrl';
-import { ProgressIndicatorWithPercentage } from 'shared/components/ProgressIndicatorWithPercentage/ProgressIndicatorWithPercentage';
+import { ProgressIndicatorWithTooltip } from 'shared/components/ProgressIndicatorWithTooltip/ProgressIndicatorWithTooltip';
 import { Link } from 'shared/components/Link/Link';
 
 export function ClusterNodes({ data, error, loading }) {
@@ -67,9 +67,8 @@ export function ClusterNodes({ data, error, loading }) {
       </Link>,
       cpu ? (
         <>
-          <ProgressIndicatorWithPercentage
-            dataBarColor="var(--sapChart_Bad)"
-            leftTitle={cpu.percentage}
+          <ProgressIndicatorWithTooltip
+            displayValue={cpu.percentage}
             value={cpu.percentageValue}
             tooltip={{
               content: t('cluster-overview.tooltips.cpu-used-percentage', {
@@ -84,8 +83,8 @@ export function ClusterNodes({ data, error, loading }) {
         EMPTY_TEXT_PLACEHOLDER
       ),
       memory ? (
-        <ProgressIndicatorWithPercentage
-          leftTitle={memory.percentage}
+        <ProgressIndicatorWithTooltip
+          displayValue={memory.percentage}
           value={memory.percentageValue}
           tooltip={{
             content: t('cluster-overview.tooltips.memory-used-percentage', {
@@ -93,7 +92,6 @@ export function ClusterNodes({ data, error, loading }) {
             }),
             position: 'bottom',
           }}
-          dataBarColor="var(--sapChart_Good)"
           accessibleName="Memory usage"
         />
       ) : (
