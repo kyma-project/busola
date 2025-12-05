@@ -363,11 +363,7 @@ export const CommunityModulesList = ({
         actions={actions as any}
         customRowClick={handleClickResource}
         extraHeaderContent={[
-          <Button
-            key="add-community-module"
-            design="Default"
-            onClick={handleShowAddModule}
-          >
+          <Button key="add-community-module" onClick={handleShowAddModule}>
             {t('common.buttons.add')}
           </Button>,
         ]}

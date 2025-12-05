@@ -60,11 +60,7 @@ export const EmptyListComponent = ({
         subtitle={<span className="sap-margin-top-small">{subtitle}</span>}
       >
         <div className="emptyListComponent__buttons">
-          {showButton && (
-            <Button design="Default" onClick={onClick}>
-              {buttonText}
-            </Button>
-          )}
+          {showButton && <Button onClick={onClick}>{buttonText}</Button>}
           {url && (
             <ExternalLink
               text="Learn More"
