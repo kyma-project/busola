@@ -191,11 +191,12 @@ export const AddSourceYamls = () => {
         accessibleName="add-yamls"
         design="Emphasized"
         key="add-yamls"
+        slot="action"
         onClick={() => {
           setShowAddSource(true);
         }}
       >
-        {t('modules.community.source-yaml.add-source-yaml')}
+        {t('common.buttons.add')}
       </Button>
 
       {showAddSource &&
