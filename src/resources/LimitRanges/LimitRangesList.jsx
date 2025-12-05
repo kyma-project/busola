@@ -54,7 +54,6 @@ export function LimitRangesList(props) {
     <ToolbarButton
       key={`create-limit-ranges`}
       data-testid={`create-limit-ranges`}
-      design="Default"
       onClick={handleShowCreate}
       text={t('components.resources-list.create')}
     />
