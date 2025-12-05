@@ -38,13 +38,13 @@ export default function JouleChat() {
 
     const bridgeImpl = {
       getApplicationContext: () => {
-        return resourceRef.current;
-      },
-      getClusterAuth: () => {
+        const resourceContext = resourceRef.current || {};
         const clusterData =
           clusterRef.current?.currentContext?.cluster?.cluster;
         const auth = authDataRef.current;
+
         return {
+          ...resourceContext,
           clusterUrl: clusterData?.server,
           certificateAuthorityData: clusterData?.['certificate-authority-data'],
           auth: {
