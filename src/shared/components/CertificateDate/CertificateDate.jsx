@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { FormattedDatetime } from 'shared/components/FormattedDate/FormattedDate';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Icon } from '@ui5/webcomponents-react';
+import useDateNow from 'shared/hooks/dateNow';
 
 export function CertificateDate({ date, lang }) {
   const { t } = useTranslation();
-  const currentDate = Date.now();
+  const currentDate = useDateNow(10_000);
   const dayInMilliseconds = 1000 * 60 * 60 * 24;
   const dateDifference = (Date.parse(date) - currentDate) / dayInMilliseconds;
   const EXPIRATION_LIMIT = 30;
