@@ -1,9 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import {
+  Button,
   Card,
+  FlexBox,
+  FlexBoxDirection,
   Link,
   List,
   ListItemStandard,
+  MessageBox,
+  Text,
   Title,
 } from '@ui5/webcomponents-react';
 import 'components/Modules/community/components/CommunityModulesSourcesList.scss';
@@ -13,23 +18,19 @@ import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTempl
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 import { CommunityModuleContext } from '../providers/CommunityModuleProvider';
+import { createPortal } from 'react-dom';
 
 export const CommunityModulesSourcesList = () => {
   const { t } = useTranslation();
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
-  const {
-    installedCommunityModules,
-    installedCommunityModuleTemplates,
-    notInstalledCommunityModuleTemplates,
-  } = useContext(CommunityModuleContext);
-  console.log('test-modules: ', {
-    installedCommunityModules,
-    installedCommunityModuleTemplates,
-    notInstalledCommunityModuleTemplates,
-  });
+  const { notInstalledCommunityModuleTemplates } = useContext(
+    CommunityModuleContext,
+  );
+
   const [showTitleDescription, setShowTitleDescription] = useState(false);
+  const [sourceToDelete, setSourceToDelete] = useState('');
 
   const getSources = () => {
     const sources = (communityModuleTemplates?.items ?? [])
@@ -65,9 +66,7 @@ export const CommunityModulesSourcesList = () => {
       }
     >
       <List
-        onItemDelete={(e) =>
-          onSourceDelete(e.detail.item.textContent, communityModuleTemplates)
-        }
+        onItemDelete={(e) => setSourceToDelete(e.detail.item.textContent)}
         selectionMode="Delete"
         separators="Inner"
         className="list-top-separator"
@@ -78,15 +77,16 @@ export const CommunityModulesSourcesList = () => {
           <ListElements sources={getSources()} />
         )}
       </List>
+      {sourceToDelete &&
+        createPortal(
+          <DeleteMessage
+            sourceToDelete={sourceToDelete}
+            notInstalledModuleTemplates={notInstalledCommunityModuleTemplates}
+          />,
+          document.body,
+        )}
     </Card>
   );
-};
-
-const onSourceDelete = (sourceName: string, communityModuleTemplates: any) => {
-  const templatesToDelete = communityModuleTemplates.items.filter(
-    (item: any) => item?.metadata?.annotations?.source === sourceName,
-  );
-  console.log('test-Del: ', templatesToDelete);
 };
 
 const ListElements = ({ sources }: { sources: string[] }) => {
@@ -109,5 +109,78 @@ const ListElements = ({ sources }: { sources: string[] }) => {
         </ListItemStandard>
       ))}
     </>
+  );
+};
+
+const DeleteMessage = ({
+  sourceToDelete,
+  notInstalledModuleTemplates,
+}: {
+  sourceToDelete: string;
+  notInstalledModuleTemplates: any;
+}) => {
+  const { t } = useTranslation();
+  const templatesToDelete = notInstalledModuleTemplates.items.filter(
+    (item: any) => item?.metadata?.annotations?.source === sourceToDelete,
+  );
+  return (
+    <MessageBox
+      open={true}
+      className="sourceurl-messagebox"
+      titleText={'Remove Source YAML'}
+      actions={[
+        <Button
+          accessibleName="add-yamls"
+          design="Emphasized"
+          key="add-yamls"
+          onClick={() => {}}
+        >
+          {'Remove'}
+        </Button>,
+        <Button
+          accessibleName="cancel-add-yamls"
+          design="Transparent"
+          key="cancel-add-yamls"
+          onClick={() => {}}
+        >
+          {t('common.buttons.cancel')}
+        </Button>,
+      ]}
+    >
+      <FlexBox
+        direction={FlexBoxDirection.Column}
+        gap={'0.5rem'}
+        className="sap-margin-top-small"
+      >
+        <List
+          separators="None"
+          header={
+            <>
+              <Text className="to-add-list-header">
+                {`Remove source YAML ${sourceToDelete}?`}
+              </Text>
+              <Text className="to-add-list-header">
+                {
+                  "Your previously installed modules will remain available, but you won't be able to add any of the following:"
+                }
+              </Text>
+            </>
+          }
+        >
+          {templatesToDelete.map((template: any, index: number) => (
+            <ListItemStandard key={`${index}-${template?.metadata?.name}`}>
+              <Text>{template?.metadata?.name}</Text>
+            </ListItemStandard>
+          ))}
+          {/* TODO: Remove hardcoded items after testing: */}
+          <ListItemStandard>
+            <Text>{'docker-registry-0.9.0 '}</Text>
+          </ListItemStandard>
+          <ListItemStandard>
+            <Text>{'cap-operator-0.15.0'}</Text>
+          </ListItemStandard>
+        </List>
+      </FlexBox>
+    </MessageBox>
   );
 };
