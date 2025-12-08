@@ -39,6 +39,7 @@ export default defineConfig(
         'react-hooks/preserve-manual-memoization': 'warn',
         'react-hooks/immutability': 'warn',
         'react-hooks/static-components': 'warn',
+        'react-hooks/purity': 'warn',
         'react-hooks/use-memo': 'warn',
 
         // TypeScript
@@ -52,10 +53,9 @@ export default defineConfig(
           },
         ],
         '@typescript-eslint/no-empty-object-type': 'off',
-        '@typescript-eslint/no-non-null-asserted-optional-chain': 'warn',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
         '@typescript-eslint/no-unused-expressions': 'warn',
-        '@typescript-eslint/ban-ts-comment': 'warn',
+        '@typescript-eslint/ban-ts-comment': 'error',
         '@typescript-eslint/no-require-imports': 'warn',
         // Misc
         'no-unused-vars': [
@@ -72,7 +72,6 @@ export default defineConfig(
         'no-empty': 'warn',
         'no-irregular-whitespace': 'warn',
         'no-prototype-builtins': 'warn',
-        'no-unsafe-optional-chaining': 'warn',
         'prefer-const': 'error',
       },
     },

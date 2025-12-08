@@ -19,6 +19,9 @@ export function EditorActions({
   isProtected,
   searchDisabled = false,
   hideDisabled = false,
+  onRevert,
+  revertHidden = true,
+  resetBtnClicked,
 }) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
@@ -36,6 +39,16 @@ export function EditorActions({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor]);
+  useEffect(() => {
+    if (editor) {
+      if (!visible) {
+        setTimeout(() => hideReadOnlyLines(), 500);
+      } else {
+        setTimeout(() => showReadOnlyLines(), 500);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetBtnClicked]);
 
   const openSearch = () => {
     // focus is required for search control to appear
@@ -69,6 +82,7 @@ export function EditorActions({
           lineNumber: match.range.startLineNumber,
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         hide
           ? editor.trigger('fold', 'editor.fold')
           : editor.trigger('unfold', 'editor.unfold');
@@ -98,6 +112,17 @@ export function EditorActions({
 
   return (
     <section>
+      {!revertHidden && (
+        <Button
+          onClick={() => {
+            onRevert();
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            !visible ? hideReadOnlyLines() : showReadOnlyLines();
+          }}
+        >
+          {t('common.buttons.revert')}
+        </Button>
+      )}
       <Button
         design="Transparent"
         icon="download"

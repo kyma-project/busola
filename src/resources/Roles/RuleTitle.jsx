@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { isRuleInvalid, hasRuleRequiredProperties } from './helpers';
+import { hasRuleRequiredProperties, isRuleInvalid } from './helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Icon } from '@ui5/webcomponents-react';
 
-export function RuleTitle({ rule, i }) {
+const Alert = ({ tooltipContent }) => {
   const { t } = useTranslation();
 
-  const Alert = ({ tooltipContent }) => (
+  return (
     <Tooltip position="right" content={tooltipContent} delay={0}>
       <Icon
         className="bsl-color--warning"
@@ -15,6 +15,10 @@ export function RuleTitle({ rule, i }) {
       />
     </Tooltip>
   );
+};
+
+export function RuleTitle({ rule, i }) {
+  const { t } = useTranslation();
 
   if (isRuleInvalid(rule)) {
     return (

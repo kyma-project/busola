@@ -45,6 +45,7 @@ import {
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
+import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -384,6 +385,7 @@ export default function CommunityModulesAddModule(props: any) {
                 url={'https://kyma-project.io/#/community-modules/user/README'}
               />
             </MessageStrip>
+            <CommunityModulesSourcesList />
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
             ) : (

@@ -1,0 +1,15 @@
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+
+  &__title {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+}
+.list-top-separator {
+  border-top: 1px solid var(--sapGroup_TitleBorderColor);
+}

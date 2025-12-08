@@ -6,12 +6,76 @@ import {
   findInitialValues,
 } from '../views/EditCluster/EditCluster';
 import { getUserIndex } from '../shared';
-import { Tokens } from 'shared/components/Tokens';
 import {
   Kubeconfig,
   KubeconfigNonOIDCAuthToken,
   KubeconfigOIDCAuth,
 } from 'types';
+import { Tokens } from 'shared/components/Tokens';
+
+const TokenData = ({ token }: { token: string }) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
+        {`${t('clusters.token')}:`}
+      </p>
+      {token && <div className="cluster-preview__token">{token}</div>}
+    </>
+  );
+};
+
+const OidcData = ({
+  issuerUrl,
+  clientId,
+  clientSecret,
+  extraScopes,
+}: {
+  issuerUrl?: string;
+  clientId?: string;
+  clientSecret?: string;
+  extraScopes?: string[];
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {issuerUrl && (
+        <>
+          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
+            {t('clusters.labels.issuer-url')}:
+          </p>
+          <div>{issuerUrl}</div>
+        </>
+      )}
+      {clientId && (
+        <>
+          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
+            {t('clusters.labels.client-id')}:
+          </p>
+          <div>{clientId}</div>
+        </>
+      )}
+      {clientSecret && (
+        <>
+          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
+            {t('clusters.labels.client-secret')}:
+          </p>
+          <div>{clientSecret}</div>
+        </>
+      )}
+      {extraScopes && (
+        <>
+          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
+            {t('clusters.labels.scopes')}:
+          </p>
+          {<Tokens tokens={extraScopes} />}
+        </>
+      )}
+    </>
+  );
+};
 
 interface ClusterPreviewProps {
   kubeconfig: Kubeconfig;
@@ -34,76 +98,22 @@ export function ClusterPreview({
     ? 'oidc'
     : 'token';
 
-  const OidcData = () => {
-    const issuerUrl = findInitialValue(
-      kubeconfig,
-      'oidc-issuer-url',
-      userIndex,
-    );
-    const clientId = findInitialValue(kubeconfig, 'oidc-client-id', userIndex);
-    const clientSecret = findInitialValue(
-      kubeconfig,
-      'oidc-client-secret',
-      userIndex,
-    );
-    const extraScopes = findInitialValues(
-      kubeconfig,
-      'oidc-extra-scope',
-      userIndex,
-    );
+  const issuerUrl = findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex);
+  const clientId = findInitialValue(kubeconfig, 'oidc-client-id', userIndex);
+  const clientSecret = findInitialValue(
+    kubeconfig,
+    'oidc-client-secret',
+    userIndex,
+  );
+  const extraScopes = findInitialValues(
+    kubeconfig,
+    'oidc-extra-scope',
+    userIndex,
+  );
 
-    return (
-      <>
-        {issuerUrl && (
-          <>
-            <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-              {t('clusters.labels.issuer-url')}:
-            </p>
-            <div>{issuerUrl}</div>
-          </>
-        )}
-        {clientId && (
-          <>
-            <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-              {t('clusters.labels.client-id')}:
-            </p>
-            <div>{clientId}</div>
-          </>
-        )}
-        {clientSecret && (
-          <>
-            <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-              {t('clusters.labels.client-secret')}:
-            </p>
-            <div>{clientSecret}</div>
-          </>
-        )}
-        {extraScopes && (
-          <>
-            <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-              {t('clusters.labels.scopes')}:
-            </p>
-            {<Tokens tokens={extraScopes} />}
-          </>
-        )}
-      </>
-    );
-  };
-
-  const TokenData = () => {
-    const token = (
-      kubeconfig?.users?.[userIndex]?.user as KubeconfigNonOIDCAuthToken
-    )?.token;
-
-    return (
-      <>
-        <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-          {`${t('clusters.token')}:`}
-        </p>
-        {token && <div className="cluster-preview__token">{token}</div>}
-      </>
-    );
-  };
+  const token = (
+    kubeconfig?.users?.[userIndex]?.user as KubeconfigNonOIDCAuthToken
+  )?.token;
 
   return (
     <div className="cluster-preview">
@@ -138,7 +148,16 @@ export function ClusterPreview({
 
         <div className="cluster-preview__content sap-margin-top-small sap-margin-bottom-tiny">
           <div className="cluster-preview__auth">
-            {authenticationType === 'token' ? <TokenData /> : <OidcData />}
+            {authenticationType === 'token' ? (
+              <TokenData token={token} />
+            ) : (
+              <OidcData
+                issuerUrl={issuerUrl}
+                clientId={clientId}
+                clientSecret={clientSecret}
+                extraScopes={extraScopes}
+              />
+            )}
           </div>
           <Button
             design="Transparent"
