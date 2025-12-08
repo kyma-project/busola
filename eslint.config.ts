@@ -38,8 +38,6 @@ export default defineConfig(
         'react-hooks/set-state-in-effect': 'warn',
         'react-hooks/preserve-manual-memoization': 'warn',
         'react-hooks/immutability': 'warn',
-        'react-hooks/static-components': 'warn',
-        'react-hooks/purity': 'warn',
         'react-hooks/use-memo': 'warn',
 
         // TypeScript
