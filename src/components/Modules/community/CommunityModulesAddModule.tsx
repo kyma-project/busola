@@ -45,7 +45,7 @@ import {
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
-import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList';
+import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList/CommunityModulesSourcesList';
 
 type VersionDisplayInfo = {
   moduleTemplate: {

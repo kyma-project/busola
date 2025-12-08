@@ -250,6 +250,7 @@ common:
     learn-more: Learn More
     ok: OK
     place: Place
+    remove: Remove
     remove-all: Remove all
     replace: Replace
     reset: Reset
@@ -966,6 +967,8 @@ modules:
       namespace-description: Namespace where ModuleTemplates are applied. If left empty, the namespace defined in the ModuleTemplates is used. Resources cannot be created in the kyma-system namespace.
       no-module-templates: No ModuleTemplates to add.
       no-source-yaml: No source YAML added.
+      remove-source-yaml: Remove Source YAML
+      remove-source-yaml-desc: Your previously installed modules will remain available, but you won't be able to add any of the following
       source-yaml-url: Source YAML URL
       source-yamls-header: Source YAMLs
     title: Community Modules
