@@ -49,6 +49,9 @@ export const CurrentCRDVersion = (resource) => {
   return (
     <UI5Panel
       key="crd-version"
+      accessibleName={`${t(
+        'custom-resource-definitions.subtitle.version',
+      )} ${storageVersion.name} panel`}
       title={
         <>
           <Title level="H4" size="H4">{`${t(

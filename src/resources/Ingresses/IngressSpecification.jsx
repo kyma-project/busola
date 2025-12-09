@@ -10,7 +10,10 @@ export const IngressSpecification = ({ resource }) => {
 
   return (
     <>
-      <UI5Panel title={t('common.headers.specification')}>
+      <UI5Panel
+        title={t('common.headers.specification')}
+        accessibleName={`${t('common.headers.specification')} panel`}
+      >
         {resource.spec.ingressClassName && (
           <LayoutPanelRow
             name={t('ingresses.labels.ingress-class-name')}

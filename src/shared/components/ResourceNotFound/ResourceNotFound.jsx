@@ -11,20 +11,15 @@ export const ResourceNotFound = ({
   layoutNumber,
 }) => {
   const { t } = useTranslation();
+  const title = customMessage
+    ? customMessage
+    : t('components.resource-not-found.messages.not-found', {
+        resource,
+      });
   return (
     <DynamicPageComponent
       title=""
-      content={
-        <UI5Panel
-          title={
-            customMessage
-              ? customMessage
-              : t('components.resource-not-found.messages.not-found', {
-                  resource,
-                })
-          }
-        />
-      }
+      content={<UI5Panel title={title} accessibleName={`${title} panel`} />}
       layoutCloseUrl={layoutCloseUrl}
       layoutNumber={layoutNumber}
     />

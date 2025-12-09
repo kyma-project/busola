@@ -34,6 +34,7 @@ export default function ContainersData({ type, containers, statuses }) {
       <UI5Panel
         disableMargin
         title={container.name}
+        accessibleName={`${container.name} panel`}
         headerActions={
           <Button
             accessibleName={'view-logs-for-' + container.name}
@@ -86,7 +87,7 @@ export default function ContainersData({ type, containers, statuses }) {
   };
 
   return (
-    <UI5Panel title={type}>
+    <UI5Panel title={type} accessibleName={`${type} panel`}>
       {containers.map((container) => (
         <ContainerComponent
           key={container.name}

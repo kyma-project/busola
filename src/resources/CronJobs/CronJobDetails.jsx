@@ -70,6 +70,7 @@ export function CronJobDetails(props) {
     <UI5Panel
       key="specification"
       title={t('common.headers.specification')}
+      accessibleName={`${t('common.headers.specification')} panel`}
       keyComponent="specification-panel"
     >
       <LayoutPanelRow

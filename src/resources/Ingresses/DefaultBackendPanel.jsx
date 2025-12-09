@@ -15,7 +15,10 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
   );
 
   return (
-    <UI5Panel title={t('ingresses.labels.default-backend')}>
+    <UI5Panel
+      title={t('ingresses.labels.default-backend')}
+      accessibleName={`${t('ingresses.labels.default-backend')} panel`}
+    >
       {backend.service && (
         <>
           {backend.service.name && (

@@ -9,7 +9,11 @@ export const CRDSpecification = ({ spec }: { spec: any }) => {
   const { t } = useTranslation();
 
   return (
-    <UI5Panel key="crd-specification" title={t('common.headers.specification')}>
+    <UI5Panel
+      key="crd-specification"
+      title={t('common.headers.specification')}
+      accessibleName={`${t('common.headers.specification')} panel`}
+    >
       <LayoutPanelRow
         name={t('custom-resource-definitions.headers.scope')}
         value={spec?.scope}
@@ -23,7 +27,10 @@ export const CRDSpecification = ({ spec }: { spec: any }) => {
         value={spec?.group}
       />
 
-      <UI5Panel title={t('custom-resource-definitions.headers.conversion')}>
+      <UI5Panel
+        title={t('custom-resource-definitions.headers.conversion')}
+        accessibleName={`${t('custom-resource-definitions.headers.conversion')} panel`}
+      >
         {spec.conversion && (
           <>
             <LayoutPanelRow

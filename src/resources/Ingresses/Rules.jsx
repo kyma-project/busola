@@ -78,7 +78,11 @@ export const Rules = ({ rules }) => {
   return (
     <>
       {rules.map((rule, i) => (
-        <UI5Panel title={t('ingresses.labels.rules')}>
+        <UI5Panel
+          title={t('ingresses.labels.rules')}
+          key={`rules-panel-${i}`}
+          accessibleName={`${t('ingresses.labels.rules')} panel`}
+        >
           {rule.host && (
             <LayoutPanelRow
               name={t('ingresses.labels.host')}

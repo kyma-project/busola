@@ -169,6 +169,7 @@ const ContainersLogs = ({ params }) => {
       content={
         <UI5Panel
           title={t('pods.labels.logs')}
+          accessibleName={`${t('pods.labels.logs')} panel`}
           headerActions={
             <>
               <Label for="context-chooser">

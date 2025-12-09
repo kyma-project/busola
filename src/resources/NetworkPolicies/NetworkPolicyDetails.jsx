@@ -29,6 +29,7 @@ export function NetworkPolicyDetails(props) {
     <UI5Panel
       key="specification"
       title={t('common.headers.specification')}
+      accessibleName={`${t('common.headers.specification')} panel`}
       keyComponent="specification-panel"
     >
       <LayoutPanelRow
@@ -45,6 +46,7 @@ export function NetworkPolicyDetails(props) {
       <UI5Panel
         key={`ingress${idx}`}
         title={t('network-policies.headers.ingress') + ` #${idx + 1}`}
+        accessibleName={`${t('network-policies.headers.ingress')} #${idx + 1} panel`}
         keyComponent={idx}
       >
         <NetworkPolicyPeers
@@ -66,6 +68,7 @@ export function NetworkPolicyDetails(props) {
       <UI5Panel
         key={`egress${idx}`}
         title={t('network-policies.headers.egress') + ` #${idx + 1}`}
+        accessibleName={`${t('network-policies.headers.egress')} #${idx + 1} panel`}
         keyComponent={idx}
       >
         <NetworkPolicyPeers
