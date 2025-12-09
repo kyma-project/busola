@@ -96,6 +96,7 @@ export const useTokenValidation = (
         }
       }, DEBOUNCE_DELAY);
     } else {
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       updateTokenState(0);
     }
   }, [text, getTokenCount, updateTokenState]);

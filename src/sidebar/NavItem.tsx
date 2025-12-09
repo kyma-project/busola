@@ -42,6 +42,7 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
 
   useEffect(() => {
     if (!node.externalUrl) {
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setJsonataLink('');
       setJsonataError(null);
       return;

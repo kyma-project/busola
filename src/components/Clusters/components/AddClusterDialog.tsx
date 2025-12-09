@@ -14,6 +14,8 @@ export function AddClusterDialog() {
 
   useEffect(() => {
     if (!showWizard) {
+      //Disabled because useState cannot be converted to useMemo as setState is passed to a child
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setKubeconfig(undefined);
     }
   }, [showWizard]);

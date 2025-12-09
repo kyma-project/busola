@@ -38,6 +38,7 @@ export default function FeedbackPopover() {
       showFeedback === FEEDBACK_SHOW_TYPE.SHOW ||
       showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE
     ) {
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setShowNewIndicators(true);
     } else {
       setShowNewIndicators(false);

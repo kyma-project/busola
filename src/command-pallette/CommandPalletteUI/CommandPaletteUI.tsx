@@ -61,9 +61,8 @@ export function CommandPaletteUI({
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
-  const [namespaceContext, setNamespaceContext] = useState<string | null>(
-    namespace,
-  );
+  const [searchInActiveNamespace, setSearchInActiveNamespace] =
+    useState<boolean>(namespace ? true : false);
 
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
@@ -75,13 +74,12 @@ export function CommandPaletteUI({
   const { results, suggestedQuery, autocompletePhrase, helpEntries } =
     useSearchResults({
       query,
-      namespaceContext,
+      namespaceContext: searchInActiveNamespace ? namespace : null,
       hideCommandPalette: hide,
       resourceCache,
       updateResourceCache,
     });
 
-  useEffect(() => setNamespaceContext(namespace), [namespace]);
   useEffect(() => {
     setTimeout(
       () => document.getElementById('command-palette-search')?.focus(),
@@ -239,10 +237,12 @@ export function CommandPaletteUI({
         ref={commandPaletteRef}
       >
         <div className="command-palette-ui__content">
-          <NamespaceContextDisplay
-            namespaceContext={namespaceContext}
-            setNamespaceContext={setNamespaceContext}
-          />
+          {searchInActiveNamespace && (
+            <NamespaceContextDisplay
+              namespaceContext={namespace}
+              onSetNoNamespaceContext={() => setSearchInActiveNamespace(false)}
+            />
+          )}
           <div className="input-container">
             <Button
               className="input-back-button"

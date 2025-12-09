@@ -40,6 +40,7 @@ export default function KymaModulesAddModule(props) {
           ),
       );
       const mergedModules = activeKymaModules.concat(newModules);
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setResource({
         ...kymaResource,
         spec: {

@@ -35,7 +35,6 @@ export default defineConfig(
         'react-hooks/exhaustive-deps': 'warn',
         'react-hooks/rules-of-hooks': 'warn',
         'react-hooks/refs': 'warn',
-        'react-hooks/set-state-in-effect': 'warn',
         'react-hooks/preserve-manual-memoization': 'warn',
         'react-hooks/immutability': 'warn',
         'react-hooks/purity': 'warn',

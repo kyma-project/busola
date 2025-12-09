@@ -30,6 +30,7 @@ export default function LimitRangeCreate({
   );
 
   useEffect(() => {
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setLimitRange(
       _.cloneDeep(initialLimitRange) ||
         createLimitRangeTemplate({ namespaceName: namespaceId }),

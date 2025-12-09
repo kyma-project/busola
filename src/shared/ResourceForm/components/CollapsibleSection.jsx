@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import classnames from 'classnames';
 import { ResourceFormWrapper } from './Wrapper';
 import { Panel } from '@ui5/webcomponents-react';
@@ -26,11 +26,9 @@ export function CollapsibleSection({
   const actionsRef = useRef();
   required = required === true;
 
-  useEffect(() => {
-    if (defaultOpen !== undefined) {
-      setOpen(defaultOpen);
-    }
-  }, [defaultOpen]);
+  if (defaultOpen && defaultOpen !== open) {
+    setOpen(defaultOpen);
+  }
 
   const toggle = (e) => {
     e.stopPropagation();

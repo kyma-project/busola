@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -28,8 +28,13 @@ export default function ConfigMapCreate({
   const [initialResource, setInitialResource] = useState(
     initialConfigMap || createConfigMapTemplate(namespace || ''),
   );
+  const [prevNamespace, setPrevNamespace] = useState(namespace);
 
-  useEffect(() => {
+  if (
+    (initialConfigMap && initialConfigMap !== initialResource) ||
+    namespace !== prevNamespace
+  ) {
+    setPrevNamespace(namespace);
     setConfigMap(
       initialConfigMap
         ? cloneDeep(initialConfigMap)
@@ -38,7 +43,7 @@ export default function ConfigMapCreate({
     setInitialResource(
       initialConfigMap || createConfigMapTemplate(namespace || ''),
     );
-  }, [initialConfigMap, namespace]);
+  }
 
   const schema = useContext(SchemaContext);
   const dataDesc = getDescription(schema, 'data');

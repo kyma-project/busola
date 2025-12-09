@@ -33,7 +33,8 @@ export default function SecretCreate({
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
-
+    //secret cannot be converted to useMemo
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setSecret(initialSecret || createSecretTemplate(namespace || ''));
     setInitialResource(initialSecret || createSecretTemplate(namespace || ''));
   }, [initialSecret, namespace, layoutState?.showEdit?.resource]);
@@ -58,6 +59,8 @@ export default function SecretCreate({
   const options = secretTypes.map((type) => ({ key: type, text: type }));
 
   useEffect(() => {
+    //lockedKeys cannot be converted to useMemo
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setLockedKeys(currentDef?.data || []);
     setSecret({
       ...secret,

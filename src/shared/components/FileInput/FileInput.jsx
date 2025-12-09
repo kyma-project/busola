@@ -34,6 +34,8 @@ export function FileInput({
   const fileNameRef = useRef(null);
 
   useEffect(() => {
+    //fileNames cannot be converted to useMemo
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     if (!openAdd && !openAddCluster) setFileNames([]);
   }, [openAdd, openAddCluster]);
 

@@ -27,6 +27,7 @@ export default function DaemonSetCreate({
   );
 
   useEffect(() => {
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setDaemonSet(
       _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
     );
