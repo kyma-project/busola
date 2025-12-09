@@ -1,14 +1,15 @@
-import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
   FlexBox,
   FlexBoxDirection,
+  Link,
   List,
   ListItemStandard,
   MessageBox,
   Text,
 } from '@ui5/webcomponents-react';
+import { Resource } from 'components/Extensibility/contexts/DataSources';
 
 export const DeleteSourceMessage = ({
   sourceToDelete,
@@ -16,12 +17,12 @@ export const DeleteSourceMessage = ({
   onCancel,
 }: {
   sourceToDelete: string;
-  notInstalledModuleTemplates: any;
-  onCancel: Dispatch<SetStateAction<string>>;
+  notInstalledModuleTemplates: { items: Resource[] };
+  onCancel: () => void;
 }) => {
   const { t } = useTranslation();
   const templatesToDelete = notInstalledModuleTemplates.items.filter(
-    (item: any) => item?.metadata?.annotations?.source === sourceToDelete,
+    (item: Resource) => item?.metadata?.annotations?.source === sourceToDelete,
   );
   return (
     <MessageBox
@@ -40,7 +41,7 @@ export const DeleteSourceMessage = ({
           accessibleName="cancel-remove-source"
           design="Transparent"
           key="cancel-remove-source"
-          onClick={() => onCancel('')}
+          onClick={onCancel}
         >
           {t('common.buttons.cancel')}
         </Button>,
@@ -54,26 +55,25 @@ export const DeleteSourceMessage = ({
         <List
           separators="None"
           header={
-            <>
-              <Text>{`${t('modules.community.source-yaml.remove-source-yaml')} ${sourceToDelete}?`}</Text>
+            <div className="delete-source-message-box-header">
+              <Text>
+                {`${t('modules.community.source-yaml.remove-source-yaml')}`}{' '}
+                <Link design="Default" href={sourceToDelete} target="_blank">
+                  {sourceToDelete}
+                </Link>
+                ?
+              </Text>
               <Text>
                 {`${t('modules.community.source-yaml.remove-source-yaml-desc')}:`}
               </Text>
-            </>
+            </div>
           }
         >
-          {templatesToDelete.map((template: any, index: number) => (
+          {templatesToDelete.map((template: Resource, index: number) => (
             <ListItemStandard key={`${index}-${template?.metadata?.name}`}>
-              <Text>{template?.metadata?.name}</Text>
+              <li className="message-list-item">{template?.metadata?.name}</li>
             </ListItemStandard>
           ))}
-          {/* TODO: Remove hardcoded items after testing: */}
-          <ListItemStandard>
-            <Text>{'docker-registry-0.9.0 '}</Text>
-          </ListItemStandard>
-          <ListItemStandard>
-            <Text>{'cap-operator-0.15.0'}</Text>
-          </ListItemStandard>
         </List>
       </FlexBox>
     </MessageBox>

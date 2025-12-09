@@ -9,6 +9,7 @@ import { CommunityModuleContext } from '../../providers/CommunityModuleProvider'
 import { AddSourceYamls } from '../AddSourceYamls';
 import { SourceListElements } from './SourceListElements';
 import { DeleteSourceMessage } from './DeleteSourceMessage';
+import { Resource } from 'components/Extensibility/contexts/DataSources';
 import './CommunityModulesSourcesList.scss';
 
 export const CommunityModulesSourcesList = () => {
@@ -25,7 +26,7 @@ export const CommunityModulesSourcesList = () => {
 
   const getSources = () => {
     const sources = (communityModuleTemplates?.items ?? [])
-      .map((item: any) => {
+      .map((item: Resource) => {
         return item?.metadata?.annotations?.source;
       })
       .filter(Boolean);
@@ -73,7 +74,7 @@ export const CommunityModulesSourcesList = () => {
           <DeleteSourceMessage
             sourceToDelete={sourceToDelete}
             notInstalledModuleTemplates={notInstalledCommunityModuleTemplates}
-            onCancel={setSourceToDelete}
+            onCancel={() => setSourceToDelete('')}
           />,
           document.body,
         )}
