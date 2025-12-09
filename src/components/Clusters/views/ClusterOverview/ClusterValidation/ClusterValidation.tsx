@@ -106,6 +106,7 @@ export const ClusterValidation = () => {
     concurrentWorkers: 1,
     backpressureBuffer: 3,
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   resourceLoader.queue.concurrency = Math.max(
     scanSettings.concurrentRequests,
     1,

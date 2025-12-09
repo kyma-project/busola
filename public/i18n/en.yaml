@@ -78,7 +78,7 @@ cluster-validation:
 clusters:
   add:
     load-default: Load default cluster
-    title: Connect cluster
+    title: Connect Cluster
   auth-type: Authentication type
   buttons:
     connect-cluster: Connect cluster
