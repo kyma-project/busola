@@ -123,7 +123,7 @@ async function fetchClusterResources(context: CommandPaletteContext) {
 function sendNamespaceSwitchMessage(
   newNamespace: string,
   activeClusterName: string,
-  navigate: Function,
+  navigate: (_: string) => void,
 ) {
   const matchedRoute =
     matchPath(

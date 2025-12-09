@@ -51,7 +51,6 @@ export default defineConfig(
           },
         ],
         '@typescript-eslint/no-empty-object-type': 'off',
-        '@typescript-eslint/no-unsafe-function-type': 'warn',
         '@typescript-eslint/no-unused-expressions': 'warn',
         '@typescript-eslint/ban-ts-comment': 'error',
         '@typescript-eslint/no-require-imports': 'warn',

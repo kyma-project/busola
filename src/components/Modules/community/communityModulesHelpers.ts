@@ -178,7 +178,7 @@ export async function postForCommunityResources(post: PostFn, link: string) {
 
 export async function fetchResourcesToApply(
   communityModulesToApply: Map<string, ModuleTemplateType>,
-  setResourcesToApply: Function,
+  setResourcesToApply: (_: { value: any }[]) => void,
   post: PostFn,
 ) {
   const resourcesLinks = [...communityModulesToApply.values()]

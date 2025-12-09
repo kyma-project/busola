@@ -2,7 +2,7 @@ import { FlexBox, Label, Option, Select } from '@ui5/webcomponents-react';
 
 export type ModuleInfoProps = {
   module: ModuleDisplayInfo;
-  onChange: Function;
+  onChange: (_?: string) => void;
 };
 
 export type ModuleDisplayInfo = {
