@@ -1,8 +1,8 @@
 import { useValidation } from 'shared/hooks/useValidation';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
-  useGetTranslation,
   getPropsFromSchema,
+  useGetTranslation,
 } from 'components/Extensibility/helpers';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { t } from 'i18next';
@@ -55,7 +55,7 @@ export function Jsonata({
     <ResourceForm.FormField
       value={value}
       setValue={(value) => {
-        onChange &&
+        if (onChange) {
           onChange({
             storeKeys,
             scopes: ['value'],
@@ -64,6 +64,7 @@ export function Jsonata({
             required,
             data: { value },
           });
+        }
       }}
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}

@@ -44,7 +44,9 @@ export function GenericRoleBindingCreate({
   );
 
   useEffect(() => {
-    cloneDeep(initialRoleBinding) || createBindingTemplate(namespace);
+    if (!cloneDeep(initialRoleBinding)) {
+      createBindingTemplate(namespace);
+    }
     setInitialResource(initialRoleBinding || createBindingTemplate(namespace));
   }, [initialRoleBinding, namespace]);
 
