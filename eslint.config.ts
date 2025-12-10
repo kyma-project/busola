@@ -53,7 +53,7 @@ export default defineConfig(
         '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
         '@typescript-eslint/no-unused-expressions': [
-          'warn',
+          'error',
           {
             allowTernary: true,
             allowShortCircuit: true,
