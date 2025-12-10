@@ -16,8 +16,8 @@ import '@ui5/webcomponents-icons/dist/AllIcons.js';
 import '@ui5/webcomponents-icons-tnt/dist/network.js';
 import '@ui5/webcomponents-icons-tnt/dist/application.js';
 import '@ui5/webcomponents-icons-tnt/dist/application-service.js';
-import '@sap-ui/common-css/dist/sap-margin.css';
-import '@sap-ui/common-css/dist/sap-padding.css';
+import '@fundamental-styles/common-css/dist/sap-margin.css';
+import '@fundamental-styles/common-css/dist/sap-padding.css';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
