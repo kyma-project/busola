@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { ResourceFormWrapper } from './Wrapper';
 import { Panel } from '@ui5/webcomponents-react';
@@ -26,9 +26,13 @@ export function CollapsibleSection({
   const actionsRef = useRef();
   required = required === true;
 
-  if (defaultOpen && defaultOpen !== open) {
-    setOpen(defaultOpen);
-  }
+  useEffect(() => {
+    if (defaultOpen !== undefined) {
+      //removing useEffect causes tests to not pass
+      //eslint-disable-next-line react-hooks/set-state-in-effect
+      setOpen(defaultOpen);
+    }
+  }, [defaultOpen]);
 
   const toggle = (e) => {
     e.stopPropagation();
