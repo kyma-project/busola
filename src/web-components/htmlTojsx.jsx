@@ -23,7 +23,7 @@ const mapEventListeners = (node, props) => {
 // Map attributes to props
 const mapAttributes = (node) => {
   const props = {};
-  for (let { name, value } of node.attributes) {
+  for (const { name, value } of node.attributes) {
     props[name === 'class' ? 'className' : name] = value;
   }
   return props;

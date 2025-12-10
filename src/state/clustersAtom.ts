@@ -9,10 +9,29 @@ export type ClustersState = {
   [clusterName: string]: Cluster;
 } | null;
 
-export const clustersAtom = atom<ClustersState>({});
-clustersAtom.debugLabel = 'clustersAtom';
-
 const inMemoryClusters: ClustersState = {};
+
+const getInitialClustersState = (): ClustersState => {
+  try {
+    const localStorageClusters = JSON.parse(
+      localStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}',
+    );
+    const sessionStorageClusters = JSON.parse(
+      sessionStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}',
+    );
+    return {
+      ...localStorageClusters,
+      ...sessionStorageClusters,
+      ...inMemoryClusters,
+    };
+  } catch (e) {
+    console.warn('Cannot get clusters', e);
+    return {};
+  }
+};
+
+export const clustersAtom = atom<ClustersState>(getInitialClustersState());
+clustersAtom.debugLabel = 'clustersAtom';
 
 export const clustersAtomEffectSetSelf = withAtomEffect(
   clustersAtom,

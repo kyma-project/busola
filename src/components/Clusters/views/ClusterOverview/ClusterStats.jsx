@@ -27,8 +27,8 @@ const Injections = React.lazy(
 export default function ClusterStats({ nodesData }) {
   const { t } = useTranslation();
 
-  let cpu = { usage: 0, capacity: 0 };
-  let memory = { usage: 0, capacity: 0 };
+  const cpu = { usage: 0, capacity: 0 };
+  const memory = { usage: 0, capacity: 0 };
 
   if (nodesData) {
     for (const node of nodesData) {

@@ -13,14 +13,14 @@ const CUSTOM_FORMATS = {
 function getExistingCustomFormats(obj, path = '') {
   let existingData = [];
 
-  for (let i in obj) {
+  for (const i in obj) {
     if (!obj.hasOwnProperty(i)) continue;
     if (typeof obj[i] === 'object') {
       existingData = existingData.concat(
         getExistingCustomFormats(obj[i], path ? `${path}.${i}` : i),
       );
     } else if (i === CUSTOM_KEY) {
-      for (let formatKey of Object.keys(CUSTOM_FORMATS)) {
+      for (const formatKey of Object.keys(CUSTOM_FORMATS)) {
         if (formatKey === obj[i]) {
           existingData.push({ path, formatKey });
           break;
@@ -32,7 +32,7 @@ function getExistingCustomFormats(obj, path = '') {
 }
 
 function replaceObjects(existingCustomFormats, schema) {
-  for (let i in existingCustomFormats) {
+  for (const i in existingCustomFormats) {
     let object = {
       ...jp.value(schema, `$.${existingCustomFormats[i].path}`),
     };

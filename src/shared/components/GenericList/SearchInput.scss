@@ -3,8 +3,22 @@
   align-items: center;
   gap: 0.5rem;
 
-  #search-input {
+  .search-input {
     margin: 0;
+
+    &:focus {
+      .search-icon {
+        &:hover {
+          color: var(--sapIllus_HoverButtonColor);
+        }
+      }
+    }
+
+    .search-icon {
+      &:hover {
+        box-shadow: var(--sapField_Hover_Shadow);
+      }
+    }
   }
 }
 

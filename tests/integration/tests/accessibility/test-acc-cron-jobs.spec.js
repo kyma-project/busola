@@ -15,6 +15,10 @@ context('Accessibility test Cron Jobs', () => {
     cy.createNamespace(NAMESPACE_NAME);
   });
 
+  beforeEach(() => {
+    cy.wait(500);
+  });
+
   it('Acc test Cron Jobs list', () => {
     cy.loginAndSelectCluster();
 

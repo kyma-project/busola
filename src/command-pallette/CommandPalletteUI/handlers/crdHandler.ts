@@ -104,7 +104,7 @@ function createResults(context: CommandPaletteContext): Result[] {
 
   const crds = resourceCache['customresourcedefinitions'];
   if (typeof crds !== 'object') {
-    //@ts-ignore  TODO: handle typein Result
+    //@ts-expect-error TODO: handle typein Result
     return [linkToList, { type: LOADING_INDICATOR }];
   }
 

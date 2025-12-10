@@ -191,11 +191,12 @@ export const AddSourceYamls = () => {
         accessibleName="add-yamls"
         design="Emphasized"
         key="add-yamls"
+        slot="action"
         onClick={() => {
           setShowAddSource(true);
         }}
       >
-        {t('modules.community.source-yaml.add-source-yaml')}
+        {t('common.buttons.add')}
       </Button>
 
       {showAddSource &&
@@ -283,7 +284,7 @@ export const AddSourceYamls = () => {
                     return (
                       <OptionCustom
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
+                        // @ts-expect-error
                         disabled
                         value={ns}
                         key={ns}

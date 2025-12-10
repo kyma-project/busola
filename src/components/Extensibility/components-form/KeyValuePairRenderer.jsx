@@ -18,23 +18,23 @@ const getEnumComponent = (
   if (!Array.isArray(enumValues)) return input;
 
   const options = enumValues.map((opt) => ({ key: opt, text: opt }));
-  return ({ onChange, setValue, onBlur, value, ...props }) => (
+  const DropdownComp = ({ onChange, setValue, onBlur, value, ...props }) => (
     <Dropdown
       {...props}
       value={value}
       options={options}
       setValue={(v) => {
-        isKeyInput
-          ? onChange({
-              target: {
-                value: v,
-              },
-            })
-          : setValue(v);
+        if (isKeyInput) {
+          onChange({ target: { value: v } });
+        } else {
+          setValue(v);
+        }
         onBlur();
       }}
     />
   );
+
+  return DropdownComp;
 };
 
 const getValueComponent = (valueInfo) => {
@@ -45,8 +45,8 @@ const getValueComponent = (valueInfo) => {
       return getEnumComponent(valueEnum, false, Inputs.Number);
     case 'string':
       return getEnumComponent(valueEnum, false, Inputs.Text);
-    case 'object':
-      return ({ setValue, value }) => (
+    case 'object': {
+      const FieldComp = ({ setValue, value }) => (
         <KeyValueField
           className="nested-key-value-pair"
           value={value}
@@ -59,6 +59,8 @@ const getValueComponent = (valueInfo) => {
           }}
         />
       );
+      return FieldComp;
+    }
     default:
       return getEnumComponent(valueEnum, false);
   }
@@ -97,7 +99,7 @@ export function KeyValuePairRenderer({
 
   try {
     value = value ? value.toJS() : {};
-  } catch (error) {
+  } catch (_error) {
     value = {};
   }
 

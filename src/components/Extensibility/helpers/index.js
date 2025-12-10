@@ -176,7 +176,7 @@ export const getResourceDescAndUrl = (descID) => {
     };
 
   const helmBracketsRegex = /{{"(.*?)"}}/g;
-  let trans = descID.replace(helmBracketsRegex, '$1');
+  const trans = descID.replace(helmBracketsRegex, '$1');
 
   if (typeof trans === 'string') {
     const links = extractLinks(trans);

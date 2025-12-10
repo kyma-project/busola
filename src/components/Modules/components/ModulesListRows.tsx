@@ -95,8 +95,11 @@ export const ModulesListRows = ({
       return kymaResourceModule?.name === resource?.name;
     }) ?? -1;
 
-  let { data: managerResourceState, error: managerResourceStateError } =
-    useGetManagerStatus(currentModuleTemplate?.spec?.manager);
+  const { data, error: managerResourceStateError } = useGetManagerStatus(
+    currentModuleTemplate?.spec?.manager,
+  );
+  let managerResourceState = data;
+
   if (resource.fakeStatus) {
     managerResourceState = resource.fakeStatus;
   }

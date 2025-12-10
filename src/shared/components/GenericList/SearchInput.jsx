@@ -109,9 +109,10 @@ export function SearchInput({
       </Label>
       <Input
         id={`search-${entriesKind}`}
+        className="search-input"
         accessibleName={`search-${entriesKind}`}
         type="Search"
-        icon={<Icon className="bsl-has-color-status-4" name="search" />}
+        icon={<Icon name="search" className="search-icon" />}
         ref={searchInputRef}
         value={searchQuery}
         onInput={(e) => handleQueryChange(e.target.value)}

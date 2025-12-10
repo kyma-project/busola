@@ -13,6 +13,10 @@ context('Accessibility test Pizza Orders', () => {
     cy.createNamespace('pizzas');
   });
 
+  beforeEach(() => {
+    cy.wait(500);
+  });
+
   it('Creates the EXT pizza orders config', () => {
     cy.getLeftNav().contains('Cluster Details').click();
 
@@ -60,7 +64,7 @@ context('Accessibility test Pizza Orders', () => {
       .contains('Namespaces')
       .click();
 
-    cy.wait(500);
+    cy.wait(1000);
 
     cy.typeInSearch('pizzas');
 
@@ -82,7 +86,7 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Acc test Pizza Orders create', () => {
-    cy.contains('ui5-button', 'Create').click();
+    cy.openCreate();
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
@@ -96,7 +100,6 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Acc test Pizza Orders details', () => {
-    cy.wait(1000);
     cy.getLeftNav().contains('Pizza Orders').click();
 
     cy.clickGenericListLink('diavola-order');

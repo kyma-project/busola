@@ -27,7 +27,7 @@ import { useUrl } from 'hooks/useUrl';
 import { sidebarNavigationNodesAtom } from 'state/navigation/sidebarNavigationNodesAtom';
 
 export default function ClusterRoutes() {
-  let { currentClusterName } = useParams() || {};
+  const { currentClusterName } = useParams() || {};
 
   const navigate = useNavigate();
   const { t } = useTranslation();

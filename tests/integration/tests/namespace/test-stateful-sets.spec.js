@@ -75,7 +75,7 @@ context('Test Stateful Sets', () => {
     cy.get('@copyPrompt').should('have.been.called');
   });
 
-  it('Check if Reset button works correctly', () => {
+  it('Check if Revert button works correctly', () => {
     cy.navigateTo('Workloads', 'Stateful Sets');
 
     cy.openCreate();
@@ -91,7 +91,7 @@ context('Test Stateful Sets', () => {
 
     cy.findMonaco().should('include.value', SS_NAME);
 
-    cy.get('ui5-button:visible').contains('Reset').click();
+    cy.get('ui5-button:visible').contains('Revert').click();
     cy.get('ui5-dialog[header-text="Discard Changes"]').should('be.visible');
 
     cy.get('ui5-dialog[header-text="Discard Changes"]:visible')

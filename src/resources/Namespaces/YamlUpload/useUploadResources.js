@@ -159,7 +159,7 @@ export function useUploadResources(
   const fetchResources = useCallback(() => {
     if (filteredResources?.length) {
       setLastOperationState(OPERATION_STATE_WAITING);
-      for (const [index, resource] of filteredResources?.entries()) {
+      for (const [index, resource] of filteredResources.entries()) {
         updateState(index, STATE_WAITING);
         fetchApiGroup(resource, index);
       }

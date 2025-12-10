@@ -16,7 +16,6 @@ import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { KymaModuleContextProvider } from 'components/Modules/providers/KymaModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { CommunityModulesDeleteBoxContextProvider } from 'components/Modules/community/components/CommunityModulesDeleteBox';
-import { AddSourceYamls } from 'components/Modules/community/components/AddSourceYamls';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { CommunityModulesUploadProvider } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
@@ -101,8 +100,6 @@ const ColumnWrapper = ({
     </div>,
   );
 
-  const addSourceYAMLsButton = <AddSourceYamls />;
-
   const midColumnComponent = (
     <>
       {/* details */}
@@ -137,7 +134,6 @@ const ColumnWrapper = ({
             {layoutState?.showCreate?.createType === 'community' && (
               <ResourceCreate
                 title={t('modules.community.add-module')}
-                headerActions={addSourceYAMLsButton}
                 confirmText={t('common.buttons.add')}
                 layoutCloseCreateUrl={url}
                 renderForm={(renderProps) => {

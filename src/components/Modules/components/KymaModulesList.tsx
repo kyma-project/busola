@@ -306,7 +306,6 @@ export const KymaModulesList = ({
         extraHeaderContent={[
           <Button
             key="add-module"
-            design="Emphasized"
             disabled={!resource}
             onClick={handleShowAddModule}
           >

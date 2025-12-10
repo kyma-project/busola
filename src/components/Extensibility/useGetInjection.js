@@ -6,7 +6,7 @@ export const useGetInjections = (location, slot) => {
   const injections = useAtomValue(injectionsAtom);
 
   const filteredInjections = useMemo(() => {
-    let filteredInjections = [];
+    const filteredInjections = [];
 
     (injections || []).forEach((injection) => {
       const target = injection.injection.targets.find(

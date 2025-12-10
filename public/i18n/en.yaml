@@ -78,7 +78,7 @@ cluster-validation:
 clusters:
   add:
     load-default: Load default cluster
-    title: Connect cluster
+    title: Connect Cluster
   auth-type: Authentication type
   buttons:
     connect-cluster: Connect cluster
@@ -958,13 +958,16 @@ modules:
     sla-warning: Community modules are contributed by the Kyma community and are not automatically updated or maintained. Additionally, they are not covered by any service level agreement (SLA). Use them at your own risk. <0>Learn more</0>
     source-yaml:
       add-source-yaml: Add Source YAML
+      add-source-yaml-info: Add your own custom modules to the Kyma cluster by adding their source files to this list. After that, your modules show up automatically in the list.
       example-format: 'Example format: http://github.com/project/repo/file.yaml'
       module-already-exists: <0> {{moduleTemplate}} </0> already exists in the <0> {{namespace}} </0> namespace.
       module-templates-to-add: ModuleTemplates to add
       modules-wont-be-added: Following ModuleTemplates already exist in the cluster and cannot be added.
       namespace-description: Namespace where ModuleTemplates are applied. If left empty, the namespace defined in the ModuleTemplates is used. Resources cannot be created in the kyma-system namespace.
       no-module-templates: No ModuleTemplates to add.
+      no-source-yaml: No source YAML added.
       source-yaml-url: Source YAML URL
+      source-yamls-header: Source YAMLs
     title: Community Modules
 namespaces:
   create-modal:
