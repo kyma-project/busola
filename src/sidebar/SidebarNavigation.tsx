@@ -20,6 +20,7 @@ import { useMatch, useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { useRef } from 'react';
 
 export function SidebarNavigation() {
   const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
@@ -29,6 +30,7 @@ export function SidebarNavigation() {
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
+  const sidebarRef = useRef(null);
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =
@@ -82,6 +84,12 @@ export function SidebarNavigation() {
     <SideNavigation
       collapsed={isSidebarCondensed}
       onSelectionChange={(e) => e.preventDefault()}
+      style={{
+        width: isSidebarCondensed
+          ? 'var(--_ui5-v2-15-1_side_navigation_collapsed_width)'
+          : '',
+      }}
+      ref={sidebarRef}
       header={
         <>
           {namespace && (
@@ -202,7 +210,9 @@ export function SidebarNavigation() {
         />
       )}
       {topLevelNodes.map((node) =>
-        node.items?.map((item, index) => <NavItem node={item} key={index} />),
+        node.items?.map((item, index) => (
+          <NavItem node={item} key={index} sidebarRef={sidebarRef} />
+        )),
       )}
       {categoryNodes.map((category, index) => (
         <CategoryItem
@@ -210,6 +220,7 @@ export function SidebarNavigation() {
           key={index}
           expandedCategories={expandedCategories}
           handleExpandedCategories={setExpandedCategories}
+          sidebarRef={sidebarRef}
         />
       ))}
     </SideNavigation>
