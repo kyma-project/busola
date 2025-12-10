@@ -66,7 +66,10 @@ export const CommunityModulesSourcesList = () => {
         {moduleTemplatesLoading ? (
           <Spinner />
         ) : (
-          <SourceListElements sources={getSources()} />
+          <SourceListElements
+            sources={getSources()}
+            notInstalledModuleTemplates={notInstalledCommunityModuleTemplates}
+          />
         )}
       </List>
       {sourceToDelete &&

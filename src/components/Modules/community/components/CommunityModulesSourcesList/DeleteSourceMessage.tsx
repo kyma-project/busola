@@ -9,7 +9,10 @@ import {
   MessageBox,
   Text,
 } from '@ui5/webcomponents-react';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
+import { getResourcePath } from 'components/Modules/support';
+import { deleteResources } from 'components/Modules/deleteModulesHelpers';
 
 export const DeleteSourceMessage = ({
   sourceToDelete,
@@ -21,9 +24,21 @@ export const DeleteSourceMessage = ({
   onCancel: () => void;
 }) => {
   const { t } = useTranslation();
-  const templatesToDelete = notInstalledModuleTemplates.items.filter(
+  const deleteFn = useDelete();
+  const templatesToDelete = notInstalledModuleTemplates?.items?.filter(
     (item: Resource) => item?.metadata?.annotations?.source === sourceToDelete,
   );
+  const deleteSource = async () => {
+    if (!templatesToDelete?.length) {
+      return;
+    }
+    const urls = templatesToDelete.map((template: Resource) => {
+      return getResourcePath(template);
+    });
+    await deleteResources(deleteFn, urls);
+    onCancel();
+  };
+
   return (
     <MessageBox
       open={true}
@@ -33,7 +48,7 @@ export const DeleteSourceMessage = ({
           accessibleName="remove-source"
           design="Emphasized"
           key="remove-source"
-          onClick={() => {}}
+          onClick={deleteSource}
         >
           {t('common.buttons.remove')}
         </Button>,
@@ -69,8 +84,11 @@ export const DeleteSourceMessage = ({
             </div>
           }
         >
-          {templatesToDelete.map((template: Resource, index: number) => (
-            <ListItemStandard key={`${index}-${template?.metadata?.name}`}>
+          {templatesToDelete?.map((template: Resource, index: number) => (
+            <ListItemStandard
+              key={`${index}-${template?.metadata?.name}`}
+              type="Inactive"
+            >
               <li className="message-list-item">{template?.metadata?.name}</li>
             </ListItemStandard>
           ))}
