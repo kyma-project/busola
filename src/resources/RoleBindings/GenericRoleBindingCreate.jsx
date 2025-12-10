@@ -52,7 +52,9 @@ export function GenericRoleBindingCreate({
   ) {
     setPrevInitialRoleBinding(initialRoleBinding);
     setPrevNamespace(namespace);
-    cloneDeep(initialRoleBinding) || createBindingTemplate(namespace);
+    if (!cloneDeep(initialRoleBinding)) {
+      createBindingTemplate(namespace);
+    }
     setInitialResource(initialRoleBinding || createBindingTemplate(namespace));
   }
 
