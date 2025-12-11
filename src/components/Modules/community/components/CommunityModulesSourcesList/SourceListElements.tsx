@@ -35,7 +35,7 @@ export const SourceListElements = ({
             )
           }
         >
-          <Link design="Default" href={sourceYaml} target="_blank">
+          <Link href={sourceYaml} target="_blank">
             {sourceYaml}
           </Link>
         </ListItemStandard>

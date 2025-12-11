@@ -939,6 +939,7 @@ modules:
     installed-modules: Community Modules
     messages:
       delete-failure: 'Failed to delete the {{module}}: {{error}}'
+      delete-template-failure: 'Failed to delete templates: {{error}}'
       install-failure: 'Failed to install the {{resourceType}}: {{error}}'
       module-added: Community Module added
       module-uninstall: Community Module deleted

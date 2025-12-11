@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -13,6 +14,8 @@ import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { getResourcePath } from 'components/Modules/support';
 import { deleteResources } from 'components/Modules/deleteModulesHelpers';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 export const DeleteSourceMessage = ({
   sourceToDelete,
@@ -25,6 +28,9 @@ export const DeleteSourceMessage = ({
 }) => {
   const { t } = useTranslation();
   const deleteFn = useDelete();
+  const notification = useNotification();
+  const [deleteSourceLoader, setDeleteSourceLoader] = useState(false);
+
   const templatesToDelete = notInstalledModuleTemplates?.items?.filter(
     (item: Resource) => item?.metadata?.annotations?.source === sourceToDelete,
   );
@@ -32,10 +38,20 @@ export const DeleteSourceMessage = ({
     if (!templatesToDelete?.length) {
       return;
     }
+    setDeleteSourceLoader(true);
     const urls = templatesToDelete.map((template: Resource) => {
       return getResourcePath(template);
     });
-    await deleteResources(deleteFn, urls);
+    try {
+      await deleteResources(deleteFn, urls);
+    } catch (e) {
+      notification.notifyError({
+        content: t('modules.community.messages.delete-template-failure', {
+          error: e instanceof Error && e?.message ? e.message : '',
+        }),
+      });
+    }
+    setDeleteSourceLoader(false);
     onCancel();
   };
 
@@ -44,8 +60,10 @@ export const DeleteSourceMessage = ({
       open={true}
       titleText={t('modules.community.source-yaml.remove-source-yaml')}
       actions={[
+        deleteSourceLoader ? <Spinner key="delete-source-loader" /> : null,
         <Button
           accessibleName="remove-source"
+          disabled={deleteSourceLoader}
           design="Emphasized"
           key="remove-source"
           onClick={deleteSource}
@@ -73,7 +91,7 @@ export const DeleteSourceMessage = ({
             <div className="delete-source-message-box-header">
               <Text>
                 {`${t('modules.community.source-yaml.remove-source-yaml')}`}{' '}
-                <Link design="Default" href={sourceToDelete} target="_blank">
+                <Link href={sourceToDelete} target="_blank">
                   {sourceToDelete}
                 </Link>
                 ?
