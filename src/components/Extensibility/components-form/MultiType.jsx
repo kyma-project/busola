@@ -61,7 +61,7 @@ export function MultiType({
                 key={type}
                 selected={type === selectedType}
                 onClick={() => {
-                  onChange &&
+                  if (onChange) {
                     onChange({
                       storeKeys,
                       scopes: ['value'],
@@ -70,6 +70,7 @@ export function MultiType({
                       required: false,
                       data: { value: defaults[type] },
                     });
+                  }
                 }}
               >
                 {tFromStoreKeys(storeKeys.push(type), schema)}
