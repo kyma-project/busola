@@ -14,7 +14,7 @@ export const RoleSubjects = (binding) => {
 
   const rowRenderer = (subject) => [
     subject.kind,
-    <SubjectLink subject={subject} />,
+    <SubjectLink key={subject} subject={subject} />,
     subject.namespace || EMPTY_TEXT_PLACEHOLDER,
   ];
 

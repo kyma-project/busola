@@ -78,7 +78,7 @@ export const Rules = ({ rules }) => {
   return (
     <>
       {rules.map((rule, i) => (
-        <UI5Panel title={t('ingresses.labels.rules')}>
+        <UI5Panel key={`rule-${i}`} title={t('ingresses.labels.rules')}>
           {rule.host && (
             <LayoutPanelRow
               name={t('ingresses.labels.host')}
@@ -96,7 +96,11 @@ export const Rules = ({ rules }) => {
             rowRenderer={(path) => [
               path.path,
               path.pathType,
-              <Backend backend={path.backend} services={services} />,
+              <Backend
+                key={path.path}
+                backend={path.backend}
+                services={services}
+              />,
             ]}
             entries={rule?.http?.paths}
             searchSettings={{

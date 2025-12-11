@@ -29,7 +29,6 @@ export default defineConfig(
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',
-        'react/jsx-key': 'warn',
         'react/display-name': 'warn',
         'react-hooks/exhaustive-deps': 'warn',
         'react-hooks/rules-of-hooks': 'warn',
