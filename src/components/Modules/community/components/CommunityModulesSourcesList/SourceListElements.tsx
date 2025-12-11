@@ -19,6 +19,8 @@ export const SourceListElements = ({
   if (!sources.length) {
     return (
       <ListItemStandard
+        deleteButton={emptyDeleteButton}
+        accessibleName="no-source-yaml"
         text={t('modules.community.source-yaml.no-source-yaml')}
       />
     );
@@ -30,9 +32,7 @@ export const SourceListElements = ({
           key={`${ind}-${sourceYaml}`}
           deleteButton={
             // If there are no templates, the delete button will not be visible.
-            getSourceTemplates(sourceYaml)?.length ? null : (
-              <span style={{ display: 'none' }} slot="deleteButton"></span>
-            )
+            getSourceTemplates(sourceYaml)?.length ? null : emptyDeleteButton
           }
         >
           <Link href={sourceYaml} target="_blank">
@@ -43,3 +43,7 @@ export const SourceListElements = ({
     </>
   );
 };
+
+const emptyDeleteButton = (
+  <span style={{ display: 'none' }} slot="deleteButton"></span>
+);
