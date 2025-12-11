@@ -78,7 +78,10 @@ export const ModulesDeleteBox = ({
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
     (node) => node.namespaced,
   );
-  const [resourceCounts, setResourceCounts] = useState<Record<string, any>>({});
+  const [resourceCounts, setResourceCounts] = useState<Record<
+    string,
+    any
+  > | null>(null);
   const [associatedResourcesUrls, setAssociatedResourcesUrls] = useState<
     string[]
   >([]);
@@ -166,8 +169,13 @@ export const ModulesDeleteBox = ({
   }, [associatedResources]);
 
   useEffect(() => {
+    // Don't update state until resource counts have been fetched
+    if (associatedResources.length > 0 && resourceCounts === null) {
+      return;
+    }
+
     const resourcesLeft = checkIfAssociatedResourceLeft(
-      resourceCounts,
+      resourceCounts ?? {},
       associatedResources,
     );
 
@@ -258,7 +266,10 @@ export const ModulesDeleteBox = ({
 
   return (
     <DeleteMessageBox
-      disableDeleteButton={associatedResourceLeft ? !allowForceDelete : false}
+      disableDeleteButton={
+        associatedResourceLeft === null ||
+        (associatedResourceLeft && !allowForceDelete)
+      }
       customDeleteText={
         associatedResourceLeft && allowForceDelete
           ? 'common.buttons.cascade-delete'
@@ -299,7 +310,7 @@ export const ModulesDeleteBox = ({
                     version: string;
                   }) => {
                     const key = `${associatedResource.kind}-${associatedResource.group}-${associatedResource.version}`;
-                    const resourceCount = resourceCounts[key];
+                    const resourceCount = resourceCounts?.[key];
                     let additionalText = t(
                       'modules.associated-resources.loading',
                     );
