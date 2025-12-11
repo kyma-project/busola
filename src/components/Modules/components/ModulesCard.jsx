@@ -165,6 +165,7 @@ export default function ModulesCard({
         headerText="Advanced"
         noAnimation
         data-testid={`module-settings-panel-${module.name}`}
+        accessibleName="Module advanced settings"
       >
         <div className="settings-panel__content sap-margin-y-small">
           <Label>{t('kyma-modules.release-channel') + ':'} </Label>

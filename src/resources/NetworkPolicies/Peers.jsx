@@ -13,7 +13,10 @@ export const NetworkPolicyPeers = ({ peers, title }) => {
     return (
       <div key={idx}>
         {peer.ipBlock ? (
-          <UI5Panel title={title || t('network-policies.headers.ip-block')}>
+          <UI5Panel
+            title={title || t('network-policies.headers.ip-block')}
+            accessibleName={`${title || t('network-policies.headers.ip-block')} panel`}
+          >
             <LayoutPanelRow
               name={t('network-policies.headers.cidr')}
               value={peer.ipBlock.cidr || EMPTY_TEXT_PLACEHOLDER}

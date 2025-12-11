@@ -67,6 +67,7 @@ export default function SecretData({ secret }) {
   return (
     <UI5Panel
       title={t('secrets.data')}
+      accessibleName={`${t('secrets.data')} panel`}
       headerActions={
         <Button
           design="Transparent"

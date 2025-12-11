@@ -30,7 +30,7 @@ export default function CustomResourcesOfType({
 
   if (loading) return <Spinner />;
   if (error) {
-    return <UI5Panel title={error.message} />;
+    return <UI5Panel title={error.message} accessibleName="Error panel" />;
   }
   if (!crd) {
     return null;

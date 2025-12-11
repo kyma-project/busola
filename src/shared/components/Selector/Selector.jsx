@@ -75,6 +75,7 @@ export const Selector = ({
           ) : null}
         </>
       }
+      accessibleName={`${title || t('selector.title')} panel`}
       keyComponent="workload-selector"
       data-test-id="workload-selector"
     >

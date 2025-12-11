@@ -12,6 +12,7 @@ export function HelmReleaseData({ releaseSecret, release }) {
   if (!release) {
     return (
       <UI5Panel
+        accessibleName={`${t('helm-releases.messages.cannot-decode')} panel`}
         title={t('helm-releases.messages.cannot-decode')}
         keyComponent="helm-release-data"
       />

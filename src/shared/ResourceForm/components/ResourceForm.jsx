@@ -288,6 +288,7 @@ export function ResourceForm({
           disableMargin
           stickyHeader={true}
           title={title}
+          accessibleName={`${title} panel`}
           headerTop={stickyHeaderHeight + 'px'}
           headerActions={
             <>

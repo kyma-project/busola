@@ -33,6 +33,7 @@ export function CustomResourceDefinitionDetails(props) {
       <GenericList
         key="crd-names"
         title={t('custom-resource-definitions.subtitle.names')}
+        accessibleName={`${t('custom-resource-definitions.subtitle.names')} panel`}
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}

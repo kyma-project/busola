@@ -31,7 +31,11 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
       const hasCause = this.state.error.cause !== undefined;
 
       return (
-        <UI5Panel title={this.state.error.name} role="alert">
+        <UI5Panel
+          title={this.state.error.name}
+          role="alert"
+          accessibleName="Error panel"
+        >
           <div
             style={{
               fontSize: '18px',
