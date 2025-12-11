@@ -7,7 +7,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useAtomValue } from 'jotai';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { disableResourceProtectionAtom } from 'state/preferences/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
@@ -15,7 +15,8 @@ import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
 export const ProtectedResourceWarning = ({ entry, withText }) => {
-  const { t } = useTranslation;
+  const { t } = useTranslation();
+  const ID = useId();
   const [protectedWarningOpen, setProtectedWarningOpen] = useState(false);
   const disableResourceProtection = useAtomValue(disableResourceProtectionAtom);
   const protectedResourcesFeature = useFeature(
@@ -59,7 +60,7 @@ export const ProtectedResourceWarning = ({ entry, withText }) => {
   return (
     <>
       <Button
-        id={`protectedOpener-${entry?.metadata?.uid}`}
+        id={`protectedOpener-${entry?.metadata?.uid}-${ID}`}
         onClick={() => {
           setProtectedWarningOpen(true);
           setPopoverMessage(message);
@@ -86,7 +87,7 @@ export const ProtectedResourceWarning = ({ entry, withText }) => {
       {createPortal(
         <Popover
           placement="End"
-          opener={`protectedOpener-${entry?.metadata?.uid}`}
+          opener={`protectedOpener-${entry?.metadata?.uid}-${ID}`}
           open={protectedWarningOpen}
           onClose={() => setProtectedWarningOpen(false)}
         >

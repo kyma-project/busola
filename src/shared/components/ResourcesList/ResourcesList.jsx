@@ -491,7 +491,6 @@ export function ResourceListRenderer({
           >
             {col.value(entry)}
             <ProtectedResourceWarning entry={entry} />
-            {/* {ProtectedResourceWarning(entry)} */}
           </div>
         );
       }
