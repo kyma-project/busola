@@ -28,6 +28,7 @@ import { useGetInjections } from 'components/Extensibility/useGetInjection';
 import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from '../Link/Link';
+import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
 
 const Injections = React.lazy(
   () => import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -257,8 +258,7 @@ export function ResourceListRenderer({
     resourceType,
   });
   const { t } = useTranslation();
-  const { isProtected, protectedResourceWarning, protectedResourcePopover } =
-    useProtectedResources();
+  const { isProtected } = useProtectedResources();
   const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
 
@@ -490,7 +490,8 @@ export function ResourceListRenderer({
             }}
           >
             {col.value(entry)}
-            {protectedResourceWarning(entry)}
+            <ProtectedResourceWarning entry={entry} />
+            {/* {ProtectedResourceWarning(entry)} */}
           </div>
         );
       }
@@ -580,7 +581,7 @@ export function ResourceListRenderer({
       )}
       {!(error && error.status === 'Definition not found') && (
         <>
-          {protectedResourcePopover()}
+          {/* {protectedResourcePopover(activeResource)} */}
           <GenericList
             displayArrow={displayArrow ?? true}
             disableHiding={disableHiding ?? false}
