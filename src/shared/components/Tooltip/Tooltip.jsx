@@ -11,9 +11,15 @@ export const Tooltip = ({
   position,
   delay = [200, 0],
   className = '',
+  visible,
 }) => {
   return (
-    <Tippy content={content} placement={position} delay={delay}>
+    <Tippy
+      content={content}
+      placement={position}
+      delay={delay}
+      visible={visible}
+    >
       <span className={className}>{children}</span>
     </Tippy>
   );
@@ -25,4 +31,5 @@ Tooltip.propTypes = {
   children: PropTypes.node,
   delay: PropTypes.array,
   className: PropTypes.string,
+  visible: PropTypes.bool,
 };

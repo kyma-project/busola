@@ -2,6 +2,7 @@ import { Button } from '@ui5/webcomponents-react';
 import copyToClipboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 interface CopyButtonProps {
   contentToCopy: string;
@@ -29,29 +30,30 @@ const CopyButton = ({
   };
 
   return (
-    <Button
-      design="Transparent"
-      icon="copy"
-      onClick={() => handleCopy()}
+    <Tooltip
       className={className}
-      tooltip={
-        iconOnly && copied
-          ? t('common.tooltips.copied-to-clipboard', { resourceName })
-          : t('common.tooltips.copy-to-clipboard')
-      }
-      accessibleName={
-        iconOnly && copied
-          ? t('common.tooltips.copied-to-clipboard', { resourceName })
-          : t('common.tooltips.copy-to-clipboard')
-      }
-      aria-live={iconOnly ? 'polite' : undefined}
+      content={t('common.tooltips.copied-to-clipboard', { resourceName })}
+      visible={iconOnly && copied}
     >
-      {!iconOnly
-        ? copied
-          ? t('common.buttons.copied')
-          : t('common.buttons.copy')
-        : null}
-    </Button>
+      <Button
+        design="Transparent"
+        icon="copy"
+        onClick={() => handleCopy()}
+        tooltip={!copied ? t('common.tooltips.copy-to-clipboard') : undefined}
+        accessibleName={
+          iconOnly && copied
+            ? t('common.tooltips.copied-to-clipboard', { resourceName })
+            : t('common.tooltips.copy-to-clipboard')
+        }
+        aria-live={iconOnly ? 'polite' : undefined}
+      >
+        {!iconOnly
+          ? copied
+            ? t('common.buttons.copied')
+            : t('common.buttons.copy')
+          : null}
+      </Button>
+    </Tooltip>
   );
 };
 
