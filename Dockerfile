@@ -39,8 +39,7 @@ RUN npm ci
 RUN make prepare-configuration
 
 # ---- Copy result ----
-FROM gcr.io/distroless/nodejs22-debian12
-
+FROM node:22.21.1-alpine3.23
 WORKDIR /app
 
 COPY --chown=65532:65532 --from=builder /app/build /app/core-ui

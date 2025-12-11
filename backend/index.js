@@ -7,12 +7,14 @@ import { serveMonaco, serveStaticApp } from './statics';
 import { fillActiveEnvForFrontend } from './utils/other';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 
+const crypto = require('crypto');
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
 const config = require('./config.js');
 
+console.log('FIPS enabled: ', crypto.getFips() === 1);
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
