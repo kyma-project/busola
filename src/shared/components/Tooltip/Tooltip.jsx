@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
-import { Tooltip as TippyTooltip } from 'react-tippy';
+import Tippy from '@tippyjs/react';
 
-import 'react-tippy/dist/tippy.css';
+import 'tippy.js/dist/tippy.css';
 import './Tooltip.scss';
 
 export const Tooltip = ({
@@ -16,18 +16,17 @@ export const Tooltip = ({
   className = '',
 }) => {
   return (
-    <TippyTooltip
+    <Tippy
       className={className}
-      html={content}
-      position={position}
+      content={content}
+      placement={position}
       trigger={trigger}
-      distance={0}
+      offset={[0, 0]}
       delay={delay}
-      style={style}
       {...tippyProps}
     >
-      {children}
-    </TippyTooltip>
+      <span style={style}>{children}</span>
+    </Tippy>
   );
 };
 

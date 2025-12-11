@@ -3,10 +3,10 @@
 @use './wizard-dialog.scss';
 
 :root {
-  --card-box-shadow: var(--_ui5-v2-15-1_card_box_shadow);
-  --card-border: var(--_ui5-v2-15-1_card_border);
-  --card-border-radius: var(--_ui5-v2-15-1_card_border-radius);
-  --card-border: var(--_ui5-v2-15-1_card_border);
+  --card-box-shadow: var(--_ui5-v2-17-0-rc-5_card_box_shadow);
+  --card-border: var(--_ui5-v2-17-0-rc-5_card_border);
+  --card-border-radius: var(--_ui5-v2-17-0-rc-5_card_border-radius);
+  --card-border: var(--_ui5-v2-17-0-rc-5_card_border);
   --ui5-v2-15-1_table_bottom_border: none !important;
 }
 
@@ -72,6 +72,7 @@ ui5-button::part(button) {
 
 ui5-checkbox {
   -webkit-appearance: checkbox;
+  appearance: checkbox;
 }
 
 ui5-tabcontainer::part(content) {
@@ -311,15 +312,19 @@ ui5-popover {
 ui5-title[size='H1'] {
   line-height: calc(var(--sapFontHeader1Size) * 1.15);
 }
+
 ui5-title[size='H2'] {
   line-height: calc(var(--sapFontHeader2Size) * 1.15);
 }
+
 ui5-title[size='H3'] {
   line-height: calc(var(--sapFontHeader3Size) * 1.15);
 }
+
 ui5-title[size='H4'] {
   line-height: calc(var(--sapFontHeader4Size) * 1.15);
 }
+
 ui5-title[size='H5'] {
   line-height: calc(var(--sapFontHeader5Size) * 1.15);
 }
