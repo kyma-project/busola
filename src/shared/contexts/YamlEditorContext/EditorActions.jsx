@@ -132,7 +132,7 @@ export function EditorActions({
       />
       <CopyButton
         contentToCopy={val}
-        buttonClassName="action-button"
+        className="action-button"
         resourceName={title}
       />
       <Button

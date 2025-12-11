@@ -7,7 +7,7 @@ const Alert = ({ tooltipContent }) => {
   const { t } = useTranslation();
 
   return (
-    <Tooltip position="right" content={tooltipContent} delay={0}>
+    <Tooltip position="right" content={tooltipContent} delay={[0, 0]}>
       <Icon
         className="bsl-color--warning"
         accessibleName={t('common.messages.validation-error')}
