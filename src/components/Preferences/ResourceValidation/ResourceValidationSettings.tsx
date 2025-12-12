@@ -131,7 +131,7 @@ export default function ResourceValidationSettings() {
               }
               headerRenderer={() => ['policies']}
               rowRenderer={(entry) => [
-                <div className="policy-row">
+                <div key={entry.text} className="policy-row">
                   <span>{entry.text}</span>
                   {choosePolicies && (
                     <Switch
