@@ -70,7 +70,6 @@ export default defineConfig(
           },
         ],
         'no-undef': 'warn',
-        'no-case-declarations': 'warn',
         'no-constant-binary-expression': 'warn',
         'no-empty': 'warn',
         'no-prototype-builtins': 'warn',

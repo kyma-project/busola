@@ -68,11 +68,13 @@ export function autocompleteForResources({
       return resourceTypes
         .flatMap((rT) => rT.aliases)
         .filter((alias) => alias.startsWith(type));
-    case 3: // name
+    case 3: {
+      // name
       const resourceNames = resources.map((n) => n.metadata.name);
       return resourceNames
         .filter((name) => name.startsWith(tokenToAutocomplete))
         .map((name) => `${type} ${name} `);
+    }
     default:
       return [];
   }
