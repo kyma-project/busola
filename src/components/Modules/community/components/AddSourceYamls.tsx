@@ -189,7 +189,6 @@ export const AddSourceYamls = () => {
     <>
       <Button
         accessibleName="add-yamls"
-        design="Emphasized"
         key="add-yamls"
         slot="action"
         onClick={() => {

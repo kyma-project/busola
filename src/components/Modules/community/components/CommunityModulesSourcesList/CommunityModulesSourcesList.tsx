@@ -1,51 +1,32 @@
-import { useTranslation } from 'react-i18next';
-import {
-  Card,
-  Link,
-  List,
-  ListItemStandard,
-  Title,
-} from '@ui5/webcomponents-react';
-import 'components/Modules/community/components/CommunityModulesSourcesList.scss';
-import { AddSourceYamls } from './AddSourceYamls';
 import { useContext, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
+import { Card, List, Title } from '@ui5/webcomponents-react';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { HintButton } from 'shared/components/HintButton/HintButton';
-
-const ListElements = ({ sources }: { sources: string[] }) => {
-  const { t } = useTranslation();
-
-  if (!sources.length) {
-    return (
-      <ListItemStandard
-        text={t('modules.community.source-yaml.no-source-yaml')}
-      />
-    );
-  }
-  return (
-    <>
-      {sources.map((sourceYaml, ind) => (
-        <ListItemStandard key={`${ind}-${sourceYaml}`}>
-          <Link design="Default" href={sourceYaml} target="_blank">
-            {sourceYaml}
-          </Link>
-        </ListItemStandard>
-      ))}
-    </>
-  );
-};
+import { CommunityModuleContext } from '../../providers/CommunityModuleProvider';
+import { AddSourceYamls } from '../AddSourceYamls';
+import { SourceListElements } from './SourceListElements';
+import { DeleteSourceMessage } from './DeleteSourceMessage';
+import { Resource } from 'components/Extensibility/contexts/DataSources';
+import './CommunityModulesSourcesList.scss';
 
 export const CommunityModulesSourcesList = () => {
   const { t } = useTranslation();
   const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
     ModuleTemplatesContext,
   );
+  const { notInstalledCommunityModuleTemplates } = useContext(
+    CommunityModuleContext,
+  );
+
   const [showTitleDescription, setShowTitleDescription] = useState(false);
+  const [sourceToDelete, setSourceToDelete] = useState('');
 
   const getSources = () => {
     const sources = (communityModuleTemplates?.items ?? [])
-      .map((item: any) => {
+      .map((item: Resource) => {
         return item?.metadata?.annotations?.source;
       })
       .filter(Boolean);
@@ -77,18 +58,29 @@ export const CommunityModulesSourcesList = () => {
       }
     >
       <List
-        // TODO: Delete will be implemented in the next task.
-        onItemDelete={(e) => console.log('DELETE', e)}
-        selectionMode="None" // change to => 'Delete' once deleting is implemented
+        onItemDelete={(e) => setSourceToDelete(e.detail.item.textContent)}
+        selectionMode="Delete"
         separators="Inner"
         className="list-top-separator"
       >
         {moduleTemplatesLoading ? (
           <Spinner />
         ) : (
-          <ListElements sources={getSources()} />
+          <SourceListElements
+            sources={getSources()}
+            notInstalledModuleTemplates={notInstalledCommunityModuleTemplates}
+          />
         )}
       </List>
+      {sourceToDelete &&
+        createPortal(
+          <DeleteSourceMessage
+            sourceToDelete={sourceToDelete}
+            notInstalledModuleTemplates={notInstalledCommunityModuleTemplates}
+            onCancel={() => setSourceToDelete('')}
+          />,
+          document.body,
+        )}
     </Card>
   );
 };

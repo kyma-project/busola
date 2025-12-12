@@ -69,6 +69,26 @@ context('Test Community Modules views', () => {
   });
 
   it('Test adding source YAML', () => {
+    // Check if source YAMLs table is visible
+    cy.get('[accessible-name="Source YAMLs"]')
+      .contains('ui5-button:visible', 'Add')
+      .should('be.visible');
+
+    // Check if delete button is visible or not
+    cy.get('[accessible-name="Source YAMLs"]').then(($sourceTable) => {
+      // If source table has no source YAMLs, the delete button will not be visible
+      if ($sourceTable.find('[accessible-name="no-source-yaml"]')?.length) {
+        cy.get('[accessible-name="Source YAMLs"]')
+          .find('ui5-button[part="delete-button"]')
+          .should('not.exist');
+      } else {
+        // If source table has source YAMLs, the delete button will be visible
+        cy.get('[accessible-name="Source YAMLs"]')
+          .find('ui5-button[part="delete-button"]')
+          .should('exist');
+      }
+    });
+
     // Open Add YAML
     cy.get('[accessible-name="add-yamls"]').click();
     cy.get(`[header-text="Add Source YAML"]:visible`)
