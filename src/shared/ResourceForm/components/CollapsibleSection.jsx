@@ -28,6 +28,8 @@ export function CollapsibleSection({
 
   useEffect(() => {
     if (defaultOpen !== undefined) {
+      //removing useEffect causes tests to not pass
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(defaultOpen);
     }
   }, [defaultOpen]);

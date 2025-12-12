@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Text, ToolbarButton } from '@ui5/webcomponents-react';
@@ -181,6 +181,7 @@ function Resources(props) {
 
   useEffect(() => {
     if (!filter) {
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setFilteredResources(resources || []);
     } else {
       Promise.all(

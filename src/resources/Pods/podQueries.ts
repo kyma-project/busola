@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { createUsageMetrics } from 'components/Nodes/nodeQueries';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import {
@@ -114,8 +114,6 @@ const sumValuesFromLimitsContainers = (
 };
 
 export function usePodsMetricsQuery(namespace?: string) {
-  const [metrics, setMetrics] = useState<UsageMetrics[] | undefined>(undefined);
-
   // Fetch all data needed for the metrics.
   const {
     data: podMetrics,
@@ -144,7 +142,7 @@ export function usePodsMetricsQuery(namespace?: string) {
     pollingInterval: 5500,
   } as UseGetOptions) as { data: NodeList | null };
 
-  useEffect(() => {
+  const metrics = useMemo(() => {
     // Collects all fetched data and creates useful metrics.
     if (pods) {
       const podsWithMetrics = pods?.items?.reduce(
@@ -180,8 +178,9 @@ export function usePodsMetricsQuery(namespace?: string) {
         },
         [],
       );
-      setMetrics(podsWithMetrics);
+      return podsWithMetrics;
     }
+    return undefined;
   }, [pods, podMetrics, nodes]);
 
   return {

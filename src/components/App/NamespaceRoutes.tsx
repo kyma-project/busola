@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { Routes, Route, useParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
@@ -19,18 +19,14 @@ export default function NamespaceRoutes() {
   const { clusterUrl, namespaceUrl } = useUrl();
   const language = useAtomValue(languageAtom);
   const extensions = useAtomValue(extensionsAtom);
-  const [extensibilityRoutes, setExtensibilityRoutes] = useState<
-    JSX.Element[] | null
-  >(null);
 
-  useEffect(() => {
+  const extensibilityRoutes = useMemo(() => {
     if (extensions?.length) {
-      setExtensibilityRoutes(
-        extensions.map((extension) =>
-          createExtensibilityRoutes(extension, language),
-        ),
+      return extensions.map((extension) =>
+        createExtensibilityRoutes(extension, language),
       );
     }
+    return null;
   }, [extensions, language]);
 
   const { error } = useGet(

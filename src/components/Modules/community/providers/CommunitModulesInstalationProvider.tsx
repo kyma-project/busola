@@ -51,6 +51,7 @@ export function CommunityModulesUploadProvider({ children }: any) {
       (module) => getModuleName(module.moduleTpl) === moduleName,
     );
     if (!moduleDuringInstallation) {
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setModulesDuringInstallation([...modulesDuringInstallation, moduleState]);
       return;
     }

@@ -30,10 +30,10 @@ export function SuggestedQuery({
 
 export function NamespaceContextDisplay({
   namespaceContext,
-  setNamespaceContext,
+  onSetNoNamespaceContext,
 }: {
   namespaceContext: string | null;
-  setNamespaceContext: (namespace: string | null) => void;
+  onSetNoNamespaceContext: () => void;
 }) {
   const { t } = useTranslation();
 
@@ -50,7 +50,7 @@ export function NamespaceContextDisplay({
         closeIcon={
           <Icon
             name="decline"
-            onClick={() => setNamespaceContext(null)}
+            onClick={onSetNoNamespaceContext}
             accessibleName={t('command-palette.search.remove-ns-context')}
           />
         }

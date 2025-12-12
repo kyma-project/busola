@@ -28,6 +28,8 @@ export default function StatefulSetCreate({
   );
 
   useEffect(() => {
+    //statefulSet cannot be converted to useMemo
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setStatefulSet(
       _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
     );

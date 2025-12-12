@@ -134,6 +134,7 @@ export const DynamicPageComponent = ({
       layoutColumn?.layout !== 'OneColumn' &&
       layoutNumber === 'startColumn'
     ) {
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedTab(editColumn === 'startColumn' ? 'edit' : 'view');
     } else {
       setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');

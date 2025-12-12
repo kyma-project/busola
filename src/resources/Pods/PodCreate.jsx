@@ -27,6 +27,7 @@ export default function PodCreate({
   );
 
   useEffect(() => {
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setPod(_.cloneDeep(initialPod) || createPodTemplate(namespaceId));
     setInitialResource(initialPod || createPodTemplate(namespaceId));
   }, [initialPod, namespaceId]);

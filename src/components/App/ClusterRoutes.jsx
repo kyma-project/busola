@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   Route,
   Routes,
@@ -39,17 +39,15 @@ export default function ClusterRoutes() {
   const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
   const [cluster, setCluster] = useAtom(clusterAtom);
   const [search] = useSearchParams();
-  const [extensibilityRoutes, setExtensibilityRoutes] = useState(null);
   const { clusterUrl } = useUrl();
 
-  useEffect(() => {
+  const extensibilityRoutes = useMemo(() => {
     if (extensions?.length) {
-      setExtensibilityRoutes(
-        extensions?.map((extension) =>
-          createExtensibilityRoutes(extension, language),
-        ),
+      return extensions?.map((extension) =>
+        createExtensibilityRoutes(extension, language),
       );
     }
+    return null;
   }, [extensions, language]);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -24,8 +24,14 @@ export default function CustomResourceDefinitionCreate({
     initialCustomResourceDefinition ||
       createCustomResourceDefinitionsTemplate(namespace),
   );
+  const [prevNamespace, setPrevNamespace] = useState(namespace);
 
-  useEffect(() => {
+  if (
+    (initialCustomResourceDefinition &&
+      initialCustomResourceDefinition !== initialResource) ||
+    namespace !== prevNamespace
+  ) {
+    setPrevNamespace(namespace);
     setCustomResourceDefinitions(
       _.cloneDeep(initialCustomResourceDefinition) ||
         createCustomResourceDefinitionsTemplate(namespace),
@@ -34,7 +40,7 @@ export default function CustomResourceDefinitionCreate({
       initialCustomResourceDefinition ||
         createCustomResourceDefinitionsTemplate(namespace),
     );
-  }, [initialCustomResourceDefinition, namespace]);
+  }
 
   return (
     <ResourceForm

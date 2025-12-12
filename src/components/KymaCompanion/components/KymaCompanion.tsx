@@ -67,6 +67,7 @@ export default function KymaCompanion() {
 
   useEffect(() => {
     if (chatHistory[0].messages.length > 1) {
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setIsInitialScreen(false);
       return;
     } else {

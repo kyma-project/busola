@@ -43,6 +43,7 @@ export default function DeploymentCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setDeployment(
       initialDeployment
         ? _.cloneDeep(initialDeployment)

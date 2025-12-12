@@ -29,6 +29,7 @@ export default function ResourceQuotaCreate({
   );
 
   useEffect(() => {
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setResourceQuota(
       _.cloneDeep(initialResourceQuota) ||
         createResourceQuotaTemplate({ namespaceName: namespaceId }),

@@ -49,6 +49,7 @@ export default function CronJobCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
     setInitialResource(initialCronJob || createCronJobTemplate(namespace));
   }, [initialCronJob, namespace, layoutState?.showEdit?.resource]);

@@ -54,6 +54,7 @@ export default function JobCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setJob(
       initialJob
         ? cloneDeep(initialJob)

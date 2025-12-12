@@ -25,6 +25,7 @@ export function SnowFeature() {
 
   useEffect(() => {
     if (theme === 'sap_horizon_hcb' || theme === 'sap_horizon_hcw') {
+      //eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSnowOpen(false);
       localStorage.setItem(SNOW_STORAGE_KEY, JSON.stringify(false));
     }

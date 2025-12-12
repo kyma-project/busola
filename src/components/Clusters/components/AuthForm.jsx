@@ -15,10 +15,12 @@ const OIDCform = ({ resource, setResource, ...props }) => {
 
   const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
   const userIndex = getUserIndex(resource);
+  const [prevResource, setPrevResource] = useState(resource);
 
-  useEffect(() => {
+  if (resource !== prevResource) {
+    setPrevResource(resource);
     setAuth(tryParseOIDCparams(getUser(resource)) || {});
-  }, [resource]);
+  }
 
   return (
     <ResourceForm.Wrapper
@@ -74,6 +76,7 @@ const TokenForm = ({ resource, setResource, ...props }) => {
   const [token, setToken] = useState(resource?.users?.[userIndex]?.user?.token);
 
   useEffect(() => {
+    //eslint-disable-next-line react-hooks/set-state-in-effect
     setToken(resource?.users?.[userIndex]?.user?.token);
   }, [resource, userIndex]);
 

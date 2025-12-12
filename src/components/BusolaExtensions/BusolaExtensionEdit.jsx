@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -29,8 +29,16 @@ export function BusolaExtensionEdit({
   const [initialResource, setInitialResource] = useState(
     initialExtension || createConfigMapTemplate(namespace || ''),
   );
+  const [prevInitialExtension, setPrevInitialExtension] =
+    useState(initialExtension);
+  const [prevNamespace, setPrevNamespace] = useState(namespace);
 
-  useEffect(() => {
+  if (
+    initialExtension !== prevInitialExtension ||
+    namespace !== prevNamespace
+  ) {
+    setPrevInitialExtension(initialExtension);
+    setPrevNamespace(namespace);
     setExtension(
       initialExtension
         ? cloneDeep(initialExtension)
@@ -39,7 +47,7 @@ export function BusolaExtensionEdit({
     setInitialResource(
       initialExtension || createConfigMapTemplate(namespace || ''),
     );
-  }, [initialExtension, namespace]);
+  }
 
   return (
     <ResourceForm
