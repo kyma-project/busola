@@ -26,20 +26,21 @@ export function VisibilityHandler({
   const overwrite = schema.get('overwrite') ?? true;
   const [visible, setVisible] = useState(true);
 
-  useEffect(() => {
-    const setVisibility = async () => {
-      if (triggers.enabled) {
-        if (visibilityFormula) {
-          const [result] = await jsonata(
-            visibilityFormula,
-            itemVars(resource, rule?.itemVars, storeKeys),
-          );
-          setVisible(result);
-        } else if (visibilityFormula === false) {
-          setVisible(false);
-        }
+  const setVisibility = async () => {
+    if (triggers.enabled) {
+      if (visibilityFormula) {
+        const [result] = await jsonata(
+          visibilityFormula,
+          itemVars(resource, rule?.itemVars, storeKeys),
+        );
+        setVisible(result);
+      } else if (visibilityFormula === false) {
+        setVisible(false);
       }
-    };
+    }
+  };
+
+  useEffect(() => {
     setVisibility();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
