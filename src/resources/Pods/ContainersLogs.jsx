@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import {
   Button,
   Label,
-  Switch,
-  Select,
   Option,
+  Select,
+  Switch,
   Text,
 } from '@ui5/webcomponents-react';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
@@ -21,6 +21,19 @@ import './ContainersLogs.scss';
 const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
+
+const scrollToSelectedLog = () => {
+  const highlightedLogs = document.getElementsByClassName('logs-highlighted');
+  if (selectedLogIndex.current < 0) {
+    selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
+  } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
+    selectedLogIndex.current = 0;
+  }
+  const selectedLog = highlightedLogs[selectedLogIndex.current];
+  if (selectedLog) {
+    selectedLog.scrollIntoView();
+  }
+};
 
 const ContainersLogs = ({ params }) => {
   const { t } = useTranslation();
@@ -73,19 +86,6 @@ const ContainersLogs = ({ params }) => {
     }
     return <span>{log}</span>;
   }
-
-  const scrollToSelectedLog = () => {
-    const highlightedLogs = document.getElementsByClassName('logs-highlighted');
-    if (selectedLogIndex.current < 0) {
-      selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
-    } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
-      selectedLogIndex.current = 0;
-    }
-    const selectedLog = highlightedLogs[selectedLogIndex.current];
-    if (selectedLog) {
-      selectedLog.scrollIntoView();
-    }
-  };
 
   const changeSelectedLog = (e) => {
     if (e.key === 'Enter' || e.key === 'ArrowDown') {

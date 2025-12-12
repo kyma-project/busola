@@ -47,6 +47,12 @@ export function SearchInput({
   const searchInputRef = useRef(null);
   const columnLayout = useAtomValue(columnLayoutAtom);
 
+  const openSearchList = () => {
+    setTimeout(() => {
+      searchInputRef.current?.focus();
+    });
+  };
+
   const onKeyPress = (e) => {
     const { key } = e;
     if (isDetailsView) return;
@@ -94,12 +100,6 @@ export function SearchInput({
     return suggestions.map((suggestion, index) => (
       <SuggestionItem key={index} id={suggestion} text={suggestion} />
     ));
-  };
-
-  const openSearchList = () => {
-    setTimeout(() => {
-      searchInputRef.current?.focus();
-    });
   };
 
   return (
