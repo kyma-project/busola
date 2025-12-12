@@ -20,13 +20,15 @@ function getAutocompleteEntries(
         return ['nodes '];
       }
       return null;
-    case 3: // name
+    case 3: {
+      // name
       const nodeNames = (resourceCache['nodes'] || []).map(
         (n) => n.metadata.name,
       );
       return nodeNames
         .filter((name) => name.startsWith(tokenToAutocomplete))
         .map((nodeName) => `${tokens[0]} ${nodeName} `);
+    }
     default:
       return [];
   }

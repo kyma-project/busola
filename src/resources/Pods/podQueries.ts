@@ -46,7 +46,7 @@ const sumValuesFromUsageContainers = (
     usage: ResourceList;
   }[],
 ) => {
-  // Sum all values ​​from the container. If all are undefined, we leave them as they are, because it will be important later.
+  // Sum all values from the container. If all are undefined, we leave them as they are, because it will be important later.
   const isAllCpuUndefined = usageContainers?.every(
     (container) => container?.usage?.cpu === undefined,
   );
@@ -84,7 +84,7 @@ const sumValuesFromLimitsContainers = (
     };
   }[],
 ) => {
-  // Sum all values ​​from the container. If all are undefined, we leave them as they are, because it will be important later.
+  // Sum all values from the container. If all are undefined, we leave them as they are, because it will be important later.
   const isAllCpuUndefined = limitsContainers?.every(
     (container) => container?.resources?.limits?.cpu === undefined,
   );

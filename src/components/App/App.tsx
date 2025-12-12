@@ -213,7 +213,7 @@ export default function App() {
                 <Route path="cluster/:currentClusterName">
                   <Route path="*" element={<ClusterRoutes />} />
                 </Route>
-                {makeGardenerLoginRoute()}
+                {makeGardenerLoginRoute}
               </Routes>
               <Preferences />
             </ContentWrapper>

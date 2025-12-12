@@ -20,12 +20,15 @@ function getAutocompleteEntries({
         return ['pods '];
       }
       return [];
-    case 2: // pod name
+    case 2: {
+      // pod name
       const podNames = pods.map((n) => n.metadata.name);
       return podNames
         .filter((podName) => podName.startsWith(tokenToAutocomplete))
         .map((podName) => `${type} ${podName} `);
-    case 3: // container name
+    }
+    case 3: {
+      // container name
       const pod = pods.find((n) => n.metadata.name === name);
       if (!pod) return [];
       return pod.spec.containers
@@ -34,6 +37,7 @@ function getAutocompleteEntries({
           containerName.startsWith(tokenToAutocomplete),
         )
         .map((containerName) => `${type} ${name} ${containerName}`);
+    }
     default:
       return [];
   }
