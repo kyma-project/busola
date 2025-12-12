@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import {
   Button,
   Label,
-  Switch,
-  Select,
   Option,
-  Text,
+  Select,
+  Switch,
 } from '@ui5/webcomponents-react';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -17,10 +16,24 @@ import { useTranslation } from 'react-i18next';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ContainersLogs.scss';
+import { LogsPanel } from 'resources/Pods/LogsPanel';
 
 const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
+
+const scrollToSelectedLog = () => {
+  const highlightedLogs = document.getElementsByClassName('logs-highlighted');
+  if (selectedLogIndex.current < 0) {
+    selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
+  } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
+    selectedLogIndex.current = 0;
+  }
+  const selectedLog = highlightedLogs[selectedLogIndex.current];
+  if (selectedLog) {
+    selectedLog.scrollIntoView();
+  }
+};
 
 const ContainersLogs = ({ params }) => {
   const { t } = useTranslation();
@@ -74,19 +87,6 @@ const ContainersLogs = ({ params }) => {
     return <span>{log}</span>;
   }
 
-  const scrollToSelectedLog = () => {
-    const highlightedLogs = document.getElementsByClassName('logs-highlighted');
-    if (selectedLogIndex.current < 0) {
-      selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
-    } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
-      selectedLogIndex.current = 0;
-    }
-    const selectedLog = highlightedLogs[selectedLogIndex.current];
-    if (selectedLog) {
-      selectedLog.scrollIntoView();
-    }
-  };
-
   const changeSelectedLog = (e) => {
     if (e.key === 'Enter' || e.key === 'ArrowDown') {
       selectedLogIndex.current = selectedLogIndex.current + 1;
@@ -131,36 +131,6 @@ const ContainersLogs = ({ params }) => {
         content: e.message,
       });
     }
-  };
-
-  const LogsPanel = ({ streamData, containerName }) => {
-    const { error, data } = streamData;
-    if (error) return <div className="empty-logs">{error.message}</div>;
-
-    if (data.length === 0)
-      return (
-        <div className="empty-logs">
-          <Text>
-            {t('pods.message.no-logs-available', {
-              containerName: containerName,
-            })}
-          </Text>
-        </div>
-      );
-
-    const newData = reverseLogs ? [...data].reverse() : [...data];
-
-    return newData.map((arr, idx) => {
-      const timestamp = arr.split(' ')[0];
-      const stream = arr.replace(timestamp, '');
-      const log = showTimestamps ? `${timestamp} ${stream}` : stream;
-      const highlightedLog = highlightSearch(log, searchQuery);
-      return (
-        <div className="logs" key={idx}>
-          {highlightedLog}
-        </div>
-      );
-    });
   };
 
   return (

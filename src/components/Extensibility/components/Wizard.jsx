@@ -20,6 +20,10 @@ export function Wizard({ value, structure, singleRootResource }) {
   );
   const wizardName = structure?.wizard || '';
 
+  const handleCloseModal = () => {
+    setShowWizard(false);
+  };
+
   const handleCloseWithEscape = (e) => {
     if (e.key === 'Escape') handleCloseModal();
   };
@@ -27,10 +31,6 @@ export function Wizard({ value, structure, singleRootResource }) {
   useEventListener('keydown', handleCloseWithEscape);
 
   if (!isWizardEnabled) return null;
-
-  const handleCloseModal = () => {
-    setShowWizard(false);
-  };
 
   return (
     <>

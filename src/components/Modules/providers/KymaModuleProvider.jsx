@@ -49,6 +49,10 @@ export function KymaModuleContextProvider({
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   const [detailsOpen, setDetailsOpen] = useState(false);
 
+  const [initialUnchangedResource, setInitialUnchangedResource] = useState();
+  const [kymaResourceState, setKymaResourceState] = useState();
+  const notification = useNotification();
+
   useEffect(() => {
     if (kymaResource) {
       setActiveKymaModules(kymaResource?.spec?.modules || []);
@@ -62,10 +66,6 @@ export function KymaModuleContextProvider({
       setDetailsOpen(layoutState?.layout !== 'OneColumn');
     }
   }, [layoutState]);
-
-  const [initialUnchangedResource, setInitialUnchangedResource] = useState();
-  const [kymaResourceState, setKymaResourceState] = useState();
-  const notification = useNotification();
 
   const handleModuleUninstall = useCreateResource({
     singularName: 'Kyma',
