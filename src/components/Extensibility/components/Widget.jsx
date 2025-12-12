@@ -174,25 +174,24 @@ export function Widget({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const stableArrayItems = useMemo(() => arrayItems, [arrayItems?.length]);
 
+  const setStatesFromJsonata = async (canceled) => {
+    const [evaluatedChildValue] = await jsonata(stableStructure.source, {
+      index: stableIndex,
+    });
+    const [result, error] = await jsonata(
+      stableStructure.visibility?.toString(),
+      { value: evaluatedChildValue },
+      true,
+    );
+    if (canceled) return;
+    setChildValue(evaluatedChildValue);
+    setVisible(result);
+    setVisibilityError(error);
+  };
+
   useEffect(() => {
     let canceled = false;
-
-    const setStatesFromJsonata = async () => {
-      const [evaluatedChildValue] = await jsonata(stableStructure.source, {
-        index: stableIndex,
-      });
-      const [result, error] = await jsonata(
-        stableStructure.visibility?.toString(),
-        { value: evaluatedChildValue },
-        true,
-      );
-      if (canceled) return;
-      setChildValue(evaluatedChildValue);
-      setVisible(result);
-      setVisibilityError(error);
-    };
-
-    setStatesFromJsonata();
+    setStatesFromJsonata(canceled);
     return () => {
       canceled = true;
     };
@@ -205,6 +204,7 @@ export function Widget({
     originalResource,
     singleRootResource,
     embedResource,
+    jsonata,
   ]);
 
   if (visibilityError) {
