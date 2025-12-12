@@ -246,7 +246,7 @@ export const parseParams = (url: string, resource: string) => {
 export const useDoesNamespaceExist = (
   url: string,
   resource: string,
-  fetchFn?: Function,
+  fetchFn?: (_: string) => boolean,
 ) => {
   const fetch = useFetch();
 
@@ -299,7 +299,7 @@ export const useDoesNamespaceExist = (
 export const useDoesResourceExist = (
   url: string,
   resource: string,
-  fetchFn?: Function,
+  fetchFn?: (_: string) => boolean,
 ) => {
   const fetch = useFetch();
   const { parsedResource, namespace } = parseParams(url, resource);

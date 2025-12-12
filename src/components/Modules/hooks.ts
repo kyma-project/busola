@@ -108,7 +108,7 @@ export function useGetAllModulesStatuses(modules: any[]) {
 
 export const useFetchModuleData = (
   moduleTemplates: ModuleTemplateListType,
-  selector: Function,
+  selector: (_: ModuleTemplateType) => any,
   label: string,
   moduleTemplatesLoading?: boolean,
 ) => {

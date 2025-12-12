@@ -14,7 +14,7 @@ import './CommandPaletteSearchBar.scss';
 type CommandPaletteSearchBarProps = {
   slot?: string;
   shouldFocus?: boolean;
-  setShouldFocus?: Function;
+  setShouldFocus?: (_: boolean) => void;
   shellbarRef?: RefObject<HTMLElement>;
 };
 

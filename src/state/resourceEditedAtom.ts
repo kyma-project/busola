@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-export type DiscardFn = {};
+export type DiscardFn = () => void;
 
 export interface IsResourceEditedState {
   isEdited: boolean;
