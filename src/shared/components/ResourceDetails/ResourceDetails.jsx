@@ -32,6 +32,7 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { ResourceCustomStatusColumns } from './ResourceCustomStatusColumns';
 import { isEmpty } from 'lodash';
+import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -203,8 +204,7 @@ function Resource({
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
-  const { isProtected, protectedResourceWarning, protectedResourcePopover } =
-    useProtectedResources();
+  const { isProtected } = useProtectedResources();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -452,7 +452,6 @@ function Resource({
 
   return (
     <ResourceDetailContext.Provider value={true}>
-      {protectedResourcePopover()}
       <DynamicPageComponent
         className={className}
         headerContent={headerContent}
@@ -463,7 +462,9 @@ function Resource({
         description={headerDescription}
         actions={actions}
         protectedResource={protectedResource}
-        protectedResourceWarning={protectedResourceWarning(resource)}
+        protectedResourceWarning={
+          <ProtectedResourceWarning entry={resource} withText />
+        }
         content={
           <>
             <BannerCarousel>
@@ -540,7 +541,9 @@ function Resource({
             isEdit={true}
             confirmText={t('common.buttons.save')}
             protectedResource={protectedResource}
-            protectedResourceWarning={protectedResourceWarning(resource, true)}
+            protectedResourceWarning={
+              <ProtectedResourceWarning entry={resource} withText />
+            }
             readOnly={readOnly}
             disableEdit={disableEdit}
             renderForm={(props) => (
