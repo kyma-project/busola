@@ -12,6 +12,8 @@ context('Test Events', () => {
   it('Checking list', () => {
     cy.getLeftNav().contains('Events').click();
 
+    cy.wait(500);
+
     cy.get('ui5-table-row').find('ui5-table-cell').first().click();
   });
 
