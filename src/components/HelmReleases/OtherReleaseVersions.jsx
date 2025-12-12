@@ -22,9 +22,14 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
   ];
 
   const rowRenderer = ({ metadata }) => [
-    <Link url={namespaceUrl(`secrets/${metadata.name}`)}>{metadata.name}</Link>,
+    <Link key={metadata.name} url={namespaceUrl(`secrets/${metadata.name}`)}>
+      {metadata.name}
+    </Link>,
     metadata.labels.version,
-    <HelmReleaseStatus status={metadata.labels.status} />,
+    <HelmReleaseStatus
+      key={metadata.labels.status}
+      status={metadata.labels.status}
+    />,
   ];
 
   return (

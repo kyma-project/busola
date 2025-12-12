@@ -6,8 +6,8 @@ import { base64Decode, base64Encode } from 'shared/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {
-  useGetTranslation,
   getPropsFromSchema,
+  useGetTranslation,
 } from 'components/Extensibility/helpers';
 
 export function StringRenderer({
@@ -130,7 +130,7 @@ export function StringRenderer({
           if (decodable && decoded) {
             value = base64Encode(value);
           }
-          onChange &&
+          if (onChange) {
             onChange({
               storeKeys,
               scopes: ['value'],
@@ -148,6 +148,7 @@ export function StringRenderer({
                     : value,
               },
             });
+          }
         }}
         disabled={readOnly || (disableOnEdit && editMode)}
         isListItem={props.isListItem}

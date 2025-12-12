@@ -53,6 +53,7 @@ export function ClusterNodes({ data, error, loading }) {
 
     return [
       <Link
+        key={`node-details-link-${entry.metadata?.name}`}
         style={{
           fontWeight: 'bold',
           width: '100%',
@@ -98,6 +99,7 @@ export function ClusterNodes({ data, error, loading }) {
         EMPTY_TEXT_PLACEHOLDER
       ),
       <ReadableCreationTimestamp
+        key={entry.metadata?.creationTimestamp}
         timestamp={entry.metadata?.creationTimestamp}
       />,
       getStatus(entry.status),

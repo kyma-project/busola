@@ -29,9 +29,7 @@ export default defineConfig(
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',
-        'react/jsx-key': 'warn',
         'react/display-name': 'warn',
-        'react/no-children-prop': 'warn',
         'react-hooks/exhaustive-deps': 'warn',
         'react-hooks/rules-of-hooks': 'warn',
         'react-hooks/refs': 'warn',
@@ -52,7 +50,13 @@ export default defineConfig(
         ],
         '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
-        '@typescript-eslint/no-unused-expressions': 'warn',
+        '@typescript-eslint/no-unused-expressions': [
+          'error',
+          {
+            allowTernary: true,
+            allowShortCircuit: true,
+          },
+        ],
         '@typescript-eslint/ban-ts-comment': 'error',
         '@typescript-eslint/no-require-imports': 'warn',
         // Misc
@@ -66,7 +70,6 @@ export default defineConfig(
         ],
         'no-undef': 'warn',
         'no-case-declarations': 'warn',
-        'no-constant-binary-expression': 'warn',
         'no-empty': 'warn',
         'no-irregular-whitespace': 'warn',
         'no-prototype-builtins': 'warn',

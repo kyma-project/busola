@@ -51,7 +51,9 @@ export function MultiType({
         value={value}
         label={tFromStoreKeys(storeKeys, schema)}
         data-testid={
-          `${storeKeys.join('.')}-type` || tFromStoreKeys(storeKeys, schema)
+          storeKeys.join('.')
+            ? `${storeKeys.join('.')}-type`
+            : tFromStoreKeys(storeKeys, schema)
         }
         input={() => (
           <SegmentedButton>
@@ -61,7 +63,7 @@ export function MultiType({
                 key={type}
                 selected={type === selectedType}
                 onClick={() => {
-                  onChange &&
+                  if (onChange) {
                     onChange({
                       storeKeys,
                       scopes: ['value'],
@@ -70,6 +72,7 @@ export function MultiType({
                       required: false,
                       data: { value: defaults[type] },
                     });
+                  }
                 }}
               >
                 {tFromStoreKeys(storeKeys.push(type), schema)}

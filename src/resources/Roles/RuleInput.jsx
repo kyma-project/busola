@@ -160,6 +160,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         }
         actions={[
           <Button
+            key="add"
             icon="add"
             design="Transparent"
             onClick={addAllResources}
@@ -187,7 +188,12 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         defaultOpen
         nestingLevel={2}
         actions={[
-          <Button icon="add" onClick={addAllVerbs} design="Transparent">
+          <Button
+            key="add"
+            icon="add"
+            onClick={addAllVerbs}
+            design="Transparent"
+          >
             {t('common.buttons.add-all')}
           </Button>,
         ]}

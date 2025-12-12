@@ -93,6 +93,7 @@ export function PodDetails(props) {
         volume.name,
         volumeType,
         <Link
+          key={`${volume.name}-link`}
           url={namespaceUrl(
             `${pluralize(volumeType.toLowerCase() || '')}/${
               volume[volumeType].name ||

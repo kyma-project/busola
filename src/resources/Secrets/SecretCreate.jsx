@@ -114,7 +114,11 @@ export default function SecretCreate({
             onInput={(event) => onChangeInput(event, setValue)}
           >
             {options.map((option) => (
-              <ComboBoxItem id={option.key} text={option.text} />
+              <ComboBoxItem
+                key={option.key}
+                id={option.key}
+                text={option.text}
+              />
             ))}
           </ComboBox>
         )}
