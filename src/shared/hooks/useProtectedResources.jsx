@@ -18,14 +18,16 @@ export function useProtectedResources() {
   const getEntryProtection = (entry) => {
     if (!entry) return [];
 
-    return protectedResourceRules.filter((rule) =>
-      Object.entries(rule?.match || {}).every(([pattern, value]) =>
-        rule?.regex
-          ? jp.value(entry, pattern) &&
-            new RegExp(value).test(jp.value(entry, pattern))
-          : jp.value(entry, pattern) === value,
-      ),
-    );
+    return protectedResourceRules.filter((rule) => {
+      if (rule?.match === null) return;
+      else
+        return Object.entries(rule?.match || {}).every(([pattern, value]) =>
+          rule?.regex
+            ? jp.value(entry, pattern) &&
+              new RegExp(value).test(jp.value(entry, pattern))
+            : jp.value(entry, pattern) === value,
+        );
+    });
   };
 
   const isProtected = (entry) =>
