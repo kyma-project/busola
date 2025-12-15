@@ -98,7 +98,7 @@ export default function ResourceValidationSettings() {
   return (
     <UI5Panel
       title={t('settings.clusters.resourcesValidation.validateResources')}
-      accessibleName={`${t('settings.clusters.resourcesValidation.validateResources')} panel`}
+      accessibleName={t('settings.clusters.accessible-name.validateResources')}
       headerActions={
         <Switch
           accessibleName={t(

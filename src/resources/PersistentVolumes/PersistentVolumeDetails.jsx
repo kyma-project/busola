@@ -42,7 +42,7 @@ export function PersistentVolumeDetails(props) {
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
       <UI5Panel
         title={t('common.headers.specification')}
-        accessibleName={`${t('common.headers.specification')} panel`}
+        accessibleName={t('common.accessible-name.specification')}
       >
         <LayoutPanelRow
           name={t('pv.headers.finalizers')}

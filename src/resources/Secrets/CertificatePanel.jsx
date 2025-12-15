@@ -11,7 +11,7 @@ export function CertificatePanel({ name, certificate }) {
     <UI5Panel
       fixed
       title={t('secrets.certificate-panel.title', { name })}
-      accessibleName={`${t('secrets.certificate-panel.title', { name })} panel`}
+      accessibleName={t('secrets.accessible-name.certificate-panel')}
     >
       <LayoutPanelRow
         name={t('secrets.certificate-panel.subject')}

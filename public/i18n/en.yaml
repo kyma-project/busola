@@ -225,6 +225,9 @@ command-palette:
     quick-navigation: Quick navigation
     remove-ns-context: Remove Namespace context
 common:
+  accessible-name:
+    configuration: Configuration panel
+    specification: Specification panel
   ariaLabel:
     code-preview: Code Preview
     editor: editor
@@ -426,6 +429,9 @@ common:
     seconds-ago: seconds ago
   'yes': 'yes'
 components:
+  accessible-name:
+    code: Code panel
+    error: Error panel
   banner-carousel: Banner Carousel
   dropdown:
     empty-list: No resources available
@@ -520,6 +526,10 @@ cron-jobs:
   schedule: Schedule
   title: Cron Jobs
 custom-resource-definitions:
+  accessible-name:
+    names: Names panel
+    schema: Schema
+    version: Version panel
   description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
     categories: Categories
@@ -630,6 +640,8 @@ events:
     type: Type
   title: Events
 extensibility:
+  accessible-name:
+    version-panel: Version panel
   configuration-error: 'Configuration error: {{error}}'
   description: <0>Extension</0> allows you to create a separate dedicated user interface (UI) page for your CustomResourceDefinition (CRD).
   edit-section: Edit {{section}}
@@ -699,6 +711,9 @@ get-help:
   help-sap-com: help.sap.com
   kyma-project-io: kyma-project.io
 helm-releases:
+  accessible-name:
+    cannot-decode: Cannot decode Panel
+    chart-information: Chart Information Panel
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
     app-version: App Version
@@ -720,6 +735,9 @@ helm-releases:
   title: Helm Releases
 horizontal-pod-autoscalers: Horizontal Pod Autoscalers
 ingresses:
+  accessible-name:
+    default-backend: Default Backend panel
+    rules: Rules panel
   description: <0>Ingress</0> describes the routing rules for traffic to services within a cluster. The routing is managed by the Ingress resource.
   labels:
     apiGroup: API Group
@@ -858,6 +876,8 @@ kyma-companion:
     talk-to-me: Talk to me naturally. For example, "what are my tasks for today?"
     you-question: you?
 kyma-modules:
+  accessible-name:
+    advanced: Module advanced settings
   add-module: Add Modules
   all-modules-added: You have added all the modules
   associated-resources: Associated Resources
@@ -910,6 +930,8 @@ legal:
   privacy: Privacy
   trademark: Trademark
 limit-ranges:
+  accessible-name:
+    limits: Limits panel
   description: <0> Limit Range </0> is a policy to constrain the resource allocations that you can specify for each applicable object kind in a namespace.
   headers:
     default: Default
@@ -933,6 +955,9 @@ modules:
     error: Error loading associated resources
     loading: Loading...
   community:
+    accessible-name:
+      advanced: Community module advanced settings
+      edit: Community modules edit panel
     add-module: Add Community Modules
     documentation: Documentation
     installed-modules: Community Modules
@@ -1005,6 +1030,9 @@ navigation:
   upload-yaml:
     title: Upload YAML
 network-policies:
+  accessible-name:
+    ip-block: IP Block panel
+    pod-selector: Pod Selector panel
   description: <0>Network Policy</0> allows you to control how a Pod communicates with different network entities.
   headers:
     cidr: CIDR
@@ -1058,6 +1086,8 @@ nodes:
   title: Nodes
   title_details: Node {{nodeName}}
 persistent-volume-claims:
+  accessible-name:
+    resources: Resources panel
   description: <0>Persistent Volume Claim (PVC)</0> is a request for the PersistentVolume resources.
   headers:
     access-modes: Access Modes
@@ -1080,6 +1110,8 @@ persistent-volume-claims:
     lost: Lost binding between PersistentVolume and PersistentVolumeClaim
     pending: Checking if binding between PersistentVolume and PersistentVolumeClaim is established.
 pods:
+  accessible-name:
+    logs: Logs panel
   buttons:
     view-logs: View Logs
   description: <0>Pod</0> is the smallest and simplest Kubernetes object that represents a set of containers running on your cluster.
@@ -1198,6 +1230,8 @@ replica-sets:
     replicas: Replicas
   title: Replica Sets
 resource-graph:
+  accessible-name:
+    resource-graph: Resource Graph panel
   buttons:
     go-to-details: Go to details
   error: Something went wrong during rendering the graph.
@@ -1309,6 +1343,8 @@ schema:
     yaml: YAML
   required: Required
 secrets:
+  accessible-name:
+    certificate-panel: Certificate panel
   buttons:
     decode: Decode
     encode: Encode
@@ -1374,6 +1410,8 @@ service-management:
   title: Service Management
 settings:
   clusters:
+    accessible-name:
+      validateResources: Validate Resources panel
     description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
     dontConfirmDelete: Delete without confirmation
@@ -1442,6 +1480,8 @@ stateful-sets:
 storage:
   title: Storage
 storage-classes:
+  accessible-name:
+    parameters: Parameters panel
   description: <0>Storage Class</0> provides a way for administrators to describe the "classes" of storage they offer.
   headers:
     allow-volume-expansion: Allow Volume Expansion

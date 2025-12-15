@@ -169,7 +169,7 @@ const ContainersLogs = ({ params }) => {
       content={
         <UI5Panel
           title={t('pods.labels.logs')}
-          accessibleName={`${t('pods.labels.logs')} panel`}
+          accessibleName={t('pods.accessible-name.logs')}
           headerActions={
             <>
               <Label for="context-chooser">

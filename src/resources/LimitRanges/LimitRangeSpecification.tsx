@@ -161,7 +161,7 @@ export default function LimitRangeSpecification({
   ) : (
     <UI5Panel
       title={t('limit-ranges.headers.limits')}
-      accessibleName={`${t('limit-ranges.headers.limits')} panel`}
+      accessibleName={t('limit-ranges.accessible-name.limits')}
       className={'limit-range-spec'}
     >
       {transLimits.map(

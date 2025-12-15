@@ -214,7 +214,7 @@ export default function CommunityModulesEdit() {
         <UI5Panel
           testid={'community-modules-edit'}
           title={''}
-          accessibleName="Community modules edit panel"
+          accessibleName={t('modules.community.accessible-name.edit')}
           headerActions={
             <Button
               className="min-width-button"

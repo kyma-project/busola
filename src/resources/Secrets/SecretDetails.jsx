@@ -53,7 +53,7 @@ export function SecretDetails(props) {
       keyComponent={'secret-configuration'}
       key="secret-configuration"
       title={t('common.headers.configuration')}
-      accessibleName={`${t('common.headers.configuration')} panel`}
+      accessibleName={t('common.accessible-name.configuration')}
     >
       <LayoutPanelRow name={t('secrets.headers.type')} value={secret.type} />
     </UI5Panel>

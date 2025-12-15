@@ -79,7 +79,7 @@ export default function ServiceAccountDetails(props) {
       keyComponent={'serviceaccount-configuration'}
       key="serviceaccount-configuration"
       title={t('common.headers.configuration')}
-      accessibleName={`${t('common.headers.configuration')} panel`}
+      accessibleName={t('common.accessible-name.configuration')}
     >
       <LayoutPanelRow
         name={t('service-accounts.headers.auto-mount-token')}

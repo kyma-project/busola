@@ -55,7 +55,7 @@ export default function ResourceQuotaDetails(props: any) {
         {(resource.spec.scopes || resource.spec.scopeSelector) && (
           <UI5Panel
             title={t('common.headers.specification')}
-            accessibleName={`${t('common.headers.specification')} panel`}
+            accessibleName={t('common.accessible-name.specification')}
           >
             {resource.spec?.scopes && (
               <LayoutPanelRow

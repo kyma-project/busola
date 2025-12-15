@@ -189,7 +189,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
         keyComponent="extensibility-version"
         title={t('extensibility.sections.version')}
         key={'extensibility-version'}
-        accessibleName={`${t('extensibility.sections.version')} panel`}
+        accessibleName={t('extensibility.accessible-name.version-panel')}
         headerActions={
           hasMigrationFunction && (
             <>

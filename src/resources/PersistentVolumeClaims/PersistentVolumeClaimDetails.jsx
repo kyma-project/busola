@@ -73,7 +73,9 @@ export const PVCConfiguration = (pvc) => {
       {pvc.spec.resources && (
         <UI5Panel
           title={t('persistent-volume-claims.headers.resources.title')}
-          accessibleName={`${t('persistent-volume-claims.headers.resources.title')} panel`}
+          accessibleName={t(
+            'persistent-volume-claims.accessible-name.resources',
+          )}
           keyComponent={'pvc-resources'}
           key="pvc-resources"
         >

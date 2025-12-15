@@ -95,7 +95,7 @@ export default function ResourceGraph({
       fixed
       className="card-shadow sap-margin-small"
       ref={(node: any) => setGraphEl(node)}
-      accessibleName="Resource graph panel"
+      accessibleName={t('resource-graph.accessible-name.resource-graph')}
       header={
         <Toolbar>
           <Title level="H5">{t('resource-graph.title')}</Title>

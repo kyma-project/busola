@@ -16,7 +16,7 @@ export function ReleaseDataPanel({ release, secret }) {
   return (
     <UI5Panel
       title={<>{t('helm-releases.headers.chart-information')}</>}
-      accessibleName={`${t('helm-releases.headers.chart-information')} panel`}
+      accessibleName={t('helm-releases.accessible-name.chart-information')}
     >
       {secret?.metadata && (
         <LayoutPanelRow

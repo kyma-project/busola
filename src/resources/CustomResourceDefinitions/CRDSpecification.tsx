@@ -12,7 +12,7 @@ export const CRDSpecification = ({ spec }: { spec: any }) => {
     <UI5Panel
       key="crd-specification"
       title={t('common.headers.specification')}
-      accessibleName={`${t('common.headers.specification')} panel`}
+      accessibleName={t('common.accessible-name.specification')}
     >
       <LayoutPanelRow
         name={t('custom-resource-definitions.headers.scope')}

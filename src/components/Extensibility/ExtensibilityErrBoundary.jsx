@@ -34,7 +34,7 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
         <UI5Panel
           title={this.state.error.name}
           role="alert"
-          accessibleName="Error panel"
+          accessibleName={t('components.accessible-name.error')}
         >
           <div
             style={{
