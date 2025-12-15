@@ -124,6 +124,7 @@ export function AuthForm({
     }
     setUseOidc(!useOidc);
   };
+  console.log(useOidc);
 
   return (
     <ResourceForm.Wrapper

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dialog } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
@@ -12,20 +12,17 @@ export function AddClusterDialog() {
   const [kubeconfig, setKubeconfig] = useState(undefined);
   const dialogRef = useRef(null);
 
-  useEffect(() => {
-    if (!showWizard) {
-      //Disabled because useState cannot be converted to useMemo as setState is passed to a child
-      //eslint-disable-next-line react-hooks/set-state-in-effect
-      setKubeconfig(undefined);
-    }
-  }, [showWizard]);
+  const handleCloseDialog = () => {
+    setShowWizard(false);
+    setKubeconfig(undefined);
+  };
 
   return (
     <Dialog
       open={showWizard}
       className="add-cluster-wizard-dialog"
       headerText={t('clusters.add.title')}
-      onClose={() => setShowWizard(false)}
+      onClose={handleCloseDialog}
     >
       <ErrorBoundary>
         {showWizard ? (
