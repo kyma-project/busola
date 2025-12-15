@@ -53,7 +53,10 @@ export default function ResourceQuotaDetails(props: any) {
     (resource: ResourceQuota) => (
       <React.Fragment key="resource-quota-details">
         {(resource.spec.scopes || resource.spec.scopeSelector) && (
-          <UI5Panel title={t('common.headers.specification')}>
+          <UI5Panel
+            title={t('common.headers.specification')}
+            accessibleName={t('common.accessible-name.specification')}
+          >
             {resource.spec?.scopes && (
               <LayoutPanelRow
                 name={t('resource-quotas.headers.scopes')}
@@ -61,7 +64,10 @@ export default function ResourceQuotaDetails(props: any) {
               />
             )}
             {resource.spec?.scopeSelector && (
-              <UI5Panel title={t('resource-quotas.headers.scope-selectors')}>
+              <UI5Panel
+                title={t('resource-quotas.headers.scope-selectors')}
+                accessibleName={`${t('resource-quotas.headers.scope-selectors')} panel`}
+              >
                 {resource.spec.scopeSelector?.matchExpressions?.map((scope) => (
                   <>
                     <Title

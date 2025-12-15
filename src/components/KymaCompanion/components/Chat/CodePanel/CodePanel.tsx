@@ -201,6 +201,7 @@ export default function CodePanel({
     <Panel
       className="code-panel sap-margin-y-small"
       stickyHeader
+      accessibleName={t('components.accessible-name.code')}
       header={
         <FlexBox alignItems="Center" fitContainer justifyContent="SpaceBetween">
           <Title level="H6" size="H6">

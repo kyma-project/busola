@@ -29,6 +29,7 @@ export function RoleRef({ roleRef }) {
       keyComponent="role-binding"
       key="role-binding"
       title={t('common.headers.configuration')}
+      accessibleName={t('common.accessible-name.configuration')}
     >
       <LayoutPanelRow
         name={t('role-bindings.headers.role-ref')}
