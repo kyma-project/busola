@@ -26,22 +26,17 @@ export function VisibilityHandler({
   const overwrite = schema.get('overwrite') ?? true;
   const [visible, setVisible] = useState(true);
 
-  const setVisibility = async () => {
-    if (triggers.enabled) {
-      if (visibilityFormula) {
-        const [result] = await jsonata(
-          visibilityFormula,
-          itemVars(resource, rule?.itemVars, storeKeys),
-        );
-        setVisible(result);
-      } else if (visibilityFormula === false) {
-        setVisible(false);
-      }
-    }
-  };
-
   useEffect(() => {
-    setVisibility();
+    setVisibility({
+      triggers,
+      visibilityFormula,
+      resource,
+      rule,
+      storeKeys,
+      jsonata,
+      itemVars,
+      setVisible,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     triggers.enabled,
@@ -91,3 +86,26 @@ export function VisibilityHandler({
     />
   );
 }
+
+const setVisibility = async ({
+  triggers,
+  visibilityFormula,
+  resource,
+  rule,
+  storeKeys,
+  jsonata,
+  itemVars,
+  setVisible,
+}) => {
+  if (triggers.enabled) {
+    if (visibilityFormula) {
+      const [result] = await jsonata(
+        visibilityFormula,
+        itemVars(resource, rule?.itemVars, storeKeys),
+      );
+      setVisible(result);
+    } else if (visibilityFormula === false) {
+      setVisible(false);
+    }
+  }
+};
