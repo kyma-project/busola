@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { RefObject, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { NavNode } from 'state/types';
@@ -10,6 +10,7 @@ import { clusterAtom } from 'state/clusterAtom';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import {
+  SideNavigationDomRef,
   SideNavigationItem,
   SideNavigationSubItem,
 } from '@ui5/webcomponents-react';
@@ -20,9 +21,10 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 type NavItemProps = {
   node: NavNode;
   subItem?: boolean;
+  sidebarRef: RefObject<SideNavigationDomRef & { closePicker: () => void }>;
 };
 
-export function NavItem({ node, subItem = false }: NavItemProps) {
+export function NavItem({ node, subItem = false, sidebarRef }: NavItemProps) {
   const { t } = useTranslation();
   const urlGenerators = useUrl();
   const navigate = useNavigate();
@@ -121,6 +123,8 @@ export function NavItem({ node, subItem = false }: NavItemProps) {
     href: node.dataSources || node.externalUrl ? getURL() : undefined,
     onClick: (e: Event) => {
       e.preventDefault();
+      sidebarRef?.current?.closePicker();
+
       e.stopPropagation();
       handleNavigation();
     },

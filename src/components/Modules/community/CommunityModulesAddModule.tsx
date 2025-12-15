@@ -46,6 +46,7 @@ import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMe
 import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
 import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList';
+import { TFunction } from 'i18next';
 
 type VersionDisplayInfo = {
   moduleTemplate: {
@@ -130,7 +131,7 @@ function transformDataForDisplay(
 }
 
 async function upload(
-  t: Function,
+  t: TFunction,
   communityModulesTemplatesToUpload: { map: Map<string, ModuleTemplateType> },
   setModulesTemplatesToUpload: React.Dispatch<
     SetStateAction<{ map: Map<string, ModuleTemplateType> }>
@@ -139,7 +140,7 @@ async function upload(
   namespaceNodes: any,
   postRequest: PostFn,
   patchRequest: MutationFn,
-  singleGet: Function,
+  singleGet: (_: any) => Promise<Response>,
   notification: NotificationContextArgs,
   callback: CallbackFn,
 ) {

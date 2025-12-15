@@ -82,7 +82,7 @@ interface CodePanelProps {
   language: string;
   withAction?: boolean;
   link?: CodeSegmentLink | null;
-  fetchFn?: Function;
+  fetchFn?: (_: string) => boolean;
 }
 
 export default function CodePanel({

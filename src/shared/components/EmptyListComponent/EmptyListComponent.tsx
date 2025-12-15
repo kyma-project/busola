@@ -32,7 +32,7 @@ export const EmptyListComponent = ({
     <Trans
       i18nKey={subtitleText}
       defaults={subtitleText}
-      components={[<ExternalLink url={url} />]}
+      components={[<ExternalLink key={subtitleText} url={url} />]}
     />
   ) : (
     ''

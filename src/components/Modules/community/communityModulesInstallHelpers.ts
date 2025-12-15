@@ -21,7 +21,7 @@ export async function installCommunityModule(
   namespaceNodes: any,
   postRequest: PostFn,
   patchRequest: MutationFn,
-  singleGet: Function,
+  singleGet: (_: string) => any,
   callback: CallbackFn,
 ) {
   try {
@@ -95,7 +95,7 @@ async function uploadResources(
   namespaceNodes: any,
   postRequest: PostFn,
   patchRequest: MutationFn,
-  singleGet: Function,
+  singleGet: (_: string) => any,
   kindFilter?: string,
 ): Promise<any[]> {
   let resourcesToUpload: any[] = resources;
@@ -133,7 +133,7 @@ async function uploadResource(
   namespaceNodes: any,
   post: PostFn,
   patchRequest: MutationFn,
-  singleGet: Function,
+  singleGet: (_: string) => any,
 ) {
   const url = await getUrl(
     resource.value,
@@ -167,7 +167,7 @@ async function uploadResource(
 
 async function checkIfResourceExist(
   url: string,
-  singleGet: Function,
+  singleGet: (_: string) => any,
 ): Promise<any> {
   try {
     const response = await singleGet(url);

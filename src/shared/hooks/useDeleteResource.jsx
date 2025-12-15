@@ -108,17 +108,19 @@ export function useDeleteResource({
               );
             }
 
-            goToLayout === 'TwoColumnsMidExpanded'
-              ? setLayoutColumn({
-                  ...layoutColumn,
-                  endColumn: null,
-                  layout: goToLayout,
-                })
-              : setLayoutColumn({
-                  ...layoutColumn,
-                  midColumn: null,
-                  layout: goToLayout,
-                });
+            if (goToLayout === 'TwoColumnsMidExpanded') {
+              setLayoutColumn({
+                ...layoutColumn,
+                endColumn: null,
+                layout: goToLayout,
+              });
+            } else {
+              setLayoutColumn({
+                ...layoutColumn,
+                midColumn: null,
+                layout: goToLayout,
+              });
+            }
           } else {
             if (window.location.pathname.includes('busolaextensions')) {
               navigate(

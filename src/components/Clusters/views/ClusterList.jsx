@@ -120,13 +120,17 @@ function ClusterList() {
 
   const rowRenderer = (entry) => [
     <Link
+      key={`${entry.name}-link`}
       design={isClusterActive(entry) ? 'Emphasized' : 'Default'}
       url={`/cluster/${encodeURIComponent(entry.contextName)}`}
     >
       {entry.name}
     </Link>,
     entry.currentContext.cluster.cluster.server,
-    <ClusterStorageType clusterConfig={entry.config} />,
+    <ClusterStorageType
+      key={entry.config?.storage}
+      clusterConfig={entry.config}
+    />,
     entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
   ];
 
