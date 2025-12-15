@@ -580,7 +580,6 @@ export function ResourceListRenderer({
       )}
       {!(error && error.status === 'Definition not found') && (
         <>
-          {/* {protectedResourcePopover(activeResource)} */}
           <GenericList
             displayArrow={displayArrow ?? true}
             disableHiding={disableHiding ?? false}

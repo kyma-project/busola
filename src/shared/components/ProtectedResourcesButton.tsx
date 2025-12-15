@@ -14,7 +14,24 @@ import { configFeaturesNames } from 'state/types';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
-export const ProtectedResourceWarning = ({ entry, withText }) => {
+type ProtectedResourceWarningProps = {
+  entry: any;
+  withText?: boolean;
+};
+
+type MatchRules = Record<string, unknown>;
+
+interface ProtectedResourceRule {
+  match?: MatchRules;
+  regex?: boolean;
+  message?: string;
+  messageSrc?: string;
+}
+
+export const ProtectedResourceWarning = ({
+  entry,
+  withText,
+}: ProtectedResourceWarningProps) => {
   const { t } = useTranslation();
   const ID = useId();
   const [protectedWarningOpen, setProtectedWarningOpen] = useState(false);
@@ -27,16 +44,26 @@ export const ProtectedResourceWarning = ({ entry, withText }) => {
     ? protectedResourcesFeature?.config?.resources || []
     : [];
 
-  const getEntryProtection = (entry) => {
+  const getEntryProtection = (entry: any) => {
     if (!entry) return [];
 
-    return protectedResourceRules.filter((rule) =>
-      Object.entries(rule?.match || {}).every(([pattern, value]) =>
-        rule?.regex
-          ? jp.value(entry, pattern) &&
-            new RegExp(value).test(jp.value(entry, pattern))
-          : jp.value(entry, pattern) === value,
-      ),
+    return protectedResourceRules.filter(
+      (rule: ProtectedResourceRule): boolean =>
+        Object.entries(rule.match ?? {}).every(
+          ([pattern, value]: [string, unknown]) => {
+            const entryValue = jp.value(entry, pattern);
+
+            if (rule.regex) {
+              return (
+                typeof entryValue === 'string' &&
+                typeof value === 'string' &&
+                new RegExp(value).test(entryValue)
+              );
+            }
+
+            return entryValue === value;
+          },
+        ),
     );
   };
   const matchedRules = getEntryProtection(entry);
@@ -46,7 +73,7 @@ export const ProtectedResourceWarning = ({ entry, withText }) => {
   }
 
   const message = matchedRules
-    .map((rule) => {
+    .map((rule: ProtectedResourceRule) => {
       if (rule.message) {
         return rule.message;
       } else if (rule.messageSrc) {
