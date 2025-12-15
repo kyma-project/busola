@@ -75,11 +75,6 @@ const TokenForm = ({ resource, setResource, ...props }) => {
   const userIndex = getUserIndex(resource);
   const [token, setToken] = useState(resource?.users?.[userIndex]?.user?.token);
 
-  useEffect(() => {
-    //eslint-disable-next-line react-hooks/set-state-in-effect
-    setToken(resource?.users?.[userIndex]?.user?.token);
-  }, [resource, userIndex]);
-
   return (
     <ResourceForm.Wrapper resource={resource} {...props}>
       <ResourceForm.FormField
@@ -124,7 +119,6 @@ export function AuthForm({
     }
     setUseOidc(!useOidc);
   };
-  console.log(useOidc);
 
   return (
     <ResourceForm.Wrapper
