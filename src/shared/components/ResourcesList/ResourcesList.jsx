@@ -579,50 +579,48 @@ export function ResourceListRenderer({
         document.body,
       )}
       {!(error && error.status === 'Definition not found') && (
-        <>
-          <GenericList
-            displayArrow={displayArrow ?? true}
-            disableHiding={disableHiding ?? false}
-            hasDetailsView={hasDetailsView}
-            customUrl={customUrl}
-            resourceType={resourceType}
-            rawResourceType={rawResourceType}
-            customColumnLayout={customColumnLayout}
-            columnLayout={columnLayout}
-            enableColumnLayout={enableColumnLayout}
-            disableMargin={disableMargin}
-            title={showTitle ? title || prettifiedResourceName : null}
-            accessibleName={
-              accessibleName ?? prettifyNamePlural(resourceTitle, resourceType)
-            }
-            actions={actions}
-            entries={resources || []}
-            headerRenderer={headerRenderer}
-            rowRenderer={rowRenderer}
-            serverDataError={error}
-            serverDataLoading={loading}
-            pagination={{ autoHide: true, ...pagination }}
-            extraHeaderContent={extraHeaderContent}
-            testid={testid}
-            sortBy={sortBy}
-            searchSettings={{
-              ...searchSettings,
-              textSearchProperties: textSearchProperties(),
-            }}
-            emptyListProps={{
-              titleText: `${t('common.labels.no')} ${prettifyNamePlural(
-                resourceTitle,
-                resourceType,
-              )}`,
-              onClick: handleShowCreate,
-              showButton: !disableCreate && namespace !== '-all-',
-              ...emptyListProps,
-              simpleEmptyListMessage: simpleEmptyListMessage,
-            }}
-            nameColIndex={nameColIndex}
-            namespaceColIndex={namespaceColIndex}
-          />
-        </>
+        <GenericList
+          displayArrow={displayArrow ?? true}
+          disableHiding={disableHiding ?? false}
+          hasDetailsView={hasDetailsView}
+          customUrl={customUrl}
+          resourceType={resourceType}
+          rawResourceType={rawResourceType}
+          customColumnLayout={customColumnLayout}
+          columnLayout={columnLayout}
+          enableColumnLayout={enableColumnLayout}
+          disableMargin={disableMargin}
+          title={showTitle ? title || prettifiedResourceName : null}
+          accessibleName={
+            accessibleName ?? prettifyNamePlural(resourceTitle, resourceType)
+          }
+          actions={actions}
+          entries={resources || []}
+          headerRenderer={headerRenderer}
+          rowRenderer={rowRenderer}
+          serverDataError={error}
+          serverDataLoading={loading}
+          pagination={{ autoHide: true, ...pagination }}
+          extraHeaderContent={extraHeaderContent}
+          testid={testid}
+          sortBy={sortBy}
+          searchSettings={{
+            ...searchSettings,
+            textSearchProperties: textSearchProperties(),
+          }}
+          emptyListProps={{
+            titleText: `${t('common.labels.no')} ${prettifyNamePlural(
+              resourceTitle,
+              resourceType,
+            )}`,
+            onClick: handleShowCreate,
+            showButton: !disableCreate && namespace !== '-all-',
+            ...emptyListProps,
+            simpleEmptyListMessage: simpleEmptyListMessage,
+          }}
+          nameColIndex={nameColIndex}
+          namespaceColIndex={namespaceColIndex}
+        />
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}
     </>
