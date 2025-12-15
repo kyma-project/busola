@@ -1,6 +1,34 @@
 import { Text } from '@ui5/webcomponents-react';
+import { useTranslation } from 'react-i18next';
 
-export const LogsPanel = ({ streamData, containerName }) => {
+function highlightSearch(log, searchText) {
+  if (searchText) {
+    const logArray = log.split(new RegExp(`(${searchText})`, 'gi'));
+    return (
+      <span>
+        {logArray.map((part, idx) =>
+          part?.toLowerCase() === searchText?.toLowerCase() ? (
+            <b key={idx} className="logs-highlighted">
+              {part}
+            </b>
+          ) : (
+            part
+          ),
+        )}
+      </span>
+    );
+  }
+  return <span>{log}</span>;
+}
+
+export const LogsPanel = ({
+  streamData,
+  containerName,
+  searchQuery,
+  reverseLogs,
+  showTimestamps,
+}) => {
+  const { t } = useTranslation();
   const { error, data } = streamData;
   if (error) return <div className="empty-logs">{error.message}</div>;
 

@@ -22,7 +22,7 @@ const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
-const scrollToSelectedLog = () => {
+const scrollToSelectedLog = (selectedLogIndex) => {
   const highlightedLogs = document.getElementsByClassName('logs-highlighted');
   if (selectedLogIndex.current < 0) {
     selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
@@ -64,36 +64,16 @@ const ContainersLogs = ({ params }) => {
 
   useEffect(() => {
     selectedLogIndex.current = 0;
-    scrollToSelectedLog();
+    scrollToSelectedLog(selectedLogIndex);
   }, [searchQuery]);
-
-  function highlightSearch(log, searchText) {
-    if (searchText) {
-      const logArray = log.split(new RegExp(`(${searchText})`, 'gi'));
-      return (
-        <span>
-          {logArray.map((part, idx) =>
-            part?.toLowerCase() === searchText?.toLowerCase() ? (
-              <b key={idx} className="logs-highlighted">
-                {part}
-              </b>
-            ) : (
-              part
-            ),
-          )}
-        </span>
-      );
-    }
-    return <span>{log}</span>;
-  }
 
   const changeSelectedLog = (e) => {
     if (e.key === 'Enter' || e.key === 'ArrowDown') {
       selectedLogIndex.current = selectedLogIndex.current + 1;
-      scrollToSelectedLog();
+      scrollToSelectedLog(selectedLogIndex);
     } else if (e.key === 'ArrowUp') {
       selectedLogIndex.current = selectedLogIndex.current - 1;
-      scrollToSelectedLog();
+      scrollToSelectedLog(selectedLogIndex);
     }
   };
 
@@ -191,6 +171,9 @@ const ContainersLogs = ({ params }) => {
             <LogsPanel
               streamData={streamData}
               containerName={params.containerName}
+              searchQuery={searchQuery}
+              reverseLogs={reverseLogs}
+              showTimestamps={showTimestamps}
             />
           </div>
         </UI5Panel>
