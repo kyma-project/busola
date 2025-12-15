@@ -42,7 +42,7 @@ export const LabelSelector = ({ selector, title }) => {
     const rowRenderer = ({ key = '', operator = '', values = [] }) => [
       key,
       operator,
-      <Tokens tokens={values} />,
+      <Tokens key="tokens" tokens={values} />,
     ];
 
     return (

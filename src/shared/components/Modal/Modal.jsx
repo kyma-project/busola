@@ -81,6 +81,7 @@ export function Modal({
 
     const output = [
       <Button
+        key="confirmation"
         design="Emphasized"
         onClick={handleConfirmClicked}
         disabled={disabledConfirm}

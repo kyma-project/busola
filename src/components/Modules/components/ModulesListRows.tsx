@@ -16,6 +16,7 @@ import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
+import { TFunction } from 'i18next';
 
 type RowResourceType = {
   name: string;
@@ -247,7 +248,7 @@ function kymaInstallationStateColumn(
   moduleStatus: any,
   managerResourceState: any,
   resourceName: string,
-  t: Function,
+  t: TFunction,
 ) {
   return (
     <>

@@ -23,6 +23,7 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
 
   const rowRenderer = ({ name, namespace }) => [
     <Link
+      key={`${namespace}/${name}`}
       url={resourceUrl({
         kind: resourceType,
         metadata: {

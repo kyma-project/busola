@@ -51,7 +51,9 @@ export function MultiType({
         value={value}
         label={tFromStoreKeys(storeKeys, schema)}
         data-testid={
-          `${storeKeys.join('.')}-type` || tFromStoreKeys(storeKeys, schema)
+          storeKeys.join('.')
+            ? `${storeKeys.join('.')}-type`
+            : tFromStoreKeys(storeKeys, schema)
         }
         input={() => (
           <SegmentedButton>
