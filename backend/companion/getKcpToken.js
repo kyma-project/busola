@@ -54,7 +54,9 @@ function getLocalCredentials() {
   try {
     return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
   } catch (error) {
-    console.warn('Local credentials file not found or could not be read');
+    console.warn(
+      `Local credentials file not found or could not be read: ${error.message}`,
+    );
     return null;
   }
 }
@@ -77,7 +79,9 @@ function getSecretManagerCredentials() {
         .trim(),
     };
   } catch (error) {
-    console.warn('Secret Manager credentials could not be read');
+    console.warn(
+      `Secret Manager credentials could not be read: ${error.message}`,
+    );
     return null;
   }
 }
