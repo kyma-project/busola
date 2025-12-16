@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, createRef } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import { Button, FlexBox } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -86,8 +86,9 @@ export function MultiInput({
   };
 
   const setEntry = (newVal, index) => {
-    internalValue[index] = newVal;
-    setInternalValue([...internalValue]);
+    const newInternalValue = [...internalValue];
+    newInternalValue[index] = newVal;
+    setInternalValue(newInternalValue);
   };
 
   const focus = (ref) => {
