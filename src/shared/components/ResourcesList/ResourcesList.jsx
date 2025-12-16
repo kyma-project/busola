@@ -441,7 +441,7 @@ export function ResourceListRenderer({
           ? {
               name: t('common.buttons.clone'),
               tooltip: t('common.buttons.clone'),
-              icon: (entry) => 'duplicate',
+              icon: () => 'duplicate',
               handler: handleResourceClone,
             }
           : null,
