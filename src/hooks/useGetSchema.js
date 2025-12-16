@@ -102,9 +102,7 @@ export const useGetResourceSchemas = (resources) => {
   );
 
   useEffect(() => {
-    const hasSchemas = Object.keys(schemaIds).every(
-      (schemaId) => schemas.schemaId,
-    );
+    const hasSchemas = Object.keys(schemaIds).every(() => schemas.schemaId);
     if (!areSchemasComputed || hasSchemas || !isWorkerOkay) {
       return;
     }

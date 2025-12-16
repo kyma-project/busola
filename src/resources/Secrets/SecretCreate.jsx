@@ -19,7 +19,6 @@ export default function SecretCreate({
   resource: initialSecret,
   resourceUrl,
   setCustomValid,
-  prefix,
   ...props
 }) {
   const { t } = useTranslation();

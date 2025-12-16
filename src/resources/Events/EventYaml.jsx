@@ -1,14 +1,7 @@
 import { ResourceForm } from 'shared/ResourceForm';
 import { showYamlTab } from './index';
 
-export default function EventYaml({
-  formElementRef,
-  onChange,
-  setCustomValid,
-  resource: initialEvent,
-  resourceUrl,
-  ...props
-}) {
+export default function EventYaml({ resource: initialEvent, ...props }) {
   return (
     <ResourceForm
       {...props}
