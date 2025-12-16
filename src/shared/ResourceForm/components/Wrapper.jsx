@@ -6,7 +6,6 @@ export function ResourceFormWrapper({
   resource,
   setResource,
   children,
-  setCustomValid,
   validationRef,
   ...props
 }) {
