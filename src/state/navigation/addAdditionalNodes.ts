@@ -18,7 +18,6 @@ export const addAdditionalNodes = (
   navNodes: NavNode[],
   scope: Scope,
   configFeatures: ConfigFeatureList,
-  moduleTemplatesCount: number | null,
 ) => {
   const extNavList = [...navNodes];
 
