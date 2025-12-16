@@ -55,7 +55,7 @@ config:
     EXTENSIBILITY_INJECTIONS:
       isEnabled: true
     EXTENSIBILITY_CUSTOM_COMPONENTS:
-      isEnabled: false
+      isEnabled: true
     EXTENSIBILITY_WIZARD:
       isEnabled: false
     KYMA_COMPANION:
