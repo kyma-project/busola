@@ -5,13 +5,7 @@ import { useGetPlaceholder } from 'components/Extensibility/helpers';
 
 import { Widget } from './Widget';
 
-export function JoinedArray({
-  value,
-  structure,
-  schema,
-  arrayItems,
-  ...props
-}) {
+export function JoinedArray({ value, structure, arrayItems, ...props }) {
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   if (isNil(value)) {

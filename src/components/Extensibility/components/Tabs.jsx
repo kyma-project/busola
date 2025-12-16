@@ -3,13 +3,7 @@ import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 import { TabContainer, Tab } from '@ui5/webcomponents-react';
 
-export function Tabs({
-  value,
-  structure,
-  schema,
-  disableMargin = false,
-  ...props
-}) {
+export function Tabs({ value, structure, schema, ...props }) {
   const { widgetT } = useGetTranslation();
 
   return Array.isArray(structure?.children) ? (

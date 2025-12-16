@@ -5,8 +5,8 @@ export function scopePaths(storeKeys) {
   const indexes = fromJS(storeKeys)
     .toArray()
     .map((item, index) => ({ item, index }))
-    .filter(({ item, index }) => typeof item === 'number')
-    .map(({ item, index }) => index);
+    .filter(({ item }) => typeof item === 'number')
+    .map(({ index }) => index);
 
   return [
     '',
