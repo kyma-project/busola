@@ -40,7 +40,6 @@ export function CommunityModulesDeleteBoxContextProvider({
 
   const detailsOpen = useMemo(() => {
     if (layoutState?.layout) {
-      console.log(layoutState?.layout !== 'OneColumn');
       return layoutState?.layout !== 'OneColumn';
     }
     return false;
