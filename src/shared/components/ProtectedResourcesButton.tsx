@@ -87,6 +87,7 @@ export const ProtectedResourceWarning = ({
   return (
     <>
       <Button
+        className="protected-resource-button"
         id={`protectedOpener-${entry?.metadata?.uid}-${ID}`}
         onClick={() => {
           setProtectedWarningOpen(true);
