@@ -32,7 +32,7 @@ export type AuthDataState = KubeconfigNonOIDCAuth | null;
 
 type handleLoginProps = {
   userCredentials: KubeconfigOIDCAuth;
-  setAuth: (auth: AuthDataState) => void;
+  setAuth: (_auth: AuthDataState) => void;
   onAfterLogin: () => void;
   onError: () => void;
 };
@@ -103,7 +103,7 @@ async function handleLogin({
     user: User | null,
     useAccessToken: boolean,
   ) => {
-    document.addEventListener('visibilitychange', async (event) => {
+    document.addEventListener('visibilitychange', async () => {
       if (document.visibilityState === 'visible') {
         if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
           user = await userManager.signinSilent();
