@@ -178,6 +178,5 @@ StatusBadge.propTypes = {
   autoResolveType: PropTypes.bool,
   noTooltip: PropTypes.bool,
   resourceKind: PropTypes.string,
-  tooltipProps: PropTypes.object,
   className: PropTypes.string,
 };

@@ -36,7 +36,10 @@ describe('CodePanel Component', () => {
     cy.mount(<CodePanel code={code} language={language} withAction={false} />);
 
     cy.get('.action-button').should('have.length', 1);
-    cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
+    cy.get('.action-button')
+      .eq(0)
+      .find('ui5-button')
+      .should('have.attr', 'icon', 'copy');
     cy.get('.action-button')
       .eq(0)
       .should('contain.text', t('common.buttons.copy'));
@@ -61,7 +64,10 @@ describe('CodePanel Component', () => {
     );
 
     cy.get('.action-button').should('have.length', 1);
-    cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
+    cy.get('.action-button')
+      .eq(0)
+      .find('ui5-button')
+      .should('have.attr', 'icon', 'copy');
     cy.get('.action-button')
       .eq(0)
       .should('contain.text', t('common.buttons.copy'));
@@ -89,6 +95,7 @@ describe('CodePanel Component', () => {
     cy.get('.action-button').should('have.length', 2);
     cy.get('.action-button')
       .eq(0)
+      .find('ui5-button')
       .should('have.attr', 'icon', 'copy')
       .should('have.attr', 'design', 'Transparent')
       .should(
@@ -149,7 +156,10 @@ describe('CodePanel Component', () => {
     );
 
     cy.get('.action-button').should('have.length', 1);
-    cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
+    cy.get('.action-button')
+      .eq(0)
+      .find('ui5-button')
+      .should('have.attr', 'icon', 'copy');
     cy.get('.action-button')
       .eq(0)
       .should('contain.text', t('common.buttons.copy'));
