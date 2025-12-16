@@ -6,6 +6,7 @@ export function isValidYaml(yaml) {
     jsyaml.load(yaml);
     return true;
   } catch (e) {
+    console.error('Invalid YAML:', e);
     return false;
   }
 }
