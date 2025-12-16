@@ -96,7 +96,7 @@ export default function SecretCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      presets={!isEdit && createPresets(secretDefs, namespace || '', t)}
+      presets={!isEdit && createPresets(secretDefs, namespace || '')}
       setCustomValid={setCustomValid}
     >
       <ResourceForm.FormField
