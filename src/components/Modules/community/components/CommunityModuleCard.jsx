@@ -106,6 +106,7 @@ export default function CommunityModuleCard({
         headerText="Advanced"
         noAnimation
         data-testid={`module-settings-panel-${module.name}`}
+        accessibleName={t('modules.community.accessible-name.advanced')}
       >
         <div className="settings-panel__content sap-margin-y-small">
           <Label>{t('modules.community.origin') + ':'} </Label>

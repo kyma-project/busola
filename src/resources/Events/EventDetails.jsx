@@ -22,6 +22,7 @@ const Specification = (event) => {
     <UI5Panel
       key="message"
       title={t('common.headers.configuration')}
+      accessibleName={t('common.accessible-name.configuration')}
       keyComponent="specification-panel"
     >
       <RowComponent

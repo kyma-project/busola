@@ -25,6 +25,7 @@ export function StorageClassDetails(props) {
         keyComponent={'storageclass-configuration'}
         key="storageclass-configuration"
         title={t('storage-classes.headers.configuration')}
+        accessibleName={t('common.accessible-name.configuration')}
       >
         <LayoutPanelRow
           name={t('storage-classes.headers.provisioner')}
@@ -46,6 +47,7 @@ export function StorageClassDetails(props) {
           fixed
           keyComponent={'storageclass-parameters'}
           title={t('storage-classes.headers.parameters')}
+          accessibleName={t('storage-classes.accessible-name.parameters')}
         >
           {Object.keys(parameters).length > 0 ? (
             Object.entries(parameters).map((parameters) => {

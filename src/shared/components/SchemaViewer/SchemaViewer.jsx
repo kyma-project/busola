@@ -20,6 +20,7 @@ export function SchemaViewer({ name, schema }) {
   return (
     <UI5Panel
       title={t('custom-resource-definitions.subtitle.schema')}
+      accessibleName={t('custom-resource-definitions.accessible-name.schema')}
       keyComponent={`crd-schema-${name}`}
       headerActions={
         <>

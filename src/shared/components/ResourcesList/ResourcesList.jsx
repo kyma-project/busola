@@ -28,6 +28,7 @@ import { useGetInjections } from 'components/Extensibility/useGetInjection';
 import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from '../Link/Link';
+import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
 
 const Injections = React.lazy(
   () => import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -257,8 +258,7 @@ export function ResourceListRenderer({
     resourceType,
   });
   const { t } = useTranslation();
-  const { isProtected, protectedResourceWarning, protectedResourcePopover } =
-    useProtectedResources();
+  const { isProtected } = useProtectedResources();
   const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
 
@@ -490,7 +490,7 @@ export function ResourceListRenderer({
             }}
           >
             {col.value(entry)}
-            {protectedResourceWarning(entry)}
+            <ProtectedResourceWarning entry={entry} />
           </div>
         );
       }
@@ -579,51 +579,48 @@ export function ResourceListRenderer({
         document.body,
       )}
       {!(error && error.status === 'Definition not found') && (
-        <>
-          {protectedResourcePopover()}
-          <GenericList
-            displayArrow={displayArrow ?? true}
-            disableHiding={disableHiding ?? false}
-            hasDetailsView={hasDetailsView}
-            customUrl={customUrl}
-            resourceType={resourceType}
-            rawResourceType={rawResourceType}
-            customColumnLayout={customColumnLayout}
-            columnLayout={columnLayout}
-            enableColumnLayout={enableColumnLayout}
-            disableMargin={disableMargin}
-            title={showTitle ? title || prettifiedResourceName : null}
-            accessibleName={
-              accessibleName ?? prettifyNamePlural(resourceTitle, resourceType)
-            }
-            actions={actions}
-            entries={resources || []}
-            headerRenderer={headerRenderer}
-            rowRenderer={rowRenderer}
-            serverDataError={error}
-            serverDataLoading={loading}
-            pagination={{ autoHide: true, ...pagination }}
-            extraHeaderContent={extraHeaderContent}
-            testid={testid}
-            sortBy={sortBy}
-            searchSettings={{
-              ...searchSettings,
-              textSearchProperties: textSearchProperties(),
-            }}
-            emptyListProps={{
-              titleText: `${t('common.labels.no')} ${prettifyNamePlural(
-                resourceTitle,
-                resourceType,
-              )}`,
-              onClick: handleShowCreate,
-              showButton: !disableCreate && namespace !== '-all-',
-              ...emptyListProps,
-              simpleEmptyListMessage: simpleEmptyListMessage,
-            }}
-            nameColIndex={nameColIndex}
-            namespaceColIndex={namespaceColIndex}
-          />
-        </>
+        <GenericList
+          displayArrow={displayArrow ?? true}
+          disableHiding={disableHiding ?? false}
+          hasDetailsView={hasDetailsView}
+          customUrl={customUrl}
+          resourceType={resourceType}
+          rawResourceType={rawResourceType}
+          customColumnLayout={customColumnLayout}
+          columnLayout={columnLayout}
+          enableColumnLayout={enableColumnLayout}
+          disableMargin={disableMargin}
+          title={showTitle ? title || prettifiedResourceName : null}
+          accessibleName={
+            accessibleName ?? prettifyNamePlural(resourceTitle, resourceType)
+          }
+          actions={actions}
+          entries={resources || []}
+          headerRenderer={headerRenderer}
+          rowRenderer={rowRenderer}
+          serverDataError={error}
+          serverDataLoading={loading}
+          pagination={{ autoHide: true, ...pagination }}
+          extraHeaderContent={extraHeaderContent}
+          testid={testid}
+          sortBy={sortBy}
+          searchSettings={{
+            ...searchSettings,
+            textSearchProperties: textSearchProperties(),
+          }}
+          emptyListProps={{
+            titleText: `${t('common.labels.no')} ${prettifyNamePlural(
+              resourceTitle,
+              resourceType,
+            )}`,
+            onClick: handleShowCreate,
+            showButton: !disableCreate && namespace !== '-all-',
+            ...emptyListProps,
+            simpleEmptyListMessage: simpleEmptyListMessage,
+          }}
+          nameColIndex={nameColIndex}
+          namespaceColIndex={namespaceColIndex}
+        />
       )}
       {!isCompact && createPortal(<YamlUploadDialog />, document.body)}
     </>

@@ -6,7 +6,10 @@ export const ErrorPanel = ({ error, title }) => {
   const { t } = useTranslation();
 
   return (
-    <UI5Panel title={title || 'Error'}>
+    <UI5Panel
+      title={title || 'Error'}
+      accessibleName={t('components.accessible-name.error')}
+    >
       <div
         style={{
           fontSize: '18px',

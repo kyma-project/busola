@@ -1,25 +1,11 @@
-import {
-  Button,
-  Icon,
-  ObjectStatus,
-  Popover,
-  Text,
-} from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useAtomValue } from 'jotai';
 import jp from 'jsonpath';
-import { useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { useTranslation } from 'react-i18next';
 
 import { disableResourceProtectionAtom } from 'state/preferences/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
 
 export function useProtectedResources() {
-  const { t } = useTranslation();
-  const popoverRef = useRef(null);
-  const [popoverMessage, setPopoverMessage] = useState('');
-
   const protectedResourcesFeature = useFeature(
     configFeaturesNames.PROTECTED_RESOURCES,
   );
@@ -32,83 +18,24 @@ export function useProtectedResources() {
   const getEntryProtection = (entry) => {
     if (!entry) return [];
 
-    return protectedResourceRules.filter((rule) =>
-      Object.entries(rule?.match || {}).every(([pattern, value]) =>
-        rule?.regex
-          ? jp.value(entry, pattern) &&
-            new RegExp(value).test(jp.value(entry, pattern))
-          : jp.value(entry, pattern) === value,
-      ),
-    );
+    return protectedResourceRules.filter((rule) => {
+      if (rule?.match === null) return;
+      else
+        return Object.entries(rule?.match || {}).every(([pattern, value]) =>
+          rule?.regex
+            ? jp.value(entry, pattern) &&
+              new RegExp(value).test(jp.value(entry, pattern))
+            : jp.value(entry, pattern) === value,
+        );
+    });
   };
 
   const isProtected = (entry) =>
     !disableResourceProtection && !!getEntryProtection(entry).length;
 
-  const protectedResourceWarning = (entry, withText) => {
-    const matchedRules = getEntryProtection(entry);
-
-    if (disableResourceProtection || !matchedRules.length) {
-      return <span />;
-    }
-
-    const message = matchedRules
-      .map((rule) => {
-        if (rule.message) {
-          return rule.message;
-        } else if (rule.messageSrc) {
-          return jp.value(entry, rule.messageSrc);
-        } else {
-          return t('common.protected-resource-description');
-        }
-      })
-      .join('\n');
-
-    return (
-      <Button
-        design="Transparent"
-        onClick={(e) => {
-          setPopoverMessage(message);
-          popoverRef?.current?.showAt(e?.target);
-        }}
-      >
-        {withText ? (
-          <ObjectStatus
-            icon={<Icon name="locked" />}
-            showDefaultIcon
-            state="Critical"
-            style={{ textOverflow: 'ellipsis' }}
-          >
-            {t('common.protected-resource')}
-          </ObjectStatus>
-        ) : (
-          <Icon
-            design="Critical"
-            name="locked"
-            style={{ marginTop: '0.125rem' }}
-          />
-        )}
-      </Button>
-    );
-  };
-
-  const protectedResourcePopover = () => {
-    if (disableResourceProtection) {
-      return <></>;
-    }
-    return createPortal(
-      <Popover placement="End" ref={popoverRef}>
-        <Text className="description">{popoverMessage}</Text>
-      </Popover>,
-      document.body,
-    );
-  };
-
   return {
     protectedResourceRules,
     getEntryProtection,
     isProtected,
-    protectedResourceWarning,
-    protectedResourcePopover,
   };
 }

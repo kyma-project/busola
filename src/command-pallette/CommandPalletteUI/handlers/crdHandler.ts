@@ -19,13 +19,15 @@ function getAutocompleteEntries({
         return ['crds'];
       }
       return [];
-    case 3: // name
+    case 3: {
+      // name
       const crdNames = (resourceCache['customresourcedefinitions'] || []).map(
         (n) => n.metadata.name,
       );
       return crdNames
         .filter((name) => name.startsWith(tokenToAutocomplete))
         ?.map((name) => `${tokens[0]} ${name} `);
+    }
     default:
       return [];
   }

@@ -10,6 +10,18 @@
     align-items: center;
   }
 }
+
 .list-top-separator {
   border-top: 1px solid var(--sapGroup_TitleBorderColor);
+}
+
+.delete-source-message-box-header > :first-child {
+  margin-bottom: 1.5rem;
+}
+
+.message-list-item {
+  display: list-item;
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-left: 1rem;
 }
