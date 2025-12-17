@@ -127,7 +127,7 @@ export const handleItemClick = async (
   version: string,
   clusterUrl: (_: string) => string,
   getScope: (_: string, __: string, ___: string) => Promise<any>,
-  namespaceUrl: (_: string, __: {}) => string,
+  namespaceUrl: (_: string, __: object) => string,
   navigate: (_: string) => void,
 ) => {
   const isNamespaced = await getScope(group, version, kind);
