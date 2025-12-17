@@ -27,16 +27,20 @@ export function VisibilityHandler({
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    setVisibility({
-      triggers,
-      visibilityFormula,
-      resource,
-      rule,
-      storeKeys,
-      jsonata,
-      itemVars,
-      setVisible,
-    });
+    const setVisibility = async () => {
+      if (triggers.enabled) {
+        if (visibilityFormula) {
+          const [result] = await jsonata(
+            visibilityFormula,
+            itemVars(resource, rule?.itemVars, storeKeys),
+          );
+          setVisible(result);
+        } else if (visibilityFormula === false) {
+          setVisible(false);
+        }
+      }
+    };
+    setVisibility();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     triggers.enabled,
@@ -86,26 +90,3 @@ export function VisibilityHandler({
     />
   );
 }
-
-const setVisibility = async ({
-  triggers,
-  visibilityFormula,
-  resource,
-  rule,
-  storeKeys,
-  jsonata,
-  itemVars,
-  setVisible,
-}) => {
-  if (triggers.enabled) {
-    if (visibilityFormula) {
-      const [result] = await jsonata(
-        visibilityFormula,
-        itemVars(resource, rule?.itemVars, storeKeys),
-      );
-      setVisible(result);
-    } else if (visibilityFormula === false) {
-      setVisible(false);
-    }
-  }
-};

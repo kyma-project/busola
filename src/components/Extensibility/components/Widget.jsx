@@ -176,18 +176,27 @@ export function Widget({
 
   useEffect(() => {
     let canceled = false;
-    setWidgetVisibility(
-      canceled,
-      stableStructure,
-      stableIndex,
-      jsonata,
-      setChildValue,
-      setVisible,
-      setVisibilityError,
-    );
+
+    const setStatesFromJsonata = async () => {
+      const [evaluatedChildValue] = await jsonata(stableStructure.source, {
+        index: stableIndex,
+      });
+      const [result, error] = await jsonata(
+        stableStructure.visibility?.toString(),
+        { value: evaluatedChildValue },
+        true,
+      );
+      if (canceled) return;
+      setChildValue(evaluatedChildValue);
+      setVisible(result);
+      setVisibilityError(error);
+    };
+
+    setStatesFromJsonata();
     return () => {
       canceled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     stableStructure,
     stableIndex,
@@ -196,7 +205,6 @@ export function Widget({
     originalResource,
     singleRootResource,
     embedResource,
-    jsonata,
   ]);
 
   if (visibilityError) {
@@ -278,26 +286,3 @@ export function Widget({
     />
   );
 }
-
-const setWidgetVisibility = async (
-  canceled,
-  stableStructure,
-  stableIndex,
-  jsonata,
-  setChildValue,
-  setVisible,
-  setVisibilityError,
-) => {
-  const [evaluatedChildValue] = await jsonata(stableStructure.source, {
-    index: stableIndex,
-  });
-  const [result, error] = await jsonata(
-    stableStructure.visibility?.toString(),
-    { value: evaluatedChildValue },
-    true,
-  );
-  if (canceled) return;
-  setChildValue(evaluatedChildValue);
-  setVisible(result);
-  setVisibilityError(error);
-};
