@@ -1,3 +1,4 @@
+/* global Buffer */
 import { getKcpToken } from './getKcpToken';
 
 export class TokenManager {

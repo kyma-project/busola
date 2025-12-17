@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { t } from 'i18next';
 import ErrorMessage from './ErrorMessage';
 import '@ui5/webcomponents-fiori/dist/illustrations/Connection.js';

@@ -1,3 +1,4 @@
+/* global Buffer */
 import rateLimit from 'express-rate-limit';
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';

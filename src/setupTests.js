@@ -1,3 +1,4 @@
+/* global afterEach, global, vi */
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
 import 'jsdom-worker-fix';

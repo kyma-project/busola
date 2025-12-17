@@ -1,3 +1,4 @@
+/* global require, module, __dirname */
 const path = require('path');
 require('@babel/register');
 const nodeExternals = require('webpack-node-externals');

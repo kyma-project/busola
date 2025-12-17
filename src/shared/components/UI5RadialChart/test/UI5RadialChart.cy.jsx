@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { UI5RadialChart } from '../UI5RadialChart';
 
 describe('UI5RadialChart', () => {

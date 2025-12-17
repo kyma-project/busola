@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { MessageChunk } from '../types';
 import TasksList from './TasksList';
 

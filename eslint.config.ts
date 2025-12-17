@@ -68,7 +68,6 @@ export default defineConfig(
             caughtErrorsIgnorePattern: '^_',
           },
         ],
-        'no-undef': 'warn',
         'no-case-declarations': 'warn',
         'no-empty': 'warn',
         'no-irregular-whitespace': 'warn',

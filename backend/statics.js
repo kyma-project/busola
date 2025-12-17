@@ -1,3 +1,4 @@
+/* global __dirname */
 // Rate limiter: Max 200 requests per 1 minutes per IP
 import rateLimit from 'express-rate-limit';
 import express from 'express';

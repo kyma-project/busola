@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { ErrorBoundary } from '../ErrorBoundary';
 
 describe('Error Boundary', () => {

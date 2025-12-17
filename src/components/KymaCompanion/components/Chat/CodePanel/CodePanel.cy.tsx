@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { t } from 'i18next';
 import CodePanel from './CodePanel';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
