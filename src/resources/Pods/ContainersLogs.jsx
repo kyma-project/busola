@@ -45,8 +45,25 @@ const ContainersLogs = ({ params }) => {
   const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
+  const scrollToSelectedLog = () => {
+    const highlightedLogs = document.getElementsByClassName('logs-highlighted');
+    if (selectedLogIndex.current < 0) {
+      selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
+    } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
+      selectedLogIndex.current = 0;
+    }
+    const selectedLog = highlightedLogs[selectedLogIndex.current];
+    if (selectedLog) {
+      selectedLog.scrollIntoView();
+    }
+  };
+
   useEffect(() => {
-    setLogsToSave(streamData.data || []);
+    const timeoutId = setTimeout(() => {
+      setLogsToSave(streamData.data || []);
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
   }, [streamData.data]);
 
   useEffect(() => {
@@ -73,19 +90,6 @@ const ContainersLogs = ({ params }) => {
     }
     return <span>{log}</span>;
   }
-
-  const scrollToSelectedLog = () => {
-    const highlightedLogs = document.getElementsByClassName('logs-highlighted');
-    if (selectedLogIndex.current < 0) {
-      selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
-    } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
-      selectedLogIndex.current = 0;
-    }
-    const selectedLog = highlightedLogs[selectedLogIndex.current];
-    if (selectedLog) {
-      selectedLog.scrollIntoView();
-    }
-  };
 
   const changeSelectedLog = (e) => {
     if (e.key === 'Enter' || e.key === 'ArrowDown') {
