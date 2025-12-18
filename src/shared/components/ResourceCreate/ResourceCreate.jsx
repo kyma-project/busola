@@ -195,6 +195,7 @@ export const ResourceCreate = ({
       {isEdit && (
         <div className="edit-form" ref={createFormRef} tabIndex={0}>
           {renderForm({
+            readOnly,
             formElementRef,
             isValid,
             setCustomValid,

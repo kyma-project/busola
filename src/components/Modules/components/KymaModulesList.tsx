@@ -41,6 +41,7 @@ type ModulesListProps = {
   kymaResource: KymaResourceType;
   namespaced: boolean;
   resourceUrl: string;
+  protectedResource: boolean;
   setOpenedModuleIndex: React.Dispatch<
     React.SetStateAction<number | undefined>
   >;
@@ -57,6 +58,7 @@ export const KymaModulesList = ({
   kymaResource,
   namespaced,
   resourceUrl,
+  protectedResource,
   setOpenedModuleIndex,
   handleResourceDelete,
   customSelectedEntry,
@@ -177,7 +179,7 @@ export const KymaModulesList = ({
         const index = selectedModules?.findIndex((kymaResourceModule) => {
           return kymaResourceModule.name === resource.name;
         });
-        return index < 0;
+        return index < 0 || protectedResource;
       },
       handler: (resource: { name: string }) => {
         const index = selectedModules?.findIndex((kymaResourceModule) => {
@@ -306,7 +308,7 @@ export const KymaModulesList = ({
         extraHeaderContent={[
           <Button
             key="add-module"
-            disabled={!resource}
+            disabled={!resource || protectedResource}
             onClick={handleShowAddModule}
           >
             {t('common.buttons.add')}
