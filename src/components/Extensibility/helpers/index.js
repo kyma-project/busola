@@ -53,7 +53,7 @@ export const useGetTranslation = () => {
       : value;
   };
 
-  const tFromStoreKeys = (storeKeys, schema, options) => {
+  const tFromStoreKeys = (storeKeys, schema) => {
     return widgetT({
       ...schema.toJS(),
       path: storeKeys.toArray().filter((el) => typeof el === 'string'),

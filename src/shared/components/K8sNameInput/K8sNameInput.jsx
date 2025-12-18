@@ -10,7 +10,6 @@ export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 export const K8sNameInput = ({
   id,
   kind,
-  showHelp = true,
   showLabel = true,
   label = 'common.labels.name',
   required = true,
@@ -67,6 +66,5 @@ export const K8sNameInput = ({
 K8sNameInput.propTypes = {
   id: PropTypes.string,
   kind: PropTypes.string.isRequired,
-  showHelp: PropTypes.bool,
   required: PropTypes.bool,
 };

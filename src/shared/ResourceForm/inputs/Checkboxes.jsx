@@ -1,15 +1,7 @@
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { CheckBox, FlexBox, Icon } from '@ui5/webcomponents-react';
 
-export function Checkboxes({
-  value = [],
-  setValue,
-  options,
-  inline,
-  dataTestID,
-  inputRef,
-  ...props
-}) {
+export function Checkboxes({ value = [], setValue, options, dataTestID }) {
   const updateValue = (key, checked) => {
     if (checked) {
       setValue([...(value || []), key]);

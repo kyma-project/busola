@@ -67,7 +67,7 @@ export function BusolaExtensionEdit({
           extension,
           `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`,
         )}
-        setValue={(val, setter) => {
+        setValue={(val) => {
           jp.value(
             extension,
             `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`,

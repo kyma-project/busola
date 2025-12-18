@@ -126,7 +126,7 @@ const getHTMLLinks = (text: string) => {
   let links: MatchedLink[] = [];
 
   if (matches?.length) {
-    links = matches.map((link, index) => {
+    links = matches.map((link) => {
       text = text.replace(link, coveredLinkSign);
       return {
         matchedText: link,

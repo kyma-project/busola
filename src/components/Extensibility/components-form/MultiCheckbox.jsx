@@ -14,14 +14,12 @@ function getValue(storeKeys, resource) {
 
 export function MultiCheckbox({
   onChange,
-  // value,  //<-- doesn't work
   schema,
   storeKeys,
   required,
   resource,
   compact,
   placeholder,
-  ...props
 }) {
   const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
 

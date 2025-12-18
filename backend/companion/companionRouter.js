@@ -209,7 +209,9 @@ async function handleFollowUpSuggestions(req, res) {
       conversationId: data?.conversation_id,
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch AI chat data' });
+    res
+      .status(500)
+      .json({ error: `Failed to fetch AI chat data: ${error.message}` });
   }
 }
 
