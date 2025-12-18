@@ -1,3 +1,4 @@
+/* global Buffer, require */
 const config = require('../config.js');
 
 export async function getKcpToken() {

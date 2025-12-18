@@ -1,3 +1,4 @@
+/* global Buffer, require */
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
 

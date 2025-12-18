@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { ControlledBy } from '../ControlledBy';
 
 describe('ControlledBy', () => {

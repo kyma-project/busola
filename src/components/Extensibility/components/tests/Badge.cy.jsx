@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { Badge } from '../Badge';
 
 describe('Badge Component', () => {

@@ -66,7 +66,6 @@ export default defineConfig(
             caughtErrorsIgnorePattern: '^_',
           },
         ],
-        'no-undef': 'warn',
         'no-empty': 'warn',
         'no-prototype-builtins': 'warn',
         'prefer-const': 'error',

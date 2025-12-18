@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import SecretData from '../SecretData';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
 
