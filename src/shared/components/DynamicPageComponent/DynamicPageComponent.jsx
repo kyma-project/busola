@@ -223,12 +223,13 @@ export const DynamicPageComponent = ({
                   layout: newLayout,
                 });
                 const resourceNamespace = searchParams.get('resourceNamespace');
+                const resourceNamespaceFragment = resourceNamespace
+                  ? `&resourceNamespace=${resourceNamespace}`
+                  : '';
                 const link = `${window.location.pathname}?layout=${newLayout}${
                   layoutColumn?.showCreate?.resourceType
                     ? '&showCreate=true'
-                    : resourceNamespace
-                      ? `&resourceNamespace=${resourceNamespace}`
-                      : ''
+                    : resourceNamespaceFragment
                 }`;
                 navigate(link);
               }}
@@ -252,12 +253,13 @@ export const DynamicPageComponent = ({
                   layout: newLayout,
                 });
                 const resourceNamespace = searchParams.get('resourceNamespace');
+                const resourceNamespaceFragment = resourceNamespace
+                  ? `&resourceNamespace=${resourceNamespace}`
+                  : '';
                 const link = `${window.location.pathname}?layout=${newLayout}${
                   layoutColumn?.showCreate?.resourceType
                     ? '&showCreate=true'
-                    : resourceNamespace
-                      ? `&resourceNamespace=${resourceNamespace}`
-                      : ''
+                    : resourceNamespaceFragment
                 }`;
                 navigate(link);
               }}
