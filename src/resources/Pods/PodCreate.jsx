@@ -27,9 +27,14 @@ export default function PodCreate({
   );
 
   useEffect(() => {
-    //eslint-disable-next-line react-hooks/set-state-in-effect
-    setPod(_.cloneDeep(initialPod) || createPodTemplate(namespaceId));
-    setInitialResource(initialPod || createPodTemplate(namespaceId));
+    const timeoutId = setTimeout(() => {
+      setPod(_.cloneDeep(initialPod) || createPodTemplate(namespaceId));
+      setInitialResource(initialPod || createPodTemplate(namespaceId));
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialPod, namespaceId]);
 
   return (

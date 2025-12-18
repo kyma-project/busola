@@ -43,15 +43,20 @@ export default function DeploymentCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
-    //eslint-disable-next-line react-hooks/set-state-in-effect
-    setDeployment(
-      initialDeployment
-        ? _.cloneDeep(initialDeployment)
-        : createDeploymentTemplate(namespace),
-    );
-    setInitialResource(
-      initialDeployment || createDeploymentTemplate(namespace),
-    );
+    const timeoutId = setTimeout(() => {
+      setDeployment(
+        initialDeployment
+          ? _.cloneDeep(initialDeployment)
+          : createDeploymentTemplate(namespace),
+      );
+      setInitialResource(
+        initialDeployment || createDeploymentTemplate(namespace),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialDeployment, namespace, layoutState?.showEdit?.resource]);
 
   const isEdit = useMemo(

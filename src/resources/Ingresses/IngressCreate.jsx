@@ -26,11 +26,16 @@ export default function IngressCreate({
   );
 
   useEffect(() => {
-    //eslint-disable-next-line react-hooks/set-state-in-effect
-    setIngress(
-      _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
-    );
-    setInitialResource(initialIngress || createIngressTemplate(namespaceId));
+    const timeoutId = setTimeout(() => {
+      setIngress(
+        _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
+      );
+      setInitialResource(initialIngress || createIngressTemplate(namespaceId));
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialIngress, namespaceId]);
 
   return (

@@ -32,10 +32,15 @@ export function GenericRoleCreate({
 
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
-    //role cannot be converted to useMemo
-    //eslint-disable-next-line react-hooks/set-state-in-effect
-    setRole(cloneDeep(initialRole) || createTemplate());
-    setInitialResource(initialRole || createTemplate());
+
+    const timeoutId = setTimeout(() => {
+      setRole(cloneDeep(initialRole) || createTemplate());
+      setInitialResource(initialRole || createTemplate());
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialRole, createTemplate, layoutState?.showEdit?.resource]);
 
   const isEdit = useMemo(

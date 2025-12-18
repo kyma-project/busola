@@ -55,12 +55,15 @@ export default function ModulesList({ namespaced }) {
       !installedCommunityModulesLoading &&
       installedCommunityModules?.length
     ) {
-      //eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedEntry(
-        installedCommunityModules.find((moduleTemplate) =>
-          checkSelectedModule(moduleTemplate, layoutState),
-        )?.name,
-      );
+      const timeoutId = setTimeout(() => {
+        setSelectedEntry(
+          installedCommunityModules.find((moduleTemplate) =>
+            checkSelectedModule(moduleTemplate, layoutState),
+          )?.name,
+        );
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [
     installedCommunityModulesLoading,

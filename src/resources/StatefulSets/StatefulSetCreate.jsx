@@ -28,14 +28,19 @@ export default function StatefulSetCreate({
   );
 
   useEffect(() => {
-    //statefulSet cannot be converted to useMemo
-    //eslint-disable-next-line react-hooks/set-state-in-effect
-    setStatefulSet(
-      _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
-    );
-    setInitialResource(
-      initialStatefulSet || createStatefulSetTemplate(namespaceId),
-    );
+    const timeoutId = setTimeout(() => {
+      setStatefulSet(
+        _.cloneDeep(initialStatefulSet) ||
+          createStatefulSetTemplate(namespaceId),
+      );
+      setInitialResource(
+        initialStatefulSet || createStatefulSetTemplate(namespaceId),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialStatefulSet, namespaceId]);
 
   return (

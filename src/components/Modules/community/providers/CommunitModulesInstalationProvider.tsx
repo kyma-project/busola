@@ -51,9 +51,14 @@ export function CommunityModulesUploadProvider({ children }: any) {
       (module) => getModuleName(module.moduleTpl) === moduleName,
     );
     if (!moduleDuringInstallation) {
-      //eslint-disable-next-line react-hooks/set-state-in-effect
-      setModulesDuringInstallation([...modulesDuringInstallation, moduleState]);
-      return;
+      const timeoutId = setTimeout(() => {
+        setModulesDuringInstallation([
+          ...modulesDuringInstallation,
+          moduleState,
+        ]);
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
     }
 
     const updatedModulesDuringInstallation = modulesDuringInstallation?.map(
@@ -65,10 +70,22 @@ export function CommunityModulesUploadProvider({ children }: any) {
         return module;
       },
     );
-    setModulesDuringInstallation(updatedModulesDuringInstallation);
-    setModuleInstallState((moduleStates) => {
-      return moduleStates.filter((state) => !isStateEqual(state, moduleState));
-    });
+
+    const modulesInstallationTimeoutId = setTimeout(() => {
+      setModulesDuringInstallation(updatedModulesDuringInstallation);
+    }, 0);
+
+    const moduleInstallTimeoutId = setTimeout(() => {
+      setModuleInstallState((moduleStates) => {
+        return moduleStates.filter(
+          (state) => !isStateEqual(state, moduleState),
+        );
+      });
+    }, 0);
+    return () => {
+      clearTimeout(modulesInstallationTimeoutId);
+      clearTimeout(moduleInstallTimeoutId);
+    };
   }, [moduleInstallState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const callbackFn: CallbackFn = (moduleTpl, moduleState, message) => {

@@ -29,15 +29,20 @@ export default function ResourceQuotaCreate({
   );
 
   useEffect(() => {
-    //eslint-disable-next-line react-hooks/set-state-in-effect
-    setResourceQuota(
-      _.cloneDeep(initialResourceQuota) ||
-        createResourceQuotaTemplate({ namespaceName: namespaceId }),
-    );
-    setInitialResource(
-      initialResourceQuota ||
-        createResourceQuotaTemplate({ namespaceName: namespaceId }),
-    );
+    const timeoutId = setTimeout(() => {
+      setResourceQuota(
+        _.cloneDeep(initialResourceQuota) ||
+          createResourceQuotaTemplate({ namespaceName: namespaceId }),
+      );
+      setInitialResource(
+        initialResourceQuota ||
+          createResourceQuotaTemplate({ namespaceName: namespaceId }),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialResourceQuota, namespaceId]);
 
   return (

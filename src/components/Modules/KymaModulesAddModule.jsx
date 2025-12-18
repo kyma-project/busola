@@ -40,14 +40,18 @@ export default function KymaModulesAddModule(props) {
           ),
       );
       const mergedModules = activeKymaModules.concat(newModules);
-      //eslint-disable-next-line react-hooks/set-state-in-effect
-      setResource({
-        ...kymaResource,
-        spec: {
-          ...kymaResource?.spec,
-          modules: mergedModules,
-        },
-      });
+
+      const timeoutId = setTimeout(() => {
+        setResource({
+          ...kymaResource,
+          spec: {
+            ...kymaResource?.spec,
+            modules: mergedModules,
+          },
+        });
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [setKymaResource, kymaResource, selectedModules, activeKymaModules]);
 

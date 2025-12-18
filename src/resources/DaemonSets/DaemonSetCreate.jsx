@@ -27,13 +27,18 @@ export default function DaemonSetCreate({
   );
 
   useEffect(() => {
-    //eslint-disable-next-line react-hooks/set-state-in-effect
-    setDaemonSet(
-      _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
-    );
-    setInitialResource(
-      initialDaemonSet || createDaemonSetTemplate(namespaceId),
-    );
+    const timeoutId = setTimeout(() => {
+      setDaemonSet(
+        _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
+      );
+      setInitialResource(
+        initialDaemonSet || createDaemonSetTemplate(namespaceId),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialDaemonSet, namespaceId]);
 
   return (

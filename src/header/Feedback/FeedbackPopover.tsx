@@ -38,10 +38,21 @@ export default function FeedbackPopover() {
       showFeedback === FEEDBACK_SHOW_TYPE.SHOW ||
       showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE
     ) {
-      //eslint-disable-next-line react-hooks/set-state-in-effect
-      setShowNewIndicators(true);
+      const timeoutId = setTimeout(() => {
+        setShowNewIndicators(true);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     } else {
-      setShowNewIndicators(false);
+      const timeoutId = setTimeout(() => {
+        setShowNewIndicators(false);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
   }, [showFeedback]);
 
