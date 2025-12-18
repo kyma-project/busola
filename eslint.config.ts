@@ -68,7 +68,6 @@ export default defineConfig(
         ],
         'no-undef': 'warn',
         'no-empty': 'warn',
-        'no-prototype-builtins': 'warn',
         'prefer-const': 'error',
       },
     },
