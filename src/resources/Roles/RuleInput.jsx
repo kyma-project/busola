@@ -53,6 +53,10 @@ export function RuleInput({ rule, rules, setRules, schema }) {
   const resourceNamesDesc = getDescription(schema, 'rules.resourceNames');
   const nonResourceURLsDesc = getDescription(schema, 'rules.nonResourceURLs');
 
+  if (!Array.isArray(rule?.apiGroups)) {
+    rule.apiGroups = [];
+  }
+
   // dictionary of pairs (apiGroup: resources in that apiGroup)
   const apiRules = rule.apiGroups.flat();
   const {

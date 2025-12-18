@@ -97,9 +97,8 @@ export function ResourceList({
   });
 
   // make sure "kind" is present on resources
-  const newValue = { ...value };
   if (Array.isArray(value?.items)) {
-    newValue.items = value.items.map((d) => ({ ...d, kind }));
+    value.items = value.items.map((d) => ({ ...d, kind }));
   }
 
   return (
@@ -108,14 +107,14 @@ export function ResourceList({
         disableHiding={true}
         displayArrow={false}
         skipDataLoading={true}
-        loading={newValue?.loading}
-        error={newValue?.error}
-        resources={newValue?.items}
+        loading={value?.loading}
+        error={value?.error}
+        resources={value?.items}
         resourceUrl={resourceUrl}
         resourceUrlPrefix={resourceUrlPrefix}
         resourceType={pluralize(kind)}
         resourceTitle={prettifyKind(kind)}
-        namespace={newValue?.namespace || namespaceId}
+        namespace={value?.namespace || namespaceId}
         isCompact
         title={widgetT(structure)}
         disableCreate={true}

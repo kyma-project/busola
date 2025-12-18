@@ -66,22 +66,21 @@ export const ExtensibilityListCore = ({
   });
 
   const resourceTitle = resMetaData?.general?.name;
-  const newListProps = { ...listProps };
-  newListProps.resourceTitle = exists('name')
+  listProps.resourceTitle = exists('name')
     ? t('name')
     : resourceTitle || pluralize(prettifyKind(resource?.kind || ''));
 
   if (resource?.kind) {
-    newListProps.resourceUrl = listProps.resourceUrl?.replace(
+    listProps.resourceUrl = listProps.resourceUrl?.replace(
       /[a-z0-9-]+\/?$/,
       pluralize(resource.kind).toLowerCase(),
     );
   }
-  newListProps.createFormProps = { resourceSchema: resMetaData };
+  listProps.createFormProps = { resourceSchema: resMetaData };
 
-  newListProps.description = useCreateResourceDescription(description);
+  listProps.description = useCreateResourceDescription(description);
 
-  newListProps.customColumns = Array.isArray(resMetaData?.list)
+  listProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
         header: widgetT(column),
         value: (resource) => (
@@ -109,7 +108,7 @@ export const ExtensibilityListCore = ({
       tBusola,
     );
 
-  newListProps.filter = isFilterAString ? filterFn : filterFunction;
+  listProps.filter = isFilterAString ? filterFn : filterFunction;
 
   const sortOptions = (resMetaData?.list || []).filter(
     (element) => element.sort,
@@ -128,7 +127,7 @@ export const ExtensibilityListCore = ({
 
   return (
     <ResourcesList
-      {...newListProps}
+      {...listProps}
       {...props}
       rawResourceType={rawResourceType}
       displayLabelForLabels
