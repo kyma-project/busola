@@ -71,11 +71,8 @@ export function CommunityModulesUploadProvider({ children }: any) {
       },
     );
 
-    const modulesInstallationTimeoutId = setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setModulesDuringInstallation(updatedModulesDuringInstallation);
-    }, 0);
-
-    const moduleInstallTimeoutId = setTimeout(() => {
       setModuleInstallState((moduleStates) => {
         return moduleStates.filter(
           (state) => !isStateEqual(state, moduleState),
@@ -83,8 +80,7 @@ export function CommunityModulesUploadProvider({ children }: any) {
       });
     }, 0);
     return () => {
-      clearTimeout(modulesInstallationTimeoutId);
-      clearTimeout(moduleInstallTimeoutId);
+      clearTimeout(timeoutId);
     };
   }, [moduleInstallState]); // eslint-disable-line react-hooks/exhaustive-deps
 
