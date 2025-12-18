@@ -35,7 +35,12 @@ export function GroupingListPage({
   }
 
   if (error) {
-    return <UI5Panel title={error.message} />;
+    return (
+      <UI5Panel
+        title={error.message}
+        accessibleName={t('components.accessible-name.error')}
+      />
+    );
   }
 
   let entries = Object.entries(crdsByGroup);

@@ -8,7 +8,7 @@ export function useFormNavigation() {
   const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenAtom);
 
   const navigateSafely = useCallback(
-    (action: Function) => {
+    (action: () => void) => {
       // Check if we should show the confirmation dialog
       if (formOpen && isResourceEdited.isEdited) {
         // Store the navigation action for later use if the user confirms

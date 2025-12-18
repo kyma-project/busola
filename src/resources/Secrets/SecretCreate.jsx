@@ -19,7 +19,6 @@ export default function SecretCreate({
   resource: initialSecret,
   resourceUrl,
   setCustomValid,
-  prefix,
   ...props
 }) {
   const { t } = useTranslation();
@@ -110,7 +109,7 @@ export default function SecretCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      presets={!isEdit && createPresets(secretDefs, namespace || '', t)}
+      presets={!isEdit && createPresets(secretDefs, namespace || '')}
       setCustomValid={setCustomValid}
     >
       <ResourceForm.FormField
@@ -128,7 +127,11 @@ export default function SecretCreate({
             onInput={(event) => onChangeInput(event, setValue)}
           >
             {options.map((option) => (
-              <ComboBoxItem id={option.key} text={option.text} />
+              <ComboBoxItem
+                key={option.key}
+                id={option.key}
+                text={option.text}
+              />
             ))}
           </ComboBox>
         )}

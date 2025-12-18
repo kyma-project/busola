@@ -6,14 +6,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
-export function MultiType({
-  onChange,
-  schema,
-  storeKeys,
-  required,
-  resource,
-  ...props
-}) {
+export function MultiType({ onChange, schema, storeKeys, resource, ...props }) {
   const value = storeKeys.reduce((val, key) => val?.[key], resource);
 
   const { tFromStoreKeys } = useGetTranslation();
@@ -51,7 +44,9 @@ export function MultiType({
         value={value}
         label={tFromStoreKeys(storeKeys, schema)}
         data-testid={
-          `${storeKeys.join('.')}-type` || tFromStoreKeys(storeKeys, schema)
+          storeKeys.join('.')
+            ? `${storeKeys.join('.')}-type`
+            : tFromStoreKeys(storeKeys, schema)
         }
         input={() => (
           <SegmentedButton>

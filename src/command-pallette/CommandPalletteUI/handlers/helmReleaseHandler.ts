@@ -25,13 +25,15 @@ function getAutocompleteEntries({
         return [helmReleaseResourceType];
       }
       return [];
-    case 3: // name
+    case 3: {
+      // name
       const helmReleaseNames = (
         resourceCache[`${namespace}/helmreleases`] || []
       ).map((n) => n.metadata.name);
       return helmReleaseNames
         .filter((name) => name.startsWith(tokenToAutocomplete))
         .map((name) => `${tokens[0]} ${name} `);
+    }
     default:
       return [];
   }

@@ -23,6 +23,7 @@ async function isImageAvailable(url) {
     const response = await fetch(url, { method: 'HEAD' });
     return response.ok;
   } catch (error) {
+    console.error('Error checking module icon availability:', error);
     return false;
   }
 }
@@ -165,6 +166,7 @@ export default function ModulesCard({
         headerText="Advanced"
         noAnimation
         data-testid={`module-settings-panel-${module.name}`}
+        accessibleName={t('kyma-modules.accessible-name.advanced')}
       >
         <div className="settings-panel__content sap-margin-y-small">
           <Label>{t('kyma-modules.release-channel') + ':'} </Label>

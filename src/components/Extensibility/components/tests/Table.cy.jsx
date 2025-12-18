@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { Table } from '../Table';
 import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 

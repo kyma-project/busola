@@ -52,6 +52,10 @@ export function KymaModuleContextProvider({
   const [kymaResourceState, setKymaResourceState] = useState();
   const notification = useNotification();
 
+  const [initialUnchangedResource, setInitialUnchangedResource] = useState();
+  const [kymaResourceState, setKymaResourceState] = useState();
+  const notification = useNotification();
+
   useEffect(() => {
     if (kymaResource) {
       const timeoutId = setTimeout(() => {

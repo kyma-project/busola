@@ -9,7 +9,8 @@ export function useEventListener(
   dependencies: any[] = [],
   options?: EventListenerOptions,
 ) {
-  const callback = useCallback(handler, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const callback = useCallback(handler, dependencies);
 
   useEffect(() => {
     window.addEventListener(event, callback, options);

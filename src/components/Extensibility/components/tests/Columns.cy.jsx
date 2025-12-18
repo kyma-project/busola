@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { Columns } from '../Columns';
 
 describe('Columns Component', () => {

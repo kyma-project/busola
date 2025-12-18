@@ -101,7 +101,8 @@ export function CommunityModulesUploadProvider({ children }: any) {
         callback: callbackFn,
         modulesDuringUpload: modulesDuringInstallation,
       }}
-      children={children}
-    />
+    >
+      {children}
+    </CommunityModulesInstallationContext.Provider>
   );
 }

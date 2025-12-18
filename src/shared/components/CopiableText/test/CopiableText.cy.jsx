@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { CopiableText } from '../CopiableText';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
 

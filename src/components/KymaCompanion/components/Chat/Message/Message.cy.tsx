@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { t } from 'i18next';
 import Message from './Message';
 import { Author } from '../types';

@@ -14,7 +14,10 @@ export function ReleaseDataPanel({ release, secret }) {
   const { chart, info } = release;
 
   return (
-    <UI5Panel title={<>{t('helm-releases.headers.chart-information')}</>}>
+    <UI5Panel
+      title={<>{t('helm-releases.headers.chart-information')}</>}
+      accessibleName={t('helm-releases.accessible-name.chart-information')}
+    >
       {secret?.metadata && (
         <LayoutPanelRow
           name={t('secrets.name_singular')}

@@ -59,7 +59,7 @@ export default function ConfigMapCreate({
       setResource={setConfigMap}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets([], namespace || '', t)}
+      presets={createPresets([], namespace || '')}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       nameProps={{ readOnly: !!initialConfigMap?.metadata?.name }}

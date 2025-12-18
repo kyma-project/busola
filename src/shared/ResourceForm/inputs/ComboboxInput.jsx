@@ -11,7 +11,6 @@ export function ComboboxInput({
   className,
   _ref,
   onSelectionChange,
-  fullWidth,
   accessibleName,
   ...props
 }) {

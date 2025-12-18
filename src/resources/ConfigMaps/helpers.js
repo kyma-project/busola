@@ -9,7 +9,7 @@ export function createConfigMapTemplate(namespace) {
   };
 }
 
-export function createPresets(defs, namespaceId, t) {
+export function createPresets(defs) {
   if (!defs.length) {
     return null;
   }

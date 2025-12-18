@@ -40,6 +40,7 @@ export function Panel({
   return (
     <UI5Panel
       disableMargin={disableMargin}
+      accessibleName={`${widgetT(structure)} panel`}
       title={
         <>
           <Title level="H5">{widgetT(structure)}</Title>

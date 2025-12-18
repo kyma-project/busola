@@ -119,12 +119,16 @@ async function cycle(
 
       const response = await fetch(url);
 
-      const allResourcesForKind = (await response.json()).items.map(
-        (item: K8sResource) => ({
-          ...item,
-          kind: resource.kind, // add kind, as it's not present on list call
-        }),
-      );
+      const json = await response.json();
+      if (!json.items) {
+        store.current[resource.kind] = [];
+        return;
+      }
+
+      const allResourcesForKind = json.items.map((item: K8sResource) => ({
+        ...item,
+        kind: resource.kind, // add kind, as it's not present on list call
+      }));
 
       const filterOnlyRelated = async (
         possiblyRelatedResource: K8sResource,
@@ -156,6 +160,8 @@ async function cycle(
       store.current[resource.kind] = matched.filter(Boolean);
     } catch (e) {
       console.warn(e);
+      // Mark as fetched (with empty array) to prevent infinite retry loops
+      store.current[resource.kind] = [];
     }
   };
 
@@ -163,7 +169,7 @@ async function cycle(
 
   events.onRelatedResourcesRefresh();
   if (Object.keys(resourcesToFetch).length && depth - 1 > 0) {
-    cycle(store, depth - 1, config, context);
+    await cycle(store, depth - 1, config, context);
   } else {
     events.onAllLoaded();
   }

@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import {
   Button,
   Label,
-  Switch,
-  Select,
   Option,
-  Text,
+  Select,
+  Switch,
 } from '@ui5/webcomponents-react';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -17,10 +16,24 @@ import { useTranslation } from 'react-i18next';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ContainersLogs.scss';
+import { LogsPanel } from 'resources/Pods/LogsPanel';
 
 const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
+
+const scrollToSelectedLog = (selectedLogIndex) => {
+  const highlightedLogs = document.getElementsByClassName('logs-highlighted');
+  if (selectedLogIndex.current < 0) {
+    selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
+  } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
+    selectedLogIndex.current = 0;
+  }
+  const selectedLog = highlightedLogs[selectedLogIndex.current];
+  if (selectedLog) {
+    selectedLog.scrollIntoView();
+  }
+};
 
 const ContainersLogs = ({ params }) => {
   const { t } = useTranslation();
@@ -45,19 +58,6 @@ const ContainersLogs = ({ params }) => {
   const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
-  const scrollToSelectedLog = () => {
-    const highlightedLogs = document.getElementsByClassName('logs-highlighted');
-    if (selectedLogIndex.current < 0) {
-      selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
-    } else if (selectedLogIndex.current > highlightedLogs?.length - 1) {
-      selectedLogIndex.current = 0;
-    }
-    const selectedLog = highlightedLogs[selectedLogIndex.current];
-    if (selectedLog) {
-      selectedLog.scrollIntoView();
-    }
-  };
-
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setLogsToSave(streamData.data || []);
@@ -68,36 +68,16 @@ const ContainersLogs = ({ params }) => {
 
   useEffect(() => {
     selectedLogIndex.current = 0;
-    scrollToSelectedLog();
+    scrollToSelectedLog(selectedLogIndex);
   }, [searchQuery]);
-
-  function highlightSearch(log, searchText) {
-    if (searchText) {
-      const logArray = log.split(new RegExp(`(${searchText})`, 'gi'));
-      return (
-        <span>
-          {logArray.map((part, idx) =>
-            part?.toLowerCase() === searchText?.toLowerCase() ? (
-              <b key={idx} className="logs-highlighted">
-                {part}
-              </b>
-            ) : (
-              part
-            ),
-          )}
-        </span>
-      );
-    }
-    return <span>{log}</span>;
-  }
 
   const changeSelectedLog = (e) => {
     if (e.key === 'Enter' || e.key === 'ArrowDown') {
       selectedLogIndex.current = selectedLogIndex.current + 1;
-      scrollToSelectedLog();
+      scrollToSelectedLog(selectedLogIndex);
     } else if (e.key === 'ArrowUp') {
       selectedLogIndex.current = selectedLogIndex.current - 1;
-      scrollToSelectedLog();
+      scrollToSelectedLog(selectedLogIndex);
     }
   };
 
@@ -137,42 +117,13 @@ const ContainersLogs = ({ params }) => {
     }
   };
 
-  const LogsPanel = ({ streamData, containerName }) => {
-    const { error, data } = streamData;
-    if (error) return <div className="empty-logs">{error.message}</div>;
-
-    if (data.length === 0)
-      return (
-        <div className="empty-logs">
-          <Text>
-            {t('pods.message.no-logs-available', {
-              containerName: containerName,
-            })}
-          </Text>
-        </div>
-      );
-
-    const newData = reverseLogs ? [...data].reverse() : [...data];
-
-    return newData.map((arr, idx) => {
-      const timestamp = arr.split(' ')[0];
-      const stream = arr.replace(timestamp, '');
-      const log = showTimestamps ? `${timestamp} ${stream}` : stream;
-      const highlightedLog = highlightSearch(log, searchQuery);
-      return (
-        <div className="logs" key={idx}>
-          {highlightedLog}
-        </div>
-      );
-    });
-  };
-
   return (
     <DynamicPageComponent
       title={params.containerName}
       content={
         <UI5Panel
           title={t('pods.labels.logs')}
+          accessibleName={t('pods.accessible-name.logs')}
           headerActions={
             <>
               <Label for="context-chooser">
@@ -225,6 +176,9 @@ const ContainersLogs = ({ params }) => {
             <LogsPanel
               streamData={streamData}
               containerName={params.containerName}
+              searchQuery={searchQuery}
+              reverseLogs={reverseLogs}
+              showTimestamps={showTimestamps}
             />
           </div>
         </UI5Panel>

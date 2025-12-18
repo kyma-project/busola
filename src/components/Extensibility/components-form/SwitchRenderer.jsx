@@ -7,7 +7,6 @@ import {
 
 export function SwitchRenderer({
   onChange,
-  onKeyDown,
   value,
   schema,
   storeKeys,

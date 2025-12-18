@@ -8,7 +8,6 @@ export function ComboboxArrayInput({
   title,
   defaultOpen,
   placeholder,
-  inputProps,
   tooltipContent,
   sectionTooltipContent,
   options,

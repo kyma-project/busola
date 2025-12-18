@@ -18,7 +18,6 @@ export function SimpleList({
   required,
   readOnly,
   level,
-  widgets,
   nestingLevel = 0,
   ...props
 }) {

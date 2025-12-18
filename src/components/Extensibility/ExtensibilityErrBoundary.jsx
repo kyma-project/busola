@@ -18,7 +18,7 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error) {
     Sentry.captureException(error);
   }
 
@@ -31,7 +31,11 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
       const hasCause = this.state.error.cause !== undefined;
 
       return (
-        <UI5Panel title={this.state.error.name} role="alert">
+        <UI5Panel
+          title={this.state.error.name}
+          role="alert"
+          accessibleName={this.props.t('components.accessible-name.error')}
+        >
           <div
             style={{
               fontSize: '18px',
@@ -55,10 +59,7 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
   }
 }
 
-export const ExtensibilityErrBoundary = ({
-  displayButton = true,
-  ...props
-}) => {
+export const ExtensibilityErrBoundary = ({ ...props }) => {
   const { t } = useTranslation();
 
   return <ExtensibilityErrBoundaryComponent {...props} t={t} />;

@@ -33,7 +33,7 @@ export const configFeaturesNames = {
 } as const;
 
 export type ConfigFeatureList = {
-  [key in ConfigFeaturesNames]?: ConfigFeature;
+  [_key in ConfigFeaturesNames]?: ConfigFeature;
 };
 
 export type ExtInjection = {
@@ -119,7 +119,7 @@ export interface UrlOverrides {
   resourceType?: string;
 }
 
-type UrlFunction = (path: string, overrides?: UrlOverrides) => string;
+type UrlFunction = (_path: string, _overrides?: UrlOverrides) => string;
 
 export interface UrlGenerators {
   cluster: string;
@@ -127,8 +127,11 @@ export interface UrlGenerators {
   clusterUrl: UrlFunction;
   namespaceUrl: UrlFunction;
   scopedUrl: UrlFunction;
-  resourceListUrl: (resource: K8sResource, overrides?: UrlOverrides) => string;
-  resourceUrl: (resource: K8sResource, overrides?: UrlOverrides) => string;
+  resourceListUrl: (
+    _resource: K8sResource,
+    _overrides?: UrlOverrides,
+  ) => string;
+  resourceUrl: (_resource: K8sResource, _overrides?: UrlOverrides) => string;
 }
 
 export type NavNode = {
@@ -144,7 +147,7 @@ export type NavNode = {
   icon?: string;
   topLevelNode?: boolean;
   externalUrl?: string;
-  createUrlFn?: (generators: UrlGenerators) => string;
+  createUrlFn?: (_generators: UrlGenerators) => string;
   aliases?: string[];
   dataSources?: DataSources;
 };

@@ -29,9 +29,7 @@ const getProperNamespacePart = (givenNamespace, currentNamespace) => {
 export function ResourceList({
   value,
   structure,
-  dataSource,
   originalResource,
-  schema,
   scope,
   arrayItems,
   ...props

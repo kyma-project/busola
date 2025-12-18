@@ -82,7 +82,7 @@ interface CodePanelProps {
   language: string;
   withAction?: boolean;
   link?: CodeSegmentLink | null;
-  fetchFn?: Function;
+  fetchFn?: (_: string) => boolean;
 }
 
 export default function CodePanel({
@@ -194,13 +194,14 @@ export default function CodePanel({
 
   return !language ? (
     <div className="code-response sap-margin-y-small">
-      <CopyButton contentToCopy={code} tooltipClassName="copy-icon" />
+      <CopyButton contentToCopy={code} className="copy-icon" />
       <Text id="code-text">{code}</Text>
     </div>
   ) : (
     <Panel
       className="code-panel sap-margin-y-small"
       stickyHeader
+      accessibleName={t('components.accessible-name.code')}
       header={
         <FlexBox alignItems="Center" fitContainer justifyContent="SpaceBetween">
           <Title level="H6" size="H6">
@@ -208,7 +209,7 @@ export default function CodePanel({
           </Title>
           <FlexBox justifyContent="End" alignItems="Center">
             <CopyButton
-              buttonClassName="action-button"
+              className="action-button"
               contentToCopy={code}
               iconOnly={false}
             />

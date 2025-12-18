@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { JoinedArray } from '../JoinedArray';
 
 describe('JoinedArray Component', () => {

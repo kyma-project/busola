@@ -9,7 +9,6 @@ import { useState } from 'react';
 import './FormField.scss';
 
 export function FormField({
-  propertyPath,
   label,
   input,
   className,
@@ -17,14 +16,13 @@ export function FormField({
   disabled,
   tooltipContent,
   isListItem,
-  defaultValue,
   messageStrip,
   inputInfo,
   updatesOnInput,
   style,
   ...props
 }) {
-  const { validate, ...inputProps } = props;
+  const { ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
   const [openPopover, setOpenPopover] = useState(false);
 

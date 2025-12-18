@@ -84,11 +84,15 @@ export function MonacoRenderer({
       if (language === 'json' && !formatAsString) {
         try {
           parsedValue = JSON.parse(value);
-        } catch (e) {}
+        } catch (e) {
+          console.warn('JSON parse error', e);
+        }
       } else if (language === 'yaml') {
         try {
           parsedValue = jsyaml.load(value);
-        } catch (e) {}
+        } catch (e) {
+          console.warn('YAML parse error', e);
+        }
       }
 
       onChange({

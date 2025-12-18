@@ -18,6 +18,7 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/components/CommunityModulesDeleteBox';
+import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 
 export default function ModulesList({ namespaced }) {
   const { t } = useTranslation();
@@ -48,7 +49,7 @@ export default function ModulesList({ namespaced }) {
   } = useContext(CommunityModulesDeleteBoxContext);
 
   const [selectedEntry, setSelectedEntry] = useState(null);
-  const { isProtected, protectedResourceWarning } = useProtectedResources();
+  const { isProtected } = useProtectedResources();
 
   useEffect(() => {
     if (
@@ -121,10 +122,9 @@ export default function ModulesList({ namespaced }) {
           isEdit={true}
           confirmText={t('common.buttons.save')}
           protectedResource={isProtected(kymaResource)}
-          protectedResourceWarning={protectedResourceWarning(
-            kymaResource,
-            true,
-          )}
+          protectedResourceWarning={
+            <ProtectedResourceWarning entry={kymaResource} withText />
+          }
           renderForm={(props) => (
             <ErrorBoundary>
               <Create

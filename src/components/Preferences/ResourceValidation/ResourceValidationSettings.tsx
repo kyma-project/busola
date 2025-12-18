@@ -98,6 +98,7 @@ export default function ResourceValidationSettings() {
   return (
     <UI5Panel
       title={t('settings.clusters.resourcesValidation.validateResources')}
+      accessibleName={t('settings.clusters.accessible-name.validateResources')}
       headerActions={
         <Switch
           accessibleName={t(
@@ -131,7 +132,7 @@ export default function ResourceValidationSettings() {
               }
               headerRenderer={() => ['policies']}
               rowRenderer={(entry) => [
-                <div className="policy-row">
+                <div key={entry.text} className="policy-row">
                   <span>{entry.text}</span>
                   {choosePolicies && (
                     <Switch

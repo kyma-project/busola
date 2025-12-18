@@ -14,7 +14,7 @@ export const MatchExpressionsList = ({ expressions }) => {
   const rowRenderer = ({ key = '', operator = '', values = [] }) => [
     key,
     operator,
-    <Tokens tokens={values} />,
+    <Tokens key="" tokens={values} />,
   ];
 
   return (

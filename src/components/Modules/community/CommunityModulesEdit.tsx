@@ -33,6 +33,7 @@ import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTempl
 
 import 'components/Modules/community/CommunityModule.scss';
 import { SetStateAction, useSetAtom } from 'jotai';
+import { TFunction } from 'i18next';
 
 const isModuleInstalled = (
   foundModuleTemplate: ModuleTemplateType,
@@ -98,10 +99,10 @@ function onVersionChange(
 }
 
 function onSave(
-  uploadResources: Function,
-  setIsResourceEdited: Function,
+  uploadResources: () => void,
+  setIsResourceEdited: (_: any) => void,
   notification: NotificationContextArgs,
-  t: Function,
+  t: TFunction,
 ) {
   return () => {
     try {
@@ -124,7 +125,6 @@ function onSave(
 
 function transformDataForDisplay(
   availableCommunityModules: Map<string, VersionInfo[]>,
-  t: Function,
 ): ModuleDisplayInfo[] {
   return Array.from(availableCommunityModules, ([moduleName, versions]) => {
     return {
@@ -205,7 +205,6 @@ export default function CommunityModulesEdit() {
 
   const communityModulesToDisplay = transformDataForDisplay(
     availableCommunityModules,
-    t,
   );
 
   if (isCommunityModulesEnabled) {
@@ -214,6 +213,7 @@ export default function CommunityModulesEdit() {
         <UI5Panel
           testid={'community-modules-edit'}
           title={''}
+          accessibleName={t('modules.community.accessible-name.edit')}
           headerActions={
             <Button
               className="min-width-button"

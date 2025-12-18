@@ -1,10 +1,8 @@
 import { atom } from 'jotai';
 import { getFetchFn } from './utils/getFetchFn';
-import { clusterAtom } from './clusterAtom';
 
 export const kymaResourcesAtom = atom(async (get) => {
   // We need to track if cluster changes
-  const _cluster = get(clusterAtom); // eslint-disable-line @typescript-eslint/no-unused-vars
   const fetchFn = getFetchFn(get);
 
   if (!fetchFn) return null;
@@ -16,6 +14,7 @@ export const kymaResourcesAtom = atom(async (get) => {
     });
     return await response.json();
   } catch (e) {
+    console.error('Error fetching Kyma resources:', e);
     return null;
   }
 });

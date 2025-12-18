@@ -125,10 +125,10 @@ export const handleItemClick = async (
   kind: string,
   group: string,
   version: string,
-  clusterUrl: Function,
-  getScope: Function,
-  namespaceUrl: Function,
-  navigate: Function,
+  clusterUrl: (_: string) => string,
+  getScope: (_: string, __: string, ___: string) => Promise<any>,
+  namespaceUrl: (_: string, __: {}) => string,
+  navigate: (_: string) => void,
 ) => {
   const isNamespaced = await getScope(group, version, kind);
   const path = `${pluralize(kind.toLowerCase())}`;
@@ -143,7 +143,7 @@ const getResources = async (
   kind: string,
   group: string,
   version: string,
-  singleGet: Function,
+  singleGet: (_: string) => any,
 ): Promise<any> | never => {
   const url =
     group === 'v1'
@@ -170,8 +170,8 @@ const getUrlsByNamespace = (resources: Resource[]) => {
 
 export const generateAssociatedResourcesUrls = async (
   resources: Resource[],
-  singleGet: Function,
-  getScope: Function,
+  singleGet: (_: string) => any,
+  getScope: (_: string, __: string, ___: string) => Promise<any>,
 ) => {
   const allUrls: string[] = [];
 
@@ -219,7 +219,7 @@ export const generateAssociatedResourcesUrls = async (
 
 export const fetchResourceCounts = async (
   resources: Resource[],
-  fetchFn: Function,
+  fetchFn: (_: any) => Promise<Response>,
 ) => {
   const counts: Counts = {};
   for (const resource of resources) {
@@ -282,7 +282,7 @@ export const deleteResources = async (
 };
 
 export const checkIfAllResourcesAreDeleted = async (
-  singleGet: Function,
+  singleGet: (_: string) => any,
   resourcesUrls: string[],
   t: TFunction,
 ) => {
@@ -327,7 +327,7 @@ export const getCommunityResourceUrls = async (
   resources: any,
   clusterNodes: NavNode[],
   namespaceNodes: NavNode[],
-  singleGet: Function,
+  singleGet: (_: string) => any,
 ) => {
   if (!resources?.length) return [];
 

@@ -15,7 +15,6 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 export function ResourceRenderer({
   onChange,
-  onKeyDown,
   value = '',
   schema,
   storeKeys,
@@ -24,7 +23,6 @@ export function ResourceRenderer({
   originalResource,
   singleRootResource,
   embedResource,
-  ...props
 }) {
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { setVar } = useVariables();

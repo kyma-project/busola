@@ -31,7 +31,6 @@ export default function JobCreate({
   setCustomValid,
   resource: initialJob,
   resourceUrl,
-  prefix,
   ...props
 }) {
   const { t } = useTranslation();

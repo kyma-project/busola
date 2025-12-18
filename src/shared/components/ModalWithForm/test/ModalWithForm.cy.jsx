@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { ModalWithForm } from '../ModalWithForm';
 
 describe('ModalWithForm', () => {

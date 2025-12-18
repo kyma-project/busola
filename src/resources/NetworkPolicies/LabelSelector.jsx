@@ -16,6 +16,9 @@ export const LabelSelector = ({ selector, title }) => {
     return (
       <UI5Panel
         title={title || t('network-policies.headers.pod-selector')}
+        accessibleName={
+          title || t('network-policies.accessible-name.pod-selector')
+        }
         keyComponent="policy-types"
       >
         <LayoutPanelRow
@@ -42,7 +45,7 @@ export const LabelSelector = ({ selector, title }) => {
     const rowRenderer = ({ key = '', operator = '', values = [] }) => [
       key,
       operator,
-      <Tokens tokens={values} />,
+      <Tokens key="tokens" tokens={values} />,
     ];
 
     return (
@@ -63,6 +66,9 @@ export const LabelSelector = ({ selector, title }) => {
   return (
     <UI5Panel
       title={title || t('network-policies.headers.pod-selector')}
+      accessibleName={
+        title || t('network-policies.accessible-name.pod-selector')
+      }
       keyComponent="policy-types"
     >
       <Text className="sap-margin-begin-small">

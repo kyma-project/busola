@@ -28,6 +28,7 @@ export default function Disclaimer({ hideDisclaimer }: DisclaimerProps) {
             i18nKey="kyma-companion.disclaimer.text"
             components={[
               <Link
+                key="data-protection-and-privacy"
                 href="https://help.sap.com/docs/joule/serviceguide/data-protection-and-privacy"
                 design="Subtle"
                 target="_blank"

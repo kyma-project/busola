@@ -18,6 +18,7 @@ async function isImageAvailable(url) {
     const response = await fetch(url, { method: 'HEAD' });
     return response.ok;
   } catch (error) {
+    console.error('Error checking module icon availability:', error);
     return false;
   }
 }
@@ -106,6 +107,7 @@ export default function CommunityModuleCard({
         headerText="Advanced"
         noAnimation
         data-testid={`module-settings-panel-${module.name}`}
+        accessibleName={t('modules.community.accessible-name.advanced')}
       >
         <div className="settings-panel__content sap-margin-y-small">
           <Label>{t('modules.community.origin') + ':'} </Label>

@@ -214,7 +214,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
 
   const renderModules = () => {
     const modulesList = [];
-    modulesEditData?.forEach((module, i) => {
+    modulesEditData?.forEach((module) => {
       const index = selectedModules?.findIndex((selectedModule) => {
         return selectedModule.name === module?.name;
       });
@@ -360,7 +360,7 @@ export default function KymaModulesEdit({ resource, ...props }) {
             />
           ),
           actions: (closeModal, defaultCloseButton) => [
-            <Button onClick={makeForceUpdateFn(closeModal)}>
+            <Button key="force-update" onClick={makeForceUpdateFn(closeModal)}>
               {t('common.create-form.force-update')}
             </Button>,
             defaultCloseButton(closeModal),

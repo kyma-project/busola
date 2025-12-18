@@ -7,12 +7,9 @@ const GardenerLogin = React.lazy(() => import('./GardenerLogin'));
 
 export function useMakeGardenerLoginRoute() {
   const gardenerLoginFeature = useFeature(configFeaturesNames.GARDENER_LOGIN);
-
-  return () => {
-    if (gardenerLoginFeature.isEnabled) {
-      return <Route path="/gardener-login" element={<GardenerLogin />} />;
-    } else {
-      return null;
-    }
-  };
+  if (gardenerLoginFeature.isEnabled) {
+    return <Route path="/gardener-login" element={<GardenerLogin />} />;
+  } else {
+    return null;
+  }
 }

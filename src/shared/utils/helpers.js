@@ -26,6 +26,7 @@ export function getApiPath(resourceType, nodes) {
     const url = new URL(matchedNode?.viewUrl);
     return url.searchParams.get('resourceApiPath');
   } catch (e) {
+    console.error('Error getting API path for resource type:', e);
     return null;
   }
 }

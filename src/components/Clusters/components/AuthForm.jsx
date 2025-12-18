@@ -10,7 +10,7 @@ import { getUser, getUserIndex } from '../shared';
 
 import { TextArrayInput } from 'shared/ResourceForm/fields';
 
-const OIDCform = ({ resource, setResource, ...props }) => {
+const OIDCform = ({ resource, ...props }) => {
   const { t } = useTranslation();
 
   const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
@@ -70,7 +70,7 @@ const OIDCform = ({ resource, setResource, ...props }) => {
   );
 };
 
-const TokenForm = ({ resource, setResource, ...props }) => {
+const TokenForm = ({ resource, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
   const [token, setToken] = useState(resource?.users?.[userIndex]?.user?.token);
@@ -142,11 +142,7 @@ export function AuthForm({
           })}
         </MessageStrip>
         {!useOidc && (
-          <TokenForm
-            onChange={checkRequiredInputs}
-            resource={resource}
-            setResource={setResource}
-          />
+          <TokenForm onChange={checkRequiredInputs} resource={resource} />
         )}
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.using-oidc')}
@@ -161,11 +157,7 @@ export function AuthForm({
           className="oidc-switch"
         />
         {useOidc && (
-          <OIDCform
-            onChange={checkRequiredInputs}
-            resource={resource}
-            setResource={setResource}
-          />
+          <OIDCform onChange={checkRequiredInputs} resource={resource} />
         )}
       </div>
     </ResourceForm.Wrapper>

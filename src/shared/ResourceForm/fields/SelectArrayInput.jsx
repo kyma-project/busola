@@ -5,7 +5,6 @@ export function SelectArrayInput({
   title,
   defaultOpen,
   placeholder,
-  inputProps,
   tooltipContent,
   sectionTooltipContent,
   options,

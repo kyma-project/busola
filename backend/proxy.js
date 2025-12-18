@@ -1,3 +1,4 @@
+/* global Buffer */
 import rateLimit from 'express-rate-limit';
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';
@@ -54,6 +55,7 @@ async function isPrivateAddress(hostname) {
     }
     return false;
   } catch (err) {
+    console.error('DNS lookup failed:', err);
     return true;
   }
 }
@@ -112,6 +114,7 @@ async function proxyHandler(req, res) {
       req.pipe(proxyReq);
     }
   } catch (error) {
+    console.error('Proxy error:', error);
     res.status(400).send('Bad Request');
   }
 }

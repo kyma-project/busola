@@ -343,6 +343,7 @@ export const GenericList = ({
       testid={testid}
       disableMargin={disableMargin}
       className={className}
+      accessibleName={`${title} panel`}
     >
       <Table
         noData={

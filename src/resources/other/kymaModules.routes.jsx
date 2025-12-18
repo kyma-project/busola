@@ -165,7 +165,7 @@ const ColumnWrapper = ({
                   title={t('kyma-modules.add-module')}
                   confirmText={t('common.buttons.add')}
                   layoutCloseCreateUrl={url}
-                  renderForm={(renderProps) => {
+                  renderForm={() => {
                     return (
                       <ErrorBoundary>
                         <div className="sap-margin-small">

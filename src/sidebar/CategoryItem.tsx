@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 
 import { Category } from 'state/navigation/categories';
 import {
+  SideNavigationDomRef,
   SideNavigationItem,
   SideNavigationItemDomRef,
   Ui5CustomEvent,
@@ -22,13 +23,15 @@ import { SideNavigationItemClickEventDetail } from '@ui5/webcomponents-fiori/dis
 type CategoryItemProps = {
   category: Category;
   expandedCategories: string[];
-  handleExpandedCategories: (newValue: ExpandedCategories) => void;
+  handleExpandedCategories: (_newValue: ExpandedCategories) => void;
+  sidebarRef: RefObject<SideNavigationDomRef & { closePicker: () => void }>;
 };
 
 export function CategoryItem({
   category,
   expandedCategories,
   handleExpandedCategories,
+  sidebarRef,
 }: CategoryItemProps) {
   const { t } = useTranslation();
   const categoryName = t(category.label, { defaultValue: category.label });
@@ -76,10 +79,20 @@ export function CategoryItem({
         <DataSourcesContextProvider
           dataSources={handleEmptyNamespace(nn.dataSources)}
         >
-          <NavItem node={nn} key={nn.pathSegment} subItem={true} />
+          <NavItem
+            node={nn}
+            key={nn.pathSegment}
+            subItem={true}
+            sidebarRef={sidebarRef}
+          />
         </DataSourcesContextProvider>
       ) : (
-        <NavItem node={nn} key={nn.pathSegment} subItem={true} />
+        <NavItem
+          node={nn}
+          key={nn.pathSegment}
+          subItem={true}
+          sidebarRef={sidebarRef}
+        />
       )}
     </React.Fragment>
   ));

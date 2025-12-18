@@ -37,7 +37,7 @@ export function createSecretTemplate(namespaceId) {
   };
 }
 
-export function createPresets(secretDefs, namespaceId, t) {
+export function createPresets(secretDefs, namespaceId) {
   return [
     ...secretDefs.map(({ title, name, type, data, ...value }) => ({
       name: title || name || type,
