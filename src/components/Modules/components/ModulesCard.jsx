@@ -23,6 +23,7 @@ async function isImageAvailable(url) {
     const response = await fetch(url, { method: 'HEAD' });
     return response.ok;
   } catch (error) {
+    console.error('Error checking module icon availability:', error);
     return false;
   }
 }

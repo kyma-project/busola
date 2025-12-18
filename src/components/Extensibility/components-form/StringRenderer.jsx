@@ -12,13 +12,12 @@ import {
 
 export function StringRenderer({
   onChange,
-  onKeyDown,
+
   value,
   schema,
   storeKeys,
   required,
   placeholder,
-  originalResource,
   editMode,
   ...props
 }) {
@@ -38,6 +37,7 @@ export function StringRenderer({
         if (decoded) value = decodedValue;
       }
     } catch (e) {
+      console.warn('Base64 decode error', e);
       decodeError = true;
       if (decoded) setDecoded(false);
     }

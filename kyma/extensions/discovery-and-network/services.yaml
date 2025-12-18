@@ -24,7 +24,7 @@ data:
       resource:
         kind: Subscription
         group: eventing.kyma-project.io
-        version: v1alpha1
+        version: v1alpha2
       filter: >-
         $substringAfter($substringBefore($item.spec.sink, '.'), '://') =
         $root.metadata.name

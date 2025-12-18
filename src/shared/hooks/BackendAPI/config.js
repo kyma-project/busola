@@ -22,10 +22,12 @@ export async function throwHttpError(response) {
       parsed.code || response.status,
     );
   } catch (e) {
+    console.warn('Failed to parse error response as JSON:', e);
     try {
       const text = await response.text();
       return new Error(text);
     } catch (e) {
+      console.warn('Failed to parse error response as text:', e);
       const { message, status, statusText } = response;
       const errorMessage =
         message || `${status} ${statusText || getReasonPhrase(status)}`;

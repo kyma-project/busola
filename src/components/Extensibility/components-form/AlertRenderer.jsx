@@ -10,12 +10,9 @@ export function AlertRenderer({
   value,
   schema,
   storeKeys,
-  compact,
   originalResource,
   resource,
-  singleRootResource,
   embedResource,
-  ...props
 }) {
   const { itemVars } = useVariables();
 

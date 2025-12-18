@@ -13,7 +13,6 @@ export function MultiInput({
   value,
   setValue,
   title,
-  label,
   tooltipContent,
   sectionTooltipContent,
   required,

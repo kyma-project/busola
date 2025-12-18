@@ -124,7 +124,7 @@ function extractHeadersData(req) {
         new URL(req.headers[urlHeader]),
       );
     } catch (e) {
-      throw new Error('Invalid cluster URL provided.');
+      throw new Error(`Invalid cluster URL provided: ${e.message}`);
     }
   } else {
     throw new Error('Missing required cluster URL.');

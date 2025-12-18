@@ -9,11 +9,10 @@ export function TextArrayInput({
   toInternal = (value) => value || [],
   toExternal = (value) => value.filter((val) => typeof val === 'string'),
   readOnly,
-  customFormatFn,
   ariaLabel,
   ...props
 }) {
-  const { validate, ...inputProps } = _inputProps || {};
+  const { ...inputProps } = _inputProps || {};
   const readOnlyOptions = readOnly ? { readOnly: true } : {};
 
   return (

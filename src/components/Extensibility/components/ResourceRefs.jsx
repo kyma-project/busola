@@ -5,7 +5,7 @@ import { useGetTranslation } from '../helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link } from 'shared/components/Link/Link';
 
-export function ResourceRefs({ value, structure, schema, disableMargin }) {
+export function ResourceRefs({ value, structure, disableMargin }) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
 

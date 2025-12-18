@@ -53,7 +53,7 @@ export function createDeploymentTemplate(namespaceId) {
   };
 }
 
-export function createPresets(namespace, translate) {
+export function createPresets(namespace) {
   return [
     {
       name: 'Echo server',

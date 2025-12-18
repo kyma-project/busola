@@ -18,7 +18,7 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error) {
     Sentry.captureException(error);
   }
 
@@ -59,10 +59,7 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
   }
 }
 
-export const ExtensibilityErrBoundary = ({
-  displayButton = true,
-  ...props
-}) => {
+export const ExtensibilityErrBoundary = ({ ...props }) => {
   const { t } = useTranslation();
 
   return <ExtensibilityErrBoundaryComponent {...props} t={t} />;

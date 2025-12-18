@@ -76,7 +76,6 @@
     "jotai-effect": "^2.0.5",
     "js-tiktoken": "^1.0.20",
     "js-yaml": "^4.1.0",
-    "jsdom": "^26.1.0",
     "jsonata": "^2.1.0",
     "jsonpath": "^1.1.1",
     "jsonschema": "^1.5.0",
