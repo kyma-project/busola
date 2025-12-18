@@ -82,6 +82,8 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
+    cy.wait(500);
+
     cy.get('[accessible-name="Group name"]')
       .find('input')
       .type('test-group')

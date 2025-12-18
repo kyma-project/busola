@@ -36,7 +36,7 @@ export function RoleRef({ roleRef }) {
         value={
           <>
             <Link url={roleDetailsLink()}>{roleRef.name}</Link>
-            <Tooltip delay={0} content={roleRef.kind}>
+            <Tooltip delay={[0, 0]} content={roleRef.kind}>
               {shortRoleKind(roleRef.kind)}
             </Tooltip>
           </>
