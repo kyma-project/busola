@@ -4,11 +4,12 @@ import PQueue from 'p-queue';
 export class ResourceLoader {
   fetch;
   queue;
-
-  constructor(fetch: (endpoint: string) => any, maxConcurrency?: number) {
-    const concurrency = maxConcurrency ? maxConcurrency : 5;
+  constructor(
+    fetch: (endpoint: string) => any,
+    queue: PQueue = new PQueue({ concurrency: 5 }),
+  ) {
     this.fetch = fetch;
-    this.queue = new PQueue({ concurrency });
+    this.queue = queue;
   }
 
   async _fetchData(endpoint: string) {

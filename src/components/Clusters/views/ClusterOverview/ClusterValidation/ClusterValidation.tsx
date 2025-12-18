@@ -51,41 +51,15 @@ export const ClusterValidation = () => {
     const post = createPostFn(fetch);
     return { fetch, post };
   }, [authData, cluster]);
-
-  const defaultPolicySet = usePolicySet();
-  const { namespaces } = useAvailableNamespaces();
-
-  const defaultConfiguration = useMemo(
-    () =>
-      getDefaultScanConfiguration(namespaces, [...defaultPolicySet.values()]),
-    [namespaces, defaultPolicySet],
-  );
-
-  const [selectedConfiguration, setConfiguration] =
-    useState<ScanConfiguration | null>(null);
-
-  const configuration = useMemo(
-    () => selectedConfiguration ?? defaultConfiguration,
-    [selectedConfiguration, defaultConfiguration],
-  );
-
-  const scanSettings = useMemo(() => {
-    return {
-      concurrentRequests: configuration?.scanParameters?.parallelRequests ?? 5,
-      concurrentWorkers: 1,
-      backpressureBuffer: 3,
-    };
-  }, [configuration?.scanParameters?.parallelRequests]);
-
   const resourceLoader = useMemo(
     () =>
-      new ResourceLoader(
-        (relativeUrl) => fetch({ relativeUrl }),
-        Math.max(scanSettings.concurrentRequests, 1),
-      ),
-    [fetch, scanSettings.concurrentRequests],
+      new ResourceLoader((relativeUrl) => fetch({ relativeUrl }), undefined),
+    [fetch],
   );
   const validationSchemas = useAtomValue(validationSchemasAtom);
+  const defaultPolicySet = usePolicySet();
+
+  const { namespaces } = useAvailableNamespaces();
 
   const [resources, setResources] = useState<K8sAPIResource[] | null>(null);
 
@@ -102,6 +76,18 @@ export const ClusterValidation = () => {
       });
   }, [resources, resourceLoader, setResources]);
 
+  const defaultConfiguration = useMemo(
+    () =>
+      getDefaultScanConfiguration(namespaces, [...defaultPolicySet.values()]),
+    [namespaces, defaultPolicySet],
+  );
+
+  const [selectedConfiguration, setConfiguration] =
+    useState<ScanConfiguration | null>(null);
+  const configuration = useMemo(
+    () => selectedConfiguration ?? defaultConfiguration,
+    [selectedConfiguration, defaultConfiguration],
+  );
   const [isConfigurationOpen, setConfigurationOpen] = useState(false);
   const configure = () => {
     setConfigurationOpen(true);
@@ -115,6 +101,17 @@ export const ClusterValidation = () => {
     else _setScanResult(result);
   };
 
+  const scanSettings = {
+    concurrentRequests: configuration?.scanParameters?.parallelRequests ?? 5,
+    concurrentWorkers: 1,
+    backpressureBuffer: 3,
+  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  resourceLoader.queue.concurrency = Math.max(
+    scanSettings.concurrentRequests,
+    1,
+  );
+
   const [scanProgress, setScanProgress] = useState<ScanProgress | null>();
 
   const scan = async () => {
@@ -127,9 +124,11 @@ export const ClusterValidation = () => {
     setCurrentScan(_currentScan);
     await ResourceValidation.setRuleset(enabledSchemas);
 
+    const resourcesToScan = listableResources;
+
     await _currentScan.scan({
       namespaces: configuration?.namespaces,
-      resources: listableResources,
+      resources: resourcesToScan,
       setScanProgress,
       setScanResult,
       post,

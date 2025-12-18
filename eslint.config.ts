@@ -34,6 +34,7 @@ export default defineConfig(
         'react-hooks/refs': 'warn',
         'react-hooks/set-state-in-effect': 'warn',
         'react-hooks/preserve-manual-memoization': 'warn',
+        'react-hooks/immutability': 'warn',
 
         // TypeScript
         '@typescript-eslint/no-explicit-any': 'off',

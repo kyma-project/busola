@@ -45,18 +45,13 @@ export function ColumnsInput({
         <Input
           value={value.name}
           onInput={(e) => {
-            const newColumns = [...columns].map((col) => {
-              if (col.name === e.target.value) {
-                return { ...col, name: e.target.value };
-              }
-              return col;
-            });
-            setColumns(newColumns);
+            value.name = e.target.value;
+            setColumns([...columns]);
           }}
           className="full-width"
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
-          disabled={!value.isSelected}
+          disabled={!value.isSelected ? true : false}
           accessibleName={t('common.labels.name')}
         />
         <Input

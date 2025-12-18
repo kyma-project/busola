@@ -154,18 +154,13 @@ export default function KymaModulesEdit({ resource, ...props }) {
   }
 
   const setManaged = (managed, index) => {
-    const newSelectedModules = [...selectedModules].map((module, idx) => {
-      if (index === idx) {
-        return { ...module, managed: managed };
-      }
-      return module;
-    });
+    selectedModules[index].managed = managed;
 
     setKymaResource({
       ...kymaResource,
       spec: {
         ...kymaResource.spec,
-        modules: newSelectedModules,
+        modules: selectedModules,
       },
     });
     setIsManagedChanged(true);

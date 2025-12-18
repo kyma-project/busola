@@ -71,11 +71,10 @@ export const ExtensibilityDetailsCore = ({
     ? t('name')
     : prettifyKind(resource?.kind || '') || resourceName;
 
-  const newDetailsProps = { ...detailsProps };
-  newDetailsProps.resourceTitle = resourceTitle;
+  detailsProps.resourceTitle = resourceTitle;
 
   if (resource?.kind) {
-    newDetailsProps.resourceUrl = detailsProps.resourceUrl?.replace(
+    detailsProps.resourceUrl = detailsProps.resourceUrl?.replace(
       urlPath,
       pluralize(resource.kind).toLowerCase(),
     );
@@ -221,7 +220,7 @@ export const ExtensibilityDetailsCore = ({
       createResourceForm={ExtensibilityCreate}
       resourceSchema={resMetaData}
       isModule={isModule}
-      {...newDetailsProps}
+      {...detailsProps}
     />
   );
 };
