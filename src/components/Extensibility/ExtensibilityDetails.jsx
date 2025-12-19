@@ -29,6 +29,7 @@ export const ExtensibilityDetailsCore = ({
   layoutCloseCreateUrl,
   namespaceId,
   isModule,
+  isEntireListProtected,
   headerActions,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
@@ -220,6 +221,7 @@ export const ExtensibilityDetailsCore = ({
       createResourceForm={ExtensibilityCreate}
       resourceSchema={resMetaData}
       isModule={isModule}
+      isEntireListProtected={isEntireListProtected}
       {...detailsProps}
     />
   );
@@ -231,6 +233,7 @@ export default function ExtensibilityDetails({
   layoutCloseCreateUrl,
   namespaceId,
   isModule = false,
+  isEntireListProtected = false,
   setResMetadata,
 }) {
   const resMetaData = useGetCRbyPath(resourceType);
@@ -259,6 +262,7 @@ export default function ExtensibilityDetails({
           layoutNumber: 'midColumn',
           headerActions,
           isModule,
+          isEntireListProtected,
           setResMetadata,
         }}
       />
@@ -280,6 +284,7 @@ export default function ExtensibilityDetails({
             layoutCloseCreateUrl={layoutCloseCreateUrl}
             namespaceId={namespaceId}
             isModule={isModule}
+            isEntireListProtected={isEntireListProtected}
             headerActions={headerActions}
           />
         </ExtensibilityErrBoundary>

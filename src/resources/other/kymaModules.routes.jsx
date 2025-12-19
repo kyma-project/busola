@@ -19,6 +19,8 @@ import { CommunityModulesDeleteBoxContextProvider } from 'components/Modules/com
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { CommunityModulesUploadProvider } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useKymaQuery } from 'components/Modules/kymaModulesQueries';
+import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 
 const KymaModulesList = React.lazy(
   () => import('components/Modules/ModulesList'),
@@ -40,6 +42,8 @@ const ColumnWrapper = ({
 }) => {
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { clusterUrl, namespaceUrl } = useUrl();
+  const { data: kymaResource } = useKymaQuery();
+  const { isProtected } = useProtectedResources();
   const url = namespaced
     ? namespaceUrl('kymamodules')
     : clusterUrl('kymamodules');
@@ -122,6 +126,7 @@ const ColumnWrapper = ({
                   : namespace
               }
               isModule={true}
+              isEntireListProtected={isProtected(kymaResource)}
               setResMetadata={setResMetadata}
             />
           </div>
