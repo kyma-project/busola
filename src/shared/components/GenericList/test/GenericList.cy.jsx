@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { GenericList } from '../GenericList';
 
 const defaultNotFoundText = 'components.generic-list.messages.not-found';

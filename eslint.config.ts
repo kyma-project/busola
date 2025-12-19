@@ -39,7 +39,7 @@ export default defineConfig(
         // TypeScript
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-unused-vars': [
-          'warn',
+          'error',
           {
             varsIgnorePattern: '^_',
             argsIgnorePattern: '^_',
@@ -65,7 +65,6 @@ export default defineConfig(
             caughtErrorsIgnorePattern: '^_',
           },
         ],
-        'no-undef': 'warn',
         'no-prototype-builtins': 'warn',
         'prefer-const': 'error',
       },

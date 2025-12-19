@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { Widget } from '../Widget';
 import { ExtensibilityTestWrapper } from './helpers';
 

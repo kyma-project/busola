@@ -38,7 +38,7 @@ export function PersistentVolumeDetails(props) {
   const findSecret = (secretName) =>
     secrets?.find(({ metadata }) => metadata.name === secretName);
 
-  const PvDetails = ({ spec, metadata, status }) => (
+  const PvDetails = ({ spec, metadata }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
       <UI5Panel
         title={t('common.headers.specification')}

@@ -5,7 +5,7 @@ import {
 import { isNil } from 'lodash';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 
-export const Text = ({ value, schema, structure }) => {
+export const Text = ({ value, structure }) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { t: tExt } = useGetTranslation();
 

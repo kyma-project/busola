@@ -1,4 +1,4 @@
-/* global cy, Cypress */
+/* global cy, Cypress, describe, it */
 import { Dropdown } from './Dropdown';
 
 describe('Dropdown Component', () => {

@@ -3,7 +3,7 @@ import { isNil } from 'lodash';
 import { Labels as BusolaLabels } from 'shared/components/Labels/Labels';
 import { Tokens } from 'shared/components/Tokens';
 
-export function Labels({ schema, value, structure }) {
+export function Labels({ value, structure }) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
   const isSimpleType = (value) => {

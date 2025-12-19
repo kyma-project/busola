@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import Bubbles from './Bubbles';
 
 describe('Bubbles Component', () => {

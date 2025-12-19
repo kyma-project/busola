@@ -19,11 +19,8 @@ export function SchemaRulesInjector({
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
-  const {
-    path: myPath,
-    children: childRules,
-    ...itemRule
-  } = schema.get('schemaRule') ?? rootRule;
+  const { children: childRules, ...itemRule } =
+    schema.get('schemaRule') ?? rootRule;
 
   let newSchema = schema.mergeDeep(itemRule);
 

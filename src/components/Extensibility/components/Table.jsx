@@ -216,7 +216,7 @@ export function Table({
         )
       }
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
+      sortBy={() => sortBy(jsonata, sortOptions, tExt, {})}
       searchSettings={{
         showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,

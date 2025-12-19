@@ -7,7 +7,6 @@ export function CustomFieldInjector({
   schema,
   storeKeys,
   currentPluginIndex,
-  rootRule,
   value,
   resource,
   ...props

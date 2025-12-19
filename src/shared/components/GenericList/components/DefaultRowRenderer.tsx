@@ -22,7 +22,6 @@ export const DefaultRowRenderer = ({
   rowRenderer,
   isSelected = false,
   displayArrow = false,
-  hasDetailsView,
   enableColumnLayout = false,
 }: DefaultRowRendererProps) => {
   const cells = rowRenderer.map((cell: JSX.Element | any, id: number) => {

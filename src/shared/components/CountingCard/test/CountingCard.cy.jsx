@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-/* global cy */
+/* global cy, describe, it */
 import { CountingCard } from '../CountingCard';
 import { Button } from '@ui5/webcomponents-react';
 

@@ -12,7 +12,7 @@ function getGatewayHost(gateway) {
   return properServers[0].hosts[0].replace('*.', '');
 }
 
-export const APIRuleHost = ({ value, schema, structure, ...props }) => {
+export const APIRuleHost = ({ value }) => {
   const { t } = useTranslation();
 
   let hostname = value?.host;

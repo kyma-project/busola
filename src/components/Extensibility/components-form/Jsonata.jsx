@@ -12,12 +12,6 @@ export function JsonataInput({
   setValue,
   onChange,
   inputRef,
-  validationRef,
-  internalValue,
-  setMultiValue,
-  setResource,
-  validateMessage,
-  fullWidth,
   ...props
 }) {
   const validationProps = useValidation({
@@ -39,14 +33,12 @@ export function JsonataInput({
 
 export function Jsonata({
   onChange,
-  onKeyDown,
   value,
   schema,
   storeKeys,
   required,
   compact,
   placeholder,
-  ...props
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const schemaPlaceholder = schema.get('placeholder');

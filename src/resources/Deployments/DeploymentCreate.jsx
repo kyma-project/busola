@@ -95,7 +95,7 @@ export default function DeploymentCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!isEdit && createPresets(namespace, t)}
+      presets={!isEdit && createPresets(namespace)}
       onPresetSelected={(value) => {
         setDeployment(value.deployment);
       }}

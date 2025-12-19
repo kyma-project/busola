@@ -50,6 +50,7 @@ export const useGenerateTokenRequest = (
         3000,
       );
     } catch (error) {
+      console.error('Error generating token request:', error);
       notifyToast({
         content: t('service-accounts.token-request.notification.failure'),
       });

@@ -86,6 +86,7 @@ export const permissionSetsAtom = atom<Promise<PermissionSetState>>(
         }
         return resourceRules;
       } catch (e) {
+        console.error('Permissions error:' + e);
         return [];
       }
     }

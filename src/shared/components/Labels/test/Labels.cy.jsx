@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { Labels } from '../Labels';
 
 describe('<Labels />', () => {

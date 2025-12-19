@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { useTranslation } from 'react-i18next';
 import { Selector } from '../Selector';
 

@@ -1,3 +1,4 @@
+/* global module, require, process */
 const fs = require('fs');
 const jsyaml = require('js-yaml');
 const merge = require('lodash.merge');

@@ -194,7 +194,7 @@ export default function CodePanel({
 
   return !language ? (
     <div className="code-response sap-margin-y-small">
-      <CopyButton contentToCopy={code} tooltipClassName="copy-icon" />
+      <CopyButton contentToCopy={code} className="copy-icon" />
       <Text id="code-text">{code}</Text>
     </div>
   ) : (
@@ -209,7 +209,7 @@ export default function CodePanel({
           </Title>
           <FlexBox justifyContent="End" alignItems="Center">
             <CopyButton
-              buttonClassName="action-button"
+              className="action-button"
               contentToCopy={code}
               iconOnly={false}
             />
