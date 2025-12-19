@@ -328,6 +328,7 @@ export const KymaModulesList = ({
             kymaResource,
             moduleTemplates,
             hasDetailsLink,
+            protectedResource,
           })
         }
         disableHiding={false}

@@ -116,7 +116,7 @@ export const ResourceCreate = ({
     return (
       <Button
         className="min-width-button"
-        disabled={readOnly || disableEdit}
+        disabled={readOnly || disableEdit || protectedResource}
         aria-disabled={readOnly || disableEdit}
         onClick={handleFormSubmit}
         design="Emphasized"

@@ -12,6 +12,8 @@ import { checkSelectedModule, findModuleStatus } from '../support';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { useProtectedResources } from 'shared/hooks/useProtectedResources';
+import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 
 export const KymaModuleContext = createContext({
   resourceName: null,
@@ -52,6 +54,7 @@ export function KymaModuleContextProvider({
   const [initialUnchangedResource, setInitialUnchangedResource] = useState();
   const [kymaResourceState, setKymaResourceState] = useState();
   const notification = useNotification();
+  const { isProtected } = useProtectedResources();
 
   useEffect(() => {
     if (kymaResource) {
@@ -105,6 +108,12 @@ export function KymaModuleContextProvider({
     getModuleName(),
   )?.maintenance;
 
+  const isResourceProtected = isProtected(kymaResource);
+
+  const protectedBadge = isResourceProtected && (
+    <ProtectedResourceWarning entry={kymaResource} />
+  );
+
   const maintenanceBadge = isMaintenancePending === true && (
     <StatusBadge
       type="Critical"
@@ -117,8 +126,10 @@ export function KymaModuleContextProvider({
 
   const customHeaderActions = (
     <>
+      {protectedBadge}
       {maintenanceBadge}
       <ToolbarButton
+        disabled={isResourceProtected}
         onClick={() => handleResourceDelete({})}
         design="Transparent"
         text={t('common.buttons.delete-module')}
