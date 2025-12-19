@@ -1,6 +1,6 @@
-import React from 'react';
+import { lazy } from 'react';
 
 export const resourceType = 'ConfigMaps';
 export const namespaced = false;
 
-export const List = React.lazy(() => import('./BusolaExtensionList'));
+export const List = lazy(() => import('./BusolaExtensionList'));

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 
 export function useMutationObserver(ref, changeCallback, options) {
   options = {
@@ -11,7 +11,7 @@ export function useMutationObserver(ref, changeCallback, options) {
     changeCallback(ref.current, mutationsList, observer);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (ref.current) {
       const observer = new MutationObserver(callback);
       observer.observe(ref.current, options);

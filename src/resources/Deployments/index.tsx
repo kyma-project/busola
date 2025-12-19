@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
@@ -10,9 +10,9 @@ export const apiGroup = 'apps';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
-export const List = React.lazy(() => import('./DeploymentList'));
-export const Details = React.lazy(() => import('./DeploymentDetails'));
-export const Create = React.lazy(() => import('./DeploymentCreate'));
+export const List = lazy(() => import('./DeploymentList'));
+export const Details = lazy(() => import('./DeploymentDetails'));
+export const Create = lazy(() => import('./DeploymentCreate'));
 
 export const i18nDescriptionKey = 'deployments.description';
 export const docsURL =

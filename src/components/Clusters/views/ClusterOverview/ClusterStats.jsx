@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
@@ -20,7 +20,7 @@ import {
 import './ClusterStats.scss';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 
-const Injections = React.lazy(
+const Injections = lazy(
   () => import('../../../Extensibility/ExtensibilityInjections'),
 );
 

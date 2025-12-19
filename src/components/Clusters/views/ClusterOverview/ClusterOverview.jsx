@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router';
@@ -26,7 +26,7 @@ import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
-const Injections = React.lazy(
+const Injections = lazy(
   () => import('../../../Extensibility/ExtensibilityInjections'),
 );
 

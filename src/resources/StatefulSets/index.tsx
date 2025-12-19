@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference } from 'shared/utils/helpers';
@@ -18,9 +18,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./StatefulSetList'));
-export const Details = React.lazy(() => import('./StatefulSetDetails'));
-export const Create = React.lazy(() => import('./StatefulSetCreate'));
+export const List = lazy(() => import('./StatefulSetList'));
+export const Details = lazy(() => import('./StatefulSetDetails'));
+export const Create = lazy(() => import('./StatefulSetCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

@@ -1,4 +1,4 @@
-import React, { Suspense, useRef } from 'react';
+import { cloneElement, Fragment, Suspense, useRef } from 'react';
 
 import { useAtomValue } from 'jotai';
 import { Route, useParams, useSearchParams } from 'react-router';
@@ -97,14 +97,14 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     apiVersion: props.apiVersion,
   });
 
-  const listComponent = React.cloneElement(list, {
+  const listComponent = cloneElement(list, {
     ...elementListProps,
     rawResourceType: props.resourceType,
     layoutCloseCreateUrl,
     enableColumnLayout: elementListProps.resourceType !== 'Namespaces',
     createFormRef: createFormRef,
   });
-  const detailsComponent = React.cloneElement(details, {
+  const detailsComponent = cloneElement(details, {
     ...elementDetailsProps,
   });
 
@@ -143,7 +143,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
           create &&
           create?.type !== null &&
           (layoutState?.showCreate?.resourceType || props?.resourceType) &&
-          React.cloneElement(create, {
+          cloneElement(create, {
             ...elementCreateProps,
             ...renderProps,
             enableColumnLayout: true,
@@ -196,7 +196,7 @@ export const createResourceRoutes = ({
   const path = customPath || createPath({ pathSegment, detailsView: true });
 
   return (
-    <React.Fragment key={path}>
+    <Fragment key={path}>
       <Route
         path={path}
         element={
@@ -215,6 +215,6 @@ export const createResourceRoutes = ({
           </Suspense>
         }
       />
-    </React.Fragment>
+    </Fragment>
   );
 };

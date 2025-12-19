@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { Editor as MonacoEditor } from 'shared/components/MonacoEditorESM/Editor';
@@ -16,7 +16,7 @@ export function Editor({
 }) {
   const { t } = useTranslation();
   const [error, setError] = useState('');
-  const parsedValue = React.useMemo(() => {
+  const parsedValue = useMemo(() => {
     if (!value) {
       return undefined;
     }
