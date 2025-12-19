@@ -47,8 +47,9 @@ export function KeyValueField({
       try {
         return base64Decode(value?.val || '');
       } catch (e) {
-        decodeErrors[value?.key] = e.message;
-        setDecodeErrors({ ...decodeErrors });
+        const newDecodeErrors = { ...decodeErrors };
+        newDecodeErrors[value?.key] = e.message;
+        setDecodeErrors(newDecodeErrors);
         setValuesEncoded(true);
         return '';
       }
