@@ -24,7 +24,7 @@ export function GenericRoleBindingList({
   const getSubject = (subject) => (
     <div key={subject.kind + ' ' + subject.name}>
       {subject.name}{' '}
-      <Tooltip delay={0} content={subject.kind}>
+      <Tooltip delay={[0, 0]} content={subject.kind}>
         ({subject.kind?.slice(0, 1)})
       </Tooltip>
     </div>
@@ -39,7 +39,7 @@ export function GenericRoleBindingList({
       >
         {subject.name}
       </Link>
-      <Tooltip delay={0} content={subject.kind}>
+      <Tooltip delay={[0, 0]} content={subject.kind}>
         {' '}
         (SA)
       </Tooltip>

@@ -46,7 +46,6 @@ export default defineConfig(
             caughtErrorsIgnorePattern: '^_',
           },
         ],
-        '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
         '@typescript-eslint/no-unused-expressions': [
           'error',
@@ -59,8 +58,6 @@ export default defineConfig(
         '@typescript-eslint/no-require-imports': 'warn',
         // Misc
         'no-unused-vars': 'off',
-        'no-empty': 'warn',
-        'no-prototype-builtins': 'warn',
         'prefer-const': 'error',
       },
     },

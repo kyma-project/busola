@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Merge with latest main
+        uses: ./.github/actions/merge
       - name: lint_check
         shell: bash
         run: |
