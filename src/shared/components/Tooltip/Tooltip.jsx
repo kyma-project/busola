@@ -1,39 +1,35 @@
 import PropTypes from 'prop-types';
 
-import { Tooltip as TippyTooltip } from 'react-tippy';
+import Tippy from '@tippyjs/react';
 
-import 'react-tippy/dist/tippy.css';
+import 'tippy.js/dist/tippy.css';
 import './Tooltip.scss';
 
 export const Tooltip = ({
   children,
-  content = {},
+  content,
   position,
-  trigger = 'mouseenter',
-  tippyProps = {},
   delay = [200, 0],
-  style = null,
   className = '',
+  visible,
 }) => {
   return (
-    <TippyTooltip
-      className={className}
-      html={content}
-      position={position}
-      trigger={trigger}
-      distance={0}
+    <Tippy
+      content={content}
+      placement={position}
       delay={delay}
-      style={style}
-      {...tippyProps}
+      visible={visible}
     >
-      {children}
-    </TippyTooltip>
+      <span className={className}>{children}</span>
+    </Tippy>
   );
 };
 
 Tooltip.propTypes = {
   content: PropTypes.node.isRequired,
   position: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
-  trigger: PropTypes.oneOf(['mouseenter', 'focus', 'click', 'manual']),
   children: PropTypes.node,
+  delay: PropTypes.array,
+  className: PropTypes.string,
+  visible: PropTypes.bool,
 };

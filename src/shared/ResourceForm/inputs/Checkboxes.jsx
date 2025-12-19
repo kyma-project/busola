@@ -21,7 +21,11 @@ export function Checkboxes({ value = [], setValue, options, dataTestID }) {
             text={text}
           />
           {description && (
-            <Tooltip className="has-tooltip" delay={0} content={description}>
+            <Tooltip
+              className="has-tooltip"
+              delay={[0, 0]}
+              content={description}
+            >
               <Icon
                 className="bsl-icon-m"
                 name="message-information"

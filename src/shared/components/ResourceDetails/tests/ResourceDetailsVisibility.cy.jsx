@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { ResourceDetails } from '../ResourceDetails';
 import { authDataAtom } from 'state/authDataAtom';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';

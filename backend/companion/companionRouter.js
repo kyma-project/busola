@@ -1,3 +1,4 @@
+/* global require */
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { TokenManager } from './TokenManager';

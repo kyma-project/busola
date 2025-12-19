@@ -46,7 +46,6 @@ export default defineConfig(
             caughtErrorsIgnorePattern: '^_',
           },
         ],
-        '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
         '@typescript-eslint/no-unused-expressions': [
           'error',
@@ -66,8 +65,6 @@ export default defineConfig(
             caughtErrorsIgnorePattern: '^_',
           },
         ],
-        'no-undef': 'warn',
-        'no-empty': 'warn',
         'prefer-const': 'error',
       },
     },

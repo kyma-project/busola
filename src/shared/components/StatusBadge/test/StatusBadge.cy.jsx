@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import { StatusBadge } from '../StatusBadge';
 
 describe('StatusBadge', () => {

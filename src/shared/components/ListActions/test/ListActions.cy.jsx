@@ -1,4 +1,4 @@
-/* global cy */
+/* global cy, describe, it */
 import ListActions from '../ListActions';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
 

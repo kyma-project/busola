@@ -222,10 +222,14 @@ export const DynamicPageComponent = ({
                   ...layoutColumn,
                   layout: newLayout,
                 });
-                const link = `${window.location.pathname}${
+                const resourceNamespace = searchParams.get('resourceNamespace');
+                const resourceNamespaceFragment = resourceNamespace
+                  ? `&resourceNamespace=${resourceNamespace}`
+                  : '';
+                const link = `${window.location.pathname}?layout=${newLayout}${
                   layoutColumn?.showCreate?.resourceType
-                    ? '?layout=' + newLayout + '&showCreate=true'
-                    : '?layout=' + newLayout
+                    ? '&showCreate=true'
+                    : resourceNamespaceFragment
                 }`;
                 navigate(link);
               }}
@@ -248,10 +252,14 @@ export const DynamicPageComponent = ({
                   ...layoutColumn,
                   layout: newLayout,
                 });
-                const link = `${window.location.pathname}${
+                const resourceNamespace = searchParams.get('resourceNamespace');
+                const resourceNamespaceFragment = resourceNamespace
+                  ? `&resourceNamespace=${resourceNamespace}`
+                  : '';
+                const link = `${window.location.pathname}?layout=${newLayout}${
                   layoutColumn?.showCreate?.resourceType
-                    ? '?layout=' + newLayout + '&showCreate=true'
-                    : '?layout=' + newLayout
+                    ? '&showCreate=true'
+                    : resourceNamespaceFragment
                 }`;
                 navigate(link);
               }}
