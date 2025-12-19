@@ -1,4 +1,4 @@
-/* global cy, describe, expect, it */
+/* global describe, expect, it */
 import { Button } from '@ui5/webcomponents-react';
 import { render } from 'testing/reactTestingUtils';
 
