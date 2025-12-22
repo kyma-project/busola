@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -111,12 +111,14 @@ export const useFetchModuleData = (
   selector: (_: ModuleTemplateType) => any,
   label: string,
   moduleTemplatesLoading?: boolean,
+  pollingInterval?: number,
 ) => {
   const [data, setData] = useState<Record<string, any>>({});
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(true);
   const fetch = useFetch();
   const singleGetFn = useSingleGet();
+  const isFetching = useRef(false);
 
   const clusterNodes = useAtomValue(allNodesAtom).filter(
     (node) => !node.namespaced,
@@ -124,19 +126,24 @@ export const useFetchModuleData = (
   const namespaceNodes = useAtomValue(allNodesAtom).filter(
     (node) => node.namespaced,
   );
-  useEffect(() => {
-    if (moduleTemplatesLoading) {
-      return;
-    }
-    const items = moduleTemplates?.items ?? [];
 
-    if (!items.length) {
-      setData({});
-      setLoading(false);
-      return;
-    }
+  const fetchAll = useCallback(
+    async (isPolling: boolean = false) => {
+      if (isFetching.current) {
+        return;
+      }
 
-    const fetchAll = async () => {
+      const items = moduleTemplates?.items ?? [];
+
+      if (!items.length) {
+        if (!isPolling) {
+          setData({});
+          setLoading(false);
+        }
+        return;
+      }
+
+      isFetching.current = true;
       setError(null);
       const cache: Record<string, any> = {};
       const errors: string[] = [];
@@ -187,15 +194,32 @@ export const useFetchModuleData = (
         }
       }
 
-      setData(cache);
+      // Don't clear data during polling if all fetches fail
+      if (Object.keys(cache).length > 0 || !isPolling) {
+        setData(cache);
+      }
       if (errors.length) setError(errors.join('\n'));
       setLoading(false);
-    };
-
-    fetchAll();
-
+      isFetching.current = false;
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moduleTemplates]);
+    [moduleTemplates, clusterNodes, namespaceNodes],
+  );
+
+  useEffect(() => {
+    if (moduleTemplatesLoading) {
+      return;
+    }
+
+    fetchAll(false);
+
+    if (pollingInterval && pollingInterval > 0) {
+      const intervalId = setInterval(() => fetchAll(true), pollingInterval);
+      return () => clearInterval(intervalId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moduleTemplates, moduleTemplatesLoading, pollingInterval]);
+
   const getItem = useCallback(
     (name: string, namespace: string) => data[`${name}:${namespace}`],
     [data],
@@ -204,12 +228,15 @@ export const useFetchModuleData = (
   return { loading, error, data, getItem };
 };
 
+const COMMUNITY_MODULES_POLLING_INTERVAL = 5000; // 5 seconds
+
 export const useGetInstalledNotInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
   moduleTemplatesLoading?: boolean,
 ): {
   installed: ModuleTemplateListType;
   notInstalled: ModuleTemplateListType;
+  installedVersions: Map<string, string>;
   loading: boolean;
   error?: any;
 } => {
@@ -222,12 +249,14 @@ export const useGetInstalledNotInstalledModules = (
     (module: ModuleTemplateType) => module?.spec?.manager ?? null,
     'manager',
     moduleTemplatesLoading,
+    COMMUNITY_MODULES_POLLING_INTERVAL,
   );
 
   if (moduleTemplatesLoading) {
     return {
       installed: { items: [] },
       notInstalled: { items: [] },
+      installedVersions: new Map(),
       loading: true,
       error: null,
     };
@@ -236,15 +265,25 @@ export const useGetInstalledNotInstalledModules = (
     return {
       installed: { items: [] },
       notInstalled: { items: [] },
+      installedVersions: new Map(),
       loading: false,
       error: null,
     };
   }
 
-  const installed = getInstalledModules(moduleTemplates, managers);
+  const { items: installedItems, installedVersions } = getInstalledModules(
+    moduleTemplates,
+    managers,
+  );
   const notInstalled = getNotInstalledModules(moduleTemplates, managers);
 
-  return { installed, notInstalled, loading, error };
+  return {
+    installed: { items: installedItems },
+    notInstalled,
+    installedVersions,
+    loading,
+    error,
+  };
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {

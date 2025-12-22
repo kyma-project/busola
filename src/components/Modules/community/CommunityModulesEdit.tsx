@@ -169,6 +169,7 @@ export default function CommunityModulesEdit() {
   const {
     installedCommunityModuleTemplates,
     installedCommunityModulesLoading,
+    installedVersions,
   } = useContext(CommunityModuleContext);
 
   const availableCommunityModules = useMemo(() => {
@@ -176,6 +177,7 @@ export default function CommunityModulesEdit() {
       return getAvailableCommunityModules(
         communityModuleTemplates,
         installedCommunityModuleTemplates,
+        installedVersions,
       );
     } else {
       return new Map();
@@ -185,6 +187,7 @@ export default function CommunityModulesEdit() {
     moduleTemplatesLoading,
     installedCommunityModuleTemplates,
     installedCommunityModulesLoading,
+    installedVersions,
   ]);
 
   useEffect(() => {

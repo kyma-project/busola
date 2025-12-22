@@ -227,24 +227,50 @@ export default function CommunityModulesAddModule(props: any) {
 
   const {
     notInstalledCommunityModuleTemplates,
+    installedCommunityModuleTemplates,
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
+    installedVersions,
   } = useContext(CommunityModuleContext);
 
   const { callback } = useContext(CommunityModulesInstallationContext);
 
+  const upgradeableCommunityModuleTemplates = useMemo(() => {
+    if (!installedCommunityModuleTemplates?.items) {
+      return { items: [] };
+    }
+
+    const upgradeable = installedCommunityModuleTemplates.items.filter(
+      (module) => {
+        const managerKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
+        const installedVersion = installedVersions.get(managerKey);
+        return installedVersion && installedVersion !== module.spec.version;
+      },
+    );
+
+    return { items: upgradeable };
+  }, [installedCommunityModuleTemplates, installedVersions]);
+
+  const allAvailableModuleTemplates = useMemo(() => {
+    const combinedItems = [
+      ...(notInstalledCommunityModuleTemplates?.items || []),
+      ...(upgradeableCommunityModuleTemplates?.items || []),
+    ];
+    return { items: combinedItems };
+  }, [
+    notInstalledCommunityModuleTemplates,
+    upgradeableCommunityModuleTemplates,
+  ]);
+
   const availableCommunityModules = useMemo(() => {
     if (!notInstalledCommunityModulesLoading) {
       return getAvailableCommunityModules(
-        notInstalledCommunityModuleTemplates,
+        allAvailableModuleTemplates,
         {} as ModuleTemplateListType,
       );
     } else {
       return new Map();
     }
-  }, [
-    notInstalledCommunityModuleTemplates,
-    notInstalledCommunityModulesLoading,
-  ]);
+  }, [allAvailableModuleTemplates, notInstalledCommunityModulesLoading]);
 
   const [columnsCount, setColumnsCount] = useState(2);
   const [cardsContainerRef, setCardsContainerRef] =
@@ -305,7 +331,7 @@ export default function CommunityModulesAddModule(props: any) {
           key={`${module.name}+${i}`}
           isChecked={isChecked}
           onChange={onVersionChange(
-            notInstalledCommunityModuleTemplates,
+            allAvailableModuleTemplates,
             communityModulesTemplatesToApply,
             setCommunityModulesTemplatesToApply,
             setIsResourceEdited,
