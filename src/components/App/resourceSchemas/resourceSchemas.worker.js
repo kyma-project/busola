@@ -14,7 +14,7 @@ function getExistingCustomFormats(obj, path = '') {
   let existingData = [];
 
   for (const i in obj) {
-    if (!obj.hasOwnProperty(i)) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
     if (typeof obj[i] === 'object') {
       existingData = existingData.concat(
         getExistingCustomFormats(obj[i], path ? `${path}.${i}` : i),

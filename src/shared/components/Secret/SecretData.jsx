@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
@@ -25,8 +25,8 @@ SecretData.propTypes = {
 
 export default function SecretData({ secret }) {
   const { t } = useTranslation();
-  const [isEncoded, setEncoded] = React.useState(true);
-  const [isInitial, setIsInitial] = React.useState(true);
+  const [isEncoded, setEncoded] = useState(true);
+  const [isInitial, setIsInitial] = useState(true);
 
   const decode = () => {
     setEncoded(true);

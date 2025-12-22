@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { Description } from 'shared/components/Description/Description';
 
 export const resourceType = 'Namespaces';
@@ -17,6 +17,6 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./NamespaceList'));
-export const Details = React.lazy(() => import('./NamespaceDetails'));
-export const Create = React.lazy(() => import('./NamespaceCreate'));
+export const List = lazy(() => import('./NamespaceList'));
+export const Details = lazy(() => import('./NamespaceDetails'));
+export const Create = lazy(() => import('./NamespaceCreate'));

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
-const ExtensibilityList = React.lazy(
+const ExtensibilityList = lazy(
   () => import('../../components/Extensibility/ExtensibilityList'),
 );
 

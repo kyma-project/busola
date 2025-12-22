@@ -33,7 +33,7 @@ export default function ResourceQuotaLimits({
     const usedResources = resource.status.used;
 
     for (const resource in hardResources) {
-      if (hardResources.hasOwnProperty(resource)) {
+      if (Object.prototype.hasOwnProperty.call(hardResources, resource)) {
         result.push({
           resource,
           hard: hardResources[resource],

@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
@@ -9,9 +9,9 @@ export const apiGroup = 'networking.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories['discovery-and-network'];
 
-export const List = React.lazy(() => import('./IngressList'));
-export const Details = React.lazy(() => import('./IngressDetails'));
-export const Create = React.lazy(() => import('./IngressCreate'));
+export const List = lazy(() => import('./IngressList'));
+export const Details = lazy(() => import('./IngressDetails'));
+export const Create = lazy(() => import('./IngressCreate'));
 
 export const i18nDescriptionKey = 'ingresses.description';
 export const docsURL =

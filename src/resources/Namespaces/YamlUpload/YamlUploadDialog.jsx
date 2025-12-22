@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Bar, Button, Dialog } from '@ui5/webcomponents-react';
 import { isEqual } from 'lodash';
 
@@ -13,7 +13,7 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import './YamlUploadDialog.scss';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 
-export const YamlUpload = React.lazy(() => import('./YamlUpload'));
+export const YamlUpload = lazy(() => import('./YamlUpload'));
 
 export const OPERATION_STATE_INITIAL = 'INITIAL';
 export const OPERATION_STATE_WAITING = 'WAITING';

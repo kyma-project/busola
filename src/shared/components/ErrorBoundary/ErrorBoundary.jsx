@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 
-class ErrorBoundaryComponent extends React.Component {
+class ErrorBoundaryComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
