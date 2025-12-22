@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
@@ -9,9 +9,9 @@ export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories['discovery-and-network'];
 
-export const List = React.lazy(() => import('./LimitRangeList'));
-export const Details = React.lazy(() => import('./LimitRangeDetails'));
-export const Create = React.lazy(() => import('./LimitRangeCreate'));
+export const List = lazy(() => import('./LimitRangeList'));
+export const Details = lazy(() => import('./LimitRangeDetails'));
+export const Create = lazy(() => import('./LimitRangeCreate'));
 
 export const i18nDescriptionKey = 'limit-ranges.description';
 export const docsURL =

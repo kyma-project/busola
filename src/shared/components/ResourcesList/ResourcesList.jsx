@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Text, ToolbarButton } from '@ui5/webcomponents-react';
@@ -30,7 +30,7 @@ import { useUrl } from 'hooks/useUrl';
 import { Link } from '../Link/Link';
 import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
 
-const Injections = React.lazy(
+const Injections = lazy(
   () => import('../../../components/Extensibility/ExtensibilityInjections'),
 );
 

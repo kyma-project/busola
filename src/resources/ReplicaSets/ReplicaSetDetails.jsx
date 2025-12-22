@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useTranslation } from 'react-i18next';
@@ -59,16 +59,16 @@ export function ReplicaSetsDetails(props) {
           <LayoutPanelRow
             name={t('replica-sets.headers.limits')}
             value={
-              <React.Fragment key="limits">
+              <Fragment key="limits">
                 {containers.map((c) => (
-                  <React.Fragment key={c.name}>
+                  <Fragment key={c.name}>
                     {t('replica-sets.cpu')}: {c.resources?.limits?.cpu}
                     <br />
                     {t('replica-sets.memory')}: {c.resources?.limits?.memory}
                     <br />
-                  </React.Fragment>
+                  </Fragment>
                 ))}
-              </React.Fragment>
+              </Fragment>
             }
           />
         )}
@@ -76,16 +76,16 @@ export function ReplicaSetsDetails(props) {
           <LayoutPanelRow
             name={t('replica-sets.headers.requests')}
             value={
-              <React.Fragment key="requests">
+              <Fragment key="requests">
                 {containers.map((c) => (
-                  <React.Fragment key={c.name}>
+                  <Fragment key={c.name}>
                     {t('replica-sets.cpu')}: {c.resources?.requests?.cpu}
                     <br />
                     {t('replica-sets.memory')}: {c.resources?.requests?.memory}
                     <br />
-                  </React.Fragment>
+                  </Fragment>
                 ))}
-              </React.Fragment>
+              </Fragment>
             }
           />
         )}

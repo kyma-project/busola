@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -142,8 +142,8 @@ export function ResourceForm({
       : (editViewMode.preferencesViewType ?? ModeSelector.MODE_FORM);
   };
 
-  const [mode, setMode] = React.useState(handleInitialMode);
-  const [actionsEditor, setActionsEditor] = React.useState(null);
+  const [mode, setMode] = useState(handleInitialMode);
+  const [actionsEditor, setActionsEditor] = useState(null);
   const validationRef = useRef(true);
 
   useEffect(() => {

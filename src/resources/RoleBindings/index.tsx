@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
@@ -17,9 +17,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./RoleBindingList'));
-export const Details = React.lazy(() => import('./RoleBindingDetails'));
-export const Create = React.lazy(() => import('./RoleBindingCreate'));
+export const List = lazy(() => import('./RoleBindingList'));
+export const Details = lazy(() => import('./RoleBindingDetails'));
+export const Create = lazy(() => import('./RoleBindingCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   relations: [

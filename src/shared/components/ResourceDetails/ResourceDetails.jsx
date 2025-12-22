@@ -1,4 +1,11 @@
-import React, { createContext, Suspense, useEffect, useState } from 'react';
+import {
+  lazy,
+  Fragment,
+  createContext,
+  Suspense,
+  useEffect,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -37,11 +44,9 @@ import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
 // It doesn't affect the lighthouse score, but it prolongs the graph waiting time.
-const ResourceGraph = React.lazy(
-  () => import('../ResourceGraph/ResourceGraph'),
-);
+const ResourceGraph = lazy(() => import('../ResourceGraph/ResourceGraph'));
 
-const Injections = React.lazy(
+const Injections = lazy(
   () => import('../../../components/Extensibility/ExtensibilityInjections'),
 );
 
@@ -359,14 +364,12 @@ function Resource({
         customConditionsComponents?.length ? (
           <>
             {filteredConditionsComponents?.map((component, index) => (
-              <React.Fragment
-                key={`${component.header.replace(' ', '-')}-${index}`}
-              >
+              <Fragment key={`${component.header.replace(' ', '-')}-${index}`}>
                 <div className="title bsl-has-color-status-4 sap-margin-x-small">
                   {component.header}:
                 </div>
                 {component.value(resource)}
-              </React.Fragment>
+              </Fragment>
             ))}
           </>
         ) : null

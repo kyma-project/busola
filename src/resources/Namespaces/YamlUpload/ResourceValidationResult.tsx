@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import {
@@ -83,7 +83,7 @@ const ValidationWarnings = ({
   return (
     <>
       {warnings.flat().map((warning, idx) => (
-        <React.Fragment key={idx}>
+        <Fragment key={idx}>
           <FlexBox alignItems="Start">
             <ObjectStatus
               showDefaultIcon
@@ -107,7 +107,7 @@ const ValidationWarnings = ({
               marginRight: '-1rem',
             }}
           />
-        </React.Fragment>
+        </Fragment>
       ))}
     </>
   );

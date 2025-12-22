@@ -1,4 +1,11 @@
-import React, { useState, useEffect, createRef } from 'react';
+import {
+  Children,
+  Fragment,
+  cloneElement,
+  useState,
+  useEffect,
+  createRef,
+} from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
@@ -14,10 +21,7 @@ export function ResourceFormWrapper({
 
   useEffect(() => {
     setInputRefs(
-      React.Children.map(
-        children,
-        (child, i) => inputRefs[i] || createRef(null),
-      ),
+      Children.map(children, (child, i) => inputRefs[i] || createRef(null)),
     );
   }, [children]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -46,7 +50,7 @@ export function ResourceFormWrapper({
   };
 
   useEffect(() => {
-    React.Children.toArray(children).forEach((child, index) => {
+    Children.toArray(children).forEach((child, index) => {
       const inputRef = inputRefs[index];
 
       if (child.props?.validate) {
@@ -72,10 +76,10 @@ export function ResourceFormWrapper({
   }
 
   return (
-    React.Children.map(children, (child, index) => {
+    Children.map(children, (child, index) => {
       if (!child) {
         return null;
-      } else if (child.type === React.Fragment) {
+      } else if (child.type === Fragment) {
         return (
           <ResourceFormWrapper
             resource={resource}
@@ -87,7 +91,7 @@ export function ResourceFormWrapper({
         );
       } else if (!child.props.propertyPath) {
         if (typeof child.type === 'function') {
-          return React.cloneElement(child, {
+          return cloneElement(child, {
             resource: child.props.resource || resource,
             setResource: child.props.setResource || setResource,
             validationRef,
@@ -113,7 +117,7 @@ export function ResourceFormWrapper({
           ? (value) => child.props.setValue(value, valueSetter)
           : valueSetter;
 
-        return React.cloneElement(child, {
+        return cloneElement(child, {
           value,
           setValue,
           inputRef: inputRefs[index],

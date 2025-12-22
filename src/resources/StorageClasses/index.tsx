@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
@@ -6,9 +6,9 @@ import { Description } from 'shared/components/Description/Description';
 export const resourceType = 'StorageClasses';
 export const namespaced = false;
 
-export const List = React.lazy(() => import('./StorageClassList'));
-export const Details = React.lazy(() => import('./StorageClassDetails'));
-export const Create = React.lazy(() => import('./StorageClassCreate'));
+export const List = lazy(() => import('./StorageClassList'));
+export const Details = lazy(() => import('./StorageClassDetails'));
+export const Create = lazy(() => import('./StorageClassCreate'));
 
 export const apiGroup = 'storage.k8s.io';
 export const apiVersion = 'v1';

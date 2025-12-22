@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import React, { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
@@ -13,7 +13,7 @@ import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 
-const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
+const ExtensibilityList = lazy(() => import('../ExtensibilityList'));
 
 const getProperNamespacePart = (givenNamespace, currentNamespace) => {
   switch (true) {

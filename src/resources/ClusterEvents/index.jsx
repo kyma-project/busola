@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 
 export { resourceType, ResourceDescription } from 'resources/Events';
 export const namespaced = false;
@@ -11,5 +11,5 @@ export const topLevelNode = true;
 export const pathSegment = 'clusterevents';
 export const customPath = `${pathSegment}/:namespace?/:resourceName?`;
 
-export const List = React.lazy(() => import('./ClusterEventList'));
-export const Details = React.lazy(() => import('./ClusterEventDetails'));
+export const List = lazy(() => import('./ClusterEventList'));
+export const Details = lazy(() => import('./ClusterEventDetails'));
