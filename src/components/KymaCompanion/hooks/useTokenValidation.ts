@@ -96,11 +96,8 @@ export const useTokenValidation = (
         }
       }, DEBOUNCE_DELAY);
     } else {
-      const timeoutId = setTimeout(() => {
-        updateTokenState(0);
-      }, 0);
-
-      return () => clearTimeout(timeoutId);
+      //eslint-disable-next-line react-hooks/set-state-in-effect
+      updateTokenState(0);
     }
   }, [text, getTokenCount, updateTokenState]);
 
