@@ -34,7 +34,11 @@ import {
 
 import 'components/Modules/KymaModulesAddModule.scss';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { CommunityModulesInstallationContext } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
+import {
+  CommunityModulesInstallationContext,
+  moduleInstallationState,
+} from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
+import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { MutationFn, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useAtomValue } from 'jotai/index';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
@@ -232,7 +236,9 @@ export default function CommunityModulesAddModule(props: any) {
     installedVersions,
   } = useContext(CommunityModuleContext);
 
-  const { callback } = useContext(CommunityModulesInstallationContext);
+  const { callback, modulesDuringUpload } = useContext(
+    CommunityModulesInstallationContext,
+  );
 
   const upgradeableCommunityModuleTemplates = useMemo(() => {
     if (!installedCommunityModuleTemplates?.items) {
@@ -250,15 +256,27 @@ export default function CommunityModulesAddModule(props: any) {
     return { items: upgradeable };
   }, [installedCommunityModuleTemplates, installedVersions]);
 
+  const modulesBeingInstalled = useMemo(() => {
+    return new Set(
+      modulesDuringUpload
+        .filter(
+          (m: moduleInstallationState) =>
+            m.state === State.Downloading || m.state === State.Uploading,
+        )
+        .map((m: moduleInstallationState) => getModuleName(m.moduleTpl)),
+    );
+  }, [modulesDuringUpload]);
+
   const allAvailableModuleTemplates = useMemo(() => {
     const combinedItems = [
       ...(notInstalledCommunityModuleTemplates?.items || []),
       ...(upgradeableCommunityModuleTemplates?.items || []),
-    ];
+    ].filter((module) => !modulesBeingInstalled.has(getModuleName(module)));
     return { items: combinedItems };
   }, [
     notInstalledCommunityModuleTemplates,
     upgradeableCommunityModuleTemplates,
+    modulesBeingInstalled,
   ]);
 
   const availableCommunityModules = useMemo(() => {
