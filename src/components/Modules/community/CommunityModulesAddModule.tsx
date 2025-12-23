@@ -379,6 +379,9 @@ export default function CommunityModulesAddModule(props: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    for (const module of communityModulesTemplatesToApply.map.values()) {
+      callback(module, State.Downloading);
+    }
     upload(
       t,
       communityModulesTemplatesToApply,
