@@ -40,6 +40,7 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
     [builtinResourceDefs],
   );
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const extensionsGraphConfig = useMemo(() => {
     return extensions
       ? Object.fromEntries(

@@ -11,25 +11,31 @@ export function useResourcesForApiGroups(apiGroups = []) {
 
   const loadable = apiGroups.some((apiGroup) => !cache[apiGroup]);
 
-  const findMatchingGroupVersions = (apiGroup) => {
-    // core api group
-    if (apiGroup === '') return ['v1'];
+  const findMatchingGroupVersions = useCallback(
+    (apiGroup) => {
+      // core api group
+      if (apiGroup === '') return ['v1'];
 
-    return groupVersions.filter((gV) => gV.startsWith(apiGroup + '/'));
-  };
+      return groupVersions.filter((gV) => gV.startsWith(apiGroup + '/'));
+    },
+    [groupVersions],
+  );
 
-  const fetchApiGroup = async (groupVersion) => {
-    const url = groupVersion === 'v1' ? '/api/v1' : `/apis/${groupVersion}`;
-    try {
-      const response = await fetch(url);
-      const json = await response.json();
-      return json.resources;
-    } catch (e) {
-      console.warn(e);
-    }
-  };
+  const fetchApiGroup = useCallback(
+    async (groupVersion) => {
+      const url = groupVersion === 'v1' ? '/api/v1' : `/apis/${groupVersion}`;
+      try {
+        const response = await fetch(url);
+        const json = await response.json();
+        return json.resources;
+      } catch (e) {
+        console.warn(e);
+      }
+    },
+    [fetch],
+  );
 
-  const fetchResources = useCallback(() => {
+  const fetchResources = useCallback(async () => {
     if (loading) return Promise.resolve(cache);
 
     const loaders = [];
@@ -57,7 +63,7 @@ export function useResourcesForApiGroups(apiGroups = []) {
       setLoading(false);
       return newCache;
     });
-  }, [apiGroups]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loading, cache, findMatchingGroupVersions, fetchApiGroup, apiGroups]);
 
   return {
     cache,

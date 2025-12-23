@@ -86,7 +86,7 @@ export function useAutocompleteWorker({
     return {
       modelUri,
     };
-  }, [schema, schemaId, readOnly]);
+  }, [schema, schemaId, schemaUri, readOnly]);
 
   const cleanupSchema = useCallback(() => {
     schemasMap.delete(schemaId);
