@@ -51,8 +51,14 @@ export function CommunityModulesUploadProvider({ children }: any) {
       (module) => getModuleName(module.moduleTpl) === moduleName,
     );
     if (!moduleDuringInstallation) {
-      setModulesDuringInstallation([...modulesDuringInstallation, moduleState]);
-      return;
+      const timeoutId = setTimeout(() => {
+        setModulesDuringInstallation([
+          ...modulesDuringInstallation,
+          moduleState,
+        ]);
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
     }
 
     const updatedModulesDuringInstallation = modulesDuringInstallation?.map(
@@ -64,10 +70,18 @@ export function CommunityModulesUploadProvider({ children }: any) {
         return module;
       },
     );
-    setModulesDuringInstallation(updatedModulesDuringInstallation);
-    setModuleInstallState((moduleStates) => {
-      return moduleStates.filter((state) => !isStateEqual(state, moduleState));
-    });
+
+    const timeoutId = setTimeout(() => {
+      setModulesDuringInstallation(updatedModulesDuringInstallation);
+      setModuleInstallState((moduleStates) => {
+        return moduleStates.filter(
+          (state) => !isStateEqual(state, moduleState),
+        );
+      });
+    }, 0);
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [moduleInstallState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const callbackFn: CallbackFn = (moduleTpl, moduleState, message) => {

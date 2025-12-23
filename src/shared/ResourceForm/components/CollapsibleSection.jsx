@@ -28,7 +28,13 @@ export function CollapsibleSection({
 
   useEffect(() => {
     if (defaultOpen !== undefined) {
-      setOpen(defaultOpen);
+      const timeoutId = setTimeout(() => {
+        setOpen(defaultOpen);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
   }, [defaultOpen]);
 

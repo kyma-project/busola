@@ -34,7 +34,15 @@ export function FileInput({
   const fileNameRef = useRef(null);
 
   useEffect(() => {
-    if (!openAdd && !openAddCluster) setFileNames([]);
+    if (!openAdd && !openAddCluster) {
+      const timeoutId = setTimeout(() => {
+        setFileNames([]);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
   }, [openAdd, openAddCluster]);
 
   // needed for onDrag to fire

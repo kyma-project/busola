@@ -49,10 +49,16 @@ export function YamlUploadDialog() {
 
   useEffect(() => {
     if (!openAdd) {
-      setResourcesData(null);
-      setResourcesWithStatuses(null);
-      setLastOperationState(OPERATION_STATE_INITIAL);
-      oldYaml.current = null;
+      const timeoutId = setTimeout(() => {
+        setResourcesData(null);
+        setResourcesWithStatuses(null);
+        setLastOperationState(OPERATION_STATE_INITIAL);
+        oldYaml.current = null;
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
   }, [openAdd]);
 

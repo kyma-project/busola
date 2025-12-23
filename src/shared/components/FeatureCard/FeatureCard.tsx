@@ -1,5 +1,5 @@
 import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { isSystemThemeDark, themeAtom } from 'state/preferences/themeAtom';
 import modulesIllustration from './assets/Modules/modulesIllustration.svg';
 import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
@@ -72,11 +72,13 @@ export function FeatureCardBanner({
   const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${id}`;
   const theme = useAtomValue(themeAtom);
+  const [prevId, setPrevId] = useState(id);
 
-  useEffect(() => {
+  if (id !== prevId) {
+    setPrevId(id);
     const storedHideValue = localStorage.getItem(hideBannerKey);
     if (storedHideValue !== null) setHideBanner(storedHideValue === 'true');
-  }, [hideBannerKey]);
+  }
 
   if (!id || hideBanner) {
     return <></>;

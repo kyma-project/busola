@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
@@ -53,16 +53,16 @@ export default function ClusterStats({ nodesData }) {
       pollingInterval: 3200,
     },
   );
-  const [pvCapacity, setPvCapacity] = useState(0);
 
-  useEffect(() => {
+  const pvCapacity = useMemo(() => {
     if (persistentVolumesData) {
       let total_bytes_capacity = 0;
       for (const pv of persistentVolumesData) {
         total_bytes_capacity += getBytes(pv?.spec?.capacity?.storage);
       }
-      setPvCapacity(bytesToHumanReadable(total_bytes_capacity).string);
+      return bytesToHumanReadable(total_bytes_capacity).string;
     }
+    return 0;
   }, [persistentVolumesData]);
 
   const { data: daemonsetsData } = useGetList()('/apis/apps/v1/daemonsets', {
@@ -78,9 +78,8 @@ export default function ClusterStats({ nodesData }) {
   const { data: servicesData } = useGetList()('/api/v1/services', {
     pollingInterval: 3200,
   });
-  const [loadbalancerNumber, setLoadbalancerNumber] = useState(0);
 
-  useEffect(() => {
+  const loadbalancerNumber = useMemo(() => {
     if (servicesData) {
       let loadbalancers = 0;
       for (const sv of servicesData) {
@@ -88,8 +87,9 @@ export default function ClusterStats({ nodesData }) {
           loadbalancers++;
         }
       }
-      setLoadbalancerNumber(loadbalancers);
+      return loadbalancers;
     }
+    return 0;
   }, [servicesData]);
 
   const statusPodsData = getStatusesPodCount(podsData);
