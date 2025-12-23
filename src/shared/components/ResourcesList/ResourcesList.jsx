@@ -182,7 +182,13 @@ function Resources(props) {
 
   useEffect(() => {
     if (!filter) {
-      setFilteredResources(resources || []);
+      const timeoutId = setTimeout(() => {
+        setFilteredResources(resources || []);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     } else {
       Promise.all(
         (resources || []).map(async (resource) => {

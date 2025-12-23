@@ -1,5 +1,5 @@
 import { ModulesDeleteBox } from 'components/Modules/components/ModulesDeleteBox';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import { checkSelectedModule } from 'components/Modules/support';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { KymaModuleContext } from 'components/Modules/providers/KymaModuleProvider';
@@ -38,12 +38,11 @@ export function CommunityModulesDeleteBoxContextProvider({
     ModuleTemplatesContext,
   );
 
-  const [detailsOpen, setDetailsOpen] = useState(false);
-
-  useEffect(() => {
+  const detailsOpen = useMemo(() => {
     if (layoutState?.layout) {
-      setDetailsOpen(layoutState?.layout !== 'OneColumn');
+      return layoutState?.layout !== 'OneColumn';
     }
+    return false;
   }, [layoutState]);
 
   const getOpenedModuleIndex = (moduleIndex, activeModules) => {

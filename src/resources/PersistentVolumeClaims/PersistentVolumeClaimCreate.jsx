@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as _ from 'lodash';
@@ -25,8 +25,14 @@ export default function PersistentVolumeClaimCreate({
     initialPersistentVolumeClaim ||
       createPersistentVolumeClaimTemplate(namespace),
   );
+  const [prevNamespace, setPrevNamespace] = useState(namespace);
 
-  useEffect(() => {
+  if (
+    (initialPersistentVolumeClaim &&
+      initialPersistentVolumeClaim !== initialResource) ||
+    namespace !== prevNamespace
+  ) {
+    setPrevNamespace(namespace);
     setPersistentVolumeClaim(
       _.cloneDeep(initialPersistentVolumeClaim) ||
         createPersistentVolumeClaimTemplate(namespace),
@@ -35,7 +41,7 @@ export default function PersistentVolumeClaimCreate({
       initialPersistentVolumeClaim ||
         createPersistentVolumeClaimTemplate(namespace),
     );
-  }, [initialPersistentVolumeClaim, namespace]);
+  }
 
   return (
     <ResourceForm

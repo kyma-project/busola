@@ -53,14 +53,20 @@ export default function JobCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
-    setJob(
-      initialJob
-        ? cloneDeep(initialJob)
-        : createJobTemplate(namespace, defaultSidecarAnnotations),
-    );
-    setInitialResource(
-      initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
-    );
+    const timeoutId = setTimeout(() => {
+      setJob(
+        initialJob
+          ? cloneDeep(initialJob)
+          : createJobTemplate(namespace, defaultSidecarAnnotations),
+      );
+      setInitialResource(
+        initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [
     initialJob,
     namespace,

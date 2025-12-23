@@ -33,8 +33,16 @@ export default function SecretCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
-    setSecret(initialSecret || createSecretTemplate(namespace || ''));
-    setInitialResource(initialSecret || createSecretTemplate(namespace || ''));
+    const timeoutId = setTimeout(() => {
+      setSecret(initialSecret || createSecretTemplate(namespace || ''));
+      setInitialResource(
+        initialSecret || createSecretTemplate(namespace || ''),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialSecret, namespace, layoutState?.showEdit?.resource]);
 
   const isEdit = useMemo(
@@ -57,17 +65,23 @@ export default function SecretCreate({
   const options = secretTypes.map((type) => ({ key: type, text: type }));
 
   useEffect(() => {
-    setLockedKeys(currentDef?.data || []);
-    setSecret({
-      ...secret,
-      data: {
-        ...(currentDef?.data || []).reduce(
-          (acc, key) => ({ ...acc, [key]: '' }),
-          {},
-        ),
-        ...(secret.data || {}),
-      },
-    });
+    const timeoutId = setTimeout(() => {
+      setLockedKeys(currentDef?.data || []);
+      setSecret({
+        ...secret,
+        data: {
+          ...(currentDef?.data || []).reduce(
+            (acc, key) => ({ ...acc, [key]: '' }),
+            {},
+          ),
+          ...(secret.data || {}),
+        },
+      });
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const schema = useContext(SchemaContext);

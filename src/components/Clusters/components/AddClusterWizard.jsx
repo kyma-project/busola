@@ -130,6 +130,12 @@ export function AddClusterWizard({
       console.warn(e);
     }
     setShowWizard(false);
+    setKubeconfig(undefined);
+  };
+
+  const onCancel = () => {
+    setShowWizard(false);
+    setKubeconfig(undefined);
   };
 
   const handleStepChange = (e) => {
@@ -269,7 +275,7 @@ export function AddClusterWizard({
                 ? selected === 4
                 : selected === 3
             }
-            onCancel={() => setShowWizard(false)}
+            onCancel={onCancel}
             customFinish={t('clusters.buttons.connect-cluster')}
             onComplete={onComplete}
             invalid={isCurrentStepInvalid(selected)}

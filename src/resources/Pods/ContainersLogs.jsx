@@ -59,7 +59,11 @@ const ContainersLogs = ({ params }) => {
   const streamData = useGetStream(url);
 
   useEffect(() => {
-    setLogsToSave(streamData.data || []);
+    const timeoutId = setTimeout(() => {
+      setLogsToSave(streamData.data || []);
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
   }, [streamData.data]);
 
   useEffect(() => {

@@ -28,12 +28,19 @@ export default function StatefulSetCreate({
   );
 
   useEffect(() => {
-    setStatefulSet(
-      _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
-    );
-    setInitialResource(
-      initialStatefulSet || createStatefulSetTemplate(namespaceId),
-    );
+    const timeoutId = setTimeout(() => {
+      setStatefulSet(
+        _.cloneDeep(initialStatefulSet) ||
+          createStatefulSetTemplate(namespaceId),
+      );
+      setInitialResource(
+        initialStatefulSet || createStatefulSetTemplate(namespaceId),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialStatefulSet, namespaceId]);
 
   return (
