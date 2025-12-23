@@ -66,7 +66,7 @@ export default function ModulesCard({
       module?.channels?.find(
         (channel) => channel?.channel === kymaResource?.spec?.channel,
       )?.version,
-    [kymaResource?.spec?.channel, module?.channels],
+    [kymaResource?.spec?.channel, module],
   );
 
   // Check if the module version from kymaResource exists and set the channel if not.
