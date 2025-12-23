@@ -333,7 +333,8 @@ export const resolveInstallationStateName = (
 export const splitModuleTemplates = (
   moduleTemplates: ModuleTemplateListType,
 ) => {
-  if (!moduleTemplates?.items) return { managed: [], unmanaged: [] };
+  if (!moduleTemplates?.items)
+    return { kymaTemplates: { items: [] }, communityTemplates: { items: [] } };
 
   const communityTemplates: ModuleTemplateListType = { items: [] };
   const kymaTemplates: ModuleTemplateListType = { items: [] };
