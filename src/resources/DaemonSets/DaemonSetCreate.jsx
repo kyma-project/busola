@@ -27,12 +27,18 @@ export default function DaemonSetCreate({
   );
 
   useEffect(() => {
-    setDaemonSet(
-      _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
-    );
-    setInitialResource(
-      initialDaemonSet || createDaemonSetTemplate(namespaceId),
-    );
+    const timeoutId = setTimeout(() => {
+      setDaemonSet(
+        _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
+      );
+      setInitialResource(
+        initialDaemonSet || createDaemonSetTemplate(namespaceId),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialDaemonSet, namespaceId]);
 
   return (

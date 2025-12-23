@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { getBytes, getCpus } from 'shared/helpers/resources';
 
@@ -35,7 +35,6 @@ export const createUsageMetrics = (node, metricsForNode) => {
 };
 
 export function useNodesQuery(skip = false) {
-  const [data, setData] = useState(null);
   const { data: nodeMetrics, loading: metricsLoading } = useGet(
     '/apis/metrics.k8s.io/v1beta1/nodes',
     {
@@ -51,7 +50,7 @@ export function useNodesQuery(skip = false) {
     loading: nodesLoading,
   } = useGet('/api/v1/nodes', { pollingInterval: 5500, skip });
 
-  useEffect(() => {
+  const data = useMemo(() => {
     if (nodes) {
       const getNodeMetrics = (node) => {
         const metricsForNode = nodeMetrics.items.find(
@@ -60,13 +59,12 @@ export function useNodesQuery(skip = false) {
         return createUsageMetrics(node, metricsForNode);
       };
 
-      setData(
-        nodes.items?.map((n) => ({
-          ...n,
-          metrics: nodeMetrics ? getNodeMetrics(n) : {},
-        })),
-      );
+      return nodes.items?.map((n) => ({
+        ...n,
+        metrics: nodeMetrics ? getNodeMetrics(n) : {},
+      }));
     }
+    return null;
   }, [nodes, nodeMetrics]);
 
   return {
@@ -77,7 +75,6 @@ export function useNodesQuery(skip = false) {
 }
 
 export function useNodeQuery(nodeName) {
-  const [data, setData] = useState(null);
   const {
     data: nodeMetrics,
     error: metricsError,
@@ -96,13 +93,14 @@ export function useNodeQuery(nodeName) {
     skip: !nodeName,
   });
 
-  useEffect(() => {
+  const data = useMemo(() => {
     if (node) {
-      setData({
+      return {
         node,
         metrics: nodeMetrics ? createUsageMetrics(node, nodeMetrics) : {},
-      });
+      };
     }
+    return null;
   }, [node, nodeMetrics]);
 
   return {
@@ -175,7 +173,6 @@ export function calcNodeResources(pods) {
 }
 
 export function useResourceByNode(nodeName) {
-  const [data, setData] = useState(null);
   const {
     data: pods,
     error,
@@ -185,12 +182,13 @@ export function useResourceByNode(nodeName) {
   );
 
   const nodeResources = useMemo(() => calcNodeResources(pods), [pods]);
-
-  useEffect(() => {
+  const data = useMemo(() => {
     if (nodeResources) {
-      setData(nodeResources);
+      return nodeResources;
     }
+    return null;
   }, [nodeResources]);
+
   return {
     data,
     error,

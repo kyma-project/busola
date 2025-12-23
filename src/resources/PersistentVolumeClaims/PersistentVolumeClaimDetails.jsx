@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
 
@@ -69,7 +69,7 @@ export const PVCConfiguration = (pvc) => {
     '/apis/storage.k8s.io/v1/storageclasses',
   );
   return (
-    <React.Fragment key="pvc-configuration">
+    <Fragment key="pvc-configuration">
       {pvc.spec.resources && (
         <UI5Panel
           title={t('persistent-volume-claims.headers.resources.title')}
@@ -170,7 +170,7 @@ export const PVCConfiguration = (pvc) => {
           }
         />
       </UI5Panel>
-    </React.Fragment>
+    </Fragment>
   );
 };
 

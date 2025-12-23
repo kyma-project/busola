@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { ReleaseDataPanel } from './ReleaseDataPanel';
 import { ChartContent } from './ChartContent';
@@ -20,13 +20,13 @@ export function HelmReleaseData({ releaseSecret, release }) {
   }
 
   return (
-    <React.Fragment key="helm-release-data">
+    <Fragment key="helm-release-data">
       <ReleaseDataPanel release={release} secret={releaseSecret} />
       <ChartContent chart={release.chart} />
       <ReadonlyEditorPanel
         title={t('helm-releases.headers.release-manifest')}
         value={jsyaml.dump(release.manifest)}
       />
-    </React.Fragment>
+    </Fragment>
   );
 }

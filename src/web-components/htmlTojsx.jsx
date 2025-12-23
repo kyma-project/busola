@@ -1,4 +1,4 @@
-import React from 'react';
+import { createElement } from 'react';
 
 const customWebComponents = ['monaco-editor', 'dynamic-page-component'];
 
@@ -71,7 +71,7 @@ export function parseHtmlToJsx(element) {
       .map(parseElement)
       .filter(Boolean);
 
-    return React.createElement(tagName, props, ...children);
+    return createElement(tagName, props, ...children);
   };
 
   return parseElement(element);

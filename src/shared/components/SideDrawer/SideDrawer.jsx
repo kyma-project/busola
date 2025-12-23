@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -19,7 +19,7 @@ export const SideDrawer = ({
   bottomContent,
   withYamlEditor,
 }) => {
-  const [width, setWidth] = React.useState(MIN_EDITOR_RATIO);
+  const [width, setWidth] = useState(MIN_EDITOR_RATIO);
 
   let textToCopy;
 
@@ -38,7 +38,7 @@ export const SideDrawer = ({
     );
   }
 
-  const doResize = React.useCallback(({ movementX }) => {
+  const doResize = useCallback(({ movementX }) => {
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
     const scale = document.body.clientWidth / 100;
 

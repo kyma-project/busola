@@ -42,13 +42,21 @@ export function GenericRoleBindingCreate({
   const [initialResource, setInitialResource] = useState(
     initialRoleBinding || createBindingTemplate(namespace),
   );
+  const [prevInitialRoleBinding, setPrevInitialRoleBinding] =
+    useState(initialRoleBinding);
+  const [prevNamespace, setPrevNamespace] = useState(namespace);
 
-  useEffect(() => {
+  if (
+    initialRoleBinding !== prevInitialRoleBinding ||
+    namespace !== prevNamespace
+  ) {
+    setPrevInitialRoleBinding(initialRoleBinding);
+    setPrevNamespace(namespace);
     if (!cloneDeep(initialRoleBinding)) {
       createBindingTemplate(namespace);
     }
     setInitialResource(initialRoleBinding || createBindingTemplate(namespace));
-  }, [initialRoleBinding, namespace]);
+  }
 
   useEffect(() => {
     setCustomValid(validateBinding(binding));

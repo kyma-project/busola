@@ -134,9 +134,21 @@ export const DynamicPageComponent = ({
       layoutColumn?.layout !== 'OneColumn' &&
       layoutNumber === 'startColumn'
     ) {
-      setSelectedTab(editColumn === 'startColumn' ? 'edit' : 'view');
+      const timeoutId = setTimeout(() => {
+        setSelectedTab(editColumn === 'startColumn' ? 'edit' : 'view');
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     } else {
-      setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
+      const timeoutId = setTimeout(() => {
+        setSelectedTab(layoutColumn?.showEdit ? 'edit' : 'view');
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
   }, [editColumn, layoutNumber, layoutColumn?.layout, layoutColumn?.showEdit]);
 

@@ -66,12 +66,7 @@ export default function KymaCompanion() {
   };
 
   useEffect(() => {
-    if (chatHistory[0].messages.length > 1) {
-      setIsInitialScreen(false);
-      return;
-    } else {
-      setIsInitialScreen(true);
-    }
+    setIsInitialScreen(chatHistory[0].messages.length <= 1);
   }, [chatHistory]);
 
   return (

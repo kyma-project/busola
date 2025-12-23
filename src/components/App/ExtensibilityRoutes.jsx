@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { lazy, Fragment, Suspense } from 'react';
 import pluralize from 'pluralize';
 import i18next from 'i18next';
 import { Route, useParams, useSearchParams } from 'react-router';
@@ -15,11 +15,9 @@ import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate'
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
-const List = React.lazy(() => import('../Extensibility/ExtensibilityList'));
-const Details = React.lazy(
-  () => import('../Extensibility/ExtensibilityDetails'),
-);
-const Create = React.lazy(() => import('../Extensibility/ExtensibilityCreate'));
+const List = lazy(() => import('../Extensibility/ExtensibilityList'));
+const Details = lazy(() => import('../Extensibility/ExtensibilityDetails'));
+const Create = lazy(() => import('../Extensibility/ExtensibilityCreate'));
 
 const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
   const layoutState = useAtomValue(columnLayoutAtom);
@@ -149,7 +147,7 @@ export const createExtensibilityRoutes = (extension, language) => {
   );
 
   return (
-    <React.Fragment key={urlPath}>
+    <Fragment key={urlPath}>
       <Route
         path={`${urlPath}/:resourceName?`}
         element={
@@ -162,6 +160,6 @@ export const createExtensibilityRoutes = (extension, language) => {
           </Suspense>
         }
       />
-    </React.Fragment>
+    </Fragment>
   );
 };

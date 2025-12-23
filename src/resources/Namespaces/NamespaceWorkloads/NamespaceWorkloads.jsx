@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
@@ -10,7 +11,6 @@ import {
   PodStatusCounterKey,
 } from './NamespaceWorkloadsHelpers';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import { useEffect, useState } from 'react';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string };
 
@@ -73,9 +73,7 @@ export function NamespaceWorkloads({ namespace }) {
     },
   );
 
-  const [loadbalancerNumber, setLoadbalancerNumber] = useState(0);
-
-  useEffect(() => {
+  const loadbalancerNumber = useMemo(() => {
     if (servicesData) {
       let loadbalancers = 0;
       for (const sv of servicesData) {
@@ -83,8 +81,9 @@ export function NamespaceWorkloads({ namespace }) {
           loadbalancers++;
         }
       }
-      setLoadbalancerNumber(loadbalancers);
+      return loadbalancers;
     }
+    return 0;
   }, [servicesData]);
 
   return (

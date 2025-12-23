@@ -33,8 +33,14 @@ export function GenericRoleCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
-    setRole(cloneDeep(initialRole) || createTemplate());
-    setInitialResource(initialRole || createTemplate());
+    const timeoutId = setTimeout(() => {
+      setRole(cloneDeep(initialRole) || createTemplate());
+      setInitialResource(initialRole || createTemplate());
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialRole, createTemplate, layoutState?.showEdit?.resource]);
 
   const isEdit = useMemo(

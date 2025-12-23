@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
@@ -6,11 +6,11 @@ import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
-const HelmReleasesList = React.lazy(
+const HelmReleasesList = lazy(
   () => import('../../components/HelmReleases/HelmReleasesList'),
 );
 
-const HelmReleaseDetails = React.lazy(
+const HelmReleaseDetails = lazy(
   () => import('../../components/HelmReleases/HelmReleasesDetails'),
 );
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { Description } from 'shared/components/Description/Description';
 
 export const resourceType = 'Events';
@@ -19,6 +19,6 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./EventList'));
-export const Details = React.lazy(() => import('./EventDetails'));
-export const Create = React.lazy(() => import('./EventYaml'));
+export const List = lazy(() => import('./EventList'));
+export const Details = lazy(() => import('./EventDetails'));
+export const Create = lazy(() => import('./EventYaml'));

@@ -26,15 +26,20 @@ export default function ReplicaSetCreate({
   const [initialResource, setInitialResource] = useState(
     initialReplicaSet || createReplicaSetTemplate(namespace),
   );
+  const [prevNamespace, setPrevNamespace] = useState(namespace);
 
-  useEffect(() => {
+  if (
+    namespace !== prevNamespace ||
+    (initialReplicaSet && initialReplicaSet !== initialResource)
+  ) {
+    setPrevNamespace(namespace);
     setReplicaSet(
       _.cloneDeep(initialReplicaSet) || createReplicaSetTemplate(namespace),
     );
     setInitialResource(
       initialReplicaSet || createReplicaSetTemplate(namespace),
     );
-  }, [initialReplicaSet, namespace]);
+  }
 
   useEffect(() => {
     const hasAnyContainers = !!(

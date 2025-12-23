@@ -26,13 +26,10 @@ export default defineConfig(
       },
       rules: {
         // React
-        'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',
-        'react-hooks/exhaustive-deps': 'warn',
         'react-hooks/rules-of-hooks': 'warn',
         'react-hooks/refs': 'warn',
-        'react-hooks/set-state-in-effect': 'warn',
         'react-hooks/immutability': 'warn',
 
         // TypeScript
@@ -56,15 +53,7 @@ export default defineConfig(
         '@typescript-eslint/ban-ts-comment': 'error',
         '@typescript-eslint/no-require-imports': 'warn',
         // Misc
-        'no-unused-vars': [
-          'warn',
-          {
-            varsIgnorePattern: '^_',
-            argsIgnorePattern: '^_',
-            caughtErrorsIgnorePattern: '^_',
-          },
-        ],
-        'no-prototype-builtins': 'warn',
+        'no-unused-vars': 'off',
         'prefer-const': 'error',
       },
     },

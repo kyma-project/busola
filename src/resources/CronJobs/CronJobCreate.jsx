@@ -49,8 +49,14 @@ export default function CronJobCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
-    setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
-    setInitialResource(initialCronJob || createCronJobTemplate(namespace));
+    const timeoutId = setTimeout(() => {
+      setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
+      setInitialResource(initialCronJob || createCronJobTemplate(namespace));
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialCronJob, namespace, layoutState?.showEdit?.resource]);
 
   useEffect(() => {

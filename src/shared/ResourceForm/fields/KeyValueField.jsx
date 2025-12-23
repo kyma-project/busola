@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -146,7 +146,7 @@ export function KeyValueField({
           </div>
         ),
         ({ value, setValue, updateValue, index }) => (
-          <React.Fragment key={`read-file-button-${index}`}>
+          <Fragment key={`read-file-button-${index}`}>
             {readableFromFile ? (
               <Button
                 onClick={() =>
@@ -165,7 +165,7 @@ export function KeyValueField({
                 {t('components.key-value-form.read-value')}
               </Button>
             ) : null}
-          </React.Fragment>
+          </Fragment>
         ),
       ]}
       actions={actions}

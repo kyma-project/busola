@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -80,7 +80,7 @@ export default function ServiceAccountCreate({
     afterCreatedFn: () => {},
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
   }, [serviceAccount, setCustomValid]);
 

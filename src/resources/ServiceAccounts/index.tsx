@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
@@ -17,9 +17,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./ServiceAccountList'));
-export const Details = React.lazy(() => import('./ServiceAccountDetails'));
-export const Create = React.lazy(() => import('./ServiceAccountCreate'));
+export const List = lazy(() => import('./ServiceAccountList'));
+export const Details = lazy(() => import('./ServiceAccountDetails'));
+export const Create = lazy(() => import('./ServiceAccountCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 2,
