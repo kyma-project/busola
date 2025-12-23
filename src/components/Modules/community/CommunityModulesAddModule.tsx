@@ -256,13 +256,10 @@ export default function CommunityModulesAddModule(props: any) {
     return { items: upgradeable };
   }, [installedCommunityModuleTemplates, installedVersions]);
 
-  const modulesBeingInstalled = useMemo(() => {
+  const modulesToHide = useMemo(() => {
     return new Set(
       modulesDuringUpload
-        .filter(
-          (m: moduleInstallationState) =>
-            m.state === State.Downloading || m.state === State.Uploading,
-        )
+        .filter((m: moduleInstallationState) => m.state !== State.Error)
         .map((m: moduleInstallationState) => getModuleName(m.moduleTpl)),
     );
   }, [modulesDuringUpload]);
@@ -271,12 +268,12 @@ export default function CommunityModulesAddModule(props: any) {
     const combinedItems = [
       ...(notInstalledCommunityModuleTemplates?.items || []),
       ...(upgradeableCommunityModuleTemplates?.items || []),
-    ].filter((module) => !modulesBeingInstalled.has(getModuleName(module)));
+    ].filter((module) => !modulesToHide.has(getModuleName(module)));
     return { items: combinedItems };
   }, [
     notInstalledCommunityModuleTemplates,
     upgradeableCommunityModuleTemplates,
-    modulesBeingInstalled,
+    modulesToHide,
   ]);
 
   const availableCommunityModules = useMemo(() => {
