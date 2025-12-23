@@ -20,10 +20,15 @@ export type VersionInfo = {
 export function getAvailableCommunityModules(
   communityModulesTemplates: ModuleTemplateListType,
   installedModuleTemplates: ModuleTemplateListType,
+  installedVersions?: Map<string, string>,
 ): Map<string, VersionInfo[]> {
   const availableCommunityModules = new Map<string, VersionInfo[]>();
   fillModuleVersions(availableCommunityModules, communityModulesTemplates);
-  markInstalledVersion(availableCommunityModules, installedModuleTemplates);
+  markInstalledVersion(
+    availableCommunityModules,
+    installedModuleTemplates,
+    installedVersions,
+  );
   return availableCommunityModules;
 }
 
@@ -89,6 +94,7 @@ function getFirstIcon(
 function markInstalledVersion(
   availableCommunityModules: Map<string, VersionInfo[]>,
   installedModuleTemplates: ModuleTemplateListType,
+  installedVersions?: Map<string, string>,
 ) {
   (installedModuleTemplates?.items || []).forEach((installedModule) => {
     const foundModuleVersions = availableCommunityModules.get(
@@ -98,9 +104,13 @@ function markInstalledVersion(
     const installedNamespace = installedModule.metadata.namespace;
 
     if (foundModuleVersions) {
+      const managerKey = `${installedModule.metadata.name}:${installedModule.spec?.manager?.namespace}`;
+      const actualInstalledVersion =
+        installedVersions?.get(managerKey) ?? installedModule.spec.version;
+
       const versionIdx = foundModuleVersions.findIndex((version) => {
         return (
-          version.version === installedModule.spec.version &&
+          version.version === actualInstalledVersion &&
           version.moduleTemplateNamespace === installedNamespace
         );
       });
@@ -112,30 +122,47 @@ function markInstalledVersion(
   });
 }
 
+export function extractVersionFromImage(image: string): string | undefined {
+  if (!image) return undefined;
+  const parts = image.split(':');
+  if (parts.length > 1) {
+    return parts[parts.length - 1];
+  }
+  return undefined;
+}
+
 export function getInstalledModules(
   moduleTemplates: ModuleTemplateListType,
   managers: any,
-): ModuleTemplateListType {
+): { items: ModuleTemplateType[]; installedVersions: Map<string, string> } {
+  const installedVersions = new Map<string, string>();
+
   const installedModuleTemplates = moduleTemplates.items?.filter((module) => {
-    const foundManager =
-      managers[`${module.metadata.name}:${module.spec?.manager?.namespace}`];
-    if (!foundManager) {
+    const managerKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
+    const foundManager = managers[managerKey];
+
+    if (
+      !foundManager ||
+      foundManager.metadata.namespace !== module.spec?.manager?.namespace
+    ) {
       return false;
     }
-    const matchedManagerContainer =
-      foundManager.spec?.template?.spec.containers.find(
-        (container: { image: string }) => {
-          return (
-            imageMatchVersion(container.image, module.spec.version) &&
-            foundManager.metadata.namespace === module.spec.manager?.namespace
-          );
-        },
-      );
-    return !!matchedManagerContainer;
+
+    const containers = foundManager.spec?.template?.spec?.containers || [];
+    for (const container of containers) {
+      const version = extractVersionFromImage(container.image);
+      if (version) {
+        installedVersions.set(managerKey, version);
+        break;
+      }
+    }
+
+    return true;
   });
 
   return {
     items: installedModuleTemplates,
+    installedVersions,
   };
 }
 
@@ -155,12 +182,6 @@ export function getNotInstalledModules(
   return {
     items: notInstalledModuleTemplates,
   };
-}
-
-function imageMatchVersion(image: string, version: string): boolean {
-  const imgName = image.split(':');
-  const imgTag = imgName[imgName.length - 1];
-  return imgTag.includes(version);
 }
 
 export async function postForCommunityResources(post: PostFn, link: string) {
