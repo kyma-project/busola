@@ -19,6 +19,7 @@ export default function CustomResource({ params }) {
     resourceName,
     resourceNamespace,
     isModule,
+    isEntireListProtected,
     setResMetadata,
     headerActions,
   } = params;
@@ -105,6 +106,7 @@ export default function CustomResource({ params }) {
       customComponents={[yamlPreview]}
       layoutCloseCreateUrl={params.layoutCloseCreateUrl}
       disableDelete={isModule}
+      isEntireListProtected={isEntireListProtected}
       headerActions={headerActions}
     />
   );

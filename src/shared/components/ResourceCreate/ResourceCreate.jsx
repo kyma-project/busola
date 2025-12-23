@@ -116,7 +116,7 @@ export const ResourceCreate = ({
     return (
       <Button
         className="min-width-button"
-        disabled={readOnly || disableEdit}
+        disabled={readOnly || disableEdit || protectedResource}
         aria-disabled={readOnly || disableEdit}
         onClick={handleFormSubmit}
         design="Emphasized"
@@ -195,6 +195,7 @@ export const ResourceCreate = ({
       {isEdit && (
         <div className="edit-form" ref={createFormRef} tabIndex={0}>
           {renderForm({
+            readOnly,
             formElementRef,
             isValid,
             setCustomValid,
