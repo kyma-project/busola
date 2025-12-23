@@ -56,14 +56,7 @@ export default defineConfig(
         '@typescript-eslint/ban-ts-comment': 'error',
         '@typescript-eslint/no-require-imports': 'warn',
         // Misc
-        'no-unused-vars': [
-          'warn',
-          {
-            varsIgnorePattern: '^_',
-            argsIgnorePattern: '^_',
-            caughtErrorsIgnorePattern: '^_',
-          },
-        ],
+        'no-unused-vars': 'off',
         'prefer-const': 'error',
       },
     },
