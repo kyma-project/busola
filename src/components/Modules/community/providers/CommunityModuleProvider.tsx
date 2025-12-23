@@ -14,6 +14,7 @@ interface CommunityModuleContextType {
     version: string;
     templateVersion: string;
     resource: any;
+    managerKey: string;
   }[];
   installedCommunityModuleTemplates: ModuleTemplateListType;
   notInstalledCommunityModuleTemplates: ModuleTemplateListType;
@@ -74,21 +75,35 @@ function simplifyInstalledModules(
   installedModules: ModuleTemplateListType,
   installedVersions: Map<string, string>,
 ) {
-  return (
-    installedModules.items?.map((module: ModuleTemplateType) => {
-      const managerKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
-      const installedVersion = installedVersions.get(managerKey);
+  const seen = new Set<string>();
 
-      return {
-        name:
+  return (
+    installedModules.items
+      ?.map((module: ModuleTemplateType) => {
+        const versionLookupKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
+        const installedVersion = installedVersions.get(versionLookupKey);
+        const moduleName =
           module.metadata?.labels['operator.kyma-project.io/module-name'] ??
-          module.spec.moduleName,
-        moduleTemplateName: module.metadata.name,
-        namespace: module.metadata.namespace,
-        version: installedVersion ?? module.spec.version,
-        templateVersion: module.spec.version,
-        resource: module.spec.data,
-      };
-    }) ?? []
+          module.spec.moduleName;
+        const managerKey = `${module.spec?.manager?.name}:${module.spec?.manager?.namespace}`;
+
+        return {
+          name: moduleName,
+          moduleTemplateName: module.metadata.name,
+          namespace: module.metadata.namespace,
+          version: installedVersion ?? module.spec.version,
+          templateVersion: module.spec.version,
+          resource: module.spec.data,
+          managerKey,
+        };
+      })
+      .filter((module) => {
+        const dedupeKey = `${module.name}::${module.managerKey}`;
+        if (seen.has(dedupeKey)) {
+          return false;
+        }
+        seen.add(dedupeKey);
+        return true;
+      }) ?? []
   );
 }
