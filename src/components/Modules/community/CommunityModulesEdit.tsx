@@ -167,6 +167,7 @@ export default function CommunityModulesEdit() {
     ModuleTemplatesContext,
   );
   const {
+    installedCommunityModules,
     installedCommunityModuleTemplates,
     installedCommunityModulesLoading,
     installedVersions,
@@ -174,8 +175,14 @@ export default function CommunityModulesEdit() {
 
   const availableCommunityModules = useMemo(() => {
     if (!moduleTemplatesLoading && !installedCommunityModulesLoading) {
+      const allTemplates: ModuleTemplateListType = {
+        items: [
+          ...(installedCommunityModuleTemplates?.items || []),
+          ...(communityModuleTemplates?.items || []),
+        ],
+      };
       return getAvailableCommunityModules(
-        communityModuleTemplates,
+        allTemplates,
         installedCommunityModuleTemplates,
         installedVersions,
       );
@@ -206,9 +213,13 @@ export default function CommunityModulesEdit() {
     );
   }
 
+  const installedModuleNames = new Set(
+    installedCommunityModules.map((m) => m.name),
+  );
+
   const communityModulesToDisplay = transformDataForDisplay(
     availableCommunityModules,
-  );
+  ).filter((module) => installedModuleNames.has(module.name));
 
   if (isCommunityModulesEnabled) {
     return (
@@ -246,25 +257,26 @@ export default function CommunityModulesEdit() {
                     className="collapsible-margins"
                     title={t('modules.community.title')}
                   >
-                    {installedCommunityModuleTemplates.items.length !== 0 ? (
+                    {communityModulesToDisplay.length !== 0 ? (
                       <div className={'edit'}>
-                        {communityModulesToDisplay &&
-                          communityModulesToDisplay.map((module, idx) => {
-                            return (
-                              <CommunityModuleVersionSelect
-                                key={`${module.name}+${idx}`}
-                                module={module}
-                                onChange={onVersionChange(
-                                  communityModuleTemplates,
-                                  installedCommunityModuleTemplates,
-                                  communityModulesTemplatesToApply,
-                                  setCommunityModulesTemplatesToApply,
-                                  setIsResourceEdited,
-                                )}
-                              />
-                            );
-                          })}
+                        {communityModulesToDisplay.map((module, idx) => {
+                          return (
+                            <CommunityModuleVersionSelect
+                              key={`${module.name}+${idx}`}
+                              module={module}
+                              onChange={onVersionChange(
+                                communityModuleTemplates,
+                                installedCommunityModuleTemplates,
+                                communityModulesTemplatesToApply,
+                                setCommunityModulesTemplatesToApply,
+                                setIsResourceEdited,
+                              )}
+                            />
+                          );
+                        })}
                       </div>
+                    ) : installedCommunityModules.length !== 0 ? (
+                      <Spinner />
                     ) : (
                       <MessageStrip
                         design="Critical"
