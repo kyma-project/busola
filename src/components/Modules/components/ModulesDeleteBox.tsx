@@ -182,9 +182,69 @@ export const ModulesDeleteBox = ({
     setAssociatedResourceLeft(resourcesLeft);
   }, [resourceCounts, associatedResources]);
 
-  const deleteAllResources = () => {
+  const deleteAllResources = async () => {
     if (allowForceDelete && associatedResourcesUrls.length > 0) {
-      deleteResources(deleteFn, associatedResourcesUrls);
+      try {
+        await deleteResources(deleteFn, associatedResourcesUrls);
+
+        // Wait for children to completely disappear.
+        const childrenLeft = await checkIfAllResourcesAreDeleted(
+          singleGet,
+          associatedResourcesUrls,
+          t,
+        );
+
+        if (childrenLeft.length > 0) {
+          notification.notifyError({
+            content: t('modules.community.messages.resources-delete-failure', {
+              module: selectedModules[chosenModuleIndex]?.name,
+              resources: childrenLeft.join(', '),
+            }),
+          });
+
+          return;
+        }
+      } catch (e) {
+        console.error('Failed to delete associated resources', e);
+        notification.notifyError({
+          content: t('modules.messages.delete-error', {
+            error: e instanceof Error ? e.message : e,
+          }),
+        });
+        return;
+      }
+    }
+
+    if (allowForceDelete && crUrls.length > 0) {
+      try {
+        await deleteResources(deleteFn, crUrls);
+
+        // Wait for the CR to be NotFound
+        const crsLeft = await checkIfAllResourcesAreDeleted(
+          singleGet,
+          crUrls,
+          t,
+        );
+
+        if (crsLeft.length > 0) {
+          notification.notifyError({
+            content: t('kyma-modules.messages.cr-delete-stuck', {
+              resources: crsLeft.join(', '),
+              defaultValue:
+                'Could not delete Module CR. The Operator might be stuck or slow. Please check the resources manually before uninstalling.',
+            }),
+          });
+          return;
+        }
+      } catch (e) {
+        console.error('Failed to delete CR', e);
+        notification.notifyError({
+          content: t('modules.messages.delete-error', {
+            error: e instanceof Error ? e.message : e,
+          }),
+        });
+        return;
+      }
     }
     if (chosenModuleIndex != null) {
       selectedModules.splice(chosenModuleIndex, 1);
@@ -199,10 +259,6 @@ export const ModulesDeleteBox = ({
       });
       handleModuleUninstall();
       setInitialUnchangedResource(cloneDeep(kymaResourceState));
-    }
-
-    if (allowForceDelete && associatedResourcesUrls.length > 0) {
-      deleteResources(deleteFn, crUrls);
     }
 
     if (detailsOpen) {
