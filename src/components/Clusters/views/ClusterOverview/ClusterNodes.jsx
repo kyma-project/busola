@@ -8,6 +8,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 import { useUrl } from 'hooks/useUrl';
 import { ProgressIndicatorWithTooltip } from 'shared/components/ProgressIndicatorWithTooltip/ProgressIndicatorWithTooltip';
 import { Link } from 'shared/components/Link/Link';
@@ -30,7 +31,7 @@ export function ClusterNodes({ data, error, loading }) {
         resourceKind="nodes"
         type={getStatusType(currentStatus.type)}
       >
-        {currentStatus.type}
+        {toSentenceCase(currentStatus.type)}
       </StatusBadge>
     ) : (
       EMPTY_TEXT_PLACEHOLDER

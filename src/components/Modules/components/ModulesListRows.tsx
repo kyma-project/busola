@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
@@ -238,7 +239,9 @@ function installationStateColumn(
       type={type}
       tooltipContent={managerResourceState?.message}
     >
-      {managerResourceState?.state ?? managerResourceState?.type}
+      {toSentenceCase(
+        managerResourceState?.state ?? managerResourceState?.type,
+      )}
     </StatusBadge>
   );
 }
@@ -258,7 +261,7 @@ function kymaInstallationStateColumn(
         type={resolveType(resolvedInstallationStateName)}
         tooltipContent={moduleStatus?.message ?? managerResourceState?.message}
       >
-        {resolvedInstallationStateName}
+        {toSentenceCase(resolvedInstallationStateName)}
       </StatusBadge>
       {moduleStatus?.maintenance === true && (
         <StatusBadge

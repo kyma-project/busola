@@ -1,4 +1,5 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 export function NamespaceStatus({ namespaceStatus }) {
   const badgeType = (status) => {
@@ -17,7 +18,7 @@ export function NamespaceStatus({ namespaceStatus }) {
       resourceKind="namespaces"
       type={badgeType(namespaceStatus.phase)}
     >
-      {namespaceStatus.phase}
+      {toSentenceCase(namespaceStatus.phase)}
     </StatusBadge>
   );
 }

@@ -1,4 +1,5 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 export const calculatePodState = (pod) => {
   const containerStatuses = pod?.status?.containerStatuses;
@@ -55,7 +56,7 @@ export function PodStatus({ pod }) {
       resourceKind="pods"
       type={badgeType(podState.status)}
     >
-      {podState.status}
+      {toSentenceCase(podState.status)}
     </StatusBadge>
   );
 }
