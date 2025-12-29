@@ -1,23 +1,9 @@
 import { FlexBox, Label, Option, Select } from '@ui5/webcomponents-react';
+import { ModuleDisplayInfo } from 'components/Modules/community/communityModulesHelpers';
 
 export type ModuleInfoProps = {
   module: ModuleDisplayInfo;
   onChange: (_?: string) => void;
-};
-
-export type ModuleDisplayInfo = {
-  name: string;
-  versions: VersionDisplayInfo[];
-};
-
-export type VersionDisplayInfo = {
-  moduleTemplate: {
-    name: string;
-    namespace: string;
-  };
-  version: string;
-  installed: boolean;
-  textToDisplay: string;
 };
 
 export default function CommunityModuleVersionSelect({

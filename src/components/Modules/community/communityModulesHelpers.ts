@@ -17,6 +17,42 @@ export type VersionInfo = {
   };
 };
 
+export type VersionDisplayInfo = {
+  moduleTemplate: {
+    name: string;
+    namespace: string;
+  };
+  version: string;
+  installed: boolean;
+  textToDisplay: string;
+  icon?: { link: string; name: string };
+  docsURL?: string;
+};
+
+export type ModuleDisplayInfo = {
+  name: string;
+  versions: VersionDisplayInfo[];
+};
+
+export function transformDataForDisplay(
+  availableCommunityModules: Map<string, VersionInfo[]>,
+): ModuleDisplayInfo[] {
+  return Array.from(availableCommunityModules, ([moduleName, versions]) => ({
+    name: moduleName,
+    versions: versions.map((v) => ({
+      moduleTemplate: {
+        name: v.moduleTemplateName,
+        namespace: v.moduleTemplateNamespace,
+      },
+      version: v.version,
+      installed: v.installed ?? false,
+      textToDisplay: `v${v.version}`,
+      icon: v.icon,
+      docsURL: v.docsURL,
+    })),
+  }));
+}
+
 export function getAvailableCommunityModules(
   communityModulesTemplates: ModuleTemplateListType,
   installedModuleTemplates: ModuleTemplateListType,

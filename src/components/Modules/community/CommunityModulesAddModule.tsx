@@ -8,7 +8,7 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   getAvailableCommunityModules,
-  VersionInfo,
+  transformDataForDisplay,
 } from 'components/Modules/community/communityModulesHelpers';
 import {
   getModuleName,
@@ -51,22 +51,6 @@ import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
 import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList/CommunityModulesSourcesList';
 import { TFunction } from 'i18next';
-
-type VersionDisplayInfo = {
-  moduleTemplate: {
-    name: string;
-    namespace: string;
-  };
-  version: string;
-  installed: boolean;
-  textToDisplay: string;
-  icon?: { link: string; name: string };
-  docsURL?: string;
-};
-type ModuleDisplayInfo = {
-  name: string;
-  versions: VersionDisplayInfo[];
-};
 
 function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
@@ -111,27 +95,6 @@ function onVersionChange(
 
     setModulesTemplatesToApply({ map: newModulesTemplatesToApply });
   };
-}
-
-function transformDataForDisplay(
-  availableCommunityModules: Map<string, VersionInfo[]>,
-): ModuleDisplayInfo[] {
-  return Array.from(availableCommunityModules, ([moduleName, versions]) => {
-    return {
-      name: moduleName,
-      versions: versions.map((v) => ({
-        moduleTemplate: {
-          name: v.moduleTemplateName,
-          namespace: v.moduleTemplateNamespace,
-        },
-        version: v.version,
-        installed: v.installed ?? false,
-        textToDisplay: `v${v.version}`,
-        icon: v.icon,
-        docsURL: v.docsURL,
-      })),
-    };
-  });
 }
 
 async function upload(
