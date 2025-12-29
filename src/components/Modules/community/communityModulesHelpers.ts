@@ -109,8 +109,10 @@ function markInstalledVersion(
         installedVersions?.get(managerKey) ?? installedModule.spec.version;
 
       const versionIdx = foundModuleVersions.findIndex((version) => {
+        const versionMatches =
+          actualInstalledVersion?.includes(version.version) ?? false;
         return (
-          version.version === actualInstalledVersion &&
+          versionMatches &&
           version.moduleTemplateNamespace === installedNamespace
         );
       });
