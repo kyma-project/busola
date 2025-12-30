@@ -57,7 +57,6 @@ export default function ServiceAccountCreate({
       cloneDeep(initialServiceAccount) ||
         createServiceAccountTemplate(namespace),
     );
-
     setInitialResource(
       initialServiceAccount || createServiceAccountTemplate(namespace),
     );
@@ -92,7 +91,11 @@ export default function ServiceAccountCreate({
     jp.value(serviceAccount, '$.imagePullSecrets', newImages);
 
     if (!newImages.length) {
-      setServiceAccount((prevState) => delete prevState.imagePullSecrets);
+      setServiceAccount((prevState) => {
+        const copy = { ...prevState };
+        delete copy.imagePullSecrets;
+        return copy;
+      });
     } else {
       setServiceAccount({ ...serviceAccount });
     }
