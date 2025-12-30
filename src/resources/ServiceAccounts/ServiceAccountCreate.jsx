@@ -57,6 +57,7 @@ export default function ServiceAccountCreate({
       cloneDeep(initialServiceAccount) ||
         createServiceAccountTemplate(namespace),
     );
+
     setInitialResource(
       initialServiceAccount || createServiceAccountTemplate(namespace),
     );
