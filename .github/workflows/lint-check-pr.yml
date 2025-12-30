@@ -14,7 +14,7 @@ jobs:
           fetch-depth: 0
       - name: Merge with latest main
         uses: ./.github/actions/merge
-      - name: lint_check
+      - name: Lint check
         shell: bash
         run: |
           set -e

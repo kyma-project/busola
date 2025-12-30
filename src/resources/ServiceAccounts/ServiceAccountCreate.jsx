@@ -91,9 +91,11 @@ export default function ServiceAccountCreate({
     });
     jp.value(serviceAccount, '$.imagePullSecrets', newImages);
 
-    if (!newImages.length) delete serviceAccount.imagePullSecrets;
-
-    setServiceAccount({ ...serviceAccount });
+    if (!newImages.length) {
+      setServiceAccount((prevState) => delete prevState.imagePullSecrets);
+    } else {
+      setServiceAccount({ ...serviceAccount });
+    }
   };
 
   async function afterServiceAccountCreate(defaultAfterCreateFn) {
