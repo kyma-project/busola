@@ -4,6 +4,7 @@ import {
   Avatar,
   ListItemStandard,
   ShellBar,
+  ShellBarItem,
   ToggleButton,
 } from '@ui5/webcomponents-react';
 
@@ -32,6 +33,7 @@ import FeedbackPopover from './Feedback/FeedbackPopover';
 import JouleChat from 'components/KymaCompanion/JouleChat';
 
 import './Header.scss';
+import { GetHelpMenu } from './GetHelpMenu';
 
 export function Header() {
   useAvailableNamespaces();
@@ -39,6 +41,7 @@ export function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isGetHelpOpen, setIsGetHelpOpen] = useState(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -180,8 +183,18 @@ export function Header() {
               {showCompanion.useJoule && <JouleChat />}
             </>
           )}
+        <ShellBarItem
+          onClick={() => setIsGetHelpOpen(true)}
+          id="openGetHelpMenu"
+          icon="sys-help"
+          text={t('navigation.menu.get-help')}
+        />
       </ShellBar>
       <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      <GetHelpMenu
+        isMenuOpen={isGetHelpOpen}
+        onClose={() => setIsGetHelpOpen(false)}
+      />
     </>
   );
 }
