@@ -186,44 +186,6 @@ export const ModulesDeleteBox = ({
     try {
       if (allowForceDelete && associatedResourcesUrls.length > 0) {
         await deleteResources(deleteFn, associatedResourcesUrls);
-
-        // Wait for children to completely disappear.
-        const childrenLeft = await checkIfAllResourcesAreDeleted(
-          singleGet,
-          associatedResourcesUrls,
-          t,
-        );
-
-        if (childrenLeft.length > 0) {
-          notification.notifyError({
-            content: t('modules.community.messages.resources-delete-failure', {
-              module: selectedModules[chosenModuleIndex]?.name,
-              resources: childrenLeft.join(', '),
-            }),
-          });
-
-          return;
-        }
-      }
-
-      if (allowForceDelete && crUrls.length > 0) {
-        await deleteResources(deleteFn, crUrls);
-
-        // Wait for the CR to be NotFound
-        const crsLeft = await checkIfAllResourcesAreDeleted(
-          singleGet,
-          crUrls,
-          t,
-        );
-
-        if (crsLeft.length > 0) {
-          notification.notifyError({
-            content: t('kyma-modules.messages.cr-delete-stuck', {
-              resources: crsLeft.join(', '),
-            }),
-          });
-          return;
-        }
       }
     } catch (e) {
       notification.notifyError({
@@ -247,6 +209,20 @@ export const ModulesDeleteBox = ({
       });
       handleModuleUninstall();
       setInitialUnchangedResource(cloneDeep(kymaResourceState));
+    }
+
+    try {
+      if (allowForceDelete && associatedResourcesUrls.length > 0) {
+        await deleteResources(deleteFn, crUrls);
+      }
+    } catch (e) {
+      notification.notifyError({
+        content: t('modules.community.messages.delete-failure', {
+          module: selectedModules[chosenModuleIndex]?.name,
+          error: e instanceof Error ? e.message : e,
+        }),
+      });
+      return;
     }
 
     if (detailsOpen) {
