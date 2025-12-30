@@ -36,7 +36,7 @@ export function useResourcesForApiGroups(apiGroups = []) {
   );
 
   const fetchResources = useCallback(async () => {
-    if (loading) return Promise.resolve(cache);
+    if (loading) return cache;
 
     const loaders = [];
     for (const apiGroup of apiGroups) {
@@ -49,20 +49,19 @@ export function useResourcesForApiGroups(apiGroups = []) {
         loaders.push(loader);
       }
     }
-    return Promise.all(loaders)?.then((jsons) => {
-      const newCache = jsons.reduce(
-        (cache, { apiGroup, resources }) => ({
-          ...cache,
-          [apiGroup]: cache[apiGroup]
-            ? [...cache[apiGroup], ...resources]
-            : resources,
-        }),
-        cache,
-      );
-      setCache(newCache);
-      setLoading(false);
-      return newCache;
-    });
+    const jsons = await Promise.all(loaders);
+    const newCache = jsons.reduce(
+      (cache, { apiGroup: apiGroup_2, resources: resources_1 }) => ({
+        ...cache,
+        [apiGroup_2]: cache[apiGroup_2]
+          ? [...cache[apiGroup_2], ...resources_1]
+          : resources_1,
+      }),
+      cache,
+    );
+    setCache(newCache);
+    setLoading(false);
+    return newCache;
   }, [loading, cache, findMatchingGroupVersions, fetchApiGroup, apiGroups]);
 
   return {
