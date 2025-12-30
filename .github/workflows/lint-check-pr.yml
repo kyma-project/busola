@@ -18,7 +18,7 @@ jobs:
         shell: bash
         run: |
           set -e
-          ls -l 
+          ls -la
           cat .eslintcache
           rm .eslintcache
           npm ci
