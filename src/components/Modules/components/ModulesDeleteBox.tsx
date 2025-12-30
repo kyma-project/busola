@@ -183,8 +183,8 @@ export const ModulesDeleteBox = ({
   }, [resourceCounts, associatedResources]);
 
   const deleteAllResources = async () => {
-    if (allowForceDelete && associatedResourcesUrls.length > 0) {
-      try {
+    try {
+      if (allowForceDelete && associatedResourcesUrls.length > 0) {
         await deleteResources(deleteFn, associatedResourcesUrls);
 
         // Wait for children to completely disappear.
@@ -204,19 +204,9 @@ export const ModulesDeleteBox = ({
 
           return;
         }
-      } catch (e) {
-        console.error('Failed to delete associated resources', e);
-        notification.notifyError({
-          content: t('modules.messages.delete-error', {
-            error: e instanceof Error ? e.message : e,
-          }),
-        });
-        return;
       }
-    }
 
-    if (allowForceDelete && crUrls.length > 0) {
-      try {
+      if (allowForceDelete && crUrls.length > 0) {
         await deleteResources(deleteFn, crUrls);
 
         // Wait for the CR to be NotFound
@@ -230,21 +220,19 @@ export const ModulesDeleteBox = ({
           notification.notifyError({
             content: t('kyma-modules.messages.cr-delete-stuck', {
               resources: crsLeft.join(', '),
-              defaultValue:
-                'Could not delete Module CR. The Operator might be stuck or slow. Please check the resources manually before uninstalling.',
             }),
           });
           return;
         }
-      } catch (e) {
-        console.error('Failed to delete CR', e);
-        notification.notifyError({
-          content: t('modules.messages.delete-error', {
-            error: e instanceof Error ? e.message : e,
-          }),
-        });
-        return;
       }
+    } catch (e) {
+      notification.notifyError({
+        content: t('modules.community.messages.delete-failure', {
+          module: selectedModules[chosenModuleIndex]?.name,
+          error: e instanceof Error ? e.message : e,
+        }),
+      });
+      return;
     }
     if (chosenModuleIndex != null) {
       selectedModules.splice(chosenModuleIndex, 1);
