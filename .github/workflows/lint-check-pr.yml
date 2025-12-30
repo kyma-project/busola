@@ -18,6 +18,9 @@ jobs:
         shell: bash
         run: |
           set -e
+          ls -l 
+          cat .eslintcache
+          rm .eslintcache
           npm ci
           npm run eslint-check
           npm run lint-check
