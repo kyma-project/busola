@@ -8,7 +8,7 @@ import { CronJobSpecSection } from 'resources/Jobs/SpecSection';
 import {
   isCronExpressionValid,
   ScheduleSection,
-} from 'resources/Jobs/ScheduleSection';
+} from 'resources/CronJobs/ScheduleSection';
 import { ContainersSection } from 'resources/Jobs/ContainersSection';
 import {
   createCronJobPresets,
