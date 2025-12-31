@@ -212,7 +212,7 @@ export const ModulesDeleteBox = ({
     }
 
     try {
-      if (allowForceDelete && associatedResourcesUrls.length > 0) {
+      if (allowForceDelete && crUrls.length > 0) {
         await deleteResources(deleteFn, crUrls);
       }
     } catch (e) {
