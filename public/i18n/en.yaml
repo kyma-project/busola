@@ -2,7 +2,7 @@ apps:
   title: Apps
 cluster-overview:
   headers:
-    cluster-details: Cluster Details
+    cluster-overview: Cluster Overview
     cpu: CPU
     memory: Memory
     metadata: Metadata
@@ -120,7 +120,7 @@ clusters:
     nat-gateway-ips: NAT Gateway IP Addresses
     subaccount-id: Subaccount ID
     title-all-clusters: Clusters Overview
-    title-current-cluster: Cluster Details
+    title-current-cluster: Cluster Overview
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
@@ -175,7 +175,7 @@ command-palette:
   help:
     all-namespaces: List resources from all namespaces
     choose-cluster: Choose cluster
-    cluster-details: Cluster details
+    cluster-overview: Cluster overview
     crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
@@ -1010,7 +1010,7 @@ namespaces:
     memory-quotas: Memory Quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
-  namespace-details: Namespace Details
+  namespace-overview: Namespace Overview
   overview:
     resources:
       error: Error while loading memory consumption data
@@ -1021,6 +1021,7 @@ namespaces:
   title: Namespaces
 navigation:
   all-namespaces: All Namespaces
+  back-to-cluster: Back To Cluster Overview
   errors:
     sidebar: Failed to load navigation items
   menu:

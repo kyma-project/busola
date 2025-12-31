@@ -80,7 +80,7 @@ export default function NamespaceDetails(props) {
       createResourceForm={NamespaceCreate}
       description={ResourceDescription}
       {...props}
-      title={t('namespaces.namespace-details')}
+      title={t('namespaces.namespace-overview')}
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}

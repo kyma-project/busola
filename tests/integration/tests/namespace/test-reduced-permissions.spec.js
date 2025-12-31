@@ -88,7 +88,7 @@ context('Test reduced permissions', () => {
   });
 
   it('Create a ClusterRoleBinding for SA and CR', () => {
-    cy.navigateTo('Back To Cluster Details', 'Cluster Role Bindings');
+    cy.navigateTo('Back To Cluster Overview', 'Cluster Role Bindings');
 
     cy.openCreate();
 
@@ -197,7 +197,7 @@ context('Test reduced permissions', () => {
 
     cy.getLeftNav().contains('Deployments').should('be.visible');
 
-    cy.getLeftNav().contains('Back To Cluster Details').click();
+    cy.getLeftNav().contains('Back To Cluster Overview').click();
 
     cy.getLeftNav().contains('Configuration').should('not.exist');
   });

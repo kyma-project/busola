@@ -49,7 +49,7 @@ context('Test Cluster configuration', () => {
     cy.contains('Category from target cluster').should('be.visible');
 
     // custom storage type should be set
-    cy.getLeftNav().contains('Cluster Details').click();
+    cy.getLeftNav().contains('Cluster Overview').click();
   });
 
   it('Test pagination', () => {
