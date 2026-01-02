@@ -22,7 +22,7 @@ context('Test resource upload', () => {
   });
 
   it('Creates resources', () => {
-    cy.getLeftNav().contains('Cluster Details').click();
+    cy.getLeftNav().contains('Cluster Overview').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 

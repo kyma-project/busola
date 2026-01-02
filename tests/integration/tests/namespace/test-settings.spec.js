@@ -119,7 +119,7 @@ context('Test app settings and preferences', () => {
       .should('be.visible')
       .click();
 
-    cy.getLeftNav().contains('Back To Cluster Details').click();
+    cy.getLeftNav().contains('Back To Cluster Overview').click();
 
     cy.getLeftNav()
       .find('ui5-side-navigation-item')

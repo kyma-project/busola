@@ -88,7 +88,7 @@ context('Test reduced permissions 2', () => {
     // check out "special" namespace view - expect Pods and Services here
     mockNamespacePermissions();
 
-    cy.getLeftNav().contains('Back To Cluster Details').click();
+    cy.getLeftNav().contains('Back To Cluster Overview').click();
 
     cy.getLeftNav()
       .find('ui5-side-navigation-item')

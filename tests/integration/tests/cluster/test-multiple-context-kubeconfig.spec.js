@@ -76,7 +76,7 @@ context('Test multiple context kubeconfig', () => {
         .contains('Connect cluster')
         .click({ force: true });
 
-      cy.contains('Cluster Details').should('exist');
+      cy.contains('Cluster Overview').should('exist');
 
       cy.url().should(
         'match',

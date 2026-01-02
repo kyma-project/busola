@@ -19,7 +19,7 @@ context('Test Extensibility Create/Update', () => {
   });
 
   it('Upload test resources', () => {
-    cy.getLeftNav().contains('Cluster Details').click();
+    cy.getLeftNav().contains('Cluster Overview').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
@@ -160,6 +160,6 @@ context('Test Extensibility Create/Update', () => {
     cy.contains(UPDATED_DESCRIPTION);
     cy.contains(SECOND_DETAIL);
 
-    cy.getLeftNav().contains('Cluster Details').click();
+    cy.getLeftNav().contains('Cluster Overview').click();
   });
 });

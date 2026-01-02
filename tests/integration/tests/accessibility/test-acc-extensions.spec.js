@@ -14,7 +14,7 @@ context('Accessibility test Extensions view', () => {
 
     cy.createNamespace('pizzas');
 
-    cy.getLeftNav().contains('Cluster Details').click();
+    cy.getLeftNav().contains('Cluster Overview').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 

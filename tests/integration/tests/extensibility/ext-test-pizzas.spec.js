@@ -20,7 +20,7 @@ context('Test Pizzas', () => {
   });
 
   it('Creates the EXT pizza config', () => {
-    cy.getLeftNav().contains('Cluster Details').click();
+    cy.getLeftNav().contains('Cluster Overview').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 

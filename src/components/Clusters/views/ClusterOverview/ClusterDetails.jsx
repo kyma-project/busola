@@ -51,7 +51,7 @@ export default function ClusterDetails({ currentCluster }) {
         className="sap-margin-begin-medium sap-margin-y-medium"
         id="cluster-details-heading"
       >
-        {t('cluster-overview.headers.cluster-details')}
+        {t('cluster-overview.headers.cluster-overview')}
       </Title>
       <div className="resource-details-container">
         <ResourceDetailsCard
