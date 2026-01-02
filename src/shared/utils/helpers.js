@@ -145,3 +145,18 @@ export function roundTwoDecimals(number) {
     ? Number.parseFloat(number).toExponential(2)
     : Number.parseFloat(number.toFixed(2));
 }
+
+/**
+ * Converts a string to sentence case.
+ * Handles PascalCase/camelCase by splitting on capital letters.
+ * @example "NotProvisioned" -> "Not provisioned"
+ * @example "ContainerCreating" -> "Container creating"
+ * @example "deployed" -> "Deployed"
+ */
+export const toSentenceCase = (str) => {
+  if (!str) return str;
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/^./, (char) => char.toUpperCase())
+    .replace(/ ./g, (char) => char.toLowerCase());
+};

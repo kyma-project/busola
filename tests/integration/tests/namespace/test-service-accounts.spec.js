@@ -41,7 +41,7 @@ context('Test Service Accounts', () => {
   it('Checking details', () => {
     cy.getMidColumn().contains('ui5-title', SERVICE_NAME).should('be.visible');
 
-    cy.getMidColumn().contains('enabled').should('be.visible');
+    cy.getMidColumn().contains('Enabled').should('be.visible');
 
     cy.getMidColumn()
       .contains('kubernetes.io/service-account-token')
@@ -73,7 +73,7 @@ context('Test Service Accounts', () => {
   it('Checking updated details', () => {
     cy.inspectTab('View');
 
-    cy.getMidColumn().contains('disabled').should('be.visible');
+    cy.getMidColumn().contains('Disabled').should('be.visible');
 
     cy.getMidColumn().contains('test.key=test-value').should('be.visible');
   });

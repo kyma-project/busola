@@ -1,6 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Icon, ListItemStandard } from '@ui5/webcomponents-react';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 
 import './ExpandableListItem.scss';
@@ -79,7 +80,7 @@ export const ExpandableListItem = ({
           {header}
           {status && (
             <StatusBadge type={statusType} className={'header__status-badge'}>
-              {status}
+              {toSentenceCase(status)}
             </StatusBadge>
           )}
         </div>

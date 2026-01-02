@@ -553,7 +553,7 @@ custom-resource-definitions:
     versions: Versions
   name_singular: CustomResourceDefinition
   status:
-    not-served: Not Served
+    not-served: Not served
     served: Served
     storage: Storage
   subtitle:
@@ -899,7 +899,7 @@ kyma-modules:
   installed-modules: Installed Modules
   kyma: Kyma
   maintenance: Maintenance
-  maintenance-pending: Pending Maintenance
+  maintenance-pending: Pending maintenance
   maintenance-tooltip: The module is currently being updated. This may take a few moments.
   managed: Managed
   messages:
@@ -1387,8 +1387,8 @@ service-accounts:
     descriptions:
       disabled: For security reasons, don't enable automount if you don't need it.
       enabled: For security reasons, don't use automount if you don't need it.
-    disabled: disabled
-    enabled: enabled
+    disabled: Disabled
+    enabled: Enabled
   create-modal:
     tooltips:
       associated-secret: Creates a long-lived API token for a ServiceAccount which data is kept in the associated Secret.

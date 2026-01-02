@@ -1,4 +1,5 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 import { useModuleStatus } from '../hooks';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 
@@ -52,7 +53,7 @@ export const ModuleStatus = ({ resource }: any) => {
       type={resolveType(moduleState)}
       tooltipContent={moduleMessage}
     >
-      {moduleState}
+      {toSentenceCase(moduleState)}
     </StatusBadge>
   );
 };
