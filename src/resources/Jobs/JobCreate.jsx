@@ -109,7 +109,7 @@ export default function JobCreate({
       <JobSpecSection propertyPath="$.spec" readOnly={isEdit} />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
-        tooltipContent={t(containersDesc)}
+        tooltipContent={t(containersDesc, { defaultValue: containersDesc })}
         readOnly={isEdit}
       />
       <MessageStrip design="Information" hideCloseButton>
