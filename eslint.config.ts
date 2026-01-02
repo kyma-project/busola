@@ -50,7 +50,25 @@ export default defineConfig(
           },
         ],
         '@typescript-eslint/ban-ts-comment': 'error',
-        '@typescript-eslint/no-require-imports': 'warn',
+        '@typescript-eslint/no-require-imports': [
+          'error',
+          {
+            allow: [
+              'babel',
+              'compression',
+              'config.js',
+              'cors',
+              'express',
+              'fs',
+              'http',
+              'https',
+              'js-yaml',
+              'lodash',
+              'path',
+              'webpack',
+            ],
+          },
+        ],
         // Misc
         'no-unused-vars': 'off',
         'prefer-const': 'error',
