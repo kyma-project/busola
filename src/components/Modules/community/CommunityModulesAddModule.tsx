@@ -8,7 +8,7 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   getAvailableCommunityModules,
-  VersionInfo,
+  transformDataForDisplay,
 } from 'components/Modules/community/communityModulesHelpers';
 import {
   getModuleName,
@@ -34,7 +34,11 @@ import {
 
 import 'components/Modules/KymaModulesAddModule.scss';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { CommunityModulesInstallationContext } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
+import {
+  CommunityModulesInstallationContext,
+  moduleInstallationState,
+} from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
+import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { MutationFn, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useAtomValue } from 'jotai/index';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
@@ -47,22 +51,6 @@ import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
 import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList/CommunityModulesSourcesList';
 import { TFunction } from 'i18next';
-
-type VersionDisplayInfo = {
-  moduleTemplate: {
-    name: string;
-    namespace: string;
-  };
-  version: string;
-  installed: boolean;
-  textToDisplay: string;
-  icon?: { link: string; name: string };
-  docsURL?: string;
-};
-type ModuleDisplayInfo = {
-  name: string;
-  versions: VersionDisplayInfo[];
-};
 
 function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
@@ -107,27 +95,6 @@ function onVersionChange(
 
     setModulesTemplatesToApply({ map: newModulesTemplatesToApply });
   };
-}
-
-function transformDataForDisplay(
-  availableCommunityModules: Map<string, VersionInfo[]>,
-): ModuleDisplayInfo[] {
-  return Array.from(availableCommunityModules, ([moduleName, versions]) => {
-    return {
-      name: moduleName,
-      versions: versions.map((v) => ({
-        moduleTemplate: {
-          name: v.moduleTemplateName,
-          namespace: v.moduleTemplateNamespace,
-        },
-        version: v.version,
-        installed: v.installed ?? false,
-        textToDisplay: `v${v.version}`,
-        icon: v.icon,
-        docsURL: v.docsURL,
-      })),
-    };
-  });
 }
 
 async function upload(
@@ -227,24 +194,61 @@ export default function CommunityModulesAddModule(props: any) {
 
   const {
     notInstalledCommunityModuleTemplates,
+    installedCommunityModuleTemplates,
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
+    installedVersions,
   } = useContext(CommunityModuleContext);
 
-  const { callback } = useContext(CommunityModulesInstallationContext);
+  const { callback, modulesDuringUpload } = useContext(
+    CommunityModulesInstallationContext,
+  );
+
+  const upgradeableCommunityModuleTemplates = useMemo(() => {
+    if (!installedCommunityModuleTemplates?.items) {
+      return { items: [] };
+    }
+
+    const upgradeable = installedCommunityModuleTemplates.items.filter(
+      (module) => {
+        const managerKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
+        const installedVersion = installedVersions.get(managerKey);
+        return installedVersion && installedVersion !== module.spec.version;
+      },
+    );
+
+    return { items: upgradeable };
+  }, [installedCommunityModuleTemplates, installedVersions]);
+
+  const modulesToHide = useMemo(() => {
+    return new Set(
+      modulesDuringUpload
+        .filter((m: moduleInstallationState) => m.state !== State.Error)
+        .map((m: moduleInstallationState) => getModuleName(m.moduleTpl)),
+    );
+  }, [modulesDuringUpload]);
+
+  const allAvailableModuleTemplates = useMemo(() => {
+    const combinedItems = [
+      ...(notInstalledCommunityModuleTemplates?.items || []),
+      ...(upgradeableCommunityModuleTemplates?.items || []),
+    ].filter((module) => !modulesToHide.has(getModuleName(module)));
+    return { items: combinedItems };
+  }, [
+    notInstalledCommunityModuleTemplates,
+    upgradeableCommunityModuleTemplates,
+    modulesToHide,
+  ]);
 
   const availableCommunityModules = useMemo(() => {
     if (!notInstalledCommunityModulesLoading) {
       return getAvailableCommunityModules(
-        notInstalledCommunityModuleTemplates,
+        allAvailableModuleTemplates,
         {} as ModuleTemplateListType,
       );
     } else {
       return new Map();
     }
-  }, [
-    notInstalledCommunityModuleTemplates,
-    notInstalledCommunityModulesLoading,
-  ]);
+  }, [allAvailableModuleTemplates, notInstalledCommunityModulesLoading]);
 
   const [columnsCount, setColumnsCount] = useState(2);
   const [cardsContainerRef, setCardsContainerRef] =
@@ -305,7 +309,7 @@ export default function CommunityModulesAddModule(props: any) {
           key={`${module.name}+${i}`}
           isChecked={isChecked}
           onChange={onVersionChange(
-            notInstalledCommunityModuleTemplates,
+            allAvailableModuleTemplates,
             communityModulesTemplatesToApply,
             setCommunityModulesTemplatesToApply,
             setIsResourceEdited,
@@ -335,6 +339,9 @@ export default function CommunityModulesAddModule(props: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    for (const module of communityModulesTemplatesToApply.map.values()) {
+      callback(module, State.Downloading);
+    }
     upload(
       t,
       communityModulesTemplatesToApply,
