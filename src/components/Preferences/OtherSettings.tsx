@@ -32,7 +32,7 @@ export default function OtherSettings() {
             key={available_size}
             selected={pageSize === Number(available_size)}
           >
-            {available_size}
+            {`${pageSize === Number(available_size) ? t('settings.other.default-last-used') : ''} ${available_size}`}
           </Option>
         ))}
         <Option

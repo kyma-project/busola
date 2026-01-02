@@ -1413,7 +1413,25 @@ service-accounts:
 service-management:
   title: Service Management
 settings:
-  clusters:
+  appearance:
+    themes:
+      light_dark:
+        description: Automatically matches your system settings
+        title: Light / Dark
+      sap_horizon:
+        description: Use in default office environments
+        title: Light
+      sap_horizon_dark:
+        description: Use in dimmed environments
+        title: Dark
+      sap_horizon_hcb:
+        description: Optimized contrast and accessibility for bright environments
+        title: High-Contrast Black
+      sap_horizon_hcw:
+        description: Optimized contrast and accessibility for dark environments
+        title: High-Contrast White
+    title: Appearance
+  general:
     accessible-name:
       validateResources: Validate Resources panel
     description: Cluster interaction, resource validation
@@ -1435,29 +1453,12 @@ settings:
       validateResources: Validate Resources
       validation-disabled: Resource validation is disabled
     showHiddenNamespaces: Show hidden Namespaces
-    title: Clusters
-  interface:
-    description: Appearance, language
-    themes:
-      light_dark:
-        description: Automatically matches your system settings
-        title: Light / Dark
-      sap_horizon:
-        description: Use in default office environments
-        title: Light
-      sap_horizon_dark:
-        description: Use in dimmed environments
-        title: Dark
-      sap_horizon_hcb:
-        description: Optimized contrast and accessibility for bright environments
-        title: High-Contrast Black
-      sap_horizon_hcw:
-        description: Optimized contrast and accessibility for dark environments
-        title: High-Contrast White
-    title: Interface
-  language: Language
+    title: Settings
+  language:
+    title: Language
   other:
     all: All
+    default-last-used: Default (last one used)
     default-page-size: Default Page Size
     info: Changes to the page size only take effect locally. To set the global default page size, go to Preferences.
     of: of {{pagesCount}}
