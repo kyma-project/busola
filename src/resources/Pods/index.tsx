@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
@@ -41,9 +41,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./PodList'));
-export const Details = React.lazy(() => import('./PodDetails'));
-export const Create = React.lazy(() => import('./PodCreate'));
+export const List = lazy(() => import('./PodList'));
+export const Details = lazy(() => import('./PodDetails'));
+export const Create = lazy(() => import('./PodCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

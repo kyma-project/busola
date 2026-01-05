@@ -182,9 +182,19 @@ export const ModulesDeleteBox = ({
     setAssociatedResourceLeft(resourcesLeft);
   }, [resourceCounts, associatedResources]);
 
-  const deleteAllResources = () => {
-    if (allowForceDelete && associatedResourcesUrls.length > 0) {
-      deleteResources(deleteFn, associatedResourcesUrls);
+  const deleteAllResources = async () => {
+    try {
+      if (allowForceDelete && associatedResourcesUrls.length > 0) {
+        await deleteResources(deleteFn, associatedResourcesUrls);
+      }
+    } catch (e) {
+      notification.notifyError({
+        content: t('modules.community.messages.delete-failure', {
+          module: selectedModules[chosenModuleIndex]?.name,
+          error: e instanceof Error ? e.message : e,
+        }),
+      });
+      return;
     }
     if (chosenModuleIndex != null) {
       selectedModules.splice(chosenModuleIndex, 1);
@@ -201,8 +211,18 @@ export const ModulesDeleteBox = ({
       setInitialUnchangedResource(cloneDeep(kymaResourceState));
     }
 
-    if (allowForceDelete && associatedResourcesUrls.length > 0) {
-      deleteResources(deleteFn, crUrls);
+    try {
+      if (allowForceDelete && crUrls.length > 0) {
+        await deleteResources(deleteFn, crUrls);
+      }
+    } catch (e) {
+      notification.notifyError({
+        content: t('modules.community.messages.delete-failure', {
+          module: selectedModules[chosenModuleIndex]?.name,
+          error: e instanceof Error ? e.message : e,
+        }),
+      });
+      return;
     }
 
     if (detailsOpen) {

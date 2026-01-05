@@ -60,10 +60,10 @@ test('Busola Lighthouse audit', async () => {
     .click();
 
   await expect(
-    page.locator('.ui5-sn-list-li:has-text("Cluster Details")'),
+    page.locator('.ui5-sn-list-li:has-text("Cluster Overview")'),
   ).toBeVisible();
 
-  console.log('Running audit on cluster details...');
+  console.log('Running audit on cluster overview...');
   await playAudit({
     page,
     port: 9222,

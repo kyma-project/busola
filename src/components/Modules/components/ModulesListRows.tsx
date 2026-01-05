@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
@@ -23,6 +24,7 @@ type RowResourceType = {
   name: string;
   channel: string;
   version: string;
+  templateVersion?: string;
   resource: { kind: string; metadata: { namespace: string } };
   fakeStatus: any;
   namespace?: string;
@@ -73,7 +75,7 @@ export const ModulesListRows = ({
     moduleTemplates,
     resource?.name,
     resource?.channel || kymaResource?.spec?.channel || '',
-    resource?.version,
+    resource?.templateVersion || resource?.version,
     resource?.namespace,
   );
 
@@ -198,7 +200,22 @@ export const ModulesListRows = ({
       )}
     </>,
     // Version
-    moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
+    <>
+      {moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER}
+      {!kymaResource &&
+        resource?.templateVersion &&
+        resource?.version &&
+        resource.templateVersion !== resource.version && (
+          <Tag
+            className="sap-margin-begin-tiny"
+            hideStateIcon
+            colorScheme="6"
+            design="Set2"
+          >
+            {t('kyma-modules.upgrade-available')}
+          </Tag>
+        )}
+    </>,
     // Module State
     <ModuleStatus
       key={`module-state-${resource.name}`}
@@ -242,7 +259,9 @@ function installationStateColumn(
       type={type}
       tooltipContent={managerResourceState?.message}
     >
-      {managerResourceState?.state ?? managerResourceState?.type}
+      {toSentenceCase(
+        managerResourceState?.state ?? managerResourceState?.type,
+      )}
     </StatusBadge>
   );
 }
@@ -262,7 +281,7 @@ function kymaInstallationStateColumn(
         type={resolveType(resolvedInstallationStateName)}
         tooltipContent={moduleStatus?.message ?? managerResourceState?.message}
       >
-        {resolvedInstallationStateName}
+        {toSentenceCase(resolvedInstallationStateName)}
       </StatusBadge>
       {moduleStatus?.maintenance === true && (
         <StatusBadge

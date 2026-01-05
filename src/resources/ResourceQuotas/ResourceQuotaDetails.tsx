@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ResourceDescription } from '.';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
@@ -51,7 +51,7 @@ export default function ResourceQuotaDetails(props: any) {
 
   const customComponents = [
     (resource: ResourceQuota) => (
-      <React.Fragment key="resource-quota-details">
+      <Fragment key="resource-quota-details">
         {(resource.spec.scopes || resource.spec.scopeSelector) && (
           <UI5Panel
             title={t('common.headers.specification')}
@@ -93,7 +93,7 @@ export default function ResourceQuotaDetails(props: any) {
             )}
           </UI5Panel>
         )}
-      </React.Fragment>
+      </Fragment>
     ),
     (resource: ResourceQuota) => {
       const monitoringCharts = [
@@ -102,7 +102,7 @@ export default function ResourceQuotaDetails(props: any) {
       ];
 
       return (
-        <React.Fragment key="resource-quota-limits">
+        <Fragment key="resource-quota-limits">
           {!!monitoringCharts.length && (
             <div className="cluster-stats sap-margin-tiny">
               {monitoringCharts.map((chartData, index) => (
@@ -123,7 +123,7 @@ export default function ResourceQuotaDetails(props: any) {
             </div>
           )}
           <ResourceQuotaLimits resource={resource} />
-        </React.Fragment>
+        </Fragment>
       );
     },
   ];

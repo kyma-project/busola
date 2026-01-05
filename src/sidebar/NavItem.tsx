@@ -44,9 +44,14 @@ export function NavItem({ node, subItem = false, sidebarRef }: NavItemProps) {
 
   useEffect(() => {
     if (!node.externalUrl) {
-      setJsonataLink('');
-      setJsonataError(null);
-      return;
+      const timeoutId = setTimeout(() => {
+        setJsonataLink('');
+        setJsonataError(null);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
 
     jsonata(node.externalUrl).then(([link, error]) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference } from 'shared/utils/helpers';
@@ -17,9 +17,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./SecretList'));
-export const Details = React.lazy(() => import('./SecretDetails'));
-export const Create = React.lazy(() => import('./SecretCreate'));
+export const List = lazy(() => import('./SecretList'));
+export const Details = lazy(() => import('./SecretDetails'));
+export const Create = lazy(() => import('./SecretCreate'));
 
 export const secrets = () => [
   {

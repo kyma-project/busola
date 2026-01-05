@@ -42,7 +42,7 @@ context('Test Command Palette navigation', () => {
   });
 
   it('Basic navigation', () => {
-    cy.contains('ui5-title', 'Cluster Details');
+    cy.contains('ui5-title', 'Cluster Overview');
 
     // navigate to namespace
     openCommandPalette();
@@ -71,7 +71,7 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().type('nodes ');
 
-    cy.contains('Cluster Details > Nodes').first().click();
+    cy.contains('Cluster Overview > Nodes').first().click();
   });
 
   it('All namespaces', () => {

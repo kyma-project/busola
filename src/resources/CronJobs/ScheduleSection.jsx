@@ -39,8 +39,9 @@ function TimeInput({ entries, index, name, setSchedule }) {
   const { t } = useTranslation();
 
   const setValue = (v) => {
-    entries[index] = v;
-    setSchedule(entries.join(' '));
+    const newEntries = [...entries];
+    newEntries[index] = v;
+    setSchedule(newEntries.join(' '));
   };
 
   return (

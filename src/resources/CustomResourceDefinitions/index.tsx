@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
 
@@ -17,10 +17,6 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./CustomResourceDefinitionList'));
-export const Details = React.lazy(
-  () => import('./CustomResourceDefinitionDetails'),
-);
-export const Create = React.lazy(
-  () => import('./CustomResourceDefinitionCreate'),
-);
+export const List = lazy(() => import('./CustomResourceDefinitionList'));
+export const Details = lazy(() => import('./CustomResourceDefinitionDetails'));
+export const Create = lazy(() => import('./CustomResourceDefinitionCreate'));

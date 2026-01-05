@@ -1,4 +1,5 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 export function BTPResourceStatus({ status, resourceKind }) {
   const conditions = status?.conditions || [];
@@ -7,7 +8,7 @@ export function BTPResourceStatus({ status, resourceKind }) {
   if (status?.ready === 'True' && lastCondition.type === 'Ready') {
     return (
       <StatusBadge type="Positive" resourceKind={resourceKind}>
-        {lastCondition.reason}
+        {toSentenceCase(lastCondition.reason)}
       </StatusBadge>
     );
   }
@@ -22,7 +23,7 @@ export function BTPResourceStatus({ status, resourceKind }) {
       additionalContent={message}
       resourceKind={resourceKind}
     >
-      {lastCondition.reason}
+      {toSentenceCase(lastCondition.reason)}
     </StatusBadge>
   );
 }

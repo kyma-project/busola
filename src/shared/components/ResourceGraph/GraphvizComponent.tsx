@@ -50,7 +50,12 @@ function GraphvizComponent({
       const svg = viz.renderSVGElement(dotSrc);
       svg.style.width = 'auto';
       svg.style.height = 'auto';
-      setSvgContent(svg.outerHTML);
+
+      const timeoutId = setTimeout(() => {
+        setSvgContent(svg.outerHTML);
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
     } catch (error) {
       console.error('Failed to render graph:', error);
     }

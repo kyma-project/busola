@@ -190,7 +190,7 @@ export const getEnabledRules = (
   return enabledRules;
 };
 
-export const useGetValidationSchemas = async () => {
+export const useGetValidationSchemas = () => {
   const setSchemas = useSetAtom(validationSchemasAtom);
   const fetchFn = getFetchFn(useAtomValue);
   const cluster = useAtomValue(clusterAtom);

@@ -1,4 +1,5 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 export function PersistentVolumeStatus({ status }) {
   const badgeType = (status) => {
@@ -20,7 +21,7 @@ export function PersistentVolumeStatus({ status }) {
       type={badgeType(status?.phase)}
       additionalContent={status?.message}
     >
-      {status?.phase}
+      {toSentenceCase(status?.phase)}
     </StatusBadge>
   );
 }

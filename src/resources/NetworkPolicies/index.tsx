@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { matchBySelector } from 'shared/utils/helpers';
@@ -18,9 +18,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./NetworkPolicyList'));
-export const Details = React.lazy(() => import('./NetworkPolicyDetails'));
-export const Create = React.lazy(() => import('./NetworkPolicyCreate'));
+export const List = lazy(() => import('./NetworkPolicyList'));
+export const Details = lazy(() => import('./NetworkPolicyDetails'));
+export const Create = lazy(() => import('./NetworkPolicyCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

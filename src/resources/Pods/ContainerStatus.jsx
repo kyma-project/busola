@@ -1,4 +1,5 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 export function ContainerStatus({ status }) {
   const state =
@@ -36,7 +37,7 @@ export function ContainerStatus({ status }) {
         additionalContent={message}
         type={badgeType(containerStatus)}
       >
-        {containerStatus}
+        {toSentenceCase(containerStatus)}
       </StatusBadge>
     </div>
   );

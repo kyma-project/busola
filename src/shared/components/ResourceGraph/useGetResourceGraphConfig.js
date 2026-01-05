@@ -101,7 +101,7 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
             }),
         )
       : {};
-  }, [extensions]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [extensions, addStyle]);
 
   return {
     ...builtinResourceGraphConfig,

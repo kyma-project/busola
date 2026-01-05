@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 
@@ -19,9 +19,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./DaemonSetList'));
-export const Details = React.lazy(() => import('./DaemonSetDetails'));
-export const Create = React.lazy(() => import('./DaemonSetCreate'));
+export const List = lazy(() => import('./DaemonSetList'));
+export const Details = lazy(() => import('./DaemonSetDetails'));
+export const Create = lazy(() => import('./DaemonSetCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

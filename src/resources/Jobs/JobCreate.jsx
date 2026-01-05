@@ -53,14 +53,20 @@ export default function JobCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
-    setJob(
-      initialJob
-        ? cloneDeep(initialJob)
-        : createJobTemplate(namespace, defaultSidecarAnnotations),
-    );
-    setInitialResource(
-      initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
-    );
+    const timeoutId = setTimeout(() => {
+      setJob(
+        initialJob
+          ? cloneDeep(initialJob)
+          : createJobTemplate(namespace, defaultSidecarAnnotations),
+      );
+      setInitialResource(
+        initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [
     initialJob,
     namespace,
@@ -103,7 +109,7 @@ export default function JobCreate({
       <JobSpecSection propertyPath="$.spec" readOnly={isEdit} />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
-        tooltipContent={t(containersDesc)}
+        tooltipContent={t(containersDesc, { defaultValue: containersDesc })}
         readOnly={isEdit}
       />
       <MessageStrip design="Information" hideCloseButton>

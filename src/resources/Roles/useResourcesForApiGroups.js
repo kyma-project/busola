@@ -11,26 +11,32 @@ export function useResourcesForApiGroups(apiGroups = []) {
 
   const loadable = apiGroups.some((apiGroup) => !cache[apiGroup]);
 
-  const findMatchingGroupVersions = (apiGroup) => {
-    // core api group
-    if (apiGroup === '') return ['v1'];
+  const findMatchingGroupVersions = useCallback(
+    (apiGroup) => {
+      // core api group
+      if (apiGroup === '') return ['v1'];
 
-    return groupVersions.filter((gV) => gV.startsWith(apiGroup + '/'));
-  };
+      return groupVersions.filter((gV) => gV.startsWith(apiGroup + '/'));
+    },
+    [groupVersions],
+  );
 
-  const fetchApiGroup = async (groupVersion) => {
-    const url = groupVersion === 'v1' ? '/api/v1' : `/apis/${groupVersion}`;
-    try {
-      const response = await fetch(url);
-      const json = await response.json();
-      return json.resources;
-    } catch (e) {
-      console.warn(e);
-    }
-  };
+  const fetchApiGroup = useCallback(
+    async (groupVersion) => {
+      const url = groupVersion === 'v1' ? '/api/v1' : `/apis/${groupVersion}`;
+      try {
+        const response = await fetch(url);
+        const json = await response.json();
+        return json.resources;
+      } catch (e) {
+        console.warn(e);
+      }
+    },
+    [fetch],
+  );
 
-  const fetchResources = useCallback(() => {
-    if (loading) return Promise.resolve(cache);
+  const fetchResources = useCallback(async () => {
+    if (loading) return cache;
 
     const loaders = [];
     for (const apiGroup of apiGroups) {
@@ -43,21 +49,20 @@ export function useResourcesForApiGroups(apiGroups = []) {
         loaders.push(loader);
       }
     }
-    return Promise.all(loaders)?.then((jsons) => {
-      const newCache = jsons.reduce(
-        (cache, { apiGroup, resources }) => ({
-          ...cache,
-          [apiGroup]: cache[apiGroup]
-            ? [...cache[apiGroup], ...resources]
-            : resources,
-        }),
-        cache,
-      );
-      setCache(newCache);
-      setLoading(false);
-      return newCache;
-    });
-  }, [apiGroups]); // eslint-disable-line react-hooks/exhaustive-deps
+    const jsons = await Promise.all(loaders);
+    const newCache = jsons.reduce(
+      (cache, { apiGroup: apiGroup_2, resources: resources_1 }) => ({
+        ...cache,
+        [apiGroup_2]: cache[apiGroup_2]
+          ? [...cache[apiGroup_2], ...resources_1]
+          : resources_1,
+      }),
+      cache,
+    );
+    setCache(newCache);
+    setLoading(false);
+    return newCache;
+  }, [loading, cache, findMatchingGroupVersions, fetchApiGroup, apiGroups]);
 
   return {
     cache,

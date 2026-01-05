@@ -1,6 +1,6 @@
 import { Trans } from 'react-i18next';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
-import * as React from 'react';
+import { ReactElement } from 'react';
 
 const coveredLinkSign = '<>';
 
@@ -8,7 +8,7 @@ export const createTranslationTextWithLinks = (
   text: string,
   t: any,
   i18n: any,
-): string | React.ReactElement => {
+): string | ReactElement => {
   const { processedText, components } = insert18nLinks(text);
   if (components?.length) {
     return (
@@ -29,7 +29,7 @@ export const createI18nLink = (linkText: string, idx: number): string => {
 };
 
 export type ProcessedTranslation = {
-  components?: React.ReactElement[];
+  components?: ReactElement[];
   processedText: string;
 };
 
@@ -41,7 +41,7 @@ export function insert18nLinks(text: string): ProcessedTranslation {
   }
 
   let processedText = text;
-  const components = links.map((link, idx): React.ReactElement => {
+  const components = links.map((link, idx): ReactElement => {
     const i18NLink = createI18nLink(link.urlText, idx);
     processedText = processedText.replace(link.matchedText, i18NLink);
     return <ExternalLink url={link.url} key={idx} />;

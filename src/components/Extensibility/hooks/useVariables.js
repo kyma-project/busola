@@ -131,7 +131,7 @@ export function useVariables() {
       values.forEach(([def, val]) => (vars[def.var] = applyDefaults(def, val)));
       if (variables?.length) {
         variables.forEach((v) => {
-          if (v.name && vars.hasOwnProperty(v.name)) {
+          if (v.name && Object.prototype.hasOwnProperty.call(vars, v.name)) {
             vars[v.name] = v.value;
           }
         });

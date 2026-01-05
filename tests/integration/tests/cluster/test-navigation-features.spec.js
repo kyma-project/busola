@@ -45,6 +45,6 @@ context('Test navigation features', () => {
       .contains('ui5-link', 'cronjob-controller')
       .click();
 
-    cy.contains('disabled').should('exist');
+    cy.contains('Disabled').should('exist');
   });
 });

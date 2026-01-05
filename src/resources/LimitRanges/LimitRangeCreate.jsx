@@ -30,16 +30,22 @@ export default function LimitRangeCreate({
   );
 
   useEffect(() => {
-    setLimitRange(
-      _.cloneDeep(initialLimitRange) ||
-        createLimitRangeTemplate({ namespaceName: namespaceId }),
-    );
-    setInitialResource(
-      initialLimitRange ||
-        createLimitRangeTemplate({
-          namespaceName: namespaceId,
-        }),
-    );
+    const timeoutId = setTimeout(() => {
+      setLimitRange(
+        _.cloneDeep(initialLimitRange) ||
+          createLimitRangeTemplate({ namespaceName: namespaceId }),
+      );
+      setInitialResource(
+        initialLimitRange ||
+          createLimitRangeTemplate({
+            namespaceName: namespaceId,
+          }),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialLimitRange, namespaceId]);
 
   return (

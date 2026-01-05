@@ -99,7 +99,7 @@ context('Test OAuth2 Clients', () => {
   });
 
   it('Check deprecation note in Cluster Overview', () => {
-    cy.getLeftNav().contains('Back To Cluster Details').click();
+    cy.getLeftNav().contains('Back To Cluster Overview').click();
 
     cy.wait(5000);
 

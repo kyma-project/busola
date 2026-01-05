@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Bar, Button, Dialog, Title } from '@ui5/webcomponents-react';
@@ -43,7 +43,7 @@ export function Modal({
   headerActions,
 }) {
   const { t } = useTranslation();
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   function onOpen() {
     if (onShow) {
       onShow();

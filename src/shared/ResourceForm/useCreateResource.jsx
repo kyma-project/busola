@@ -150,14 +150,15 @@ export function useCreateResource({
   const handleCreate = async () => {
     try {
       if (isEdit) {
+        const newResource = { ...resource };
         if (
           initialResource?.metadata?.resourceVersion &&
-          !resource?.metadata?.resourceVersion
+          !newResource?.metadata?.resourceVersion
         ) {
-          resource.metadata.resourceVersion =
+          newResource.metadata.resourceVersion =
             initialResource.metadata.resourceVersion;
         }
-        const diff = createPatch(initialResource, resource);
+        const diff = createPatch(initialResource, newResource);
         await patchRequest(createUrl, diff);
       } else {
         await postRequest(createUrl, resource);

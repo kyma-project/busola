@@ -1,8 +1,9 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 export function HelmReleaseStatus({ status }) {
   const resolveType = (status) => {
-    switch (status) {
+    switch (status?.toLowerCase()) {
       case 'deployed':
         return 'Positive';
       case 'uninstalling':
@@ -17,7 +18,7 @@ export function HelmReleaseStatus({ status }) {
 
   return (
     <StatusBadge resourceKind="helm-releases" type={resolveType(status)}>
-      {status}
+      {toSentenceCase(status)}
     </StatusBadge>
   );
 }

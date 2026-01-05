@@ -8,7 +8,7 @@ import { CronJobSpecSection } from 'resources/Jobs/SpecSection';
 import {
   isCronExpressionValid,
   ScheduleSection,
-} from 'resources/Jobs/ScheduleSection';
+} from 'resources/CronJobs/ScheduleSection';
 import { ContainersSection } from 'resources/Jobs/ContainersSection';
 import {
   createCronJobPresets,
@@ -49,8 +49,14 @@ export default function CronJobCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
-    setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
-    setInitialResource(initialCronJob || createCronJobTemplate(namespace));
+    const timeoutId = setTimeout(() => {
+      setCronJob(cloneDeep(initialCronJob) || createCronJobTemplate(namespace));
+      setInitialResource(initialCronJob || createCronJobTemplate(namespace));
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialCronJob, namespace, layoutState?.showEdit?.resource]);
 
   useEffect(() => {

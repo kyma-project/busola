@@ -2,7 +2,7 @@ apps:
   title: Apps
 cluster-overview:
   headers:
-    cluster-details: Cluster Details
+    cluster-overview: Cluster Overview
     cpu: CPU
     memory: Memory
     metadata: Metadata
@@ -120,7 +120,7 @@ clusters:
     nat-gateway-ips: NAT Gateway IP Addresses
     subaccount-id: Subaccount ID
     title-all-clusters: Clusters Overview
-    title-current-cluster: Cluster Details
+    title-current-cluster: Cluster Overview
   statuses:
     inmemory: In Memory
     localstorage: Local Storage
@@ -175,7 +175,7 @@ command-palette:
   help:
     all-namespaces: List resources from all namespaces
     choose-cluster: Choose cluster
-    cluster-details: Cluster details
+    cluster-overview: Cluster overview
     crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
@@ -553,7 +553,7 @@ custom-resource-definitions:
     versions: Versions
   name_singular: CustomResourceDefinition
   status:
-    not-served: Not Served
+    not-served: Not served
     served: Served
     storage: Storage
   subtitle:
@@ -899,7 +899,7 @@ kyma-modules:
   installed-modules: Installed Modules
   kyma: Kyma
   maintenance: Maintenance
-  maintenance-pending: Pending Maintenance
+  maintenance-pending: Pending maintenance
   maintenance-tooltip: The module is currently being updated. This may take a few moments.
   managed: Managed
   messages:
@@ -924,6 +924,7 @@ kyma-modules:
   unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
   unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
   unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
+  upgrade-available: Upgrade available
   version: Version
 legal:
   copyright: Copyright
@@ -1010,7 +1011,7 @@ namespaces:
     memory-quotas: Memory Quotas
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
-  namespace-details: Namespace Details
+  namespace-overview: Namespace Overview
   overview:
     resources:
       error: Error while loading memory consumption data
@@ -1021,6 +1022,7 @@ namespaces:
   title: Namespaces
 navigation:
   all-namespaces: All Namespaces
+  back-to-cluster: Back To Cluster Overview
   errors:
     sidebar: Failed to load navigation items
   menu:
@@ -1387,8 +1389,8 @@ service-accounts:
     descriptions:
       disabled: For security reasons, don't enable automount if you don't need it.
       enabled: For security reasons, don't use automount if you don't need it.
-    disabled: disabled
-    enabled: enabled
+    disabled: Disabled
+    enabled: Enabled
   create-modal:
     tooltips:
       associated-secret: Creates a long-lived API token for a ServiceAccount which data is kept in the associated Secret.

@@ -50,7 +50,6 @@ export function KymaModuleContextProvider({
   );
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
   const [detailsOpen, setDetailsOpen] = useState(false);
-
   const [initialUnchangedResource, setInitialUnchangedResource] = useState();
   const [kymaResourceState, setKymaResourceState] = useState();
   const notification = useNotification();
@@ -58,15 +57,23 @@ export function KymaModuleContextProvider({
 
   useEffect(() => {
     if (kymaResource) {
-      setActiveKymaModules(kymaResource?.spec?.modules || []);
-      setKymaResourceState(kymaResource);
-      setInitialUnchangedResource(cloneDeep(kymaResource));
+      const timeoutId = setTimeout(() => {
+        setActiveKymaModules(kymaResource?.spec?.modules || []);
+        setKymaResourceState(kymaResource);
+        setInitialUnchangedResource(cloneDeep(kymaResource));
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [kymaResource]);
 
   useEffect(() => {
     if (layoutState?.layout) {
-      setDetailsOpen(layoutState?.layout !== 'OneColumn');
+      const timeoutId = setTimeout(() => {
+        setDetailsOpen(layoutState?.layout !== 'OneColumn');
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [layoutState]);
 

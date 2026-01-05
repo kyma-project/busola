@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
@@ -12,14 +12,14 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
-const BusolaExtensionList = React.lazy(
+const BusolaExtensionList = lazy(
   () => import('components/BusolaExtensions/BusolaExtensionList'),
 );
-const BusolaExtensionDetails = React.lazy(
+const BusolaExtensionDetails = lazy(
   () => import('components/BusolaExtensions/BusolaExtensionDetails'),
 );
 
-const BusolaExtensionCreate = React.lazy(
+const BusolaExtensionCreate = lazy(
   () => import('components/BusolaExtensions/BusolaExtensionCreate'),
 );
 

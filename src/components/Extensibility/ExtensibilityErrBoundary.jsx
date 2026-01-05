@@ -1,10 +1,10 @@
-import React from 'react';
+import { Component } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-class ExtensibilityErrBoundaryComponent extends React.Component {
+class ExtensibilityErrBoundaryComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {

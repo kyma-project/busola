@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
@@ -6,9 +6,9 @@ import { Description } from 'shared/components/Description/Description';
 export const resourceType = 'Roles';
 export const namespaced = true;
 
-export const List = React.lazy(() => import('./RoleList'));
-export const Details = React.lazy(() => import('./RoleDetails'));
-export const Create = React.lazy(() => import('./RoleCreate'));
+export const List = lazy(() => import('./RoleList'));
+export const Details = lazy(() => import('./RoleDetails'));
+export const Create = lazy(() => import('./RoleCreate'));
 
 export const apiGroup = 'rbac.authorization.k8s.io';
 export const apiVersion = 'v1';

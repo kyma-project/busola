@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { Route, useParams, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
@@ -15,15 +15,15 @@ import { useUrl } from 'hooks/useUrl';
 import CRCreate from '../CustomResourceDefinitions/CRCreate';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 
-const CustomResourcesByGroup = React.lazy(
+const CustomResourcesByGroup = lazy(
   () => import('../../components/CustomResources/CustomResourcesByGroup'),
 );
 
-const CustomResourcesOfType = React.lazy(
+const CustomResourcesOfType = lazy(
   () => import('../../components/CustomResources/CustomResourcesOfType'),
 );
 
-const CustomResource = React.lazy(
+const CustomResource = lazy(
   () => import('../CustomResourceDefinitions/CustomResources.details'),
 );
 

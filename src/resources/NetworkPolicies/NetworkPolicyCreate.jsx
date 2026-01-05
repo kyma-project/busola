@@ -27,13 +27,19 @@ export default function NetworkPolicyCreate({
   );
 
   useEffect(() => {
-    setNetworkPolicy(
-      _.cloneDeep(initialNetworkPolicy) ||
-        createNetworkPolicyTemplate(namespaceId),
-    );
-    setInitialResource(
-      initialNetworkPolicy || createNetworkPolicyTemplate(namespaceId),
-    );
+    const timeoutId = setTimeout(() => {
+      setNetworkPolicy(
+        _.cloneDeep(initialNetworkPolicy) ||
+          createNetworkPolicyTemplate(namespaceId),
+      );
+      setInitialResource(
+        initialNetworkPolicy || createNetworkPolicyTemplate(namespaceId),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialNetworkPolicy, namespaceId]);
 
   return (

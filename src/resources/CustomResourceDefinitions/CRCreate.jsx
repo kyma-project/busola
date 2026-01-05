@@ -36,8 +36,14 @@ function CRCreateForm({
   useEffect(() => {
     if (layoutColumn?.showEdit?.resource) return;
 
-    setCr(cloneDeep(initialCustomResource) || createTemplate(crd));
-    setInitialResource(initialCustomResource || createTemplate(crd));
+    const timeoutId = setTimeout(() => {
+      setCr(cloneDeep(initialCustomResource) || createTemplate(crd));
+      setInitialResource(initialCustomResource || createTemplate(crd));
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [initialCustomResource, crd, layoutColumn?.showEdit?.resource]);
 
   const isEdit = useMemo(

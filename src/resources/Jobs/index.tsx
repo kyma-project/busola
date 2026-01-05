@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { matchByOwnerReference } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
@@ -10,9 +10,9 @@ export const apiGroup = 'batch';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
-export const List = React.lazy(() => import('./JobList'));
-export const Details = React.lazy(() => import('./JobDetails'));
-export const Create = React.lazy(() => import('./JobCreate'));
+export const List = lazy(() => import('./JobList'));
+export const Details = lazy(() => import('./JobDetails'));
+export const Create = lazy(() => import('./JobCreate'));
 
 export const i18nDescriptionKey = 'jobs.description';
 export const docsURL =

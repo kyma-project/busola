@@ -36,6 +36,7 @@ export const getAssociatedResources = (
   const selectedModule = selectedModules[chosenModuleIndex];
   const moduleChannel = selectedModule?.channel || kymaResource?.spec?.channel;
   const moduleVersion =
+    selectedModule?.templateVersion ||
     selectedModule?.version ||
     findModuleStatus(kymaResource, selectedModule?.name)?.version;
 
@@ -61,6 +62,7 @@ export const getCRResource = (
   const selectedModule = selectedModules[chosenModuleIndex];
   const moduleChannel = selectedModule?.channel || kymaResource?.spec?.channel;
   const moduleVersion =
+    selectedModule?.templateVersion ||
     selectedModule?.version ||
     findModuleStatus(kymaResource, selectedModule?.name)?.version;
 
@@ -97,6 +99,7 @@ export const getCommunityResources = async (
   const selectedModule = selectedModules[chosenModuleIndex];
   const moduleChannel = selectedModule?.channel || kymaResource?.spec?.channel;
   const moduleVersion =
+    selectedModule?.templateVersion ||
     selectedModule?.version ||
     findModuleStatus(kymaResource, selectedModule?.name)?.version;
 
@@ -127,7 +130,7 @@ export const handleItemClick = async (
   version: string,
   clusterUrl: (_: string) => string,
   getScope: (_: string, __: string, ___: string) => Promise<any>,
-  namespaceUrl: (_: string, __: {}) => string,
+  namespaceUrl: (_: string, __: object) => string,
   navigate: (_: string) => void,
 ) => {
   const isNamespaced = await getScope(group, version, kind);

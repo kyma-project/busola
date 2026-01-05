@@ -26,14 +26,9 @@ export default defineConfig(
       },
       rules: {
         // React
-        'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',
-        'react-hooks/exhaustive-deps': 'warn',
-        'react-hooks/rules-of-hooks': 'warn',
         'react-hooks/refs': 'warn',
-        'react-hooks/set-state-in-effect': 'warn',
-        'react-hooks/preserve-manual-memoization': 'warn',
         'react-hooks/immutability': 'warn',
 
         // TypeScript
@@ -46,7 +41,6 @@ export default defineConfig(
             caughtErrorsIgnorePattern: '^_',
           },
         ],
-        '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unsafe-function-type': 'warn',
         '@typescript-eslint/no-unused-expressions': [
           'error',
@@ -56,18 +50,27 @@ export default defineConfig(
           },
         ],
         '@typescript-eslint/ban-ts-comment': 'error',
-        '@typescript-eslint/no-require-imports': 'warn',
-        // Misc
-        'no-unused-vars': [
-          'warn',
+        '@typescript-eslint/no-require-imports': [
+          'error',
           {
-            varsIgnorePattern: '^_',
-            argsIgnorePattern: '^_',
-            caughtErrorsIgnorePattern: '^_',
+            allow: [
+              'babel',
+              'compression',
+              'config.js',
+              'cors',
+              'express',
+              'fs',
+              'http',
+              'https',
+              'js-yaml',
+              'lodash',
+              'path',
+              'webpack',
+            ],
           },
         ],
-        'no-empty': 'warn',
-        'no-prototype-builtins': 'warn',
+        // Misc
+        'no-unused-vars': 'off',
         'prefer-const': 'error',
       },
     },

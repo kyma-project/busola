@@ -16,7 +16,7 @@ const getSchema = async (schema: string): Promise<ExtensibilitySchema> => {
   return jsyaml.load(text);
 };
 
-export const useGetExtensibilitySchemas = async () => {
+export const useGetExtensibilitySchemas = () => {
   const setSchemas = useSetAtom(extensibilitySchemasAtom);
   const cluster = useAtomValue(clusterAtom);
   const auth = useAtomValue(authDataAtom);

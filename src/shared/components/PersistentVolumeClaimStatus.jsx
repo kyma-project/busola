@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 const createPhaseProperties = (phase, t) => {
   switch (phase) {
@@ -33,7 +34,7 @@ export const PersistentVolumeClaimStatus = ({ phase }) => {
       type={phaseProperties.type}
       tooltipContent={phaseProperties?.tooltipContent}
     >
-      {phase}
+      {toSentenceCase(phase)}
     </StatusBadge>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
@@ -8,7 +8,7 @@ import './KubeconfigUpload.scss';
 import { ClusterDataForm } from 'components/Clusters/views/EditCluster/EditCluster';
 
 export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
-  const [error, setError] = React.useState('');
+  const [error, setError] = useState('');
 
   const { t } = useTranslation();
 

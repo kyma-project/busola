@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import jsyaml from 'js-yaml';
 import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -18,7 +18,7 @@ export function YamlContent({
   readOnly,
   isProtected,
 }) {
-  const [editor, setEditor] = React.useState(null);
+  const [editor, setEditor] = useState(null);
   const [val, setVal] = useState(jsyaml.dump(yaml));
 
   useEffect(() => {

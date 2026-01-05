@@ -56,11 +56,15 @@ export default function ModulesList({ namespaced }) {
       !installedCommunityModulesLoading &&
       installedCommunityModules?.length
     ) {
-      setSelectedEntry(
-        installedCommunityModules.find((moduleTemplate) =>
-          checkSelectedModule(moduleTemplate, layoutState),
-        )?.name,
-      );
+      const timeoutId = setTimeout(() => {
+        setSelectedEntry(
+          installedCommunityModules.find((moduleTemplate) =>
+            checkSelectedModule(moduleTemplate, layoutState),
+          )?.name,
+        );
+      }, 0);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [
     installedCommunityModulesLoading,

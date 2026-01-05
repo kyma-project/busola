@@ -15,10 +15,12 @@ const OIDCform = ({ resource, ...props }) => {
 
   const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
   const userIndex = getUserIndex(resource);
+  const [prevResource, setPrevResource] = useState(resource);
 
-  useEffect(() => {
+  if (resource !== prevResource) {
+    setPrevResource(resource);
     setAuth(tryParseOIDCparams(getUser(resource)) || {});
-  }, [resource]);
+  }
 
   return (
     <ResourceForm.Wrapper
@@ -72,10 +74,6 @@ const TokenForm = ({ resource, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
   const [token, setToken] = useState(resource?.users?.[userIndex]?.user?.token);
-
-  useEffect(() => {
-    setToken(resource?.users?.[userIndex]?.user?.token);
-  }, [resource, userIndex]);
 
   return (
     <ResourceForm.Wrapper resource={resource} {...props}>

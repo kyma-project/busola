@@ -1,4 +1,4 @@
-import React from 'react';
+import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
@@ -17,9 +17,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = React.lazy(() => import('./PersistentVolumeList'));
-export const Details = React.lazy(() => import('./PersistentVolumeDetails'));
-export const Create = React.lazy(() => import('./PersistentVolumeCreate'));
+export const List = lazy(() => import('./PersistentVolumeList'));
+export const Details = lazy(() => import('./PersistentVolumeDetails'));
+export const Create = lazy(() => import('./PersistentVolumeCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 1,
