@@ -7,7 +7,7 @@ type ThemePreviewProps = {
 
 function ThemePreviewImage({ theme }: ThemePreviewProps) {
   return (
-    // those are copied from https://sap.live.dxp.k8s.ondemand.com/projects
+    // Those are copied from https://portal.hyperspace.tools.sap/projects
     <svg
       viewBox="0 0 200 200"
       xmlns="http://www.w3.org/2000/svg"
