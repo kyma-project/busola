@@ -9,7 +9,7 @@ import { useFeature } from 'hooks/useFeature';
 import { useAtomValue } from 'jotai';
 import { useId, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { disableResourceProtectionAtom } from 'state/preferences/disableResourceProtectionAtom';
+import { disableResourceProtectionAtom } from 'state/settings/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';

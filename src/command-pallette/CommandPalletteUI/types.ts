@@ -20,7 +20,7 @@ export type CommandPaletteContext = {
   resourceCache: Record<string, K8sResource[]>;
   updateResourceCache: (key: string, resources: K8sResource[]) => void;
   t: TFunction<'translation', undefined>;
-  setOpenPreferencesModal: (open: boolean) => void;
+  setOpenSettingsModal: (open: boolean) => void;
   setShowYamlUpload: (show: boolean) => void;
   clustersInfo: useClustersInfoType;
   navigate: (_: string) => void;

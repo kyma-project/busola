@@ -10,7 +10,7 @@ import { sidebarNavigationNodesAtom } from 'state/navigation/sidebarNavigationNo
 import { expandedCategoriesAtom } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { CategoryItem } from './CategoryItem';
 import { NavItem } from './NavItem';
-import { isSidebarCondensedAtom } from 'state/preferences/isSidebarCondensedAtom';
+import { isSidebarCondensedAtom } from 'state/settings/isSidebarCondensedAtom';
 import { NamespaceDropdown } from 'header/NamespaceDropdown/NamespaceDropdown';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';

@@ -3,7 +3,7 @@ import { Routes, Route, useParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
-import { languageAtom } from 'state/preferences/languageAtom';
+import { languageAtom } from 'state/settings/languageAtom';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 
 import { resourceRoutesNamespaced } from 'resources';

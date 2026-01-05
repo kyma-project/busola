@@ -184,7 +184,7 @@ KYMA_COMPANION:
 
 The **match** keys and **messageSrc** must use the format described in the [`jsonpath` repository](https://github.com/dchester/jsonpath).
 
-- **RESOURCE_VALIDATION** - determines the selected policies for [resource validation](resource-validation/README.md). They can be overwritten in the user preferences.
+- **RESOURCE_VALIDATION** - determines the selected policies for [resource validation](resource-validation/README.md). They can be overwritten in the user settings.
 
   Default settings:
 

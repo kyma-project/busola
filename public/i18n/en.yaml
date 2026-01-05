@@ -179,7 +179,7 @@ command-palette:
     crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
-    open-preferences: Open preferences
+    open-settings: Open settings
     open-upload-yaml: Open upload YAML
     resource-aliases: Built-in resource aliases
     short-help: Type <0>?</0> for help
@@ -286,7 +286,7 @@ common:
     delete-title: Delete {{type}}
     disconnect-message: Are you sure you want to disconnect {{type}} {{name}}?
     disconnect-title: Disconnect {{type}}
-    information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
+    information: You've switched off removal confirmations for all resources. You can switch them back on in Settings.
   errors:
     couldnt-fetch-resources: Couldn't fetch resources.
     delete: Deletion of resource failed
@@ -373,7 +373,7 @@ common:
     secret-ref-namespace: Select namespace
   product-title: Kyma
   protected-resource: Protected resource
-  protected-resource-description: Resource protected. Go to Preferences to turn on the modification of protected resources.
+  protected-resource-description: Resource protected. Go to Settings to turn on the modification of protected resources.
   sorting:
     asc: Ascending
     count: Count
@@ -411,7 +411,7 @@ common:
     k8s-name-input: Name must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name', or '123-abc').
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
-    protected-resources-info: To allow for modifying protected resources go to Preferences > Clusters.
+    protected-resources-info: To allow for modifying protected resources go to Settings > Clusters.
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
@@ -1026,9 +1026,9 @@ navigation:
   menu:
     get-help: Get Help
     legal-information: Legal Information
-  preferences:
-    title: Preferences
   select-namespace: Select Namespace...
+  settings:
+    title: Settings
   snow: Let it snow
   snow-stop: Stop the snow
   upload-yaml:
@@ -1459,7 +1459,7 @@ settings:
   other:
     all: All
     default-page-size: Default Page Size
-    info: Changes to the page size only take effect locally. To set the global default page size, go to Preferences.
+    info: Changes to the page size only take effect locally. To set the global default page size, go to Settings.
     of: of {{pagesCount}}
     page: Page
     pagination: Pagination

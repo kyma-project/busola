@@ -2,7 +2,7 @@ import { Icon, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';
 import TasksList from '../TaskList/TasksList';
-import { isCurrentThemeDark, themeAtom } from 'state/preferences/themeAtom';
+import { isCurrentThemeDark, themeAtom } from 'state/settings/themeAtom';
 import { useAtomValue } from 'jotai';
 import './Message.scss';
 import './marked.scss';

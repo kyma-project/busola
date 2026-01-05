@@ -1,4 +1,4 @@
-import { isSystemThemeDark } from 'state/preferences/themeAtom';
+import { isSystemThemeDark } from 'state/settings/themeAtom';
 import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
 
 // you must initially load the themeAtom to

@@ -4,7 +4,7 @@ import { Select, Option, Label } from '@ui5/webcomponents-react';
 import {
   AVAILABLE_PAGE_SIZES,
   pageSizeAtom,
-} from 'state/preferences/pageSizeAtom';
+} from 'state/settings/pageSizeAtom';
 
 export default function OtherSettings() {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ export default function OtherSettings() {
   };
 
   return (
-    <div className="preferences-row">
+    <div className="settings-row">
       <Label for="page-size-settings" className="bsl-has-color-status-4">
         {t('settings.other.default-page-size')}
       </Label>
