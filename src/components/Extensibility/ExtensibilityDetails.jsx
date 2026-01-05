@@ -250,7 +250,8 @@ export default function ExtensibilityDetails({
 
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
-  const { customHeaderActions: headerActions } = useContext(KymaModuleContext);
+  const { customHeaderActions: headerActions, isCommunityModuleSelected } =
+    useContext(KymaModuleContext);
 
   if (!resMetaData) {
     return (
@@ -263,7 +264,8 @@ export default function ExtensibilityDetails({
           layoutNumber: 'midColumn',
           headerActions,
           isModule,
-          isEntireListProtected,
+          isEntireListProtected:
+            isEntireListProtected && !isCommunityModuleSelected,
           setResMetadata,
         }}
       />
@@ -285,7 +287,9 @@ export default function ExtensibilityDetails({
             layoutCloseCreateUrl={layoutCloseCreateUrl}
             namespaceId={namespaceId}
             isModule={isModule}
-            isEntireListProtected={isEntireListProtected}
+            isEntireListProtected={
+              isEntireListProtected && !isCommunityModuleSelected
+            }
             headerActions={headerActions}
           />
         </ExtensibilityErrBoundary>

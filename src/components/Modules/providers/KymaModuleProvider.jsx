@@ -14,6 +14,7 @@ import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
+import pluralize from 'pluralize';
 
 export const KymaModuleContext = createContext({
   resourceName: null,
@@ -90,8 +91,11 @@ export function KymaModuleContextProvider({
       }),
   });
 
-  const { moduleTemplates: kymaModuleTemplates, moduleTemplatesLoading } =
-    useContext(ModuleTemplatesContext);
+  const {
+    moduleTemplates: kymaModuleTemplates,
+    moduleTemplatesLoading,
+    communityModuleTemplates,
+  } = useContext(ModuleTemplatesContext);
 
   const getOpenedModuleIndex = (moduleIndex, activeModules) => {
     const index =
@@ -115,7 +119,22 @@ export function KymaModuleContextProvider({
     getModuleName(),
   )?.maintenance;
 
-  const isResourceProtected = isProtected(kymaResource);
+  const isCommunityModuleSelected = () => {
+    const communityModulesNames = communityModuleTemplates?.items?.map(
+      (module) =>
+        pluralize(
+          module?.metadata?.labels[
+            'operator.kyma-project.io/module-name'
+          ]?.replace('-', '') || '',
+        ),
+    );
+    return communityModulesNames?.includes(
+      layoutState?.midColumn?.resourceType,
+    );
+  };
+
+  const isResourceProtected =
+    isProtected(kymaResource) && !isCommunityModuleSelected();
 
   const protectedBadge = isResourceProtected && (
     <ProtectedResourceWarning entry={kymaResource} />
@@ -160,6 +179,7 @@ export function KymaModuleContextProvider({
         handleResourceDelete: handleResourceDelete,
         showDeleteDialog: showDeleteDialog,
         customHeaderActions: customHeaderActions,
+        isCommunityModuleSelected: isCommunityModuleSelected(),
       }}
     >
       {createPortal(
