@@ -73,6 +73,8 @@ context('Test Cluster configuration', () => {
 
     cy.get('ui5-option:visible').contains('10').click();
 
+    cy.contains('Appearance').click();
+
     cy.contains('Close').click();
 
     cy.get('ui5-table-row').should('have.length', 10);
