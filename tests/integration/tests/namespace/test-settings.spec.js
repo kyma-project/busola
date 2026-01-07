@@ -75,7 +75,7 @@ context('Test app settings and preferences', () => {
       .contains('Preferences')
       .click({ force: true });
 
-    cy.contains('Interface').click();
+    cy.contains('Appearance').click();
 
     cy.contains('High-Contrast Black').click();
 

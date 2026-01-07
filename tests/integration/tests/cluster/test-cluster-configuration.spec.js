@@ -65,11 +65,15 @@ context('Test Cluster configuration', () => {
       .contains('Preferences')
       .click({ force: true });
 
+    cy.contains('Settings').click();
+
     cy.contains('Other').parentsUntil('[role=tab]').click({ force: true });
 
     cy.get('ui5-dialog').contains('20').click();
 
     cy.get('ui5-option:visible').contains('10').click();
+
+    cy.contains('Appearance').click();
 
     cy.contains('Close').click();
 

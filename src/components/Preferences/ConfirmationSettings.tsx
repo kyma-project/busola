@@ -15,12 +15,12 @@ export default function ConfirmationSettings() {
         for="dont-confirm-delete-switch"
         className="bsl-has-color-status-4"
       >
-        {t('settings.clusters.dontConfirmDelete')}
+        {t('settings.general.dontConfirmDelete')}
       </Label>
       <div>
         <Switch
           id="dont-confirm-delete-switch"
-          accessibleName={t('settings.clusters.dontConfirmDelete')}
+          accessibleName={t('settings.general.dontConfirmDelete')}
           checked={dontConfirmDelete}
           onChange={() =>
             setDontConfirmDelete((previousState) => !previousState)

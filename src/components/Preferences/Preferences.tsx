@@ -34,13 +34,12 @@ export function Preferences() {
 
   const tabs = [
     {
-      title: t('settings.interface.title'),
-      description: t('settings.interface.description'),
+      title: t('settings.appearance.title'),
       icon: (
         <Icon
           style={{ margin: 'auto' }}
-          name="accelerated"
-          accessibleName={t('settings.interface.title')}
+          name="palette"
+          accessibleName={t('settings.appearance.title')}
           className="bsl-icon-xl"
         />
       ),
@@ -52,17 +51,29 @@ export function Preferences() {
       },
     },
     {
-      title: t('settings.clusters.title'),
-      description: t('settings.clusters.description'),
+      title: t('settings.language.title'),
       icon: (
         <Icon
           style={{ margin: 'auto' }}
-          name="database"
-          accessibleName={t('settings.clusters.title')}
+          name="globe"
+          accessibleName={t('settings.language.title')}
           className="bsl-icon-xl"
         />
       ),
       id: 2,
+    },
+    {
+      title: t('settings.general.title'),
+      description: t('settings.general.description'),
+      icon: (
+        <Icon
+          style={{ margin: 'auto' }}
+          name="database"
+          accessibleName={t('settings.general.title')}
+          className="bsl-icon-xl"
+        />
+      ),
+      id: 3,
     },
   ];
 
@@ -86,7 +97,7 @@ export function Preferences() {
           design="Footer"
           endContent={
             <>
-              <Button onClick={handleCloseModal}>
+              <Button design="Transparent" onClick={handleCloseModal}>
                 {t('common.buttons.close')}
               </Button>
             </>
@@ -108,12 +119,6 @@ export function Preferences() {
             >
               <ThemeChooser listRef={listRef} />
             </Tab>
-            <Tab key="language-settings" text={t('settings.language')}>
-              <LanguageSettings />
-            </Tab>
-            <Tab key="other-settings" text={t('settings.other.title')}>
-              <OtherSettings />
-            </Tab>
           </TabContainer>
         </VerticalTabs.Content>
         <VerticalTabs.Content id={2}>
@@ -121,9 +126,19 @@ export function Preferences() {
             tabLayout="Inline"
             contentBackgroundDesign="Transparent"
           >
+            <Tab key="language-settings" text={t('settings.language.title')}>
+              <LanguageSettings />
+            </Tab>
+          </TabContainer>
+        </VerticalTabs.Content>
+        <VerticalTabs.Content id={3}>
+          <TabContainer
+            tabLayout="Inline"
+            contentBackgroundDesign="Transparent"
+          >
             <Tab
               key="cluster-interaction"
-              text={t('settings.clusters.interaction.title')}
+              text={t('settings.general.interaction.title')}
             >
               <div>
                 <NamespaceSettings />
@@ -134,9 +149,12 @@ export function Preferences() {
             </Tab>
             <Tab
               key="resource-validation"
-              text={t('settings.clusters.resourcesValidation.title')}
+              text={t('settings.general.resourcesValidation.title')}
             >
               <ResourceValidationSettings />
+            </Tab>
+            <Tab key="other-settings" text={t('settings.other.title')}>
+              <OtherSettings />
             </Tab>
           </TabContainer>
         </VerticalTabs.Content>
