@@ -94,7 +94,10 @@ export function Header() {
         className="header"
         accessibilityAttributes={{
           logo: {
-            name: 'SAP Kyma logo',
+            name:
+              window.location.pathname === '/clusters'
+                ? t('clusters.overview.title-all-clusters')
+                : t('clusters.overview.title-current-cluster'),
           },
           branding: {
             name: `Selected cluster: ${title}`,
@@ -104,7 +107,13 @@ export function Header() {
           window.location.pathname !== '/clusters' && <SidebarSwitcher />
         }
         onLogoClick={() => {
-          navigateSafely(() => navigate('/clusters'));
+          navigateSafely(() => {
+            if (cluster?.name && window.location.pathname !== '/clusters') {
+              navigate(`/cluster/${encodeURIComponent(cluster.name)}/overview`);
+            } else {
+              navigate('/clusters');
+            }
+          });
           setShowCompanion((prevState) => ({
             ...prevState,
             show: false,
