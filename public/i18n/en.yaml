@@ -282,7 +282,7 @@ common:
     template: Template
   delete-dialog:
     delete-confirm: Don't ask again
-    delete-message: Are you sure you want to delete {{type}} {{name}}?
+    delete-message: Delete {{type}} {{name}}?
     delete-title: Delete {{type}}
     disconnect-message: Are you sure you want to disconnect {{type}} {{name}}?
     disconnect-title: Disconnect {{type}}
