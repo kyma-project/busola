@@ -63,7 +63,7 @@ context('Test Cluster configuration', () => {
 
     cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
-    cy.contains('Settings').click();
+    cy.get('ui5-li-custom').contains('Settings').click();
 
     cy.contains('Other').parentsUntil('[role=tab]').click({ force: true });
 
