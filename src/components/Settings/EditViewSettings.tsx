@@ -22,11 +22,11 @@ export default function EditViewSettings() {
     <>
       <div className="settings-row">
         <Label for="editTypeComboBox" className="bsl-has-color-status-4">
-          {t('settings.clusters.edit-view.choose')}
+          {t('settings.general.edit-view.choose')}
         </Label>
         <Select
           id="editTypeComboBox"
-          accessibleName={t('settings.clusters.edit-view.choose')}
+          accessibleName={t('settings.general.edit-view.choose')}
           onChange={(e) => {
             setEditViewMode({
               preferencesViewType: e.target.value ?? 'MODE_DEFAULT',
@@ -41,7 +41,7 @@ export default function EditViewSettings() {
               value={available_option.key}
               selected={preferencesViewType === available_option.key}
             >
-              {t(`settings.clusters.edit-view.${available_option.text}`)}
+              {t(`settings.general.edit-view.${available_option.text}`)}
             </Option>
           ))}
         </Select>

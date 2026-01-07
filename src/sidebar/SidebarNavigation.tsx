@@ -103,7 +103,7 @@ export function SidebarNavigation() {
             >
               <SideNavigationItem
                 icon="slim-arrow-left"
-                text="Back To Cluster Details"
+                text={t('navigation.back-to-cluster')}
                 onClick={() => {
                   navigateSafely(() => {
                     setDefaultColumnLayout();
@@ -179,7 +179,11 @@ export function SidebarNavigation() {
           />
           <SideNavigationItem
             icon={namespace ? 'slim-arrow-left' : 'bbyd-dashboard'}
-            text={namespace ? 'Back To Cluster Details' : 'Cluster Details'}
+            text={
+              namespace
+                ? t('navigation.back-to-cluster')
+                : t('cluster-overview.headers.cluster-overview')
+            }
             onClick={() => {
               navigateSafely(() => navigate(clusterUrl(`overview`)));
             }}
@@ -199,7 +203,7 @@ export function SidebarNavigation() {
       {!namespace && !isSidebarCondensed && (
         <SideNavigationItem
           icon="bbyd-dashboard"
-          text="Cluster Details"
+          text={t('cluster-overview.headers.cluster-overview')}
           onClick={() => {
             navigateSafely(() => {
               setDefaultColumnLayout();

@@ -146,7 +146,7 @@ export const nonResourceHandler: Handler = {
     {
       name: 'overview',
       alias: 'ov',
-      description: t('command-palette.help.cluster-details'),
+      description: t('command-palette.help.cluster-overview'),
     },
     {
       name: 'settings',

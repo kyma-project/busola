@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import useDateNow from 'shared/hooks/dateNow';
 
 const toSeconds = 1000;
 const toMinutes = 60;
@@ -17,6 +18,7 @@ export const ReadableElapsedTimeFromNow = ({
   timestamp: string;
 }): JSX.Element => {
   const { t } = useTranslation();
+  const now = useDateNow(10_000);
 
   const result = useMemo(() => {
     if (!timestamp) {
@@ -24,8 +26,7 @@ export const ReadableElapsedTimeFromNow = ({
     }
 
     const startDate = new Date(timestamp);
-    const now = new Date();
-    const timeDiff = now.valueOf() - startDate.valueOf();
+    const timeDiff = now - startDate.valueOf();
 
     const seconds = timeDiff / toSeconds;
     const minutes = seconds / toMinutes;
@@ -39,7 +40,7 @@ export const ReadableElapsedTimeFromNow = ({
     else if (hours < 24)
       return formatResult(hours, t('common.value-units.hours-ago'));
     else return formatResult(days, t('common.value-units.days-ago'));
-  }, [timestamp, t]);
+  }, [timestamp, t, now]);
 
   return result;
 };

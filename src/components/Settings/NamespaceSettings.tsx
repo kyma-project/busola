@@ -19,12 +19,12 @@ export default function NamespaceSettings() {
         for="show-hidden-namespaces-switch"
         className="bsl-has-color-status-4"
       >
-        {t('settings.clusters.showHiddenNamespaces')}
+        {t('settings.general.showHiddenNamespaces')}
       </Label>
       <div>
         <Switch
           id="show-hidden-namespaces-switch"
-          accessibleName={t('settings.clusters.showHiddenNamespaces')}
+          accessibleName={t('settings.general.showHiddenNamespaces')}
           checked={showHiddenNamespaces}
           onChange={toggleVisibility}
         />

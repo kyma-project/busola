@@ -32,9 +32,9 @@ export default function ThemeChooser({ listRef }: ThemeChooserProps) {
         return (
           <TileButton
             key={themeName}
-            title={t(`settings.interface.themes.${themeName}.title`)}
+            title={t(`settings.appearance.themes.${themeName}.title`)}
             description={t(
-              `settings.interface.themes.${themeName}.description`,
+              `settings.appearance.themes.${themeName}.description`,
             )}
             icon={<ThemePreview theme={themeName} />}
             isActive={themeName === theme}

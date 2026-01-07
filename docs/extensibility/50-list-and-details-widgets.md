@@ -661,7 +661,7 @@ See the following example:
 
 `StatisticalCard` widgets render a card component with several numerical pieces of information.
 To display the widget in the **Monitoring and Health** section of a details page, configure it in **data.details.health**.  
-To render the card within the dense grid layout in the **Monitoring and Health** section of **Cluster Details**, use [injections](./70-widget-injection.md) (**destination: ClusterOverview, slot: health**).
+To render the card within the dense grid layout in the **Monitoring and Health** section of **Cluster Overview**, use [injections](./70-widget-injection.md) (**destination: ClusterOverview, slot: health**).
 
 These are the available `StatisticalCard` widget parameters:
 
@@ -692,7 +692,7 @@ details: |-
           source: $item.value2
 ```
 
-This is an example of the widget configured using injection which allows the `StatisticalCard` to be displayed in the **Monitoring and Health** section of **Cluster Details**:
+This is an example of the widget configured using injection which allows the `StatisticalCard` to be displayed in the **Monitoring and Health** section of **Cluster Overview**:
 
 ```yaml
 injections: |-
@@ -777,7 +777,7 @@ See the following example:
 
 `Radial Chart` widgets render a card component with a graphical representation of the radial chart.
 To display the widget in the **Monitoring and Health** section of a details page, configure it in **data.details.health**.  
-To render the card within the dense grid layout in the **Monitoring and Health** section of **Cluster Details**, use [injections](./70-widget-injection.md) (`destination: ClusterOverview`, `slot: health`).
+To render the card within the dense grid layout in the **Monitoring and Health** section of **Cluster Overview**, use [injections](./70-widget-injection.md) (`destination: ClusterOverview`, `slot: health`).
 
 These are the available `Radial Chart` widget parameters:
 
@@ -798,7 +798,7 @@ This is an example of the widget configuration in the **data.details.health** se
   color: var(--sapChart_OrderedColor_5)
 ```
 
-This is an example of the widget configured using injection, which allows the `RadialChart` to be displayed in the **Monitoring and Health** section of **Cluster Details**:
+This is an example of the widget configured using injection, which allows the `RadialChart` to be displayed in the **Monitoring and Health** section of **Cluster Overview**:
 
 ```yaml
 injections: |-

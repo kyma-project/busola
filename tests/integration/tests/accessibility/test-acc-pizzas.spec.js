@@ -18,7 +18,7 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Creates the EXT pizza orders config', () => {
-    cy.getLeftNav().contains('Cluster Details').click();
+    cy.getLeftNav().contains('Cluster Overview').click();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 

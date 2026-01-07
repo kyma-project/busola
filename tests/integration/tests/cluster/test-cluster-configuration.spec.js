@@ -49,7 +49,7 @@ context('Test Cluster configuration', () => {
     cy.contains('Category from target cluster').should('be.visible');
 
     // custom storage type should be set
-    cy.getLeftNav().contains('Cluster Details').click();
+    cy.getLeftNav().contains('Cluster Overview').click();
   });
 
   it('Test pagination', () => {
@@ -63,11 +63,15 @@ context('Test Cluster configuration', () => {
 
     cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
+    cy.contains('Settings').click();
+
     cy.contains('Other').parentsUntil('[role=tab]').click({ force: true });
 
     cy.get('ui5-dialog').contains('20').click();
 
     cy.get('ui5-option:visible').contains('10').click();
+
+    cy.contains('Appearance').click();
 
     cy.contains('Close').click();
 

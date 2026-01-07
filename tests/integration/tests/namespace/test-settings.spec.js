@@ -69,7 +69,7 @@ context('Test app settings and preferences', () => {
 
     cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
-    cy.contains('Interface').click();
+    cy.contains('Appearance').click();
 
     cy.contains('High-Contrast Black').click();
 
@@ -111,7 +111,7 @@ context('Test app settings and preferences', () => {
       .should('be.visible')
       .click();
 
-    cy.getLeftNav().contains('Back To Cluster Details').click();
+    cy.getLeftNav().contains('Back To Cluster Overview').click();
 
     cy.getLeftNav()
       .find('ui5-side-navigation-item')

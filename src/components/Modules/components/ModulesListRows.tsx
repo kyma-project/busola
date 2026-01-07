@@ -18,11 +18,13 @@ import { toSentenceCase } from 'shared/utils/helpers';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
+import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 
 type RowResourceType = {
   name: string;
   channel: string;
   version: string;
+  templateVersion?: string;
   resource: { kind: string; metadata: { namespace: string } };
   fakeStatus: any;
   namespace?: string;
@@ -37,6 +39,7 @@ type ModulesListRowsProps = {
   resource: RowResourceType;
   kymaResource?: KymaResourceType;
   moduleTemplates: ModuleTemplateListType;
+  protectedResource?: boolean;
   hasDetailsLink: (resource: RowResourceType) => boolean;
 };
 
@@ -46,6 +49,7 @@ export const ModulesListRows = ({
   moduleTemplates,
   hasDetailsLink,
   kymaResource,
+  protectedResource,
 }: ModulesListRowsProps) => {
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
@@ -71,7 +75,7 @@ export const ModulesListRows = ({
     moduleTemplates,
     resource?.name,
     resource?.channel || kymaResource?.spec?.channel || '',
-    resource?.version,
+    resource?.templateVersion || resource?.version,
     resource?.namespace,
   );
 
@@ -150,6 +154,7 @@ export const ModulesListRows = ({
       ) : (
         resource.name
       )}
+      {protectedResource && <ProtectedResourceWarning entry={kymaResource} />}
       {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
         <Tag
           className="sap-margin-begin-tiny"
@@ -195,7 +200,22 @@ export const ModulesListRows = ({
       )}
     </>,
     // Version
-    moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER,
+    <>
+      {moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER}
+      {!kymaResource &&
+        resource?.templateVersion &&
+        resource?.version &&
+        resource.templateVersion !== resource.version && (
+          <Tag
+            className="sap-margin-begin-tiny"
+            hideStateIcon
+            colorScheme="6"
+            design="Set2"
+          >
+            {t('kyma-modules.upgrade-available')}
+          </Tag>
+        )}
+    </>,
     // Module State
     <ModuleStatus
       key={`module-state-${resource.name}`}
