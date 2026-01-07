@@ -12,6 +12,9 @@ import { checkSelectedModule, findModuleStatus } from '../support';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { useProtectedResources } from 'shared/hooks/useProtectedResources';
+import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
+import pluralize from 'pluralize';
 
 export const KymaModuleContext = createContext({
   resourceName: null,
@@ -51,6 +54,7 @@ export function KymaModuleContextProvider({
   const [initialUnchangedResource, setInitialUnchangedResource] = useState();
   const [kymaResourceState, setKymaResourceState] = useState();
   const notification = useNotification();
+  const { isProtected } = useProtectedResources();
 
   useEffect(() => {
     if (kymaResource) {
@@ -87,8 +91,11 @@ export function KymaModuleContextProvider({
       }),
   });
 
-  const { moduleTemplates: kymaModuleTemplates, moduleTemplatesLoading } =
-    useContext(ModuleTemplatesContext);
+  const {
+    moduleTemplates: kymaModuleTemplates,
+    moduleTemplatesLoading,
+    communityModuleTemplates,
+  } = useContext(ModuleTemplatesContext);
 
   const getOpenedModuleIndex = (moduleIndex, activeModules) => {
     const index =
@@ -112,6 +119,27 @@ export function KymaModuleContextProvider({
     getModuleName(),
   )?.maintenance;
 
+  const isCommunityModuleSelected = () => {
+    const communityModulesNames = communityModuleTemplates?.items?.map(
+      (module) =>
+        pluralize(
+          module?.metadata?.labels[
+            'operator.kyma-project.io/module-name'
+          ]?.replace('-', '') || '',
+        ),
+    );
+    return communityModulesNames?.includes(
+      layoutState?.midColumn?.resourceType,
+    );
+  };
+
+  const isResourceProtected =
+    isProtected(kymaResource) && !isCommunityModuleSelected();
+
+  const protectedBadge = isResourceProtected && (
+    <ProtectedResourceWarning entry={kymaResource} />
+  );
+
   const maintenanceBadge = isMaintenancePending === true && (
     <StatusBadge
       type="Critical"
@@ -124,8 +152,10 @@ export function KymaModuleContextProvider({
 
   const customHeaderActions = (
     <>
+      {protectedBadge}
       {maintenanceBadge}
       <ToolbarButton
+        disabled={isResourceProtected}
         onClick={() => handleResourceDelete({})}
         design="Transparent"
         text={t('common.buttons.delete-module')}
@@ -149,6 +179,7 @@ export function KymaModuleContextProvider({
         handleResourceDelete: handleResourceDelete,
         showDeleteDialog: showDeleteDialog,
         customHeaderActions: customHeaderActions,
+        isCommunityModuleSelected: isCommunityModuleSelected(),
       }}
     >
       {createPortal(

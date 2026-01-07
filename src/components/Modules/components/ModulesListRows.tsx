@@ -18,6 +18,7 @@ import { toSentenceCase } from 'shared/utils/helpers';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
+import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 
 type RowResourceType = {
   name: string;
@@ -38,6 +39,7 @@ type ModulesListRowsProps = {
   resource: RowResourceType;
   kymaResource?: KymaResourceType;
   moduleTemplates: ModuleTemplateListType;
+  protectedResource?: boolean;
   hasDetailsLink: (resource: RowResourceType) => boolean;
 };
 
@@ -47,6 +49,7 @@ export const ModulesListRows = ({
   moduleTemplates,
   hasDetailsLink,
   kymaResource,
+  protectedResource,
 }: ModulesListRowsProps) => {
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
@@ -151,6 +154,7 @@ export const ModulesListRows = ({
       ) : (
         resource.name
       )}
+      {protectedResource && <ProtectedResourceWarning entry={kymaResource} />}
       {checkBeta(currentModuleTemplate, currentModuleReleaseMeta) ? (
         <Tag
           className="sap-margin-begin-tiny"

@@ -75,6 +75,7 @@ ResourceDetails.propTypes = {
   customHealthCards: PropTypes.arrayOf(PropTypes.func),
   showHealthCardsTitle: PropTypes.bool,
   isModule: PropTypes.bool,
+  isEntireListProtected: PropTypes.bool,
 };
 
 export function ResourceDetails(props) {
@@ -198,6 +199,7 @@ function Resource({
   headerContent,
   className,
   headerDescription,
+  isEntireListProtected = false,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -219,7 +221,7 @@ function Resource({
   });
 
   const layoutColumn = useAtomValue(columnLayoutAtom);
-  const protectedResource = isProtected(resource);
+  const protectedResource = isProtected(resource) || isEntireListProtected;
   const [filteredStatusColumns, setFilteredStatusColumns] = useState([]);
   const [filteredStatusColumnsLong, setFilteredStatusColumnsLong] = useState(
     [],
@@ -547,7 +549,7 @@ function Resource({
             protectedResourceWarning={
               <ProtectedResourceWarning entry={resource} withText />
             }
-            readOnly={readOnly}
+            readOnly={readOnly || protectedResource}
             disableEdit={disableEdit}
             renderForm={(props) => (
               <ErrorBoundary>

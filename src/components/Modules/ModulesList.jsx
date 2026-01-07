@@ -76,6 +76,8 @@ export default function ModulesList({ namespaced }) {
     return <Spinner />;
   }
 
+  const isResourceProtected = isProtected(kymaResource);
+
   return (
     <DynamicPageComponent
       className="kyma-modules"
@@ -96,6 +98,7 @@ export default function ModulesList({ namespaced }) {
               kymaResource={kymaResource}
               namespaced={namespaced}
               resourceUrl={resourceUrl}
+              protectedResource={isResourceProtected}
               setOpenedModuleIndex={setOpenedManagedModuleIndex}
               handleResourceDelete={handleResourceDelete}
               customSelectedEntry={selectedEntry}
@@ -121,7 +124,8 @@ export default function ModulesList({ namespaced }) {
         <ResourceCreate
           isEdit={true}
           confirmText={t('common.buttons.save')}
-          protectedResource={isProtected(kymaResource)}
+          readOnly={isResourceProtected}
+          protectedResource={isResourceProtected}
           protectedResourceWarning={
             <ProtectedResourceWarning entry={kymaResource} withText />
           }
