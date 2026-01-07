@@ -22,9 +22,15 @@ type NavItemProps = {
   node: NavNode;
   subItem?: boolean;
   sidebarRef: RefObject<SideNavigationDomRef & { closePicker: () => void }>;
+  isSelected: boolean;
 };
 
-export function NavItem({ node, subItem = false, sidebarRef }: NavItemProps) {
+export function NavItem({
+  node,
+  subItem = false,
+  sidebarRef,
+  isSelected,
+}: NavItemProps) {
   const { t } = useTranslation();
   const urlGenerators = useUrl();
   const navigate = useNavigate();
@@ -60,7 +66,7 @@ export function NavItem({ node, subItem = false, sidebarRef }: NavItemProps) {
     });
   }, [node.externalUrl, emptyResource, jsonata]);
 
-  const isSelected = useMemo(() => {
+  const selected = useMemo(() => {
     if (node.externalUrl) return false;
     const namespacePart = namespaceId ? `/namespaces/${namespaceId}/` : '/';
     const resourcePart = location.pathname.replace(
@@ -124,7 +130,7 @@ export function NavItem({ node, subItem = false, sidebarRef }: NavItemProps) {
   const propsForNav = {
     icon: node.externalUrl ? 'action' : node.icon,
     text: t(node.label, { defaultValue: node.label }),
-    selected: isSelected,
+    selected: isSelected ?? selected,
     href: node.dataSources || node.externalUrl ? getURL() : undefined,
     onClick: (e: Event) => {
       e.preventDefault();
