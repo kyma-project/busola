@@ -5,7 +5,6 @@ import {
   List,
   ListItemStandard,
   MessageStrip,
-  Text,
 } from '@ui5/webcomponents-react';
 import {
   checkIfAllResourcesAreDeleted,
@@ -299,13 +298,13 @@ export const ModulesDeleteBox = ({
           : null
       }
       customTitle={t('kyma-modules.delete-module-title', { name: moduleName })}
+      customMessage={t('kyma-modules.delete-module')}
       cancelFn={() => {
         setAllowForceDelete(false);
         setChosenModuleIndex(null);
       }}
       additionalDeleteInfo={
         <>
-          <Text>{t('kyma-modules.delete-module')}</Text>
           {associatedResources.length > 0 && (
             <>
               <MessageStrip
