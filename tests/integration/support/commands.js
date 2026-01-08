@@ -181,6 +181,7 @@ Cypress.Commands.add(
       searchInPlainTableText = false,
       parentSelector = null,
       waitForDelete = 0,
+      customHeaderText = null,
     } = options;
 
     cy.wait(1000);
@@ -218,7 +219,10 @@ Cypress.Commands.add(
     cy.get('ui5-button[data-testid="delete"]').click();
 
     if (confirmationEnabled) {
-      cy.contains(`Delete ${resourceType} ${resourceName}`);
+      const headerText = customHeaderText || `Delete ${resourceType}`;
+      cy.contains(
+        customHeaderText || `Delete ${resourceType} ${resourceName}`,
+      );
 
       // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
       // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
@@ -226,7 +230,7 @@ Cypress.Commands.add(
         cy.wait(waitForDelete);
       }
 
-      cy.get(`[header-text="Delete ${resourceType}"]:visible`)
+      cy.get(`[header-text="${headerText}"]:visible`)
         .find('[data-testid="delete-confirmation"]')
         .click();
 

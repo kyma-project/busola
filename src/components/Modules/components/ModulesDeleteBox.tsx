@@ -284,6 +284,9 @@ export const ModulesDeleteBox = ({
     }
   };
 
+  const moduleName =
+    chosenModuleIndex != null ? selectedModules[chosenModuleIndex]?.name : '';
+
   return (
     <DeleteMessageBox
       disableDeleteButton={
@@ -295,20 +298,14 @@ export const ModulesDeleteBox = ({
           ? 'common.buttons.cascade-delete'
           : null
       }
+      customTitle={t('kyma-modules.delete-module-title', { name: moduleName })}
       cancelFn={() => {
         setAllowForceDelete(false);
         setChosenModuleIndex(null);
       }}
       additionalDeleteInfo={
         <>
-          <Text>
-            {t('kyma-modules.delete-module', {
-              name:
-                chosenModuleIndex != null
-                  ? selectedModules[chosenModuleIndex]?.name
-                  : '',
-            })}
-          </Text>
+          <Text>{t('kyma-modules.delete-module')}</Text>
           {associatedResources.length > 0 && (
             <>
               <MessageStrip
