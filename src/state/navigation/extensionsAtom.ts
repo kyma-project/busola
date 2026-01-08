@@ -65,7 +65,7 @@ type ConfigMapListResponse =
   | undefined;
 
 interface ExtensionProps {
-  kymaFetchFn: (url: string, options?: any) => Promise<Response>;
+  kymaFetchFn: (_url: string, _options?: any) => Promise<Response>;
 }
 
 const isTheSameNameAndUrl = (
@@ -80,9 +80,9 @@ const isTheSameId = (
   secondCM: Partial<ExtResource>,
 ) => firstCM?.general?.id === secondCM?.general?.id;
 
-const convertYamlToObject: (
+const convertYamlToObject = (
   yamlString: string,
-) => Record<string, any> | null = (yamlString) => {
+): Record<string, any> | null => {
   try {
     return jsyaml.load(yamlString, { json: true }) as Record<string, any>;
   } catch (error) {
