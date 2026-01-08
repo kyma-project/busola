@@ -69,7 +69,7 @@ context('Test Stateful Sets', () => {
     cy.get('ui5-button[icon="copy"]:visible').click({ force: true });
 
     cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('be.visible');
-    cy.wait(2100);
+    cy.wait(3100);
     cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('not.exist');
 
     cy.get('@copyPrompt').should('have.been.called');
