@@ -84,11 +84,18 @@ export function ClusterSwitcher() {
               }
             }}
           >
-            <ListItemStandard data-cluster="all-clusters">
+            <ListItemStandard
+              data-cluster="all-clusters"
+              accessibleName={t('clusters.overview.title-all-clusters')}
+            >
               {t('clusters.overview.title-all-clusters')}
             </ListItemStandard>
             {inactiveClusterNames.map((name) => (
-              <ListItemStandard key={name} data-cluster={name}>
+              <ListItemStandard
+                key={name}
+                data-cluster={name}
+                accessibleName={name}
+              >
                 {name}
               </ListItemStandard>
             ))}

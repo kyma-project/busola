@@ -40,8 +40,8 @@ context('Test edit cluster', () => {
 
     cy.contains('ui5-button', 'Update').click();
 
-    cy.get('.header')
-      .find('button')
+    cy.get('ui5-shellbar')
+      .find('ui5-button#clusterSwitcherOpener')
       .contains(TEMP_NAME)
       .should('be.visible')
       .click();
@@ -63,7 +63,7 @@ context('Test edit cluster', () => {
     cy.contains('ui5-button', 'Update').click();
 
     cy.get('ui5-shellbar')
-      .find('.ui5-shellbar-menu-button-title')
+      .find('ui5-button#clusterSwitcherOpener')
       .contains(originalName)
       .should('be.visible')
       .click();

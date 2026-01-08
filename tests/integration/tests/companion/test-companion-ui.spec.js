@@ -144,16 +144,17 @@ context('Test Companion UI', () => {
       cy.reload();
       cy.get('ui5-shellbar').as('shellbar');
 
-      cy.get('@shellbar').find('.ui5-shellbar-menu-button').click();
+      cy.get('@shellbar').find('#clusterSwitcherOpener').click();
 
-      cy.wait(1000);
+      cy.wait(500);
 
-      cy.get('@shellbar')
+      cy.get('ui5-popover#cluster-switcher-popover')
         .find('ui5-li')
         .contains('Clusters Overview')
         .should('be.visible')
         .find('li[part="native-li"]')
         .click({ force: true });
+
       cy.wait(1000);
 
       cy.get('@shellbar')
