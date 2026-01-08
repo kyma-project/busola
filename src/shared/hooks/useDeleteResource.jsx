@@ -170,6 +170,7 @@ export function useDeleteResource({
     additionalDeleteInfo,
     customDeleteText,
     customTitle,
+    customMessage,
     disableDeleteButton = false,
   }) => {
     const defaultTitle = t(
@@ -224,9 +225,9 @@ export function useDeleteResource({
             padding: '15px 25px',
           }}
         >
-          {!customTitle && (
-            <Text style={{ paddingLeft: '7.5px' }}>
-              {t(
+          <Text style={{ paddingLeft: '7.5px' }}>
+            {customMessage ??
+              t(
                 resourceIsCluster
                   ? 'common.delete-dialog.disconnect-message'
                   : 'common.delete-dialog.delete-message',
@@ -235,8 +236,7 @@ export function useDeleteResource({
                   name: resourceTitle || resource?.metadata?.name,
                 },
               )}
-            </Text>
-          )}
+          </Text>
           {additionalDeleteInfo && (
             <Text style={{ paddingLeft: '7.5px' }}>{additionalDeleteInfo}</Text>
           )}
