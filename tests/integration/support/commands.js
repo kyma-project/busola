@@ -157,7 +157,7 @@ Cypress.Commands.add(
       cy.get('ui5-button').contains('Delete').should('be.visible').click();
     }
 
-    cy.contains(`delete ${resourceType} ${resourceName}`);
+    cy.contains(`Delete ${resourceType} ${resourceName}`);
 
     cy.get(`[header-text="Delete ${resourceType}"]:visible`)
       .find('[data-testid="delete-confirmation"]')
