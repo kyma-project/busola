@@ -175,7 +175,7 @@ export function Header() {
           window.location.pathname !== '/clusters' && (
             <>
               <ToggleButton
-                accessibleName="Kyma Companion"
+                accessibleName={t('kyma-companion.name')}
                 icon={showCompanion.show ? 'da-2' : 'da'}
                 onClick={(e) => {
                   e.preventDefault();
