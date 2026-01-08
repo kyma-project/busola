@@ -22,7 +22,7 @@ type NavItemProps = {
   node: NavNode;
   subItem?: boolean;
   sidebarRef: RefObject<SideNavigationDomRef & { closePicker: () => void }>;
-  isSelected: boolean;
+  isSelected?: boolean;
 };
 
 export function NavItem({

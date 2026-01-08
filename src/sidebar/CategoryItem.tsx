@@ -103,7 +103,7 @@ export function CategoryItem({
 
   const children = category.items?.map((nn, index) => {
     const isNodeSelected = checkIsSelected(nn);
-    console.log(isNodeSelected);
+
     return (
       <React.Fragment key={`${nn.pathSegment}-${index}`}>
         {nn.dataSources ? (
