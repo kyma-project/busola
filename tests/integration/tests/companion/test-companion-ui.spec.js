@@ -149,9 +149,8 @@ context('Test Companion UI', () => {
       cy.wait(500);
 
       cy.get('ui5-popover#cluster-switcher-popover')
-        .find('ui5-li')
-        .contains('Clusters Overview')
-        .should('be.visible')
+        .find('ui5-li[accessible-name="Clusters Overview"]:visible')
+        .should('contain.text', 'Clusters Overview')
         .find('li[part="native-li"]')
         .click({ force: true });
 
