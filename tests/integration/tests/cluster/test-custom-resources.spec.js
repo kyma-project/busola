@@ -131,7 +131,7 @@ context('Test Custom Resources', () => {
       .should('be.visible')
       .click();
 
-    cy.contains(`delete Tcluster tcluster-test`);
+    cy.contains(`Delete Tcluster tcluster-test`);
 
     cy.get(`[header-text="Delete Tcluster"]:visible`)
       .find('[data-testid="delete-confirmation"]')
