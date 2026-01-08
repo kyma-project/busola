@@ -14,7 +14,7 @@ type EmptyListComponentProps = {
   url: string;
   onClick: () => null;
   children?: ReactNode;
-  image?: 'TntNoApplications' | 'TntComponents' | 'NoEntries';
+  image?: 'TntComponents' | 'NoEntries';
 };
 
 export const EmptyListComponent = ({
