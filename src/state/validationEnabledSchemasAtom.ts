@@ -5,7 +5,7 @@ import {
   ExtendedValidateResources,
   getExtendedValidateResourceState,
   validateResourcesAtom,
-} from './preferences/validateResourcesAtom';
+} from './settings/validateResourcesAtom';
 import {
   emptyValidationSchema,
   getEnabledRules,

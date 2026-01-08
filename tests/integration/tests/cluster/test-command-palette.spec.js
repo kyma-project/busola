@@ -144,7 +144,7 @@ context('Test Command Palette navigation', () => {
   it('Autocompletion', () => {
     openCommandPalette();
 
-    getQueryInput().type('pref');
+    getQueryInput().type('set');
 
     // autocomplete
     cy.get('body').tab();

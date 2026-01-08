@@ -1,7 +1,7 @@
 # Kyma Dashboard Command Palette
 
 With the Kyma dashboard command palette feature, you can easily navigate through all your dashboard resources, such as workloads, deployments, and more.
-You can perform actions such as listing or accessing your namespaces, or preferences, or uploading YAML files.
+You can perform actions such as listing or accessing your namespaces, or settings, or uploading YAML files.
 
 ## Features
 

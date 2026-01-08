@@ -4,7 +4,7 @@ import { Button, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesAtom,
-} from 'state/preferences/validateResourcesAtom';
+} from 'state/settings/validateResourcesAtom';
 import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';

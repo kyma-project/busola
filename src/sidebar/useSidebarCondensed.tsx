@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
-import { isSidebarCondensedAtom } from 'state/preferences/isSidebarCondensedAtom';
+import { isSidebarCondensedAtom } from 'state/settings/isSidebarCondensedAtom';
 
 function getWindowDimensions() {
   const { innerWidth: width } = window;

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
+import { showHiddenNamespacesAtom } from 'state/settings/showHiddenNamespacesAtom';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import NamespaceCreate from './NamespaceCreate';

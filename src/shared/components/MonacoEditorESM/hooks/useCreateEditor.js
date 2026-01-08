@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { editor, Uri } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
-import { themeAtom } from 'state/preferences/themeAtom';
+import { themeAtom } from 'state/settings/themeAtom';
 
 export const getEditorTheme = (theme) => {
   switch (theme) {

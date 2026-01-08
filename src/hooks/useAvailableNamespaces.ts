@@ -4,7 +4,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { namespacesAtom } from 'state/namespacesAtom';
-import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
+import { showHiddenNamespacesAtom } from 'state/settings/showHiddenNamespacesAtom';
 import { K8sResource } from 'types';
 
 export function useAvailableNamespaces() {
