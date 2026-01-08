@@ -24,12 +24,12 @@ export default function ProtectedSettings() {
         for="disable-resource-protection-switch"
         className="bsl-has-color-status-4"
       >
-        {t('settings.clusters.disableResourceProtection')}
+        {t('settings.general.disableResourceProtection')}
       </Label>
       <div>
         <Switch
           id="disable-resource-protection-switch"
-          accessibleName={t('settings.clusters.disableResourceProtection')}
+          accessibleName={t('settings.general.disableResourceProtection')}
           checked={disableResourceProtection}
           onChange={() =>
             setDisableResourceProtection((prevState) => !prevState)
