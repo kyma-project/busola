@@ -205,6 +205,7 @@ context('Test Kyma Modules views', () => {
 
   it('Test deleting Modules from List and Details', { retries: 3 }, () => {
     cy.deleteFromGenericList('Module', 'eventing', {
+      searchInPlainTableText: true,
       parentSelector: '.modules-list',
       customHeaderText: 'Delete module eventing from your cluster?',
     });
