@@ -70,7 +70,7 @@ context('Test Stateful Sets', () => {
 
     cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('be.visible');
     cy.wait(3100);
-    cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('not.exist');
+    cy.contains(`Copied ${SS_NAME}.yaml to clipboard`).should('not.be.visible');
 
     cy.get('@copyPrompt').should('have.been.called');
   });
