@@ -3,7 +3,7 @@ import { useFeature } from 'hooks/useFeature';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
-import { disableResourceProtectionAtom } from 'state/preferences/disableResourceProtectionAtom';
+import { disableResourceProtectionAtom } from 'state/settings/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
 
 export default function ProtectedSettings() {
@@ -19,17 +19,17 @@ export default function ProtectedSettings() {
   if (!protectedResourcesEnabled) return null;
 
   return (
-    <div className="preferences-row">
+    <div className="settings-row">
       <Label
         for="disable-resource-protection-switch"
         className="bsl-has-color-status-4"
       >
-        {t('settings.clusters.disableResourceProtection')}
+        {t('settings.general.disableResourceProtection')}
       </Label>
       <div>
         <Switch
           id="disable-resource-protection-switch"
-          accessibleName={t('settings.clusters.disableResourceProtection')}
+          accessibleName={t('settings.general.disableResourceProtection')}
           checked={disableResourceProtection}
           onChange={() =>
             setDisableResourceProtection((prevState) => !prevState)

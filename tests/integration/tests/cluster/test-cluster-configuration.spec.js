@@ -61,15 +61,17 @@ context('Test Cluster configuration', () => {
 
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Preferences')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
+
+    cy.get('ui5-li-custom').contains('Settings').click();
 
     cy.contains('Other').parentsUntil('[role=tab]').click({ force: true });
 
     cy.get('ui5-dialog').contains('20').click();
 
     cy.get('ui5-option:visible').contains('10').click();
+
+    cy.contains('Appearance').click();
 
     cy.contains('Close').click();
 

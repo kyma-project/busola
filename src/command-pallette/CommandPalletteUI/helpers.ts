@@ -7,8 +7,8 @@ export const activateResult = (query: string, activateCallback: () => void) => {
 
 export const isResultGoingToRedirect = (resultQuery: string) => {
   switch (resultQuery) {
-    case 'preferences':
-    case 'prefs':
+    case 'settings':
+    case 'set':
     case 'upload':
     case 'up':
       return false;

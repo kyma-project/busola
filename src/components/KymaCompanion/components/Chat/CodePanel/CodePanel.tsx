@@ -2,11 +2,7 @@ import { Text, Panel, Title, FlexBox, Button } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useAtom, useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import {
-  isCurrentThemeDark,
-  Theme,
-  themeAtom,
-} from 'state/preferences/themeAtom';
+import { isCurrentThemeDark, Theme, themeAtom } from 'state/settings/themeAtom';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
 import { clusterAtom } from 'state/clusterAtom';

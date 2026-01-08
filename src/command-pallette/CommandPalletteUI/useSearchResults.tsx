@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { isPreferencesOpenAtom } from 'state/preferences/isPreferencesModalOpenAtom';
+import { isSettingsOpenAtom } from 'state/settings/isSettingsModalOpenAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
+import { showHiddenNamespacesAtom } from 'state/settings/showHiddenNamespacesAtom';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import * as handlers from './handlers';
@@ -48,7 +48,7 @@ export function useSearchResults({
   const showHiddenNamespaces = useAtomValue(showHiddenNamespacesAtom);
   const fetch = useFetch();
   const { t } = useTranslation();
-  const setOpenPreferencesModal = useSetAtom(isPreferencesOpenAtom);
+  const setOpenSettingsModal = useSetAtom(isSettingsOpenAtom);
   const setShowYamlUpload = useSetAtom(showYamlUploadDialogAtom);
   const clustersInfo = useClustersInfo();
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ export function useSearchResults({
     resourceCache,
     updateResourceCache,
     t,
-    setOpenPreferencesModal,
+    setOpenSettingsModal: setOpenSettingsModal,
     setShowYamlUpload,
     clustersInfo,
     navigate: navigateAndCloseColumns,

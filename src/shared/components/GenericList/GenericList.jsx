@@ -15,7 +15,7 @@ import ListActions from 'shared/components/ListActions/ListActions';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { SortModalPanel } from './SortModalPanel';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
-import { pageSizeAtom } from 'state/preferences/pageSizeAtom';
+import { pageSizeAtom } from 'state/settings/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';

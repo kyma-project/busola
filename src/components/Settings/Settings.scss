@@ -1,4 +1,4 @@
-.preferences-dialog::part(content) {
+.settings-dialog::part(content) {
   background: var(--sapBackgroundColor);
   overflow-y: auto;
   width: 100%;
@@ -11,7 +11,7 @@
   }
 }
 
-.preferences-row {
+.settings-row {
   display: grid;
   grid-template-columns: 3fr 3fr;
   align-items: center;

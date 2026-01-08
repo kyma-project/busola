@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { themeAtom } from 'state/preferences/themeAtom';
+import { themeAtom } from 'state/settings/themeAtom';
 import { configFeaturesNames } from 'state/types';
 import './SnowFeature.scss';
 

@@ -4,11 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { List, ListDomRef } from '@ui5/webcomponents-react';
 import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
 
-import {
-  Theme,
-  isSystemThemeDark,
-  themeAtom,
-} from 'state/preferences/themeAtom';
+import { Theme, isSystemThemeDark, themeAtom } from 'state/settings/themeAtom';
 import { TileButton } from 'shared/components/TileButton/TileButton';
 
 import { ThemePreview } from './ThemePreview/ThemePreview';
@@ -36,9 +32,9 @@ export default function ThemeChooser({ listRef }: ThemeChooserProps) {
         return (
           <TileButton
             key={themeName}
-            title={t(`settings.interface.themes.${themeName}.title`)}
+            title={t(`settings.appearance.themes.${themeName}.title`)}
             description={t(
-              `settings.interface.themes.${themeName}.description`,
+              `settings.appearance.themes.${themeName}.description`,
             )}
             icon={<ThemePreview theme={themeName} />}
             isActive={themeName === theme}

@@ -14,7 +14,7 @@ import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
 
 import { clusterAtom } from 'state/clusterAtom';
-import { languageAtom } from 'state/preferences/languageAtom';
+import { languageAtom } from 'state/settings/languageAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useAuthHandler } from 'state/authDataAtom';
 import { useGetConfiguration } from 'state/configuration/configurationAtom';
@@ -38,7 +38,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
-import { Preferences } from 'components/Preferences/Preferences';
+import { Settings } from 'components/Settings/Settings';
 import { Header } from 'header/Header';
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
 import { Sidebar } from 'sidebar/Sidebar';
@@ -48,7 +48,7 @@ import { IncorrectPath } from './IncorrectPath';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ContextChooserMessage } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
-import { themeAtom } from 'state/preferences/themeAtom';
+import { themeAtom } from 'state/settings/themeAtom';
 import { initTheme } from './initTheme';
 
 import './App.scss';
@@ -215,7 +215,7 @@ export default function App() {
                 </Route>
                 {makeGardenerLoginRoute}
               </Routes>
-              <Preferences />
+              <Settings />
             </ContentWrapper>
           </div>
         </div>

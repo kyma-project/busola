@@ -4,7 +4,7 @@ import { Button, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesAtom,
-} from 'state/preferences/validateResourcesAtom';
+} from 'state/settings/validateResourcesAtom';
 import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
@@ -97,12 +97,12 @@ export default function ResourceValidationSettings() {
 
   return (
     <UI5Panel
-      title={t('settings.clusters.resourcesValidation.validateResources')}
-      accessibleName={t('settings.clusters.accessible-name.validateResources')}
+      title={t('settings.general.resourcesValidation.validateResources')}
+      accessibleName={t('settings.general.accessible-name.validateResources')}
       headerActions={
         <Switch
           accessibleName={t(
-            'settings.clusters.resourcesValidation.validateResources',
+            'settings.general.resourcesValidation.validateResources',
           )}
           checked={isEnabled}
           onChange={toggleVisibility}
@@ -112,7 +112,7 @@ export default function ResourceValidationSettings() {
       {!isEnabled && (
         <div className="no-validation-info">
           <span className="bsl-has-color-status-4">
-            {t('settings.clusters.resourcesValidation.validation-disabled')}
+            {t('settings.general.resourcesValidation.validation-disabled')}
           </span>
         </div>
       )}
@@ -121,9 +121,7 @@ export default function ResourceValidationSettings() {
           policyList.filter((policy) => policy.selected).length > 0) && (
           <>
             <GenericList
-              title={t(
-                'settings.clusters.resourcesValidation.enabled-policies',
-              )}
+              title={t('settings.general.resourcesValidation.enabled-policies')}
               //@ts-expect-error Type mismatch between js and ts
               entries={
                 choosePolicies
@@ -137,7 +135,7 @@ export default function ResourceValidationSettings() {
                   {choosePolicies && (
                     <Switch
                       accessibleName={t(
-                        'settings.clusters.resourcesValidation.select-policy',
+                        'settings.general.resourcesValidation.select-policy',
                         {
                           name: entry.text,
                         },
@@ -159,7 +157,7 @@ export default function ResourceValidationSettings() {
                       endIcon="customize"
                       onClick={enablePolicyCustomization}
                     >
-                      {t('settings.clusters.resourcesValidation.customize')}
+                      {t('settings.general.resourcesValidation.customize')}
                     </Button>
                   )}
                   {choosePolicies && (
@@ -168,7 +166,7 @@ export default function ResourceValidationSettings() {
                       endIcon="reset"
                       onClick={disablePolicyCustomization}
                     >
-                      {t('settings.clusters.resourcesValidation.reset')}
+                      {t('settings.general.resourcesValidation.reset')}
                     </Button>
                   )}
                 </>
@@ -176,7 +174,7 @@ export default function ResourceValidationSettings() {
               searchSettings={{
                 showSearchSuggestion: false,
                 noSearchResultTitle: t(
-                  'settings.clusters.resourcesValidation.no-policies-found',
+                  'settings.general.resourcesValidation.no-policies-found',
                 ),
                 noSearchResultSubtitle: '',
                 textSearchProperties: ['key', 'text'],

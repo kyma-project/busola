@@ -9,7 +9,7 @@ import {
   SideNavigationItemDomRef,
   Ui5CustomEvent,
 } from '@ui5/webcomponents-react';
-import { isSidebarCondensedAtom } from 'state/preferences/isSidebarCondensedAtom';
+import { isSidebarCondensedAtom } from 'state/settings/isSidebarCondensedAtom';
 
 import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { NavItem } from './NavItem';

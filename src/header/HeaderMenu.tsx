@@ -2,7 +2,7 @@ import { Menu, MenuItem } from '@ui5/webcomponents-react';
 import { MenuDomRef, Ui5CustomEvent } from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 import { useSetAtom } from 'jotai';
-import { isPreferencesOpenAtom } from 'state/preferences/isPreferencesModalOpenAtom';
+import { isSettingsOpenAtom } from 'state/settings/isSettingsModalOpenAtom';
 import { useGetBusolaVersionDetails } from './SidebarMenu/useGetBusolaVersion';
 import { useGetLegalLinks } from './SidebarMenu/useGetLegalLinks';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ interface HeaderMenuProps {
 
 export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
   const { t } = useTranslation();
-  const setPreferencesOpen = useSetAtom(isPreferencesOpenAtom);
+  const setSettingsOpen = useSetAtom(isSettingsOpenAtom);
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
 
@@ -41,8 +41,8 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
   ) => {
     const legalLinkUsed = legalLinks.find((x) => x.label === e.detail.text);
 
-    if (e.detail.text === t('navigation.preferences.title')) {
-      setPreferencesOpen(true);
+    if (e.detail.text === t('navigation.settings.title')) {
+      setSettingsOpen(true);
     } else if (legalLinkUsed) {
       openNewWindow(legalLinkUsed.link);
     } else if (
@@ -61,10 +61,10 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
       onItemClick={handleMenuItemClick}
     >
       <MenuItem
-        onClick={() => setPreferencesOpen(true)}
-        key="preferences"
-        text={t('navigation.preferences.title')}
-        icon="wrench"
+        onClick={() => setSettingsOpen(true)}
+        key="settings"
+        text={t('navigation.settings.title')}
+        icon="action-settings"
       />
       <MenuItem
         key="legal-information"

@@ -2,7 +2,7 @@ import { useFeature } from 'hooks/useFeature';
 import { useAtomValue } from 'jotai';
 import jp from 'jsonpath';
 
-import { disableResourceProtectionAtom } from 'state/preferences/disableResourceProtectionAtom';
+import { disableResourceProtectionAtom } from 'state/settings/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
 
 export function useProtectedResources() {

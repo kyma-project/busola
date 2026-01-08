@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSetAtom } from 'jotai';
 import { Select, Option, Label } from '@ui5/webcomponents-react';
-import { languageAtom } from 'state/preferences/languageAtom';
+import { languageAtom } from 'state/settings/languageAtom';
 
 const AVAILABLE_LANGUAGES = [{ key: 'en', text: 'English' }];
 
@@ -15,13 +15,13 @@ export default function LanguageSettings() {
   };
 
   return (
-    <div className="preferences-row">
+    <div className="settings-row">
       <Label for="language-select" className="bsl-has-color-status-4">
-        {t('settings.language')}
+        {t('settings.language.title')}
       </Label>
       <Select
         id="language-select"
-        accessibleName={t('settings.language')}
+        accessibleName={t('settings.language.title')}
         onChange={onChange}
       >
         {AVAILABLE_LANGUAGES.map((available_language) => (
