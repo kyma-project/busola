@@ -65,7 +65,7 @@ type ConfigMapListResponse =
   | undefined;
 
 interface ExtensionProps {
-  kymaFetchFn: (_url: string, _options?: any) => Promise<Response>;
+  kymaFetchFn: (url: string, options?: any) => Promise<Response>;
 }
 
 const isTheSameNameAndUrl = (
@@ -80,9 +80,9 @@ const isTheSameId = (
   secondCM: Partial<ExtResource>,
 ) => firstCM?.general?.id === secondCM?.general?.id;
 
-const convertYamlToObject = (
+const convertYamlToObject: (
   yamlString: string,
-): Record<string, any> | null => {
+) => Record<string, any> | null = (yamlString) => {
   try {
     return jsyaml.load(yamlString, { json: true }) as Record<string, any>;
   } catch (error) {
@@ -509,7 +509,7 @@ export const useGetExtensions = () => {
         // TODO wizard injections
       }
 
-      const filteredConfigs: ExtResource[] = [];
+      let filteredConfigs: ExtResource[] = [];
       if (!configs) {
         setExtensions([]);
         setAllExtensions([]);
@@ -525,13 +525,11 @@ export const useGetExtensions = () => {
           configSet,
         );
 
-        configs
-          .filter((node) =>
-            !(node?.general?.resource === null)
-              ? true
-              : isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
-          )
-          .forEach((i) => filteredConfigs.push(i));
+        filteredConfigs = configs.filter((node) =>
+          node?.general?.resource === null
+            ? true
+            : isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
+        );
 
         setExtensions(filteredConfigs);
         setAllExtensions(configs);
