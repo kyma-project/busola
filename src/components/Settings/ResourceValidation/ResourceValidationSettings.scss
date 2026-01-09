@@ -1,6 +1,14 @@
+.resource-validation-table {
+  ui5-table-cell {
+    overflow-clip-margin: unset !important; // Otherwise switch focus is being cut off
+  }
+
+  ui5-table-header-row {
+    display: none;
+  }
+}
+
 .policy-row {
-  display: grid;
-  grid-template-columns: 1fr fit-content(50%);
   align-items: center;
   font-size: var(--sapFontSize);
 }

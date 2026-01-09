@@ -2,7 +2,6 @@ import { atomWithStorage } from 'jotai/utils';
 
 export type ExtendedValidateResources = {
   isEnabled: boolean;
-  choosePolicies: boolean;
   policies?: string[];
 };
 
@@ -23,7 +22,6 @@ export const getExtendedValidateResourceState = (
   if (typeof validateResources === 'boolean') {
     return {
       isEnabled: validateResources,
-      choosePolicies: false,
     };
   } else {
     return validateResources;
