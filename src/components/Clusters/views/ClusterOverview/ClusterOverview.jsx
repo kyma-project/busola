@@ -11,7 +11,7 @@ import { useSetAtom } from 'jotai';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 import { createPortal } from 'react-dom';
 import { deleteCluster } from 'components/Clusters/shared';
-import { Button } from '@ui5/webcomponents-react';
+import { ToolbarButton } from '@ui5/webcomponents-react';
 import { ClusterNodes } from './ClusterNodes';
 import { ClusterValidation } from './ClusterValidation/ClusterValidation';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -60,17 +60,16 @@ export function ClusterOverview() {
   }, [setLayoutColumn]);
 
   const actions = (
-    <section aria-label="Cluster actions">
-      <Button
+    <section aria-label="Cluster actions" className="actions">
+      <ToolbarButton
         key="upload-yaml"
         icon="add"
         onClick={() => {
           setShowAdd(true);
         }}
-      >
-        {t('upload-yaml.title')}
-      </Button>
-      <Button
+        text={t('upload-yaml.title')}
+      />
+      <ToolbarButton
         key="disconnect"
         design="Transparent"
         onClick={() => {
@@ -84,9 +83,8 @@ export function ClusterOverview() {
             },
           });
         }}
-      >
-        {t('common.buttons.disconnect')}
-      </Button>
+        text={t('common.buttons.disconnect')}
+      />
     </section>
   );
 
