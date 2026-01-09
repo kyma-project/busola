@@ -1,7 +1,30 @@
-import { ComboBox, ComboBoxItem, FlexBox } from '@ui5/webcomponents-react';
+import {
+  ComboBox,
+  ComboBoxDomRef,
+  ComboBoxItem,
+  FlexBox,
+  Ui5CustomEvent,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { Label } from '../../ResourceForm/components/Label';
 import { useRef } from 'react';
+import { ComboBoxSelectionChangeEventDetail } from '@ui5/webcomponents/dist/ComboBox';
+
+type DropdownProps = {
+  accessibleName?: string;
+  label?: string;
+  options: { key: string; text: string }[];
+  selectedKey: string;
+  onSelect: (event: Event, option: { key: string; text: string }) => void;
+  required?: boolean;
+  id?: string;
+  disabled?: boolean;
+  placeholder?: string;
+  _ref?: React.RefObject<any>;
+  emptyListMessage?: string;
+  className?: string;
+  [key: string]: any;
+};
 
 export function Dropdown({
   accessibleName,
@@ -17,8 +40,7 @@ export function Dropdown({
   emptyListMessage,
   className,
   ...props
-}) {
-  if (!props.readOnly) delete props.readOnly;
+}: DropdownProps) {
   const { t } = useTranslation();
 
   const localeRef = useRef(null);
@@ -35,8 +57,12 @@ export function Dropdown({
     disabled = true;
   }
 
-  const onSelectionChange = (event) => {
-    const selectedOption = options.find((o) => o.key === event.detail.item.id);
+  const onSelectionChange = (
+    event: Ui5CustomEvent<ComboBoxDomRef, ComboBoxSelectionChangeEventDetail>,
+  ) => {
+    const selectedOption = options.find(
+      (o) => o?.key === event?.detail?.item?.id,
+    );
     if (selectedOption) onSelect(event, selectedOption);
   };
 
