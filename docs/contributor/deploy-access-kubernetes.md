@@ -40,17 +40,16 @@ To install Busola using a specific landscape configuration, go to the folder wit
 ## Deploying Busola From a Pull Request
 
 1. Create a PR, and run the following pipelines:
+   - **Busola Web Build** - front-end changes
+   - **Busola Backend Build** - backend changes, if needed.
 
-- **Busola Web Build** - front-end changes
-- **Busola Backend Build** - backend changes, if needed.
-
-> [!TIP]
-> You can mark your PR as ready for review or you can trigger the jobs manualy using the `/test JOB_NAME` comment.
+   > [!TIP]
+   > You can mark your PR as ready for review or you can trigger the jobs manualy using the `/test JOB_NAME` comment.
 
 2. In `resources/base/busola/deployment.yaml`, go to `spec.containers.image` and replace `busola` with `europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-{PR_NUMBER}`
 
-> [!NOTE]
-> You don't need to push these changes. You only need them to run the script.
+   > [!NOTE]
+   > You don't need to push these changes. You only need them to run the script.
 
 3. Create a namespace on your cluster, for example, `UI5`.
 
@@ -60,8 +59,8 @@ To install Busola using a specific landscape configuration, go to the folder wit
    export KUBECONFIG={PATH_TO_KUBECONFIG}
    ```
 
-> [!TIP]
-> If you have a problem with your kubeconfig, for example, with the Gardener login, create Service Account with `cluster-admin` Cluster Role Binding, generate token for this Service Account and use it as kubeconfig.
+   > [!TIP]
+   > If you have a problem with your kubeconfig, for example, with the Gardener login, create Service Account with `cluster-admin` Cluster Role Binding, generate token for this Service Account and use it as kubeconfig.
 
 5. In your terminal, run the following command to get your Cluster domain:
 
@@ -76,8 +75,8 @@ To install Busola using a specific landscape configuration, go to the folder wit
    ./apply-resources-istio.sh {NAMESAPCE_NAME}.{CLUSTER_DOMAIN} {NAMESPACE_NAME}
    ```
 
-> [!NOTE]
-> If you get the `line 12: envsubst: command not found` error, install gettext with `brew install gettext`. After that, re-run the script.
+   > [!NOTE]
+   > If you get the `line 12: envsubst: command not found` error, install gettext with `brew install gettext`. After that, re-run the script.
 
 Your demo cluster is available under `{NAMESAPCE_NAME}.{CLUSTER_LINK}`, for example, `ui5.c-58184fc.stage.kyma.ondemand.com`
 
@@ -111,8 +110,8 @@ kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
    k3d cluster create -p "80:80@loadbalancer"
    ```
 
-> [!TIP]
-> See [Exposing Services](https://k3d.io/v5.6.3/usage/exposing_services/) for more details.
+   > [!TIP]
+   > See [Exposing Services](https://k3d.io/v5.6.3/usage/exposing_services/) for more details.
 
 2. Install Ingress resources:
 
