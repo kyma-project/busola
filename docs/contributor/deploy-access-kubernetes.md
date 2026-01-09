@@ -131,6 +131,8 @@ Use shell to quickly process the file.
 
 - [yq](https://mikefarah.gitbook.io/yq)
 
+##### Procedure
+
 Set the **K3D_CLUSTER_NAME** shell environment variable to the name of your cluster and run:
 
 ```shell
