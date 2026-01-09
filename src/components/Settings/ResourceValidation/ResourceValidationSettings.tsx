@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { Button, Switch } from '@ui5/webcomponents-react';
+import { FlexBox, Label, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesAtom,
@@ -11,7 +11,6 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { useFeature } from 'hooks/useFeature';
 import { ValidationFeatureConfig } from 'state/validationEnabledSchemasAtom';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import './ResourceValidationSettings.scss';
 import { configFeaturesNames } from 'state/types';
@@ -28,7 +27,6 @@ export default function ResourceValidationSettings() {
 
   const {
     isEnabled,
-    choosePolicies,
     policies: selectedPolicies = (validationFeature?.isEnabled &&
       validationFeature?.config?.policies) ||
       [],
@@ -42,7 +40,6 @@ export default function ResourceValidationSettings() {
         .sort((a, b) => (a.key < b.key ? -1 : 1)) ?? [],
     [validationSchemas],
   );
-
   const policyList = useMemo(() => {
     const selectedPolicySet = selectedPolicies.reduce(
       (agg, name) => agg.add(name),
@@ -57,32 +54,13 @@ export default function ResourceValidationSettings() {
   const toggleVisibility = () => {
     setValidateResources({
       isEnabled: !isEnabled,
-      choosePolicies,
       policies: selectedPolicies,
-    });
-  };
-
-  const enablePolicyCustomization = () => {
-    setValidateResources({
-      isEnabled,
-      choosePolicies: true,
-      policies:
-        (validationFeature?.isEnabled && validationFeature?.config?.policies) ||
-        [],
-    });
-  };
-
-  const disablePolicyCustomization = () => {
-    setValidateResources({
-      isEnabled,
-      choosePolicies: false,
     });
   };
 
   const deleteSelectedPolicy = (policyToDelete: string) => {
     setValidateResources({
       isEnabled,
-      choosePolicies,
       policies: selectedPolicies.filter((policy) => policy !== policyToDelete),
     });
   };
@@ -90,16 +68,20 @@ export default function ResourceValidationSettings() {
   const addSelectedPolicy = (policyToAdd: string) => {
     setValidateResources({
       isEnabled,
-      choosePolicies,
       policies: [...selectedPolicies, policyToAdd].sort(),
     });
   };
 
   return (
-    <UI5Panel
-      title={t('settings.general.resourcesValidation.validateResources')}
-      accessibleName={t('settings.general.accessible-name.validateResources')}
-      headerActions={
+    <>
+      <FlexBox
+        alignItems="Center"
+        gap={'0.5rem'}
+        className="resource-validation-container sap-margin-small"
+      >
+        <Label showColon>
+          {t('settings.general.resourcesValidation.validateResources')}
+        </Label>
         <Switch
           accessibleName={t(
             'settings.general.resourcesValidation.validateResources',
@@ -107,8 +89,7 @@ export default function ResourceValidationSettings() {
           checked={isEnabled}
           onChange={toggleVisibility}
         />
-      }
-    >
+      </FlexBox>
       {!isEnabled && (
         <div className="no-validation-info">
           <span className="bsl-has-color-status-4">
@@ -116,74 +97,48 @@ export default function ResourceValidationSettings() {
           </span>
         </div>
       )}
-      {isEnabled &&
-        (choosePolicies ||
-          policyList.filter((policy) => policy.selected).length > 0) && (
-          <>
-            <GenericList
-              title={t('settings.general.resourcesValidation.enabled-policies')}
-              //@ts-expect-error Type mismatch between js and ts
-              entries={
-                choosePolicies
-                  ? policyList
-                  : policyList.filter((policy) => policy.selected)
-              }
-              headerRenderer={() => ['policies']}
-              rowRenderer={(entry) => [
-                <div key={entry.text} className="policy-row">
-                  <span>{entry.text}</span>
-                  {choosePolicies && (
-                    <Switch
-                      accessibleName={t(
-                        'settings.general.resourcesValidation.select-policy',
-                        {
-                          name: entry.text,
-                        },
-                      )}
-                      checked={entry.selected}
-                      onChange={() => {
-                        if (entry.selected) deleteSelectedPolicy(entry.key);
-                        else addSelectedPolicy(entry.key);
-                      }}
-                    />
+      {isEnabled && policyList.length > 0 && (
+        <>
+          <GenericList
+            className="resource-validation-table"
+            title={t(
+              'settings.general.resourcesValidation.validation-policies',
+            )}
+            //@ts-expect-error Type mismatch between js and ts
+            entries={policyList}
+            headerRenderer={() => ['']} //Throws an error if it's empty - header column is hidden with CSS
+            rowRenderer={(entry) => [
+              <FlexBox gap="0.5rem" key={entry.text} className="policy-row">
+                <Switch
+                  accessibleName={t(
+                    'settings.general.resourcesValidation.select-policy',
+                    {
+                      name: entry.text,
+                    },
                   )}
-                </div>,
-              ]}
-              extraHeaderContent={
-                <>
-                  {!choosePolicies && (
-                    <Button
-                      design="Transparent"
-                      endIcon="customize"
-                      onClick={enablePolicyCustomization}
-                    >
-                      {t('settings.general.resourcesValidation.customize')}
-                    </Button>
-                  )}
-                  {choosePolicies && (
-                    <Button
-                      design="Transparent"
-                      endIcon="reset"
-                      onClick={disablePolicyCustomization}
-                    >
-                      {t('settings.general.resourcesValidation.reset')}
-                    </Button>
-                  )}
-                </>
-              }
-              searchSettings={{
-                showSearchSuggestion: false,
-                noSearchResultTitle: t(
-                  'settings.general.resourcesValidation.no-policies-found',
-                ),
-                noSearchResultSubtitle: '',
-                textSearchProperties: ['key', 'text'],
-                showSearchField: true,
-                allowSlashShortcut: true,
-              }}
-            />
-          </>
-        )}
-    </UI5Panel>
+                  checked={entry.selected}
+                  onChange={() => {
+                    if (entry.selected) deleteSelectedPolicy(entry.key);
+                    else addSelectedPolicy(entry.key);
+                  }}
+                  style={{ paddingLeft: '4px' }}
+                />
+                <span>{entry.text}</span>
+              </FlexBox>,
+            ]}
+            searchSettings={{
+              showSearchSuggestion: false,
+              noSearchResultTitle: t(
+                'settings.general.resourcesValidation.no-policies-found',
+              ),
+              noSearchResultSubtitle: '',
+              textSearchProperties: ['key', 'text'],
+              showSearchField: true,
+              allowSlashShortcut: true,
+            }}
+          />
+        </>
+      )}
+    </>
   );
 }

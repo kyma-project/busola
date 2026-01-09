@@ -1448,12 +1448,12 @@ settings:
       title: Cluster Interaction
     resourcesValidation:
       customize: Customize
-      enabled-policies: Enabled Policies
       no-policies-found: No policies found
       reset: Reset
       title: Resource Validation
       validateResources: Validate Resources
       validation-disabled: Resource validation is disabled
+      validation-policies: Validation Policies
     showHiddenNamespaces: Show hidden Namespaces
     title: Settings
   language:
