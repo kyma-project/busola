@@ -9,7 +9,7 @@ For more details about environment configuration, see [Environment-Specific Sett
 
 ## Deploying Busola in the Kubernetes Cluster
 
-Follow these steps to deploy Busola in the Kubernetes Cluster:
+Follow these steps to deploy Busola in the Kubernetes cluster:
 
 1. Go to the Busola release page and download the version of your choice.
 2. Set the the **NAMESPACE** and **VERSION** shell environment variables. For example:
