@@ -53,13 +53,18 @@ export default function ServiceAccountCreate({
   useEffect(() => {
     if (layoutState?.showEdit?.resource) return;
 
-    setServiceAccount(
-      cloneDeep(initialServiceAccount) ||
-        createServiceAccountTemplate(namespace),
-    );
-    setInitialResource(
-      initialServiceAccount || createServiceAccountTemplate(namespace),
-    );
+    const timeoutID = setTimeout(() => {
+      setServiceAccount(
+        cloneDeep(initialServiceAccount) ||
+          createServiceAccountTemplate(namespace),
+      );
+      setInitialResource(
+        initialServiceAccount || createServiceAccountTemplate(namespace),
+      );
+    }, 0);
+    return () => {
+      clearTimeout(timeoutID);
+    };
   }, [initialServiceAccount, namespace, layoutState?.showEdit?.resource]);
 
   const isEdit = useMemo(
@@ -90,9 +95,10 @@ export default function ServiceAccountCreate({
     });
     jp.value(serviceAccount, '$.imagePullSecrets', newImages);
 
-    if (!newImages.length) delete serviceAccount.imagePullSecrets;
+    const newServiceAccount = { ...serviceAccount };
+    if (!newImages.length) delete newServiceAccount.imagePullSecrets;
 
-    setServiceAccount({ ...serviceAccount });
+    setServiceAccount(newServiceAccount);
   };
 
   async function afterServiceAccountCreate(defaultAfterCreateFn) {

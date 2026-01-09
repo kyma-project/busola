@@ -45,13 +45,14 @@ export function ColumnsInput({
         <Input
           value={value.name}
           onInput={(e) => {
+            // eslint-disable-next-line react-hooks/immutability
             value.name = e.target.value;
             setColumns([...columns]);
           }}
           className="full-width"
           required
           placeholder={t('extensibility.starter-modal.headers.field-name')}
-          disabled={!value.isSelected ? true : false}
+          disabled={!value.isSelected}
           accessibleName={t('common.labels.name')}
         />
         <Input
