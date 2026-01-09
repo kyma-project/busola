@@ -49,7 +49,7 @@ export default function ModulesList({ namespaced }) {
   } = useContext(CommunityModulesDeleteBoxContext);
 
   const [selectedEntry, setSelectedEntry] = useState(null);
-  const { isProtected } = useProtectedResources();
+  const { isProtected, isProtectedResource } = useProtectedResources();
 
   useEffect(() => {
     if (
@@ -76,6 +76,9 @@ export default function ModulesList({ namespaced }) {
     return <Spinner />;
   }
 
+  // Use isProtectedResource for showing the icon (always show if resource matches rules)
+  const showProtectedResourceWarning = isProtectedResource(kymaResource);
+  // Use isProtected for blocking modifications (considers user setting)
   const isResourceProtected = isProtected(kymaResource);
 
   return (
@@ -98,7 +101,7 @@ export default function ModulesList({ namespaced }) {
               kymaResource={kymaResource}
               namespaced={namespaced}
               resourceUrl={resourceUrl}
-              protectedResource={isResourceProtected}
+              protectedResource={showProtectedResourceWarning}
               setOpenedModuleIndex={setOpenedManagedModuleIndex}
               handleResourceDelete={handleResourceDelete}
               customSelectedEntry={selectedEntry}
@@ -124,11 +127,11 @@ export default function ModulesList({ namespaced }) {
         <ResourceCreate
           isEdit={true}
           confirmText={t('common.buttons.save')}
-          readOnly={isResourceProtected}
-          protectedResource={isResourceProtected}
+          protectedResource={showProtectedResourceWarning}
           protectedResourceWarning={
             <ProtectedResourceWarning entry={kymaResource} withText />
           }
+          isProtectedResourceModificationBlocked={isResourceProtected}
           renderForm={(props) => (
             <ErrorBoundary>
               <Create

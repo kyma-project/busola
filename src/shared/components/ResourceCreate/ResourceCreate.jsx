@@ -29,6 +29,7 @@ export const ResourceCreate = ({
   protectedResource = false,
   protectedResourceWarning = null,
   createFormRef = null,
+  isProtectedResourceModificationBlocked = false,
 }) => {
   const { t } = useTranslation();
   const { isValid, formElementRef, setCustomValid, revalidate } =
@@ -113,14 +114,20 @@ export const ResourceCreate = ({
   }
 
   function renderConfirmButton() {
+    const isDisabled =
+      readOnly || disableEdit || isProtectedResourceModificationBlocked;
     return (
       <Button
         className="min-width-button"
-        disabled={readOnly || disableEdit || protectedResource}
-        aria-disabled={readOnly || disableEdit}
+        disabled={isDisabled}
+        aria-disabled={isDisabled}
         onClick={handleFormSubmit}
         design="Emphasized"
-        tooltip={invalidPopupMessage}
+        tooltip={
+          isProtectedResourceModificationBlocked
+            ? t('common.tooltips.protected-resources-info')
+            : invalidPopupMessage
+        }
       >
         {confirmText}
       </Button>

@@ -30,12 +30,17 @@ export function useProtectedResources() {
     });
   };
 
+  // Returns true if the resource matches protection rules (for showing icon)
+  const isProtectedResource = (entry) => !!getEntryProtection(entry).length;
+
+  // Returns true if modification should be blocked (considers user setting)
   const isProtected = (entry) =>
-    !disableResourceProtection && !!getEntryProtection(entry).length;
+    !disableResourceProtection && isProtectedResource(entry);
 
   return {
     protectedResourceRules,
     getEntryProtection,
     isProtected,
+    isProtectedResource,
   };
 }

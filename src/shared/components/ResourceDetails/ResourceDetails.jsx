@@ -211,7 +211,7 @@ function Resource({
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
-  const { isProtected } = useProtectedResources();
+  const { isProtected, isProtectedResource } = useProtectedResources();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceTitle,
@@ -221,6 +221,10 @@ function Resource({
   });
 
   const layoutColumn = useAtomValue(columnLayoutAtom);
+  // Use isProtectedResource for showing the icon (always show if resource matches rules)
+  const showProtectedResourceWarning =
+    isProtectedResource(resource) || isEntireListProtected;
+  // Use isProtected for blocking modifications (considers user setting)
   const protectedResource = isProtected(resource) || isEntireListProtected;
   const [filteredStatusColumns, setFilteredStatusColumns] = useState([]);
   const [filteredStatusColumnsLong, setFilteredStatusColumnsLong] = useState(
@@ -466,7 +470,7 @@ function Resource({
         title={customTitle ?? resource.metadata.name}
         description={headerDescription}
         actions={actions}
-        protectedResource={protectedResource}
+        protectedResource={showProtectedResourceWarning}
         protectedResourceWarning={
           <ProtectedResourceWarning entry={resource} withText />
         }
@@ -545,11 +549,12 @@ function Resource({
             }
             isEdit={true}
             confirmText={t('common.buttons.save')}
-            protectedResource={protectedResource}
+            protectedResource={showProtectedResourceWarning}
             protectedResourceWarning={
               <ProtectedResourceWarning entry={resource} withText />
             }
-            readOnly={readOnly || protectedResource}
+            isProtectedResourceModificationBlocked={protectedResource}
+            readOnly={readOnly}
             disableEdit={disableEdit}
             renderForm={(props) => (
               <ErrorBoundary>
