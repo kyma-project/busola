@@ -2,21 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
-  ListItemStandard,
   ShellBar,
   ShellBarItem,
   ToggleButton,
 } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
 import {
-  clustersAtom,
   clustersAtomEffectOnSet,
   clustersAtomEffectSetSelf,
 } from 'state/clustersAtom';
@@ -24,8 +22,8 @@ import { clusterAtom } from 'state/clusterAtom';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { configFeaturesNames } from 'state/types';
 
-import { Logo } from './Logo/Logo';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
+import { ClusterSwitcher } from './ClusterSwitcher/ClusterSwitcher';
 import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
@@ -45,12 +43,14 @@ export function Header() {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { navigateSafely } = useFormNavigation();
 
   useAtom(clustersAtomEffectSetSelf);
   useAtom(clustersAtomEffectOnSet);
   const cluster = useAtomValue(clusterAtom);
-  const clusters = useAtomValue(clustersAtom);
+
+  const isOnClustersPage = location.pathname === '/clusters';
 
   const { isEnabled: isKymaCompanionEnabled, useJoule: usesJoule } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
@@ -67,71 +67,25 @@ export function Header() {
 
   const shellbarRef = useRef(null);
 
-  const inactiveClusterNames = Object.keys(clusters || {}).filter(
-    (name) => name !== cluster?.name,
-  );
-  const title =
-    window.location.pathname !== '/clusters'
-      ? cluster?.contextName || cluster?.name
-      : '';
-
-  const clustersList = [
-    ...inactiveClusterNames.map((name, index) => {
-      return (
-        <ListItemStandard key={name} accessibleName={name} data-key={index}>
-          {name}
-        </ListItemStandard>
-      );
-    }),
-    <ListItemStandard key="all-clusters" accessibleName="all-clusters">
-      {t('clusters.overview.title-all-clusters')}
-    </ListItemStandard>,
-  ];
-
   return (
     <>
       <ShellBar
         className="header"
         accessibilityAttributes={{
           logo: {
-            name: cluster?.name
-              ? t('cluster-overview.headers.cluster-overview')
-              : t('clusters.overview.title-all-clusters'),
-          },
-          branding: {
-            name: `Selected cluster: ${title}`,
+            name: isOnClustersPage
+              ? t('clusters.overview.title-all-clusters')
+              : t('clusters.overview.title-current-cluster'),
           },
         }}
-        startButton={
-          window.location.pathname !== '/clusters' && <SidebarSwitcher />
-        }
+        startButton={!isOnClustersPage && <SidebarSwitcher />}
         onLogoClick={() => {
-          navigateSafely(() =>
-            navigate(
-              cluster?.name
-                ? `/cluster/${encodeURIComponent(cluster.name)}/overview`
-                : '/clusters',
-            ),
-          );
-          setShowCompanion((prevState) => ({
-            ...prevState,
-            show: false,
-            fullScreen: false,
-          }));
-        }}
-        logo={<Logo />}
-        primaryTitle={title}
-        menuItems={window.location.pathname !== '/clusters' ? clustersList : []}
-        onMenuItemClick={(e) => {
           navigateSafely(() => {
-            e.detail.item.textContent ===
-            t('clusters.overview.title-all-clusters')
-              ? navigate('/clusters')
-              : navigate(
-                  `/cluster/${encodeURIComponent(
-                    e.detail.item?.textContent ?? '',
-                  )}`,
-                );
+            if (cluster?.name && !isOnClustersPage) {
+              navigate(`/cluster/${encodeURIComponent(cluster.name)}/overview`);
+            } else {
+              navigate('/clusters');
+            }
           });
           setShowCompanion((prevState) => ({
             ...prevState,
@@ -139,6 +93,9 @@ export function Header() {
             fullScreen: false,
           }));
         }}
+        logo={<img alt="SAP" src="/assets/sap-logo.svg" />}
+        primaryTitle={t('common.product-title')}
+        content={<ClusterSwitcher />}
         profile={
           <Avatar
             icon="customer"
@@ -149,7 +106,7 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
         searchField={
-          window.location.pathname !== '/clusters' && (
+          !isOnClustersPage && (
             <CommandPaletteSearchBar
               shouldFocus={isSearchOpen}
               slot="searchField"
@@ -170,27 +127,25 @@ export function Header() {
       >
         <SnowFeature />
         <FeedbackPopover />
-        {isKymaCompanionEnabled &&
-          isSAPUser &&
-          window.location.pathname !== '/clusters' && (
-            <>
-              <ToggleButton
-                accessibleName={t('kyma-companion.name')}
-                icon={showCompanion.show ? 'da-2' : 'da'}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowCompanion((prevState) => ({
-                    ...prevState,
-                    show: true,
-                    fullScreen: false,
-                  }));
-                }}
-                pressed={showCompanion.show}
-                slot="assistant"
-              />
-              {showCompanion.useJoule && <JouleChat />}
-            </>
-          )}
+        {isKymaCompanionEnabled && isSAPUser && !isOnClustersPage && (
+          <>
+            <ToggleButton
+              accessibleName={t('kyma-companion.name')}
+              icon={showCompanion.show ? 'da-2' : 'da'}
+              onClick={(e) => {
+                e.preventDefault();
+                setShowCompanion((prevState) => ({
+                  ...prevState,
+                  show: true,
+                  fullScreen: false,
+                }));
+              }}
+              pressed={showCompanion.show}
+              slot="assistant"
+            />
+            {showCompanion.useJoule && <JouleChat />}
+          </>
+        )}
         <ShellBarItem
           onClick={() => setIsGetHelpOpen(true)}
           id="openGetHelpMenu"

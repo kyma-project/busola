@@ -257,9 +257,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('changeCluster', (clusterName) => {
-  cy.get('header')
-    .find('button[aria-haspopup="menu"][data-ui5-stable="menu"]:visible')
-    .click({ force: true });
+  cy.get('ui5-shellbar').find('#clusterSwitcherOpener').click();
 
   cy.get(`[accessible-name="${clusterName}"]:visible`)
     .find('span[part="title"]')

@@ -220,7 +220,7 @@ context('Test reduced permissions', () => {
     });
 
     // remove cluster
-    cy.changeCluster('all-clusters');
+    cy.changeCluster('Clusters Overview');
 
     cy.deleteFromGenericList('Cluster', SA_NAME, {
       confirmationEnabled: true,
