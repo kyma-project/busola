@@ -114,9 +114,7 @@ context('Test Protected Resources', () => {
   it('Change protection setting', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Preferences')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
@@ -136,7 +134,7 @@ context('Test Protected Resources', () => {
       .find('ui5-button[data-testid="delete"]')
       .click();
 
-    cy.contains(`delete Config Map ${NAME}`);
+    cy.contains(`Delete Config Map ${NAME}`);
     cy.get(`[header-text="Delete Config Map"]`)
       .find('[data-testid="delete-cancel"]')
       .click();

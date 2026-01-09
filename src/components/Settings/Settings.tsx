@@ -13,7 +13,7 @@ import { useEventListener } from 'hooks/useEventListener';
 import { TabContainer, Tab } from '@ui5/webcomponents-react';
 
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
-import { isPreferencesOpenAtom } from 'state/preferences/isPreferencesModalOpenAtom';
+import { isSettingsOpenAtom } from 'state/settings/isSettingsModalOpenAtom';
 
 import ConfirmationSettings from './ConfirmationSettings';
 import LanguageSettings from './LanguageSettings';
@@ -23,12 +23,12 @@ import OtherSettings from './OtherSettings';
 import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
 
-import './Preferences.scss';
+import './Settings.scss';
 import EditViewSettings from './EditViewSettings';
 
-export function Preferences() {
+export function Settings() {
   const { t } = useTranslation();
-  const [isModalOpen, setModalOpen] = useAtom(isPreferencesOpenAtom);
+  const [isModalOpen, setModalOpen] = useAtom(isSettingsOpenAtom);
   const listRef = useRef<ListDomRef>(null);
   const [tabId, setTabId] = useState(1);
 
@@ -91,7 +91,7 @@ export function Preferences() {
     <Dialog
       onClose={handleCloseModal}
       open={isModalOpen}
-      headerText={t('navigation.preferences.title')}
+      headerText={t('navigation.settings.title')}
       footer={
         <Bar
           design="Footer"
@@ -104,7 +104,7 @@ export function Preferences() {
           }
         />
       }
-      className="preferences-dialog"
+      className="settings-dialog"
     >
       <VerticalTabs tabs={tabs} tabId={tabId} onSetTabId={setTabId}>
         <VerticalTabs.Content id={1}>

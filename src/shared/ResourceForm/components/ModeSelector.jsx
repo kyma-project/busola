@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import {
   editViewModeAtom,
   getEditViewModeState,
-} from 'state/preferences/editViewModeAtom';
+} from 'state/settings/editViewModeAtom';
 
 export function ModeSelector({ mode, setMode, isDisabled = false }) {
   const { t } = useTranslation();

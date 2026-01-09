@@ -12,7 +12,7 @@ import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/T
 import {
   getExtendedValidateResourceState,
   validateResourcesAtom,
-} from 'state/preferences/validateResourcesAtom';
+} from 'state/settings/validateResourcesAtom';
 import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
 import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
 

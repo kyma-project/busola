@@ -13,7 +13,7 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { clusterAtom } from 'state/clusterAtom';
 import { clustersAtom } from 'state/clustersAtom';
-import { languageAtom } from 'state/preferences/languageAtom';
+import { languageAtom } from 'state/settings/languageAtom';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { authDataAtom } from 'state/authDataAtom';
 import { otherRoutes } from 'resources/other';

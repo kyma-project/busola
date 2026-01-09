@@ -17,8 +17,8 @@ export function createNonResourceOptions({
       type: 'upload',
     },
     {
-      names: ['preferences', 'prefs'],
-      type: 'preferences',
+      names: ['settings', 'set'],
+      type: 'settings',
     },
     {
       names: ['help', '?'],
@@ -90,16 +90,16 @@ function createResults(context: CommandPaletteContext): Result[] | null {
             aliases: ['up'],
           },
         ];
-      case 'preferences':
+      case 'settings':
         return [
           {
-            label: t('navigation.preferences.title'),
-            query: 'preferences',
+            label: t('navigation.settings.title'),
+            query: 'settings',
             onActivate: () => {
-              context.setOpenPreferencesModal(true);
+              context.setOpenSettingsModal(true);
             },
-            customActionText: t('command-palette.help.open-preferences'),
-            aliases: ['prefs'],
+            customActionText: t('command-palette.help.open-settings'),
+            aliases: ['set'],
           },
         ];
       case 'overview':
@@ -149,9 +149,9 @@ export const nonResourceHandler: Handler = {
       description: t('command-palette.help.cluster-overview'),
     },
     {
-      name: 'preferences',
-      alias: 'prefs',
-      description: t('command-palette.help.open-preferences'),
+      name: 'settings',
+      alias: 'set',
+      description: t('command-palette.help.open-settings'),
     },
     {
       name: 'ns -a',

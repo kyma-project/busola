@@ -13,9 +13,7 @@ context('Accessibility test Cluster list and overview', () => {
   it('Acc test with performance panel open', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Preferences')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 

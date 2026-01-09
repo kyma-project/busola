@@ -14,7 +14,7 @@ type EmptyListComponentProps = {
   url: string;
   onClick: () => null;
   children?: ReactNode;
-  image?: 'TntNoApplications' | 'TntComponents';
+  image?: 'TntComponents' | 'NoEntries';
 };
 
 export const EmptyListComponent = ({
@@ -25,7 +25,7 @@ export const EmptyListComponent = ({
   url,
   onClick,
   children,
-  image = 'TntNoApplications',
+  image = 'NoEntries',
 }: EmptyListComponentProps) => {
   const { t } = useTranslation();
   const subtitle = subtitleText ? (

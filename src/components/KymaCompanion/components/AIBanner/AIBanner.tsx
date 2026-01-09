@@ -7,7 +7,7 @@ import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import JouleIconLightTheme from './assets/JouleIcon.svg';
 import JouleIconDarkHCdarkTheme from './assets/JouleIconWhite.svg';
 import JouleIconHClightTheme from './assets/JouleIconBlack.svg';
-import { isSystemThemeDark, themeAtom } from 'state/preferences/themeAtom';
+import { isSystemThemeDark, themeAtom } from 'state/settings/themeAtom';
 
 const getIllustration = (theme: ThemeType): string | undefined => {
   switch (theme) {

@@ -15,7 +15,7 @@ import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { useAtom, useAtomValue } from 'jotai';
-import { editViewModeAtom } from 'state/preferences/editViewModeAtom';
+import { editViewModeAtom } from 'state/settings/editViewModeAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';

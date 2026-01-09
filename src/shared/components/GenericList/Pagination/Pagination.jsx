@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, Text, Icon, Input, FlexBox } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 import { Select, Option } from '@ui5/webcomponents-react';
-import { AVAILABLE_PAGE_SIZES } from 'state/preferences/pageSizeAtom';
+import { AVAILABLE_PAGE_SIZES } from 'state/settings/pageSizeAtom';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 import './Pagination.scss';
 

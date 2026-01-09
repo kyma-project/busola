@@ -8,7 +8,7 @@ import {
 import classnames from 'classnames';
 import { useAtomValue } from 'jotai';
 
-import { showHiddenNamespacesAtom } from 'state/preferences/showHiddenNamespacesAtom';
+import { showHiddenNamespacesAtom } from 'state/settings/showHiddenNamespacesAtom';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { Spinner } from 'shared/components/Spinner/Spinner';

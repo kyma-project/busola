@@ -1,6 +1,6 @@
 import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
 import { useState } from 'react';
-import { isSystemThemeDark, themeAtom } from 'state/preferences/themeAtom';
+import { isSystemThemeDark, themeAtom } from 'state/settings/themeAtom';
 import modulesIllustration from './assets/Modules/modulesIllustration.svg';
 import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
 import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';

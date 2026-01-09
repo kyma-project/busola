@@ -100,7 +100,7 @@ export function Header() {
           <Avatar
             icon="customer"
             colorScheme="Accent6"
-            accessibleName="Preferences"
+            accessibleName="Settings"
             id="openShellbarMenu"
           />
         }
@@ -130,7 +130,7 @@ export function Header() {
         {isKymaCompanionEnabled && isSAPUser && !isOnClustersPage && (
           <>
             <ToggleButton
-              accessibleName="Kyma Companion"
+              accessibleName={t('kyma-companion.name')}
               icon={showCompanion.show ? 'da-2' : 'da'}
               onClick={(e) => {
                 e.preventDefault();

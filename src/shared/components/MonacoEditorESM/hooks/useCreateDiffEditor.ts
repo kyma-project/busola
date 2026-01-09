@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { editor } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
-import { themeAtom } from 'state/preferences/themeAtom';
+import { themeAtom } from 'state/settings/themeAtom';
 import { getEditorTheme } from './useCreateEditor';
 
 type useCreateDiffEditorProps = {

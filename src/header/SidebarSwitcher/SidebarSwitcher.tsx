@@ -1,7 +1,7 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { isSidebarCondensedAtom } from 'state/preferences/isSidebarCondensedAtom';
+import { isSidebarCondensedAtom } from 'state/settings/isSidebarCondensedAtom';
 
 export function SidebarSwitcher(props: any) {
   const { t } = useTranslation();

@@ -11,13 +11,11 @@ context('Test app settings and preferences', () => {
   it('Deletes without confirmation', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Preferences')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('.preferences-row', 'Delete without confirmation')
+    cy.contains('.settings-row', 'Delete without confirmation')
       .find('ui5-switch')
       .find('div[role="switch"')
       .click({ force: true });
@@ -46,18 +44,16 @@ context('Test app settings and preferences', () => {
       .find('ui5-button[data-testid="delete"]')
       .click();
 
-    cy.contains('Are you sure you want to delete').should('not.be.visible');
+    cy.contains('Delete ').should('not.be.visible');
 
     // disable "deletion without confirmation" to not mess other tests
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Preferences')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('.preferences-row', 'Delete without confirmation')
+    cy.contains('.settings-row', 'Delete without confirmation')
       .find('ui5-switch')
       .find('div[role="switch"')
       .click({ force: true });
@@ -71,9 +67,7 @@ context('Test app settings and preferences', () => {
   it('Changes application theme', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Preferences')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.contains('Appearance').click();
 
@@ -96,18 +90,16 @@ context('Test app settings and preferences', () => {
   it('Shows hidden namespaces', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Preferences')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('.preferences-row', 'Show hidden Namespaces')
+    cy.contains('.settings-row', 'Show hidden Namespaces')
       .find('[accessible-name="Show hidden Namespaces"]')
       .invoke('attr', 'aria-checked')
       .then((value) => {
         if (value === 'true' || value === 'checked') {
-          cy.contains('.preferences-row', 'Show hidden Namespaces')
+          cy.contains('.settings-row', 'Show hidden Namespaces')
             .find('ui5-switch')
             .find('div[role="switch"')
             .click({ force: true });

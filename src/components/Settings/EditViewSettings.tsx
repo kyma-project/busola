@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import {
   editViewModeAtom,
   getEditViewModeState,
-} from 'state/preferences/editViewModeAtom';
+} from 'state/settings/editViewModeAtom';
 
 const AVAILABLE_EDIT_VIEW_OPTIONS = [
   { key: 'MODE_YAML', text: 'always-yaml' },
@@ -20,7 +20,7 @@ export default function EditViewSettings() {
 
   return (
     <>
-      <div className="preferences-row">
+      <div className="settings-row">
         <Label for="editTypeComboBox" className="bsl-has-color-status-4">
           {t('settings.general.edit-view.choose')}
         </Label>

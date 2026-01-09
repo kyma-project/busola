@@ -3,7 +3,7 @@ import { Label, Switch } from '@ui5/webcomponents-react';
 import {
   getExtendedValidateResourceState,
   validateResourcesAtom,
-} from '../../../state/preferences/validateResourcesAtom';
+} from '../../../state/settings/validateResourcesAtom';
 import { useAtom } from 'jotai';
 import './ValidationSwitch.scss';
 

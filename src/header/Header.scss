@@ -13,6 +13,10 @@ ui5-shellbar.header {
     padding-inline-end: 1.25rem;
     box-shadow: var(--sapContainer_Shadow1);
   }
+
+  ui5-toggle-button[slot='assistant'] {
+    min-width: 2.5rem;
+  }
 }
 
 @media (max-width: 340px) {
