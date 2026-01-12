@@ -74,10 +74,12 @@ export const ProtectedResourceWarning = ({
       if (rule.message) {
         return rule.message;
       } else if (rule.messageSrc) {
-        return jp.value(entry, rule.messageSrc);
-      } else {
-        return t('common.protected-resource-description');
+        const messageFromSrc = jp.value(entry, rule.messageSrc);
+        if (messageFromSrc) {
+          return messageFromSrc;
+        }
       }
+      return t('common.protected-resource-description');
     })
     .join('\n');
 
