@@ -77,6 +77,20 @@ jobs:
           IS_LATEST_RELEASE: ${{ github.event.inputs.latest_release }}
           RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
         run: ./.github/scripts/publish_release.sh
+
+      - name: DORA metrics - Release created
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/kyma/dora-integration/actions/workflows/124729/dispatches \
+            -f 'ref=main' `: # branch with the DORA-integration workflow` \
+            -f 'inputs[component_host]=github.com' \
+            -f 'inputs[component_organisation]=kyma-project' \
+            -f 'inputs[component_repository]=busola' \
+            -f 'inputs[component_ref]=[${{ github.event.inputs.name }}]' \
+            -f 'inputs[component]=busola'
     outputs:
       release_id: ${{ steps.create-draft.outputs.release_id }}
 
