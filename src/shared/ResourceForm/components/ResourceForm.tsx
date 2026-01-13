@@ -1,4 +1,5 @@
 import {
+  FormEventHandler,
   FunctionComponent,
   useContext,
   useEffect,
@@ -36,6 +37,7 @@ import './ResourceForm.scss';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { editor } from 'monaco-editor';
 
 type ResourceFormProps = {
   pluralKind: string; // used for the request path
@@ -45,7 +47,7 @@ type ResourceFormProps = {
   updateInitialResource?: (res: any) => void;
   setResource: (res: any) => void;
   setCustomValid?: (isValid: boolean) => void;
-  onChange?: (event: Event) => void;
+  onChange?: FormEventHandler<HTMLElement>;
   formElementRef?: React.RefObject<HTMLFormElement>;
   children?: React.ReactNode;
   createUrl?: string;
@@ -199,7 +201,8 @@ export default function ResourceForm({
   };
 
   const [mode, setMode] = useState(handleInitialMode);
-  const [actionsEditor, setActionsEditor] = useState(null);
+  const [actionsEditor, setActionsEditor] =
+    useState<editor.IStandaloneCodeEditor | null>(null);
   const validationRef = useRef(true);
 
   useEffect(() => {
@@ -224,7 +227,7 @@ export default function ResourceForm({
         }
 
         if (onChange) {
-          onChange(new Event('input', { bubbles: true }));
+          onChange(new Event('input', { bubbles: true }) as any);
         }
       }}
     />
@@ -319,10 +322,10 @@ export default function ResourceForm({
       setIsFormOpen({ ...isFormOpen, leavingForm: true });
     }
     navigateSafely(() => {
-      setIsFormOpen({ isOpen: true, leavingForm: false });
+      setIsFormOpen({ formOpen: true, leavingForm: false });
 
       if (mode === 'MODE_YAML')
-        actionsEditor.setValue(jsyaml.dump(initialResource));
+        actionsEditor?.setValue(jsyaml.dump(initialResource));
       else setResource(initialResource);
     });
   };

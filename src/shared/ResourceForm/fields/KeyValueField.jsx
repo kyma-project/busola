@@ -12,7 +12,7 @@ import './KeyValueField.scss';
 export function KeyValueField({
   actions = [],
   encodable = false,
-  defaultOpen,
+  defaultOpen = false,
   input = {},
   keyProps = {
     pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
@@ -21,9 +21,9 @@ export function KeyValueField({
   readableFromFile = false,
   lockedKeys = [],
   lockedValues = [],
-  required,
-  disableOnEdit,
-  editMode,
+  required = undefined,
+  disableOnEdit = undefined,
+  editMode = undefined,
   ...props
 }) {
   const { t } = useTranslation();

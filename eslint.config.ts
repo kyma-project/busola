@@ -27,6 +27,7 @@ export default defineConfig(
       rules: {
         // React
         'react/react-in-jsx-scope': 'off',
+        'react/prop-types': 'off',
         'react-hooks/refs': 'warn',
         'react-hooks/immutability': 'warn',
 

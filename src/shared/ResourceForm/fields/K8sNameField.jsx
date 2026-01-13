@@ -8,12 +8,12 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 export function K8sNameField({
   kind,
-  value,
+  value = '',
   setValue,
-  className,
-  pattern,
+  className = '',
+  pattern = undefined,
   showHelp = true,
-  inputInfo,
+  inputInfo = undefined,
   tooltipContent,
   required = true,
   ...props
