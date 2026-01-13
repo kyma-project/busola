@@ -91,6 +91,8 @@ jobs:
             -f 'inputs[component_repository]=busola' \
             -f 'inputs[component_ref]=[${{ github.event.inputs.name }}]' \
             -f 'inputs[component]=busola'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       release_id: ${{ steps.create-draft.outputs.release_id }}
 
