@@ -89,7 +89,7 @@ jobs:
             -f 'inputs[component_host]=github.com' \
             -f 'inputs[component_organisation]=kyma-project' \
             -f 'inputs[component_repository]=busola' \
-            -f 'inputs[component_ref]=[${{ github.event.inputs.name }}]' \
+            -f 'inputs[component_ref]=${{ github.event.inputs.name }}' \
             -f 'inputs[component]=busola'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
