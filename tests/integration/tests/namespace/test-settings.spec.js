@@ -11,7 +11,9 @@ context('Test app settings and preferences', () => {
   it('Deletes without confirmation', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
+    cy.get('ui5-menu-item:visible')
+      .contains('Advanced options')
+      .click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
@@ -49,7 +51,9 @@ context('Test app settings and preferences', () => {
     // disable "deletion without confirmation" to not mess other tests
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
+    cy.get('ui5-menu-item:visible')
+      .contains('Advanced options')
+      .click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
@@ -67,7 +71,9 @@ context('Test app settings and preferences', () => {
   it('Changes application theme', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
+    cy.get('ui5-menu-item:visible')
+      .contains('Advanced options')
+      .click({ force: true });
 
     cy.contains('Appearance').click();
 
@@ -90,7 +96,9 @@ context('Test app settings and preferences', () => {
   it('Shows hidden namespaces', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
+    cy.get('ui5-menu-item:visible')
+      .contains('Advanced options')
+      .click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
