@@ -88,7 +88,7 @@ export const ModulesListRows = ({
 
   useEffect(() => {
     const checkIfNamespaceIsMissing = async () => {
-      if (currentModuleTemplate?.spec.data.metadata.namespace) {
+      if (currentModuleTemplate?.spec?.data?.metadata?.namespace) {
         setModuleResourceWithNamespace(currentModuleTemplate?.spec.data);
       } else {
         const newModuleResource = await populateWithNamespace(
