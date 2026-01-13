@@ -47,7 +47,7 @@ export function Editor({
       }
 
       if (!convert) {
-        setValue(text);
+        setValue?.(text);
         return;
       }
       try {

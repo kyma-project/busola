@@ -4,18 +4,20 @@ import {
   ComboBoxItem,
   FlexBox,
   Ui5CustomEvent,
+  UI5WCSlotsNode,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { Label } from '../../ResourceForm/components/Label';
 import { useRef } from 'react';
 import { ComboBoxSelectionChangeEventDetail } from '@ui5/webcomponents/dist/ComboBox';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 
 type DropdownProps = {
   accessibleName?: string;
   label?: string;
   options: { key: string; text: string }[];
   selectedKey: string;
-  onSelect: (event: Event, option: { key: string; text: string }) => void;
+  onSelect: (event: Event, option: any) => void;
   required?: boolean;
   id?: string;
   disabled?: boolean;
@@ -23,6 +25,15 @@ type DropdownProps = {
   _ref?: React.RefObject<any>;
   emptyListMessage?: string;
   className?: string;
+  accessibleNameRef?: string;
+  name?: string;
+  readonly?: boolean;
+  showClearIcon?: boolean;
+  valueStateMessage?: UI5WCSlotsNode;
+  valueState?: ValueState | keyof typeof ValueState;
+  autoFocus?: boolean;
+  onOpen?: (event: Ui5CustomEvent<ComboBoxDomRef>) => void;
+  onInput?: (event: Ui5CustomEvent<ComboBoxDomRef>) => void;
   [key: string]: any;
 };
 
@@ -39,6 +50,15 @@ export function Dropdown({
   _ref,
   emptyListMessage,
   className,
+  accessibleNameRef,
+  name,
+  readonly,
+  showClearIcon,
+  valueStateMessage,
+  valueState,
+  autoFocus,
+  onOpen,
+  onInput,
   ...props
 }: DropdownProps) {
   const { t } = useTranslation();
@@ -46,7 +66,7 @@ export function Dropdown({
   const localeRef = useRef(null);
   const comboboxRef = _ref || localeRef;
 
-  if (!options || !options.length) {
+  if (!options?.length) {
     options = [
       {
         key: 'empty-list',
@@ -95,6 +115,15 @@ export function Dropdown({
       onClose={() => handlePopover(false)}
       onBlur={() => handlePopover(false)}
       value={options.find((o) => o.key === selectedKey)?.text}
+      accessibleNameRef={accessibleNameRef}
+      name={name}
+      readonly={readonly}
+      showClearIcon={showClearIcon}
+      valueStateMessage={valueStateMessage}
+      valueState={valueState}
+      autoFocus={autoFocus}
+      onOpen={onOpen}
+      onInput={onInput}
       {...props}
     >
       {options.map((option) => (

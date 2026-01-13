@@ -5,7 +5,7 @@ import './Presets.scss';
 
 type PresetProps = {
   presets: { name: string; data: Record<string, any> }[];
-  onSelect: (preset?: { name: string; data: Record<string, any> }) => void;
+  onSelect: (preset?: any) => void;
   inlinePresets?: boolean;
   disabled?: boolean;
 };

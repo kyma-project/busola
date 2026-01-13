@@ -1,4 +1,11 @@
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -15,7 +22,10 @@ import { Form, FormItem } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { useAtom, useAtomValue } from 'jotai';
-import { editViewModeAtom } from 'state/settings/editViewModeAtom';
+import {
+  editViewModeAtom,
+  EditViewTypes,
+} from 'state/settings/editViewModeAtom';
 import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
@@ -27,7 +37,51 @@ import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 
-export function ResourceForm({
+type ResourceFormProps = {
+  pluralKind: string; // used for the request path
+  singularName: string;
+  resource: any;
+  initialResource: any;
+  updateInitialResource?: (res: any) => void;
+  setResource: (res: any) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  onChange?: (event: Event) => void;
+  formElementRef?: React.RefObject<HTMLFormElement>;
+  children?: React.ReactNode;
+  createUrl?: string;
+  presets?: Array<any>;
+  onPresetSelected?: (preset: any, variables: Record<string, string>) => void;
+  renderEditor?: (params: {
+    defaultEditor: React.ReactNode;
+    Editor: FunctionComponent<any>;
+  }) => React.ReactNode;
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
+  skipCreateFn?: (res: any) => boolean;
+  afterCreatedFn?: (res: any) => void;
+  afterCreatedCustomMessage?: string;
+  className?: string;
+  onlyYaml?: boolean;
+  autocompletionDisabled?: boolean;
+  readOnly?: boolean;
+  handleNameChange?: (name: string) => void;
+  nameProps?: Record<string, any>;
+  labelsProps?: Record<string, any>;
+  disableDefaultFields?: boolean;
+  onModeChange?: (oldMode: string, newMode: string) => void;
+  urlPath?: string;
+  layoutNumber?: number;
+  actions?: React.ReactNode;
+  modeSelectorDisabled?: boolean;
+  initialMode?: 'MODE_FORM' | 'MODE_YAML';
+  yamlSearchDisabled?: boolean;
+  yamlHideDisabled?: boolean;
+  stickyHeaderHeight?: number;
+  title?: React.ReactNode;
+  resetLayout?: boolean;
+  formWithoutPanel?: boolean;
+};
+
+export default function ResourceForm({
   pluralKind, // used for the request path
   singularName,
   resource,
@@ -66,7 +120,7 @@ export function ResourceForm({
   title,
   resetLayout,
   formWithoutPanel,
-}) {
+}: ResourceFormProps) {
   const layoutState = useAtomValue(columnLayoutAtom);
 
   const isEdit = useMemo(
@@ -100,7 +154,7 @@ export function ResourceForm({
   }
 
   const editViewMode = useAtomValue(editViewModeAtom);
-  const [editorError, setEditorError] = useState(null);
+  const [editorError, setEditorError] = useState(undefined);
 
   useFormEditTracking(resource, initialResource, editorError);
 
@@ -135,11 +189,13 @@ export function ResourceForm({
 
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
-    return editViewMode.preferencesViewType === 'MODE_DEFAULT'
-      ? editViewMode.dynamicViewType === ModeSelector.MODE_FORM
-        ? ModeSelector.MODE_FORM
-        : ModeSelector.MODE_YAML
-      : (editViewMode.preferencesViewType ?? ModeSelector.MODE_FORM);
+    const newEditViewMode = editViewMode as EditViewTypes;
+    const modeSelectorForDynamicViewType = ModeSelector.MODE_FORM
+      ? ModeSelector.MODE_FORM
+      : ModeSelector.MODE_YAML;
+    return newEditViewMode.preferencesViewType === 'MODE_DEFAULT'
+      ? newEditViewMode.dynamicViewType === modeSelectorForDynamicViewType
+      : (newEditViewMode.preferencesViewType ?? ModeSelector.MODE_FORM);
   };
 
   const [mode, setMode] = useState(handleInitialMode);
@@ -174,7 +230,7 @@ export function ResourceForm({
     />
   );
 
-  let editor = (
+  const editorComponent = (
     <EditorWrapper
       height="100%"
       value={resource}
@@ -186,11 +242,12 @@ export function ResourceForm({
       updateValueOnParentChange={true}
       setEditorError={setEditorError}
       schema={schema}
+      setValue={undefined}
     />
   );
-  editor = renderEditor
-    ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
-    : editor;
+  const editor = renderEditor
+    ? renderEditor({ defaultEditor: editorComponent, Editor: EditorWrapper })
+    : editorComponent;
 
   const nameDesc = getDescription(schema, 'metadata.name');
   const labelsDesc = getDescription(schema, 'metadata.labels');
@@ -311,7 +368,7 @@ export function ResourceForm({
               {onlyYaml ? null : (
                 <ModeSelector
                   mode={mode}
-                  setMode={(newMode) => {
+                  setMode={(newMode: string) => {
                     setMode(newMode);
                     if (onModeChange) onModeChange(mode, newMode);
                   }}
