@@ -14,10 +14,8 @@ ui5-shellbar.header {
     box-shadow: var(--sapContainer_Shadow1);
   }
 
-  .header-logo {
-    img[alt='SAP'] {
-      height: 32px;
-    }
+  ui5-toggle-button[slot='assistant'] {
+    min-width: 2.5rem;
   }
 }
 
@@ -30,12 +28,6 @@ ui5-shellbar.header {
     &::part(root) {
       padding-inline-start: 0.5rem;
       padding-inline-end: 0.75rem;
-    }
-
-    .header-logo {
-      img[alt='SAP'] {
-        height: 30px;
-      }
     }
   }
 }

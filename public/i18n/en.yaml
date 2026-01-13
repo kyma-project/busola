@@ -282,7 +282,7 @@ common:
     template: Template
   delete-dialog:
     delete-confirm: Don't ask again
-    delete-message: Are you sure you want to delete {{type}} {{name}}?
+    delete-message: Delete {{type}} {{name}}?
     delete-title: Delete {{type}}
     disconnect-message: Are you sure you want to disconnect {{type}} {{name}}?
     disconnect-title: Disconnect {{type}}
@@ -371,7 +371,7 @@ common:
     enter-jsonata: Enter JSONata expression
     secret-ref-name: Select name
     secret-ref-namespace: Select namespace
-  product-title: Kyma
+  product-title: Kyma Dashboard
   protected-resource: Protected resource
   protected-resource-description: Resource protected. Go to Settings to turn on the modification of protected resources.
   sorting:

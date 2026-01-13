@@ -54,7 +54,7 @@ export function KymaModuleContextProvider({
   const [initialUnchangedResource, setInitialUnchangedResource] = useState();
   const [kymaResourceState, setKymaResourceState] = useState();
   const notification = useNotification();
-  const { isProtected } = useProtectedResources();
+  const { isProtected, isProtectedResource } = useProtectedResources();
 
   useEffect(() => {
     if (kymaResource) {
@@ -133,10 +133,14 @@ export function KymaModuleContextProvider({
     );
   };
 
+  // Use isProtectedResource for showing the badge (always show if resource matches rules)
+  const showProtectedResourceWarning =
+    isProtectedResource(kymaResource) && !isCommunityModuleSelected();
+  // Use isProtected for blocking modifications (considers user setting)
   const isResourceProtected =
     isProtected(kymaResource) && !isCommunityModuleSelected();
 
-  const protectedBadge = isResourceProtected && (
+  const protectedBadge = showProtectedResourceWarning && (
     <ProtectedResourceWarning entry={kymaResource} />
   );
 

@@ -157,7 +157,7 @@ Cypress.Commands.add(
       cy.get('ui5-button').contains('Delete').should('be.visible').click();
     }
 
-    cy.contains(`delete ${resourceType} ${resourceName}`);
+    cy.contains(`Delete ${resourceType} ${resourceName}`);
 
     cy.get(`[header-text="Delete ${resourceType}"]:visible`)
       .find('[data-testid="delete-confirmation"]')
@@ -218,7 +218,7 @@ Cypress.Commands.add(
     cy.get('ui5-button[data-testid="delete"]').click();
 
     if (confirmationEnabled) {
-      cy.contains(`delete ${resourceType} ${resourceName}`);
+      cy.contains(`Delete ${resourceType} ${resourceName}`);
 
       // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
       // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
@@ -257,9 +257,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('changeCluster', (clusterName) => {
-  cy.get('header')
-    .find('button[aria-haspopup="menu"][data-ui5-stable="menu"]:visible')
-    .click({ force: true });
+  cy.get('ui5-shellbar').find('#clusterSwitcherOpener').click();
 
   cy.get(`[accessible-name="${clusterName}"]:visible`)
     .find('span[part="title"]')

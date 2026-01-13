@@ -83,7 +83,7 @@ context('Test multiple context kubeconfig', () => {
         new RegExp(`${kubeconfig.contexts[1].name}/overview$`),
       );
 
-      cy.changeCluster('all-clusters');
+      cy.changeCluster('Clusters Overview');
 
       cy.url().should('match', new RegExp(`/clusters$`));
 

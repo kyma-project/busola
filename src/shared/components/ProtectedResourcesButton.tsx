@@ -6,10 +6,8 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
-import { useAtomValue } from 'jotai';
 import { useId, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { disableResourceProtectionAtom } from 'state/settings/disableResourceProtectionAtom';
 import { configFeaturesNames } from 'state/types';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +33,6 @@ export const ProtectedResourceWarning = ({
   const { t } = useTranslation();
   const ID = useId();
   const [protectedWarningOpen, setProtectedWarningOpen] = useState(false);
-  const disableResourceProtection = useAtomValue(disableResourceProtectionAtom);
   const protectedResourcesFeature = useFeature(
     configFeaturesNames.PROTECTED_RESOURCES,
   );
@@ -68,7 +65,7 @@ export const ProtectedResourceWarning = ({
   };
   const matchedRules = getEntryProtection(entry);
 
-  if (disableResourceProtection || !matchedRules.length) {
+  if (!matchedRules.length) {
     return <span />;
   }
 
@@ -77,10 +74,12 @@ export const ProtectedResourceWarning = ({
       if (rule.message) {
         return rule.message;
       } else if (rule.messageSrc) {
-        return jp.value(entry, rule.messageSrc);
-      } else {
-        return t('common.protected-resource-description');
+        const messageFromSrc = jp.value(entry, rule.messageSrc);
+        if (messageFromSrc) {
+          return messageFromSrc;
+        }
       }
+      return t('common.protected-resource-description');
     })
     .join('\n');
 

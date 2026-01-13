@@ -44,7 +44,7 @@ context('Test app settings and preferences', () => {
       .find('ui5-button[data-testid="delete"]')
       .click();
 
-    cy.contains('Are you sure you want to delete').should('not.be.visible');
+    cy.contains('Delete ').should('not.be.visible');
 
     // disable "deletion without confirmation" to not mess other tests
     cy.get('[tooltip="Profile"]').click({ force: true });
