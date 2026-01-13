@@ -93,6 +93,7 @@ jobs:
             -f 'inputs[component]=busola'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_HOST: github.tools.sap
     outputs:
       release_id: ${{ steps.create-draft.outputs.release_id }}
 
