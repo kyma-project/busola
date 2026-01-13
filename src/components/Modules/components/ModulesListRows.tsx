@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Tag, Text } from '@ui5/webcomponents-react';
 import {
   findModuleStatus,
@@ -19,6 +20,7 @@ import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
+import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
 
 type RowResourceType = {
   name: string;
@@ -55,6 +57,11 @@ export const ModulesListRows = ({
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
   });
+
+  const [moduleResourceWithNamespace, setModuleResourceWithNamespace] =
+    useState<any>(null);
+
+  const populateWithNamespace = usePopulateWithNamespace();
   const findModuleReleaseMeta = (moduleName: string) => {
     return (moduleReleaseMetas as ModuleReleaseMetasType | null)?.items.find(
       (item) => item.spec.moduleName === moduleName,
@@ -79,8 +86,22 @@ export const ModulesListRows = ({
     resource?.namespace,
   );
 
+  useEffect(() => {
+    const checkIfNamespaceIsMissing = async () => {
+      if (currentModuleTemplate?.spec.data.metadata.namespace) {
+        setModuleResourceWithNamespace(currentModuleTemplate?.spec.data);
+      } else {
+        const newModuleResource = await populateWithNamespace(
+          currentModuleTemplate?.spec.data,
+        );
+        setModuleResourceWithNamespace(newModuleResource);
+      }
+    };
+    checkIfNamespaceIsMissing();
+  }, [currentModuleTemplate]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const { data: moduleResource } = useGetModuleResource(
-    currentModuleTemplate?.spec.data,
+    moduleResourceWithNamespace ?? currentModuleTemplate?.spec.data,
   );
 
   const moduleStatus = kymaResource
