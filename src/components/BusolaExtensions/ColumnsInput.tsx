@@ -30,7 +30,7 @@ export function ColumnsInput({
     );
   }
 
-  return columns.map((value) => {
+  return columns.map((value, index) => {
     return (
       <div key={value.path} className="columns-input">
         <CheckBox
@@ -45,9 +45,9 @@ export function ColumnsInput({
         <Input
           value={value.name}
           onInput={(e) => {
-            // eslint-disable-next-line react-hooks/immutability
-            value.name = e.target.value;
-            setColumns([...columns]);
+            const columnsCopy = [...columns];
+            columnsCopy[index].name = e.target.value;
+            setColumns(columnsCopy);
           }}
           className="full-width"
           required
