@@ -41,9 +41,7 @@ context('Test resource validation', () => {
   it('Disables resource validation via settings', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Advanced options')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
@@ -82,9 +80,7 @@ context('Test resource validation', () => {
   it('Customize resource validation policies via settings', () => {
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Advanced options')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
@@ -141,9 +137,7 @@ context('Test resource validation', () => {
 
     cy.get('[tooltip="Profile"]').click({ force: true });
 
-    cy.get('ui5-menu-item:visible')
-      .contains('Advanced options')
-      .click({ force: true });
+    cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 
     cy.contains('Cluster interaction').click();
 
