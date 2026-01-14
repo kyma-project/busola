@@ -5,24 +5,52 @@ import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
+import { Ui5CustomEvent } from '@ui5/webcomponents-react-base';
+import { InputDomRef } from '@ui5/webcomponents-react';
+
+type K8sNameFieldProps = {
+  kind: string;
+  value?: string;
+  setValue: (value: string) => void;
+  className?: string;
+  pattern?: string;
+  showHelp?: boolean;
+  inputInfo?: {
+    title: string;
+    description: string;
+    link?: {
+      url: string;
+      text: string;
+    };
+  };
+  tooltipContent?: React.ReactNode;
+  required?: boolean;
+  readOnly?: boolean;
+  [key: string]: any;
+};
 
 export function K8sNameField({
   kind,
-  value = '',
+  value,
   setValue,
-  className = '',
-  pattern = undefined,
+  className,
+  pattern,
   showHelp = true,
-  inputInfo = undefined,
+  inputInfo,
   tooltipContent,
   required = true,
+  readOnly,
   ...props
-}) {
+}: K8sNameFieldProps) {
   const { t } = useTranslation();
-  const { readOnly, ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
 
+  const setValueOnChange = (event: Ui5CustomEvent<InputDomRef>) => {
+    setValue(event.target.value);
+  };
+
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceForm.FormField
       required={required}
       className={className}
@@ -34,17 +62,18 @@ export function K8sNameField({
         return (
           <>
             <div className="bsl-col-md--12">
+              {/*@ts-expect-error Type mismatch between js and ts*/}
               <K8sNameInput
                 kind={kind}
                 compact
                 required={required}
                 showLabel={false}
-                onChange={(e) => setValue(e.target.value)}
-                onInput={(e) => setValue(e.target.value)}
+                onChange={setValueOnChange}
+                onInput={setValueOnChange}
                 value={value}
                 readOnly={readOnly}
                 pattern={pattern}
-                {...inputProps}
+                {...props}
               />
             </div>
             {showHelp && inputInfo === undefined ? (

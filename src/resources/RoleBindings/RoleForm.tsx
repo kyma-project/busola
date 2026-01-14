@@ -30,6 +30,7 @@ export const RoleForm = ({
   if (error) return error.message;
 
   const roleTypeDropdown = (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceForm.FormField
       required
       label={t('role-bindings.create-modal.role-type')}
@@ -67,6 +68,7 @@ export const RoleForm = ({
   };
 
   const roleNameInput = (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceForm.FormField
       required
       label={t('role-bindings.create-modal.role')}

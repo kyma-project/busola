@@ -83,7 +83,7 @@ type ResourceFormProps = {
   formWithoutPanel?: boolean;
 };
 
-export default function ResourceForm({
+export function ResourceForm({
   pluralKind, // used for the request path
   singularName,
   resource,
