@@ -30,7 +30,9 @@ const getEnabledPolicyNames = (
 ): PolicyReference[] => {
   if (validationPreferences.isEnabled) {
     return (
-      validationPreferences.policies ?? validationFeature.config.policies ?? []
+      validationPreferences.policies ??
+      validationFeature?.config?.policies ??
+      []
     );
   }
   return [];
