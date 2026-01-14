@@ -1,10 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import {
-  ExtendedValidateResources,
-  getExtendedValidateResourceState,
-  validateResourcesAtom,
-} from './settings/validateResourcesAtom';
+import { useSyncedValidateResources } from './settings/validateResourcesAtom';
 import {
   emptyValidationSchema,
   getEnabledRules,
@@ -12,8 +8,6 @@ import {
   ValidationSchema,
   validationSchemasAtom,
 } from './validationSchemasAtom';
-import { useFeature } from 'hooks/useFeature';
-import { configFeaturesNames } from './types';
 
 type PolicyReference = string;
 
@@ -24,41 +18,13 @@ export type ValidationFeatureConfig = {
   };
 };
 
-const getEnabledPolicyNames = (
-  validationFeature: ValidationFeatureConfig,
-  validationPreferences: ExtendedValidateResources,
-): PolicyReference[] => {
-  if (validationPreferences.isEnabled) {
-    return (
-      validationPreferences.policies ??
-      validationFeature?.config?.policies ??
-      []
-    );
-  }
-  return [];
-};
-
 export const usePolicySet = () => {
-  const validationFeature = useFeature(
-    configFeaturesNames.RESOURCE_VALIDATION,
-  ) as ValidationFeatureConfig;
-  const validateResources = useAtomValue(validateResourcesAtom);
-  const validationPreferences = useMemo(
-    () => getExtendedValidateResourceState(validateResources),
-    [validateResources],
-  );
+  const [{ isEnabled, policies }] = useSyncedValidateResources();
 
   return useMemo(() => {
-    const policyNames = getEnabledPolicyNames(
-      validationFeature,
-      validationPreferences,
-    );
-
-    return policyNames.reduce((agg, policyReference) => {
-      agg.add(policyReference);
-      return agg;
-    }, new Set()) as Set<PolicyReference>;
-  }, [validationFeature, validationPreferences]) as Set<PolicyReference>;
+    if (!isEnabled) return new Set<string>();
+    return new Set(policies) as Set<PolicyReference>;
+  }, [isEnabled, policies]);
 };
 
 export const getValidationEnabledSchemas = (

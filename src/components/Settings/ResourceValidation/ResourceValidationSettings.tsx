@@ -1,36 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { FlexBox, Label, Switch } from '@ui5/webcomponents-react';
-import {
-  getExtendedValidateResourceState,
-  validateResourcesAtom,
-} from 'state/settings/validateResourcesAtom';
-import { validationSchemasAtom } from 'state/validationSchemasAtom';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { useFeature } from 'hooks/useFeature';
-import { ValidationFeatureConfig } from 'state/validationEnabledSchemasAtom';
-
+import { useSyncedValidateResources } from 'state/settings/validateResourcesAtom';
+import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import './ResourceValidationSettings.scss';
-import { configFeaturesNames } from 'state/types';
-import { useAtomValue } from 'jotai';
 
 export default function ResourceValidationSettings() {
   const { t } = useTranslation();
-  const [validateResources, setValidateResources] = useAtom(
-    validateResourcesAtom,
-  );
-  const validationFeature = useFeature(
-    configFeaturesNames.RESOURCE_VALIDATION,
-  ) as ValidationFeatureConfig;
 
-  const {
-    isEnabled,
-    policies: selectedPolicies = (validationFeature?.isEnabled &&
-      validationFeature?.config?.policies) ||
-      [],
-  } = getExtendedValidateResourceState(validateResources);
+  const [{ isEnabled, policies }, setValidateResources] =
+    useSyncedValidateResources();
+
+  const selectedPolicies = policies;
 
   const validationSchemas = useAtomValue(validationSchemasAtom);
   const allOptions = useMemo(
@@ -41,27 +25,12 @@ export default function ResourceValidationSettings() {
     [validationSchemas],
   );
   const policyList = useMemo(() => {
-    const selectedPolicySet = selectedPolicies.reduce(
-      (agg, name) => agg.add(name),
-      new Set(),
-    );
+    const selectedPolicySet = new Set(selectedPolicies);
     return allOptions.map((option) => ({
       ...option,
       selected: selectedPolicySet.has(option.key),
     }));
   }, [allOptions, selectedPolicies]);
-
-  useEffect(() => {
-    if (
-      typeof validateResources === 'boolean' &&
-      validationFeature?.isEnabled
-    ) {
-      setValidateResources({
-        isEnabled: validateResources,
-        policies: validationFeature?.config?.policies || [],
-      });
-    }
-  }, [validateResources, validationFeature, setValidateResources]);
 
   const toggleVisibility = () => {
     setValidateResources({
@@ -73,7 +42,9 @@ export default function ResourceValidationSettings() {
   const deleteSelectedPolicy = (policyToDelete: string) => {
     setValidateResources({
       isEnabled,
-      policies: selectedPolicies.filter((policy) => policy !== policyToDelete),
+      policies: selectedPolicies.filter(
+        (policy: string) => policy !== policyToDelete,
+      ),
     });
   };
 
