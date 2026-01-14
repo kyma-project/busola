@@ -86,6 +86,7 @@ export function MultiInput({
   };
 
   const setEntry = (newVal, index) => {
+    // eslint-disable-next-line react-hooks/immutability
     internalValue[index] = newVal;
     setInternalValue([...internalValue]);
   };
