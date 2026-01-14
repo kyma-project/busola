@@ -78,6 +78,11 @@ jobs:
           RELEASE_ID: ${{ steps.create-draft.outputs.release_id }}
         run: ./.github/scripts/publish_release.sh
 
+      - name: Setup GitHub CLI
+        run: |
+          gh config set --host github.tools.sap git_protocol https
+          echo "${{ secrets.GH_TOOLS_SERVICE_USER_PAT }}" | gh auth login --with-token --hostname github.tools.sap
+
       - name: DORA metrics - Release created
         run: |
           gh api \
