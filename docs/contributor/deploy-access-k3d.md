@@ -24,7 +24,7 @@
    kubectl create namespace ${NAMESPACE}
    ```
 
-3. To deploy Busola on your k3d cluster, follow the steps described in [Deploying Busola in a Kubernetes Cluster](deploy-access-kubernetes.md#deploying-busola-in-a-kubernetes-cluster)
+3. To deploy Busola in your k3d cluster, follow the steps described in [Deploying Busola in a Kubernetes Cluster](deploy-access-kubernetes.md#deploying-busola-in-a-kubernetes-cluster)
 
 4. In your terminal, go to the Busola root folder, and run the following command to install Ingress resources:
 
