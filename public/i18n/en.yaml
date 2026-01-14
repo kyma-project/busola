@@ -1455,7 +1455,7 @@ settings:
       validateResources: Validate Resources
       validation-disabled: Resource validation is disabled
     showHiddenNamespaces: Show hidden Namespaces
-    title: Advanced options
+    title: Advanced Options
   language:
     title: Language
   other:
