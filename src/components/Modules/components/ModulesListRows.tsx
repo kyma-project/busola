@@ -101,7 +101,7 @@ export const ModulesListRows = ({
   }, [currentModuleTemplate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { data: moduleResource } = useGetModuleResource(
-    moduleResourceWithNamespace ?? currentModuleTemplate?.spec.data,
+    moduleResourceWithNamespace,
   );
 
   const moduleStatus = kymaResource
@@ -130,12 +130,8 @@ export const ModulesListRows = ({
   if (resource.fakeStatus) {
     managerResourceState = resource.fakeStatus;
   }
-  if (
-    moduleStatus &&
-    !moduleStatus.resource &&
-    currentModuleTemplate?.spec?.data
-  ) {
-    const moduleCr = currentModuleTemplate?.spec?.data;
+  if (moduleStatus && !moduleStatus.resource && moduleResourceWithNamespace) {
+    const moduleCr = moduleResourceWithNamespace;
 
     moduleStatus.resource = {
       kind: moduleCr.kind,
