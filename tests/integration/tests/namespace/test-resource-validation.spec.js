@@ -171,6 +171,8 @@ context('Test resource validation', () => {
       },
     });
 
+    cy.clearLocalStorage();
+
     cy.loginAndSelectCluster();
 
     cy.contains('ui5-button', 'Upload YAML').click();
