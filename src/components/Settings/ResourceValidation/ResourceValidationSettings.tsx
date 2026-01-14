@@ -104,7 +104,6 @@ export default function ResourceValidationSettings() {
                     if (entry.selected) deleteSelectedPolicy(entry.key);
                     else addSelectedPolicy(entry.key);
                   }}
-                  style={{ paddingLeft: '4px' }}
                 />
                 <span>{entry.text}</span>
               </FlexBox>,
