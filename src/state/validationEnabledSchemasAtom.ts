@@ -12,6 +12,8 @@ import {
   ValidationSchema,
   validationSchemasAtom,
 } from './validationSchemasAtom';
+import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from './types';
 
 type PolicyReference = string;
 
@@ -23,15 +25,21 @@ export type ValidationFeatureConfig = {
 };
 
 const getEnabledPolicyNames = (
+  validationFeature: ValidationFeatureConfig,
   validationPreferences: ExtendedValidateResources,
 ): PolicyReference[] => {
   if (validationPreferences.isEnabled) {
-    return validationPreferences.policies ?? [];
+    return (
+      validationPreferences.policies ?? validationFeature.config.policies ?? []
+    );
   }
   return [];
 };
 
 export const usePolicySet = () => {
+  const validationFeature = useFeature(
+    configFeaturesNames.RESOURCE_VALIDATION,
+  ) as ValidationFeatureConfig;
   const validateResources = useAtomValue(validateResourcesAtom);
   const validationPreferences = useMemo(
     () => getExtendedValidateResourceState(validateResources),
@@ -39,13 +47,16 @@ export const usePolicySet = () => {
   );
 
   return useMemo(() => {
-    const policyNames = getEnabledPolicyNames(validationPreferences);
+    const policyNames = getEnabledPolicyNames(
+      validationFeature,
+      validationPreferences,
+    );
 
     return policyNames.reduce((agg, policyReference) => {
       agg.add(policyReference);
       return agg;
     }, new Set()) as Set<PolicyReference>;
-  }, [validationPreferences]) as Set<PolicyReference>;
+  }, [validationFeature, validationPreferences]) as Set<PolicyReference>;
 };
 
 export const getValidationEnabledSchemas = (

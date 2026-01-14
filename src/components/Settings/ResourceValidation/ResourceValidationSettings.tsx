@@ -6,7 +6,7 @@ import {
   validateResourcesAtom,
 } from 'state/settings/validateResourcesAtom';
 import { validationSchemasAtom } from 'state/validationSchemasAtom';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { useFeature } from 'hooks/useFeature';
@@ -50,6 +50,18 @@ export default function ResourceValidationSettings() {
       selected: selectedPolicySet.has(option.key),
     }));
   }, [allOptions, selectedPolicies]);
+
+  useEffect(() => {
+    if (
+      typeof validateResources === 'boolean' &&
+      validationFeature?.isEnabled
+    ) {
+      setValidateResources({
+        isEnabled: validateResources,
+        policies: validationFeature?.config?.policies || [],
+      });
+    }
+  }, [validateResources, validationFeature, setValidateResources]);
 
   const toggleVisibility = () => {
     setValidateResources({
