@@ -220,9 +220,7 @@ Cypress.Commands.add(
 
     if (confirmationEnabled) {
       const headerText = customHeaderText || `Delete ${resourceType}`;
-      cy.contains(
-        customHeaderText || `Delete ${resourceType} ${resourceName}`,
-      );
+      cy.contains(customHeaderText || `Delete ${resourceType} ${resourceName}`);
 
       // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
       // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
