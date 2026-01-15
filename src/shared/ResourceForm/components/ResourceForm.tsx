@@ -156,9 +156,9 @@ export function ResourceForm({
   }
 
   const editViewMode = useAtomValue(editViewModeAtom);
-  const [editorError, setEditorError] = useState(undefined);
+  const [editorError, setEditorError] = useState<string | null>(null);
 
-  useFormEditTracking(resource, initialResource, editorError);
+  useFormEditTracking(resource, initialResource, !!editorError);
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
@@ -192,11 +192,12 @@ export function ResourceForm({
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
     const newEditViewMode = editViewMode as EditViewTypes;
-    const modeSelectorForDynamicViewType = ModeSelector.MODE_FORM
-      ? ModeSelector.MODE_FORM
-      : ModeSelector.MODE_YAML;
+    const modeSelectorForDynamicViewType =
+      newEditViewMode.dynamicViewType === ModeSelector.MODE_FORM
+        ? ModeSelector.MODE_FORM
+        : ModeSelector.MODE_YAML;
     return newEditViewMode.preferencesViewType === 'MODE_DEFAULT'
-      ? newEditViewMode.dynamicViewType === modeSelectorForDynamicViewType
+      ? modeSelectorForDynamicViewType
       : (newEditViewMode.preferencesViewType ?? ModeSelector.MODE_FORM);
   };
 
@@ -353,6 +354,7 @@ export function ResourceForm({
           headerActions={
             <>
               {actions}
+              {/*@ts-expect-error Type mismatch between js and ts*/}
               <EditorActions
                 val={convertedResource}
                 editor={actionsEditor}
@@ -375,7 +377,6 @@ export function ResourceForm({
                     setMode(newMode);
                     if (onModeChange) onModeChange(mode, newMode);
                   }}
-                  isEditing={isEdit}
                   isDisabled={modeSelectorDisabled}
                 />
               )}

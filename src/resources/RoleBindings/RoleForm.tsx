@@ -59,10 +59,10 @@ export const RoleForm = ({
 
   const onChange = (event: any, props: any) => {
     const selectedOption = options.find(
-      (o) => o.text === event.target.value,
+      (o) => o.text === event?.target?.value,
     ) ?? {
-      key: event.target._state.filterValue,
-      text: event.target._state.filterValue,
+      key: event?.target?._state?.filterValue,
+      text: event?.target?._state?.filterValue,
     };
     props.setValue(selectedOption.text);
   };
@@ -79,6 +79,7 @@ export const RoleForm = ({
           accessibleName="Role Combobox"
           disabled={props.disabled || !options?.length}
           filter="Contains"
+          /*@ts-expect-error This property probably no longer exists in the component*/
           inputRef={props.inputRef}
           placeholder={t('common.messages.type-to-select', {
             value: t(
@@ -102,11 +103,8 @@ export const RoleForm = ({
   );
 
   return (
-    <ResourceFormWrapper
-      resource={binding}
-      setResource={setBinding}
-      validationRef={undefined}
-    >
+    /*@ts-expect-error Type mismatch between js and ts*/
+    <ResourceFormWrapper resource={binding} setResource={setBinding}>
       {roleTypeDropdown}
       {roleNameInput}
     </ResourceFormWrapper>
