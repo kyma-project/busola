@@ -171,11 +171,11 @@ context('Test resource validation', () => {
       },
     });
 
-    cy.clearLocalStorage();
-
     cy.loginAndSelectCluster();
 
     cy.contains('ui5-button', 'Upload YAML').click();
+
+    cy.clearLocalStorage('busola.validateResources');
 
     cy.fixture('examples/resource-validation/pod.yaml').then((podConfig) => {
       cy.pasteToMonaco(podConfig);
