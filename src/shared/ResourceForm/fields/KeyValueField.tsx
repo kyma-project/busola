@@ -10,8 +10,8 @@ import * as Inputs from '../inputs';
 import './KeyValueField.scss';
 
 type InputProp = {
-  key: (props: any) => React.ReactNode;
-  value: (props: any) => React.ReactNode;
+  key?: (props: any) => React.ReactNode;
+  value?: (props: any) => React.ReactNode;
 };
 
 type KeyValueFieldProps = {
@@ -118,7 +118,7 @@ export function KeyValueField({
             key={`key-value-field-key-${index}`}
             className={readableFromFile ? 'bsl-col-md--4' : 'bsl-col-md--6'}
           >
-            {input.key({
+            {input.key?.({
               fullWidth: true,
               className: 'full-width',
               disabled:
@@ -151,7 +151,7 @@ export function KeyValueField({
             key={`key-value-field-value-${index}`}
             className={readableFromFile ? 'bsl-col-md--5' : 'bsl-col-md--6'}
           >
-            {input.value({
+            {input.value?.({
               fullWidth: true,
               className: 'value-input full-width',
               key: 'value',

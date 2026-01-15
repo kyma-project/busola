@@ -79,8 +79,7 @@ export const RoleForm = ({
           accessibleName="Role Combobox"
           disabled={props.disabled || !options?.length}
           filter="Contains"
-          /*@ts-expect-error This property probably no longer exists in the component*/
-          inputRef={props.inputRef}
+          ref={props.inputRef}
           placeholder={t('common.messages.type-to-select', {
             value: t(
               binding.roleRef?.kind === 'ClusterRole'

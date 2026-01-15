@@ -13,7 +13,7 @@ type EditorProps = {
   value: any;
   onChange?: (value: any) => void;
   setValue?: (value: any) => void;
-  language?: 'yaml' | 'json' | string;
+  language?: string;
   convert?: boolean;
   schemaId?: string;
   setEditorError?: Dispatch<SetStateAction<string | null>>;

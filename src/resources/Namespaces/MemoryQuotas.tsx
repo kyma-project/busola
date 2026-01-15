@@ -52,8 +52,6 @@ export function MemoryInput({
       <FlexBox style={{ gap: '10px' }} className={className}>
         <Input
           type="Number"
-          /*@ts-expect-error This property exists in native input. Mismatch to be checked*/
-          min="0"
           required={required}
           value={numericValue}
           onInput={(e) => setValue(e.target.value + selectedUnit)}
