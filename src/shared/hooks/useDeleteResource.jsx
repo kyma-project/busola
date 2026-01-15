@@ -169,20 +169,23 @@ export function useDeleteResource({
     cancelFn,
     additionalDeleteInfo,
     customDeleteText,
+    customTitle,
+    customMessage,
     disableDeleteButton = false,
   }) => {
+    const defaultTitle = t(
+      resourceIsCluster
+        ? 'common.delete-dialog.disconnect-title'
+        : 'common.delete-dialog.delete-title',
+      {
+        type: prettifiedResourceName,
+      },
+    );
     return (
       <MessageBox
         style={{ maxWidth: '700px' }}
         type="Warning"
-        titleText={t(
-          resourceIsCluster
-            ? 'common.delete-dialog.disconnect-title'
-            : 'common.delete-dialog.delete-title',
-          {
-            type: prettifiedResourceName,
-          },
-        )}
+        titleText={customTitle || defaultTitle}
         open={showDeleteDialog}
         className="ui5-content-density-compact"
         id="delete-message-box"
@@ -223,15 +226,16 @@ export function useDeleteResource({
           }}
         >
           <Text style={{ paddingLeft: '7.5px' }}>
-            {t(
-              resourceIsCluster
-                ? 'common.delete-dialog.disconnect-message'
-                : 'common.delete-dialog.delete-message',
-              {
-                type: prettifiedResourceName,
-                name: resourceTitle || resource?.metadata?.name,
-              },
-            )}
+            {customMessage ??
+              t(
+                resourceIsCluster
+                  ? 'common.delete-dialog.disconnect-message'
+                  : 'common.delete-dialog.delete-message',
+                {
+                  type: prettifiedResourceName,
+                  name: resourceTitle || resource?.metadata?.name,
+                },
+              )}
           </Text>
           {additionalDeleteInfo && (
             <Text style={{ paddingLeft: '7.5px' }}>{additionalDeleteInfo}</Text>
