@@ -86,7 +86,6 @@ export function PersistentVolumeList(props) {
 
   return (
     <ResourcesList
-      disableMargin={props.disableMargin}
       resourceTitle={t('pv.title')}
       customColumns={customColumns}
       description={ResourceDescription}

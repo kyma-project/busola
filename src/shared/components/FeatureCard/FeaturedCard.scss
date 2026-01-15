@@ -1,19 +1,20 @@
-.banner-carousel > * {
-  width: 100%;
-  margin-left: 0.25rem !important;
-  margin-right: 0.25rem !important;
-}
-
 .feature-card-container {
   container-type: inline-size;
 }
 
 .banner-carousel {
-  position: relative;
-  top: 2px;
-  left: 2px;
   height: fit-content;
-  width: calc(100% - 4px);
+  margin-bottom: 1rem;
+  width: 100%;
+
+  &.banner-carousel > * {
+    width: 100%;
+    margin-top: 0 !important;
+  }
+
+  &::part(item) {
+    padding: 0 !important;
+  }
 }
 
 .feature-card {
@@ -39,15 +40,18 @@
     .title-container {
       ui5-title {
         margin-right: 8px;
+
         .banner-title {
           font-weight: 900;
         }
       }
+
       img {
         width: 46px;
         height: 46px;
       }
     }
+
     ui5-text {
       font-size: 16px;
       font-weight: 400;
@@ -79,6 +83,7 @@
     .illustration {
       max-width: 100%;
     }
+
     .outer-container {
       flex-direction: column-reverse;
       align-items: start;
