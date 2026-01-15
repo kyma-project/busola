@@ -99,6 +99,7 @@ export default function ResourceValidationSettings() {
     <UI5Panel
       title={t('settings.general.resourcesValidation.validateResources')}
       accessibleName={t('settings.general.accessible-name.validateResources')}
+      className="sap-margin-small"
       headerActions={
         <Switch
           accessibleName={t(
