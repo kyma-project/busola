@@ -11,18 +11,21 @@ For more details about environment configuration, see [Environment-Specific Sett
 
 Follow these steps to deploy Busola in a Kubernetes cluster:
 
-1. Create a new namespace, if needed:
+1. Set the **NAMESPACE** shell environment variable, and create your namespace:
 
    ```bash
-   kubectl create namespace {YOUR_NAMESPACE}
+   export NAMESPACE={YOUR_NAMESPACE_NAME}
+   kubectl create namespace ${NAMESPACE}
    ```
 
-2. Set the **NAMESPACE** and **VERSION** shell environment variables. For example:
+2. Set the **VERSION** environment variable:
 
    ```bash
-   export NAMESPACE={YOUR_NAMESPACE}
    export VERSION={YOUR_BUSOLA_VERSION}
    ```
+
+<details>
+<summary>Install Busola from the release</summary>
 
 3. Run the following command to install Busola from the release you've chosen:
 
@@ -30,17 +33,32 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    kubectl apply --namespace "${NAMESPACE}" -f "https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml"
    ```
 
-To install Busola from the main branch, [download the Busola version](https://github.com/kyma-project/busola/releases) of your choice, go to the folder with your Busola release, and run:
+<summary> Install Busola from the main branch </summary>
 
-```bash
-(cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
-```
+Follow these steps to install Busola from the main branch:
 
-To install Busola using a specific landscape configuration, go to the folder with your Busola release, set the **ENVIRONMENT** shell environment variable with your landscape, and run:
+1. Clone the [Busola repository](https://github.com/kyma-project/busola).
+2. Go to the folder where you downloaded it, and run:
 
-```bash
-(cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
-```
+   ```bash
+   (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
+   ```
+
+   <summary>Install Busola with a specific landscape configuration</summary>
+
+Follow these steps to install Busola with a specific landscape configuration:
+
+1. Export the **ENVIRONMENT** environment variable:
+
+   ```bash
+   export ENVIRONMENT={YOUR_LANDSCAPE}
+   ```
+
+2. Run the following command:
+
+   ```bash
+   (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
+   ```
 
 To install Busola from a pull request, replace `{PR_NUMBER}` with your PR number, and run the following command from your Busola release folder:
 

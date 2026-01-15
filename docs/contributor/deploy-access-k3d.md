@@ -19,7 +19,7 @@
 
 2. Set the **NAMESPACE** shell environment variable, and create your namespace:
 
-   ```
+   ```bash
    export NAMESPACE={YOUR_NAMESPACE_NAME}
    kubectl create namespace ${NAMESPACE}
    ```
