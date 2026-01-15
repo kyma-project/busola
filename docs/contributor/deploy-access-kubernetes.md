@@ -24,6 +24,8 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    export VERSION={YOUR_BUSOLA_VERSION}
    ```
 
+3. Choose one of the following installation options that suits your case.
+
 <details>
 <summary>Install Busola from the release</summary>
 
@@ -33,7 +35,10 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    kubectl apply --namespace "${NAMESPACE}" -f "https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml"
    ```
 
-<summary> Install Busola from the main branch </summary>
+   </details>
+
+<details>
+<summary>Install Busola from the main branch </summary>
 
 Follow these steps to install Busola from the main branch:
 
@@ -44,29 +49,49 @@ Follow these steps to install Busola from the main branch:
    (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-   <summary>Install Busola with a specific landscape configuration</summary>
+   </details>
+
+<details>
+<summary>Install Busola with a specific landscape configuration</summary>
 
 Follow these steps to install Busola with a specific landscape configuration:
 
-1. Export the **ENVIRONMENT** environment variable:
+1. Clone the [Busola repository](https://github.com/kyma-project/busola).
+
+2. Export the **ENVIRONMENT** environment variable:
 
    ```bash
    export ENVIRONMENT={YOUR_LANDSCAPE}
    ```
 
-2. Run the following command:
+3. Run the following command from the Busola root folder:
 
    ```bash
    (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-To install Busola from a pull request, replace `{PR_NUMBER}` with your PR number, and run the following command from your Busola release folder:
+   </details>
 
-```bash
-(cd resources/base && kustomize edit set image busola="europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-${PR_NUMBER}" && cd ../ && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
-```
+<details>
+<summary>Install Busola from a pull request</summary>
 
-In case of any changes in your PR, the image should be automatically updated on your cluster. If you don't see the latest changes, go to your namespace, and in **Deployments**, select the restart button next to the image you want to update.
+Follow these steps to install Busola from a pull request:
+
+1. Clone the [Busola repository](https://github.com/kyma-project/busola).
+
+2. Export your PR number as an environment variable:
+
+   ```bash
+   export PR_NUMBER={PR_NUMBER}
+   ```
+
+3. Run the following command:
+
+   ```bash
+   (cd resources/base && kustomize edit set image busola="europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-${PR_NUMBER}" && cd ../ && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
+   ```
+
+In case of any changes in your PR, the image should be automatically updated on your cluster. If you don't see the latest changes, make sure that the image job has finished, go to your namespace, and in **Deployments**, select the restart button next to the image you want to update.
 
 ## Accessing Busola Installed on Kubernetes
 
@@ -85,9 +110,11 @@ kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
 #### Prerequisites
 
 - Sidecar Proxy injection enabled; see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
-- The API Gateway module installed, see [Quick Install](https://kyma-project.io/02-get-started/01-quick-install.html)
+- The [API Gateway module](https://kyma-project.io/external-content/api-gateway/docs/user/README.html) installed, see [Quick Install](https://kyma-project.io/02-get-started/01-quick-install.html)
 
 #### Procedure
+
+Follow these steps to get access to your Busola page:
 
 1. Install the Istio required resources:
 
@@ -98,7 +125,7 @@ kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
 2. To get the Busola address, run:
 
    ```bash
-   kubectl get --namespace "${NAMESPACE}" virtualservices.networking.istio.io
+   kubectl get --namespace "${NAMESPACE}" virtualservices.networking.istio.io busola
    ```
 
 Under `HOSTS`, you should see an address that you can use to access the Busola page.
