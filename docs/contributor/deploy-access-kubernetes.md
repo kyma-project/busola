@@ -18,18 +18,20 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    kubectl create namespace ${NAMESPACE}
    ```
 
-2. Set the **VERSION** environment variable:
+2. Choose one of the following installation options that suits your case.
+
+<details>
+<summary>Install Busola from the release</summary>
+
+3. See [the Busola release page](https://github.com/kyma-project/busola/releases) and choose one of the available versions.
+
+4. Set the **VERSION** environment variable:
 
    ```bash
    export VERSION={YOUR_BUSOLA_VERSION}
    ```
 
-3. Choose one of the following installation options that suits your case.
-
-<details>
-<summary>Install Busola from the release</summary>
-
-3. Run the following command to install Busola from the release you've chosen:
+5. Run the following command to install Busola from the release you've chosen:
 
    ```bash
    kubectl apply --namespace "${NAMESPACE}" -f "https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml"
@@ -49,7 +51,7 @@ Follow these steps to install Busola from the main branch:
    (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-   </details>
+</details>
 
 <details>
 <summary>Install Busola with a specific landscape configuration</summary>
@@ -70,7 +72,7 @@ Follow these steps to install Busola with a specific landscape configuration:
    (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-   </details>
+</details>
 
 <details>
 <summary>Install Busola from a pull request</summary>
@@ -91,7 +93,8 @@ Follow these steps to install Busola from a pull request:
    (cd resources/base && kustomize edit set image busola="europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-${PR_NUMBER}" && cd ../ && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-In case of any changes in your PR, the image should be automatically updated on your cluster. If you don't see the latest changes, make sure that the image job has finished, go to your namespace, and in **Deployments**, select the restart button next to the image you want to update.
+> [!NOTE]
+> In case of any changes in your PR, the image should be automatically updated on your cluster. If you don't see the latest changes, make sure that the image job has finished, go to your namespace, and in **Deployments**, select the restart button next to the image you want to update.
 
 ## Accessing Busola Installed on Kubernetes
 
