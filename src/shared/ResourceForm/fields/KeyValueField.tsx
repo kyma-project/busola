@@ -9,11 +9,32 @@ import * as Inputs from '../inputs';
 
 import './KeyValueField.scss';
 
+type InputProp = {
+  key?: (props: any) => React.ReactNode;
+  value?: (props: any) => React.ReactNode;
+};
+
+type KeyValueFieldProps = {
+  actions?: React.ReactNode[];
+  encodable?: boolean;
+  defaultOpen?: boolean;
+  input?: InputProp;
+  initialValue?: string;
+  readableFromFile?: boolean;
+  keyProps?: Record<string, any>;
+  lockedKeys?: string[];
+  lockedValues?: string[];
+  required?: boolean;
+  disableOnEdit?: boolean;
+  editMode?: boolean;
+  [key: string]: any;
+};
+
 export function KeyValueField({
   actions = [],
   encodable = false,
   defaultOpen,
-  input = {},
+  input = {} as InputProp,
   keyProps = {
     pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
   },
@@ -25,14 +46,13 @@ export function KeyValueField({
   disableOnEdit,
   editMode,
   ...props
-}) {
+}: KeyValueFieldProps) {
   const { t } = useTranslation();
   const [valuesEncoded, setValuesEncoded] = useState(false);
-  const [decodeErrors, setDecodeErrors] = useState({});
+  const [decodeErrors, setDecodeErrors] = useState<{ [key: string]: any }>({});
   input = {
-    key: Inputs.Text,
-    value: Inputs.Text,
-    ...input,
+    key: input.key ?? Inputs.Text,
+    value: input.value ?? Inputs.Text,
   };
 
   const toggleEncoding = () => {
@@ -40,15 +60,17 @@ export function KeyValueField({
     setValuesEncoded(!valuesEncoded);
   };
 
-  const dataValue = (value) => {
+  const dataValue = (value?: { val?: string; key?: string }) => {
     if (!encodable || valuesEncoded) {
       return value?.val || initialValue;
     } else {
       try {
         return base64Decode(value?.val || '');
       } catch (e) {
-        const newDecodeErrors = { ...decodeErrors };
-        newDecodeErrors[value?.key] = e.message;
+        const newDecodeErrors: { [key: string]: any } = { ...decodeErrors };
+        if (e instanceof Error && value?.key) {
+          newDecodeErrors[value?.key] = e.message;
+        }
         setDecodeErrors(newDecodeErrors);
         setValuesEncoded(true);
         return '';
@@ -73,23 +95,30 @@ export function KeyValueField({
   }
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <MultiInput
       defaultOpen={defaultOpen}
-      toInternal={(value) =>
+      toInternal={(value: { [key: string]: any }) =>
         Object.entries(value || {}).map(([key, val]) => ({ key, val }))
       }
-      toExternal={(value) =>
+      toExternal={(value: { [key: string]: any }) =>
         value
-          .filter((entry) => !!entry?.key)
-          .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
+          .filter((entry: { key: any; val: any }) => !!entry?.key)
+          .reduce(
+            (acc: { [key: string]: any }, entry: { key: any; val: any }) => ({
+              ...acc,
+              [entry.key]: entry.val,
+            }),
+            {},
+          )
       }
       inputs={[
-        ({ value, setValue, ref, updateValue, focus, index }) => (
+        ({ value, setValue, ref, updateValue, focus, index }: any) => (
           <div
             key={`key-value-field-key-${index}`}
             className={readableFromFile ? 'bsl-col-md--4' : 'bsl-col-md--6'}
           >
-            {input.key({
+            {input.key?.({
               fullWidth: true,
               className: 'full-width',
               disabled:
@@ -97,12 +126,12 @@ export function KeyValueField({
               key: 'key',
               value: value?.key || '',
               ref: ref,
-              onChange: (e) =>
+              onChange: (e: Event) =>
                 setValue({
                   val: value?.val || initialValue,
-                  key: e.target.value,
+                  key: (e?.target as HTMLInputElement)?.value,
                 }),
-              onKeyDown: (e) => focus(e, 1),
+              onKeyDown: (e: Event) => focus(e, 1),
               onBlur: updateValue,
               placeholder: t('components.key-value-field.enter-key'),
               accessibleName: `${props.title} key`,
@@ -110,22 +139,29 @@ export function KeyValueField({
             })}
           </div>
         ),
-        ({ focus, value, setValue, updateValue, index, ...valueProps }) => (
+        ({
+          focus,
+          value,
+          setValue,
+          updateValue,
+          index,
+          ...valueProps
+        }: any) => (
           <div
             key={`key-value-field-value-${index}`}
             className={readableFromFile ? 'bsl-col-md--5' : 'bsl-col-md--6'}
           >
-            {input.value({
+            {input.value?.({
               fullWidth: true,
               className: 'value-input full-width',
               key: 'value',
-              onKeyDown: (e) => focus(e),
+              onKeyDown: (e: Event) => focus(e),
               value: dataValue(value),
               placeholder: t('components.key-value-field.enter-value'),
               disabled:
                 lockedValues.includes(value?.key) ||
                 (disableOnEdit && editMode),
-              setValue: (val) => {
+              setValue: (val: any) => {
                 setValue({
                   ...value,
                   val: valuesEncoded || !encodable ? val : base64Encode(val),
@@ -146,7 +182,7 @@ export function KeyValueField({
             })}
           </div>
         ),
-        ({ value, setValue, updateValue, index }) => (
+        ({ value, setValue, updateValue, index }: any) => (
           <Fragment key={`read-file-button-${index}`}>
             {readableFromFile ? (
               <Button
