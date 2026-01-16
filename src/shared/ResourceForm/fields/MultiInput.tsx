@@ -9,6 +9,37 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import './MultiInput.scss';
 
+type MultiInputProps = {
+  value: any;
+  setValue: (val: any) => void;
+  title: string;
+  tooltipContent?: string;
+  sectionTooltipContent?: string;
+  required?: boolean;
+  toInternal: (val: any) => any[];
+  toExternal: (val: any[]) => any;
+  inputs: ((props: {
+    index: number;
+    value: any;
+    setValue: (val: any) => void;
+    ref?: React.RefObject<HTMLInputElement>;
+    updateValue: () => void;
+    internalValue: any[];
+    setMultiValue: (val: any) => void;
+    focus: (e: React.KeyboardEvent, target?: number) => void;
+  }) => JSX.Element)[];
+  className?: string;
+  defaultOpen?: boolean;
+  isEntryLocked?: (entry: any) => boolean;
+  readOnly?: boolean;
+  noEdit?: boolean;
+  newItemAction?: JSX.Element;
+  newItemActionWidth?: number;
+  inputInfo?: string | JSX.Element;
+  disableOnEdit?: boolean;
+  editMode?: boolean;
+} & React.HTMLAttributes<HTMLElement>;
+
 export function MultiInput({
   value,
   setValue,
@@ -30,21 +61,21 @@ export function MultiInput({
   disableOnEdit,
   editMode,
   ...props
-}) {
+}: MultiInputProps) {
   const { t } = useTranslation();
   const valueRef = useRef(null); // for deep comparison
-  const [internalValue, setInternalValue] = useState([]);
+  const [internalValue, setInternalValue] = useState<any[]>([]);
   const [keys, setKeys] = useState(1);
-  const [refs, setRefs] = useState([]);
+  const [refs, setRefs] = useState<any[]>([]);
   const inputInfoLink = useCreateResourceDescription(inputInfo);
 
   useEffect(() => {
     setRefs(
-      Array(internalValue.length)
-        .fill()
-        .map((val, index) =>
+      new Array(internalValue.length)
+        .fill(undefined)
+        .map((_, index) =>
           inputs.map(
-            (input, inputIndex) => refs[index]?.[inputIndex] || createRef(),
+            (_, inputIndex) => refs[index]?.[inputIndex] || createRef(),
           ),
         ),
     );
@@ -69,13 +100,13 @@ export function MultiInput({
     setInternalValue([...toInternal(valueRef.current), null]);
   }
 
-  const isLast = (index) => index === internalValue.length - 1;
+  const isLast = (index: number) => index === internalValue.length - 1;
 
-  const updateValue = (val) => {
+  const updateValue = (val: any[]) => {
     setValue(toExternal(val));
   };
 
-  const removeValue = (index) => {
+  const removeValue = (index: number) => {
     /* 
       Removing one of the inputs decreases the next inputs keys by one, so the last input has the previous input value instead of being empty.
       We force rerender by changing keys.
@@ -85,13 +116,13 @@ export function MultiInput({
     updateValue(internalValue);
   };
 
-  const setEntry = (newVal, index) => {
+  const setEntry = (newVal: any, index: number) => {
     // eslint-disable-next-line react-hooks/immutability
     internalValue[index] = newVal;
     setInternalValue([...internalValue]);
   };
 
-  const focus = (ref) => {
+  const focus = (ref?: React.RefObject<HTMLInputElement>) => {
     if (ref?.current?.focus) {
       ref.current.focus();
     }
@@ -115,8 +146,9 @@ export function MultiInput({
 
   useEffect(() => {
     internalValue.forEach((entry, index) => {
-      const isValid = (child) => child.props.validate(entry) ?? true;
-      const errorMessage = (child) => {
+      const isValid = (child: JSX.Element) =>
+        child.props.validate(entry) ?? true;
+      const errorMessage = (child: JSX.Element) => {
         if (!child.props.validateMessage) {
           return t('common.errors.generic');
         } else if (typeof child.props.validateMessage !== 'function') {
@@ -137,7 +169,11 @@ export function MultiInput({
     });
   }, [inputs, internalValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleFocusMove = (e, target, index) => {
+  const handleFocusMove = (
+    e: React.KeyboardEvent,
+    target: number | undefined,
+    index: number,
+  ) => {
     if (e.key === 'Enter') {
       if (typeof target === 'undefined') {
         focus(refs[index + 1]?.[0]);
@@ -152,6 +188,7 @@ export function MultiInput({
   };
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceForm.CollapsibleSection
       title={title}
       className={className}
@@ -214,6 +251,7 @@ export function MultiInput({
           </Label>
         )}
       </ul>
+      {/*@ts-expect-error Type mismatch between js and ts*/}
     </ResourceForm.CollapsibleSection>
   );
 }
