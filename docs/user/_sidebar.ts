@@ -73,11 +73,11 @@ export default [
     items: [
       {
         text: 'Configuration',
-        link: '../technical-reference/configuration.md',
+        link: './technical-reference/configuration.md',
       },
       {
         text: 'Feature Flags',
-        link: '../technical-reference/feature-flags.md',
+        link: './technical-reference/feature-flags.md',
       },
     ],
   },
