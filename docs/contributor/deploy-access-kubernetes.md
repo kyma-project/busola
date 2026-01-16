@@ -11,19 +11,19 @@ For more details about environment configuration, see [Environment-Specific Sett
 
 Follow these steps to deploy Busola in a Kubernetes cluster:
 
-1. Set the **NAMESPACE** shell environment variable, and create your namespace:
+1. Set the **NAMESPACE** shell environment variable and create your namespace:
 
    ```bash
    export NAMESPACE={YOUR_NAMESPACE_NAME}
    kubectl create namespace ${NAMESPACE}
    ```
 
-2. Choose one of the following installation options that suits your case.
+2. Choose one of the following installation options that suit your case.
 
 <details>
 <summary>Install Busola from a release</summary>
 
-3. See [the Busola release page](https://github.com/kyma-project/busola/releases) and choose one of the available versions.
+3. Go to the [Busola release page](https://github.com/kyma-project/busola/releases) and choose one of the available versions.
 
 4. Set the **VERSION** environment variable:
 
@@ -43,7 +43,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
 <summary>Install Busola from the main branch </summary>
 
 3. Clone the [Busola repository](https://github.com/kyma-project/busola).
-4. Go to the folder where you downloaded it, and run:
+4. Go to the folder where you downloaded it and run:
 
    ```bash
    (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
@@ -56,7 +56,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
 
 3. Clone the [Busola repository](https://github.com/kyma-project/busola).
 
-4. Export the **ENVIRONMENT** environment variable:
+4. Set the **ENVIRONMENT** environment variable:
 
    ```bash
    export ENVIRONMENT={YOUR_LANDSCAPE}
@@ -75,7 +75,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
 
 1. Clone the [Busola repository](https://github.com/kyma-project/busola).
 
-2. Export your PR number as an environment variable:
+2. Set your PR number as an environment variable:
 
    ```bash
    export PR_NUMBER={PR_NUMBER}
@@ -88,13 +88,13 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    ```
 
 > [!NOTE]
-> In case of any changes in your PR, the image should be automatically updated on your cluster. If you don't see the latest changes, make sure that the image job has finished, go to your namespace, and in **Deployments**, select the restart button next to the image you want to update.
+> If there are any changes in your PR, the image should be automatically updated in your cluster. If you don't see the latest changes, make sure that the image job has finished. Then, go to your namespace, and in **Deployments**, select the restart button next to the image you want to update.
 
 </details>
 
 ## Accessing Busola Installed on Kubernetes
 
-You can access Busola by simply using the `kubectl port forward` command, or by using your Kubernetes cluster with Istio installed.
+You can access Busola by simply using the `kubectl port forward` command or by using your Kubernetes cluster with Istio installed.
 
 ### kubectl
 
@@ -113,7 +113,7 @@ kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
 
 #### Procedure
 
-Follow these steps to get access to your Busola page:
+Follow these steps to access your Busola page:
 
 1. To install the Istio required resources, run the following command from the Busola root folder:
 
@@ -124,7 +124,7 @@ Follow these steps to get access to your Busola page:
 2. To get the Busola address, run:
 
    ```bash
-   kubectl get --namespace "${NAMESPACE}" virtualservices.networking.istio.io busola
+   kubectl get --namespace "${NAMESPACE}" virtualservices.networking.istio.io
    ```
 
 Under `HOSTS`, you should see an address that you can use to access the Busola page.
