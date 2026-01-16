@@ -37,7 +37,7 @@ export default function ResourceQuotaList(props: any) {
 
   return (
     <ResourcesList
-      resourceTitle={t('limit-ranges.title')}
+      resourceTitle={t('resource-quotas.title')}
       description={ResourceDescription}
       {...props}
       createResourceForm={ResourceQuotaCreate}
