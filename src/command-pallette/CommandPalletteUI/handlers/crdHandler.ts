@@ -77,7 +77,7 @@ async function fetchCRDs(context: CommandPaletteContext) {
     const { items: crds } = await response.json();
     updateResourceCache('customresourcedefinitions', crds);
   } catch (e) {
-    console.warn(e);
+    console.warn('Failed to fetch CRDs:', e);
   }
 }
 

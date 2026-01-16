@@ -92,7 +92,6 @@ function createFetchFunction(failedAttempts: number): fetchFn {
       handleSuccess: handleChatResponseFn,
       handleError: handleChatErrorResponseFn,
     ) {
-      console.debug('1: Fetch called');
       called += 1;
       if (failedAttempts < called) {
         handleSuccess({

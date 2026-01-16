@@ -29,7 +29,7 @@ export function useResourcesForApiGroups(apiGroups = []) {
         const json = await response.json();
         return json.resources;
       } catch (e) {
-        console.warn(e);
+        console.warn('Failed to fetch resources for API group:', e);
       }
     },
     [fetch],

@@ -79,7 +79,7 @@ async function concernsNodes(context: CommandPaletteContext) {
     const { items: nodes } = await response.json();
     updateResourceCache('nodes', nodes);
   } catch (e) {
-    console.warn(e);
+    console.warn('Failed to fetch nodes:', e);
   }
 }
 
