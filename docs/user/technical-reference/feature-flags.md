@@ -1,6 +1,6 @@
 # Feature Flags
 
-To configure Busola, override the default values of its `defaultConfig.yaml` file.
+To configure Busola, override the default values of its [`defaultConfig.yaml`](https://github.com/kyma-project/busola/blob/main/public/defaultConfig.yaml) file.
 
 ## Features Priority
 
@@ -42,6 +42,6 @@ This table lists the frontend configurable feature flags, their descriptions, an
 > [!NOTE]
 > Backend features cannot be modified at the cluster ConfigMap level.
 
-| Feature flag |                                                               Description | Default value     |
-| ------------ | ------------------------------------------------------------------------ | ----------------- |
+| Feature flag | Description                                                               | Default value     |
+| ------------ | ------------------------------------------------------------------------- | ----------------- |
 | **GZIP**     | Indicates whether responses from the backend server should be compressed. | `isEnabled: true` |
