@@ -18,7 +18,7 @@ If the stage is not set, the feature is loaded only on demand, most often by the
 
 > **TIP:** The list is ordered alphabetically.
 
-- **EXTENSIBILITY** - is used to indicate whether the Busola [extensibility](extensibility/README.md) feature is enabled.
+- **EXTENSIBILITY** - is used to indicate whether the Busola [extensibility](user/extensibility/README.md) feature is enabled.
 
 Default settings:
 
