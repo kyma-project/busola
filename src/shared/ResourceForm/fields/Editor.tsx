@@ -1,7 +1,25 @@
-import { useMemo, useCallback, useState } from 'react';
+import {
+  useMemo,
+  useCallback,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { Editor as MonacoEditor } from 'shared/components/MonacoEditorESM/Editor';
+
+type EditorProps = {
+  value: any;
+  onChange?: (value: any) => void;
+  setValue?: (value: any) => void;
+  language?: string;
+  convert?: boolean;
+  schemaId?: string;
+  setEditorError?: Dispatch<SetStateAction<string | null>>;
+  schema?: any;
+  [key: string]: any;
+};
 
 export function Editor({
   value,
@@ -13,9 +31,9 @@ export function Editor({
   setEditorError,
   schema,
   ...props
-}) {
+}: EditorProps) {
   const { t } = useTranslation();
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>('');
   const parsedValue = useMemo(() => {
     if (!value) {
       return undefined;
@@ -23,7 +41,8 @@ export function Editor({
     if (!convert) {
       return value;
     } else if (language === 'yaml') {
-      return jsyaml.dump(JSON.parse(JSON.stringify(value), { noRefs: true }), {
+      return jsyaml.dump(JSON.parse(JSON.stringify(value)), {
+        noRefs: true,
         lineWidth: -1,
       });
     } else if (language === 'json') {
@@ -34,24 +53,26 @@ export function Editor({
   }, [value, language, convert]);
 
   const handleChange = useCallback(
-    (text) => {
-      const placeholer = document.getElementsByClassName(
-        'resource-form__placeholder',
+    (text: string) => {
+      const placeholder = (
+        document.getElementsByClassName(
+          'resource-form__placeholder',
+        ) as HTMLCollectionOf<HTMLElement>
       )[0];
-      if (placeholer) {
+      if (placeholder) {
         if (text) {
-          placeholer.style['display'] = 'none';
+          placeholder.style['display'] = 'none';
         } else {
-          placeholer.style['display'] = 'block';
+          placeholder.style['display'] = 'block';
         }
       }
 
       if (!convert) {
-        setValue(text);
+        setValue?.(text);
         return;
       }
       try {
-        let parsed = {};
+        let parsed: unknown = {};
         if (language === 'yaml') {
           parsed = jsyaml.load(text);
         } else if (language === 'json') {
@@ -68,7 +89,8 @@ export function Editor({
 
         setError(null);
         if (typeof setEditorError === 'function') setEditorError(null);
-      } catch ({ message }) {
+      } catch (error) {
+        const message = error instanceof Error ? error?.message : '';
         // get the message until the newline
         setError(message.substr(0, message.indexOf('\n')));
         if (typeof setEditorError === 'function')
@@ -87,6 +109,7 @@ export function Editor({
       onChange={handleChange}
       error={error}
       schemaId={schemaId}
+      /*@ts-expect-error Type mismatch between js and ts*/
       placeholder={t('clusters.wizard.editor-placeholder')}
       schema={schema}
     />

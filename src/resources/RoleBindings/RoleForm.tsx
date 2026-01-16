@@ -5,6 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 import { ResourceFormWrapper } from 'shared/ResourceForm/components/Wrapper';
 
+type RoleFormProps = {
+  loading?: boolean;
+  error: Error | null;
+  roles: Array<{ metadata: { name: string } }>;
+  clusterRoles: Array<{ metadata: { name: string } }>;
+  namespace: string | null;
+  binding: any;
+  setBinding: (binding: any) => void;
+};
+
 export const RoleForm = ({
   loading,
   error,
@@ -13,23 +23,24 @@ export const RoleForm = ({
   namespace,
   binding,
   setBinding,
-}) => {
+}: RoleFormProps) => {
   const { t } = useTranslation();
 
   if (loading) return <Spinner />;
   if (error) return error.message;
 
   const roleTypeDropdown = (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceForm.FormField
       required
       label={t('role-bindings.create-modal.role-type')}
       propertyPath="$.roleRef.kind"
-      input={(props) => (
+      input={(props: any) => (
         <Dropdown
           selectedKey={props.value}
           options={['Role', 'ClusterRole'].map((v) => ({ key: v, text: v }))}
           {...props}
-          setValue={(value) => {
+          setValue={(value: string) => {
             binding.roleRef.name = '';
             props.setValue(value);
           }}
@@ -46,28 +57,29 @@ export const RoleForm = ({
     text: r.metadata.name,
   }));
 
-  const onChange = (event, props) => {
+  const onChange = (event: any, props: any) => {
     const selectedOption = options.find(
-      (o) => o.text === event.target.value,
+      (o) => o.text === event?.target?.value,
     ) ?? {
-      key: event.target._state.filterValue,
-      text: event.target._state.filterValue,
+      key: event?.target?._state?.filterValue,
+      text: event?.target?._state?.filterValue,
     };
     props.setValue(selectedOption.text);
   };
 
   const roleNameInput = (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceForm.FormField
       required
       label={t('role-bindings.create-modal.role')}
       propertyPath="$.roleRef.name"
-      input={(props) => (
+      input={(props: any) => (
         <ComboBox
           id="role"
           accessibleName="Role Combobox"
           disabled={props.disabled || !options?.length}
           filter="Contains"
-          inputRef={props.inputRef}
+          ref={props.inputRef}
           placeholder={t('common.messages.type-to-select', {
             value: t(
               binding.roleRef?.kind === 'ClusterRole'
@@ -90,6 +102,7 @@ export const RoleForm = ({
   );
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceFormWrapper resource={binding} setResource={setBinding}>
       {roleTypeDropdown}
       {roleNameInput}
