@@ -115,7 +115,7 @@ kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
 
 Follow these steps to get access to your Busola page:
 
-1. Run this command from the Busola root folder, to install the Istio required resources:
+1. To install the Istio required resources, run the following command from the Busola root folder:
 
    ```bash
    (cd resources && kubectl apply --namespace "${NAMESPACE}" -k istio)
