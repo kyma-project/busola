@@ -81,7 +81,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    export PR_NUMBER={PR_NUMBER}
    ```
 
-3. Run the following command:
+3. Run the following command from the Busola root folder:
 
    ```bash
    (cd resources/base && kustomize edit set image busola="europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-${PR_NUMBER}" && cd ../ && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
@@ -115,7 +115,7 @@ kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
 
 Follow these steps to get access to your Busola page:
 
-1. Install the Istio required resources:
+1. Run this command from the Busola root folder, to install the Istio required resources:
 
    ```bash
    (cd resources && kubectl apply --namespace "${NAMESPACE}" -k istio)
