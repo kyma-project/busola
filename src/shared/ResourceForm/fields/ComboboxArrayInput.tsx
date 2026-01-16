@@ -4,6 +4,19 @@ import { MultiInput } from './MultiInput';
 import * as Inputs from '../inputs';
 import './ComboboxArrayInput.scss';
 
+type ComboboxArrayInputProps = {
+  title?: string;
+  defaultOpen?: boolean;
+  placeholder?: string;
+  tooltipContent?: React.ReactNode;
+  sectionTooltipContent?: React.ReactNode;
+  options: { key: string; text: string }[];
+  emptyStringKey?: string;
+  onBlur?: () => void;
+  noEdit?: boolean;
+  [key: string]: any;
+};
+
 export function ComboboxArrayInput({
   title,
   defaultOpen,
@@ -15,7 +28,7 @@ export function ComboboxArrayInput({
   onBlur,
   noEdit,
   ...props
-}) {
+}: ComboboxArrayInputProps) {
   const { t } = useTranslation();
 
   placeholder =
@@ -27,17 +40,18 @@ export function ComboboxArrayInput({
 
     {key: '', text: 'empty'} -> {key: emptyStringKey, text: 'empty'}
   */
-  const toInternal = (values) =>
+  const toInternal = (values: []) =>
     (values || [])
       .filter((v) => v || (emptyStringKey && v === ''))
       .map((v) => (emptyStringKey && v === '' ? emptyStringKey : v));
 
-  const toExternal = (values) =>
-    values
+  const toExternal = (values: []) =>
+    (values || [])
       .filter((val) => !!val)
       .map((v) => (emptyStringKey && v === emptyStringKey ? '' : v));
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <MultiInput
       title={title}
       noEdit={noEdit}
@@ -48,8 +62,9 @@ export function ComboboxArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       className="combobox-array-input"
       inputs={[
-        ({ value, setValue, ref, updateValue, focus, index }) => {
+        ({ value, setValue, ref, updateValue, focus, index }: any) => {
           return (
+            /*@ts-expect-error Type mismatch between js and ts*/
             <Inputs.ComboboxInput
               updatesOnInput={false}
               key={index}
@@ -62,7 +77,10 @@ export function ComboboxArrayInput({
               onKeyDown={focus}
               onBlur={onBlur}
               fullWidth
-              onSelectionChange={(_, selected) => {
+              onSelectionChange={(
+                _: any,
+                selected: { key: any; text: any },
+              ) => {
                 if ((noEdit && !selected) || selected.key === -1) {
                   return;
                 }

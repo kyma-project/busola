@@ -1,7 +1,41 @@
-import { ComboBox, ComboBoxItem, FlexBox } from '@ui5/webcomponents-react';
+import {
+  ComboBox,
+  ComboBoxDomRef,
+  ComboBoxItem,
+  FlexBox,
+  Ui5CustomEvent,
+  UI5WCSlotsNode,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { Label } from '../../ResourceForm/components/Label';
 import { useRef } from 'react';
+import { ComboBoxSelectionChangeEventDetail } from '@ui5/webcomponents/dist/ComboBox';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
+
+type DropdownProps = {
+  accessibleName?: string;
+  label?: string;
+  options: { key: string; text: string }[];
+  selectedKey: string;
+  onSelect: (event: Event, option: any) => void;
+  required?: boolean;
+  id?: string;
+  disabled?: boolean;
+  placeholder?: string;
+  _ref?: React.RefObject<any>;
+  emptyListMessage?: string;
+  className?: string;
+  accessibleNameRef?: string;
+  name?: string;
+  readonly?: boolean;
+  showClearIcon?: boolean;
+  valueStateMessage?: UI5WCSlotsNode;
+  valueState?: ValueState | keyof typeof ValueState;
+  autoFocus?: boolean;
+  onOpen?: (event: Ui5CustomEvent<ComboBoxDomRef>) => void;
+  onInput?: (event: Ui5CustomEvent<ComboBoxDomRef>) => void;
+  [key: string]: any;
+};
 
 export function Dropdown({
   accessibleName,
@@ -16,15 +50,23 @@ export function Dropdown({
   _ref,
   emptyListMessage,
   className,
+  accessibleNameRef,
+  name,
+  readonly,
+  showClearIcon,
+  valueStateMessage,
+  valueState,
+  autoFocus,
+  onOpen,
+  onInput,
   ...props
-}) {
-  if (!props.readOnly) delete props.readOnly;
+}: DropdownProps) {
   const { t } = useTranslation();
 
   const localeRef = useRef(null);
   const comboboxRef = _ref || localeRef;
 
-  if (!options || !options.length) {
+  if (!options?.length) {
     options = [
       {
         key: 'empty-list',
@@ -35,8 +77,12 @@ export function Dropdown({
     disabled = true;
   }
 
-  const onSelectionChange = (event) => {
-    const selectedOption = options.find((o) => o.key === event.detail.item.id);
+  const onSelectionChange = (
+    event: Ui5CustomEvent<ComboBoxDomRef, ComboBoxSelectionChangeEventDetail>,
+  ) => {
+    const selectedOption = options.find(
+      (o) => o?.key === event?.detail?.item?.id,
+    );
     if (selectedOption) onSelect(event, selectedOption);
   };
 
@@ -69,6 +115,15 @@ export function Dropdown({
       onClose={() => handlePopover(false)}
       onBlur={() => handlePopover(false)}
       value={options.find((o) => o.key === selectedKey)?.text}
+      accessibleNameRef={accessibleNameRef}
+      name={name}
+      readonly={readonly}
+      showClearIcon={showClearIcon}
+      valueStateMessage={valueStateMessage}
+      valueState={valueState}
+      autoFocus={autoFocus}
+      onOpen={onOpen}
+      onInput={onInput}
       {...props}
     >
       {options.map((option) => (
