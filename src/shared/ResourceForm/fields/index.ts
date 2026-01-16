@@ -5,7 +5,6 @@ export * from './KeyValueField';
 export * from './DataField';
 export * from './ItemArray';
 export * from './ComboboxArrayInput';
-export * from './SelectArrayInput';
 export * from './RuntimeResources';
 export * from './RichEditorDataField/RichEditorDataField';
 export * from './Editor';

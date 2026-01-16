@@ -13,7 +13,6 @@ import { Title, ToolbarButton } from '@ui5/webcomponents-react';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { getErrorMessage, prettifyNameSingular } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
@@ -93,14 +92,10 @@ function ResourceDetailsRenderer(props) {
     loading = true,
     error,
     data: resource,
-    silentRefetch,
   } = useGet(props.resourceUrl, {
     pollingInterval: 3000,
     errorTolerancy: props.isModule ? 0 : undefined,
   });
-
-  const updateResourceMutation = useUpdate(props.resourceUrl);
-  const deleteResourceMutation = useDelete(props.resourceUrl);
   const [disableEditState, setDisableEditState] = useState(false);
 
   useEffect(() => {
@@ -149,9 +144,6 @@ function ResourceDetailsRenderer(props) {
         <Resource
           {...props}
           key={resource.metadata.name}
-          deleteResourceMutation={deleteResourceMutation}
-          updateResourceMutation={updateResourceMutation}
-          silentRefetch={silentRefetch}
           resource={resource}
           disableEdit={disableEditState}
         />
