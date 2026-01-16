@@ -238,8 +238,15 @@ export const parseParams = (url: string, resource: string) => {
   } else {
     [resType, resName] = [parts[0], parts[1]];
   }
-
-  const parsedResource = jsyaml.load(resource.replace('yaml', '')) || {};
+  let parsedResource: any = {};
+  try {
+    const documents = jsyaml.loadAll(resource.replace('yaml', ''));
+    parsedResource =
+      (Array.isArray(documents) ? documents[0] : documents) || {};
+  } catch (error) {
+    console.warn('YAML parsing failed in parseParams:', error);
+    parsedResource = {};
+  }
   return { namespace, resType, resName, parsedResource };
 };
 
@@ -250,8 +257,7 @@ export const useDoesNamespaceExist = (
 ) => {
   const fetch = useFetch();
 
-  const { namespace } = parseParams(url, resource);
-  const { parsedResource } = parseParams(url, resource);
+  const { namespace, parsedResource } = parseParams(url, resource);
   const resourceNamespace = (parsedResource as any)?.metadata?.namespace;
   const [namespaceExists, setNamespaceExists] = useState(false);
 
