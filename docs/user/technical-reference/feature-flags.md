@@ -43,5 +43,5 @@ This table lists the frontend configurable feature flags, their descriptions, an
 > Backend features cannot be modified at the cluster ConfigMap level.
 
 | Feature flag |                                                               Description | Default value     |
-| ------------ | ------------------------------------------------------------------------: | ----------------- |
+| ------------ | ------------------------------------------------------------------------ | ----------------- |
 | **GZIP**     | Indicates whether responses from the backend server should be compressed. | `isEnabled: true` |
