@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import eslint from '@nabla/vite-plugin-eslint';
 import fs from 'fs';
-import { glob } from 'glob';
+import glob from 'glob';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -69,7 +69,7 @@ export default defineConfig({
   },
 });
 
-function mergeYamlFiles(filesPath) {
+function mergeYamlFiles(filesPath: string | string[]) {
   let mergedYamlContent = '';
 
   const files = glob.sync(filesPath);
