@@ -37,7 +37,9 @@ function PodTemplateTable({ className, items, columns, rowRenderer }) {
       }
     >
       {items.map((item, index) => (
-        <TableRow key={`row-${item?.name || item?.containerName || index}`}>
+        <TableRow
+          key={`row-${item?.name || item?.containerName || ''}-${index}`}
+        >
           {rowRenderer(item)}
         </TableRow>
       ))}

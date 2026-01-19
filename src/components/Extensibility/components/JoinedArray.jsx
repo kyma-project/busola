@@ -29,7 +29,7 @@ export function JoinedArray({ value, structure, arrayItems, ...props }) {
                     <Widget
                       structure={def}
                       value={val}
-                      key={`widget-${idx}-${def?.path || def?.name || idx}`}
+                      key={`widget-${def?.path || def?.name || ''}-${idx}`}
                       {...props}
                     />
                   ))
@@ -44,7 +44,7 @@ export function JoinedArray({ value, structure, arrayItems, ...props }) {
                     structure={def}
                     arrayItems={[...arrayItems, val]}
                     value={val}
-                    key={`widget-${idx}-${def?.path || def?.name || idx}`}
+                    key={`widget-${def?.path || def?.name || ''}-${idx}`}
                     {...props}
                   />
                 ))}

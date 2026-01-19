@@ -17,7 +17,7 @@ export function Tabs({ value, structure, schema, ...props }) {
             {Array.isArray(child?.children) &&
               child.children.map((def, defIdx) => (
                 <Widget
-                  key={`tab-content-${def?.path || def?.name || defIdx}`}
+                  key={`widget-${def?.path || def?.name || ''}-${defIdx}`}
                   value={value}
                   structure={def}
                   schema={schema}
