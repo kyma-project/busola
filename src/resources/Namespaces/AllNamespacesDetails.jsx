@@ -11,10 +11,12 @@ import { createPortal } from 'react-dom';
 import YamlUploadDialog from './YamlUpload/YamlUploadDialog';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 import { useSetAtom } from 'jotai';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 
 export function AllNamespacesDetails() {
   const { t } = useTranslation();
   const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
+  useWindowTitle(t('namespaces.namespaces-overview'));
 
   const limitRangesParams = {
     hasDetailsView: true,
