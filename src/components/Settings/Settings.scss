@@ -1,14 +1,9 @@
 .settings-dialog::part(content) {
-  background: var(--sapBackgroundColor);
   overflow-y: auto;
   width: 100%;
   height: 75vh;
-  padding: 0;
+  padding: 0 !important;
   list-style-type: none;
-
-  .vertical-tabs-wrapper {
-    height: 100% !important;
-  }
 }
 
 .settings-row {

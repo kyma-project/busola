@@ -49,7 +49,7 @@ context('Test resource validation', () => {
       .parentsUntil('[role=tab]')
       .click({ force: true });
 
-    cy.contains('ui5-panel', 'Validate Resources')
+    cy.contains('.resource-validation-container', 'Validate Resources')
       .find('ui5-switch')
       .find('div[role="switch"')
       .click({ force: true });
@@ -69,7 +69,7 @@ context('Test resource validation', () => {
 
     cy.contains('warnings').should('not.exist');
 
-    cy.contains('.validate-resources', 'Validate resources')
+    cy.contains('.resource-validation-container', 'Validate Resources')
       .find('ui5-switch')
       .find('div[role="switch"')
       .click({ force: true });
@@ -87,8 +87,6 @@ context('Test resource validation', () => {
     cy.contains('Resource Validation')
       .parentsUntil('[role=tab]')
       .click({ force: true });
-
-    cy.contains('ui5-button', 'Customize').click();
 
     cy.contains('.policy-row', 'Default')
       .find('ui5-switch')
@@ -145,10 +143,20 @@ context('Test resource validation', () => {
       .parentsUntil('[role=tab]')
       .click({ force: true });
 
-    cy.get('ui5-dialog')
-      .contains('ui5-button', 'Reset')
-      .should('be.visible')
-      .click();
+    cy.contains('.policy-row', 'Default')
+      .find('ui5-switch')
+      .find('div[role="switch"')
+      .click({ force: true });
+
+    cy.contains('.policy-row', 'PodSecurityStandardsBaseline')
+      .find('ui5-switch')
+      .find('div[role="switch"')
+      .click({ force: true });
+
+    cy.contains('.policy-row', 'TestPolicy')
+      .find('ui5-switch')
+      .find('div[role="switch"')
+      .click({ force: true });
 
     cy.get('ui5-dialog')
       .contains('ui5-button', 'Close')
@@ -166,6 +174,8 @@ context('Test resource validation', () => {
     cy.loginAndSelectCluster();
 
     cy.contains('ui5-button', 'Upload YAML').click();
+
+    cy.clearLocalStorage('busola.validateResources');
 
     cy.fixture('examples/resource-validation/pod.yaml').then((podConfig) => {
       cy.pasteToMonaco(podConfig);
