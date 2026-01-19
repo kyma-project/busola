@@ -188,7 +188,6 @@ export function MultiInput({
   };
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceForm.CollapsibleSection
       title={title}
       className={className}
@@ -251,7 +250,6 @@ export function MultiInput({
           </Label>
         )}
       </ul>
-      {/*@ts-expect-error Type mismatch between js and ts*/}
     </ResourceForm.CollapsibleSection>
   );
 }

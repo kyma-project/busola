@@ -6,7 +6,17 @@ import {
   getEditViewModeState,
 } from 'state/settings/editViewModeAtom';
 
-export function ModeSelector({ mode, setMode, isDisabled = false }) {
+type ModeSelectorProps = {
+  mode: string;
+  setMode: (mode: string) => void;
+  isDisabled?: boolean;
+};
+
+export function ModeSelector({
+  mode,
+  setMode,
+  isDisabled = false,
+}: ModeSelectorProps) {
   const { t } = useTranslation();
   const [editViewMode, setEditViewMode] = useAtom(editViewModeAtom);
   const { preferencesViewType } = getEditViewModeState(editViewMode);
@@ -28,11 +38,11 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
         className="mode-selector__content"
         onSelectionChange={(event) => {
           const mode = event.detail.selectedItems[0].getAttribute('data-mode');
-          setMode(mode);
+          setMode(mode as any);
           if (preferencesViewType === 'MODE_DEFAULT') {
             setEditViewMode({
               preferencesViewType: preferencesViewType,
-              dynamicViewType: mode,
+              dynamicViewType: mode as any,
             });
           }
         }}

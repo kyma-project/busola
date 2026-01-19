@@ -1,7 +1,7 @@
 import { Label as UI5Label } from '@ui5/webcomponents-react';
 import WrappingType from '@ui5/webcomponents/dist/types/WrappingType';
 
-type LabelProps = {
+export type LabelProps = {
   required?: boolean;
   forElement?: string;
   children: React.ReactNode;

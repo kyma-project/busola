@@ -3,8 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import './Presets.scss';
 
-type PresetProps = {
-  presets: { name: string; data: Record<string, any> }[];
+export type PresetProps = {
+  presets: {
+    name: string;
+    data?: Record<string, any>;
+    value?: Record<string, any>;
+  }[];
   onSelect: (preset?: any) => void;
   inlinePresets?: boolean;
   disabled?: boolean;
