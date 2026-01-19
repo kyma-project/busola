@@ -32,7 +32,7 @@ To install dependencies for the root and backend projects, and to prepare symlin
 npm install
 ```
 
-To learn how to install the dashboard with Istio Ingress and install it in a Kyma cluster, see [Install Kyma Dashboard Manually](docs/contributor/deploy-access-kubernetes.md).
+To learn how to install the dashboard with Istio Ingress and install it in a Kyma cluster, see [Deploying and Accessing Busola in the Kubernetes Cluster](docs/contributor/deploy-access-kubernetes.md).
 
 ## Usage
 
