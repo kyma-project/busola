@@ -63,21 +63,3 @@ To create a ConfigMap with your CRD's UI configuration, you can either use the E
 
 > [!TIP]
 > To see an example configuration of the Busola extensibility feature, check the [Pizza example](https://github.com/kyma-project/busola/blob/main/examples/pizzas/README.md).
-
-## Related Information
-
-[Configure a List Page](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/20-list-columns.md)
-[Configure a Details Page](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/30-details-summary.md)
-[Configure Create and Edit Pages](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/40-form-fields.md)
-[List and Details Widgets](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/50-list-and-details-widgets.md)
-[Form Widgets](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/60-form-widgets.md)
-[Widget Injection](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/70-widget-injection.md)
-[Custom Extensions](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/80-custom-extensions.md)
-[Configure the dataSources Section](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/90-datasources.md)
-[Use JSONata Expressions with Resource-Based Extensions](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/100-jsonata.md)
-[Use JSONata Preset Functions for Resource-Based Extensions](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/101-jsonata-preset-functions.md)
-[Configure the presets Section](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/110-presets.md)
-[Configure a Config Map for Resource-Based Extensions](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/120-resource-extensions.md)
-[Additional Sections for Resource-Based Extensions](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/130-additional-sections-resources.md)
-[Configure a Config Map for Static Extensions](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/140-static-extensions.md)
-[Configure Translations](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/150-translations.md)
