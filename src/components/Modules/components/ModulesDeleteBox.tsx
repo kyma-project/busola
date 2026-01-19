@@ -42,6 +42,9 @@ type ModulesListDeleteBoxProps = {
   detailsOpen: boolean;
   isCommunity?: boolean;
   namespaced: boolean;
+  showDeleteDialog: boolean;
+  performDelete: () => void;
+  performCancel: () => void;
   setLayoutColumn: (update: SetStateAction<ColumnLayoutState>) => void;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
@@ -59,6 +62,9 @@ export const ModulesDeleteBox = ({
   detailsOpen,
   isCommunity,
   namespaced,
+  showDeleteDialog,
+  performDelete,
+  performCancel,
   setLayoutColumn,
   handleModuleUninstall,
   setChosenModuleIndex,
@@ -286,6 +292,9 @@ export const ModulesDeleteBox = ({
 
   return (
     <DeleteMessageBox
+      showDeleteDialog={showDeleteDialog}
+      performDelete={performDelete}
+      performCancel={performCancel}
       disableDeleteButton={
         associatedResourceLeft === null ||
         (associatedResourceLeft && !allowForceDelete)
