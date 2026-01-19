@@ -2,16 +2,16 @@
 
 ## Overview
 
-With Busola's extensibility feature, you can create a dedicated user interface (UI) page for your CustomResourceDefinition (CRD). It enables you to add navigation nodes, on cluster or namespace level, and to configure your [UI display](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/30-details-summary.md), for example, a resource list page, and details pages. You can also [create and edit forms](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/40-form-fields.md). To create a UI component, you need a ConfigMap.
+With Busola's extensibility feature, you can create a dedicated user interface (UI) page for your CustomResourceDefinition (CRD). It enables you to add navigation nodes, on cluster or namespace level, and to configure your [UI display](../contributor/extensibility/30-details-summary.md), for example, a resource list page, and details pages. You can also [create and edit forms](../contributor/extensibility/40-form-fields.md). To create a UI component, you need a ConfigMap.
 
-You can also leverage Busola's [custom extension feature](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility/80-custom-extensions.md) to design entirely custom user interfaces tailored to your specific needs.
+You can also leverage Busola's [custom extension feature](../contributor/extensibility/80-custom-extensions.md) to design entirely custom user interfaces tailored to your specific needs.
 
 ## Create a ConfigMap for Your UI
 
 To create a ConfigMap with your CRD's UI configuration, you can either use the Extensions feature or do it manually.
 
 > [!TIP]
-> For more information about extensibility in Busola, see the [`extensibility folder`](https://github.com/kyma-project/busola/blob/main/docs/contributor/extensibility) in the Busola repository.
+> For more information about extensibility in Busola, see the [`extensibility folder`](../contributor/extensibility/) in the Busola repository.
 
 ### Create a CRD ConfigMap Using the Extensions Feature
 
