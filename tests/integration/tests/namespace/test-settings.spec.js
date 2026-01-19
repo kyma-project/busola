@@ -76,7 +76,7 @@ context('Test app settings and preferences', () => {
     cy.get('.vertical-tabs-wrapper').should(
       'have.css',
       'background-color',
-      'rgb(0, 0, 0)',
+      'rgba(0, 0, 0, 0)',
     );
 
     cy.contains('Light').click();
