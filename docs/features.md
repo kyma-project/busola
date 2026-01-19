@@ -36,7 +36,7 @@ EXTENSIBILITY_CUSTOM_COMPONENTS:
   isEnabled: false
 ```
 
-- **EXTENSIBILITY_INJECTIONS** - is used to indicate whether extensibility injections can be added to Busola. For more information, see [Widget Injection](https://github.com/kyma-project/busola/blob/main/docs/extensibility/70-widget-injection.md).
+- **EXTENSIBILITY_INJECTIONS** - is used to indicate whether extensibility injections can be added to Busola. For more information, see [Widget Injection](user/extensibility/70-widget-injection.md).
 
 Default settings:
 

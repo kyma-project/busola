@@ -60,4 +60,4 @@ For more information about extensibility in Busola, see [Configure a Config Map 
 
 6. Click **Create**.
 
-To see an exemplary configuration of the Busola extensibility feature, check the [Pizza example](examples/../../../examples/pizzas/README.md).
+To see an exemplary configuration of the Busola extensibility feature, check the [Pizza example](../../../examples/pizzas/README.md).
