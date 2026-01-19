@@ -4,6 +4,16 @@ import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { Input, FlexBox } from '@ui5/webcomponents-react';
 import { Label } from '../../shared/ResourceForm/components/Label';
 
+type MemoryInputProps = {
+  label: string;
+  propertyPath: string;
+  container: Record<string, any>;
+  setContainer: (container: Record<string, any>) => void;
+  required?: boolean;
+  className?: string;
+  disabled?: boolean;
+};
+
 export function MemoryInput({
   label,
   propertyPath,
@@ -12,7 +22,7 @@ export function MemoryInput({
   required,
   className,
   disabled,
-}) {
+}: MemoryInputProps) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
   const options = [
     { key: '', text: 'B' },
@@ -27,7 +37,7 @@ export function MemoryInput({
   const unit = value.replace(numericValue, '');
   const selectedUnit = units.includes(unit) ? unit : '';
 
-  const setValue = (val) => {
+  const setValue = (val: string) => {
     jp.value(container, propertyPath, val);
     setContainer({ ...container });
   };
@@ -42,7 +52,6 @@ export function MemoryInput({
       <FlexBox style={{ gap: '10px' }} className={className}>
         <Input
           type="Number"
-          min="0"
           required={required}
           value={numericValue}
           onInput={(e) => setValue(e.target.value + selectedUnit)}

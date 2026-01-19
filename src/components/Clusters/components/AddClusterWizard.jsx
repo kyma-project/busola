@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { Wizard, WizardStep, Title } from '@ui5/webcomponents-react';
+import { useState } from 'react';
+import { Title, Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 
@@ -25,12 +24,7 @@ import { ClusterPreview } from './ClusterPreview';
 import './AddClusterWizard.scss';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
-export function AddClusterWizard({
-  kubeconfig,
-  setKubeconfig,
-  dialogRef,
-  config = {},
-}) {
+export function AddClusterWizard({ config = {} }) {
   const busolaClusterParams = useAtomValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
@@ -48,6 +42,7 @@ export function AddClusterWizard({
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const [chosenContext, setChosenContext] = useState(undefined);
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
+  const [kubeconfig, setKubeconfig] = useState(undefined);
 
   const {
     isValid: authValid,
@@ -56,7 +51,12 @@ export function AddClusterWizard({
     revalidate,
   } = useCustomFormValidator();
 
-  useEffect(() => {
+  const updateKubeconfig = (kubeconfig) => {
+    if (!kubeconfig) {
+      setKubeconfig(null);
+      return;
+    }
+
     if (Array.isArray(kubeconfig?.contexts)) {
       if (getUser(kubeconfig)?.token) {
         setStorage('sessionStorage');
@@ -64,17 +64,11 @@ export function AddClusterWizard({
         setStorage('localStorage');
       }
     }
-  }, [kubeconfig]);
-
-  const updateKubeconfig = (kubeconfig) => {
-    if (!kubeconfig) {
-      setKubeconfig(null);
-      return;
-    }
 
     const hasOneContext = kubeconfig?.contexts?.length === 1;
-    const hasAuth = hasKubeconfigAuth(kubeconfig);
     setHasOneContext(hasOneContext);
+
+    const hasAuth = hasKubeconfigAuth(kubeconfig);
     setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
@@ -130,12 +124,12 @@ export function AddClusterWizard({
       console.warn(e);
     }
     setShowWizard(false);
-    setKubeconfig(undefined);
+    updateKubeconfig(undefined);
   };
 
   const onCancel = () => {
     setShowWizard(false);
-    setKubeconfig(undefined);
+    updateKubeconfig(undefined);
   };
 
   const handleStepChange = (e) => {
@@ -189,7 +183,7 @@ export function AddClusterWizard({
               <ResourceForm.Single
                 formElementRef={authFormRef}
                 resource={kubeconfig}
-                setResource={setKubeconfig}
+                setResource={updateKubeconfig}
                 setCustomValid={setCustomValid}
                 createResource={(e) => {
                   e.preventDefault();
@@ -263,25 +257,21 @@ export function AddClusterWizard({
           />
         </WizardStep>
       </Wizard>
-      {dialogRef?.current &&
-        createPortal(
-          <WizardButtons
-            className="cluster-wizard-buttons"
-            selectedStep={selected}
-            setSelectedStep={setSelected}
-            firstStep={selected === 1}
-            lastStep={
-              kubeconfig && (!hasAuth || !hasOneContext)
-                ? selected === 4
-                : selected === 3
-            }
-            onCancel={onCancel}
-            customFinish={t('clusters.buttons.connect-cluster')}
-            onComplete={onComplete}
-            invalid={isCurrentStepInvalid(selected)}
-          />,
-          dialogRef.current,
-        )}
+      <WizardButtons
+        className="cluster-wizard-buttons"
+        selectedStep={selected}
+        setSelectedStep={setSelected}
+        firstStep={selected === 1}
+        lastStep={
+          kubeconfig && (!hasAuth || !hasOneContext)
+            ? selected === 4
+            : selected === 3
+        }
+        onCancel={onCancel}
+        customFinish={t('clusters.buttons.connect-cluster')}
+        onComplete={onComplete}
+        invalid={isCurrentStepInvalid(selected)}
+      />
     </>
   );
 }

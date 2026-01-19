@@ -176,10 +176,11 @@ context('Test Community Modules views', () => {
 
   it('Test deleting Community Modules from List and Details', () => {
     cy.deleteFromGenericList('Module', 'busola', {
+      parentSelector: '.community-modules-list',
       searchInPlainTableText: true,
       deletedVisible: false,
-      parentSelector: '.community-modules-list',
       waitForDelete: 2000,
+      customHeaderText: 'Delete module busola from your cluster?',
     });
   });
 });
