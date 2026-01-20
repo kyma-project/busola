@@ -11,41 +11,39 @@ export function PodTemplate({ template }) {
   const { t } = useTranslation();
 
   return (
-    <div className="sap-margin-x-small sap-margin-bottom-small">
-      <Card
-        accessibleName={t('pods.labels.pod-template')}
-        className="pod-template"
-        key="pod-template"
-        header={<CardHeader titleText={t('pods.labels.pod-template')} />}
-      >
-        <PodTemplateRow
-          label={t('pods.labels.restart-policy')}
-          component={<Text>{template.spec.restartPolicy}</Text>}
+    <Card
+      accessibleName={t('pods.labels.pod-template')}
+      className="pod-template"
+      key="pod-template"
+      header={<CardHeader titleText={t('pods.labels.pod-template')} />}
+    >
+      <PodTemplateRow
+        label={t('pods.labels.restart-policy')}
+        component={<Text>{template.spec.restartPolicy}</Text>}
+      />
+      <PodTemplateRow
+        label={t('common.headers.labels')}
+        component={<Labels labels={template.metadata.labels} />}
+      />
+      {template.spec.containers && (
+        <ContainersPanel
+          title={t('pods.labels.containers')}
+          containers={template.spec.containers}
         />
-        <PodTemplateRow
-          label={t('common.headers.labels')}
-          component={<Labels labels={template.metadata.labels} />}
+      )}
+      {template.spec.initContainers && (
+        <ContainersPanel
+          title={t('pods.labels.init-containers')}
+          containers={template.spec.initContainers}
         />
-        {template.spec.containers && (
-          <ContainersPanel
-            title={t('pods.labels.containers')}
-            containers={template.spec.containers}
-          />
-        )}
-        {template.spec.initContainers && (
-          <ContainersPanel
-            title={t('pods.labels.init-containers')}
-            containers={template.spec.initContainers}
-          />
-        )}
-        {template.spec.volumes && (
-          <VolumesPanel
-            title={t('pods.labels.volumes')}
-            labels={template.metadata.labels}
-            volumes={template.spec.volumes}
-          />
-        )}
-      </Card>
-    </div>
+      )}
+      {template.spec.volumes && (
+        <VolumesPanel
+          title={t('pods.labels.volumes')}
+          labels={template.metadata.labels}
+          volumes={template.spec.volumes}
+        />
+      )}
+    </Card>
   );
 }

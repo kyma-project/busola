@@ -5,7 +5,7 @@ import { useGetTranslation } from '../helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link } from 'shared/components/Link/Link';
 
-export function ResourceRefs({ value, structure, disableMargin }) {
+export function ResourceRefs({ value, structure }) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
 
@@ -53,7 +53,6 @@ export function ResourceRefs({ value, structure, disableMargin }) {
       entries={sanitizedValue || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      disableMargin={disableMargin}
       searchSettings={{
         showSearchField: false,
       }}

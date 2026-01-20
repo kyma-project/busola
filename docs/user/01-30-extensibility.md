@@ -2,17 +2,18 @@
 
 ## Overview
 
-With Busola's extensibility feature, you can create a dedicated user interface (UI) page for your CustomResourceDefinition (CRD). It enables you to add navigation nodes, on cluster or namespace level, and to configure your [UI display](./30-details-summary.md), for example, a resource list page, and details pages. You can also [create and edit forms](./40-form-fields.md). To create a UI component, you need a ConfigMap.
+With Busola's extensibility feature, you can create a dedicated user interface (UI) page for your CustomResourceDefinition (CRD). It enables you to add navigation nodes, on cluster or namespace level, and to configure your [UI display](../contributor/extensibility/30-details-summary.md), for example, a resource list page, and details pages. You can also [create and edit forms](../contributor/extensibility/40-form-fields.md). To create a UI component, you need a ConfigMap.
 
-You can also leverage Busola's [custom extension feature](80-custom-extensions.md) to design entirely custom user interfaces tailored to your specific needs.
+You can also leverage Busola's [custom extension feature](../contributor/extensibility/80-custom-extensions.md) to design entirely custom user interfaces tailored to your specific needs.
 
 ## Create a ConfigMap for Your UI
 
 To create a ConfigMap with your CRD's UI configuration, you can either use the Extensions feature or do it manually.
 
-For more information about extensibility in Busola, see [Configure a Config Map for Resource-Based Extensions](120-resource-extensions.md).
+> [!TIP]
+> For more information about extensibility in Busola, see the [`extensibility folder`](../contributor/extensibility/) in the Busola repository.
 
-### Create a CRD ConfigMap Using the Extentions Feature
+### Create a CRD ConfigMap Using the Extensions Feature
 
 > [!NOTE]
 > Using the Extensions feature, you can't change the namespace where the UI component is created or edit the ConfigMap's name. If you want to create the ConfigMap in a different namespace, create the ConfigMap manually.
@@ -40,10 +41,10 @@ For more information about extensibility in Busola, see [Configure a Config Map 
 
 1. In Kyma dashboard, choose a namespace.
 2. Go to **Configuration** > **Config Maps** and click **Create**.
-3. Enter the Config Map's **Name**.
+3. Enter the ConfigMap's **Name**.
 4. In the **Labels** section, enter two labels:
-   - `busola.io/extension` as the key, and `resource` as the value
-   - `busola.io/extension-version`as the key, and `'0.5'` as the value
+   - `busola.io/extension` as the key and `resource` as the value
+   - `busola.io/extension-version`as the key and `'0.5'` as the value
 5. Under **Data**, add the following required fields for your module's UI configuration:
 
    ```yaml
@@ -60,4 +61,5 @@ For more information about extensibility in Busola, see [Configure a Config Map 
 
 6. Click **Create**.
 
-To see an exemplary configuration of the Busola extensibility feature, check the [Pizza example](examples/../../../examples/pizzas/README.md).
+> [!TIP]
+> To see an example configuration of the Busola extensibility feature, check the [Pizza example](https://github.com/kyma-project/busola/blob/main/examples/pizzas/README.md).
