@@ -5,7 +5,7 @@
 ![Busola Kubernetes architecture](assets/busola_kubernetes_3.svg)
 
 To expose Busola, you can use [APIRule](https://github.com/kyma-project/busola/tree/main/resources/istio), [Ingress](https://github.com/kyma-project/busola/tree/main/resources/ingress), or create your own exposing mechanism.
-For more details about environment configuration, see [Environment-Specific Settings](../operator/configuration.md#environment-specific-settings).
+For more details about environment configuration, see [Environment-Specific Settings](../user/technical-reference/configuration.md#environment-specific-settings).
 
 ## Deploying Busola in a Kubernetes Cluster
 
