@@ -20,6 +20,8 @@ interface DeleteResourceModalProps {
   resource?: any;
   resourceIsCluster?: boolean;
   resourceUrl?: string;
+  customTitle?: string;
+  customMessage?: string;
   deleteFn?: (resource: any, resourceUrl: string) => Promise<void>;
   cancelFn: () => void;
   additionalDeleteInfo?: ReactNode;
@@ -37,6 +39,8 @@ export function DeleteResourceModal({
   resource,
   resourceIsCluster = false,
   resourceUrl,
+  customTitle,
+  customMessage,
   deleteFn,
   cancelFn,
   additionalDeleteInfo,
@@ -46,24 +50,25 @@ export function DeleteResourceModal({
   showDeleteDialog,
   performCancel,
 }: DeleteResourceModalProps) {
+  const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
   const { t } = useTranslation();
+  const defaultTitle = t(
+    resourceIsCluster
+      ? 'common.delete-dialog.disconnect-title'
+      : 'common.delete-dialog.delete-title',
+    {
+      type: prettifiedResourceName,
+    },
+  );
   const [dontConfirmDelete, setDontConfirmDelete] = useAtom(
     dontConfirmDeleteAtom,
   );
-  const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
 
   return (
     <MessageBox
       style={{ maxWidth: '700px' }}
       type="Warning"
-      titleText={t(
-        resourceIsCluster
-          ? 'common.delete-dialog.disconnect-title'
-          : 'common.delete-dialog.delete-title',
-        {
-          type: prettifiedResourceName,
-        },
-      )}
+      titleText={customTitle || defaultTitle}
       open={showDeleteDialog}
       className="ui5-content-density-compact"
       actions={[
@@ -102,15 +107,16 @@ export function DeleteResourceModal({
         }}
       >
         <Text style={{ paddingLeft: '0.5rem' }}>
-          {t(
-            resourceIsCluster
-              ? 'common.delete-dialog.disconnect-message'
-              : 'common.delete-dialog.delete-message',
-            {
-              type: prettifiedResourceName,
-              name: resourceTitle || resource?.metadata?.name,
-            },
-          )}
+          {customMessage ??
+            t(
+              resourceIsCluster
+                ? 'common.delete-dialog.disconnect-message'
+                : 'common.delete-dialog.delete-message',
+              {
+                type: prettifiedResourceName,
+                name: resourceTitle || resource?.metadata?.name,
+              },
+            )}
         </Text>
         {additionalDeleteInfo && (
           <Text style={{ paddingLeft: '0.5rem' }}>{additionalDeleteInfo}</Text>
