@@ -13,6 +13,8 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteAtom } from 'state/settings/dontConfirmDeleteAtom';
 import { ReactNode } from 'react';
 
+import './DeleteResourceModal.scss';
+
 interface DeleteResourceModalProps {
   resourceTitle?: string;
   resourceType?: string;

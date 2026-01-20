@@ -580,14 +580,13 @@ export function ResourceListRenderer({
       ...(searchSettings?.textSearchProperties || []),
     ];
   };
-
   return (
     <>
       {createPortal(
         <DeleteResourceModal
           resource={activeResource}
           resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
-          resourceType={rawResourceType}
+          resourceType={rawResourceType || resourceType}
           performCancel={performCancel}
           performDelete={performDelete}
           showDeleteDialog={showDeleteDialog}
