@@ -156,7 +156,7 @@ export default function LimitRangeSpecification({
       searchSettings={{
         showSearchField: false,
       }}
-      className={'limit-range-spec compact'}
+      className="limit-range-spec compact"
     />
   ) : (
     <UI5Panel

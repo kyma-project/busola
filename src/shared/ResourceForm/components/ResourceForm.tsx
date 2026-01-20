@@ -346,7 +346,6 @@ export function ResourceForm({
         <UI5Panel
           key={`edit-panel-${singularName}`}
           className="resource-form--panel card-shadow sap-margin-y-small"
-          disableMargin
           stickyHeader={true}
           title={title}
           accessibleName={`${title} panel`}

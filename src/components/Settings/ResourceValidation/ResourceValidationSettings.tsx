@@ -83,7 +83,7 @@ export default function ResourceValidationSettings() {
       {isEnabled && policyList.length > 0 && (
         <>
           <GenericList
-            className="resource-validation-table"
+            className="resource-validation-table sap-margin-small"
             title={t(
               'settings.general.resourcesValidation.validation-policies',
             )}

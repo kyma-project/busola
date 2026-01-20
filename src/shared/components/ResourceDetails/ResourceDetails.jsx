@@ -488,7 +488,7 @@ function Resource({
                 <Title
                   level="H3"
                   size="H3"
-                  className="sap-margin-begin-medium sap-margin-y-medium"
+                  className="sap-margin-top-small sap-margin-bottom-medium"
                   id="namespace-details-heading"
                 >
                   {title ?? t('common.headers.resource-details')}

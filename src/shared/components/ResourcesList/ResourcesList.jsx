@@ -72,7 +72,6 @@ ResourcesList.propTypes = {
   resourceUrlPrefix: PropTypes.string,
   disableCreate: PropTypes.bool,
   disableDelete: PropTypes.bool,
-  disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
   filterFn: PropTypes.func,
@@ -239,7 +238,6 @@ export function ResourceListRenderer({
   nameSelector = (entry) => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate = false,
   disableDelete = false,
-  disableMargin = false,
   enableColumnLayout = false,
   columnLayout,
   customColumnLayout,
@@ -595,7 +593,6 @@ export function ResourceListRenderer({
           customColumnLayout={customColumnLayout}
           columnLayout={columnLayout}
           enableColumnLayout={enableColumnLayout}
-          disableMargin={disableMargin}
           title={showTitle ? title || prettifiedResourceName : null}
           accessibleName={
             accessibleName ?? prettifyNamePlural(resourceTitle, resourceType)

@@ -17,19 +17,17 @@ export function RelatedCRDsList(resource) {
   return (
     <CustomResourceDefinitionList
       key="crds"
-      {...{
-        disableHiding: true,
-        displayArrow: false,
-        hasDetailsView: true,
-        resourceUrl,
-        resourceType: 'customresourcedefinitions',
-        isCompact: true,
-        showTitle: true,
-        filter: filterByCategories,
-        title: t('custom-resource-definitions.subtitle.related-crds'),
-        pagination: { itemsPerPage: 5 },
-        hideCreateOption: true,
-      }}
+      disableHiding={true}
+      displayArrow={false}
+      hasDetailsView={true}
+      resourceUrl={resourceUrl}
+      resourceType="customresourcedefinitions"
+      isCompact={true}
+      showTitle={true}
+      filter={filterByCategories}
+      title={t('custom-resource-definitions.subtitle.related-crds')}
+      pagination={{ itemsPerPage: 5 }}
+      hideCreateOption={true}
     />
   );
 }

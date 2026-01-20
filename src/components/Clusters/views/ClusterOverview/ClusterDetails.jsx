@@ -48,7 +48,7 @@ export default function ClusterDetails({ currentCluster }) {
       <Title
         level="H3"
         size="H3"
-        className="sap-margin-begin-medium sap-margin-y-medium"
+        className="sap-margin-top-small sap-margin-bottom-medium"
         id="cluster-details-heading"
       >
         {t('cluster-overview.headers.cluster-overview')}
