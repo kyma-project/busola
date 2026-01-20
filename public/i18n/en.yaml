@@ -1013,13 +1013,13 @@ namespaces:
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
   namespace-overview: Namespace Overview
+  namespaces-overview: Namespaces Overview
   overview:
     resources:
       error: Error while loading memory consumption data
       limits: Memory Limits
       requests: Memory Requests
       title: Resource Consumption
-    title: Overview
   title: Namespaces
 navigation:
   all-namespaces: All Namespaces

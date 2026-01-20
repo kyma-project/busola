@@ -32,6 +32,7 @@ import { useNavigate } from 'react-router';
 import { createPortal } from 'react-dom';
 
 import './ClusterList.scss';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature(configFeaturesNames.GARDENER_LOGIN);
@@ -42,6 +43,7 @@ function ClusterList() {
   const notification = useNotification();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  useWindowTitle(t('clusters.labels.name'));
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     resourceType: t('clusters.labels.name'),
