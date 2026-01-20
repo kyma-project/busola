@@ -21,4 +21,4 @@ Creating a custom extension is as straightforward as setting up a ConfigMap with
 
 Once your ConfigMap is ready, add it to your cluster. Then, Busola loads and displays your custom UI.
 
-For more information, see this [example](./../../examples/custom-extension/README.md).
+For more information, see this [example](../../../examples/custom-extension/README.md).
