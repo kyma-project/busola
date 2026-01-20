@@ -1,6 +1,6 @@
 export default [
   { text: 'Command Palette', link: './01-20-command-palette.md' },
-  { text: 'Extensibility', link: './extensibility/README.md' },
+  { text: 'Extensibility', link: './01-30-extensibility.md' },
   {
     text: 'Troubleshooting Guides',
     link: './troubleshooting-guides/README.md',
