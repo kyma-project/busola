@@ -23,13 +23,13 @@ interface DeleteResourceModalProps {
   customTitle?: string;
   customMessage?: string;
   deleteFn?: (resource: any, resourceUrl: string) => Promise<void>;
-  cancelFn: () => void;
+  cancelFn?: () => void;
   additionalDeleteInfo?: ReactNode;
   customDeleteText?: string | null;
   disableDeleteButton?: boolean;
   performDelete: (resource: any, resourceUrl: any, deleteFn: any) => void;
   showDeleteDialog: boolean;
-  performCancel: (cancelFn: () => void) => void;
+  performCancel: (cancelFn?: () => void) => void;
   additionalPadding?: boolean;
 }
 
