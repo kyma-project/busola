@@ -112,12 +112,12 @@ export default function ClusterStats({ nodesData }) {
       <Title
         level="H3"
         size="H3"
-        className="sap-margin-begin-medium sap-margin-y-medium"
+        className="sap-margin-top-small sap-margin-bottom-medium"
         id="monitoring-heading"
       >
         {t('common.headers.monitoring-and-health')}
       </Title>
-      <div className="cluster-stats sap-margin-x-tiny">
+      <div className="cluster-stats">
         <div className="item-wrapper card-tall">
           <UI5RadialChart
             cardClassName="item"

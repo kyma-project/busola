@@ -5,7 +5,6 @@ import {
   List,
   ListItemStandard,
   MessageStrip,
-  Text,
 } from '@ui5/webcomponents-react';
 import {
   checkIfAllResourcesAreDeleted,
@@ -42,6 +41,9 @@ type ModulesListDeleteBoxProps = {
   detailsOpen: boolean;
   isCommunity?: boolean;
   namespaced: boolean;
+  showDeleteDialog: boolean;
+  performDelete: () => void;
+  performCancel: () => void;
   setLayoutColumn: (update: SetStateAction<ColumnLayoutState>) => void;
   handleModuleUninstall: () => void;
   setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
@@ -59,6 +61,9 @@ export const ModulesDeleteBox = ({
   detailsOpen,
   isCommunity,
   namespaced,
+  showDeleteDialog,
+  performDelete,
+  performCancel,
   setLayoutColumn,
   handleModuleUninstall,
   setChosenModuleIndex,
@@ -284,8 +289,15 @@ export const ModulesDeleteBox = ({
     }
   };
 
+  const moduleName =
+    chosenModuleIndex != null ? selectedModules[chosenModuleIndex]?.name : '';
+
   return (
     <DeleteMessageBox
+      showDeleteDialog={showDeleteDialog}
+      performDelete={performDelete}
+      performCancel={performCancel}
+      additionalPadding
       disableDeleteButton={
         associatedResourceLeft === null ||
         (associatedResourceLeft && !allowForceDelete)
@@ -295,20 +307,14 @@ export const ModulesDeleteBox = ({
           ? 'common.buttons.cascade-delete'
           : null
       }
+      customTitle={t('kyma-modules.delete-module-title', { name: moduleName })}
+      customMessage={t('kyma-modules.delete-module')}
       cancelFn={() => {
         setAllowForceDelete(false);
         setChosenModuleIndex(null);
       }}
       additionalDeleteInfo={
         <>
-          <Text>
-            {t('kyma-modules.delete-module', {
-              name:
-                chosenModuleIndex != null
-                  ? selectedModules[chosenModuleIndex]?.name
-                  : '',
-            })}
-          </Text>
           {associatedResources.length > 0 && (
             <>
               <MessageStrip

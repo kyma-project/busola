@@ -1,6 +1,18 @@
 import { MultiInput } from './MultiInput';
 import { Input } from '@ui5/webcomponents-react';
 
+type TextArrayInputProps = {
+  defaultOpen?: boolean;
+  inputProps?: { [key: string]: any };
+  sectionTooltipContent?: React.ReactNode;
+  placeholder?: string;
+  toInternal?: (value: any) => string[];
+  toExternal?: (value: string[]) => any;
+  readOnly?: boolean;
+  ariaLabel?: string;
+  [key: string]: any;
+};
+
 export function TextArrayInput({
   defaultOpen,
   inputProps: _inputProps,
@@ -11,11 +23,12 @@ export function TextArrayInput({
   readOnly,
   ariaLabel,
   ...props
-}) {
+}: TextArrayInputProps) {
   const { ...inputProps } = _inputProps || {};
   const readOnlyOptions = readOnly ? { readOnly: true } : {};
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <MultiInput
       defaultOpen={defaultOpen}
       toInternal={toInternal}
@@ -23,7 +36,7 @@ export function TextArrayInput({
       sectionTooltipContent={sectionTooltipContent}
       readOnly={readOnly}
       inputs={[
-        ({ value, setValue, ref, updateValue, index }) => (
+        ({ value, setValue, ref, updateValue, index }: any) => (
           <Input
             placeholder={Math.abs(index) === 1 ? placeholder : ''}
             key={index}

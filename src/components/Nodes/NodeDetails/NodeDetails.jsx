@@ -56,7 +56,7 @@ export default function NodeDetails({ nodeName }) {
       loadingMetrics ? (
         <Spinner />
       ) : (
-        <div className="flexwrap sap-margin-x-small sap-margin-top-small">
+        <div className="flexwrap">
           <NodeResources metrics={data.metrics} resources={resources} />
         </div>
       ),

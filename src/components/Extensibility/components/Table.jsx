@@ -192,8 +192,7 @@ export function Table({
     <GenericList
       disableHiding={true}
       displayArrow={false}
-      disableMargin={structure.disablePadding}
-      className={'extensibility-table'}
+      className="extensibility-table"
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,
       })}
