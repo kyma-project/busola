@@ -297,6 +297,7 @@ export const ModulesDeleteBox = ({
       showDeleteDialog={showDeleteDialog}
       performDelete={performDelete}
       performCancel={performCancel}
+      additionalPadding
       disableDeleteButton={
         associatedResourceLeft === null ||
         (associatedResourceLeft && !allowForceDelete)

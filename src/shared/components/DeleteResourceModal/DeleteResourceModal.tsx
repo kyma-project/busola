@@ -13,8 +13,6 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteAtom } from 'state/settings/dontConfirmDeleteAtom';
 import { ReactNode } from 'react';
 
-import './DeleteResourceModal.scss';
-
 interface DeleteResourceModalProps {
   resourceTitle?: string;
   resourceType?: string;
@@ -32,6 +30,7 @@ interface DeleteResourceModalProps {
   performDelete: (resource: any, resourceUrl: any, deleteFn: any) => void;
   showDeleteDialog: boolean;
   performCancel: (cancelFn: () => void) => void;
+  additionalPadding?: boolean;
 }
 
 export function DeleteResourceModal({
@@ -51,6 +50,7 @@ export function DeleteResourceModal({
   performDelete,
   showDeleteDialog,
   performCancel,
+  additionalPadding = false,
 }: DeleteResourceModalProps) {
   const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
   const { t } = useTranslation();
@@ -106,6 +106,8 @@ export function DeleteResourceModal({
         direction="Column"
         style={{
           gap: '10px',
+          paddingLeft: additionalPadding ? '1rem' : undefined,
+          paddingRight: additionalPadding ? '1rem' : undefined,
         }}
       >
         <Text style={{ paddingLeft: '0.5rem' }}>
