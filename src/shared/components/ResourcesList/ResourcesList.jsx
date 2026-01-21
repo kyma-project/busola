@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from '../Link/Link';
 import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
+import { DeleteResourceModal } from '../DeleteResourceModal/DeleteResourceModal';
 
 const Injections = lazy(
   () => import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -266,7 +267,12 @@ export function ResourceListRenderer({
   const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
 
-  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+  const {
+    showDeleteDialog,
+    handleResourceDelete,
+    performDelete,
+    performCancel,
+  } = useDeleteResource({
     resourceTitle,
     resourceType,
     layoutNumber,
@@ -572,13 +578,16 @@ export function ResourceListRenderer({
       ...(searchSettings?.textSearchProperties || []),
     ];
   };
-
   return (
     <>
       {createPortal(
-        <DeleteMessageBox
+        <DeleteResourceModal
           resource={activeResource}
           resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
+          resourceType={rawResourceType || resourceType}
+          performCancel={performCancel}
+          performDelete={performDelete}
+          showDeleteDialog={showDeleteDialog}
         />,
         document.body,
       )}
