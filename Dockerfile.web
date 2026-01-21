@@ -51,6 +51,8 @@ COPY --from=builder --chown=nginx /app/start_nginx.sh /app/start_nginx.sh
 COPY --from=configuration /kyma/build /app/core-ui/environments
 
 USER root:root
+# Upgrade libpng, libxslt, and c-ares to patch CVE-2025-66293, CVE-2025-7425, and CVE-2025-62408
+RUN apk add --no-cache --upgrade libpng libxslt c-ares
 RUN chown -R nginx:root /etc/nginx /app/core-ui
 USER nginx:nginx
 
