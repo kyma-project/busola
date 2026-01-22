@@ -108,8 +108,8 @@ kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
 
 #### Prerequisites
 
-- Sidecar Proxy injection enabled; see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
-- The [API Gateway module](https://kyma-project.io/external-content/api-gateway/docs/user/README.html) installed, see [Quick Install](https://kyma-project.io/02-get-started/01-quick-install.html)
+- Sidecar Proxy injection for your namespace enabled; see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
+- The API Gateway and Istio modules installed, see [Quick Install](https://kyma-project.io/02-get-started/01-quick-install.html)
 
 #### Procedure
 
@@ -126,5 +126,8 @@ Follow these steps to access your Busola page:
    ```bash
    kubectl get --namespace "${NAMESPACE}" virtualservices.networking.istio.io
    ```
+
+> [!NOTE]
+> You may need to wait a few minutes for your VirtualService to be created.
 
 Under `HOSTS`, you should see an address that you can use to access the Busola page.
