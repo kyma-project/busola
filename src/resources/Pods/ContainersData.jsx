@@ -32,7 +32,6 @@ export default function ContainersData({ type, containers, statuses }) {
       status?.state?.terminated;
     return (
       <UI5Panel
-        disableMargin
         title={container.name}
         accessibleName={`${container.name} panel`}
         headerActions={

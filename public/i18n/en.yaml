@@ -1013,13 +1013,13 @@ namespaces:
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
   namespace-overview: Namespace Overview
+  namespaces-overview: Namespaces Overview
   overview:
     resources:
       error: Error while loading memory consumption data
       limits: Memory Limits
       requests: Memory Requests
       title: Resource Consumption
-    title: Overview
   title: Namespaces
 navigation:
   all-namespaces: All Namespaces
@@ -1449,12 +1449,12 @@ settings:
       title: Cluster Interaction
     resourcesValidation:
       customize: Customize
-      enabled-policies: Enabled Policies
       no-policies-found: No policies found
       reset: Reset
       title: Resource Validation
       validateResources: Validate Resources
       validation-disabled: Resource validation is disabled
+      validation-policies: Validation Policies
     showHiddenNamespaces: Show hidden Namespaces
     title: Advanced Options
   language:

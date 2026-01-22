@@ -21,6 +21,7 @@ import { CommunityModulesUploadProvider } from 'components/Modules/community/pro
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useKymaQuery } from 'components/Modules/kymaModulesQueries';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
+import { DeleteResourceModal } from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 
 const KymaModulesList = lazy(() => import('components/Modules/ModulesList'));
 
@@ -37,6 +38,8 @@ const ColumnWrapper = ({
   DeleteMessageBox,
   handleResourceDelete,
   showDeleteDialog,
+  performDelete,
+  performCancel,
 }) => {
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { clusterUrl, namespaceUrl } = useUrl();
@@ -194,6 +197,8 @@ const ColumnWrapper = ({
         DeleteMessageBox={DeleteMessageBox}
         handleResourceDelete={handleResourceDelete}
         showDeleteDialog={showDeleteDialog}
+        performDelete={performDelete}
+        performCancel={performCancel}
         namespaced={namespaced}
       >
         <CommunityModuleContextProvider>
@@ -202,6 +207,8 @@ const ColumnWrapper = ({
             layoutState={layoutState}
             DeleteMessageBox={DeleteMessageBox}
             handleResourceDelete={handleResourceDelete}
+            performDelete={performDelete}
+            performCancel={performCancel}
             showDeleteDialog={showDeleteDialog}
             namespaced={namespaced}
           >
@@ -232,19 +239,25 @@ const ColumnWrapper = ({
 };
 
 const KymaModules = ({ defaultColumn, namespaced }) => {
-  const [DeleteMessageBox, handleResourceDelete, showDeleteDialog] =
-    useDeleteResource({
-      resourceType: t('kyma-modules.title'),
-      forceConfirmDelete: true,
-    });
+  const {
+    performCancel,
+    performDelete,
+    handleResourceDelete,
+    showDeleteDialog,
+  } = useDeleteResource({
+    resourceType: t('kyma-modules.title'),
+    forceConfirmDelete: true,
+  });
   return (
     <Suspense fallback={<Spinner />}>
       <ColumnWrapper
         defaultColumn={defaultColumn}
         namespaced={namespaced}
-        DeleteMessageBox={DeleteMessageBox}
-        handleResourceDelete={handleResourceDelete}
+        DeleteMessageBox={DeleteResourceModal}
+        performDelete={performDelete}
+        performCancel={performCancel}
         showDeleteDialog={showDeleteDialog}
+        handleResourceDelete={handleResourceDelete}
       />
     </Suspense>
   );

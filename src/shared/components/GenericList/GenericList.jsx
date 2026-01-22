@@ -57,7 +57,6 @@ export const GenericList = ({
   sortBy,
   notFoundMessage = 'components.generic-list.messages.not-found',
   searchSettings = defaultSearch,
-  disableMargin,
   emptyListProps = null,
   columnLayout = null,
   customColumnLayout = null,
@@ -341,7 +340,6 @@ export const GenericList = ({
       title={title}
       headerActions={!headerActionsEmpty && headerActions}
       testid={testid}
-      disableMargin={disableMargin}
       className={className}
       accessibleName={`${title} panel`}
     >
@@ -475,7 +473,6 @@ GenericList.propTypes = {
   sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   notFoundMessage: PropTypes.string,
   searchSettings: SearchProps,
-  disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   customUrl: PropTypes.func,
   hasDetailsView: PropTypes.bool,

@@ -12,11 +12,8 @@ export const ValidationSwitch = () => {
     validateResourcesAtom,
   );
 
-  const {
-    isEnabled,
-    choosePolicies,
-    policies: selectedPolicies = [],
-  } = getExtendedValidateResourceState(validateResources);
+  const { isEnabled, policies: selectedPolicies = [] } =
+    getExtendedValidateResourceState(validateResources);
 
   return (
     <div className="validate-resources">
@@ -29,7 +26,6 @@ export const ValidationSwitch = () => {
         onChange={() =>
           setValidateResources({
             isEnabled: !isEnabled,
-            choosePolicies,
             policies: selectedPolicies,
           })
         }

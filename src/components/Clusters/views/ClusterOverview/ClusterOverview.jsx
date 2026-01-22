@@ -21,6 +21,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner';
+import { DeleteResourceModal } from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
@@ -40,7 +41,12 @@ export function ClusterOverview() {
   const notification = useNotification();
   const navigate = useNavigate();
   const { nodes, error, loading } = useNodesQuery();
-  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+  const {
+    showDeleteDialog,
+    handleResourceDelete,
+    performDelete,
+    performCancel,
+  } = useDeleteResource({
     resourceType: t('clusters.labels.name'),
   });
   const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
@@ -119,7 +125,7 @@ export function ClusterOverview() {
       />
       {createPortal(<YamlUploadDialog />, document.body)}
       {createPortal(
-        <DeleteMessageBox
+        <DeleteResourceModal
           resource={currentCluster}
           resourceIsCluster={true}
           resourceTitle={currentCluster?.kubeconfig['current-context']}
@@ -128,8 +134,11 @@ export function ClusterOverview() {
             notification.notifySuccess({
               content: t('clusters.disconnect'),
             });
-            navigate('/clusters');
           }}
+          resourceType={t('clusters.labels.name')}
+          performDelete={performDelete}
+          showDeleteDialog={showDeleteDialog}
+          performCancel={performCancel}
         />,
         document.body,
       )}

@@ -36,7 +36,7 @@ Features comprise the following elements:
 - `selector`: The Kubernetes resources that can activate the feature
 - `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
 
-For more information, see the available Busola [feature flags](../features.md).
+For more information, see the available Busola [feature flags](feature-flags.md).
 
 ### Environment-Specific Settings
 

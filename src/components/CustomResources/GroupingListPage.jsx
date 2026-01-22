@@ -59,11 +59,11 @@ export function GroupingListPage({
   }
 
   const lists = (
-    <ul>
+    <ul className="cr-group-list">
       {entries
         .sort(([groupA], [groupB]) => groupA.localeCompare(groupB))
         .map(([group, crds]) => (
-          <li key={group} className="cr-group-list">
+          <li key={group} className="cr-group-list-item">
             <ResourceListRenderer
               resourceUrl={resourceUrl}
               resourceType="CustomResourceDefinition"

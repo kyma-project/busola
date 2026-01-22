@@ -18,6 +18,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
 import { Link } from 'shared/components/Link/Link';
+import { DeleteResourceModal } from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 
 import { Button } from '@ui5/webcomponents-react';
 
@@ -32,6 +33,7 @@ import { useNavigate } from 'react-router';
 import { createPortal } from 'react-dom';
 
 import './ClusterList.scss';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature(configFeaturesNames.GARDENER_LOGIN);
@@ -42,12 +44,20 @@ function ClusterList() {
   const notification = useNotification();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
-  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    resourceType: t('clusters.labels.name'),
-  });
+  useWindowTitle(t('clusters.labels.name'));
 
   const [chosenCluster, setChosenCluster] = useState(null);
+
+  const {
+    showDeleteDialog,
+    handleResourceDelete,
+    performCancel,
+    performDelete,
+  } = useDeleteResource({
+    resourceType: t('clusters.labels.name'),
+    resourceTitle: chosenCluster?.kubeconfig['current-context'],
+  });
+
   const setShowAdd = useSetAtom(showAddClusterWizardAtom);
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const setShowCompanion = useSetAtom(showKymaCompanionAtom);
@@ -263,7 +273,7 @@ function ClusterList() {
               hasDetailsView
             />
             {createPortal(
-              <DeleteMessageBox
+              <DeleteResourceModal
                 resource={chosenCluster}
                 resourceTitle={chosenCluster?.kubeconfig['current-context']}
                 deleteFn={(e) => {
@@ -272,6 +282,10 @@ function ClusterList() {
                     content: t('clusters.disconnect'),
                   });
                 }}
+                resourceType={t('clusters.labels.name')}
+                performDelete={performDelete}
+                showDeleteDialog={showDeleteDialog}
+                performCancel={performCancel}
               />,
               document.body,
             )}
