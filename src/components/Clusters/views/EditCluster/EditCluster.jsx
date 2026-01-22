@@ -13,7 +13,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { authDataAtom } from 'state/authDataAtom';
-import { Title } from '@ui5/webcomponents-react';
+import { FlexBox, Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster, getUser } from '../../shared';
 import { getUserIndex } from '../../shared';
@@ -195,7 +195,7 @@ export const ClusterDataForm = ({
               jp.value(kubeconfig, '$["current-context"]', name);
               jp.value(kubeconfig, `$.contexts[${userIndex}].name`, name);
 
-              setResource({ ...kubeconfig });
+              setResource(kubeconfig);
             }
           }}
         />
@@ -216,7 +216,7 @@ export const ClusterDataForm = ({
               }
               onChange();
               setChosenContext(context);
-              setResource({ ...kubeconfig });
+              setResource(kubeconfig);
             }}
             input={({ setValue }) => (
               <ContextButtons
@@ -237,13 +237,13 @@ export const ClusterDataForm = ({
           setValue={(type) => {
             onChange();
             if (type === 'token') {
-              delete kubeconfig?.users[userIndex]?.user?.exec;
+              delete kubeconfig?.users?.[userIndex]?.user?.exec;
               jp.value(kubeconfig, `$.users[${userIndex}].user.token`, null);
             } else {
-              delete kubeconfig.users[userIndex]?.user?.token;
+              delete kubeconfig?.users?.[userIndex]?.user?.token;
               createOIDC();
             }
-            setResource({ ...kubeconfig });
+            setResource(kubeconfig);
             setAuthenticationType(type);
           }}
           input={({ value, setValue, accessibleName }) => (
@@ -278,7 +278,7 @@ function EditClusterComponent({
 
   const setWholeResource = (newKubeconfig) => {
     jp.value(resource, '$.kubeconfig', newKubeconfig);
-    setResource({ ...resource });
+    setResource(resource);
   };
 
   const onComplete = () => {
@@ -310,31 +310,29 @@ function EditClusterComponent({
   };
 
   return (
-    <>
-      <div className="sap-margin-x-large sap-margin-y-small">
-        <Title level="H3" size="H3" className="sap-margin-bottom-small">
-          {t('clusters.storage.choose-storage.label')}
-        </Title>
-        <ChooseStorage
-          storage={resource.config?.storage}
-          setStorage={(type) => {
-            jp.value(resource, '$.config.storage', type);
-            setResource({ ...resource });
-          }}
-        />
-        <ResourceForm.FormField
-          className="sap-margin-top-medium"
-          label={t('common.headers.description')}
-          data-testid="cluster-description"
-          input={Inputs.Text}
-          placeholder={t('clusters.description-visibility')}
-          value={resource.config?.description || ''}
-          setValue={(value) => {
-            jp.value(resource, '$.config.description', value);
-            setResource({ ...resource });
-          }}
-        />
-      </div>
+    <div className="edit-cluster-form">
+      <Title level="H5" size="H5">
+        {t('clusters.storage.choose-storage.label')}
+      </Title>
+      <ChooseStorage
+        storage={resource.config?.storage}
+        setStorage={(type) => {
+          jp.value(resource, '$.config.storage', type);
+          setResource(resource);
+        }}
+      />
+      <ResourceForm.FormField
+        className="sap-margin-top-small"
+        label={t('common.headers.description')}
+        data-testid="cluster-description"
+        input={Inputs.Text}
+        placeholder={t('clusters.description-visibility')}
+        value={resource.config?.description || ''}
+        setValue={(value) => {
+          jp.value(resource, '$.config.description', value);
+          setResource(resource);
+        }}
+      />
       <ClusterDataForm
         onChange={onChange}
         kubeconfig={kubeconfig}
@@ -343,7 +341,7 @@ function EditClusterComponent({
         formElementRef={formElementRef}
         resourceUrl={resourceUrl}
       />
-    </>
+    </div>
   );
 }
 
