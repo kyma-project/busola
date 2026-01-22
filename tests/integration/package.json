@@ -20,12 +20,9 @@
   },
   "devDependencies": {
     "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-6.1.0.tgz",
-    "cypress": "^14.5.0",
+    "cypress": "^15.8.2",
     "cypress-file-upload": "^5.0.8",
     "cypress-plugin-tab": "^1.0.5",
     "js-yaml": "^4.1.0"
-  },
-  "overrides": {
-    "qs": "^6.14.1"
   }
 }
