@@ -38,6 +38,7 @@ import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { editor } from 'monaco-editor';
+import { useBlocker } from 'react-router';
 
 type ResourceFormProps = {
   pluralKind: string; // used for the request path
@@ -124,12 +125,29 @@ export function ResourceForm({
   formWithoutPanel,
 }: ResourceFormProps) {
   const layoutState = useAtomValue(columnLayoutAtom);
+  const isResourceEdited = useAtomValue(isResourceEditedAtom);
+  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenAtom);
+  const { navigateSafely } = useFormNavigation();
+  const blocker = useBlocker(isResourceEdited?.isEdited);
 
   const isEdit = useMemo(
     () =>
       !!initialResource?.metadata?.uid && !layoutState?.showCreate?.resource,
     [initialResource, layoutState?.showCreate?.resource],
   );
+
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      if (isResourceEdited?.isEdited) {
+        setIsFormOpen({ ...isFormOpen, leavingForm: true });
+      }
+      navigateSafely(() => {
+        setIsFormOpen({ formOpen: false, leavingForm: false });
+        if (blocker.state === 'blocked') blocker.proceed();
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocker]);
 
   useEffect(() => {
     if (layoutState?.showCreate?.resource) {
@@ -312,9 +330,6 @@ export function ResourceForm({
     </Form>
   );
 
-  const isResourceEdited = useAtomValue(isResourceEditedAtom);
-  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenAtom);
-  const { navigateSafely } = useFormNavigation();
   const [resetBtnClicked, setResetBtnClicked] = useState(false);
 
   const handleRevert = () => {
