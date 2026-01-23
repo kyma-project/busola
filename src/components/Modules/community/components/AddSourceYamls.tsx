@@ -361,7 +361,7 @@ export const AddSourceYamls = () => {
                     }
                   >
                     {resourcesToApply.length === 0 && (
-                      <ListItemStandard>
+                      <ListItemStandard key="no-modules-to-add">
                         <Text>
                           {t(
                             'modules.community.source-yaml.no-module-templates',
@@ -371,7 +371,7 @@ export const AddSourceYamls = () => {
                     )}
                     {resourcesToApply?.map((mt) => {
                       return (
-                        <ListItemCustom key={mt.value.metadata.uid}>
+                        <ListItemCustom key={mt.value.metadata.name}>
                           <Text>
                             {mt.value.metadata.name}
                             {mt.value.spec.version
