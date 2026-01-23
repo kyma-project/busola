@@ -13,7 +13,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { authDataAtom } from 'state/authDataAtom';
-import { FlexBox, Title } from '@ui5/webcomponents-react';
+import { Title } from '@ui5/webcomponents-react';
 
 import { addCluster, getContext, deleteCluster, getUser } from '../../shared';
 import { getUserIndex } from '../../shared';
