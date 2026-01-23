@@ -1,11 +1,30 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useAtom } from 'jotai';
+import { useBlocker } from 'react-router';
 
-export function useFormNavigation() {
+export function useFormNavigation(webNavBlocker = false) {
   const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
   const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenAtom);
+
+  const blocker = useBlocker(
+    useCallback(
+      () => webNavBlocker && isResourceEdited.isEdited,
+      [webNavBlocker, isResourceEdited.isEdited],
+    ),
+  );
+
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      setIsResourceEdited((prev) => ({
+        ...prev,
+        discardAction: () => blocker.proceed(),
+      }));
+      setIsFormOpen({ formOpen: true, leavingForm: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocker]);
 
   const navigateSafely = useCallback(
     (action: () => void) => {
@@ -22,7 +41,7 @@ export function useFormNavigation() {
 
       action();
     },
-    [formOpen, isResourceEdited, setIsFormOpen, setIsResourceEdited],
+    [formOpen, isResourceEdited.isEdited, setIsFormOpen, setIsResourceEdited],
   );
 
   const confirmDiscard = useCallback(
@@ -40,7 +59,10 @@ export function useFormNavigation() {
 
   const cancelDiscard = useCallback(() => {
     setIsFormOpen({ formOpen: true, leavingForm: false });
-  }, [setIsFormOpen]);
+    if (blocker.state === 'blocked') {
+      blocker.reset();
+    }
+  }, [setIsFormOpen, blocker]);
 
   return {
     navigateSafely,
