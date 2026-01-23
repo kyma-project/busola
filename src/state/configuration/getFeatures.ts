@@ -23,7 +23,6 @@ export async function discoverFeature(
 ) {
   try {
     if (!rawFeatureConfig) {
-      console.debug('discoverFeature: not found ', featureName);
       return { isEnabled: false };
     }
 

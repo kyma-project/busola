@@ -46,7 +46,7 @@ async function getBusolaVersion(t: TFunction): Promise<string> {
       return versionFile.version;
     })
     .catch((e) => {
-      console.warn(e);
+      console.warn('Failed to fetch Busola version:', e);
       return t('common.statuses.unknown');
     });
 }

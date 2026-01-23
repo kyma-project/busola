@@ -17,7 +17,7 @@ export const apiGroupAtom = atom<Promise<ApiGroupState>>(async (get) => {
     const response = await fetchFn({ relativeUrl: '/apis' });
     return (await response.json()).groups;
   } catch (e) {
-    console.warn(e);
+    console.warn('Failed to fetch API groups:', e);
     return null;
   }
 });

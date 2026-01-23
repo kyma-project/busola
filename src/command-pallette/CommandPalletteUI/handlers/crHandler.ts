@@ -185,7 +185,7 @@ async function fetchResources(context: CommandPaletteContext) {
       crds = (await response.json()).items;
       updateResourceCache('customresourcedefinitions', crds);
     } catch (e) {
-      console.warn(e);
+      console.warn('Failed to fetch CRDs for CR handler:', e);
     }
   }
 
@@ -211,7 +211,7 @@ async function fetchResources(context: CommandPaletteContext) {
       const { items } = await response.json();
       updateResourceCache(resourceKey, items);
     } catch (e) {
-      console.warn(e);
+      console.warn('Failed to fetch custom resources:', e);
     }
   }
 }
