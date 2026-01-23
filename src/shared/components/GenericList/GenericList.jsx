@@ -394,7 +394,6 @@ export const GenericList = ({
         }}
         headerRow={
           <HeaderRenderer
-            entries={entries}
             actions={actions}
             headerRenderer={headerRenderer}
             disableHiding={disableHiding}
@@ -417,7 +416,6 @@ export const GenericList = ({
           actions={actions}
           rowRenderer={rowRenderer}
           displayArrow={displayArrow}
-          hasDetailsView={hasDetailsView}
           enableColumnLayout={enableColumnLayout}
         />
       </Table>

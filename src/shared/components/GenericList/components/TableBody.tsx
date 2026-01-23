@@ -44,7 +44,6 @@ type TableBodyProps = {
   actions: any[];
   rowRenderer: (entry: FilteredEntriesType, index: number) => any;
   displayArrow: boolean;
-  hasDetailsView: boolean;
   enableColumnLayout: boolean;
 };
 
@@ -63,7 +62,6 @@ export const TableBody = ({
   actions,
   rowRenderer,
   displayArrow,
-  hasDetailsView,
   enableColumnLayout,
 }: TableBodyProps) => {
   const { i18n, t } = useTranslation();
@@ -163,7 +161,6 @@ export const TableBody = ({
         actions={actions}
         rowRenderer={rowRenderer}
         displayArrow={displayArrow}
-        hasDetailsView={hasDetailsView}
         enableColumnLayout={enableColumnLayout}
       />
     );

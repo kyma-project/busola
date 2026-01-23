@@ -1,4 +1,5 @@
 import { memo, useEffect, useState, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { instance } from '@viz-js/viz';
 import {
   TransformWrapper,
@@ -26,6 +27,7 @@ function GraphvizComponent({
   dotSrc: string;
   isReady: boolean;
 }) {
+  const { t } = useTranslation();
   const [viz, setViz] = useState<Awaited<ReturnType<typeof instance>> | null>(
     null,
   );
@@ -168,7 +170,7 @@ function GraphvizComponent({
       className="graphviz-container graphviz-container--loading"
       data-testid="graphviz-container"
     >
-      <Text>Loading...</Text>
+      <Text>{t('common.headers.loading')}</Text>
     </div>
   );
 }

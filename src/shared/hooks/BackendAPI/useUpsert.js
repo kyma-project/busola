@@ -11,8 +11,7 @@ export function useUpsert() {
   const getExistingResource = async (url, name) => {
     try {
       return await fetch({ relativeUrl: url + '/' + name });
-    } catch (e) {
-      console.debug(e);
+    } catch {
       return null;
     }
   };

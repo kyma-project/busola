@@ -9,7 +9,6 @@ type CollapsedRowRendererProps = {
   rowRenderer: any;
   isSelected?: boolean;
   displayArrow: boolean;
-  hasDetailsView: boolean;
   enableColumnLayout: boolean;
 };
 
@@ -23,7 +22,6 @@ export const CollapsedRowRenderer = ({
   },
   isSelected,
   displayArrow,
-  hasDetailsView,
   enableColumnLayout,
   entry,
   actions,
@@ -63,7 +61,6 @@ export const CollapsedRowRenderer = ({
       rowRenderer={rowRenderer}
       isSelected={isSelected}
       displayArrow={displayArrow}
-      hasDetailsView={hasDetailsView}
       enableColumnLayout={enableColumnLayout}
       entry={entry}
       actions={actions}

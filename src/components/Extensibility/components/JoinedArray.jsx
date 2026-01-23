@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -22,28 +23,33 @@ export function JoinedArray({ value, structure, arrayItems, ...props }) {
     <div>
       {separator === 'break'
         ? value.map((val, i) => (
-            <div key={i}>
+            <div key={`break-${i}-${val}`}>
               {structure?.children
                 ? structure?.children?.map((def, idx) => (
-                    <Widget structure={def} value={val} key={idx} {...props} />
+                    <Widget
+                      structure={def}
+                      value={val}
+                      key={`widget-${def?.path || def?.name || ''}-${idx}`}
+                      {...props}
+                    />
                   ))
                 : val}
             </div>
           ))
         : structure?.children
           ? value.map((val, i) => (
-              <>
+              <Fragment key={`joined-${i}-${val}`}>
                 {structure?.children?.map((def, idx) => (
                   <Widget
                     structure={def}
                     arrayItems={[...arrayItems, val]}
                     value={val}
-                    key={idx}
+                    key={`widget-${def?.path || def?.name || ''}-${idx}`}
                     {...props}
                   />
                 ))}
                 {i !== value.length - 1 && separator}
-              </>
+              </Fragment>
             ))
           : value.join(separator) || emptyLeafPlaceholder}
     </div>
