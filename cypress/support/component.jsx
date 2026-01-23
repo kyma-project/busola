@@ -1,7 +1,7 @@
 /* global Cypress */
 import { mount } from 'cypress/react18';
 import { ThemeProvider } from '@ui5/webcomponents-react';
-import { MemoryRouter } from 'react-router';
+import { RouterProvider, createMemoryRouter } from 'react-router';
 import { Provider } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
 
@@ -25,6 +25,22 @@ function JotaiHydrator({ children, atomValues = [] }) {
   return children;
 }
 
+const DataRouterWrapper = ({ children }) => {
+  const router = createMemoryRouter(
+    [
+      {
+        path: '/*',
+        element: children,
+      },
+    ],
+    {
+      initialEntries: ['/'],
+    },
+  );
+
+  return <RouterProvider router={router} />;
+};
+
 Cypress.Commands.add(
   'mount',
   (component, { initializeJotai, ...options } = {}) => {
@@ -32,9 +48,9 @@ Cypress.Commands.add(
       <Provider>
         <JotaiHydrator atomValues={initializeJotai}>
           <I18nextProvider i18n={i18n}>
-            <MemoryRouter>
+            <DataRouterWrapper>
               <ThemeProvider>{component}</ThemeProvider>
-            </MemoryRouter>
+            </DataRouterWrapper>
           </I18nextProvider>
         </JotaiHydrator>
       </Provider>,

@@ -4,9 +4,9 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import customCSS from 'shared/components/DynamicPageComponent/DynamicPageComponent.scss?inline';
 import { parseHtmlToJsx } from './htmlTojsx';
-import { BrowserRouter } from 'react-router';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 
 function DynamicPageWithJotai(props) {
   const transformedForm = (stickyHeaderHeight) => {
@@ -15,19 +15,31 @@ function DynamicPageWithJotai(props) {
     else return null;
   };
 
+  const router = useMemo(
+    () =>
+      createBrowserRouter([
+        {
+          path: '*',
+          element: (
+            <Suspense fallback={<Spinner />}>
+              <DynamicPageComponent
+                {...props}
+                inlineEditForm={
+                  props?.inlineEditForm ? transformedForm : undefined
+                }
+              />
+            </Suspense>
+          ),
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      ]),
+    [props],
+  );
+
   return (
     <Provider>
       <ThemeProvider>
-        <BrowserRouter>
-          <Suspense fallback={<Spinner />}>
-            <DynamicPageComponent
-              {...props}
-              inlineEditForm={
-                props?.inlineEditForm ? transformedForm : undefined
-              }
-            />
-          </Suspense>
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>
   );
