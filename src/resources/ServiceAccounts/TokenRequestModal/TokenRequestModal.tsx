@@ -121,12 +121,10 @@ export function TokenRequestModal({
         />
       }
     >
-      {/*@ts-expect-error Type mismatch between js and ts*/}
       <ResourceForm.Single
         resource={tokenRequest}
         setResource={setTokenRequest}
       >
-        {/*@ts-expect-error Type mismatch between js and ts*/}
         <ResourceForm.FormField
           required
           propertyPath="$.spec.expirationSeconds"
@@ -181,7 +179,6 @@ export function TokenRequestModal({
             language="yaml"
           />
         </div>
-        {/*@ts-expect-error Type mismatch between js and ts*/}
       </ResourceForm.Single>
     </Dialog>
   );

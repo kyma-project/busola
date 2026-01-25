@@ -7,6 +7,22 @@ import './CollapsibleSection.scss';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
+export type CollapsibleSectionProps = {
+  disabled?: boolean;
+  defaultOpen?: boolean;
+  canChangeState?: boolean;
+  title: string | JSX.Element;
+  defaultTitleType?: boolean;
+  actions?: JSX.Element | ((setOpen: (open: boolean) => void) => JSX.Element);
+  children: React.ReactNode;
+  resource?: Record<string, any> | string;
+  setResource?: (resource: Record<string, any> | string) => void;
+  className?: string;
+  required?: boolean;
+  tooltipContent?: string;
+  nestingLevel?: number;
+};
+
 export function CollapsibleSection({
   disabled = undefined,
   defaultOpen,
@@ -21,9 +37,9 @@ export function CollapsibleSection({
   required = undefined,
   tooltipContent = undefined,
   nestingLevel = 0,
-}) {
+}: CollapsibleSectionProps) {
   const [open, setOpen] = useState(defaultOpen);
-  const actionsRef = useRef();
+  const actionsRef = useRef<HTMLDivElement>(null);
   required = required === true;
 
   useEffect(() => {
@@ -38,11 +54,11 @@ export function CollapsibleSection({
     }
   }, [defaultOpen]);
 
-  const toggle = (e) => {
+  const toggle = (e: CustomEvent<any>) => {
     e.stopPropagation();
     if (!canChangeState) return;
     if (disabled) return;
-    if (!actionsRef.current?.contains(e.target)) setOpen(!open);
+    if (!actionsRef.current?.contains(e.target as any)) setOpen(!open);
   };
 
   const classNames = classnames(
@@ -71,7 +87,7 @@ export function CollapsibleSection({
       onToggle={toggle}
       data-testid={titleText?.toLowerCase().replaceAll(' ', '-')}
       accessibleName={titleText}
-      ref={(panelElement) => {
+      ref={(panelElement: any) => {
         if (panelElement) {
           panelElement.useAccessibleNameForToggleButton = true;
         }

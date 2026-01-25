@@ -23,7 +23,7 @@ type K8sNameFieldProps = {
       text: string;
     };
   };
-  tooltipContent?: React.ReactNode;
+  tooltipContent?: React.ReactNode | string;
   required?: boolean;
   readOnly?: boolean;
   [key: string]: any;
@@ -50,7 +50,6 @@ export function K8sNameField({
   };
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourceForm.FormField
       required={required}
       className={className}
