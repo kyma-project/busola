@@ -311,9 +311,6 @@ function EditClusterComponent({
 
   return (
     <div className="edit-cluster-form">
-      <Title level="H5" size="H5">
-        {t('clusters.storage.choose-storage.label')}
-      </Title>
       <ChooseStorage
         storage={resource.config?.storage}
         setStorage={(type) => {
