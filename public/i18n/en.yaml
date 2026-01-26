@@ -201,6 +201,7 @@ command-palette:
     destinationrules: Destination Rules
     functions: Functions
     gateways: Gateways
+    helmreleases: Helm Releases
     horizontalpodautoscalers: Horizontal Pod Autoscalers
     kyma: Modules
     limitranges: Limit Ranges
