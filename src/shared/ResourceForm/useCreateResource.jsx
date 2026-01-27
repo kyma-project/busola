@@ -1,6 +1,6 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -16,7 +16,6 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { useMemo } from 'react';
-import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 
 export function useCreateResource({
   singularName,
@@ -41,7 +40,6 @@ export function useCreateResource({
   const { scopedUrl } = useUrl();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
   const activeNamespace = useAtomValue(activeNamespaceIdAtom);
-  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
@@ -147,10 +145,6 @@ export function useCreateResource({
     } else {
       defaultAfterCreatedFn();
     }
-
-    setIsResourceEdited({
-      isEdited: false,
-    });
   };
 
   const handleCreate = async () => {
