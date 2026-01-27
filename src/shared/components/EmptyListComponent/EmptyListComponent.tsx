@@ -63,7 +63,7 @@ export const EmptyListComponent = ({
           {showButton && <Button onClick={onClick}>{buttonText}</Button>}
           {url && (
             <ExternalLink
-              text="Learn More"
+              text={t('common.buttons.learn-more')}
               url={url}
               buttonDesign="Transparent"
               type="button"

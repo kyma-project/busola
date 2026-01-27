@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
-import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
 import { useAtom } from 'jotai';
@@ -28,7 +27,6 @@ export const ResourceCreate = ({
   onlyYaml = false,
   protectedResource = false,
   protectedResourceWarning = null,
-  createFormRef = null,
   isProtectedResourceModificationBlocked = false,
 }) => {
   const { t } = useTranslation();
@@ -160,11 +158,7 @@ export const ResourceCreate = ({
           showYamlTab={disableEdit && onlyYaml}
           content={(stickyHeaderHeight) => (
             <>
-              <div
-                className="create-form sap-margin-bottom-small"
-                ref={createFormRef}
-                tabIndex={0}
-              >
+              <div className="create-form sap-margin-bottom-small" tabIndex={0}>
                 {renderForm({
                   formElementRef,
                   isValid,
@@ -200,7 +194,7 @@ export const ResourceCreate = ({
         />
       )}
       {isEdit && (
-        <div className="edit-form" ref={createFormRef} tabIndex={0}>
+        <div className="edit-form" tabIndex={0}>
           {renderForm({
             readOnly,
             formElementRef,
@@ -229,8 +223,6 @@ ResourceCreate.propTypes = {
   renderForm: PropTypes.func.isRequired,
   confirmText: PropTypes.string,
   invalidPopupMessage: PropTypes.string,
-  button: CustomPropTypes.button,
-  className: PropTypes.string,
   isEdit: PropTypes.bool,
   readOnly: PropTypes.bool,
   disableEdit: PropTypes.bool,

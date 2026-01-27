@@ -134,7 +134,7 @@ async function handleLogin({
     // ignore 'No state in response' error - it means we didn't fire login request yet
     if (e instanceof Error)
       if (!e.message.includes('No state in response')) {
-        alert('Login eror: ' + e);
+        alert('Login error: ' + e);
       } else {
         // no response data yet, try to log in
         await userManager.clearStaleState();

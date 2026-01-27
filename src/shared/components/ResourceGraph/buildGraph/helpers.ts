@@ -68,7 +68,10 @@ export async function match(
     try {
       return await matcher(resourceA, resourceB);
     } catch (e) {
-      console.debug(e);
+      console.warn(
+        `Resource graph matcher failed for ${kindA} -> ${kindB}:`,
+        e,
+      );
     }
   }
   return false;

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Children, ReactNode, useEffect, useRef, useState } from 'react';
 import { Carousel } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,15 +9,12 @@ export default function BannerCarousel({
 }) {
   const { t } = useTranslation();
   const carouselRef = useRef<React.ElementRef<typeof Carousel>>(null);
-  const [childrenLength, setChildrenLength] = useState(0);
+  const childrenLength = Children.count(children);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isUserChoice, setIsUserChoice] = useState(false);
   const SCROLL_INTERVALL_MS = 25000;
-
-  useEffect(() => {
-    setChildrenLength(carouselRef?.current?.children?.length ?? 0);
-  }, [carouselRef?.current?.children?.length]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {

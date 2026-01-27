@@ -1,5 +1,5 @@
 /* global Cypress */
-import { mount } from 'cypress/react18';
+import { mount } from 'cypress/react';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import { RouterProvider, createMemoryRouter } from 'react-router';
 import { Provider } from 'jotai';

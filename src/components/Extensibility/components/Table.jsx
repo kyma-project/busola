@@ -64,7 +64,7 @@ const rowRenderer = (
           arrayItems: [...arrayItems, entry],
         });
       } catch (e) {
-        console.warn(e);
+        console.warn('Failed to evaluate collapsible title:', e);
         return defaultTitle;
       }
     } else {

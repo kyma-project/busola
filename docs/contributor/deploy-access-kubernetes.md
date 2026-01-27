@@ -1,4 +1,4 @@
-# Deploying and Accessing Busola in the Kubernetes Cluster
+# Deploying and Accessing Busola in a Kubernetes Cluster
 
 ## Architecture
 
@@ -7,86 +7,127 @@
 To expose Busola, you can use [APIRule](https://github.com/kyma-project/busola/tree/main/resources/istio), [Ingress](https://github.com/kyma-project/busola/tree/main/resources/ingress), or create your own exposing mechanism.
 For more details about environment configuration, see [Environment-Specific Settings](../user/technical-reference/configuration.md#environment-specific-settings).
 
-## Deploying Busola in the Kubernetes Cluster
+## Deploying Busola in a Kubernetes Cluster
 
-To install Busola from the release in the Kubernetes cluster, set the **NAMESPACE** and **VERSION** shell environment variables with the desired release and run:
+Follow these steps to deploy Busola in a Kubernetes cluster:
 
-```shell
-kubectl apply --namespace "${NAMESPACE}" -f https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml
-```
+1. Set the **NAMESPACE** shell environment variable and create your namespace:
 
-To install Busola from the main branch in the Kubernetes cluster, run:
+   ```bash
+   export NAMESPACE={YOUR_NAMESPACE_NAME}
+   kubectl create namespace ${NAMESPACE}
+   ```
 
-```shell
-(cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
-```
+2. Choose one of the following installation options that suit your case.
 
-To install Busola using a specific environment configuration, set the **ENVIRONMENT** shell environment variable and run:
+<details>
+<summary>Install Busola from a release</summary>
 
-```shell
-(cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
-```
+3. Go to the [Busola release page](https://github.com/kyma-project/busola/releases) and choose one of the available versions.
+
+4. Set the **VERSION** environment variable:
+
+   ```bash
+   export VERSION={YOUR_BUSOLA_VERSION}
+   ```
+
+5. Run the following command to install Busola from the release you've chosen:
+
+   ```bash
+   kubectl apply --namespace "${NAMESPACE}" -f "https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml"
+   ```
+
+   </details>
+
+<details>
+<summary>Install Busola from the main branch </summary>
+
+3. Clone the [Busola repository](https://github.com/kyma-project/busola).
+4. Go to the folder where you downloaded it and run:
+
+   ```bash
+   (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
+   ```
+
+   </details>
+
+<details>
+<summary>Install Busola with a specific landscape configuration</summary>
+
+3. Clone the [Busola repository](https://github.com/kyma-project/busola).
+
+4. Set the **ENVIRONMENT** environment variable:
+
+   ```bash
+   export ENVIRONMENT={YOUR_LANDSCAPE}
+   ```
+
+5. Run the following command from the Busola root folder:
+
+   ```bash
+   (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
+   ```
+
+   </details>
+
+<details>
+<summary>Install Busola from a pull request</summary>
+
+1. Clone the [Busola repository](https://github.com/kyma-project/busola).
+
+2. Set your PR number as an environment variable:
+
+   ```bash
+   export PR_NUMBER={PR_NUMBER}
+   ```
+
+3. Run the following command from the Busola root folder:
+
+   ```bash
+   (cd resources/base && kustomize edit set image busola="europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-${PR_NUMBER}" && cd ../ && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
+   ```
+
+> [!NOTE]
+> If there are any changes in your PR, the image should be automatically updated in your cluster. If you don't see the latest changes, make sure that the image job has finished. Then, go to your namespace, and in **Deployments**, select the restart button next to the image you want to update.
+
+</details>
 
 ## Accessing Busola Installed on Kubernetes
 
+You can access Busola using the `kubectl port forward` command or your Kubernetes cluster with Istio installed.
+
 ### kubectl
 
-The simplest method that always works is to use the capabilities of kubectl.
+Run the following command:
 
-```shell
+```bash
 kubectl port-forward --namespace "${NAMESPACE}" services/busola 3001:3001
-```
-
-### k3d
-
-Prerequisites:
-
-- k3d with exposed loadbalancer on port 80.
-  > **TIP:** To create K3d with exposed load balancer run: `k3d cluster create -p "80:80@loadbalancer"`.
-  > See [Exposing Services](https://k3d.io/v5.6.3/usage/exposing_services/) for more details.
-
-1. Install Ingress resources:
-
-```shell
-(cd resources && kubectl apply --namespace "${NAMESPACE}" -f ingress/ingress.yaml)
-```
-
-2. Visit `localhost`.
-
-#### Connecting to the k3d Cluster with Busola Installed
-
-To connect to the same k3d cluster with Busola installed, download kubeconfig and change the cluster server address to `https://kubernetes.default.svc:443`.
-
-Use shell to quickly process the file.
-
-Prerequisites:
-
-- [yq](https://mikefarah.gitbook.io/yq)
-
-Set the **K3D_CLUSTER_NAME** shell environment variable to the name of your cluster and run:
-
-```shell
-k3d kubeconfig get ${K3D_CLUSTER_NAME} > k3d-kubeconfig.yaml
-yq --inplace '.clusters[].cluster.server = "https://kubernetes.default.svc:443"' k3d-kubeconfig.yaml
 ```
 
 ### Kubernetes Cluster with Istio Installed
 
-Prerequisites:
+#### Prerequisites
 
-- Sidecar Proxy injection enabled; see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
-- The API Gateway module installed, see [Adding and Deleting a Kyma Module](https://help.sap.com/docs/btp/sap-business-technology-platform/enable-and-disable-kyma-module?locale=en-US&version=Cloud)
+- Sidecar Proxy injection for your namespace enabled; see [Enable Istio Sidecar Proxy Injection](https://kyma-project.io/#/istio/user/tutorials/01-40-enable-sidecar-injection?id=enable-istio-sidecar-proxy-injection).
+- The API Gateway and Istio modules installed, see [Quick Install](https://kyma-project.io/02-get-started/01-quick-install.html)
 
-1. Install the Istio required resources:
+#### Procedure
 
-```shell
-(cd resources && kubectl apply --namespace "${NAMESPACE}" -k istio)
-```
+Follow these steps to access your Busola page:
+
+1. To install the Istio required resources, run the following command from the Busola root folder:
+
+   ```bash
+   (cd resources && kubectl apply --namespace "${NAMESPACE}" -k istio)
+   ```
 
 2. To get the Busola address, run:
 
-```shell
-kubectl get --namespace "${NAMESPACE}" virtualservices.networking.istio.io
-```
+   ```bash
+   kubectl get --namespace "${NAMESPACE}" virtualservices.networking.istio.io
+   ```
 
-and find the `busola-***` virtual service. Under `HOSTS,` there is an address where you can access the Busola page.
+> [!NOTE]
+> The VirtualService creation takes a few minutes.
+
+Under `HOSTS`, you should see an address that you can use to access the Busola page.
