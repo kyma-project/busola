@@ -11,7 +11,7 @@
 1. Create a k3d cluster with the exposed load balancer.
 
    > [!TIP]
-   > If you want to use Istio with your k3d cluster, run: `k3d cluster create --image rancher/k3s:v1.33.5-k3s1 -p '80:80@loadbalancer' -p '443:443@loadbalancer' --k3s-arg '--disable=traefik@server:*'`.  For more information, see [k3d](https://istio.io/latest/es/docs/setup/platform-setup/k3d/).
+   > If you want to use Istio with your k3d cluster, run: `k3d cluster create --image rancher/k3s:v1.33.5-k3s1 -p '80:80@loadbalancer' -p '443:443@loadbalancer' --k3s-arg '--disable=traefik@server:*'`. For more information, see [k3d](https://istio.io/latest/es/docs/setup/platform-setup/k3d/).
 
    ```bash
    k3d cluster create -p "80:80@loadbalancer"
