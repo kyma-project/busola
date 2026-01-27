@@ -10,8 +10,8 @@ export function useFormNavigation(webNavBlocker = false) {
 
   const blocker = useBlocker(
     useCallback(
-      () => webNavBlocker && isResourceEdited.isEdited,
-      [webNavBlocker, isResourceEdited.isEdited],
+      () => webNavBlocker && isResourceEdited.isEdited && formOpen,
+      [webNavBlocker, isResourceEdited.isEdited, formOpen],
     ),
   );
 
