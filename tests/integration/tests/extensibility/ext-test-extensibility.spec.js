@@ -76,10 +76,9 @@ context('Test Extensibility Create/Update', () => {
 
     cy.get('[aria-label="Details Summary, collapsed"]').click();
     cy.get('ui5-panel[data-testid="details-summary"]').within(() => {
-      cy.get('ui5-input[value="description"]')
-        .find('input')
-        .clear()
-        .type(FIRST_DESCRIPTION, { force: true });
+      cy.get('ui5-input[value="description"]').find('input').clear();
+
+      cy.get('ui5-input[value=""]').find('input').type(FIRST_DESCRIPTION);
 
       cy.get('ui5-checkbox[data-testid="spec.weight"]').last().click();
     });
