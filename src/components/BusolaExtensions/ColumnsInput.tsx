@@ -32,7 +32,10 @@ export function ColumnsInput({
 
   return columns.map((value, index) => {
     return (
-      <div key={value.path} className="columns-input">
+      <div
+        key={`${value.path}-${value.type}-${index}`}
+        className="columns-input"
+      >
         <CheckBox
           data-testid={value?.path}
           checked={value.isSelected}

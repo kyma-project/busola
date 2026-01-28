@@ -201,6 +201,7 @@ command-palette:
     destinationrules: Destination Rules
     functions: Functions
     gateways: Gateways
+    helmreleases: Helm Releases
     horizontalpodautoscalers: Horizontal Pod Autoscalers
     kyma: Modules
     limitranges: Limit Ranges
@@ -1451,6 +1452,7 @@ settings:
       customize: Customize
       no-policies-found: No policies found
       reset: Reset
+      select-policy: Select {{name}} validation policy
       title: Resource Validation
       validateResources: Validate Resources
       validation-disabled: Resource validation is disabled
