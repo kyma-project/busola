@@ -57,6 +57,7 @@ export const useCreateEditor = ({
       theme: editorTheme,
       fixedOverflowWidgets: true,
       readOnly: readOnly,
+      scrollBeyondLastLine: false,
       scrollbar: {
         alwaysConsumeMouseWheel: false,
       },
