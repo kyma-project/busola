@@ -8,13 +8,20 @@ export function useFormNavigation(webNavBlocker = false) {
   const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
   const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenAtom);
 
-  const blocker = useBlocker(({ historyAction }) => {
-    const isBrowserNav = historyAction === 'POP';
+  const blocker = useBlocker(
+    webNavBlocker
+      ? ({ historyAction }) => {
+          const isBrowserNav = historyAction === 'POP';
 
-    return (
-      isBrowserNav && isResourceEdited.isEdited && formOpen && webNavBlocker
-    );
-  });
+          return (
+            isBrowserNav &&
+            isResourceEdited.isEdited &&
+            formOpen &&
+            webNavBlocker
+          );
+        }
+      : false,
+  );
 
   useEffect(() => {
     if (blocker.state === 'blocked') {
