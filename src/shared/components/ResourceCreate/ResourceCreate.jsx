@@ -35,7 +35,7 @@ export const ResourceCreate = ({
   const notificationManager = useNotification();
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
-  const { navigateSafely } = useFormNavigation();
+  const { navigateSafely } = useFormNavigation(true);
 
   confirmText = confirmText || t('common.buttons.create');
 
