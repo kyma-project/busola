@@ -15,11 +15,7 @@ export const UnmanagedModuleInfo = ({ kymaResource }: any) => {
 
   return (
     isSomeModuleUnmanaged && (
-      <MessageStrip
-        design="Information"
-        hideCloseButton
-        className="sap-margin-bottom-tiny"
-      >
+      <MessageStrip design="Information" hideCloseButton>
         {t('kyma-modules.unmanaged-modules-info')}
       </MessageStrip>
     )
