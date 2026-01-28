@@ -194,7 +194,7 @@ export const ClusterDataForm = ({
               jp.value(kubeconfig, '$["current-context"]', name);
               jp.value(kubeconfig, `$.contexts[${userIndex}].name`, name);
 
-              setResource(kubeconfig);
+              setResource({ ...kubeconfig });
             }
           }}
         />
@@ -215,7 +215,7 @@ export const ClusterDataForm = ({
               }
               onChange();
               setChosenContext(context);
-              setResource(kubeconfig);
+              setResource({ ...kubeconfig });
             }}
             input={({ setValue }) => (
               <ContextButtons
@@ -242,7 +242,7 @@ export const ClusterDataForm = ({
               delete kubeconfig?.users?.[userIndex]?.user?.token;
               createOIDC();
             }
-            setResource(kubeconfig);
+            setResource({ ...kubeconfig });
             setAuthenticationType(type);
           }}
           input={({ value, setValue, accessibleName }) => (
@@ -277,7 +277,7 @@ function EditClusterComponent({
 
   const setWholeResource = (newKubeconfig) => {
     jp.value(resource, '$.kubeconfig', newKubeconfig);
-    setResource(resource);
+    setResource({ ...resource });
   };
 
   const onComplete = () => {
@@ -314,7 +314,7 @@ function EditClusterComponent({
         storage={resource.config?.storage}
         setStorage={(type) => {
           jp.value(resource, '$.config.storage', type);
-          setResource(resource);
+          setResource({ ...resource });
         }}
       />
       <ResourceForm.FormField
@@ -326,7 +326,7 @@ function EditClusterComponent({
         value={resource.config?.description || ''}
         setValue={(value) => {
           jp.value(resource, '$.config.description', value);
-          setResource(resource);
+          setResource({ ...resource });
         }}
       />
       <ClusterDataForm
