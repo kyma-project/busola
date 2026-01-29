@@ -119,12 +119,10 @@ async function proxyHandler(req, res) {
       if (Buffer.isBuffer(req.body)) {
         proxyReq.end(req.body);
       } else {
-        pipeline(req, proxyReq)
-          .then(() => {}) // Request body sent successfully
-          .catch((err) => {
-            console.error('Request pipeline error:', err);
-            proxyReq.destroy();
-          });
+        pipeline(req, proxyReq).catch((err) => {
+          console.error('Request pipeline error:', err);
+          proxyReq.destroy(err);
+        });
       }
     });
   } catch (error) {

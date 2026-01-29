@@ -125,12 +125,10 @@ export async function handleK8sRequests(req, res) {
         k8sRequest.end(req.body);
       } else {
         // If there's no body, pipe the request (for streaming)
-        pipeline(req, k8sRequest)
-          .then(() => {}) // Request body sent successfully
-          .catch((err) => {
-            req.log.warn('Request pipeline error:', err);
-            k8sRequest.destroy();
-          });
+        pipeline(req, k8sRequest).catch((err) => {
+          req.log.warn('Request pipeline error:', err);
+          k8sRequest.destroy(err);
+        });
       }
     });
   } catch (error) {
