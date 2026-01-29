@@ -36,13 +36,15 @@ jobs:
       - uses: actions/setup-node@v4
         name: Setup node
         with:
-          node-version: 22
+          node-version: 24
       - name: Run busola
         shell: bash
+        timeout-minutes: 15
         run: |
           .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Run lighthouse tests
         shell: bash
+        timeout-minutes: 15
         run: |
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
           cd tests/lighthouse

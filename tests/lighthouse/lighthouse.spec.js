@@ -4,13 +4,15 @@ import { chromium } from 'playwright';
 import { tmpdir } from 'os';
 
 const ADDRESS = process.env.LOCAL
-  ? 'http://localhost:8080'
-  : 'http://localhost:3001';
-// What to do with that
+  ? 'http://127.0.0.1:8080'
+  : 'http://127.0.0.1:3001';
 
 test('Busola Lighthouse audit', async () => {
   const context = await chromium.launchPersistentContext(tmpdir(), {
-    args: ['--remote-debugging-port=9222'],
+    args: [
+      '--remote-debugging-port=9222',
+      '--remote-debugging-address=127.0.0.1',
+    ],
     ignoreHTTPSErrors: true,
   });
   const page = await context.newPage();
@@ -25,6 +27,7 @@ test('Busola Lighthouse audit', async () => {
   await playAudit({
     page,
     port: 9222,
+    hostname: '127.0.0.1',
     thresholds: {
       accessibility: 80,
       'best-practices': 100,
@@ -67,6 +70,7 @@ test('Busola Lighthouse audit', async () => {
   await playAudit({
     page,
     port: 9222,
+    hostname: '127.0.0.1',
     thresholds: {
       accessibility: 80,
       'best-practices': 85, //best-practices were reduced after the bump of lighthouse version - it detects Monaco which prevents passing
