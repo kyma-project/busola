@@ -70,7 +70,7 @@ EXTENSIBILITY_INJECTIONS:
   FEEDBACK:
     isEnabled: true
     config:
-      link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_d3UPNymSgUHAb9Y?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
+      link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   ```
 
 - **GET_HELP_LINKS** – is used to show or hide helper links. You can find all the available links in the following example.
@@ -237,7 +237,7 @@ GZIP:
   ```yaml
   KYMA_COMPANION:
     config:
-      feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/form/SV_dmWATTfes5SstG6
+      link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
       documentationLink: https://help.sap.com/
       model: 'gpt-4.1'
       queryMaxTokens: 8000
