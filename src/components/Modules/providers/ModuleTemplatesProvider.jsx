@@ -28,7 +28,7 @@ export function ModuleTemplatesContextProvider({ children }) {
 
   let checkedModuleTemplates;
 
-  if (!moduleTemplatesLoading || !communityModuleTemplatesLoading)
+  if (!moduleTemplatesLoading || !communityModuleTemplatesLoading) {
     checkedModuleTemplates = externalCommunityModuleTemplates
       .filter((resource) => {
         if (allModuleTemplates?.items !== undefined)
@@ -40,6 +40,7 @@ export function ModuleTemplatesContextProvider({ children }) {
         return resource.value;
       })
       .flatMap((res) => res.value);
+  }
 
   const mergedModuleTmeplates = {
     items: [
