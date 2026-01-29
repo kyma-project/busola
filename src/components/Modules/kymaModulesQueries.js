@@ -1,4 +1,6 @@
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useGetYAMLModuleTemplates } from './hooks';
 
 export function useKymaModulesQuery() {
   const kyma = useKymaQuery();
@@ -51,6 +53,19 @@ export function useModuleTemplatesQuery({ skip = false }) {
     data,
     loading,
   };
+}
+
+export function useExternalCommunityModulesQuery() {
+  const communityModulesRepoUrl = `https://kyma-project.github.io/community-modules/all-modules.yaml`;
+  const post = usePost();
+
+  const {
+    resources: data,
+    error,
+    loading,
+  } = useGetYAMLModuleTemplates(communityModulesRepoUrl, post);
+
+  return { data, loading, error };
 }
 
 export function useModulesReleaseQuery({ skip = false }) {
