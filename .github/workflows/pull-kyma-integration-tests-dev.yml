@@ -35,10 +35,10 @@ jobs:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
         run: curl --silent --fail $K3D_URL | bash
       - name: Setup Kyma
+        shell: bash
         run: |
           ./.github/scripts/provision_k3d_for_kyma.sh | tee kyma-provision.log
           ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
-        shell: bash
       - uses: actions/setup-node@v4
         name: Setup node
         with:
