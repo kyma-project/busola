@@ -2,29 +2,14 @@ import { useCallback, useEffect } from 'react';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useAtom } from 'jotai';
-import { useBlocker } from 'react-router';
+import { Blocker } from 'react-router';
 
-export function useFormNavigation(webNavBlocker = false) {
+export function useFormNavigation(blocker: Blocker) {
   const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
   const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenAtom);
 
-  const blocker = useBlocker(
-    webNavBlocker
-      ? ({ historyAction }) => {
-          const isBrowserNav = historyAction === 'POP';
-
-          return (
-            isBrowserNav &&
-            isResourceEdited.isEdited &&
-            formOpen &&
-            webNavBlocker
-          );
-        }
-      : false,
-  );
-
   useEffect(() => {
-    if (blocker.state === 'blocked') {
+    if (blocker && blocker.state === 'blocked') {
       setIsResourceEdited((prev) => ({
         ...prev,
         discardAction: () => blocker.proceed(),
@@ -67,7 +52,7 @@ export function useFormNavigation(webNavBlocker = false) {
 
   const cancelDiscard = useCallback(() => {
     setIsFormOpen({ formOpen: true, leavingForm: false });
-    if (blocker.state === 'blocked') {
+    if (blocker && blocker?.state === 'blocked') {
       blocker.reset();
     }
   }, [setIsFormOpen, blocker]);
