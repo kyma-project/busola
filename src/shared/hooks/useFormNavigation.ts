@@ -4,7 +4,7 @@ import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useAtom } from 'jotai';
 import { Blocker } from 'react-router';
 
-export function useFormNavigation(blocker: Blocker) {
+export function useFormNavigation(blocker?: Blocker) {
   const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
   const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenAtom);
 
