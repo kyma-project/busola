@@ -314,7 +314,7 @@ export function ResourceForm({
 
   const isResourceEdited = useAtomValue(isResourceEditedAtom);
   const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenAtom);
-  const { navigateSafely } = useFormNavigation();
+  const { navigateSafely } = useFormNavigation(true);
   const [resetBtnClicked, setResetBtnClicked] = useState(false);
 
   const handleRevert = () => {

@@ -22,4 +22,13 @@ Cypress.Commands.add('checkUnsavedDialog', () => {
     .find('ui5-button')
     .contains('Cancel')
     .click();
+
+  cy.wait(10000);
+
+  cy.go('back');
+
+  cy.get('ui5-dialog[header-text="Discard Changes"]:visible')
+    .find('ui5-button')
+    .contains('Cancel')
+    .click();
 });
