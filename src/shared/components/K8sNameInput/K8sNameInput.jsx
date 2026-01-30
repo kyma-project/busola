@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
-import { useValidation } from 'shared/hooks/useValidation';
 import { Input } from '@ui5/webcomponents-react';
 import { Label } from '../../ResourceForm/components/Label';
 
@@ -15,17 +14,11 @@ export const K8sNameInput = ({
   required = true,
   defaultValue,
   value,
-  onChange,
   onInput,
-  inputRef,
   pattern = k8sNamePattern,
   ...props
 }) => {
   const { t } = useTranslation();
-  const validationProps = useValidation({
-    inputRef,
-    onChange,
-  });
   if (!props.readOnly) delete props.readOnly;
   const { className, compact, ...inputProps } = props || {};
 
@@ -46,7 +39,6 @@ export const K8sNameInput = ({
       pattern={pattern}
       onInput={onInput}
       {...inputProps}
-      {...validationProps}
       className={inputClassName}
     />
   );
