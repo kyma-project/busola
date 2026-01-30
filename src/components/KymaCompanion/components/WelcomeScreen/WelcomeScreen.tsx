@@ -15,17 +15,20 @@ export const WelcomeScreen = () => {
 
   const measureRef = useRef<HTMLElement | null>(null);
 
+  // eslint-disable-next-line react-hooks/refs
   const width = measureRef.current?.offsetWidth || 0;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  // eslint-disable-next-line react-hooks/refs
   const [wordWidth, setWordWidth] = useState(width);
 
   useEffect(() => {
     if (measureRef.current) {
       setWordWidth(measureRef.current.offsetWidth || width);
     }
+    // eslint-disable-next-line react-hooks/refs
   }, [currentIndex, width]);
 
   useEffect(() => {

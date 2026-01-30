@@ -28,7 +28,6 @@ export default defineConfig(
         // React
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',
-        'react-hooks/refs': 'warn',
 
         // TypeScript
         '@typescript-eslint/no-explicit-any': 'off',

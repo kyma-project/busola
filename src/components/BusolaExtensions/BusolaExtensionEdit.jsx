@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { K8sNameField, Editor } from 'shared/ResourceForm/fields';
+import { Editor, K8sNameField } from 'shared/ResourceForm/fields';
 import jp from 'jsonpath';
 
 import { createConfigMapTemplate, SECTIONS } from './helpers';
