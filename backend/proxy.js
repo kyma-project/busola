@@ -4,6 +4,7 @@ import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import net from 'net';
 import dns from 'dns/promises';
+import { pipeline } from 'stream/promises';
 
 function isLocalDomain(hostname) {
   const localDomains = ['localhost', '127.0.0.1', '::1'];
@@ -99,23 +100,36 @@ async function proxyHandler(req, res) {
       timeout: 30000,
     };
 
-    const proxyReq = httpsRequest(options, (proxyRes) => {
-      res.writeHead(proxyRes.statusCode, proxyRes.headers);
-      proxyRes.pipe(res);
-    });
+    await new Promise((resolve, reject) => {
+      const proxyReq = httpsRequest(options, async (proxyRes) => {
+        res.writeHead(proxyRes.statusCode, proxyRes.headers);
+        try {
+          await pipeline(proxyRes, res);
+          resolve();
+        } catch (err) {
+          console.error('Proxy response pipeline error:', err);
+          reject(err);
+        }
+      });
 
-    proxyReq.on('error', () => {
-      res.status(502).send('An error occurred while making the proxy request.');
-    });
+      proxyReq.on('error', (err) => {
+        reject(err);
+      });
 
-    if (Buffer.isBuffer(req.body)) {
-      proxyReq.end(req.body);
-    } else {
-      req.pipe(proxyReq);
-    }
+      if (Buffer.isBuffer(req.body)) {
+        proxyReq.end(req.body);
+      } else {
+        pipeline(req, proxyReq).catch((err) => {
+          console.error('Request pipeline error:', err);
+          proxyReq.destroy(err);
+        });
+      }
+    });
   } catch (error) {
     console.error('Proxy error:', error);
-    res.status(400).send('Bad Request');
+    if (!res.headersSent) {
+      res.status(502).send('An error occurred while making the proxy request.');
+    }
   }
 }
 

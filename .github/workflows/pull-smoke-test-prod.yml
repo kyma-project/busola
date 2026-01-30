@@ -42,7 +42,7 @@ jobs:
           ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - name: Build Busola Docker Image
         shell: bash
         run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log
