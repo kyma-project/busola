@@ -69,7 +69,7 @@ export default function ResourceQuotaDetails(props: any) {
                 accessibleName={`${t('resource-quotas.headers.scope-selectors')} panel`}
               >
                 {resource.spec.scopeSelector?.matchExpressions?.map((scope) => (
-                  <>
+                  <Fragment key={scope.scopeName}>
                     <Title
                       level="H6"
                       size="H6"
@@ -87,7 +87,7 @@ export default function ResourceQuotaDetails(props: any) {
                         value={<Tokens tokens={scope.values} />}
                       />
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </UI5Panel>
             )}

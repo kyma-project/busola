@@ -55,7 +55,7 @@ ResourceDetails.propTypes = {
   children: PropTypes.node,
   customComponents: PropTypes.arrayOf(PropTypes.func),
   description: PropTypes.object,
-  resourceUrl: PropTypes.string.isRequired,
+  resourceUrl: PropTypes.string,
   resourceType: PropTypes.string.isRequired,
   resourceName: PropTypes.string,
   resourceTitle: PropTypes.string,
