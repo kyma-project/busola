@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { RichEditorSection } from './RichEditorSection';
 
-function createInternalState(data, internalData) {
-  const dataAsArray = objectEntriesToArray(data, internalData);
-  console.log(dataAsArray);
+function createInternalState(data, previousInitialState) {
+  const dataAsArray = transformData(data, previousInitialState);
   if (checkIfLastItemIsNotNull) {
     // Add new empty field
     return [...dataAsArray, null];
@@ -14,9 +13,8 @@ function createInternalState(data, internalData) {
   }
 }
 
-function objectEntriesToArray(obj, internalData) {
+function transformData(obj, internalData) {
   return Object.entries(obj || {}).map(([key, value]) => {
-    console.log(value);
     return {
       key,
       value,
@@ -67,9 +65,7 @@ export function RichEditorDataField({
           item={item}
           setInternalData={setInternalData}
           onChange={(data) => {
-            console.log(data);
             setInternalData((internalData) => {
-              console.log('CHANGE');
               internalData[index] = {
                 ...item,
                 ...data,
