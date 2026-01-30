@@ -6,14 +6,14 @@ on:
     paths:
       - '.github/workflows/pull-kyma-intergation-tests.yml'
       - '.github/scripts/**'
-      - "kyma/**"
-      - "backend/**"
-      - "public/**"
-      - "src/**"
-      - "package.json"
-      - "Makefile"
-      - "Dockerfile*"
-      - "nginx/**"
+      - 'kyma/**'
+      - 'backend/**'
+      - 'public/**'
+      - 'src/**'
+      - 'package.json'
+      - 'Makefile'
+      - 'Dockerfile*'
+      - 'nginx/**'
       - 'resources/**'
       - 'tests/integration/**'
 jobs:
@@ -32,10 +32,12 @@ jobs:
       - name: Merge with latest main
         uses: ./.github/actions/merge
       - name: Install k3d
+        shell: bash
         env:
           K3D_URL: https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh
         run: curl --silent --fail $K3D_URL | bash
       - name: Setup K3d cluster
+        shell: bash
         run: |
           ./.github/scripts/provision_k3d_for_kyma.sh | tee kyma-provision.log
       - uses: actions/setup-node@v4
@@ -55,6 +57,7 @@ jobs:
         env:
           ENV: dev
       - name: Prepare kubeconfig
+        shell: bash
         run: |
           .github/scripts/prepare_kubeconfig.sh
       - name: Run tests

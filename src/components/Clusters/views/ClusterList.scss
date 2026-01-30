@@ -14,3 +14,21 @@
 .cluster-disabled-subtitle a {
   font-size: inherit;
 }
+
+#edit-cluster {
+  .edit-cluster-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .resource-form--panel,
+    .resource-form--panel::part(content) {
+      min-height: unset !important;
+      height: unset !important;
+    }
+  }
+
+  &::part(footer) {
+    padding: 0;
+  }
+}

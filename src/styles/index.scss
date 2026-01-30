@@ -1,7 +1,5 @@
 @use '../shared/components/ResourceGraph/mixins';
 
-@use './wizard-dialog.scss';
-
 :root {
   --card-box-shadow: var(--_ui5-v2-18-0_card_box_shadow);
   --card-border: var(--_ui5-v2-18-0_card_border);
@@ -58,8 +56,8 @@ body {
 
 .modal-size--l::part(content) {
   width: 80vw;
-  height: 80vw;
-  min-width: unset;
+  height: 80vh;
+  padding-block: 2rem;
 }
 
 ui5-combobox {
