@@ -42,7 +42,9 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
         const selectedOption = getAvailableLanguages().find(
           (o) => o.text === event.target.value,
         );
-        if (selectedOption) onChange(selectedOption.key);
+        console.log(selectedOption);
+        console.log(event.target.value);
+        if (selectedOption) onChange({ language: selectedOption.key });
       }}
       placeholder={t('components.rich-editor-data-field.language-placeholder')}
     >
