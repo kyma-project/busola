@@ -2,7 +2,7 @@ import i18next from 'i18next';
 import yaml from 'js-yaml';
 import { Suspense } from 'react';
 import { initReactI18next } from 'react-i18next';
-import { BrowserRouter } from 'react-router';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
 import { savePreviousPath } from 'state/useAfterInitHook';
 
@@ -70,15 +70,22 @@ const isDevMode =
   window.location.hostname === 'localhost' &&
   (window.location.port === '8080' || window.location.port === '8000');
 
-root.render(
-  <ThemeProvider>
-    <BrowserRouter>
+const router = createBrowserRouter([
+  {
+    path: '*',
+    element: (
       <Suspense fallback={<Spinner />}>
         <NotificationProvider>
           <App />
           {isDevMode && <JotaiDevTools />}
         </NotificationProvider>
       </Suspense>
-    </BrowserRouter>
+    ),
+  },
+]);
+
+root.render(
+  <ThemeProvider>
+    <RouterProvider router={router} />
   </ThemeProvider>,
 );
