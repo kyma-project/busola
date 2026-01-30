@@ -62,7 +62,11 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
   let startColumnComponent = null;
   if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
-      <Details resourceName={resourceName} namespaceId={namespaceId} />
+      <Details
+        resourceName={resourceName}
+        namespaceId={namespaceId}
+        resourceType={urlPath ?? resourceType}
+      />
     );
   } else {
     startColumnComponent = (
@@ -114,6 +118,7 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
       <Details
         resourceName={layoutState?.midColumn?.resourceName ?? resourceName}
         namespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
+        resourceType={urlPath ?? resourceType}
       />
     );
   }
