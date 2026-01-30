@@ -289,10 +289,9 @@ export function ResourceListRenderer({
   const { resourceUrl: resourceUrlFn } = useUrl();
 
   const linkTo = (entry) => {
-    const overrides = namespace === '-all-' ? { namespace } : {};
     return customUrl
       ? customUrl(entry)
-      : resourceUrlFn(entry, { resourceType, ...overrides });
+      : resourceUrlFn(entry, { resourceType });
   };
 
   const onLinkClick = (entry, e) => {
