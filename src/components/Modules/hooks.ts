@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
+import { isEmpty } from 'lodash';
 
 import {
   ConditionType,
@@ -398,8 +399,8 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
   const { t } = useTranslation();
   const [resources, setResources] = useState([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+  console.log('sourceURL', sourceURL, typeof sourceURL, isEmpty(sourceURL));
   const filterResources = (resources: any) => {
     return (resources || []).filter(
       (resource: any) =>
@@ -411,10 +412,13 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (!sourceURL) {
       setResources([]);
       setError(null);
       setLoading(false);
+      console.log('resources,', resources, 'loading', loading, 'error', error);
+
       return;
     }
 
@@ -422,32 +426,41 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
       (async function () {
         setLoading(true);
         try {
+          console.log('try');
+
           const allResources = await postForCommunityResources(post, sourceURL);
           const allowedToApply = filterResources(allResources);
           const formatted = allowedToApply?.map((r: any) => {
             return { value: r };
           });
-
+          console.log(
+            'allResources',
+            allResources,
+            'allowedToApply',
+            allowedToApply,
+          );
           setError(null);
 
           setResources(formatted);
         } catch (e) {
+          console.log('catch');
+
           if (e instanceof HttpError) {
-            setError(
-              t('modules.community.messages.source-yaml-fetch-failed', {
-                error: e.message,
-              }),
-            );
+            setError(e.message);
           }
         } finally {
+          console.log('finally');
           setLoading(false);
         }
       })();
     } else {
+      console.log('else');
+      setResources([]);
+
       setError(t('modules.community.messages.source-yaml-invalid-url'));
       setLoading(false);
     }
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
-
+  console.log('before return resources,', resources);
   return { resources, error, loading };
 }
