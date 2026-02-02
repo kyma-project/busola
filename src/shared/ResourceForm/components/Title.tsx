@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
 export type TitleProps = {
-  tooltipContent?: string;
+  tooltipContent?: string | JSX.Element;
   title?: string | JSX.Element;
   disabled?: boolean;
   canChangeState?: boolean;

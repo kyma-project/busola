@@ -97,7 +97,7 @@ export function ItemArray({
     <ResourceForm.CollapsibleSection
       title={listTitle}
       tooltipContent={tooltipContent}
-      actions={(setOpen: Dispatch<SetStateAction<boolean>>) => (
+      actions={(setOpen: Dispatch<SetStateAction<boolean | undefined>>) => (
         <Button
           icon="add"
           onClick={() => {
