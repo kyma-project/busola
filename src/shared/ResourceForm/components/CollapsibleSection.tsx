@@ -56,11 +56,12 @@ export function CollapsibleSection({
     }
   }, [defaultOpen]);
 
-  const toggle = (e: CustomEvent<any>) => {
-    e.stopPropagation();
-    if (!canChangeState) return;
-    if (disabled) return;
-    if (!actionsRef.current?.contains(e.target as any)) setOpen(!open);
+  const toggle = (e?: CustomEvent) => {
+    e?.stopPropagation();
+    if (!canChangeState || disabled) return;
+    if (!actionsRef.current?.contains(e?.target as Node)) {
+      setOpen(!open);
+    }
   };
 
   const classNames = classnames(
