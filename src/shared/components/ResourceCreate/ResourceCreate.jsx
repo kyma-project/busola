@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { useBlocker, useNavigate } from 'react-router';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
-import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import './ResourceCreate.scss';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 
 export const ResourceCreate = ({
   performRefetch = () => {},
@@ -28,7 +28,6 @@ export const ResourceCreate = ({
   onlyYaml = false,
   protectedResource = false,
   protectedResourceWarning = null,
-  createFormRef = null,
   isProtectedResourceModificationBlocked = false,
 }) => {
   const { t } = useTranslation();
@@ -37,9 +36,17 @@ export const ResourceCreate = ({
   const notificationManager = useNotification();
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
-  const { navigateSafely } = useFormNavigation();
+  const isResourceEdited = useAtomValue(isResourceEditedAtom);
 
   confirmText = confirmText || t('common.buttons.create');
+
+  const blocker = useBlocker(({ historyAction }) => {
+    const isBrowserNav = historyAction === 'POP';
+
+    return isBrowserNav && isResourceEdited.isEdited;
+  });
+
+  const { navigateSafely } = useFormNavigation(blocker);
 
   function handleFormChanged() {
     setTimeout(() => {
@@ -160,11 +167,7 @@ export const ResourceCreate = ({
           showYamlTab={disableEdit && onlyYaml}
           content={(stickyHeaderHeight) => (
             <>
-              <div
-                className="create-form sap-margin-bottom-small"
-                ref={createFormRef}
-                tabIndex={0}
-              >
+              <div className="create-form sap-margin-bottom-small" tabIndex={0}>
                 {renderForm({
                   formElementRef,
                   isValid,
@@ -200,7 +203,7 @@ export const ResourceCreate = ({
         />
       )}
       {isEdit && (
-        <div className="edit-form" ref={createFormRef} tabIndex={0}>
+        <div className="edit-form" tabIndex={0}>
           {renderForm({
             readOnly,
             formElementRef,
@@ -229,8 +232,6 @@ ResourceCreate.propTypes = {
   renderForm: PropTypes.func.isRequired,
   confirmText: PropTypes.string,
   invalidPopupMessage: PropTypes.string,
-  button: CustomPropTypes.button,
-  className: PropTypes.string,
   isEdit: PropTypes.bool,
   readOnly: PropTypes.bool,
   disableEdit: PropTypes.bool,

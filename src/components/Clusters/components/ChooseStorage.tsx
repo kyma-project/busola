@@ -5,24 +5,31 @@ import './ChooseStorage.scss';
 interface ChooseStorageProps {
   storage: string;
   setStorage: (storage: string) => void;
+  hideLabel?: boolean;
 }
 
-export function ChooseStorage({ storage, setStorage }: ChooseStorageProps) {
+export function ChooseStorage({
+  storage,
+  setStorage,
+  hideLabel = false,
+}: ChooseStorageProps) {
   const { t } = useTranslation();
 
   return (
     <>
       <FlexBox
         direction="Column"
-        aria-labelledby={'storage-preference'}
+        aria-labelledby="storage-preference"
         role="radiogroup"
       >
-        <Label
-          id={'storage-preference'}
-          className="cluster-wizard__storage-preference sap-margin-bottom-tiny"
-        >
-          {`${t('clusters.storage.storage-preference')}:`}
-        </Label>
+        {!hideLabel && (
+          <Label
+            id="storage-preference"
+            className="cluster-wizard__storage-preference sap-margin-bottom-tiny"
+          >
+            {`${t('clusters.storage.storage-preference')}:`}
+          </Label>
+        )}
         <RadioButton
           name="storage"
           value="localStorage"

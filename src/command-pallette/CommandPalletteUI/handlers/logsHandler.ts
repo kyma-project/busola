@@ -100,7 +100,7 @@ async function fetchLogs(context: CommandPaletteContext) {
     const { items: pods } = await response.json();
     updateResourceCache(`${namespace}/pods`, pods);
   } catch (e) {
-    console.warn(e);
+    console.warn('Failed to fetch pods for logs handler:', e);
   }
 }
 

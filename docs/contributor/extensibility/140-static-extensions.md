@@ -33,4 +33,4 @@ general:
           link: 'https://github.com/kyma-project/busola'
 ```
 
-For more information on an exemplary configuration of the `External Nodes` feature in static extensions, see the [configuration example](examples/../../../examples/statics/statics-external-nodes.yaml).
+For more information on an exemplary configuration of the `External Nodes` feature in static extensions, see the [configuration example](../../../examples/statics/statics-external-nodes.yaml).

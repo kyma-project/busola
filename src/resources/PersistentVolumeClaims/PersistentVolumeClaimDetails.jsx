@@ -39,7 +39,6 @@ const RelatedVolumes = ({ labels }) => {
     isCompact: true,
     showTitle: true,
     disableCreate: true,
-    disableMargin: true,
   };
 
   return <PersistentVolumesList {...PVParams} key="pv-list" />;

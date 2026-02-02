@@ -159,7 +159,7 @@ async function cycle(
 
       store.current[resource.kind] = matched.filter(Boolean);
     } catch (e) {
-      console.warn(e);
+      console.warn('Failed to fetch related resources:', e);
       // Mark as fetched (with empty array) to prevent infinite retry loops
       store.current[resource.kind] = [];
     }

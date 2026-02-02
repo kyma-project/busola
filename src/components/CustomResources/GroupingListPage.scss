@@ -1,4 +1,14 @@
 .cr-group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cr-group-list-item {
+  &.cr-group-list-item > * {
+    margin-block: 0 !important;
+  }
+
   ui5-table-cell[slot='default-1'] {
     width: 35vw;
   }
@@ -15,7 +25,7 @@
 }
 
 @media (max-width: 850px) {
-  .cr-group-list {
+  .cr-group-list-item {
     ui5-table-cell[slot='default-1'],
     ui5-table-cell[slot='default-2'] {
       width: unset;

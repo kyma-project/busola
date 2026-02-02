@@ -1,19 +1,75 @@
-.banner-carousel > * {
-  width: 100%;
-  margin-left: 0.25rem !important;
-  margin-right: 0.25rem !important;
-}
-
 .feature-card-container {
   container-type: inline-size;
 }
 
 .banner-carousel {
-  position: relative;
-  top: 2px;
-  left: 2px;
-  height: fit-content;
-  width: calc(100% - 4px);
+  width: auto;
+  margin-top: -1rem;
+
+  &.banner-carousel > * {
+    width: 100%;
+    margin-top: 0 !important;
+  }
+
+  &::part(item) {
+    padding-block: 1rem !important;
+  }
+}
+
+@container (min-width: 1440px) {
+  .banner-carousel {
+    margin-inline: calc(
+      (-1 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_XL)) + 1px
+    );
+
+    &::part(item) {
+      padding-inline: var(
+        --_ui5-v2-18-0_dynamic_page_content_padding_inline_XL
+      ) !important;
+    }
+  }
+}
+
+@container (min-width: 1024px) and (max-width: 1439px) {
+  .banner-carousel {
+    margin-inline: calc(
+      (-1 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_L)) + 1px
+    );
+
+    &::part(item) {
+      padding-inline: var(
+        --_ui5-v2-18-0_dynamic_page_content_padding_inline_L
+      ) !important;
+    }
+  }
+}
+
+@container (min-width: 600px) and (max-width: 1023px) {
+  .banner-carousel {
+    margin-inline: calc(
+      (-1 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_M)) + 1px
+    );
+
+    &::part(item) {
+      padding-inline: var(
+        --_ui5-v2-18-0_dynamic_page_content_padding_inline_M
+      ) !important;
+    }
+  }
+}
+
+@container (max-width: 599px) {
+  .banner-carousel {
+    margin-inline: calc(
+      (-1 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_S)) + 1px
+    );
+
+    &::part(item) {
+      padding-inline: var(
+        --_ui5-v2-18-0_dynamic_page_content_padding_inline_S
+      ) !important;
+    }
+  }
 }
 
 .feature-card {
@@ -39,15 +95,18 @@
     .title-container {
       ui5-title {
         margin-right: 8px;
+
         .banner-title {
           font-weight: 900;
         }
       }
+
       img {
         width: 46px;
         height: 46px;
       }
     }
+
     ui5-text {
       font-size: 16px;
       font-weight: 400;
@@ -79,6 +138,7 @@
     .illustration {
       max-width: 100%;
     }
+
     .outer-container {
       flex-direction: column-reverse;
       align-items: start;

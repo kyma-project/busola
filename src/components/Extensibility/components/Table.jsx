@@ -64,7 +64,7 @@ const rowRenderer = (
           arrayItems: [...arrayItems, entry],
         });
       } catch (e) {
-        console.warn(e);
+        console.warn('Failed to evaluate collapsible title:', e);
         return defaultTitle;
       }
     } else {
@@ -192,8 +192,7 @@ export function Table({
     <GenericList
       disableHiding={true}
       displayArrow={false}
-      disableMargin={structure.disablePadding}
-      className={'extensibility-table'}
+      className="extensibility-table"
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,
       })}

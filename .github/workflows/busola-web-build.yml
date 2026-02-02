@@ -54,6 +54,7 @@ jobs:
     steps:
       - name: Extract tag from built images
         id: extract_tag
+        shell: bash
         run: |
           images='${{ needs.build-web-image.outputs.images }}'
           tag=$(echo "$images" | jq -r '.[]' | grep -v ':latest' | awk -F: '{print $NF}' | head -n1)
@@ -75,6 +76,7 @@ jobs:
           token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
 
       - name: Update busola_web_image version in dev/main.tf
+        shell: bash
         run: |
           sed -i -E 's|(busola_web_image\s*=\s*".*:)[^"]+|\1${{ needs.extract-image-tag.outputs.image_tag }}|' dev/main.tf
 

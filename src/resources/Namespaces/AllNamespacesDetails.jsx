@@ -11,10 +11,13 @@ import { createPortal } from 'react-dom';
 import YamlUploadDialog from './YamlUpload/YamlUploadDialog';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 import { useSetAtom } from 'jotai';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
+import './AllNamespaceDetails.scss';
 
 export function AllNamespacesDetails() {
   const { t } = useTranslation();
   const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
+  useWindowTitle(t('namespaces.namespaces-overview'));
 
   const limitRangesParams = {
     hasDetailsView: true,
@@ -60,16 +63,19 @@ export function AllNamespacesDetails() {
     <DynamicPageComponent
       title={t('navigation.all-namespaces')}
       content={
-        <section aria-labelledby="monitoring-heading">
+        <section
+          aria-labelledby="monitoring-heading"
+          className="monitoring-section"
+        >
           <Title
             level="H3"
             size="H3"
-            className="sap-margin-begin-medium sap-margin-y-medium"
+            className="sap-margin-y-small"
             id="monitoring-heading"
           >
             {t('common.headers.monitoring-and-health')}
           </Title>
-          <div className="cluster-stats sap-margin-tiny">
+          <div className="cluster-stats">
             <ResourcesUsage />
             <NamespaceWorkloads />
           </div>

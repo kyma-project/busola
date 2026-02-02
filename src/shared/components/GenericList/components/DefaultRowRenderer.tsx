@@ -12,7 +12,6 @@ type DefaultRowRendererProps = {
   rowRenderer: JSX.Element[];
   isSelected?: boolean;
   displayArrow: boolean;
-  hasDetailsView: boolean;
   enableColumnLayout: boolean;
 };
 

@@ -14,7 +14,6 @@ export function Panel({
   value,
   structure,
   schema,
-  disableMargin = false,
   singleRootResource,
   embedResource,
   ...props
@@ -39,7 +38,6 @@ export function Panel({
 
   return (
     <UI5Panel
-      disableMargin={disableMargin}
       accessibleName={`${widgetT(structure)} panel`}
       title={
         <>

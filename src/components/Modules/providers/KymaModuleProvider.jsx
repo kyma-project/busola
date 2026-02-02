@@ -29,6 +29,8 @@ export const KymaModuleContext = createContext({
   handleResourceDelete: () => {},
   customHeaderActions: <></>,
   namespaced: false,
+  performDelete: () => {},
+  performCancel: () => {},
 });
 
 export function KymaModuleContextProvider({
@@ -39,6 +41,8 @@ export function KymaModuleContextProvider({
   handleResourceDelete,
   showDeleteDialog,
   namespaced,
+  performCancel,
+  performDelete,
 }) {
   const {
     data: kymaResource,
@@ -184,6 +188,8 @@ export function KymaModuleContextProvider({
         showDeleteDialog: showDeleteDialog,
         customHeaderActions: customHeaderActions,
         isCommunityModuleSelected: isCommunityModuleSelected(),
+        performDelete: performDelete,
+        performCancel: performCancel,
       }}
     >
       {createPortal(
@@ -194,6 +200,9 @@ export function KymaModuleContextProvider({
           showDeleteDialog && (
             <ModulesDeleteBox
               DeleteMessageBox={DeleteMessageBox}
+              showDeleteDialog={showDeleteDialog}
+              performDelete={performDelete}
+              performCancel={performCancel}
               selectedModules={activeKymaModules}
               chosenModuleIndex={getOpenedModuleIndex(
                 openedModuleIndex,

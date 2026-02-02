@@ -9,7 +9,6 @@ type RowRendererProps = {
   index: number;
   isSelected?: boolean;
   displayArrow: boolean;
-  hasDetailsView: boolean;
   enableColumnLayout: boolean;
 };
 
@@ -20,7 +19,6 @@ export const RowRenderer = ({
   index,
   isSelected,
   displayArrow,
-  hasDetailsView,
   enableColumnLayout,
 }: RowRendererProps) => {
   const filteredActions = actions?.filter((a) =>
@@ -33,7 +31,6 @@ export const RowRenderer = ({
       <DefaultRowRenderer
         isSelected={isSelected}
         displayArrow={displayArrow}
-        hasDetailsView={hasDetailsView}
         enableColumnLayout={enableColumnLayout}
         entry={entry}
         actions={filteredActions}
@@ -45,7 +42,6 @@ export const RowRenderer = ({
     <CollapsedRowRenderer
       isSelected={isSelected}
       displayArrow={displayArrow}
-      hasDetailsView={hasDetailsView}
       enableColumnLayout={enableColumnLayout}
       entry={entry}
       actions={filteredActions}

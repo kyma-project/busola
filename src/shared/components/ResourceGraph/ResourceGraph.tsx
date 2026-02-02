@@ -93,7 +93,7 @@ export default function ResourceGraph({
   return (
     <Panel
       fixed
-      className="card-shadow sap-margin-small"
+      className="card-shadow"
       ref={(node: any) => setGraphEl(node)}
       accessibleName={t('resource-graph.accessible-name.resource-graph')}
       header={

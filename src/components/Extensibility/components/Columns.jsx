@@ -9,15 +9,11 @@ export function Columns({ structure, inlineContext, ...props }) {
   const classNames = inline ? 'inline-display' : 'panel-grid';
 
   return (
-    <div
-      className={`${classNames} sap-margin-small`}
-      data-testid="extensibility-columns"
-    >
+    <div className={classNames} data-testid="extensibility-columns">
       {(structure.children || []).map((child) => (
         <Widget
           structure={child}
           key={`column-${child.path || child.name}`}
-          disableMargin={true}
           {...props}
         />
       ))}

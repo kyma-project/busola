@@ -57,7 +57,7 @@ export function EventList({
       if (eventFilterError) return false;
       return !!eventFilter;
     } catch (e) {
-      console.warn(e);
+      console.warn('Failed to evaluate event filter:', e);
       return false;
     }
   };

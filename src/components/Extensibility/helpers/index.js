@@ -247,7 +247,7 @@ const getSearchingFunction = (searchOption, originalResource) => {
 
       return foundValues;
     } catch (e) {
-      console.warn(e);
+      console.warn('Failed to execute search function:', e);
       return null;
     }
   };

@@ -13,7 +13,6 @@ import { Title, ToolbarButton } from '@ui5/webcomponents-react';
 
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { getErrorMessage, prettifyNameSingular } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
@@ -40,6 +39,7 @@ import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { ResourceCustomStatusColumns } from './ResourceCustomStatusColumns';
 import { isEmpty } from 'lodash';
 import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
+import { DeleteResourceModal } from '../DeleteResourceModal/DeleteResourceModal';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -93,14 +93,10 @@ function ResourceDetailsRenderer(props) {
     loading = true,
     error,
     data: resource,
-    silentRefetch,
   } = useGet(props.resourceUrl, {
     pollingInterval: 3000,
     errorTolerancy: props.isModule ? 0 : undefined,
   });
-
-  const updateResourceMutation = useUpdate(props.resourceUrl);
-  const deleteResourceMutation = useDelete(props.resourceUrl);
   const [disableEditState, setDisableEditState] = useState(false);
 
   useEffect(() => {
@@ -149,9 +145,6 @@ function ResourceDetailsRenderer(props) {
         <Resource
           {...props}
           key={resource.metadata.name}
-          deleteResourceMutation={deleteResourceMutation}
-          updateResourceMutation={updateResourceMutation}
-          silentRefetch={silentRefetch}
           resource={resource}
           disableEdit={disableEditState}
         />
@@ -213,7 +206,12 @@ function Resource({
   useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, isProtectedResource } = useProtectedResources();
 
-  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+  const {
+    showDeleteDialog,
+    handleResourceDelete,
+    performDelete,
+    performCancel,
+  } = useDeleteResource({
     resourceTitle,
     resourceType,
     navigateToListAfterDelete: true,
@@ -317,7 +315,14 @@ function Resource({
             text={t('common.buttons.delete')}
           />
           {createPortal(
-            <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />,
+            <DeleteResourceModal
+              resource={resource}
+              resourceUrl={resourceUrl}
+              resourceType={resource.kind}
+              performDelete={performDelete}
+              showDeleteDialog={showDeleteDialog}
+              performCancel={performCancel}
+            />,
             document.body,
           )}
           \
@@ -488,7 +493,7 @@ function Resource({
                 <Title
                   level="H3"
                   size="H3"
-                  className="sap-margin-begin-medium sap-margin-y-medium"
+                  className="sap-margin-top-small sap-margin-bottom-medium"
                   id="namespace-details-heading"
                 >
                   {title ?? t('common.headers.resource-details')}

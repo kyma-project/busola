@@ -106,8 +106,7 @@ export const ModalWithForm = ({
       {renderModalOpeningComponent()}
       {createPortal(
         <Dialog
-          style={{ height: '100%' }}
-          className={`${className}`}
+          className={className}
           {...props}
           open={isOpen}
           footer={

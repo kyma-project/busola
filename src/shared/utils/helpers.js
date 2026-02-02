@@ -88,7 +88,7 @@ const capitalize = (str) => {
 
 const splitName = (name) => {
   if (!name) return '';
-  const nameArray = name.match(/[A-Z][a-z]+/g);
+  const nameArray = name.match(/[A-Z][a-z]*/g);
   return (nameArray || []).join(' ');
 };
 
@@ -117,9 +117,6 @@ export const getErrorMessage = (error, message = null) => {
   return errorNotification;
 };
 
-export const intersperse = (arr, sep) =>
-  arr.flatMap((el) => [sep, el]).slice(1);
-
 export const stringifyIfBoolean = (val) =>
   typeof val === 'boolean' ? JSON.stringify(val) : val;
 
@@ -138,12 +135,6 @@ export function buildPathsFromObject(object, path = '') {
   }
 
   return result;
-}
-
-export function roundTwoDecimals(number) {
-  return number > 100_000
-    ? Number.parseFloat(number).toExponential(2)
-    : Number.parseFloat(number.toFixed(2));
 }
 
 /**

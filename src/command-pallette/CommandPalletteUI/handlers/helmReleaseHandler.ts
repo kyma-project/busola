@@ -94,7 +94,7 @@ async function fetchHelmReleases(context: CommandPaletteContext) {
 
     updateResourceCache(`${namespace}/helmreleases`, recentReleases);
   } catch (e) {
-    console.warn(e);
+    console.warn('Failed to fetch Helm releases:', e);
   }
 }
 

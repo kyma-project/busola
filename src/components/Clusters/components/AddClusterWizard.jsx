@@ -232,7 +232,11 @@ export function AddClusterWizard({ config = {} }) {
                 ariaTitle={t('clusters.storage.choose-storage.label')}
               />
             </Title>
-            <ChooseStorage storage={storage} setStorage={setStorage} />
+            <ChooseStorage
+              storage={storage}
+              setStorage={setStorage}
+              hideLabel
+            />
           </div>
         </WizardStep>
         <WizardStep

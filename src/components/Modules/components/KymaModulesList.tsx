@@ -297,9 +297,7 @@ export const KymaModulesList = ({
 
   return (
     <React.Fragment key="modules-list">
-      <div className="sap-margin-small">
-        <UnmanagedModuleInfo kymaResource={kymaResource} />
-      </div>
+      <UnmanagedModuleInfo kymaResource={kymaResource} />
       <GenericList
         testid={'kyma-modules-list'}
         className={'modules-list'}

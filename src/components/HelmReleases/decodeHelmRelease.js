@@ -13,7 +13,7 @@ export function decodeHelmRelease(encodedRelease) {
     const strRelease = decoder.decode(data);
     return JSON.parse(strRelease);
   } catch (e) {
-    console.warn(e);
+    console.warn('Failed to decode Helm release:', e);
     return null;
   }
 }

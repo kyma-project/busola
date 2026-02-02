@@ -1,4 +1,4 @@
-import { cloneElement, Fragment, Suspense, useRef } from 'react';
+import { cloneElement, Fragment, Suspense } from 'react';
 
 import { useAtomValue } from 'jotai';
 import { Route, useParams, useSearchParams } from 'react-router';
@@ -33,7 +33,6 @@ export const createPath = (
 const ColumnWrapper = ({ list, details, create, ...props }) => {
   const layoutState = useAtomValue(columnLayoutAtom);
   const { resourceListUrl } = useUrl();
-  const createFormRef = useRef(null);
 
   const { t } = useTranslation();
 
@@ -102,7 +101,6 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     rawResourceType: props.resourceType,
     layoutCloseCreateUrl,
     enableColumnLayout: elementListProps.resourceType !== 'Namespaces',
-    createFormRef: createFormRef,
   });
   const detailsComponent = cloneElement(details, {
     ...elementDetailsProps,
@@ -137,7 +135,6 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
       title={elementCreateProps.resourceTitle}
       confirmText={t('common.buttons.create')}
       layoutCloseCreateUrl={layoutCloseCreateUrl}
-      createFormRef={createFormRef}
       renderForm={(renderProps) => {
         const createComponent =
           create &&

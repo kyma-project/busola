@@ -81,7 +81,7 @@ export default function NamespaceDetails(props) {
       description={ResourceDescription}
       {...props}
       title={t('namespaces.namespace-overview')}
-      windowTitle={t('namespaces.overview.title')}
+      windowTitle={t('namespaces.namespace-overview')}
       customColumns={customColumns}
       headerActions={headerActions}
       customHealthCards={[

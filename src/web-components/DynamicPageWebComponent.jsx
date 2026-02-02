@@ -1,33 +1,67 @@
-import { Provider } from 'jotai';
+import { Provider, atom, useAtomValue, createStore } from 'jotai';
 import createWebComponent from './createWebComponent';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import customCSS from 'shared/components/DynamicPageComponent/DynamicPageComponent.scss?inline';
 import { parseHtmlToJsx } from './htmlTojsx';
-import { BrowserRouter } from 'react-router';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { Suspense } from 'react';
+import { Suspense, useCallback, useEffect, useMemo } from 'react';
 
-function DynamicPageWithJotai(props) {
-  const transformedForm = (stickyHeaderHeight) => {
-    if (props.inlineEditForm)
-      return parseHtmlToJsx(props.inlineEditForm(stickyHeaderHeight));
-    else return null;
-  };
+const webComponentPropsAtom = atom({});
+webComponentPropsAtom.debugLabel = 'webComponentPropsAtom';
+
+const DynamicPageWrapper = () => {
+  const props = useAtomValue(webComponentPropsAtom);
+
+  const { inlineEditForm } = props;
+
+  const transformedForm = useCallback(
+    (stickyHeaderHeight) => {
+      if (inlineEditForm) {
+        return parseHtmlToJsx(inlineEditForm(stickyHeaderHeight));
+      }
+      return null;
+    },
+    [inlineEditForm],
+  );
 
   return (
-    <Provider>
+    <Suspense fallback={<Spinner />}>
+      <DynamicPageComponent
+        {...props}
+        inlineEditForm={inlineEditForm ? transformedForm : undefined}
+      />
+    </Suspense>
+  );
+};
+
+function DynamicPageWithJotai(props) {
+  const store = useMemo(() => createStore(), []);
+
+  useEffect(() => {
+    store.set(webComponentPropsAtom, props);
+  }, [props, store]);
+
+  const router = useMemo(
+    () =>
+      createBrowserRouter([
+        {
+          path: '*',
+          element: (
+            <Suspense fallback={<Spinner />}>
+              <DynamicPageWrapper />
+            </Suspense>
+          ),
+        },
+      ]),
+    [],
+  );
+
+  return (
+    <Provider store={store}>
       <ThemeProvider>
-        <BrowserRouter>
-          <Suspense fallback={<Spinner />}>
-            <DynamicPageComponent
-              {...props}
-              inlineEditForm={
-                props?.inlineEditForm ? transformedForm : undefined
-              }
-            />
-          </Suspense>
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>
   );

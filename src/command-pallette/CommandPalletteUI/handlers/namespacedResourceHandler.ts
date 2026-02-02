@@ -113,7 +113,7 @@ async function fetchNamespacedResource(context: CommandPaletteContext) {
     const { items } = await response.json();
     updateResourceCache(`${namespace}/${resourceType}`, items);
   } catch (e) {
-    console.warn(e);
+    console.warn('Failed to fetch namespaced resources:', e);
   }
 }
 

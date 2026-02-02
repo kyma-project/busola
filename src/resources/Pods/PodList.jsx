@@ -57,7 +57,6 @@ export function PodList(params) {
 
   return (
     <ResourcesList
-      disableMargin={params.disableMargin}
       customColumns={customColumns}
       description={ResourceDescription}
       sortBy={(defaultSort) => ({

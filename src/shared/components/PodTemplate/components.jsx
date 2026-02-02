@@ -28,8 +28,8 @@ function PodTemplateTable({ className, items, columns, rowRenderer }) {
       className={className}
       headerRow={
         <TableHeaderRow style={{ width: '50%' }}>
-          {columns.map((column, index) => (
-            <TableHeaderCell key={`PodTemplateTable-header-cell${index}`}>
+          {columns.map((column) => (
+            <TableHeaderCell key={`header-${column}`}>
               <Title level="H5">{column}</Title>
             </TableHeaderCell>
           ))}
@@ -37,7 +37,9 @@ function PodTemplateTable({ className, items, columns, rowRenderer }) {
       }
     >
       {items.map((item, index) => (
-        <TableRow key={`PodTemplateTable-table-row${index}`}>
+        <TableRow
+          key={`row-${item?.name || item?.containerName || ''}-${index}`}
+        >
           {rowRenderer(item)}
         </TableRow>
       ))}

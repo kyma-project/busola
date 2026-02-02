@@ -10,11 +10,14 @@ export function Tabs({ value, structure, schema, ...props }) {
     <div className="sap-margin-top-small sap-margin-x-small">
       <TabContainer tabLayout="Inline" contentBackgroundDesign="Transparent">
         {structure.children.map((child, idx) => (
-          <Tab key={`tab-wrapper-${idx}`} text={widgetT(child)}>
+          <Tab
+            key={`tab-wrapper-${child?.path || child?.name || idx}`}
+            text={widgetT(child)}
+          >
             {Array.isArray(child?.children) &&
-              child.children.map((def, idx) => (
+              child.children.map((def, defIdx) => (
                 <Widget
-                  key={`tab-content-${idx}`}
+                  key={`widget-${def?.path || def?.name || ''}-${defIdx}`}
                   value={value}
                   structure={def}
                   schema={schema}

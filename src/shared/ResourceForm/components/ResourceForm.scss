@@ -9,10 +9,10 @@ form .resource-form {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 0 1rem;
 
   ui5-form-item::part(layout) {
     grid-template-columns: none;
+    padding-inline: 1rem;
   }
 
   &::part(layout) {

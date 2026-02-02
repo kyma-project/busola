@@ -4,7 +4,7 @@ export function useWindowTitle(title, { skip } = {}) {
   useEffect(() => {
     const oldTitle = document.title;
     if (!skip) {
-      document.title = title;
+      document.title = title + ' - Kyma Dashboard';
       return () => (document.title = oldTitle);
     }
   }, [title, skip]);

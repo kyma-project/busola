@@ -1,4 +1,9 @@
 .page-header {
+  --_ui5-v2-18-0_dynamic_page_content_padding_inline_XL: 3rem;
+  --_ui5-v2-18-0_dynamic_page_content_padding_inline_L: 2rem;
+  --_ui5-v2-18-0_dynamic_page_content_padding_inline_M: 2rem;
+  --_ui5-v2-18-0_dynamic_page_content_padding_inline_S: 1rem;
+
   background-color: var(--sapBackgroundColor);
   container-type: inline-size;
 
@@ -30,6 +35,10 @@
     }
   }
 
+  .no-shadow {
+    box-shadow: none;
+  }
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -59,22 +68,79 @@
   &::part(fit-content) {
     position: static;
     padding: unset;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &::part(content) {
+    padding-block: 1rem;
+
+    @container (min-width: 1440px) {
+      padding-inline: var(
+        --_ui5-v2-18-0_dynamic_page_content_padding_inline_XL
+      );
+    }
+
+    @container (min-width: 1024px) and (max-width: 1439px) {
+      padding-inline: var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_L);
+    }
+
+    @container (min-width: 600px) and (max-width: 1023px) {
+      padding-inline: var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_M);
+    }
+
+    @container (max-width: 599px) {
+      padding-inline: var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_S);
+    }
   }
 
   .tab-container {
     position: sticky;
     z-index: 1;
+    display: block;
+    margin-top: -1rem;
+
+    @container (min-width: 1440px) {
+      margin-inline: calc(
+        -1 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_XL)
+      );
+      width: calc(
+        100% + 2 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_XL)
+      );
+    }
+
+    @container (min-width: 1024px) and (max-width: 1439px) {
+      margin-inline: calc(
+        -1 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_L)
+      );
+      width: calc(
+        100% + 2 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_L)
+      );
+    }
+
+    @container (min-width: 600px) and (max-width: 1023px) {
+      margin-inline: calc(
+        -1 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_M)
+      );
+      width: calc(
+        100% + 2 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_M)
+      );
+    }
+
+    @container (max-width: 599px) {
+      margin-inline: calc(
+        -1 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_S)
+      );
+      width: calc(
+        100% + 2 * var(--_ui5-v2-18-0_dynamic_page_content_padding_inline_S)
+      );
+    }
   }
 
   ui5-dynamic-page-header {
     padding-top: 0;
     padding-bottom: 1rem;
-  }
-}
-
-ui5-dynamic-page {
-  .no-shadow {
-    box-shadow: none;
   }
 }
 

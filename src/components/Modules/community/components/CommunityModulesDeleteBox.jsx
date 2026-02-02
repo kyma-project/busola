@@ -10,11 +10,13 @@ import { createPortal } from 'react-dom';
 
 export const CommunityModulesDeleteBoxContext = createContext({
   setOpenedModuleIndex: () => {},
-  showDeleteDialog: () => {},
+  showDeleteDialog: false,
   openedModuleIndex: undefined,
   deleteModuleButton: <></>,
   handleResourceDelete: () => {},
   namespaced: false,
+  performDelete: () => {},
+  performCancel: () => {},
 });
 
 export function CommunityModulesDeleteBoxContextProvider({
@@ -25,6 +27,8 @@ export function CommunityModulesDeleteBoxContextProvider({
   setLayoutColumn,
   children,
   namespaced,
+  performDelete,
+  performCancel,
 }) {
   const { t } = useTranslation();
   const [openedModuleIndex, setOpenedModuleIndex] = useState();
@@ -70,6 +74,8 @@ export function CommunityModulesDeleteBoxContextProvider({
         openedModuleIndex: openedModuleIndex,
         handleResourceDelete: handleResourceDelete,
         deleteModuleButton: deleteModuleButton,
+        performDelete: performDelete,
+        performCancel: performCancel,
       }}
     >
       {createPortal(
@@ -79,6 +85,9 @@ export function CommunityModulesDeleteBoxContextProvider({
           !moduleTemplatesLoading &&
           showDeleteDialog && (
             <ModulesDeleteBox
+              showDeleteDialog={showDeleteDialog}
+              performDelete={performDelete}
+              performCancel={performCancel}
               kymaResource={kymaResource}
               DeleteMessageBox={DeleteMessageBox}
               selectedModules={installedCommunityModules}

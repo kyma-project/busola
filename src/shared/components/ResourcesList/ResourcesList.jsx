@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from '../Link/Link';
 import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
+import { DeleteResourceModal } from '../DeleteResourceModal/DeleteResourceModal';
 
 const Injections = lazy(
   () => import('../../../components/Extensibility/ExtensibilityInjections'),
@@ -72,7 +73,6 @@ ResourcesList.propTypes = {
   resourceUrlPrefix: PropTypes.string,
   disableCreate: PropTypes.bool,
   disableDelete: PropTypes.bool,
-  disableMargin: PropTypes.bool,
   enableColumnLayout: PropTypes.bool,
   layoutNumber: PropTypes.string,
   filterFn: PropTypes.func,
@@ -239,7 +239,6 @@ export function ResourceListRenderer({
   nameSelector = (entry) => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate = false,
   disableDelete = false,
-  disableMargin = false,
   enableColumnLayout = false,
   columnLayout,
   customColumnLayout,
@@ -268,7 +267,12 @@ export function ResourceListRenderer({
   const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
 
-  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+  const {
+    showDeleteDialog,
+    handleResourceDelete,
+    performDelete,
+    performCancel,
+  } = useDeleteResource({
     resourceTitle,
     resourceType,
     layoutNumber,
@@ -574,13 +578,16 @@ export function ResourceListRenderer({
       ...(searchSettings?.textSearchProperties || []),
     ];
   };
-
   return (
     <>
       {createPortal(
-        <DeleteMessageBox
+        <DeleteResourceModal
           resource={activeResource}
           resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
+          resourceType={rawResourceType || resourceType}
+          performCancel={performCancel}
+          performDelete={performDelete}
+          showDeleteDialog={showDeleteDialog}
         />,
         document.body,
       )}
@@ -595,7 +602,6 @@ export function ResourceListRenderer({
           customColumnLayout={customColumnLayout}
           columnLayout={columnLayout}
           enableColumnLayout={enableColumnLayout}
-          disableMargin={disableMargin}
           title={showTitle ? title || prettifiedResourceName : null}
           accessibleName={
             accessibleName ?? prettifyNamePlural(resourceTitle, resourceType)

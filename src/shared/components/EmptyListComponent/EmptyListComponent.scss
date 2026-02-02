@@ -6,13 +6,13 @@
     flex-direction: row;
     align-items: center;
   }
+
+  section {
+    height: 100%;
+  }
 }
 
 div[slot='noData'] {
   width: 100%;
   text-align: center;
-}
-
-section {
-  height: 100%;
 }

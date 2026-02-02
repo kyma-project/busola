@@ -1,10 +1,6 @@
 import { PodList } from 'resources/Pods/PodList';
 
-export const RelatedPods = ({
-  namespace = '',
-  filter,
-  disableMargin = false,
-}) => {
+export const RelatedPods = ({ namespace = '', filter }) => {
   const podListParams = {
     disableHiding: true,
     displayArrow: false,
@@ -16,7 +12,6 @@ export const RelatedPods = ({
     filter,
     showTitle: true,
     disableCreate: true,
-    disableMargin,
     enableColumnLayout: false,
   };
 

@@ -116,7 +116,7 @@ async function fetchClusterResources(context: CommandPaletteContext) {
     const { items } = await response.json();
     updateResourceCache(resourceType, items);
   } catch (e) {
-    console.warn(e);
+    console.warn('Failed to fetch cluster resources:', e);
   }
 }
 

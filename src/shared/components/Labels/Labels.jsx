@@ -47,10 +47,10 @@ export const Labels = ({
         </Label>
       ) : null}
       <div className={classNames('labels', className)} style={style}>
-        {separatedLabels.map((label, id) => (
+        {separatedLabels.map((label) => (
           <Tag
             aria-label={label}
-            key={id}
+            key={label}
             colorScheme="10"
             design="Set2"
             className={`sap-margin-end-tiny ${
