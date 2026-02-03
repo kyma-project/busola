@@ -11,6 +11,7 @@ import {
   transformDataForDisplay,
 } from 'components/Modules/community/communityModulesHelpers';
 import {
+  DEFAULT_K8S_NAMESPACE,
   getModuleName,
   ModuleTemplateListType,
   ModuleTemplateType,
@@ -45,6 +46,7 @@ import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import {
   CallbackFn,
   installCommunityModule,
+  uploadResource,
 } from 'components/Modules/community/communityModulesInstallHelpers';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
@@ -64,10 +66,16 @@ function onVersionChange(
     const newModulesTemplatesToApply = new Map(moduleTemplatesToApply.map);
 
     const [name, namespace] = value.split('|');
-    const newModuleTemplateToApply = moduleTemplates.items.find(
-      (item) =>
-        item.metadata.namespace === namespace && item.metadata.name === name,
-    );
+    const newModuleTemplateToApply = moduleTemplates.items.find((item) => {
+      // If namespace is empty, it's a preloaded module template
+      if (!item.metadata.namespace) {
+        return item.metadata.name === name;
+      } else {
+        return (
+          item.metadata.namespace === namespace && item.metadata.name === name
+        );
+      }
+    });
     if (!newModuleTemplateToApply) {
       console.warn(`Can't find module template`);
       return;
@@ -119,11 +127,23 @@ async function upload(
     let errorOccurred = false;
     for (const module of communityModulesTemplatesToUpload.map.values()) {
       try {
-        notification.notifySuccess({
-          content: t('modules.community.messages.upload', {
-            resourceType: getModuleName(module),
-          }),
-        });
+        // Check if it's preoloaded module template
+        if (module.metadata.creationTimestamp === undefined) {
+          try {
+            await uploadResource(
+              { value: module },
+              DEFAULT_K8S_NAMESPACE,
+              clusterNodes,
+              namespaceNodes,
+              postRequest,
+              patchRequest,
+              singleGet,
+            );
+          } catch (e) {
+            console.error('Failed to add modules template:', e);
+            throw e;
+          }
+        }
 
         await installCommunityModule(
           module,
@@ -134,6 +154,12 @@ async function upload(
           singleGet,
           callback,
         );
+
+        notification.notifySuccess({
+          content: t('modules.community.messages.upload', {
+            resourceType: getModuleName(module),
+          }),
+        });
       } catch (e) {
         errorOccurred = true;
         notification.notifyError({
