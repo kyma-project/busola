@@ -155,7 +155,10 @@ function GraphvizComponent({
         >
           <ZoomControls onFitToView={fitToView} />
           <TransformComponent
-            wrapperClass="transform-component-wrapper"
+            wrapperStyle={{
+              width: '100%',
+              height: '100%',
+            }}
             contentClass="transform-component-content"
           >
             <div dangerouslySetInnerHTML={{ __html: svgContent }} />
