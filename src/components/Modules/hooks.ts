@@ -3,7 +3,6 @@ import { useAtomValue } from 'jotai';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
-import { isEmpty } from 'lodash';
 
 import {
   ConditionType,
@@ -400,7 +399,7 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
   const [resources, setResources] = useState([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  console.log('sourceURL', sourceURL, typeof sourceURL, isEmpty(sourceURL));
+
   const filterResources = (resources: any) => {
     return (resources || []).filter(
       (resource: any) =>
@@ -461,6 +460,6 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
       setLoading(false);
     }
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
-  console.log('before return resources,', resources);
+
   return { resources, error, loading };
 }

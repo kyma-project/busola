@@ -91,8 +91,10 @@ context('Test Community Modules views', () => {
 
     // Open Add YAML
     cy.get('[accessible-name="add-yamls"]').click();
+
+    // Open Add to Namespace select
     cy.get(`[header-text="Add Source YAML"]:visible`)
-      .find('[data-testid="yaml-namespace-select"]')
+      .find('[data-testid="add-to-namespace-select"]')
       .click();
 
     // Check if kyma-system has locked icon

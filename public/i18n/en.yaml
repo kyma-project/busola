@@ -992,6 +992,7 @@ modules:
     source-yaml:
       add-source-yaml: Add Source YAML
       add-source-yaml-info: Add your own custom modules to the Kyma cluster by adding their source files to this list. After that, your modules show up automatically in the list.
+      add-to-namespace: Add to Namespace
       all-modules-installed: All modules in this YAML are already installed.
       module-already-exists: <0> {{moduleTemplate}} </0> exists in <0> {{namespace}} </0>.
       module-templates-to-add: 'You can install the remaining modules:'

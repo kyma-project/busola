@@ -80,9 +80,11 @@ export const AddSourceYamls = () => {
       ),
     );
   }, [fetchedResources, communityModuleTemplates]);
+
   const allTemplatesInstalled =
     existingModuleTemplates.length > 0 &&
     existingModuleTemplates.length === fetchedResources.length;
+
   const uploadResources = useUploadResources(
     resourcesToApply,
     setResourcesToApply,
@@ -324,26 +326,27 @@ export const AddSourceYamls = () => {
                 <Spinner />
               ) : (
                 !allTemplatesInstalled &&
-                existingModuleTemplates.length > 0 &&
                 !error && (
                   <>
-                    <FlexBox
-                      direction={FlexBoxDirection.Column}
-                      gap={'0.5rem'}
-                      className="sap-margin-top-small"
-                    >
-                      <MessageStrip design="Critical" hideCloseButton>
-                        {t(
-                          'modules.community.source-yaml.modules-wont-be-added',
-                        )}
-                        {displayExistingModulesList(existingModuleTemplates)}
-                        <br />
-                        {t(
-                          'modules.community.source-yaml.module-templates-to-add',
-                        )}
-                        {displayModulesTooAddList(resourcesToApply)}
-                      </MessageStrip>
-                    </FlexBox>
+                    {existingModuleTemplates.length > 0 && (
+                      <FlexBox
+                        direction={FlexBoxDirection.Column}
+                        gap={'0.5rem'}
+                        className="sap-margin-top-small"
+                      >
+                        <MessageStrip design="Critical" hideCloseButton>
+                          {t(
+                            'modules.community.source-yaml.modules-wont-be-added',
+                          )}
+                          {displayExistingModulesList(existingModuleTemplates)}
+                          <br />
+                          {t(
+                            'modules.community.source-yaml.module-templates-to-add',
+                          )}
+                          {displayModulesTooAddList(resourcesToApply)}
+                        </MessageStrip>
+                      </FlexBox>
+                    )}
                     <FlexBox
                       direction={FlexBoxDirection.Column}
                       gap={'0.5rem'}
@@ -354,7 +357,8 @@ export const AddSourceYamls = () => {
                         alignItems="Center"
                       >
                         <Label for="source-url">
-                          {t('common.headers.namespace') + ':'}
+                          {t('modules.community.source-yaml.add-to-namespace') +
+                            ':'}
                         </Label>
                         <HintButton
                           setShowTitleDescription={setShowDescription}
@@ -367,8 +371,8 @@ export const AddSourceYamls = () => {
                         ></HintButton>
                       </FlexBox>
                       <Select
-                        id="yaml-namespace-select"
-                        data-testid="yaml-namespace-select"
+                        id="add-to-namespace-select"
+                        data-testid="add-to-namespace-select"
                         onChange={(e) => applyNamespace(e.target.value)}
                         className="namespace-select"
                       >
