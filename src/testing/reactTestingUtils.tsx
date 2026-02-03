@@ -2,7 +2,7 @@ import { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { Provider, WritableAtom } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
-import { BrowserRouter } from 'react-router';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 
 type CustomRenderOptions = Omit<RenderOptions, 'wrapper'> & {
   initialAtoms?: Iterable<[WritableAtom<unknown, any[], unknown>, unknown]>;
@@ -22,10 +22,23 @@ export function JotaiHydrator({
 
 const customRender = (ui: ReactElement, options?: CustomRenderOptions) => {
   const AllTheProviders = ({ children }: { children: ReactNode }) => {
+    const router = createMemoryRouter(
+      [
+        {
+          path: '/*',
+          element: children,
+        },
+      ],
+      {
+        initialEntries: ['/'],
+        initialIndex: 0,
+      },
+    );
+
     return (
       <Provider>
         <JotaiHydrator initialValues={options?.initialAtoms}>
-          <BrowserRouter>{children}</BrowserRouter>
+          <RouterProvider router={router} />
         </JotaiHydrator>
       </Provider>
     );

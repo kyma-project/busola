@@ -49,4 +49,4 @@ If your use case needs TLS all the way into the backend Pod, enable it by provid
    ```
 
 4. If you are using Istio Service Mesh, enable the `destinationrule-busola-backend.yaml` resource in `resources/istio/kustomization.yaml`.
-5. Install Busola according to [Install Kyma Dashboard with Istio Ingress](#install-kyma-dashboard-with-istio-ingress).
+5. Install Busola according to [Deploying and Accessing Busola in a Kubernetes Cluster](./contributor/deploy-access-kubernetes.md).

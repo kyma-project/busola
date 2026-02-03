@@ -4,15 +4,15 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "test:local": "LOCAL=1 npx playwright test",
-    "test": "npx playwright test"
+    "test:local": "NODE_OPTIONS='--no-experimental-strip-types' LOCAL=1 npx playwright test",
+    "test": "NODE_OPTIONS='--no-experimental-strip-types' npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.51.1",
-    "lighthouse": "^12.5.1",
-    "playwright": "^1.51.1",
+    "@playwright/test": "^1.55.0",
+    "lighthouse": "^13.0.0",
+    "playwright": "^1.55.0",
     "playwright-lighthouse": "^4.0.0",
-    "@playwright/browser-chromium": "1.51.1"
+    "@playwright/browser-chromium": "^1.55.0"
   },
   "author": "",
   "license": "ISC"
