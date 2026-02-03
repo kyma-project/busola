@@ -54,14 +54,15 @@ export default function NodeDetails({ nodeName }) {
   const customComponents = [
     () =>
       loadingMetrics ? (
-        <Spinner />
+        <Spinner key="node-resources" />
       ) : (
-        <div className="flexwrap">
+        <div className="flexwrap" key="node-resources">
           <NodeResources metrics={data.metrics} resources={resources} />
         </div>
       ),
     () => (
       <EventsList
+        key="events-list"
         filter={filterByHost}
         defaultType={EVENT_MESSAGE_TYPE.WARNING}
       />

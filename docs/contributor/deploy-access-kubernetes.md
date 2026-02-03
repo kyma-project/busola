@@ -92,7 +92,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
 
 </details>
 
-## Accessing Busola Installed on Kubernetes
+## Accessing Busola Installed in a Kubernetes Cluster
 
 You can access Busola using the `kubectl port forward` command or your Kubernetes cluster with Istio installed.
 

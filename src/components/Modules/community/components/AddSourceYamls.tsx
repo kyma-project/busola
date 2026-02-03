@@ -188,7 +188,7 @@ export const AddSourceYamls = () => {
     <ul className="unordered-list-disc">
       {moduleList?.map((mt: any) => {
         return (
-          <li key={mt?.metadata.uid}>
+          <li key={mt?.metadata.name}>
             <Text
               onClick={() => {
                 handleItemClick(mt.metadata.name, mt?.metadata.namespace);
@@ -215,7 +215,7 @@ export const AddSourceYamls = () => {
     <ul className="unordered-list-disc">
       {addModuleList?.map((mt: any) => {
         return (
-          <li key={mt?.value.metadata.uid}>
+          <li key={mt?.value.metadata.name}>
             <Text>
               <span style={{ fontWeight: 'bold' }}>
                 {mt.value.metadata.name}
