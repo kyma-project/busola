@@ -51,7 +51,7 @@ export function ComboboxArrayInput({
 
   return (
     <MultiInput
-      title={title ?? ''}
+      title={title}
       noEdit={noEdit}
       defaultOpen={defaultOpen}
       toInternal={toInternal}
