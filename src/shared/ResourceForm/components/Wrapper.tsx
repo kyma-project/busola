@@ -16,8 +16,7 @@ export type ResourceFormWrapperProps = {
   validationRef?: React.MutableRefObject<boolean>;
   nestingLevel?: number;
   required?: boolean;
-  [key: string]: any;
-};
+} & Record<string, any>;
 
 export function ResourceFormWrapper({
   resource,

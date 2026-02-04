@@ -14,6 +14,7 @@ export type CollapsibleSectionProps = {
   title: string | JSX.Element;
   defaultTitleType?: boolean;
   actions?:
+    | React.ReactNode[]
     | JSX.Element
     | ((setOpen: Dispatch<SetStateAction<boolean | undefined>>) => JSX.Element);
   children: React.ReactNode;
@@ -21,7 +22,7 @@ export type CollapsibleSectionProps = {
   setResource?: (resource: Record<string, any> | string) => void;
   className?: string;
   required?: boolean;
-  tooltipContent?: string | JSX.Element;
+  tooltipContent?: React.ReactNode;
   nestingLevel?: number;
 };
 

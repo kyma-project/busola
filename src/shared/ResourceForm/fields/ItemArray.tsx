@@ -23,7 +23,15 @@ type ItemArrayProps = {
   readOnly?: boolean;
   tooltipContent?: string | JSX.Element;
   nestingLevel?: number;
-} & React.HTMLAttributes<HTMLElement>;
+  disabled?: boolean;
+  defaultOpen?: boolean;
+  canChangeState?: boolean;
+  defaultTitleType?: boolean;
+  resource?: Record<string, any> | string;
+  setResource?: (resource: Record<string, any> | string) => void;
+  className?: string;
+  required?: boolean;
+};
 
 export function ItemArray({
   value: values,
@@ -38,7 +46,14 @@ export function ItemArray({
   readOnly,
   tooltipContent,
   nestingLevel = 0,
-  ...props
+  disabled,
+  defaultOpen,
+  canChangeState,
+  defaultTitleType,
+  resource,
+  setResource,
+  className,
+  required,
 }: ItemArrayProps) {
   const { t } = useTranslation();
 
@@ -110,7 +125,14 @@ export function ItemArray({
           {t('common.buttons.add')} {nameSingular}
         </Button>
       )}
-      {...props}
+      disabled={disabled}
+      defaultOpen={defaultOpen}
+      canChangeState={canChangeState}
+      defaultTitleType={defaultTitleType}
+      resource={resource}
+      setResource={setResource}
+      className={className}
+      required={required}
     >
       {content}
       {atLeastOneRequiredMessage && !values.length && (

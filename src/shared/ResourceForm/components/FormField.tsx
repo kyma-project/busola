@@ -36,7 +36,6 @@ export function FormField({
   style,
   ...props
 }: FormFieldProps) {
-  const { ...inputProps } = props;
   const inputInfoLink = useCreateResourceDescription(inputInfo);
   const [openPopover, setOpenPopover] = useState(false);
 
@@ -77,17 +76,16 @@ export function FormField({
         alignItems="Center"
         className="full-width"
       >
-        {messageStrip
-          ? messageStrip
-          : input({
-              updatesOnInput,
-              required,
-              disabled,
-              className: 'full-width',
-              accessibleName: label,
-              id: label?.replace(' ', '-').toLowerCase(),
-              ...inputProps,
-            })}
+        {messageStrip ||
+          input({
+            updatesOnInput,
+            required,
+            disabled,
+            className: 'full-width',
+            accessibleName: label,
+            id: label?.replace(' ', '-').toLowerCase(),
+            ...props,
+          })}
         {inputInfo && (
           <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
             {inputInfoLink}

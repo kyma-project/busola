@@ -28,7 +28,6 @@ export function TextArrayInput({
   const readOnlyOptions = readOnly ? { readOnly: true } : {};
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <MultiInput
       defaultOpen={defaultOpen}
       toInternal={toInternal}

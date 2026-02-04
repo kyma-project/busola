@@ -95,7 +95,6 @@ export function KeyValueField({
   }
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <MultiInput
       defaultOpen={defaultOpen}
       toInternal={(value: { [key: string]: any }) =>

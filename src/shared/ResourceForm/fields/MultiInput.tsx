@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, createRef } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  createRef,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { Button, FlexBox } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -10,14 +17,14 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 import './MultiInput.scss';
 
 type MultiInputProps = {
-  value: any;
-  setValue: (val: any) => void;
-  title: string;
-  tooltipContent?: string;
-  sectionTooltipContent?: string;
+  value?: any;
+  setValue?: (val: any) => void;
+  title?: string;
+  tooltipContent?: React.ReactNode;
+  sectionTooltipContent?: React.ReactNode;
   required?: boolean;
-  toInternal: (val: any) => any[];
-  toExternal: (val: any[]) => any;
+  toInternal: (val: any) => any;
+  toExternal: (val: any) => any;
   inputs: ((props: {
     index: number;
     value: any;
@@ -38,11 +45,21 @@ type MultiInputProps = {
   inputInfo?: string | JSX.Element;
   disableOnEdit?: boolean;
   editMode?: boolean;
-} & React.HTMLAttributes<HTMLElement>;
+  disabled?: boolean;
+  canChangeState?: boolean;
+  defaultTitleType?: boolean;
+  actions?:
+    | React.ReactNode[]
+    | JSX.Element
+    | ((setOpen: Dispatch<SetStateAction<boolean | undefined>>) => JSX.Element);
+  resource?: Record<string, any> | string;
+  setResource?: (resource: Record<string, any> | string) => void;
+  nestingLevel?: number;
+};
 
 export function MultiInput({
   value,
-  setValue,
+  setValue = () => {},
   title,
   tooltipContent,
   sectionTooltipContent,
@@ -60,7 +77,13 @@ export function MultiInput({
   inputInfo,
   disableOnEdit,
   editMode,
-  ...props
+  disabled,
+  canChangeState,
+  defaultTitleType,
+  actions,
+  resource,
+  setResource,
+  nestingLevel,
 }: MultiInputProps) {
   const { t } = useTranslation();
   const valueRef = useRef(null); // for deep comparison
@@ -189,12 +212,18 @@ export function MultiInput({
 
   return (
     <ResourceForm.CollapsibleSection
-      title={title}
+      title={title ?? ''}
       className={className}
       required={required}
       defaultOpen={open}
       tooltipContent={sectionTooltipContent || tooltipContent}
-      {...props}
+      disabled={disabled}
+      canChangeState={canChangeState}
+      defaultTitleType={defaultTitleType}
+      actions={actions}
+      resource={resource}
+      setResource={setResource}
+      nestingLevel={nestingLevel}
     >
       <ul className="full-width form-field multi-input">
         {internalValue.map((entry, index) => {
