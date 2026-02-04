@@ -49,4 +49,4 @@ If your use case needs TLS all the way into the backend Pod, enable it by provid
    ```
 
 4. If you are using Istio Service Mesh, enable the `destinationrule-busola-backend.yaml` resource in `resources/istio/kustomization.yaml`.
-5. Install Busola according to [Deploying and Accessing Busola in a Kubernetes Cluster](./contributor/deploy-access-kubernetes.md).
+5. Install Busola according to [Deploying and Accessing Busola in a Kubernetes Cluster](user/01-40-deploy-access-kubernetes.md).
