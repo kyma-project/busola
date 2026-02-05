@@ -2,6 +2,7 @@
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
 import { pipeline } from 'stream/promises';
+import { tokenAuthAgent } from '../utils/https-agent.js';
 
 const https = require('https');
 const fs = require('fs');
@@ -55,6 +56,10 @@ export async function handleK8sRequests(req, res) {
     ? { ...req.headers, authorization }
     : req.headers;
 
+  // Use keep-alive agent for token auth only (skip for cert auth)
+  const useAgent = authorization && !cert && !key;
+  const agent = useAgent ? tokenAuthAgent : undefined;
+
   const options = {
     hostname: targetApiServer.hostname,
     path: req.originalUrl.replace(/^\/backend/, ''),
@@ -64,6 +69,7 @@ export async function handleK8sRequests(req, res) {
     ca,
     cert,
     key,
+    agent,
   };
   workaroundForNodeMetrics(req);
 

@@ -5,6 +5,7 @@ import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
+import { destroyAgent } from './utils/https-agent.js';
 
 const express = require('express');
 const compression = require('compression');
@@ -87,7 +88,21 @@ if (isDocker) {
 }
 
 process.on('SIGINT', function () {
-  process.exit();
+  console.log('SIGINT received, cleaning up...');
+  destroyAgent();
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
+});
+
+process.on('SIGTERM', function () {
+  console.log('SIGTERM received, cleaning up...');
+  destroyAgent();
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
 });
 
 server.listen(port, '0.0.0.0', address, () => {
