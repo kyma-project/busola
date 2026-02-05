@@ -1,4 +1,3 @@
-import { useValidation } from 'shared/hooks/useValidation';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
   getPropsFromSchema,
@@ -7,24 +6,13 @@ import {
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { t } from 'i18next';
 
-export function JsonataInput({
-  value,
-  setValue,
-  onChange,
-  inputRef,
-  ...props
-}) {
-  const validationProps = useValidation({
-    inputRef,
-    onChange: [onChange, (e) => setValue && setValue(e.target.value)],
-  });
+export function JsonataInput({ value, setValue, onChange, ...props }) {
   if (!props.readOnly) delete props.readOnly;
 
   return (
     <Input
       value={value || ''}
       {...props}
-      {...validationProps}
       onInput={onChange ?? ((e) => setValue && setValue(e.target.value))}
       icon={<Icon accessibleName="Jsonata" name="source-code" />}
     />

@@ -53,6 +53,7 @@ export default function NamespaceCreate({
   useEffect(() => {
     if (layoutColumn?.showEdit?.resource) return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNamespace(
       initialNamespace
         ? cloneDeep(initialNamespace)
@@ -79,10 +80,10 @@ export default function NamespaceCreate({
 
   // container limits
   const [withLimits, setWithLimits] = useState(false);
-  const [limits, setLimits] = useState(createLimitRangeTemplate({}));
+  const [limits, setLimits] = useState(() => createLimitRangeTemplate({}));
   // memory quotas
   const [withMemory, setWithMemory] = useState(false);
-  const [memory, setMemory] = useState(createResourceQuotaTemplate({}));
+  const [memory, setMemory] = useState(() => createResourceQuotaTemplate({}));
 
   const createLimitResource = useCreateResource({
     singularName: 'LimitRange',
@@ -100,24 +101,9 @@ export default function NamespaceCreate({
     afterCreatedFn: () => {},
   });
 
-  useEffect(() => {
+  async function afterNamespaceCreated() {
     const name = namespace.metadata?.name;
 
-    if (name) {
-      jp.value(memory, '$.metadata.name', `${name}-quotas`);
-      jp.value(memory, '$.metadata.namespace', `${name}`);
-      setMemory({ ...memory });
-    }
-
-    if (name) {
-      jp.value(limits, '$.metadata.name', `${name}-limits`);
-      jp.value(limits, '$.metadata.namespace', name);
-      setLimits({ ...limits });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [namespace.metadata?.name]);
-
-  async function afterNamespaceCreated() {
     setLayoutColumn((prevState) => ({
       layout: 'OneColumn',
       showCreate: null,
@@ -139,9 +125,14 @@ export default function NamespaceCreate({
 
     const additionalRequests = [];
     if (withLimits) {
+      jp.value(limits, '$.metadata.name', `${name}-limits`);
+      jp.value(limits, '$.metadata.namespace', name);
       additionalRequests.push(createLimitResource());
     }
+
     if (withMemory) {
+      jp.value(memory, '$.metadata.name', `${name}-quotas`);
+      jp.value(memory, '$.metadata.namespace', name);
       additionalRequests.push(createMemoryResource());
     }
 

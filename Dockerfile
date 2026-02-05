@@ -1,7 +1,7 @@
 # this is a Dockerfile for single deployment app - both backend and frontends
 
 # ---- Base Alpine with Node ----
-FROM --platform=$BUILDPLATFORM node:22.22-alpine3.23 AS builder
+FROM --platform=$BUILDPLATFORM node:24.13-alpine3.23 AS builder
 ARG default_tag
 ARG tag
 
@@ -27,7 +27,7 @@ RUN npm run build:docker
 RUN cd /app/backend && npm run build
 
 # ---- Environments Configuration ----
-FROM --platform=$BUILDPLATFORM node:22.22-alpine3.23 AS configuration
+FROM --platform=$BUILDPLATFORM node:24.13-alpine3.23 AS configuration
 WORKDIR /kyma
 
 RUN apk add make

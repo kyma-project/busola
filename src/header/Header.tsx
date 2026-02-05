@@ -63,7 +63,7 @@ export function Header() {
       ...prevState,
       useJoule: usesJoule,
     }));
-  }, [usesJoule]);
+  }, [setShowCompanion, usesJoule]);
 
   const shellbarRef = useRef(null);
 

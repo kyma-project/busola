@@ -16,8 +16,7 @@ export function useFormNavigation(blocker?: Blocker) {
       }));
       setIsFormOpen({ formOpen: true, leavingForm: true });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blocker]);
+  }, [blocker, setIsFormOpen, setIsResourceEdited]);
 
   const navigateSafely = useCallback(
     (action: () => void) => {

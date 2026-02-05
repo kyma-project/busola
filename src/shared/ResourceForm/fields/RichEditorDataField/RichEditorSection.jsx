@@ -75,8 +75,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   );
   const handleChange = useCallback(
     (value) => onChange({ key: key || '', value }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key, language],
+    [key, onChange],
   );
 
   const valueInput = (

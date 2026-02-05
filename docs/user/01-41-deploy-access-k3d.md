@@ -20,7 +20,7 @@
    > [!TIP]
    > For more information, see [Exposing Services](https://k3d.io/v5.6.3/usage/exposing_services/).
 
-2. To deploy Busola in your k3d cluster, follow the steps described in [Deploying Busola in a Kubernetes Cluster](deploy-access-kubernetes.md#deploying-busola-in-a-kubernetes-cluster).
+2. To deploy Busola in your k3d cluster, follow the steps described in [Deploying Busola in a Kubernetes Cluster](01-40-deploy-access-kubernetes.md#deploying-busola-in-a-kubernetes-cluster).
 
 3. In your terminal, go to the Busola root folder and run the following command to install Ingress resources:
 
