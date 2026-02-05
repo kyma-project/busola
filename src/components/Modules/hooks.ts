@@ -416,7 +416,6 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
       setResources([]);
       setError(null);
       setLoading(false);
-      console.log('resources,', resources, 'loading', loading, 'error', error);
 
       return;
     }
@@ -425,35 +424,24 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
       (async function () {
         setLoading(true);
         try {
-          console.log('try');
-
           const allResources = await postForCommunityResources(post, sourceURL);
           const allowedToApply = filterResources(allResources);
           const formatted = allowedToApply?.map((r: any) => {
             return { value: r };
           });
-          console.log(
-            'allResources',
-            allResources,
-            'allowedToApply',
-            allowedToApply,
-          );
+
           setError(null);
 
           setResources(formatted);
         } catch (e) {
-          console.log('catch');
-
           if (e instanceof HttpError) {
             setError(e.message);
           }
         } finally {
-          console.log('finally');
           setLoading(false);
         }
       })();
     } else {
-      console.log('else');
       setResources([]);
 
       setError(t('modules.community.messages.source-yaml-invalid-url'));
