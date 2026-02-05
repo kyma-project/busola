@@ -1,5 +1,30 @@
 .sourceurl-messagebox {
-  width: 50%;
+  width: 50vw;
+}
+
+.sourceurl-content {
+  --_ui5-v2-18-0_popup_content_padding_xl: 3rem;
+  --_ui5-v2-18-0_popup_content_padding_m_l: 2rem;
+  --_ui5-v2-18-0_popup_content_padding_s: 1rem;
+}
+
+@media (min-width: 2879px) {
+  .sourceurl-content {
+    width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_xl)));
+  }
+}
+
+@media (min-width: 1199px) and (max-width: 2878px) {
+  .sourceurl-content {
+    width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_m_l)));
+  }
+}
+
+@media (max-width: 1198px) {
+  .sourceurl-content {
+    width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_s)));
+    min-width: calc(320px - (2 * var(--_ui5-v2-18-0_popup_content_padding_s)));
+  }
 }
 
 .to-add-list-header {
@@ -10,16 +35,13 @@
   font-size: var(--sapFontHeader5Size);
 }
 
-.namespace-select {
-  width: 100%;
-}
-
 .option-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 }
+
 ul.unordered-list-disc {
   list-style-type: disc;
   margin-left: 1rem;

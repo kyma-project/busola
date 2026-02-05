@@ -295,7 +295,7 @@ export const AddSourceYamls = () => {
               </Button>,
             ]}
           >
-            <div className="full-width">
+            <div className="sourceurl-content">
               <FlexBox direction={FlexBoxDirection.Column} gap={'0.5rem'}>
                 <Label for="source-url">
                   {t('modules.community.source-yaml.source-yaml-url') + ':'}
@@ -374,7 +374,7 @@ export const AddSourceYamls = () => {
                         id="add-to-namespace-select"
                         data-testid="add-to-namespace-select"
                         onChange={(e) => applyNamespace(e.target.value)}
-                        className="namespace-select"
+                        className="full-width"
                       >
                         <OptionCustom key="Empty namespace"></OptionCustom>
                         {allNamespaces?.map((ns) => {
