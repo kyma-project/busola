@@ -126,7 +126,10 @@ export default function CommunityModuleCard({
                 value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
                 additionalText={version.beta ? 'Beta' : ''}
               >
-                {`${version.textToDisplay} (namespace: ${version.moduleTemplate.namespace})`}
+                {version.textToDisplay}{' '}
+                {version.moduleTemplate.namespace
+                  ? `(namespace: ${version.moduleTemplate.namespace})`
+                  : ''}
               </Option>
             ))}
           </Select>
