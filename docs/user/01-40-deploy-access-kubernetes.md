@@ -20,8 +20,9 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
 
 2. Choose one of the following installation options that suit your case.
 
-<details>
-<summary>Install Busola from a release</summary>
+<!-- tabs:start -->
+
+### **Install Busola from a release**
 
 3. Go to the [Busola release page](https://github.com/kyma-project/busola/releases) and choose one of the available versions.
 
@@ -37,10 +38,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    kubectl apply --namespace "${NAMESPACE}" -f "https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml"
    ```
 
-   </details>
-
-<details>
-<summary>Install Busola from the main branch </summary>
+### **Install Busola from the main branch**
 
 3. Clone the [Busola repository](https://github.com/kyma-project/busola).
 4. Go to the folder where you downloaded it and run:
@@ -49,10 +47,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-   </details>
-
-<details>
-<summary>Install Busola with a specific landscape configuration</summary>
+### **Install Busola with a specific landscape configuration**
 
 3. Clone the [Busola repository](https://github.com/kyma-project/busola).
 
@@ -68,20 +63,17 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-   </details>
+### **Install Busola from a pull request**
 
-<details>
-<summary>Install Busola from a pull request</summary>
+3. Clone the [Busola repository](https://github.com/kyma-project/busola).
 
-1. Clone the [Busola repository](https://github.com/kyma-project/busola).
-
-2. Set your PR number as an environment variable:
+4. Set your PR number as an environment variable:
 
    ```bash
    export PR_NUMBER={PR_NUMBER}
    ```
 
-3. Run the following command from the Busola root folder:
+5. Run the following command from the Busola root folder:
 
    ```bash
    (cd resources/base && kustomize edit set image busola="europe-docker.pkg.dev/kyma-project/dev/busola-web:PR-${PR_NUMBER}" && cd ../ && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
@@ -90,7 +82,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
 > [!NOTE]
 > If there are any changes in your PR, the image should be automatically updated in your cluster. If you don't see the latest changes, make sure that the image job has finished. Then, go to your namespace, and in **Deployments**, select the restart button next to the image you want to update.
 
-</details>
+<!-- tabs:end -->
 
 ## Accessing Busola Installed in a Kubernetes Cluster
 
