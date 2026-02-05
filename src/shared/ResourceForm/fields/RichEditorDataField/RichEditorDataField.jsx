@@ -5,7 +5,8 @@ import { RichEditorSection } from './RichEditorSection';
 
 function createInternalState(data, previousInitialState) {
   const dataAsArray = transformData(data, previousInitialState);
-  if (checkIfLastItemIsNotNull) {
+
+  if (checkIfLastItemIsNotNull(dataAsArray)) {
     // Add new empty field
     return [...dataAsArray, null];
   } else {
@@ -63,7 +64,6 @@ export function RichEditorDataField({
         <RichEditorSection
           key={index}
           item={item}
-          setInternalData={setInternalData}
           onChange={(data) => {
             setInternalData((internalData) => {
               internalData[index] = {
