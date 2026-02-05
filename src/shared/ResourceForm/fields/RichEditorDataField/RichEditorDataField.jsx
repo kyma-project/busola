@@ -1,7 +1,32 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { RichEditorSection } from './RichEditorSection';
+
+function createInternalState(data, previousInitialState) {
+  const dataAsArray = transformData(data, previousInitialState);
+
+  if (checkIfLastItemIsNotNull(dataAsArray)) {
+    // Add new empty field
+    return [...dataAsArray, null];
+  } else {
+    return dataAsArray;
+  }
+}
+
+function transformData(obj, internalData) {
+  return Object.entries(obj || {}).map(([key, value]) => {
+    return {
+      key,
+      value,
+      language: internalData?.find((d) => d?.key === key)?.language || '',
+    };
+  });
+}
+
+function checkIfLastItemIsNotNull(arr) {
+  return !arr.length || arr[arr.length - 1];
+}
 
 export function RichEditorDataField({
   value: data,
@@ -9,29 +34,16 @@ export function RichEditorDataField({
   tooltipContent,
 }) {
   const { t } = useTranslation();
-  const [internalData, setInternalData] = useState([]);
-  const valueRef = useRef(null);
-  const firstRender = useRef(true); // detect languages only on first render
+  const [internalData, setInternalData] = useState(() =>
+    createInternalState(data, null),
+  );
 
-  // update internal value
-  if (JSON.stringify(data) !== valueRef.current) {
-    setInternalData(
-      Object.entries(data || {}).map(([key, value]) => ({
-        key,
-        value,
-        language: internalData.find((d) => d?.key === key)?.language || '',
-      })),
-    );
-    firstRender.current = false;
-    valueRef.current = JSON.stringify(data);
+  const [prevData, setPrevData] = useState(data);
+  // if previous data changed
+  if (prevData !== data) {
+    setPrevData(data);
+    setInternalData(createInternalState(data, internalData));
   }
-
-  // add empty "new" item
-  useEffect(() => {
-    if (!internalData.length || internalData[internalData.length - 1]) {
-      setInternalData([...internalData, null]);
-    }
-  }, [internalData]);
 
   // update original data source
   const pushValue = useCallback(() => {
@@ -52,16 +64,15 @@ export function RichEditorDataField({
         <RichEditorSection
           key={index}
           item={item}
-          setInternalData={setInternalData}
-          onChange={(data) =>
+          onChange={(data) => {
             setInternalData((internalData) => {
               internalData[index] = {
                 ...item,
                 ...data,
               };
               return [...internalData];
-            })
-          }
+            });
+          }}
           onDelete={() => {
             internalData.splice(index, 1);
             setInternalData([...internalData]);

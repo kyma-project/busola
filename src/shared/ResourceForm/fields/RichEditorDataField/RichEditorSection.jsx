@@ -42,7 +42,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
         const selectedOption = getAvailableLanguages().find(
           (o) => o.text === event.target.value,
         );
-        if (selectedOption) onChange(selectedOption.key);
+        if (selectedOption) onChange({ language: selectedOption.key });
       }}
       placeholder={t('components.rich-editor-data-field.language-placeholder')}
     >
@@ -75,8 +75,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   );
   const handleChange = useCallback(
     (value) => onChange({ key: key || '', value }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key, language],
+    [key, onChange],
   );
 
   const valueInput = (

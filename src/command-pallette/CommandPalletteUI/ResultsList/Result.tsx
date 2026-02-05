@@ -35,8 +35,7 @@ export function Result({
     const target = resultRef.current!;
     target.addEventListener('mousemove', onMouseOver);
     return () => target.removeEventListener('mousemove', onMouseOver);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, activeIndex, setActiveIndex]);
+  }, [index, activeIndex, setActiveIndex, onMouseOver]);
 
   const actionText =
     typeof customActionText === 'string' ? (

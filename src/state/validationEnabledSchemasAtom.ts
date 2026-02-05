@@ -59,8 +59,7 @@ export const useGetValidationEnabledSchemas = () => {
       );
       setSchemas(enabledSchemas);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validationSchemas, policySet]);
+  }, [validationSchemas, policySet, setSchemas]);
 };
 
 export const validationSchemasEnabledAtom = atom<ValidationSchema>(
