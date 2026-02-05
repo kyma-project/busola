@@ -2,6 +2,7 @@
 import PinoHttp from 'pino-http';
 import { v4 as uuid } from 'uuid';
 import escape from 'lodash.escape';
+import { slowRequestLogger } from './slowRequestLogger.js';
 
 function configureLogger() {
   const isDev = process.env.NODE_ENV !== 'production';
@@ -27,10 +28,14 @@ function configureLogger() {
   });
 }
 
-export default function addLogger(handler) {
-  const logger = configureLogger();
-  return async function wrapper(req, res) {
-    logger(req, res);
-    handler(req, res);
+export const pinoMiddleware = configureLogger();
+
+export function createSlowRequestLogger(thresholdMs = 4000) {
+  return (req, res, next) => {
+    if (req.log) {
+      slowRequestLogger(req.log, thresholdMs)(req, res, next);
+    } else {
+      next();
+    }
   };
 }
