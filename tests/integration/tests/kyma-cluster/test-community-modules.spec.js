@@ -180,7 +180,7 @@ context('Test Community Modules views', () => {
       searchInPlainTableText: true,
       deletedVisible: false,
       waitForDelete: 2000,
-      customHeaderText: 'Delete module busola from your cluster?',
+      customHeaderText: 'Delete Module',
     });
   });
 });

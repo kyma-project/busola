@@ -307,8 +307,8 @@ export const ModulesDeleteBox = ({
           ? 'common.buttons.cascade-delete'
           : null
       }
-      customTitle={t('kyma-modules.delete-module-title', { name: moduleName })}
-      customMessage={t('kyma-modules.delete-module')}
+      customTitle={t('kyma-modules.delete-module-title')}
+      customMessage={t('kyma-modules.delete-module', { name: moduleName })}
       cancelFn={() => {
         setAllowForceDelete(false);
         setChosenModuleIndex(null);
