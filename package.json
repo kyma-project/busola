@@ -62,6 +62,7 @@
     "@ui5/webcomponents-react-compat": "^2.18.0",
     "@viz-js/viz": "^3.11.0",
     "classnames": "^2.5.1",
+    "compare-versions": "^6.1.1",
     "copy-to-clipboard": "^3.2.0",
     "core-js": "^3.41.0",
     "cronstrue": "^2.56.0",
