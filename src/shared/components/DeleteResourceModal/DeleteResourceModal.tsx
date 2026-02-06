@@ -110,7 +110,7 @@ export function DeleteResourceModal({
           paddingRight: additionalPadding ? '1rem' : undefined,
         }}
       >
-        <Text style={{ paddingLeft: '0.5rem' }}>
+        <Text style={{ paddingLeft: '0.5rem', whiteSpace: 'pre-line' }}>
           {customMessage ??
             t(
               resourceIsCluster

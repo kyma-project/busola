@@ -893,7 +893,9 @@ kyma-modules:
   change-release-channel-warning: The module's version in the fast channel is usually higher than the version in the regular channel. As downgrades are not supported, switching the channel back to regular will not affect the module's version <0>until the channel version is the same or higher.</0> To use the lower version, you must delete the module and re-add it from the <0>regular</0> channel.
   channel: Channel
   channel-overridden: Overridden
-  delete-module: Delete module {{name}} from your cluster? Deleting this module will also permanently delete all namespaces, service instances, and service bindings created by the module.
+  delete-module: |
+    Delete module {{name}} from your cluster?
+    Deleting this module will also permanently delete all namespaces, service instances, and service bindings created by the module.
   delete-module-title: Delete Module
   description: With <0>Kyma’s modular approach</0>, you can install just the modules you need, instead of a predefined set of components.
   documentation: Documentation
