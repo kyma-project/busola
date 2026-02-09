@@ -1,5 +1,7 @@
 .sourceurl-messagebox {
   width: 50vw;
+  container-name: messagebox;
+  container-type: inline-size;
 }
 
 .sourceurl-content {
@@ -8,19 +10,19 @@
   --_ui5-v2-18-0_popup_content_padding_s: 1rem;
 }
 
-@media (min-width: 2879px) {
+@container messagebox (min-width: 1439px) {
   .sourceurl-content {
     width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_xl)));
   }
 }
 
-@media (min-width: 1199px) and (max-width: 2878px) {
+@container messagebox (min-width: 599px) and (max-width: 1439px) {
   .sourceurl-content {
     width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_m_l)));
   }
 }
 
-@media (max-width: 1198px) {
+@container messagebox (max-width: 599px) {
   .sourceurl-content {
     width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_s)));
     min-width: calc(320px - (2 * var(--_ui5-v2-18-0_popup_content_padding_s)));

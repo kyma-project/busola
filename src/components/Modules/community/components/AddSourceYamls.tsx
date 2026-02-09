@@ -304,10 +304,12 @@ export const AddSourceYamls = () => {
                   type="Text"
                   id="source-url"
                   value={sourceURL}
-                  onInput={(e: any) => {
+                  onInput={(e: Event) => {
                     setSourceURL((e.target as HTMLInputElement).value);
                   }}
-                  accessibleName={t('modules.community.source-yaml.source-yaml-url')}
+                  accessibleName={t(
+                    'modules.community.source-yaml.source-yaml-url',
+                  )}
                   showClearIcon
                   className="full-width"
                   valueState={

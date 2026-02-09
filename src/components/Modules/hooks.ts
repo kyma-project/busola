@@ -435,7 +435,8 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
           setResources(formatted);
         } catch (e) {
           if (e instanceof HttpError) {
-            setError(e.message);
+            setResources([]);
+            setError(t('modules.community.messages.source-yaml-invalid-url'));
           }
         } finally {
           setLoading(false);
