@@ -137,5 +137,6 @@ export function ResourceFormWrapper({
     }
   };
 
+  // eslint-disable-next-line react-hooks/refs
   return Children.map(children, renderWrapper) || null;
 }
