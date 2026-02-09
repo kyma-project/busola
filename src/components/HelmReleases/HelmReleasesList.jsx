@@ -13,9 +13,12 @@ import {
 } from 'components/HelmReleases';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
+  useWindowTitle(t('helm-releases.title'));
+
   const namespace = useAtomValue(activeNamespaceIdAtom);
   const { namespaceUrl } = useUrl();
   const resourceUrl = (entry) => {
@@ -23,7 +26,6 @@ function HelmReleasesList() {
       namespace: entry.namespace,
     });
   };
-
   const dataUrl =
     namespace === '-all-'
       ? `/api/v1/secrets`
