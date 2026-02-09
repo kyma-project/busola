@@ -5,7 +5,6 @@ import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
-import { destroyAgent } from './utils/https-agent.js';
 
 const express = require('express');
 const compression = require('compression');
@@ -45,7 +44,10 @@ if (process.env.NODE_ENV === 'development') {
 // Add Pino logging middleware (attaches req.log to all requests)
 app.use(pinoMiddleware);
 
-const SLOW_REQUEST_THRESHOLD_MS = 4000;
+const SLOW_REQUEST_THRESHOLD_MS = parseInt(
+  process.env.SLOW_REQUEST_THRESHOLD_MS || '4000',
+  10,
+);
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
 app.use('/proxy', proxyRateLimiter, proxyHandler);
@@ -89,7 +91,6 @@ if (isDocker) {
 
 process.on('SIGINT', function () {
   console.log('SIGINT received, cleaning up...');
-  destroyAgent();
   server.close(() => {
     console.log('Server closed');
     process.exit(0);
@@ -98,7 +99,6 @@ process.on('SIGINT', function () {
 
 process.on('SIGTERM', function () {
   console.log('SIGTERM received, cleaning up...');
-  destroyAgent();
   server.close(() => {
     console.log('Server closed');
     process.exit(0);

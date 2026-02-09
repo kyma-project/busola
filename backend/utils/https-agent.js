@@ -19,7 +19,3 @@ export const tokenAuthAgent = new https.Agent({
   timeout: 60000, // Match typical load balancer timeouts
   scheduling: 'lifo',
 });
-
-export function destroyAgent() {
-  tokenAuthAgent.destroy();
-}

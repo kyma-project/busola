@@ -8,13 +8,13 @@ import escape from 'lodash.escape';
  */
 export const slowRequestLogger = (logger, thresholdMs = 4000) => {
   return (req, res, next) => {
-    const start = process.hrtime();
+    const start = process.hrtime.bigint();
 
     // Hook into the response 'finish' event (fires when response has been sent completely)
     res.on('finish', () => {
-      const diff = process.hrtime(start);
-      // Convert [seconds, nanoseconds] to milliseconds
-      const durationMs = diff[0] * 1e3 + diff[1] * 1e-6;
+      const end = process.hrtime.bigint();
+      // Convert nanoseconds to milliseconds
+      const durationMs = Number(end - start) / 1e6;
 
       if (durationMs > thresholdMs) {
         const url = req.originalUrl || req.url;
