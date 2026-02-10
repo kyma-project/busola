@@ -213,7 +213,7 @@ export const AddSourceYamls = () => {
     </ul>
   );
 
-  const displayModulesTooAddList = (addModuleList: any) => (
+  const displayModulesToAddList = (addModuleList: any) => (
     <ul className="unordered-list-disc">
       {addModuleList?.map((mt: any) => {
         return (
@@ -345,7 +345,7 @@ export const AddSourceYamls = () => {
                           {t(
                             'modules.community.source-yaml.module-templates-to-add',
                           )}
-                          {displayModulesTooAddList(resourcesToApply)}
+                          {displayModulesToAddList(resourcesToApply)}
                         </MessageStrip>
                       </FlexBox>
                     )}
