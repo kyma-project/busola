@@ -1,0 +1,8 @@
+configMapGenerator:
+  - name: busola-extensions
+    options:
+      disableNameSuffixHash: true
+    files:
+      - extensions.yaml
+      - wizards.yaml
+      - statics.yaml
