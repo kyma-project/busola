@@ -39,7 +39,8 @@ RUN npm ci
 RUN make prepare-configuration
 
 # ---- Copy result ----
-FROM node:22.21.1-alpine3.23
+ARG RUNTIME_IMAGE=node:22.21.1-alpine3.23
+FROM $RUNTIME_IMAGE
 WORKDIR /app
 
 COPY --chown=65532:65532 --from=builder /app/build /app/core-ui
