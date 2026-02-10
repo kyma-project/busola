@@ -86,7 +86,7 @@ export function SidebarNavigation() {
       onSelectionChange={(e) => e.preventDefault()}
       style={{
         width: isSidebarCondensed
-          ? 'var(--_ui5-v2-18-0_side_navigation_collapsed_width)'
+          ? 'var(--_ui5_side_navigation_collapsed_width)'
           : '',
       }}
       ref={sidebarRef}

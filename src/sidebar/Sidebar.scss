@@ -1,10 +1,5 @@
-:root {
-  --sidebar-padding: var(--_ui5-v2-18-0_side_navigation_padding);
-  --sidebar-width: var(--_ui5-v2-18-0_side_navigation_width);
-}
-
 .ui5-content-density-compact {
-  --_ui5-v2-18-0_side_navigation_padding: 0.2rem 0.7rem 0.75rem 0.75rem !important;
+  --_ui5_side_navigation_padding: 0.2rem 0.7rem 0.75rem 0.75rem !important;
 }
 
 .sidebar__content {

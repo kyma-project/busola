@@ -1,13 +1,5 @@
 @use '../shared/components/ResourceGraph/mixins';
 
-:root {
-  --card-box-shadow: var(--_ui5-v2-18-0_card_box_shadow);
-  --card-border: var(--_ui5-v2-18-0_card_border);
-  --card-border-radius: var(--_ui5-v2-18-0_card_border-radius);
-  --card-border: var(--_ui5-v2-18-0_card_border);
-  --ui5-v2-18-0_table_bottom_border: none !important;
-}
-
 html {
   font-size: 16px;
   background: color-mix(in srgb, black 4%, var(--sapBackgroundColor));
@@ -32,9 +24,8 @@ body {
 }
 
 .card-shadow {
-  box-shadow: var(--card-box-shadow);
-  border-radius: var(--card-border-radius);
-  border: var(--card-border);
+  box-shadow: var(--_ui5_card_box_shadow);
+  border: var(--_ui5_card_border);
   overflow: hidden;
 }
 
