@@ -48,7 +48,6 @@ COPY --chown=65532:65532 --from=builder /app/backend/backend-production.js /app/
 COPY --chown=65532:65532 --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --chown=65532:65532 --from=builder /app/backend/settings/* /app/settings/
 COPY --chown=65532:65532 --from=builder /app/backend/environments /app/environments
-COPY --chown=65532:65532 --from=builder /app/start_node.sh /app/start_node.sh
 COPY --chown=65532:65532 --from=configuration /kyma/build /app/core-ui/environments
 
 USER 65532:65532
