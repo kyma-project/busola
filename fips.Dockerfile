@@ -1,6 +1,6 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE AS source
-FROM europe-docker.pkg.dev/kyma-project/restricted-prod/sap.com/node-fips:v22.21.1-slim
+FROM europe-docker.pkg.dev/kyma-project/restricted-prod/sap.com/node-fips:24.13-slim
 COPY --from=source /app /app
 
 ENV ADDRESS=0.0.0.0 IS_DOCKER=true ENVIRONMENT="" NODE_ENV=production
