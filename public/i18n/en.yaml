@@ -977,10 +977,9 @@ modules:
       resources-delete-in-progress: Resources are still being deleted. Try again later.
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
-      source-yaml-fetch-failed: We couldn’t reach that URL. Check that the link is correct and accessible.
       source-yaml-invalid-url: |-
-        We couldn’t reach that URL. Check that the link is correct and accessible. 
-         Example format: http://github.com/project/repo/file.yaml
+        'We couldn’t reach that URL. Check the link and try again. {0}
+        Example format: http://github.com/project/repo/file.yaml'
       success: '{{resourceType}} installed'
       upload: Start {{resourceType}} upload
     no-modules: No community modules available
