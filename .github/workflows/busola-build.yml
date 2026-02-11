@@ -67,6 +67,6 @@ jobs:
     with:
       name: fips-busola
       dockerfile: fips.Dockerfile
-      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}s
+      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       use-restricted-registry: true
       build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/prod/busola:${{ inputs.tag != '' && inputs.tag || needs.prepare-tag.outputs.tag }}
