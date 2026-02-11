@@ -1,22 +1,5 @@
 $bslNamespace: bsl-has;
 
-$properties: padding, padding-top, padding-bottom, padding-left, padding-right;
-$sizes: (
-  'tiny': 0.5rem,
-  'small': 1rem,
-  'regular': 1.5rem,
-  'medium': 2rem,
-  'large': 3rem,
-  'none': 0,
-);
-@each $property in $properties {
-  @each $sizeName, $sizeValue in $sizes {
-    .#{$bslNamespace}-#{$property}-#{$sizeName} {
-      #{$property}: $sizeValue !important;
-    }
-  }
-}
-
 $statusColors: (
   'status-1': var(--sapPositiveColor),
   'status-2': var(--sapCriticalColor),
@@ -24,6 +7,7 @@ $statusColors: (
   'status-4': var(--sapNeutralColor),
   'text-1': var(--sapTextColor),
 );
+
 @each $colorName, $colorValue in $statusColors {
   .#{$bslNamespace}-color-#{$colorName} {
     color: $colorValue !important;

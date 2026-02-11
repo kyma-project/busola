@@ -1,18 +1,8 @@
-.params-warning-icon {
-  color: var(--sapCriticalColor);
-  font-weight: bolder;
-  margin-left: 10px;
-}
-
 .empty-cluster-list {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.cluster-disabled-subtitle a {
-  font-size: inherit;
 }
 
 #edit-cluster {
