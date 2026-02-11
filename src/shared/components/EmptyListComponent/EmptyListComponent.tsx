@@ -28,15 +28,16 @@ export const EmptyListComponent = ({
   image = 'NoEntries',
 }: EmptyListComponentProps) => {
   const { t } = useTranslation();
-  const subtitle = subtitleText ? (
-    <Trans
-      i18nKey={subtitleText}
-      defaults={subtitleText}
-      components={[<ExternalLink key={subtitleText} url={url} />]}
-    />
-  ) : (
-    ''
-  );
+  const subtitle =
+    subtitleText && subtitleText !== 'resource.description' ? (
+      <Trans
+        i18nKey={subtitleText}
+        defaults={subtitleText}
+        components={[<ExternalLink key={subtitleText} url={url} />]}
+      />
+    ) : (
+      ''
+    );
 
   if (showButton === undefined) {
     showButton = typeof onClick === 'function';

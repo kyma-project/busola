@@ -214,6 +214,7 @@ command-palette:
     rolebindings: Role Bindings
     serviceaccounts: Service Accounts
     serviceentries: Service Entries
+    services: Services
     statefulsets: Stateful Sets
     storageclasses: Storage Classes
     subscriptions: Subscriptions
