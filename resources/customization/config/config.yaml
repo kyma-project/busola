@@ -4,4 +4,4 @@ config:
     FEEDBACK:
       isEnabled: true
       config:
-        link: https://openstreetmap.org
+        link: https://kyma-project.io/#/
