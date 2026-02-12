@@ -136,7 +136,7 @@ export function Header() {
                 e.preventDefault();
                 setShowCompanion((prevState) => ({
                   ...prevState,
-                  show: true,
+                  show: prevState.useJoule ? !prevState.show : true,
                   fullScreen: false,
                 }));
               }}
