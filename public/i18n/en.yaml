@@ -970,6 +970,7 @@ modules:
     messages:
       delete-failure: 'Failed to delete the {{module}}: {{error}}'
       delete-template-failure: 'Failed to delete templates: {{error}}'
+      example-format: 'Example format: http://github.com/project/repo/file.yaml'
       install-failure: 'Failed to install the {{resourceType}}: {{error}}'
       module-added: Community Module added
       module-uninstall: Community Module deleted
@@ -978,8 +979,9 @@ modules:
       resources-delete-in-progress: Resources are still being deleted. Try again later.
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
-      source-yaml-fetch-failed: 'Failed to download source yaml: {{error}}'
-      source-yaml-invalid-url: Ensure your URL ends with ".yaml".
+      source-yaml-invalid-url: |-
+        'We couldn’t reach that URL. Check the link and try again. {0}
+        Example format: http://github.com/project/repo/file.yaml'
       success: '{{resourceType}} installed'
       upload: Start {{resourceType}} upload
     no-modules: No community modules available
@@ -991,12 +993,12 @@ modules:
     source-yaml:
       add-source-yaml: Add Source YAML
       add-source-yaml-info: Add your own custom modules to the Kyma cluster by adding their source files to this list. After that, your modules show up automatically in the list.
-      example-format: 'Example format: http://github.com/project/repo/file.yaml'
-      module-already-exists: <0> {{moduleTemplate}} </0> already exists in the <0> {{namespace}} </0> namespace.
-      module-templates-to-add: ModuleTemplates to add
-      modules-wont-be-added: Following ModuleTemplates already exist in the cluster and cannot be added.
+      add-to-namespace: Add to Namespace
+      all-modules-installed: All modules in this YAML are already installed.
+      module-already-exists: <0> {{moduleTemplate}} </0> exists in <0> {{namespace}} </0>.
+      module-templates-to-add: 'You can install the remaining modules:'
+      modules-wont-be-added: Some modules in this YAML already exist in the cluster.
       namespace-description: Namespace where ModuleTemplates are applied. If left empty, the namespace defined in the ModuleTemplates is used. Resources cannot be created in the kyma-system namespace.
-      no-module-templates: No ModuleTemplates to add.
       no-source-yaml: No source YAML added.
       remove-source-yaml: Remove Source YAML
       remove-source-yaml-desc: Your previously installed modules will remain available, but you won't be able to add any of the following

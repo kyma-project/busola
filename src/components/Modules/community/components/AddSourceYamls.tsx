@@ -3,9 +3,6 @@ import {
   FlexBox,
   Input,
   Label,
-  List,
-  ListItemCustom,
-  ListItemStandard,
   MessageBox,
   MessageStrip,
   OptionCustom,
@@ -68,6 +65,7 @@ export const AddSourceYamls = () => {
     error,
     loading,
   } = useGetYAMLModuleTemplates(sourceURL, post);
+
   const allNamespaces = useAtomValue(namespacesAtom);
   const { communityModuleTemplates } = useContext(ModuleTemplatesContext);
 
@@ -82,6 +80,10 @@ export const AddSourceYamls = () => {
       ),
     );
   }, [fetchedResources, communityModuleTemplates]);
+
+  const allTemplatesInstalled =
+    existingModuleTemplates.length > 0 &&
+    existingModuleTemplates.length === fetchedResources.length;
 
   const uploadResources = useUploadResources(
     resourcesToApply,
@@ -184,6 +186,66 @@ export const AddSourceYamls = () => {
     setShowAddSource(false);
     setAddYamlsLoader(false);
   };
+  const displayExistingModulesList = (moduleList: any) => (
+    <ul className="unordered-list-disc">
+      {moduleList?.map((mt: any) => {
+        return (
+          <li key={mt?.metadata.name}>
+            <Text
+              onClick={() => {
+                handleItemClick(mt.metadata.name, mt?.metadata.namespace);
+              }}
+              style={{ cursor: 'pointer' }}
+            >
+              <Trans
+                i18nKey={'modules.community.source-yaml.module-already-exists'}
+                values={{
+                  moduleTemplate: `${mt.metadata.name} ${mt.spec.version ? ` (v${mt.spec.version})` : ''}`,
+                  namespace: mt?.metadata.namespace,
+                }}
+              >
+                <span style={{ fontWeight: 'bold' }}></span>
+              </Trans>
+            </Text>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
+  const displayModulesToAddList = (addModuleList: any) => (
+    <ul className="unordered-list-disc">
+      {addModuleList?.map((mt: any) => {
+        return (
+          <li key={mt?.value.metadata.name}>
+            <Text>
+              <span style={{ fontWeight: 'bold' }}>
+                {mt.value.metadata.name}
+                {mt.value.spec.version ? ` (v${mt.value.spec.version})` : ''}
+              </span>
+            </Text>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
+  const errorMessage = () => {
+    if (loading) return null;
+    if (allTemplatesInstalled) {
+      return (
+        <>
+          <Text>
+            {t('modules.community.source-yaml.all-modules-installed')}
+          </Text>
+          {displayExistingModulesList(existingModuleTemplates)}
+        </>
+      );
+    }
+    if (error) {
+      return <Text>{error}</Text>;
+    }
+  };
 
   return (
     <>
@@ -233,158 +295,118 @@ export const AddSourceYamls = () => {
               </Button>,
             ]}
           >
-            <FlexBox direction={FlexBoxDirection.Column} gap={'0.5rem'}>
-              <Label for="source-url">
-                {t('modules.community.source-yaml.source-yaml-url') + ':'}
-              </Label>
-              <Input
-                type="Text"
-                id="source-url"
-                value={sourceURL}
-                onInput={(e: any) => {
-                  setSourceURL((e.target as HTMLInputElement).value);
-                }}
-                accessibleName="Source YAML URL"
-                showClearIcon
-                className="full-width"
-              />
-              <Label wrappingType="Normal">
-                {t('modules.community.source-yaml.example-format')}
-              </Label>
-            </FlexBox>
-            <FlexBox
-              direction={FlexBoxDirection.Column}
-              gap={'0.5rem'}
-              className="sap-margin-top-small"
-            >
-              <FlexBox direction={FlexBoxDirection.Row} alignItems="Center">
+            <div className="sourceurl-content">
+              <FlexBox direction={FlexBoxDirection.Column} gap={'0.5rem'}>
                 <Label for="source-url">
-                  {t('common.headers.namespace') + ':'}
+                  {t('modules.community.source-yaml.source-yaml-url') + ':'}
                 </Label>
-                <HintButton
-                  setShowTitleDescription={setShowDescription}
-                  showTitleDescription={showDescription}
-                  description={
-                    t(
-                      'modules.community.source-yaml.namespace-description',
-                    ) as string
+                <Input
+                  type="Text"
+                  id="source-url"
+                  value={sourceURL}
+                  onInput={(e: Event) => {
+                    setSourceURL((e.target as HTMLInputElement).value);
+                  }}
+                  accessibleName={t(
+                    'modules.community.source-yaml.source-yaml-url',
+                  )}
+                  showClearIcon
+                  className="full-width"
+                  valueState={
+                    !loading && (error || allTemplatesInstalled)
+                      ? 'Negative'
+                      : 'None'
                   }
-                ></HintButton>
+                  valueStateMessage={
+                    <>
+                      <Text>{errorMessage()}</Text>
+                    </>
+                  }
+                />
               </FlexBox>
-              <Select
-                id="yaml-namespace-select"
-                data-testid="yaml-namespace-select"
-                onChange={(e) => applyNamespace(e.target.value)}
-                className="namespace-select"
-              >
-                <OptionCustom key="Empty namespace"></OptionCustom>
-                {allNamespaces?.map((ns) => {
-                  if (ns === 'kyma-system')
-                    return (
-                      <OptionCustom
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-expect-error
-                        disabled
-                        value={ns}
-                        key={ns}
+              {loading ? (
+                <Spinner />
+              ) : (
+                !allTemplatesInstalled &&
+                !error && (
+                  <>
+                    {existingModuleTemplates.length > 0 && (
+                      <FlexBox
+                        direction={FlexBoxDirection.Column}
+                        gap={'0.5rem'}
+                        className="sap-margin-top-small"
                       >
-                        <div className="option-content">
-                          {ns}
-                          <Icon name="locked" />
-                        </div>
-                      </OptionCustom>
-                    );
-                  return (
-                    <OptionCustom value={ns} key={ns}>
-                      {ns}
-                    </OptionCustom>
-                  );
-                })}
-              </Select>
-            </FlexBox>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <>
-                {existingModuleTemplates.length > 0 && (
-                  <FlexBox
-                    direction={FlexBoxDirection.Column}
-                    gap={'0.5rem'}
-                    className="sap-margin-top-small"
-                  >
-                    <MessageStrip design="Critical" hideCloseButton>
-                      {t('modules.community.source-yaml.modules-wont-be-added')}
-                    </MessageStrip>
-                    <List>
-                      {existingModuleTemplates?.map((mt: any) => {
-                        return (
-                          <ListItemCustom
-                            key={mt?.metadata.uid}
-                            onClick={() => {
-                              handleItemClick(
-                                mt.metadata.name,
-                                mt?.metadata.namespace,
-                              );
-                            }}
-                          >
-                            <Text>
-                              <Trans
-                                i18nKey={
-                                  'modules.community.source-yaml.module-already-exists'
-                                }
-                                values={{
-                                  moduleTemplate: `${mt.metadata.name} ${mt.spec.version ? ` (v${mt.spec.version})` : ''}`,
-                                  namespace: mt?.metadata.namespace,
-                                }}
-                              >
-                                <span style={{ fontWeight: 'bold' }}></span>
-                              </Trans>
-                            </Text>
-                          </ListItemCustom>
-                        );
-                      })}
-                    </List>
-                  </FlexBox>
-                )}
-                <FlexBox
-                  direction={FlexBoxDirection.Column}
-                  gap={'0.5rem'}
-                  className="sap-margin-top-small"
-                >
-                  <List
-                    header={
-                      <Text className="to-add-list-header">
-                        {t(
-                          'modules.community.source-yaml.module-templates-to-add',
-                        )}
-                      </Text>
-                    }
-                  >
-                    {resourcesToApply.length === 0 && (
-                      <ListItemStandard key="no-modules-to-add">
-                        <Text>
+                        <MessageStrip design="Critical" hideCloseButton>
                           {t(
-                            'modules.community.source-yaml.no-module-templates',
+                            'modules.community.source-yaml.modules-wont-be-added',
                           )}
-                        </Text>
-                      </ListItemStandard>
+                          {displayExistingModulesList(existingModuleTemplates)}
+                          <br />
+                          {t(
+                            'modules.community.source-yaml.module-templates-to-add',
+                          )}
+                          {displayModulesToAddList(resourcesToApply)}
+                        </MessageStrip>
+                      </FlexBox>
                     )}
-                    {resourcesToApply?.map((mt) => {
-                      return (
-                        <ListItemCustom key={mt.value.metadata.name}>
-                          <Text>
-                            {mt.value.metadata.name}
-                            {mt.value.spec.version
-                              ? ` (v${mt.value.spec.version})`
-                              : ''}
-                          </Text>
-                        </ListItemCustom>
-                      );
-                    })}
-                  </List>
-                </FlexBox>
-              </>
-            )}
+                    <FlexBox
+                      direction={FlexBoxDirection.Column}
+                      gap={'0.5rem'}
+                      className="sap-margin-top-small"
+                    >
+                      <FlexBox
+                        direction={FlexBoxDirection.Row}
+                        alignItems="Center"
+                      >
+                        <Label for="source-url">
+                          {t('modules.community.source-yaml.add-to-namespace') +
+                            ':'}
+                        </Label>
+                        <HintButton
+                          setShowTitleDescription={setShowDescription}
+                          showTitleDescription={showDescription}
+                          description={
+                            t(
+                              'modules.community.source-yaml.namespace-description',
+                            ) as string
+                          }
+                        ></HintButton>
+                      </FlexBox>
+                      <Select
+                        id="add-to-namespace-select"
+                        data-testid="add-to-namespace-select"
+                        onChange={(e) => applyNamespace(e.target.value)}
+                        className="full-width"
+                      >
+                        <OptionCustom key="Empty namespace"></OptionCustom>
+                        {allNamespaces?.map((ns) => {
+                          if (ns === 'kyma-system')
+                            return (
+                              <OptionCustom
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-expect-error
+                                disabled
+                                value={ns}
+                                key={ns}
+                              >
+                                <div className="option-content">
+                                  {ns}
+                                  <Icon name="locked" />
+                                </div>
+                              </OptionCustom>
+                            );
+                          return (
+                            <OptionCustom value={ns} key={ns}>
+                              {ns}
+                            </OptionCustom>
+                          );
+                        })}
+                      </Select>
+                    </FlexBox>
+                  </>
+                )
+              )}
+            </div>
           </MessageBox>,
           document.body,
         )}
