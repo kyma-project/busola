@@ -22,7 +22,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
 
 <!-- tabs:start -->
 
-### **Install Busola from a release**
+#### **Install Busola from a release**
 
 3. Go to the [Busola release page](https://github.com/kyma-project/busola/releases) and choose one of the available versions.
 
@@ -38,7 +38,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    kubectl apply --namespace "${NAMESPACE}" -f "https://github.com/kyma-project/busola/releases/download/${VERSION}/busola.yaml"
    ```
 
-### **Install Busola from the main branch**
+#### **Install Busola from the main branch**
 
 3. Clone the [Busola repository](https://github.com/kyma-project/busola).
 4. Go to the folder where you downloaded it and run:
@@ -47,7 +47,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    (cd resources && kustomize build base/ | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-### **Install Busola with a specific landscape configuration**
+#### **Install Busola with a specific landscape configuration**
 
 3. Clone the [Busola repository](https://github.com/kyma-project/busola).
 
@@ -63,7 +63,7 @@ Follow these steps to deploy Busola in a Kubernetes cluster:
    (cd resources && kustomize build environments/${ENVIRONMENT} | kubectl apply --namespace "${NAMESPACE}" -f- )
    ```
 
-### **Install Busola from a pull request**
+#### **Install Busola from a pull request**
 
 3. Clone the [Busola repository](https://github.com/kyma-project/busola).
 
