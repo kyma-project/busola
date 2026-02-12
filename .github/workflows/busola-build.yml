@@ -41,6 +41,17 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
+  prepare-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.generate-tag.outputs.tag }}
+    steps:
+      - name: Generate tag with date and SHA
+        id: generate-tag
+        run: |
+          DATE=$(date '+%Y%m%d')
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+          echo "tag=v${DATE}-${SHORT_SHA}" >> $GITHUB_OUTPUT
   build-busola-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
     if: github.event.pull_request.draft == false
@@ -52,9 +63,10 @@ jobs:
   build-fips-busola-image:
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
     if: github.event.pull_request.draft == false
+    needs: [build-busola-image, prepare-tag]
     with:
       name: fips-busola
       dockerfile: fips.Dockerfile
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       use-restricted-registry: true
-      build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/prod/busola:${{ inputs.tag != '' && inputs.tag || 'latest' }}
+      build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/prod/busola:${{ inputs.tag != '' && inputs.tag || needs.prepare-tag.outputs.tag }}
