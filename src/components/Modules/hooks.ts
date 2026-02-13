@@ -398,7 +398,7 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
   const { t } = useTranslation();
   const [resources, setResources] = useState([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const filterResources = (resources: any) => {
     return (resources || []).filter(
@@ -411,10 +411,12 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (!sourceURL) {
       setResources([]);
       setError(null);
       setLoading(false);
+
       return;
     }
 
@@ -433,17 +435,16 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
           setResources(formatted);
         } catch (e) {
           if (e instanceof HttpError) {
-            setError(
-              t('modules.community.messages.source-yaml-fetch-failed', {
-                error: e.message,
-              }),
-            );
+            setResources([]);
+            setError(t('modules.community.messages.source-yaml-invalid-url'));
           }
         } finally {
           setLoading(false);
         }
       })();
     } else {
+      setResources([]);
+
       setError(t('modules.community.messages.source-yaml-invalid-url'));
       setLoading(false);
     }
