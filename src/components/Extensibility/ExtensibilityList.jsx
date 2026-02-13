@@ -123,8 +123,7 @@ export const ExtensibilityListCore = ({
     defaultSearch: true,
   });
 
-  const { description: subtitleText, url: emptyListUrl } =
-    getResourceDescAndUrl(description);
+  const { url: emptyListUrl } = getResourceDescAndUrl(description);
 
   return (
     <ResourcesList
@@ -143,10 +142,7 @@ export const ExtensibilityListCore = ({
           textSearchProperties(defaultSearchProperties),
       }}
       emptyListProps={{
-        subtitleText:
-          subtitleText !== 'resource.description'
-            ? subtitleText
-            : newListProps.description.props.i18nKey,
+        subtitleText: newListProps?.description?.props?.i18nKey,
         url: emptyListUrl,
       }}
     />
