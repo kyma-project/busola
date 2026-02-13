@@ -22,6 +22,8 @@ You can configure Busola to suit your needs. To do so, follow these steps:
    (cd resources/customization && kustomize build . | kubectl apply -f- --namespace "${NAMESPACE}")
    kubectl rollout restart deployment busola --namespace "${NAMESPACE}"
 
+   ```
+
 4. To verify that your configuration has been applied, go to your Cluster Overview, select the Feedback button, and choose **Give Feedback**. The link you provided in `resources/customization/config/config.yaml` should open. By default it's `kyma-project.io`.
 
 5. To check if your extensions are loaded properly, select your namespace, and check if your resource is there. For example, **Kustomized Horizontal Pod Autoscalers** in the **Discovery and Network** section, as provided in `resources/customization/extensions/extensions.yaml`.
