@@ -143,7 +143,10 @@ export const ExtensibilityListCore = ({
           textSearchProperties(defaultSearchProperties),
       }}
       emptyListProps={{
-        subtitleText: subtitleText,
+        subtitleText:
+          subtitleText !== 'resource.description'
+            ? subtitleText
+            : newListProps.description.props.i18nKey,
         url: emptyListUrl,
       }}
     />
