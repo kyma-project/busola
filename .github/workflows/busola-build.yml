@@ -66,7 +66,8 @@ jobs:
     needs: [build-busola-image, prepare-tag]
     with:
       name: fips-busola
-      dockerfile: fips.Dockerfile
+      dockerfile: Dockerfile.fips
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       use-restricted-registry: true
-      build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/prod/busola:${{ inputs.tag != '' && inputs.tag || needs.prepare-tag.outputs.tag }}
+#      TODO: use digest instead of latest from output of previous build (image builder team is preparing the output)
+      build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/prod/busola:latest
