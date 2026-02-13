@@ -5,27 +5,27 @@
 }
 
 .sourceurl-content {
-  --_ui5-v2-18-0_popup_content_padding_xl: 3rem;
-  --_ui5-v2-18-0_popup_content_padding_m_l: 2rem;
-  --_ui5-v2-18-0_popup_content_padding_s: 1rem;
+  --_ui5_popup_content_padding_xl: 3rem;
+  --_ui5_popup_content_padding_m_l: 2rem;
+  --_ui5_popup_content_padding_s: 1rem;
 }
 
 @container messagebox (min-width: 1439px) {
   .sourceurl-content {
-    width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_xl)));
+    width: calc(50vw - (2 * var(--_ui5_popup_content_padding_xl)));
   }
 }
 
 @container messagebox (min-width: 599px) and (max-width: 1439px) {
   .sourceurl-content {
-    width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_m_l)));
+    width: calc(50vw - (2 * var(--_ui5_popup_content_padding_m_l)));
   }
 }
 
 @container messagebox (max-width: 599px) {
   .sourceurl-content {
-    width: calc(50vw - (2 * var(--_ui5-v2-18-0_popup_content_padding_s)));
-    min-width: calc(320px - (2 * var(--_ui5-v2-18-0_popup_content_padding_s)));
+    width: calc(50vw - (2 * var(--_ui5_popup_content_padding_s)));
+    min-width: calc(320px - (2 * var(--_ui5_popup_content_padding_s)));
   }
 }
 

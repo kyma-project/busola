@@ -39,7 +39,6 @@ export const ProgressIndicatorWithTooltip = ({
         displayValue={displayValue}
         value={value}
         className="progress-indicator"
-        style={{ position: 'relative', zIndex: 0 }}
       />
     </TooltipWrapper>
   );
