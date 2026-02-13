@@ -10,8 +10,6 @@ import {
   getBadgeType,
 } from 'components/Extensibility/helpers';
 
-import './Badge.scss';
-
 export function Badge({
   value,
   structure,

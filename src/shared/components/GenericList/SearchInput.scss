@@ -9,7 +9,7 @@
     &:focus {
       .search-icon {
         &:hover {
-          color: var(--sapIllus_HoverButtonColor);
+          color: var(--sapButton_Selected_TextColor);
         }
       }
     }

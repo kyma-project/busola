@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 import { ListItemCustom, Text } from '@ui5/webcomponents-react';
 
-import './TileButton.scss';
-
 type TileButtonProps = {
   title: string;
   description: string;

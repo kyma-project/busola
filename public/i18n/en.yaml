@@ -980,8 +980,8 @@ modules:
       source-yaml-added: Source YAML added
       source-yaml-failed: Failed to add Source YAML
       source-yaml-invalid-url: |-
-        'We couldn’t reach that URL. Check the link and try again. {0}
-        Example format: http://github.com/project/repo/file.yaml'
+        We couldn’t reach that URL. Check the link and try again. 
+        Example format: http://github.com/project/repo/file.yaml
       success: '{{resourceType}} installed'
       upload: Start {{resourceType}} upload
     no-modules: No community modules available

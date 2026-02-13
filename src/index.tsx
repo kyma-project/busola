@@ -20,8 +20,6 @@ import '@fundamental-styles/common-css/dist/sap-margin.css';
 import '@fundamental-styles/common-css/dist/sap-padding.css';
 
 import './styles/reset.css';
-import './styles/sapIllus-Fills.css';
-import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
 import { createRoot } from 'react-dom/client';
