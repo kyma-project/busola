@@ -172,7 +172,7 @@ describe('localIpFilter tests', () => {
       description: 'should allow a public IP address',
       headersData: {
         targetApiServer: {
-          host: '203.0.113.1',
+          hostname: '203.0.113.1',
         },
       },
     },
@@ -180,7 +180,7 @@ describe('localIpFilter tests', () => {
       description: 'should allow an external cluster address',
       headersData: {
         targetApiServer: {
-          host: 'myservice.cluster.external',
+          hostname: 'myservice.cluster.external',
         },
       },
     },
@@ -192,7 +192,7 @@ describe('localIpFilter tests', () => {
         'should throw an error for a local IP address in the 10.0.0.0/8 range',
       headersData: {
         targetApiServer: {
-          host: '10.0.0.1',
+          hostname: '10.0.0.1',
         },
       },
     },
@@ -201,7 +201,7 @@ describe('localIpFilter tests', () => {
         'should throw an error for a local IP address in the 172.16.0.0/12 range',
       headersData: {
         targetApiServer: {
-          host: '172.16.0.1',
+          hostname: '172.16.0.1',
         },
       },
     },
@@ -210,7 +210,7 @@ describe('localIpFilter tests', () => {
         'should throw an error for a local IP address in the 192.168.0.0/16 range',
       headersData: {
         targetApiServer: {
-          host: '192.168.1.1',
+          hostname: '192.168.1.1',
         },
       },
     },
@@ -219,7 +219,7 @@ describe('localIpFilter tests', () => {
         'should throw an error for a local IP address in the 169.254.0.0/16 range',
       headersData: {
         targetApiServer: {
-          host: '169.254.1.1',
+          hostname: '169.254.1.1',
         },
       },
     },
@@ -227,7 +227,7 @@ describe('localIpFilter tests', () => {
       description: 'should throw an error for a local cluster address',
       headersData: {
         targetApiServer: {
-          host: 'myservice.cluster.local',
+          hostname: 'myservice.cluster.local',
         },
       },
     },

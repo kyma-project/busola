@@ -5,6 +5,8 @@ import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
+import crypto from 'crypto';
+import { fillActiveEnvForFrontend } from './utils/active-env';
 
 const express = require('express');
 const compression = require('compression');
@@ -16,8 +18,9 @@ const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
 
-const gzipEnabled = config.features?.GZIP?.isEnabled;
+console.log('FIPS enabled: ', crypto.getFips() === 1);
 
+const gzipEnabled = config.features?.GZIP?.isEnabled;
 if (gzipEnabled)
   app.use(
     compression({
@@ -35,6 +38,10 @@ if (gzipEnabled)
       },
     }),
   );
+
+if (process.env.ENVIRONMENT) {
+  fillActiveEnvForFrontend(process.env.ENVIRONMENT);
+}
 
 if (process.env.NODE_ENV === 'development') {
   console.log('Use development settings of cors');
