@@ -108,7 +108,7 @@
     "@testing-library/react": "^16.0.1",
     "@types/didyoumean": "^1.2.0",
     "@types/file-saver": "^2.0.5",
-    "@types/js-yaml": "^4.0.9",
+    "@types/js-yaml": "^4.0.5",
     "@types/lodash": "^4.14.186",
     "@types/node": "^18.8.5",
     "@types/pluralize": "^0.0.29",
