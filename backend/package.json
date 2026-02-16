@@ -18,7 +18,7 @@
     "cors": "^2.8.5",
     "express": "^5.2.1",
     "express-rate-limit": "^7.5.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "lodash.escape": "^4.0.1",
     "lodash.merge": "^4.6.2",
     "lodash.isempty": "^4.4.0",
