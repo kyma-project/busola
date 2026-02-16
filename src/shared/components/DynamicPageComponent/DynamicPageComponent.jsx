@@ -293,7 +293,7 @@ export const DynamicPageComponent = ({
   const headerTitle = (
     <DynamicPageTitle
       className={inlineEditForm ? 'no-shadow' : ''}
-      style={title === 'Clusters Overview' ? { display: 'none' } : null}
+      style={title === 'Clusters' ? { display: 'none' } : null}
       aria-label={title}
       heading={
         <FlexBox className="title-container" alignItems="Center">
@@ -326,7 +326,7 @@ export const DynamicPageComponent = ({
   );
 
   const headerContent =
-    title !== 'Clusters Overview' && children ? (
+    title !== 'Clusters' && children ? (
       <DynamicPageHeader className="header-wrapper">
         <section className={`column-wrapper ${columnWrapperClassName || ''}`}>
           {children}

@@ -89,7 +89,7 @@ clusters:
     download-kubeconfig: Download Kubeconfig
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
-  description-visibility: Description is shown on the Clusters Overview list
+  description-visibility: Description is shown on the Clusters view
   disconnect: Cluster disconnected
   edit-cluster: Edit Cluster
   empty:
@@ -119,7 +119,7 @@ clusters:
     kyma-version: Kyma Version
     nat-gateway-ips: NAT Gateway IP Addresses
     subaccount-id: Subaccount ID
-    title-all-clusters: Clusters Overview
+    title-all-clusters: Clusters
     title-current-cluster: Cluster Overview
   statuses:
     inmemory: In Memory
@@ -452,7 +452,7 @@ components:
   incorrect-path:
     message:
       cluster: The provided path does not exist. You will get redirected to Clusters Details.
-      clusters: The provided path does not exist. You will get redirected to Clusters Overview.
+      clusters: The provided path does not exist. You will get redirected to Clusters.
       default: The provided path does not exist. You will get redirected.
       extensions: The provided path does not exist. You will be redirected to the Custom Resource details.
       namespace: The provided path does not exist. You will get redirected to Namespace Overview.
