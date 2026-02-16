@@ -64,12 +64,13 @@ export function NodeResources({ metrics, resources }) {
       <UI5RadialChart
         color="var(--sapChart_OrderedColor_6)"
         value={
-          bytesToHumanReadable(resources.requests?.memory, { unit: 'Gi' }).value
+          bytesToHumanReadable(resources?.requests?.memory, { unit: 'Gi' })
+            .value
         }
         max={bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value}
         titleText={t('cluster-overview.statistics.memory-requests')}
         additionalInfo={`${
-          bytesToHumanReadable(resources.requests?.memory, { unit: 'Gi' })
+          bytesToHumanReadable(resources?.requests?.memory, { unit: 'Gi' })
             .string
         } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`}
         accessibleName={t('cluster-overview.statistics.memory-requests')}
@@ -101,12 +102,12 @@ export function NodeResources({ metrics, resources }) {
       <UI5RadialChart
         color="var(--sapChart_OrderedColor_6)"
         value={
-          bytesToHumanReadable(resources.limits.memory, { unit: 'Gi' }).value
+          bytesToHumanReadable(resources?.limits?.memory, { unit: 'Gi' }).value
         }
         max={bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value}
         titleText={t('cluster-overview.statistics.memory-limits')}
         additionalInfo={`${
-          bytesToHumanReadable(resources.limits.memory, { unit: 'Gi' }).string
+          bytesToHumanReadable(resources?.limits?.memory, { unit: 'Gi' }).string
         } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`}
         accessibleName={t('cluster-overview.statistics.memory-limits')}
       />

@@ -10,10 +10,10 @@ const getPercentageFromUsage = (value, total) => {
 };
 
 export const createUsageMetrics = (node, metricsForNode) => {
-  const cpuUsage = getCpus(metricsForNode?.usage.cpu);
-  const memoryUsage = getBytes(metricsForNode?.usage.memory);
-  const cpuCapacity = getCpus(node.status.allocatable?.cpu || '0');
-  const memoryCapacity = getBytes(node.status.allocatable?.memory);
+  const cpuUsage = getCpus(metricsForNode?.usage?.cpu);
+  const memoryUsage = getBytes(metricsForNode?.usage?.memory);
+  const cpuCapacity = getCpus(node?.status?.allocatable?.cpu);
+  const memoryCapacity = getBytes(node?.status?.allocatable?.memory);
 
   const cpuPercentage = getPercentageFromUsage(cpuUsage, cpuCapacity);
   const memoryPercentage = getPercentageFromUsage(memoryUsage, memoryCapacity);
@@ -53,8 +53,8 @@ export function useNodesQuery(skip = false) {
   const data = useMemo(() => {
     if (nodes) {
       const getNodeMetrics = (node) => {
-        const metricsForNode = nodeMetrics.items.find(
-          (metrics) => node.metadata.name === metrics.metadata.name,
+        const metricsForNode = nodeMetrics?.items?.find(
+          (metrics) => node?.metadata?.name === metrics?.metadata?.name,
         );
         return createUsageMetrics(node, metricsForNode);
       };

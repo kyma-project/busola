@@ -59,7 +59,7 @@ export function K8sResourceSelect({
   const getValidationState = () => {
     if (error) {
       return {
-        state: 'Error',
+        state: 'Negative',
         text: t('common.messages.cannot-load', {
           value: pluralResourceType,
           error: error.message,
