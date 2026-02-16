@@ -7,7 +7,7 @@
     "start": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js",
     "build": "webpack --mode=production",
     "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node --max-http-header-size 24576 backend-production.js",
-    "test": "jest"
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -32,7 +32,7 @@
     "@babel/register": "^7.28.6",
     "babel-loader": "^10.0.0",
     "core-js": "^3.41.0",
-    "jest": "^29.7.0",
+    "vitest": "^3.1.1",
     "nodemon": "^2.0.7",
     "webpack": "^5.99.5",
     "webpack-cli": "6.0.1",
