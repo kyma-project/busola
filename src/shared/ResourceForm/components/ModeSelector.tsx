@@ -3,10 +3,21 @@ import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
 import { useAtom } from 'jotai';
 import {
   editViewModeAtom,
+  EditViewTypes,
   getEditViewModeState,
 } from 'state/settings/editViewModeAtom';
 
-export function ModeSelector({ mode, setMode, isDisabled = false }) {
+type ModeSelectorProps = {
+  mode: string;
+  setMode: (mode: string) => void;
+  isDisabled?: boolean;
+};
+
+export function ModeSelector({
+  mode,
+  setMode,
+  isDisabled = false,
+}: ModeSelectorProps) {
   const { t } = useTranslation();
   const [editViewMode, setEditViewMode] = useAtom(editViewModeAtom);
   const { preferencesViewType } = getEditViewModeState(editViewMode);
@@ -27,8 +38,10 @@ export function ModeSelector({ mode, setMode, isDisabled = false }) {
       <SegmentedButton
         className="mode-selector__content"
         onSelectionChange={(event) => {
-          const mode = event.detail.selectedItems[0].getAttribute('data-mode');
-          setMode(mode);
+          const mode = event.detail.selectedItems[0].getAttribute(
+            'data-mode',
+          ) as EditViewTypes['dynamicViewType'];
+          setMode(mode as string);
           if (preferencesViewType === 'MODE_DEFAULT') {
             setEditViewMode({
               preferencesViewType: preferencesViewType,

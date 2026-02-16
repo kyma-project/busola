@@ -1,7 +1,37 @@
+import { Dispatch, SetStateAction } from 'react';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from '..';
+
+type ItemArrayProps = {
+  value: any[];
+  setValue: (val: any[]) => void;
+  listTitle: string | JSX.Element;
+  entryTitle: string | ((item: any, index: number) => string | JSX.Element);
+  nameSingular: string;
+  atLeastOneRequiredMessage?: string | JSX.Element;
+  allowEmpty?: boolean;
+  itemRenderer: (props: {
+    item: any;
+    values: any[];
+    setValues: (vals: any[]) => void;
+    index: number;
+    nestingLevel: number;
+  }) => JSX.Element;
+  newResourceTemplateFn: () => any;
+  readOnly?: boolean;
+  tooltipContent?: string | JSX.Element;
+  nestingLevel?: number;
+  disabled?: boolean;
+  defaultOpen?: boolean;
+  canChangeState?: boolean;
+  defaultTitleType?: boolean;
+  resource?: Record<string, any> | string;
+  setResource?: (resource: Record<string, any> | string) => void;
+  className?: string;
+  required?: boolean;
+};
 
 export function ItemArray({
   value: values,
@@ -16,8 +46,15 @@ export function ItemArray({
   readOnly,
   tooltipContent,
   nestingLevel = 0,
-  ...props
-}) {
+  disabled,
+  defaultOpen,
+  canChangeState,
+  defaultTitleType,
+  resource,
+  setResource,
+  className,
+  required,
+}: ItemArrayProps) {
   const { t } = useTranslation();
 
   if (!Array.isArray(values)) {
@@ -28,9 +65,10 @@ export function ItemArray({
     values = [];
   }
 
-  const remove = (index) => setValues(values.filter((_, i) => index !== i));
+  const remove = (index: number) =>
+    setValues(values.filter((_, i) => index !== i));
 
-  const renderItem = (item, index) =>
+  const renderItem = (item: any, index: number) =>
     itemRenderer({
       item,
       values,
@@ -44,7 +82,7 @@ export function ItemArray({
       const name = typeof entryTitle === 'function' && entryTitle(current, i);
       return (
         <ResourceForm.CollapsibleSection
-          key={i}
+          key={`${nameSingular}-${i}`}
           nestingLevel={nestingLevel + 1}
           title={
             <>
@@ -74,7 +112,7 @@ export function ItemArray({
     <ResourceForm.CollapsibleSection
       title={listTitle}
       tooltipContent={tooltipContent}
-      actions={(setOpen) => (
+      actions={(setOpen: Dispatch<SetStateAction<boolean | undefined>>) => (
         <Button
           icon="add"
           onClick={() => {
@@ -87,7 +125,14 @@ export function ItemArray({
           {t('common.buttons.add')} {nameSingular}
         </Button>
       )}
-      {...props}
+      disabled={disabled}
+      defaultOpen={defaultOpen}
+      canChangeState={canChangeState}
+      defaultTitleType={defaultTitleType}
+      resource={resource}
+      setResource={setResource}
+      className={className}
+      required={required}
     >
       {content}
       {atLeastOneRequiredMessage && !values.length && (

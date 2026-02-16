@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Tag, Text } from '@ui5/webcomponents-react';
+import { compare } from 'compare-versions';
 import {
   findModuleStatus,
   findModuleTemplate,
@@ -222,7 +223,7 @@ export const ModulesListRows = ({
       {!kymaResource &&
         resource?.templateVersion &&
         resource?.version &&
-        resource.templateVersion !== resource.version && (
+        compare(resource?.templateVersion, resource?.version, '>') && (
           <Tag
             className="sap-margin-begin-tiny"
             hideStateIcon

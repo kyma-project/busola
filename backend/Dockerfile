@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM --platform=$BUILDPLATFORM  alpine:3.23.2 AS base
+FROM --platform=$BUILDPLATFORM  alpine:3.23.3 AS base
 # install node
 RUN apk add --update nodejs npm
 

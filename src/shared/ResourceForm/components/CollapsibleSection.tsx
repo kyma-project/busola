@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { ResourceFormWrapper } from './Wrapper';
 import { Panel } from '@ui5/webcomponents-react';
@@ -6,6 +6,25 @@ import { Title } from './Title';
 import './CollapsibleSection.scss';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
+
+export type CollapsibleSectionProps = {
+  disabled?: boolean;
+  defaultOpen?: boolean;
+  canChangeState?: boolean;
+  title: string | JSX.Element;
+  defaultTitleType?: boolean;
+  actions?:
+    | React.ReactNode[]
+    | JSX.Element
+    | ((setOpen: Dispatch<SetStateAction<boolean | undefined>>) => JSX.Element);
+  children: React.ReactNode;
+  resource?: Record<string, any> | string;
+  setResource?: (resource: Record<string, any> | string) => void;
+  className?: string;
+  required?: boolean;
+  tooltipContent?: React.ReactNode;
+  nestingLevel?: number;
+};
 
 export function CollapsibleSection({
   disabled = undefined,
@@ -21,9 +40,9 @@ export function CollapsibleSection({
   required = undefined,
   tooltipContent = undefined,
   nestingLevel = 0,
-}) {
+}: CollapsibleSectionProps) {
   const [open, setOpen] = useState(defaultOpen);
-  const actionsRef = useRef();
+  const actionsRef = useRef<HTMLDivElement>(null);
   required = required === true;
 
   useEffect(() => {
@@ -38,11 +57,12 @@ export function CollapsibleSection({
     }
   }, [defaultOpen]);
 
-  const toggle = (e) => {
-    e.stopPropagation();
-    if (!canChangeState) return;
-    if (disabled) return;
-    if (!actionsRef.current?.contains(e.target)) setOpen(!open);
+  const toggle = (e?: CustomEvent) => {
+    e?.stopPropagation();
+    if (!canChangeState || disabled) return;
+    if (!actionsRef.current?.contains(e?.target as Node)) {
+      setOpen(!open);
+    }
   };
 
   const classNames = classnames(
@@ -71,7 +91,7 @@ export function CollapsibleSection({
       onToggle={toggle}
       data-testid={titleText?.toLowerCase().replaceAll(' ', '-')}
       accessibleName={titleText}
-      ref={(panelElement) => {
+      ref={(panelElement: any) => {
         if (panelElement) {
           panelElement.useAccessibleNameForToggleButton = true;
         }

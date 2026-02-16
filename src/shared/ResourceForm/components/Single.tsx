@@ -6,6 +6,17 @@ import { createPortal } from 'react-dom';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { useFormEditTracking } from 'shared/hooks/useFormEditTracking';
 
+export type SingleFormProps = {
+  formElementRef?: React.RefObject<HTMLFormElement>;
+  createResource?: (e: React.FormEvent<HTMLFormElement>) => void;
+  children: React.ReactNode;
+  resource?: Record<string, any>;
+  setResource?: (resource: any) => void;
+  className?: string;
+  setCustomValid?: (isValid: boolean) => void;
+  initialResource?: Record<string, any>;
+} & Record<string, any>;
+
 export function SingleForm({
   formElementRef,
   createResource,
@@ -16,7 +27,7 @@ export function SingleForm({
   setCustomValid,
   initialResource,
   ...props
-}) {
+}: SingleFormProps) {
   const validationRef = useRef(true);
 
   useEffect(() => {

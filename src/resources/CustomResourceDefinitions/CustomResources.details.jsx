@@ -108,6 +108,7 @@ export default function CustomResource({ params }) {
       disableDelete={isModule}
       isEntireListProtected={isEntireListProtected}
       headerActions={headerActions}
+      windowTitle={isModule ? t('kyma-modules.title') : null}
     />
   );
 }

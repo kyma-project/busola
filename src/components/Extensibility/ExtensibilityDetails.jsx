@@ -1,6 +1,7 @@
 import pluralize from 'pluralize';
 import { useContext, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -33,6 +34,8 @@ export const ExtensibilityDetailsCore = ({
   headerActions,
 }) => {
   const { t, widgetT, exists } = useGetTranslation();
+  const { t: tBusola } = useTranslation();
+
   const setResourcesConditions = useSetAtom(resourcesConditionsAtom);
   const {
     urlPath,
@@ -111,6 +114,7 @@ export const ExtensibilityDetailsCore = ({
       disableDelete={disableDelete}
       resourceTitle={resourceTitle}
       headerActions={headerActions}
+      windowTitle={isModule ? tBusola('kyma-modules.title') : null}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({

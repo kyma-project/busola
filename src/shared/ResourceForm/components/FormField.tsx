@@ -4,9 +4,23 @@ import { Label } from './Label';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
-import { useState } from 'react';
+import { JSXElementConstructor, ReactElement, useState } from 'react';
 
 import './FormField.scss';
+
+export type FormFieldProps = {
+  label?: string;
+  input: (props: any) => JSX.Element;
+  className?: string;
+  required?: boolean;
+  disabled?: boolean;
+  tooltipContent?: React.ReactNode | string;
+  isListItem?: boolean;
+  messageStrip?: JSX.Element;
+  inputInfo?: string | ReactElement<any, string | JSXElementConstructor<any>>;
+  updatesOnInput?: boolean;
+  style?: React.CSSProperties;
+} & Record<string, any>;
 
 export function FormField({
   label,
@@ -21,8 +35,7 @@ export function FormField({
   updatesOnInput,
   style,
   ...props
-}) {
-  const { ...inputProps } = props;
+}: FormFieldProps) {
   const inputInfoLink = useCreateResourceDescription(inputInfo);
   const [openPopover, setOpenPopover] = useState(false);
 
@@ -63,17 +76,16 @@ export function FormField({
         alignItems="Center"
         className="full-width"
       >
-        {messageStrip
-          ? messageStrip
-          : input({
-              updatesOnInput,
-              required,
-              disabled,
-              className: 'full-width',
-              accessibleName: label,
-              id: label.replace(' ', '-').toLowerCase(),
-              ...inputProps,
-            })}
+        {messageStrip ||
+          input({
+            updatesOnInput,
+            required,
+            disabled,
+            className: 'full-width',
+            accessibleName: label,
+            id: label?.replace(' ', '-').toLowerCase(),
+            ...props,
+          })}
         {inputInfo && (
           <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
             {inputInfoLink}

@@ -1,6 +1,5 @@
 import { FlexBox, Label, RadioButton } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import './ChooseStorage.scss';
 
 interface ChooseStorageProps {
   storage: string;

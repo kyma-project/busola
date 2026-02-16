@@ -94,8 +94,9 @@ context('Test Community Modules views', () => {
     //   'https://raw.githubusercontent.com/kyma-project/community-modules/main/all-modules.yaml',
     // );
 
+    // Open Add to Namespace select
     cy.get(`[header-text="Add Source YAML"]:visible`)
-      .find('[data-testid="yaml-namespace-select"]')
+      .find('[data-testid="add-to-namespace-select"]')
       .click();
 
     // Check if kyma-system has locked icon
@@ -183,7 +184,7 @@ context('Test Community Modules views', () => {
       searchInPlainTableText: true,
       deletedVisible: false,
       waitForDelete: 2000,
-      customHeaderText: 'Delete module busola from your cluster?',
+      customHeaderText: 'Delete Module',
     });
   });
 });

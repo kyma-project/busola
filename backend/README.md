@@ -28,3 +28,25 @@ You can also use the `docker build` command to use the backend as an image of a 
 ## Development
 
 Use the `npm run watch` command to run the backend in the unsafe mode (no TLS certificate) and with the hot-reload feature.
+
+## Configuration
+
+### Feature Flags
+
+The backend supports feature flags configured via YAML files. Configuration is loaded in this order:
+
+1. `settings/defaultConfig.yaml` (base configuration)
+2. `environments/{ENVIRONMENT}/config.yaml` (environment-specific overrides, when ENVIRONMENT is set)
+3. `config/config.yaml` (Kubernetes cluster-level overrides, mounted as ConfigMap in production)
+
+**For local development:** Edit `settings/defaultConfig.yaml` directly (avoid committing local changes). The `config/config.yaml` file is a symlink used only in Kubernetes deployments.
+
+#### Available Feature Flags
+
+Backend feature flags include:
+
+- **GZIP** - Response compression (default: enabled)
+- **KYMA_COMPANION** - Kyma Companion AI assistant configuration
+- **ALLOW_PRIVATE_IPS** - Control private IP access for local development (default: disabled, secure)
+
+**For detailed configuration, defaults, and security considerations, see [docs/features.md](../docs/features.md#features-list-for-backend).**

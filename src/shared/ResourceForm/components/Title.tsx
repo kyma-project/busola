@@ -2,6 +2,15 @@ import { FlexBox, Icon, Label } from '@ui5/webcomponents-react';
 import { useState } from 'react';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
+export type TitleProps = {
+  tooltipContent?: React.ReactNode;
+  title?: string | JSX.Element;
+  disabled?: boolean;
+  canChangeState?: boolean;
+  iconGlyph?: string;
+  required?: boolean;
+};
+
 export function Title({
   tooltipContent,
   title,
@@ -9,7 +18,7 @@ export function Title({
   canChangeState,
   iconGlyph,
   required,
-}) {
+}: TitleProps) {
   const [openPopover, setOpenPopover] = useState(false);
 
   return (

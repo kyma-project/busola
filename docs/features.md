@@ -242,3 +242,15 @@ GZIP:
       model: 'gpt-4.1'
       queryMaxTokens: 8000
   ```
+
+- **ALLOW_PRIVATE_IPS** - controls whether the backend allows connections to private IP addresses and `.cluster.local` domains. When disabled (default), the backend blocks requests to private IP ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16), link-local addresses (169.254.0.0/16), localhost (127.0.0.0/8), and cluster-local domains to prevent Server-Side Request Forgery (SSRF) attacks. Enable this flag only in trusted development environments (e.g., when connecting Busola running in a container to local Kubernetes clusters like k3d).
+
+  Default settings:
+
+  ```yaml
+  ALLOW_PRIVATE_IPS:
+    isEnabled: false
+  ```
+
+  > [!WARNING]
+  > Enabling this feature disables SSRF protection for private IP addresses. Only enable in trusted environments where connecting to local/private networks is required.

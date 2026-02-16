@@ -91,7 +91,7 @@ const ValidationWarnings = ({
               state="Critical"
               className="sap-margin-end-small"
               style={{
-                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5-v2-18-0_panel_content_padding` is divided by 2
+                marginLeft: '-0.3125rem', //set icon in one line with expand arrow. The value from class `--_ui5_panel_content_padding` is divided by 2
               }}
             />
             <ValidationWarning

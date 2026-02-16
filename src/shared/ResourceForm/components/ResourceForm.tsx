@@ -14,8 +14,13 @@ import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
 
 import { ModeSelector } from './ModeSelector';
-import { ResourceFormWrapper } from './Wrapper';
-import { Presets } from './Presets';
+import { ResourceFormWrapper, ResourceFormWrapperProps } from './Wrapper';
+import { PresetProps, Presets } from './Presets';
+import { SingleFormProps } from './Single';
+import { CollapsibleSectionProps } from './CollapsibleSection';
+import { LabelProps } from './Label';
+import { FormFieldProps } from './FormField';
+import { TitleProps } from './Title';
 import { useCreateResource } from '../useCreateResource';
 import { K8sNameField, KeyValueField } from '../fields';
 import jp from 'jsonpath';
@@ -83,7 +88,17 @@ type ResourceFormProps = {
   formWithoutPanel?: boolean;
 };
 
-export function ResourceForm({
+type ResourceFormType = FunctionComponent<ResourceFormProps> & {
+  Single: FunctionComponent<SingleFormProps>;
+  Wrapper: FunctionComponent<ResourceFormWrapperProps>;
+  CollapsibleSection: FunctionComponent<CollapsibleSectionProps>;
+  Label: FunctionComponent<LabelProps>;
+  FormField: FunctionComponent<FormFieldProps>;
+  Title: FunctionComponent<TitleProps>;
+  Presets: FunctionComponent<PresetProps>;
+};
+
+export const ResourceForm: ResourceFormType = (({
   pluralKind, // used for the request path
   singularName,
   resource,
@@ -122,7 +137,7 @@ export function ResourceForm({
   title,
   resetLayout,
   formWithoutPanel,
-}: ResourceFormProps) {
+}) => {
   const layoutState = useAtomValue(columnLayoutAtom);
 
   const isEdit = useMemo(
@@ -411,4 +426,4 @@ export function ResourceForm({
       )}
     </section>
   );
-}
+}) as ResourceFormType;

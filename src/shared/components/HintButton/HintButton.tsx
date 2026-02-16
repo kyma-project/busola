@@ -9,7 +9,7 @@ type HintButtonProps = {
   showTitleDescription: boolean;
   description: string | ReactNode;
   disableLinkDetection?: boolean;
-  ariaTitle?: string;
+  ariaTitle?: string | JSX.Element;
   className?: string;
 };
 

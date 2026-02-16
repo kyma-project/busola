@@ -3,8 +3,6 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-
-import './HelmReleaseDataPanel.scss';
 import { Link } from 'shared/components/Link/Link';
 
 export function ReleaseDataPanel({ release, secret }) {

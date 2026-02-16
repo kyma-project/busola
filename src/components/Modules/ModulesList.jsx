@@ -19,9 +19,12 @@ import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 
 export default function ModulesList({ namespaced }) {
   const { t } = useTranslation();
+  useWindowTitle(t('kyma-modules.title'));
+
   const layoutState = useAtomValue(columnLayoutAtom);
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,

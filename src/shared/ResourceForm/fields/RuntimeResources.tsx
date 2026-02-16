@@ -8,7 +8,35 @@ import { MemoryInput } from 'resources/Namespaces/MemoryQuotas';
 
 import './RuntimeResources.scss';
 
-function CpuInput({ label, propertyPath, container = {}, setContainer }) {
+type CpuInputProps = {
+  label: string;
+  propertyPath: string;
+  container?: Record<string, any>;
+  setContainer: (container: Record<string, any>) => void;
+};
+
+type RuntimeResourcesProps = {
+  value: Record<string, any>;
+  setValue: (value: Record<string, any>) => void;
+  presets?: Record<
+    string,
+    {
+      requestCpu: string;
+      limitCpu: string;
+      requestMemory: string;
+      limitMemory: string;
+    }
+  >;
+  nestingLevel?: number;
+  title: string | JSX.Element;
+};
+
+function CpuInput({
+  label,
+  propertyPath,
+  container = {},
+  setContainer,
+}: CpuInputProps) {
   let value = jp.value(container, propertyPath)?.toString() || '';
   if (value.endsWith('m')) {
     value = value.replace(/m/, '');
@@ -17,7 +45,7 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
     value *= 1000;
   }
 
-  const setValue = (val) => {
+  const setValue = (val: string) => {
     jp.value(container, propertyPath, val);
     setContainer(container);
   };
@@ -33,7 +61,7 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
       <Inputs.Number
         min="0"
         value={value}
-        setValue={(value) => setValue(value + 'm')}
+        setValue={(value: number | null) => setValue(value + 'm')}
         className="full-width"
         required
         accessibleName={label}
@@ -48,7 +76,7 @@ export function RuntimeResources({
   presets,
   nestingLevel = 0,
   ...props
-}) {
+}: RuntimeResourcesProps) {
   const { t } = useTranslation();
 
   const mappedPresets = Object.entries(presets || {}).map(

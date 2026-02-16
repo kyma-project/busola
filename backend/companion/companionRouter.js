@@ -5,7 +5,6 @@ import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 import escape from 'lodash.escape';
-import addLogger from '../logging';
 
 const config = require('../config.js');
 
@@ -216,16 +215,8 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
-router.post(
-  '/suggestions',
-  companionRateLimiter,
-  addLogger(handlePromptSuggestions),
-);
-router.post('/messages', companionRateLimiter, addLogger(handleChatMessage));
-router.post(
-  '/followup',
-  companionRateLimiter,
-  addLogger(handleFollowUpSuggestions),
-);
+router.post('/suggestions', companionRateLimiter, handlePromptSuggestions);
+router.post('/messages', companionRateLimiter, handleChatMessage);
+router.post('/followup', companionRateLimiter, handleFollowUpSuggestions);
 
 export default router;

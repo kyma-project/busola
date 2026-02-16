@@ -14,8 +14,7 @@ type ComboboxArrayInputProps = {
   emptyStringKey?: string;
   onBlur?: () => void;
   noEdit?: boolean;
-  [key: string]: any;
-};
+} & Record<string, any>;
 
 export function ComboboxArrayInput({
   title,
@@ -51,7 +50,6 @@ export function ComboboxArrayInput({
       .map((v) => (emptyStringKey && v === emptyStringKey ? '' : v));
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <MultiInput
       title={title}
       noEdit={noEdit}
