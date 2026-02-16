@@ -1,15 +1,23 @@
 import net from 'net';
-import { isPrivateIp } from './utils/network-utils';
+import { isPrivateIp } from './utils/network-utils.js';
+import config from './config.js';
 
 export const localIpFilter = (_req, headersData) => {
-  const host = headersData.targetApiServer.host || '';
+  const hostname = headersData.targetApiServer.hostname || '';
 
-  if (host.endsWith('.cluster.local')) {
+  const allowPrivateIps =
+    config.features?.ALLOW_PRIVATE_IPS?.isEnabled ?? false;
+
+  if (allowPrivateIps) {
+    return;
+  }
+
+  if (hostname.endsWith('.cluster.local')) {
     throw Error('Local IP addresses are not allowed.');
   }
 
-  if (net.isIP(host)) {
-    if (isPrivateIp(host)) {
+  if (net.isIP(hostname)) {
+    if (isPrivateIp(hostname)) {
       throw Error('Local IP addresses are not allowed.');
     }
   }

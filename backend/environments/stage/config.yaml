@@ -1,5 +1,7 @@
 config:
   features:
+    ALLOW_PRIVATE_IPS:
+      isEnabled: false
     GZIP:
       isEnabled: true
     KYMA_COMPANION:
