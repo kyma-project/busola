@@ -1,9 +1,22 @@
+import { vi } from 'vitest';
+
+// Mock config before imports to ensure default behavior
+vi.mock('./config.js', () => ({
+  default: {
+    features: {
+      ALLOW_PRIVATE_IPS: {
+        isEnabled: false,
+      },
+    },
+  },
+}));
+
 import {
   invalidRequestMethodFilter,
   localIpFilter,
   pathInvalidCharacterFilter,
   pathWhitelistFilter,
-} from './request-filters';
+} from './request-filters.js';
 
 describe('invalidRequestMethodFilter tests', () => {
   const successTestCases = [
@@ -225,6 +238,125 @@ describe('localIpFilter tests', () => {
   });
 
   test.each(errorTestCases)('$description', ({ headersData }) => {
+    expect(() => localIpFilter({}, headersData)).toThrowError(
+      'Local IP addresses are not allowed.',
+    );
+  });
+});
+
+describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
+  beforeEach(() => {
+    // Reset modules to allow mocking
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test('should allow private IPs when feature flag is enabled', async () => {
+    vi.doMock('./config.js', () => ({
+      default: {
+        features: {
+          ALLOW_PRIVATE_IPS: {
+            isEnabled: true,
+          },
+        },
+      },
+    }));
+
+    const { localIpFilter } = await import('./request-filters.js');
+
+    const headersData = {
+      targetApiServer: {
+        hostname: '172.18.0.4',
+      },
+    };
+
+    expect(() => localIpFilter({}, headersData)).not.toThrow();
+  });
+
+  test('should block private IPs when feature flag is disabled', async () => {
+    vi.doMock('./config.js', () => ({
+      default: {
+        features: {
+          ALLOW_PRIVATE_IPS: {
+            isEnabled: false,
+          },
+        },
+      },
+    }));
+
+    const { localIpFilter } = await import('./request-filters.js');
+
+    const headersData = {
+      targetApiServer: {
+        hostname: '172.18.0.4',
+      },
+    };
+
+    expect(() => localIpFilter({}, headersData)).toThrowError(
+      'Local IP addresses are not allowed.',
+    );
+  });
+
+  test('should block private IPs when feature flag is missing (secure default)', async () => {
+    vi.doMock('./config.js', () => ({
+      default: {
+        features: {},
+      },
+    }));
+
+    const { localIpFilter } = await import('./request-filters.js');
+
+    const headersData = {
+      targetApiServer: {
+        hostname: '192.168.1.1',
+      },
+    };
+
+    expect(() => localIpFilter({}, headersData)).toThrowError(
+      'Local IP addresses are not allowed.',
+    );
+  });
+
+  test('should allow .cluster.local domains when feature flag is enabled', async () => {
+    vi.doMock('./config.js', () => ({
+      default: {
+        features: {
+          ALLOW_PRIVATE_IPS: {
+            isEnabled: true,
+          },
+        },
+      },
+    }));
+
+    const { localIpFilter } = await import('./request-filters.js');
+
+    const headersData = {
+      targetApiServer: {
+        hostname: 'kubernetes.default.svc.cluster.local',
+      },
+    };
+
+    expect(() => localIpFilter({}, headersData)).not.toThrow();
+  });
+
+  test('should block .cluster.local domains when feature flag is disabled', async () => {
+    vi.doMock('./config.js', () => ({
+      default: {
+        features: {},
+      },
+    }));
+
+    const { localIpFilter } = await import('./request-filters.js');
+
+    const headersData = {
+      targetApiServer: {
+        hostname: 'kubernetes.default.svc.cluster.local',
+      },
+    };
+
     expect(() => localIpFilter({}, headersData)).toThrowError(
       'Local IP addresses are not allowed.',
     );

@@ -126,7 +126,7 @@ async function uploadResources(
   return notUploadedResources;
 }
 
-async function uploadResource(
+export async function uploadResource(
   resource: any,
   namespaceId: string,
   clusterNodes: any,

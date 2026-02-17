@@ -73,11 +73,13 @@ export const AddSourceYamls = () => {
     const communityItems = communityModuleTemplates?.items || [];
 
     return fetchedResources.flatMap((resource: any) =>
-      communityItems.filter(
-        (mt: any) =>
-          mt.metadata?.name === resource.value?.metadata?.name &&
-          mt.spec?.version === resource.value?.spec?.version,
-      ),
+      communityItems.filter((mt: any) => {
+        if (mt.metadata?.creationTimestamp !== undefined)
+          return (
+            mt.metadata?.name === resource.value?.metadata?.name &&
+            mt.spec?.version === resource.value?.spec?.version
+          );
+      }),
     );
   }, [fetchedResources, communityModuleTemplates]);
 
