@@ -168,10 +168,9 @@ export const useCreateResourceDescription = (descID) => {
   }
 };
 
-export const getResourceDescAndUrl = (descID) => {
+export const getResourceUrl = (descID) => {
   if (!descID)
     return {
-      description: null,
       url: null,
     };
 
@@ -183,17 +182,11 @@ export const getResourceDescAndUrl = (descID) => {
 
     if (links?.length >= 1) {
       const matchedLink = links[0];
-      const processedTrans = trans.replace(
-        matchedLink.matchedText,
-        `<0>${matchedLink.urlText}</0>`,
-      );
       return {
-        description: processedTrans,
         url: matchedLink.url,
       };
     } else {
       return {
-        description: trans,
         url: null,
       };
     }
