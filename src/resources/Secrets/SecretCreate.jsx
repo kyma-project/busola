@@ -37,7 +37,9 @@ export default function SecretCreate({
     if (layoutState?.showEdit?.resource) return;
 
     const timeoutId = setTimeout(() => {
-      setSecret(initialSecret || createSecretTemplate(namespace || ''));
+      setSecret(
+        cloneDeep(initialSecret) || createSecretTemplate(namespace || ''),
+      );
       setInitialResource(
         initialSecret || createSecretTemplate(namespace || ''),
       );
