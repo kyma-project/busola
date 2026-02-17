@@ -99,7 +99,7 @@ export default function SecretCreate({
     };
     setValue(selectedOption.text);
   };
-  console.log(props);
+
   return (
     <ResourceForm
       {...props}
