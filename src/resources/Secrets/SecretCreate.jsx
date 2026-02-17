@@ -11,6 +11,7 @@ import { useAtomValue } from 'jotai';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { cloneDeep } from 'lodash';
 
 export default function SecretCreate({
   namespace,
@@ -23,7 +24,9 @@ export default function SecretCreate({
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
-    initialSecret || createSecretTemplate(namespace || ''),
+    initialSecret
+      ? cloneDeep(initialSecret)
+      : createSecretTemplate(namespace || ''),
   );
   const [initialResource, setInitialResource] = useState(
     initialSecret || createSecretTemplate(namespace || ''),
@@ -34,7 +37,9 @@ export default function SecretCreate({
     if (layoutState?.showEdit?.resource) return;
 
     const timeoutId = setTimeout(() => {
-      setSecret(initialSecret || createSecretTemplate(namespace || ''));
+      setSecret(
+        cloneDeep(initialSecret) || createSecretTemplate(namespace || ''),
+      );
       setInitialResource(
         initialSecret || createSecretTemplate(namespace || ''),
       );
@@ -109,8 +114,8 @@ export default function SecretCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      presets={!isEdit && createPresets(secretDefs, namespace || '')}
       setCustomValid={setCustomValid}
+      presets={!isEdit && createPresets(secretDefs, namespace || '')}
     >
       <ResourceForm.FormField
         required

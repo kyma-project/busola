@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 import {
+  useExternalCommunityModulesQuery,
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from '../kymaModulesQueries';
@@ -20,22 +21,50 @@ export function ModuleTemplatesContextProvider({ children }) {
   const { data: allModuleTemplates, loading: moduleTemplatesLoading } =
     useModuleTemplatesQuery({});
 
+  const {
+    data: externalCommunityModuleTemplates,
+    loading: communityModuleTemplatesLoading,
+  } = useExternalCommunityModulesQuery();
+
+  let checkedModuleTemplates;
+
+  if (!moduleTemplatesLoading || !communityModuleTemplatesLoading)
+    checkedModuleTemplates = externalCommunityModuleTemplates
+      .filter((resource) => {
+        if (allModuleTemplates?.items !== undefined)
+          return !allModuleTemplates.items.some(
+            (mt) =>
+              mt.metadata?.name === resource.value?.metadata?.name &&
+              mt.spec?.version === resource.value?.spec?.version,
+          );
+        return resource.value;
+      })
+      .flatMap((res) => res.value);
+
+  const mergedModuleTmeplates = {
+    items: [
+      ...(allModuleTemplates?.items || []),
+      ...(checkedModuleTemplates || []),
+    ],
+  };
+
   const { data: moduleReleaseMetas, loading: moduleReleaseMetasLoading } =
     useModulesReleaseQuery({});
 
   const {
     communityTemplates: communityModuleTemplates,
     kymaTemplates: moduleTemplates,
-  } = splitModuleTemplates(allModuleTemplates);
+  } = splitModuleTemplates(mergedModuleTmeplates);
 
   return (
     <ModuleTemplatesContext.Provider
       value={{
-        allModuleTemplates: allModuleTemplates,
+        allModuleTemplates: mergedModuleTmeplates,
         moduleTemplates: moduleTemplates,
         moduleReleaseMetas: moduleReleaseMetas,
         moduleReleaseMetasLoading: moduleReleaseMetasLoading,
-        moduleTemplatesLoading: moduleTemplatesLoading,
+        moduleTemplatesLoading:
+          moduleTemplatesLoading || communityModuleTemplatesLoading,
         communityModuleTemplates: communityModuleTemplates,
       }}
     >

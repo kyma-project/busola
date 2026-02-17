@@ -402,7 +402,7 @@ function handleSingleDataReceived(
 ) {
   if (
     !oldData || // current data is empty and we received some. There's no doubdt we should update.
-    newData.metadata.resourceVersion !== oldData.metadata?.resourceVersion ||
+    newData?.metadata?.resourceVersion !== oldData?.metadata?.resourceVersion ||
     (compareEntireResource &&
       JSON.stringify(newData) !== JSON.stringify(oldData))
   ) {

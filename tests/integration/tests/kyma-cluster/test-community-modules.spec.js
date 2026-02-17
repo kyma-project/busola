@@ -63,9 +63,6 @@ context('Test Community Modules views', () => {
       .click();
 
     cy.wait(2000);
-
-    // Check if already installed module is not visible
-    cy.get('.create-form').contains('No community modules available');
   });
 
   it('Test adding source YAML', () => {
@@ -91,6 +88,11 @@ context('Test Community Modules views', () => {
 
     // Open Add YAML
     cy.get('[accessible-name="add-yamls"]').click();
+
+    // Uncomment and adjust with https://github.com/kyma-project/busola/issues/4587
+    // cy.get('[accessible-name="Source YAML URL"]').click().type(
+    //   'https://raw.githubusercontent.com/kyma-project/community-modules/main/all-modules.yaml',
+    // );
 
     // Open Add to Namespace select
     cy.get(`[header-text="Add Source YAML"]:visible`)

@@ -45,7 +45,7 @@ export default function NodeDetails({ nodeName }) {
   }, [nodeName]);
 
   if (loading) return <Spinner />;
-  if (error) return <Text>{error}</Text>;
+  if (error) return <Text>{error?.message || String(error)}</Text>;
 
   const gpus = node ? getAvailableNvidiaGPUs([node]) : 0;
 
@@ -57,7 +57,7 @@ export default function NodeDetails({ nodeName }) {
         <Spinner key="node-resources" />
       ) : (
         <div className="flexwrap" key="node-resources">
-          <NodeResources metrics={data.metrics} resources={resources} />
+          <NodeResources metrics={data?.metrics} resources={resources} />
         </div>
       ),
     () => (
@@ -72,20 +72,21 @@ export default function NodeDetails({ nodeName }) {
   const customColumns = [
     {
       header: t('node-details.region'),
-      value: (node) => node.metadata?.labels?.['topology.kubernetes.io/region'],
+      value: (node) =>
+        node?.metadata?.labels?.['topology.kubernetes.io/region'],
     },
     {
       header: t('node-details.zone'),
-      value: (node) => node.metadata?.labels?.['topology.kubernetes.io/zone'],
+      value: (node) => node?.metadata?.labels?.['topology.kubernetes.io/zone'],
     },
     {
       header: t('node-details.pool'),
-      value: (node) => node.metadata?.labels?.['worker.gardener.cloud/pool'],
+      value: (node) => node?.metadata?.labels?.['worker.gardener.cloud/pool'],
     },
     {
       header: t('node-details.machine-type'),
       value: (node) =>
-        node.metadata?.labels?.['node.kubernetes.io/instance-type'],
+        node?.metadata?.labels?.['node.kubernetes.io/instance-type'],
     },
   ];
 
@@ -107,9 +108,9 @@ export default function NodeDetails({ nodeName }) {
         resource={node}
         customStatus={
           <MachineInfo
-            nodeInfo={node?.status.nodeInfo}
-            capacity={node?.status.capacity}
-            addresses={node?.status.addresses}
+            nodeInfo={node?.status?.nodeInfo}
+            capacity={node?.status?.capacity}
+            addresses={node?.status?.addresses}
             gpus={gpus}
             spec={node?.spec}
           />
