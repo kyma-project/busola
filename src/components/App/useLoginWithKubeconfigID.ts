@@ -32,7 +32,7 @@ import {
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
     kubeconfigUrl: string;
-    showClustersOverview?: boolean; //todo
+    showClustersList?: boolean; //todo
     defaultKubeconfig?: string; //todo
   };
   isEnabled: boolean;
@@ -83,11 +83,11 @@ const addClusters = async (
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
   const currentContext = kubeconfig['current-context'];
-  const showClustersOverview = kubeconfigIdFeature.config?.showClustersOverview;
+  const showClustersList = kubeconfigIdFeature.config?.showClustersList;
   const isK8CurrentCluster = (name: string) =>
     !!currentContext && currentContext === name;
   const shouldRedirectToCluster = (name: string) =>
-    !showClustersOverview && (isOnlyOneCluster || isK8CurrentCluster(name));
+    !showClustersList && (isOnlyOneCluster || isK8CurrentCluster(name));
 
   try {
     kubeconfig.contexts.forEach((context) => {
@@ -107,7 +107,7 @@ const addClusters = async (
         );
     });
 
-    if (showClustersOverview) {
+    if (showClustersList) {
       window.location.href = window.location.origin + '/clusters';
     }
   } catch (e) {
