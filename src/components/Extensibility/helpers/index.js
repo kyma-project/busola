@@ -169,10 +169,7 @@ export const useCreateResourceDescription = (descID) => {
 };
 
 export const getResourceUrl = (descID) => {
-  if (!descID)
-    return {
-      url: null,
-    };
+  if (!descID) return null;
 
   const helmBracketsRegex = /{{"(.*?)"}}/g;
   const trans = descID.replace(helmBracketsRegex, '$1');
@@ -182,13 +179,9 @@ export const getResourceUrl = (descID) => {
 
     if (links?.length >= 1) {
       const matchedLink = links[0];
-      return {
-        url: matchedLink.url,
-      };
+      return matchedLink.url;
     } else {
-      return {
-        url: null,
-      };
+      return null;
     }
   }
 };

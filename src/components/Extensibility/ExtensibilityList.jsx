@@ -123,7 +123,7 @@ export const ExtensibilityListCore = ({
     defaultSearch: true,
   });
 
-  const { url: emptyListUrl } = getResourceUrl(description);
+  const emptyListUrl = getResourceUrl(description);
 
   return (
     <ResourcesList
