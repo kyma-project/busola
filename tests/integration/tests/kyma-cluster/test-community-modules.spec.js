@@ -89,10 +89,14 @@ context('Test Community Modules views', () => {
     // Open Add YAML
     cy.get('[accessible-name="add-yamls"]').click();
 
-    // Uncomment and adjust with https://github.com/kyma-project/busola/issues/4587
-    // cy.get('[accessible-name="Source YAML URL"]').click().type(
-    //   'https://raw.githubusercontent.com/kyma-project/community-modules/main/all-modules.yaml',
-    // );
+    // Check access to raw github files
+    cy.get('[accessible-name="Source YAML URL"]')
+      .find('input')
+      .click()
+      .clear()
+      .type(
+        'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-0-12.yaml',
+      );
 
     // Open Add to Namespace select
     cy.get(`[header-text="Add Source YAML"]:visible`)
