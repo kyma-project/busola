@@ -4,6 +4,7 @@ import {
   useGetTranslation,
   getPropsFromSchema,
   SchemaOnChangeParams,
+  OptionType,
 } from 'components/Extensibility/helpers';
 import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 
@@ -16,10 +17,6 @@ type MultiCheckboxProps = {
   compact?: boolean;
   placeholder?: string;
 };
-
-type OptionType =
-  | string
-  | { key?: string; name?: string; description?: string };
 
 function getValue(storeKeys: StoreKeys, resource?: Record<string, any>) {
   let value = resource;

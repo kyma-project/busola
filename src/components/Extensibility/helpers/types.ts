@@ -12,3 +12,7 @@ type SchemaOnChangeParam = {
 };
 
 export type SchemaOnChangeParams = SchemaOnChangeParam | SchemaOnChangeParam[];
+
+export type OptionType =
+  | string
+  | { key?: string; name?: string; description?: string };
