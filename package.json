@@ -145,9 +145,6 @@
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
   },
   "overrides": {
-    "oidc-client-ts": {
-      "crypto-js": "4.2.0"
-    },
     "d3-color": "^3.1.0",
     "prismjs": "1.30.0"
   }
