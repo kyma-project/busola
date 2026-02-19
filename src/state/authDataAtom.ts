@@ -65,7 +65,7 @@ export function createUserManager(
   return new UserManager({
     redirect_uri: window.location.origin + redirectPath,
     post_logout_redirect_uri: window.location.origin + '/logout.html',
-    loadUserInfo: true,
+    loadUserInfo: false,
     client_id: oidcParams.clientId,
     authority: oidcParams.issuerUrl,
     client_secret: oidcParams.clientSecret,
