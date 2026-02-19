@@ -16,15 +16,18 @@ export default function CustomResourcesByGroup() {
   );
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <GroupingListPage
       title={t('custom-resources.title')}
       description={description}
-      filter={(crd) =>
-        crd.spec.scope === (namespace ? 'Namespaced' : 'Cluster')
+      filter={(crd: { spec: { scope: string } }) =>
+        crd?.spec?.scope === (namespace ? 'Namespaced' : 'Cluster')
       }
       resourceListProps={{
-        customUrl: (crd) => scopedUrl(`customresources/${crd.metadata.name}`),
-        nameSelector: (entry) => pluralize(entry?.spec.names.kind || ''),
+        customUrl: (crd: { metadata: { name: string } }) =>
+          scopedUrl(`customresources/${crd.metadata.name}`),
+        nameSelector: (entry?: { spec: { names: { kind: string } } }) =>
+          pluralize(entry?.spec?.names?.kind || ''),
         readOnly: true,
       }}
       enableColumnLayout={true}

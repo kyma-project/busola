@@ -1,3 +1,4 @@
+import { FormEventHandler, RefObject } from 'react';
 import jp from 'jsonpath';
 import pluralize from 'pluralize';
 
@@ -8,6 +9,27 @@ import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 
+export type Version = {
+  name: string;
+  served?: boolean;
+  additionalPrinterColumns?: { name: string; jsonPath: string }[];
+};
+
+type CustomResourcesProps = {
+  crd: {
+    spec: { group: string; names: { plural: string; kind: string } };
+    apiVersion: string;
+    metadata: { name: string; namespace?: string };
+  };
+  version: Version;
+  showTitle?: boolean;
+  omitColumnsIds?: string[];
+  hideCreateOption?: boolean;
+  enableColumnLayout?: boolean;
+  layoutCloseCreateUrl?: string;
+  simpleEmptyListMessage?: boolean;
+};
+
 export function CustomResources({
   crd,
   version,
@@ -17,7 +39,7 @@ export function CustomResources({
   enableColumnLayout,
   layoutCloseCreateUrl,
   simpleEmptyListMessage = false,
-}) {
+}: CustomResourcesProps) {
   const { group, names } = crd.spec;
   const name = names.plural;
   const customUrl = useCustomResourceUrl(crd);
@@ -32,7 +54,7 @@ export function CustomResources({
       ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
       : `/apis/${group}/${version.name}/${name}`;
 
-  const getJsonPath = (resource, jsonPath) => {
+  const getJsonPath = (resource: Record<string, any>, jsonPath: string) => {
     // try catch to parse annotations to take value from resource using jsonpath
     let value;
     try {
@@ -48,7 +70,7 @@ export function CustomResources({
         ) || EMPTY_TEXT_PLACEHOLDER;
     } catch (e) {
       console.error(e);
-      value = e.message;
+      value = (e as Error)?.message;
     }
     if (typeof value === 'boolean') {
       return value.toString();
@@ -61,12 +83,16 @@ export function CustomResources({
 
   const customColumns = version.additionalPrinterColumns?.map((column) => ({
     header: column.name,
-    value: (resource) => getJsonPath(resource, column.jsonPath),
+    value: (resource: Record<string, any>) =>
+      getJsonPath(resource, column.jsonPath),
   }));
   // CRD can have infinite number of additionalPrinterColumns what would be impossible to fit into the table
-  if (customColumns?.length > 5) customColumns.length = 5;
+  if (customColumns?.length && customColumns?.length > 5)
+    customColumns.length = 5;
 
-  const customColumnLayout = (resource) => {
+  const customColumnLayout = (resource?: {
+    metadata?: { name?: string; namespace?: string };
+  }) => {
     const { group, version } = extractApiGroupVersion(crd?.apiVersion);
     return {
       resourceName: resource?.metadata?.name,
@@ -89,9 +115,13 @@ export function CustomResources({
     testid: 'crd-custom-resources',
     omitColumnsIds,
     hideCreateOption,
-    createResourceForm: (props) => (
-      <CRCreate {...props} crd={crd} layoutNumber="midColumn" />
-    ),
+    createResourceForm: (props: {
+      [x: string]: any;
+      onChange: FormEventHandler<HTMLElement>;
+      formElementRef: RefObject<HTMLFormElement>;
+      layoutNumber: number;
+      resource: any;
+    }) => <CRCreate {...props} crd={crd} layoutNumber="midColumn" />,
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
     searchSettings: {
       textSearchProperties: ['metadata.namespace'],
@@ -106,5 +136,6 @@ export function CustomResources({
     parentCrdName: crd.metadata.name,
     simpleEmptyListMessage,
   };
+  /*@ts-expect-error Type mismatch between js and ts*/
   return <ResourcesList {...params} />;
 }
