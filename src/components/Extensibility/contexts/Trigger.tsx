@@ -1,6 +1,6 @@
 import { StoreKeys } from '@ui-schema/ui-schema';
 import { fromJS } from 'immutable';
-import { createContext, useState, useRef } from 'react';
+import { createContext, useState, useRef, ReactNode } from 'react';
 
 export function scopePaths(storeKeys: StoreKeys) {
   const indexes = fromJS(storeKeys)
@@ -50,11 +50,7 @@ export const TriggerContext = createContext({
   subs: [] as any,
 });
 
-export function TriggerContextProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function TriggerContextProvider({ children }: { children: ReactNode }) {
   const subs = useRef<Record<string, any>[]>([]);
   const [enabled, setEnabled] = useState(true);
 

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, ReactNode, Suspense } from 'react';
 import { Spinner } from '../Spinner/Spinner';
 import { ToolbarButton } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
@@ -13,10 +13,10 @@ const Injections = lazy(
 );
 
 type ResourceActionsProps = {
-  headerActions?: React.ReactNode;
+  headerActions?: ReactNode;
   readOnly?: boolean;
   resource: K8sResource & Resource;
-  resourceHeaderActions: Array<(resource: any) => React.ReactNode>;
+  resourceHeaderActions: Array<(resource: any) => ReactNode>;
   resourceType: string;
   resourceUrl?: string;
   disableDelete?: boolean;
@@ -33,7 +33,7 @@ type ResourceActionsProps = {
   showDeleteDialog: boolean;
   performDelete: (
     resource: any,
-    resourceUrl: any,
+    resourceUrl: string,
     deleteFn: any,
   ) => Promise<void>;
   performCancel: (cancelFn: any) => void;

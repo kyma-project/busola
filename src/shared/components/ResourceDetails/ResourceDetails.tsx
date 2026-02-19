@@ -1,4 +1,10 @@
-import { createContext, useEffect, useState } from 'react';
+import {
+  ComponentType,
+  createContext,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { getErrorMessage, prettifyNameSingular } from 'shared/utils/helpers';
@@ -14,18 +20,16 @@ export const ResourceDetailContext = createContext(false);
 
 export type ResourceDetailsProps = {
   customColumns?: CustomColumnsType;
-  children?: React.ReactNode;
-  customComponents?: Array<
-    (resource: any, resourceUrl: string) => React.ReactNode
-  >;
+  children?: ReactNode;
+  customComponents?: Array<(resource: any, resourceUrl: string) => ReactNode>;
   description?: string;
   resourceUrl?: string;
   resourceType: string;
   resourceName?: string;
   resourceTitle?: string;
   namespace?: string;
-  headerActions?: React.ReactNode;
-  resourceHeaderActions?: Array<(resource: any) => React.ReactNode>;
+  headerActions?: ReactNode;
+  resourceHeaderActions?: Array<(resource: any) => ReactNode>;
   readOnly?: boolean;
   editActionLabel?: string;
   windowTitle?: string;
@@ -36,7 +40,7 @@ export type ResourceDetailsProps = {
   showYamlTab?: boolean;
   layoutCloseCreateUrl?: string;
   layoutNumber?: string;
-  customHealthCards?: Array<(resource: any, index: number) => React.ReactNode>;
+  customHealthCards?: Array<(resource: any, index: number) => ReactNode>;
   showHealthCardsTitle?: boolean;
   isModule?: boolean;
   isEntireListProtected?: boolean;
@@ -45,7 +49,7 @@ export type ResourceDetailsProps = {
   hideLabels?: boolean;
   hideAnnotations?: boolean;
   hideLastUpdate?: boolean;
-  createResourceForm: React.ComponentType<{
+  createResourceForm: ComponentType<{
     resource: any;
     resourceType: string;
     resourceUrl: string;
@@ -57,16 +61,16 @@ export type ResourceDetailsProps = {
   }>;
   customConditionsComponents?: CustomColumnsType;
   title?: string;
-  statusBadge?: (resource: any) => React.ReactNode;
+  statusBadge?: (resource: any) => ReactNode;
   customStatusColumns?: CustomColumnsType;
-  customStatus?: React.ReactNode;
+  customStatus?: ReactNode;
   statusConditions?: (resource: any) => Array<{
     type: string;
     status: string;
     reason?: string;
     message?: string;
   }>;
-  headerContent?: React.ReactNode;
+  headerContent?: ReactNode;
   className?: string;
   headerDescription?: string;
 };

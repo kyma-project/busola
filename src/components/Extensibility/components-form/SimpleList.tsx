@@ -77,8 +77,6 @@ export function SimpleList({
   return (
     <ResourceForm.CollapsibleSection
       defaultOpen={defaultOpen}
-      /*@ts-expect-error Some type mismatch or probably no longer used*/
-      container
       title={tFromStoreKeys(storeKeys, schema)}
       required={required}
       nestingLevel={nestingLevel}

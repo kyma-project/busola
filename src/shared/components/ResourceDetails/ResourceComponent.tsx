@@ -25,6 +25,7 @@ import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { ResourceActions } from './ResourceActions';
 import { ResourceDetailsCardContent } from './ResourceDetailsCardContent';
 import { ResourceStatusCardContent } from './ResourceStatusCardContent';
+import './ResourceDetailsCard.scss';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
