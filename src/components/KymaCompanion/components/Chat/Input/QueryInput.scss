@@ -6,8 +6,11 @@
 
     .query-input-container {
       position: relative;
-      --_ui5_textarea_padding_top: 8px !important;
-      --_ui5_textarea_padding_bottom: 8px !important;
+
+      #query-input {
+        --_ui5_textarea_padding_top: 8px !important;
+        --_ui5_textarea_padding_bottom: 8px !important;
+      }
 
       #query-input:focus::part(textarea) {
         box-shadow: 0px 1px 4px var(--sapLinkColor);

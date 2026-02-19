@@ -170,12 +170,8 @@ export const useCreateResourceDescription = (descID) => {
   }
 };
 
-export const getResourceDescAndUrl = (descID) => {
-  if (!descID)
-    return {
-      description: null,
-      url: null,
-    };
+export const getResourceUrl = (descID) => {
+  if (!descID) return null;
 
   const helmBracketsRegex = /{{"(.*?)"}}/g;
   const trans = descID.replace(helmBracketsRegex, '$1');
@@ -185,19 +181,9 @@ export const getResourceDescAndUrl = (descID) => {
 
     if (links?.length >= 1) {
       const matchedLink = links[0];
-      const processedTrans = trans.replace(
-        matchedLink.matchedText,
-        `<0>${matchedLink.urlText}</0>`,
-      );
-      return {
-        description: processedTrans,
-        url: matchedLink.url,
-      };
+      return matchedLink.url;
     } else {
-      return {
-        description: trans,
-        url: null,
-      };
+      return null;
     }
   }
 };

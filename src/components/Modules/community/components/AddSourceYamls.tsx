@@ -237,7 +237,7 @@ export const AddSourceYamls = () => {
     if (allTemplatesInstalled) {
       return (
         <>
-          <Text>
+          <Text data-testid="error-all-modules-installed">
             {t('modules.community.source-yaml.all-modules-installed')}
           </Text>
           {displayExistingModulesList(existingModuleTemplates)}

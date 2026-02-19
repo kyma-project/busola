@@ -13,7 +13,7 @@ import { useGetCRbyPath } from './useGetCRbyPath';
 import ExtensibilityCreate from './ExtensibilityCreate';
 import {
   applyFormula,
-  getResourceDescAndUrl,
+  getResourceUrl,
   getTextSearchProperties,
   TranslationBundleContext,
   useCreateResourceDescription,
@@ -123,8 +123,7 @@ export const ExtensibilityListCore = ({
     defaultSearch: true,
   });
 
-  const { description: subtitleText, url: emptyListUrl } =
-    getResourceDescAndUrl(description);
+  const emptyListUrl = getResourceUrl(description);
 
   return (
     <ResourcesList
@@ -143,7 +142,7 @@ export const ExtensibilityListCore = ({
           textSearchProperties(defaultSearchProperties),
       }}
       emptyListProps={{
-        subtitleText: subtitleText,
+        subtitleText: newListProps?.description,
         url: emptyListUrl,
       }}
     />

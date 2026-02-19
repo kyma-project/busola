@@ -97,7 +97,7 @@ export function getCpus(cpuString) {
     return parseFloat(cpuString);
   }
 
-  const number = String(cpuString).replace(suffix, '');
+  const number = parseFloat(String(cpuString).replace(suffix, ''));
   return number * suffixPower;
 }
 

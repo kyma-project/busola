@@ -9,6 +9,6 @@ export default function useDateNow(refreshInterval: number = 1_000) {
     };
     const interval = setInterval(handler, refreshInterval);
     return () => clearInterval(interval);
-  });
+  }, [refreshInterval]);
   return time;
 }
