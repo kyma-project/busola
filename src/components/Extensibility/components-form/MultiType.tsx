@@ -69,8 +69,6 @@ export function MultiType({
           <SegmentedButton>
             {types.map((type: TypeOption) => (
               <SegmentedButtonItem
-                /*@ts-expect-error Type mismatch or probably no longer used*/
-                compact
                 key={type}
                 selected={type === selectedType}
                 onClick={() => {

@@ -79,8 +79,6 @@ export function GenericList({
     <ResourceForm.CollapsibleSection
       defaultOpen={defaultOpen}
       tooltipContent={tExt(tooltipContent)}
-      /*@ts-expect-error Type mismatch or probably no longer used*/
-      container
       title={tFromStoreKeys(storeKeys, schema)}
       nestingLevel={nestingLevel}
       required={required}

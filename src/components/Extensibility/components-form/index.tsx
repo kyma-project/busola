@@ -1,4 +1,10 @@
-import { Children, cloneElement, DetailedReactHTMLElement } from 'react';
+import {
+  Children,
+  cloneElement,
+  DetailedReactHTMLElement,
+  FunctionComponent,
+  ReactNode,
+} from 'react';
 import { WidgetRenderer } from '@ui-schema/ui-schema/WidgetRenderer';
 
 import {
@@ -58,10 +64,10 @@ const pluginStack = [
 ];
 
 export const widgets = {
-  RootRenderer: ({ children }: { children: React.ReactNode }) => (
+  RootRenderer: ({ children }: { children: ReactNode }) => (
     <div>{children}</div>
   ),
-  GroupRenderer: ({ children }: { children: React.ReactNode }) => (
+  GroupRenderer: ({ children }: { children: ReactNode }) => (
     <>
       {Children.map(children, (child, i) =>
         cloneElement(child as DetailedReactHTMLElement<any, HTMLElement>, {
@@ -79,7 +85,7 @@ export const widgets = {
     required: boolean;
   } & Record<string, any>) => {
     required = schema.get('required') ?? required;
-    return (WidgetRenderer as React.FunctionComponent<any>)({
+    return (WidgetRenderer as FunctionComponent<any>)({
       schema,
       required,
       ...props,

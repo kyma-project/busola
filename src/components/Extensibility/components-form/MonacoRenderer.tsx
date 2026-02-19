@@ -21,7 +21,7 @@ function getValue(storeKeys: StoreKeys, resource: any) {
   return value;
 }
 
-function formatValue(value: any, language: string, formatAsString: string) {
+function formatValue(value: any, language: string, formatAsString: boolean) {
   if (language === 'json' && !formatAsString) {
     return JSON.stringify(value, null, 2);
   } else if (language === 'yaml') {
