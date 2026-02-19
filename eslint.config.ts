@@ -27,7 +27,7 @@ export default defineConfig(
       rules: {
         // React
         'react/react-in-jsx-scope': 'off',
-        'react/prop-types': 'off',
+        // 'react/prop-types': 'off',
 
         // TypeScript
         '@typescript-eslint/no-explicit-any': 'off',
