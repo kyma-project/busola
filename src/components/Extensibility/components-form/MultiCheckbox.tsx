@@ -3,9 +3,22 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import {
   useGetTranslation,
   getPropsFromSchema,
+  SchemaOnChangeParams,
+  OptionType,
 } from 'components/Extensibility/helpers';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 
-function getValue(storeKeys, resource) {
+type MultiCheckboxProps = {
+  onChange?: (params: SchemaOnChangeParams) => void;
+  schema: StoreSchemaType;
+  storeKeys: StoreKeys;
+  required?: boolean;
+  resource?: Record<string, any>;
+  compact?: boolean;
+  placeholder?: string;
+};
+
+function getValue(storeKeys: StoreKeys, resource?: Record<string, any>) {
   let value = resource;
   const keys = storeKeys.toJS();
   keys.forEach((key) => (value = value?.[key]));
@@ -20,7 +33,7 @@ export function MultiCheckbox({
   resource,
   compact,
   placeholder,
-}) {
+}: MultiCheckboxProps) {
   const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
 
   if (!schema.get('options')) {
@@ -46,7 +59,7 @@ export function MultiCheckbox({
     if (!Array.isArray(options)) {
       options = [];
     }
-    const displayOptions = options.map((option) => {
+    const displayOptions = options.map((option?: OptionType) => {
       if (typeof option === 'string') {
         return {
           key: option,
@@ -59,18 +72,18 @@ export function MultiCheckbox({
       }
 
       return {
-        key: option.key,
-        text: option.name
-          ? tExt(option.name)
-          : exists(`${translationPath}.${option.key}`)
-            ? tExt(`${translationPath}.${option.key}`)
-            : option.key,
-        description: option.description
-          ? exists(option.description)
-            ? tExt(option.description)
-            : exists(`${translationPath}.${option.description}`)
-              ? tExt(`${translationPath}.${option.description}`)
-              : option.description
+        key: option?.key,
+        text: option?.name
+          ? tExt(option?.name)
+          : exists(`${translationPath}.${option?.key}`)
+            ? tExt(`${translationPath}.${option?.key}`)
+            : option?.key,
+        description: option?.description
+          ? exists(option?.description)
+            ? tExt(option?.description)
+            : exists(`${translationPath}.${option?.description}`)
+              ? tExt(`${translationPath}.${option?.description}`)
+              : option?.description
           : null,
       };
     });
@@ -84,7 +97,7 @@ export function MultiCheckbox({
     <ResourceForm.Wrapper resource={resource}>
       <ResourceForm.FormField
         value={value}
-        setValue={(value) => {
+        setValue={(value: string) => {
           if (!onChange) return;
           onChange({
             storeKeys,

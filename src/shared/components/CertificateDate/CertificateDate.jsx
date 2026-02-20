@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { FormattedDatetime } from 'shared/components/FormattedDate/FormattedDate';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Icon } from '@ui5/webcomponents-react';
-import useDateNow from 'shared/hooks/dateNow';
+import useDateNow from 'shared/hooks/useDateNow';
 
 export function CertificateDate({ date, lang }) {
   const { t } = useTranslation();

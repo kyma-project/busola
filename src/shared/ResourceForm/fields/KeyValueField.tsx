@@ -19,7 +19,7 @@ type KeyValueFieldProps = {
   encodable?: boolean;
   defaultOpen?: boolean;
   input?: InputProp;
-  initialValue?: string;
+  initialValue?: string | Record<string, any>;
   readableFromFile?: boolean;
   keyProps?: Record<string, any>;
   lockedKeys?: string[];

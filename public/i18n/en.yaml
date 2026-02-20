@@ -427,9 +427,13 @@ common:
   value-units:
     days: days
     days-ago: days ago
+    days-old: days old
     hours-ago: hours ago
+    hours-old: hours old
     minutes-ago: minutes ago
+    minutes-old: minutes old
     seconds-ago: seconds ago
+    seconds-old: seconds old
   'yes': 'yes'
 components:
   accessible-name:

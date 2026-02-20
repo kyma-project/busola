@@ -1,6 +1,15 @@
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 import './FormGroup.scss';
+
+type FormGroupProps = {
+  schema: StoreSchemaType;
+  storeKeys: StoreKeys;
+  widgets: { WidgetRenderer: React.ComponentType<any> };
+  nestingLevel?: number;
+  required?: boolean;
+} & Record<string, any>;
 
 export function FormGroup({
   schema,
@@ -9,7 +18,7 @@ export function FormGroup({
   nestingLevel = 0,
   required = false,
   ...props
-}) {
+}: FormGroupProps) {
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
   const { tFromStoreKeys, t: tExt } = useGetTranslation();

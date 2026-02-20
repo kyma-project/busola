@@ -1,14 +1,31 @@
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
-import { PluginStack } from '@ui-schema/ui-schema';
+import { PluginStack, StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 import { isNil } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  SchemaOnChangeParams,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 
-export function MultiType({ onChange, schema, storeKeys, resource, ...props }) {
+type MultiTypeProps = {
+  onChange: (params: SchemaOnChangeParams) => void;
+  schema: StoreSchemaType;
+  storeKeys: StoreKeys;
+  resource: Record<string, any>;
+} & Record<string, any>;
+
+type TypeOption = 'string' | 'number' | 'boolean' | 'object' | 'array' | 'null';
+
+export function MultiType({
+  onChange,
+  schema,
+  storeKeys,
+  resource,
+  ...props
+}: MultiTypeProps) {
   const value = storeKeys.reduce((val, key) => val?.[key], resource);
-
   const { tFromStoreKeys } = useGetTranslation();
 
   const types = schema.get('type');
@@ -50,9 +67,8 @@ export function MultiType({ onChange, schema, storeKeys, resource, ...props }) {
         }
         input={() => (
           <SegmentedButton>
-            {types.map((type) => (
+            {types.map((type: TypeOption) => (
               <SegmentedButtonItem
-                compact
                 key={type}
                 selected={type === selectedType}
                 onClick={() => {
@@ -76,10 +92,10 @@ export function MultiType({ onChange, schema, storeKeys, resource, ...props }) {
       />
       <PluginStack
         {...props}
+        /*@ts-expect-error Type mismatch or probably no longer used*/
         onChange={onChange}
         schema={newSchema}
         storeKeys={storeKeys}
-        resource={resource}
       />
     </>
   );

@@ -3,7 +3,23 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import {
   useGetTranslation,
   getPropsFromSchema,
+  SchemaOnChangeParams,
 } from 'components/Extensibility/helpers';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { FormFieldProps } from 'shared/ResourceForm/components/FormField';
+
+type SwitchRendererProps = {
+  onChange: (params: SchemaOnChangeParams) => void;
+  value: any;
+  schema: StoreSchemaType;
+  storeKeys: StoreKeys;
+  required?: boolean;
+  compact?: boolean;
+  editMode?: boolean;
+} & Omit<
+  FormFieldProps,
+  'label' | 'input' | 'required' | 'disabled' | 'tooltipContent' | 'inputInfo'
+>;
 
 export function SwitchRenderer({
   onChange,
@@ -14,14 +30,14 @@ export function SwitchRenderer({
   compact,
   editMode,
   ...props
-}) {
+}: SwitchRendererProps) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const disableOnEdit = schema.get('disableOnEdit');
 
   return (
     <ResourceForm.FormField
       value={value}
-      setValue={(value) => {
+      setValue={(value: any) => {
         onChange({
           storeKeys,
           scopes: ['value'],

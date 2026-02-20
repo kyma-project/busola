@@ -2,15 +2,34 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { fromJS, isImmutable } from 'immutable';
 
-import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
+import {
+  getObjectValueWorkaround,
+  SchemaOnChangeParams,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
 import { useUrl } from 'hooks/useUrl';
 import { usePermittedUrl } from 'hooks/usePermittedUrl';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { Resource } from '../contexts/DataSources';
+
+type ResourceRefRenderProps = {
+  onChange: (params: SchemaOnChangeParams) => void;
+  value: any;
+  schema: StoreSchemaType;
+  storeKeys: StoreKeys;
+  resource: any;
+  widgets: { WidgetRenderer: React.ComponentType<any> };
+  required: boolean;
+  originalResource: Resource;
+  nestingLevel: number;
+  singleRootResource?: Resource;
+  embedResource?: Resource;
+} & Record<string, any>;
 
 export function ResourceRefRender({
   onChange,
@@ -25,7 +44,7 @@ export function ResourceRefRender({
   singleRootResource,
   embedResource,
   ...props
-}) {
+}: ResourceRefRenderProps) {
   const stableJsonataDeps = useMemo(
     () => ({
       resource: originalResource,
@@ -45,7 +64,7 @@ export function ResourceRefRender({
     [schema, resource, storeKeys, value],
   );
 
-  const valueRef = useRef();
+  const valueRef = useRef<string | Record<string, any> | null>();
 
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
@@ -60,12 +79,13 @@ export function ResourceRefRender({
   const group = (schemaResource?.group || '').toLowerCase();
   const version = schemaResource?.version;
   const resourceType = pluralize(schemaResource?.kind || '')?.toLowerCase();
-  const url = usePermittedUrl(group, version, resourceType);
+  const url = usePermittedUrl(group, version, resourceType, '');
   const { data, loading, error } = useGetList()(url, {
     skip: !url,
   });
 
-  const { setVar } = useVariables();
+  const { setVar }: { setVar: (path: string, value: any) => void } =
+    useVariables();
   const [resources, setResources] = useState([]);
 
   useEffect(() => {
@@ -83,12 +103,12 @@ export function ResourceRefRender({
         return res;
       }),
     ).then((results) => {
-      setResources(results.filter(Boolean));
+      setResources(results.filter(Boolean) as any);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toInternal, data, filter, stableJsonataDeps, memoizedValue]);
 
-  const setValue = (value) => {
+  const setValue = (value: any) => {
     const getValueAndChange = async () => {
       if (toExternal) {
         const [external, error] = await jsonata(toExternal, {
@@ -98,7 +118,7 @@ export function ResourceRefRender({
         value = error ? {} : external;
       }
       const resource = (data ?? []).find(
-        (res) =>
+        (res: { metadata: { name: string; namespace: string } }) =>
           res.metadata.namespace === value.namespace &&
           res.metadata.name === value.name,
       );
@@ -116,9 +136,11 @@ export function ResourceRefRender({
     getValueAndChange();
   };
 
-  const checkImmutable = (val) => (isImmutable(val) ? val.toJS() : val);
+  const checkImmutable = (val: string | Record<string, any> | null) =>
+    isImmutable(val) ? val.toJS() : val;
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ExternalResourceRef
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}

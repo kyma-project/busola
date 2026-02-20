@@ -3,6 +3,7 @@ import { fromJS } from 'immutable';
 import {
   useGetTranslation,
   getPropsFromSchema,
+  SchemaOnChangeParams,
 } from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
@@ -12,6 +13,19 @@ import { usePermittedUrl } from 'hooks/usePermittedUrl';
 
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+
+type ResourceRendererProps = {
+  onChange: (params: SchemaOnChangeParams) => void;
+  value: any;
+  schema: StoreSchemaType;
+  storeKeys: StoreKeys;
+  required: boolean;
+  compact?: boolean;
+  originalResource?: any;
+  singleRootResource?: any;
+  embedResource?: any;
+};
 
 export function ResourceRenderer({
   onChange,
@@ -23,15 +37,16 @@ export function ResourceRenderer({
   originalResource,
   singleRootResource,
   embedResource,
-}) {
+}: ResourceRendererProps) {
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
-  const { setVar } = useVariables();
+  const { setVar } = useVariables() as {
+    setVar: (path: string, value: any) => void;
+  };
   const jsonata = useJsonata({
     resource: originalResource,
     parent: singleRootResource,
     embedResource: embedResource,
     scope: value,
-    value,
   });
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
@@ -59,7 +74,7 @@ export function ResourceRenderer({
         <K8sResourceSelectWithUseGetList
           data-testid={storeKeys.join('.') || tFromStoreKeys(storeKeys, schema)}
           url={url}
-          filter={async (item) => {
+          filter={async (item: any) => {
             if (schema.get('filter')) {
               const [value] = await jsonata(schema.get('filter'), {
                 item,
@@ -67,7 +82,7 @@ export function ResourceRenderer({
               return value;
             } else return true;
           }}
-          onSelect={(value, resources) => {
+          onSelect={(value: string, resources: any[]) => {
             const resource = (resources || []).find(
               (r) => r.metadata.name === value,
             );

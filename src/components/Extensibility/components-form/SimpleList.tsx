@@ -1,13 +1,40 @@
-import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
+import {
+  PluginStack,
+  StoreKeys,
+  StoreSchemaType,
+  useUIStore,
+} from '@ui-schema/ui-schema';
 import { Button, FlexBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import {
+  SchemaOnChangeParams,
   useCreateResourceDescription,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
+import { CollapsibleSectionProps } from 'shared/ResourceForm/components/CollapsibleSection';
+
+type SimpleListProps = {
+  storeKeys: StoreKeys;
+  onChange: (params: SchemaOnChangeParams) => void;
+  schema: StoreSchemaType;
+  schemaKeys: StoreKeys;
+  showValidity?: boolean;
+  required?: boolean;
+  readOnly?: boolean;
+  level?: number;
+  nestingLevel?: number;
+} & Omit<
+  CollapsibleSectionProps,
+  | 'children'
+  | 'title'
+  | 'defaultOpen'
+  | 'required'
+  | 'tooltipContent'
+  | 'nestingLevel'
+>;
 
 export function SimpleList({
   storeKeys,
@@ -17,21 +44,23 @@ export function SimpleList({
   showValidity,
   required,
   readOnly,
-  level,
+  level = 0,
   nestingLevel = 0,
   ...props
-}) {
+}: SimpleListProps) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const { store } = useUIStore();
-  const { value } = store?.extractValues(storeKeys) || {};
+  const { value } = (store?.extractValues(storeKeys) || {}) as {
+    value: { size?: number };
+  };
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
   const inputInfo = useCreateResourceDescription(schema.get('inputInfo'));
   const tooltipContent = schema.get('description');
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
-  const removeItem = (index) => {
+  const removeItem = (index: number) => {
     onChange({
       storeKeys,
       scopes: ['value', 'internal'],
@@ -42,13 +71,12 @@ export function SimpleList({
     });
   };
 
-  const isLast = (index) => index === listSize;
+  const isLast = (index: number) => index === listSize;
   const itemsSchema = schema.get('items');
 
   return (
     <ResourceForm.CollapsibleSection
       defaultOpen={defaultOpen}
-      container
       title={tFromStoreKeys(storeKeys, schema)}
       required={required}
       nestingLevel={nestingLevel}
@@ -70,6 +98,7 @@ export function SimpleList({
                       parentSchema={schema}
                       storeKeys={ownKeys}
                       level={level + 1}
+                      /*@ts-expect-error Some type mismatch or probably no longer used*/
                       schemaKeys={schemaKeys?.push('items')}
                       placeholder={tExt(schemaPlaceholder)}
                       isListItem

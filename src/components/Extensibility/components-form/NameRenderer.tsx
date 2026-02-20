@@ -4,8 +4,22 @@ import jp from 'jsonpath';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 import {
   getPropsFromSchema,
+  SchemaOnChangeParams,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+
+type NameRendererProps = {
+  storeKeys: StoreKeys;
+  resource: {
+    kind: string;
+  };
+  value: string;
+  onChange: (params: SchemaOnChangeParams) => void;
+  schema: StoreSchemaType;
+  required?: boolean;
+  editMode?: boolean;
+};
 
 export function NameRenderer({
   storeKeys,
@@ -15,7 +29,7 @@ export function NameRenderer({
   schema,
   required,
   editMode,
-}) {
+}: NameRendererProps) {
   const { t: tExt } = useGetTranslation();
   const extraPaths = schema.get('extraPaths');
   const disableOnEdit = schema.get('disableOnEdit') || false;
@@ -36,7 +50,7 @@ export function NameRenderer({
               required,
               data: { value },
             },
-            ...extraPaths.map((path) => ({
+            ...extraPaths.map((path: string | (string | number)[]) => ({
               storeKeys: List(
                 Array.isArray(path)
                   ? path
@@ -60,7 +74,7 @@ export function NameRenderer({
           });
         }
       }}
-      validate={(value) => !!value}
+      validate={(value: string) => !!value}
       {...getPropsFromSchema(schema, required, tExt)}
     />
   );
