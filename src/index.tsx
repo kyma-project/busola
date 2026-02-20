@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
 import { savePreviousPath } from 'state/useAfterInitHook';
+import { initIntendedPathFromUrl } from 'state/intendedPathAtom';
 
 import App from './components/App/App';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -61,6 +62,10 @@ i18next
   });
 
 savePreviousPath();
+
+// Initialize intended path from URL parameters (for kubeconfigID permalinks)
+// This must be called early before any redirects happen
+initIntendedPathFromUrl();
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

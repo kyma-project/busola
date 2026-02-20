@@ -1,0 +1,6 @@
+# Ignore all kubeconfig files (they may contain sensitive data)
+*
+# But keep this .gitignore and the README
+!.gitignore
+!README.md
+!.gitkeep

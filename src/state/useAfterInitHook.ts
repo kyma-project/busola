@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { authDataAtom } from './authDataAtom';
 import { clusterAtom } from './clusterAtom';
+import { getIntendedPath, clearIntendedPath } from './intendedPathAtom';
 
 const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
@@ -84,6 +85,17 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
     }
 
     initDone.current = true;
+
+    // Handle intended path from kubeconfigID permalinks
+    // This happens after auth is ready to ensure API calls work
+    const intendedPath = getIntendedPath();
+    if (intendedPath?.path && cluster) {
+      const fullPath = `/cluster/${encodeURIComponent(cluster.name)}${intendedPath.path}`;
+      navigate(fullPath);
+      clearIntendedPath();
+      return;
+    }
+
     const previousPath = getPreviousPath();
 
     if (

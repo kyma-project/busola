@@ -15,6 +15,7 @@ import { SetStateAction, useSetAtom } from 'jotai';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { ManualKubeConfigIdType } from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
+import { getIntendedPath, clearIntendedPath } from 'state/intendedPathAtom';
 
 export type Users = Array<{
   name: string;
@@ -29,7 +30,17 @@ function addCurrentCluster(
 
   if (clustersInfo.currentCluster?.name !== params?.name) removePreviousPath();
 
-  if (params.currentContext.namespace) {
+  // Check for intended path from kubeconfigID permalink
+  // If there's an intended path, navigate to cluster overview first.
+  // The actual navigation to the intended path will happen in useAfterInitHook
+  // after auth is fully set up.
+  const intendedPath = getIntendedPath();
+  if (intendedPath?.path) {
+    // Navigate to cluster overview - useAfterInitHook will handle the intended path
+    clustersInfo.navigate(
+      `/cluster/${encodeURIComponent(params.contextName)}/overview`,
+    );
+  } else if (params.currentContext.namespace) {
     clustersInfo.navigate(
       `/cluster/${encodeURIComponent(params.contextName)}/namespaces/${
         params.currentContext.namespace
