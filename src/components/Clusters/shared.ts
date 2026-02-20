@@ -15,7 +15,7 @@ import { SetStateAction, useSetAtom } from 'jotai';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { ManualKubeConfigIdType } from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
-import { getIntendedPath, clearIntendedPath } from 'state/intendedPathAtom';
+import { getIntendedPath } from 'state/intendedPathAtom';
 
 export type Users = Array<{
   name: string;
