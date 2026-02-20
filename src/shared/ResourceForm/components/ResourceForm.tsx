@@ -45,12 +45,12 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { editor } from 'monaco-editor';
 
 type ResourceFormProps = {
-  pluralKind: string; // used for the request path
-  singularName: string;
+  pluralKind?: string; // used for the request path
+  singularName?: string;
   resource: any;
   initialResource: any;
   updateInitialResource?: (res: any) => void;
-  setResource: (res: any) => void;
+  setResource?: (res: any) => void;
   setCustomValid?: (isValid: boolean) => void;
   onChange?: FormEventHandler<HTMLElement>;
   formElementRef?: React.RefObject<HTMLFormElement>;
@@ -104,7 +104,7 @@ export const ResourceForm: ResourceFormType = (({
   resource,
   initialResource,
   updateInitialResource = () => {},
-  setResource,
+  setResource = () => {},
   setCustomValid,
   onChange,
   formElementRef,

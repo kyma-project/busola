@@ -6,14 +6,19 @@ import { useUrl } from 'hooks/useUrl';
 
 import BusolaExtensionCreate from './BusolaExtensionCreate';
 
-function BusolaExtensionList({ layoutCloseCreateUrl }) {
+function BusolaExtensionList({
+  layoutCloseCreateUrl,
+}: {
+  layoutCloseCreateUrl: string;
+}) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
   const customColumns = [
     {
       header: t('common.headers.namespace'),
-      value: (resource) => resource.metadata.namespace,
+      value: (resource: { metadata: { namespace: string } }) =>
+        resource.metadata.namespace,
     },
   ];
 
@@ -24,6 +29,7 @@ function BusolaExtensionList({ layoutCloseCreateUrl }) {
   );
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourcesList
       searchSettings={{
         textSearchProperties: ['metadata.namespace'],
@@ -37,7 +43,9 @@ function BusolaExtensionList({ layoutCloseCreateUrl }) {
       resourceUrlPrefix="/api/v1"
       hasDetailsView={true}
       layoutCloseCreateUrl={layoutCloseCreateUrl}
-      customUrl={(extension) =>
+      customUrl={(extension: {
+        metadata: { namespace: string; name: string };
+      }) =>
         clusterUrl(
           `busolaextensions/${extension.metadata.namespace}/${extension.metadata.name}`,
         )

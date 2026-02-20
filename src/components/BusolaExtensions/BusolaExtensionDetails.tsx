@@ -1,3 +1,4 @@
+import { ComponentProps } from 'react';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
@@ -32,7 +33,15 @@ import { EXTENSION_VERSION_LABEL } from './constants';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { configFeaturesNames } from 'state/types';
 
-export function BusolaExtensionDetails({ name, namespace }) {
+type BusolaExtensionDetailsProps = {
+  name: string;
+  namespace: string;
+};
+
+export function BusolaExtensionDetails({
+  name,
+  namespace,
+}: BusolaExtensionDetailsProps) {
   const { t } = useTranslation();
   const extensibilitySchemas = useAtomValue(extensibilitySchemasAtom);
 
@@ -40,14 +49,17 @@ export function BusolaExtensionDetails({ name, namespace }) {
 
   const resourceUrl = `/api/v1/namespaces/${namespace}/configmaps/${name}`;
 
-  const updateResourceMutation = useUpdate(resourceUrl);
+  const updateResourceMutation = useUpdate();
   const notification = useNotification();
 
   if (!name || !namespace) {
     return null;
   }
 
-  const updateBusolaExtension = async (newBusolaExtension, configmap) => {
+  const updateBusolaExtension = async (
+    newBusolaExtension: Record<string, any>,
+    configmap: Record<string, any>,
+  ) => {
     try {
       const diff = createPatch(configmap, newBusolaExtension);
       await updateResourceMutation(resourceUrl, diff);
@@ -61,14 +73,14 @@ export function BusolaExtensionDetails({ name, namespace }) {
       notification.notifyError({
         content: t('components.resource-details.messages.failure', {
           resourceType: 'BusolaExtension',
-          error: e.message,
+          error: (e as Error)?.message,
         }),
       });
       throw e;
     }
   };
 
-  const BusolaExtensionEditor = (resource) => {
+  const BusolaExtensionEditor = (resource: Record<string, any>) => {
     const { data } = resource;
     return SECTIONS.map((key) => (
       <ReadonlyEditorPanel
@@ -92,20 +104,21 @@ export function BusolaExtensionDetails({ name, namespace }) {
             id="edit-resource-modal"
             key="edit-resource-modal"
             className="modal-size--l"
-            renderForm={(props) => (
+            renderForm={(
+              props: Partial<ComponentProps<typeof SectionEditor>>,
+            ) => (
               <ErrorBoundary>
                 <SectionEditor
                   {...props}
                   onlyYaml={
                     // onlyYaml view for form & details due to heavy performance issues
-                    !extensibilitySchemas[key] ||
+                    !extensibilitySchemas?.[key] ||
                     key === 'form' ||
                     key === 'details'
                   }
                   data={data[key]}
-                  schema={extensibilitySchemas[key]}
-                  resource={data}
-                  onSubmit={(newData) => {
+                  schema={extensibilitySchemas?.[key]}
+                  onSubmit={(newData: string) => {
                     const newResource = {
                       ...resource,
                       data: {
@@ -124,7 +137,9 @@ export function BusolaExtensionDetails({ name, namespace }) {
     ));
   };
 
-  const ExtensibilityVersion = (configmap) => {
+  const ExtensibilityVersion = (configmap: {
+    metadata?: { labels?: Record<string, string> };
+  }) => {
     const { t } = useTranslation();
     const { isEnabled: isExtensibilityEnabled } = useFeature(
       configFeaturesNames.EXTENSIBILITY,
@@ -136,7 +151,7 @@ export function BusolaExtensionDetails({ name, namespace }) {
     if (!(isExtensibilityEnabled && hasExtensibilityLabel)) return null;
 
     const currentVersion = formatCurrentVersion(
-      configmap?.metadata.labels?.[EXTENSION_VERSION_LABEL],
+      configmap?.metadata?.labels?.[EXTENSION_VERSION_LABEL],
     );
 
     const hasMigrationFunction = getMigrationFunctions().some(
@@ -191,23 +206,18 @@ export function BusolaExtensionDetails({ name, namespace }) {
         key={'extensibility-version'}
         accessibleName={t('extensibility.accessible-name.version-panel')}
         headerActions={
-          hasMigrationFunction && (
-            <>
-              {currentVersion && (
-                <>
-                  <Button
-                    disabled={currentVersion === getLatestVersion()}
-                    endIcon="forward"
-                    onClick={() => {
-                      const newBusolaExtension = migrateToLatest(configmap);
-                      updateBusolaExtension(newBusolaExtension, configmap);
-                    }}
-                  >
-                    {t('config-maps.buttons.migrate')}
-                  </Button>
-                </>
-              )}
-            </>
+          hasMigrationFunction &&
+          currentVersion && (
+            <Button
+              disabled={currentVersion === getLatestVersion()}
+              endIcon="forward"
+              onClick={() => {
+                const newBusolaExtension = migrateToLatest(configmap);
+                updateBusolaExtension(newBusolaExtension, configmap);
+              }}
+            >
+              {t('config-maps.buttons.migrate')}
+            </Button>
           )
         }
       >
@@ -227,9 +237,13 @@ export function BusolaExtensionDetails({ name, namespace }) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (secret) => (
-        <ControlledBy ownerReferences={secret.metadata.ownerReferences} />
-      ),
+      value: (secret: {
+        metadata: {
+          ownerReferences?:
+            | { kind?: string; name?: string }[]
+            | { kind?: string; name?: string };
+        };
+      }) => <ControlledBy ownerReferences={secret.metadata.ownerReferences} />,
     },
   ];
 

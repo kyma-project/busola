@@ -37,6 +37,8 @@ export function ColumnsInput({
       <div
         key={`${value.path}-${value.type}-${index}`}
         className="columns-input"
+        // propertyPath is read and used by the parent: ResourceFormWrapper.
+        data-property-path={propertyPath}
       >
         <CheckBox
           data-testid={value?.path}
