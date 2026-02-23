@@ -15,12 +15,7 @@ import { clusterAtom } from 'state/clusterAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
-// Todo: after merge previous PR, check if this type already exists
-type Crd = {
-  spec: { group: string; names: { plural: string; kind: string } };
-  apiVersion: string;
-  metadata: { name: string; namespace?: string };
-};
+import { Crd } from 'types';
 
 type BusolaExtensionCreateProps = {
   formElementRef: RefObject<HTMLFormElement>;
