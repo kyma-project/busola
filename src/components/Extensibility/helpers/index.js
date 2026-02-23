@@ -12,6 +12,8 @@ import {
   extractLinks,
 } from 'shared/helpers/linkExtractor';
 
+export * from './types';
+
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
 });

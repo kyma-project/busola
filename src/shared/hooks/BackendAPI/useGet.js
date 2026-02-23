@@ -23,7 +23,7 @@ const useGetHook = (processDataFn) =>
     {
       pollingInterval,
       onDataReceived,
-      skip,
+      skip = false,
       errorTolerancy = undefined,
       compareEntireResource = false,
     } = {},

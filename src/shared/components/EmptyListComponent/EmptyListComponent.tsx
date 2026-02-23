@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ReactNode, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { Button, IllustratedMessage, Title } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-fiori/dist/illustrations/AllIllustrations';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
@@ -8,7 +8,7 @@ import './EmptyListComponent.scss';
 
 type EmptyListComponentProps = {
   titleText: string;
-  subtitleText: string;
+  subtitleText: string | ReactNode;
   showButton?: boolean;
   buttonText?: string;
   url: string;
@@ -29,6 +29,19 @@ export const EmptyListComponent = ({
 }: EmptyListComponentProps) => {
   const { t } = useTranslation();
 
+  const subtitle = useMemo(() => {
+    if (!subtitleText) return '';
+    if (typeof subtitleText !== 'string') return subtitleText;
+
+    return (
+      <Trans
+        i18nKey={subtitleText}
+        defaults={subtitleText}
+        components={[<ExternalLink key={subtitleText} url={url} />]}
+      />
+    );
+  }, [subtitleText, url]);
+
   if (showButton === undefined) {
     showButton = typeof onClick === 'function';
   }
@@ -48,9 +61,7 @@ export const EmptyListComponent = ({
             {titleText}
           </Title>
         }
-        subtitle={
-          <span className="sap-margin-top-small">{subtitleText ?? ''}</span>
-        }
+        subtitle={<span className="sap-margin-top-small">{subtitle}</span>}
       >
         <div className="emptyListComponent__buttons">
           {showButton && <Button onClick={onClick}>{buttonText}</Button>}
