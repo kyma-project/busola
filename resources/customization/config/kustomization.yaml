@@ -1,0 +1,6 @@
+configMapGenerator:
+  - name: busola-config
+    options:
+      disableNameSuffixHash: true
+    files:
+      - config.yaml

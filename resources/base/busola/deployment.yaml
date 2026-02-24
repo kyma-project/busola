@@ -28,6 +28,8 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /app/core-ui/config
+            - name: extensions
+              mountPath: /app/core-ui/extensions
           resources:
             requests:
               cpu: 500m
@@ -50,10 +52,21 @@ spec:
               port: 3001
               path: /
       volumes:
+        - name: extensions
+          configMap:
+            optional: true
+            items:
+              - key: statics.yaml
+                path: statics.yaml
+              - key: wizards.yaml
+                path: wizards.yaml
+              - key: extensions.yaml
+                path: extensions.yaml
+            name: busola-extensions
         - name: config
           configMap:
             optional: true
             name: busola-config
             items:
-              - key: config
+              - key: config.yaml
                 path: config.yaml
