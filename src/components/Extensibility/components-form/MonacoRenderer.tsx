@@ -5,10 +5,14 @@ import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Label } from '../../../shared/ResourceForm/components/Label';
 
-import { useGetTranslation } from 'components/Extensibility/helpers';
-import { useJsonata } from '../hooks/useJsonata';
+import {
+  SchemaOnChangeParams,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
+import { JsonataFunction, useJsonata } from '../hooks/useJsonata';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 
-function getValue(storeKeys, resource) {
+function getValue(storeKeys: StoreKeys, resource: any) {
   let value = resource;
   const keys = storeKeys.toJS();
   keys.forEach((key) => {
@@ -17,7 +21,7 @@ function getValue(storeKeys, resource) {
   return value;
 }
 
-function formatValue(value, language, formatAsString) {
+function formatValue(value: any, language: string, formatAsString: boolean) {
   if (language === 'json' && !formatAsString) {
     return JSON.stringify(value, null, 2);
   } else if (language === 'yaml') {
@@ -31,7 +35,7 @@ function formatValue(value, language, formatAsString) {
   }
 }
 
-async function getLanguage(jsonata, schema) {
+async function getLanguage(jsonata: JsonataFunction, schema: StoreSchemaType) {
   const languageFormula = schema.get('language');
   if (!languageFormula) return 'json';
 
@@ -39,15 +43,23 @@ async function getLanguage(jsonata, schema) {
   return error ? 'json' : (language || '').toLowerCase();
 }
 
+type MonacoRendererProps = {
+  storeKeys: StoreKeys;
+  onChange: (params: SchemaOnChangeParams) => void;
+  schema: StoreSchemaType;
+  required: boolean;
+  resource: any;
+  nestingLevel?: number;
+};
+
 export function MonacoRenderer({
   storeKeys,
-  // value,  //<-- doesn't work
   onChange,
   schema,
   required,
   resource,
   nestingLevel = 0,
-}) {
+}: MonacoRendererProps) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const value = useMemo(
     () => getValue(storeKeys, resource),
@@ -79,8 +91,8 @@ export function MonacoRenderer({
   const defaultOpen = schema.get('defaultExpanded') ?? false;
 
   const handleChange = useCallback(
-    (value) => {
-      let parsedValue = value;
+    (value: string) => {
+      let parsedValue: any = value;
       if (language === 'json' && !formatAsString) {
         try {
           parsedValue = JSON.parse(value);
@@ -123,6 +135,7 @@ export function MonacoRenderer({
         <Label required={required}>{tFromStoreKeys(storeKeys, schema)}</Label>
       </div>
       <div className="bsl-col-md--11">
+        {/*@ts-expect-error Type mismatch between js and ts*/}
         <Editor
           autocompletionDisabled
           updateValueOnParentChange

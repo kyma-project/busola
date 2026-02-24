@@ -1,7 +1,8 @@
+import { StoreKeys } from '@ui-schema/ui-schema';
 import { fromJS } from 'immutable';
-import { createContext, useState, useRef } from 'react';
+import { createContext, useState, useRef, ReactNode } from 'react';
 
-export function scopePaths(storeKeys) {
+export function scopePaths(storeKeys: StoreKeys) {
   const indexes = fromJS(storeKeys)
     .toArray()
     .map((item, index) => ({ item, index }))
@@ -19,7 +20,11 @@ export function scopePaths(storeKeys) {
   ];
 }
 
-function pathMatch(subKeys, triggerKeys, modifiers) {
+function pathMatch(
+  subKeys: StoreKeys,
+  triggerKeys: StoreKeys,
+  modifiers: string[],
+) {
   const subPaths = scopePaths(subKeys);
   const triggerPaths = scopePaths(triggerKeys);
 
@@ -32,25 +37,24 @@ function pathMatch(subKeys, triggerKeys, modifiers) {
       .forEach(() => (subPath = subPaths.pop()));
   }
 
-  return triggerPaths.includes(subPath);
+  return triggerPaths.includes(subPath as string);
 }
 
 export const TriggerContext = createContext({
-  trigger: () => {},
-  subscribe: () => {},
-  unsubscribe: () => {},
-  setResource: () => {},
+  trigger: (() => {}) as (name: string, storeKeys: StoreKeys) => void,
+  subscribe: (() => {}) as (sub: Record<string, any>) => void,
+  unsubscribe: (() => {}) as (sub: Record<string, any>) => void,
   disable: () => {},
   enable: () => {},
   enabled: true,
-  subs: [],
+  subs: [] as any,
 });
 
-export function TriggerContextProvider({ children }) {
-  const subs = useRef([]);
+export function TriggerContextProvider({ children }: { children: ReactNode }) {
+  const subs = useRef<Record<string, any>[]>([]);
   const [enabled, setEnabled] = useState(true);
 
-  const trigger = (name, storeKeys) => {
+  const trigger = (name: string, storeKeys: StoreKeys) => {
     if (!enabled) return;
     setTimeout(() =>
       subs.current
@@ -61,11 +65,11 @@ export function TriggerContextProvider({ children }) {
     );
   };
 
-  const subscribe = (sub) => {
+  const subscribe = (sub: Record<string, any>) => {
     subs.current = [...subs.current, sub];
   };
 
-  const unsubscribe = (sub) => {
+  const unsubscribe = (sub: Record<string, any>) => {
     subs.current = subs.current.filter((s) => s.sub !== sub);
   };
 

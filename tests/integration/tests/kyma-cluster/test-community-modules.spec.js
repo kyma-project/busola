@@ -89,11 +89,6 @@ context('Test Community Modules views', () => {
     // Open Add YAML
     cy.get('[accessible-name="add-yamls"]').click();
 
-    // Uncomment and adjust with https://github.com/kyma-project/busola/issues/4587
-    // cy.get('[accessible-name="Source YAML URL"]').click().type(
-    //   'https://raw.githubusercontent.com/kyma-project/community-modules/main/all-modules.yaml',
-    // );
-
     // Open Add to Namespace select
     cy.get(`[header-text="Add Source YAML"]:visible`)
       .find('[data-testid="add-to-namespace-select"]')
@@ -108,6 +103,20 @@ context('Test Community Modules views', () => {
 
     // Click of default namespace
     cy.get('ui5-option-custom:visible').contains('default').click();
+
+    // Check access to raw github files
+    cy.get('[accessible-name="Source YAML URL"]')
+      .find('input')
+      .click()
+      .clear()
+      .type(
+        'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-0-12.yaml',
+      );
+
+    // Check if error 'all modules installed' is displayed
+    cy.get('[data-testid="error-all-modules-installed"]')
+      .contains('All modules in this YAML are already installed.')
+      .should('be.visible');
 
     cy.get('ui5-button:visible').contains('Cancel').click();
   });

@@ -1,5 +1,5 @@
 import { Card, CardHeader } from '@ui5/webcomponents-react';
-import './ResourceDetails.scss';
+import './ResourceDetailsCard.scss';
 import { ReactNode } from 'react';
 
 interface ResourceDetailsCardProps {

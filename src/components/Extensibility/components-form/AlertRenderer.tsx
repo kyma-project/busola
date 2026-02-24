@@ -5,6 +5,33 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import MessageStripDesign from '@ui5/webcomponents/dist/types/MessageStripDesign';
+import { Resource } from '../contexts/DataSources';
+
+type AlertRendererProps = {
+  value: any;
+  schema: StoreSchemaType;
+  storeKeys: StoreKeys;
+  originalResource: Resource;
+  resource?: Resource;
+  embedResource?: Resource;
+};
+
+const getMessageType = (
+  severity: string,
+): MessageStripDesign | keyof typeof MessageStripDesign => {
+  switch (severity) {
+    case 'warning':
+      return 'Critical';
+    case 'error':
+      return 'Negative';
+    case 'success':
+      return 'Positive';
+    default:
+      return 'Information';
+  }
+};
 
 export function AlertRenderer({
   value,
@@ -13,7 +40,7 @@ export function AlertRenderer({
   originalResource,
   resource,
   embedResource,
-}) {
+}: AlertRendererProps) {
   const { itemVars } = useVariables();
 
   const rule = schema.get('schemaRule');
@@ -32,19 +59,15 @@ export function AlertRenderer({
   const alert = schema.get('alert');
   const severity = schema.get('severity');
 
-  let schemaType = 'Information';
-  if (severity === 'warning') {
-    schemaType = 'Critical';
-  } else if (severity === 'error') {
-    schemaType = 'Negative';
-  } else if (severity === 'success') {
-    schemaType = 'Positive';
-  }
+  const schemaType = getMessageType(severity);
 
-  const [alertJsonata, setAlertJsonata] = useState('');
+  const [alertJsonata, setAlertJsonata] = useState<string | null>('');
 
   useEffect(() => {
-    async function getAlertJsonata(alertFormula, item) {
+    async function getAlertJsonata(
+      alertFormula: string,
+      item: Record<string, any>,
+    ) {
       const [value, error] = await jsonata(alertFormula, item);
       if (error) {
         console.warn('Widget::shouldBeVisible error:', error);

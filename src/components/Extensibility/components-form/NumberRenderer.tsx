@@ -3,7 +3,19 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import {
   useGetTranslation,
   getPropsFromSchema,
+  SchemaOnChangeParams,
 } from 'components/Extensibility/helpers';
+import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+
+type NumberRendererProps = {
+  onChange: (params: SchemaOnChangeParams) => void;
+  value: number | null;
+  schema: StoreSchemaType;
+  storeKeys: StoreKeys;
+  required?: boolean;
+  placeholder?: string;
+  editMode?: boolean;
+};
 
 export function NumberRenderer({
   onChange,
@@ -13,7 +25,7 @@ export function NumberRenderer({
   required,
   placeholder,
   editMode,
-}) {
+}: NumberRendererProps) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const schemaPlaceholder = schema.get('placeholder');
@@ -40,8 +52,8 @@ export function NumberRenderer({
       }
 
       const displayOptions = enumOptions
-        .filter((option) => typeof option === 'number')
-        .map((option) => ({
+        .filter((option: number | string | null) => typeof option === 'number')
+        .map((option: number) => ({
           key: option,
           text: option,
         }));
@@ -59,7 +71,7 @@ export function NumberRenderer({
   return (
     <ResourceForm.FormField
       value={value}
-      setValue={(value) => {
+      setValue={(value: number | null) => {
         onChange({
           storeKeys,
           scopes: ['value'],

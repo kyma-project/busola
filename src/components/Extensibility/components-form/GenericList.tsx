@@ -1,12 +1,32 @@
 import { useState } from 'react';
-import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
+import {
+  PluginStack,
+  StoreKeys,
+  StoreSchemaType,
+  useUIStore,
+} from '@ui-schema/ui-schema';
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  SchemaOnChangeParams,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 import pluralize from 'pluralize';
 import { fromJS } from 'immutable';
+
+type GenericListProps = {
+  storeKeys: StoreKeys;
+  onChange: (params: SchemaOnChangeParams) => void;
+  schema: StoreSchemaType;
+  schemaKeys: StoreKeys;
+  showValidity: boolean;
+  required?: boolean;
+  readOnly?: boolean;
+  level: number;
+  nestingLevel?: number;
+} & Record<string, any>;
 
 export function GenericList({
   storeKeys,
@@ -19,11 +39,13 @@ export function GenericList({
   level,
   nestingLevel = 0,
   ...props
-}) {
+}: GenericListProps) {
   const { t } = useTranslation();
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { store } = useUIStore();
-  const { value } = store?.extractValues(storeKeys) || {};
+  const { value } = (store?.extractValues(storeKeys) || {}) as {
+    value: { size?: number };
+  };
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
   const itemTemplate = schema.get('template') || {};
@@ -31,7 +53,7 @@ export function GenericList({
   const tooltipContent = schema.get('description');
   const [newItemIndex, setNewItemIndex] = useState(0);
 
-  const addItem = (itemTemplate) => {
+  const addItem = (itemTemplate: any) => {
     onChange({
       storeKeys,
       scopes: ['value', 'internal'],
@@ -42,7 +64,7 @@ export function GenericList({
     });
   };
 
-  const removeItem = (index) => {
+  const removeItem = (index: number) => {
     onChange({
       storeKeys,
       scopes: ['value', 'internal'],
@@ -57,7 +79,6 @@ export function GenericList({
     <ResourceForm.CollapsibleSection
       defaultOpen={defaultOpen}
       tooltipContent={tExt(tooltipContent)}
-      container
       title={tFromStoreKeys(storeKeys, schema)}
       nestingLevel={nestingLevel}
       required={required}
@@ -105,6 +126,7 @@ export function GenericList({
                 parentSchema={schema}
                 storeKeys={ownKeys}
                 level={level + 1}
+                /*@ts-expect-error Type mismatch or probably no longer used*/
                 schemaKeys={schemaKeys?.push('items')}
                 placeholder={tExt(schemaPlaceholder)}
                 nestingLevel={nestingLevel + 1}
