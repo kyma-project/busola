@@ -1,9 +1,9 @@
 import jsyaml from 'js-yaml';
 import { isArray, mergeWith } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 
-import { clusterAtom } from '../clusterAtom';
+import { ActiveClusterState, clusterAtom } from '../clusterAtom';
 import { authDataAtom } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
@@ -97,13 +97,19 @@ export const useGetConfiguration = () => {
   const apis = useAtomValue(apiGroupAtom);
   const setConfig = useSetAtom(configurationAtom);
   const fetchFn = getFetchFn(useAtomValue);
+  const [prevCluster, setPrevCluster] = useState<ActiveClusterState>(null);
 
   useEffect(() => {
     const setClusterConfig = async () => {
       const configs = await getConfigs(fetchFn);
       const updatedFeatures = await getFeatures(configs?.features);
-      setConfig({ ...configs, features: updatedFeatures });
+      console.log('cluster === prevCluster', cluster === prevCluster);
+      if (cluster !== prevCluster) {
+        setConfig({ ...configs, features: updatedFeatures });
+        setPrevCluster(cluster);
+      }
     };
+
     setClusterConfig();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster, auth, apis]);
