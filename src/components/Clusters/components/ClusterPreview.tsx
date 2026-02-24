@@ -78,7 +78,7 @@ const OidcData = ({
 };
 
 interface ClusterPreviewProps {
-  kubeconfig: Kubeconfig;
+  kubeconfig?: Kubeconfig;
   storage: string;
   setSelected: (selected: number) => void;
   hasAuth: boolean;

@@ -94,8 +94,8 @@ const TokenForm = ({ resource, ...props }) => {
 
 export function AuthForm({
   formElementRef = null,
-  resource,
-  setResource,
+  resource = undefined,
+  setResource = () => {},
   revalidate = () => {},
   checkRequiredInputs = () => {},
   ...props

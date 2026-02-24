@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 export type ResourceFormWrapperProps = {
   resource?: Record<string, any> | string;
   setResource?: (resource: Record<string, any> | string) => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   validationRef?: React.MutableRefObject<boolean>;
   nestingLevel?: number;
   required?: boolean;

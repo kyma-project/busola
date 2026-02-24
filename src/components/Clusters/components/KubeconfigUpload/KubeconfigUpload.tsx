@@ -6,10 +6,11 @@ import jsyaml from 'js-yaml';
 import { ClusterDataForm } from 'components/Clusters/views/EditCluster/EditCluster';
 
 import './KubeconfigUpload.scss';
+import { Kubeconfig } from 'types';
 
 type KubeconfigUploadProps = {
-  kubeconfig: Record<string, any>;
-  setKubeconfig: (config: Record<string, any>) => void;
+  kubeconfig?: Kubeconfig;
+  setKubeconfig: (config?: Kubeconfig) => void;
   formRef: RefObject<HTMLDivElement>;
 };
 
@@ -30,7 +31,7 @@ export function KubeconfigUpload({
         if (typeof config !== 'object') {
           setError(t('clusters.wizard.not-an-object'));
         } else {
-          setKubeconfig(config as Record<string, any>);
+          setKubeconfig(config as Kubeconfig);
 
           setError(null);
         }
@@ -55,7 +56,7 @@ export function KubeconfigUpload({
       {/*@ts-expect-error Type mismatch between js and ts*/}
       <ClusterDataForm
         kubeconfig={kubeconfig}
-        setResource={(modified: Record<string, any>) => {
+        setResource={(modified: Kubeconfig) => {
           if (modified) setKubeconfig({ ...modified });
         }}
         onChange={updateKubeconfig}

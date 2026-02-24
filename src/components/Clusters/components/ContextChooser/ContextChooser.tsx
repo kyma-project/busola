@@ -20,9 +20,9 @@ import { ListItemClickEventDetail } from '@ui5/webcomponents/dist/List';
 import './ContextChooser.scss';
 
 type ContextChooserProps = {
-  resource: Record<string, any>;
+  resource?: Record<string, any>;
   chosenContext: string;
-  setChosenContext: (context: string) => void;
+  setChosenContext: (context?: string) => void;
 } & ResourceFormWrapperProps;
 
 export function ContextChooser({
