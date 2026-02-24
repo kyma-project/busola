@@ -252,9 +252,9 @@ export function useLoginWithKubeconfigID() {
   useEffect(() => {
     const dependenciesReady = !!configuration?.features && !!clusters;
     const flowStarted = handledKubeconfigId !== 'not started';
-
-    if (search.get('kubeconfigID') && flowStarted) {
-      setCurrentCluster(undefined);
+    const flowFinished = handledKubeconfigId == 'done';
+    if (search.get('kubeconfigID') && flowStarted && !flowFinished) {
+      return;
     }
 
     if (!dependenciesReady || flowStarted) {
