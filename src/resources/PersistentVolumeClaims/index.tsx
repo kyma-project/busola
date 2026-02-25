@@ -1,7 +1,7 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'PersistentVolumeClaims';
 export const namespaced = true;
@@ -9,9 +9,15 @@ export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.storage;
 
-export const List = lazy(() => import('./PersistentVolumeClaimList'));
-export const Details = lazy(() => import('./PersistentVolumeClaimDetails'));
-export const Create = lazy(() => import('./PersistentVolumeClaimCreate'));
+export const List = lazyWithRetries(
+  () => import('./PersistentVolumeClaimList'),
+);
+export const Details = lazyWithRetries(
+  () => import('./PersistentVolumeClaimDetails'),
+);
+export const Create = lazyWithRetries(
+  () => import('./PersistentVolumeClaimCreate'),
+);
 
 export const i18nDescriptionKey = 'persistent-volume-claims.description';
 export const docsURL =

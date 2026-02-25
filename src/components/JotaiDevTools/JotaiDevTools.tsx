@@ -1,6 +1,9 @@
 import { DevTools } from 'jotai-devtools';
-import { lazy, Suspense } from 'react';
-const JotaiDevToolsStyling = lazy(() => import('./JotaiDevToolsStyling'));
+import { Suspense } from 'react';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
+const JotaiDevToolsStyling = lazyWithRetries(
+  () => import('./JotaiDevToolsStyling'),
+);
 
 function JotaiDevTools() {
   return (

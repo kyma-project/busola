@@ -1,5 +1,5 @@
-import { lazy } from 'react';
 import { Description } from 'shared/components/Description/Description';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'Namespaces';
 export const namespaced = false;
@@ -17,6 +17,6 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./NamespaceList'));
-export const Details = lazy(() => import('./NamespaceDetails'));
-export const Create = lazy(() => import('./NamespaceCreate'));
+export const List = lazyWithRetries(() => import('./NamespaceList'));
+export const Details = lazyWithRetries(() => import('./NamespaceDetails'));
+export const Create = lazyWithRetries(() => import('./NamespaceCreate'));

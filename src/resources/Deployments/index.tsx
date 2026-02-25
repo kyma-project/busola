@@ -1,8 +1,8 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'Deployments';
 export const namespaced = true;
@@ -10,9 +10,9 @@ export const apiGroup = 'apps';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
-export const List = lazy(() => import('./DeploymentList'));
-export const Details = lazy(() => import('./DeploymentDetails'));
-export const Create = lazy(() => import('./DeploymentCreate'));
+export const List = lazyWithRetries(() => import('./DeploymentList'));
+export const Details = lazyWithRetries(() => import('./DeploymentDetails'));
+export const Create = lazyWithRetries(() => import('./DeploymentCreate'));
 
 export const i18nDescriptionKey = 'deployments.description';
 export const docsURL =

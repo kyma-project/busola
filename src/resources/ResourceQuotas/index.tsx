@@ -1,7 +1,7 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'ResourceQuotas';
 export const namespaced = true;
@@ -9,9 +9,9 @@ export const apiGroup = '';
 export const apiVersion = 'v1';
 export const category = predefinedCategories['discovery-and-network'];
 
-export const List = lazy(() => import('./ResourceQuotaList'));
-export const Details = lazy(() => import('./ResourceQuotaDetails'));
-export const Create = lazy(() => import('./ResourceQuotaCreate'));
+export const List = lazyWithRetries(() => import('./ResourceQuotaList'));
+export const Details = lazyWithRetries(() => import('./ResourceQuotaDetails'));
+export const Create = lazyWithRetries(() => import('./ResourceQuotaCreate'));
 
 export const i18nDescriptionKey = 'resource-quotas.description';
 export const docsURL =

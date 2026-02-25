@@ -12,8 +12,9 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
-const ExtensibilityList = lazy(() => import('../ExtensibilityList'));
+const ExtensibilityList = lazyWithRetries(() => import('../ExtensibilityList'));
 
 const getProperNamespacePart = (givenNamespace, currentNamespace) => {
   switch (true) {
