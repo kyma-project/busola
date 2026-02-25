@@ -8,7 +8,7 @@ import {
   ValidKubeconfig,
 } from 'types';
 import { useClustersInfoType } from 'state/utils/getClustersInfo';
-import { tryParseOIDCparams } from './components/oidc-params';
+import { tryParseOIDCparams, isOIDCExec } from './components/oidc-params';
 import { hasNonOidcAuth, createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router';
 import { useSetAtom } from 'jotai';
@@ -66,7 +66,8 @@ export function deleteCluster(
   setClusters((prev) => {
     // todo the same function when we switch cluster from oidc one
     const prevCredentials = prev?.[clusterName]?.currentContext.user.user;
-    if (!hasNonOidcAuth(prevCredentials)) {
+    const prevExec = (prevCredentials as KubeconfigOIDCAuth)?.exec;
+    if (!hasNonOidcAuth(prevCredentials) && isOIDCExec(prevExec)) {
       const userManager = createUserManager(
         parseOIDCparams(prevCredentials as KubeconfigOIDCAuth),
       );
@@ -140,6 +141,7 @@ export function hasKubeconfigAuth(kubeconfig: Kubeconfig) {
     if ('client-certificate-data' in user) {
       return user['client-certificate-data'] && !!user['client-key-data'];
     }
+
     const oidcData = tryParseOIDCparams(user as KubeconfigOIDCAuth);
 
     if (oidcData?.issuerUrl && oidcData?.clientId && oidcData?.scopes) {
