@@ -6,8 +6,10 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { CollapsibleSection } from 'shared/ResourceForm/components/CollapsibleSection';
 import { FormField } from 'shared/ResourceForm/components/FormField';
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { ScanConfiguration } from './ScanConfiguration';
+import { NamespacesState } from 'state/namespacesAtom';
 
-const getNested = (obj, next, ...path) => {
+const getNested = (obj: ScanConfiguration, next: string, ...path: string[]) => {
   if (!next || !obj) return obj;
   return getNested(obj[next], ...path);
 };
@@ -20,28 +22,44 @@ const setNested = (obj, newVal, next, ...path) => {
   };
 };
 
-const useNested = (obj, setObj, ...path) => {
+const useNested = (
+  obj: ScanConfiguration,
+  setObj: (newObj: ScanConfiguration) => void,
+  ...path: string[]
+) => {
   const val = useMemo(() => getNested(obj, ...path), [obj, path]);
   const setter = (newVal) => setObj(setNested(obj, newVal, ...path));
   return [val, setter];
 };
 
-const ListActions = ({ options, setSelected }) => {
+type ListActionsProps = {
+  options?: { key: string; text: string }[];
+  setSelected: (selectedKeys?: string[]) => void;
+};
+
+const ListActions = ({ options, setSelected }: ListActionsProps) => {
   const { t } = useTranslation();
   return (
     <>
       <Button
         icon="add"
-        onClick={() => setSelected(options.map(({ key }) => key))}
+        onClick={() => setSelected(options?.map(({ key }) => key))}
         design="Transparent"
       >
         {t('common.buttons.add-all')}
       </Button>
-      <Button icon="less" onClick={() => setSelected([])} desgin="Transparent">
+      <Button icon="less" onClick={() => setSelected([])} design="Transparent">
         {t('common.buttons.remove-all')}
       </Button>
     </>
   );
+};
+
+type ConfigurationFormProps = {
+  configuration: ScanConfiguration;
+  setConfiguration: (newConfig: ScanConfiguration) => void;
+  namespaces: NamespacesState;
+  policies?: string[];
 };
 
 const ConfigurationForm = ({
@@ -49,7 +67,7 @@ const ConfigurationForm = ({
   setConfiguration,
   namespaces,
   policies,
-}) => {
+}: ConfigurationFormProps) => {
   const { t } = useTranslation();
   const [description, setDescription] = useNested(
     configuration,
@@ -146,7 +164,7 @@ const ConfigurationForm = ({
           <FormField
             label={t('cluster-validation.scan.configuration.parallel-requests')}
             input={Inputs.Number}
-            setValue={(val) =>
+            setValue={(val: number) =>
               setParallelRequests(Number.isInteger(val) ? val : undefined)
             }
             value={parallelRequests ?? ''}
@@ -167,6 +185,15 @@ const ConfigurationForm = ({
   );
 };
 
+type ClusterValidationConfigurationDialogProps = {
+  show: boolean;
+  onCancel: () => void;
+  onSubmit: (newConfiguration: ScanConfiguration) => void;
+  configuration: ScanConfiguration;
+  namespaces: NamespacesState;
+  policies?: string[];
+};
+
 export function ClusterValidationConfigurationDialog({
   show,
   onCancel,
@@ -174,7 +201,7 @@ export function ClusterValidationConfigurationDialog({
   configuration,
   namespaces,
   policies,
-}) {
+}: ClusterValidationConfigurationDialogProps) {
   const { t } = useTranslation();
 
   const [tempConfiguration, setTempConfiguration] = useState(configuration);
@@ -198,7 +225,7 @@ export function ClusterValidationConfigurationDialog({
           endContent={
             <>
               <Button
-                desgin="Emphasized"
+                design="Emphasized"
                 onClick={() => {
                   onSubmit(tempConfiguration);
                 }}
@@ -222,12 +249,10 @@ export function ClusterValidationConfigurationDialog({
     >
       <ErrorBoundary>
         <ConfigurationForm
-          {...{
-            configuration: tempConfiguration,
-            setConfiguration: setTempConfiguration,
-            namespaces,
-            policies,
-          }}
+          configuration={tempConfiguration}
+          setConfiguration={setTempConfiguration}
+          namespaces={namespaces}
+          policies={policies}
         />
       </ErrorBoundary>
     </Dialog>
