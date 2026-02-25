@@ -11,9 +11,12 @@ import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { hasNonOidcAuth, createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router';
-import { SetStateAction, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { removePreviousPath } from 'state/useAfterInitHook';
-import { ManualKubeConfigIdType } from 'state/manualKubeConfigIdAtom';
+import {
+  ManualKubeConfigIdController,
+  ManualKubeConfigIdType,
+} from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 
 export type Users = Array<{
@@ -163,12 +166,7 @@ export const addByContext = (
     config: any;
   },
   clustersInfo: useClustersInfoType,
-  manualKubeConfigId?: {
-    manualKubeConfigId?: ManualKubeConfigIdType;
-    setManualKubeConfigId?: (
-      update: SetStateAction<ManualKubeConfigIdType>,
-    ) => void;
-  },
+  manualKubeConfigId?: ManualKubeConfigIdController,
 ) => {
   let kubeconfig = userKubeconfig as ValidKubeconfig;
   const findUser = () =>

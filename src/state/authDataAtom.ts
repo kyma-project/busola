@@ -170,7 +170,12 @@ export function useAuthHandler() {
         const onAfterLogin = () => {
           setIsLoading(false);
 
-          if (!getPreviousPath() || getPreviousPath() === '/clusters') {
+          // Only auto-navigate after an OIDC redirect (which always lands on '/').
+          const isOidcCallbackPath = window.location.pathname === '/';
+          if (
+            isOidcCallbackPath &&
+            (!getPreviousPath() || getPreviousPath() === '/clusters')
+          ) {
             if (cluster.currentContext.namespace) {
               navigate(
                 `/cluster/${encodeURIComponent(cluster.name)}/namespaces/${
