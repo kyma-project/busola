@@ -103,8 +103,7 @@ export const useGetConfiguration = () => {
     const setClusterConfig = async () => {
       const configs = await getConfigs(fetchFn);
       const updatedFeatures = await getFeatures(configs?.features);
-      console.log('cluster === prevCluster', cluster === prevCluster);
-      if (cluster !== prevCluster) {
+      if (!cluster || cluster !== prevCluster) {
         setConfig({ ...configs, features: updatedFeatures });
         setPrevCluster(cluster);
       }
