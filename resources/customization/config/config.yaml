@@ -1,0 +1,7 @@
+config:
+  storage: localStorage
+  features:
+    FEEDBACK:
+      isEnabled: true
+      config:
+        link: https://kyma-project.io/#/

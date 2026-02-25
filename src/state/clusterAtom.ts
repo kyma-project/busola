@@ -36,6 +36,12 @@ const getClusters = () => {
 };
 
 const getInitialClusterState = (): ActiveClusterState => {
+  // Don't restore a previous cluster when a kubeconfigID is present — it
+  // would race with and override the kubeconfigID flow.
+  if (new URLSearchParams(window.location.search).get('kubeconfigID')) {
+    return null;
+  }
+
   const clusters = getClusters();
   const clusterName = localStorage.getItem(CLUSTER_NAME_STORAGE_KEY);
 
