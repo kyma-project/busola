@@ -9,12 +9,21 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { ScanConfiguration } from './ScanConfiguration';
 import { NamespacesState } from 'state/namespacesAtom';
 
-const getNested = (obj: ScanConfiguration, next: string, ...path: string[]) => {
+const getNested = (
+  obj?: Record<string, any> | string | string[] | number,
+  next?: string,
+  ...path: string[]
+) => {
   if (!next || !obj) return obj;
-  return getNested(obj[next], ...path);
+  return getNested((obj as Record<string, any>)[next], ...path);
 };
 
-const setNested = (obj, newVal, next, ...path) => {
+const setNested = (
+  obj: Record<string, any>,
+  newVal?: string | string[] | number,
+  next?: string,
+  ...path: string[]
+): Record<string, any> | string | string[] | number | undefined => {
   if (!next) return newVal;
   return {
     ...obj,
@@ -23,12 +32,16 @@ const setNested = (obj, newVal, next, ...path) => {
 };
 
 const useNested = (
-  obj: ScanConfiguration,
-  setObj: (newObj: ScanConfiguration) => void,
+  obj: Record<string, any>,
+  setObj: (newObj: any) => void,
   ...path: string[]
-) => {
+): [
+  Record<string, any> | string | string[] | number | undefined,
+  (newVal?: string | string[] | number) => void,
+] => {
   const val = useMemo(() => getNested(obj, ...path), [obj, path]);
-  const setter = (newVal) => setObj(setNested(obj, newVal, ...path));
+  const setter = (newVal?: string | string[] | number) =>
+    setObj(setNested(obj, newVal, ...path));
   return [val, setter];
 };
 
@@ -112,7 +125,7 @@ const ConfigurationForm = ({
           input={Inputs.Text}
           value={description}
           defaultValue={description}
-          setValue={(val) => setDescription(val)}
+          setValue={(val?: string) => setDescription(val)}
         ></FormField>
       </div>
 
@@ -131,7 +144,7 @@ const ConfigurationForm = ({
             label={t('common.headers.namespaces')}
             input={Inputs.Checkboxes}
             options={namespaceOptions ?? []}
-            setValue={(val) => setSelectedNamespaces(val)}
+            setValue={(val: string[]) => setSelectedNamespaces(val)}
             value={selectedNamespaces}
           ></FormField>
         </div>
@@ -151,7 +164,7 @@ const ConfigurationForm = ({
             label={t('common.headers.policies')}
             input={Inputs.Checkboxes}
             options={policyOptions ?? []}
-            setValue={(val) => setSelectedPolicies(val)}
+            setValue={(val: string[]) => setSelectedPolicies(val)}
             value={selectedPolicies}
           ></FormField>
         </div>
@@ -169,7 +182,7 @@ const ConfigurationForm = ({
             }
             value={parallelRequests ?? ''}
             validationState={
-              parallelRequests < 1
+              typeof parallelRequests === 'number' && parallelRequests < 1
                 ? {
                     state: 'error',
                     text: t(
