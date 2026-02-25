@@ -1,7 +1,7 @@
 import { addByContext } from 'components/Clusters/shared';
 import { ClustersState, clustersAtom } from 'state/clustersAtom';
 import { SetStateAction, useAtom, useAtomValue } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavigateFunction, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
@@ -26,7 +26,7 @@ import {
 import { useNotification } from 'shared/contexts/NotificationContext';
 import {
   manualKubeConfigIdAtom,
-  ManualKubeConfigIdType,
+  ManualKubeConfigIdController,
 } from 'state/manualKubeConfigIdAtom';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
@@ -66,7 +66,7 @@ export async function loadKubeconfigById(
   return payload;
 }
 
-const addClusters = async (
+const addClusters = (
   kubeconfig: ValidKubeconfig,
   clusters: ClustersState,
   clusterInfo: useClustersInfoType,
@@ -74,12 +74,7 @@ const addClusters = async (
   t: TFunction,
   notification?: any,
   navigate?: NavigateFunction,
-  manualKubeConfigId?: {
-    manualKubeConfigId?: ManualKubeConfigIdType;
-    setManualKubeConfigId?: (
-      update: SetStateAction<ManualKubeConfigIdType>,
-    ) => void;
-  },
+  manualKubeConfigId?: ManualKubeConfigIdController,
 ) => {
   const isOnlyOneCluster = kubeconfig.contexts.length === 1;
   const currentContext = kubeconfig['current-context'];
@@ -133,12 +128,7 @@ const loadKubeconfigIdCluster = async (
   clusterInfo: useClustersInfoType,
   t: TFunction,
   setContextsState?: (update: SetStateAction<KubeConfigMultipleState>) => void,
-  manualKubeConfigId?: {
-    manualKubeConfigId?: ManualKubeConfigIdType;
-    setManualKubeConfigId?: (
-      update: SetStateAction<ManualKubeConfigIdType>,
-    ) => void;
-  },
+  manualKubeConfigId?: ManualKubeConfigIdController,
 ) => {
   try {
     const kubeconfig = await loadKubeconfigById(
@@ -201,6 +191,7 @@ export function useLoginWithKubeconfigID() {
   const { setCurrentCluster } = clusterInfo;
   const [handledKubeconfigId, setHandledKubeconfigId] =
     useState<KubeconfigIdHandleState>('not started');
+  const lastProcessedKubeconfigIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (contextsState?.chosenContext) {
@@ -252,21 +243,26 @@ export function useLoginWithKubeconfigID() {
   useEffect(() => {
     const dependenciesReady = !!configuration?.features && !!clusters;
     const flowStarted = handledKubeconfigId !== 'not started';
+    const kubeconfigId = search.get('kubeconfigID');
 
-    if (search.get('kubeconfigID') && flowStarted) {
-      setCurrentCluster(undefined);
+    if (kubeconfigId && flowStarted) {
+      if (kubeconfigId !== lastProcessedKubeconfigIdRef.current) {
+        setCurrentCluster(undefined);
+        setHandledKubeconfigId('not started');
+      }
+      return;
     }
 
     if (!dependenciesReady || flowStarted) {
       return;
     }
 
-    const kubeconfigId = search.get('kubeconfigID');
     if (!kubeconfigId || !kubeconfigIdFeature?.isEnabled) {
       setHandledKubeconfigId('done');
       return;
     }
 
+    lastProcessedKubeconfigIdRef.current = kubeconfigId;
     setHandledKubeconfigId('loading');
     loadKubeconfigIdCluster(
       kubeconfigId,
@@ -282,7 +278,6 @@ export function useLoginWithKubeconfigID() {
       }
     });
   }, [
-    contextsState,
     search,
     clusters,
     kubeconfigIdFeature,
