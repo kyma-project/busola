@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
