@@ -9,6 +9,7 @@ import { getPreviousPath } from './useAfterInitHook';
 import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
 import { isEqual } from 'lodash';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { useTranslation } from 'react-i18next';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -154,6 +155,7 @@ async function handleLogin({
 }
 
 export function useAuthHandler() {
+  const { t } = useTranslation();
   const notification = useNotification();
   const cluster = useAtomValue(clusterAtom);
   const setAuth = useSetAtom(authDataAtom);
@@ -203,10 +205,10 @@ export function useAuthHandler() {
           console.warn('Silent token renew failed:', error);
 
           const errorMessage =
-            error?.message || 'Session expired or network issue.';
+            error?.message || t('common.errors.session-expired');
 
           notification.notifyError({
-            content: `Your session could not be renewed. ${errorMessage}`,
+            content: `${t('common.errors.session-not-renewed')} ${errorMessage}`,
           });
         };
 

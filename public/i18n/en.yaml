@@ -297,6 +297,8 @@ common:
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
+    session-expired: Session expired or network issue.
+    session-not-renewed: Your session could not be renewed.
   headers:
     age: Age
     annotations: Annotations
