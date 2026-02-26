@@ -18,6 +18,7 @@ import { ResourceFormWrapperProps } from 'shared/ResourceForm/components/Wrapper
 import { ListItemClickEventDetail } from '@ui5/webcomponents/dist/List';
 
 import './ContextChooser.scss';
+import { KubeConfigMultipleState } from 'state/multipleContextsAtom';
 
 type ContextChooserProps = {
   resource?: Record<string, any>;
@@ -117,10 +118,7 @@ export function ContextButtons({
 }
 
 type ContextChooserMessageProps = {
-  contextState?: {
-    users?: Array<{ name: string; user: { exec: { args?: string[] } } }>;
-    contexts?: { name: string }[];
-  };
+  contextState?: KubeConfigMultipleState;
   setValue: (context: string) => void;
   onCancel: () => void;
 };
@@ -178,7 +176,7 @@ export function ContextChooserMessage({
               {contextState?.users && (
                 <AuthContextData
                   contextName={context?.name}
-                  users={contextState?.users}
+                  users={contextState?.users as any}
                 />
               )}
             </div>

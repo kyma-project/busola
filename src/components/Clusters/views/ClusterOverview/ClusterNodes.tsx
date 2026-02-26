@@ -12,17 +12,41 @@ import { toSentenceCase } from 'shared/utils/helpers';
 import { useUrl } from 'hooks/useUrl';
 import { ProgressIndicatorWithTooltip } from 'shared/components/ProgressIndicatorWithTooltip/ProgressIndicatorWithTooltip';
 import { Link } from 'shared/components/Link/Link';
+import { UsageMetrics } from 'resources/Pods/types';
 
-export function ClusterNodes({ data, error, loading }) {
+type ClusterNodesProps = {
+  data?: any[];
+  error?: Error;
+  loading?: boolean;
+};
+
+type RowRendererEntry = {
+  metadata?: {
+    name?: string;
+    creationTimestamp?: string;
+    labels?: Record<string, string>;
+  };
+  status?: {
+    conditions?: { status?: string; type?: string; message?: string }[];
+    nodeInfo?: {
+      kubeletVersion?: string;
+    };
+  };
+  metrics?: UsageMetrics;
+};
+
+export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
   const { clusterUrl } = useUrl();
   const { t } = useTranslation();
 
-  const getStatusType = (status) => {
+  const getStatusType = (status?: string) => {
     if (status === 'Ready') return 'Positive';
     return undefined;
   };
 
-  const getStatus = (status) => {
+  const getStatus = (status?: {
+    conditions?: { status?: string; type?: string; message?: string }[];
+  }) => {
     const conditions = status?.conditions || [];
     const currentStatus = conditions.find((c) => c?.status === 'True');
     return currentStatus ? (
@@ -49,12 +73,12 @@ export function ClusterNodes({ data, error, loading }) {
     t('common.headers.zone'),
   ];
 
-  const rowRenderer = (entry) => {
+  const rowRenderer = (entry?: RowRendererEntry) => {
     const { cpu, memory } = entry?.metrics || {};
 
     return [
       <Link
-        key={`node-details-link-${entry.metadata?.name}`}
+        key={`node-details-link-${entry?.metadata?.name}`}
         style={{
           fontWeight: 'bold',
           width: '100%',
@@ -62,16 +86,16 @@ export function ClusterNodes({ data, error, loading }) {
           display: 'flex',
           alignItems: 'center',
         }}
-        data-testid={`node-details-link-${entry.metadata?.name}`}
-        url={clusterUrl(`overview/nodes/${entry.metadata?.name}`)}
+        data-testid={`node-details-link-${entry?.metadata?.name}`}
+        url={clusterUrl(`overview/nodes/${entry?.metadata?.name}`)}
       >
-        {entry.metadata?.name}
+        {entry?.metadata?.name}
       </Link>,
       cpu ? (
         <>
           <ProgressIndicatorWithTooltip
             displayValue={cpu.percentage}
-            value={cpu.percentageValue}
+            value={Number(cpu.percentageValue)}
             tooltip={{
               content: t('cluster-overview.tooltips.cpu-used-percentage', {
                 percentage: cpu.percentage,
@@ -87,7 +111,7 @@ export function ClusterNodes({ data, error, loading }) {
       memory ? (
         <ProgressIndicatorWithTooltip
           displayValue={memory.percentage}
-          value={memory.percentageValue}
+          value={Number(memory.percentageValue)}
           tooltip={{
             content: t('cluster-overview.tooltips.memory-used-percentage', {
               percentage: memory.percentage,
@@ -100,19 +124,19 @@ export function ClusterNodes({ data, error, loading }) {
         EMPTY_TEXT_PLACEHOLDER
       ),
       <ReadableCreationTimestamp
-        key={entry.metadata?.creationTimestamp}
-        timestamp={entry.metadata?.creationTimestamp}
+        key={entry?.metadata?.creationTimestamp}
+        timestamp={entry?.metadata?.creationTimestamp ?? ''}
       />,
-      getStatus(entry.status),
-      entry.metadata?.labels?.['worker.gardener.cloud/pool'] ??
+      getStatus(entry?.status),
+      entry?.metadata?.labels?.['worker.gardener.cloud/pool'] ??
         EMPTY_TEXT_PLACEHOLDER,
-      entry.metadata?.labels?.['node.kubernetes.io/instance-type'] ??
+      entry?.metadata?.labels?.['node.kubernetes.io/instance-type'] ??
         EMPTY_TEXT_PLACEHOLDER,
       entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
         EMPTY_TEXT_PLACEHOLDER,
     ];
   };
-
+  /*@ts-expect-error Type mismatch between js and ts*/
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
   // This sets and unsets cluster version.
@@ -128,13 +152,16 @@ export function ClusterNodes({ data, error, loading }) {
         <GenericList
           title={t('cluster-overview.headers.nodes')}
           actions={[]}
+          /*@ts-expect-error Type mismatch between js and ts*/
           entries={data || []}
           headerRenderer={headerRenderer}
           rowRenderer={rowRenderer}
+          /*@ts-expect-error Type mismatch between js and ts*/
           serverDataError={error}
           serverDataLoading={!data && loading}
           pagination={{ autoHide: true }}
           testid="cluster-nodes"
+          /*@ts-expect-error Type mismatch between js and ts*/
           searchSettings={{
             showSearchField: false,
             allowSlashShortcut: false,

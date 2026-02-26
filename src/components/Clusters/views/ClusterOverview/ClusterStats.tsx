@@ -19,12 +19,22 @@ import {
 
 import './ClusterStats.scss';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
+import { UsageMetrics } from 'resources/Pods/types';
 
 const Injections = lazy(
   () => import('../../../Extensibility/ExtensibilityInjections'),
 );
 
-export default function ClusterStats({ nodesData }) {
+type ClusterStatsProps = {
+  nodesData: {
+    metrics?: UsageMetrics;
+    status: {
+      allocatable: any;
+    };
+  }[];
+};
+
+export default function ClusterStats({ nodesData }: ClusterStatsProps) {
   const { t } = useTranslation();
 
   const cpu = { usage: 0, capacity: 0 };
@@ -32,27 +42,27 @@ export default function ClusterStats({ nodesData }) {
 
   if (nodesData) {
     for (const node of nodesData) {
-      cpu.usage += node.metrics.cpu?.usage ?? 0;
-      cpu.capacity += node.metrics.cpu?.capacity ?? 0;
-      memory.usage += node.metrics.memory?.usage ?? 0;
-      memory.capacity += node.metrics.memory?.capacity ?? 0;
+      cpu.usage += node?.metrics?.cpu?.usage ?? 0;
+      cpu.capacity += node?.metrics?.cpu?.capacity ?? 0;
+      memory.usage += node?.metrics?.memory?.usage ?? 0;
+      memory.capacity += node?.metrics?.memory?.capacity ?? 0;
     }
   }
 
   const { data: podsData } = useGetList()(`/api/v1/pods`, {
     pollingInterval: 3200,
-  });
+  } as any) as { data: Record<string, any>[] | null };
 
   const { data: deploymentsData } = useGetList()('/apis/apps/v1/deployments', {
     pollingInterval: 3200,
-  });
+  } as any) as { data: Record<string, any>[] | null };
 
   const { data: persistentVolumesData } = useGetList()(
     '/api/v1/persistentvolumes',
     {
       pollingInterval: 3200,
-    },
-  );
+    } as any,
+  ) as { data: { spec?: { capacity?: { storage?: string } } }[] | null };
 
   const pvCapacity = useMemo(() => {
     if (persistentVolumesData) {
@@ -67,17 +77,17 @@ export default function ClusterStats({ nodesData }) {
 
   const { data: daemonsetsData } = useGetList()('/apis/apps/v1/daemonsets', {
     pollingInterval: 3200,
-  });
+  } as any) as { data: Record<string, any>[] | null };
   const { data: statefulsetsData } = useGetList()(
     '/apis/apps/v1/statefulsets',
     {
       pollingInterval: 3200,
-    },
-  );
+    } as any,
+  ) as { data: Record<string, any>[] | null };
 
   const { data: servicesData } = useGetList()('/api/v1/services', {
     pollingInterval: 3200,
-  });
+  } as any) as { data: { spec?: { type?: string } }[] | null };
 
   const loadbalancerNumber = useMemo(() => {
     if (servicesData) {
@@ -168,7 +178,7 @@ export default function ClusterStats({ nodesData }) {
                 gpus > 0
                   ? {
                       title: t('cluster-overview.statistics.nvidia-gpus'),
-                      value: gpus,
+                      value: String(gpus),
                     }
                   : null,
               ]}
@@ -277,11 +287,11 @@ export default function ClusterStats({ nodesData }) {
                   title: t(
                     'cluster-overview.statistics.services-loadbalancers',
                   ),
-                  value: loadbalancerNumber,
+                  value: String(loadbalancerNumber),
                 },
                 {
                   title: t('cluster-overview.statistics.services-others'),
-                  value: servicesData?.length - loadbalancerNumber,
+                  value: String(servicesData?.length - loadbalancerNumber),
                 },
               ]}
               resourceUrl="services"
@@ -306,7 +316,7 @@ export default function ClusterStats({ nodesData }) {
                   title: t(
                     'cluster-overview.statistics.persistent-volumes-total-capacity',
                   ),
-                  value: pvCapacity,
+                  value: String(pvCapacity),
                 },
               ]}
             />

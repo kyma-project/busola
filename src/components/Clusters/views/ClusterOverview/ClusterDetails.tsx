@@ -15,6 +15,16 @@ import { CommunityModuleContextProvider } from 'components/Modules/community/pro
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { useGetEnvironmentParameters } from './useGetEnvironmentParameters';
 import { Tokens } from 'shared/components/Tokens';
+import { ActiveClusterState } from 'state/clusterAtom';
+
+type KymaResourcesItem = {
+  status?: string;
+  metadata?: {
+    labels?: {
+      [key: string]: string;
+    };
+  };
+};
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -23,21 +33,27 @@ const GardenerProvider = () => {
   if (!provider) return null;
 
   return (
+    /*@ts-expect-error Type mismatch between js and ts*/
     <DynamicPageComponent.Column title={t('gardener.headers.provider')}>
       <p className="gardener-provider">{provider}</p>
     </DynamicPageComponent.Column>
   );
 };
 
-export default function ClusterDetails({ currentCluster }) {
+export default function ClusterDetails({
+  currentCluster,
+}: {
+  currentCluster: ActiveClusterState;
+}) {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
   const kymaResources = useAtomValue(kymaResourcesAtom);
   const config = currentCluster?.config;
   const kymaResourceLabels = useMemo(
     () =>
-      kymaResources?.items.find((kymaResource) => kymaResource?.status)
-        ?.metadata.labels || kymaResources?.items[0]?.metadata?.labels,
+      kymaResources?.items.find(
+        (kymaResource?: KymaResourcesItem) => kymaResource?.status,
+      )?.metadata.labels || kymaResources?.items[0]?.metadata?.labels,
     [kymaResources],
   );
   const { natGatewayIps, environmentParametersLoading } =
@@ -60,6 +76,7 @@ export default function ClusterDetails({ currentCluster }) {
           content={
             <>
               {!loading && k8sVersion && (
+                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.kubernetes-version')}
                 >
@@ -67,15 +84,18 @@ export default function ClusterDetails({ currentCluster }) {
                 </DynamicPageComponent.Column>
               )}
               {!loading && kymaVersion && (
+                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.kyma-version')}
                 >
                   {kymaVersion}
                 </DynamicPageComponent.Column>
               )}
+              {/*@ts-expect-error Type mismatch between js and ts*/}
               <DynamicPageComponent.Column title={t('clusters.storage.title')}>
                 <ClusterStorageType clusterConfig={config} />
               </DynamicPageComponent.Column>
+              {/*@ts-expect-error Type mismatch between js and ts*/}
               <DynamicPageComponent.Column
                 title={t('clusters.common.api-server-address')}
               >
@@ -85,6 +105,7 @@ export default function ClusterDetails({ currentCluster }) {
               </DynamicPageComponent.Column>
               <GardenerProvider />
               {!!kymaResourceLabels?.['kyma-project.io/global-account-id'] && (
+                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.global-account-id')}
                 >
@@ -92,6 +113,7 @@ export default function ClusterDetails({ currentCluster }) {
                 </DynamicPageComponent.Column>
               )}
               {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
+                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.subaccount-id')}
                 >
@@ -99,6 +121,7 @@ export default function ClusterDetails({ currentCluster }) {
                 </DynamicPageComponent.Column>
               )}
               {!environmentParametersLoading && !!natGatewayIps && (
+                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.nat-gateway-ips')}
                 >
