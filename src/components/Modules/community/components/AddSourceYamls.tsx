@@ -3,12 +3,16 @@ import {
   FlexBox,
   Input,
   Label,
-  MessageBox,
   MessageStrip,
   OptionCustom,
   Text,
   Select,
   Icon,
+  Dialog,
+  Bar,
+  ButtonDomRef,
+  Ui5CustomEvent,
+  DialogDomRef,
 } from '@ui5/webcomponents-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
@@ -35,6 +39,8 @@ import {
   OPERATION_STATE_SOME_FAILED,
   OPERATION_STATE_SUCCEEDED,
 } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { ButtonClickEventDetail } from '@ui5/webcomponents/dist/Button';
+import { PopupBeforeCloseEventDetail } from '@ui5/webcomponents/dist/Popup';
 
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
@@ -173,21 +179,23 @@ export const AddSourceYamls = () => {
     navigate(link);
   };
 
-  const handleClose = (action?: string) => {
-    /* It fires on every action, but we want to show the loader when adding.
-      `1: custom action` - Add
-      `2: custom action` - Cancel
-      undefined - ESC
-    */
-    if (action === '1: custom action') {
-      return;
+  const handleClose = (
+    e:
+      | Ui5CustomEvent<ButtonDomRef, ButtonClickEventDetail>
+      | Ui5CustomEvent<DialogDomRef, PopupBeforeCloseEventDetail>,
+    isCancel?: boolean,
+  ) => {
+    const isEscape = 'escPressed' in e.detail ? e.detail.escPressed : false;
+
+    if (isEscape || isCancel) {
+      setSourceURL(DEFAULT_SOURCE_URL);
+      setResourcesToApply([]);
+      setShowDescription(false);
+      setShowAddSource(false);
+      setAddYamlsLoader(false);
     }
-    setSourceURL(DEFAULT_SOURCE_URL);
-    setResourcesToApply([]);
-    setShowDescription(false);
-    setShowAddSource(false);
-    setAddYamlsLoader(false);
   };
+
   const displayExistingModulesList = (moduleList: any) => (
     <ul className="unordered-list-disc">
       {moduleList?.map((mt: any) => {
@@ -264,38 +272,48 @@ export const AddSourceYamls = () => {
 
       {showAddSource &&
         createPortal(
-          <MessageBox
+          <Dialog
             open={showAddSource}
             className="sourceurl-messagebox"
-            titleText={t('modules.community.source-yaml.add-source-yaml')}
-            onClose={handleClose}
-            actions={[
-              addYamlsLoader ? <Spinner key="add-yamls-loader" /> : null,
-              <Button
-                accessibleName="add-yamls"
-                design="Emphasized"
-                key="add-yamls"
-                disabled={
-                  !!error || resourcesToApply.length === 0 || addYamlsLoader
+            headerText={t('modules.community.source-yaml.add-source-yaml')}
+            onBeforeClose={handleClose}
+            footer={
+              <Bar
+                design="Footer"
+                endContent={
+                  <>
+                    {addYamlsLoader ? <Spinner key="add-yamls-loader" /> : null}
+                    <Button
+                      accessibleName="add-yamls"
+                      design="Emphasized"
+                      key="add-yamls"
+                      disabled={
+                        !!error ||
+                        resourcesToApply.length === 0 ||
+                        addYamlsLoader
+                      }
+                      onClick={async () => {
+                        setAddYamlsLoader(true);
+                        await handleApplySourceYAMLs();
+                      }}
+                    >
+                      {t('common.buttons.add')}
+                    </Button>
+                    <Button
+                      accessibleName="cancel-add-yamls"
+                      design="Transparent"
+                      key="cancel-add-yamls"
+                      onClick={(e) => {
+                        handleClose(e, true);
+                        setShowAddSource(false);
+                      }}
+                    >
+                      {t('common.buttons.cancel')}
+                    </Button>
+                  </>
                 }
-                onClick={async () => {
-                  setAddYamlsLoader(true);
-                  await handleApplySourceYAMLs();
-                }}
-              >
-                {t('common.buttons.add')}
-              </Button>,
-              <Button
-                accessibleName="cancel-add-yamls"
-                design="Transparent"
-                key="cancel-add-yamls"
-                onClick={() => {
-                  setShowAddSource(false);
-                }}
-              >
-                {t('common.buttons.cancel')}
-              </Button>,
-            ]}
+              ></Bar>
+            }
           >
             <div className="sourceurl-content">
               <FlexBox direction={FlexBoxDirection.Column} gap={'0.5rem'}>
@@ -409,7 +427,7 @@ export const AddSourceYamls = () => {
                 )
               )}
             </div>
-          </MessageBox>,
+          </Dialog>,
           document.body,
         )}
     </>

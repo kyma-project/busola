@@ -10,6 +10,10 @@ export default [
     link: './01-41-deploy-access-k3d.md',
   },
   {
+    text: 'Deploy Busola with Your Own Configuration',
+    link: './01-42-configure-busola.md',
+  },
+  {
     text: 'Troubleshooting Guides',
     link: './troubleshooting-guides/README.md',
     collapsed: true,
