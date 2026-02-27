@@ -141,7 +141,7 @@ clusters:
       inMemory: In memory
       localStorage: Local storage
       sessionStorage: Session storage
-    oidc-memory-warning: Memory storage is not compatible with browser-based OIDC login. After the authentication redirect, cluster data stored in memory will be lost. Use session or local storage instead.
+    oidc-memory-warning: Memory storage is not compatible with browser-based OIDC login. After the authentication redirect, cluster data stored in memory is lost. Use session or local storage instead.
     storage-preference: Storage preference
     title: Storage Type
   token: Token
@@ -150,7 +150,7 @@ clusters:
       client-id: Client ID
       client-secret: Client Secret
       exec-command: Command
-      exec-info: Run the command shown above to obtain a token, then paste it in the Token field.
+      exec-info: Run the above command to obtain a token, then paste it in the Token field.
       issuer-url: Issuer URL
       scopes: Scopes
       token: Token
