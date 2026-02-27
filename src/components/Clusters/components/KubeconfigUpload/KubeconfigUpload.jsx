@@ -46,7 +46,6 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
         setResource={(modified) => {
           if (modified) setKubeconfig({ ...modified });
         }}
-        onChange={updateKubeconfig}
         formElementRef={formRef}
         modeSelectorDisabled={
           kubeconfig ? !Object.keys(kubeconfig)?.length : !kubeconfig
