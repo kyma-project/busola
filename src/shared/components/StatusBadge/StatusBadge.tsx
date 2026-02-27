@@ -1,12 +1,12 @@
+import { I18nLike, TFunctionLike } from 'types';
 import { useTranslation } from 'react-i18next';
 import { ObjectStatus } from '@ui5/webcomponents-react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import './StatusBadge.scss';
 import { PopoverBadge } from '../PopoverBadge/PopoverBadge';
 
-const resolveType = (status) => {
+const resolveType = (status: string | any) => {
   if (typeof status !== 'string') {
     console.warn(
       `'autoResolveType' prop requires 'children' prop to be a string.`,
@@ -44,13 +44,22 @@ const resolveType = (status) => {
   }
 };
 
-const translate = (i18n, t, arrayOfVariableNames, fallbackValue) => {
+const translate = (
+  i18n: I18nLike,
+  t: TFunctionLike,
+  arrayOfVariableNames: string | string[],
+  fallbackValue: string,
+): string => {
   return i18n.exists(arrayOfVariableNames)
     ? t(arrayOfVariableNames)
     : fallbackValue;
 };
 
-const prepareTranslationPath = (resourceKind, value, type) => {
+const prepareTranslationPath = (
+  resourceKind: string,
+  value: string,
+  type: string,
+): string => {
   return `${resourceKind.toString().toLowerCase()}.${type}.${value
     .toString()
     .toLowerCase()
@@ -64,19 +73,30 @@ const TYPE_FALLBACK = new Map([
   ['info', 'Information'],
 ]);
 
+type StatusBadgeProps = {
+  additionalContent?: React.ReactNode;
+  tooltipContent?: React.ReactNode; // deprecated
+  type: 'Information' | 'Positive' | 'Negative' | 'Critical' | 'None';
+  resourceKind: string;
+  children: string | any;
+  autoResolveType: boolean;
+  noTooltip: boolean;
+  className?: string;
+};
+
 export const StatusBadge = ({
   additionalContent,
   tooltipContent, // deprecated
-  type,
+  type = 'Information',
   resourceKind = 'common',
   children: value = '',
   autoResolveType = false,
   noTooltip = false,
   className,
-}) => {
+}: StatusBadgeProps) => {
   const { t, i18n } = useTranslation();
-  if (autoResolveType) type = resolveType(value);
-  else type = TYPE_FALLBACK.get(type) || type;
+  if (autoResolveType) type = resolveType(value) as StatusBadgeProps['type'];
+  else type = (TYPE_FALLBACK.get(type) || type) as StatusBadgeProps['type'];
 
   const i18nFullVariableName = prepareTranslationPath(
     resourceKind,
@@ -123,12 +143,9 @@ export const StatusBadge = ({
   );
 
   if (additionalContent) {
-    if (badgeContent === content) content = additionalContent;
-    else {
-      // Remove the dot at the end of the sentence if we add a colon afterwards
-      if (content?.endsWith('.')) content = content?.slice(0, -1);
-      content = `${content}: ${additionalContent}`;
-    }
+    // Remove the dot at the end of the sentence if we add a colon afterwards
+    if (content?.endsWith('.')) content = content?.slice(0, -1);
+    content = `${content}: ${additionalContent}`;
   }
 
   // TODO: tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
@@ -163,20 +180,4 @@ export const StatusBadge = ({
       </PopoverBadge>
     );
   }
-};
-
-StatusBadge.propTypes = {
-  additionalContent: PropTypes.node,
-  tooltipContent: PropTypes.node,
-  type: PropTypes.oneOf([
-    'Information',
-    'Positive',
-    'Negative',
-    'Critical',
-    'None',
-  ]),
-  autoResolveType: PropTypes.bool,
-  noTooltip: PropTypes.bool,
-  resourceKind: PropTypes.string,
-  className: PropTypes.string,
 };
