@@ -6,6 +6,7 @@ import {
   findInitialValues,
 } from '../views/EditCluster/EditCluster';
 import { getUserIndex } from '../shared';
+import { isOIDCExec } from './oidc-params';
 import {
   Kubeconfig,
   KubeconfigNonOIDCAuthToken,
@@ -13,11 +14,25 @@ import {
 } from 'types';
 import { Tokens } from 'shared/components/Tokens';
 
-const TokenData = ({ token }: { token: string }) => {
+const TokenData = ({
+  token,
+  execCommand,
+}: {
+  token: string;
+  execCommand?: string;
+}) => {
   const { t } = useTranslation();
 
   return (
     <>
+      {execCommand && (
+        <>
+          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
+            {t('clusters.wizard.auth.exec-command')}:
+          </p>
+          <div>{execCommand}</div>
+        </>
+      )}
       <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
         {`${t('clusters.token')}:`}
       </p>
@@ -92,11 +107,9 @@ export function ClusterPreview({
 }: ClusterPreviewProps) {
   const { t } = useTranslation();
   const userIndex = getUserIndex(kubeconfig);
-  const authenticationType = (
-    kubeconfig?.users?.[userIndex]?.user as KubeconfigOIDCAuth
-  )?.exec
-    ? 'oidc'
-    : 'token';
+  const exec = (kubeconfig?.users?.[userIndex]?.user as KubeconfigOIDCAuth)
+    ?.exec;
+  const authenticationType = exec && isOIDCExec(exec) ? 'oidc' : 'token';
 
   const issuerUrl = findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex);
   const clientId = findInitialValue(kubeconfig, 'oidc-client-id', userIndex);
@@ -149,7 +162,7 @@ export function ClusterPreview({
         <div className="cluster-preview__content sap-margin-top-small sap-margin-bottom-tiny">
           <div className="cluster-preview__auth">
             {authenticationType === 'token' ? (
-              <TokenData token={token} />
+              <TokenData token={token} execCommand={exec?.command} />
             ) : (
               <OidcData
                 issuerUrl={issuerUrl}

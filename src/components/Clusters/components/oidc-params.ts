@@ -1,5 +1,9 @@
 import { KubeconfigOIDCAuth, LoginCommand } from 'types';
 
+export function isOIDCExec(exec: { args?: string[] } | undefined): boolean {
+  return !!exec?.args?.some((arg) => arg?.startsWith('--oidc-issuer-url='));
+}
+
 const OIDC_PARAM_NAMES = new Map([
   ['--oidc-issuer-url', 'issuerUrl'],
   ['--oidc-client-id', 'clientId'],

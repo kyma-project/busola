@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { MessageStrip } from '@ui5/webcomponents-react';
 import { useSetAtom } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -14,13 +15,14 @@ import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluste
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { authDataAtom } from 'state/authDataAtom';
 
+import { isOIDCExec } from 'components/Clusters/components/oidc-params';
 import { addCluster, getContext, deleteCluster, getUser } from '../../shared';
 import { getUserIndex } from '../../shared';
 import { ContextButtons } from 'components/Clusters/components/ContextChooser/ContextChooser';
 
 export const findInitialValues = (kubeconfig, id, userIndex = 0) => {
   const elementsWithId =
-    kubeconfig?.users?.[userIndex]?.user?.exec?.args.filter((el) =>
+    kubeconfig?.users?.[userIndex]?.user?.exec?.args?.filter((el) =>
       el?.includes(id),
     ) || [];
   const regex = new RegExp(`${id}=(?<value>.*)`);
@@ -62,8 +64,12 @@ export const ClusterDataForm = ({
 }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(kubeconfig);
+  const getAuthType = (kc, idx) => {
+    const exec = kc?.users?.[idx]?.user?.exec;
+    return exec && isOIDCExec(exec) ? 'oidc' : 'token';
+  };
   const [authenticationType, setAuthenticationType] = useState(
-    kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
+    getAuthType(kubeconfig, userIndex),
   );
   const hasOneContext = kubeconfig?.contexts?.length === 1;
   const [chosenContext, setChosenContext] = useState(
@@ -79,23 +85,39 @@ export const ClusterDataForm = ({
   const scopes = findInitialValues(kubeconfig, 'oidc-extra-scope', userIndex);
 
   useEffect(() => {
-    setAuthenticationType(
-      kubeconfig?.users?.[userIndex]?.user?.exec ? 'oidc' : 'token',
-    );
+    setAuthenticationType(getAuthType(kubeconfig, userIndex));
   }, [kubeconfig, userIndex]);
 
+  const execCommand = kubeconfig?.users?.[userIndex]?.user?.exec?.command;
+  const isGenericExec =
+    !!kubeconfig?.users?.[userIndex]?.user?.exec &&
+    !isOIDCExec(kubeconfig?.users?.[userIndex]?.user?.exec);
+
   const tokenFields = (
-    <ResourceForm.FormField
-      label={t('clusters.token')}
-      input={Inputs.Text}
-      required
-      onChange={onChange}
-      value={kubeconfig?.users?.[userIndex]?.user?.token}
-      setValue={(val) => {
-        jp.value(kubeconfig, `$.users[${userIndex}].user.token`, val);
-        setResource({ ...kubeconfig });
-      }}
-    />
+    <>
+      {isGenericExec && execCommand && (
+        <ResourceForm.FormField
+          label={t('clusters.wizard.auth.exec-command')}
+          input={Inputs.Text}
+          value={execCommand}
+          readOnly
+        />
+      )}
+      <ResourceForm.FormField
+        label={t('clusters.token')}
+        input={Inputs.Text}
+        required
+        onChange={onChange}
+        inputInfo={
+          isGenericExec ? t('clusters.wizard.auth.exec-info') : undefined
+        }
+        value={kubeconfig?.users?.[userIndex]?.user?.token}
+        setValue={(val) => {
+          jp.value(kubeconfig, `$.users[${userIndex}].user.token`, val);
+          setResource({ ...kubeconfig });
+        }}
+      />
+    </>
   );
 
   const createOIDC = (type = '', val = '') => {
@@ -238,7 +260,7 @@ export const ClusterDataForm = ({
             if (type === 'token') {
               delete kubeconfig?.users?.[userIndex]?.user?.exec;
               jp.value(kubeconfig, `$.users[${userIndex}].user.token`, null);
-            } else {
+            } else if (type === 'oidc') {
               delete kubeconfig?.users?.[userIndex]?.user?.token;
               createOIDC();
             }
@@ -317,6 +339,16 @@ function EditClusterComponent({
           setResource({ ...resource });
         }}
       />
+      {isOIDCExec(getUser(kubeconfig)?.exec) &&
+        resource.config?.storage === 'inMemory' && (
+          <MessageStrip
+            design="Critical"
+            hideCloseButton
+            className="sap-margin-top-small"
+          >
+            {t('clusters.storage.oidc-memory-warning')}
+          </MessageStrip>
+        )}
       <ResourceForm.FormField
         className="sap-margin-top-small"
         label={t('common.headers.description')}

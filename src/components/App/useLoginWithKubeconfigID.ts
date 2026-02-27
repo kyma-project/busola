@@ -244,8 +244,9 @@ export function useLoginWithKubeconfigID() {
     const dependenciesReady = !!configuration?.features && !!clusters;
     const flowStarted = handledKubeconfigId !== 'not started';
     const kubeconfigId = search.get('kubeconfigID');
+    const flowFinished = handledKubeconfigId == 'done';
 
-    if (kubeconfigId && flowStarted) {
+    if (kubeconfigId && flowStarted && !flowFinished) {
       if (kubeconfigId !== lastProcessedKubeconfigIdRef.current) {
         setCurrentCluster(undefined);
         setHandledKubeconfigId('not started');

@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip, Switch, Title } from '@ui5/webcomponents-react';
 import jp from 'jsonpath';
-import { createLoginCommand, tryParseOIDCparams } from './oidc-params';
+import {
+  createLoginCommand,
+  isOIDCExec,
+  tryParseOIDCparams,
+} from './oidc-params';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
@@ -70,23 +74,43 @@ const OIDCform = ({ resource, ...props }) => {
   );
 };
 
-const TokenForm = ({ resource, ...props }) => {
+const TokenForm = ({ resource, setResource, onChange, ...props }) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
+  const exec = resource?.users?.[userIndex]?.user?.exec;
+  const isGenericExec = !!exec && !isOIDCExec(exec);
   const [token, setToken] = useState(resource?.users?.[userIndex]?.user?.token);
 
   return (
-    <ResourceForm.Wrapper resource={resource} {...props}>
+    <ResourceForm.Wrapper
+      resource={resource}
+      setResource={setResource}
+      {...props}
+    >
+      {isGenericExec && exec?.command && (
+        <ResourceForm.FormField
+          label={t('clusters.wizard.auth.exec-command')}
+          input={Inputs.Text}
+          value={exec.command}
+          readOnly
+        />
+      )}
       <ResourceForm.FormField
         required
         value={token}
         setValue={(val) => {
           setToken(val);
           jp.value(resource, `$.users[${userIndex}].user.token`, val);
+          setResource?.({ ...resource });
+          onChange?.();
         }}
         label={t('clusters.wizard.auth.token')}
         input={Inputs.Text}
-        inputInfo={t('clusters.wizard.token-info')}
+        inputInfo={
+          isGenericExec
+            ? t('clusters.wizard.auth.exec-info')
+            : t('clusters.wizard.token-info')
+        }
       />
     </ResourceForm.Wrapper>
   );
@@ -102,7 +126,10 @@ export function AuthForm({
 }) {
   const { t } = useTranslation();
 
-  const [useOidc, setUseOidc] = useState(!!getUser(resource)?.exec);
+  const userExec = getUser(resource)?.exec;
+  const isGenericExec = !!userExec && !isOIDCExec(userExec);
+
+  const [useOidc, setUseOidc] = useState(!isGenericExec && !!userExec);
 
   useEffect(() => {
     revalidate();
@@ -120,6 +147,11 @@ export function AuthForm({
     setUseOidc(!useOidc);
   };
 
+  const incompleteContext =
+    resource['current-context'] === '-all-'
+      ? resource.contexts[0]?.name
+      : resource['current-context'];
+
   return (
     <ResourceForm.Wrapper
       formElementRef={formElementRef}
@@ -134,30 +166,29 @@ export function AuthForm({
           hideCloseButton
           className="sap-margin-y-small"
         >
-          {t('clusters.wizard.incomplete', {
-            context:
-              resource['current-context'] === '-all-'
-                ? resource.contexts[0]?.name
-                : resource['current-context'],
-          })}
+          {t('clusters.wizard.incomplete', { context: incompleteContext })}
         </MessageStrip>
         {!useOidc && (
           <TokenForm onChange={checkRequiredInputs} resource={resource} />
         )}
-        <ResourceForm.FormField
-          label={t('clusters.wizard.auth.using-oidc')}
-          input={(props) => (
-            <Switch
-              {...props}
-              className="sap-margin-top-tiny"
-              checked={useOidc}
-              onChange={switchAuthVariant}
+        {!isGenericExec && (
+          <>
+            <ResourceForm.FormField
+              label={t('clusters.wizard.auth.using-oidc')}
+              input={(props) => (
+                <Switch
+                  {...props}
+                  className="sap-margin-top-tiny"
+                  checked={useOidc}
+                  onChange={switchAuthVariant}
+                />
+              )}
+              className="oidc-switch"
             />
-          )}
-          className="oidc-switch"
-        />
-        {useOidc && (
-          <OIDCform onChange={checkRequiredInputs} resource={resource} />
+            {useOidc && (
+              <OIDCform onChange={checkRequiredInputs} resource={resource} />
+            )}
+          </>
         )}
       </div>
     </ResourceForm.Wrapper>
