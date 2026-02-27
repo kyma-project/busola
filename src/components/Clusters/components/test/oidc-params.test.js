@@ -1,4 +1,41 @@
-import { parseOIDCparams } from '../oidc-params';
+import { parseOIDCparams, isOIDCExec } from '../oidc-params';
+
+describe('isOIDCExec', () => {
+  it('returns true when exec args contain --oidc-issuer-url', () => {
+    const exec = {
+      command: 'kubectl',
+      args: [
+        'oidc-login',
+        'get-token',
+        '--oidc-issuer-url=https://example.com',
+        '--oidc-client-id=myid',
+      ],
+    };
+    expect(isOIDCExec(exec)).toBe(true);
+  });
+
+  it('returns false for a generic exec plugin without OIDC args', () => {
+    const exec = {
+      command: 'sh',
+      args: ['mock-oidc.sh'],
+    };
+    expect(isOIDCExec(exec)).toBe(false);
+  });
+
+  it('returns false when exec has empty args array', () => {
+    const exec = { command: 'my-plugin', args: [] };
+    expect(isOIDCExec(exec)).toBe(false);
+  });
+
+  it('returns false when exec has no args property', () => {
+    const exec = { command: 'my-plugin' };
+    expect(isOIDCExec(exec)).toBe(false);
+  });
+
+  it('returns false for undefined exec', () => {
+    expect(isOIDCExec(undefined)).toBe(false);
+  });
+});
 
 describe('parseOIDCparams', () => {
   it('Throw for empty data', () => {

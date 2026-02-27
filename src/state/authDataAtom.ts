@@ -1,4 +1,7 @@
-import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
+import {
+  parseOIDCparams,
+  isOIDCExec,
+} from 'components/Clusters/components/oidc-params';
 import { User, UserManager } from 'oidc-client-ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -163,8 +166,20 @@ export function useAuthHandler() {
 
       const userCredentials = cluster.currentContext?.user?.user;
 
+      const genericExec =
+        !hasNonOidcAuth(userCredentials) &&
+        !isOIDCExec((userCredentials as KubeconfigOIDCAuth)?.exec);
+
       if (hasNonOidcAuth(userCredentials)) {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
+        setIsLoading(false);
+      } else if (genericExec) {
+        // Generic exec plugin — cannot be run in the browser and no token was
+        // provided. Redirect back to the cluster list so the user can supply one.
+        console.warn(
+          'Cluster uses a generic exec plugin with no token. Please edit the cluster and provide a token.',
+        );
+        navigate('/clusters');
         setIsLoading(false);
       } else {
         const onAfterLogin = () => {
