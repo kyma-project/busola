@@ -71,13 +71,15 @@ export function tryParseOIDCparams(kubeconfigUser: KubeconfigOIDCAuth) {
   }
 }
 
+export type OidcConfig = {
+  issuerUrl: string;
+  clientId: string;
+  clientSecret?: string;
+  scopes: string[];
+};
+
 export function createLoginCommand(
-  oidcConfig: {
-    issuerUrl: string;
-    clientId: string;
-    clientSecret?: string;
-    scopes: string[];
-  },
+  oidcConfig: OidcConfig,
   execRest: object,
 ): LoginCommand {
   return {

@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageStrip, Switch, Title } from '@ui5/webcomponents-react';
 import jp from 'jsonpath';
 import {
   createLoginCommand,
   isOIDCExec,
+  OidcConfig,
   tryParseOIDCparams,
 } from './oidc-params';
 
@@ -13,17 +14,31 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { getUser, getUserIndex } from '../shared';
 
 import { TextArrayInput } from 'shared/ResourceForm/fields';
+import {
+  Kubeconfig,
+  KubeconfigNonOIDCAuthToken,
+  KubeconfigOIDCAuth,
+  ValidKubeconfig,
+} from 'types';
+import { ResourceFormWrapperProps } from 'shared/ResourceForm/components/Wrapper';
+import { FormFieldProps } from 'shared/ResourceForm/components/FormField';
 
-const OIDCform = ({ resource, ...props }) => {
+type OIDCformProps = {
+  resource: Kubeconfig;
+} & Partial<ResourceFormWrapperProps & FormFieldProps>;
+
+const OIDCform = ({ resource, ...props }: OIDCformProps) => {
   const { t } = useTranslation();
 
-  const [auth, setAuth] = useState(tryParseOIDCparams(getUser(resource)) || {});
+  const [auth, setAuth] = useState(
+    tryParseOIDCparams(getUser(resource) as KubeconfigOIDCAuth) || {},
+  );
   const userIndex = getUserIndex(resource);
   const [prevResource, setPrevResource] = useState(resource);
 
   if (resource !== prevResource) {
     setPrevResource(resource);
-    setAuth(tryParseOIDCparams(getUser(resource)) || {});
+    setAuth(tryParseOIDCparams(getUser(resource) as KubeconfigOIDCAuth) || {});
   }
 
   return (
@@ -33,7 +48,10 @@ const OIDCform = ({ resource, ...props }) => {
         jp.value(
           resource,
           `$.users[${userIndex}].user.exec`,
-          createLoginCommand(auth, resource?.users?.[userIndex]?.user?.exec),
+          createLoginCommand(
+            auth as OidcConfig,
+            (resource?.users?.[userIndex]?.user as KubeconfigOIDCAuth)?.exec,
+          ),
         );
         setAuth(auth);
       }}
@@ -74,12 +92,25 @@ const OIDCform = ({ resource, ...props }) => {
   );
 };
 
-const TokenForm = ({ resource, setResource, onChange, ...props }) => {
+type TokenFormProps = {
+  resource: Kubeconfig;
+  setResource?: (resource: Kubeconfig) => void;
+  onChange?: () => void;
+} & Partial<ResourceFormWrapperProps>;
+
+const TokenForm = ({
+  resource,
+  setResource,
+  onChange,
+  ...props
+}: TokenFormProps) => {
   const { t } = useTranslation();
   const userIndex = getUserIndex(resource);
-  const exec = resource?.users?.[userIndex]?.user?.exec;
+  const exec = (resource?.users?.[userIndex]?.user as KubeconfigOIDCAuth)?.exec;
   const isGenericExec = !!exec && !isOIDCExec(exec);
-  const [token, setToken] = useState(resource?.users?.[userIndex]?.user?.token);
+  const [token, setToken] = useState(
+    (resource?.users?.[userIndex]?.user as KubeconfigNonOIDCAuthToken)?.token,
+  );
 
   return (
     <ResourceForm.Wrapper
@@ -98,10 +129,10 @@ const TokenForm = ({ resource, setResource, onChange, ...props }) => {
       <ResourceForm.FormField
         required
         value={token}
-        setValue={(val) => {
+        setValue={(val: string) => {
           setToken(val);
           jp.value(resource, `$.users[${userIndex}].user.token`, val);
-          setResource?.({ ...resource });
+          setResource?.({ ...(resource as ValidKubeconfig) });
           onChange?.();
         }}
         label={t('clusters.wizard.auth.token')}
@@ -116,24 +147,32 @@ const TokenForm = ({ resource, setResource, onChange, ...props }) => {
   );
 };
 
+type AuthFormProps = {
+  formElementRef?: RefObject<HTMLFormElement>;
+  resource?: Kubeconfig;
+  setResource?: (resource: Record<string, any>) => void;
+  revalidate?: () => void;
+  checkRequiredInputs?: () => void;
+} & Record<string, any>;
+
 export function AuthForm({
-  formElementRef = null,
-  resource = undefined,
-  setResource = () => {},
-  revalidate = () => {},
-  checkRequiredInputs = () => {},
+  formElementRef,
+  resource,
+  setResource,
+  revalidate,
+  checkRequiredInputs,
   ...props
-}) {
+}: AuthFormProps) {
   const { t } = useTranslation();
 
-  const userExec = getUser(resource)?.exec;
+  const userExec = (getUser(resource ?? {}) as KubeconfigOIDCAuth)?.exec;
   const isGenericExec = !!userExec && !isOIDCExec(userExec);
 
   const [useOidc, setUseOidc] = useState(!isGenericExec && !!userExec);
 
   useEffect(() => {
-    revalidate();
-    checkRequiredInputs();
+    revalidate?.();
+    checkRequiredInputs?.();
   }, [useOidc, revalidate, checkRequiredInputs]);
 
   const userIndex = getUserIndex(resource);
@@ -148,15 +187,15 @@ export function AuthForm({
   };
 
   const incompleteContext =
-    resource['current-context'] === '-all-'
-      ? resource.contexts[0]?.name
-      : resource['current-context'];
+    resource?.['current-context'] === '-all-'
+      ? resource?.contexts?.[0]?.name
+      : resource?.['current-context'];
 
   return (
     <ResourceForm.Wrapper
       formElementRef={formElementRef}
       resource={resource}
-      setResource={setResource}
+      setResource={setResource as any}
       {...props}
     >
       <div className="add-cluster__content-container">
@@ -169,7 +208,10 @@ export function AuthForm({
           {t('clusters.wizard.incomplete', { context: incompleteContext })}
         </MessageStrip>
         {!useOidc && (
-          <TokenForm onChange={checkRequiredInputs} resource={resource} />
+          <TokenForm
+            onChange={checkRequiredInputs}
+            resource={resource as ValidKubeconfig}
+          />
         )}
         {!isGenericExec && (
           <>
@@ -186,7 +228,10 @@ export function AuthForm({
               className="oidc-switch"
             />
             {useOidc && (
-              <OIDCform onChange={checkRequiredInputs} resource={resource} />
+              <OIDCform
+                onChange={checkRequiredInputs}
+                resource={resource as ValidKubeconfig}
+              />
             )}
           </>
         )}
