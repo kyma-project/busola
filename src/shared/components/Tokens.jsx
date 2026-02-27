@@ -2,7 +2,7 @@ import { Tag } from '@ui5/webcomponents-react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 const Tokens = ({ tokens }) => (
-  <>
+  <div>
     {tokens?.length
       ? tokens.map((scope) => (
           <Tag
@@ -16,7 +16,7 @@ const Tokens = ({ tokens }) => (
           </Tag>
         ))
       : EMPTY_TEXT_PLACEHOLDER}
-  </>
+  </div>
 );
 
 export { Tokens };
