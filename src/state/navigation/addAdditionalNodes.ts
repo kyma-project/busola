@@ -18,6 +18,7 @@ export const addAdditionalNodes = (
   navNodes: NavNode[],
   scope: Scope,
   configFeatures: ConfigFeatureList,
+  isKymaResources: boolean,
 ) => {
   const extNavList = [...navNodes];
 
@@ -35,13 +36,15 @@ export const addAdditionalNodes = (
     if (scope === 'cluster') {
       addResource(extensionsNavNode, extNavList.length, extNavList);
     }
-    addResource(
-      scope === 'cluster'
-        ? kymaModulesNavNode
-        : { ...kymaModulesNavNode, namespaced: true },
-      extNavList.length,
-      extNavList,
-    );
+    if (configFeatures.COMMUNITY_MODULES?.isEnabled || isKymaResources) {
+      addResource(
+        scope === 'cluster'
+          ? kymaModulesNavNode
+          : { ...kymaModulesNavNode, namespaced: true },
+        extNavList.length,
+        extNavList,
+      );
+    }
   }
 
   const crdIndex = findResourceIndex(crd, navNodes) + 1;

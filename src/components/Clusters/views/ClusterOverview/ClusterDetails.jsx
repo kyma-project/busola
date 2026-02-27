@@ -15,6 +15,8 @@ import { CommunityModuleContextProvider } from 'components/Modules/community/pro
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { useGetEnvironmentParameters } from './useGetEnvironmentParameters';
 import { Tokens } from 'shared/components/Tokens';
+import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames } from 'state/types';
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
@@ -42,6 +44,9 @@ export default function ClusterDetails({ currentCluster }) {
   );
   const { natGatewayIps, environmentParametersLoading } =
     useGetEnvironmentParameters();
+  const { isEnabled: isCommunityModulesEnabled } = useFeature(
+    configFeaturesNames.COMMUNITY_MODULES,
+  );
 
   return (
     <section aria-labelledby="cluster-details-heading">
@@ -108,11 +113,13 @@ export default function ClusterDetails({ currentCluster }) {
             </>
           }
         />
-        <ModuleTemplatesContextProvider>
-          <CommunityModuleContextProvider>
-            <ClusterModulesCard />
-          </CommunityModuleContextProvider>
-        </ModuleTemplatesContextProvider>
+        {(kymaResources || isCommunityModulesEnabled) && (
+          <ModuleTemplatesContextProvider>
+            <CommunityModuleContextProvider>
+              <ClusterModulesCard />
+            </CommunityModuleContextProvider>
+          </ModuleTemplatesContextProvider>
+        )}
       </div>
     </section>
   );
