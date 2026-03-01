@@ -11,6 +11,8 @@ import { clusterAtom } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
 import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
 import { isEqual } from 'lodash';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useTranslation } from 'react-i18next';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -37,7 +39,7 @@ type handleLoginProps = {
   userCredentials: KubeconfigOIDCAuth;
   setAuth: (_auth: AuthDataState) => void;
   onAfterLogin: () => void;
-  onError: () => void;
+  onError: (error: Error) => void;
 };
 
 function getToken(user: User | null, useAccessToken: boolean): string {
@@ -97,7 +99,7 @@ async function handleLogin({
     userManager.events.addSilentRenewError((e) => {
       console.warn('silent renew failed', e);
       setAuth(null);
-      onError();
+      onError(e);
     });
   };
 
@@ -108,11 +110,17 @@ async function handleLogin({
   ) => {
     document.addEventListener('visibilitychange', async () => {
       if (document.visibilityState === 'visible') {
-        if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
-          user = await userManager.signinSilent();
-          setAuth({
-            token: getToken(user, useAccessToken),
-          });
+        if (!!user?.expired || (user?.expires_in && user?.expires_in <= 5)) {
+          try {
+            user = await userManager.signinSilent();
+            setAuth({
+              token: getToken(user, useAccessToken),
+            });
+          } catch (e) {
+            console.warn('Visibility silent renew failed: ', e);
+            setAuth(null);
+            onError(e instanceof Error ? e : new Error(String(e)));
+          }
         }
       }
     });
@@ -150,6 +158,8 @@ async function handleLogin({
 }
 
 export function useAuthHandler() {
+  const { t } = useTranslation();
+  const notification = useNotification();
   const cluster = useAtomValue(clusterAtom);
   const setAuth = useSetAtom(authDataAtom);
   const navigate = useNavigate();
@@ -203,9 +213,18 @@ export function useAuthHandler() {
           }
         };
 
-        const onError = () => {
+        const onError = (error?: Error) => {
           navigate('/clusters');
           setIsLoading(false);
+
+          console.warn('Silent token renew failed:', error);
+
+          const errorMessage =
+            error?.message || t('common.errors.session-expired');
+
+          notification.notifyError({
+            content: `${t('common.errors.session-not-renewed')} ${errorMessage}`,
+          });
         };
 
         handleLogin({
