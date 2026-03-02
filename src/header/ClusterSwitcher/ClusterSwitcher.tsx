@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -30,11 +30,15 @@ export function ClusterSwitcher() {
 
   const isOnClustersPage = location.pathname === '/clusters';
 
-  const inactiveClusterNames = Object.keys(clusters || {}).filter(
-    (name) => name !== cluster?.name,
+  const inactiveClusterNames = useMemo(
+    () => Object.keys(clusters || {}).filter((name) => name !== cluster?.name),
+    [clusters, cluster],
   );
 
-  const title = !isOnClustersPage ? cluster?.contextName || cluster?.name : '';
+  const title = useMemo(
+    () => (!isOnClustersPage ? cluster?.contextName || cluster?.name : ''),
+    [isOnClustersPage, cluster],
+  );
 
   if (!title) {
     return null;

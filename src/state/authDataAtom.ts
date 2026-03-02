@@ -1,4 +1,7 @@
-import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
+import {
+  parseOIDCparams,
+  isOIDCExec,
+} from 'components/Clusters/components/oidc-params';
 import { User, UserManager } from 'oidc-client-ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -8,6 +11,8 @@ import { clusterAtom } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
 import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
 import { isEqual } from 'lodash';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useTranslation } from 'react-i18next';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -34,7 +39,7 @@ type handleLoginProps = {
   userCredentials: KubeconfigOIDCAuth;
   setAuth: (_auth: AuthDataState) => void;
   onAfterLogin: () => void;
-  onError: () => void;
+  onError: (error: Error) => void;
 };
 
 function getToken(user: User | null, useAccessToken: boolean): string {
@@ -94,7 +99,7 @@ async function handleLogin({
     userManager.events.addSilentRenewError((e) => {
       console.warn('silent renew failed', e);
       setAuth(null);
-      onError();
+      onError(e);
     });
   };
 
@@ -105,11 +110,17 @@ async function handleLogin({
   ) => {
     document.addEventListener('visibilitychange', async () => {
       if (document.visibilityState === 'visible') {
-        if (!!user?.expired || (user?.expires_in && user?.expires_in <= 2)) {
-          user = await userManager.signinSilent();
-          setAuth({
-            token: getToken(user, useAccessToken),
-          });
+        if (!!user?.expired || (user?.expires_in && user?.expires_in <= 5)) {
+          try {
+            user = await userManager.signinSilent();
+            setAuth({
+              token: getToken(user, useAccessToken),
+            });
+          } catch (e) {
+            console.warn('Visibility silent renew failed: ', e);
+            setAuth(null);
+            onError(e instanceof Error ? e : new Error(String(e)));
+          }
         }
       }
     });
@@ -147,6 +158,8 @@ async function handleLogin({
 }
 
 export function useAuthHandler() {
+  const { t } = useTranslation();
+  const notification = useNotification();
   const cluster = useAtomValue(clusterAtom);
   const setAuth = useSetAtom(authDataAtom);
   const navigate = useNavigate();
@@ -163,14 +176,31 @@ export function useAuthHandler() {
 
       const userCredentials = cluster.currentContext?.user?.user;
 
+      const genericExec =
+        !hasNonOidcAuth(userCredentials) &&
+        !isOIDCExec((userCredentials as KubeconfigOIDCAuth)?.exec);
+
       if (hasNonOidcAuth(userCredentials)) {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
+        setIsLoading(false);
+      } else if (genericExec) {
+        // Generic exec plugin — cannot be run in the browser and no token was
+        // provided. Redirect back to the cluster list so the user can supply one.
+        console.warn(
+          'Cluster uses a generic exec plugin with no token. Please edit the cluster and provide a token.',
+        );
+        navigate('/clusters');
         setIsLoading(false);
       } else {
         const onAfterLogin = () => {
           setIsLoading(false);
 
-          if (!getPreviousPath() || getPreviousPath() === '/clusters') {
+          // Only auto-navigate after an OIDC redirect (which always lands on '/').
+          const isOidcCallbackPath = window.location.pathname === '/';
+          if (
+            isOidcCallbackPath &&
+            (!getPreviousPath() || getPreviousPath() === '/clusters')
+          ) {
             if (cluster.currentContext.namespace) {
               navigate(
                 `/cluster/${encodeURIComponent(cluster.name)}/namespaces/${
@@ -183,9 +213,18 @@ export function useAuthHandler() {
           }
         };
 
-        const onError = () => {
+        const onError = (error?: Error) => {
           navigate('/clusters');
           setIsLoading(false);
+
+          console.warn('Silent token renew failed:', error);
+
+          const errorMessage =
+            error?.message || t('common.errors.session-expired');
+
+          notification.notifyError({
+            content: `${t('common.errors.session-not-renewed')} ${errorMessage}`,
+          });
         };
 
         handleLogin({

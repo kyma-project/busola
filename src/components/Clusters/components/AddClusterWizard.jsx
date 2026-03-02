@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { Title, Wizard, WizardStep } from '@ui5/webcomponents-react';
+import {
+  MessageStrip,
+  Title,
+  Wizard,
+  WizardStep,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 
@@ -14,6 +19,7 @@ import { isFormOpenAtom } from 'state/formOpenAtom';
 import { checkAuthRequiredInputs } from '../helper';
 
 import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
+import { isOIDCExec } from './oidc-params';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
@@ -237,6 +243,16 @@ export function AddClusterWizard({ config = {} }) {
               setStorage={setStorage}
               hideLabel
             />
+            {isOIDCExec(getUser(kubeconfig)?.exec) &&
+              storage === 'inMemory' && (
+                <MessageStrip
+                  design="Critical"
+                  hideCloseButton
+                  className="sap-margin-top-small"
+                >
+                  {t('clusters.storage.oidc-memory-warning')}
+                </MessageStrip>
+              )}
           </div>
         </WizardStep>
         <WizardStep
