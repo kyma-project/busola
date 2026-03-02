@@ -1,4 +1,4 @@
-import { ComponentProps, useState } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
 import { Tokens } from 'shared/components/Tokens';
@@ -17,7 +17,7 @@ import './GroupingListPage.scss';
 
 type GroupingListPageProps = {
   title: string;
-  description?: string;
+  description: ReactNode;
   filter?: (entry: any) => boolean;
   resourceListProps?: Partial<ComponentProps<typeof ResourceListRenderer>>;
   showCrdScope?: boolean;
@@ -122,9 +122,9 @@ export function GroupingListPage({
 
   return (
     <>
-      {/*@ts-expect-error Type mismatch between js and ts*/}
       <DynamicPageComponent
         title={title}
+        /*@ts-expect-error Type mismatch between js and ts*/
         description={description}
         actions={
           <SearchInput

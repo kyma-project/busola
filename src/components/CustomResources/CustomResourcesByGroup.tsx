@@ -16,7 +16,6 @@ export default function CustomResourcesByGroup() {
   );
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <GroupingListPage
       title={t('custom-resources.title')}
       description={description}

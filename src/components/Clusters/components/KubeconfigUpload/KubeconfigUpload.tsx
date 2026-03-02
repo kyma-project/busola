@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
 import { ClusterDataForm } from 'components/Clusters/views/EditCluster/EditCluster';
+import { Kubeconfig, ValidKubeconfig } from 'types';
 
 import './KubeconfigUpload.scss';
-import { Kubeconfig } from 'types';
 
 type KubeconfigUploadProps = {
   kubeconfig?: Kubeconfig;
   setKubeconfig: (config?: Kubeconfig) => void;
-  formRef: RefObject<HTMLDivElement>;
+  formRef: RefObject<HTMLElement>;
 };
 
 export function KubeconfigUpload({
@@ -53,9 +53,8 @@ export function KubeconfigUpload({
           }}
         />
       </div>
-      {/*@ts-expect-error Type mismatch between js and ts*/}
       <ClusterDataForm
-        kubeconfig={kubeconfig}
+        kubeconfig={kubeconfig as ValidKubeconfig}
         setResource={(modified: Kubeconfig) => {
           if (modified) setKubeconfig({ ...modified });
         }}

@@ -65,10 +65,10 @@ export const findInitialValue = (
 type ClusterDataFormProps = {
   kubeconfig: Kubeconfig;
   setResource: (resource: Kubeconfig) => void;
-  onChange: () => void;
-  onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
+  onChange: (resource?: any) => void;
+  onSubmit?: (event: FormEvent<HTMLElement | HTMLFormElement>) => void;
   resourceUrl?: string;
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLElement | HTMLFormElement>;
   className?: string;
   modeSelectorDisabled?: boolean;
   initialMode?: 'MODE_FORM' | 'MODE_YAML';
@@ -223,7 +223,7 @@ export const ClusterDataForm = ({
       setResource={setResource}
       initialResource={kubeconfig}
       onChange={onChange}
-      formElementRef={formElementRef}
+      formElementRef={formElementRef as RefObject<HTMLFormElement>}
       createUrl={resourceUrl}
       onSubmit={onSubmit}
       autocompletionDisabled

@@ -154,8 +154,7 @@ export default function App() {
                     createResource={updateManualKubeConfigIdState}
                   >
                     <AuthForm
-                      resource={authFormState as any}
-                      /*@ts-expect-error Type mismatch between js and ts*/
+                      resource={authFormState}
                       setResource={setAuthFormState}
                       checkRequiredInputs={checkRequiredInputs}
                     />
