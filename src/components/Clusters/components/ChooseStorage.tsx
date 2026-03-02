@@ -5,12 +5,16 @@ interface ChooseStorageProps {
   storage: string;
   setStorage: (storage: string) => void;
   hideLabel?: boolean;
+  disabled?: boolean;
+  name?: string;
 }
 
 export function ChooseStorage({
   storage,
   setStorage,
   hideLabel = false,
+  disabled = false,
+  name = 'storage',
 }: ChooseStorageProps) {
   const { t } = useTranslation();
 
@@ -30,30 +34,33 @@ export function ChooseStorage({
           </Label>
         )}
         <RadioButton
-          name="storage"
+          name={name}
           value="localStorage"
           checked={storage === 'localStorage'}
           text={`${t('clusters.storage.labels.localStorage')}: ${t(
             'clusters.storage.descriptions.localStorage',
           )}`}
+          disabled={disabled}
           onChange={(event) => setStorage(event.target.value)}
         />
         <RadioButton
-          name="storage"
+          name={name}
           value="sessionStorage"
           checked={storage === 'sessionStorage'}
           text={`${t('clusters.storage.labels.sessionStorage')}: ${t(
             'clusters.storage.descriptions.sessionStorage',
           )}`}
+          disabled={disabled}
           onChange={(event) => setStorage(event.target.value)}
         />
         <RadioButton
-          name="storage"
+          name={name}
           value="inMemory"
           checked={storage === 'inMemory'}
           text={`${t('clusters.storage.labels.inMemory')}: ${t(
             'clusters.storage.descriptions.inMemory',
           )}`}
+          disabled={disabled}
           onChange={(event) => setStorage(event.target.value)}
         />
       </FlexBox>

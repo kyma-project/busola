@@ -1,4 +1,4 @@
-import { Button, FlexBox, RadioButton, Title } from '@ui5/webcomponents-react';
+import { Button, Label, Text, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ClusterPreview.scss';
 import {
@@ -6,6 +6,7 @@ import {
   findInitialValues,
 } from '../views/EditCluster/EditCluster';
 import { getUserIndex } from '../shared';
+import { ChooseStorage } from './ChooseStorage';
 import { isOIDCExec } from './oidc-params';
 import {
   Kubeconfig,
@@ -27,16 +28,16 @@ const TokenData = ({
     <>
       {execCommand && (
         <>
-          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-            {t('clusters.wizard.auth.exec-command')}:
-          </p>
-          <div>{execCommand}</div>
+          <Label className="sap-margin-bottom-tiny" showColon>
+            {t('clusters.wizard.auth.exec-command')}
+          </Label>
+          <Text>{execCommand}</Text>
         </>
       )}
-      <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-        {`${t('clusters.token')}:`}
-      </p>
-      {token && <div className="cluster-preview__token">{token}</div>}
+      <Label className="sap-margin-top-small sap-margin-bottom-tiny" showColon>
+        {t('clusters.token')}
+      </Label>
+      {token && <Text className="cluster-preview__token">{token}</Text>}
     </>
   );
 };
@@ -58,34 +59,43 @@ const OidcData = ({
     <>
       {issuerUrl && (
         <>
-          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-            {t('clusters.labels.issuer-url')}:
-          </p>
-          <div>{issuerUrl}</div>
+          <Label className="sap-margin-bottom-tiny" showColon>
+            {t('clusters.labels.issuer-url')}
+          </Label>
+          <Text>{issuerUrl}</Text>
         </>
       )}
       {clientId && (
         <>
-          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-            {t('clusters.labels.client-id')}:
-          </p>
-          <div>{clientId}</div>
+          <Label
+            className="sap-margin-top-small sap-margin-bottom-tiny"
+            showColon
+          >
+            {t('clusters.labels.client-id')}
+          </Label>
+          <Text>{clientId}</Text>
         </>
       )}
       {clientSecret && (
         <>
-          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-            {t('clusters.labels.client-secret')}:
-          </p>
-          <div>{clientSecret}</div>
+          <Label
+            className="sap-margin-top-small sap-margin-bottom-tiny"
+            showColon
+          >
+            {t('clusters.labels.client-secret')}
+          </Label>
+          <Text>{clientSecret}</Text>
         </>
       )}
       {extraScopes && (
         <>
-          <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-            {t('clusters.labels.scopes')}:
-          </p>
-          {<Tokens tokens={extraScopes} />}
+          <Label
+            className="sap-margin-top-small sap-margin-bottom-tiny"
+            showColon
+          >
+            {t('clusters.labels.scopes')}
+          </Label>
+          <Tokens tokens={extraScopes} />
         </>
       )}
     </>
@@ -138,11 +148,13 @@ export function ClusterPreview({
           level="H5"
           className="cluster-preview__subtitle sap-margin-y-small"
         >{`1. ${t('common.headers.configuration')}`}</Title>
-        <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-          {t('clusters.name_singular')}:
-        </p>
-        <div className="cluster-preview__content sap-margin-top-small sap-margin-bottom-tiny">
-          <div>{kubeconfig?.['current-context']}</div>
+        <div className="cluster-preview__content sap-margin-y-small">
+          <div>
+            <Label className="sap-margin-bottom-tiny" showColon>
+              {t('clusters.name_singular')}
+            </Label>
+            <Text>{kubeconfig?.['current-context']}</Text>
+          </div>
           <Button
             design="Transparent"
             onClick={() => setSelected(1)}
@@ -159,7 +171,7 @@ export function ClusterPreview({
           className="cluster-preview__subtitle sap-margin-y-small"
         >{`2. ${t('clusters.wizard.authentication')}`}</Title>
 
-        <div className="cluster-preview__content sap-margin-top-small sap-margin-bottom-tiny">
+        <div className="cluster-preview__content sap-margin-y-small">
           <div className="cluster-preview__auth">
             {authenticationType === 'token' ? (
               <TokenData token={token} execCommand={exec?.command} />
@@ -187,39 +199,13 @@ export function ClusterPreview({
           level="H5"
           className="cluster-preview__subtitle sap-margin-y-small"
         >{`3. ${t('clusters.wizard.storage')}`}</Title>
-        <p className="cluster-preview__data-header sap-margin-top-small sap-margin-bottom-tiny">
-          {`${t('clusters.storage.storage-preference')}:`}
-        </p>
-        <div className="cluster-preview__content sap-margin-bottom-medium sap-margin-top-tiny">
-          <FlexBox
-            direction="Column"
-            className="cluster-preview__storage-container"
-          >
-            <RadioButton
-              checked={storage === 'localStorage'}
-              text={`${t('clusters.storage.labels.localStorage')}: ${t(
-                'clusters.storage.descriptions.localStorage',
-              )}`}
-              disabled
-              className="cluster-preview__storage"
-            />
-            <RadioButton
-              checked={storage === 'sessionStorage'}
-              text={`${t('clusters.storage.labels.sessionStorage')}: ${t(
-                'clusters.storage.descriptions.sessionStorage',
-              )}`}
-              disabled
-              className="cluster-preview__storage"
-            />
-            <RadioButton
-              checked={storage === 'inMemory'}
-              text={`${t('clusters.storage.labels.inMemory')}: ${t(
-                'clusters.storage.descriptions.inMemory',
-              )}`}
-              disabled
-              className="cluster-preview__storage"
-            />
-          </FlexBox>
+        <div className="cluster-preview__content sap-margin-y-small">
+          <ChooseStorage
+            storage={storage}
+            setStorage={() => {}}
+            disabled
+            name="storage-preview"
+          />
           <Button
             design="Transparent"
             onClick={() => {
