@@ -44,7 +44,7 @@ import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { editor } from 'monaco-editor';
 
-type ResourceFormProps = {
+export type ResourceFormProps = {
   pluralKind?: string; // used for the request path
   singularName?: string;
   resource: any;
