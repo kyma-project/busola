@@ -1,7 +1,5 @@
 import { ComponentType, lazy } from 'react';
 
-let hasReloadedForChunkError = false;
-
 export const lazyWithRetries = <T extends ComponentType<any>>(
   importer: () => Promise<{ default: T }>,
 ) => {
@@ -9,17 +7,29 @@ export const lazyWithRetries = <T extends ComponentType<any>>(
     try {
       return await importer();
     } catch (error: any) {
-      // Safely check if the error is the specific Vite chunk load error
       const isChunkLoadFailed = error?.message?.includes(
         'Failed to fetch dynamically imported module',
       );
-      if (isChunkLoadFailed && !hasReloadedForChunkError) {
-        hasReloadedForChunkError = true;
-        window.location.reload();
 
-        return new Promise<{ default: T }>(() => {});
+      if (isChunkLoadFailed) {
+        const lastReloadStr = sessionStorage.getItem(
+          'busola_chunk_reload_time',
+        );
+        const now = Date.now();
+        const isRecentReload =
+          lastReloadStr && now - parseInt(lastReloadStr, 10) < 10000;
+
+        if (!isRecentReload) {
+          sessionStorage.setItem('busola_chunk_reload_time', now.toString());
+          window.location.reload();
+          return new Promise<{ default: T }>(() => {});
+        }
+
+        console.error(
+          'Chunk load failed even after a hard reload. The deployment might be missing assets.',
+        );
       }
-      // If it's a normal error, throw it to be caught by an ErrorBoundary
+
       throw error;
     }
   });
