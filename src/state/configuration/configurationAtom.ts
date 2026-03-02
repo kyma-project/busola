@@ -3,7 +3,7 @@ import { isArray, mergeWith } from 'lodash';
 import { useEffect, useState } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 
-import { ActiveClusterState, clusterAtom } from '../clusterAtom';
+import { clusterAtom, ActiveClusterState } from '../clusterAtom';
 import { authDataAtom } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
@@ -98,18 +98,24 @@ export const useGetConfiguration = () => {
   const setConfig = useSetAtom(configurationAtom);
   const fetchFn = getFetchFn(useAtomValue);
   const [prevCluster, setPrevCluster] = useState<ActiveClusterState>(null);
+  const [prevHasFetchFn, setPrevHasFetchFn] = useState(false);
 
   useEffect(() => {
-    const setClusterConfig = async () => {
-      const configs = await getConfigs(fetchFn);
-      const updatedFeatures = await getFeatures(configs?.features);
-      if (!cluster || cluster !== prevCluster) {
+    const hasFetchFn = !!fetchFn;
+    const clusterChanged = cluster !== prevCluster;
+    const fetchFnBecameAvailable = hasFetchFn && !prevHasFetchFn;
+
+    if (!cluster || clusterChanged || fetchFnBecameAvailable) {
+      const setClusterConfig = async () => {
+        const configs = await getConfigs(fetchFn);
+        const updatedFeatures = await getFeatures(configs?.features);
         setConfig({ ...configs, features: updatedFeatures });
         setPrevCluster(cluster);
-      }
-    };
+        setPrevHasFetchFn(hasFetchFn);
+      };
 
-    setClusterConfig();
+      setClusterConfig();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster, auth, apis]);
 };
