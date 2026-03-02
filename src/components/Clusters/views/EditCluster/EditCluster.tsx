@@ -65,7 +65,7 @@ export const findInitialValue = (
 type ClusterDataFormProps = {
   kubeconfig: Kubeconfig;
   setResource: (resource: Kubeconfig) => void;
-  onChange: (resource?: any) => void;
+  onChange?: (resource?: any) => void;
   onSubmit?: (event: FormEvent<HTMLElement | HTMLFormElement>) => void;
   resourceUrl?: string;
   formElementRef?: RefObject<HTMLElement | HTMLFormElement>;
@@ -133,7 +133,6 @@ export const ClusterDataForm = ({
         label={t('clusters.token')}
         input={Inputs.Text}
         required
-        onChange={onChange}
         inputInfo={
           isGenericExec ? t('clusters.wizard.auth.exec-info') : undefined
         }
@@ -178,7 +177,6 @@ export const ClusterDataForm = ({
         input={Inputs.Text}
         required
         value={issuerUrl}
-        onChange={onChange}
         setValue={(val: string) => {
           createOIDC('issuerUrl', val);
         }}
@@ -188,7 +186,6 @@ export const ClusterDataForm = ({
         input={Inputs.Text}
         required
         value={clientId}
-        onChange={onChange}
         setValue={(val: string) => {
           createOIDC('clientId', val);
         }}
@@ -206,7 +203,6 @@ export const ClusterDataForm = ({
         defaultOpen
         title={t('clusters.labels.scopes')}
         value={scopes}
-        toExternal={onChange}
         setValue={(val: string) => {
           createOIDC('scopes', val);
         }}
@@ -264,7 +260,7 @@ export const ClusterDataForm = ({
                   { name: context },
                 ]);
               }
-              onChange();
+              onChange?.();
               setChosenContext(context);
               setResource({ ...kubeconfig });
             }}
@@ -285,7 +281,7 @@ export const ClusterDataForm = ({
           required
           value={authenticationType}
           setValue={(type: string) => {
-            onChange();
+            onChange?.();
             const user = kubeconfig?.users?.[userIndex]?.user as {
               exec?: LoginCommand;
               token?: string;

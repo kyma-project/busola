@@ -87,7 +87,11 @@ export function FormField({
             ...props,
           })}
         {inputInfo && (
-          <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+          <Label
+            wrappingType="Normal"
+            showColon={false}
+            style={{ marginTop: '5px' }}
+          >
             {inputInfoLink}
           </Label>
         )}

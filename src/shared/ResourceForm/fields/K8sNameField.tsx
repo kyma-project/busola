@@ -76,7 +76,11 @@ export function K8sNameField({
               />
             </div>
             {showHelp && inputInfo === undefined ? (
-              <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+              <Label
+                wrappingType="Normal"
+                showColon={false}
+                style={{ marginTop: '5px' }}
+              >
                 {t('common.tooltips.k8s-name-input')}
               </Label>
             ) : null}
