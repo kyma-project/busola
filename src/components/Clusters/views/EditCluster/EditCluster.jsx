@@ -107,7 +107,6 @@ export const ClusterDataForm = ({
         label={t('clusters.token')}
         input={Inputs.Text}
         required
-        onChange={onChange}
         inputInfo={
           isGenericExec ? t('clusters.wizard.auth.exec-info') : undefined
         }
@@ -149,7 +148,6 @@ export const ClusterDataForm = ({
         input={Inputs.Text}
         required
         value={issuerUrl}
-        onChange={onChange}
         setValue={(val) => {
           createOIDC('issuerUrl', val);
         }}
@@ -159,7 +157,6 @@ export const ClusterDataForm = ({
         input={Inputs.Text}
         required
         value={clientId}
-        onChange={onChange}
         setValue={(val) => {
           createOIDC('clientId', val);
         }}
@@ -177,7 +174,6 @@ export const ClusterDataForm = ({
         defaultOpen
         title={t('clusters.labels.scopes')}
         value={scopes}
-        toExternal={onChange}
         setValue={(val) => {
           createOIDC('scopes', val);
         }}
@@ -235,7 +231,7 @@ export const ClusterDataForm = ({
                   { name: context },
                 ]);
               }
-              onChange();
+              onChange?.();
               setChosenContext(context);
               setResource({ ...kubeconfig });
             }}
@@ -256,7 +252,7 @@ export const ClusterDataForm = ({
           required
           value={authenticationType}
           setValue={(type) => {
-            onChange();
+            onChange?.();
             if (type === 'token') {
               delete kubeconfig?.users?.[userIndex]?.user?.exec;
               jp.value(kubeconfig, `$.users[${userIndex}].user.token`, null);
