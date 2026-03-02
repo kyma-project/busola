@@ -9,8 +9,6 @@ export type ClustersState = {
   [clusterName: string]: Cluster;
 } | null;
 
-const inMemoryClusters: ClustersState = {};
-
 const getInitialClustersState = (): ClustersState => {
   try {
     const localStorageClusters = JSON.parse(
@@ -22,7 +20,6 @@ const getInitialClustersState = (): ClustersState => {
     return {
       ...localStorageClusters,
       ...sessionStorageClusters,
-      ...inMemoryClusters,
     };
   } catch (e) {
     console.warn('Cannot get clusters', e);
@@ -40,7 +37,6 @@ export const clustersAtomEffectSetSelf = withAtomEffect(
       const savedValue = {
         ...JSON.parse(localStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}'),
         ...JSON.parse(sessionStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}'),
-        ...inMemoryClusters,
       };
 
       try {
@@ -75,9 +71,6 @@ export const clustersAtomEffectOnSet = atomEffect((get, _set) => {
         break;
       case 'sessionStorage':
         sessionStorageClusters[clusterName] = cluster;
-        break;
-      case 'inMemory':
-        inMemoryClusters[clusterName] = cluster;
         break;
       default:
         console.warn(
