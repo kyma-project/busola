@@ -53,16 +53,6 @@ export function ChooseStorage({
           disabled={disabled}
           onChange={(event) => setStorage(event.target.value)}
         />
-        <RadioButton
-          name={name}
-          value="inMemory"
-          checked={storage === 'inMemory'}
-          text={`${t('clusters.storage.labels.inMemory')}: ${t(
-            'clusters.storage.descriptions.inMemory',
-          )}`}
-          disabled={disabled}
-          onChange={(event) => setStorage(event.target.value)}
-        />
       </FlexBox>
     </>
   );

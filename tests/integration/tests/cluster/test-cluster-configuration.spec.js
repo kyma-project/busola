@@ -22,7 +22,7 @@ const configMock = {
             ],
           },
         },
-        storage: 'inMemory',
+        storage: 'sessionStorage',
       },
     }),
   },
