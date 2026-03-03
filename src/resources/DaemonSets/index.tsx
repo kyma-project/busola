@@ -1,9 +1,9 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 
 import { matchByOwnerReference } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'DaemonSets';
 export const namespaced = true;
@@ -19,9 +19,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./DaemonSetList'));
-export const Details = lazy(() => import('./DaemonSetDetails'));
-export const Create = lazy(() => import('./DaemonSetCreate'));
+export const List = lazyWithRetries(() => import('./DaemonSetList'));
+export const Details = lazyWithRetries(() => import('./DaemonSetDetails'));
+export const Create = lazyWithRetries(() => import('./DaemonSetCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

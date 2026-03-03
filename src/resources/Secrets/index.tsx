@@ -1,7 +1,7 @@
-import { lazy } from 'react';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference } from 'shared/utils/helpers';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'Secrets';
 export const namespaced = true;
@@ -17,9 +17,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./SecretList'));
-export const Details = lazy(() => import('./SecretDetails'));
-export const Create = lazy(() => import('./SecretCreate'));
+export const List = lazyWithRetries(() => import('./SecretList'));
+export const Details = lazyWithRetries(() => import('./SecretDetails'));
+export const Create = lazyWithRetries(() => import('./SecretCreate'));
 
 export const secrets = () => [
   {

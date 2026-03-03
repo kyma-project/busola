@@ -1,7 +1,7 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'RoleBindings';
 export const namespaced = true;
@@ -17,9 +17,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./RoleBindingList'));
-export const Details = lazy(() => import('./RoleBindingDetails'));
-export const Create = lazy(() => import('./RoleBindingCreate'));
+export const List = lazyWithRetries(() => import('./RoleBindingList'));
+export const Details = lazyWithRetries(() => import('./RoleBindingDetails'));
+export const Create = lazyWithRetries(() => import('./RoleBindingCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   relations: [

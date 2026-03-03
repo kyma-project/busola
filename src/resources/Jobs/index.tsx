@@ -1,8 +1,8 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { matchByOwnerReference } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'Jobs';
 export const namespaced = true;
@@ -10,9 +10,9 @@ export const apiGroup = 'batch';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.workloads;
 
-export const List = lazy(() => import('./JobList'));
-export const Details = lazy(() => import('./JobDetails'));
-export const Create = lazy(() => import('./JobCreate'));
+export const List = lazyWithRetries(() => import('./JobList'));
+export const Details = lazyWithRetries(() => import('./JobDetails'));
+export const Create = lazyWithRetries(() => import('./JobCreate'));
 
 export const i18nDescriptionKey = 'jobs.description';
 export const docsURL =

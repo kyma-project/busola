@@ -1,8 +1,8 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'NetworkPolicies';
 export const namespaced = true;
@@ -18,9 +18,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./NetworkPolicyList'));
-export const Details = lazy(() => import('./NetworkPolicyDetails'));
-export const Create = lazy(() => import('./NetworkPolicyCreate'));
+export const List = lazyWithRetries(() => import('./NetworkPolicyList'));
+export const Details = lazyWithRetries(() => import('./NetworkPolicyDetails'));
+export const Create = lazyWithRetries(() => import('./NetworkPolicyCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

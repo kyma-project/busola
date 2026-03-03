@@ -1,4 +1,4 @@
-import { lazy, Fragment, Suspense } from 'react';
+import { Fragment, Suspense } from 'react';
 import pluralize from 'pluralize';
 import i18next from 'i18next';
 import { Route, useParams, useSearchParams } from 'react-router';
@@ -16,10 +16,17 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { K8sResource } from 'types';
 import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
-const List = lazy(() => import('../Extensibility/ExtensibilityList'));
-const Details = lazy(() => import('../Extensibility/ExtensibilityDetails'));
-const Create = lazy(() => import('../Extensibility/ExtensibilityCreate'));
+const List = lazyWithRetries(
+  () => import('../Extensibility/ExtensibilityList'),
+);
+const Details = lazyWithRetries(
+  () => import('../Extensibility/ExtensibilityDetails'),
+);
+const Create = lazyWithRetries(
+  () => import('../Extensibility/ExtensibilityCreate'),
+);
 
 type ColumnWrapperProps = {
   resourceType?: string;

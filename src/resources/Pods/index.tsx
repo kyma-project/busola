@@ -1,8 +1,8 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 function matchByMount(volumeResourceType: any) {
   const valueFromKey = volumeResourceType + 'KeyRef';
@@ -41,9 +41,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./PodList'));
-export const Details = lazy(() => import('./PodDetails'));
-export const Create = lazy(() => import('./PodCreate'));
+export const List = lazyWithRetries(() => import('./PodList'));
+export const Details = lazyWithRetries(() => import('./PodDetails'));
+export const Create = lazyWithRetries(() => import('./PodCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,

@@ -1,6 +1,6 @@
-import { lazy } from 'react';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'CustomResourceDefinitions';
 export const namespaced = false;
@@ -17,6 +17,12 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./CustomResourceDefinitionList'));
-export const Details = lazy(() => import('./CustomResourceDefinitionDetails'));
-export const Create = lazy(() => import('./CustomResourceDefinitionCreate'));
+export const List = lazyWithRetries(
+  () => import('./CustomResourceDefinitionList'),
+);
+export const Details = lazyWithRetries(
+  () => import('./CustomResourceDefinitionDetails'),
+);
+export const Create = lazyWithRetries(
+  () => import('./CustomResourceDefinitionCreate'),
+);

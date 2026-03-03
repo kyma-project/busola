@@ -1,8 +1,8 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
 import { matchByOwnerReference } from 'shared/utils/helpers';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'ConfigMaps';
 export const namespaced = true;
@@ -18,9 +18,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./ConfigMapList'));
-export const Details = lazy(() => import('./ConfigMapDetails'));
-export const Create = lazy(() => import('./ConfigMapCreate'));
+export const List = lazyWithRetries(() => import('./ConfigMapList'));
+export const Details = lazyWithRetries(() => import('./ConfigMapDetails'));
+export const Create = lazyWithRetries(() => import('./ConfigMapCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 1,

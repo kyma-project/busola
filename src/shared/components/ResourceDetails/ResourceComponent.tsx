@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { Title } from '@ui5/webcomponents-react';
@@ -26,13 +26,16 @@ import { ResourceActions } from './ResourceActions';
 import { ResourceDetailsCardContent } from './ResourceDetailsCardContent';
 import { ResourceStatusCardContent } from './ResourceStatusCardContent';
 import './ResourceDetailsCard.scss';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
 // It doesn't affect the lighthouse score, but it prolongs the graph waiting time.
-const ResourceGraph = lazy(() => import('../ResourceGraph/ResourceGraph'));
+const ResourceGraph = lazyWithRetries(
+  () => import('../ResourceGraph/ResourceGraph'),
+);
 
-const Injections = lazy(
+const Injections = lazyWithRetries(
   () => import('../../../components/Extensibility/ExtensibilityInjections'),
 );
 

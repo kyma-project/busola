@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, FormEvent, RefObject } from 'react';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip } from '@ui5/webcomponents-react';
 import { useSetAtom } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -375,16 +374,6 @@ function EditClusterComponent({
           setResource({ ...resource });
         }}
       />
-      {isOIDCExec((getUser(kubeconfig) as KubeconfigOIDCAuth)?.exec) &&
-        resource.config?.storage === 'inMemory' && (
-          <MessageStrip
-            design="Critical"
-            hideCloseButton
-            className="sap-margin-top-small"
-          >
-            {t('clusters.storage.oidc-memory-warning')}
-          </MessageStrip>
-        )}
       <ResourceForm.FormField
         className="sap-margin-top-small"
         label={t('common.headers.description')}
