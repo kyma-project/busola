@@ -98,11 +98,12 @@ export function AddClusterWizard({
   const onComplete = () => {
     try {
       setAuth(null);
+      if (!kubeconfig) return;
       const contextName = kubeconfig?.['current-context'];
       if (!kubeconfig?.contexts?.length) {
         addByContext(
           {
-            kubeconfig: kubeconfig ?? ({} as Kubeconfig),
+            kubeconfig,
             context: {
               name: kubeconfig?.clusters?.[0]?.name ?? '',
               context: {
