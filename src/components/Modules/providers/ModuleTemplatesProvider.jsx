@@ -29,17 +29,9 @@ export function ModuleTemplatesContextProvider({ children }) {
   let checkedModuleTemplates;
 
   if (!moduleTemplatesLoading || !communityModuleTemplatesLoading)
-    checkedModuleTemplates = externalCommunityModuleTemplates
-      .filter((resource) => {
-        if (allModuleTemplates?.items !== undefined)
-          return !allModuleTemplates.items.some(
-            (mt) =>
-              mt.metadata?.name === resource.value?.metadata?.name &&
-              mt.spec?.version === resource.value?.spec?.version,
-          );
-        return resource.value;
-      })
-      .flatMap((res) => res.value);
+    checkedModuleTemplates = externalCommunityModuleTemplates.flatMap(
+      (res) => res.value,
+    );
 
   const mergedModuleTmeplates = {
     items: [
