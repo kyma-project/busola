@@ -1,6 +1,6 @@
 import { Button, MessageBox, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useMatch, useNavigate } from 'react-router';
+import { To, useMatch, useNavigate } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 
@@ -10,7 +10,17 @@ import { useUrl } from 'hooks/useUrl';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useNotification } from 'shared/contexts/NotificationContext';
 
-export function IncorrectPath({ to, title = '', message = '' }) {
+type IncorrectPathProps = {
+  to: To;
+  title?: string;
+  message?: string;
+};
+
+export function IncorrectPath({
+  to,
+  title = '',
+  message = '',
+}: IncorrectPathProps) {
   const { t } = useTranslation();
   const { namespace, namespaceUrl, clusterUrl } = useUrl();
   const notificationManager = useNotification();
@@ -49,8 +59,12 @@ export function IncorrectPath({ to, title = '', message = '' }) {
   const resourceName = namespace ? namespaceResourceName : clusterResourceName;
 
   const { data, loading } = useGetList(
-    (crd) => pluralize(crd.spec.names.kind.toLowerCase()) === resourceType,
-  )(resourceUrl, { skip: !extensions?.length });
+    (crd: { spec: { names: { kind: string } } }) =>
+      pluralize(crd.spec.names.kind.toLowerCase()) === resourceType,
+  )(resourceUrl, { skip: !extensions?.length }) as {
+    data: { spec?: { group?: string } }[] | null;
+    loading?: boolean;
+  };
 
   if (!extensions?.length && extensions?.length !== 0) return null;
 

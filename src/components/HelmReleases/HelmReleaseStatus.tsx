@@ -1,8 +1,8 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 
-export function HelmReleaseStatus({ status }) {
-  const resolveType = (status) => {
+export function HelmReleaseStatus({ status }: { status?: string }) {
+  const resolveType = (status?: string) => {
     switch (status?.toLowerCase()) {
       case 'deployed':
         return 'Positive';

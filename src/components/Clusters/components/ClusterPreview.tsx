@@ -12,6 +12,7 @@ import {
   Kubeconfig,
   KubeconfigNonOIDCAuthToken,
   KubeconfigOIDCAuth,
+  ValidKubeconfig,
 } from 'types';
 import { Tokens } from 'shared/components/Tokens';
 
@@ -103,7 +104,7 @@ const OidcData = ({
 };
 
 interface ClusterPreviewProps {
-  kubeconfig: Kubeconfig;
+  kubeconfig?: Kubeconfig;
   storage: string;
   setSelected: (selected: number) => void;
   hasAuth: boolean;
@@ -121,15 +122,23 @@ export function ClusterPreview({
     ?.exec;
   const authenticationType = exec && isOIDCExec(exec) ? 'oidc' : 'token';
 
-  const issuerUrl = findInitialValue(kubeconfig, 'oidc-issuer-url', userIndex);
-  const clientId = findInitialValue(kubeconfig, 'oidc-client-id', userIndex);
+  const issuerUrl = findInitialValue(
+    kubeconfig as ValidKubeconfig,
+    'oidc-issuer-url',
+    userIndex,
+  );
+  const clientId = findInitialValue(
+    kubeconfig as ValidKubeconfig,
+    'oidc-client-id',
+    userIndex,
+  );
   const clientSecret = findInitialValue(
-    kubeconfig,
+    kubeconfig as ValidKubeconfig,
     'oidc-client-secret',
     userIndex,
   );
   const extraScopes = findInitialValues(
-    kubeconfig,
+    kubeconfig as ValidKubeconfig,
     'oidc-extra-scope',
     userIndex,
   );

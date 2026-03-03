@@ -4,8 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Link } from 'shared/components/Link/Link';
+import { Release } from './HelmReleaseData';
 
-export function ReleaseDataPanel({ release, secret }) {
+export function ReleaseDataPanel({
+  release,
+  secret,
+}: {
+  secret: Record<string, any>;
+  release: Release;
+}) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
@@ -32,22 +39,22 @@ export function ReleaseDataPanel({ release, secret }) {
       )}
       <LayoutPanelRow
         name={t('helm-releases.headers.chart-version')}
-        value={chart.metadata.version}
+        value={chart?.metadata?.version}
       />
       <LayoutPanelRow
         name={t('helm-releases.headers.chart-name')}
-        value={chart.metadata.name}
+        value={chart?.metadata?.name}
       />
-      {chart.metadata.description && (
+      {chart?.metadata?.description && (
         <LayoutPanelRow
           name={t('helm-releases.headers.chart-description')}
           value={chart.metadata.description}
         />
       )}
-      {chart.metadata.appVersion && (
+      {chart?.metadata?.appVersion && (
         <LayoutPanelRow
           name={t('helm-releases.headers.app-version')}
-          value={chart.metadata.appVersion}
+          value={chart?.metadata?.appVersion}
         />
       )}
       {info.first_deployed && (

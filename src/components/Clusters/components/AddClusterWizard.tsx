@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { Title, Wizard, WizardStep } from '@ui5/webcomponents-react';
+import {
+  Ui5CustomEvent,
+  WizardDomRef,
+  Title,
+  Wizard,
+  WizardStep,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 
@@ -20,11 +26,22 @@ import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 import { ClusterPreview } from './ClusterPreview';
+import { HintButton } from 'shared/components/HintButton/HintButton';
+import { ClusterConfig } from 'state/clusterAtom';
+import {
+  Kubeconfig,
+  KubeconfigContext,
+  KubeconfigNonOIDCAuthToken,
+} from 'types';
 
 import './AddClusterWizard.scss';
-import { HintButton } from 'shared/components/HintButton/HintButton';
+import { WizardStepChangeEventDetail } from '@ui5/webcomponents-fiori/dist/Wizard';
 
-export function AddClusterWizard({ config = {} }) {
+export function AddClusterWizard({
+  config = {} as ClusterConfig,
+}: {
+  config?: ClusterConfig;
+}) {
   const busolaClusterParams = useAtomValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
@@ -34,15 +51,19 @@ export function AddClusterWizard({ config = {} }) {
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
   const [storage, setStorage] = useState(
-    busolaClusterParams?.config?.storage || 'sessionStorage',
+    busolaClusterParams?.storageType || 'sessionStorage',
   );
   const [selected, setSelected] = useState(1);
   const setShowWizard = useSetAtom(showAddClusterWizardAtom);
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
-  const [chosenContext, setChosenContext] = useState(undefined);
+  const [chosenContext, setChosenContext] = useState<string | undefined>(
+    undefined,
+  );
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
-  const [kubeconfig, setKubeconfig] = useState(undefined);
+  const [kubeconfig, setKubeconfig] = useState<Kubeconfig | undefined>(
+    undefined,
+  );
 
   const {
     isValid: authValid,
@@ -51,14 +72,14 @@ export function AddClusterWizard({ config = {} }) {
     revalidate,
   } = useCustomFormValidator();
 
-  const updateKubeconfig = (kubeconfig) => {
+  const updateKubeconfig = (kubeconfig?: Kubeconfig) => {
     if (!kubeconfig) {
-      setKubeconfig(null);
+      setKubeconfig(undefined);
       return;
     }
 
     if (Array.isArray(kubeconfig?.contexts)) {
-      if (getUser(kubeconfig)?.token) {
+      if ((getUser(kubeconfig) as KubeconfigNonOIDCAuthToken)?.token) {
         setStorage('sessionStorage');
       } else {
         setStorage('localStorage');
@@ -77,19 +98,19 @@ export function AddClusterWizard({ config = {} }) {
   const onComplete = () => {
     try {
       setAuth(null);
-      const contextName = kubeconfig['current-context'];
-      if (!kubeconfig.contexts?.length) {
+      if (!kubeconfig) return;
+      const contextName = kubeconfig?.['current-context'];
+      if (!kubeconfig?.contexts?.length) {
         addByContext(
           {
             kubeconfig,
             context: {
-              name: kubeconfig.clusters[0].name,
+              name: kubeconfig?.clusters?.[0]?.name ?? '',
               context: {
-                cluster: kubeconfig.clusters[0].name,
-                user: kubeconfig.users[0].name,
+                cluster: kubeconfig?.clusters?.[0]?.name ?? '',
+                user: kubeconfig?.users?.[0]?.name ?? '',
               },
             },
-
             storage,
             config,
           },
@@ -100,7 +121,7 @@ export function AddClusterWizard({ config = {} }) {
           addByContext(
             {
               kubeconfig,
-              context,
+              context: context as KubeconfigContext,
               switchCluster: !index,
               storage,
               config,
@@ -110,8 +131,8 @@ export function AddClusterWizard({ config = {} }) {
         });
       } else {
         const context = kubeconfig.contexts.find(
-          (context) => context.name === contextName,
-        );
+          (context) => context?.name === contextName,
+        ) as KubeconfigContext;
         addByContext({ kubeconfig, context, storage, config }, clustersInfo);
       }
       setIsFormOpen({ formOpen: false });
@@ -124,19 +145,21 @@ export function AddClusterWizard({ config = {} }) {
       console.warn(e);
     }
     setShowWizard(false);
-    updateKubeconfig(undefined);
+    updateKubeconfig();
   };
 
   const onCancel = () => {
     setShowWizard(false);
-    updateKubeconfig(undefined);
+    updateKubeconfig();
   };
 
-  const handleStepChange = (e) => {
+  const handleStepChange = (
+    e: Ui5CustomEvent<WizardDomRef, WizardStepChangeEventDetail>,
+  ) => {
     setSelected(Number(e.detail.step.dataset.step));
   };
 
-  const isCurrentStepInvalid = (step) => {
+  const isCurrentStepInvalid = (step: number) => {
     const invalidMultipleContexts = !hasOneContext && !chosenContext;
     switch (step) {
       case 1:
@@ -192,7 +215,7 @@ export function AddClusterWizard({ config = {} }) {
               >
                 {!hasOneContext && (
                   <ContextChooser
-                    chosenContext={chosenContext}
+                    chosenContext={chosenContext ?? ''}
                     setChosenContext={setChosenContext}
                   />
                 )}

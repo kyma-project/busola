@@ -15,7 +15,7 @@ type UI5PanelProps = {
   modeActions?: ReactNode;
   keyComponent?: string;
   className?: string;
-  children: ReactNode;
+  children?: ReactNode;
   description?: string;
   stickyHeader?: boolean;
   headerTop?: string;

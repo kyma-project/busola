@@ -164,13 +164,13 @@ export const addByContext = (
     kubeconfig: Kubeconfig;
     context: KubeconfigContext;
     storage: ClusterStorage;
-    switchCluster: boolean;
+    switchCluster?: boolean;
     config: any;
   },
   clustersInfo: useClustersInfoType,
   manualKubeConfigId?: ManualKubeConfigIdController,
 ) => {
-  let kubeconfig = userKubeconfig as ValidKubeconfig;
+  let kubeconfig = (userKubeconfig ?? {}) as ValidKubeconfig;
   const findUser = () =>
     kubeconfig.users?.find((u) => u.name === context.context.user);
   try {

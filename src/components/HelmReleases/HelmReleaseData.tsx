@@ -6,7 +6,30 @@ import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-export function HelmReleaseData({ releaseSecret, release }) {
+export type Release = {
+  name?: string;
+  version?: string;
+  manifest?: any;
+  chart?: {
+    metadata?: {
+      name?: string;
+      description?: string;
+      version?: string;
+      appVersion?: string;
+    };
+    files?: { name?: string; data?: any }[];
+    templates?: { name?: string; data?: any }[];
+  };
+  info?: any;
+};
+
+export function HelmReleaseData({
+  releaseSecret,
+  release,
+}: {
+  releaseSecret: Record<string, any>;
+  release: Release;
+}) {
   const { t } = useTranslation();
 
   if (!release) {
@@ -23,6 +46,7 @@ export function HelmReleaseData({ releaseSecret, release }) {
     <Fragment key="helm-release-data">
       <ReleaseDataPanel release={release} secret={releaseSecret} />
       <ChartContent chart={release.chart} />
+      {/*@ts-expect-error Type mismatch between js and ts*/}
       <ReadonlyEditorPanel
         title={t('helm-releases.headers.release-manifest')}
         value={jsyaml.dump(release.manifest)}

@@ -55,8 +55,8 @@ export const GoToDetailsLink = ({
 
 export const ControlledBy = ({
   ownerReferences,
-  namespace,
-  kindOnly,
+  namespace = undefined,
+  kindOnly = false,
   placeholder = EMPTY_TEXT_PLACEHOLDER,
 }) => {
   if (

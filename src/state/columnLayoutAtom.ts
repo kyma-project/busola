@@ -5,8 +5,8 @@ export type ColumnState = {
   resourceType: null | string;
   rawResourceTypeName?: null | string;
   namespaceId: null | string;
-  apiGroup: null | string;
-  apiVersion: null | string;
+  apiGroup?: null | string;
+  apiVersion?: null | string;
 };
 
 export type ShowCreate = {

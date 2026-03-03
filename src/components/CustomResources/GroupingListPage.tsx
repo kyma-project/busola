@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
 import { Tokens } from 'shared/components/Tokens';
@@ -12,7 +12,17 @@ import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
+import { Crd } from 'types';
 import './GroupingListPage.scss';
+
+type GroupingListPageProps = {
+  title: string;
+  description: ReactNode;
+  filter?: (entry: any) => boolean;
+  resourceListProps?: Partial<ComponentProps<typeof ResourceListRenderer>>;
+  showCrdScope?: boolean;
+  enableColumnLayout?: boolean;
+};
 
 export function GroupingListPage({
   title,
@@ -21,14 +31,18 @@ export function GroupingListPage({
   resourceListProps,
   showCrdScope,
   enableColumnLayout,
-}) {
+}: GroupingListPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
   useWindowTitle(title);
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
-  const { data, loading, error } = useGetList(filter)(resourceUrl);
-  const crdsByGroup = groupBy(data, (e) => e.spec.group);
+  const { data, loading, error } = useGetList(filter)(resourceUrl) as {
+    data: Crd[] | null;
+    loading?: boolean;
+    error?: Error | null;
+  };
+  const crdsByGroup = groupBy(data, (e) => e?.spec?.group);
 
   if (loading) {
     return <Spinner />;
@@ -47,15 +61,18 @@ export function GroupingListPage({
   if (searchQuery) {
     const query = searchQuery.toLowerCase();
 
-    const removeEmpty = ([, crds]) => crds.length;
+    const removeEmpty = ([_, crds]: [any, Crd[]]) => crds?.length;
 
-    const filterBySearchQuery = (crd) =>
+    const filterBySearchQuery = (crd: Crd) =>
       crd.metadata.name.includes(query) ||
       crd.spec.names.categories?.includes(query);
 
     entries = entries
-      .map(([group, crds]) => [group, crds.filter(filterBySearchQuery)])
-      .filter(removeEmpty);
+      .map(([group, crds]): [string, Crd[]] => [
+        group,
+        crds.filter(filterBySearchQuery),
+      ])
+      .filter(([group, crds]) => removeEmpty([group, crds]));
   }
 
   const lists = (
@@ -64,6 +81,7 @@ export function GroupingListPage({
         .sort(([groupA], [groupB]) => groupA.localeCompare(groupB))
         .map(([group, crds]) => (
           <li key={group} className="cr-group-list-item">
+            {/*@ts-expect-error Type mismatch between js and ts*/}
             <ResourceListRenderer
               resourceUrl={resourceUrl}
               resourceType="CustomResourceDefinition"
@@ -74,22 +92,24 @@ export function GroupingListPage({
               title={group}
               resources={crds}
               isCompact={true}
-              customColumns={[
-                {
-                  header: t('custom-resource-definitions.headers.categories'),
-                  value: (entry) => (
-                    <Tokens tokens={entry.spec.names.categories} />
-                  ),
-                },
-                ...(showCrdScope
-                  ? [
-                      {
-                        header: t('scope'),
-                        value: (entry) => entry.spec.scope,
-                      },
-                    ]
-                  : []),
-              ]}
+              customColumns={
+                [
+                  {
+                    header: t('custom-resource-definitions.headers.categories'),
+                    value: (entry: Crd) => (
+                      <Tokens tokens={entry.spec.names.categories} />
+                    ),
+                  },
+                  ...(showCrdScope
+                    ? [
+                        {
+                          header: t('scope'),
+                          value: (entry: Crd) => entry.spec.scope,
+                        },
+                      ]
+                    : []),
+                ] as any
+              }
               searchSettings={{
                 showSearchField: false,
               }}
@@ -104,11 +124,12 @@ export function GroupingListPage({
     <>
       <DynamicPageComponent
         title={title}
+        /*@ts-expect-error Type mismatch between js and ts*/
         description={description}
         actions={
           <SearchInput
             entriesKind={title}
-            value={searchQuery}
+            searchQuery={searchQuery}
             handleQueryChange={setSearchQuery}
             allowSlashShortcut
           />

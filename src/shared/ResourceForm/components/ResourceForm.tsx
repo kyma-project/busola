@@ -44,9 +44,9 @@ import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { editor } from 'monaco-editor';
 
-type ResourceFormProps = {
-  pluralKind: string; // used for the request path
-  singularName: string;
+export type ResourceFormProps = {
+  pluralKind?: string; // used for the request path
+  singularName?: string;
   resource: any;
   initialResource: any;
   updateInitialResource?: (res: any) => void;
@@ -104,7 +104,7 @@ export const ResourceForm: ResourceFormType = (({
   resource,
   initialResource,
   updateInitialResource = () => {},
-  setResource,
+  setResource = () => {},
   setCustomValid,
   onChange,
   formElementRef,

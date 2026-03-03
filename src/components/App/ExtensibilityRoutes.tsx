@@ -14,6 +14,8 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
+import { K8sResource } from 'types';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 const List = lazyWithRetries(
@@ -26,7 +28,17 @@ const Create = lazyWithRetries(
   () => import('../Extensibility/ExtensibilityCreate'),
 );
 
-const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
+type ColumnWrapperProps = {
+  resourceType?: string;
+  extension?: Record<string, any>;
+  urlPath?: string;
+};
+
+const ColumnWrapper = ({
+  resourceType,
+  extension,
+  urlPath,
+}: ColumnWrapperProps) => {
   const layoutState = useAtomValue(columnLayoutAtom);
   const { resourceListUrl } = useUrl();
 
@@ -52,6 +64,9 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
       layoutState?.showEdit?.resource ||
       null,
     rawResourceTypeName: extension?.general?.resource?.kind,
+    isCustomResource: undefined,
+    crName: undefined,
+    isModule: undefined,
   });
 
   const overrides = { resourceType: urlPath };
@@ -62,13 +77,14 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
       metadata: {
         namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
       },
-    },
-    urlPath ? overrides : null,
+    } as K8sResource,
+    urlPath ? overrides : undefined,
   );
 
   let startColumnComponent = null;
   if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
+      /*@ts-expect-error Type mismatch between js and ts*/
       <Details
         resourceName={resourceName}
         namespaceId={namespaceId}
@@ -77,6 +93,7 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
     );
   } else {
     startColumnComponent = (
+      /*@ts-expect-error Type mismatch between js and ts*/
       <List
         rawResourceType={extension?.general?.resource?.kind}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
@@ -90,12 +107,14 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
     resourceTypeForTitle: extension?.general?.name,
     apiGroup: extension?.general.resource.group,
     apiVersion: extension?.general.resource.version,
+    resourceCustomType: undefined,
   });
 
   let midColumnComponent = null;
 
   if (layoutState?.showCreate?.resourceType) {
     midColumnComponent = (
+      /*@ts-expect-error Type mismatch between js and ts*/
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
@@ -122,6 +141,7 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     midColumnComponent = (
+      /*@ts-expect-error Type mismatch between js and ts*/
       <Details
         resourceName={layoutState?.midColumn?.resourceName ?? resourceName}
         namespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
@@ -134,7 +154,11 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
     <FlexibleColumnLayout
       style={{ height: '100%' }}
       layout={
-        !midColumnComponent ? 'OneColumn' : layoutState?.layout || 'OneColumn'
+        (!midColumnComponent
+          ? 'OneColumn'
+          : layoutState?.layout || 'OneColumn') as
+          | FCLLayout
+          | keyof typeof FCLLayout
       }
       startColumn={<div className="column-content">{startColumnComponent}</div>}
       midColumn={<div className="column-content">{midColumnComponent}</div>}
@@ -142,7 +166,10 @@ const ColumnWrapper = ({ resourceType, extension, urlPath }) => {
   );
 };
 
-export const createExtensibilityRoutes = (extension, language) => {
+export const createExtensibilityRoutes = (
+  extension: Record<string, any>,
+  language: string,
+) => {
   const urlPath =
     extension?.general?.urlPath ||
     pluralize(extension?.general?.resource?.kind?.toLowerCase() || '');

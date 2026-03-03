@@ -6,13 +6,24 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { CollapsibleSection } from 'shared/ResourceForm/components/CollapsibleSection';
 import { FormField } from 'shared/ResourceForm/components/FormField';
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { ScanConfiguration } from './ScanConfiguration';
+import { NamespacesState } from 'state/namespacesAtom';
 
-const getNested = (obj, next, ...path) => {
+const getNested = (
+  obj?: Record<string, any> | string | string[] | number,
+  next?: string,
+  ...path: string[]
+) => {
   if (!next || !obj) return obj;
-  return getNested(obj[next], ...path);
+  return getNested((obj as Record<string, any>)[next], ...path);
 };
 
-const setNested = (obj, newVal, next, ...path) => {
+const setNested = (
+  obj: Record<string, any>,
+  newVal?: string | string[] | number,
+  next?: string,
+  ...path: string[]
+): Record<string, any> | string | string[] | number | undefined => {
   if (!next) return newVal;
   return {
     ...obj,
@@ -20,28 +31,48 @@ const setNested = (obj, newVal, next, ...path) => {
   };
 };
 
-const useNested = (obj, setObj, ...path) => {
+const useNested = (
+  obj: Record<string, any>,
+  setObj: (newObj: any) => void,
+  ...path: string[]
+): [
+  Record<string, any> | string | string[] | number | undefined,
+  (newVal?: string | string[] | number) => void,
+] => {
   const val = useMemo(() => getNested(obj, ...path), [obj, path]);
-  const setter = (newVal) => setObj(setNested(obj, newVal, ...path));
+  const setter = (newVal?: string | string[] | number) =>
+    setObj(setNested(obj, newVal, ...path));
   return [val, setter];
 };
 
-const ListActions = ({ options, setSelected }) => {
+type ListActionsProps = {
+  options?: { key: string; text: string }[];
+  setSelected: (selectedKeys?: string[]) => void;
+};
+
+const ListActions = ({ options, setSelected }: ListActionsProps) => {
   const { t } = useTranslation();
   return (
     <>
       <Button
         icon="add"
-        onClick={() => setSelected(options.map(({ key }) => key))}
+        onClick={() => setSelected(options?.map(({ key }) => key))}
         design="Transparent"
       >
         {t('common.buttons.add-all')}
       </Button>
-      <Button icon="less" onClick={() => setSelected([])} desgin="Transparent">
+      <Button icon="less" onClick={() => setSelected([])} design="Transparent">
         {t('common.buttons.remove-all')}
       </Button>
     </>
   );
+};
+
+type ConfigurationFormProps = {
+  configuration: ScanConfiguration;
+  setConfiguration: (newConfig: ScanConfiguration) => void;
+  namespaces: NamespacesState;
+  policies?: string[];
 };
 
 const ConfigurationForm = ({
@@ -49,7 +80,7 @@ const ConfigurationForm = ({
   setConfiguration,
   namespaces,
   policies,
-}) => {
+}: ConfigurationFormProps) => {
   const { t } = useTranslation();
   const [description, setDescription] = useNested(
     configuration,
@@ -94,7 +125,7 @@ const ConfigurationForm = ({
           input={Inputs.Text}
           value={description}
           defaultValue={description}
-          setValue={(val) => setDescription(val)}
+          setValue={(val?: string) => setDescription(val)}
         ></FormField>
       </div>
 
@@ -113,7 +144,7 @@ const ConfigurationForm = ({
             label={t('common.headers.namespaces')}
             input={Inputs.Checkboxes}
             options={namespaceOptions ?? []}
-            setValue={(val) => setSelectedNamespaces(val)}
+            setValue={(val: string[]) => setSelectedNamespaces(val)}
             value={selectedNamespaces}
           ></FormField>
         </div>
@@ -133,7 +164,7 @@ const ConfigurationForm = ({
             label={t('common.headers.policies')}
             input={Inputs.Checkboxes}
             options={policyOptions ?? []}
-            setValue={(val) => setSelectedPolicies(val)}
+            setValue={(val: string[]) => setSelectedPolicies(val)}
             value={selectedPolicies}
           ></FormField>
         </div>
@@ -146,12 +177,12 @@ const ConfigurationForm = ({
           <FormField
             label={t('cluster-validation.scan.configuration.parallel-requests')}
             input={Inputs.Number}
-            setValue={(val) =>
+            setValue={(val: number) =>
               setParallelRequests(Number.isInteger(val) ? val : undefined)
             }
             value={parallelRequests ?? ''}
             validationState={
-              parallelRequests < 1
+              typeof parallelRequests === 'number' && parallelRequests < 1
                 ? {
                     state: 'error',
                     text: t(
@@ -167,6 +198,15 @@ const ConfigurationForm = ({
   );
 };
 
+type ClusterValidationConfigurationDialogProps = {
+  show: boolean;
+  onCancel: () => void;
+  onSubmit: (newConfiguration: ScanConfiguration) => void;
+  configuration: ScanConfiguration;
+  namespaces: NamespacesState;
+  policies?: string[];
+};
+
 export function ClusterValidationConfigurationDialog({
   show,
   onCancel,
@@ -174,7 +214,7 @@ export function ClusterValidationConfigurationDialog({
   configuration,
   namespaces,
   policies,
-}) {
+}: ClusterValidationConfigurationDialogProps) {
   const { t } = useTranslation();
 
   const [tempConfiguration, setTempConfiguration] = useState(configuration);
@@ -198,7 +238,7 @@ export function ClusterValidationConfigurationDialog({
           endContent={
             <>
               <Button
-                desgin="Emphasized"
+                design="Emphasized"
                 onClick={() => {
                   onSubmit(tempConfiguration);
                 }}
@@ -222,12 +262,10 @@ export function ClusterValidationConfigurationDialog({
     >
       <ErrorBoundary>
         <ConfigurationForm
-          {...{
-            configuration: tempConfiguration,
-            setConfiguration: setTempConfiguration,
-            namespaces,
-            policies,
-          }}
+          configuration={tempConfiguration}
+          setConfiguration={setTempConfiguration}
+          namespaces={namespaces}
+          policies={policies}
         />
       </ErrorBoundary>
     </Dialog>
