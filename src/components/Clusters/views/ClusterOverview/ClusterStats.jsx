@@ -1,4 +1,4 @@
-import { lazy, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
@@ -19,8 +19,9 @@ import {
 
 import './ClusterStats.scss';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
-const Injections = lazy(
+const Injections = lazyWithRetries(
   () => import('../../../Extensibility/ExtensibilityInjections'),
 );
 

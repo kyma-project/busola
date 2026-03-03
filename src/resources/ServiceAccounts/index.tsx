@@ -1,7 +1,7 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'ServiceAccounts';
 export const namespaced = true;
@@ -17,9 +17,9 @@ export const ResourceDescription = (
   <Description i18nKey={i18nDescriptionKey} url={docsURL} />
 );
 
-export const List = lazy(() => import('./ServiceAccountList'));
-export const Details = lazy(() => import('./ServiceAccountDetails'));
-export const Create = lazy(() => import('./ServiceAccountCreate'));
+export const List = lazyWithRetries(() => import('./ServiceAccountList'));
+export const Details = lazyWithRetries(() => import('./ServiceAccountDetails'));
+export const Create = lazyWithRetries(() => import('./ServiceAccountCreate'));
 
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 2,

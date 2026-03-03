@@ -1,5 +1,5 @@
 import { FlexibleColumnLayout, MessageStrip } from '@ui5/webcomponents-react';
-import { lazy, Suspense, useDeferredValue, useEffect, useState } from 'react';
+import { Suspense, useDeferredValue, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Route, useParams, useSearchParams } from 'react-router';
@@ -22,13 +22,16 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useKymaQuery } from 'components/Modules/kymaModulesQueries';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { DeleteResourceModal } from 'shared/components/DeleteResourceModal/DeleteResourceModal';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
-const KymaModulesList = lazy(() => import('components/Modules/ModulesList'));
+const KymaModulesList = lazyWithRetries(
+  () => import('components/Modules/ModulesList'),
+);
 
-const KymaModulesAddModule = lazy(
+const KymaModulesAddModule = lazyWithRetries(
   () => import('../../components/Modules/KymaModulesAddModule'),
 );
-const CommunityModulesAddModule = lazy(
+const CommunityModulesAddModule = lazyWithRetries(
   () => import('components/Modules/community/CommunityModulesAddModule.tsx'),
 );
 

@@ -1,8 +1,9 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Route, useParams } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
-const CRDetails = React.lazy(
+const CRDetails = lazyWithRetries(
   () =>
     import('../../resources/CustomResourceDefinitions/CustomResources.details'),
 );

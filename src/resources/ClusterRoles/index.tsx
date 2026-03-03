@@ -1,7 +1,7 @@
-import { lazy } from 'react';
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export const resourceType = 'ClusterRoles';
 export const namespaced = false;
@@ -9,9 +9,9 @@ export const apiGroup = 'rbac.authorization.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.configuration;
 
-export const List = lazy(() => import('./ClusterRoleList'));
-export const Details = lazy(() => import('./ClusterRoleDetails'));
-export const Create = lazy(() => import('./ClusterRoleCreate'));
+export const List = lazyWithRetries(() => import('./ClusterRoleList'));
+export const Details = lazyWithRetries(() => import('./ClusterRoleDetails'));
+export const Create = lazyWithRetries(() => import('./ClusterRoleCreate'));
 
 export const i18nDescriptionKey = 'cluster-roles.description';
 export const docsURL =

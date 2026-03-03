@@ -1,8 +1,9 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Route, useParams } from 'react-router';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
-const NodeOverview = React.lazy(
+const NodeOverview = lazyWithRetries(
   () => import('../../components/Nodes/NodeDetails/NodeDetails'),
 );
 

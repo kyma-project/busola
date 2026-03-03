@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Bar, Button, Dialog } from '@ui5/webcomponents-react';
 import { isEqual } from 'lodash';
 
@@ -12,8 +12,9 @@ import { useAtom, useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import './YamlUploadDialog.scss';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
-export const YamlUpload = lazy(() => import('./YamlUpload'));
+export const YamlUpload = lazyWithRetries(() => import('./YamlUpload'));
 
 export const OPERATION_STATE_INITIAL = 'INITIAL';
 export const OPERATION_STATE_WAITING = 'WAITING';
