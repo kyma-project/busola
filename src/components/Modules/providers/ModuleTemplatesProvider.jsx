@@ -28,7 +28,7 @@ export function ModuleTemplatesContextProvider({ children }) {
 
   let checkedModuleTemplates;
 
-  if (!moduleTemplatesLoading || !communityModuleTemplatesLoading)
+  if (!moduleTemplatesLoading && !communityModuleTemplatesLoading)
     checkedModuleTemplates = externalCommunityModuleTemplates.flatMap(
       (res) => res.value,
     );
