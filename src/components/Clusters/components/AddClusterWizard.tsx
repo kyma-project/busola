@@ -102,7 +102,7 @@ export function AddClusterWizard({
       if (!kubeconfig?.contexts?.length) {
         addByContext(
           {
-            kubeconfig,
+            kubeconfig: kubeconfig ?? ({} as Kubeconfig),
             context: {
               name: kubeconfig?.clusters?.[0]?.name ?? '',
               context: {

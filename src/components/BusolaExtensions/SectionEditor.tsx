@@ -57,6 +57,7 @@ export function SectionEditor({
           onlyYaml={onlyYaml}
           formElementRef={formElementRef}
           onSubmit={() => onSubmit(jsyaml.dump(resource))}
+          setResource={() => {}}
         >
           <FormStack isRoot schema={schemaMap} resource={resource} />
         </ResourceForm>

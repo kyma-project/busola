@@ -161,7 +161,7 @@ export const addByContext = (
     switchCluster = true,
     config = {},
   }: {
-    kubeconfig?: Kubeconfig;
+    kubeconfig: Kubeconfig;
     context: KubeconfigContext;
     storage: ClusterStorage;
     switchCluster?: boolean;
