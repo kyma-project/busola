@@ -41,8 +41,6 @@ export interface K8sAPIResource {
 
 export * from './kubeconfig';
 
-export interface I18nLike {
+export interface I18nInterfaces {
   exists(keys: string | string[]): boolean;
 }
-
-export type TFunctionLike = (keys: string | string[]) => string;

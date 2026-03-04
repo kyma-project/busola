@@ -1,10 +1,11 @@
-import { I18nLike, TFunctionLike } from 'types';
+import { I18nInterfaces } from 'types';
 import { useTranslation } from 'react-i18next';
 import { ObjectStatus } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 
 import './StatusBadge.scss';
 import { PopoverBadge } from '../PopoverBadge/PopoverBadge';
+import { TFunction } from 'i18next';
 
 const resolveType = (status: string | any) => {
   if (typeof status !== 'string') {
@@ -45,8 +46,8 @@ const resolveType = (status: string | any) => {
 };
 
 const translate = (
-  i18n: I18nLike,
-  t: TFunctionLike,
+  i18n: I18nInterfaces,
+  t: TFunction,
   arrayOfVariableNames: string | string[],
   fallbackValue: string,
 ): string => {
