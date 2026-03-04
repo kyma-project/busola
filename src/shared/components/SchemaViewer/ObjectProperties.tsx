@@ -5,7 +5,20 @@ import { Text, Icon } from '@ui5/webcomponents-react';
 
 import { Generic, PROPERTIES } from './handlers';
 
-function ObjectProperty({ label, val, handler, required, expanded = false }) {
+type ObjectPropertyProps = {
+  label: string;
+  val: any;
+  handler: any;
+  required?: string[];
+  expanded?: boolean;
+};
+function ObjectProperty({
+  label,
+  val,
+  handler,
+  required,
+  expanded = false,
+}: ObjectPropertyProps) {
   const [collapsed, setCollapsed] = useState(!expanded);
   const Handler = handler;
 
@@ -41,7 +54,14 @@ function ObjectProperty({ label, val, handler, required, expanded = false }) {
   );
 }
 
-export function ObjectProperties({ def, expanded = false }) {
+type ObjectPropertiesProps = {
+  def: any;
+  expanded?: boolean;
+};
+export function ObjectProperties({
+  def,
+  expanded = false,
+}: ObjectPropertiesProps) {
   const { t } = useTranslation();
 
   return (
@@ -52,7 +72,6 @@ export function ObjectProperties({ def, expanded = false }) {
         .map(([key, handler]) => (
           <ObjectProperty
             key={key}
-            propKey={key}
             label={t(`schema.fields.${key}`)}
             handler={handler}
             val={def[key]}
@@ -65,7 +84,6 @@ export function ObjectProperties({ def, expanded = false }) {
         .map((key) => (
           <ObjectProperty
             key={key}
-            propKey={key}
             label={key}
             handler={Generic}
             val={def[key]}
