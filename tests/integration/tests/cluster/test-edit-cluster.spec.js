@@ -32,7 +32,7 @@ context('Test edit cluster', () => {
       .click()
       .type(DESC);
 
-    cy.get('ui5-input[date-testid="cluster-name"]')
+    cy.get('ui5-input[data-testid="cluster-name"]')
       .first()
       .find('input')
       .type(`{selectall}{backspace}`)
@@ -54,7 +54,7 @@ context('Test edit cluster', () => {
   it('Restores previous settings', () => {
     cy.get('ui5-button[data-testid="edit"]').click();
 
-    cy.get('ui5-input[date-testid="cluster-name"]')
+    cy.get('ui5-input[data-testid="cluster-name"]')
       .find('input')
       .wait(500)
       .clear()
