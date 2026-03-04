@@ -301,7 +301,7 @@ export const DynamicPageComponent = ({
             level="H2"
             size="H3"
             className="bold-title"
-            wrappingType="None"
+            wrappingType="Normal"
           >
             {title}
           </Title>
