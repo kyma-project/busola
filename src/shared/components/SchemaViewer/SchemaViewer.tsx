@@ -12,7 +12,11 @@ const EDITOR_OPTIONS = {
   minimap: { enabled: false },
 };
 
-export function SchemaViewer({ name, schema }) {
+type SchemaViewerProps = {
+  name: string;
+  schema: any;
+};
+export function SchemaViewer({ name, schema }: SchemaViewerProps) {
   const [schemaMode, setSchemaMode] = useState('viewer');
 
   const { t } = useTranslation();
@@ -26,21 +30,18 @@ export function SchemaViewer({ name, schema }) {
         <>
           <SegmentedButton>
             <SegmentedButtonItem
-              compact
               selected={schemaMode === 'viewer'}
               onClick={() => setSchemaMode('viewer')}
             >
               {t('schema.modes.viewer')}
             </SegmentedButtonItem>
             <SegmentedButtonItem
-              compact
               selected={schemaMode === 'json'}
               onClick={() => setSchemaMode('json')}
             >
               {t('schema.modes.json')}
             </SegmentedButtonItem>
             <SegmentedButtonItem
-              compact
               selected={schemaMode === 'yaml'}
               onClick={() => setSchemaMode('yaml')}
             >
