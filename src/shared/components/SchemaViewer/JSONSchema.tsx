@@ -3,6 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { ObjectProperties } from './ObjectProperties';
 import { FlexBox, ObjectStatus, Text } from '@ui5/webcomponents-react';
 
+type JSONSchemaProps = {
+  root?: boolean;
+  type?: string | string[];
+  name?: string;
+  description?: string;
+  isRequired?: boolean;
+  [key: string]: any;
+};
 export function JSONSchema({
   root = false,
   type,
@@ -10,7 +18,7 @@ export function JSONSchema({
   description,
   isRequired,
   ...def
-}) {
+}: JSONSchemaProps) {
   const { t } = useTranslation();
 
   const types = type ? (Array.isArray(type) ? type : [type]) : [];
