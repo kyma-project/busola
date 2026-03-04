@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Button } from '@ui5/webcomponents-react';
 import copyToClipboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
@@ -6,30 +5,31 @@ import { useTranslation } from 'react-i18next';
 import './CopiableText.scss';
 import { useRef, useState } from 'react';
 
-CopiableText.propTypes = {
-  textToCopy: PropTypes.string.isRequired,
-  buttonText: PropTypes.string,
-  children: PropTypes.node,
-  iconOnly: PropTypes.bool,
-  disabled: PropTypes.bool,
+type CopiableTextProps = {
+  textToCopy: string;
+  buttonText?: string;
+  children?: React.ReactNode;
+  iconOnly?: boolean;
+  disabled?: boolean;
 };
-
 export function CopiableText({
   textToCopy,
   buttonText,
   children,
   iconOnly,
   disabled,
-}) {
+}: CopiableTextProps) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
-  const timeoutRef = useRef(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleCopy = () => {
     copyToClipboard(textToCopy);
     setCopied(true);
 
-    clearTimeout(timeoutRef.current);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     timeoutRef.current = setTimeout(() => {
       setCopied(false);
     }, 2000);
