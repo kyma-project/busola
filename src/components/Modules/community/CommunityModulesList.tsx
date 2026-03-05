@@ -199,14 +199,13 @@ export const CommunityModulesList = ({
     version: string;
     namespace?: string;
     resource: { kind: string; metadata: { name: string; namespace: string } };
-    template?: { kind: string; metadata: { name: string; namespace: string } };
   }) => {
     const currentModuleTemplate = findModuleTemplate(
       moduleTemplates,
       resource.name,
       resource.channel,
       resource.version,
-      resource.template,
+      undefined,
       resource.namespace,
     );
 

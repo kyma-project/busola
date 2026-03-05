@@ -205,6 +205,7 @@ export const findModuleTemplate = (
   moduleStatusTemplate?: KymaResourceStatusTemplate | undefined,
   namespace?: string,
 ) => {
+  // Get moduleTemplate based on kyma resource status template
   if (moduleStatusTemplate?.metadata?.name) {
     return moduleTemplates?.items?.find(
       (moduleTemplate) =>
@@ -214,17 +215,7 @@ export const findModuleTemplate = (
     );
   }
 
-  // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
-  const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
-    (moduleTemplate) =>
-      moduleName ===
-        moduleTemplate.metadata.labels[
-          'operator.kyma-project.io/module-name'
-        ] &&
-      moduleTemplate.spec.channel === channel &&
-      (!namespace || moduleTemplate.metadata.namespace === namespace),
-  );
-  const moduleWithInfo = moduleTemplates?.items?.find(
+  return moduleTemplates?.items?.find(
     (moduleTemplate) =>
       moduleName ===
         moduleTemplate.metadata.labels[
@@ -234,8 +225,6 @@ export const findModuleTemplate = (
       moduleTemplate.spec.version === version &&
       (!namespace || moduleTemplate.metadata.namespace === namespace),
   );
-
-  return moduleWithInfo ?? moduleTemplateWithoutInfo;
 };
 
 export const getModuleName = (moduleTemplate: ModuleTemplateType): string => {
