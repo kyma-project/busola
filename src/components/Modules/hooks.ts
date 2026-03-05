@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -49,68 +49,6 @@ export function useModuleStatus(resource: KymaResourceType) {
     fetchModule();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
-
-  return { data, loading, error };
-}
-
-export function useGetAllModulesStatuses(modules: any[]) {
-  const fetch = useFetch();
-  const [data, setData] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  // Create a stable key based on module names
-  const modulesKey = useMemo(() => {
-    if (!modules || modules.length === 0) return '';
-    return modules
-      .map((m) => m?.resource?.metadata?.name ?? m?.metadata?.name ?? m?.name)
-      .filter(Boolean)
-      .join(',');
-  }, [modules]);
-
-  useEffect(() => {
-    async function fetchModules() {
-      if (!modules || modules.length === 0) return;
-      setLoading(true);
-      try {
-        const results = await Promise.all(
-          modules.map(async (module) => {
-            const resource = module?.resource ?? module;
-
-            if (!resource || (!resource?.apiVersion && !resource?.group))
-              return null;
-            const path = getResourcePath(resource);
-
-            try {
-              const response = await fetch({ relativeUrl: path });
-              const status = (await response.json())?.status;
-              return {
-                key: resource?.metadata?.name ?? resource?.name,
-                status: status?.state || ModuleTemplateStatus.Unknown,
-              };
-            } catch (e) {
-              return {
-                key: resource?.metadata?.name ?? resource?.name,
-                status: null,
-                error: e,
-              };
-            }
-          }),
-        );
-
-        setData(results);
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e);
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchModules();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modulesKey]);
 
   return { data, loading, error };
 }
@@ -176,11 +114,11 @@ export const useFetchModuleData = (
               namespaceNodes,
               singleGetFn,
             );
-            const url = `${resourceUrl}/${
-              resource?.metadata?.name || resource?.name
-            }`;
+            const resourceName = resource?.metadata?.name || resource?.name;
+            const url = `${resourceUrl}?fieldSelector=metadata.name=${encodeURIComponent(resourceName)}`;
             const response = await fetch({ relativeUrl: url });
-            const data = await response.json();
+            const list = await response.json();
+            const data = list?.items?.[0] ?? null;
 
             return { name, data };
           } catch (e) {
