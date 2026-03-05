@@ -45,12 +45,23 @@ export type KymaResourceSpecModuleType = {
   channel?: string;
 };
 
+type KymaResourceStatusTemplate = {
+  apiVersion?: string;
+  metadata?: { name: string; namespace?: string };
+  kind?: string;
+};
+
 export type KymaResourceStatusModuleType = {
   name: string;
   channel?: string;
   version?: string;
   state?: string;
   resource?: {
+    apiVersion?: string;
+    metadata?: { name: string; namespace?: string };
+    kind?: string;
+  };
+  template?: {
     apiVersion?: string;
     metadata?: { name: string; namespace?: string };
     kind?: string;
@@ -191,8 +202,18 @@ export const findModuleTemplate = (
   moduleName: string,
   channel: string,
   version: string,
+  moduleStatusTemplate?: KymaResourceStatusTemplate | undefined,
   namespace?: string,
 ) => {
+  if (moduleStatusTemplate?.metadata?.name) {
+    return moduleTemplates?.items?.find(
+      (moduleTemplate) =>
+        moduleTemplate.metadata.name === moduleStatusTemplate.metadata?.name &&
+        moduleTemplate.metadata.namespace ===
+          moduleStatusTemplate?.metadata.namespace,
+    );
+  }
+
   // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
   const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
     (moduleTemplate) =>

@@ -28,7 +28,7 @@ type RowResourceType = {
   channel: string;
   version: string;
   templateVersion?: string;
-  resource: { kind: string; metadata: { namespace: string } };
+  resource: { kind: string; metadata: { name: string; namespace: string } };
   fakeStatus: any;
   namespace?: string;
 };
@@ -78,12 +78,16 @@ export const ModulesListRows = ({
       currentModuleReleaseMeta?.spec?.beta === true
     );
   };
-
+  let moduleStatus;
+  if (kymaResource) {
+    moduleStatus = findModuleStatus(kymaResource, resource.name);
+  }
   const currentModuleTemplate = findModuleTemplate(
     moduleTemplates,
     resource?.name,
     resource?.channel || kymaResource?.spec?.channel || '',
     resource?.templateVersion || resource?.version,
+    moduleStatus?.template,
     resource?.namespace,
   );
 
@@ -104,18 +108,17 @@ export const ModulesListRows = ({
   const { data: moduleResource } = useGetModuleResource(
     moduleResourceWithNamespace,
   );
-
-  const moduleStatus = kymaResource
-    ? findModuleStatus(kymaResource, resource.name)
-    : {
-        name: resource.name,
-        resource: moduleResource,
-        version: resource.version,
-        channel: resource.channel,
-        state: moduleResource?.status?.state,
-        message: moduleResource?.status?.message,
-        maintenance: false,
-      };
+  if (!kymaResource) {
+    moduleStatus = {
+      name: resource.name,
+      resource: moduleResource,
+      version: resource.version,
+      channel: resource.channel,
+      state: moduleResource?.status?.state,
+      message: moduleResource?.status?.message,
+      maintenance: false,
+    };
+  }
 
   const showDetailsLink = hasDetailsLink(resource);
   const moduleIndex =

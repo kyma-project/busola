@@ -131,7 +131,7 @@ export const KymaModulesList = ({
     name: string;
     channel: string;
     version: string;
-    resource: { kind: string };
+    resource: { kind: string; metadata: { name: string; namespace: string } };
   }) => {
     const isInstalled =
       selectedModules?.findIndex((kymaResourceModule) => {
@@ -149,6 +149,8 @@ export const KymaModulesList = ({
       resource.name,
       resource.channel,
       resource.version,
+      moduleStatus?.template,
+      resource?.resource?.metadata?.namespace,
     );
     return (
       (isInstalled || isDeletionFailed || !isError) &&
@@ -202,6 +204,11 @@ export const KymaModulesList = ({
         apiVersion: string;
         metadata: { name: string; namespace: string };
       };
+      template: {
+        kind: string;
+        apiVersion: string;
+        metadata: { name: string; namespace: string };
+      };
     },
   ) => {
     setOpenedModuleIndex(
@@ -217,6 +224,7 @@ export const KymaModulesList = ({
         moduleName,
         moduleStatus.channel,
         moduleStatus.version,
+        moduleStatus?.template,
       );
       const moduleCr = connectedModule?.spec?.data;
       moduleStatus.resource = {

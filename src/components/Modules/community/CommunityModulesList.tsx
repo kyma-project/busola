@@ -198,13 +198,15 @@ export const CommunityModulesList = ({
     channel: string;
     version: string;
     namespace?: string;
-    resource: { kind: string; metadata: { namespace: string } };
+    resource: { kind: string; metadata: { name: string; namespace: string } };
+    template?: { kind: string; metadata: { name: string; namespace: string } };
   }) => {
     const currentModuleTemplate = findModuleTemplate(
       moduleTemplates,
       resource.name,
       resource.channel,
       resource.version,
+      resource.template,
       resource.namespace,
     );
 
@@ -278,6 +280,11 @@ export const CommunityModulesList = ({
         apiVersion: string;
         metadata: { name: string; namespace: string };
       };
+      template: {
+        kind: string;
+        apiVersion: string;
+        metadata: { name: string; namespace: string };
+      };
     },
   ) => {
     setOpenedModuleIndex(
@@ -291,6 +298,8 @@ export const CommunityModulesList = ({
       moduleName,
       moduleStatus.channel,
       moduleStatus.version,
+      moduleStatus?.template,
+      moduleStatus?.resource?.metadata?.namespace,
     );
     if (!moduleStatus.resource) {
       const moduleResource = moduleTemplate?.spec?.data;
