@@ -231,7 +231,7 @@ export const ClusterDataForm = ({
       <div className={className}>
         <K8sNameField
           kind={t('clusters.name_singular')}
-          date-testid="cluster-name"
+          data-testid="cluster-name"
           value={
             kubeconfig ? jp.value(kubeconfig, '$["current-context"]') : null
           }
