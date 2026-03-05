@@ -1,5 +1,5 @@
+import { ReactNode } from 'react';
 import pluralize from 'pluralize';
-import './ControlledBy.scss';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useAtomValue } from 'jotai';
@@ -8,6 +8,8 @@ import { resources } from 'resources';
 import { useUrl } from 'hooks/useUrl';
 import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
 import { Link } from '../Link/Link';
+
+import './ControlledBy.scss';
 
 type GoToDetailsLinkProps = {
   kind: string;
@@ -30,7 +32,7 @@ type ControlledByProps = {
       };
   namespace?: string;
   kindOnly?: boolean;
-  placeholder?: React.ReactNode;
+  placeholder?: ReactNode;
 };
 
 type OwnerRefProps = {
