@@ -49,7 +49,9 @@ export const UI5RadialChart = ({
       accessibleName={accessibleName}
       header={
         <div className="radial-chart-card-header">
-          <Title size="H6">{titleText}</Title>
+          <Title className="ui5-card-header-title" size="H6">
+            {titleText}
+          </Title>
           {tooltipInfo && (
             <HintButton
               className="sap-margin-begin-tiny"
