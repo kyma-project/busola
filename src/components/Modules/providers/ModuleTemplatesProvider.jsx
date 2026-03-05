@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useMemo } from 'react';
 
 import {
   useExternalCommunityModulesQuery,
@@ -33,12 +33,15 @@ export function ModuleTemplatesContextProvider({ children }) {
       (res) => res.value,
     );
 
-  const mergedModuleTmeplates = {
-    items: [
-      ...(allModuleTemplates?.items || []),
-      ...(checkedModuleTemplates || []),
-    ],
-  };
+  const mergedModuleTmeplates = useMemo(
+    () => ({
+      items: [
+        ...(allModuleTemplates?.items || []),
+        ...(checkedModuleTemplates || []),
+      ],
+    }),
+    [allModuleTemplates?.items, checkedModuleTemplates],
+  );
 
   const { data: moduleReleaseMetas, loading: moduleReleaseMetasLoading } =
     useModulesReleaseQuery({});
@@ -46,20 +49,34 @@ export function ModuleTemplatesContextProvider({ children }) {
   const {
     communityTemplates: communityModuleTemplates,
     kymaTemplates: moduleTemplates,
-  } = splitModuleTemplates(mergedModuleTmeplates);
+  } = useMemo(
+    () => splitModuleTemplates(mergedModuleTmeplates),
+    [mergedModuleTmeplates],
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      allModuleTemplates: mergedModuleTmeplates,
+      moduleTemplates,
+      moduleReleaseMetas,
+      moduleReleaseMetasLoading,
+      moduleTemplatesLoading:
+        moduleTemplatesLoading || communityModuleTemplatesLoading,
+      communityModuleTemplates,
+    }),
+    [
+      mergedModuleTmeplates,
+      moduleTemplates,
+      moduleReleaseMetas,
+      moduleReleaseMetasLoading,
+      moduleTemplatesLoading,
+      communityModuleTemplatesLoading,
+      communityModuleTemplates,
+    ],
+  );
 
   return (
-    <ModuleTemplatesContext.Provider
-      value={{
-        allModuleTemplates: mergedModuleTmeplates,
-        moduleTemplates: moduleTemplates,
-        moduleReleaseMetas: moduleReleaseMetas,
-        moduleReleaseMetasLoading: moduleReleaseMetasLoading,
-        moduleTemplatesLoading:
-          moduleTemplatesLoading || communityModuleTemplatesLoading,
-        communityModuleTemplates: communityModuleTemplates,
-      }}
-    >
+    <ModuleTemplatesContext.Provider value={contextValue}>
       {children}
     </ModuleTemplatesContext.Provider>
   );

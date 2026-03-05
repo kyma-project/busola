@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { useGetInstalledNotInstalledModules } from 'components/Modules/hooks';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import {
@@ -55,17 +55,26 @@ export function CommunityModuleContextProvider({
     installedVersions,
   );
 
+  const contextValue = useMemo(
+    () => ({
+      installedCommunityModules: installedCommunityModules,
+      installedCommunityModuleTemplates: installedCommunityModuleTemplates,
+      installedCommunityModulesLoading,
+      notInstalledCommunityModuleTemplates:
+        notInstalledCommunityModuleTemplates,
+      installedVersions,
+    }),
+    [
+      installedCommunityModules,
+      installedCommunityModuleTemplates,
+      installedCommunityModulesLoading,
+      notInstalledCommunityModuleTemplates,
+      installedVersions,
+    ],
+  );
+
   return (
-    <CommunityModuleContext.Provider
-      value={{
-        installedCommunityModules: installedCommunityModules,
-        installedCommunityModuleTemplates: installedCommunityModuleTemplates,
-        installedCommunityModulesLoading,
-        notInstalledCommunityModuleTemplates:
-          notInstalledCommunityModuleTemplates,
-        installedVersions,
-      }}
-    >
+    <CommunityModuleContext.Provider value={contextValue}>
       {children}
     </CommunityModuleContext.Provider>
   );
