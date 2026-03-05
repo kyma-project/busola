@@ -4,7 +4,11 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Icon } from '@ui5/webcomponents-react';
 import useDateNow from 'shared/hooks/useDateNow';
 
-export function CertificateDate({ date, lang }) {
+type CertificateDateProps = {
+  date: string;
+  lang: string;
+};
+export function CertificateDate({ date, lang }: CertificateDateProps) {
   const { t } = useTranslation();
   const currentDate = useDateNow(10_000);
   const dayInMilliseconds = 1000 * 60 * 60 * 24;
@@ -14,7 +18,12 @@ export function CertificateDate({ date, lang }) {
   if (dateDifference >= EXPIRATION_LIMIT)
     return <FormattedDatetime date={date} lang={lang} />;
 
-  let certificateDetails = {};
+  let certificateDetails = {} as {
+    tooltipContent: string;
+    ariaLabel: string;
+    glyph: string;
+    colorIndex: string;
+  };
 
   if (dateDifference < 0) {
     certificateDetails = {

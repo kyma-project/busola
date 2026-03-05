@@ -1,5 +1,5 @@
+import { ReactNode } from 'react';
 import pluralize from 'pluralize';
-import './ControlledBy.scss';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useAtomValue } from 'jotai';
@@ -9,12 +9,46 @@ import { useUrl } from 'hooks/useUrl';
 import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
 import { Link } from '../Link/Link';
 
+import './ControlledBy.scss';
+
+type GoToDetailsLinkProps = {
+  kind: string;
+  apiVersion: string;
+  name: string;
+  namespace?: string;
+  noBrackets?: boolean;
+};
+type ControlledByProps = {
+  ownerReferences:
+    | {
+        apiVersion: string;
+        kind: string;
+        name: string;
+      }[]
+    | {
+        apiVersion: string;
+        kind: string;
+        name: string;
+      };
+  namespace?: string;
+  kindOnly?: boolean;
+  placeholder?: ReactNode;
+};
+
+type OwnerRefProps = {
+  owner: {
+    apiVersion: string;
+    kind: string;
+    name: string;
+  };
+};
+
 export const GoToDetailsLink = ({
   kind,
   name,
   namespace,
   noBrackets = false,
-}) => {
+}: GoToDetailsLinkProps) => {
   const extensions = useAtomValue(extensionsAtom);
   const { namespaceUrl, clusterUrl } = useUrl();
 
@@ -58,14 +92,14 @@ export const ControlledBy = ({
   namespace = undefined,
   kindOnly = false,
   placeholder = EMPTY_TEXT_PLACEHOLDER,
-}) => {
+}: ControlledByProps) => {
   if (
     !ownerReferences ||
     (Array.isArray(ownerReferences) && !ownerReferences?.length)
   )
     return placeholder;
 
-  const OwnerRef = ({ owner }) => {
+  const OwnerRef = ({ owner }: OwnerRefProps) => {
     return (
       <div key={owner.name}>
         {owner.kind}
