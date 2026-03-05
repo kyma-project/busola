@@ -8,7 +8,6 @@ import {
 import { splitModuleTemplates } from '../support';
 
 export const ModuleTemplatesContext = createContext({
-  allModuleTemplates: { items: [] },
   moduleTemplatesLoading: false,
   moduleReleaseMetas: { items: [] },
   moduleReleaseMetasLoading: false,
@@ -32,7 +31,7 @@ export function ModuleTemplatesContextProvider({ children }) {
       (res) => res.value,
     );
 
-  const mergedModuleTmeplates = {
+  const mergedModuleTemplates = {
     items: [
       ...(allModuleTemplates?.items || []),
       ...(checkedModuleTemplates || []),
@@ -45,12 +44,11 @@ export function ModuleTemplatesContextProvider({ children }) {
   const {
     communityTemplates: communityModuleTemplates,
     kymaTemplates: moduleTemplates,
-  } = splitModuleTemplates(mergedModuleTmeplates);
+  } = splitModuleTemplates(mergedModuleTemplates);
 
   return (
     <ModuleTemplatesContext.Provider
       value={{
-        allModuleTemplates: mergedModuleTmeplates,
         moduleTemplates: moduleTemplates,
         moduleReleaseMetas: moduleReleaseMetas,
         moduleReleaseMetasLoading: moduleReleaseMetasLoading,
