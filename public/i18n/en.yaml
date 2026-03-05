@@ -11,7 +11,7 @@ cluster-overview:
     pool: Pool
   statistics:
     cpu-limits: CPU limits
-    cpu-limits-tooltip: CPU limits informs you about the maximum amount of CPU resources that Pods in the cluster can use. It helps you understand how much of the cluster's processing power is allocated to your applications and whether you have room to scale up.
+    cpu-limits-tooltip: CPU limits informs you about the maximum amount of CPU resources that Pods in the cluster can use. It helps you understand how much of the cluster's processing power is allocated to your applications and whether you have room to scale up. It is common for the total sum of limits across a node to exceed 100% of the actual physical node capacity. This happens because Kubernetes is designed to maximize resource utilization (overcommitment). This is configurable.
     cpu-requests: CPU requests
     cpu-requests-tooltip: CPU requests informs you about the amount of CPU resources that are requested by Pods in the cluster. It helps you understand the CPU resource requirements of your applications.
     cpu-usage: CPU Usage
@@ -25,7 +25,7 @@ cluster-overview:
     healthy-pods: Healthy Pods
     healthy-statefulsets: Healthy Stateful Sets
     memory-limits: Memory limits
-    memory-limits-tooltip: Memory limits informs you about the maximum amount of memory resources that Pods in the cluster can use. It helps you understand how much of the cluster's memory is allocated to your applications and whether you have room to scale up.
+    memory-limits-tooltip: Memory limits informs you about the maximum amount of memory resources that Pods in the cluster can use. It helps you understand how much of the cluster's memory is allocated to your applications and whether you have room to scale up. It is common for the total sum of all limits across a node to exceed 100% of the actual physical node capacity. This happens because Kubernetes is designed to maximize resource utilization (overcommitment). This is configurable.
     memory-requests: Memory requests
     memory-requests-tooltip: Memory requests informs you about the amount of memory resources that are requested by Pods in the cluster. It helps you understand the memory resource requirements of your applications.
     memory-usage: Memory Usage
