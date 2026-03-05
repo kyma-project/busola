@@ -2,7 +2,11 @@ import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 
-export const ErrorPanel = ({ error, title }) => {
+type ErrorPanelProps = {
+  error: any;
+  title?: string;
+};
+export const ErrorPanel = ({ error, title }: ErrorPanelProps) => {
   const { t } = useTranslation();
 
   return (
