@@ -12,6 +12,7 @@ export function NodeResources({ metrics, resources }) {
   return cpu && memory ? (
     <>
       <UI5RadialChart
+        tooltipInfo={t('cluster-overview.statistics.cpu-usage-tooltip')}
         color="var(--sapChart_OrderedColor_5)"
         value={
           cpusToHumanReadable(cpu.usage, {
@@ -28,6 +29,7 @@ export function NodeResources({ metrics, resources }) {
         accessibleName={t('cluster-overview.statistics.cpu-usage')}
       />
       <UI5RadialChart
+        tooltipInfo={t('cluster-overview.statistics.memory-usage-tooltip')}
         color="var(--sapChart_OrderedColor_6)"
         value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}
         max={bytesToHumanReadable(memory.capacity, { unit: 'Mi' }).value}
@@ -38,6 +40,7 @@ export function NodeResources({ metrics, resources }) {
         accessibleName={t('cluster-overview.statistics.memory-usage')}
       />
       <UI5RadialChart
+        tooltipInfo={t('cluster-overview.statistics.cpu-requests-tooltip')}
         color="var(--sapChart_OrderedColor_5)"
         value={
           cpusToHumanReadable(resources?.requests?.cpu, {
@@ -62,6 +65,7 @@ export function NodeResources({ metrics, resources }) {
         accessibleName={t('cluster-overview.statistics.cpu-requests')}
       />
       <UI5RadialChart
+        tooltipInfo={t('cluster-overview.statistics.memory-requests-tooltip')}
         color="var(--sapChart_OrderedColor_6)"
         value={
           bytesToHumanReadable(resources?.requests?.memory, { unit: 'Gi' })
@@ -76,6 +80,7 @@ export function NodeResources({ metrics, resources }) {
         accessibleName={t('cluster-overview.statistics.memory-requests')}
       />
       <UI5RadialChart
+        tooltipInfo={t('cluster-overview.statistics.cpu-limits-tooltip')}
         color="var(--sapChart_OrderedColor_5)"
         value={
           cpusToHumanReadable(resources?.limits?.cpu, {
@@ -100,6 +105,7 @@ export function NodeResources({ metrics, resources }) {
         accessibleName={t('cluster-overview.statistics.cpu-limits')}
       />
       <UI5RadialChart
+        tooltipInfo={t('cluster-overview.statistics.memory-limits-tooltip')}
         color="var(--sapChart_OrderedColor_6)"
         value={
           bytesToHumanReadable(resources?.limits?.memory, { unit: 'Gi' }).value

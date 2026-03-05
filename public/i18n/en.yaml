@@ -11,8 +11,11 @@ cluster-overview:
     pool: Pool
   statistics:
     cpu-limits: CPU limits
+    cpu-limits-tooltip: CPU limits informs you about the maximum amount of CPU resources that Pods in the cluster can use. It helps you understand how much of the cluster's processing power is allocated to your applications and whether you have room to scale up.
     cpu-requests: CPU requests
+    cpu-requests-tooltip: CPU requests informs you about the amount of CPU resources that are requested by Pods in the cluster. It helps you understand the CPU resource requirements of your applications.
     cpu-usage: CPU Usage
+    cpu-usage-tooltip: CPU usage shows how much processing power is currently being used across all nodes in the Kubernetes cluster compared to the total available CPU capacity. It helps you understand overall cluster load and available compute resources.
     daemonsets-overview: Daemon Sets Overview
     deployments-overview: Deployments Overview
     failing-deployments: Failing Deployments
@@ -22,8 +25,11 @@ cluster-overview:
     healthy-pods: Healthy Pods
     healthy-statefulsets: Healthy Stateful Sets
     memory-limits: Memory limits
+    memory-limits-tooltip: Memory limits informs you about the maximum amount of memory resources that Pods in the cluster can use. It helps you understand how much of the cluster's memory is allocated to your applications and whether you have room to scale up.
     memory-requests: Memory requests
+    memory-requests-tooltip: Memory requests informs you about the amount of memory resources that are requested by Pods in the cluster. It helps you understand the memory resource requirements of your applications.
     memory-usage: Memory Usage
+    memory-usage-tooltip: Memory Usage shows how much memory is currently being used across all nodes in the Kubernetes cluster compared to the total available memory capacity. It helps you understand overall cluster load and available memory resources.
     modules-overview: Modules Overview
     nodes: Nodes
     nvidia-gpus: Nvidia GPUs

@@ -131,6 +131,7 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
       <div className="cluster-stats">
         <div className="item-wrapper card-tall">
           <UI5RadialChart
+            tooltipInfo={t('cluster-overview.statistics.cpu-usage-tooltip')}
             cardClassName="item"
             color="var(--sapChart_OrderedColor_5)"
             value={
@@ -158,6 +159,7 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
         </div>
         <div className="item-wrapper card-tall">
           <UI5RadialChart
+            tooltipInfo={t('cluster-overview.statistics.memory-usage-tooltip')}
             cardClassName="item"
             color="var(--sapChart_OrderedColor_6)"
             value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}
