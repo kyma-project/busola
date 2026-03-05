@@ -1,32 +1,44 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, RefObject } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
+import { ClusterDataForm } from 'components/Clusters/views/EditCluster/EditCluster';
+import { Kubeconfig, ValidKubeconfig } from 'types';
 
 import './KubeconfigUpload.scss';
-import { ClusterDataForm } from 'components/Clusters/views/EditCluster/EditCluster';
 
-export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
-  const [error, setError] = useState('');
+type KubeconfigUploadProps = {
+  kubeconfig?: Kubeconfig;
+  setKubeconfig: (config?: Kubeconfig) => void;
+  formRef: RefObject<HTMLElement>;
+};
+
+export function KubeconfigUpload({
+  kubeconfig,
+  setKubeconfig,
+  formRef,
+}: KubeconfigUploadProps) {
+  const [error, setError] = useState<string | null>(null);
 
   const { t } = useTranslation();
 
   const updateKubeconfig = useCallback(
-    (text) => {
+    (text: string) => {
       try {
         const config = jsyaml.load(text);
 
         if (typeof config !== 'object') {
           setError(t('clusters.wizard.not-an-object'));
         } else {
-          setKubeconfig(config);
+          setKubeconfig(config as Kubeconfig);
 
           setError(null);
         }
-      } catch ({ message }) {
+      } catch (e) {
+        const message = (e as Error)?.message;
         // get the message until the newline
-        setError(message.substr(0, message.indexOf('\n')));
+        setError(message.slice(0, message.indexOf('\n')));
       }
     },
     [t, setError, setKubeconfig],
@@ -42,11 +54,10 @@ export function KubeconfigUpload({ kubeconfig, setKubeconfig, formRef }) {
         />
       </div>
       <ClusterDataForm
-        kubeconfig={kubeconfig}
-        setResource={(modified) => {
+        kubeconfig={kubeconfig as ValidKubeconfig}
+        setResource={(modified: Kubeconfig) => {
           if (modified) setKubeconfig({ ...modified });
         }}
-        onChange={updateKubeconfig}
         formElementRef={formRef}
         modeSelectorDisabled={
           kubeconfig ? !Object.keys(kubeconfig)?.length : !kubeconfig

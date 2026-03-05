@@ -16,7 +16,13 @@ import { decodeHelmRelease } from './decodeHelmRelease';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
-export default function HelmReleasesDetails({ releaseName, namespace }) {
+export default function HelmReleasesDetails({
+  releaseName,
+  namespace,
+}: {
+  releaseName?: string;
+  namespace?: string;
+}) {
   const { t } = useTranslation();
 
   const resourceUrl =
@@ -24,15 +30,16 @@ export default function HelmReleasesDetails({ releaseName, namespace }) {
       ? `/api/v1/secrets?labelSelector=name==${releaseName}`
       : `/api/v1/namespaces/${namespace}/secrets?labelSelector=name==${releaseName}`;
 
-  const { data, loading } = useGetList((s) => s.type === 'helm.sh/release.v1')(
-    resourceUrl,
-  );
+  const { data, loading } = useGetList(
+    (s?: { type?: string }) => s?.type === 'helm.sh/release.v1',
+  )(resourceUrl);
 
   if (loading) return <Spinner />;
   const releaseSecret = findRecentRelease(data || []);
 
   if (!releaseSecret) {
     return (
+      /*@ts-expect-error Type mismatch between js and ts*/
       <ResourceNotFound
         resource={prettifyNameSingular(undefined, t('helm-releases.title'))}
       />
@@ -57,9 +64,10 @@ export default function HelmReleasesDetails({ releaseName, namespace }) {
       />
     ),
     () => (
+      /*@ts-expect-error Type mismatch between js and ts*/
       <EventsList
         key="events"
-        namespace={namespace}
+        namespace={namespace ?? ''}
         filter={filterByResource('Secret', releaseSecret.metadata.name)}
         hideInvolvedObjects={true}
       />
@@ -89,10 +97,10 @@ export default function HelmReleasesDetails({ releaseName, namespace }) {
       resourceName={releaseName}
       customTitle={releaseName}
       resourceUrl={resourceUrl}
-      resource={releaseSecret}
       customStatusColumns={customStatusColumns}
       statusBadge={statusBadge}
       createResourceForm={() => (
+        /*@ts-expect-error Type mismatch between js and ts*/
         <ResourceCreate
           title={'HelmRelease'}
           isEdit={true}

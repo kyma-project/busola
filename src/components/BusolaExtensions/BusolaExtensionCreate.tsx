@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEventHandler, RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 
@@ -15,12 +15,19 @@ import { clusterAtom } from 'state/clusterAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
+import { Crd } from 'types';
+
+type BusolaExtensionCreateProps = {
+  formElementRef: RefObject<HTMLFormElement>;
+  onChange: FormEventHandler<HTMLFormElement>;
+  layoutNumber: string;
+};
 
 export default function BusolaExtensionCreate({
   formElementRef,
   onChange,
   layoutNumber,
-}) {
+}: BusolaExtensionCreateProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const notificationManager = useNotification();
@@ -32,8 +39,8 @@ export default function BusolaExtensionCreate({
 
   const { data: crds } = useGetList()(
     '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
-  );
-  const [crd, setCrd] = useState(null);
+  ) as { data: Crd[] | null; loading: boolean; error: null };
+  const [crd, setCrd] = useState<Crd | null>(null);
   const [state, setState] = useState({});
 
   return (
@@ -46,11 +53,10 @@ export default function BusolaExtensionCreate({
         setResource={setState}
         className="resource-form--unset-height"
         createResource={async () => {
-          const onError = (e) =>
+          const onError = (e: Error) =>
             notificationManager.notifyError({
               content: t('common.messages.error', { error: e.message }),
-              title: t('extensibility.starter-modal.messages.error'),
-              type: 'error',
+              header: t('extensibility.starter-modal.messages.error'),
             });
 
           const onSuccess = () => {
@@ -68,7 +74,7 @@ export default function BusolaExtensionCreate({
                 namespaceId: 'kube-public',
               },
               midColumn: {
-                resourceName: crd?.metadata?.name,
+                resourceName: crd?.metadata?.name ?? null,
                 resourceType: 'Extensions',
                 rawResourceTypeName: 'ConfigMap',
                 namespaceId: 'kube-public',
@@ -76,7 +82,7 @@ export default function BusolaExtensionCreate({
               endColumn: null,
             });
             navigate(
-              `/cluster/${cluster.contextName}/busolaextensions/kube-public/${crd.metadata.name}${nextQuery}`,
+              `/cluster/${cluster?.contextName}/busolaextensions/kube-public/${crd?.metadata?.name}${nextQuery}`,
             );
           };
 
@@ -94,8 +100,8 @@ export default function BusolaExtensionCreate({
           required
           label={t('extensibility.starter-modal.crd')}
           value={crd?.metadata.name}
-          setValue={(value) => {
-            const crd = crds.find((crd) => crd.metadata.name === value);
+          setValue={(value: string) => {
+            const crd = crds?.find((crd) => crd.metadata.name === value);
             if (crd) {
               setCrd(crd);
               setState(createExtensibilityTemplate(crd, t));

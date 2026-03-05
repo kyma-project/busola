@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 export { resourceType, ResourceDescription } from 'resources/Events';
 export const namespaced = false;
@@ -11,5 +11,5 @@ export const topLevelNode = true;
 export const pathSegment = 'clusterevents';
 export const customPath = `${pathSegment}/:namespace?/:resourceName?`;
 
-export const List = lazy(() => import('./ClusterEventList'));
-export const Details = lazy(() => import('./ClusterEventDetails'));
+export const List = lazyWithRetries(() => import('./ClusterEventList'));
+export const Details = lazyWithRetries(() => import('./ClusterEventDetails'));

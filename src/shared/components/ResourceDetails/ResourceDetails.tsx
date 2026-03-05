@@ -22,7 +22,7 @@ export type ResourceDetailsProps = {
   customColumns?: CustomColumnsType;
   children?: ReactNode;
   customComponents?: Array<(resource: any, resourceUrl: string) => ReactNode>;
-  description?: string;
+  description?: ReactNode;
   resourceUrl?: string;
   resourceType: string;
   resourceName?: string;

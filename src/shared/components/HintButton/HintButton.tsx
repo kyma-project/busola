@@ -11,6 +11,7 @@ type HintButtonProps = {
   disableLinkDetection?: boolean;
   ariaTitle?: string | JSX.Element;
   className?: string;
+  id?: string;
 };
 
 export function HintButton({
@@ -20,6 +21,7 @@ export function HintButton({
   disableLinkDetection = false,
   ariaTitle = '',
   className,
+  id,
 }: HintButtonProps) {
   const ID = useId();
   const { t, i18n } = useTranslation();
@@ -33,7 +35,7 @@ export function HintButton({
     <>
       <Button
         className={className}
-        id={`descriptionOpener-${ID}`}
+        id={id ?? `descriptionOpener-${ID}`}
         icon="hint"
         design="Transparent"
         onClick={(e) => {

@@ -10,7 +10,7 @@ import jsyaml from 'js-yaml';
 import { Editor as MonacoEditor } from 'shared/components/MonacoEditorESM/Editor';
 
 type EditorProps = {
-  value: any;
+  value?: any;
   onChange?: (value: any) => void;
   setValue?: (value: any) => void;
   language?: string;

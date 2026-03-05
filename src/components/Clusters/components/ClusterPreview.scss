@@ -2,8 +2,12 @@
   overflow-x: hidden;
   margin-bottom: 4rem;
 
+  ui5-text {
+    display: block;
+  }
+
   &__subtitle {
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--sapList_BorderColor);
   }
 
@@ -25,21 +29,11 @@
     width: 100%;
     overflow-wrap: break-word;
     word-break: break-all;
-    font-size: var(--sapFontSize);
-  }
-
-  &__data-header {
-    color: var(--sapContent_LabelColor);
-    font-size: var(--sapFontSize);
   }
 
   &__edit-button {
-    align-self: flex-end;
+    align-self: center;
     width: 80%;
-
-    @media screen and (max-width: 380px) {
-      align-self: center;
-    }
   }
 
   &__storage-container {

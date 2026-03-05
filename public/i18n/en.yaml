@@ -122,7 +122,6 @@ clusters:
     title-all-clusters: Clusters
     title-current-cluster: Cluster Overview
   statuses:
-    inmemory: In Memory
     localstorage: Local Storage
     sessionstorage: Session Storage
     unknown: Unknown
@@ -130,18 +129,15 @@ clusters:
     choose-storage:
       label: Storage type configuration
     descriptions:
-      inMemory: Cluster data is cleared when you leave or refresh the page.
       localStorage: Cluster data is persisted between browser reloads.
       sessionStorage: Cluster data is cleared when the page session ends.
     info: |
-      You can choose where to store your cluster configuration. 
-      However, we recommend the pre-selected storage mode based on your kubeconfig file type. 
+      You can choose where to store your cluster configuration.
+      However, we recommend the pre-selected storage mode based on your kubeconfig file type.
       None of the options stores information on the server.
     labels:
-      inMemory: In memory
       localStorage: Local storage
       sessionStorage: Session storage
-    oidc-memory-warning: Memory storage is not compatible with browser-based OIDC login. After the authentication redirect, cluster data stored in memory is lost. Use session or local storage instead.
     storage-preference: Storage preference
     title: Storage Type
   token: Token
@@ -300,6 +296,8 @@ common:
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
+    session-expired: Your session expired, or there is a network issue.
+    session-not-renewed: Your session could not be renewed.
   headers:
     age: Age
     annotations: Annotations

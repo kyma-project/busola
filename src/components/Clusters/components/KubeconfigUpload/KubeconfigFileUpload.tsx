@@ -4,21 +4,27 @@ import { Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
-export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
+type KubeconfigFileUploadProps = {
+  onKubeconfigTextAdded: (kubeconfigText: string) => void;
+};
+
+export function KubeconfigFileUpload({
+  onKubeconfigTextAdded,
+}: KubeconfigFileUploadProps) {
   const { t } = useTranslation();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
 
-  const readFile = (file) => {
+  const readFile = (file: File) => {
     return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target.result);
+      reader.onload = (e) => resolve(e?.target?.result);
       reader.readAsText(file);
     });
   };
 
-  const onKubeconfigFileUploaded = async (files) => {
+  const onKubeconfigFileUploaded = async (files: FileList) => {
     const fileContent = await readFile(files[0]);
-    onKubeconfigTextAdded(fileContent);
+    onKubeconfigTextAdded(fileContent as string);
   };
 
   return (
@@ -35,6 +41,7 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
           />
         </>
       </Title>
+      {/*@ts-expect-error Type mismatch between js and ts*/}
       <FileInput
         fileInputChanged={onKubeconfigFileUploaded}
         acceptedFileFormats=".yaml,.yml"

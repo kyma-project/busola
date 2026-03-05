@@ -9,9 +9,9 @@ import { Ui5CustomEvent } from '@ui5/webcomponents-react-base';
 import { InputDomRef } from '@ui5/webcomponents-react';
 
 type K8sNameFieldProps = {
-  kind: string;
+  kind?: string;
   value?: string;
-  setValue: (value: string) => void;
+  setValue?: (value: string) => void;
   className?: string;
   pattern?: string;
   showHelp?: boolean;
@@ -46,7 +46,7 @@ export function K8sNameField({
   const inputInfoLink = useCreateResourceDescription(inputInfo);
 
   const setValueOnChange = (event: Ui5CustomEvent<InputDomRef>) => {
-    setValue(event.target.value);
+    setValue?.(event.target.value);
   };
 
   return (
@@ -76,7 +76,11 @@ export function K8sNameField({
               />
             </div>
             {showHelp && inputInfo === undefined ? (
-              <Label wrappingType="Normal" style={{ marginTop: '5px' }}>
+              <Label
+                wrappingType="Normal"
+                showColon={false}
+                style={{ marginTop: '5px' }}
+              >
                 {t('common.tooltips.k8s-name-input')}
               </Label>
             ) : null}

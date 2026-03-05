@@ -6,12 +6,12 @@ import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/Readab
 import { Labels } from 'shared/components/Labels/Labels';
 import { K8sResource } from 'types';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { CustomColumn } from './ResourceCustomStatusColumns';
 
 type ResourceDetailsCardContentProps = {
   resource: K8sResource & Resource;
-  description?: string;
+  description?: ReactNode;
   setShowTitleDescription: Dispatch<SetStateAction<boolean>>;
   showTitleDescription: boolean;
   lastUpdate: string;

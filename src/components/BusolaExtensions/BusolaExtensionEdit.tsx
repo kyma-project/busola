@@ -10,6 +10,15 @@ import jp from 'jsonpath';
 import { createConfigMapTemplate, SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
 
+type BusolaExtensionEditProps = {
+  namespace?: string;
+  formElementRef?: React.RefObject<HTMLFormElement>;
+  onChange?: (newResource: Record<string, any>) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resource?: Record<string, any>;
+  resourceUrl: string;
+};
+
 export function BusolaExtensionEdit({
   namespace,
   formElementRef,
@@ -18,7 +27,7 @@ export function BusolaExtensionEdit({
   resource: initialExtension,
   resourceUrl,
   ...props
-}) {
+}: BusolaExtensionEditProps) {
   const { t } = useTranslation();
 
   const [extension, setExtension] = useState(
@@ -67,7 +76,7 @@ export function BusolaExtensionEdit({
         readOnly={true}
         propertyPath="$.metadata.name"
         kind="ConfigMap"
-        validate={(value) => !!value}
+        validate={(value?: string) => !!value}
       />
       <ResourceForm.FormField
         required
@@ -75,7 +84,7 @@ export function BusolaExtensionEdit({
           extension,
           `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`,
         )}
-        setValue={(val) => {
+        setValue={(val: string) => {
           jp.value(
             extension,
             `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`,

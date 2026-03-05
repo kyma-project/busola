@@ -9,39 +9,54 @@ import {
   Label,
   List,
   ListItemCustom,
+  Ui5CustomEvent,
+  ListDomRef,
 } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { getUserDetail } from './helpers';
+import { ResourceFormWrapperProps } from 'shared/ResourceForm/components/Wrapper';
+import { ListItemClickEventDetail } from '@ui5/webcomponents/dist/List';
 
 import './ContextChooser.scss';
+import { KubeConfigMultipleState } from 'state/multipleContextsAtom';
 
-export function ContextChooser(params) {
-  const kubeconfig = params.resource;
+type ContextChooserProps = {
+  resource?: Record<string, any>;
+  chosenContext: string;
+  setChosenContext: (context?: string) => void;
+} & ResourceFormWrapperProps;
+
+export function ContextChooser({
+  resource,
+  chosenContext,
+  setChosenContext,
+  ...props
+}: ContextChooserProps) {
   const { t } = useTranslation();
 
-  if (!Array.isArray(kubeconfig.contexts)) {
+  if (!Array.isArray(resource?.contexts)) {
     return '';
   }
 
   return (
     <div className="add-cluster__content-container">
-      <ResourceForm.Wrapper {...params}>
+      <ResourceForm.Wrapper resource={resource} {...props}>
         <Title className="sap-margin-bottom-small" level="H5">
           {t('clusters.wizard.provide-context')}
         </Title>
         <ResourceForm.FormField
           required
-          value={params.chosenContext}
+          value={chosenContext}
           propertyPath='$["current-context"]'
           label={t('clusters.wizard.context')}
-          validate={(value) => !!value}
+          validate={(value: string) => !!value}
           input={({ setValue }) => (
             <ContextButtons
-              contexts={kubeconfig.contexts}
-              users={kubeconfig?.users}
+              contexts={resource?.contexts}
+              users={resource?.users}
               setValue={setValue}
-              chosenContext={params.chosenContext}
-              setChosenContext={params.setChosenContext}
+              chosenContext={chosenContext}
+              setChosenContext={setChosenContext}
             />
           )}
         />
@@ -49,22 +64,34 @@ export function ContextChooser(params) {
     </div>
   );
 }
+
+type ContextButtonsProps = {
+  users?: Array<{ name: string; user: { exec: { args?: string[] } } }>;
+  contexts: { name: string }[];
+  chosenContext: string;
+  setValue: (context: string) => void;
+  setChosenContext?: (context: string) => void;
+};
+
 export function ContextButtons({
   users,
   contexts,
-  setValue,
   chosenContext,
+  setValue,
   setChosenContext,
-}) {
+}: ContextButtonsProps) {
   return (
     <List
-      onItemClick={(e) => {
-        setValue(e?.detail?.item?.children[0]?.children[0].value);
-        if (setChosenContext)
-          setChosenContext(e?.detail?.item?.children[0]?.children[0].value);
+      onItemClick={(
+        e: Ui5CustomEvent<ListDomRef, ListItemClickEventDetail>,
+      ) => {
+        const contextElement = e?.detail?.item?.children?.[0]
+          ?.children?.[0] as HTMLInputElement;
+        setValue(contextElement?.value);
+        if (setChosenContext) setChosenContext(contextElement?.value);
       }}
     >
-      {contexts.map((context) => {
+      {contexts?.map((context) => {
         return (
           <ListItemCustom key={context.name} style={{}}>
             <div>
@@ -89,7 +116,18 @@ export function ContextButtons({
     </List>
   );
 }
-export function ContextChooserMessage({ contextState, setValue, onCancel }) {
+
+type ContextChooserMessageProps = {
+  contextState?: KubeConfigMultipleState;
+  setValue: (context: string) => void;
+  onCancel: () => void;
+};
+
+export function ContextChooserMessage({
+  contextState,
+  setValue,
+  onCancel,
+}: ContextChooserMessageProps) {
   const { t } = useTranslation();
   const [chosenContext, setChosenContext] = useState('');
 
@@ -118,10 +156,12 @@ export function ContextChooserMessage({ contextState, setValue, onCancel }) {
     >
       <List
         onItemClick={(e) => {
-          setChosenContext(e?.detail?.item?.children[0]?.children[0].value);
+          const contextElement = e?.detail?.item?.children?.[0]
+            ?.children?.[0] as HTMLInputElement;
+          setChosenContext(contextElement?.value);
         }}
       >
-        {contextState.contexts.map((context) => (
+        {contextState?.contexts?.map((context) => (
           <ListItemCustom key={context.name} style={{}}>
             <div>
               <RadioButton
@@ -135,8 +175,8 @@ export function ContextChooserMessage({ contextState, setValue, onCancel }) {
               />
               {contextState?.users && (
                 <AuthContextData
-                  contextName={context.name}
-                  users={contextState.users}
+                  contextName={context?.name}
+                  users={contextState?.users as any}
                 />
               )}
             </div>
@@ -147,7 +187,12 @@ export function ContextChooserMessage({ contextState, setValue, onCancel }) {
   );
 }
 
-function AuthContextData({ contextName, users }) {
+type AuthContextDataProps = {
+  contextName: string;
+  users?: Array<{ name: string; user: { exec: { args?: string[] } } }>;
+};
+
+function AuthContextData({ contextName, users }: AuthContextDataProps) {
   const { t } = useTranslation();
 
   const issuerUrl = getUserDetail(contextName, '--oidc-issuer-url=', users);

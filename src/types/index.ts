@@ -39,4 +39,14 @@ export interface K8sAPIResource {
   base: string;
 }
 
+export type Crd = {
+  spec: {
+    group: string;
+    scope: string;
+    names: { plural: string; kind: string; categories?: string[] };
+  };
+  apiVersion: string;
+  metadata: { name: string; namespace?: string };
+};
+
 export * from './kubeconfig';

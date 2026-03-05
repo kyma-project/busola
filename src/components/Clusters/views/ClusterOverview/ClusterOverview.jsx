@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router';
@@ -26,8 +26,9 @@ import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 import DeleteResourceModal from 'shared/components/DeleteResourceModal/DeleteResourceModal';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
-const Injections = lazy(
+const Injections = lazyWithRetries(
   () => import('../../../Extensibility/ExtensibilityInjections'),
 );
 

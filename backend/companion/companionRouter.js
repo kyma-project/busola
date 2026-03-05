@@ -71,19 +71,19 @@ async function buildApiHeaders(authData, contentType = 'application/json') {
 }
 
 async function handlePromptSuggestions(req, res) {
-  const { namespace, resourceType, groupVersion, resourceName } = JSON.parse(
-    req.body.toString(),
-  );
   const authData = extractAuthHeaders(req);
-  const endpointUrl = COMPANION_API_BASE_URL;
-  const payload = {
-    resource_kind: resourceType,
-    resource_api_version: groupVersion,
-    resource_name: resourceName,
-    namespace: namespace,
-  };
 
   try {
+    const { namespace, resourceType, groupVersion, resourceName } = JSON.parse(
+      req.body.toString(),
+    );
+    const endpointUrl = COMPANION_API_BASE_URL;
+    const payload = {
+      resource_kind: resourceType,
+      resource_api_version: groupVersion,
+      resource_name: resourceName,
+      namespace: namespace,
+    };
     const headers = await buildApiHeaders(authData);
 
     const response = await fetch(endpointUrl, {
@@ -107,29 +107,32 @@ async function handlePromptSuggestions(req, res) {
 }
 
 async function handleChatMessage(req, res) {
-  const { query, namespace, resourceType, groupVersion, resourceName } =
-    JSON.parse(req.body.toString());
-
   const authData = extractAuthHeaders(req);
   const conversationId = authData.sessionId;
 
-  const endpointUrl = new URL(
-    `${encodeURIComponent(conversationId)}/messages`,
-    COMPANION_API_BASE_URL,
-  );
-
-  const payload = {
-    query,
-    resource_kind: resourceType,
-    resource_api_version: groupVersion,
-    resource_name: resourceName,
-    namespace: namespace,
-  };
-
   try {
+    const { query, namespace, resourceType, groupVersion, resourceName } =
+      JSON.parse(req.body.toString());
+
+    const endpointUrl = new URL(
+      `${encodeURIComponent(conversationId)}/messages`,
+      COMPANION_API_BASE_URL,
+    );
+
+    const payload = {
+      query,
+      resource_kind: resourceType,
+      resource_api_version: groupVersion,
+      resource_name: resourceName,
+      namespace: namespace,
+    };
+
     const uuidPattern = /^[a-f0-9]{32}$/i;
     if (!uuidPattern.test(conversationId)) {
-      throw new Error('Invalid session ID ');
+      const error = new Error('Invalid session ID');
+      error.status = 400;
+      error.error = 'Invalid session ID';
+      throw error;
     }
     // Set up headers for streaming response
     res.setHeader('Content-Type', 'text/event-stream');
@@ -167,7 +170,7 @@ async function handleChatMessage(req, res) {
   } catch (error) {
     req.log.warn(error);
     if (!res.headersSent) {
-      res.status(error.status).json({
+      res.status(error.status ?? 500).json({
         error: error.error,
         message: error.message,
       });
@@ -190,12 +193,20 @@ async function handleFollowUpSuggestions(req, res) {
   const authData = extractAuthHeaders(req);
   const conversationId = authData.sessionId;
 
-  const endpointUrl = new URL(
-    `${encodeURIComponent(conversationId)}/questions`,
-    COMPANION_API_BASE_URL,
-  );
-
   try {
+    const uuidPattern = /^[a-f0-9]{32}$/i;
+    if (!uuidPattern.test(conversationId)) {
+      const error = new Error('Invalid session ID');
+      error.status = 400;
+      error.error = 'Invalid session ID';
+      throw error;
+    }
+
+    const endpointUrl = new URL(
+      `${encodeURIComponent(conversationId)}/questions`,
+      COMPANION_API_BASE_URL,
+    );
+
     const headers = await buildApiHeaders(authData);
 
     const response = await fetch(endpointUrl, {
@@ -209,8 +220,9 @@ async function handleFollowUpSuggestions(req, res) {
       conversationId: data?.conversation_id,
     });
   } catch (error) {
+    req.log.warn(error);
     res
-      .status(500)
+      .status(error.status ?? 500)
       .json({ error: `Failed to fetch AI chat data: ${error.message}` });
   }
 }

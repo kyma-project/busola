@@ -8,7 +8,7 @@ interface ClusterConfigType {
 }
 
 interface ClusterStorageTypeProps {
-  clusterConfig: ClusterConfigType;
+  clusterConfig?: ClusterConfigType | null;
 }
 
 export function ClusterStorageType({ clusterConfig }: ClusterStorageTypeProps) {

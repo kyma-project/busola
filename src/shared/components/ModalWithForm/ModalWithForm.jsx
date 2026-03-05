@@ -13,14 +13,14 @@ import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 export const ModalWithForm = ({
   performRefetch = () => {},
   title,
-  button,
+  button = undefined,
   renderForm,
-  item,
+  item = {},
   modalOpeningComponent,
   confirmText,
   invalidPopupMessage = '',
   className,
-  getToggleFormFn,
+  getToggleFormFn = undefined,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -91,13 +91,13 @@ export const ModalWithForm = ({
       </div>
     ) : (
       <Button
-        endIcon={button.icon || null}
-        accessibleName={button.label || null}
-        design={button.design}
-        disabled={!!button.disabled}
+        endIcon={button?.icon || null}
+        accessibleName={button?.label || null}
+        design={button?.design}
+        disabled={!!button?.disabled}
         onClick={() => setOpenStatus(true)}
       >
-        {button.text}
+        {button?.text}
       </Button>
     );
 
@@ -169,4 +169,5 @@ ModalWithForm.propTypes = {
   invalidPopupMessage: PropTypes.string,
   button: CustomPropTypes.button,
   className: PropTypes.string,
+  getToggleFormFn: PropTypes.func,
 };

@@ -3,7 +3,7 @@ import { CurrentContext, ValidKubeconfig } from 'types';
 import { CLUSTERS_STORAGE_KEY } from './clustersAtom';
 import { ClusterStorage } from './types';
 
-type ClusterConfig = {
+export type ClusterConfig = {
   storage: ClusterStorage;
 } | null;
 

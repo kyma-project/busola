@@ -13,7 +13,7 @@ type CountingCardProps = {
   value: number;
   extraInfo: ExtraInfo[];
   title: string;
-  subTitle: string;
+  subTitle?: string;
   resourceUrl?: string;
   isClusterResource?: boolean;
   allNamespaceURL?: boolean;

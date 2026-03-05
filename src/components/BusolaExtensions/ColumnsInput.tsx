@@ -12,13 +12,15 @@ interface Column {
 }
 
 interface ColumnsInputProps {
-  value: Column[];
-  setValue: (columns: Column[]) => void;
+  value?: Column[];
+  setValue?: (columns: Column[]) => void;
+  propertyPath?: string;
 }
 
 export function ColumnsInput({
   value: columns,
   setValue: setColumns,
+  propertyPath,
 }: ColumnsInputProps) {
   const { t } = useTranslation();
 
@@ -35,13 +37,15 @@ export function ColumnsInput({
       <div
         key={`${value.path}-${value.type}-${index}`}
         className="columns-input"
+        // propertyPath is read and used by the parent: ResourceFormWrapper.
+        data-property-path={propertyPath}
       >
         <CheckBox
           data-testid={value?.path}
           checked={value.isSelected}
           onChange={(e) => {
             value.isSelected = e.target.checked;
-            setColumns([...columns]);
+            setColumns?.([...columns]);
           }}
           accessibleName={`Checkbox ${value.name}`}
         />
@@ -50,7 +54,7 @@ export function ColumnsInput({
           onInput={(e) => {
             const columnsCopy = [...columns];
             columnsCopy[index].name = e.target.value;
-            setColumns(columnsCopy);
+            setColumns?.(columnsCopy);
           }}
           className="full-width"
           required
