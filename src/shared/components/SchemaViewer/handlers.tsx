@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { JSONSchema } from './JSONSchema';
 
-export const Generic = ({ val }) => {
+export const Generic = ({ val }: { val: any }) => {
   const { t } = useTranslation();
 
   if (Array.isArray(val)) {
@@ -18,21 +18,27 @@ export const Generic = ({ val }) => {
   }
 };
 
-export const Schema = ({ val }) => <JSONSchema {...val} />;
+export const Schema = ({ val }: { val: any }) => <JSONSchema {...val} />;
 Schema.fullWidth = true;
 
-export const SchemaArray = ({ val }) =>
+export const SchemaArray = ({ val }: { val: any[] }) =>
   val.map((schema, index) => <JSONSchema key={index} {...schema} />);
 SchemaArray.fullWidth = true;
 
-export const SchemaMap = ({ val, required }) => {
+export const SchemaMap = ({
+  val,
+  required,
+}: {
+  val: Record<string, any>;
+  required?: string[];
+}) => {
   return (
     <ul>
       {Object.entries(val).map(([name, def]) => (
         <li key={name}>
           <JSONSchema
             name={name}
-            {...def}
+            {...(def as object)}
             isRequired={required?.includes(name)}
           />
         </li>
