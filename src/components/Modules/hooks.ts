@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
+import pluralize from 'pluralize';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
@@ -7,6 +8,7 @@ import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import {
   ConditionType,
   DEFAULT_K8S_NAMESPACE,
+  getResourceListPath,
   getResourcePath,
   KymaResourceType,
   ModuleManagerType,
@@ -67,12 +69,9 @@ export const useFetchModuleData = (
   const singleGetFn = useSingleGet();
   const isFetching = useRef(false);
 
-  const clusterNodes = useAtomValue(allNodesAtom).filter(
-    (node) => !node.namespaced,
-  );
-  const namespaceNodes = useAtomValue(allNodesAtom).filter(
-    (node) => node.namespaced,
-  );
+  const allNodes = useAtomValue(allNodesAtom);
+  const clusterNodes = allNodes.filter((node) => !node.namespaced);
+  const namespaceNodes = allNodes.filter((node) => node.namespaced);
 
   const fetchAll = useCallback(
     async (isPolling: boolean = false) => {
@@ -104,6 +103,15 @@ export const useFetchModuleData = (
             return { name, data: null };
           }
 
+          const resourceKind = resource?.kind;
+          if (resourceKind) {
+            const resourceType = pluralize(resourceKind.toLowerCase());
+            const isKnownResource = allNodes.some(
+              (n: any) => n.resourceType === resourceType,
+            );
+            if (!isKnownResource) return { name, data: null };
+          }
+
           try {
             const resourceUrl = await getUrl(
               resource,
@@ -114,6 +122,7 @@ export const useFetchModuleData = (
               namespaceNodes,
               singleGetFn,
             );
+            if (!resourceUrl) return { name, data: null };
             const resourceName = resource?.metadata?.name || resource?.name;
             const url = `${resourceUrl}?fieldSelector=metadata.name=${encodeURIComponent(resourceName)}`;
             const response = await fetch({ relativeUrl: url });
@@ -243,7 +252,7 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
 
   useEffect(() => {
     if (manager) {
-      const path = getResourcePath({
+      const listPath = getResourceListPath({
         apiVersion: `${manager?.group}/${manager?.version}`,
         kind: manager?.kind,
         metadata: {
@@ -254,8 +263,12 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
 
       async function fetchResource() {
         try {
-          const response = await fetch({ relativeUrl: path });
-          const status = (await response.json())?.status;
+          const response = await fetch({ relativeUrl: listPath });
+          const list = await response.json();
+          const item = list?.items?.[0];
+          if (!item) return;
+
+          const status = item?.status;
           if (status.state) {
             setData({ state: status.state, message: status?.message });
             return;
@@ -307,14 +320,15 @@ export const useGetModuleResource = (resource: any) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const path = getResourcePath(resource);
+  const listPath = getResourceListPath(resource);
 
   useEffect(() => {
     async function fetchResource() {
       if (!resource) return;
       try {
-        const response = await fetch({ relativeUrl: path });
-        const moduleResource = await response.json();
+        const response = await fetch({ relativeUrl: listPath });
+        const list = await response.json();
+        const moduleResource = list?.items?.[0] ?? null;
         setData(moduleResource);
       } catch (e) {
         if (e instanceof Error) {
@@ -327,7 +341,7 @@ export const useGetModuleResource = (resource: any) => {
 
     fetchResource();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
+  }, [listPath]);
 
   return { data, loading, error };
 };

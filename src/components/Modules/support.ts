@@ -146,6 +146,23 @@ export const getResourcePath = (resource: any) => {
       ).toLowerCase()}/${resourceName}`;
 };
 
+export const getResourceListPath = (resource: any) => {
+  if (!resource) return '';
+
+  const apiVersion =
+    resource?.apiVersion || `${resource?.group}/${resource?.version}`;
+  const resourceName = resource?.metadata?.name || resource?.name;
+  const resourceNamespace =
+    resource?.metadata?.namespace || resource?.namespace;
+  const kindPlural = pluralize(resource.kind || '').toLowerCase();
+
+  const basePath = resourceNamespace
+    ? `/apis/${apiVersion}/namespaces/${resourceNamespace}/${kindPlural}`
+    : `/apis/${apiVersion}/${kindPlural}`;
+
+  return `${basePath}?fieldSelector=metadata.name=${encodeURIComponent(resourceName)}`;
+};
+
 export const findChannel = (
   module: { name: string; channels: [{ version: string; channel: string }] },
   channel: string,
