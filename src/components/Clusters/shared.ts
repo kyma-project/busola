@@ -30,15 +30,10 @@ function addCurrentCluster(
 
   if (clustersInfo.currentCluster?.name !== params?.name) removePreviousPath();
 
-  // Check for intended path from kubeconfigID permalink
-  // If there's an intended path, navigate to cluster overview first.
-  // The actual navigation to the intended path will happen in useAfterInitHook
-  // after auth is fully set up.
   const intendedPath = getIntendedPath();
   if (intendedPath?.path) {
-    // Navigate to cluster overview - useAfterInitHook will handle the intended path
     clustersInfo.navigate(
-      `/cluster/${encodeURIComponent(params.contextName)}/overview`,
+      `/cluster/${encodeURIComponent(params.contextName)}${intendedPath.path}`,
     );
   } else if (params.currentContext.namespace) {
     clustersInfo.navigate(

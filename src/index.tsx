@@ -63,8 +63,6 @@ i18next
 
 savePreviousPath();
 
-// Initialize intended path from URL parameters (for kubeconfigID permalinks)
-// This must be called early before any redirects happen
 initIntendedPathFromUrl();
 
 const container = document.getElementById('root');

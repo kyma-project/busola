@@ -86,8 +86,6 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
 
     initDone.current = true;
 
-    // Handle intended path from kubeconfigID permalinks
-    // This happens after auth is ready to ensure API calls work
     const intendedPath = getIntendedPath();
     if (intendedPath?.path && cluster) {
       const fullPath = `/cluster/${encodeURIComponent(cluster.name)}${intendedPath.path}`;

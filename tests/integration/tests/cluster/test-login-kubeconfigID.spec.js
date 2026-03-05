@@ -29,6 +29,23 @@ context('Test login - kubeconfigID', () => {
     });
   });
 
+  it('Adds cluster by kubeconfigID - navigates to path query parameter', () => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: `${kubeconfigIdAddress}/*`,
+        },
+        kubeconfig,
+      );
+
+      cy.visit(
+        `${config.clusterAddress}/?kubeconfigID=tests&path=/namespaces/default/deployments`,
+      );
+      cy.url().should('match', /deployments/);
+    });
+  });
+
   it('Adds cluster by kubeconfigID - saves path', () => {
     cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
       cy.intercept(
@@ -43,7 +60,7 @@ context('Test login - kubeconfigID', () => {
       const path = `cluster/${clusterName}/namespaces/default/deployments`;
 
       cy.visit(`${config.clusterAddress}/${path}/?kubeconfigID=tests`);
-      cy.url().should('match', /deployments\/$/);
+      cy.url().should('match', /deployments\/?$/);
     });
   });
 
