@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { createDaemonSetTemplate } from './templates';
 
@@ -20,7 +20,7 @@ export default function DaemonSetCreate({
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [daemonSet, setDaemonSet] = useState(
-    _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
+    cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
   );
   const [initialResource, setInitialResource] = useState(
     initialDaemonSet || createDaemonSetTemplate(namespaceId),
@@ -29,7 +29,7 @@ export default function DaemonSetCreate({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setDaemonSet(
-        _.cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
+        cloneDeep(initialDaemonSet) || createDaemonSetTemplate(namespaceId),
       );
       setInitialResource(
         initialDaemonSet || createDaemonSetTemplate(namespaceId),

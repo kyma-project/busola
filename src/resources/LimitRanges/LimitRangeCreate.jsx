@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import { createLimitRangeTemplate } from './templates';
 
 export default function LimitRangeCreate({
@@ -18,7 +18,7 @@ export default function LimitRangeCreate({
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [limitRange, setLimitRange] = useState(
-    _.cloneDeep(initialLimitRange) ||
+    cloneDeep(initialLimitRange) ||
       createLimitRangeTemplate({ namespaceName: namespaceId }),
   );
 
@@ -32,7 +32,7 @@ export default function LimitRangeCreate({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setLimitRange(
-        _.cloneDeep(initialLimitRange) ||
+        cloneDeep(initialLimitRange) ||
           createLimitRangeTemplate({ namespaceName: namespaceId }),
       );
       setInitialResource(
