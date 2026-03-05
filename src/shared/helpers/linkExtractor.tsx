@@ -1,12 +1,13 @@
 import { Trans } from 'react-i18next';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { ReactElement } from 'react';
+import { TFunction } from 'i18next';
 
 const coveredLinkSign = '<>';
 
 export const createTranslationTextWithLinks = (
   text: string,
-  t: any,
+  t: TFunction,
   i18n: any,
 ): string | ReactElement => {
   const { processedText, components } = insert18nLinks(text);

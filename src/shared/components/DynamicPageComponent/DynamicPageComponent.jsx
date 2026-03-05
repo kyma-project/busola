@@ -8,7 +8,6 @@ import {
   TabContainer,
   Title,
   Toolbar,
-  ToolbarSeparator,
   ToolbarButton,
 } from '@ui5/webcomponents-react';
 
@@ -199,96 +198,88 @@ export const DynamicPageComponent = ({
     navigate(link);
   };
 
-  const actionsBar = (
+  const actionsBar = actions ? (
     <Toolbar design="Transparent" toolbarStyle="Clear">
-      {actions && (
-        <>
-          {actions}
-          {(window.location.search.includes('layout') ||
-            (!window.location.search.includes('layout') &&
-              layoutColumn?.showCreate?.resourceType)) &&
-          layoutNumber !== 'startColumn' ? (
-            <ToolbarSeparator />
-          ) : null}
-        </>
-      )}
-      {(window.location.search.includes('layout') ||
-        layoutColumn?.showCreate?.resourceType) &&
-      layoutColumn.layout !== 'OneColumn' &&
-      layoutNumber !== 'startColumn' ? (
-        <>
-          {(layoutColumn.layout === 'TwoColumnsMidExpanded' ||
-            ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
-              layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
-              layoutNumber !== 'midColumn')) && (
-            <ToolbarButton
-              accessibleName="enter-full-screen"
-              design="Transparent"
-              icon="full-screen"
-              onClick={() => {
-                const newLayout =
-                  layoutNumber === 'midColumn'
-                    ? 'MidColumnFullScreen'
-                    : 'EndColumnFullScreen';
-                setLayoutColumn({
-                  ...layoutColumn,
-                  layout: newLayout,
-                });
-                const resourceNamespace = searchParams.get('resourceNamespace');
-                const resourceNamespaceFragment = resourceNamespace
-                  ? `&resourceNamespace=${resourceNamespace}`
-                  : '';
-                const link = `${window.location.pathname}?layout=${newLayout}${
-                  layoutColumn?.showCreate?.resourceType
-                    ? '&showCreate=true'
-                    : resourceNamespaceFragment
-                }`;
-                navigate(link);
-              }}
-            />
-          )}
-          {(layoutColumn.layout === 'MidColumnFullScreen' ||
-            layoutColumn.layout === 'EndColumnFullScreen') && (
-            <ToolbarButton
-              accessibleName="close-full-screen"
-              design="Transparent"
-              icon="exit-full-screen"
-              onClick={() => {
-                const newLayout =
-                  layoutNumber === 'midColumn'
-                    ? layoutColumn.endColumn === null
-                      ? 'TwoColumnsMidExpanded'
-                      : 'ThreeColumnsMidExpanded'
-                    : 'ThreeColumnsEndExpanded';
-                setLayoutColumn({
-                  ...layoutColumn,
-                  layout: newLayout,
-                });
-                const resourceNamespace = searchParams.get('resourceNamespace');
-                const resourceNamespaceFragment = resourceNamespace
-                  ? `&resourceNamespace=${resourceNamespace}`
-                  : '';
-                const link = `${window.location.pathname}?layout=${newLayout}${
-                  layoutColumn?.showCreate?.resourceType
-                    ? '&showCreate=true'
-                    : resourceNamespaceFragment
-                }`;
-                navigate(link);
-              }}
-            />
-          )}
+      {actions}
+    </Toolbar>
+  ) : null;
+
+  const navigationBar =
+    (window.location.search.includes('layout') ||
+      layoutColumn?.showCreate?.resourceType) &&
+    layoutColumn.layout !== 'OneColumn' &&
+    layoutNumber !== 'startColumn' ? (
+      <Toolbar design="Transparent" toolbarStyle="Clear">
+        {(layoutColumn.layout === 'TwoColumnsMidExpanded' ||
+          ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
+            layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
+            layoutNumber !== 'midColumn')) && (
           <ToolbarButton
-            accessibleName="close-column"
+            accessibleName="enter-full-screen"
             design="Transparent"
-            icon="decline"
+            icon="full-screen"
             onClick={() => {
-              navigateSafely(() => handleColumnClose());
+              const newLayout =
+                layoutNumber === 'midColumn'
+                  ? 'MidColumnFullScreen'
+                  : 'EndColumnFullScreen';
+              setLayoutColumn({
+                ...layoutColumn,
+                layout: newLayout,
+              });
+              const resourceNamespace = searchParams.get('resourceNamespace');
+              const resourceNamespaceFragment = resourceNamespace
+                ? `&resourceNamespace=${resourceNamespace}`
+                : '';
+              const link = `${window.location.pathname}?layout=${newLayout}${
+                layoutColumn?.showCreate?.resourceType
+                  ? '&showCreate=true'
+                  : resourceNamespaceFragment
+              }`;
+              navigate(link);
             }}
           />
-        </>
-      ) : null}
-    </Toolbar>
-  );
+        )}
+        {(layoutColumn.layout === 'MidColumnFullScreen' ||
+          layoutColumn.layout === 'EndColumnFullScreen') && (
+          <ToolbarButton
+            accessibleName="close-full-screen"
+            design="Transparent"
+            icon="exit-full-screen"
+            onClick={() => {
+              const newLayout =
+                layoutNumber === 'midColumn'
+                  ? layoutColumn.endColumn === null
+                    ? 'TwoColumnsMidExpanded'
+                    : 'ThreeColumnsMidExpanded'
+                  : 'ThreeColumnsEndExpanded';
+              setLayoutColumn({
+                ...layoutColumn,
+                layout: newLayout,
+              });
+              const resourceNamespace = searchParams.get('resourceNamespace');
+              const resourceNamespaceFragment = resourceNamespace
+                ? `&resourceNamespace=${resourceNamespace}`
+                : '';
+              const link = `${window.location.pathname}?layout=${newLayout}${
+                layoutColumn?.showCreate?.resourceType
+                  ? '&showCreate=true'
+                  : resourceNamespaceFragment
+              }`;
+              navigate(link);
+            }}
+          />
+        )}
+        <ToolbarButton
+          accessibleName="close-column"
+          design="Transparent"
+          icon="decline"
+          onClick={() => {
+            navigateSafely(() => handleColumnClose());
+          }}
+        />
+      </Toolbar>
+    ) : null;
 
   const headerTitle = (
     <DynamicPageTitle
@@ -301,7 +292,7 @@ export const DynamicPageComponent = ({
             level="H2"
             size="H3"
             className="bold-title"
-            wrappingType="None"
+            wrappingType="Normal"
           >
             {title}
           </Title>
@@ -322,6 +313,7 @@ export const DynamicPageComponent = ({
         </FlexBox>
       }
       actionsBar={actionsBar}
+      navigationBar={navigationBar}
     />
   );
 

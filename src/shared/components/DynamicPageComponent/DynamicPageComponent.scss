@@ -13,8 +13,13 @@
     pointer-events: none;
 
     [slot='actionsBar'],
+    [slot='navigationBar'],
     .protected-resource-button {
       pointer-events: auto;
+    }
+
+    [slot='navigationBar'] {
+      margin-bottom: 0.5rem;
     }
   }
 

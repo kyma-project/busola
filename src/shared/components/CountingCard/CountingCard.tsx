@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import {
   AnalyticalCardHeader,
   Card,
@@ -18,7 +19,7 @@ type CountingCardProps = {
   isClusterResource?: boolean;
   allNamespaceURL?: boolean;
   className?: string;
-  additionalContent?: React.ReactNode;
+  additionalContent?: ReactNode;
 };
 
 type ExtraInfo = {

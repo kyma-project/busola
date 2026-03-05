@@ -50,3 +50,7 @@ export type Crd = {
 };
 
 export * from './kubeconfig';
+
+export interface I18nInterfaces {
+  exists(keys: string | string[]): boolean;
+}

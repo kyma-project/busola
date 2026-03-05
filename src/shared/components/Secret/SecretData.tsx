@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
@@ -8,7 +8,19 @@ import './SecretData.scss';
 import { base64Decode } from 'shared/helpers';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 
-const SecretComponent = ({ name, value, showEncoded, isInitial }) => (
+type SecretComponentProps = {
+  name: string;
+  value: string;
+  showEncoded: boolean;
+  isInitial: boolean;
+};
+
+const SecretComponent = ({
+  name,
+  value,
+  showEncoded,
+  isInitial,
+}: SecretComponentProps) => (
   <LayoutPanelRow
     name={name}
     value={
@@ -23,7 +35,11 @@ SecretData.propTypes = {
   secret: PropTypes.object,
 };
 
-export default function SecretData({ secret }) {
+export default function SecretData({
+  secret,
+}: {
+  secret: { data: Record<string, string> };
+}) {
   const { t } = useTranslation();
   const [isEncoded, setEncoded] = useState(true);
   const [isInitial, setIsInitial] = useState(true);
@@ -38,7 +54,7 @@ export default function SecretData({ secret }) {
   };
 
   const body = () => {
-    const SecretWrapper = ({ children }) => (
+    const SecretWrapper = ({ children }: { children: ReactNode }) => (
       <div className="secret-wrapper">{children}</div>
     );
 

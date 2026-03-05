@@ -7,17 +7,24 @@ import { isEmpty, isEqual } from 'lodash';
 import { Text, Title } from '@ui5/webcomponents-react';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 
+type SelectorDetailsProps = {
+  expressions: any;
+  labels: Record<string, string> | null;
+  namespace: string;
+  RelatedResources?: any;
+};
+
 const SelectorDetails = ({
   expressions,
   labels,
   namespace,
   RelatedResources,
-}) => {
-  const filterByLabels = (pod) => {
-    if (!pod.metadata?.labels) return false;
+}: SelectorDetailsProps) => {
+  const filterByLabels = (pod: any) => {
+    if (!pod.metadata?.labels || !labels) return false;
 
-    const podLabels = Object?.entries(pod.metadata?.labels);
-    const resourceLabels = Object?.entries(labels);
+    const podLabels = Object.entries(pod.metadata.labels);
+    const resourceLabels = Object.entries(labels);
     return resourceLabels.every((resLabel) =>
       podLabels.some((podLabel) => isEqual(resLabel, podLabel)),
     );
@@ -26,11 +33,7 @@ const SelectorDetails = ({
   const relatedResources = RelatedResources ? (
     <RelatedResources labels={labels} namespace={namespace} />
   ) : (
-    <RelatedPods
-      namespace={namespace}
-      labels={labels}
-      filter={filterByLabels}
-    />
+    <RelatedPods namespace={namespace} filter={filterByLabels} />
   );
   return expressions ? (
     <MatchExpressionsList expressions={expressions} />
@@ -39,6 +42,16 @@ const SelectorDetails = ({
   );
 };
 
+type SelectorProps = {
+  namespace: string;
+  labels: Record<string, string> | null;
+  expressions: any;
+  title?: string;
+  selector?: any;
+  message?: string;
+  RelatedResources?: any;
+  isIstioSelector?: boolean;
+};
 export const Selector = ({
   namespace,
   labels,
@@ -48,7 +61,7 @@ export const Selector = ({
   message,
   RelatedResources,
   isIstioSelector,
-}) => {
+}: SelectorProps) => {
   const { t } = useTranslation();
   // when k8s selector is empty it matches all
   // if it's null it doesn't
