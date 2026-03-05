@@ -217,7 +217,7 @@ export const KymaModulesList = ({
 
     setSelectedEntry?.(moduleName);
 
-    // It can be refactored after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
+    // Decided to leave it to be independent from kcp
     if (!moduleStatus.resource) {
       const connectedModule = findModuleTemplate(
         moduleTemplates,
