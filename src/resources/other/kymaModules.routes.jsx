@@ -21,7 +21,7 @@ import { CommunityModulesUploadProvider } from 'components/Modules/community/pro
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useKymaQuery } from 'components/Modules/kymaModulesQueries';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
-import { DeleteResourceModal } from 'shared/components/DeleteResourceModal/DeleteResourceModal';
+import DeleteResourceModal from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 
 const KymaModulesList = lazy(() => import('components/Modules/ModulesList'));
 

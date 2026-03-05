@@ -3,6 +3,7 @@ import pluralize from 'pluralize';
 
 import { UrlGenerators, UrlOverrides } from 'state/types';
 import { K8sResource } from 'types';
+import { useCallback } from 'react';
 
 export const useUrl: () => UrlGenerators = () => {
   const cluster =
@@ -11,17 +12,23 @@ export const useUrl: () => UrlGenerators = () => {
     useMatch({ path: '/cluster/:cluster/namespaces/:namespace', end: false })
       ?.params?.namespace ?? '';
 
-  const clusterUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${encodeURIComponent(
-      overrides?.cluster ?? cluster,
-    )}/${path ?? ''}`;
-  };
+  const clusterUrl = useCallback(
+    (path: string, overrides: UrlOverrides = {}) => {
+      return `/cluster/${encodeURIComponent(
+        overrides?.cluster ?? cluster,
+      )}/${path ?? ''}`;
+    },
+    [cluster],
+  );
 
-  const namespaceUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${encodeURIComponent(
-      overrides?.cluster ?? cluster,
-    )}/namespaces/${overrides?.namespace ?? namespace}/${path ?? ''}`;
-  };
+  const namespaceUrl = useCallback(
+    (path: string, overrides: UrlOverrides = {}) => {
+      return `/cluster/${encodeURIComponent(
+        overrides?.cluster ?? cluster,
+      )}/namespaces/${overrides?.namespace ?? namespace}/${path ?? ''}`;
+    },
+    [cluster, namespace],
+  );
 
   const scopedUrl = (path: string, overrides: UrlOverrides = {}) => {
     if ((overrides?.resourceType || '').toLowerCase() === 'namespaces') {
