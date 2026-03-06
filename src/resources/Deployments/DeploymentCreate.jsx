@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
 import { AdvancedContainersView } from 'shared/components/Deployment/ContainersViews';
@@ -32,7 +32,7 @@ export default function DeploymentCreate({
 
   const [deployment, setDeployment] = useState(
     initialDeployment
-      ? _.cloneDeep(initialDeployment)
+      ? cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
   const [initialResource, setInitialResource] = useState(
@@ -46,7 +46,7 @@ export default function DeploymentCreate({
     const timeoutId = setTimeout(() => {
       setDeployment(
         initialDeployment
-          ? _.cloneDeep(initialDeployment)
+          ? cloneDeep(initialDeployment)
           : createDeploymentTemplate(namespace),
       );
       setInitialResource(

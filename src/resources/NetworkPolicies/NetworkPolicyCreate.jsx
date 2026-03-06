@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
@@ -19,8 +19,7 @@ export default function NetworkPolicyCreate({
   const { t } = useTranslation();
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [networkPolicy, setNetworkPolicy] = useState(
-    _.cloneDeep(initialNetworkPolicy) ||
-      createNetworkPolicyTemplate(namespaceId),
+    cloneDeep(initialNetworkPolicy) || createNetworkPolicyTemplate(namespaceId),
   );
   const [initialResource, setInitialResource] = useState(
     initialNetworkPolicy || createNetworkPolicyTemplate(namespaceId),
@@ -29,7 +28,7 @@ export default function NetworkPolicyCreate({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setNetworkPolicy(
-        _.cloneDeep(initialNetworkPolicy) ||
+        cloneDeep(initialNetworkPolicy) ||
           createNetworkPolicyTemplate(namespaceId),
       );
       setInitialResource(

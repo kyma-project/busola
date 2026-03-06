@@ -1,4 +1,11 @@
-import { createContext, ReactNode, SetStateAction, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import jp from 'jsonpath';
 
 export const VarStoreContext = createContext({
@@ -10,16 +17,24 @@ export const VarStoreContext = createContext({
 export function VarStoreContextProvider({ children }: { children: ReactNode }) {
   const [vars, setVars] = useState({});
 
-  const setVar = (path: string, value: any) => {
-    const oldVal = jp.value(vars, path);
-    if (typeof value !== 'undefined' && value !== oldVal) {
-      jp.value(vars, path, value);
-      setVars({ ...vars });
-    }
-  };
+  const setVar = useCallback(
+    (path: string, value: any) => {
+      const oldVal = jp.value(vars, path);
+      if (typeof value !== 'undefined' && value !== oldVal) {
+        jp.value(vars, path, value);
+        setVars({ ...vars });
+      }
+    },
+    [vars],
+  );
+
+  const contextValue = useMemo(
+    () => ({ vars, setVar, setVars }),
+    [vars, setVar],
+  );
 
   return (
-    <VarStoreContext.Provider value={{ vars, setVar, setVars }}>
+    <VarStoreContext.Provider value={contextValue}>
       {children}
     </VarStoreContext.Provider>
   );

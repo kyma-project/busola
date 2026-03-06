@@ -112,13 +112,17 @@ export default function ExtensibilityInjections({ destination, slot, root }) {
 
 const ExtensibilityInjection = ({ resMetaData, root }) => {
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
+
+  const translationBundleValue = useMemo(
+    () => ({
+      translationBundle: urlPath || 'extensibility',
+      defaultResourcePlaceholder: defaultPlaceholder,
+    }),
+    [urlPath, defaultPlaceholder],
+  );
+
   return (
-    <TranslationBundleContext.Provider
-      value={{
-        translationBundle: urlPath || 'extensibility',
-        defaultResourcePlaceholder: defaultPlaceholder,
-      }}
-    >
+    <TranslationBundleContext.Provider value={translationBundleValue}>
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary>
           <ExtensibilityInjectionCore resMetaData={resMetaData} root={root} />
