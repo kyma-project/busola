@@ -1,6 +1,7 @@
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useGetYAMLModuleTemplates } from './hooks';
+import { useMemo } from 'react';
 
 export function useKymaModulesQuery() {
   const kyma = useKymaQuery();
@@ -20,9 +21,13 @@ export function useKymaQuery() {
     '/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas',
   );
 
-  const resourceName =
-    kymaResources?.items.find((kymaResource) => kymaResource?.status)?.metadata
-      .name || kymaResources?.items[0]?.metadata?.name;
+  const resourceName = useMemo(
+    () =>
+      kymaResources?.items.find((kymaResource) => kymaResource?.status)
+        ?.metadata.name || kymaResources?.items[0]?.metadata?.name,
+    [kymaResources],
+  );
+
   const kymaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/namespaces/kyma-system/kymas/${resourceName}`;
 
   const {

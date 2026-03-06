@@ -29,7 +29,7 @@ import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from '../Link/Link';
 import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
-import { DeleteResourceModal } from '../DeleteResourceModal/DeleteResourceModal';
+import DeleteResourceModal from '../DeleteResourceModal/DeleteResourceModal';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 const Injections = lazyWithRetries(

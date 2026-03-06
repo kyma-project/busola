@@ -21,11 +21,11 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner';
-import { DeleteResourceModal } from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
+import DeleteResourceModal from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 const Injections = lazyWithRetries(

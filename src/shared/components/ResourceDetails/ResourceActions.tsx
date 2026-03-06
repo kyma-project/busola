@@ -2,11 +2,11 @@ import { ReactNode, Suspense } from 'react';
 import { Spinner } from '../Spinner/Spinner';
 import { ToolbarButton } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
-import { DeleteResourceModal } from '../DeleteResourceModal/DeleteResourceModal';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useTranslation } from 'react-i18next';
 import { K8sResource } from 'types';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
+import DeleteResourceModal from '../DeleteResourceModal/DeleteResourceModal';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 const Injections = lazyWithRetries(

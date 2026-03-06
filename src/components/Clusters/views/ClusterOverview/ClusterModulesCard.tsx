@@ -4,42 +4,26 @@ import { CountingCard } from 'shared/components/CountingCard/CountingCard';
 import { useKymaModulesQuery } from 'components/Modules/kymaModulesQueries';
 import { useUrl } from 'hooks/useUrl';
 import { useNavigate } from 'react-router';
-import { useGetAllModulesStatuses } from 'components/Modules/hooks';
 import { useContext, useMemo } from 'react';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
+import { KymaResourceStatusModuleType } from 'components/Modules/support';
 
-const CountStatuseByType = (
-  statuses: Record<string, any>,
-  loadingStatuses: boolean,
-  statusesError: Error | null,
-) => {
-  if (statuses?.length && !loadingStatuses && !statusesError) {
-    return statuses.reduce(
-      (
-        acc: {
-          ready: number;
-          error: number;
-          warning: number;
-          processing: number;
-          other: number;
-        },
-        m: { status: string },
-      ) => {
-        if (m?.status === 'Ready') acc.ready++;
-        else if (m?.status === 'Error') acc.error++;
-        else if (m?.status === 'Warning') acc.warning++;
-        else if (m?.status === 'Processing') acc.processing++;
-        else acc.other++;
-        return acc;
-      },
-      { ready: 0, error: 0, warning: 0, processing: 0, other: 0 },
-    );
+function countStatusesByType(modules: KymaResourceStatusModuleType[]) {
+  const counts = { ready: 0, error: 0, warning: 0, processing: 0, other: 0 };
+  for (const m of modules) {
+    const state = m?.state;
+    if (state === 'Ready') counts.ready++;
+    else if (state === 'Error') counts.error++;
+    else if (state === 'Warning') counts.warning++;
+    else if (state === 'Processing') counts.processing++;
+    else counts.other++;
   }
-  return { ready: 0, error: 0, warning: 0, processing: 0, other: 0 };
-};
+  return counts;
+}
+
 export default function ClusterModulesCard() {
   const { t } = useTranslation();
   const { installedCommunityModules, installedCommunityModulesLoading } =
@@ -47,16 +31,10 @@ export default function ClusterModulesCard() {
   const { modules, error, loading: loadingModules } = useKymaModulesQuery();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
-  const {
-    data: statuses,
-    loading: loadingStatuses,
-    error: statusesError,
-  } = useGetAllModulesStatuses(modules);
 
   const moduleStatusCounts = useMemo(() => {
-    return CountStatuseByType(statuses, loadingStatuses, statusesError);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statuses, statusesError]);
+    return countStatusesByType(modules ?? []);
+  }, [modules]);
 
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
