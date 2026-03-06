@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import {
@@ -102,10 +101,4 @@ export const K8sNameInput = ({
       {input}
     </>
   );
-};
-
-K8sNameInput.propTypes = {
-  id: PropTypes.string,
-  kind: PropTypes.string.isRequired,
-  required: PropTypes.bool,
 };
