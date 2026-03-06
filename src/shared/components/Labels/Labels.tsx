@@ -7,15 +7,25 @@ import './Labels.scss';
 
 const SHORTENING_TRESHOLD = 50;
 
+interface LabelsProps {
+  labels: Record<string, string> | null;
+  className?: string;
+  shortenLongLabels?: boolean;
+  style?: React.CSSProperties;
+  displayLabelForLabels?: boolean;
+  disableMarginBottom?: boolean;
+  hideIcon?: boolean;
+}
+
 export const Labels = ({
   labels,
   className = '',
   shortenLongLabels = true,
-  style = null,
+  style = undefined,
   displayLabelForLabels = false,
   disableMarginBottom = false,
   hideIcon = true,
-}) => {
+}: LabelsProps) => {
   const { t } = useTranslation();
   if (!labels || Object.keys(labels).length === 0) {
     return (
@@ -34,7 +44,8 @@ export const Labels = ({
     separatedLabels.push(`${key}=${labels[key]}`);
   }
 
-  const shortenLabel = (label) => label.slice(0, SHORTENING_TRESHOLD) + '...';
+  const shortenLabel = (label: string) =>
+    label.slice(0, SHORTENING_TRESHOLD) + '...';
 
   return (
     <>
