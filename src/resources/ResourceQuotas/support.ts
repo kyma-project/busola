@@ -36,6 +36,7 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
   return [
     {
       headerTitle: 'cluster-overview.statistics.cpu-limits',
+      tooltipInfo: 'cluster-overview.statistics.cpu-limits-tooltip',
       value: cpusToHumanReadable(totalUsageCpuLimits, {
         unit: 'm',
       }).value,
@@ -55,6 +56,7 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
     },
     {
       headerTitle: 'namespaces.overview.resources.limits',
+      tooltipInfo: 'cluster-overview.statistics.memory-limits-tooltip',
       value: bytesToHumanReadable(totalUsageMemoryLimits, {
         unit: 'Gi',
       }).value,
@@ -74,6 +76,7 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
     },
     {
       headerTitle: 'cluster-overview.statistics.cpu-requests',
+      tooltipInfo: 'cluster-overview.statistics.cpu-requests-tooltip',
       value: cpusToHumanReadable(totalUsageCpuRequests, {
         unit: 'm',
       }).value,
@@ -93,6 +96,7 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
     },
     {
       headerTitle: 'namespaces.overview.resources.requests',
+      tooltipInfo: 'cluster-overview.statistics.memory-requests-tooltip',
       value: bytesToHumanReadable(totalUsageMemoryRequests, {
         unit: 'Gi',
       }).value,
@@ -123,6 +127,7 @@ export const mapUsagesToChartsData = (podsMetrics?: UsageMetrics[]) => {
   return [
     {
       headerTitle: 'cluster-overview.statistics.cpu-usage',
+      tooltipInfo: 'cluster-overview.statistics.cpu-usage-tooltip',
       value: cpusToHumanReadable(cpu.usage, {
         unit: 'm',
       }).value,
@@ -136,6 +141,7 @@ export const mapUsagesToChartsData = (podsMetrics?: UsageMetrics[]) => {
     },
     {
       headerTitle: 'cluster-overview.statistics.memory-usage',
+      tooltipInfo: 'cluster-overview.statistics.memory-usage-tooltip',
       value: bytesToHumanReadable(memory.usage).value,
       max: bytesToHumanReadable(memory.capacity).value,
       color: 'var(--sapChart_OrderedColor_6)',

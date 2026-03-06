@@ -111,6 +111,7 @@ export default function ResourceQuotaDetails(props: any) {
                   className="item-wrapper card-tall"
                 >
                   <UI5RadialChart
+                    tooltipInfo={t(chartData.tooltipInfo)}
                     color={chartData.color}
                     value={chartData.value}
                     max={chartData.max}
