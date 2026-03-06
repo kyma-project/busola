@@ -37,7 +37,6 @@ export const K8sNameInput = ({
   pattern = k8sNamePattern,
   ...props
 }: K8sNameInputProps) => {
-  console.log(pattern);
   const { t } = useTranslation();
   const [inputValue, setValue] = useState(value || defaultValue || '');
   const [isValid, setIsValid] = useState(true);
@@ -56,7 +55,8 @@ export const K8sNameInput = ({
   const handleInput: InputPropTypes['onInput'] = (event) => {
     event.preventDefault();
     const { value } = event.target;
-    const sanitized = value.replace(allowedCharsRegex, '');
+    const sanitized =
+      pattern === '.*' ? value : value.replace(allowedCharsRegex, '');
     setValue(sanitized);
 
     if (onInput) {
