@@ -1,4 +1,4 @@
-import { DragEvent, useEffect, useRef, useState } from 'react';
+import { DragEvent, RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 
@@ -13,7 +13,7 @@ type FileInputProps = {
   fileInputChanged: (files: FileList) => void;
   availableFormatsMessage?: string;
   acceptedFileFormats: string;
-  inputRef?: React.RefObject<HTMLInputElement>;
+  inputRef?: RefObject<HTMLInputElement>;
   required?: boolean;
   allowMultiple?: boolean;
   customMessage?: string;
