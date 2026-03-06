@@ -18,7 +18,6 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
 import { Link } from 'shared/components/Link/Link';
-import { DeleteResourceModal } from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 
 import { Button } from '@ui5/webcomponents-react';
 
@@ -34,6 +33,7 @@ import { createPortal } from 'react-dom';
 
 import './ClusterList.scss';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
+import DeleteResourceModal from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 
 function ClusterList() {
   const gardenerLoginFeature = useFeature(configFeaturesNames.GARDENER_LOGIN);

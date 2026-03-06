@@ -225,6 +225,8 @@ const getSearchingFunction = (searchOption, originalResource) => {
       if (!search?.searchFunction)
         return isValueMatching(value, input) ? value : null;
 
+      if (!input) return value;
+
       const jsonata = jsonataWrapper(search?.searchFunction);
       jsonata.assign('input', input);
 

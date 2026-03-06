@@ -23,7 +23,7 @@ type CountingCardProps = {
 };
 
 type ExtraInfo = {
-  value: string;
+  value: number | string;
   title: string;
 } | null;
 
