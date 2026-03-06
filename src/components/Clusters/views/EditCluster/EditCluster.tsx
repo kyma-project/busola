@@ -243,6 +243,7 @@ export const ClusterDataForm = ({
               setResource({ ...kubeconfig });
             }
           }}
+          pattern=".*"
         />
         {!hasOneContext && (
           <ResourceForm.FormField
