@@ -45,12 +45,23 @@ export type KymaResourceSpecModuleType = {
   channel?: string;
 };
 
+type KymaResourceStatusTemplate = {
+  apiVersion?: string;
+  metadata?: { name: string; namespace?: string };
+  kind?: string;
+};
+
 export type KymaResourceStatusModuleType = {
   name: string;
   channel?: string;
   version?: string;
   state?: string;
   resource?: {
+    apiVersion?: string;
+    metadata?: { name: string; namespace?: string };
+    kind?: string;
+  };
+  template?: {
     apiVersion?: string;
     metadata?: { name: string; namespace?: string };
     kind?: string;
@@ -208,19 +219,20 @@ export const findModuleTemplate = (
   moduleName: string,
   channel: string,
   version: string,
+  moduleStatusTemplate?: KymaResourceStatusTemplate | undefined,
   namespace?: string,
 ) => {
-  // This change was made due to changes in moduleTemplates and should be simplified once all moduleTemplates migrate
-  const moduleTemplateWithoutInfo = moduleTemplates?.items?.find(
-    (moduleTemplate) =>
-      moduleName ===
-        moduleTemplate.metadata.labels[
-          'operator.kyma-project.io/module-name'
-        ] &&
-      moduleTemplate.spec.channel === channel &&
-      (!namespace || moduleTemplate.metadata.namespace === namespace),
-  );
-  const moduleWithInfo = moduleTemplates?.items?.find(
+  // Get moduleTemplate based on kyma resource status template
+  if (moduleStatusTemplate?.metadata?.name) {
+    return moduleTemplates?.items?.find(
+      (moduleTemplate) =>
+        moduleTemplate.metadata.name === moduleStatusTemplate.metadata?.name &&
+        moduleTemplate.metadata.namespace ===
+          moduleStatusTemplate?.metadata.namespace,
+    );
+  }
+
+  return moduleTemplates?.items?.find(
     (moduleTemplate) =>
       moduleName ===
         moduleTemplate.metadata.labels[
@@ -230,8 +242,6 @@ export const findModuleTemplate = (
       moduleTemplate.spec.version === version &&
       (!namespace || moduleTemplate.metadata.namespace === namespace),
   );
-
-  return moduleWithInfo ?? moduleTemplateWithoutInfo;
 };
 
 export const getModuleName = (moduleTemplate: ModuleTemplateType): string => {

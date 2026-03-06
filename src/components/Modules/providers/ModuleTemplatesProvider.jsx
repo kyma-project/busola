@@ -8,7 +8,6 @@ import {
 import { splitModuleTemplates } from '../support';
 
 export const ModuleTemplatesContext = createContext({
-  allModuleTemplates: { items: [] },
   moduleTemplatesLoading: false,
   moduleReleaseMetas: { items: [] },
   moduleReleaseMetasLoading: false,
@@ -17,7 +16,6 @@ export const ModuleTemplatesContext = createContext({
 });
 
 export function ModuleTemplatesContextProvider({ children }) {
-  // Fetching all Module Templates can be replaced with fetching one by one from api after implementing https://github.com/kyma-project/lifecycle-manager/issues/2232
   const { data: allModuleTemplates, loading: moduleTemplatesLoading } =
     useModuleTemplatesQuery({});
 
@@ -33,7 +31,7 @@ export function ModuleTemplatesContextProvider({ children }) {
       (res) => res.value,
     );
 
-  const mergedModuleTmeplates = {
+  const mergedModuleTemplates = {
     items: [
       ...(allModuleTemplates?.items || []),
       ...(checkedModuleTemplates || []),
@@ -46,12 +44,11 @@ export function ModuleTemplatesContextProvider({ children }) {
   const {
     communityTemplates: communityModuleTemplates,
     kymaTemplates: moduleTemplates,
-  } = splitModuleTemplates(mergedModuleTmeplates);
+  } = splitModuleTemplates(mergedModuleTemplates);
 
   return (
     <ModuleTemplatesContext.Provider
       value={{
-        allModuleTemplates: mergedModuleTmeplates,
         moduleTemplates: moduleTemplates,
         moduleReleaseMetas: moduleReleaseMetas,
         moduleReleaseMetasLoading: moduleReleaseMetasLoading,
