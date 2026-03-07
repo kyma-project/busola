@@ -1,4 +1,4 @@
-# Deploy Busola with Your Own Configuration
+# Configuring Busola
 
 ## Prerequisites
 
