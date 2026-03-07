@@ -123,3 +123,21 @@ Follow these steps to access your Busola page:
 > The VirtualService creation takes a few minutes.
 
 Under `HOSTS`, you should see an address that you can use to access the Busola page.
+
+## Logging into Busola
+
+After accessing Busola through one of the methods above, you need to provide your kubeconfig to connect to Busola.
+
+### Providing Kubeconfig
+
+1. Open your web browser and navigate to:
+   - `http://localhost:3001`, if using kubectl port-forward
+   - Or the address from the Istio VirtualService
+
+2. On the Busola login page, choose **Connect** to provide cluster connection details.
+
+3. Provide your kubeconfig, either by uploading the kubeconfig file or by pasting the kubeconfig content in the text area, and select **Next Step**.
+4. Choose your preferred storage configuration, and select **Next Step**.
+5. Choose **Connect Cluster** to establish connection to your cluster.
+
+After successful login, you should see the Busola dashboard with your cluster resources.
