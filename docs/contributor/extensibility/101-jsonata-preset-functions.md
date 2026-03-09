@@ -88,7 +88,7 @@ You can use this function to convert time to readable date. The function comes w
 
 ## readableTimestampWithTime (timestamp)
 
-You can use this function to convert time to readable date with time. The function comes with the following parameters:
+You can use this function to convert time to a readable date with time. The function comes with the following parameters:
 
 - **timestamp**: Defines a timestamp to convert.
 
