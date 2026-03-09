@@ -1,5 +1,12 @@
 import { Toast, ToastDomRef } from '@ui5/webcomponents-react';
-import { createContext, useContext, useRef, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   ErrorModal,
   ErrorModalProps,
@@ -36,28 +43,36 @@ export const NotificationProvider = ({
 
   const toast = useRef<ToastDomRef | null>(null);
 
-  const methods = {
-    notifySuccess: function (notificationProps: ToastProps) {
+  const notifySuccess = useCallback(
+    function (notificationProps: ToastProps) {
       setToastProps(notificationProps);
       if (toast.current && !toastProps?.parentContainer) {
         toast.current.open = true;
       }
     },
-    notifyError: function (notificationProps: Omit<ErrorModalProps, 'close'>) {
-      setErrorProps({
-        ...notificationProps,
-        close: () => setErrorProps(null),
-      });
-    },
-  };
+    [toastProps?.parentContainer],
+  );
+
+  const notifyError = useCallback(function (
+    notificationProps: Omit<ErrorModalProps, 'close'>,
+  ) {
+    setErrorProps({
+      ...notificationProps,
+      close: () => setErrorProps(null),
+    });
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({
+      isOpen: !!toastProps,
+      notifySuccess,
+      notifyError,
+    }),
+    [toastProps, notifySuccess, notifyError],
+  );
 
   return (
-    <NotificationContext.Provider
-      value={{
-        isOpen: !!toastProps,
-        ...methods,
-      }}
-    >
+    <NotificationContext.Provider value={contextValue}>
       {toastProps?.parentContainer &&
         createPortal(
           <Toast

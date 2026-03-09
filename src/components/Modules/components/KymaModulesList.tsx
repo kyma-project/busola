@@ -11,6 +11,7 @@ import {
   findModuleTemplate,
   KymaResourceSpecModuleType,
   KymaResourceStatusModuleType,
+  KymaResourceStatusTemplate,
   KymaResourceType,
   ModuleTemplateListType,
 } from '../support';
@@ -204,11 +205,7 @@ export const KymaModulesList = ({
         apiVersion: string;
         metadata: { name: string; namespace: string };
       };
-      template: {
-        kind: string;
-        apiVersion: string;
-        metadata: { name: string; namespace: string };
-      };
+      template: KymaResourceStatusTemplate;
     },
   ) => {
     setOpenedModuleIndex(

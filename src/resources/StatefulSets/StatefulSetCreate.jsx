@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
@@ -20,7 +20,7 @@ export default function StatefulSetCreate({
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [statefulSet, setStatefulSet] = useState(
-    _.cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
+    cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
   );
 
   const [initialResource, setInitialResource] = useState(
@@ -30,8 +30,7 @@ export default function StatefulSetCreate({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setStatefulSet(
-        _.cloneDeep(initialStatefulSet) ||
-          createStatefulSetTemplate(namespaceId),
+        cloneDeep(initialStatefulSet) || createStatefulSetTemplate(namespaceId),
       );
       setInitialResource(
         initialStatefulSet || createStatefulSetTemplate(namespaceId),
