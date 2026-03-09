@@ -30,6 +30,14 @@ const workaroundForNodeMetrics = (req) => {
   }
 };
 
+export function buildK8sRequestPath(targetApiServer, originalUrl) {
+  const basePath =
+    targetApiServer.pathname !== '/'
+      ? targetApiServer.pathname.replace(/\/$/, '')
+      : '';
+  return basePath + originalUrl.replace(/^\/backend/, '');
+}
+
 export async function handleK8sRequests(req, res) {
   let headersData;
   try {
@@ -62,7 +70,7 @@ export async function handleK8sRequests(req, res) {
 
   const options = {
     hostname: targetApiServer.hostname,
-    path: req.originalUrl.replace(/^\/backend/, ''),
+    path: buildK8sRequestPath(targetApiServer, req.originalUrl),
     headers,
     method: req.method,
     port: targetApiServer.port || 443,
