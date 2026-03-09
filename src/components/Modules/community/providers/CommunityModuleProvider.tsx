@@ -57,11 +57,10 @@ export function CommunityModuleContextProvider({
 
   const contextValue = useMemo(
     () => ({
-      installedCommunityModules: installedCommunityModules,
-      installedCommunityModuleTemplates: installedCommunityModuleTemplates,
+      installedCommunityModules,
+      installedCommunityModuleTemplates,
       installedCommunityModulesLoading,
-      notInstalledCommunityModuleTemplates:
-        notInstalledCommunityModuleTemplates,
+      notInstalledCommunityModuleTemplates,
       installedVersions,
     }),
     [
