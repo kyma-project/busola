@@ -7,23 +7,27 @@ const options: Intl.DateTimeFormatOptions = {
 };
 
 const withTimeOptions: Intl.DateTimeFormatOptions = {
-  dateStyle: 'short',
-  timeStyle: 'medium',
-  hour12: false,
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
 };
 
+// locale undefined = user's browser locale
 export const getReadableTimestamp = (timestamp: string): string => {
   if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
   const timestampAsDate = new Date(timestamp);
-  const formattedDate = timestampAsDate.toLocaleDateString('en-US', options);
+  const formattedDate = timestampAsDate.toLocaleDateString(undefined, options);
   return formattedDate;
 };
 
-export const getReadableTimestampWithTime = (timestamp: string) => {
+export const getReadableTimestampWithTime = (timestamp: string): string => {
   if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
   const timestampAsDate = new Date(timestamp);
   const formattedDate = timestampAsDate.toLocaleString(
-    'de-DE',
+    undefined,
     withTimeOptions,
   );
   return formattedDate;
