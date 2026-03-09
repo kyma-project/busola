@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { Button, Menu, MenuItem } from '@ui5/webcomponents-react';
 
-import PropTypes from 'prop-types';
-import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-
 import './ListActions.scss';
 
 const AUTO_ICONS_BY_NAME = new Map([
@@ -12,7 +9,27 @@ const AUTO_ICONS_BY_NAME = new Map([
   ['Details', 'detail-view'],
 ]);
 
-const StandaloneAction = ({ action, entry }) => {
+interface Action {
+  name: string;
+  handler: (entry: any) => void;
+  icon?: string | ((entry: any) => string);
+  disabledHandler?: (entry: any) => boolean;
+  tooltip?: string | ((entry: any) => string);
+  component?: (entry: any) => JSX.Element;
+}
+
+interface ListActionsProps {
+  actions: Action[];
+  entry: any;
+}
+
+const StandaloneAction = ({
+  action,
+  entry,
+}: {
+  action: Action;
+  entry: any;
+}) => {
   const icon = action.icon || AUTO_ICONS_BY_NAME.get(action.name);
 
   if (action.component) {
@@ -42,7 +59,7 @@ const StandaloneAction = ({ action, entry }) => {
   );
 };
 
-const ListActions = ({ actions, entry }) => {
+const ListActions = ({ actions, entry }: ListActionsProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   if (!actions.length) {
@@ -85,11 +102,6 @@ const ListActions = ({ actions, entry }) => {
       ) : null}
     </div>
   );
-};
-
-ListActions.propTypes = {
-  actions: CustomPropTypes.listActions,
-  entry: PropTypes.any.isRequired,
 };
 
 export default ListActions;

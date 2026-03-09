@@ -11,7 +11,7 @@ import { useAtom } from 'jotai';
 
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteAtom } from 'state/settings/dontConfirmDeleteAtom';
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 
 interface DeleteResourceModalProps {
   resourceTitle?: string;
@@ -33,7 +33,7 @@ interface DeleteResourceModalProps {
   additionalPadding?: boolean;
 }
 
-export function DeleteResourceModal({
+function DeleteResourceModal({
   resourceTitle,
   resourceType,
   forceConfirmDelete = false,
@@ -142,3 +142,5 @@ export function DeleteResourceModal({
     </MessageBox>
   );
 }
+
+export default memo(DeleteResourceModal);

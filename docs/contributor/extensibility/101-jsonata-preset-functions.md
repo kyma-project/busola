@@ -75,7 +75,7 @@ You can use this function to match Events using a resource selector. The functio
 
 ## readableTimestamp (timestamp)
 
-You can use this function to convert time to readable time. The function comes with the following parameters:
+You can use this function to convert time to readable date. The function comes with the following parameters:
 
 - **timestamp**: Defines a timestamp to convert.
 
@@ -83,5 +83,18 @@ You can use this function to convert time to readable time. The function comes w
 
 ```yaml
 - source: '$readableTimestamp($item.lastTransitionTime)'
+  name: status.conditions.lastTransitionTime
+```
+
+## readableTimestampWithTime (timestamp)
+
+You can use this function to convert time to a readable date with time. The function comes with the following parameters:
+
+- **timestamp**: Defines a timestamp to convert.
+
+### Example
+
+```yaml
+- source: '$readableTimestampWithTime($item.lastTransitionTime)'
   name: status.conditions.lastTransitionTime
 ```

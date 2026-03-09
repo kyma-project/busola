@@ -179,7 +179,7 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
                 gpus > 0
                   ? {
                       title: t('cluster-overview.statistics.nvidia-gpus'),
-                      value: String(gpus),
+                      value: gpus,
                     }
                   : null,
               ]}
@@ -288,11 +288,11 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
                   title: t(
                     'cluster-overview.statistics.services-loadbalancers',
                   ),
-                  value: String(loadbalancerNumber),
+                  value: loadbalancerNumber,
                 },
                 {
                   title: t('cluster-overview.statistics.services-others'),
-                  value: String(servicesData?.length - loadbalancerNumber),
+                  value: servicesData?.length - loadbalancerNumber,
                 },
               ]}
               resourceUrl="services"
@@ -317,7 +317,7 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
                   title: t(
                     'cluster-overview.statistics.persistent-volumes-total-capacity',
                   ),
-                  value: String(pvCapacity),
+                  value: pvCapacity,
                 },
               ]}
             />

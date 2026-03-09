@@ -47,14 +47,20 @@ export const getUrl = async (
   } else if (isKnownNamespaceWide) {
     return getResourceUrl(resource, namespaceId || 'default');
   } else {
-    const resourceKindUrl = getResourceKindUrl(resource);
-    const response = await singleGet(resourceKindUrl);
-    const json = await response.json();
-    const apiGroupResources = json?.resources;
-    const apiGroup = apiGroupResources.find((r) => r?.kind === resource?.kind);
-    return apiGroup?.namespaced
-      ? getResourceUrl(resource, namespaceId)
-      : getResourceUrl(resource);
+    try {
+      const resourceKindUrl = getResourceKindUrl(resource);
+      const response = await singleGet(resourceKindUrl);
+      const json = await response.json();
+      const apiGroupResources = json?.resources;
+      const apiGroup = apiGroupResources?.find(
+        (r) => r?.kind === resource?.kind,
+      );
+      return apiGroup?.namespaced
+        ? getResourceUrl(resource, namespaceId)
+        : getResourceUrl(resource);
+    } catch {
+      return null;
+    }
   }
 };
 

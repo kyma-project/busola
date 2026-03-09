@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { CSSProperties } from 'react';
 import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Label, Tag } from '@ui5/webcomponents-react';
@@ -7,15 +8,25 @@ import './Labels.scss';
 
 const SHORTENING_TRESHOLD = 50;
 
+interface LabelsProps {
+  labels: Record<string, string> | null;
+  className?: string;
+  shortenLongLabels?: boolean;
+  style?: CSSProperties;
+  displayLabelForLabels?: boolean;
+  disableMarginBottom?: boolean;
+  hideIcon?: boolean;
+}
+
 export const Labels = ({
   labels,
   className = '',
   shortenLongLabels = true,
-  style = null,
+  style = undefined,
   displayLabelForLabels = false,
   disableMarginBottom = false,
   hideIcon = true,
-}) => {
+}: LabelsProps) => {
   const { t } = useTranslation();
   if (!labels || Object.keys(labels).length === 0) {
     return (
@@ -34,7 +45,8 @@ export const Labels = ({
     separatedLabels.push(`${key}=${labels[key]}`);
   }
 
-  const shortenLabel = (label) => label.slice(0, SHORTENING_TRESHOLD) + '...';
+  const shortenLabel = (label: string) =>
+    label.slice(0, SHORTENING_TRESHOLD) + '...';
 
   return (
     <>
