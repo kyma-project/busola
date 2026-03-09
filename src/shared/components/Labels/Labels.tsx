@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { CSSProperties } from 'react';
 import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Label, Tag } from '@ui5/webcomponents-react';
@@ -11,7 +12,7 @@ interface LabelsProps {
   labels: Record<string, string> | null;
   className?: string;
   shortenLongLabels?: boolean;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   displayLabelForLabels?: boolean;
   disableMarginBottom?: boolean;
   hideIcon?: boolean;
