@@ -12,13 +12,21 @@ import {
 } from 'shared/helpers/schema';
 import { useContext } from 'react';
 
+type AdvancedContainersViewProps = {
+  resource: Record<string, any>;
+  setResource: (resource: Record<string, any>) => void;
+  onChange: (event: Event) => void;
+  namespace: string;
+  createContainerTemplate: () => Record<string, any>;
+};
+
 export function AdvancedContainersView({
   resource,
   setResource,
   onChange,
   namespace,
   createContainerTemplate,
-}) {
+}: AdvancedContainersViewProps) {
   const { t } = useTranslation();
   const schema = useContext(SchemaContext);
 
@@ -37,11 +45,11 @@ export function AdvancedContainersView({
   );
 
   return (
-    <ResourceForm.Wrapper resource={resource} setResource={setResource}>
+    <ResourceForm.Wrapper resource={resource} setResource={setResource as any}>
       <ResourceForm.CollapsibleSection
         title={t('deployments.create-modal.image-pull-secret')}
         resource={resource}
-        setResource={setResource}
+        setResource={setResource as any}
         tooltipContent={imgPullSecretsDesc}
       >
         <ResourceForm.FormField
@@ -49,7 +57,7 @@ export function AdvancedContainersView({
           input={() => (
             <K8sResourceSelectWithUseGetList
               url={`/api/v1/namespaces/${namespace}/secrets`}
-              onSelect={(secretName) => {
+              onSelect={(secretName: string) => {
                 jp.value(
                   resource,
                   '$.spec.template.spec.imagePullSecrets[0].name',
@@ -64,16 +72,17 @@ export function AdvancedContainersView({
                   '$.spec.template.spec.imagePullSecrets[0].name',
                 ) ?? ''
               }
+              filter={undefined}
             />
           )}
         />
       </ResourceForm.CollapsibleSection>
-      <SchemaContext.Provider value={containerSchema}>
+      <SchemaContext.Provider value={containerSchema as any}>
         <ResourceForm.CollapsibleSection
           title={t('deployments.create-modal.containers')}
           defaultOpen
           resource={resource}
-          setResource={setResource}
+          setResource={setResource as any}
           tooltipContent={containersDesc}
           actions={(setOpen) => (
             <Button
@@ -96,7 +105,11 @@ export function AdvancedContainersView({
             </Button>
           )}
         >
-          <Containers propertyPath="$.spec.template.spec.containers" />
+          <Containers
+            value={[]}
+            setValue={() => {}}
+            propertyPath="$.spec.template.spec.containers"
+          />
         </ResourceForm.CollapsibleSection>
       </SchemaContext.Provider>
     </ResourceForm.Wrapper>

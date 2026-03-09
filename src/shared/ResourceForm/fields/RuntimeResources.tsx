@@ -7,6 +7,7 @@ import { Label } from '../components/Label';
 import { MemoryInput } from 'resources/Namespaces/MemoryQuotas';
 
 import './RuntimeResources.scss';
+import { CollapsibleSectionProps } from '../components/CollapsibleSection';
 
 type CpuInputProps = {
   label: string;
@@ -29,7 +30,9 @@ type RuntimeResourcesProps = {
   >;
   nestingLevel?: number;
   title: string | JSX.Element;
-};
+  // propertyPath is read and used by the parent: Wrapper.
+  propertyPath?: string;
+} & Partial<CollapsibleSectionProps>;
 
 function CpuInput({
   label,

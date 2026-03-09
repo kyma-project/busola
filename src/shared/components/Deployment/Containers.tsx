@@ -13,7 +13,15 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { useContext } from 'react';
 
-function SingleContainerSection({ container, setContainer }) {
+type SingleContainerSectionProps = {
+  container: Record<string, any>;
+  setContainer: (resource: Record<string, any>) => void;
+};
+
+function SingleContainerSection({
+  container,
+  setContainer,
+}: SingleContainerSectionProps) {
   const { t } = useTranslation();
   const schema = useContext(SchemaContext);
 
@@ -23,7 +31,10 @@ function SingleContainerSection({ container, setContainer }) {
   const resourcesDesc = getDescription(schema, 'resources');
 
   return (
-    <ResourceForm.Wrapper resource={container} setResource={setContainer}>
+    <ResourceForm.Wrapper
+      resource={container}
+      setResource={setContainer as any}
+    >
       <K8sNameField
         propertyPath="$.name"
         setValue={(name) => {
@@ -63,15 +74,28 @@ function SingleContainerSection({ container, setContainer }) {
         nestingLevel={1}
         defaultOpen
         tooltipContent={resourcesDesc}
+        value={{}}
+        setValue={() => {}}
       />
     </ResourceForm.Wrapper>
   );
 }
 
-export function Containers({ value: containers, setValue: setContainers }) {
+type ContainersProps = {
+  value: Record<string, any>[];
+  setValue: (containers: Record<string, any>[]) => void;
+  // propertyPath is read and used by the parent: Wrapper.
+  propertyPath?: string;
+};
+
+export function Containers({
+  value: containers,
+  setValue: setContainers,
+  propertyPath: _propertyPath,
+}: ContainersProps) {
   const { t } = useTranslation();
 
-  const removeContainer = (index) => {
+  const removeContainer = (index: number) => {
     setContainers(containers.filter((_, i) => index !== i));
   };
 
