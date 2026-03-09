@@ -1,4 +1,4 @@
-import { buildK8sRequestPath } from './handler.js';
+import { buildK8sRequestPath } from './path-utils.js';
 
 describe('buildK8sRequestPath', () => {
   test('should use only the request path when targetApiServer has no path', () => {

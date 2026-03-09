@@ -3,6 +3,7 @@ import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
 import { pipeline } from 'stream/promises';
 import { tokenAuthAgent } from '../utils/https-agent.js';
+import { buildK8sRequestPath } from './path-utils.js';
 
 const https = require('https');
 const fs = require('fs');
@@ -29,14 +30,6 @@ const workaroundForNodeMetrics = (req) => {
     req.headers['connection'] = 'close';
   }
 };
-
-export function buildK8sRequestPath(targetApiServer, originalUrl) {
-  const basePath =
-    targetApiServer.pathname !== '/'
-      ? targetApiServer.pathname.replace(/\/$/, '')
-      : '';
-  return basePath + originalUrl.replace(/^\/backend/, '');
-}
 
 export async function handleK8sRequests(req, res) {
   let headersData;
