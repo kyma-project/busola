@@ -126,13 +126,13 @@ Under `HOSTS`, you should see an address that you can use to access the Busola p
 
 ## Logging into Busola
 
-After accessing Busola through one of the methods above, you need to provide your kubeconfig to connect to Busola.
+After accessing Busola using one of the methods above, you need to provide your kubeconfig to connect to it.
 
 ### Providing Kubeconfig
 
-1. Open your web browser and navigate to:
+1. Open your web browser and navigate to one of the following:
    - `http://localhost:3001`, if using kubectl port-forward
-   - Or the address from the Istio VirtualService
+   - The address from the Istio VirtualService
 
 2. On the Busola login page, choose **Connect** to provide cluster connection details.
 
