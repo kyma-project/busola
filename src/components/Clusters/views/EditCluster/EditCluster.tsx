@@ -328,8 +328,8 @@ function EditClusterComponent({
 
   const { t } = useTranslation();
   const notification = useNotification();
-
   const clustersInfo = useClustersInfo();
+
   const setAuth = useSetAtom(authDataAtom);
   const originalName = useRef(kubeconfig?.['current-context'] || '');
 
