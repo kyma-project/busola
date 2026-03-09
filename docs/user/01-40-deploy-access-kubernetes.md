@@ -135,7 +135,6 @@ After accessing Busola using one of the methods above, you need to provide your 
    - The address from the Istio VirtualService
 
 2. On the Busola login page, choose **Connect** to provide cluster connection details.
-
 3. Provide your kubeconfig, either by uploading the kubeconfig file or by pasting the kubeconfig content in the text area, and select **Next Step**.
 4. Choose your preferred storage configuration, and select **Next Step**.
 5. Choose **Connect Cluster** to establish connection to your cluster.
