@@ -1,16 +1,24 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Text, Icon, Input, FlexBox } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Text,
+  Icon,
+  Input,
+  FlexBox,
+  Ui5CustomEvent,
+  SelectDomRef,
+} from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 import { Select, Option } from '@ui5/webcomponents-react';
 import { AVAILABLE_PAGE_SIZES } from 'state/settings/pageSizeAtom';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 import './Pagination.scss';
+import { SelectChangeEventDetail } from '@ui5/webcomponents/dist/Select';
 
-const makePartitions = (currentPage, pagesCount) => {
+const makePartitions = (currentPage: number, pagesCount: number) => {
   const radius = 2;
-  const partitions = [];
+  const partitions: (number | string)[] = [];
   // add the current page and the pages in its radius
   for (let i = 1; i <= pagesCount; i++) {
     if (i === 1 || Math.abs(currentPage - i) <= radius || i === pagesCount) {
@@ -27,6 +35,14 @@ const makePartitions = (currentPage, pagesCount) => {
   return partitions;
 };
 
+type LinkProps = {
+  children: React.ReactNode;
+  isInteractable?: boolean;
+  isCurrent?: boolean;
+  onClick: () => void;
+  accessibleName?: string;
+} & Omit<React.ComponentProps<typeof Button>, 'onClick'>;
+
 const Link = ({
   children,
   isInteractable,
@@ -34,7 +50,7 @@ const Link = ({
   onClick,
   accessibleName,
   ...props
-}) => {
+}: LinkProps) => {
   const className = classNames('page-link', {
     current: isCurrent,
     interactable: isInteractable,
@@ -53,13 +69,21 @@ const Link = ({
   );
 };
 
+type PaginationProps = {
+  itemsTotal: number;
+  itemsPerPage: number;
+  currentPage: number;
+  onChangePage: (page: number) => void;
+  setLocalPageSize: (size: number) => void;
+};
+
 export const Pagination = ({
   itemsTotal,
   itemsPerPage,
   currentPage,
   onChangePage,
   setLocalPageSize,
-}) => {
+}: PaginationProps) => {
   const { t } = useTranslation();
   const [showInfo, setShowInfo] = useState(false);
 
@@ -67,8 +91,10 @@ export const Pagination = ({
 
   const partitions = makePartitions(currentPage, pagesCount);
 
-  const onSelectionChange = (event) => {
-    const selectedSize = event.detail.selectedOption.value;
+  const onSelectionChange = (
+    event: Ui5CustomEvent<SelectDomRef, SelectChangeEventDetail>,
+  ) => {
+    const selectedSize = event.detail.selectedOption.value as string;
     setLocalPageSize(parseInt(selectedSize));
   };
 
@@ -143,11 +169,11 @@ export const Pagination = ({
               <Input
                 className="page-input"
                 onChange={(event) => {
-                  const newValue = Number(event.target.typedInValue);
+                  const newValue = Number((event.target as any).typedInValue);
                   if (newValue >= 1 && newValue <= pagesCount)
                     onChangePage(newValue);
                 }}
-                value={currentPage}
+                value={currentPage.toString()}
                 type="Number"
               />
               <Text className="page-input-text bsl-has-color-status-4">
@@ -159,7 +185,11 @@ export const Pagination = ({
               key={i}
               isInteractable={current !== '...'}
               isCurrent={current === currentPage}
-              onClick={() => onChangePage(current)}
+              onClick={() =>
+                onChangePage(
+                  typeof current === 'string' ? parseInt(current) : current,
+                )
+              }
             >
               {current}
             </Link>
@@ -198,12 +228,4 @@ export const Pagination = ({
       </div>
     </div>
   );
-};
-
-Pagination.propTypes = {
-  itemsTotal: PropTypes.number.isRequired,
-  itemsPerPage: PropTypes.number,
-  currentPage: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
-  setLocalPageSize: PropTypes.func.isRequired,
 };
