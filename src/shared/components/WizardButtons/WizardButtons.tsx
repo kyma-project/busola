@@ -1,6 +1,18 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
+interface WizardButtonProps {
+  selectedStep: number;
+  setSelectedStep: (step: number) => void;
+  firstStep?: boolean;
+  customFinish?: string;
+  lastStep?: boolean;
+  onComplete: () => void;
+  onCancel: () => void;
+  invalid?: boolean;
+  className?: string;
+}
+
 export function WizardButtons({
   selectedStep,
   setSelectedStep,
@@ -11,7 +23,7 @@ export function WizardButtons({
   onCancel,
   invalid,
   className,
-}) {
+}: WizardButtonProps) {
   const { t } = useTranslation();
 
   const goToNextStep = () => {

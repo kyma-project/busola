@@ -17,7 +17,19 @@ import { Labels } from '../Labels/Labels';
 import { PodTemplateRow } from './PodTemplateRow';
 import { Link } from '../Link/Link';
 
-function PodTemplateTable({ className, items, columns, rowRenderer }) {
+interface PodTemplateTableProps {
+  className?: string;
+  items: any[];
+  columns: string[];
+  rowRenderer: (item: any) => JSX.Element;
+}
+
+function PodTemplateTable({
+  className,
+  items,
+  columns,
+  rowRenderer,
+}: PodTemplateTableProps) {
   if (!items?.length) {
     return <></>;
   }
@@ -47,7 +59,12 @@ function PodTemplateTable({ className, items, columns, rowRenderer }) {
   );
 }
 
-export function ContainersPanel({ title, containers }) {
+interface ContainersPanelProps {
+  title: string;
+  containers: any[];
+}
+
+export function ContainersPanel({ title, containers }: ContainersPanelProps) {
   return (
     <List headerText={title}>
       {containers?.map((container) => (
@@ -57,7 +74,11 @@ export function ContainersPanel({ title, containers }) {
   );
 }
 
-function ContainerComponent({ container }) {
+interface ContainerComponentProps {
+  container: any;
+}
+
+function ContainerComponent({ container }: ContainerComponentProps) {
   const { t } = useTranslation();
 
   return (
@@ -146,7 +167,13 @@ function ContainerComponent({ container }) {
   );
 }
 
-export function VolumesPanel({ title, labels, volumes }) {
+interface VolumesPanelProps {
+  title: string;
+  labels: Record<string, string>;
+  volumes: any[];
+}
+
+export function VolumesPanel({ title, labels, volumes }: VolumesPanelProps) {
   const { t } = useTranslation();
   return (
     <List headerText={title}>
@@ -161,7 +188,7 @@ export function VolumesPanel({ title, labels, volumes }) {
   );
 }
 
-function VolumeComponent({ volume }) {
+function VolumeComponent({ volume }: { volume: any }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
   const { name, configMap, secret } = volume;
