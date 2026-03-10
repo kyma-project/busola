@@ -1,31 +1,92 @@
 import { isEmpty } from 'lodash';
-import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue } from 'jotai';
 
 import { useNavigate, useSearchParams } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { HeaderRenderer } from './components/HeaderRenderer';
-import { TableBody } from './components/TableBody';
+import {
+  FilteredEntriesType,
+  PaginationType,
+  SearchSettingsType,
+  TableBody,
+} from './components/TableBody';
 import { filterEntries } from 'shared/components/GenericList/helpers';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import ListActions from 'shared/components/ListActions/ListActions';
-import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { SortModalPanel } from './SortModalPanel';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { pageSizeAtom } from 'state/settings/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
-import { Table } from '@ui5/webcomponents-react';
+import { Table, TableDomRef, Ui5CustomEvent } from '@ui5/webcomponents-react';
 import './GenericList.scss';
 import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 import { useDebounce } from 'hooks/useDebounce';
+import { K8sResource } from 'types';
+import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table';
+
+type AsyncSortFunction = {
+  asyncFn: (a: any, b: any) => Promise<any>;
+};
+
+type SortFunction = (a: any, b: any) => number;
+
+type SortByObject = Record<string, SortFunction | AsyncSortFunction>;
+
+type Actions = {
+  name: string;
+  handler: (resource: any) => void;
+  [key: string]: any;
+}[];
+
+type GenericListProps = {
+  title?: string;
+  entries?: FilteredEntriesType[];
+  headerRenderer: () => (string | ReactNode)[];
+  rowRenderer: (entry: any, actions?: any) => ReactNode[];
+  actions?: Actions;
+  extraHeaderContent?: ReactNode;
+  testid?: string;
+  serverDataError?: any;
+  serverDataLoading?: boolean;
+  pagination?: PaginationType;
+  sortBy?: SortByObject | ((a: any) => SortByObject);
+  notFoundMessage?: string;
+  searchSettings?: SearchSettingsType;
+  emptyListProps?: {
+    simpleEmptyListMessage?: boolean;
+    titleText: string;
+    subtitleText?: string;
+    showButton?: boolean;
+    buttonText?: string;
+    url?: string;
+    onClick?: () => void;
+    image?: string;
+  };
+  columnLayout?: string;
+  customColumnLayout?: (entry: any) => any;
+  enableColumnLayout?: boolean;
+  resourceType?: string;
+  rawResourceType?: string;
+  customUrl?: (entry: any) => string;
+  hasDetailsView?: boolean;
+  disableHiding?: boolean;
+  displayArrow?: boolean;
+  nameColIndex?: number;
+  namespaceColIndex?: number;
+  noHideFields?: string[];
+  customRowClick?: (name: string, entry: any) => void;
+  className?: string;
+  accessibleName?: string;
+  customSelectedEntry?: string;
+};
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -51,15 +112,15 @@ export const GenericList = ({
   headerRenderer,
   rowRenderer,
   testid,
-  serverDataError = null,
+  serverDataError,
   serverDataLoading = false,
   pagination,
   sortBy,
   notFoundMessage = 'components.generic-list.messages.not-found',
   searchSettings = defaultSearch,
-  emptyListProps = null,
-  columnLayout = null,
-  customColumnLayout = null,
+  emptyListProps,
+  columnLayout,
+  customColumnLayout,
   enableColumnLayout,
   resourceType = '',
   rawResourceType = '',
@@ -72,16 +133,21 @@ export const GenericList = ({
   noHideFields,
   customRowClick,
   className = '',
-  accessibleName = null,
+  accessibleName,
   customSelectedEntry = '',
-}) => {
+}: GenericListProps) => {
   const navigate = useNavigate();
   searchSettings = { ...defaultSearch, ...searchSettings };
-  const [entrySelected, setEntrySelected] = useState(customSelectedEntry || '');
+  const [entrySelected, setEntrySelected] = useState<string | string[]>(
+    customSelectedEntry,
+  );
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
-  const [sort, setSort] = useState({
+  const [sort, setSort] = useState<{
+    name?: string;
+    order: 'ASC' | 'DESC';
+  }>({
     name: sortBy && Object.keys(sortBy)[0],
     order: 'ASC',
   });
@@ -90,25 +156,37 @@ export const GenericList = ({
     setEntrySelected(customSelectedEntry || '');
   }, [customSelectedEntry]);
 
-  const sorting = async (sort, resources) => {
+  const sorting = async (
+    sort: { name?: string; order: 'ASC' | 'DESC' },
+    resources: any[],
+  ) => {
     if (!sortBy || isEmpty(sortBy)) return resources;
 
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
 
-    if (sortFunction?.asyncFn) {
+    if ((sortFunction as AsyncSortFunction)?.asyncFn) {
       if (sort.order === 'ASC') {
-        return await asyncSort([...resources], sortFunction.asyncFn);
+        return await asyncSort(
+          [...resources],
+          (sortFunction as AsyncSortFunction).asyncFn,
+        );
       } else {
-        return await asyncSort([...resources], sortFunction.asyncFn, true);
+        return await asyncSort(
+          [...resources],
+          (sortFunction as AsyncSortFunction).asyncFn,
+          true,
+        );
       }
     }
 
     if (sort.order === 'ASC') {
-      return [...resources].sort(sortFunction);
+      return [...resources].sort(sortFunction as SortFunction);
     } else {
-      return [...resources].sort((a, b) => sortFunction(b, a));
+      return [...resources].sort((a, b) =>
+        (sortFunction as SortFunction)(b, a),
+      );
     }
   };
 
@@ -127,7 +205,7 @@ export const GenericList = ({
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(pagination?.initialPage || 1);
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
-  const [filteredEntries, setFilteredEntries] = useState([]);
+  const [filteredEntries, setFilteredEntries] = useState<any[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get('search');
   const setSearchFieldFromURL =
@@ -146,7 +224,7 @@ export const GenericList = ({
   }, [debouncedSearch]);
 
   useEffect(() => {
-    if (pagination) {
+    if (pagination?.itemsPerPage) {
       // move back when the last item from the last page is deleted
       const pagesCount = Math.ceil(entries.length / pagination.itemsPerPage);
       if (currentPage > pagesCount && pagesCount > 0) {
@@ -190,7 +268,9 @@ export const GenericList = ({
       // There is often more than one match due to similar names (e.g. `test`, `test123`),
       // so entrySelected can be a string or an array of strings.
       // This (the correct one) is resolved in TableBody.
-      setEntrySelected(selected?.length === 1 ? selected[0] : selected);
+      setEntrySelected(
+        (selected?.length === 1 ? selected[0] : selected) as string | string[],
+      );
       const namespaceParam = searchParams.get('resourceNamespace');
       if (namespaceParam) setEntrySelectedNamespace(namespaceParam);
     }
@@ -234,27 +314,31 @@ export const GenericList = ({
 
   const { navigateSafely } = useFormNavigation();
   const { resourceUrl: resourceUrlFn, namespace } = useUrl();
-  const linkTo = (entry) => {
+  const linkTo = (entry: K8sResource) => {
     const overrides = namespace === '-all-' ? { namespace } : {};
     return customUrl
       ? customUrl(entry)
       : resourceUrlFn(entry, { resourceType, ...overrides });
   };
 
-  const handleRowClick = (e) => {
+  const handleRowClick = (
+    e: Ui5CustomEvent<TableDomRef, TableRowClickEventDetail>,
+  ) => {
     const arrowColumnCount = displayArrow ? 1 : 0;
+    const nameColElement =
+      e?.detail?.row?.children?.[nameColIndex + arrowColumnCount];
     const item = (
-      e.detail.row.children[nameColIndex + arrowColumnCount]?.children?.[0]
-        ?.innerText ??
-      e.detail.row.children[nameColIndex + arrowColumnCount].innerText
+      (nameColElement?.children?.[0] as HTMLElement)?.innerText ??
+      (nameColElement as HTMLElement)?.innerText
     )?.trimEnd();
 
     const hasNamepace = namespaceColIndex !== -1;
+    const namespaceColElement = hasNamepace
+      ? e?.detail?.row?.children?.[namespaceColIndex + arrowColumnCount]
+      : null;
     const itemNamespace = hasNamepace
-      ? (e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
-          ?.children[0]?.innerText ??
-        e?.detail?.row.children[namespaceColIndex + arrowColumnCount]
-          ?.innerText)
+      ? ((namespaceColElement?.children?.[0] as HTMLElement)?.innerText ??
+        (namespaceColElement as HTMLElement)?.innerText)
       : '';
 
     const selectedEntry = entries.find((entry) => {
@@ -275,10 +359,11 @@ export const GenericList = ({
       return customRowClick(item, selectedEntry);
     } else {
       setEntrySelected(
-        selectedEntry?.metadata?.name ?? e.target.children[0].innerText,
+        selectedEntry?.metadata?.name ??
+          (e.target.children[0] as HTMLElement).innerText,
       );
       setEntrySelectedNamespace(
-        selectedEntry?.metadata?.namespace ?? selectedEntry.namespace ?? '',
+        selectedEntry?.metadata?.namespace ?? selectedEntry?.namespace ?? '',
       );
 
       const { group, version } = extractApiGroupVersion(
@@ -292,17 +377,17 @@ export const GenericList = ({
           ? {
               ...layoutState,
               showCreate: null,
-              endColumn: customColumnLayout(selectedEntry),
+              endColumn: customColumnLayout?.(selectedEntry),
               layout: newLayout,
               showEdit: null,
             }
-          : {
+          : ({
               ...layoutState,
               showCreate: null,
               midColumn: {
                 resourceName:
                   selectedEntry?.metadata?.name ??
-                  e.target.children[0].innerText,
+                  (e.target.children[0] as HTMLElement).innerText,
                 resourceType: resourceType,
                 rawResourceTypeName: rawResourceType,
                 namespaceId: selectedEntry?.metadata?.namespace,
@@ -312,9 +397,9 @@ export const GenericList = ({
               endColumn: null,
               layout: newLayout,
               showEdit: null,
-            },
+            } as ColumnLayoutState),
       );
-      const link = `${linkTo(selectedEntry)}${
+      const link = `${linkTo(selectedEntry as any)}${
         enableColumnLayout
           ? `?${searchQuery === '' ? '' : `search=${searchParam}&`}layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
               namespace === '-all-' && selectedEntry?.metadata?.namespace
@@ -358,9 +443,14 @@ export const GenericList = ({
                   subtitleText={emptyListProps.subtitleText}
                   showButton={emptyListProps.showButton}
                   buttonText={emptyListProps.buttonText}
-                  url={emptyListProps.url}
-                  onClick={emptyListProps.onClick}
-                  image={emptyListProps?.image}
+                  url={emptyListProps.url ?? ''}
+                  onClick={emptyListProps.onClick ?? (() => null)}
+                  image={
+                    emptyListProps?.image as
+                      | 'TntComponents'
+                      | 'NoEntries'
+                      | undefined
+                  }
                 />
               ) : (
                 <p>
@@ -385,11 +475,12 @@ export const GenericList = ({
             : ''
         }`}
         onMouseDown={() => {
-          window.getSelection().removeAllRanges();
+          window.getSelection()?.removeAllRanges();
         }}
         onRowClick={(e) => {
-          const selection = window.getSelection().toString();
-          if (!hasDetailsView || selection.length > 0) return;
+          const selection = window.getSelection()?.toString();
+          if (!hasDetailsView || (selection?.length && selection?.length > 0))
+            return;
           navigateSafely(() => handleRowClick(e));
         }}
         headerRow={
@@ -397,7 +488,7 @@ export const GenericList = ({
             actions={actions}
             headerRenderer={headerRenderer}
             disableHiding={disableHiding}
-            noHideFields={noHideFields}
+            noHideFields={noHideFields ?? []}
           />
         }
       >
@@ -416,16 +507,16 @@ export const GenericList = ({
           actions={actions}
           rowRenderer={rowRenderer}
           displayArrow={displayArrow}
-          enableColumnLayout={enableColumnLayout}
+          enableColumnLayout={enableColumnLayout ?? false}
         />
       </Table>
       {pagination &&
         (!pagination.autoHide ||
-          filteredEntries.length > pagination.itemsPerPage) && (
+          filteredEntries.length > (pagination?.itemsPerPage ?? 0)) && (
           <Pagination
             itemsTotal={filteredEntries.length}
             currentPage={currentPage}
-            itemsPerPage={pagination.itemsPerPage}
+            itemsPerPage={pagination.itemsPerPage ?? 0}
             onChangePage={setCurrentPage}
             setLocalPageSize={setPageSize}
           />
@@ -435,47 +526,3 @@ export const GenericList = ({
 };
 
 GenericList.Actions = ListActions;
-
-const PaginationProps = PropTypes.shape({
-  itemsPerPage: PropTypes.number,
-  initialPage: PropTypes.number,
-  autoHide: PropTypes.bool,
-});
-
-const SearchProps = PropTypes.shape({
-  showSearchField: PropTypes.bool,
-  textSearchProperties: PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      PropTypes.string.isRequired,
-      PropTypes.func.isRequired,
-      PropTypes.any,
-    ]),
-  ),
-  showSearchSuggestion: PropTypes.bool,
-  allowSlashShortcut: PropTypes.bool,
-  noSearchResultTitle: PropTypes.string,
-  noSearchResultSubtitle: PropTypes.string,
-});
-
-GenericList.propTypes = {
-  title: PropTypes.string,
-  entries: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-  ).isRequired,
-  headerRenderer: PropTypes.func.isRequired,
-  rowRenderer: PropTypes.func.isRequired,
-  actions: CustomPropTypes.listActions,
-  extraHeaderContent: PropTypes.node,
-  testid: PropTypes.string,
-  serverDataError: PropTypes.any,
-  serverDataLoading: PropTypes.bool,
-  pagination: PaginationProps,
-  sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-  notFoundMessage: PropTypes.string,
-  searchSettings: SearchProps,
-  enableColumnLayout: PropTypes.bool,
-  customUrl: PropTypes.func,
-  hasDetailsView: PropTypes.bool,
-  noHideFields: PropTypes.arrayOf(PropTypes.string),
-  customRowClick: PropTypes.func,
-};
