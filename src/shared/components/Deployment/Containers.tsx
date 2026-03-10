@@ -74,8 +74,6 @@ function SingleContainerSection({
         nestingLevel={1}
         defaultOpen
         tooltipContent={resourcesDesc}
-        value={{}}
-        setValue={() => {}}
       />
     </ResourceForm.Wrapper>
   );

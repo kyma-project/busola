@@ -17,8 +17,8 @@ type CpuInputProps = {
 };
 
 type RuntimeResourcesProps = {
-  value: Record<string, any>;
-  setValue: (value: Record<string, any>) => void;
+  value?: Record<string, any>;
+  setValue?: (value: Record<string, any>) => void;
   presets?: Record<
     string,
     {
@@ -75,7 +75,7 @@ function CpuInput({
 
 export function RuntimeResources({
   value,
-  setValue,
+  setValue = () => {},
   presets,
   nestingLevel = 0,
   ...props
