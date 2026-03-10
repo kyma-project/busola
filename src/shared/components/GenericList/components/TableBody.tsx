@@ -12,22 +12,21 @@ export type FilteredEntriesType = {
   namespace: string;
   resource?: { metadata?: { namespace: string } };
   metadata?: { name: string; namespace: string; uid: string };
-  [key: string]: any;
 };
 
-export type SearchSettingsType = {
-  showSearchField?: boolean;
-  textSearchProperties?: any[];
-  showSearchSuggestion?: boolean;
-  allowSlashShortcut?: boolean;
-  noSearchResultTitle?: string;
-  noSearchResultSubtitle?: string;
+type SearchSettingsType = {
+  showSearchField: boolean;
+  textSearchProperties: any[];
+  showSearchSuggestion: boolean;
+  allowSlashShortcut: boolean;
+  noSearchResultTitle: string;
+  noSearchResultSubtitle: string;
 };
 
-export type PaginationType = {
-  itemsPerPage?: number;
-  initialPage?: number;
-  autoHide?: boolean;
+type PaginationType = {
+  itemsPerPage: number;
+  initialPage: number;
+  autoHide: boolean;
 };
 
 type TableBodyProps = {
@@ -37,7 +36,7 @@ type TableBodyProps = {
   searchQuery: string;
   searchSettings: SearchSettingsType;
   entries: FilteredEntriesType[];
-  pagination?: PaginationType;
+  pagination: PaginationType;
   currentPage: number;
   layoutState: ColumnLayoutState;
   entrySelected: string | string[];
@@ -89,13 +88,11 @@ export const TableBody = ({
           <IllustratedMessage
             name="NoSearchResults"
             titleText={
-              searchSettings.noSearchResultTitle &&
               i18n.exists(searchSettings.noSearchResultTitle)
                 ? t(searchSettings.noSearchResultTitle)
                 : searchSettings.noSearchResultTitle
             }
             subtitleText={
-              searchSettings.noSearchResultSubtitle &&
               i18n.exists(searchSettings.noSearchResultSubtitle)
                 ? t(searchSettings.noSearchResultSubtitle)
                 : searchSettings.noSearchResultSubtitle
@@ -113,8 +110,8 @@ export const TableBody = ({
   let pagedItems = filteredEntries;
   if (pagination) {
     pagedItems = filteredEntries.slice(
-      (currentPage - 1) * (pagination?.itemsPerPage || 0),
-      currentPage * (pagination?.itemsPerPage || 0),
+      (currentPage - 1) * pagination.itemsPerPage,
+      currentPage * pagination.itemsPerPage,
     );
   }
 
