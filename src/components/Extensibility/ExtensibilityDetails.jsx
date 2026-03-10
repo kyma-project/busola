@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { useSetAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
@@ -257,6 +257,14 @@ export default function ExtensibilityDetails({
   const { customHeaderActions: headerActions, isCommunityModuleSelected } =
     useContext(KymaModuleContext);
 
+  const translationBundleValue = useMemo(
+    () => ({
+      translationBundle: urlPath || 'extensibility',
+      defaultResourcePlaceholder: defaultPlaceholder,
+    }),
+    [urlPath, defaultPlaceholder],
+  );
+
   if (!resMetaData) {
     return (
       <CustomResource
@@ -277,12 +285,7 @@ export default function ExtensibilityDetails({
   }
 
   return (
-    <TranslationBundleContext.Provider
-      value={{
-        translationBundle: urlPath || 'extensibility',
-        defaultResourcePlaceholder: defaultPlaceholder,
-      }}
-    >
+    <TranslationBundleContext.Provider value={translationBundleValue}>
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary>
           <ExtensibilityDetailsCore

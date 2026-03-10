@@ -246,13 +246,16 @@ export default function ExtensibilityCreate(props) {
   const resMetaData = useGetCRbyPath();
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
+  const translationBundleValue = useMemo(
+    () => ({
+      translationBundle: urlPath || 'extensibility',
+      defaultResourcePlaceholder: defaultPlaceholder,
+    }),
+    [urlPath, defaultPlaceholder],
+  );
+
   return (
-    <TranslationBundleContext.Provider
-      value={{
-        translationBundle: urlPath || 'extensibility',
-        defaultResourcePlaceholder: defaultPlaceholder,
-      }}
-    >
+    <TranslationBundleContext.Provider value={translationBundleValue}>
       <DataSourcesContextProvider
         dataSources={props.resourceSchema?.dataSources || {}}
       >

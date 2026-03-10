@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
@@ -17,7 +17,7 @@ export default function PersistentVolumeCreate({
   const { t } = useTranslation();
 
   const [pv, setPv] = useState(
-    _.cloneDeep(initialPersistentVolume) || createPersistentVolumeTemplate(),
+    cloneDeep(initialPersistentVolume) || createPersistentVolumeTemplate(),
   );
 
   const [initialResource, setInitialResource] = useState(
@@ -26,7 +26,7 @@ export default function PersistentVolumeCreate({
 
   if (initialPersistentVolume && initialResource !== initialPersistentVolume) {
     setPv(
-      _.cloneDeep(initialPersistentVolume) || createPersistentVolumeTemplate(),
+      cloneDeep(initialPersistentVolume) || createPersistentVolumeTemplate(),
     );
     setInitialResource(
       initialPersistentVolume || createPersistentVolumeTemplate(),

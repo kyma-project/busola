@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { createIngressTemplate } from './templates';
@@ -19,7 +19,7 @@ export default function IngressCreate({
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [ingress, setIngress] = useState(
-    _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
+    cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
   );
   const [initialResource, setInitialResource] = useState(
     initialIngress || createIngressTemplate(namespaceId),
@@ -28,7 +28,7 @@ export default function IngressCreate({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setIngress(
-        _.cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
+        cloneDeep(initialIngress) || createIngressTemplate(namespaceId),
       );
       setInitialResource(initialIngress || createIngressTemplate(namespaceId));
     }, 0);

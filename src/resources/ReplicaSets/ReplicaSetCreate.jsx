@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
@@ -21,7 +21,7 @@ export default function ReplicaSetCreate({
   const { t } = useTranslation();
 
   const [replicaset, setReplicaSet] = useState(
-    _.cloneDeep(initialReplicaSet) || createReplicaSetTemplate(namespace),
+    cloneDeep(initialReplicaSet) || createReplicaSetTemplate(namespace),
   );
   const [initialResource, setInitialResource] = useState(
     initialReplicaSet || createReplicaSetTemplate(namespace),
@@ -34,7 +34,7 @@ export default function ReplicaSetCreate({
   ) {
     setPrevNamespace(namespace);
     setReplicaSet(
-      _.cloneDeep(initialReplicaSet) || createReplicaSetTemplate(namespace),
+      cloneDeep(initialReplicaSet) || createReplicaSetTemplate(namespace),
     );
     setInitialResource(
       initialReplicaSet || createReplicaSetTemplate(namespace),

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 
@@ -191,13 +191,16 @@ const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
     }
   }, [resMetaData, isExtensibilityCustomComponentsEnabled]);
 
+  const translationBundleValue = useMemo(
+    () => ({
+      translationBundle: getExtensibilityPath(resMetaData?.general),
+      defaultResourcePlaceholder: defaultPlaceholder,
+    }),
+    [resMetaData?.general, defaultPlaceholder],
+  );
+
   return (
-    <TranslationBundleContext.Provider
-      value={{
-        translationBundle: getExtensibilityPath(resMetaData?.general),
-        defaultResourcePlaceholder: defaultPlaceholder,
-      }}
-    >
+    <TranslationBundleContext.Provider value={translationBundleValue}>
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
           {isExtensibilityCustomComponentsEnabled && resMetaData?.customHtml ? (

@@ -18,6 +18,7 @@ import {
   ManualKubeConfigIdType,
 } from 'state/manualKubeConfigIdAtom';
 import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
+import { getIntendedPath } from 'state/intendedPathAtom';
 
 export type Users = Array<{
   name: string;
@@ -32,7 +33,12 @@ function addCurrentCluster(
 
   if (clustersInfo.currentCluster?.name !== params?.name) removePreviousPath();
 
-  if (params.currentContext.namespace) {
+  const intendedPath = getIntendedPath();
+  if (intendedPath?.path) {
+    clustersInfo.navigate(
+      `/cluster/${encodeURIComponent(params.contextName)}${intendedPath.path}`,
+    );
+  } else if (params.currentContext.namespace) {
     clustersInfo.navigate(
       `/cluster/${encodeURIComponent(params.contextName)}/namespaces/${
         params.currentContext.namespace
