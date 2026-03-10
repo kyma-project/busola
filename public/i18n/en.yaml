@@ -633,6 +633,8 @@ discovery-and-network:
   title: Discovery and Network
 err-boundary:
   go-back: Go back
+  reload: Reload page
+  reload-page: Please reload the page to try again.
   restored-initial-form: Something went wrong. We restored the initial form for you.
   sth-went-wrong: Something went wrong.
 events:
