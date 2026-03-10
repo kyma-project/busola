@@ -8,6 +8,9 @@ Busola configuration is the product of gathering and merging the configurations 
 
 ### Backend
 
+> [!NOTE]
+> The `busola-config` ConfigMap is intended **only for configuring Busola features, and not for configuring storage**. If you want to override storage configuration, use environment variables (envs) instead of `busola-config`.
+
 - Busola backend default cluster configuration, acquired from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/backend/settings/defaultConfig.yaml) file.
 - Busola cluster configuration, available in the Busola cluster in the ConfigMap `busola/busola-config` under the key **config**.
   This data is mounted to the `busola` Pods, and during the local development,
