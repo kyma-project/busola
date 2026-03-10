@@ -1,0 +1,15 @@
+name: "SAP specific CodeQL configuration"
+
+queries:
+  - uses: security-extended
+
+packs:
+  # Use these packs for JavaScript and TypeScript analysis
+  javascript:
+    - codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
+    - advanced-security/javascript-sap-xsjs-queries:codeql-suites/javascript-security-extended.qls
+    - advanced-security/javascript-sap-cap-queries:codeql-suites/javascript-security-extended.qls
+    - advanced-security/javascript-sap-ui5-queries:codeql-suites/javascript-security-extended.qls
+    - advanced-security/javascript-sap-xsjs-models
+    - advanced-security/javascript-sap-cap-all
+    - advanced-security/javascript-sap-ui5-models
