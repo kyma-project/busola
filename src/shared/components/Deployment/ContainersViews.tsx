@@ -105,11 +105,7 @@ export function AdvancedContainersView({
             </Button>
           )}
         >
-          <Containers
-            value={[]}
-            setValue={() => {}}
-            propertyPath="$.spec.template.spec.containers"
-          />
+          <Containers propertyPath="$.spec.template.spec.containers" />
         </ResourceForm.CollapsibleSection>
       </SchemaContext.Provider>
     </ResourceForm.Wrapper>

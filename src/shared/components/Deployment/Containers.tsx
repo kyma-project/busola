@@ -80,8 +80,8 @@ function SingleContainerSection({
 }
 
 type ContainersProps = {
-  value: Record<string, any>[];
-  setValue: (containers: Record<string, any>[]) => void;
+  value?: Record<string, any>[];
+  setValue?: (containers?: Record<string, any>[]) => void;
   // propertyPath is read and used by the parent: Wrapper.
   propertyPath?: string;
 };
@@ -94,7 +94,7 @@ export function Containers({
   const { t } = useTranslation();
 
   const removeContainer = (index: number) => {
-    setContainers(containers.filter((_, i) => index !== i));
+    setContainers?.(containers?.filter((_, i) => index !== i));
   };
 
   containers = containers || [];
@@ -113,7 +113,7 @@ export function Containers({
         container={containers[0]}
         setContainer={(newContainer) => {
           containers.splice(0, 1, newContainer);
-          setContainers(containers);
+          setContainers?.(containers);
         }}
       />
     );
@@ -138,7 +138,7 @@ export function Containers({
         container={container || {}}
         setContainer={(newContainer) => {
           containers.splice(i, 1, newContainer);
-          setContainers(containers);
+          setContainers?.(containers);
         }}
       />
     </ResourceForm.CollapsibleSection>
