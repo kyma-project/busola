@@ -1,6 +1,13 @@
 import { StoreKeys } from '@ui-schema/ui-schema';
 import { fromJS } from 'immutable';
-import { createContext, useState, useRef, ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useMemo,
+  useState,
+  useRef,
+  ReactNode,
+} from 'react';
 
 export function scopePaths(storeKeys: StoreKeys) {
   const indexes = fromJS(storeKeys)
@@ -54,45 +61,43 @@ export function TriggerContextProvider({ children }: { children: ReactNode }) {
   const subs = useRef<Record<string, any>[]>([]);
   const [enabled, setEnabled] = useState(true);
 
-  const trigger = (name: string, storeKeys: StoreKeys) => {
-    if (!enabled) return;
-    setTimeout(() =>
-      subs.current
-        .map((sub) => sub.current[name])
-        .filter((sub) => !!sub)
-        .filter((sub) => pathMatch(sub.storeKeys, storeKeys, sub.modifiers))
-        .forEach((sub) => sub.callback()),
-    );
-  };
+  const trigger = useCallback(
+    (name: string, storeKeys: StoreKeys) => {
+      if (!enabled) return;
+      setTimeout(() =>
+        subs.current
+          .map((sub) => sub.current[name])
+          .filter((sub) => !!sub)
+          .filter((sub) => pathMatch(sub.storeKeys, storeKeys, sub.modifiers))
+          .forEach((sub) => sub.callback()),
+      );
+    },
+    [enabled],
+  );
 
-  const subscribe = (sub: Record<string, any>) => {
+  const subscribe = useCallback((sub: Record<string, any>) => {
     subs.current = [...subs.current, sub];
-  };
+  }, []);
 
-  const unsubscribe = (sub: Record<string, any>) => {
+  const unsubscribe = useCallback((sub: Record<string, any>) => {
     subs.current = subs.current.filter((s) => s.sub !== sub);
-  };
+  }, []);
 
-  const disable = () => {
+  const disable = useCallback(() => {
     setEnabled(false);
-  };
+  }, []);
 
-  const enable = () => {
+  const enable = useCallback(() => {
     setEnabled(true);
-  };
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({ trigger, subscribe, unsubscribe, disable, enable, enabled, subs }),
+    [trigger, subscribe, unsubscribe, disable, enable, enabled],
+  );
 
   return (
-    <TriggerContext.Provider
-      value={{
-        trigger,
-        subscribe,
-        unsubscribe,
-        disable,
-        enable,
-        enabled,
-        subs,
-      }}
-    >
+    <TriggerContext.Provider value={contextValue}>
       {children}
     </TriggerContext.Provider>
   );

@@ -45,7 +45,7 @@ export type KymaResourceSpecModuleType = {
   channel?: string;
 };
 
-type KymaResourceStatusTemplate = {
+export type KymaResourceStatusTemplate = {
   apiVersion?: string;
   metadata?: { name: string; namespace?: string };
   kind?: string;
@@ -61,11 +61,7 @@ export type KymaResourceStatusModuleType = {
     metadata?: { name: string; namespace?: string };
     kind?: string;
   };
-  template?: {
-    apiVersion?: string;
-    metadata?: { name: string; namespace?: string };
-    kind?: string;
-  };
+  template?: KymaResourceStatusTemplate;
   message?: string;
   maintenance?: boolean;
 };

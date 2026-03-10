@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { createCustomResourceDefinitionsTemplate } from './templates';
 
@@ -17,7 +17,7 @@ export default function CustomResourceDefinitionCreate({
 }) {
   const { t } = useTranslation();
   const [customResourceDefinitions, setCustomResourceDefinitions] = useState(
-    _.cloneDeep(initialCustomResourceDefinition) ||
+    cloneDeep(initialCustomResourceDefinition) ||
       createCustomResourceDefinitionsTemplate(namespace),
   );
   const [initialResource, setInitialResource] = useState(
@@ -33,7 +33,7 @@ export default function CustomResourceDefinitionCreate({
   ) {
     setPrevNamespace(namespace);
     setCustomResourceDefinitions(
-      _.cloneDeep(initialCustomResourceDefinition) ||
+      cloneDeep(initialCustomResourceDefinition) ||
         createCustomResourceDefinitionsTemplate(namespace),
     );
     setInitialResource(

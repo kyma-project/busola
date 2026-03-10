@@ -9,6 +9,7 @@ import {
   findExtension,
   findModuleTemplate,
   getModuleName,
+  KymaResourceStatusTemplate,
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/Modules/support';
@@ -279,11 +280,7 @@ export const CommunityModulesList = ({
         apiVersion: string;
         metadata: { name: string; namespace: string };
       };
-      template: {
-        kind: string;
-        apiVersion: string;
-        metadata: { name: string; namespace: string };
-      };
+      template: KymaResourceStatusTemplate;
     },
   ) => {
     setOpenedModuleIndex(
