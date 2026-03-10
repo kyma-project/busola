@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
 import { Card, Text, Title } from '@ui5/webcomponents-react';
-import { Tooltip } from '../Tooltip/Tooltip';
 
 import './UI5RadialChart.scss';
 import { HintButton } from '../HintButton/HintButton';
@@ -70,32 +69,26 @@ export const UI5RadialChart = ({
         aria-label={`${accessibleName}, radial chart, ${text}${additionalInfo ? `, ${additionalInfo}` : ''}`}
         role="img"
       >
-        <Tooltip
-          position={'top'}
-          content={tooltipInfo ?? ''}
-          {...(!tooltipInfo && { visible: false })}
-        >
-          <RadialChart
-            displayValue={text}
-            displayValueStyle={{
-              fontSize: textSize,
-              fill: color,
-            }}
-            value={value}
-            maxValue={max}
-            color={color}
-            className="sap-margin-y-tiny"
-            style={{
-              height: size + 'px',
-              width: size + 'px',
-            }}
-            chartConfig={{
-              innerRadius: '98%',
-              outerRadius: '98%',
-              barSize: 12,
-            }}
-          />
-        </Tooltip>
+        <RadialChart
+          displayValue={text}
+          displayValueStyle={{
+            fontSize: textSize,
+            fill: color,
+          }}
+          value={value}
+          maxValue={max}
+          color={color}
+          className="sap-margin-y-tiny"
+          style={{
+            height: size + 'px',
+            width: size + 'px',
+          }}
+          chartConfig={{
+            innerRadius: '98%',
+            outerRadius: '98%',
+            barSize: 12,
+          }}
+        />
         {additionalInfo && (
           <Text className="additional-info">{additionalInfo}</Text>
         )}
