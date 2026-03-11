@@ -7,7 +7,7 @@ Learn about the default configuration in Busola and how to change it.
 Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence.
 
 > [!NOTE]
-> The `busola-config` ConfigMap is intended **only for configuring Busola features, and not for configuring storage**. If you want to override storage configuration, use environment variables (envs) instead of `busola-config`. See [Configuring Busola](../01-42-configure-busola.md) for more details.
+> Use the `busola-config` ConfigMap **only to configure Busola features**, not storage. To override the storage configuration, you must use environment variables. For details, see [Configure Busola with environment variables](../01-42-configure-busola.md).
 
 ### Backend
 
