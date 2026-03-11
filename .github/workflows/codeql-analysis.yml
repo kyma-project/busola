@@ -3,8 +3,6 @@ name: 'CodeQL'
 on:
   push:
     branches: [main, firebase-integration]
-  pull_request:
-    branches: [main]
   schedule:
     - cron: '45 21 * * 2'
 
