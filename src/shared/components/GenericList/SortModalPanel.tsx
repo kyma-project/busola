@@ -12,7 +12,7 @@ import { Modal } from '../Modal/Modal';
 import { useTranslation } from 'react-i18next';
 import './SortModalPanel.scss';
 
-type Sort = {
+export type Sort = {
   name?: string;
   order: 'ASC' | 'DESC';
 };

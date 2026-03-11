@@ -16,7 +16,7 @@ import { filterEntries } from 'shared/components/GenericList/helpers';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import ListActions from 'shared/components/ListActions/ListActions';
-import { SortModalPanel } from './SortModalPanel';
+import { Sort, SortModalPanel } from './SortModalPanel';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { pageSizeAtom } from 'state/settings/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
@@ -68,7 +68,7 @@ type GenericListProps = {
     buttonText?: string;
     url?: string;
     onClick?: () => void;
-    image?: string;
+    image?: 'TntComponents' | 'NoEntries';
   };
   columnLayout?: string;
   customColumnLayout?: (entry: any) => any;
@@ -144,10 +144,7 @@ export const GenericList = ({
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
-  const [sort, setSort] = useState<{
-    name?: string;
-    order: 'ASC' | 'DESC';
-  }>({
+  const [sort, setSort] = useState<Sort>({
     name: sortBy && Object.keys(sortBy)[0],
     order: 'ASC',
   });
@@ -156,10 +153,7 @@ export const GenericList = ({
     setEntrySelected(customSelectedEntry || '');
   }, [customSelectedEntry]);
 
-  const sorting = async (
-    sort: { name?: string; order: 'ASC' | 'DESC' },
-    resources: any[],
-  ) => {
+  const sorting = async (sort: Sort, resources: any[]) => {
     if (!sortBy || isEmpty(sortBy)) return resources;
 
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
@@ -445,12 +439,7 @@ export const GenericList = ({
                   buttonText={emptyListProps.buttonText}
                   url={emptyListProps.url ?? ''}
                   onClick={emptyListProps.onClick ?? (() => null)}
-                  image={
-                    emptyListProps?.image as
-                      | 'TntComponents'
-                      | 'NoEntries'
-                      | undefined
-                  }
+                  image={emptyListProps?.image}
                 />
               ) : (
                 <p>
@@ -507,7 +496,7 @@ export const GenericList = ({
           actions={actions}
           rowRenderer={rowRenderer}
           displayArrow={displayArrow}
-          enableColumnLayout={enableColumnLayout ?? false}
+          enableColumnLayout={!!enableColumnLayout}
         />
       </Table>
       {pagination &&
