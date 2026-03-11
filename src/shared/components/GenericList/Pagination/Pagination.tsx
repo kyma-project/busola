@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
 import {
   Button,
   Text,
@@ -36,12 +36,12 @@ const makePartitions = (currentPage: number, pagesCount: number) => {
 };
 
 type LinkProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   isInteractable?: boolean;
   isCurrent?: boolean;
   onClick: () => void;
   accessibleName?: string;
-} & Omit<React.ComponentProps<typeof Button>, 'onClick'>;
+} & Omit<ComponentProps<typeof Button>, 'onClick'>;
 
 const Link = ({
   children,
