@@ -1,6 +1,13 @@
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+interface GetContainersPortsProps {
+  ports: {
+    name?: string;
+    containerPort: number;
+    protocol: string;
+  }[];
+}
 
-export function getPorts(ports) {
+export function getPorts({ ports }: GetContainersPortsProps) {
   if (ports?.length) {
     return (
       <ul>

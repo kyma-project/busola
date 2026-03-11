@@ -80,8 +80,8 @@ type StatusBadgeProps = {
   type: 'Information' | 'Positive' | 'Negative' | 'Critical' | 'None';
   resourceKind: string;
   children: string | any;
-  autoResolveType: boolean;
-  noTooltip: boolean;
+  autoResolveType?: boolean;
+  noTooltip?: boolean;
   className?: string;
 };
 
