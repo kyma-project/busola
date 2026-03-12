@@ -1,4 +1,4 @@
-name: "SAP specific CodeQL configuration"
+name: 'SAP specific CodeQL configuration'
 
 queries:
   - uses: security-extended
