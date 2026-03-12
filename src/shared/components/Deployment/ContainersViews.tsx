@@ -72,7 +72,6 @@ export function AdvancedContainersView({
                   '$.spec.template.spec.imagePullSecrets[0].name',
                 ) ?? ''
               }
-              filter={undefined}
             />
           )}
         />

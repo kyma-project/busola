@@ -383,14 +383,8 @@ export const DynamicPageComponent = ({
     ) : null;
 
   const handlePageRef = (dynamicPage: DynamicPageDomRef | null) => {
-    if (dynamicPageRef) {
-      if (typeof dynamicPageRef === 'function') {
-        (dynamicPageRef as (ref: DynamicPageDomRef | null) => void)(
-          dynamicPage,
-        );
-      } else if (dynamicPageRef.current !== undefined) {
-        dynamicPageRef.current = dynamicPage;
-      }
+    if (dynamicPageRef?.current !== undefined) {
+      dynamicPageRef.current = dynamicPage;
     }
 
     const button = dynamicPage?.shadowRoot?.querySelector(
