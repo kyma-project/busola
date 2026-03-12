@@ -1,5 +1,4 @@
 import { Button, IllustratedMessage } from '@ui5/webcomponents-react';
-import '@ui5/webcomponents-fiori/dist/illustrations/UnableToLoad.js';
 import { useTranslation } from 'react-i18next';
 
 export function RouteErrorFallback() {
