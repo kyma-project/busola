@@ -61,7 +61,7 @@ function PodTemplateTable({
 
 interface ContainersPanelProps {
   title: string;
-  containers: any[];
+  containers: Record<string, any>[];
 }
 
 export function ContainersPanel({ title, containers }: ContainersPanelProps) {
@@ -75,7 +75,7 @@ export function ContainersPanel({ title, containers }: ContainersPanelProps) {
 }
 
 interface ContainerComponentProps {
-  container: any;
+  container: Record<string, any>;
 }
 
 function ContainerComponent({ container }: ContainerComponentProps) {
