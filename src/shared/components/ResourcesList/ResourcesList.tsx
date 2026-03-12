@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, RefObject, useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
 import { Text, ToolbarButton } from '@ui5/webcomponents-react';
 import { cloneDeep } from 'lodash';
 import jp from 'jsonpath';
@@ -13,7 +12,6 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { prettifyNamePlural, prettifyNameSingular } from 'shared/utils/helpers';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -51,33 +49,41 @@ const Injections = lazyWithRetries(
  * }
  */
 
-ResourcesList.propTypes = {
-  customColumns: CustomPropTypes.customColumnsType,
-  createResourceForm: PropTypes.func,
-  customHeaderActions: PropTypes.node,
-  createActionLabel: PropTypes.string,
-  resourceUrl: PropTypes.string.isRequired,
-  resourceType: PropTypes.string.isRequired,
-  rawResourceType: PropTypes.string,
-  resourceTitle: PropTypes.string,
-  namespace: PropTypes.string,
-  hasDetailsView: PropTypes.bool,
-  isCompact: PropTypes.bool,
-  showTitle: PropTypes.bool,
-  filter: PropTypes.func,
-  listHeaderActions: PropTypes.node,
-  description: PropTypes.node,
-  readOnly: PropTypes.bool,
-  customUrl: PropTypes.func,
-  testid: PropTypes.string,
-  omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
-  resourceUrlPrefix: PropTypes.string,
-  disableCreate: PropTypes.bool,
-  disableDelete: PropTypes.bool,
-  enableColumnLayout: PropTypes.bool,
-  layoutNumber: PropTypes.string,
-  filterFn: PropTypes.func,
-  createFormRef: PropTypes.object,
+type CustomColumn = {
+  header?: string;
+  value: (resource: any) => ReactNode;
+  id: string;
+  visibility?: (resource: any) => boolean;
+};
+
+type ResourcesListProps = {
+  customColumns?: CustomColumn[];
+  createResourceForm?: () => void;
+  customHeaderActions?: ReactNode;
+  createActionLabel?: string;
+  resourceUrl: string;
+  resourceType: string;
+  rawResourceType?: string;
+  resourceTitle?: string;
+  namespace?: string;
+  hasDetailsView?: boolean;
+  isCompact?: boolean;
+  showTitle?: boolean;
+  filter?: (resource: any) => boolean;
+  listHeaderActions?: ReactNode;
+  description?: ReactNode;
+  readOnly?: boolean;
+  customUrl?: (resource: any) => string;
+  testid?: string;
+  omitColumnsIds?: string[];
+  resourceUrlPrefix?: string;
+  disableCreate?: boolean;
+  disableDelete?: boolean;
+  enableColumnLayout?: boolean;
+  layoutNumber?: string;
+  filterFn?: (resource: any) => boolean;
+  createFormRef?: RefObject<any>;
+  resources?: Record<string, any>[];
 };
 
 export function ResourcesList({
@@ -91,7 +97,7 @@ export function ResourcesList({
   resources,
   filterFn = () => true,
   ...props
-}) {
+}: ResourcesListProps) {
   const headerInjections = useGetInjections(resourceType, 'list-header');
   if (!resourceUrl) {
     return <></>; // wait for the context update
