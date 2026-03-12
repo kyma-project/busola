@@ -78,7 +78,7 @@ type StatusBadgeProps = {
   additionalContent?: React.ReactNode;
   tooltipContent?: React.ReactNode; // deprecated
   type: 'Information' | 'Positive' | 'Negative' | 'Critical' | 'None';
-  resourceKind: string;
+  resourceKind?: string;
   children: string | any;
   autoResolveType?: boolean;
   noTooltip?: boolean;

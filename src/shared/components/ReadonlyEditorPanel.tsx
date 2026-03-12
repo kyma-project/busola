@@ -2,7 +2,7 @@ import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { UI5Panel } from './UI5Panel/UI5Panel';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
 import { Button } from '@ui5/webcomponents-react';
 import { base64Decode } from 'shared/helpers';
 
@@ -10,13 +10,21 @@ const EDITOR_OPTIONS = {
   minimap: { enabled: false },
 };
 
+interface ReadonlyEditorPanelProps {
+  title: string;
+  value: string;
+  editorProps?: any;
+  actions?: ReactNode;
+  isBase64?: boolean;
+}
+
 export function ReadonlyEditorPanel({
   title,
   value,
   editorProps,
   actions,
   isBase64 = false,
-}) {
+}: ReadonlyEditorPanelProps) {
   const { t } = useTranslation();
   const [editor, setEditor] = useState(null);
   const [isEncoded, setEncoded] = useState(true);

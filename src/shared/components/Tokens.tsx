@@ -1,7 +1,7 @@
 import { Tag } from '@ui5/webcomponents-react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-const Tokens = ({ tokens }) => (
+const Tokens = ({ tokens }: { tokens?: string[] }) => (
   <div>
     {tokens?.length
       ? tokens.map((scope) => (
