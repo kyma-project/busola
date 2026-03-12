@@ -12,7 +12,7 @@ type EmptyListComponentProps = {
   showButton?: boolean;
   buttonText?: string;
   url: string;
-  onClick: () => null;
+  onClick: () => null | void;
   children?: ReactNode;
   image?: 'TntComponents' | 'NoEntries';
 };

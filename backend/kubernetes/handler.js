@@ -3,6 +3,7 @@ import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
 import { pipeline } from 'stream/promises';
 import { tokenAuthAgent } from '../utils/https-agent.js';
+import { buildK8sRequestPath } from './path-utils.js';
 
 const https = require('https');
 const fs = require('fs');
@@ -62,7 +63,7 @@ export async function handleK8sRequests(req, res) {
 
   const options = {
     hostname: targetApiServer.hostname,
-    path: req.originalUrl.replace(/^\/backend/, ''),
+    path: buildK8sRequestPath(targetApiServer, req.originalUrl),
     headers,
     method: req.method,
     port: targetApiServer.port || 443,

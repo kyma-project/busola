@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { DragEvent, RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 
-import PropTypes from 'prop-types';
 import { Icon } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
@@ -10,11 +9,14 @@ import { showAddClusterWizardAtom } from 'state/showAddClusterWizardAtom';
 
 import './FileInput.scss';
 
-FileInput.propTypes = {
-  fileInputChanged: PropTypes.func.isRequired,
-  availableFormatsMessage: PropTypes.string,
-  acceptedFileFormats: PropTypes.string.isRequired,
-  required: PropTypes.bool,
+type FileInputProps = {
+  fileInputChanged: (files: FileList) => void;
+  availableFormatsMessage?: string;
+  acceptedFileFormats: string;
+  inputRef?: RefObject<HTMLInputElement>;
+  required?: boolean;
+  allowMultiple?: boolean;
+  customMessage?: string;
 };
 
 export function FileInput({
@@ -25,13 +27,13 @@ export function FileInput({
   required,
   allowMultiple,
   customMessage,
-}) {
-  const [fileNames, setFileNames] = useState([]);
+}: FileInputProps) {
+  const [fileNames, setFileNames] = useState<string[]>([]);
   const openAddCluster = useAtomValue(showAddClusterWizardAtom);
   const openAdd = useAtomValue(showYamlUploadDialogAtom);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation();
-  const fileNameRef = useRef(null);
+  const fileNameRef = useRef<HTMLParagraphElement | null>(null);
 
   useEffect(() => {
     if (!openAdd && !openAddCluster) {
@@ -46,12 +48,12 @@ export function FileInput({
   }, [openAdd, openAddCluster]);
 
   // needed for onDrag to fire
-  function dragOver(e) {
+  function dragOver(e: DragEvent<HTMLLabelElement>) {
     e.stopPropagation();
     e.preventDefault();
   }
 
-  function fileChanged(files) {
+  function fileChanged(files: FileList) {
     setFileNames([...files]?.map((file) => file.name || ''));
     if (files.length) {
       fileInputChanged(files);
@@ -64,7 +66,7 @@ export function FileInput({
     }
   }
 
-  function drop(e) {
+  function drop(e: DragEvent<HTMLLabelElement>): void {
     setDraggingCounter(0);
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); // to avoid event.js error
@@ -102,7 +104,11 @@ export function FileInput({
         ref={inputRef}
         type="file"
         id="file-upload"
-        onChange={(e) => fileChanged(e.target.files)}
+        onChange={(e) => {
+          if (e.target.files) {
+            fileChanged(e.target.files);
+          }
+        }}
         aria-hidden="true"
         accept={acceptedFileFormats}
         required={required}
