@@ -12,13 +12,26 @@ import { Modal } from '../Modal/Modal';
 import { useTranslation } from 'react-i18next';
 import './SortModalPanel.scss';
 
+export type Sort = {
+  name?: string;
+  order: 'ASC' | 'DESC';
+};
+
+type SortModalPanelProps = {
+  sortBy: Record<string, any>;
+  sort: Sort;
+  setSort: (sort: Sort) => void;
+  disabled?: boolean;
+  defaultSort: Sort;
+};
+
 export const SortModalPanel = ({
   sortBy,
   sort,
   setSort,
   disabled = false,
   defaultSort,
-}) => {
+}: SortModalPanelProps) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
 
@@ -44,16 +57,17 @@ export const SortModalPanel = ({
       className="sorting-modal"
       title={t('common.sorting.sort')}
       headerActions={
-        <Button design="Transparent" onClick={handleReset} tabIndex="-1">
+        <Button design="Transparent" onClick={handleReset} tabIndex={-1}>
           {t('common.buttons.reset')}
         </Button>
       }
-      actions={(onClose) => [
+      /*@ts-expect-error Type mismatch between js and ts*/
+      actions={(onClose?: () => void) => [
         <Button
           design="Emphasized"
           onClick={() => {
             setSort({ name: name, order: order });
-            onClose();
+            onClose?.();
           }}
           key="sort"
         >
@@ -69,7 +83,11 @@ export const SortModalPanel = ({
       <List
         separators="All"
         onItemClick={(e) => {
-          setOrder(e?.detail?.item?.children[0]?.value);
+          setOrder(
+            (e?.detail?.item?.children[0] as HTMLInputElement)?.value as
+              | 'ASC'
+              | 'DESC',
+          );
         }}
         accessibleName="sortOrderList"
       >
@@ -79,7 +97,7 @@ export const SortModalPanel = ({
             name="sortOrder"
             value="ASC"
             checked={order === 'ASC'}
-            onChange={(event) => setOrder(event.target.value)}
+            onChange={(event) => setOrder(event.target.value as 'ASC' | 'DESC')}
           />
           <Text>{t('common.sorting.asc')}</Text>
         </ListItemCustom>
@@ -88,7 +106,7 @@ export const SortModalPanel = ({
             name="sortOrder"
             value="DESC"
             checked={order === 'DESC'}
-            onChange={(event) => setOrder(event.target.value)}
+            onChange={(event) => setOrder(event.target.value as 'ASC' | 'DESC')}
           />
           <Text>{t('common.sorting.desc')}</Text>
         </ListItemCustom>
@@ -96,7 +114,7 @@ export const SortModalPanel = ({
       <List
         separators="All"
         onItemClick={(e) => {
-          setName(e?.detail?.item?.children[0]?.value);
+          setName((e?.detail?.item?.children[0] as HTMLInputElement)?.value);
         }}
         accessibleName="sortByList"
       >

@@ -1,8 +1,10 @@
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
-import { Card, CardHeader, Text } from '@ui5/webcomponents-react';
+import { Card, Text, Title } from '@ui5/webcomponents-react';
 
 import './UI5RadialChart.scss';
+import { HintButton } from '../HintButton/HintButton';
+import { useState } from 'react';
 
 interface UI5RadialChartProps {
   cardClassName?: string;
@@ -14,6 +16,7 @@ interface UI5RadialChartProps {
   titleText: string;
   additionalInfo?: string;
   accessibleName: string;
+  tooltipInfo?: string;
 }
 
 export const UI5RadialChart = ({
@@ -26,6 +29,7 @@ export const UI5RadialChart = ({
   titleText,
   additionalInfo = '',
   accessibleName,
+  tooltipInfo,
 }: UI5RadialChartProps) => {
   const percent = max && value ? Math.round((value * 100) / max) : 0;
   const text = (percent > 10_000 ? percent.toPrecision(3) : percent) + '%';
@@ -34,14 +38,30 @@ export const UI5RadialChart = ({
   const classnames = classNames(`radial-chart`, {
     'cursor-pointer': onClick,
   });
-
   const cardClassnames = classNames(`radial-chart-card`, cardClassName);
+
+  const [showTitleDescription, setShowTitleDescription] = useState(false);
 
   return (
     <Card
       className={cardClassnames}
       accessibleName={accessibleName}
-      header={<CardHeader titleText={titleText} />}
+      header={
+        <div className="radial-chart-card-header">
+          <Title className="ui5-card-header-title" size="H6">
+            {titleText}
+          </Title>
+          {tooltipInfo && (
+            <HintButton
+              className="sap-margin-begin-tiny"
+              setShowTitleDescription={setShowTitleDescription}
+              description={tooltipInfo}
+              showTitleDescription={showTitleDescription}
+              ariaTitle={tooltipInfo}
+            />
+          )}
+        </div>
+      }
     >
       <div
         className={classnames}

@@ -46,6 +46,7 @@ export const RadialChart = ({ structure, value, originalResource }) => {
   return (
     <div className="item-wrapper card-tall">
       <UI5RadialChart
+        tooltipInfo={structure?.tooltipInfo}
         color={structure.color}
         value={value}
         max={maxValue ? maxValue : structure?.maxValue}

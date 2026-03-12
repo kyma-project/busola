@@ -37,6 +37,7 @@ export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
     <>
       <div className="item-wrapper card-tall">
         <UI5RadialChart
+          tooltipInfo={t('cluster-overview.statistics.cpu-usage-tooltip')}
           cardClassName="item"
           color="var(--sapChart_OrderedColor_5)"
           value={
@@ -64,6 +65,7 @@ export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
       </div>
       <div className="item-wrapper card-tall">
         <UI5RadialChart
+          tooltipInfo={t('cluster-overview.statistics.memory-usage-tooltip')}
           cardClassName="item"
           color="var(--sapChart_OrderedColor_6)"
           value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}

@@ -19,4 +19,13 @@
   align-items: center;
   max-width: 230px;
   height: 300px;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    padding-bottom: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+  }
 }
