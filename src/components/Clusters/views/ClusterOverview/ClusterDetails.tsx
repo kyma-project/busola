@@ -35,7 +35,6 @@ const GardenerProvider = () => {
   if (!provider) return null;
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <DynamicPageComponent.Column title={t('gardener.headers.provider')}>
       <p className="gardener-provider">{provider}</p>
     </DynamicPageComponent.Column>
@@ -81,7 +80,6 @@ export default function ClusterDetails({
           content={
             <>
               {!loading && k8sVersion && (
-                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.kubernetes-version')}
                 >
@@ -89,18 +87,15 @@ export default function ClusterDetails({
                 </DynamicPageComponent.Column>
               )}
               {!loading && kymaVersion && (
-                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.kyma-version')}
                 >
                   {kymaVersion}
                 </DynamicPageComponent.Column>
               )}
-              {/*@ts-expect-error Type mismatch between js and ts*/}
               <DynamicPageComponent.Column title={t('clusters.storage.title')}>
                 <ClusterStorageType clusterConfig={config} />
               </DynamicPageComponent.Column>
-              {/*@ts-expect-error Type mismatch between js and ts*/}
               <DynamicPageComponent.Column
                 title={t('clusters.common.api-server-address')}
               >
@@ -110,7 +105,6 @@ export default function ClusterDetails({
               </DynamicPageComponent.Column>
               <GardenerProvider />
               {!!kymaResourceLabels?.['kyma-project.io/global-account-id'] && (
-                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.global-account-id')}
                 >
@@ -118,7 +112,6 @@ export default function ClusterDetails({
                 </DynamicPageComponent.Column>
               )}
               {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
-                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.subaccount-id')}
                 >
@@ -126,7 +119,6 @@ export default function ClusterDetails({
                 </DynamicPageComponent.Column>
               )}
               {!environmentParametersLoading && !!natGatewayIps && (
-                /*@ts-expect-error Type mismatch between js and ts*/
                 <DynamicPageComponent.Column
                   title={t('clusters.overview.nat-gateway-ips')}
                 >

@@ -42,7 +42,6 @@ export const ResourceDetailsCardContent = ({
       wrapperClassname="resource-overview__details-wrapper"
       content={
         <>
-          {/*@ts-expect-error Type mismatch between js and ts*/}
           <DynamicPageComponent.Column
             key="Resource Type"
             title={t('common.headers.resource-type')}
@@ -60,7 +59,6 @@ export const ResourceDetailsCardContent = ({
               )}
             </div>
           </DynamicPageComponent.Column>
-          {/*@ts-expect-error Type mismatch between js and ts*/}
           <DynamicPageComponent.Column
             key="Age"
             title={t('common.headers.age')}
@@ -70,7 +68,6 @@ export const ResourceDetailsCardContent = ({
             />
           </DynamicPageComponent.Column>
           {!hideLastUpdate && (
-            /*@ts-expect-error Type mismatch between js and ts*/
             <DynamicPageComponent.Column
               key="Last Update"
               title={t('common.headers.last-update')}
@@ -79,13 +76,14 @@ export const ResourceDetailsCardContent = ({
             </DynamicPageComponent.Column>
           )}
           {filteredDetailsCardColumns.map((col) => (
-            /*@ts-expect-error Type mismatch between js and ts*/
-            <DynamicPageComponent.Column key={col.header} title={col.header}>
+            <DynamicPageComponent.Column
+              key={col.header}
+              title={col.header ?? ''}
+            >
               {col.value(resource)}
             </DynamicPageComponent.Column>
           ))}
           {!hideLabels && (
-            /*@ts-expect-error Type mismatch between js and ts*/
             <DynamicPageComponent.Column
               key="Labels"
               title={t('common.headers.labels')}
@@ -98,7 +96,6 @@ export const ResourceDetailsCardContent = ({
             </DynamicPageComponent.Column>
           )}
           {!hideAnnotations && (
-            /*@ts-expect-error Type mismatch between js and ts*/
             <DynamicPageComponent.Column
               key="Annotations"
               title={t('common.headers.annotations')}

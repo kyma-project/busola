@@ -23,7 +23,7 @@ interface K8sResourceSelectWithUseGetListProps
 
 export function K8sResourceSelectWithUseGetList({
   url,
-  filter,
+  filter = undefined,
   ...props
 }: K8sResourceSelectWithUseGetListProps) {
   const { data, error, ...listCall } = useGetList(filter)(url, {

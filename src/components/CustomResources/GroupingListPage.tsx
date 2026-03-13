@@ -124,7 +124,6 @@ export function GroupingListPage({
     <>
       <DynamicPageComponent
         title={title}
-        /*@ts-expect-error Type mismatch between js and ts*/
         description={description}
         actions={
           <SearchInput

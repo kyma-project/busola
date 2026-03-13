@@ -10,6 +10,7 @@ import { initIntendedPathFromUrl } from 'state/intendedPathAtom';
 import App from './components/App/App';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { NotificationProvider } from 'shared/contexts/NotificationContext';
+import { RouteErrorFallback } from 'shared/components/RouteErrorFallback/RouteErrorFallback';
 
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-react/dist/Assets';
@@ -82,6 +83,7 @@ const router = createBrowserRouter([
         </NotificationProvider>
       </Suspense>
     ),
+    errorElement: <RouteErrorFallback />,
   },
 ]);
 

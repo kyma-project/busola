@@ -27,8 +27,7 @@ export function ResourceCustomStatusColumns({
   return (
     <>
       {filteredStatusColumns?.map((col) => (
-        /*@ts-expect-error Type mismatch between js and ts*/
-        <DynamicPageComponent.Column key={col.header} title={col.header}>
+        <DynamicPageComponent.Column key={col.header} title={col.header ?? ''}>
           {col.value(resource)}
         </DynamicPageComponent.Column>
       ))}
