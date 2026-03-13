@@ -5,6 +5,7 @@ import {
   SortByObject,
 } from '../GenericList/GenericList';
 import { SearchSettingsType } from '../GenericList/components/TableBody';
+import { LayoutColumnName } from 'types';
 
 type CustomColumn = {
   header?: string;
@@ -37,7 +38,7 @@ export type ResourcesListProps = {
   disableCreate?: boolean;
   disableDelete?: boolean;
   enableColumnLayout?: boolean;
-  layoutNumber?: 'startColumn' | 'midColumn' | 'endColumn';
+  layoutNumber?: LayoutColumnName;
   filterFn?: (resource: any) => boolean;
   createFormRef?: RefObject<any> | null;
   resources?: Record<string, any>[];

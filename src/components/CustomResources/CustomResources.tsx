@@ -8,6 +8,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
+import { LayoutColumnName } from 'types';
 
 export type Version = {
   name: string;
@@ -119,7 +120,7 @@ export function CustomResources({
       [x: string]: any;
       onChange: FormEventHandler<HTMLElement>;
       formElementRef: RefObject<HTMLFormElement>;
-      layoutNumber: any;
+      layoutNumber: LayoutColumnName;
       resource: any;
     }) => <CRCreate {...props} crd={crd} layoutNumber="midColumn" />,
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
@@ -132,11 +133,7 @@ export function CustomResources({
     layoutCloseCreateUrl: layoutCloseCreateUrl,
     columnLayout: 'ThreeColumnsEndExpanded',
     customColumnLayout,
-    layoutNumber: 'midColumn' as
-      | 'startColumn'
-      | 'midColumn'
-      | 'endColumn'
-      | undefined,
+    layoutNumber: 'midColumn' as LayoutColumnName,
     parentCrdName: crd.metadata.name,
     simpleEmptyListMessage,
   };

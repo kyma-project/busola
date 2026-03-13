@@ -54,3 +54,10 @@ export * from './kubeconfig';
 export interface I18nInterfaces {
   exists(keys: string | string[]): boolean;
 }
+
+export type LayoutColumnName =
+  | 'startColumn'
+  | 'midColumn'
+  | 'endColumn'
+  | undefined
+  | null;
