@@ -38,7 +38,6 @@ export const K8sNameInput = ({
   ...props
 }: K8sNameInputProps) => {
   const { t } = useTranslation();
-  const [inputValue, setValue] = useState(value || defaultValue || '');
   const [isValid, setIsValid] = useState(true);
 
   if (!props.readOnly) delete props.readOnly;
@@ -48,24 +47,26 @@ export const K8sNameInput = ({
     'ui5-content-density-compact': compact,
   });
 
-  // Derive the character-level strip pattern from the provided pattern.
-  // This allows only characters that could ever appear in a valid name.
   const allowedCharsRegex = /[^a-z0-9-]/g;
 
   const handleInput: InputPropTypes['onInput'] = (event) => {
-    event.preventDefault();
-    const { value } = event.target;
-    const sanitized =
-      pattern === '.*' ? value : value.replace(allowedCharsRegex, '');
-    setValue(sanitized);
+    const target = event.target as any;
+    const currentValue = target.value;
+
+    if (pattern !== '.*') {
+      const sanitized = currentValue.replace(allowedCharsRegex, '');
+      if (currentValue !== sanitized) {
+        target.value = sanitized;
+      }
+    }
 
     if (onInput) {
       onInput(event);
     }
   };
 
-  const handleBlur = () => {
-    setIsValid(new RegExp(pattern).test(inputValue));
+  const handleBlur: InputPropTypes['onBlur'] = (event) => {
+    setIsValid(new RegExp(pattern).test((event.target as any).value));
   };
 
   const handleFocus = () => {
@@ -76,7 +77,7 @@ export const K8sNameInput = ({
     <Input
       type="Text"
       id={id}
-      value={inputValue}
+      value={value !== undefined ? value : defaultValue || ''}
       aria-required={required ? 'true' : 'false'}
       accessibleName={t('components.k8s-name-input.aria-label', {
         resourceType: kind,
