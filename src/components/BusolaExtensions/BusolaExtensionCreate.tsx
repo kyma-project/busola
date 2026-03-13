@@ -15,12 +15,12 @@ import { clusterAtom } from 'state/clusterAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
-import { Crd } from 'types';
+import { Crd, LayoutColumnName } from 'types';
 
 type BusolaExtensionCreateProps = {
   formElementRef: RefObject<HTMLFormElement>;
   onChange: FormEventHandler<HTMLFormElement>;
-  layoutNumber: string;
+  layoutNumber: LayoutColumnName;
 };
 
 export default function BusolaExtensionCreate({

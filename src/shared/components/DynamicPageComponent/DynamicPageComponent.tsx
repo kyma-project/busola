@@ -33,6 +33,7 @@ import {
 import { isFormOpenAtom, IsFormOpenState } from 'state/formOpenAtom';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { LayoutColumnName } from 'types';
 
 const useGetHeaderHeight = (
   dynamicPageRef: RefObject<DynamicPageDomRef>,
@@ -137,7 +138,7 @@ type DynamicPageComponentProps = {
   columnWrapperClassName?: string;
   content?: ReactNode | ((headerHeight?: number) => ReactNode);
   footer?: ReactNode;
-  layoutNumber?: 'startColumn' | 'midColumn' | 'endColumn';
+  layoutNumber?: LayoutColumnName;
   layoutCloseUrl?: string;
   inlineEditForm?: (height?: number | string) => ReactNode;
   showYamlTab?: boolean;
