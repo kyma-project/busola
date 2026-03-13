@@ -64,7 +64,6 @@ export default function CustomResourcesOfType({
 
   return (
     <>
-      {/*@ts-expect-error Type mismatch between js and ts*/}
       <DynamicPageComponent
         layoutNumber="midColumn"
         title={pluralize(crd?.spec?.names?.kind ?? '')}
@@ -78,7 +77,6 @@ export default function CustomResourcesOfType({
           />
         }
       >
-        {/*@ts-expect-error Type mismatch between js and ts*/}
         <DynamicPageComponent.Column
           title={t('custom-resource-definitions.name_singular')}
         >
