@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
@@ -20,7 +20,7 @@ export default function ResourceQuotaCreate({
   const { t } = useTranslation();
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [resourceQuota, setResourceQuota] = useState(
-    _.cloneDeep(initialResourceQuota) ||
+    cloneDeep(initialResourceQuota) ||
       createResourceQuotaTemplate({ namespaceName: namespaceId }),
   );
   const [initialResource, setInitialResource] = useState(
@@ -31,7 +31,7 @@ export default function ResourceQuotaCreate({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setResourceQuota(
-        _.cloneDeep(initialResourceQuota) ||
+        cloneDeep(initialResourceQuota) ||
           createResourceQuotaTemplate({ namespaceName: namespaceId }),
       );
       setInitialResource(

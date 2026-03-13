@@ -1,6 +1,9 @@
 import jsonata from 'jsonata';
 import { isEqual } from 'lodash';
-import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import {
+  getReadableTimestamp,
+  getReadableTimestampWithTime,
+} from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { doesUserHavePermission } from 'state/navigation/filters/permissions';
 import { permissionSetsAtom } from 'state/permissionSetsAtom';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
@@ -72,6 +75,10 @@ export function jsonataWrapper(expression: string) {
 
   exp.registerFunction('readableTimestamp', (timestamp) => {
     return getReadableTimestamp(timestamp);
+  });
+
+  exp.registerFunction('readableTimestampWithTime', (timestamp) => {
+    return getReadableTimestampWithTime(timestamp);
   });
 
   exp.registerFunction('canI', (resourceGroupAndVersion, resourceKind) => {
