@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Tokens } from 'shared/components/Tokens';
 
-export const MatchExpressionsList = ({ expressions }) => {
+export const MatchExpressionsList = ({
+  expressions,
+}: {
+  expressions?: any[];
+}) => {
   const { t } = useTranslation();
   const headerRenderer = () => [
     t('match-expressions.headers.key'),
