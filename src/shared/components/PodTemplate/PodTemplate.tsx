@@ -7,7 +7,7 @@ import { PodTemplateRow } from './PodTemplateRow';
 
 import './PodTemplate.scss';
 
-export function PodTemplate({ template }) {
+export function PodTemplate({ template }: { template: any }) {
   const { t } = useTranslation();
 
   return (
