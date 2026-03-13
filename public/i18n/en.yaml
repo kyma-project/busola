@@ -11,8 +11,11 @@ cluster-overview:
     pool: Pool
   statistics:
     cpu-limits: CPU limits
+    cpu-limits-tooltip: The maximum amount of CPU resources your Pods can consume. Monitor these limits to understand your cluster's resource allocation and scaling capacity. Kubernetes allows the total limits across a node to exceed 100% of physical capacity (overcommitment), which is configurable.
     cpu-requests: CPU requests
+    cpu-requests-tooltip: The amount of CPU resources that Pods request in the cluster. It helps you understand the CPU resource requirements of your applications.
     cpu-usage: CPU Usage
+    cpu-usage-tooltip: It shows how much processing power is currently being used across all nodes in the Kubernetes cluster compared to the total available CPU capacity. It helps you understand overall cluster load and available compute resources.
     daemonsets-overview: Daemon Sets Overview
     deployments-overview: Deployments Overview
     failing-deployments: Failing Deployments
@@ -22,8 +25,11 @@ cluster-overview:
     healthy-pods: Healthy Pods
     healthy-statefulsets: Healthy Stateful Sets
     memory-limits: Memory limits
+    memory-limits-tooltip: The maximum amount of memory resources your Pods can consume. Monitor these limits to understand your cluster's memory allocation and scaling capacity. Kubernetes allows the total limits across a node to exceed 100% of physical capacity (overcommitment), which is configurable.
     memory-requests: Memory requests
+    memory-requests-tooltip: The amount of memory resources that Pods request in the cluster. It helps you understand the memory resource requirements of your applications.
     memory-usage: Memory Usage
+    memory-usage-tooltip: It shows how much memory is currently being used across all nodes in the Kubernetes cluster compared to the total available memory capacity. It helps you understand the overall cluster load and available memory resources.
     modules-overview: Modules Overview
     nodes: Nodes
     nvidia-gpus: Nvidia GPUs
