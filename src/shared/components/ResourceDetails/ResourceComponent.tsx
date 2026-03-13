@@ -213,12 +213,11 @@ export function ResourceComponent({
 
   return (
     <ResourceDetailContext.Provider value={true}>
-      {/*@ts-expect-error Type mismatch between js and ts*/}
       <DynamicPageComponent
         className={className}
         headerContent={headerContent}
         showYamlTab={showYamlTab || disableEdit}
-        layoutNumber={layoutNumber ?? 'midColumn'}
+        layoutNumber={(layoutNumber ?? 'midColumn') as any}
         layoutCloseUrl={layoutCloseCreateUrl}
         title={customTitle ?? resource.metadata.name}
         description={headerDescription}
@@ -328,7 +327,7 @@ export function ResourceComponent({
             </Suspense>
           </>
         }
-        inlineEditForm={(stickyHeaderHeight: number | string) => (
+        inlineEditForm={(stickyHeaderHeight?: number | string) => (
           <ResourceCreate
             title={
               editActionLabel ||

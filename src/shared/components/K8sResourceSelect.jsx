@@ -19,7 +19,11 @@ K8sResourceSelectWithUseGetList.propTypes = {
   ...commonPropTypes,
 };
 
-export function K8sResourceSelectWithUseGetList({ url, filter, ...props }) {
+export function K8sResourceSelectWithUseGetList({
+  url,
+  filter = undefined,
+  ...props
+}) {
   const listCall = useGetList(filter)(url, {
     pollingInterval: 7000,
   });
