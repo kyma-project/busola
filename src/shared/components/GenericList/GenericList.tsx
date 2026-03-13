@@ -51,7 +51,7 @@ export type Actions = {
 
 export type EmptyListProps = {
   simpleEmptyListMessage?: boolean;
-  titleText: string;
+  titleText?: string;
   subtitleText?: string;
   showButton?: boolean;
   buttonText?: string;
@@ -438,7 +438,7 @@ export const GenericList = ({
               (emptyListProps?.simpleEmptyListMessage === false ||
               (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
                 <EmptyListComponent
-                  titleText={emptyListProps.titleText}
+                  titleText={emptyListProps.titleText ?? ''}
                   subtitleText={emptyListProps.subtitleText}
                   showButton={emptyListProps.showButton}
                   buttonText={emptyListProps.buttonText}

@@ -119,7 +119,7 @@ export function CustomResources({
       [x: string]: any;
       onChange: FormEventHandler<HTMLElement>;
       formElementRef: RefObject<HTMLFormElement>;
-      layoutNumber: number;
+      layoutNumber: any;
       resource: any;
     }) => <CRCreate {...props} crd={crd} layoutNumber="midColumn" />,
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
@@ -132,10 +132,13 @@ export function CustomResources({
     layoutCloseCreateUrl: layoutCloseCreateUrl,
     columnLayout: 'ThreeColumnsEndExpanded',
     customColumnLayout,
-    layoutNumber: 'midColumn',
+    layoutNumber: 'midColumn' as
+      | 'startColumn'
+      | 'midColumn'
+      | 'endColumn'
+      | undefined,
     parentCrdName: crd.metadata.name,
     simpleEmptyListMessage,
   };
-  /*@ts-expect-error Type mismatch between js and ts*/
   return <ResourcesList {...params} />;
 }

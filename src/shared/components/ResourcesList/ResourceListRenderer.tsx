@@ -100,7 +100,10 @@ export function ResourceListRenderer({
     parentCrdName,
   });
 
-  const [activeResource, setActiveResource] = useState(null);
+  const [activeResource, setActiveResource] = useState<Record<
+    string,
+    any
+  > | null>(null);
 
   const prettifiedResourceName = prettifyNameSingular(
     resourceTitle,
@@ -188,11 +191,11 @@ export function ResourceListRenderer({
   customColumns =
     columns ||
     [...defaultColumns, ...customColumns].filter(
-      (col) => !omitColumnsIds.includes(col.id),
+      (col) => !omitColumnsIds.includes(col.id as any),
     );
 
   const prepareResourceUrl = (resourceUrl: string, resource: K8sResource) => {
-    const encodedName = encodeURIComponent(resource?.metadata.name);
+    const encodedName = encodeURIComponent(resource?.metadata?.name);
     const namespace = resource?.metadata?.namespace;
     const pluralKind = pluralize((resource?.kind || '').toLowerCase());
 
@@ -224,7 +227,7 @@ export function ResourceListRenderer({
 
     if (Array.isArray(createResourceForm?.sanitizeClone)) {
       createResourceForm?.sanitizeClone.forEach((path) =>
-        jp.remove(activeResource, path),
+        jp.apply(activeResource, path, () => undefined),
       );
     } else if (typeof createResourceForm?.sanitizeClone === 'function') {
       activeResource = createResourceForm?.sanitizeClone(activeResource);
@@ -235,12 +238,12 @@ export function ResourceListRenderer({
       layoutNumber === 'midColumn' && enableColumnLayout
         ? {
             ...layoutState,
-            midColumn: layoutState?.midColumn,
+            midColumn: layoutState?.midColumn ?? null,
             endColumn: null,
             showCreate: {
-              resourceType: resourceType,
+              resourceType: resourceType ?? null,
               rawResourceTypeName: rawResourceType,
-              namespaceId: namespace,
+              namespaceId: namespace ?? null,
               resource: activeResource,
             },
             showEdit: null,
@@ -251,9 +254,9 @@ export function ResourceListRenderer({
             midColumn: null,
             endColumn: null,
             showCreate: {
-              resourceType: resourceType,
+              resourceType: resourceType ?? null,
               rawResourceTypeName: rawResourceType,
-              namespaceId: namespace,
+              namespaceId: namespace ?? null,
               resource: activeResource,
             },
             showEdit: null,
@@ -281,23 +284,24 @@ export function ResourceListRenderer({
           : null,
         {
           name: t('common.buttons.delete'),
-          tooltip: (entry) =>
+          tooltip: (entry: Record<string, any>) =>
             isProtected(entry)
               ? t('common.tooltips.protected-resources-info')
               : disableDelete
                 ? t('common.buttons.button-disabled')
                 : t('common.buttons.delete'),
           icon: 'delete',
-          disabledHandler: (entry) => isProtected(entry) || disableDelete,
-          handler: (resource) => {
+          disabledHandler: (entry: Record<string, any>) =>
+            isProtected(entry) || disableDelete,
+          handler: (resource: K8sResource) => {
             handleResourceDelete({
               resourceUrl: prepareResourceUrl(resourceUrl, resource),
-            });
+            } as any);
             setActiveResource(resource);
           },
         },
         ...customListActions,
-      ].filter((e) => e);
+      ].filter((e) => !!e);
 
   const nameColIndex = customColumns.findIndex((col) => col?.id === 'name');
   const namespaceColIndex = customColumns.findIndex(
@@ -308,7 +312,7 @@ export function ResourceListRenderer({
     return customColumns?.map((col) => col?.header || null);
   };
 
-  const rowRenderer = (entry) => {
+  const rowRenderer = (entry: any) => {
     const rowColumns = customColumns?.map((col, index) => {
       if (col?.value && index === nameColIndex) {
         return (
@@ -335,17 +339,17 @@ export function ResourceListRenderer({
   };
 
   const handleShowCreate = () => {
-    setActiveResource(undefined);
+    setActiveResource(null);
     setLayoutColumn(
       layoutNumber === 'midColumn' && enableColumnLayout
         ? {
             ...layoutState,
-            midColumn: layoutState?.midColumn,
+            midColumn: layoutState?.midColumn ?? null,
             endColumn: null,
             showCreate: {
-              resourceType: layoutState?.midColumn.resourceName,
+              resourceType: layoutState?.midColumn?.resourceName ?? null,
               rawResourceTypeName: rawResourceType,
-              namespaceId: namespace,
+              namespaceId: namespace ?? null,
             },
             showEdit: null,
             layout: 'ThreeColumnsEndExpanded',
@@ -355,9 +359,9 @@ export function ResourceListRenderer({
             midColumn: null,
             endColumn: null,
             showCreate: {
-              resourceType: resourceType,
+              resourceType: resourceType ?? null,
               rawResourceTypeName: rawResourceType,
-              namespaceId: namespace,
+              namespaceId: namespace ?? null,
             },
             showEdit: null,
             layout: 'TwoColumnsMidExpanded',
@@ -407,7 +411,10 @@ export function ResourceListRenderer({
       {createPortal(
         <DeleteResourceModal
           resource={activeResource}
-          resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
+          resourceUrl={prepareResourceUrl(
+            resourceUrl,
+            (activeResource as K8sResource) || ({} as K8sResource),
+          )}
           resourceType={rawResourceType || resourceType}
           performCancel={performCancel}
           performDelete={performDelete}
@@ -426,12 +433,12 @@ export function ResourceListRenderer({
           customColumnLayout={customColumnLayout}
           columnLayout={columnLayout}
           enableColumnLayout={enableColumnLayout}
-          title={showTitle ? title || prettifiedResourceName : null}
+          title={showTitle ? title || prettifiedResourceName : undefined}
           accessibleName={
             accessibleName ?? prettifyNamePlural(resourceTitle, resourceType)
           }
           actions={actions}
-          entries={resources || []}
+          entries={(resources || []) as any[]}
           headerRenderer={headerRenderer}
           rowRenderer={rowRenderer}
           serverDataError={error}
@@ -445,13 +452,15 @@ export function ResourceListRenderer({
             textSearchProperties: textSearchProperties(),
           }}
           emptyListProps={{
-            titleText: `${t('common.labels.no')} ${prettifyNamePlural(
-              resourceTitle,
-              resourceType,
-            )}`,
             onClick: handleShowCreate,
             showButton: !disableCreate && namespace !== '-all-',
             ...emptyListProps,
+            titleText:
+              emptyListProps?.titleText ??
+              `${t('common.labels.no')} ${prettifyNamePlural(
+                resourceTitle,
+                resourceType,
+              )}`,
             simpleEmptyListMessage: simpleEmptyListMessage,
           }}
           nameColIndex={nameColIndex}

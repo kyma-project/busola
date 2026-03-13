@@ -9,7 +9,7 @@ import { SearchSettingsType } from '../GenericList/components/TableBody';
 type CustomColumn = {
   header?: string;
   value: (resource: any) => ReactNode;
-  id: string;
+  id?: string;
   visibility?: (resource: any) => boolean;
 };
 
@@ -37,13 +37,13 @@ export type ResourcesListProps = {
   disableCreate?: boolean;
   disableDelete?: boolean;
   enableColumnLayout?: boolean;
-  layoutNumber?: string;
+  layoutNumber?: 'startColumn' | 'midColumn' | 'endColumn';
   filterFn?: (resource: any) => boolean;
   createFormRef?: RefObject<any> | null;
   resources?: Record<string, any>[];
   columns?: CustomColumn[];
   title?: string;
-  customListActions?: Actions[];
+  customListActions?: Actions;
   pagination?: {
     pageSize: number;
     serverSide?: boolean;
@@ -54,7 +54,9 @@ export type ResourcesListProps = {
   customColumnLayout?: (entry: any) => any;
   layoutCloseCreateUrl?: string;
   sortBy?: SortByObject | ((a: any) => SortByObject);
-  searchSettings?: SearchSettingsType;
+  searchSettings?: Omit<SearchSettingsType, 'textSearchProperties'> & {
+    textSearchProperties?: any[] | ((entry: any) => any[]);
+  };
   parentCrdName?: string;
   simpleEmptyListMessage?: boolean;
   disableHiding?: boolean;

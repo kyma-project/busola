@@ -63,8 +63,8 @@ export function ResourcesList({
       </BannerCarousel>
       {resources ? (
         <ResourceListRenderer
-          resources={(resources || []).filter(filterFn)}
           {...allProps}
+          resources={(resources || []).filter(filterFn)}
         />
       ) : (
         <Resources {...allProps} />
