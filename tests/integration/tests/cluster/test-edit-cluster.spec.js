@@ -57,8 +57,7 @@ context('Test edit cluster', () => {
     cy.get('ui5-input[data-testid="cluster-name"]')
       .find('input')
       .wait(500)
-      .clear()
-      .wait(500)
+      .type(`{selectall}{backspace}`)
       .type(originalName);
 
     cy.contains('ui5-button', 'Update').click();
