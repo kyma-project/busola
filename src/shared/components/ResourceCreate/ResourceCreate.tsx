@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Bar, Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useBlocker, useNavigate } from 'react-router';
@@ -12,13 +11,45 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import './ResourceCreate.scss';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
+import { ReactNode } from 'react';
+
+interface RenderFormArgs {
+  readOnly?: boolean;
+  formElementRef: React.RefObject<HTMLFormElement | null>;
+  isValid: boolean;
+  setCustomValid: (valid: boolean) => void;
+  onChange: () => void;
+  onError: (title: string, message: string, isWarning: boolean) => void;
+  onCompleted: (message: string) => void;
+  performManualSubmit: () => void;
+  stickyHeaderHeight?: number;
+  actions?: ReactNode;
+}
+
+interface ResourceCreateProps {
+  performRefetch?: () => void;
+  title: string;
+  headerActions?: ReactNode;
+  renderForm: (args: RenderFormArgs) => ReactNode;
+  confirmText?: string;
+  invalidPopupMessage?: string;
+  isEdit?: boolean;
+  readOnly?: boolean;
+  disableEdit?: boolean;
+  layoutCloseCreateUrl?: string;
+  layoutNumber?: 'startColumn' | 'midColumn' | 'endColumn';
+  onlyYaml?: boolean;
+  protectedResource?: boolean;
+  protectedResourceWarning?: ReactNode;
+  isProtectedResourceModificationBlocked?: boolean;
+}
 
 export const ResourceCreate = ({
   performRefetch = () => {},
   title,
   headerActions,
   renderForm,
-  confirmText,
+  confirmText: confirmTextProp,
   invalidPopupMessage = '',
   isEdit = false,
   readOnly = false,
@@ -29,16 +60,21 @@ export const ResourceCreate = ({
   protectedResource = false,
   protectedResourceWarning = null,
   isProtectedResourceModificationBlocked = false,
-}) => {
+}: ResourceCreateProps) => {
   const { t } = useTranslation();
   const { isValid, formElementRef, setCustomValid, revalidate } =
-    useCustomFormValidator();
+    useCustomFormValidator() as {
+      isValid: boolean;
+      formElementRef: React.RefObject<HTMLFormElement | null>;
+      setCustomValid: (valid: boolean) => void;
+      revalidate: () => void;
+    };
   const notificationManager = useNotification();
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
   const isResourceEdited = useAtomValue(isResourceEditedAtom);
 
-  confirmText = confirmText || t('common.buttons.create');
+  const confirmText = confirmTextProp || t('common.buttons.create');
 
   const blocker = useBlocker(({ historyAction }) => {
     const isBrowserNav = historyAction === 'POP';
@@ -54,15 +90,18 @@ export const ResourceCreate = ({
     });
   }
 
-  function handleFormError(title, message, isWarning) {
+  function handleFormError(
+    title: string,
+    message: string,
+    _isWarning: boolean,
+  ) {
     notificationManager.notifyError({
       content: message,
-      title: title,
-      type: isWarning ? 'warning' : 'error',
+      header: title,
     });
   }
 
-  function handleFormSuccess(message) {
+  function handleFormSuccess(message: string) {
     notificationManager.notifySuccess({
       content: message,
     });
@@ -72,13 +111,12 @@ export const ResourceCreate = ({
 
   function handleFormSubmit() {
     if (isValid) {
-      formElementRef.current.dispatchEvent(
+      formElementRef.current?.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true }),
       );
     } else {
       notificationManager.notifyError({
         content: t('common.messages.must-fill-required'),
-        type: 'error',
       });
     }
   }
@@ -96,7 +134,7 @@ export const ResourceCreate = ({
             window.location.pathname.lastIndexOf('/'),
           )}${
             layoutNumber === 'midColumn' ||
-            layoutCloseCreateUrl?.showCreate?.resourceType
+            (layoutCloseCreateUrl as any)?.showCreate?.resourceType
               ? ''
               : '?layout=TwoColumnsMidExpanded'
           }`,
@@ -224,16 +262,4 @@ export const ResourceCreate = ({
       )}
     </>
   );
-};
-
-ResourceCreate.propTypes = {
-  performRefetch: PropTypes.func,
-  title: PropTypes.string.isRequired,
-  renderForm: PropTypes.func.isRequired,
-  confirmText: PropTypes.string,
-  invalidPopupMessage: PropTypes.string,
-  isEdit: PropTypes.bool,
-  readOnly: PropTypes.bool,
-  disableEdit: PropTypes.bool,
-  layoutCloseCreateUrl: PropTypes.string,
 };
