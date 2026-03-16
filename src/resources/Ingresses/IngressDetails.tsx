@@ -13,27 +13,35 @@ import { IngressStatus } from './IngressStatus';
 import { IngressSpecification } from './IngressSpecification';
 import { useState } from 'react';
 
-export function IngressDetails(props) {
+interface IngressDetailsProps {
+  namespace: string;
+  resourceName: string;
+  [key: string]: any;
+}
+
+export function IngressDetails(props: IngressDetailsProps) {
   const { t } = useTranslation();
   const [totalPorts, setTotalPorts] = useState(0);
   const [healthyPorts, setHealthyPorts] = useState(0);
 
-  const calculatePorts = (ingress) => {
+  const calculatePorts = (ingress: any) => {
     let allPorts = 0;
-    let healthyPorts = 0;
+    let healthy = 0;
 
-    ingress?.status?.loadBalancer?.ingress?.forEach((element) => {
-      element?.ports?.forEach((port) => {
+    ingress?.status?.loadBalancer?.ingress?.forEach((element: any) => {
+      element?.ports?.forEach((port: any) => {
         allPorts++;
-        if (!port.error) healthyPorts++;
+        if (!port.error) healthy++;
       });
     });
 
     setTotalPorts(allPorts);
-    setHealthyPorts(healthyPorts);
+    setHealthyPorts(healthy);
   };
 
-  const customComponents = [];
+  const customComponents: Array<
+    (resource: any, resourceUrl: string) => React.ReactNode
+  > = [];
 
   customComponents.push(
     (resource) =>
@@ -66,7 +74,7 @@ export function IngressDetails(props) {
     />
   ));
 
-  const statusBadge = (resource) => {
+  const statusBadge = (resource: any) => {
     calculatePorts(resource);
     const portsStatus =
       totalPorts === 0
@@ -92,10 +100,10 @@ export function IngressDetails(props) {
       customConditionsComponents={[
         {
           header: t('ingresses.labels.load-balancers'),
-          value: (resource) => <IngressStatus resource={resource} />,
+          value: (resource: any) => <IngressStatus resource={resource} />,
         },
       ]}
-      {...props}
+      {...(props as any)}
     />
   );
 }
