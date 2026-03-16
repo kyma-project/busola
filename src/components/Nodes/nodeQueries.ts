@@ -2,14 +2,45 @@ import { useMemo } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { getBytes, getCpus } from 'shared/helpers/resources';
 
-const getPercentageFromUsage = (value, total) => {
+interface ResourceValues {
+  cpu: number;
+  memory: number;
+}
+
+interface NodeResources {
+  limits: ResourceValues;
+  requests: ResourceValues;
+}
+
+interface UsageMetrics {
+  cpu: {
+    usage: number;
+    capacity: number;
+    percentage: string;
+    percentageValue: number;
+  };
+  memory: {
+    usage: number;
+    capacity: number;
+    percentage: string;
+    percentageValue: number;
+  };
+}
+
+const getPercentageFromUsage = (
+  value: number,
+  total: number,
+): number | string => {
   if (total === 0) {
-    return 'Unknown';
+    return 'Unknown' as any;
   }
   return Math.round((100 * value) / total);
 };
 
-export const createUsageMetrics = (node, metricsForNode) => {
+export const createUsageMetrics = (
+  node: any,
+  metricsForNode: any,
+): UsageMetrics => {
   const cpuUsage = getCpus(metricsForNode?.usage?.cpu);
   const memoryUsage = getBytes(metricsForNode?.usage?.memory);
   const cpuCapacity = getCpus(node?.status?.allocatable?.cpu);
@@ -23,13 +54,13 @@ export const createUsageMetrics = (node, metricsForNode) => {
       usage: cpuUsage,
       capacity: cpuCapacity,
       percentage: cpuPercentage + '%',
-      percentageValue: cpuPercentage,
+      percentageValue: cpuPercentage as number,
     },
     memory: {
       usage: memoryUsage,
       capacity: memoryCapacity,
       percentage: memoryPercentage + '%',
-      percentageValue: memoryPercentage,
+      percentageValue: memoryPercentage as number,
     },
   };
 };
@@ -41,25 +72,25 @@ export function useNodesQuery(skip = false) {
       pollingInterval: 4000,
       skip,
       compareEntireResource: true,
-    },
+    } as any,
   );
 
   const {
     data: nodes,
     error: nodesError,
     loading: nodesLoading,
-  } = useGet('/api/v1/nodes', { pollingInterval: 5500, skip });
+  } = useGet('/api/v1/nodes', { pollingInterval: 5500, skip } as any);
 
   const data = useMemo(() => {
     if (nodes) {
-      const getNodeMetrics = (node) => {
-        const metricsForNode = nodeMetrics?.items?.find(
-          (metrics) => node?.metadata?.name === metrics?.metadata?.name,
+      const getNodeMetrics = (node: any) => {
+        const metricsForNode = (nodeMetrics as any)?.items?.find(
+          (metrics: any) => node?.metadata?.name === metrics?.metadata?.name,
         );
         return createUsageMetrics(node, metricsForNode);
       };
 
-      return nodes.items?.map((n) => ({
+      return (nodes as any).items?.map((n: any) => ({
         ...n,
         metrics: nodeMetrics ? getNodeMetrics(n) : {},
       }));
@@ -74,7 +105,7 @@ export function useNodesQuery(skip = false) {
   };
 }
 
-export function useNodeQuery(nodeName) {
+export function useNodeQuery(nodeName: string) {
   const {
     data: nodeMetrics,
     error: metricsError,
@@ -82,7 +113,7 @@ export function useNodeQuery(nodeName) {
   } = useGet(`/apis/metrics.k8s.io/v1beta1/nodes/${nodeName}`, {
     pollingInterval: 3000,
     skip: !nodeName,
-  });
+  } as any);
 
   const {
     data: node,
@@ -91,7 +122,7 @@ export function useNodeQuery(nodeName) {
   } = useGet(`/api/v1/nodes/${nodeName}`, {
     pollingInterval: 3000,
     skip: !nodeName,
-  });
+  } as any);
 
   const data = useMemo(() => {
     if (node) {
@@ -110,7 +141,7 @@ export function useNodeQuery(nodeName) {
   };
 }
 
-const emptyResources = {
+const emptyResources: NodeResources = {
   limits: {
     cpu: 0,
     memory: 0,
@@ -121,7 +152,10 @@ const emptyResources = {
   },
 };
 
-function addResources(a, b) {
+function addResources(
+  a: NodeResources | undefined,
+  b: NodeResources | undefined,
+): NodeResources {
   if (!a && !b) {
     return structuredClone(emptyResources);
   }
@@ -140,17 +174,17 @@ function addResources(a, b) {
   };
 }
 
-function sumContainersResources(containers) {
-  return containers?.reduce((containerAccu, container) => {
+function sumContainersResources(containers: any[]): NodeResources {
+  return containers?.reduce((containerAccu: NodeResources, container: any) => {
     const containerResources = container.resources;
     const updatedResources = addResources(containerAccu, containerResources);
     return updatedResources;
   }, structuredClone(emptyResources));
 }
 
-export function calcNodeResources(pods) {
+export function calcNodeResources(pods: any): NodeResources {
   const nodeResources =
-    pods?.items?.reduce((accumulator, pod) => {
+    pods?.items?.reduce((accumulator: NodeResources, pod: any) => {
       if (pod?.spec?.containers) {
         const containerResources = sumContainersResources(
           pod?.spec?.containers,
@@ -172,7 +206,7 @@ export function calcNodeResources(pods) {
   };
 }
 
-export function useResourceByNode(nodeName) {
+export function useResourceByNode(nodeName: string) {
   const {
     data: pods,
     error,
