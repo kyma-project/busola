@@ -4,7 +4,10 @@ import {
   EmptyListProps,
   SortByObject,
 } from '../GenericList/GenericList';
-import { SearchSettingsType } from '../GenericList/components/TableBody';
+import {
+  PaginationType,
+  SearchSettingsType,
+} from '../GenericList/components/TableBody';
 import { LayoutColumnName } from 'types';
 
 type CustomColumn = {
@@ -45,10 +48,7 @@ export type ResourcesListProps = {
   columns?: CustomColumn[];
   title?: string;
   customListActions?: Actions;
-  pagination?: {
-    pageSize: number;
-    serverSide?: boolean;
-  };
+  pagination?: PaginationType;
   emptyListProps?: EmptyListProps;
   nameSelector?: (entry?: Record<string, any>) => string;
   columnLayout?: string;
