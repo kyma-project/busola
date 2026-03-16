@@ -4,6 +4,11 @@ import { Popover, Token } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
 import { useRef, useState } from 'react';
 
+interface AccountTokenValues {
+  type: 'Critical' | 'Information';
+  tooltipContent: string;
+  status: string;
+}
 export const ServiceAccountTokenStatus = ({
   automount,
 }: {
@@ -22,16 +27,16 @@ export const ServiceAccountTokenStatus = ({
     }
   };
 
-  const accountTokenValues = automount
+  const accountTokenValues: AccountTokenValues = automount
     ? {
-        type: 'Warning',
+        type: 'Critical',
         tooltipContent: t(
           'service-accounts.auto-mount-token.descriptions.enabled',
         ),
         status: t('service-accounts.auto-mount-token.enabled'),
       }
     : {
-        type: 'Neutral',
+        type: 'Information',
         tooltipContent: t(
           'service-accounts.auto-mount-token.descriptions.disabled',
         ),

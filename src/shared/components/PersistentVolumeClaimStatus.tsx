@@ -1,8 +1,16 @@
+import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 
-const createPhaseProperties = (phase, t) => {
+interface CreatePhasePropertiesReturnType {
+  type: 'Positive' | 'Negative' | 'Critical' | 'Information';
+  tooltipContent?: string;
+}
+const createPhaseProperties = (
+  phase: string,
+  t: TFunction,
+): CreatePhasePropertiesReturnType => {
   switch (phase) {
     case 'Bound':
       return {
@@ -24,7 +32,7 @@ const createPhaseProperties = (phase, t) => {
   }
 };
 
-export const PersistentVolumeClaimStatus = ({ phase }) => {
+export const PersistentVolumeClaimStatus = ({ phase }: { phase: string }) => {
   const { t } = useTranslation();
   const phaseProperties = createPhaseProperties(phase, t);
 

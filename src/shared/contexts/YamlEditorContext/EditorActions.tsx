@@ -9,6 +9,21 @@ import CopyButton from 'shared/components/CopyButton/CopyButton';
 const EDITOR_VISIBILITY = 'editor-visibility';
 const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
 
+interface EditorActionsProps {
+  val: string;
+  editor: any;
+  title?: string;
+  onSave?: () => void;
+  saveDisabled: boolean;
+  saveHidden?: boolean;
+  isProtected?: boolean;
+  searchDisabled?: boolean;
+  hideDisabled?: boolean;
+  onRevert?: () => void;
+  revertHidden?: boolean;
+  resetBtnClicked?: boolean;
+}
+
 export function EditorActions({
   val,
   editor,
@@ -22,7 +37,7 @@ export function EditorActions({
   onRevert,
   revertHidden = true,
   resetBtnClicked,
-}) {
+}: EditorActionsProps) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
   );
@@ -30,7 +45,7 @@ export function EditorActions({
   const { readOnly } = editor?.getRawOptions() || {};
 
   useEffect(() => {
-    localStorage.setItem(EDITOR_VISIBILITY, visible);
+    localStorage.setItem(EDITOR_VISIBILITY, visible.toString());
   }, [visible]);
 
   useEffect(() => {
@@ -59,7 +74,7 @@ export function EditorActions({
   const getReadOnlyFieldsPosition = () => {
     // definition of read only fields
 
-    let arrayOfPositions = [];
+    let arrayOfPositions: any[] = [];
     READONLY_FIELDS.forEach((fieldName) => {
       if (editor.getModel()) {
         arrayOfPositions = arrayOfPositions.concat(
@@ -74,7 +89,7 @@ export function EditorActions({
     );
   };
 
-  const toggleReadOnlyLines = (fieldsPosition, hide) => {
+  const toggleReadOnlyLines = (fieldsPosition: any[], hide: boolean) => {
     fieldsPosition.forEach((match) => {
       setTimeout(() => {
         editor.setPosition({
@@ -114,7 +129,7 @@ export function EditorActions({
       {!revertHidden && (
         <Button
           onClick={() => {
-            onRevert();
+            onRevert?.();
             !visible ? hideReadOnlyLines() : showReadOnlyLines();
           }}
         >

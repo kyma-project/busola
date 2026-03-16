@@ -1,47 +1,64 @@
-import PropTypes from 'prop-types';
 import { ComboBox, ComboBoxItem, Text } from '@ui5/webcomponents-react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { k8sNamePattern } from 'shared/components/K8sNameInput/K8sNameInput';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 
-const commonPropTypes = {
-  onSelect: PropTypes.func.isRequired,
-  onChange: PropTypes.func,
-  resource: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  required: PropTypes.bool,
-  isNamespaced: PropTypes.bool,
-};
+interface K8sResourceSelectBaseProps {
+  onSelect: (value: string, resource: any) => void;
+  resource?: string;
+  value: string;
+  required?: boolean;
+  isNamespaced?: boolean;
+  resourceType?: string;
+  'data-testid'?: string;
+}
 
-K8sResourceSelectWithUseGetList.propTypes = {
-  url: PropTypes.string.isRequired,
-  ...commonPropTypes,
-};
+interface K8sResourceSelectWithUseGetListProps
+  extends K8sResourceSelectBaseProps {
+  url?: string | null;
+  filter?: (item: any) => Promise<string | true | null>;
+}
 
 export function K8sResourceSelectWithUseGetList({
   url,
   filter = undefined,
   ...props
-}) {
-  const listCall = useGetList(filter)(url, {
+}: K8sResourceSelectWithUseGetListProps) {
+  const { data, error, ...listCall } = useGetList(filter)(url, {
+    //@ts-expect-error Type mismatch between js and ts
     pollingInterval: 7000,
   });
 
-  return <K8sResourceSelect {...props} {...listCall} />;
+  return (
+    <K8sResourceSelect
+      data={data as any}
+      error={error as any}
+      {...props}
+      {...listCall}
+    />
+  );
 }
 
-K8sResourceSelect.propTypes = {
-  data: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.arrayOf(PropTypes.object.isRequired),
-  ]),
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.object,
-  ...commonPropTypes,
-};
+interface K8sResourceSelectProps extends K8sResourceSelectBaseProps {
+  data?: object | object[];
+  loading: boolean;
+  error: any;
+  disabled?: boolean;
+}
 
-export function K8sResourceSelect({
+type GetValidationState =
+  | {
+      state: keyof typeof ValueState;
+      text: string;
+    }
+  | {
+      state: keyof typeof ValueState;
+      text?: undefined;
+    };
+
+function K8sResourceSelect({
   data,
   loading,
   error,
@@ -51,16 +68,18 @@ export function K8sResourceSelect({
   required,
   isNamespaced = true,
   ...props
-}) {
+}: K8sResourceSelectProps) {
   const { t } = useTranslation();
 
   resourceType = resourceType || t('common.labels.resource');
   const pluralResourceType = pluralize(resourceType);
 
-  const resourceNames = (data || []).map((s) => s.metadata.name);
+  const resourceNames = (Array.isArray(data) ? data : []).map(
+    (s) => s.metadata.name,
+  );
   const options = resourceNames.map((name, idx) => ({ key: idx, text: name }));
 
-  const getValidationState = () => {
+  const getValidationState = (): GetValidationState => {
     if (error) {
       return {
         state: 'Negative',
@@ -91,7 +110,7 @@ export function K8sResourceSelect({
       };
   };
 
-  const onChange = (event) => {
+  const onChange = (event: any) => {
     const selectedOption = options.find(
       (o) => o.text === event.target.value,
     ) ?? {
@@ -116,6 +135,7 @@ export function K8sResourceSelect({
       value={value}
       valueState={getValidationState()?.state}
       valueStateMessage={<Text>{getValidationState()?.text}</Text>}
+      //@ts-expect-error Property 'pattern' doesn't exist on ComboBox types, but it is probably supported
       pattern={k8sNamePattern}
     >
       {options.map((option) => (
