@@ -7,6 +7,30 @@ import { RichEditorDataField } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type ConfigMapCreateProps = {
+  namespace: string;
+  formElementRef?: React.RefObject<HTMLFormElement>;
+  onChange?: (configMap: any) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resource?: any;
+  resourceUrl?: string;
+} & Omit<
+  ResourceFormProps,
+  | 'pluralKind'
+  | 'singularName'
+  | 'resource'
+  | 'initialResource'
+  | 'updateInitialResource'
+  | 'setResource'
+  | 'onChange'
+  | 'formElementRef'
+  | 'presets'
+  | 'createUrl'
+  | 'setCustomValid'
+  | 'nameProps'
+>;
 
 export default function ConfigMapCreate({
   namespace,
@@ -16,7 +40,7 @@ export default function ConfigMapCreate({
   resource: initialConfigMap,
   resourceUrl,
   ...props
-}) {
+}: ConfigMapCreateProps) {
   const { t } = useTranslation();
 
   const [configMap, setConfigMap] = useState(
@@ -46,7 +70,7 @@ export default function ConfigMapCreate({
   }
 
   const schema = useContext(SchemaContext);
-  const dataDesc = getDescription(schema, 'data');
+  const dataDesc = getDescription(schema, 'data') ?? '';
 
   return (
     <ResourceForm
@@ -59,13 +83,13 @@ export default function ConfigMapCreate({
       setResource={setConfigMap}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets([], namespace || '')}
+      presets={createPresets([]) ?? undefined}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       nameProps={{ readOnly: !!initialConfigMap?.metadata?.name }}
     >
+      {/* @ts-expect-error Type mismatch between js and ts */}
       <RichEditorDataField
-        defaultOpen
         propertyPath="$.data"
         tooltipContent={t(dataDesc, { defaultValue: dataDesc })}
       />

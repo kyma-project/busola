@@ -32,6 +32,7 @@ export function RichEditorDataField({
   value: data,
   setValue: setData,
   tooltipContent,
+  propertyPath: _propertyPath, // used by Wrapper
 }) {
   const { t } = useTranslation();
   const [internalData, setInternalData] = useState(() =>
