@@ -101,6 +101,7 @@ export function ScheduleSection({
   value: schedule,
   setValue: setSchedule,
   tooltipContent,
+  propertyPath: _propertyPath, // used by Wrapper.
 }) {
   const { t, i18n } = useTranslation();
 

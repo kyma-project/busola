@@ -10,11 +10,8 @@ import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 
 type ConfigMapCreateProps = {
-  namespace: string;
-  formElementRef?: React.RefObject<HTMLFormElement>;
-  onChange?: (configMap: any) => void;
-  setCustomValid?: (isValid: boolean) => void;
-  resource?: any;
+  namespace?: string;
+  resource?: Record<string, any>;
   resourceUrl?: string;
 } & Omit<
   ResourceFormProps,
@@ -24,11 +21,8 @@ type ConfigMapCreateProps = {
   | 'initialResource'
   | 'updateInitialResource'
   | 'setResource'
-  | 'onChange'
-  | 'formElementRef'
   | 'presets'
   | 'createUrl'
-  | 'setCustomValid'
   | 'nameProps'
 >;
 
