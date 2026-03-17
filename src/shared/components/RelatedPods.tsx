@@ -1,6 +1,11 @@
 import { PodList } from 'resources/Pods/PodList';
 
-export const RelatedPods = ({ namespace = '', filter }) => {
+interface RelatedPodsProps {
+  namespace?: string;
+  filter: (pod: any) => boolean;
+}
+
+export const RelatedPods = ({ namespace = '', filter }: RelatedPodsProps) => {
   const podListParams = {
     disableHiding: true,
     displayArrow: false,

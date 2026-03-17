@@ -1,12 +1,20 @@
 import { EventList as EventListComponent } from 'resources/Events/EventList';
 
+interface EventsListProps {
+  namespace?: string;
+  filter?: (event: any) => boolean;
+  defaultType?: string;
+  hideInvolvedObjects?: boolean;
+  isClusterView?: boolean;
+}
+
 export function EventsList({
   namespace = '',
   filter,
   defaultType,
   hideInvolvedObjects,
   isClusterView,
-}) {
+}: EventsListProps) {
   const resourceUrl = namespace
     ? `/api/v1/namespaces/${namespace}/events`
     : '/api/v1/events';

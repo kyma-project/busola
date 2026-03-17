@@ -1,6 +1,11 @@
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+interface PortsType {
+  name?: string;
+  containerPort: number;
+  protocol: string;
+}
 
-export function getPorts(ports) {
+export function getPorts(ports: PortsType[]) {
   if (ports?.length) {
     return (
       <ul>

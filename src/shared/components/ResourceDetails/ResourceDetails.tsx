@@ -14,7 +14,7 @@ import { isEmpty } from 'lodash';
 import { ResourceGraphConfig } from '../ResourceGraph/types';
 import { ResourceComponent } from './ResourceComponent';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { K8sResource } from 'types';
+import { K8sResource, LayoutColumnName } from 'types';
 
 export const ResourceDetailContext = createContext(false);
 
@@ -39,7 +39,7 @@ export type ResourceDetailsProps = {
   disableDelete?: boolean;
   showYamlTab?: boolean;
   layoutCloseCreateUrl?: string;
-  layoutNumber?: string;
+  layoutNumber?: LayoutColumnName;
   customHealthCards?: Array<(resource: any, index: number) => ReactNode>;
   showHealthCardsTitle?: boolean;
   isModule?: boolean;

@@ -5,7 +5,7 @@ import { Tokens } from 'shared/components/Tokens';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { ResourceListRenderer } from 'shared/components/ResourcesList/ResourcesList';
+import { ResourceListRenderer } from 'shared/components/ResourcesList/ResourceListRenderer';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
@@ -81,7 +81,6 @@ export function GroupingListPage({
         .sort(([groupA], [groupB]) => groupA.localeCompare(groupB))
         .map(([group, crds]) => (
           <li key={group} className="cr-group-list-item">
-            {/*@ts-expect-error Type mismatch between js and ts*/}
             <ResourceListRenderer
               resourceUrl={resourceUrl}
               resourceType="CustomResourceDefinition"
@@ -124,7 +123,6 @@ export function GroupingListPage({
     <>
       <DynamicPageComponent
         title={title}
-        /*@ts-expect-error Type mismatch between js and ts*/
         description={description}
         actions={
           <SearchInput

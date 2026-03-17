@@ -1,30 +1,50 @@
-import PropTypes from 'prop-types';
 import {
   DynamicPage,
+  DynamicPageDomRef,
   DynamicPageHeader,
   DynamicPageTitle,
   FlexBox,
   Tab,
   TabContainer,
+  TabContainerDomRef,
   Title,
   Toolbar,
   ToolbarButton,
+  UI5WCSlotsNode,
 } from '@ui5/webcomponents-react';
 
 import './DynamicPageComponent.scss';
-import { useEffect, useRef, useState } from 'react';
+import {
+  CSSProperties,
+  ReactNode,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { columnLayoutAtom, ShowEdit } from 'state/columnLayoutAtom';
 import { HintButton } from '../HintButton/HintButton';
-import { isResourceEditedAtom } from 'state/resourceEditedAtom';
-import { isFormOpenAtom } from 'state/formOpenAtom';
+import {
+  isResourceEditedAtom,
+  IsResourceEditedState,
+} from 'state/resourceEditedAtom';
+import { isFormOpenAtom, IsFormOpenState } from 'state/formOpenAtom';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
+import { LayoutColumnName } from 'types';
 
-const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
-  const [headerHeight, setHeaderHeight] = useState(undefined);
-  const [tabContainerHeight, setTabContainerHeight] = useState(undefined);
+const useGetHeaderHeight = (
+  dynamicPageRef: RefObject<DynamicPageDomRef>,
+  tabContainerRef: RefObject<TabContainerDomRef>,
+) => {
+  const [headerHeight, setHeaderHeight] = useState<number | undefined>(
+    undefined,
+  );
+  const [tabContainerHeight, setTabContainerHeight] = useState<
+    number | undefined
+  >(undefined);
 
   useEffect(() => {
     const headerObserver = new ResizeObserver(([header]) => {
@@ -78,7 +98,21 @@ const useGetHeaderHeight = (dynamicPageRef, tabContainerRef) => {
   return { headerHeight, tabContainerHeight };
 };
 
-const Column = ({ title, children, columnSpan, image, style = {} }) => {
+type ColumnProps = {
+  title: string;
+  children: ReactNode;
+  columnSpan?: string;
+  image?: ReactNode;
+  style?: CSSProperties;
+};
+
+const Column = ({
+  title,
+  children,
+  columnSpan,
+  image,
+  style = {},
+}: ColumnProps) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
   return (
     <div className="page-header__column" style={styleComputed}>
@@ -93,6 +127,31 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
       </div>
     </div>
   );
+};
+
+type DynamicPageComponentProps = {
+  headerContent?: ReactNode;
+  title: string;
+  description?: ReactNode;
+  actions?: ReactNode;
+  children?: ReactNode;
+  columnWrapperClassName?: string;
+  content?: ReactNode | ((headerHeight?: number) => ReactNode);
+  footer?: ReactNode;
+  layoutNumber?: LayoutColumnName;
+  layoutCloseUrl?: string;
+  inlineEditForm?: (height?: number | string) => ReactNode;
+  showYamlTab?: boolean;
+  protectedResource?: boolean;
+  protectedResourceWarning?: ReactNode;
+  className?: string;
+  customActionIfFormOpen?: (
+    isResourceEdited: IsResourceEditedState,
+    setIsResourceEdited: (edited: IsResourceEditedState) => void,
+    isFormOpen: IsFormOpenState,
+    setIsFormOpen: (open: IsFormOpenState) => void,
+  ) => void;
+  isFirstColumnWithEdit?: boolean;
 };
 
 export const DynamicPageComponent = ({
@@ -113,7 +172,7 @@ export const DynamicPageComponent = ({
   className,
   customActionIfFormOpen,
   isFirstColumnWithEdit = false,
-}) => {
+}: DynamicPageComponentProps) => {
   const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
@@ -124,7 +183,7 @@ export const DynamicPageComponent = ({
   const [searchParams] = useSearchParams();
   const editColumn = searchParams.get('editColumn');
 
-  const [selectedTab, setSelectedTab] = useState(
+  const [selectedTab, setSelectedTab] = useState<string | null>(
     layoutColumn?.showEdit ? 'edit' : 'view',
   );
 
@@ -151,8 +210,8 @@ export const DynamicPageComponent = ({
     }
   }, [editColumn, layoutNumber, layoutColumn?.layout, layoutColumn?.showEdit]);
 
-  const dynamicPageRef = useRef(null);
-  const tabContainerRef = useRef(null);
+  const dynamicPageRef = useRef<DynamicPageDomRef | null>(null);
+  const tabContainerRef = useRef<TabContainerDomRef | null>(null);
   const { headerHeight, tabContainerHeight } = useGetHeaderHeight(
     dynamicPageRef,
     tabContainerRef,
@@ -199,9 +258,7 @@ export const DynamicPageComponent = ({
   };
 
   const actionsBar = actions ? (
-    <Toolbar design="Transparent" toolbarStyle="Clear">
-      {actions}
-    </Toolbar>
+    <Toolbar design="Transparent">{actions}</Toolbar>
   ) : null;
 
   const navigationBar =
@@ -209,7 +266,7 @@ export const DynamicPageComponent = ({
       layoutColumn?.showCreate?.resourceType) &&
     layoutColumn.layout !== 'OneColumn' &&
     layoutNumber !== 'startColumn' ? (
-      <Toolbar design="Transparent" toolbarStyle="Clear">
+      <Toolbar design="Transparent">
         {(layoutColumn.layout === 'TwoColumnsMidExpanded' ||
           ((layoutColumn.layout === 'ThreeColumnsMidExpanded' ||
             layoutColumn.layout === 'ThreeColumnsEndExpanded') &&
@@ -284,7 +341,7 @@ export const DynamicPageComponent = ({
   const headerTitle = (
     <DynamicPageTitle
       className={inlineEditForm ? 'no-shadow' : ''}
-      style={title === 'Clusters' ? { display: 'none' } : null}
+      style={title === 'Clusters' ? { display: 'none' } : undefined}
       aria-label={title}
       heading={
         <FlexBox className="title-container" alignItems="Center">
@@ -326,18 +383,14 @@ export const DynamicPageComponent = ({
       </DynamicPageHeader>
     ) : null;
 
-  const handlePageRef = (dynamicPage) => {
-    if (dynamicPageRef) {
-      if (typeof dynamicPageRef === 'function') {
-        dynamicPageRef(dynamicPage);
-      } else if (dynamicPageRef.current !== undefined) {
-        dynamicPageRef.current = dynamicPage;
-      }
+  const handlePageRef = (dynamicPage: DynamicPageDomRef | null) => {
+    if (dynamicPageRef?.current !== undefined) {
+      dynamicPageRef.current = dynamicPage;
     }
 
     const button = dynamicPage?.shadowRoot?.querySelector(
       'ui5-dynamic-page-header-actions',
-    );
+    ) as HTMLElement | null | undefined;
     if (button) {
       button.style['display'] = 'none';
     }
@@ -346,12 +399,11 @@ export const DynamicPageComponent = ({
   if (inlineEditForm) {
     return (
       <DynamicPage
-        mode="IconTabBar"
         className={`page-header ${className ?? ''}`}
         headerPinned
         hidePinButton={true}
         titleArea={headerTitle}
-        headerArea={customHeaderContent ?? headerContent}
+        headerArea={(customHeaderContent ?? headerContent) as UI5WCSlotsNode}
         ref={(dynamicPage) => handlePageRef(dynamicPage)}
       >
         <TabContainer
@@ -382,7 +434,7 @@ export const DynamicPageComponent = ({
               let showEdit = null;
 
               if (newTabName === 'edit') {
-                showEdit = { resource: null };
+                showEdit = { resource: null } as ShowEdit;
 
                 if (layoutColumn.layout !== 'OneColumn') {
                   if (isFirstColumnWithEdit) {
@@ -419,10 +471,10 @@ export const DynamicPageComponent = ({
           ></Tab>
         </TabContainer>
 
-        {selectedTab === 'view' && content}
+        {selectedTab === 'view' && (content as ReactNode)}
 
         {selectedTab === 'edit' &&
-          inlineEditForm(headerHeight + tabContainerHeight)}
+          inlineEditForm((headerHeight ?? 0) + (tabContainerHeight ?? 0))}
       </DynamicPage>
     );
   }
@@ -433,16 +485,12 @@ export const DynamicPageComponent = ({
       hidePinButton
       titleArea={headerTitle}
       headerArea={headerContent}
-      footerArea={footer}
+      footerArea={footer as UI5WCSlotsNode}
       ref={(dynamicPage) => handlePageRef(dynamicPage)}
     >
       {typeof content === 'function' ? content(headerHeight) : content}
     </DynamicPage>
   );
 };
-DynamicPageComponent.Column = Column;
 
-DynamicPageComponent.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.node,
-};
+DynamicPageComponent.Column = Column;

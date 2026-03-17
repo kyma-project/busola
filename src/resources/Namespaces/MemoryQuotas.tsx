@@ -7,7 +7,7 @@ import { Label } from '../../shared/ResourceForm/components/Label';
 type MemoryInputProps = {
   label: string;
   propertyPath: string;
-  container: Record<string, any>;
+  container?: Record<string, any>;
   setContainer: (container: Record<string, any>) => void;
   required?: boolean;
   className?: string;

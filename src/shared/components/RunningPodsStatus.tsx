@@ -1,7 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from './StatusBadge/StatusBadge';
 
-export function RunningPodsStatus({ running, expected }) {
+interface RunningPodsStatusProps {
+  running: number;
+  expected: number;
+}
+export function RunningPodsStatus({
+  running,
+  expected,
+}: RunningPodsStatusProps) {
   const { t } = useTranslation();
   const tooltip =
     running === 1

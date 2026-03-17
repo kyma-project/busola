@@ -7,6 +7,7 @@ import { Label } from '../components/Label';
 import { MemoryInput } from 'resources/Namespaces/MemoryQuotas';
 
 import './RuntimeResources.scss';
+import { CollapsibleSectionProps } from '../components/CollapsibleSection';
 
 type CpuInputProps = {
   label: string;
@@ -16,8 +17,8 @@ type CpuInputProps = {
 };
 
 type RuntimeResourcesProps = {
-  value: Record<string, any>;
-  setValue: (value: Record<string, any>) => void;
+  value?: Record<string, any>;
+  setValue?: (value: Record<string, any>) => void;
   presets?: Record<
     string,
     {
@@ -29,7 +30,9 @@ type RuntimeResourcesProps = {
   >;
   nestingLevel?: number;
   title: string | JSX.Element;
-};
+  // propertyPath is read and used by the parent: Wrapper.
+  propertyPath?: string;
+} & Partial<CollapsibleSectionProps>;
 
 function CpuInput({
   label,
@@ -72,7 +75,7 @@ function CpuInput({
 
 export function RuntimeResources({
   value,
-  setValue,
+  setValue = () => {},
   presets,
   nestingLevel = 0,
   ...props
