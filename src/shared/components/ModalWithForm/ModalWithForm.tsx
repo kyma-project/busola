@@ -1,10 +1,8 @@
 import { ReactNode, RefObject, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Dialog, Button, ButtonPropTypes, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
-import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 import { createPortal } from 'react-dom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
@@ -20,7 +18,7 @@ type ButtonArgs = {
   disabled?: boolean;
 };
 
-type RenderFormArgs = {
+type RenderFormProps = {
   readOnly?: boolean;
   formElementRef: React.RefObject<HTMLFormElement>;
   isValid: boolean;
@@ -31,14 +29,14 @@ type RenderFormArgs = {
   performManualSubmit: () => void;
   stickyHeaderHeight?: number;
   actions?: ReactNode;
-  item: any;
+  item?: any;
 };
 
 type ModalWithFormProps = {
-  performRefetch: () => void;
+  performRefetch?: () => void;
   title: string;
   button?: ButtonArgs;
-  renderForm: (args: RenderFormArgs) => ReactNode;
+  renderForm: (args: RenderFormProps) => ReactNode;
   modalOpeningComponent: JSX.Element;
   confirmText: string;
   invalidPopupMessage?: string;
