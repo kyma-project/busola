@@ -38,13 +38,27 @@ type AsyncSortFunction = {
 
 type SortFunction = (a: any, b: any) => number;
 
-type SortByObject = Record<string, SortFunction | AsyncSortFunction>;
+export type SortByObject = Record<string, SortFunction | AsyncSortFunction>;
 
-type Actions = {
+export type Actions = {
   name: string;
   handler: (resource: any) => void;
+  tooltip?: string | ((entry: any) => string);
+  icon?: string | (() => string);
+  disabledHandler?: (entry: any) => boolean;
   [key: string]: any;
 }[];
+
+export type EmptyListProps = {
+  simpleEmptyListMessage?: boolean;
+  titleText?: string;
+  subtitleText?: string;
+  showButton?: boolean;
+  buttonText?: string;
+  url?: string;
+  onClick?: () => void;
+  image?: 'TntComponents' | 'NoEntries';
+};
 
 type GenericListProps = {
   title?: string;
@@ -60,16 +74,7 @@ type GenericListProps = {
   sortBy?: SortByObject | ((a: any) => SortByObject);
   notFoundMessage?: string;
   searchSettings?: SearchSettingsType;
-  emptyListProps?: {
-    simpleEmptyListMessage?: boolean;
-    titleText: string;
-    subtitleText?: string;
-    showButton?: boolean;
-    buttonText?: string;
-    url?: string;
-    onClick?: () => void;
-    image?: 'TntComponents' | 'NoEntries';
-  };
+  emptyListProps?: EmptyListProps;
   columnLayout?: string;
   customColumnLayout?: (entry: any) => any;
   enableColumnLayout?: boolean;
@@ -433,7 +438,7 @@ export const GenericList = ({
               (emptyListProps?.simpleEmptyListMessage === false ||
               (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
                 <EmptyListComponent
-                  titleText={emptyListProps.titleText}
+                  titleText={emptyListProps.titleText ?? ''}
                   subtitleText={emptyListProps.subtitleText}
                   showButton={emptyListProps.showButton}
                   buttonText={emptyListProps.buttonText}
