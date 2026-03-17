@@ -1,8 +1,14 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 
-export function NamespaceStatus({ namespaceStatus }) {
-  const badgeType = (status) => {
+export type NamespaceStatusProps = {
+  namespaceStatus: {
+    phase: string;
+  };
+};
+
+export function NamespaceStatus({ namespaceStatus }: NamespaceStatusProps) {
+  const badgeType = (status: string) => {
     switch (status) {
       case 'Active':
         return 'Positive';
