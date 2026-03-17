@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { ReactNode, RefObject, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, Button, Bar } from '@ui5/webcomponents-react';
+import { Dialog, Button, ButtonPropTypes, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -9,6 +9,40 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useC
 import { createPortal } from 'react-dom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
+type OnErrorProps = { title: string; message: string };
+
+interface RenderFormArgs {
+  readOnly?: boolean;
+  formElementRef: React.RefObject<HTMLFormElement>;
+  isValid: boolean;
+  setCustomValid: (valid: boolean) => void;
+  onChange: () => void;
+  onError: ({ title, message }: OnErrorProps) => void;
+  onCompleted: (message: string) => void;
+  performManualSubmit: () => void;
+  stickyHeaderHeight?: number;
+  actions?: ReactNode;
+  item: any;
+}
+interface ButtonArgs {
+  text: string;
+  icon?: string;
+  label?: string;
+  design?: ButtonPropTypes['design'];
+  disabled?: boolean;
+}
+type ModalWithFormProps = {
+  performRefetch: () => void;
+  title: string;
+  button?: ButtonArgs;
+  renderForm: (args: RenderFormArgs) => ReactNode;
+  modalOpeningComponent: JSX.Element;
+  confirmText: string;
+  invalidPopupMessage?: string;
+  className?: string;
+  getToggleFormFn?: (fn: () => void) => void;
+  [key: string]: any;
+};
 
 export const ModalWithForm = ({
   performRefetch = () => {},
@@ -22,19 +56,24 @@ export const ModalWithForm = ({
   className,
   getToggleFormFn = undefined,
   ...props
-}) => {
+}: ModalWithFormProps) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
   const { navigateSafely } = useFormNavigation();
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
   const { isValid, formElementRef, setCustomValid, revalidate } =
-    useCustomFormValidator();
+    useCustomFormValidator() as {
+      isValid: boolean;
+      formElementRef: RefObject<HTMLFormElement>;
+      setCustomValid: (valid: boolean) => void;
+      revalidate: () => void;
+    };
   const notificationManager = useNotification();
 
   confirmText = confirmText || t('common.buttons.create');
 
-  const setOpenStatus = (status) => {
+  const setOpenStatus = (status: boolean) => {
     if (status) {
       setTimeout(() => revalidate());
     }
@@ -57,15 +96,14 @@ export const ModalWithForm = ({
     });
   }
 
-  function handleFormError(title, message, isWarning) {
+  function handleFormError({ title, message }: OnErrorProps) {
     notificationManager.notifyError({
       content: message,
-      title: title,
-      type: isWarning ? 'warning' : 'error',
+      header: title,
     });
   }
 
-  function handleFormSuccess(message) {
+  function handleFormSuccess(message: string) {
     notificationManager.notifySuccess({
       content: message,
     });
@@ -75,24 +113,25 @@ export const ModalWithForm = ({
 
   function handleFormSubmit() {
     if (isValid) {
-      formElementRef.current.dispatchEvent(
+      formElementRef.current?.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true }),
       );
+
       if (!getToggleFormFn) {
         setOpenStatus(false);
       }
     }
   }
 
-  const renderModalOpeningComponent = (_) =>
+  const renderModalOpeningComponent = () =>
     modalOpeningComponent ? (
       <div style={{ display: 'contents' }} onClick={() => setOpenStatus(true)}>
         {modalOpeningComponent}
       </div>
     ) : (
       <Button
-        endIcon={button?.icon || null}
-        accessibleName={button?.label || null}
+        endIcon={button?.icon}
+        accessibleName={button?.label}
         design={button?.design}
         disabled={!!button?.disabled}
         onClick={() => setOpenStatus(true)}
@@ -119,7 +158,7 @@ export const ModalWithForm = ({
                     aria-disabled={!isValid}
                     onClick={handleFormSubmit}
                     design="Emphasized"
-                    tooltip={!isValid ? invalidPopupMessage : null}
+                    tooltip={!isValid ? invalidPopupMessage : undefined}
                   >
                     {confirmText}
                   </Button>
