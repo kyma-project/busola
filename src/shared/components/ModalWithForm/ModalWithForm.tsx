@@ -9,9 +9,18 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useC
 import { createPortal } from 'react-dom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
+
 type OnErrorProps = { title: string; message: string };
 
-interface RenderFormArgs {
+type ButtonArgs = {
+  text: string;
+  icon?: string;
+  label?: string;
+  design?: ButtonPropTypes['design'];
+  disabled?: boolean;
+};
+
+type RenderFormArgs = {
   readOnly?: boolean;
   formElementRef: React.RefObject<HTMLFormElement>;
   isValid: boolean;
@@ -23,14 +32,8 @@ interface RenderFormArgs {
   stickyHeaderHeight?: number;
   actions?: ReactNode;
   item: any;
-}
-interface ButtonArgs {
-  text: string;
-  icon?: string;
-  label?: string;
-  design?: ButtonPropTypes['design'];
-  disabled?: boolean;
-}
+};
+
 type ModalWithFormProps = {
   performRefetch: () => void;
   title: string;
