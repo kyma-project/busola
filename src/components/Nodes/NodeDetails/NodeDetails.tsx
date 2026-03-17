@@ -20,10 +20,14 @@ import { Description } from 'shared/components/Description/Description';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
-export default function NodeDetails({ nodeName }) {
+interface NodeDetailsProps {
+  nodeName: string;
+}
+
+export default function NodeDetails({ nodeName }: NodeDetailsProps) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
-  const node = useMemo(() => data?.node, [data]);
+  const node: any = useMemo(() => data?.node, [data]);
   useWindowTitle(t('nodes.title_details', { nodeName }));
   const { data: resources, loading: loadingMetrics } =
     useResourceByNode(nodeName);
@@ -37,6 +41,7 @@ export default function NodeDetails({ nodeName }) {
         resourceName: nodeName,
         rawResourceTypeName: 'Node',
         apiVersion: 'v1',
+        namespaceId: null,
       },
       midColumn: null,
       endColumn: null,
@@ -45,11 +50,11 @@ export default function NodeDetails({ nodeName }) {
   }, [nodeName]);
 
   if (loading) return <Spinner />;
-  if (error) return <Text>{error?.message || String(error)}</Text>;
+  if (error) return <Text>{(error as any)?.message || String(error)}</Text>;
 
   const gpus = node ? getAvailableNvidiaGPUs([node]) : 0;
 
-  const filterByHost = (e) => e.source.host === nodeName;
+  const filterByHost = (e: any) => e.source.host === nodeName;
 
   const customComponents = [
     () =>
@@ -57,10 +62,11 @@ export default function NodeDetails({ nodeName }) {
         <Spinner key="node-resources" />
       ) : (
         <div className="flexwrap" key="node-resources">
-          <NodeResources metrics={data?.metrics} resources={resources} />
+          <NodeResources metrics={data?.metrics as any} resources={resources} />
         </div>
       ),
     () => (
+      // @ts-expect-error EventsList is untyped JSX - hideInvolvedObjects and isClusterView are optional at runtime
       <EventsList
         key="events-list"
         filter={filterByHost}
@@ -72,20 +78,22 @@ export default function NodeDetails({ nodeName }) {
   const customColumns = [
     {
       header: t('node-details.region'),
-      value: (node) =>
+      value: (node: any) =>
         node?.metadata?.labels?.['topology.kubernetes.io/region'],
     },
     {
       header: t('node-details.zone'),
-      value: (node) => node?.metadata?.labels?.['topology.kubernetes.io/zone'],
+      value: (node: any) =>
+        node?.metadata?.labels?.['topology.kubernetes.io/zone'],
     },
     {
       header: t('node-details.pool'),
-      value: (node) => node?.metadata?.labels?.['worker.gardener.cloud/pool'],
+      value: (node: any) =>
+        node?.metadata?.labels?.['worker.gardener.cloud/pool'],
     },
     {
       header: t('node-details.machine-type'),
-      value: (node) =>
+      value: (node: any) =>
         node?.metadata?.labels?.['node.kubernetes.io/instance-type'],
     },
   ];
@@ -105,7 +113,6 @@ export default function NodeDetails({ nodeName }) {
         resourceType="Nodes"
         resourceName={nodeName}
         resourceUrl={`/api/v1/nodes/${nodeName}`}
-        resource={node}
         customStatus={
           <MachineInfo
             nodeInfo={node?.status?.nodeInfo}
@@ -117,7 +124,12 @@ export default function NodeDetails({ nodeName }) {
         }
         customComponents={customComponents}
         createResourceForm={() => (
-          <ResourceForm resource={node} initialResource={node} onlyYaml />
+          <ResourceForm
+            resource={node}
+            initialResource={node}
+            onlyYaml
+            setResource={() => {}}
+          />
         )}
         disableEdit
         disableDelete

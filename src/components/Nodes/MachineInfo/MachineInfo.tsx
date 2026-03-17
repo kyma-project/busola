@@ -4,7 +4,38 @@ import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetai
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import './MachineInfo.scss';
 
-export function MachineInfo({ nodeInfo, capacity, addresses, spec, gpus }) {
+interface NodeAddress {
+  type: string;
+  address: string;
+}
+
+interface MachineInfoProps {
+  nodeInfo?: {
+    operatingSystem?: string;
+    osImage?: string;
+    architecture?: string;
+    kubeletVersion?: string;
+  };
+  capacity?: {
+    memory?: string;
+    cpu?: string;
+    pods?: string;
+  };
+  addresses?: NodeAddress[];
+  spec?: {
+    providerID?: string;
+    podCIDRs?: string[];
+  };
+  gpus: number;
+}
+
+export function MachineInfo({
+  nodeInfo,
+  capacity,
+  addresses,
+  spec,
+  gpus,
+}: MachineInfoProps) {
   const formattedMemory = capacity?.memory
     ? Math.round((parseInt(capacity.memory) / 1024 / 1024) * 10) / 10
     : 0;

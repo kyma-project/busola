@@ -1,4 +1,4 @@
-import { calcNodeResources } from './nodeQueries.js';
+import { calcNodeResources } from './nodeQueries';
 
 vi.mock('shared/components/UI5RadialChart/UI5RadialChart', () => {
   return {
@@ -13,6 +13,11 @@ vi.mock('@ui5/webcomponents-react', () => {
 });
 
 const MiB = 1024 * 1024;
+
+interface ResourceSpec {
+  limits: { cpu: string; memory: string };
+  requests: { cpu: string; memory: string };
+}
 
 describe('Calculate resources for node', () => {
   const testCases = [
@@ -92,7 +97,7 @@ describe('Calculate resources for node', () => {
   });
 });
 
-function fixPod(resources) {
+function fixPod(resources: ResourceSpec[]) {
   return {
     spec: {
       containers: resources.map((item) => {
@@ -116,7 +121,12 @@ function fixPodWithoutResources() {
   };
 }
 
-function fixResources(cpuLimit, memoryLimit, cpuRequest, memoryRequest) {
+function fixResources(
+  cpuLimit: string,
+  memoryLimit: string,
+  cpuRequest: string,
+  memoryRequest: string,
+): ResourceSpec {
   return {
     limits: {
       cpu: cpuLimit,
