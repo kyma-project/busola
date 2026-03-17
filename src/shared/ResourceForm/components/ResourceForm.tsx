@@ -43,6 +43,7 @@ import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { editor } from 'monaco-editor';
+import { LayoutColumnName } from 'types';
 
 export type ResourceFormProps = {
   pluralKind?: string; // used for the request path
@@ -76,7 +77,7 @@ export type ResourceFormProps = {
   disableDefaultFields?: boolean;
   onModeChange?: (oldMode: string, newMode: string) => void;
   urlPath?: string;
-  layoutNumber?: number;
+  layoutNumber?: LayoutColumnName;
   actions?: React.ReactNode;
   modeSelectorDisabled?: boolean;
   initialMode?: 'MODE_FORM' | 'MODE_YAML';

@@ -29,7 +29,6 @@ function BusolaExtensionList({
   );
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <ResourcesList
       searchSettings={{
         textSearchProperties: ['metadata.namespace'],
