@@ -200,16 +200,3 @@ export const ModalWithForm = ({
     </>
   );
 };
-
-ModalWithForm.propTypes = {
-  performRefetch: PropTypes.func,
-  title: PropTypes.string.isRequired,
-  renderForm: PropTypes.func.isRequired,
-  item: PropTypes.object,
-  modalOpeningComponent: PropTypes.node,
-  confirmText: PropTypes.string,
-  invalidPopupMessage: PropTypes.string,
-  button: CustomPropTypes.button,
-  className: PropTypes.string,
-  getToggleFormFn: PropTypes.func,
-};
