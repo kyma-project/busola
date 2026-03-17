@@ -1,10 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FormEventHandler, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { cloneDeep } from 'lodash';
 import { createLimitRangeTemplate } from './templates';
+
+interface LimitRangeCreateProps {
+  formElementRef: RefObject<HTMLFormElement>;
+  onChange: FormEventHandler<HTMLElement>;
+  setCustomValid: (valid: boolean) => void;
+  resourceUrl: string;
+  resource?: any;
+  [key: string]: any;
+}
 
 export default function LimitRangeCreate({
   formElementRef,
@@ -13,7 +22,7 @@ export default function LimitRangeCreate({
   resourceUrl,
   resource: initialLimitRange,
   ...props
-}) {
+}: LimitRangeCreateProps) {
   const { t } = useTranslation();
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
