@@ -9,7 +9,14 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import pluralize from 'pluralize';
 
-export function LimitRangesList(props) {
+interface LimitRangesListProps {
+  namespace: string;
+  resourceType: string;
+  resourceUrl: string;
+  [key: string]: any;
+}
+
+export function LimitRangesList(props: LimitRangesListProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
@@ -18,13 +25,16 @@ export function LimitRangesList(props) {
   const customColumns = [
     {
       header: 'Popin',
-      value: (limit) => <LimitRangeSpecification resource={limit} isCompact />,
+      value: (limit: any) => (
+        <LimitRangeSpecification resource={limit} isCompact />
+      ),
     },
   ];
 
   const handleShowCreate = () => {
     setLayoutColumn({
       startColumn: {
+        resourceName: null,
         resourceType: 'LimitRange',
         rawResourceTypeName: 'LimitRange',
         namespaceId: props.namespace,
@@ -64,7 +74,7 @@ export function LimitRangesList(props) {
       disableHiding={true}
       simpleEmptyListMessage={true}
       resourceTitle={t('limit-ranges.title')}
-      {...props}
+      {...(props as any)}
       createResourceForm={LimitRangeCreate}
       displayArrow={false}
       readOnly

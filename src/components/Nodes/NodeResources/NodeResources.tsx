@@ -5,7 +5,30 @@ import {
   cpusToHumanReadable,
 } from 'shared/helpers/resources';
 
-export function NodeResources({ metrics, resources }) {
+interface ResourceMetric {
+  usage: number;
+  capacity: number;
+  percentage: string;
+  percentageValue: number;
+}
+
+interface ResourceUsage {
+  cpu?: number;
+  memory?: number;
+}
+
+interface NodeResourcesProps {
+  metrics?: {
+    cpu?: ResourceMetric;
+    memory?: ResourceMetric;
+  };
+  resources?: {
+    requests?: ResourceUsage;
+    limits?: ResourceUsage;
+  } | null;
+}
+
+export function NodeResources({ metrics, resources }: NodeResourcesProps) {
   const { t } = useTranslation();
   const { cpu, memory } = metrics || {};
 
