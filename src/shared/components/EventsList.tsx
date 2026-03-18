@@ -3,7 +3,7 @@ import { EventList as EventListComponent } from 'resources/Events/EventList';
 interface EventsListProps {
   namespace?: string;
   filter?: (event: any) => boolean;
-  defaultType?: string;
+  defaultType?: { key: string; text: string };
   hideInvolvedObjects?: boolean;
   isClusterView?: boolean;
 }

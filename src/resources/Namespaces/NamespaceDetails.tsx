@@ -17,12 +17,16 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 import { ResourceDescription } from 'resources/Namespaces';
 import { useSetAtom } from 'jotai';
 
-export default function NamespaceDetails(props) {
+export type NamespaceDetailsProps = any & {
+  resourceName: string;
+};
+
+export default function NamespaceDetails(props: NamespaceDetailsProps) {
   const { t } = useTranslation();
   const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
 
   if (props.resourceName === '-all-') {
-    return <AllNamespacesDetails {...props} />;
+    return <AllNamespacesDetails />;
   }
 
   const limitRangesParams = {
@@ -69,7 +73,7 @@ export default function NamespaceDetails(props) {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: (namespace) => (
+      value: (namespace: { status: { phase: string } }) => (
         <NamespaceStatus namespaceStatus={namespace.status} />
       ),
     },
