@@ -1,7 +1,11 @@
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import {
+  ResourceDetails,
+  ResourceDetailsProps,
+} from 'shared/components/ResourceDetails/ResourceDetails';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
@@ -18,14 +22,26 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-export function CronJobDetails(props) {
+type CronJobDetailsProps = Omit<
+  ResourceDetailsProps,
+  | 'customComponents'
+  | 'createResourceForm'
+  | 'description'
+  | 'customStatusColumns'
+>;
+
+export function CronJobDetails({
+  namespace,
+  resourceName,
+  ...props
+}: CronJobDetailsProps) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
   const customStatusColumns = [
     {
       header: t('cron-jobs.last-schedule-time'),
-      value: (resource) => (
+      value: (resource: { status: Record<string, any> }) => (
         <CronJobLastScheduleTime
           lastScheduleTime={resource.status.lastScheduleTime}
         />
@@ -33,7 +49,7 @@ export function CronJobDetails(props) {
     },
     {
       header: t('cron-jobs.last-successful-time'),
-      value: (resource) => (
+      value: (resource: { status: Record<string, any> }) => (
         <ReadableCreationTimestamp
           timestamp={
             resource.status.lastSuccessfulTime ?? EMPTY_TEXT_PLACEHOLDER
@@ -43,7 +59,7 @@ export function CronJobDetails(props) {
     },
     {
       header: t('cron-jobs.last-job-execution'),
-      value: (resource) => {
+      value: (resource: { status: Record<string, any> }) => {
         if (!resource.status.active) {
           return t('cron-jobs.not-scheduled-yet');
         }
@@ -55,7 +71,7 @@ export function CronJobDetails(props) {
     },
     {
       header: t('cron-jobs.active'),
-      value: (resource) =>
+      value: (resource: { status: Record<string, any> }) =>
         resource.status.active?.length ? (
           <ReadableCreationTimestamp
             timestamp={resource.status.active?.length}
@@ -66,7 +82,11 @@ export function CronJobDetails(props) {
     },
   ];
 
-  const Specification = ({ spec }) => (
+  const Specification = ({
+    spec,
+  }: {
+    spec: { schedule: string; concurrencyPolicy: ReactNode };
+  }) => (
     <UI5Panel
       key="specification"
       title={t('common.headers.specification')}
@@ -91,13 +111,15 @@ export function CronJobDetails(props) {
   const Events = () => (
     <EventsList
       key="events"
-      namespace={props.namespace}
-      filter={filterByResource('CronJob', props.resourceName)}
+      namespace={namespace}
+      filter={filterByResource('CronJob', resourceName)}
       hideInvolvedObjects={true}
     />
   );
 
-  const CronJobPodTemplate = (cronjob) => (
+  const CronJobPodTemplate = (cronjob: {
+    spec: { jobTemplate: { spec: { template: Record<string, any> } } };
+  }) => (
     <PodTemplate
       key="pod-template"
       template={cronjob.spec.jobTemplate.spec.template}

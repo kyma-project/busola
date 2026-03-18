@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  FormEventHandler,
+  RefObject,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { cloneDeep } from 'lodash';
 
@@ -13,6 +19,28 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { BusyIndicator } from '@ui5/webcomponents-react';
 import { useAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { LayoutColumnName } from 'types';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+import { Version } from 'components/CustomResources/CustomResources';
+
+export type CRD = {
+  spec: {
+    group: string;
+    names: { plural: string; kind: string; categories?: string[] };
+    versions?: Version[];
+    scope?: string;
+  };
+  apiVersion: string;
+  metadata: { name: string; namespace?: string };
+};
+
+type CRCreateProps = {
+  onChange?: FormEventHandler<HTMLElement>;
+  formElementRef?: RefObject<HTMLFormElement>;
+  crd?: CRD;
+  layoutNumber: LayoutColumnName;
+  resource: any;
+} & Partial<ResourceFormProps>;
 
 function CRCreateForm({
   onChange,
@@ -21,7 +49,7 @@ function CRCreateForm({
   layoutNumber,
   resource: initialCustomResource,
   ...props
-}) {
+}: CRCreateProps) {
   const { crdName } = useParams();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { t } = useTranslation();
@@ -57,9 +85,9 @@ function CRCreateForm({
   const navigate = useNavigate();
   const { nextQuery } = usePrepareLayout(layoutNumber);
 
-  const currentVersion = crd.spec.versions?.find((ver) => ver.storage).name;
+  const currentVersion = crd?.spec?.versions?.find((ver) => ver?.storage)?.name;
   const namespace =
-    crd.spec.scope === 'Namespaced'
+    crd?.spec?.scope === 'Namespaced'
       ? `/namespaces/${cr.metadata?.namespace || ''}`
       : '';
   const createUrlResourceName = initialCustomResource?.metadata?.name
@@ -67,16 +95,16 @@ function CRCreateForm({
     : '';
 
   const createUrl = `/apis/${
-    crd.spec?.group || ''
+    crd?.spec?.group || ''
   }/${currentVersion}${namespace}/${
-    crd.spec.names.plural
+    crd?.spec?.names?.plural
   }${createUrlResourceName}`;
 
   return (
     <ResourceForm
       {...props}
-      pluralKind={crd.spec.names.plural}
-      singularName={crd.spec.names.kind}
+      pluralKind={crd?.spec?.names?.plural}
+      singularName={crd?.spec?.names?.kind}
       resource={cr}
       initialResource={initialResource}
       updateInitialResource={setInitialResource}
@@ -93,7 +121,7 @@ function CRCreateForm({
               ? 'common.create-form.messages.patch-success'
               : 'common.create-form.messages.create-success',
             {
-              resourceType: crd.spec.names.kind,
+              resourceType: crd?.spec?.names?.kind,
             },
           ),
         });
@@ -103,8 +131,8 @@ function CRCreateForm({
           showCreate: null,
           endColumn: {
             resourceName: cr.metadata.name,
-            resourceType: crdName,
-            rawResourceTypeName: crd.spec.names.kind,
+            resourceType: crdName ?? null,
+            rawResourceTypeName: crd?.spec?.names?.kind,
             namespaceId: cr.metadata.namespace,
           },
         });
@@ -120,7 +148,7 @@ function CRCreate({
   layoutNumber,
   resource: initialCustomResource,
   ...props
-}) {
+}: CRCreateProps) {
   if (!crd) {
     return (
       <BusyIndicator

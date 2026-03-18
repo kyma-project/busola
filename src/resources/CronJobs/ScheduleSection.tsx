@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { parse } from '@datasert/cronjs-parser';
-import { toString as cRonstrue } from 'cronstrue/i18n';
+import { toString as cRonstrue } from 'cronstrue';
 import { MessageStrip, Text } from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { i18n } from 'i18next';
 
-const presets = {
+const presets: Record<string, string> = {
   '@yearly': '0 0 1 1 *',
   '@monthly': '0 0 1 * *',
   '@weekly': '0 0 * * 0',
@@ -14,7 +15,7 @@ const presets = {
   '@hourly': '0 * * * *',
 };
 
-function readableSchedule(schedule, i18n) {
+function readableSchedule(schedule: string, i18n: i18n) {
   try {
     return cRonstrue(schedule, { locale: i18n.language });
   } catch (_) {
@@ -23,7 +24,7 @@ function readableSchedule(schedule, i18n) {
   }
 }
 
-export function isCronExpressionValid(schedule) {
+export function isCronExpressionValid(schedule: string) {
   try {
     parse(schedule);
     return (
@@ -35,13 +36,23 @@ export function isCronExpressionValid(schedule) {
   }
 }
 
-function TimeInput({ entries, index, name, setSchedule }) {
+function TimeInput({
+  entries,
+  index,
+  name,
+  setSchedule,
+}: {
+  entries: string[];
+  index: number;
+  name: string;
+  setSchedule?: (value: string) => void;
+}) {
   const { t } = useTranslation();
 
-  const setValue = (v) => {
+  const setValue = (v: string) => {
     const newEntries = [...entries];
     newEntries[index] = v;
-    setSchedule(newEntries.join(' '));
+    setSchedule?.(newEntries.join(' '));
   };
 
   return (
@@ -51,6 +62,7 @@ function TimeInput({ entries, index, name, setSchedule }) {
       tooltipContent={t('cron-jobs.create-modal.tooltips.' + name)}
       input={() => (
         <Inputs.Text
+          key={`${entries[index] || ''}-${index}`}
           value={entries[index] || ''}
           setValue={setValue}
           placeholder={t('cron-jobs.create-modal.' + name)}
@@ -63,7 +75,13 @@ function TimeInput({ entries, index, name, setSchedule }) {
   );
 }
 
-function ScheduleEditor({ schedule, setSchedule }) {
+function ScheduleEditor({
+  schedule,
+  setSchedule,
+}: {
+  schedule: string;
+  setSchedule?: (value: string) => void;
+}) {
   const { t } = useTranslation();
 
   const entries = (presets[schedule] || schedule || '').split(' ');
@@ -97,12 +115,19 @@ function ScheduleEditor({ schedule, setSchedule }) {
   );
 }
 
+type ScheduleSectionProps = {
+  value?: string;
+  setValue?: (value: string) => void;
+  tooltipContent?: string;
+  propertyPath?: string; // used by Wrapper.
+};
+
 export function ScheduleSection({
-  value: schedule,
+  value: schedule = '',
   setValue: setSchedule,
   tooltipContent,
   propertyPath: _propertyPath, // used by Wrapper.
-}) {
+}: ScheduleSectionProps) {
   const { t, i18n } = useTranslation();
 
   const schedulePresets = [
@@ -130,7 +155,7 @@ export function ScheduleSection({
 
   const presets = (
     <ResourceForm.Presets
-      onSelect={({ value }) => setSchedule(value)}
+      onSelect={({ value }) => setSchedule?.(value)}
       presets={schedulePresets}
       inlinePresets={true}
     />

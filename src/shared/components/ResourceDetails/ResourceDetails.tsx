@@ -18,6 +18,17 @@ import { K8sResource, LayoutColumnName } from 'types';
 
 export const ResourceDetailContext = createContext(false);
 
+export type CreateResourceFormProps = {
+  resource: any;
+  resourceType: string;
+  resourceUrl: string;
+  namespace?: string;
+  resourceSchema?: Record<string, any>;
+  editMode: boolean;
+  stickyHeaderHeight?: number | string;
+  [key: string]: any;
+};
+
 export type ResourceDetailsProps = {
   customColumns?: CustomColumnsType;
   children?: ReactNode;
@@ -49,16 +60,7 @@ export type ResourceDetailsProps = {
   hideLabels?: boolean;
   hideAnnotations?: boolean;
   hideLastUpdate?: boolean;
-  createResourceForm: ComponentType<{
-    resource: any;
-    resourceType: string;
-    resourceUrl: string;
-    namespace?: string;
-    resourceSchema?: Record<string, any>;
-    editMode: boolean;
-    stickyHeaderHeight: number | string;
-    [key: string]: any;
-  }>;
+  createResourceForm: ComponentType<CreateResourceFormProps>;
   customConditionsComponents?: CustomColumnsType;
   title?: string;
   statusBadge?: (resource: any) => ReactNode;

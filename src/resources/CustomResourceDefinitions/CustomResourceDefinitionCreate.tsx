@@ -1,10 +1,20 @@
-import { useState } from 'react';
+import { RefObject, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { cloneDeep } from 'lodash';
 
 import { createCustomResourceDefinitionsTemplate } from './templates';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type CustomResourceDefinitionCreateProps = {
+  namespace?: string;
+  formElementRef?: RefObject<HTMLFormElement>;
+  onChange?: (resource: Record<string, any>) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resource?: Record<string, any>;
+  resourceUrl?: string;
+} & Partial<ResourceFormProps>;
 
 export default function CustomResourceDefinitionCreate({
   namespace,
@@ -14,7 +24,7 @@ export default function CustomResourceDefinitionCreate({
   resource: initialCustomResourceDefinition,
   resourceUrl,
   ...props
-}) {
+}: CustomResourceDefinitionCreateProps) {
   const { t } = useTranslation();
   const [customResourceDefinitions, setCustomResourceDefinitions] = useState(
     cloneDeep(initialCustomResourceDefinition) ||

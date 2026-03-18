@@ -9,21 +9,30 @@ import {
   i18nDescriptionKey,
   docsURL,
 } from 'resources/CustomResourceDefinitions';
+import { ResourcesListProps } from 'shared/components/ResourcesList/types';
+import { CRD } from './CRCreate';
 
-export function CustomResourceDefinitionList(props) {
+export function CustomResourceDefinitionList({
+  hideCreateOption,
+  ...props
+}: {
+  hideCreateOption?: boolean;
+  resourceUrl: string;
+  resourceType: string;
+} & Partial<ResourcesListProps>) {
   const { t } = useTranslation();
 
   const customColumns = [
     {
       header: t('custom-resource-definitions.headers.scope'),
-      value: (crd) => ({
+      value: (crd: CRD) => ({
         content: crd.spec.scope,
         style: { wordBreak: 'keep-all' },
       }),
     },
     {
       header: t('custom-resource-definitions.headers.categories'),
-      value: (crd) => <Tokens tokens={crd.spec.names?.categories} />,
+      value: (crd: CRD) => <Tokens tokens={crd.spec.names?.categories} />,
     },
   ];
 
@@ -33,7 +42,7 @@ export function CustomResourceDefinitionList(props) {
       customColumns={customColumns}
       {...props}
       createResourceForm={
-        props.hideCreateOption ? null : CustomResourceDefinitionCreate
+        hideCreateOption ? undefined : CustomResourceDefinitionCreate
       }
       searchSettings={{
         textSearchProperties: ['spec.names.categories'],

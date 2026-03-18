@@ -4,13 +4,22 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
 
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
-import { CustomResources } from 'components/CustomResources/CustomResources';
+import {
+  CustomResources,
+  Version,
+} from 'components/CustomResources/CustomResources';
 import { Title } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { FilteredEntriesType } from 'shared/components/GenericList/components/TableBody';
+import { CRD } from './CRCreate';
 
 import './CurrentCRDVersion.scss';
 
-const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
+const AdditionalPrinterColumns = ({
+  additionalPrinterColumns,
+}: {
+  additionalPrinterColumns: FilteredEntriesType[];
+}) => {
   const { t } = useTranslation();
 
   const headerRenderer = () => [
@@ -20,7 +29,7 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
     t('custom-resource-definitions.headers.json-path'),
   ];
 
-  const rowRenderer = (entry) => [
+  const rowRenderer = (entry: FilteredEntriesType) => [
     { content: entry.name, style: { wordBreak: 'keep-all' } },
     { content: entry.type, style: { wordBreak: 'keep-all' } },
     entry.description || EMPTY_TEXT_PLACEHOLDER,
@@ -38,13 +47,13 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
   );
 };
 
-export const CurrentCRDVersion = (resource) => {
+export const CurrentCRDVersion = (resource: CRD) => {
   const { t } = useTranslation();
 
   if (!resource) return null;
   const { versions } = resource.spec;
 
-  const storageVersion = versions.find((v) => v.storage);
+  const storageVersion = versions?.find((v: Version) => v.storage);
 
   return (
     <UI5Panel
@@ -54,17 +63,17 @@ export const CurrentCRDVersion = (resource) => {
         <>
           <Title level="H4" size="H4">{`${t(
             'custom-resource-definitions.subtitle.version',
-          )} ${storageVersion.name}`}</Title>
+          )} ${storageVersion?.name}`}</Title>
           <StatusBadge
-            type={storageVersion.served ? 'Positive' : 'Information'}
+            type={storageVersion?.served ? 'Positive' : 'Information'}
             className="version-status"
             resourceKind="custom-resource-definitions"
           >
-            {storageVersion.served
+            {storageVersion?.served
               ? t('custom-resource-definitions.status.served')
               : t('custom-resource-definitions.status.not-served')}
           </StatusBadge>
-          {storageVersion.storage && (
+          {storageVersion?.storage && (
             <StatusBadge
               type="Positive"
               className="version-status"
@@ -78,7 +87,7 @@ export const CurrentCRDVersion = (resource) => {
     >
       <CustomResources
         crd={resource}
-        version={storageVersion}
+        version={storageVersion ?? {}}
         omitColumnsIds={
           resource.spec.scope !== 'Namespaced' ? ['namespace'] : []
         }
@@ -87,13 +96,14 @@ export const CurrentCRDVersion = (resource) => {
       />
       <AdditionalPrinterColumns
         additionalPrinterColumns={
-          storageVersion?.additionalPrinterColumns || []
+          (storageVersion?.additionalPrinterColumns ||
+            []) as FilteredEntriesType[]
         }
       />
-      {storageVersion.schema && (
+      {storageVersion?.schema && (
         <SchemaViewer
-          name={storageVersion.name}
-          schema={storageVersion.schema}
+          name={storageVersion?.name ?? ''}
+          schema={storageVersion?.schema}
         />
       )}
     </UI5Panel>

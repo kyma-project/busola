@@ -109,7 +109,6 @@ export default function CronJobCreate({
     >
       {/* @ts-expect-error Type mismatch between js and ts */}
       <CronJobSpecSection propertyPath="$.spec" />
-      {/* @ts-expect-error Type mismatch between js and ts */}
       <ScheduleSection
         propertyPath="$.spec.schedule"
         tooltipContent={t(scheduleDesc, { defaultValue: scheduleDesc })}
