@@ -12,7 +12,15 @@ const ExtensibilityList = lazyWithRetries(
   () => import('../../components/Extensibility/ExtensibilityList'),
 );
 
-export const HPASubcomponent = (props) => {
+interface HPASubcomponentProps {
+  kind: string;
+  metadata: {
+    name: string;
+  };
+  [key: string]: any;
+}
+
+export const HPASubcomponent = (props: HPASubcomponentProps) => {
   const { t } = useTranslation();
   const resourceKind = props.kind;
   const resourceName = props.metadata.name;
@@ -20,13 +28,13 @@ export const HPASubcomponent = (props) => {
   const extensions = useAtomValue(extensionsAtom);
 
   const extensibilityHPAs = extensions?.find(
-    (cR) => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
+    (cR: any) => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
   );
 
   const url = namespace
     ? `/apis/autoscaling/v2/namespaces/${namespace}/horizontalpodautoscalers`
     : '';
-  const hpaFilter = (hpa) => {
+  const hpaFilter = (hpa: any) => {
     return (
       (hpa.spec?.scaleTargetRef?.kind || '').toLowerCase() ===
         resourceKind.toLowerCase() &&
