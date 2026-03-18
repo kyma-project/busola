@@ -1,6 +1,6 @@
 import jsyaml from 'js-yaml';
 import { useAtomValue } from 'jotai';
-import { useCallback, useEffect, useMemo } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -25,7 +25,7 @@ type CustomResourceProps = {
     version?: string;
     kind?: string;
   }) => void;
-  headerActions?: React.ReactNode[];
+  headerActions?: ReactNode[];
   layoutNumber?: 'midColumn' | 'endColumn';
   layoutCloseCreateUrl?: string;
 };
