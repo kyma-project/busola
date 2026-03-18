@@ -10,13 +10,17 @@ import {
   docsURL,
 } from 'resources/Ingresses';
 
-export function IngressList(props) {
+interface IngressListProps {
+  [key: string]: any;
+}
+
+export function IngressList(props: IngressListProps) {
   const { t } = useTranslation();
 
-  const getLoadBalancer = (service) => {
+  const getLoadBalancer = (service: any) => {
     if (service.status.loadBalancer?.ingress) {
       return service.status.loadBalancer?.ingress
-        .map((endpoint) => endpoint.ip || endpoint.hostname)
+        .map((endpoint: any) => endpoint.ip || endpoint.hostname)
         .join(', ');
     } else {
       return EMPTY_TEXT_PLACEHOLDER;
@@ -34,7 +38,7 @@ export function IngressList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={ResourceDescription}
-      {...props}
+      {...(props as any)}
       createResourceForm={IngressCreate}
       emptyListProps={{
         subtitleText: i18nDescriptionKey,
