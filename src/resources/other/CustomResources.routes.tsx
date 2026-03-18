@@ -122,7 +122,7 @@ export const ColumnWrapper = () => {
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
-        renderForm={(renderProps) => {
+        renderForm={(renderProps: any) => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <CRCreate
               {...renderProps}
@@ -157,7 +157,7 @@ export const ColumnWrapper = () => {
         confirmText={t('common.buttons.create')}
         layoutNumber="endColumn"
         layoutCloseCreateUrl={layoutCloseCreateUrl}
-        renderForm={(renderProps) => {
+        renderForm={(renderProps: any) => {
           const createComponent = layoutState?.showCreate?.resourceType && (
             <CRCreate
               {...renderProps}

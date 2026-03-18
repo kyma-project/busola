@@ -23,7 +23,11 @@ const BusolaExtensionCreate = lazyWithRetries(
   () => import('components/BusolaExtensions/BusolaExtensionCreate'),
 );
 
-const ColumnWrapper = ({ defaultColumn = 'list' }) => {
+interface ColumnWrapperProps {
+  defaultColumn?: string;
+}
+
+const ColumnWrapper = ({ defaultColumn = 'list' }: ColumnWrapperProps) => {
   const layoutState = useAtomValue(columnLayoutAtom);
   const { clusterUrl } = useUrl();
 
@@ -88,7 +92,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       title={elementCreateProps.resourceTitle}
       confirmText={t('common.buttons.create')}
       layoutCloseCreateUrl={clusterUrl('busolaextensions')}
-      renderForm={(renderProps) => {
+      renderForm={(renderProps: any) => {
         const createComponent = (
           <BusolaExtensionCreate
             {...renderProps}

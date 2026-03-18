@@ -14,7 +14,11 @@ const HelmReleaseDetails = lazyWithRetries(
   () => import('../../components/HelmReleases/HelmReleasesDetails'),
 );
 
-const ColumnWrapper = ({ defaultColumn = 'list' }) => {
+interface ColumnWrapperProps {
+  defaultColumn?: string;
+}
+
+const ColumnWrapper = ({ defaultColumn = 'list' }: ColumnWrapperProps) => {
   const layoutState = useAtomValue(columnLayoutAtom);
   const { namespaceId: rawNamespaceId, releaseName } = useParams();
   const [searchParams] = useSearchParams();
