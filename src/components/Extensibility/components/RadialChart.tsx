@@ -3,7 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { useJsonata } from '../hooks/useJsonata';
 
-export const RadialChart = ({ structure, value, originalResource }) => {
+interface RadialChartProps {
+  structure: any;
+  value: any;
+  originalResource: any;
+}
+
+export const RadialChart = ({
+  structure,
+  value,
+  originalResource,
+}: RadialChartProps) => {
   const { t } = useTranslation();
   const stableJsonataDeps = useMemo(
     () => ({
@@ -14,9 +24,9 @@ export const RadialChart = ({ structure, value, originalResource }) => {
   );
   const jsonata = useJsonata(stableJsonataDeps);
 
-  const [error, setError] = useState(null);
-  const [maxValue, setMaxValue] = useState(null);
-  const [additionalInfo, setAdditionalInfo] = useState(null);
+  const [error, setError] = useState<any>(null);
+  const [maxValue, setMaxValue] = useState<any>(null);
+  const [additionalInfo, setAdditionalInfo] = useState<any>(null);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {

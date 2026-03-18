@@ -4,13 +4,21 @@ import { useJsonata } from '../hooks/useJsonata';
 import { useGetTranslation } from '../helpers';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
+interface StatisticalCardProps {
+  structure: any;
+  value: any;
+  originalResource: any;
+  general: any;
+  context: any;
+}
+
 export function StatisticalCard({
   structure,
   value,
   originalResource,
   general,
   context,
-}) {
+}: StatisticalCardProps) {
   const stableJsonataDeps = useMemo(
     () => ({
       resource: originalResource,
@@ -21,14 +29,14 @@ export function StatisticalCard({
   const jsonata = useJsonata(stableJsonataDeps);
   const { t } = useGetTranslation();
 
-  const [extraInfo, setExtraInfo] = useState([]);
-  const [err, setErr] = useState(null);
+  const [extraInfo, setExtraInfo] = useState<any[]>([]);
+  const [err, setErr] = useState<any>(null);
   const [mainValue, setMainValue] = useState(undefined);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
       const extraInfoRes = await Promise.all(
-        structure?.children?.map(async (child) => {
+        structure?.children?.map(async (child: any) => {
           const [childValue, err] = await jsonata(child.source, {
             resource: value,
           });

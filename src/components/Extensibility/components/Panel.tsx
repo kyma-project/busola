@@ -10,6 +10,15 @@ import { useCreateResourceDescription, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
+interface PanelProps {
+  value: any;
+  structure: any;
+  schema: any;
+  singleRootResource: any;
+  embedResource: any;
+  [key: string]: any;
+}
+
 export function Panel({
   value,
   structure,
@@ -17,7 +26,7 @@ export function Panel({
   singleRootResource,
   embedResource,
   ...props
-}) {
+}: PanelProps) {
   const { decodable } = structure;
 
   const { t } = useTranslation();
@@ -43,7 +52,7 @@ export function Panel({
         <>
           <Title level="H5">{widgetT(structure)}</Title>
           {Array.isArray(header)
-            ? header.map((def, idx) => (
+            ? header.map((def: any, idx: number) => (
                 <Widget
                   key={idx}
                   structure={def}
@@ -74,7 +83,7 @@ export function Panel({
     >
       {Array.isArray(structure?.children) && (
         <div className={bodyClassNames}>
-          {structure.children.map((def, idx) => (
+          {structure.children.map((def: any, idx: number) => (
             <Widget
               key={idx}
               value={value}

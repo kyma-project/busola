@@ -10,6 +10,16 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 
+interface CodeViewerProps {
+  value: any;
+  structure: any;
+  originalResource: any;
+  scope: any;
+  arrayItems: any;
+  singleRootResource: any;
+  embedResource: any;
+}
+
 export function CodeViewer({
   value,
   structure,
@@ -18,7 +28,7 @@ export function CodeViewer({
   arrayItems,
   singleRootResource,
   embedResource,
-}) {
+}: CodeViewerProps) {
   const { widgetT } = useGetTranslation();
   const { t } = useTranslation();
   const notification = useNotification();
@@ -45,13 +55,15 @@ export function CodeViewer({
   const [language, setLanguage] = useState(null);
 
   useEffect(() => {
-    jsonata(structure?.language, {}, detectLanguage(value)).then(([lang]) => {
-      setLanguage(lang?.toLowerCase());
-    });
+    jsonata(structure?.language, {}, detectLanguage(value)).then(
+      ([lang]: any) => {
+        setLanguage(lang?.toLowerCase());
+      },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure?.language, stableJsonataDeps]);
 
-  const getValue = (value) => {
+  const getValue = (value: any) => {
     if (!isNil(value)) {
       try {
         switch (language) {
@@ -61,7 +73,7 @@ export function CodeViewer({
             //this includes JSON and other languages
             return stringifyIfObject(value);
         }
-      } catch (e) {
+      } catch (e: any) {
         const errMessage = t('extensibility.widgets.code-viewer-error', {
           error: e.message,
         });
@@ -75,7 +87,7 @@ export function CodeViewer({
     return '';
   };
 
-  const parsedValue = getValue(value, structure);
+  const parsedValue = getValue(value);
 
   return (
     <ReadonlyEditorPanel
@@ -86,7 +98,7 @@ export function CodeViewer({
   );
 }
 
-function detectLanguage(value) {
+function detectLanguage(value: any) {
   if (isValidYaml(value)) {
     return 'yaml';
   } else if (typeof value === 'object') {
@@ -96,7 +108,7 @@ function detectLanguage(value) {
   }
 }
 
-function stringifyIfObject(value) {
+function stringifyIfObject(value: any) {
   return isNil(value)
     ? ''
     : typeof value !== 'string'

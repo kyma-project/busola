@@ -6,6 +6,16 @@ import { useJsonata } from '../hooks/useJsonata';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
+interface EventListProps {
+  structure: any;
+  originalResource: any;
+  scope: any;
+  value: any;
+  arrayItems: any;
+  singleRootResource: any;
+  embedResource: any;
+}
+
 export function EventList({
   structure,
   originalResource,
@@ -14,7 +24,7 @@ export function EventList({
   arrayItems,
   singleRootResource,
   embedResource,
-}) {
+}: EventListProps) {
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { widgetT } = useGetTranslation();
   const jsonata = useJsonata({
@@ -27,7 +37,7 @@ export function EventList({
   });
   const simpleEmptyListMessage = structure.simpleEmptyListMessage || false;
 
-  const renameDefaultType = (defaultType) => {
+  const renameDefaultType = (defaultType: string) => {
     switch ((defaultType || '').toLowerCase()) {
       case 'information':
         return 'NORMAL';
@@ -46,7 +56,7 @@ export function EventList({
       ? `/api/v1/namespaces/${namespaceId}/events`
       : '/api/v1/events';
 
-  const filter = async (res) => {
+  const filter = async (res: any) => {
     if (!structure.filter) return true;
 
     try {

@@ -9,12 +9,12 @@ import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
-export const SimpleRenderer = ({ children }) => {
+export const SimpleRenderer = ({ children }: { children: any }) => {
   return children;
 };
 SimpleRenderer.copyable = true;
 
-export function InlineWidget({ children, value, structure, ...props }) {
+export function InlineWidget({ children, value, structure, ...props }: any) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
@@ -31,13 +31,17 @@ export function InlineWidget({ children, value, structure, ...props }) {
     <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
   );
 }
-InlineWidget.copyable = (Renderer) => Renderer?.copyable;
-InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
+InlineWidget.copyable = (Renderer: any) => Renderer?.copyable;
+InlineWidget.copyFunction = (
+  props: any,
+  Renderer: any,
+  defaultCopyFunction: any,
+) =>
   Renderer?.copyFunction
     ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
     : defaultCopyFunction(props, Renderer, defaultCopyFunction);
 
-const defaultCopyFunction = ({ value }) =>
+const defaultCopyFunction = ({ value }: any) =>
   typeof value === 'object' ? JSON.stringify(value) : value;
 
 const CopyableWrapper = memo(function CopyableWrapper({
@@ -50,7 +54,7 @@ const CopyableWrapper = memo(function CopyableWrapper({
   value,
   arrayItems,
   structure,
-}) {
+}: any) {
   const isRendererCopyable = useMemo(() => {
     return typeof Renderer.copyable === 'function'
       ? Renderer.copyable(Renderer)
@@ -68,7 +72,12 @@ const CopyableWrapper = memo(function CopyableWrapper({
   const [textToCopy, setTextToCopy] = useState('');
 
   const copyFunction = useCallback(
-    ({ value, structure }, Renderer, defaultCopyFunction, linkObject) =>
+    (
+      { value, structure }: any,
+      Renderer: any,
+      defaultCopyFunction: any,
+      linkObject: any,
+    ) =>
       typeof Renderer.copyFunction === 'function'
         ? Renderer.copyFunction(
             { value, structure },
@@ -87,7 +96,7 @@ const CopyableWrapper = memo(function CopyableWrapper({
 
   useEffect(() => {
     if (!structure?.copyable || !isRendererCopyable) return;
-    jsonata(structure?.link).then((linkObject) => {
+    jsonata(structure?.link).then((linkObject: any) => {
       setTextToCopy(
         copyFunction(
           { value, structure },
@@ -125,7 +134,7 @@ const SingleWidget = memo(function SingleWidget({
   inlineRenderer,
   Renderer,
   ...props
-}) {
+}: any) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
   return Renderer.inline ? (
@@ -149,7 +158,7 @@ export function Widget({
   embedResource,
   index,
   ...props
-}) {
+}: any) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
   const jsonata = useJsonata({
@@ -162,7 +171,7 @@ export function Widget({
 
   const [childValue, setChildValue] = useState(null);
   const [visible, setVisible] = useState(true);
-  const [visibilityError, setVisibilityError] = useState(null);
+  const [visibilityError, setVisibilityError] = useState<any>(null);
 
   const stableStructure = useMemo(
     () => structure,
@@ -256,7 +265,7 @@ export function Widget({
     return null;
   }
   return Array.isArray(sanitizedValue) && !Renderer.array ? (
-    sanitizedValue.map((valueItem, index) => (
+    sanitizedValue.map((valueItem: any, index: number) => (
       <SingleWidget
         key={index}
         {...props}

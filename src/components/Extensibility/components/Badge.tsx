@@ -10,6 +10,16 @@ import {
   getBadgeType,
 } from 'components/Extensibility/helpers';
 
+interface BadgeProps {
+  value: any;
+  structure: any;
+  originalResource: any;
+  scope: any;
+  arrayItems: any;
+  singleRootResource: any;
+  embedResource: any;
+}
+
 export function Badge({
   value,
   structure,
@@ -18,7 +28,7 @@ export function Badge({
   arrayItems,
   singleRootResource,
   embedResource,
-}) {
+}: BadgeProps) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
@@ -63,7 +73,7 @@ export function Badge({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structure?.description, structure?.highlights, stableJsonataDeps]);
 
-  const getTooltipContent = (description) => {
+  const getTooltipContent = (description: any) => {
     if (tooltip && !tooltipError) {
       return tooltip;
     }

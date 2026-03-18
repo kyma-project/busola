@@ -1,7 +1,12 @@
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
-export const Alert = ({ value, structure }) => {
+interface AlertProps {
+  value: any;
+  structure: any;
+}
+
+export const Alert = ({ value, structure }: AlertProps) => {
   const { t: tExt } = useGetTranslation();
 
   let schemaType = 'Information';

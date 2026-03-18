@@ -6,6 +6,16 @@ import { useUrl } from 'hooks/useUrl';
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 
+interface ResourceLinkProps {
+  value: any;
+  structure: any;
+  originalResource: any;
+  scope: any;
+  arrayItems: any;
+  singleRootResource: any;
+  embedResource: any;
+}
+
 export function ResourceLink({
   value,
   structure,
@@ -14,7 +24,7 @@ export function ResourceLink({
   arrayItems,
   singleRootResource,
   embedResource,
-}) {
+}: ResourceLinkProps) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
@@ -39,12 +49,12 @@ export function ResourceLink({
   );
   const jsonata = useJsonata(stableJsonataDeps);
 
-  const [name, setName] = useState(null);
-  const [nameError, setNameError] = useState(null);
-  const [namespace, setNamespace] = useState(null);
-  const [namespaceError, setNamespaceError] = useState(null);
-  const [kind, setKind] = useState(null);
-  const [kindError, setKindError] = useState(null);
+  const [name, setName] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<any>(null);
+  const [namespace, setNamespace] = useState<string | null>(null);
+  const [namespaceError, setNamespaceError] = useState<any>(null);
+  const [kind, setKind] = useState<string | null>(null);
+  const [kindError, setKindError] = useState<any>(null);
 
   useEffect(() => {
     if (!value) {

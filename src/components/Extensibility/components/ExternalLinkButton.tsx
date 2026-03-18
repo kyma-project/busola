@@ -1,7 +1,11 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
-export function ExternalLinkButton({ structure }) {
+interface ExternalLinkButtonProps {
+  structure: any;
+}
+
+export function ExternalLinkButton({ structure }: ExternalLinkButtonProps) {
   const { t } = useTranslation();
 
   return (

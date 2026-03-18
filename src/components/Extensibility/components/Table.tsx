@@ -13,7 +13,7 @@ import { getSearchDetails, getSortDetails } from './helpers';
 
 import './Table.scss';
 
-const handleTableValue = (value, t) => {
+const handleTableValue = (value: any, t: any) => {
   switch (true) {
     case isNil(value): {
       return { entries: [] };
@@ -33,18 +33,18 @@ const handleTableValue = (value, t) => {
 };
 
 const rowRenderer = (
-  entry,
-  index,
-  structure,
-  tExt,
-  jsonata,
-  arrayItems,
-  title,
-  setTitle,
-  schema,
-  originalResource,
-  singleRootResource,
-  props,
+  entry: any,
+  index: number,
+  structure: any,
+  tExt: any,
+  jsonata: any,
+  arrayItems: any[],
+  title: any,
+  setTitle: any,
+  schema: any,
+  originalResource: any,
+  singleRootResource: any,
+  props: any,
 ) => {
   const tdClassNames = classNames({
     'collapsible-panel': !structure.disablePadding,
@@ -71,31 +71,33 @@ const rowRenderer = (
       return defaultTitle;
     }
   };
-  makeTitle().then((result) => {
+  makeTitle().then((result: any) => {
     if (!structure.collapsible) {
       return;
     }
     if (result && JSON.stringify(title?.[index]) !== JSON.stringify(result)) {
-      setTitle((prev) => ({ ...prev, [index]: result }));
+      setTitle((prev: any) => ({ ...prev, [index]: result }));
     }
   });
 
-  const cells = (structure.children || []).map((column, cellIndex) => {
-    return (
-      <Widget
-        {...props}
-        key={cellIndex}
-        value={entry}
-        scope={entry}
-        arrayItems={[...arrayItems, entry]}
-        structure={column}
-        schema={schema}
-        originalResource={originalResource}
-        singleRootResource={singleRootResource}
-        index={index}
-      />
-    );
-  });
+  const cells = (structure.children || []).map(
+    (column: any, cellIndex: number) => {
+      return (
+        <Widget
+          {...props}
+          key={cellIndex}
+          value={entry}
+          scope={entry}
+          arrayItems={[...arrayItems, entry]}
+          structure={column}
+          schema={schema}
+          originalResource={originalResource}
+          singleRootResource={singleRootResource}
+          index={index}
+        />
+      );
+    },
+  );
 
   if (!structure.collapsible) {
     return cells;
@@ -106,7 +108,7 @@ const rowRenderer = (
     title: title?.[index] ?? '',
     collapseContent: (
       <div className={tdClassNames}>
-        {structure.collapsible.map((child, cellIndex) => (
+        {structure.collapsible.map((child: any, cellIndex: number) => (
           <Widget
             {...props}
             key={cellIndex}
@@ -126,6 +128,18 @@ const rowRenderer = (
   };
 };
 
+interface TableProps {
+  value: any;
+  structure: any;
+  schema: any;
+  originalResource: any;
+  scope: any;
+  arrayItems?: any[];
+  singleRootResource: any;
+  embedResource: any;
+  [key: string]: any;
+}
+
 export function Table({
   value,
   structure,
@@ -136,7 +150,7 @@ export function Table({
   singleRootResource,
   embedResource,
   ...props
-}) {
+}: TableProps) {
   // cleanup jsonata results
   if (!Array.isArray(value)) {
     if (isNil(value)) {
@@ -159,7 +173,9 @@ export function Table({
 
   const [title, setTitle] = useState({});
 
-  const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
+  const coreHeaders = (structure.children || []).map(
+    ({ name }: { name: string }) => tExt(name),
+  );
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
@@ -168,7 +184,7 @@ export function Table({
   const { searchOptions, defaultSearch } = getSearchDetails(structure);
 
   const extraHeaderContent = (structure.extraHeaderContent || []).map(
-    (content, index) => {
+    (content: any, index: number) => {
       return (
         <Widget
           {...props}
@@ -198,7 +214,7 @@ export function Table({
       })}
       extraHeaderContent={extraHeaderContent}
       headerRenderer={headerRenderer}
-      rowRenderer={(entry, index) =>
+      rowRenderer={(entry: any, index: number) =>
         rowRenderer(
           entry,
           index,

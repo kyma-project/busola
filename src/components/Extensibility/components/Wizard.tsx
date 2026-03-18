@@ -11,7 +11,13 @@ import { useEventListener } from 'hooks/useEventListener';
 import { createPortal } from 'react-dom';
 import { configFeaturesNames } from 'state/types';
 
-export function Wizard({ value, structure, singleRootResource }) {
+interface WizardProps {
+  value: any;
+  structure: any;
+  singleRootResource: any;
+}
+
+export function Wizard({ value, structure, singleRootResource }: WizardProps) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const [showWizard, setShowWizard] = useState(false);
@@ -24,7 +30,7 @@ export function Wizard({ value, structure, singleRootResource }) {
     setShowWizard(false);
   };
 
-  const handleCloseWithEscape = (e) => {
+  const handleCloseWithEscape = (e: KeyboardEvent) => {
     if (e.key === 'Escape') handleCloseModal();
   };
 
