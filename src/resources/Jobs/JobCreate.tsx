@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { RefObject, useContext, useEffect, useMemo, useState } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +13,16 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+
+interface JobCreateProps {
+  formElementRef?: RefObject<HTMLFormElement>;
+  namespace?: string;
+  onChange?: (job: Record<string, any>) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resource?: Record<string, any>;
+  resourceUrl?: string;
+  [key: string]: any;
+}
 
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
@@ -32,7 +42,7 @@ export default function JobCreate({
   resource: initialJob,
   resourceUrl,
   ...props
-}) {
+}: JobCreateProps) {
   const { t } = useTranslation();
 
   const defaultSidecarAnnotations = useMemo(() => {
@@ -81,7 +91,7 @@ export default function JobCreate({
   );
 
   useEffect(() => {
-    setCustomValid(isJobValid(job));
+    setCustomValid?.(isJobValid(job));
   }, [job, setCustomValid]);
 
   const schema = useContext(SchemaContext);
@@ -101,15 +111,15 @@ export default function JobCreate({
       updateInitialResource={setInitialResource}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={
-        !isEdit && createJobPresets(namespace, t, defaultSidecarAnnotations)
-      }
+      presets={!isEdit ? createJobPresets(namespace) : []}
       createUrl={resourceUrl}
     >
       <JobSpecSection propertyPath="$.spec" readOnly={isEdit} />
       <ContainersSection
         propertyPath="$.spec.template.spec.containers"
-        tooltipContent={t(containersDesc, { defaultValue: containersDesc })}
+        tooltipContent={t(containersDesc ?? '', {
+          defaultValue: containersDesc,
+        })}
         readOnly={isEdit}
       />
       <MessageStrip design="Information" hideCloseButton>

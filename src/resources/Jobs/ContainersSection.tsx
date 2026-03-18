@@ -4,7 +4,18 @@ import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
 import { SingleContainerForm } from './Containers';
 
-export const ContainersSection = ({ readOnly, tooltipContent, ...props }) => {
+interface ContainersSectionProps {
+  readOnly?: boolean;
+  tooltipContent?: string;
+  defaultOpen?: boolean;
+  propertyPath?: string;
+}
+
+export const ContainersSection = ({
+  readOnly,
+  tooltipContent,
+  ...props
+}: ContainersSectionProps) => {
   const { t } = useTranslation();
 
   return (
@@ -17,7 +28,15 @@ export const ContainersSection = ({ readOnly, tooltipContent, ...props }) => {
       atLeastOneRequiredMessage={t(
         'jobs.create-modal.at-least-one-container-required',
       )}
-      itemRenderer={({ item, values, setValues }) => (
+      itemRenderer={({
+        item,
+        values,
+        setValues,
+      }: {
+        item: Record<string, any>;
+        values?: Record<string, any>[];
+        setValues?: (vals: Record<string, any>[]) => void;
+      }) => (
         <SingleContainerForm
           container={item}
           containers={values}

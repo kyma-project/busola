@@ -3,6 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
+interface SpecSectionProps {
+  value?: Record<string, any>;
+  setValue?: (resource: string | Record<string, any>) => void;
+  readOnly?: boolean;
+  propertyPath?: string;
+}
+
 const restartPolicyOptions = ['Never', 'OnFailure'].map((p) => ({
   key: p,
   text: p,
@@ -13,7 +20,11 @@ const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map((p) => ({
   text: p,
 }));
 
-export const CronJobSpecSection = ({ value, setValue, ...props }) => {
+export const CronJobSpecSection = ({
+  value,
+  setValue,
+  ...props
+}: SpecSectionProps) => {
   const { t } = useTranslation();
 
   return (
@@ -77,7 +88,7 @@ export const JobSpecSection = ({
   setValue,
   readOnly,
   ...props
-}) => {
+}: SpecSectionProps) => {
   const value = { template: {}, ...unsafeValue };
 
   const { t } = useTranslation();
