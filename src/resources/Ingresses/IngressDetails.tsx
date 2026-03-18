@@ -11,7 +11,7 @@ import { filterByResource } from 'hooks/useMessageList';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { IngressStatus } from './IngressStatus';
 import { IngressSpecification } from './IngressSpecification';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 interface IngressDetailsProps {
   namespace: string;
@@ -40,7 +40,7 @@ export function IngressDetails(props: IngressDetailsProps) {
   };
 
   const customComponents: Array<
-    (resource: any, resourceUrl: string) => React.ReactNode
+    (resource: any, resourceUrl: string) => ReactNode
   > = [];
 
   customComponents.push(
