@@ -4,7 +4,6 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Labels } from 'shared/components/Labels/Labels';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
-import { Resource } from 'components/Extensibility/contexts/DataSources';
 
 import DaemonSetCreate from './DaemonSetCreate';
 import { DaemonSetStatus, DaemonSetType } from './DaemonSetStatus';
@@ -28,7 +27,7 @@ export function DaemonSetList(props: DaemonSetProps) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (resource: Resource) => (
+      value: (resource: Record<string, any>) => (
         <ControlledBy
           ownerReferences={resource.metadata.ownerReferences}
           kindOnly
@@ -37,7 +36,7 @@ export function DaemonSetList(props: DaemonSetProps) {
     },
     {
       header: t('daemon-sets.node-selector'),
-      value: (resource: Resource) => (
+      value: (resource: Record<string, any>) => (
         <Labels labels={resource.spec.template.spec.nodeSelector} />
       ),
     },
