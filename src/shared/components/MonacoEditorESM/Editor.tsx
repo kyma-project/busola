@@ -11,10 +11,21 @@ import { useUpdateValueOnParentChange } from './hooks/useUpdateValueOnParentChan
 import { useOnMount } from './hooks/useOnMount';
 import { useOnChange } from './hooks/useOnChange';
 import { useCreateEditor } from './hooks/useCreateEditor';
+import { EditorProps } from 'shared/ResourceForm/fields/Editor';
+import { Uri } from 'monaco-editor';
 
 import './Editor.scss';
 
 const DEFAULT_OPTIONS = {};
+
+type AutocompleteWorker = {
+  setAutocompleteOptions: () => {
+    modelUri: Uri;
+  };
+  cleanupSchema: () => void;
+  error: any;
+  loading: boolean;
+};
 
 export function Editor({
   value = '',
@@ -32,7 +43,7 @@ export function Editor({
   options = DEFAULT_OPTIONS, // IEditorOptions, check Monaco API for the list of options
   placeholder = null,
   schema,
-}) {
+}: EditorProps) {
   const { t } = useTranslation();
 
   // prepare autocompletion
@@ -41,7 +52,7 @@ export function Editor({
     cleanupSchema,
     error: schemaError,
     loading,
-  } = useAutocompleteWorker({
+  }: AutocompleteWorker = useAutocompleteWorker({
     schemaId,
     autocompletionDisabled,
     readOnly,
@@ -124,7 +135,7 @@ export function Editor({
             className="break-word sap-margin-small"
             role="alert"
           >
-            {warnings.map((w, index) => (
+            {warnings.map((w: any, index) => (
               <span
                 className="line"
                 key={`${w.startLineNumber}-${w.startColumn}-${index}`}
