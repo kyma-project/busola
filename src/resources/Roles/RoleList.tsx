@@ -2,7 +2,11 @@ import { GenericRoleList } from './GenericRoleList';
 import RoleCreate from './RoleCreate';
 import { ResourceDescription, i18nDescriptionKey } from 'resources/Roles';
 
-export function RoleList(props) {
+interface RoleListProps {
+  [key: string]: any;
+}
+
+export function RoleList(props: RoleListProps) {
   return (
     <GenericRoleList
       description={ResourceDescription}

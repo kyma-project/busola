@@ -5,7 +5,11 @@ import {
   i18nDescriptionKey,
 } from 'resources/RoleBindings';
 
-export function RoleBindingList(props) {
+interface RoleBindingListProps {
+  [key: string]: any;
+}
+
+export function RoleBindingList(props: RoleBindingListProps) {
   return (
     <GenericRoleBindingList
       description={ResourceDescription}

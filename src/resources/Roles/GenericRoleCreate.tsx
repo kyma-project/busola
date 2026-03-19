@@ -11,6 +11,19 @@ import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useAtomValue } from 'jotai';
 
+interface GenericRoleCreateProps {
+  onChange: () => void;
+  formElementRef: React.RefObject<HTMLFormElement>;
+  setCustomValid: (valid: boolean) => void;
+  pluralKind: string;
+  singularName: string;
+  resourceUrl: string;
+  presets: any;
+  createTemplate: () => any;
+  resource: any;
+  [key: string]: any;
+}
+
 export function GenericRoleCreate({
   onChange,
   formElementRef,
@@ -22,7 +35,7 @@ export function GenericRoleCreate({
   createTemplate,
   resource: initialRole,
   ...props
-}) {
+}: GenericRoleCreateProps) {
   const { t } = useTranslation();
   const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
   const [initialResource, setInitialResource] = useState(
@@ -73,12 +86,17 @@ export function GenericRoleCreate({
       nameProps={{ readOnly: !!initialRole?.metadata?.name }}
     >
       <ItemArray
-        propertyPath="$.rules"
+        {...({
+          propertyPath: '$.rules',
+          defaultOpen: true,
+        } as any)}
         listTitle={t('roles.headers.rules')}
-        entryTitle={(rule, i) => <RuleTitle rule={rule} i={i} />}
+        entryTitle={(rule: any, i: number) => <RuleTitle rule={rule} i={i} />}
         nameSingular={t('roles.headers.rule')}
-        tooltipContent={t(rulesDesc, { defaultValue: rulesDesc })}
-        itemRenderer={({ item, values, setValues }) => (
+        tooltipContent={t(rulesDesc as string, {
+          defaultValue: rulesDesc as string,
+        })}
+        itemRenderer={({ item, values, setValues }: any) => (
           <RuleInput
             rule={item}
             rules={values}
@@ -87,7 +105,6 @@ export function GenericRoleCreate({
           />
         )}
         newResourceTemplateFn={createRuleTemplate}
-        defaultOpen
       />
     </ResourceForm>
   );

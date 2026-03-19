@@ -1,7 +1,11 @@
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
 
-export function SubjectLink({ subject }) {
+interface SubjectLinkProps {
+  subject: any;
+}
+
+export function SubjectLink({ subject }: SubjectLinkProps) {
   const { namespaceUrl } = useUrl();
 
   const path = namespaceUrl(`serviceaccounts/${subject.name}`, {

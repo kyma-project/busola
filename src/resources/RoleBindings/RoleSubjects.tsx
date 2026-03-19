@@ -3,7 +3,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { SubjectLink } from './SubjectLink';
 
-export const RoleSubjects = (binding) => {
+export const RoleSubjects = (binding: any) => {
   const { t } = useTranslation();
 
   const headerRenderer = () => [
@@ -12,7 +12,7 @@ export const RoleSubjects = (binding) => {
     t('common.labels.namespace'),
   ];
 
-  const rowRenderer = (subject) => [
+  const rowRenderer = (subject: any) => [
     subject.kind,
     <SubjectLink key={subject} subject={subject} />,
     subject.namespace || EMPTY_TEXT_PLACEHOLDER,

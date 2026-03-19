@@ -5,15 +5,21 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
 
+interface GenericRoleBindingListProps {
+  description: any;
+  descriptionKey: string;
+  [key: string]: any;
+}
+
 export function GenericRoleBindingList({
   description,
   descriptionKey,
   ...props
-}) {
+}: GenericRoleBindingListProps) {
   const { t } = useTranslation();
   const { clusterUrl, namespaceUrl } = useUrl();
 
-  const navigateToRole = (role) => {
+  const navigateToRole = (role: any) => {
     if (role.kind === 'ClusterRole') {
       return clusterUrl(`clusterroles/${role.name}`);
     } else {
@@ -21,7 +27,7 @@ export function GenericRoleBindingList({
     }
   };
 
-  const getSubject = (subject) => (
+  const getSubject = (subject: any) => (
     <div key={subject.kind + ' ' + subject.name}>
       {subject.name}{' '}
       <Tooltip delay={[0, 0]} content={subject.kind}>
@@ -30,7 +36,7 @@ export function GenericRoleBindingList({
     </div>
   );
 
-  const getSubjectWithLink = (subject) => (
+  const getSubjectWithLink = (subject: any) => (
     <div key={subject.kind + ' ' + subject.name}>
       <Link
         url={namespaceUrl(`serviceaccounts/${subject.name}`, {
@@ -46,8 +52,8 @@ export function GenericRoleBindingList({
     </div>
   );
 
-  const getAllSubjects = (binding) => {
-    return binding.subjects?.map((subject) =>
+  const getAllSubjects = (binding: any) => {
+    return binding.subjects?.map((subject: any) =>
       subject.kind === 'ServiceAccount'
         ? getSubjectWithLink(subject)
         : getSubject(subject),
@@ -57,7 +63,7 @@ export function GenericRoleBindingList({
   const customColumns = [
     {
       header: t('role-bindings.headers.role-ref'),
-      value: (binding) => (
+      value: (binding: any) => (
         <Link url={navigateToRole(binding.roleRef)}>
           {binding.roleRef.name}
         </Link>
@@ -65,14 +71,14 @@ export function GenericRoleBindingList({
     },
     {
       header: t('role-bindings.headers.subjects'),
-      value: (binding) => getAllSubjects(binding),
+      value: (binding: any) => getAllSubjects(binding),
     },
   ];
 
   const textSearchProperties = [
     'roleRef.name',
-    (entry, query) => {
-      const matchingSubject = entry.subjects?.find((subject) =>
+    (entry: any, query: any) => {
+      const matchingSubject = entry.subjects?.find((subject: any) =>
         subject.name.toLowerCase().includes(query?.toLowerCase()),
       );
       return matchingSubject?.name || null;
@@ -86,7 +92,7 @@ export function GenericRoleBindingList({
       searchSettings={{
         textSearchProperties,
       }}
-      {...props}
+      {...(props as any)}
       emptyListProps={{
         subtitleText: descriptionKey,
         url: 'https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding',

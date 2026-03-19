@@ -1,8 +1,8 @@
-export function unique(arr) {
+export function unique(arr: any[]) {
   return [...new Set(arr)];
 }
 export const EMPTY_API_GROUP_KEY = 'core-api-group';
-export const extractApiGroupVersion = (groupVersion) => {
+export const extractApiGroupVersion = (groupVersion: string) => {
   if (!groupVersion) return { group: '', version: '' };
   // handle core ('') group
   if (groupVersion === 'v1') return { group: '', version: 'v1' };
@@ -11,14 +11,17 @@ export const extractApiGroupVersion = (groupVersion) => {
   return { group: apiGroup, version: apiVersion };
 };
 
-export const getApiGroupInputOptions = (groupVersions) =>
+export const getApiGroupInputOptions = (groupVersions: any) =>
   unique(groupVersions?.map(extractApiGroupVersion))?.map(({ group }) =>
     group === ''
       ? { key: EMPTY_API_GROUP_KEY, text: '(core)' }
       : { key: group, text: group },
   ) ?? [];
 
-export function createRoleTemplate(namespace, { name = '', rules } = {}) {
+export function createRoleTemplate(
+  namespace: string,
+  { name = '', rules }: { name?: string; rules?: any[] } = {},
+) {
   if (!rules) {
     rules = [createRuleTemplate(true)];
   }
@@ -33,7 +36,7 @@ export function createRoleTemplate(namespace, { name = '', rules } = {}) {
   };
 }
 
-export function createRuleTemplate(isNamespaced) {
+export function createRuleTemplate(isNamespaced?: boolean) {
   return {
     verbs: [],
     apiGroups: [],
@@ -43,7 +46,11 @@ export function createRuleTemplate(isNamespaced) {
   };
 }
 
-export function createRolePresets(namespace, translate, groupVersions) {
+export function createRolePresets(
+  namespace: string,
+  translate: any,
+  groupVersions: any[],
+) {
   const apiGroups = getApiGroupInputOptions(groupVersions).map((g) =>
     g.key === 'core-api-group' ? '' : g.key,
   );
@@ -80,23 +87,23 @@ export function createRolePresets(namespace, translate, groupVersions) {
   ];
 }
 
-function isResourceRule(rule) {
+function isResourceRule(rule: any) {
   return (
     !!rule.apiGroups?.length && !!rule.resources?.length && !!rule.verbs?.length
   );
 }
 
-function isNonResourceRule(rule) {
+function isNonResourceRule(rule: any) {
   return !!rule.nonResourceURLs?.length && !!rule.verbs?.length;
 }
 
-export function hasRuleRequiredProperties(rule) {
+export function hasRuleRequiredProperties(rule: any) {
   if (!rule) return false;
 
   return isResourceRule(rule) ^ isNonResourceRule(rule);
 }
 
-export function isRuleInvalid(rule) {
+export function isRuleInvalid(rule: any) {
   if (!rule) return false;
 
   return (
@@ -107,6 +114,6 @@ export function isRuleInvalid(rule) {
   );
 }
 
-export function validateRole(role) {
+export function validateRole(role: any) {
   return role?.rules?.every(hasRuleRequiredProperties);
 }

@@ -7,7 +7,11 @@ import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
 
-export default function RoleCreate(props) {
+interface RoleCreateProps {
+  [key: string]: any;
+}
+
+export default function RoleCreate(props: RoleCreateProps) {
   const { t } = useTranslation();
   const groupVersions = useAtomValue(groupVersionsAtom);
   const namespace = useAtomValue(activeNamespaceIdAtom);
@@ -24,7 +28,7 @@ export default function RoleCreate(props) {
 
   return (
     <GenericRoleCreate
-      {...props}
+      {...(props as any)}
       pluralKind="roles"
       singularName={t('roles.name_singular')}
       createTemplate={createTemplate}

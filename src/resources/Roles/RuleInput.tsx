@@ -42,7 +42,14 @@ const verbs = [
   '*',
 ];
 
-export function RuleInput({ rule, rules, setRules, schema }) {
+interface RuleInputProps {
+  rule: any;
+  rules: any[];
+  setRules: (rules: any[]) => void;
+  schema: any;
+}
+
+export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
   const groupVersions = useAtomValue(groupVersionsAtom);
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();
@@ -66,11 +73,11 @@ export function RuleInput({ rule, rules, setRules, schema }) {
 
   // there's no endpoint for "all resources" - add just a '*' and specific resources
   // for already choosen apiGroups
-  const getAvailableResources = (resourcesCache) =>
+  const getAvailableResources = (resourcesCache: any) =>
     unique([
       ...(rule.apiGroups
         .flatMap((apiGroup) => resourcesCache[apiGroup] || [])
-        .map((r) => r.name) || []),
+        .map((r: any) => r.name) || []),
       '*',
     ]);
   const availableResources = getAvailableResources(resourcesCache);
@@ -79,14 +86,14 @@ export function RuleInput({ rule, rules, setRules, schema }) {
     jp.value(rule, '$.apiGroups', [
       '',
       ...apiGroupsInputOptions
-        .map((g) => g.key)
+        .map((g: any) => g.key)
         .filter((k) => k !== EMPTY_API_GROUP_KEY),
     ]);
     setRules([...rules]);
   };
 
   const addAllResources = () => {
-    fetchResources()?.then((resourcesCache) => {
+    fetchResources()?.then((resourcesCache: any) => {
       const availableResources = getAvailableResources(resourcesCache);
       jp.value(
         rule,

@@ -21,6 +21,18 @@ import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
+interface GenericRoleBindingCreateProps {
+  formElementRef: React.RefObject<HTMLFormElement>;
+  namespace: string;
+  onChange: () => void;
+  setCustomValid: (valid: boolean) => void;
+  resource: any;
+  resourceUrl: string;
+  pluralKind: string;
+  singularName: string;
+  [key: string]: any;
+}
+
 export function GenericRoleBindingCreate({
   formElementRef,
   namespace,
@@ -31,7 +43,7 @@ export function GenericRoleBindingCreate({
   pluralKind,
   singularName,
   ...props
-}) {
+}: GenericRoleBindingCreateProps) {
   const { t } = useTranslation();
   const [hasPermissionsForClusterRoles] = useHasPermissionsFor([
     [DEFAULT_APIGROUP, 'clusterroles'],
@@ -81,8 +93,8 @@ export function GenericRoleBindingCreate({
     skip: !hasPermissionsForClusterRoles,
   });
 
-  let clusterRoles = data;
-  let clusterRolesError = error;
+  let clusterRoles: any = data;
+  let clusterRolesError: any = error;
 
   // ignore no permissions for ClusterRoles
   if (clusterRolesError?.code === 403) {
@@ -117,8 +129,8 @@ export function GenericRoleBindingCreate({
         loading={rolesLoading}
         error={rolesError}
         namespace={namespace}
-        roles={roles}
-        clusterRoles={clusterRoles}
+        roles={roles ?? []}
+        clusterRoles={clusterRoles ?? []}
         binding={binding}
         setBinding={setBinding}
       />
@@ -134,17 +146,27 @@ export function GenericRoleBindingCreate({
         </MessageStrip>
       )}
       <ItemArray
-        defaultOpen
-        propertyPath="$.subjects"
+        {...({
+          defaultOpen: true,
+          propertyPath: '$.subjects',
+        } as any)}
         listTitle={t('role-bindings.create-modal.subjects')}
         nameSingular={t('role-bindings.create-modal.subject')}
-        entryTitle={(subject) => subject?.name}
-        tooltipContent={t(subjectsDesc, { defaultValue: subjectsDesc })}
+        entryTitle={(subject: any) => subject?.name}
+        tooltipContent={t(subjectsDesc as string, {
+          defaultValue: subjectsDesc as string,
+        })}
         atLeastOneRequiredMessage={t(
           'role-bindings.create-modal.at-least-one-subject-required',
           { resource: singularName },
         )}
-        itemRenderer={({ item, values, setValues, index, nestingLevel }) => (
+        itemRenderer={({
+          item,
+          values,
+          setValues,
+          index,
+          nestingLevel,
+        }: any) => (
           <SingleSubjectForm
             subject={item}
             subjects={values}

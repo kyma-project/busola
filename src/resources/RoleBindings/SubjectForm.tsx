@@ -7,16 +7,24 @@ import { ServiceAccountRef } from 'shared/components/ResourceRef/ServiceAccountR
 
 import { DEFAULT_APIGROUP, SUBJECT_KINDS } from './templates';
 
+interface SingleSubjectFormProps {
+  subject?: any;
+  subjects: any[];
+  setSubjects: (subjects: any[]) => void;
+  index: number;
+  nestingLevel?: number;
+}
+
 export function SingleSubjectForm({
   subject = {},
   subjects,
   setSubjects,
   index,
   nestingLevel = 0,
-}) {
+}: SingleSubjectFormProps) {
   const { t } = useTranslation();
 
-  const setKind = (selected) => {
+  const setKind = (selected: string) => {
     subject.kind = selected;
     switch (subject.kind) {
       case 'Group':
@@ -38,12 +46,18 @@ export function SingleSubjectForm({
     setSubjects([...subjects]);
   };
 
-  const setName = (name) => {
+  const setName = (name: string) => {
     subject.name = name;
     setSubjects([...subjects]);
   };
 
-  const setServiceAccount = ({ name, namespace }) => {
+  const setServiceAccount = ({
+    name,
+    namespace,
+  }: {
+    name: string;
+    namespace: string;
+  }) => {
     if (name) {
       subject.name = name;
     }
@@ -53,7 +67,7 @@ export function SingleSubjectForm({
     setSubjects([...subjects]);
   };
 
-  const onChange = (event) => {
+  const onChange = (event: any) => {
     const selectedKind = event.detail.selectedOption.value;
     setKind(selectedKind);
   };

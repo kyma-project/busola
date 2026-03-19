@@ -3,7 +3,7 @@ import { hasRuleRequiredProperties, isRuleInvalid } from './helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Icon } from '@ui5/webcomponents-react';
 
-const Alert = ({ tooltipContent }) => {
+const Alert = ({ tooltipContent }: { tooltipContent: string }) => {
   const { t } = useTranslation();
 
   return (
@@ -17,7 +17,12 @@ const Alert = ({ tooltipContent }) => {
   );
 };
 
-export function RuleTitle({ rule, i }) {
+interface RuleTitleProps {
+  rule: any;
+  i: number;
+}
+
+export function RuleTitle({ rule, i }: RuleTitleProps) {
   const { t } = useTranslation();
 
   if (isRuleInvalid(rule)) {
