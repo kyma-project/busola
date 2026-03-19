@@ -61,8 +61,8 @@ function TimeInput({
       label={t('cron-jobs.create-modal.' + name)}
       tooltipContent={t('cron-jobs.create-modal.tooltips.' + name)}
       input={() => (
+        /*@ts-expect-error Type mismatch between js and ts*/
         <Inputs.Text
-          key={`${entries[index] || ''}-${index}`}
           value={entries[index] || ''}
           setValue={setValue}
           placeholder={t('cron-jobs.create-modal.' + name)}
