@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FormEventHandler, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -7,6 +7,15 @@ import { createIngressTemplate } from './templates';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
+interface IngressCreateProps {
+  formElementRef: RefObject<HTMLFormElement>;
+  onChange: FormEventHandler<HTMLElement>;
+  setCustomValid: (valid: boolean) => void;
+  resourceUrl: string;
+  resource?: any;
+  [key: string]: any;
+}
+
 export default function IngressCreate({
   formElementRef,
   onChange,
@@ -14,7 +23,7 @@ export default function IngressCreate({
   resourceUrl,
   resource: initialIngress,
   ...props
-}) {
+}: IngressCreateProps) {
   const { t } = useTranslation();
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);

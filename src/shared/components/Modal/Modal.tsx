@@ -1,30 +1,34 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Bar, Button, Dialog, Title } from '@ui5/webcomponents-react';
+import {
+  Bar,
+  Button,
+  Dialog,
+  Title,
+  UI5WCSlotsNode,
+} from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 
 import './Modal.scss';
 
-Modal.propTypes = {
-  title: PropTypes.any,
-  modalOpeningComponent: PropTypes.any.isRequired,
-  openerDisabled: PropTypes.bool,
-  onShow: PropTypes.func,
-  actions: PropTypes.any,
-  onHide: PropTypes.func,
-  onConfirm: PropTypes.func,
-  confirmText: PropTypes.string,
-  cancelText: PropTypes.string,
-  type: PropTypes.string,
-  disabledConfirm: PropTypes.bool,
-  waiting: PropTypes.bool,
-  className: PropTypes.string,
-  headerActions: PropTypes.object,
+type ModalProps = {
+  title?: string;
+  modalOpeningComponent?: any;
+  openerDisabled?: boolean;
+  onShow?: () => void;
+  actions: any;
+  onHide?: () => void;
+  onConfirm?: () => boolean;
+  confirmText?: string;
+  cancelText?: string;
+  disabledConfirm?: boolean;
+  waiting?: boolean;
+  className: string;
+  headerActions?: UI5WCSlotsNode;
+  children: JSX.Element[];
 };
-
 export function Modal({
   title = 'components.modal.title',
   actions = null,
@@ -35,13 +39,12 @@ export function Modal({
   onConfirm,
   confirmText = 'components.modal.confirm-text',
   cancelText,
-  type = 'default',
   disabledConfirm = false,
   waiting = false,
   children,
   className,
   headerActions,
-}) {
+}: ModalProps) {
   const { t } = useTranslation();
   const [show, setShow] = useState(false);
   function onOpen() {
@@ -115,7 +118,7 @@ export function Modal({
     <>
       <div
         style={{ display: 'contents' }}
-        onClick={!openerDisabled ? onOpen : null}
+        onClick={!openerDisabled ? onOpen : () => {}}
       >
         {modalOpeningComponent}
       </div>
@@ -123,7 +126,6 @@ export function Modal({
         <Dialog
           accessibleName={title}
           className={classNames('custom-modal', className)}
-          type={type}
           headerText={title}
           header={
             headerActions ? (
@@ -135,10 +137,11 @@ export function Modal({
           }
           open={show}
           onClose={onClose}
-          actions={modalActions()}
+          footer={
+            <Bar design="Footer" slot="footer" endContent={modalActions()} />
+          }
         >
           {children}
-          <Bar design="footer" slot="footer" endContent={modalActions()} />
         </Dialog>,
         document.body,
       )}

@@ -1,3 +1,12 @@
+interface LimitRangeTemplateArgs {
+  max?: string;
+  min?: string;
+  defaultVal?: string;
+  defaultRequest?: string;
+  name?: string;
+  namespaceName?: string;
+}
+
 export function createLimitRangeTemplate({
   max = '1100Mi',
   min = '16Mi',
@@ -5,7 +14,7 @@ export function createLimitRangeTemplate({
   defaultRequest = '32Mi',
   name = '',
   namespaceName = '',
-}) {
+}: LimitRangeTemplateArgs) {
   return {
     apiVersion: 'v1',
     kind: 'LimitRange',

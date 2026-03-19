@@ -5,7 +5,13 @@ import { Tokens } from 'shared/components/Tokens';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-export const IngressSpecification = ({ resource }) => {
+interface IngressSpecificationProps {
+  resource: any;
+}
+
+export const IngressSpecification = ({
+  resource,
+}: IngressSpecificationProps) => {
   const { t } = useTranslation();
 
   return (
@@ -27,7 +33,7 @@ export const IngressSpecification = ({ resource }) => {
               t('ingresses.labels.hosts'),
               t('ingresses.labels.secret-name'),
             ]}
-            rowRenderer={(tls) => [
+            rowRenderer={(tls: any) => [
               tls?.hosts ? (
                 <Tokens tokens={tls?.hosts} />
               ) : (
