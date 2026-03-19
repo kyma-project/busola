@@ -1,8 +1,8 @@
 import {
-  formatNamespace,
   formatLimits,
   formatMemoryQuotas,
-} from './../helpers.js';
+  formatNamespace,
+} from 'resources/Namespaces/test/helpers';
 
 describe('Namespace create helpers', () => {
   describe('formatNamespace', () => {

@@ -19,11 +19,13 @@ type NotificationContextProps = {
   defaultVisibilityTime?: number;
 };
 
+type CloseFn = () => void;
+
 type NotifySuccessFn = (props: ToastProps, visibilityTime?: number) => void;
 type NotifyErrorFn = (props: {
   actions: (
-    close,
-    defaultCloseButton,
+    close: CloseFn,
+    defaultCloseButton: (close: CloseFn) => React.ReactNode,
   ) =>
     | React.ReactElement<any, string | React.JSXElementConstructor<any>>
     | string
@@ -33,7 +35,8 @@ type NotifyErrorFn = (props: {
     | boolean
     | undefined
     | null;
-  content: string;
+  content: string | React.ReactElement;
+  wider?: boolean;
 }) => void;
 
 export type NotificationContextArgs = {

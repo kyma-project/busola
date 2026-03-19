@@ -137,7 +137,7 @@ export function useCreateResource({
       actions: (close, defaultCloseButton) => {
         const closeWrapper = () => {
           close();
-          previousActiveElement?.focus();
+          (previousActiveElement as HTMLElement)?.focus();
         };
         return defaultCloseButton(closeWrapper);
       },
