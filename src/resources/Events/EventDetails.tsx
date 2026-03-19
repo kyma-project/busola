@@ -12,10 +12,15 @@ import { ResourceDescription } from 'resources/Events';
 import EventCreate from './EventYaml';
 import { Link } from 'shared/components/Link/Link';
 
-const RowComponent = ({ name, value }) =>
+type RowComponentProps = {
+  name: string;
+  value: any;
+};
+
+const RowComponent = ({ name, value }: RowComponentProps) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
 
-const Specification = (event) => {
+const Specification = (event: any) => {
   const { t } = useTranslation();
 
   return (

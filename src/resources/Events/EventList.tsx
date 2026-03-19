@@ -14,18 +14,31 @@ import {
 } from 'resources/Events';
 import { pathSegment } from 'resources/ClusterEvents';
 import { Link } from 'shared/components/Link/Link';
+import { CustomColumn } from 'shared/components/ResourcesList/types';
 
-function useEventUrl(resourceType, clusterView) {
+export interface EventListProps {
+  resourceType: string;
+  resourceUrl: string;
+  defaultType?: any;
+  hideInvolvedObjects?: boolean;
+  filter?: (resource: any) => boolean;
+  isCompact?: boolean;
+  isClusterView?: boolean;
+  displayArrow?: boolean;
+  [key: string]: any;
+}
+
+function useEventUrl(resourceType: string, clusterView?: boolean) {
   const { namespaceUrl, clusterUrl } = useUrl();
 
   if (clusterView) {
-    return (resource) => {
+    return (resource: any) => {
       return clusterUrl(
         `${pathSegment}/${resource.metadata.namespace}/${resource.metadata.name}`,
       );
     };
   }
-  return (resource) => {
+  return (resource: any) => {
     return namespaceUrl(`${resourceType}/${resource.metadata.name}`, {
       namespace: resource.metadata.namespace,
     });
@@ -39,7 +52,7 @@ export function EventList({
   isCompact,
   isClusterView = false,
   ...props
-}) {
+}: EventListProps) {
   const { t } = useTranslation();
   const { namespace } = useUrl();
   const resourceType = props.resourceType.toLowerCase();
@@ -51,14 +64,7 @@ export function EventList({
     FormatInvolvedObject,
     FormatSourceObject,
   } = useMessageList(defaultType);
-
-  const involvedObject = hideInvolvedObjects
-    ? {}
-    : {
-        header: t('events.headers.involved-object'),
-        value: (e) => FormatInvolvedObject(e.involvedObject),
-      };
-
+  console.log(props);
   const textSearchProperties = [
     'metadata.namespace',
     'message',
@@ -68,7 +74,7 @@ export function EventList({
     'involvedObject.name',
   ];
 
-  const customColumns = [
+  const customColumns: CustomColumn[] = [
     {
       header: t('events.headers.type'),
       value: (e) => (
@@ -86,8 +92,6 @@ export function EventList({
             <Tooltip content={e.type}>
               <ObjectStatus
                 aria-label="Normal"
-                name="message-information"
-                design="Information"
                 className="has-tooltip bsl-icon-m"
                 icon={<Icon accessibleName="Normal" name="information" />}
                 state="Information"
@@ -128,17 +132,22 @@ export function EventList({
       ? [
           {
             header: t('common.headers.namespace'),
-            value: (entry) => entry.metadata.namespace,
+            value: (entry: any) => entry.metadata.namespace,
             id: 'namespace',
           },
         ]
       : []),
-    {
-      ...involvedObject,
-    },
+    ...(hideInvolvedObjects
+      ? []
+      : [
+          {
+            header: t('events.headers.involved-object'),
+            value: (e: any) => FormatInvolvedObject(e.involvedObject),
+          },
+        ]),
     {
       header: t('events.headers.source'),
-      value: (e) => FormatSourceObject(e.source),
+      value: (e: any) => FormatSourceObject(e.source),
     },
     {
       header: t('events.headers.count'),
@@ -150,15 +159,15 @@ export function EventList({
     },
   ];
 
-  const sortByFn = (defaultSort) => {
+  const sortByFn = (defaultSort: any) => {
     const { name } = defaultSort;
     return {
       name,
-      type: (a, b) => a.type.localeCompare(b.type),
-      lastseen: (a, b) =>
+      type: (a: any, b: any) => a.type.localeCompare(b.type),
+      lastseen: (a: any, b: any) =>
         new Date(b.lastTimestamp).getTime() -
         new Date(a.lastTimestamp).getTime(),
-      count: (a, b) => a.count - b.count,
+      count: (a: any, b: any) => (a.count || 0) - (b.count || 0),
     };
   };
 
@@ -179,10 +188,7 @@ export function EventList({
           displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
           res.type === displayType.key;
 
-        const propsFilter =
-          typeof filter === 'function' || typeof filter?.then === 'function'
-            ? await filter(res)
-            : true;
+        const propsFilter = filter ? await filter(res) : true;
 
         return typeFilter && propsFilter;
       }}
@@ -195,7 +201,6 @@ export function EventList({
         subtitleText: i18nDescriptionKey,
         url: docsURL,
       }}
-      showDefaultColumns={false}
     />
   );
 }
