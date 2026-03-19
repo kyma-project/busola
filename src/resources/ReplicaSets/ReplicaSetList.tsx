@@ -11,7 +11,7 @@ import {
   docsURL,
 } from 'resources/ReplicaSets';
 
-const getImages = (replicaSet) => {
+const getImages = (replicaSet: any) => {
   const images =
     replicaSet.spec.template.spec.containers?.map(
       (container) => container.image,
@@ -19,7 +19,11 @@ const getImages = (replicaSet) => {
   return images;
 };
 
-export function ReplicaSetList(params) {
+interface ReplicaSetListProps {
+  [key: string]: any;
+}
+
+export function ReplicaSetList(params: ReplicaSetListProps) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -51,7 +55,7 @@ export function ReplicaSetList(params) {
       customColumns={customColumns}
       resourceTitle={t('replica-sets.title')}
       description={ResourceDescription}
-      {...params}
+      {...(params as any)}
       createResourceForm={ReplicaSetCreate}
       emptyListProps={{
         subtitleText: i18nDescriptionKey,

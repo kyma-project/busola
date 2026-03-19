@@ -1,3 +1,10 @@
+interface ResourceQuotaTemplateParams {
+  limits?: { memory: string; cpu: string };
+  requests?: { memory: string; cpu: string };
+  name?: string;
+  namespaceName?: string;
+}
+
 export function createResourceQuotaTemplate({
   limits = {
     memory: '3Gi',
@@ -9,7 +16,7 @@ export function createResourceQuotaTemplate({
   },
   name = '',
   namespaceName = '',
-}) {
+}: ResourceQuotaTemplateParams) {
   return {
     apiVersion: 'v1',
     kind: 'ResourceQuota',

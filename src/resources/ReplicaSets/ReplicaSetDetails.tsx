@@ -15,7 +15,13 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { filterByResource } from 'hooks/useMessageList';
 
-export function ReplicaSetsDetails(props) {
+interface ReplicaSetsDetailsProps {
+  namespace: string;
+  resourceName: string;
+  [key: string]: any;
+}
+
+export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
   const { t } = useTranslation();
 
   const Events = () => (
@@ -170,7 +176,7 @@ export function ReplicaSetsDetails(props) {
       statusConditions={statusConditions}
       description={ResourceDescription}
       createResourceForm={ReplicaSetCreate}
-      {...props}
+      {...(props as any)}
     />
   );
 }

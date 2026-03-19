@@ -1,6 +1,10 @@
 import { RunningPodsStatus } from 'shared/components/RunningPodsStatus';
 
-export function ReplicaSetStatus({ replicaSet }) {
+interface ReplicaSetStatusProps {
+  replicaSet: any;
+}
+
+export function ReplicaSetStatus({ replicaSet }: ReplicaSetStatusProps) {
   const running = replicaSet.status.readyReplicas || 0;
   const expected = replicaSet.status.replicas || replicaSet.spec.replicas || 0;
 
