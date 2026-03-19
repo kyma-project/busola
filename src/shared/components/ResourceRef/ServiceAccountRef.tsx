@@ -3,7 +3,21 @@ import { useTranslation } from 'react-i18next';
 
 import { ExternalResourceRef } from './ExternalResourceRef';
 
-export function ServiceAccountRef(props) {
+type ServiceAccountRefProps = {
+  index: number;
+  nestingLevel: number;
+  setValue: ({ name, namespace }: { name: string; namespace: string }) => void;
+  title: string;
+  value: { name: string; namespace: string };
+};
+
+export function ServiceAccountRef({
+  index,
+  nestingLevel,
+  setValue,
+  title,
+  value,
+}: ServiceAccountRefProps) {
   const { t } = useTranslation();
   const { data: serviceaccounts, loading } = useGetList()(
     '/api/v1/serviceaccounts/',
@@ -15,7 +29,11 @@ export function ServiceAccountRef(props) {
       resources={serviceaccounts}
       loading={loading}
       labelPrefix={t('role-bindings.labels.service-account')}
-      {...props}
+      index={index}
+      nestingLevel={nestingLevel}
+      setValue={setValue}
+      title={title}
+      value={value}
     />
   );
 }

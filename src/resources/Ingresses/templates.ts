@@ -1,4 +1,4 @@
-export function createIngressTemplate(namespace) {
+export function createIngressTemplate(namespace: string) {
   return {
     apiVersion: 'networking.k8s.io/v1',
     kind: 'Ingress',

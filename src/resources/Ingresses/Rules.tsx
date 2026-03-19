@@ -10,11 +10,17 @@ import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Link } from 'shared/components/Link/Link';
 
-const Port = ({ serviceName, port, services }) => {
+interface PortProps {
+  serviceName: string;
+  port: any;
+  services: any[] | null;
+}
+
+const Port = ({ serviceName, port, services }: PortProps) => {
   const { namespaceUrl } = useUrl();
 
   const serviceLink = services?.find(
-    ({ metadata }) => metadata.name === serviceName,
+    ({ metadata }: any) => metadata.name === serviceName,
   ) ? (
     <Link url={namespaceUrl(`services/${serviceName}`)}>{serviceName}</Link>
   ) : (
@@ -34,15 +40,25 @@ const Port = ({ serviceName, port, services }) => {
   }
 };
 
-export const Rules = ({ rules }) => {
+interface RulesProps {
+  rules: any[];
+}
+
+export const Rules = ({ rules }: RulesProps) => {
   const { t } = useTranslation();
   const namespace = useAtomValue(activeNamespaceIdAtom);
 
   const { data: services } = useGetList()(
     `/api/v1/namespaces/${namespace}/services`,
-  );
+  ) as { data: any[] | null };
 
-  const Backend = ({ backend, services }) => {
+  const Backend = ({
+    backend,
+    services,
+  }: {
+    backend: any;
+    services: any[] | null;
+  }) => {
     if (backend.service) {
       return (
         <Port
@@ -64,6 +80,7 @@ export const Rules = ({ rules }) => {
             {t('common.labels.name')}:{' '}
             <GoToDetailsLink
               kind={backend.resource.kind}
+              apiVersion={backend.resource.apiGroup}
               name={backend.resource.name}
               noBrackets
             />
@@ -97,7 +114,7 @@ export const Rules = ({ rules }) => {
               t('ingresses.labels.path-type'),
               t('ingresses.labels.backend'),
             ]}
-            rowRenderer={(path) => [
+            rowRenderer={(path: any) => [
               path.path,
               path.pathType,
               <Backend

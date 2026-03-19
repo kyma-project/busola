@@ -7,12 +7,20 @@ import { useUrl } from 'hooks/useUrl';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Link } from 'shared/components/Link/Link';
 
-export const DefaultBackendPanel = ({ backend, namespace }) => {
+interface DefaultBackendPanelProps {
+  backend: any;
+  namespace: string;
+}
+
+export const DefaultBackendPanel = ({
+  backend,
+  namespace,
+}: DefaultBackendPanelProps) => {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
   const { data: services } = useGetList()(
     `/api/v1/namespaces/${namespace}/services`,
-  );
+  ) as { data: any[] | null };
 
   return (
     <UI5Panel
@@ -26,7 +34,8 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
               name={t('ingresses.labels.service-name')}
               value={
                 services?.find(
-                  ({ metadata }) => metadata.name === backend?.service.name,
+                  ({ metadata }: any) =>
+                    metadata.name === backend?.service.name,
                 ) ? (
                   <Link url={namespaceUrl(`services/${backend?.service.name}`)}>
                     {backend?.service.name}
@@ -66,10 +75,11 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
             name={t('common.labels.name')}
             value={
               services?.find(
-                ({ metadata }) => metadata.name === backend.resource.name,
+                ({ metadata }: any) => metadata.name === backend.resource.name,
               ) ? (
                 <GoToDetailsLink
                   kind={backend.resource.kind}
+                  apiVersion={backend.resource.apiGroup}
                   name={backend.resource.name}
                   noBrackets
                 />

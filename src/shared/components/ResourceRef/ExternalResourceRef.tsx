@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ComboBox,
@@ -15,6 +16,30 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import './ExternalResourceRef.scss';
+
+type ExternalResourceRefProps = {
+  value: any;
+  resources: any[] | null;
+  loading: boolean;
+  title: string;
+  labelPrefix?: string;
+  tooltipContent?: React.ReactNode;
+  actions?:
+    | React.ReactNode[]
+    | JSX.Element
+    | ((setOpen: Dispatch<SetStateAction<boolean | undefined>>) => JSX.Element);
+  className?: string;
+  setValue: (value: any) => void;
+  required?: boolean;
+  defaultOpen: boolean | undefined;
+  currentNamespace?: string;
+  noSection?: boolean;
+  error?: any;
+  index?: number;
+  children?: React.ReactNode;
+  nestingLevel: number;
+  defaultNamespace?: string;
+};
 
 export function ExternalResourceRef({
   value,
@@ -35,7 +60,7 @@ export function ExternalResourceRef({
   children,
   nestingLevel = 0,
   defaultNamespace,
-}) {
+}: ExternalResourceRefProps) {
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
   const {
@@ -58,7 +83,7 @@ export function ExternalResourceRef({
     .filter((ns) =>
       showHiddenNamespaces
         ? true
-        : !hiddenNamespaces.includes(ns.metadata.name),
+        : !hiddenNamespaces.includes(ns.metadata.name ?? ''),
     )
     ?.map((ns) => ({
       key: ns.metadata.name,
@@ -79,7 +104,9 @@ export function ExternalResourceRef({
     namespace: resource.metadata.namespace,
   }));
 
-  let filteredResourcesOptions = [];
+  let filteredResourcesOptions:
+    | { key: string; text: string; namespace: string }[]
+    | undefined = [];
   if (value?.namespace?.length) {
     filteredResourcesOptions = allResourcesOptions?.filter(
       (resource) => value?.namespace === resource.namespace,
@@ -154,7 +181,7 @@ export function ExternalResourceRef({
               disabled={!filteredResourcesOptions?.length}
               placeholder={t('common.placeholders.secret-ref-name')}
               onChange={(event) => {
-                const selectedOption = filteredResourcesOptions.find(
+                const selectedOption = filteredResourcesOptions?.find(
                   (o) => o.text === event.target.value,
                 );
                 if (selectedOption)
@@ -172,13 +199,15 @@ export function ExternalResourceRef({
                 </Text>
               }
             >
-              {filteredResourcesOptions.map((filteredResource, idx) => (
-                <ComboBoxItem
-                  key={idx}
-                  id={filteredResource.key}
-                  text={filteredResource.text}
-                />
-              ))}
+              {filteredResourcesOptions?.map(
+                (filteredResource, idx: number) => (
+                  <ComboBoxItem
+                    key={idx}
+                    id={filteredResource.key}
+                    text={filteredResource.text}
+                  />
+                ),
+              )}
             </ComboBox>
           </div>
         )}

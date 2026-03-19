@@ -5,16 +5,22 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import './IngressStatus.scss';
 
-export const IngressStatus = ({ resource }) => {
+interface IngressStatusProps {
+  resource: any;
+}
+
+export const IngressStatus = ({ resource }: IngressStatusProps) => {
   const { t } = useTranslation();
   const ingresses = useMemo(() => {
-    return resource?.status?.loadBalancer?.ingress?.map((ingress) => ingress);
+    return resource?.status?.loadBalancer?.ingress?.map(
+      (ingress: any) => ingress,
+    );
   }, [resource]);
 
   return ingresses ? (
     <ConditionList
       className="load-balancers"
-      conditions={ingresses.map((ingress) => ({
+      conditions={ingresses.map((ingress: any) => ({
         header: {
           titleText: ingress.hostname ? (
             <div>
@@ -51,7 +57,7 @@ export const IngressStatus = ({ resource }) => {
             header: t('ingresses.labels.ports'),
             value: ingress.ports ? (
               <ConditionList
-                conditions={ingress?.ports?.map((port) => {
+                conditions={ingress?.ports?.map((port: any) => {
                   return {
                     header: {
                       titleText: port.port,

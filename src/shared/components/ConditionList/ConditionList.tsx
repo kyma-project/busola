@@ -10,7 +10,7 @@ type ConditionListProps = {
   className?: string;
 };
 
-type ConditionItem = {
+export type ConditionItem = {
   header: ConditionHeader;
   message?: string;
   customContent?: CustomContent[];
