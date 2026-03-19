@@ -31,19 +31,24 @@ type CustomResourceProps = {
 };
 
 export default function CustomResource({
-  customResourceDefinitionName,
-  resourceVersion,
-  resourceName,
-  resourceNamespace,
-  isModule,
-  isEntireListProtected,
-  setResMetadata,
-  headerActions,
-  layoutNumber,
-  layoutCloseCreateUrl,
-}: CustomResourceProps) {
+  params,
+}: {
+  params: CustomResourceProps;
+}) {
   const { t } = useTranslation();
   const namespace = useAtomValue(activeNamespaceIdAtom);
+  const {
+    customResourceDefinitionName,
+    resourceVersion,
+    resourceName,
+    resourceNamespace,
+    isModule,
+    isEntireListProtected,
+    setResMetadata,
+    headerActions,
+    layoutNumber,
+    layoutCloseCreateUrl,
+  } = params;
 
   const { data, loading } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${customResourceDefinitionName}`,
