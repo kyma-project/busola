@@ -1,10 +1,20 @@
-import { useState } from 'react';
+import { RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import { createPersistentVolumeClaimTemplate } from './templates';
+
+interface PersistentVolumeClaimCreateProps {
+  namespace?: string;
+  formElementRef?: RefObject<HTMLFormElement>;
+  onChange?: (pvc: Record<string, any>) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resource?: Record<string, any>;
+  resourceUrl?: string;
+  [key: string]: any;
+}
 
 export default function PersistentVolumeClaimCreate({
   namespace,
@@ -14,7 +24,7 @@ export default function PersistentVolumeClaimCreate({
   resource: initialPersistentVolumeClaim,
   setCustomValid,
   ...props
-}) {
+}: PersistentVolumeClaimCreateProps) {
   const { t } = useTranslation();
   const [persistentVolumeClaim, setPersistentVolumeClaim] = useState(
     cloneDeep(initialPersistentVolumeClaim) ||
