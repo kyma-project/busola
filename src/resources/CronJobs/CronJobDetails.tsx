@@ -134,6 +134,8 @@ export function CronJobDetails({
         CronJobPodTemplate,
         Events,
       ]}
+      namespace={namespace}
+      resourceName={resourceName}
       createResourceForm={CronJobCreate}
       description={ResourceDescription}
       customStatusColumns={customStatusColumns}
