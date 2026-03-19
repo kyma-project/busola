@@ -23,7 +23,7 @@ const BusolaExtensionCreate = lazyWithRetries(
   () => import('components/BusolaExtensions/BusolaExtensionCreate'),
 );
 
-interface ColumnWrapperProps {
+export interface ColumnWrapperProps {
   defaultColumn?: string;
 }
 
@@ -53,6 +53,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }: ColumnWrapperProps) => {
     rawResourceTypeName: 'ConfigMap',
   });
 
+  // @ts-expect-error hook not yet migrated to TS
   const elementCreateProps = usePrepareCreateProps({
     resourceType: 'ConfigMap',
     resourceTypeForTitle: t('extensibility.title'),
@@ -65,8 +66,8 @@ const ColumnWrapper = ({ defaultColumn = 'list' }: ColumnWrapperProps) => {
   if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
       <BusolaExtensionDetails
-        name={layoutState?.midColumn?.resourceName || name}
-        namespace={layoutState.midColumn?.namespaceId || namespace}
+        name={layoutState?.midColumn?.resourceName || name || ''}
+        namespace={layoutState.midColumn?.namespaceId || namespace || ''}
       />
     );
   } else {
@@ -81,8 +82,8 @@ const ColumnWrapper = ({ defaultColumn = 'list' }: ColumnWrapperProps) => {
   if (!layoutState?.showCreate) {
     detailsMidColumn = (
       <BusolaExtensionDetails
-        name={layoutState?.midColumn?.resourceName || name}
-        namespace={layoutState.midColumn?.namespaceId || namespace}
+        name={layoutState?.midColumn?.resourceName || name || ''}
+        namespace={layoutState.midColumn?.namespaceId || namespace || ''}
       />
     );
   }

@@ -55,7 +55,7 @@ export const ColumnWrapper = () => {
       null,
     rawResourceTypeName: 'CustomResourceDefinition',
   });
-  const defaultColumn = crName ? 'details' : 'list';
+  const defaultColumn: string = crName ? 'details' : 'list';
 
   const layoutCloseCreateUrl = scopedUrl(
     `customresources/${layoutState?.midColumn?.resourceName ?? crdName}`,
@@ -81,6 +81,7 @@ export const ColumnWrapper = () => {
     },
   );
 
+  // @ts-expect-error hook not yet migrated to TS
   const elementCreateProps = usePrepareCreateProps({
     resourceType: crdResourceName,
     apiGroup: 'apiextensions.k8s.io',
@@ -103,7 +104,7 @@ export const ColumnWrapper = () => {
     } else if (defaultColumn === 'listOfType') {
       startColumnComponent = (
         <CustomResourcesOfType
-          crdName={layoutState?.midColumn?.resourceName ?? crdName}
+          crdName={layoutState?.midColumn?.resourceName ?? crdName ?? ''}
           enableColumnLayout={false}
           layoutCloseCreateUrl={layoutCloseCreateUrl}
         />
@@ -142,7 +143,7 @@ export const ColumnWrapper = () => {
   ) {
     midColumnComponent = (
       <CustomResourcesOfType
-        crdName={layoutState?.midColumn?.resourceName ?? crdName}
+        crdName={layoutState?.midColumn?.resourceName ?? crdName ?? ''}
         enableColumnLayout={true}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
       />

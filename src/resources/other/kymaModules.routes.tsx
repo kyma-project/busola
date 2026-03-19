@@ -32,7 +32,7 @@ const KymaModulesAddModule = lazyWithRetries(
   () => import('../../components/Modules/KymaModulesAddModule'),
 );
 const CommunityModulesAddModule = lazyWithRetries(
-  () => import('components/Modules/community/CommunityModulesAddModule.tsx'),
+  () => import('components/Modules/community/CommunityModulesAddModule'),
 );
 
 interface ColumnWrapperProps {
@@ -111,6 +111,7 @@ const ColumnWrapper = ({
           resourceType={layoutState?.midColumn?.resourceType || resourceType}
           namespaceId={layoutState?.midColumn?.namespaceId ?? namespace}
           isModule={true}
+          setResMetadata={setResMetadata}
         />
       ) : (
         <KymaModulesList namespaced={namespaced} />
