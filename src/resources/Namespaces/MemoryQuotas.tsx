@@ -1,14 +1,14 @@
 import jp from 'jsonpath';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { Input, FlexBox } from '@ui5/webcomponents-react';
-import { Label } from '../../shared/ResourceForm/components/Label';
+import { FlexBox, Input } from '@ui5/webcomponents-react';
+import { Label } from 'shared/ResourceForm/components/Label';
 
 type MemoryInputProps = {
   label: string;
   propertyPath: string;
   container?: Record<string, any>;
-  setContainer: (container: Record<string, any>) => void;
+  setContainer: React.SetStateAction<any>;
   required?: boolean;
   className?: string;
   disabled?: boolean;

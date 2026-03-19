@@ -20,7 +20,21 @@ type NotificationContextProps = {
 };
 
 type NotifySuccessFn = (props: ToastProps, visibilityTime?: number) => void;
-type NotifyErrorFn = (props: Omit<ErrorModalProps, 'close'>) => void;
+type NotifyErrorFn = (props: {
+  actions: (
+    close,
+    defaultCloseButton,
+  ) =>
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | string
+    | number
+    | Iterable<React.ReactNode>
+    | React.ReactPortal
+    | boolean
+    | undefined
+    | null;
+  content: string;
+}) => void;
 
 export type NotificationContextArgs = {
   isOpen: boolean;

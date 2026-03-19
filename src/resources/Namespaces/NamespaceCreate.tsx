@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -20,13 +20,23 @@ import { useNavigate } from 'react-router';
 
 import './NamespaceCreate.scss';
 import { useAtom } from 'jotai';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
 import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
 const ISTIO_INJECTION_DISABLED = 'disabled';
+
+export type NamespaceCreateProps = any & {
+  formElementRef: React.Ref<any>;
+  onChange: Function;
+  resource: any;
+  resourceUrl: string;
+  onCompleted: Function;
+  onError: Function;
+  setCustomValid: Function;
+};
 
 export default function NamespaceCreate({
   formElementRef,
@@ -37,7 +47,7 @@ export default function NamespaceCreate({
   onError,
   setCustomValid,
   ...props
-}) {
+}: NamespaceCreateProps) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
@@ -104,7 +114,7 @@ export default function NamespaceCreate({
   async function afterNamespaceCreated() {
     const name = namespace.metadata?.name;
 
-    setLayoutColumn((prevState) => ({
+    setLayoutColumn((prevState: ColumnLayoutState) => ({
       layout: 'OneColumn',
       showCreate: null,
       showEdit: prevState.showEdit,
@@ -114,6 +124,7 @@ export default function NamespaceCreate({
         resourceName: namespace.metadata?.name,
         apiGroup: '',
         apiVersion: 'v1',
+        namespaceId: null,
       },
       midColumn: null,
       endColumn: null,
@@ -154,7 +165,13 @@ export default function NamespaceCreate({
     }
   }
 
-  const renderEditor = ({ defaultEditor, Editor }) => (
+  const renderEditor = ({
+    defaultEditor,
+    Editor,
+  }: {
+    defaultEditor: React.ReactNode;
+    Editor: React.JSX.ElementType;
+  }) => (
     <div>
       <ResourceForm.CollapsibleSection
         title={t('namespaces.name_singular')}
@@ -241,7 +258,7 @@ export default function NamespaceCreate({
               />
               <MemoryPresets
                 presets={CONFIG.NS_MEMORY_QUOTAS_PRESET}
-                setValue={(val) => {
+                setValue={(val: any) => {
                   setMemory(val);
                 }}
                 disabled={!withMemory}
@@ -285,7 +302,7 @@ export default function NamespaceCreate({
               />
               <LimitPresets
                 presets={CONFIG.NS_CONTAINER_LIMITS_PRESET}
-                setValue={(val) => {
+                setValue={(val: any) => {
                   setLimits(val);
                 }}
                 disabled={!withLimits}

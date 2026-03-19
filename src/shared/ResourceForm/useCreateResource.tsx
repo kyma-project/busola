@@ -17,6 +17,20 @@ import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { useMemo } from 'react';
 
+export type useCreateResourcesProps = {
+  singularName: string;
+  pluralKind: string;
+  resource: any;
+  initialResource?: any;
+  updateInitialResource?: React.SetStateAction<any>;
+  createUrl: string;
+  skipCreateFn?: () => void;
+  afterCreatedFn?: (defaultAfterCreatedFn: () => void) => void;
+  urlPath?: string;
+  layoutNumber?: string;
+  resetLayout?: boolean;
+  afterCreatedCustomMessage?: string;
+};
 export function useCreateResource({
   singularName,
   pluralKind,
@@ -30,7 +44,7 @@ export function useCreateResource({
   layoutNumber,
   resetLayout,
   afterCreatedCustomMessage,
-}) {
+}: useCreateResourcesProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const notification = useNotification();
@@ -116,14 +130,14 @@ export function useCreateResource({
     }
   };
 
-  const showError = (error) => {
+  const showError = (error: any) => {
     console.error(error);
     const previousActiveElement = document.activeElement;
     notification.notifyError({
       actions: (close, defaultCloseButton) => {
         const closeWrapper = () => {
           close();
-          previousActiveElement.focus();
+          previousActiveElement?.focus();
         };
         return defaultCloseButton(closeWrapper);
       },
@@ -171,7 +185,7 @@ export function useCreateResource({
         const response = await getRequest(createUrl);
         const updatedResource = await response.json();
 
-        const makeForceUpdateFn = (closeModal) => {
+        const makeForceUpdateFn = (closeModal: () => void) => {
           return async () => {
             resource.metadata.resourceVersion =
               initialResource?.metadata.resourceVersion;
@@ -212,7 +226,7 @@ export function useCreateResource({
     }
   };
 
-  return async (e) => {
+  return async (e?: Event) => {
     if (e) {
       e.preventDefault();
     }
