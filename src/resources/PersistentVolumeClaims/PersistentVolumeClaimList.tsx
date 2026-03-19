@@ -11,25 +11,34 @@ import {
   docsURL,
 } from 'resources/PersistentVolumeClaims';
 
-export function PersistentVolumeClaimList(props) {
+interface PersistentVolumeClaimListProps {
+  namespace?: string;
+  layoutCloseCreateUrl?: string;
+  [key: string]: any;
+}
+
+export function PersistentVolumeClaimList(
+  props: PersistentVolumeClaimListProps,
+) {
   const { t } = useTranslation();
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: ({ status }) => (
+      value: ({ status }: { status: any }) => (
         <PersistentVolumeClaimStatus phase={status.phase} />
       ),
     },
     {
       header: t('persistent-volume-claims.headers.storage'),
-      value: ({ spec }) => ({
-        content: spec.resources.requests.storage,
-        style: { wordBreak: 'keep-all' },
-      }),
+      value: ({ spec }: { spec: any }) => (
+        <p style={{ wordBreak: 'keep-all' }}>
+          {spec.resources.requests.storage}
+        </p>
+      ),
     },
     {
       header: t('persistent-volume-claims.headers.access-modes'),
-      value: ({ spec }) => <Tokens tokens={spec.accessModes} />,
+      value: ({ spec }: { spec: any }) => <Tokens tokens={spec.accessModes} />,
     },
   ];
 
@@ -37,6 +46,8 @@ export function PersistentVolumeClaimList(props) {
     <ResourcesList
       description={ResourceDescription}
       customColumns={customColumns}
+      resourceType="persistentVolumeClaims"
+      resourceUrl="/api/v1/persistentvolumeclaims"
       {...props}
       createResourceForm={PersistentVolumeClaimCreate}
       emptyListProps={{

@@ -22,12 +22,21 @@ import { Link } from 'shared/components/Link/Link';
 
 import './PersistentVolumeClaim.scss';
 
-const RelatedVolumes = ({ labels }) => {
+interface RelatedVolumesProps {
+  labels: Record<string, string>;
+}
+
+interface PersistentVolumeClaimDetailsProps {
+  namespace: string;
+  resourceName: string;
+}
+
+const RelatedVolumes = ({ labels }: RelatedVolumesProps) => {
   const PVParams = {
     hasDetailsView: true,
     resourceUrl: '/api/v1/persistentvolumes',
     resourceType: 'persistentVolumes',
-    filter: (pv) => {
+    filter: (pv: any) => {
       if (!pv.metadata?.labels) return false;
 
       const pvLabels = Object?.entries(pv.metadata?.labels);
@@ -44,7 +53,7 @@ const RelatedVolumes = ({ labels }) => {
   return <PersistentVolumesList {...PVParams} key="pv-list" />;
 };
 
-function PVCSelectorSpecification(pvc) {
+function PVCSelectorSpecification(pvc: any) {
   const { t } = useTranslation();
 
   return (
@@ -60,13 +69,13 @@ function PVCSelectorSpecification(pvc) {
   );
 }
 
-export const PVCConfiguration = (pvc) => {
+export const PVCConfiguration = (pvc: any) => {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
-  );
+  ) as { data: any[] | null };
   return (
     <Fragment key="pvc-configuration">
       {pvc.spec.resources && (
@@ -92,7 +101,9 @@ export const PVCConfiguration = (pvc) => {
                     return (
                       <LayoutPanelRow
                         name={requests[0] + ' Requests'}
-                        value={requests[1] || EMPTY_TEXT_PLACEHOLDER}
+                        value={
+                          (requests[1] || EMPTY_TEXT_PLACEHOLDER) as string
+                        }
                         key={requests[0]}
                         capitalize={true}
                       />
@@ -107,7 +118,7 @@ export const PVCConfiguration = (pvc) => {
                   return (
                     <LayoutPanelRow
                       name={limits[0] + ' Limits'}
-                      value={limits[1] || EMPTY_TEXT_PLACEHOLDER}
+                      value={(limits[1] || EMPTY_TEXT_PLACEHOLDER) as string}
                       key={limits[0]}
                     />
                   );
@@ -152,7 +163,8 @@ export const PVCConfiguration = (pvc) => {
           name={t('persistent-volume-claims.headers.storage-class-name')}
           value={
             storageClasses?.find(
-              ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
+              ({ metadata }: { metadata: any }) =>
+                metadata.name === pvc.spec?.storageClassName,
             ) ? (
               <Link
                 url={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
@@ -173,12 +185,14 @@ export const PVCConfiguration = (pvc) => {
   );
 };
 
-export function PersistentVolumeClaimDetails(props) {
+export function PersistentVolumeClaimDetails(
+  props: PersistentVolumeClaimDetailsProps,
+) {
   const { t } = useTranslation();
   const customStatusColumns = [
     {
       header: t('persistent-volume-claims.headers.access-modes'),
-      value: (pvc) => <Tokens tokens={pvc?.status?.accessModes} />,
+      value: (pvc: any) => <Tokens tokens={pvc?.status?.accessModes} />,
     },
   ];
 
@@ -191,10 +205,10 @@ export function PersistentVolumeClaimDetails(props) {
     />
   );
 
-  const PVCPods = (pvc) => {
-    const filterByClaim = ({ spec }) =>
+  const PVCPods = (pvc: any) => {
+    const filterByClaim = ({ spec }: { spec: any }) =>
       spec?.volumes?.find(
-        (volume) =>
+        (volume: any) =>
           volume?.persistentVolumeClaim?.claimName === pvc.metadata.name,
       );
 
@@ -210,9 +224,11 @@ export function PersistentVolumeClaimDetails(props) {
   return (
     <ResourceDetails
       statusBadge={(pvc) =>
-        <PersistentVolumeClaimStatus phase={pvc?.status.phase} /> || {
-          EMPTY_TEXT_PLACEHOLDER,
-        }
+        pvc?.status?.phase ? (
+          <PersistentVolumeClaimStatus phase={pvc?.status.phase} />
+        ) : (
+          <>{EMPTY_TEXT_PLACEHOLDER}</>
+        )
       }
       customConditionsComponents={[
         {
@@ -223,7 +239,7 @@ export function PersistentVolumeClaimDetails(props) {
                 return (
                   <LayoutPanelRow
                     name={capacity[0]}
-                    value={capacity[1] || EMPTY_TEXT_PLACEHOLDER}
+                    value={(capacity[1] || EMPTY_TEXT_PLACEHOLDER) as string}
                     key={capacity[0]}
                   />
                 );
@@ -243,8 +259,8 @@ export function PersistentVolumeClaimDetails(props) {
         Events,
       ]}
       description={ResourceDescription}
-      singularName={t('persistent-volume-claims.name_singular')}
       createResourceForm={PersistentVolumeClaimCreate}
+      resourceType="persistentVolumeClaims"
       {...props}
     />
   );
