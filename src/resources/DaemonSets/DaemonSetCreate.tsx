@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 
@@ -7,7 +7,14 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { cloneDeep } from 'lodash';
 
 import { createDaemonSetTemplate } from './templates';
-
+interface DaemonSetCreateProps {
+  formElementRef?: RefObject<HTMLFormElement>;
+  onChange?: (job: Record<string, any>) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resource?: Record<string, any>;
+  resourceUrl?: string;
+  [key: string]: any;
+}
 export default function DaemonSetCreate({
   formElementRef,
   onChange,
@@ -15,7 +22,7 @@ export default function DaemonSetCreate({
   resourceUrl,
   resource: initialDaemonSet,
   ...props
-}) {
+}: DaemonSetCreateProps) {
   const { t } = useTranslation();
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
