@@ -1,4 +1,10 @@
-import { cloneElement, Fragment, Suspense } from 'react';
+import {
+  cloneElement,
+  ComponentType,
+  Fragment,
+  ReactElement,
+  Suspense,
+} from 'react';
 
 import { useAtomValue } from 'jotai';
 import { Route, useParams, useSearchParams } from 'react-router';
@@ -30,7 +36,29 @@ export const createPath = (
   return `${pathSegment}${details}`;
 };
 
-const ColumnWrapper = ({ list, details, create, ...props }) => {
+interface ColumnWrapperProps {
+  list: ReactElement;
+  details: ReactElement;
+  create: ReactElement | null;
+  resourceType: string;
+  resourceI18Key?: string;
+  resourceCustomType?: string;
+  apiGroup?: string;
+  apiVersion?: string;
+  resourceName?: string;
+  namespaceId?: string;
+  hasDetailsView?: boolean;
+  showYamlTab?: boolean;
+  children?: React.ReactNode;
+  [key: string]: any;
+}
+
+const ColumnWrapper = ({
+  list,
+  details,
+  create,
+  ...props
+}: ColumnWrapperProps) => {
   const layoutState = useAtomValue(columnLayoutAtom);
   const { resourceListUrl } = useUrl();
 
@@ -47,6 +75,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
       ? searchParams.get('resourceNamespace')
       : rawNamespaceId);
 
+  // @ts-expect-error hook not yet migrated to TS
   usePrepareLayoutColumns({
     resourceType: props.resourceType,
     namespaceId: namespaceId,
@@ -65,9 +94,10 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,
     metadata: {
-      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+      namespace:
+        layoutState?.midColumn?.namespaceId ?? namespaceId ?? undefined,
     },
-  });
+  } as any);
 
   const elementListProps = usePrepareListProps({
     resourceCustomType: props.resourceCustomType,
@@ -85,7 +115,8 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     apiGroup: props.apiGroup,
     apiVersion: props.apiVersion,
     resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
-    namespaceId: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    namespaceId:
+      layoutState?.midColumn?.namespaceId ?? namespaceId ?? undefined,
     showYamlTab: props.showYamlTab,
   });
 
@@ -122,6 +153,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
     detailsMidColumn = detailsComponent;
   }
 
+  // @ts-expect-error hook not yet migrated to TS
   const { schema } = useGetSchema({
     resource: {
       group: props?.apiGroup,
@@ -135,7 +167,7 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
       title={elementCreateProps.resourceTitle}
       confirmText={t('common.buttons.create')}
       layoutCloseCreateUrl={layoutCloseCreateUrl}
-      renderForm={(renderProps) => {
+      renderForm={(renderProps: any) => {
         const createComponent =
           create &&
           create?.type !== null &&
@@ -179,15 +211,25 @@ const ColumnWrapper = ({ list, details, create, ...props }) => {
   );
 };
 
+interface CreateResourceRoutesConfig {
+  List: ComponentType<any>;
+  Details: ComponentType<any>;
+  Create?: ComponentType<any> | null;
+  resourceType?: string;
+  resourceI18Key?: string;
+  customPath?: string | null;
+  [key: string]: any;
+}
+
 export const createResourceRoutes = ({
-  List = null,
-  Details = null,
+  List,
+  Details,
   Create = null,
   resourceType = '',
   resourceI18Key = '',
   customPath = null,
   ...props
-}) => {
+}: CreateResourceRoutesConfig) => {
   const pathSegment = resourceType.toLowerCase();
 
   const path = customPath || createPath({ pathSegment, detailsView: true });
