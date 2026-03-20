@@ -18,6 +18,10 @@ interface JobDetailsProps {
   resourceName: string;
   resourceUrl?: string;
   resourceType: string;
+  readOnly?: boolean;
+  resourceGraphConfig?: any;
+  resourceTitle: string;
+  showYamlTab?: boolean;
 }
 
 export function JobDetails({
@@ -25,6 +29,10 @@ export function JobDetails({
   resourceName,
   resourceUrl,
   resourceType,
+  readOnly,
+  resourceTitle,
+  showYamlTab,
+  resourceGraphConfig,
 }: JobDetailsProps) {
   const { t } = useTranslation();
 
@@ -159,6 +167,10 @@ export function JobDetails({
       resourceName={resourceName}
       resourceUrl={resourceUrl}
       resourceType={resourceType}
+      readOnly={readOnly}
+      resourceTitle={resourceTitle}
+      showYamlTab={showYamlTab}
+      resourceGraphConfig={resourceGraphConfig}
     />
   );
 }
