@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
-export function JobCompletions({ job }) {
+export function JobCompletions({ job }: { job?: Record<string, any> }) {
   const { t } = useTranslation();
 
-  const succeeded = job.status.succeeded || 0;
-  const completions = job.spec.completions || 0;
+  const succeeded = job?.status?.succeeded || 0;
+  const completions = job?.spec?.completions || 0;
   const statusType = succeeded === completions ? 'Positive' : 'Information';
 
   return (
