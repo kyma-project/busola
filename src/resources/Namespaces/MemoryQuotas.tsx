@@ -3,12 +3,13 @@ import jp from 'jsonpath';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { FlexBox, Input } from '@ui5/webcomponents-react';
 import { Label } from 'shared/ResourceForm/components/Label';
+import { Dispatch, SetStateAction } from 'react';
 
 type MemoryInputProps = {
   label: string;
   propertyPath: string;
   container?: Record<string, any>;
-  setContainer: React.SetStateAction<any>;
+  setContainer: Dispatch<SetStateAction<Record<string, any>>>;
   required?: boolean;
   className?: string;
   disabled?: boolean;

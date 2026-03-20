@@ -170,7 +170,7 @@ export default function NamespaceCreate({
     Editor,
   }: {
     defaultEditor: React.ReactNode;
-    Editor: React.JSX.ElementType;
+    Editor: React.ElementType;
   }) => (
     <div>
       <ResourceForm.CollapsibleSection

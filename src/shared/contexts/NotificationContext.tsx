@@ -19,18 +19,9 @@ type NotificationContextProps = {
   defaultVisibilityTime?: number;
 };
 
-type CloseFn = () => void;
-
 type NotifySuccessFn = (props: ToastProps, visibilityTime?: number) => void;
-type NotifyErrorFn = (props: {
-  actions?: (
-    close: CloseFn,
-    defaultCloseButton: (close: CloseFn) => React.ReactNode,
-  ) => React.ReactNode[] | React.ReactNode | null;
-  content: string | React.ReactElement;
-  header?: React.ReactNode | string;
-  wider?: boolean;
-}) => void;
+
+type NotifyErrorFn = (props: Omit<ErrorModalProps, 'close'>) => void;
 
 export type NotificationContextArgs = {
   isOpen: boolean;
