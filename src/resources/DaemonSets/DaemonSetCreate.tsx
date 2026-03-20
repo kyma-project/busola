@@ -7,14 +7,16 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { cloneDeep } from 'lodash';
 
 import { createDaemonSetTemplate } from './templates';
-interface DaemonSetCreateProps {
+
+type DaemonSetCreateProps = {
   formElementRef?: RefObject<HTMLFormElement>;
   onChange?: (job: Record<string, any>) => void;
   setCustomValid?: (isValid: boolean) => void;
   resource?: Record<string, any>;
   resourceUrl?: string;
   [key: string]: any;
-}
+};
+
 export default function DaemonSetCreate({
   formElementRef,
   onChange,

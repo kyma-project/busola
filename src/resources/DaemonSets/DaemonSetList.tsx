@@ -13,14 +13,14 @@ import {
   docsURL,
 } from 'resources/DaemonSets';
 
-interface DaemonSetProps {
+interface DaemonSetListProps {
   namespace: string;
   resourceUrl: string;
   resourceType: string;
   [key: string]: any;
 }
 
-export function DaemonSetList(props: DaemonSetProps) {
+export function DaemonSetList(props: DaemonSetListProps) {
   const { t } = useTranslation();
   const restartAction = useRestartAction(props.resourceUrl);
 

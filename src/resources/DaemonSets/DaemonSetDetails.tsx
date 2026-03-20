@@ -48,12 +48,14 @@ const Tolerations = (resource: Record<string, any>) => {
     />
   );
 };
-interface DaemonSetDetailsProps {
+
+type DaemonSetDetailsProps = {
   namespace: string;
   resourceName: string;
   resourceUrl?: string;
   resourceType: string;
-}
+};
+
 export function DaemonSetDetails(props: DaemonSetDetailsProps) {
   const { t } = useTranslation();
 
