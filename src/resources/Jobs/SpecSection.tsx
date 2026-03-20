@@ -23,12 +23,18 @@ const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map((p) => ({
 export const CronJobSpecSection = ({
   value,
   setValue,
-  ...props
+  readOnly,
+  propertyPath,
 }: SpecSectionProps) => {
   const { t } = useTranslation();
 
   return (
-    <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
+    <ResourceForm.Wrapper
+      resource={value}
+      setResource={setValue}
+      readOnly={readOnly}
+      propertyPath={propertyPath}
+    >
       <ResourceForm.FormField
         propertyPath="$.startingDeadlineSeconds"
         label={t('jobs.create-modal.labels.starting-deadline')}
@@ -87,14 +93,19 @@ export const JobSpecSection = ({
   value: unsafeValue,
   setValue,
   readOnly,
-  ...props
+  propertyPath,
 }: SpecSectionProps) => {
   const value = { template: {}, ...unsafeValue };
 
   const { t } = useTranslation();
 
   return (
-    <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
+    <ResourceForm.Wrapper
+      resource={value}
+      setResource={setValue}
+      readOnly={readOnly}
+      propertyPath={propertyPath}
+    >
       <ResourceForm.FormField
         propertyPath="$.parallelism"
         label={t('jobs.create-modal.labels.parallelism')}

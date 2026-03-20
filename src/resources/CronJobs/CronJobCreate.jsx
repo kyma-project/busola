@@ -95,11 +95,7 @@ export default function CronJobCreate({
         propertyPath="$.spec.schedule"
         tooltipContent={t(scheduleDesc, { defaultValue: scheduleDesc })}
       />
-      <ContainersSection
-        defaultOpen
-        tooltipContent={containersDesc}
-        propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
-      />
+      <ContainersSection defaultOpen tooltipContent={containersDesc} />
     </ResourceForm>
   );
 }

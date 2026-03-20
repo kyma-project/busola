@@ -20,7 +20,12 @@ interface JobDetailsProps {
   resourceType: string;
 }
 
-export function JobDetails(props: JobDetailsProps) {
+export function JobDetails({
+  namespace,
+  resourceName,
+  resourceUrl,
+  resourceType,
+}: JobDetailsProps) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -119,9 +124,9 @@ export function JobDetails(props: JobDetailsProps) {
   const Events = () => (
     <EventsList
       key="events"
-      namespace={props.namespace}
-      filter={filterByResource('Job', props.resourceName)}
-      hideInvolvedObjects={true}
+      namespace={namespace}
+      filter={filterByResource('Job', resourceName)}
+      hideInvolvedObjects
     />
   );
 
@@ -150,7 +155,10 @@ export function JobDetails(props: JobDetailsProps) {
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
       statusBadge={(job) => <JobCompletions key="completions" job={job} />}
-      {...props}
+      namespace={namespace}
+      resourceName={resourceName}
+      resourceUrl={resourceUrl}
+      resourceType={resourceType}
     />
   );
 }

@@ -8,19 +8,18 @@ interface ContainersSectionProps {
   readOnly?: boolean;
   tooltipContent?: string;
   defaultOpen?: boolean;
-  propertyPath?: string;
 }
 
 export const ContainersSection = ({
   readOnly,
   tooltipContent,
-  ...props
+  defaultOpen = true,
 }: ContainersSectionProps) => {
   const { t } = useTranslation();
 
   return (
     <ItemArray
-      defaultOpen
+      defaultOpen={defaultOpen}
       listTitle={t('jobs.create-modal.containers')}
       nameSingular={t('jobs.create-modal.container')}
       entryTitle={(container) => container?.name}
@@ -46,7 +45,6 @@ export const ContainersSection = ({
       )}
       newResourceTemplateFn={createContainerTemplate}
       readOnly={readOnly}
-      {...props}
     />
   );
 };
