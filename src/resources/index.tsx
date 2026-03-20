@@ -65,8 +65,16 @@ export const resources = [
 ];
 
 export const resourceRoutes = (
-  <>{resources?.filter((r: any) => !r.namespaced)?.map(createResourceRoutes)}</>
+  <>
+    {resources
+      ?.filter((r: Record<string, any>) => !r.namespaced)
+      ?.map(createResourceRoutes)}
+  </>
 );
 export const resourceRoutesNamespaced = (
-  <>{resources?.filter((r: any) => r.namespaced)?.map(createResourceRoutes)}</>
+  <>
+    {resources
+      ?.filter((r: Record<string, any>) => r.namespaced)
+      ?.map(createResourceRoutes)}
+  </>
 );

@@ -70,7 +70,8 @@ export const usePrepareListProps = ({
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
-    resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
+    resourceTitle:
+      resourceI18Key && i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
     namespace: namespaceId,
     i18n,
   };
@@ -97,7 +98,7 @@ export const usePrepareDetailsProps = ({
   namespaceId,
   showYamlTab,
 }: PrepareDetailsProps) => {
-  const encodedResourceName = encodeURIComponent(resourceName?.trimEnd());
+  const encodedResourceName = encodeURIComponent(resourceName?.trimEnd() ?? '');
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
@@ -116,9 +117,10 @@ export const usePrepareDetailsProps = ({
   return {
     resourceUrl: resourceUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
-    resourceTitle: i18n.exists(resourceI18Key)
-      ? t(resourceI18Key)
-      : resourceI18Key,
+    resourceTitle:
+      resourceI18Key && i18n.exists(resourceI18Key)
+        ? t(resourceI18Key)
+        : resourceI18Key,
     resourceName: resourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
@@ -168,7 +170,7 @@ export const usePrepareCreateProps = ({
 };
 
 export const getLastTransitionTime = (
-  conditions: any[],
+  conditions: Record<string, any>[],
   keyValue = 'lastTransitionTime',
 ) => {
   if (!conditions) {
@@ -178,13 +180,13 @@ export const getLastTransitionTime = (
   const clonedConditions = cloneDeep(conditions);
 
   clonedConditions.sort(
-    (a: any, b: any) =>
+    (a: Record<string, any>, b: Record<string, any>) =>
       new Date(a[keyValue]).getTime() - new Date(b[keyValue]).getTime(),
   );
 
   return (
     <ReadableElapsedTimeFromNow
-      timestamp={clonedConditions[0] ? clonedConditions[0][[keyValue]] : null}
+      timestamp={clonedConditions[0] ? clonedConditions[0][keyValue] : null}
     />
   );
 };

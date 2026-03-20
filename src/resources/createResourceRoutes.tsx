@@ -1,4 +1,10 @@
-import { cloneElement, Fragment, ReactElement, Suspense } from 'react';
+import {
+  cloneElement,
+  ComponentType,
+  Fragment,
+  ReactElement,
+  Suspense,
+} from 'react';
 
 import { useAtomValue } from 'jotai';
 import { Route, useParams, useSearchParams } from 'react-router';
@@ -69,6 +75,7 @@ const ColumnWrapper = ({
       ? searchParams.get('resourceNamespace')
       : rawNamespaceId);
 
+  // @ts-expect-error hook not yet migrated to TS
   usePrepareLayoutColumns({
     resourceType: props.resourceType,
     namespaceId: namespaceId,
@@ -87,9 +94,10 @@ const ColumnWrapper = ({
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,
     metadata: {
-      namespace: layoutState?.midColumn?.namespaceId ?? namespaceId,
+      namespace:
+        layoutState?.midColumn?.namespaceId ?? namespaceId ?? undefined,
     },
-  });
+  } as any);
 
   const elementListProps = usePrepareListProps({
     resourceCustomType: props.resourceCustomType,
@@ -107,7 +115,8 @@ const ColumnWrapper = ({
     apiGroup: props.apiGroup,
     apiVersion: props.apiVersion,
     resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
-    namespaceId: layoutState?.midColumn?.namespaceId ?? namespaceId,
+    namespaceId:
+      layoutState?.midColumn?.namespaceId ?? namespaceId ?? undefined,
     showYamlTab: props.showYamlTab,
   });
 
@@ -144,6 +153,7 @@ const ColumnWrapper = ({
     detailsMidColumn = detailsComponent;
   }
 
+  // @ts-expect-error hook not yet migrated to TS
   const { schema } = useGetSchema({
     resource: {
       group: props?.apiGroup,
@@ -202,9 +212,9 @@ const ColumnWrapper = ({
 };
 
 interface CreateResourceRoutesConfig {
-  List?: any;
-  Details?: any;
-  Create?: any;
+  List: ComponentType<any>;
+  Details: ComponentType<any>;
+  Create?: ComponentType<any> | null;
   resourceType?: string;
   resourceI18Key?: string;
   customPath?: string | null;
@@ -212,8 +222,8 @@ interface CreateResourceRoutesConfig {
 }
 
 export const createResourceRoutes = ({
-  List = null,
-  Details = null,
+  List,
+  Details,
   Create = null,
   resourceType = '',
   resourceI18Key = '',

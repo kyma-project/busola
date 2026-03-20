@@ -6,6 +6,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useAtomValue } from 'jotai';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { ExtResource } from 'state/types';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 const ExtensibilityList = lazyWithRetries(
@@ -28,13 +29,14 @@ export const HPASubcomponent = (props: HPASubcomponentProps) => {
   const extensions = useAtomValue(extensionsAtom);
 
   const extensibilityHPAs = extensions?.find(
-    (cR: any) => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
+    (cR: ExtResource) =>
+      cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
   );
 
   const url = namespace
     ? `/apis/autoscaling/v2/namespaces/${namespace}/horizontalpodautoscalers`
     : '';
-  const hpaFilter = (hpa: any) => {
+  const hpaFilter = (hpa: Record<string, any>) => {
     return (
       (hpa.spec?.scaleTargetRef?.kind || '').toLowerCase() ===
         resourceKind.toLowerCase() &&
