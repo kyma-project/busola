@@ -13,10 +13,8 @@ type ResourceTableEntry = {
 
 export default function ResourceQuotaLimits({
   resource,
-  isCompact = false,
 }: {
   resource: ResourceQuota;
-  isCompact?: boolean;
 }) {
   const { t } = useTranslation();
 
@@ -55,14 +53,14 @@ export default function ResourceQuotaLimits({
 
   return (
     <GenericList
-      title={!isCompact ? t('resource-quotas.headers.limits-usage') : null}
-      entries={parsedResourceQuota || []}
+      title={t('resource-quotas.headers.limits-usage')}
+      entries={parsedResourceQuota as any}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       searchSettings={{
         showSearchField: false,
       }}
-      className={`resource-quota-limits ${isCompact ? 'compact' : ''}`}
+      className="resource-quota-limits"
     />
   );
 }

@@ -36,7 +36,7 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (resource) => (
+      value: (resource: any) => (
         <ControlledBy
           ownerReferences={resource.metadata.ownerReferences}
           namespace={resource.metadata.namespace}
@@ -45,7 +45,7 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
     },
   ];
 
-  const Specification = ({ spec }) => {
+  const Specification = ({ spec }: any) => {
     const containers = spec.template.spec.containers || [];
     if (
       !containers?.[0].resources?.limits &&
@@ -66,7 +66,7 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
             name={t('replica-sets.headers.limits')}
             value={
               <Fragment key="limits">
-                {containers.map((c) => (
+                {containers.map((c: any) => (
                   <Fragment key={c.name}>
                     {t('replica-sets.cpu')}: {c.resources?.limits?.cpu}
                     <br />
@@ -83,7 +83,7 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
             name={t('replica-sets.headers.requests')}
             value={
               <Fragment key="requests">
-                {containers.map((c) => (
+                {containers.map((c: any) => (
                   <Fragment key={c.name}>
                     {t('replica-sets.cpu')}: {c.resources?.requests?.cpu}
                     <br />
@@ -102,19 +102,19 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
   const customStatusColumns = [
     {
       header: t('replica-sets.status.available-replicas'),
-      value: (resource) => (
+      value: (resource: any) => (
         <div>{resource?.status?.availableReplicas ?? 0}</div>
       ),
     },
     {
       header: t('replica-sets.status.fully-labeled-replicas'),
-      value: (resource) => (
+      value: (resource: any) => (
         <div>{resource?.status?.fullyLabeledReplicas ?? 0}</div>
       ),
     },
     {
       header: t('replica-sets.status.observed-generation'),
-      value: (resource) => (
+      value: (resource: any) => (
         <div>
           {resource?.status?.observedGeneration ?? EMPTY_TEXT_PLACEHOLDER}{' '}
         </div>
@@ -122,15 +122,17 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
     },
     {
       header: t('replica-sets.status.ready-replicas'),
-      value: (resource) => <div>{resource?.status?.readyReplicas ?? 0}</div>,
+      value: (resource: any) => (
+        <div>{resource?.status?.readyReplicas ?? 0}</div>
+      ),
     },
     {
       header: t('replica-sets.status.replicas'),
-      value: (resource) => <div>{resource?.status?.replicas ?? 0}</div>,
+      value: (resource: any) => <div>{resource?.status?.replicas ?? 0}</div>,
     },
   ];
-  const statusConditions = (resource) => {
-    return resource?.status?.conditions?.map((condition) => {
+  const statusConditions = (resource: any) => {
+    return resource?.status?.conditions?.map((condition: any) => {
       const overridenStatus = () => {
         if (condition.type === 'ReplicaFailure')
           return condition.status === 'True' ? 'Negative' : 'Positive';
@@ -147,7 +149,7 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
     });
   };
 
-  const MatchSelector = (replicaset) => (
+  const MatchSelector = (replicaset: any) => (
     <Selector
       key="match-selector"
       namespace={replicaset.metadata.namespace}
@@ -157,7 +159,7 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
     />
   );
 
-  const ReplicaSetPodTemplate = (replicaset) => (
+  const ReplicaSetPodTemplate = (replicaset: any) => (
     <PodTemplate key="pod-template" template={replicaset.spec.template} />
   );
 
@@ -171,7 +173,9 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
         ReplicaSetPodTemplate,
         Events,
       ]}
-      statusBadge={(replicaSet) => <ReplicaSetStatus replicaSet={replicaSet} />}
+      statusBadge={(replicaSet: any) => (
+        <ReplicaSetStatus replicaSet={replicaSet} />
+      )}
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
       description={ResourceDescription}
