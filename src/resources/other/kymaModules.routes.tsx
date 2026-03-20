@@ -32,8 +32,18 @@ const KymaModulesAddModule = lazyWithRetries(
   () => import('../../components/Modules/KymaModulesAddModule'),
 );
 const CommunityModulesAddModule = lazyWithRetries(
-  () => import('components/Modules/community/CommunityModulesAddModule.tsx'),
+  () => import('components/Modules/community/CommunityModulesAddModule'),
 );
+
+interface ColumnWrapperProps {
+  defaultColumn?: string;
+  namespaced?: boolean;
+  DeleteMessageBox?: any;
+  handleResourceDelete?: any;
+  showDeleteDialog?: any;
+  performDelete?: any;
+  performCancel?: any;
+}
 
 const ColumnWrapper = ({
   defaultColumn = 'list',
@@ -43,7 +53,7 @@ const ColumnWrapper = ({
   showDeleteDialog,
   performDelete,
   performCancel,
-}) => {
+}: ColumnWrapperProps) => {
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { clusterUrl, namespaceUrl } = useUrl();
   const { data: kymaResource } = useKymaQuery();
@@ -58,10 +68,10 @@ const ColumnWrapper = ({
     rawNamespace === '-all-'
       ? searchParams.get('resourceNamespace')
       : rawNamespace;
-  const [resMetadata, setResMetadata] = useState(null);
+  const [resMetadata, setResMetadata] = useState<any>(null);
 
   useEffect(() => {
-    setLayoutColumn((prev) => {
+    setLayoutColumn((prev: any) => {
       // Only update if previous values were empty strings
       if (prev?.midColumn?.apiGroup === '') {
         return {
@@ -101,6 +111,7 @@ const ColumnWrapper = ({
           resourceType={layoutState?.midColumn?.resourceType || resourceType}
           namespaceId={layoutState?.midColumn?.namespaceId ?? namespace}
           isModule={true}
+          setResMetadata={setResMetadata}
         />
       ) : (
         <KymaModulesList namespaced={namespaced} />
@@ -145,7 +156,7 @@ const ColumnWrapper = ({
                 title={t('modules.community.add-module')}
                 confirmText={t('common.buttons.add')}
                 layoutCloseCreateUrl={url}
-                renderForm={(renderProps) => {
+                renderForm={(renderProps: any) => {
                   return (
                     <ErrorBoundary>
                       <CommunityModulesAddModule {...renderProps} />
@@ -159,7 +170,7 @@ const ColumnWrapper = ({
                 title={t('kyma-modules.add-module')}
                 confirmText={t('common.buttons.add')}
                 layoutCloseCreateUrl={url}
-                renderForm={(renderProps) => {
+                renderForm={(renderProps: any) => {
                   return (
                     <ErrorBoundary>
                       <KymaModulesAddModule {...renderProps} />
@@ -224,7 +235,7 @@ const ColumnWrapper = ({
                   startColumn={startColumnComponent}
                   midColumn={
                     midColumnComponent?.props?.children?.some(
-                      (component) => !!component,
+                      (component: any) => !!component,
                     ) ? (
                       midColumnComponent
                     ) : (
@@ -241,7 +252,12 @@ const ColumnWrapper = ({
   );
 };
 
-const KymaModules = ({ defaultColumn, namespaced }) => {
+interface KymaModulesProps {
+  defaultColumn?: string;
+  namespaced?: boolean;
+}
+
+const KymaModules = ({ defaultColumn, namespaced }: KymaModulesProps) => {
   const {
     performCancel,
     performDelete,
