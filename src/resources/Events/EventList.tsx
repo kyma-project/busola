@@ -19,7 +19,7 @@ import { CustomColumn } from 'shared/components/ResourcesList/types';
 export interface EventListProps {
   resourceType: string;
   resourceUrl: string;
-  defaultType?: any;
+  defaultType?: { key: string; text: string };
   hideInvolvedObjects?: boolean;
   filter?: (resource: any) => boolean;
   isCompact?: boolean;
@@ -64,7 +64,7 @@ export function EventList({
     FormatInvolvedObject,
     FormatSourceObject,
   } = useMessageList(defaultType);
-  console.log(props);
+
   const textSearchProperties = [
     'metadata.namespace',
     'message',
