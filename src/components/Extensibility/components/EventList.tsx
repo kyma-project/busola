@@ -19,7 +19,7 @@ interface EventListProps {
 export function EventList({
   structure,
   originalResource,
-  scope,
+  scope: _scope,
   value,
   arrayItems,
   singleRootResource,
@@ -31,8 +31,7 @@ export function EventList({
     resource: originalResource,
     parent: singleRootResource,
     embedResource: embedResource,
-    scope,
-    value,
+    scope: value,
     arrayItems,
   });
   const simpleEmptyListMessage = structure.simpleEmptyListMessage || false;

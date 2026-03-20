@@ -52,7 +52,7 @@ export function CodeViewer({
   );
   const jsonata = useJsonata(stableJsonataDeps);
 
-  const [language, setLanguage] = useState(null);
+  const [language, setLanguage] = useState<string | null>(null);
 
   useEffect(() => {
     jsonata(structure?.language, {}, detectLanguage(value)).then(

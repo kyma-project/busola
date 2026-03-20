@@ -65,8 +65,7 @@ const CopyableWrapper = memo(function CopyableWrapper({
     resource: originalResource,
     parent: singleRootResource,
     embedResource,
-    scope,
-    value,
+    scope: value ?? scope,
     arrayItems,
   });
   const [textToCopy, setTextToCopy] = useState('');
@@ -169,8 +168,8 @@ export function Widget({
     arrayItems,
   });
 
-  const [childValue, setChildValue] = useState(null);
-  const [visible, setVisible] = useState(true);
+  const [childValue, setChildValue] = useState<any>(null);
+  const [visible, setVisible] = useState<any>(true);
   const [visibilityError, setVisibilityError] = useState<any>(null);
 
   const stableStructure = useMemo(
@@ -225,7 +224,9 @@ export function Widget({
   if (visible === false) return null;
 
   if (structure.valuePreprocessor) {
-    const Preprocessor = valuePreprocessors[structure.valuePreprocessor];
+    const Preprocessor = (valuePreprocessors as any)[
+      structure.valuePreprocessor
+    ];
     const copiedStructure = JSON.parse(JSON.stringify(structure));
     copiedStructure.valuePreprocessor = null;
     return (
@@ -253,7 +254,7 @@ export function Widget({
   }
   let Renderer = structure.children ? Plain : Text;
   if (structure.widget) {
-    Renderer = widgets[structure.widget];
+    Renderer = (widgets as any)[structure.widget];
     if (!Renderer) {
       return `no widget ${structure.widget}`;
     }
@@ -264,7 +265,7 @@ export function Widget({
   if (sanitizedValue?.loading) {
     return null;
   }
-  return Array.isArray(sanitizedValue) && !Renderer.array ? (
+  return Array.isArray(sanitizedValue) && !(Renderer as any).array ? (
     sanitizedValue.map((valueItem: any, index: number) => (
       <SingleWidget
         key={index}

@@ -145,7 +145,7 @@ export function Table({
   structure,
   schema,
   originalResource,
-  scope,
+  scope: _scope,
   arrayItems = [],
   singleRootResource,
   embedResource,
@@ -166,8 +166,7 @@ export function Table({
     resource: originalResource,
     parent: singleRootResource,
     embedResource: embedResource,
-    scope,
-    value,
+    scope: value,
     arrayItems,
   });
 

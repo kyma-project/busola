@@ -101,19 +101,18 @@ export function ResourceButton({
     <Button
       design="Emphasized"
       endIcon={structure?.icon}
-      inline={true}
       onClick={() =>
         navigate(
           customUrl
             ? clusterUrl(customUrl)
             : resourceUrl(
                 {
-                  kind,
+                  kind: kind ?? '',
                   metadata: {
-                    name,
+                    name: name ?? '',
                   },
-                },
-                { namespace },
+                } as any,
+                { namespace: namespace ?? undefined },
               ),
         )
       }

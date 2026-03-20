@@ -15,7 +15,6 @@ export function ExternalLinkButton({ structure }: ExternalLinkButtonProps) {
       accessibleDescription="Open in new tab link"
       endIcon="inspect"
       design={structure?.emphasized ? 'Emphasized' : 'Default'}
-      inline={true}
       onClick={() => {
         const newWindow = window.open(
           structure?.link,

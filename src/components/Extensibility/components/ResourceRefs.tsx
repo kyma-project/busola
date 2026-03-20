@@ -41,7 +41,7 @@ export function ResourceRefs({ value, structure }: ResourceRefsProps) {
           name,
           namespace,
         },
-      })}
+      } as any)}
     >
       {namespace}/{name}
     </Link>,

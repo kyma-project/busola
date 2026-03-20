@@ -52,9 +52,9 @@ export function Badge({
   );
   const jsonata = useJsonata(stableJsonataDeps);
 
-  const [tooltip, setTooltip] = useState(null);
-  const [tooltipError, setTooltipError] = useState(null);
-  const [badgeType, setBadgeType] = useState(null);
+  const [tooltip, setTooltip] = useState<string | null>(null);
+  const [tooltipError, setTooltipError] = useState<Error | null>(null);
+  const [badgeType, setBadgeType] = useState<string | null>(null);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
@@ -88,13 +88,13 @@ export function Badge({
   ) : structure?.description ? (
     <StatusBadge
       autoResolveType={!badgeType}
-      type={badgeType}
+      type={badgeType as any}
       tooltipContent={getTooltipContent(structure.description)}
     >
       {tExt(value)}
     </StatusBadge>
   ) : (
-    <StatusBadge autoResolveType={!badgeType} type={badgeType}>
+    <StatusBadge autoResolveType={!badgeType} type={badgeType as any}>
       {tExt(value)}
     </StatusBadge>
   );

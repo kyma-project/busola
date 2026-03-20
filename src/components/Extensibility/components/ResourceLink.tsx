@@ -97,12 +97,12 @@ export function ResourceLink({
     <Link
       url={resourceUrl(
         {
-          kind,
+          kind: kind ?? '',
           metadata: {
-            name,
+            name: name ?? '',
           },
-        },
-        { namespace },
+        } as any,
+        { namespace: namespace ?? undefined },
       )}
     >
       {tExt(value)}

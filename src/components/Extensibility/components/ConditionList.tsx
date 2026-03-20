@@ -101,7 +101,9 @@ export const ConditionList = ({
     return null;
   }
 
-  return conditions && <ConditionListComponent conditions={conditions} />;
+  return (
+    conditions && <ConditionListComponent conditions={conditions as any} />
+  );
 };
 
 ConditionList.array = true;

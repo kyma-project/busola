@@ -31,7 +31,7 @@ export function StatisticalCard({
 
   const [extraInfo, setExtraInfo] = useState<any[]>([]);
   const [err, setErr] = useState<any>(null);
-  const [mainValue, setMainValue] = useState(undefined);
+  const [mainValue, setMainValue] = useState<string | null>(null);
 
   useEffect(() => {
     const setStatesFromJsonata = async () => {
@@ -77,7 +77,7 @@ export function StatisticalCard({
     <div className={`item-wrapper ${extraInfo ? 'card-wide' : 'card-small'}`}>
       <CountingCard
         className="item"
-        value={mainValue !== undefined ? mainValue : EMPTY_TEXT_PLACEHOLDER}
+        value={mainValue ?? EMPTY_TEXT_PLACEHOLDER}
         title={structure?.name}
         subTitle={structure?.mainValue?.name}
         resourceUrl={context !== general?.urlPath ? general?.urlPath : null}

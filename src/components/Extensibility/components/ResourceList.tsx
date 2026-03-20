@@ -43,7 +43,7 @@ export function ResourceList({
   value,
   structure,
   originalResource,
-  scope,
+  scope: _scope,
   arrayItems,
   ...props
 }: ResourceListProps) {
@@ -60,8 +60,7 @@ export function ResourceList({
 
   const jsonata = useJsonata({
     resource: originalResource,
-    scope,
-    value,
+    scope: value,
     arrayItems,
   });
 

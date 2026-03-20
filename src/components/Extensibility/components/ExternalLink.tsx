@@ -82,9 +82,7 @@ export const ExternalLink = ({
   ) {
     return (
       <ToolbarButton
-        accessibleRole="Link"
         accessibleName={tExt(value)}
-        accessibleDescription="Open in new tab link"
         endIcon="inspect"
         onClick={() => {
           const newWindow = window.open(href, '_blank', 'noopener, noreferrer');
@@ -126,7 +124,6 @@ export const ExternalLink = ({
         name="inspect"
         className="bsl-icon-s sap-margin-begin-tiny"
         accessibleName={t('common.ariaLabel.new-tab-link')}
-        originalResource={originalResource}
       />
     </Link>
   );

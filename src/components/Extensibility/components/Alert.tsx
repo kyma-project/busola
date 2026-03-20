@@ -20,7 +20,7 @@ export const Alert = ({ value, structure }: AlertProps) => {
 
   return (
     <div className={!structure.disableMargin ? 'sap-margin-medium' : ''}>
-      <MessageStrip design={schemaType} hideCloseButton>
+      <MessageStrip design={schemaType as any} hideCloseButton>
         {tExt(value)}
       </MessageStrip>
     </div>

@@ -79,7 +79,7 @@ export function Panel({
           </Button>
         )
       }
-      description={description}
+      description={description as string}
     >
       {Array.isArray(structure?.children) && (
         <div className={bodyClassNames}>
