@@ -19,7 +19,7 @@ export function MemoryInput({
   label,
   propertyPath,
   container = {},
-  setCNamespaceCreateontainer,
+  setContainer,
   required,
   className,
   disabled,
