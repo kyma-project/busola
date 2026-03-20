@@ -12,21 +12,27 @@ import {
   docsURL,
 } from 'resources/Deployments';
 
-const getImages = (deployment) => {
+const getImages = (deployment: Record<string, any>) => {
   const images = deployment.spec.template.spec.containers?.map(
-    (container) => container.image,
+    (container: Record<string, any>) => container.image,
   );
   return images || [];
 };
 
-export function DeploymentList(props) {
+type DeploymentListProps = {
+  namespace: string;
+  resourceUrl: string;
+  resourceType: string;
+  [key: string]: any;
+};
+export function DeploymentList(props: DeploymentListProps) {
   const { t } = useTranslation();
   const restartAction = useRestartAction(props.resourceUrl);
 
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (deployment) => {
+      value: (deployment: Record<string, any>) => {
         return (
           <ControlledBy
             ownerReferences={deployment.metadata.ownerReferences}
@@ -37,7 +43,7 @@ export function DeploymentList(props) {
     },
     {
       header: t('deployments.headers.images'),
-      value: (deployment) => {
+      value: (deployment: Record<string, any>) => {
         const images = getImages(deployment);
         const imagesString = images.join(', ');
         return <span style={{ overflowWrap: 'anywhere' }}>{imagesString}</span>;
@@ -45,7 +51,9 @@ export function DeploymentList(props) {
     },
     {
       header: t('common.headers.pods'),
-      value: (deployment) => <DeploymentStatus deployment={deployment} />,
+      value: (deployment: Record<string, any>) => (
+        <DeploymentStatus deployment={deployment} />
+      ),
     },
   ];
 

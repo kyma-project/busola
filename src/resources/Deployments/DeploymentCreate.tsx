@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { RefObject, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -19,6 +19,16 @@ const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
 const ISTIO_INJECTION_DISABLED = 'false';
 
+type DeploymentCreateProps = {
+  formElementRef?: RefObject<HTMLFormElement>;
+  namespace: string;
+  onChange?: (job: Record<string, any>) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resource?: Record<string, any>;
+  resourceUrl?: string;
+  [key: string]: any;
+};
+
 export default function DeploymentCreate({
   formElementRef,
   namespace,
@@ -27,7 +37,7 @@ export default function DeploymentCreate({
   resource: initialDeployment,
   resourceUrl,
   ...props
-}) {
+}: DeploymentCreateProps) {
   const { t } = useTranslation();
 
   const [deployment, setDeployment] = useState(
@@ -80,10 +90,10 @@ export default function DeploymentCreate({
       jp.value(deployment, '$.spec.template.spec.containers') || []
     ).length;
 
-    setCustomValid(hasAnyContainers);
+    setCustomValid?.(hasAnyContainers);
   }, [deployment, setCustomValid]);
 
-  const handleNameChange = (name) => {
+  const handleNameChange = (name: string) => {
     jp.value(deployment, '$.metadata.name', name);
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(deployment, '$.spec.template.spec.containers[0].name', name);
@@ -101,7 +111,7 @@ export default function DeploymentCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!isEdit && createPresets(namespace)}
+      presets={!isEdit ? createPresets(namespace) : []}
       onPresetSelected={(value) => {
         setDeployment(value.deployment);
       }}
@@ -132,8 +142,8 @@ export default function DeploymentCreate({
       <AdvancedContainersView
         resource={deployment}
         setResource={setDeployment}
-        onChange={onChange}
-        namespace={namespace}
+        onChange={onChange ? onChange : () => {}}
+        namespace={namespace || ''}
         createContainerTemplate={createContainerTemplate}
       />
     </ResourceForm>
