@@ -1,7 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
-import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import {
+  ControlledBy,
+  OwnerReferences,
+} from 'shared/components/ControlledBy/ControlledBy';
+import {
+  ResourceDetails,
+  ResourceDetailsProps,
+} from 'shared/components/ResourceDetails/ResourceDetails';
 import SecretData from 'shared/components/Secret/SecretData';
 import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 import { CertificateData } from './CertificateData';
@@ -12,7 +18,7 @@ import { filterByResource } from 'hooks/useMessageList';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-function HelmReleaseDataWrapper(secret) {
+function HelmReleaseDataWrapper(secret: Record<string, any>) {
   if (secret.type !== 'helm.sh/release.v1') {
     return null;
   }
@@ -20,16 +26,26 @@ function HelmReleaseDataWrapper(secret) {
   return <HelmReleaseData key="helm-release-data" releaseSecret={secret} />;
 }
 
-export function SecretDetails(props) {
+export function SecretDetails(
+  props: {
+    namespace?: string;
+    resourceName?: string;
+  } & Omit<
+    ResourceDetailsProps,
+    'customComponents' | 'customColumns' | 'description' | 'createResourceForm'
+  >,
+) {
   const { t } = useTranslation();
-  const Secret = (resource) => (
+  const Secret = (resource: { data: Record<string, string> }) => (
     <SecretData key="secret-data" secret={resource} />
   );
 
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (secret) => (
+      value: (secret: {
+        metadata: { ownerReferences: OwnerReferences; namespace?: string };
+      }) => (
         <ControlledBy
           ownerReferences={secret.metadata.ownerReferences}
           namespace={secret.metadata.namespace}
@@ -47,7 +63,7 @@ export function SecretDetails(props) {
     />
   );
 
-  const Configuration = (secret) => (
+  const Configuration = (secret: { type: string }) => (
     <UI5Panel
       fixed
       keyComponent={'secret-configuration'}

@@ -83,7 +83,7 @@ export type ResourceFormProps = {
   initialMode?: 'MODE_FORM' | 'MODE_YAML';
   yamlSearchDisabled?: boolean;
   yamlHideDisabled?: boolean;
-  stickyHeaderHeight?: number;
+  stickyHeaderHeight?: number | string;
   title?: React.ReactNode;
   resetLayout?: boolean;
   formWithoutPanel?: boolean;
