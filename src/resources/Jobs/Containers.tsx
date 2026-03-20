@@ -4,13 +4,21 @@ import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sNameField, TextArrayInput } from 'shared/ResourceForm/fields';
 
+interface SingleContainerFormProps {
+  container?: Record<string, any>;
+  containers?: Record<string, any>[];
+  setContainers?: (containers: Record<string, any>[]) => void;
+  readOnly?: boolean;
+  prefix?: string;
+}
+
 export function SingleContainerForm({
   container,
   containers,
   setContainers,
   readOnly,
   prefix,
-}) {
+}: SingleContainerFormProps) {
   const { t } = useTranslation();
 
   const imagePullPolicyOptions = ['IfNotPresent', 'Always', 'Never'].map(
@@ -23,7 +31,7 @@ export function SingleContainerForm({
   return (
     <ResourceForm.Wrapper
       resource={container}
-      setResource={() => setContainers([...containers])}
+      setResource={() => setContainers?.([...(containers ?? [])])}
     >
       <K8sNameField
         propertyPath="$.name"
@@ -62,29 +70,5 @@ export function SingleContainerForm({
         readOnly={readOnly}
       />
     </ResourceForm.Wrapper>
-  );
-}
-
-export function SingleContainerInput({
-  value: containers,
-  setValue: setContainers,
-  readOnly,
-  ...props
-}) {
-  const { t } = useTranslation();
-
-  return (
-    <ResourceForm.CollapsibleSection
-      title={t('jobs.create-modal.container')}
-      defaultOpen
-    >
-      <SingleContainerForm
-        container={containers?.[0]}
-        containers={containers}
-        setContainers={setContainers}
-        readOnly={readOnly}
-        {...props}
-      />
-    </ResourceForm.CollapsibleSection>
   );
 }

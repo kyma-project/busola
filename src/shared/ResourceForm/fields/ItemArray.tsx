@@ -1,21 +1,21 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, RefObject, SetStateAction } from 'react';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from '..';
 
 type ItemArrayProps = {
-  value: any[];
-  setValue: (val: any[]) => void;
+  value?: any[];
+  setValue?: (val: any[]) => void;
   listTitle: string | JSX.Element;
   entryTitle: string | ((item: any, index: number) => string | JSX.Element);
   nameSingular: string;
   atLeastOneRequiredMessage?: string | JSX.Element;
   allowEmpty?: boolean;
   itemRenderer: (props: {
-    item: any;
-    values: any[];
-    setValues: (vals: any[]) => void;
+    item: Record<string, any>;
+    values?: Record<string, any>[];
+    setValues?: (vals: Record<string, any>[]) => void;
     index: number;
     nestingLevel: number;
   }) => JSX.Element;
@@ -31,6 +31,8 @@ type ItemArrayProps = {
   setResource?: (resource: Record<string, any> | string) => void;
   className?: string;
   required?: boolean;
+  propertyPath?: string;
+  inputRef?: RefObject<HTMLInputElement>;
 };
 
 export function ItemArray({
@@ -66,7 +68,7 @@ export function ItemArray({
   }
 
   const remove = (index: number) =>
-    setValues(values.filter((_, i) => index !== i));
+    setValues?.(values.filter((_, i) => index !== i));
 
   const renderItem = (item: any, index: number) =>
     itemRenderer({
@@ -116,7 +118,7 @@ export function ItemArray({
         <Button
           icon="add"
           onClick={() => {
-            setValues([...values, newResourceTemplateFn()]);
+            setValues?.([...values, newResourceTemplateFn()]);
             setOpen(true);
           }}
           disabled={readOnly}
