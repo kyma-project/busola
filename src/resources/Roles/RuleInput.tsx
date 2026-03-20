@@ -54,11 +54,12 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();
 
-  const apiGroupDesc = getDescription(schema, 'rules.apiGroups');
-  const resourcesDesc = getDescription(schema, 'rules.resources');
-  const verbsDesc = getDescription(schema, 'rules.verbs');
-  const resourceNamesDesc = getDescription(schema, 'rules.resourceNames');
-  const nonResourceURLsDesc = getDescription(schema, 'rules.nonResourceURLs');
+  const apiGroupDesc = getDescription(schema, 'rules.apiGroups') ?? '';
+  const resourcesDesc = getDescription(schema, 'rules.resources') ?? '';
+  const verbsDesc = getDescription(schema, 'rules.verbs') ?? '';
+  const resourceNamesDesc = getDescription(schema, 'rules.resourceNames') ?? '';
+  const nonResourceURLsDesc =
+    getDescription(schema, 'rules.nonResourceURLs') ?? '';
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
   const apiRules = rule.apiGroups.flat();
@@ -67,7 +68,7 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
     fetchResources,
     loadable,
     loading,
-  } = useResourcesForApiGroups([...new Set(apiRules)]);
+  } = useResourcesForApiGroups([...new Set(apiRules)] as string[]);
   // introduce special option for '' apiGroup - Combobox doesn't accept empty string key
   const apiGroupsInputOptions = getApiGroupInputOptions(groupVersions);
 
@@ -76,7 +77,7 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
   const getAvailableResources = (resourcesCache: any) =>
     unique([
       ...(rule.apiGroups
-        .flatMap((apiGroup) => resourcesCache[apiGroup] || [])
+        .flatMap((apiGroup: any) => resourcesCache[apiGroup] || [])
         .map((r: any) => r.name) || []),
       '*',
     ]);
@@ -148,7 +149,7 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
         newItemActionWidth={2}
         newItemAction={
           loading ? (
-            <BusyIndicator size="S" active={true} delay="0" />
+            <BusyIndicator size="S" active={true} delay={0} />
           ) : (
             <Button
               design="Transparent"

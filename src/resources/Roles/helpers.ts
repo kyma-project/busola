@@ -100,7 +100,7 @@ function isNonResourceRule(rule: any) {
 export function hasRuleRequiredProperties(rule: any) {
   if (!rule) return false;
 
-  return isResourceRule(rule) ^ isNonResourceRule(rule);
+  return isResourceRule(rule) !== isNonResourceRule(rule);
 }
 
 export function isRuleInvalid(rule: any) {

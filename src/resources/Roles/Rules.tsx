@@ -58,10 +58,10 @@ export const Rules = (resource: any) => {
         content: <VerbStatus rule={rule} verb={verb} />,
         style: { textAlign: 'center' },
       })),
-      rule.verbs?.filter((v) => !standardVerbs.includes(v)).join(', ') ||
+      rule.verbs?.filter((v: any) => !standardVerbs.includes(v)).join(', ') ||
         EMPTY_TEXT_PLACEHOLDER,
       displayArrayValue(
-        (rule.apiGroups || []).map((apiGroup) =>
+        (rule.apiGroups || []).map((apiGroup: any) =>
           apiGroup ? apiGroup : '(core)',
         ),
       ),

@@ -16,7 +16,7 @@ export function useResourcesForApiGroups(apiGroups: string[] = []) {
       // core api group
       if (apiGroup === '') return ['v1'];
 
-      return groupVersions.filter((gV: string) =>
+      return (groupVersions ?? []).filter((gV: string) =>
         gV.startsWith(apiGroup + '/'),
       );
     },
@@ -45,9 +45,10 @@ export function useResourcesForApiGroups(apiGroups: string[] = []) {
       if (cache[apiGroup]?.length) continue;
       for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
         setLoading(true);
-        const loader = fetchApiGroup(groupVersion, apiGroup)?.then(
-          (resources) => ({ apiGroup, resources }),
-        );
+        const loader = fetchApiGroup(groupVersion)?.then((resources) => ({
+          apiGroup,
+          resources,
+        }));
         loaders.push(loader);
       }
     }
