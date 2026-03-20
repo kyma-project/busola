@@ -23,19 +23,12 @@ type CloseFn = () => void;
 
 type NotifySuccessFn = (props: ToastProps, visibilityTime?: number) => void;
 type NotifyErrorFn = (props: {
-  actions: (
+  actions?: (
     close: CloseFn,
     defaultCloseButton: (close: CloseFn) => React.ReactNode,
-  ) =>
-    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-    | string
-    | number
-    | Iterable<React.ReactNode>
-    | React.ReactPortal
-    | boolean
-    | undefined
-    | null;
+  ) => React.ReactNode[] | React.ReactNode | null;
   content: string | React.ReactElement;
+  header?: React.ReactNode | string;
   wider?: boolean;
 }) => void;
 
