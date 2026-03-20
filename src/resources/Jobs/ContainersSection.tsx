@@ -3,23 +3,35 @@ import { useTranslation } from 'react-i18next';
 import { ItemArray } from 'shared/ResourceForm/fields';
 import { createContainerTemplate } from './templates';
 import { SingleContainerForm } from './Containers';
+import { RefObject } from 'react';
 
 interface ContainersSectionProps {
   readOnly?: boolean;
   tooltipContent?: string;
   defaultOpen?: boolean;
+  value?: any[];
+  propertyPath?: string;
+  inputRef?: RefObject<HTMLInputElement>;
+  setValue?: (value: any[]) => void;
 }
 
 export const ContainersSection = ({
   readOnly,
   tooltipContent,
   defaultOpen = true,
+  value,
+  propertyPath,
+  inputRef,
+  setValue,
 }: ContainersSectionProps) => {
   const { t } = useTranslation();
-
   return (
     <ItemArray
       defaultOpen={defaultOpen}
+      value={value}
+      setValue={setValue}
+      inputRef={inputRef}
+      propertyPath={propertyPath}
       listTitle={t('jobs.create-modal.containers')}
       nameSingular={t('jobs.create-modal.container')}
       entryTitle={(container) => container?.name}

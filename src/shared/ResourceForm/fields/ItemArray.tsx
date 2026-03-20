@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, RefObject, SetStateAction } from 'react';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -31,6 +31,8 @@ type ItemArrayProps = {
   setResource?: (resource: Record<string, any> | string) => void;
   className?: string;
   required?: boolean;
+  propertyPath?: string;
+  inputRef?: RefObject<HTMLInputElement>;
 };
 
 export function ItemArray({
