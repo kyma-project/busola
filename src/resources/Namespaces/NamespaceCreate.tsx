@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -23,6 +23,12 @@ import { useAtom } from 'jotai';
 import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
 import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
+import {
+  onChangeFn,
+  onCompletedFn,
+  onErrorFn,
+  setCustomValid,
+} from 'shared/components/ResourceCreate/ResourceCreate';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
@@ -30,12 +36,12 @@ const ISTIO_INJECTION_DISABLED = 'disabled';
 
 export type NamespaceCreateProps = any & {
   formElementRef: React.Ref<any>;
-  onChange: Function;
+  onChange: onChangeFn;
   resource: any;
   resourceUrl: string;
-  onCompleted: Function;
-  onError: Function;
-  setCustomValid: Function;
+  onCompleted: onCompletedFn;
+  onError: onErrorFn;
+  setCustomValid: setCustomValid;
 };
 
 export default function NamespaceCreate({
@@ -90,10 +96,14 @@ export default function NamespaceCreate({
 
   // container limits
   const [withLimits, setWithLimits] = useState(false);
-  const [limits, setLimits] = useState(() => createLimitRangeTemplate({}));
+  const [limits, setLimits] = useState<Record<string, any>>(() =>
+    createLimitRangeTemplate({}),
+  );
   // memory quotas
   const [withMemory, setWithMemory] = useState(false);
-  const [memory, setMemory] = useState(() => createResourceQuotaTemplate({}));
+  const [memory, setMemory] = useState<Record<string, any>>(() =>
+    createResourceQuotaTemplate({}),
+  );
 
   const createLimitResource = useCreateResource({
     singularName: 'LimitRange',
