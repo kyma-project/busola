@@ -5,6 +5,7 @@ import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
+import { ColumnWrapperProps } from './BusolaExtensions.routes';
 
 const HelmReleasesList = lazyWithRetries(
   () => import('../../components/HelmReleases/HelmReleasesList'),
@@ -14,7 +15,7 @@ const HelmReleaseDetails = lazyWithRetries(
   () => import('../../components/HelmReleases/HelmReleasesDetails'),
 );
 
-const ColumnWrapper = ({ defaultColumn = 'list' }) => {
+const ColumnWrapper = ({ defaultColumn = 'list' }: ColumnWrapperProps) => {
   const layoutState = useAtomValue(columnLayoutAtom);
   const { namespaceId: rawNamespaceId, releaseName } = useParams();
   const [searchParams] = useSearchParams();
@@ -41,7 +42,9 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     startColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}
-        namespace={layoutState?.midColumn?.namespaceId || namespaceId}
+        namespace={
+          layoutState?.midColumn?.namespaceId || namespaceId || undefined
+        }
       />
     );
   } else {
@@ -53,7 +56,9 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     midColumnComponent = (
       <HelmReleaseDetails
         releaseName={layoutState?.midColumn?.resourceName || releaseName}
-        namespace={layoutState?.midColumn?.namespaceId || namespaceId}
+        namespace={
+          layoutState?.midColumn?.namespaceId || namespaceId || undefined
+        }
       />
     );
   }

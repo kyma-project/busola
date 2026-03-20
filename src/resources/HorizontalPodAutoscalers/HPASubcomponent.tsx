@@ -6,13 +6,22 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useAtomValue } from 'jotai';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { ExtResource } from 'state/types';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 const ExtensibilityList = lazyWithRetries(
   () => import('../../components/Extensibility/ExtensibilityList'),
 );
 
-export const HPASubcomponent = (props) => {
+interface HPASubcomponentProps {
+  kind: string;
+  metadata: {
+    name: string;
+  };
+  [key: string]: any;
+}
+
+export const HPASubcomponent = (props: HPASubcomponentProps) => {
   const { t } = useTranslation();
   const resourceKind = props.kind;
   const resourceName = props.metadata.name;
@@ -20,13 +29,14 @@ export const HPASubcomponent = (props) => {
   const extensions = useAtomValue(extensionsAtom);
 
   const extensibilityHPAs = extensions?.find(
-    (cR) => cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
+    (cR: ExtResource) =>
+      cR.general?.resource?.kind === 'HorizontalPodAutoscaler',
   );
 
   const url = namespace
     ? `/apis/autoscaling/v2/namespaces/${namespace}/horizontalpodautoscalers`
     : '';
-  const hpaFilter = (hpa) => {
+  const hpaFilter = (hpa: Record<string, any>) => {
     return (
       (hpa.spec?.scaleTargetRef?.kind || '').toLowerCase() ===
         resourceKind.toLowerCase() &&

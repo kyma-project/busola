@@ -9,7 +9,7 @@ const NodeOverview = lazyWithRetries(
 
 const RoutedNodeOverview = () => {
   const { nodeName } = useParams();
-  return <NodeOverview nodeName={nodeName} />;
+  return <NodeOverview nodeName={nodeName ?? ''} />;
 };
 
 export default (

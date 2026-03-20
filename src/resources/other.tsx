@@ -1,4 +1,4 @@
-import customResources from 'resources/other/CustomResources.routes.jsx';
+import customResources from 'resources/other/CustomResources.routes';
 import noPermissions from './other/noPermissions.routes';
 import nodeOverview from './other/nodeOverview.routes';
 import busolaExtensions from './other/BusolaExtensions.routes';

@@ -13,11 +13,17 @@ import { useAtomValue } from 'jotai';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 
+interface PrepareResourceUrlProps {
+  apiGroup?: string;
+  apiVersion?: string;
+  resourceType?: string;
+}
+
 export const usePrepareResourceUrl = ({
   apiGroup,
   apiVersion,
   resourceType,
-}) => {
+}: PrepareResourceUrlProps) => {
   const { namespaceId } = useParams();
 
   if (!apiVersion || !resourceType) return;
@@ -31,6 +37,15 @@ export const usePrepareResourceUrl = ({
   return resourceUrl;
 };
 
+interface PrepareListProps {
+  resourceCustomType?: string;
+  resourceType?: string;
+  resourceI18Key?: string;
+  apiGroup?: string;
+  apiVersion?: string;
+  hasDetailsView?: boolean;
+}
+
 export const usePrepareListProps = ({
   resourceCustomType,
   resourceType,
@@ -38,7 +53,7 @@ export const usePrepareListProps = ({
   apiGroup,
   apiVersion,
   hasDetailsView,
-}) => {
+}: PrepareListProps) => {
   const { namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
@@ -55,11 +70,23 @@ export const usePrepareListProps = ({
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
-    resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
+    resourceTitle:
+      resourceI18Key && i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
     namespace: namespaceId,
     i18n,
   };
 };
+
+interface PrepareDetailsProps {
+  resourceCustomType?: string;
+  resourceType?: string;
+  resourceI18Key?: string;
+  apiGroup?: string;
+  apiVersion?: string;
+  resourceName?: string;
+  namespaceId?: string;
+  showYamlTab?: boolean;
+}
 
 export const usePrepareDetailsProps = ({
   resourceCustomType,
@@ -70,8 +97,8 @@ export const usePrepareDetailsProps = ({
   resourceName,
   namespaceId,
   showYamlTab,
-}) => {
-  const encodedResourceName = encodeURIComponent(resourceName?.trimEnd());
+}: PrepareDetailsProps) => {
+  const encodedResourceName = encodeURIComponent(resourceName?.trimEnd() ?? '');
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
@@ -90,9 +117,10 @@ export const usePrepareDetailsProps = ({
   return {
     resourceUrl: resourceUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
-    resourceTitle: i18n.exists(resourceI18Key)
-      ? t(resourceI18Key)
-      : resourceI18Key,
+    resourceTitle:
+      resourceI18Key && i18n.exists(resourceI18Key)
+        ? t(resourceI18Key)
+        : resourceI18Key,
     resourceName: resourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
@@ -102,13 +130,21 @@ export const usePrepareDetailsProps = ({
   };
 };
 
+interface PrepareCreateProps {
+  resourceCustomType?: string;
+  resourceType?: string;
+  resourceTypeForTitle?: string;
+  apiGroup?: string;
+  apiVersion?: string;
+}
+
 export const usePrepareCreateProps = ({
   resourceCustomType,
   resourceType,
   resourceTypeForTitle,
   apiGroup,
   apiVersion,
-}) => {
+}: PrepareCreateProps) => {
   const { namespaceId } = useParams();
   const { i18n, t } = useTranslation();
 
@@ -134,7 +170,7 @@ export const usePrepareCreateProps = ({
 };
 
 export const getLastTransitionTime = (
-  conditions,
+  conditions: Record<string, any>[],
   keyValue = 'lastTransitionTime',
 ) => {
   if (!conditions) {
@@ -144,12 +180,13 @@ export const getLastTransitionTime = (
   const clonedConditions = cloneDeep(conditions);
 
   clonedConditions.sort(
-    (a, b) => new Date(a[keyValue]).getTime() - new Date(b[keyValue]).getTime(),
+    (a: Record<string, any>, b: Record<string, any>) =>
+      new Date(a[keyValue]).getTime() - new Date(b[keyValue]).getTime(),
   );
 
   return (
     <ReadableElapsedTimeFromNow
-      timestamp={clonedConditions[0] ? clonedConditions[0][[keyValue]] : null}
+      timestamp={clonedConditions[0] ? clonedConditions[0][keyValue] : null}
     />
   );
 };
