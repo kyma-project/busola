@@ -1,7 +1,16 @@
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import './ResourceStatusCard.scss';
-import { ConditionList } from '../ConditionList/ConditionList';
+import { ConditionItem, ConditionList } from '../ConditionList/ConditionList';
+import { ReactNode } from 'react';
+
+type ResourceStatusCardProps = {
+  statusBadge: ReactNode;
+  customColumns: ReactNode;
+  customColumnsLong: ReactNode;
+  conditions: [ConditionItem];
+  customConditionsComponent: ReactNode;
+};
 
 export function ResourceStatusCard({
   statusBadge,
@@ -9,7 +18,7 @@ export function ResourceStatusCard({
   customColumnsLong,
   conditions,
   customConditionsComponent,
-}) {
+}: ResourceStatusCardProps) {
   const { t } = useTranslation();
 
   return (

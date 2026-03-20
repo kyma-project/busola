@@ -140,7 +140,6 @@ export function ResourceRefRender({
     isImmutable(val) ? val.toJS() : val;
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <ExternalResourceRef
       defaultOpen={defaultOpen}
       defaultNamespace={namespace}
