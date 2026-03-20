@@ -23,7 +23,11 @@ const BusolaExtensionCreate = lazyWithRetries(
   () => import('components/BusolaExtensions/BusolaExtensionCreate'),
 );
 
-const ColumnWrapper = ({ defaultColumn = 'list' }) => {
+export interface ColumnWrapperProps {
+  defaultColumn?: string;
+}
+
+const ColumnWrapper = ({ defaultColumn = 'list' }: ColumnWrapperProps) => {
   const layoutState = useAtomValue(columnLayoutAtom);
   const { clusterUrl } = useUrl();
 
@@ -49,6 +53,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
     rawResourceTypeName: 'ConfigMap',
   });
 
+  // @ts-expect-error hook not yet migrated to TS
   const elementCreateProps = usePrepareCreateProps({
     resourceType: 'ConfigMap',
     resourceTypeForTitle: t('extensibility.title'),
@@ -61,8 +66,8 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
       <BusolaExtensionDetails
-        name={layoutState?.midColumn?.resourceName || name}
-        namespace={layoutState.midColumn?.namespaceId || namespace}
+        name={layoutState?.midColumn?.resourceName || name || ''}
+        namespace={layoutState.midColumn?.namespaceId || namespace || ''}
       />
     );
   } else {
@@ -77,8 +82,8 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
   if (!layoutState?.showCreate) {
     detailsMidColumn = (
       <BusolaExtensionDetails
-        name={layoutState?.midColumn?.resourceName || name}
-        namespace={layoutState.midColumn?.namespaceId || namespace}
+        name={layoutState?.midColumn?.resourceName || name || ''}
+        namespace={layoutState.midColumn?.namespaceId || namespace || ''}
       />
     );
   }
@@ -88,7 +93,7 @@ const ColumnWrapper = ({ defaultColumn = 'list' }) => {
       title={elementCreateProps.resourceTitle}
       confirmText={t('common.buttons.create')}
       layoutCloseCreateUrl={clusterUrl('busolaextensions')}
-      renderForm={(renderProps) => {
+      renderForm={(renderProps: any) => {
         const createComponent = (
           <BusolaExtensionCreate
             {...renderProps}

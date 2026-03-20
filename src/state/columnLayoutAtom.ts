@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
 
 export type ColumnState = {
   resourceName: null | string;
@@ -28,7 +29,7 @@ export type ColumnLayoutState = {
   endColumn: null | ColumnState;
   showCreate?: null | ShowCreate;
   showEdit?: null | ShowEdit;
-  layout: string;
+  layout: FCLLayout | keyof typeof FCLLayout;
 };
 
 const defaultValue: ColumnLayoutState = {
