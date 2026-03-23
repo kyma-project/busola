@@ -1,7 +1,12 @@
 import { ControlledBy as CB } from 'shared/components/ControlledBy/ControlledBy';
 import { useGetPlaceholder } from 'components/Extensibility/helpers';
 
-export function ControlledBy({ value, structure }) {
+interface ControlledByProps {
+  value: any;
+  structure: any;
+}
+
+export function ControlledBy({ value, structure }: ControlledByProps) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
   return (

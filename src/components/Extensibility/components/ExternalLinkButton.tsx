@@ -1,7 +1,11 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
-export function ExternalLinkButton({ structure }) {
+interface ExternalLinkButtonProps {
+  structure: any;
+}
+
+export function ExternalLinkButton({ structure }: ExternalLinkButtonProps) {
   const { t } = useTranslation();
 
   return (
@@ -11,7 +15,6 @@ export function ExternalLinkButton({ structure }) {
       accessibleDescription="Open in new tab link"
       endIcon="inspect"
       design={structure?.emphasized ? 'Emphasized' : 'Default'}
-      inline={true}
       onClick={() => {
         const newWindow = window.open(
           structure?.link,

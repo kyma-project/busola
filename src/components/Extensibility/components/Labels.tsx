@@ -3,10 +3,15 @@ import { isNil } from 'lodash';
 import { Labels as BusolaLabels } from 'shared/components/Labels/Labels';
 import { Tokens } from 'shared/components/Tokens';
 
-export function Labels({ value, structure }) {
+interface LabelsProps {
+  value: any;
+  structure: any;
+}
+
+export function Labels({ value, structure }: LabelsProps) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
-  const isSimpleType = (value) => {
+  const isSimpleType = (value: any) => {
     return (
       typeof value === 'boolean' ||
       typeof value === 'string' ||

@@ -5,6 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { getBadgeType } from 'components/Extensibility/helpers';
 import { Widget } from './Widget';
 
+interface ConditionListProps {
+  value: any;
+  structure: any;
+  originalResource: any;
+  scope: any;
+  arrayItems: any;
+  singleRootResource: any;
+  embedResource: any;
+}
+
 export const ConditionList = ({
   value,
   structure,
@@ -13,7 +23,7 @@ export const ConditionList = ({
   arrayItems,
   singleRootResource,
   embedResource,
-}) => {
+}: ConditionListProps) => {
   const { t } = useTranslation();
   const stableJsonataDeps = useMemo(
     () => ({
@@ -35,17 +45,19 @@ export const ConditionList = ({
   );
   const jsonata = useJsonata(stableJsonataDeps);
 
-  const [conditions, setConditions] = useState(null);
+  const [conditions, setConditions] = useState<any[] | null>(null);
 
   useEffect(() => {
     if (!Array.isArray(value) || value?.length === 0) {
       return;
     }
     Promise.all(
-      value.map(async (v) => {
-        const override = structure?.highlights?.find((o) => o.type === v.type);
+      value.map(async (v: any) => {
+        const override = structure?.highlights?.find(
+          (o: any) => o.type === v.type,
+        );
         const customContentPromise = await Promise.all(
-          (structure?.customContent || []).map(async (c) => {
+          (structure?.customContent || []).map(async (c: any) => {
             return {
               ...c,
               value:
@@ -65,7 +77,7 @@ export const ConditionList = ({
           }),
         );
         const customContent = customContentPromise.filter(
-          (c) => c.type === v.type,
+          (c: any) => c.type === v.type,
         );
 
         const badgeType = override
@@ -89,7 +101,9 @@ export const ConditionList = ({
     return null;
   }
 
-  return conditions && <ConditionListComponent conditions={conditions} />;
+  return (
+    conditions && <ConditionListComponent conditions={conditions as any} />
+  );
 };
 
 ConditionList.array = true;

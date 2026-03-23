@@ -6,7 +6,19 @@ import { useGetPlaceholder } from 'components/Extensibility/helpers';
 
 import { Widget } from './Widget';
 
-export function JoinedArray({ value, structure, arrayItems, ...props }) {
+interface JoinedArrayProps {
+  value: any;
+  structure: any;
+  arrayItems: any[];
+  [key: string]: any;
+}
+
+export function JoinedArray({
+  value,
+  structure,
+  arrayItems,
+  ...props
+}: JoinedArrayProps) {
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   if (isNil(value)) {
@@ -22,10 +34,10 @@ export function JoinedArray({ value, structure, arrayItems, ...props }) {
   return (
     <div>
       {separator === 'break'
-        ? value.map((val, i) => (
+        ? value.map((val: any, i: number) => (
             <div key={`break-${i}-${val}`}>
               {structure?.children
-                ? structure?.children?.map((def, idx) => (
+                ? structure?.children?.map((def: any, idx: number) => (
                     <Widget
                       structure={def}
                       value={val}
@@ -37,9 +49,9 @@ export function JoinedArray({ value, structure, arrayItems, ...props }) {
             </div>
           ))
         : structure?.children
-          ? value.map((val, i) => (
+          ? value.map((val: any, i: number) => (
               <Fragment key={`joined-${i}-${val}`}>
-                {structure?.children?.map((def, idx) => (
+                {structure?.children?.map((def: any, idx: number) => (
                   <Widget
                     structure={def}
                     arrayItems={[...arrayItems, val]}
@@ -59,7 +71,7 @@ export function JoinedArray({ value, structure, arrayItems, ...props }) {
 JoinedArray.array = true;
 JoinedArray.inline = true;
 JoinedArray.copyable = true;
-JoinedArray.copyFunction = ({ value, structure }) => {
+JoinedArray.copyFunction = ({ value, structure }: any) => {
   let separator = structure?.separator ?? ', ';
   separator = separator === 'break' ? '\n' : separator;
 

@@ -1,7 +1,12 @@
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
-export const Alert = ({ value, structure }) => {
+interface AlertProps {
+  value: any;
+  structure: any;
+}
+
+export const Alert = ({ value, structure }: AlertProps) => {
   const { t: tExt } = useGetTranslation();
 
   let schemaType = 'Information';
@@ -15,7 +20,7 @@ export const Alert = ({ value, structure }) => {
 
   return (
     <div className={!structure.disableMargin ? 'sap-margin-medium' : ''}>
-      <MessageStrip design={schemaType} hideCloseButton>
+      <MessageStrip design={schemaType as any} hideCloseButton>
         {tExt(value)}
       </MessageStrip>
     </div>

@@ -1,4 +1,11 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  memo,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -9,12 +16,24 @@ import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
-export const SimpleRenderer = ({ children }) => {
+export const SimpleRenderer = ({ children }: { children: ReactNode }) => {
   return children;
 };
 SimpleRenderer.copyable = true;
 
-export function InlineWidget({ children, value, structure, ...props }) {
+type InlineWidgetProps = {
+  children?: ReactNode;
+  value?: any;
+  structure: any;
+  [key: string]: any;
+};
+
+export function InlineWidget({
+  children,
+  value,
+  structure,
+  ...props
+}: InlineWidgetProps) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
@@ -31,13 +50,17 @@ export function InlineWidget({ children, value, structure, ...props }) {
     <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
   );
 }
-InlineWidget.copyable = (Renderer) => Renderer?.copyable;
-InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
+InlineWidget.copyable = (Renderer: any) => Renderer?.copyable;
+InlineWidget.copyFunction = (
+  props: any,
+  Renderer: any,
+  defaultCopyFunction: any,
+) =>
   Renderer?.copyFunction
     ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
     : defaultCopyFunction(props, Renderer, defaultCopyFunction);
 
-const defaultCopyFunction = ({ value }) =>
+const defaultCopyFunction = ({ value }: any) =>
   typeof value === 'object' ? JSON.stringify(value) : value;
 
 const CopyableWrapper = memo(function CopyableWrapper({
@@ -50,7 +73,7 @@ const CopyableWrapper = memo(function CopyableWrapper({
   value,
   arrayItems,
   structure,
-}) {
+}: any) {
   const isRendererCopyable = useMemo(() => {
     return typeof Renderer.copyable === 'function'
       ? Renderer.copyable(Renderer)
@@ -61,14 +84,18 @@ const CopyableWrapper = memo(function CopyableWrapper({
     resource: originalResource,
     parent: singleRootResource,
     embedResource,
-    scope,
-    value,
+    scope: value ?? scope,
     arrayItems,
   });
   const [textToCopy, setTextToCopy] = useState('');
 
   const copyFunction = useCallback(
-    ({ value, structure }, Renderer, defaultCopyFunction, linkObject) =>
+    (
+      { value, structure }: any,
+      Renderer: any,
+      defaultCopyFunction: any,
+      linkObject: any,
+    ) =>
       typeof Renderer.copyFunction === 'function'
         ? Renderer.copyFunction(
             { value, structure },
@@ -87,7 +114,7 @@ const CopyableWrapper = memo(function CopyableWrapper({
 
   useEffect(() => {
     if (!structure?.copyable || !isRendererCopyable) return;
-    jsonata(structure?.link).then((linkObject) => {
+    jsonata(structure?.link).then((linkObject: any) => {
       setTextToCopy(
         copyFunction(
           { value, structure },
@@ -125,7 +152,7 @@ const SingleWidget = memo(function SingleWidget({
   inlineRenderer,
   Renderer,
   ...props
-}) {
+}: any) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
   return Renderer.inline ? (
@@ -139,6 +166,18 @@ const SingleWidget = memo(function SingleWidget({
   );
 });
 
+type WidgetProps = {
+  structure: any;
+  value?: any;
+  arrayItems?: any[];
+  inlineRenderer?: any;
+  originalResource?: any;
+  singleRootResource?: any;
+  embedResource?: any;
+  index?: number;
+  [key: string]: any;
+};
+
 export function Widget({
   structure,
   value,
@@ -149,7 +188,7 @@ export function Widget({
   embedResource,
   index,
   ...props
-}) {
+}: WidgetProps) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
   const jsonata = useJsonata({
@@ -160,9 +199,9 @@ export function Widget({
     arrayItems,
   });
 
-  const [childValue, setChildValue] = useState(null);
-  const [visible, setVisible] = useState(true);
-  const [visibilityError, setVisibilityError] = useState(null);
+  const [childValue, setChildValue] = useState<any>(null);
+  const [visible, setVisible] = useState<any>(true);
+  const [visibilityError, setVisibilityError] = useState<any>(null);
 
   const stableStructure = useMemo(
     () => structure,
@@ -216,7 +255,9 @@ export function Widget({
   if (visible === false) return null;
 
   if (structure.valuePreprocessor) {
-    const Preprocessor = valuePreprocessors[structure.valuePreprocessor];
+    const Preprocessor = (valuePreprocessors as any)[
+      structure.valuePreprocessor
+    ];
     const copiedStructure = JSON.parse(JSON.stringify(structure));
     copiedStructure.valuePreprocessor = null;
     return (
@@ -244,7 +285,7 @@ export function Widget({
   }
   let Renderer = structure.children ? Plain : Text;
   if (structure.widget) {
-    Renderer = widgets[structure.widget];
+    Renderer = (widgets as any)[structure.widget];
     if (!Renderer) {
       return `no widget ${structure.widget}`;
     }
@@ -255,8 +296,8 @@ export function Widget({
   if (sanitizedValue?.loading) {
     return null;
   }
-  return Array.isArray(sanitizedValue) && !Renderer.array ? (
-    sanitizedValue.map((valueItem, index) => (
+  return Array.isArray(sanitizedValue) && !(Renderer as any).array ? (
+    sanitizedValue.map((valueItem: any, index: number) => (
       <SingleWidget
         key={index}
         {...props}

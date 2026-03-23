@@ -11,7 +11,7 @@ import { Link } from '../Link/Link';
 import './CountingCard.scss';
 
 type CountingCardProps = {
-  value: number;
+  value: number | string;
   extraInfo: ExtraInfo[];
   title: string;
   subTitle?: string;

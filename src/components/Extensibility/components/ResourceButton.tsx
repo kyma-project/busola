@@ -1,12 +1,23 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'shared/components/Link/Link';
-
+import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
+import { Button } from '@ui5/webcomponents-react';
+
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 
-export function ResourceLink({
+interface ResourceButtonProps {
+  value: any;
+  structure: any;
+  originalResource: any;
+  scope: any;
+  arrayItems: any;
+  singleRootResource: any;
+  embedResource: any;
+}
+
+export function ResourceButton({
   value,
   structure,
   originalResource,
@@ -14,11 +25,12 @@ export function ResourceLink({
   arrayItems,
   singleRootResource,
   embedResource,
-}) {
+}: ResourceButtonProps) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-  const { resourceUrl } = useUrl();
+  const { resourceUrl, clusterUrl } = useUrl();
+  const navigate = useNavigate();
   const stableJsonataDeps = useMemo(
     () => ({
       resource: originalResource,
@@ -39,12 +51,12 @@ export function ResourceLink({
   );
   const jsonata = useJsonata(stableJsonataDeps);
 
-  const [name, setName] = useState(null);
-  const [nameError, setNameError] = useState(null);
-  const [namespace, setNamespace] = useState(null);
-  const [namespaceError, setNamespaceError] = useState(null);
-  const [kind, setKind] = useState(null);
-  const [kindError, setKindError] = useState(null);
+  const [name, setName] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<any>(null);
+  const [namespace, setNamespace] = useState<string | null>(null);
+  const [namespaceError, setNamespaceError] = useState<any>(null);
+  const [kind, setKind] = useState<string | null>(null);
+  const [kindError, setKindError] = useState<any>(null);
 
   useEffect(() => {
     if (!value) {
@@ -76,6 +88,8 @@ export function ResourceLink({
     return emptyLeafPlaceholder;
   }
 
+  const customUrl = structure.resource?.customUrl;
+
   const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {
     return t('extensibility.configuration-error', {
@@ -84,20 +98,26 @@ export function ResourceLink({
   }
 
   return (
-    <Link
-      url={resourceUrl(
-        {
-          kind,
-          metadata: {
-            name,
-          },
-        },
-        { namespace },
-      )}
+    <Button
+      design="Emphasized"
+      endIcon={structure?.icon}
+      onClick={() =>
+        navigate(
+          customUrl
+            ? clusterUrl(customUrl)
+            : resourceUrl(
+                {
+                  kind: kind ?? '',
+                  metadata: {
+                    name: name ?? '',
+                  },
+                } as any,
+                { namespace: namespace ?? undefined },
+              ),
+        )
+      }
     >
       {tExt(value)}
-    </Link>
+    </Button>
   );
 }
-
-ResourceLink.inline = true;

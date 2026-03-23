@@ -5,7 +5,12 @@ import { useGetTranslation } from '../helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link } from 'shared/components/Link/Link';
 
-export function ResourceRefs({ value, structure }) {
+interface ResourceRefsProps {
+  value: any;
+  structure: any;
+}
+
+export function ResourceRefs({ value, structure }: ResourceRefsProps) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
 
@@ -21,7 +26,13 @@ export function ResourceRefs({ value, structure }) {
     t('common.headers.name'),
   ];
 
-  const rowRenderer = ({ name, namespace }) => [
+  const rowRenderer = ({
+    name,
+    namespace,
+  }: {
+    name: string;
+    namespace: string;
+  }) => [
     <Link
       key={`${namespace}/${name}`}
       url={resourceUrl({
@@ -30,7 +41,7 @@ export function ResourceRefs({ value, structure }) {
           name,
           namespace,
         },
-      })}
+      } as any)}
     >
       {namespace}/{name}
     </Link>,
@@ -38,11 +49,11 @@ export function ResourceRefs({ value, structure }) {
     name,
   ];
 
-  const sortBy = (defaultSort) => {
+  const sortBy = (defaultSort: any) => {
     const { name } = defaultSort;
     return {
       name,
-      namespace: (a, b) =>
+      namespace: (a: any, b: any) =>
         a.metadata?.namespace.localeCompare(b.metadata?.namespace),
     };
   };

@@ -16,7 +16,10 @@ import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 const ExtensibilityList = lazyWithRetries(() => import('../ExtensibilityList'));
 
-const getProperNamespacePart = (givenNamespace, currentNamespace) => {
+const getProperNamespacePart = (
+  givenNamespace: any,
+  currentNamespace: string,
+) => {
   switch (true) {
     case typeof givenNamespace === 'string':
       return `/namespaces/${givenNamespace}`;
@@ -27,14 +30,23 @@ const getProperNamespacePart = (givenNamespace, currentNamespace) => {
   }
 };
 
+interface ResourceListProps {
+  value: any;
+  structure: any;
+  originalResource: any;
+  scope: any;
+  arrayItems: any;
+  [key: string]: any;
+}
+
 export function ResourceList({
   value,
   structure,
   originalResource,
-  scope,
+  scope: _scope,
   arrayItems,
   ...props
-}) {
+}: ResourceListProps) {
   const { widgetT, t } = useGetTranslation();
   const extensions = useAtomValue(extensionsAtom);
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
@@ -48,17 +60,16 @@ export function ResourceList({
 
   const jsonata = useJsonata({
     resource: originalResource,
-    scope,
-    value,
+    scope: value,
     arrayItems,
   });
 
   const extensibilityResourceSchema = extensions?.find(
-    (cR) => cR.general?.resource?.kind === kind,
+    (cR: any) => cR.general?.resource?.kind === kind,
   );
 
   const PredefinedRenderer = resources.find(
-    (r) => r.resourceType.toLowerCase() === pluralKind,
+    (r: any) => r.resourceType.toLowerCase() === pluralKind,
   );
 
   if (!structure.children && extensibilityResourceSchema) {
@@ -100,7 +111,7 @@ export function ResourceList({
   // make sure "kind" is present on resources
   const newValue = { ...value };
   if (Array.isArray(value?.items)) {
-    newValue.items = value.items.map((d) => ({ ...d, kind }));
+    newValue.items = value.items.map((d: any) => ({ ...d, kind }));
   }
 
   return (
@@ -125,12 +136,12 @@ export function ResourceList({
           structure.hasDetailsView ?? !!PredefinedRenderer?.Details
         }
         columns={children}
-        sortBy={(defaultSortOptions) =>
+        sortBy={(defaultSortOptions: any) =>
           sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
         }
         simpleEmptyListMessage={simpleEmptyListMessage}
         searchSettings={{
-          textSearchProperties: (defaultSortOptions) =>
+          textSearchProperties: (defaultSortOptions: any) =>
             textSearchProperties(defaultSortOptions),
         }}
         {...structure}

@@ -6,8 +6,13 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { DataSourcesContext } from '../contexts/DataSources';
 import { Widget } from './Widget';
 
+interface PendingWrapperProps {
+  value: any;
+  [key: string]: any;
+}
+
 // receives { data, loading, error }, displays loading or error state and passes the value down
-export function PendingWrapper({ value, ...props }) {
+export function PendingWrapper({ value, ...props }: PendingWrapperProps) {
   const { t } = useTranslation();
 
   const { getRelatedResourceInPath } = useContext(DataSourcesContext);
@@ -18,7 +23,7 @@ export function PendingWrapper({ value, ...props }) {
   const { data, loading, error } = value;
 
   if (loading) {
-    return <Spinner size="Small" center={false} />;
+    return <Spinner size="S" center={false} />;
   } else if (error) {
     return t('common.messages.error', { error });
   } else {
