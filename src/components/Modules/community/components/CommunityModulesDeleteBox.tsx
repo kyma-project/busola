@@ -1,5 +1,12 @@
 import { ModulesDeleteBox } from 'components/Modules/components/ModulesDeleteBox';
-import { createContext, useContext, useMemo, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import { checkSelectedModule } from 'components/Modules/support';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { KymaModuleContext } from 'components/Modules/providers/KymaModuleProvider';
@@ -7,17 +14,42 @@ import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTempl
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
+import { ColumnLayoutState } from 'state/columnLayoutAtom';
 
-export const CommunityModulesDeleteBoxContext = createContext({
-  setOpenedModuleIndex: () => {},
-  showDeleteDialog: false,
-  openedModuleIndex: undefined,
-  deleteModuleButton: <></>,
-  handleResourceDelete: () => {},
-  namespaced: false,
-  performDelete: () => {},
-  performCancel: () => {},
-});
+type CommunityModulesDeleteBoxContextProviderProps = {
+  handleResourceDelete: (options: any) => void;
+  showDeleteDialog: boolean;
+  DeleteMessageBox: React.FC<{ moduleName: string }>;
+  layoutState: any;
+  setLayoutColumn: (update: SetStateAction<ColumnLayoutState>) => void;
+  children: React.ReactNode;
+  namespaced: boolean;
+  performDelete: () => void;
+  performCancel: () => void;
+};
+
+type CommunityModulesDeleteBoxContextType = {
+  setOpenedModuleIndex: Dispatch<SetStateAction<number | null>>;
+  showDeleteDialog?: boolean;
+  openedModuleIndex: number | null;
+  deleteModuleButton: React.ReactNode;
+  handleResourceDelete: (options: any) => void;
+  namespaced?: boolean;
+  performDelete: () => void;
+  performCancel: () => void;
+};
+
+export const CommunityModulesDeleteBoxContext =
+  createContext<CommunityModulesDeleteBoxContextType>({
+    setOpenedModuleIndex: () => {},
+    showDeleteDialog: false,
+    openedModuleIndex: null,
+    deleteModuleButton: <></>,
+    handleResourceDelete: () => {},
+    namespaced: false,
+    performDelete: () => {},
+    performCancel: () => {},
+  });
 
 export function CommunityModulesDeleteBoxContextProvider({
   handleResourceDelete,
@@ -29,9 +61,11 @@ export function CommunityModulesDeleteBoxContextProvider({
   namespaced,
   performDelete,
   performCancel,
-}) {
+}: CommunityModulesDeleteBoxContextProviderProps) {
   const { t } = useTranslation();
-  const [openedModuleIndex, setOpenedModuleIndex] = useState();
+  const [openedModuleIndex, setOpenedModuleIndex] = useState<number | null>(
+    null,
+  );
 
   const { kymaResource } = useContext(KymaModuleContext);
 
@@ -49,11 +83,14 @@ export function CommunityModulesDeleteBoxContextProvider({
     return false;
   }, [layoutState]);
 
-  const getOpenedModuleIndex = (moduleIndex, activeModules) => {
+  const getOpenedModuleIndex = (
+    moduleIndex: number | null,
+    activeModules: any,
+  ) => {
     const index =
       moduleIndex ??
       // Find index of the selected module after a refresh or other case after which we have undefined.
-      activeModules.items?.findIndex((module) =>
+      activeModules.items?.findIndex((module: any) =>
         checkSelectedModule(module, layoutState),
       );
     return index > -1 ? index : undefined;
