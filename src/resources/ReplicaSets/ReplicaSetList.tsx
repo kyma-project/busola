@@ -11,21 +11,25 @@ import {
   docsURL,
 } from 'resources/ReplicaSets';
 
-const getImages = (replicaSet) => {
+const getImages = (replicaSet: any) => {
   const images =
     replicaSet.spec.template.spec.containers?.map(
-      (container) => container.image,
+      (container: any) => container.image,
     ) || [];
   return images;
 };
 
-export function ReplicaSetList(params) {
+interface ReplicaSetListProps {
+  [key: string]: any;
+}
+
+export function ReplicaSetList(params: ReplicaSetListProps) {
   const { t } = useTranslation();
 
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (replicaSet) => (
+      value: (replicaSet: any) => (
         <ControlledBy
           ownerReferences={replicaSet.metadata.ownerReferences}
           kindOnly
@@ -34,7 +38,7 @@ export function ReplicaSetList(params) {
     },
     {
       header: t('replica-sets.headers.images'),
-      value: (replicaSet) => {
+      value: (replicaSet: any) => {
         const images = getImages(replicaSet);
         const imagesString = images.join(', ');
         return <span style={{ overflowWrap: 'anywhere' }}>{imagesString}</span>;
@@ -42,7 +46,7 @@ export function ReplicaSetList(params) {
     },
     {
       header: t('common.headers.pods'),
-      value: (replicaSet) => <ReplicaSetStatus replicaSet={replicaSet} />,
+      value: (replicaSet: any) => <ReplicaSetStatus replicaSet={replicaSet} />,
     },
   ];
 
@@ -51,7 +55,7 @@ export function ReplicaSetList(params) {
       customColumns={customColumns}
       resourceTitle={t('replica-sets.title')}
       description={ResourceDescription}
-      {...params}
+      {...(params as any)}
       createResourceForm={ReplicaSetCreate}
       emptyListProps={{
         subtitleText: i18nDescriptionKey,

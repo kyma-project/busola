@@ -19,7 +19,7 @@ function createResourcesTemplate() {
   };
 }
 
-export function createReplicaSetTemplate(namespaceId) {
+export function createReplicaSetTemplate(namespaceId: string) {
   return {
     apiVersion: 'apps/v1',
     kind: 'ReplicaSet',

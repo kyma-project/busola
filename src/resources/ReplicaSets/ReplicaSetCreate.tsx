@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -9,6 +9,16 @@ import { AdvancedContainersView } from 'shared/components/Deployment/ContainersV
 
 import { createContainerTemplate, createReplicaSetTemplate } from './templates';
 
+interface ReplicaSetCreateProps {
+  resourceUrl: string;
+  resource: any;
+  formElementRef: RefObject<HTMLFormElement>;
+  namespace: string;
+  onChange: () => void;
+  setCustomValid: (valid: boolean) => void;
+  [key: string]: any;
+}
+
 export default function ReplicaSetCreate({
   resourceUrl,
   resource: initialReplicaSet,
@@ -17,7 +27,7 @@ export default function ReplicaSetCreate({
   onChange,
   setCustomValid,
   ...props
-}) {
+}: ReplicaSetCreateProps) {
   const { t } = useTranslation();
 
   const [replicaset, setReplicaSet] = useState(
@@ -49,7 +59,7 @@ export default function ReplicaSetCreate({
     setCustomValid(hasAnyContainers);
   }, [replicaset, setCustomValid]);
 
-  const handleNameChange = (name) => {
+  const handleNameChange = (name: string) => {
     jp.value(replicaset, '$.metadata.name', name);
     jp.value(replicaset, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(replicaset, '$.spec.template.spec.containers[0].name', name);
