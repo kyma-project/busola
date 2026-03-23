@@ -114,7 +114,6 @@ const ColumnWrapper = ({
 
   if (layoutState?.showCreate?.resourceType) {
     midColumnComponent = (
-      /*@ts-expect-error Type mismatch between js and ts*/
       <ResourceCreate
         title={elementCreateProps.resourceTitle}
         confirmText={t('common.buttons.create')}

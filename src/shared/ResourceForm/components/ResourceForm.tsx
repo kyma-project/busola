@@ -1,6 +1,9 @@
 import {
+  FormEvent,
   FormEventHandler,
   FunctionComponent,
+  ReactNode,
+  RefObject,
   useContext,
   useEffect,
   useMemo,
@@ -54,16 +57,16 @@ export type ResourceFormProps = {
   setResource: (res: any) => void;
   setCustomValid?: (isValid: boolean) => void;
   onChange?: FormEventHandler<HTMLElement>;
-  formElementRef?: React.RefObject<HTMLFormElement>;
-  children?: React.ReactNode;
+  formElementRef?: RefObject<HTMLFormElement>;
+  children?: ReactNode;
   createUrl?: string;
   presets?: Array<any>;
   onPresetSelected?: (preset: any, variables: Record<string, string>) => void;
   renderEditor?: (params: {
-    defaultEditor: React.ReactNode;
+    defaultEditor: ReactNode;
     Editor: FunctionComponent<any>;
-  }) => React.ReactNode;
-  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
+  }) => ReactNode;
+  onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
   skipCreateFn?: (res: any) => boolean;
   afterCreatedFn?: (res: any) => void;
   afterCreatedCustomMessage?: string;
@@ -78,13 +81,13 @@ export type ResourceFormProps = {
   onModeChange?: (oldMode: string, newMode: string) => void;
   urlPath?: string;
   layoutNumber?: LayoutColumnName;
-  actions?: React.ReactNode;
+  actions?: ReactNode;
   modeSelectorDisabled?: boolean;
   initialMode?: 'MODE_FORM' | 'MODE_YAML';
   yamlSearchDisabled?: boolean;
   yamlHideDisabled?: boolean;
   stickyHeaderHeight?: number | string;
-  title?: React.ReactNode;
+  title?: ReactNode;
   resetLayout?: boolean;
   formWithoutPanel?: boolean;
 };

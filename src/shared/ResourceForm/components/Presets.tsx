@@ -7,7 +7,7 @@ export type PresetProps = {
   presets: {
     name: string;
     data?: Record<string, any>;
-    value?: Record<string, any>;
+    value?: Record<string, any> | string;
   }[];
   onSelect: (preset?: any) => void;
   inlinePresets?: boolean;

@@ -3,9 +3,9 @@ import { useCallback, useEffect } from 'react';
 type EventType = keyof WindowEventMap;
 type EventListenerOptions = boolean | AddEventListenerOptions;
 
-export function useEventListener(
-  event: EventType,
-  handler: (t: Event) => void,
+export function useEventListener<E extends EventType>(
+  event: E,
+  handler: (t: WindowEventMap[E]) => void,
   dependencies: any[] = [],
   options?: EventListenerOptions,
 ) {
