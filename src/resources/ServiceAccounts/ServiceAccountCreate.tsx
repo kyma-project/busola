@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { RefObject, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -14,7 +14,7 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
-const createDefaultSecret = (serviceAccountName) => {
+const createDefaultSecret = (serviceAccountName: string) => {
   return {
     apiVersion: 'v1',
     kind: 'Secret',
@@ -30,6 +30,17 @@ const createDefaultSecret = (serviceAccountName) => {
   };
 };
 
+type ServiceAccountCreateProps = {
+  formElementRef: RefObject<HTMLFormElement>;
+  namespace: string;
+  onChange: (serviceAccount: Record<string, any>) => void;
+  setCustomValid: (isValid: boolean) => void;
+  resource: Record<string, any>;
+  onError: (title: string, message: string, isWarning?: boolean) => void;
+  onCompleted: (message: string) => void;
+  resourceUrl: string;
+};
+
 export default function ServiceAccountCreate({
   formElementRef,
   namespace,
@@ -40,7 +51,7 @@ export default function ServiceAccountCreate({
   onCompleted,
   resourceUrl,
   ...props
-}) {
+}: ServiceAccountCreateProps) {
   const { t } = useTranslation();
   const [serviceAccount, setServiceAccount] = useState(
     cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),

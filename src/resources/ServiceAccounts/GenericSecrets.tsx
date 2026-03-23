@@ -3,17 +3,25 @@ import { useTranslation } from 'react-i18next';
 import { SecretList } from 'resources/Secrets/SecretList';
 import { useDownloadKubeconfigWithToken } from './useDownloadKubeconfigWithToken';
 
+type GenericSecretsProps = {
+  namespace: string;
+  filter?: (secret: Record<string, any>) => boolean;
+  title: string;
+  allowKubeconfigDownload?: boolean;
+  prefix?: string;
+};
+
 export const GenericSecrets = ({
   namespace,
   filter,
   title,
   allowKubeconfigDownload,
   prefix,
-}) => {
+}: GenericSecretsProps) => {
   const { t } = useTranslation();
   const downloadKubeconfig = useDownloadKubeconfigWithToken();
 
-  const downloadSecretKubeconfig = (secret) => {
+  const downloadSecretKubeconfig = (secret: Record<string, any>) => {
     if (secret.type !== 'kubernetes.io/service-account-token') return;
     const name = secret.metadata.name;
     const serviceAccountToken = atob(secret.data.token);
@@ -26,7 +34,7 @@ export const GenericSecrets = ({
     {
       name: t('service-accounts.headers.download-kubeconfig'),
       icon: 'download',
-      disabledHandler: (secret) =>
+      disabledHandler: (secret: Record<string, any>) =>
         secret.type !== 'kubernetes.io/service-account-token',
       handler: downloadSecretKubeconfig,
       tooltip: t('service-accounts.headers.download-kubeconfig'),
