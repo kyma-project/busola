@@ -1,0 +1,309 @@
+import { FlexibleColumnLayout, MessageStrip } from '@ui5/webcomponents-react';
+import { Suspense, useDeferredValue, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+
+import { Route, useParams, useSearchParams } from 'react-router';
+import { useAtom } from 'jotai';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { useUrl } from 'hooks/useUrl';
+import ExtensibilityDetails from 'components/Extensibility/ExtensibilityDetails';
+import { t } from 'i18next';
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
+import { KymaModuleContextProvider } from 'components/Modules/providers/KymaModuleProvider';
+import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
+import { CommunityModulesDeleteBoxContextProvider } from 'components/Modules/community/components/CommunityModulesDeleteBox';
+import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
+import { CommunityModulesUploadProvider } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { useKymaQuery } from 'components/Modules/kymaModulesQueries';
+import { useProtectedResources } from 'shared/hooks/useProtectedResources';
+import DeleteResourceModal from 'shared/components/DeleteResourceModal/DeleteResourceModal';
+import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
+
+const KymaModulesList = lazyWithRetries(
+  () => import('components/Modules/ModulesList'),
+);
+
+const KymaModulesAddModule = lazyWithRetries(
+  () => import('../../components/Modules/KymaModulesAddModule'),
+);
+const CommunityModulesAddModule = lazyWithRetries(
+  () => import('components/Modules/community/CommunityModulesAddModule'),
+);
+
+interface ColumnWrapperProps {
+  defaultColumn?: string;
+  namespaced?: boolean;
+  DeleteMessageBox?: any;
+  handleResourceDelete?: any;
+  showDeleteDialog?: any;
+  performDelete?: any;
+  performCancel?: any;
+}
+
+const ColumnWrapper = ({
+  defaultColumn = 'list',
+  namespaced = false,
+  DeleteMessageBox,
+  handleResourceDelete,
+  showDeleteDialog,
+  performDelete,
+  performCancel,
+}: ColumnWrapperProps) => {
+  const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
+  const { clusterUrl, namespaceUrl } = useUrl();
+  const { data: kymaResource } = useKymaQuery();
+  const { isProtected } = useProtectedResources();
+  const url = namespaced
+    ? namespaceUrl('kymamodules')
+    : clusterUrl('kymamodules');
+
+  const { resourceName, resourceType, namespace: rawNamespace } = useParams();
+  const [searchParams] = useSearchParams();
+  const namespace =
+    rawNamespace === '-all-'
+      ? searchParams.get('resourceNamespace')
+      : rawNamespace;
+  const [resMetadata, setResMetadata] = useState<any>(null);
+
+  useEffect(() => {
+    setLayoutColumn((prev: any) => {
+      // Only update if previous values were empty strings
+      if (prev?.midColumn?.apiGroup === '') {
+        return {
+          ...prev,
+          midColumn: {
+            ...prev.midColumn,
+            apiGroup: resMetadata?.group,
+            apiVersion: resMetadata?.version,
+            rawResourceTypeName: resMetadata?.kind,
+          },
+        };
+      }
+      return prev;
+    });
+  }, [resMetadata, setLayoutColumn]);
+
+  usePrepareLayoutColumns({
+    resourceType: resourceType,
+    namespaceId: namespace,
+    apiGroup: '',
+    apiVersion: '',
+    resourceName: resourceName,
+    isModule: true,
+    resource:
+      layoutState?.showCreate?.resource ||
+      layoutState?.showEdit?.resource ||
+      null,
+    rawResourceTypeName: '',
+  });
+
+  const startColumnComponent = useDeferredValue(
+    <div className="column-content">
+      {layoutState.layout === 'OneColumn' && defaultColumn === 'details' ? (
+        <ExtensibilityDetails
+          layoutCloseCreateUrl={url}
+          resourceName={layoutState?.midColumn?.resourceName || resourceName}
+          resourceType={layoutState?.midColumn?.resourceType || resourceType}
+          namespaceId={layoutState?.midColumn?.namespaceId ?? namespace}
+          isModule={true}
+          setResMetadata={setResMetadata}
+        />
+      ) : (
+        <KymaModulesList namespaced={namespaced} />
+      )}
+    </div>,
+  );
+
+  const midColumnComponent = (
+    <>
+      {/* details */}
+      {!layoutState?.showCreate &&
+        layoutState?.midColumn &&
+        (defaultColumn !== 'details' || layoutState.layout !== 'OneColumn') && (
+          <div className="column-content">
+            <ExtensibilityDetails
+              layoutCloseCreateUrl={url}
+              resourceName={
+                layoutState?.midColumn?.resourceName || resourceName
+              }
+              resourceType={
+                layoutState?.midColumn?.resourceType || resourceType
+              }
+              namespaceId={
+                layoutState?.midColumn?.namespaceId ||
+                layoutState?.midColumn?.namespaceId === ''
+                  ? layoutState?.midColumn?.namespaceId
+                  : namespace
+              }
+              isModule={true}
+              isEntireListProtected={isProtected(kymaResource)}
+              setResMetadata={setResMetadata}
+            />
+          </div>
+        )}
+
+      {/* create */}
+      {!layoutState?.midColumn &&
+        (defaultColumn !== 'details' || layoutState.layout !== 'OneColumn') && (
+          <div className="column-content">
+            {layoutState?.showCreate?.createType === 'community' && (
+              <ResourceCreate
+                title={t('modules.community.add-module')}
+                confirmText={t('common.buttons.add')}
+                layoutCloseCreateUrl={url}
+                renderForm={(renderProps: any) => {
+                  return (
+                    <ErrorBoundary>
+                      <CommunityModulesAddModule {...renderProps} />
+                    </ErrorBoundary>
+                  );
+                }}
+              />
+            )}
+            {layoutState?.showCreate?.createType === 'kyma' && (
+              <ResourceCreate
+                title={t('kyma-modules.add-module')}
+                confirmText={t('common.buttons.add')}
+                layoutCloseCreateUrl={url}
+                renderForm={(renderProps: any) => {
+                  return (
+                    <ErrorBoundary>
+                      <KymaModulesAddModule {...renderProps} />
+                    </ErrorBoundary>
+                  );
+                }}
+              />
+            )}
+            {layoutState?.showCreate?.createType !== 'community' &&
+              layoutState?.showCreate?.createType !== 'kyma' && (
+                <ResourceCreate
+                  title={t('kyma-modules.add-module')}
+                  confirmText={t('common.buttons.add')}
+                  layoutCloseCreateUrl={url}
+                  renderForm={() => {
+                    return (
+                      <ErrorBoundary>
+                        <div className="sap-margin-small">
+                          <MessageStrip design="Critical" hideCloseButton>
+                            {t('err-boundary.sth-went-wrong')}
+                          </MessageStrip>
+                        </div>
+                      </ErrorBoundary>
+                    );
+                  }}
+                />
+              )}
+          </div>
+        )}
+    </>
+  );
+
+  return (
+    <ModuleTemplatesContextProvider>
+      <KymaModuleContextProvider
+        setLayoutColumn={setLayoutColumn}
+        layoutState={layoutState}
+        DeleteMessageBox={DeleteMessageBox}
+        handleResourceDelete={handleResourceDelete}
+        showDeleteDialog={showDeleteDialog}
+        performDelete={performDelete}
+        performCancel={performCancel}
+        namespaced={namespaced}
+      >
+        <CommunityModuleContextProvider>
+          <CommunityModulesDeleteBoxContextProvider
+            setLayoutColumn={setLayoutColumn}
+            layoutState={layoutState}
+            DeleteMessageBox={DeleteMessageBox}
+            handleResourceDelete={handleResourceDelete}
+            performDelete={performDelete}
+            performCancel={performCancel}
+            showDeleteDialog={showDeleteDialog}
+            namespaced={namespaced}
+          >
+            <CommunityModulesUploadProvider>
+              <Suspense fallback={<Spinner />}>
+                {createPortal(<YamlUploadDialog />, document.body)}
+                <FlexibleColumnLayout
+                  style={{ height: '100%' }}
+                  layout={layoutState?.layout}
+                  startColumn={startColumnComponent}
+                  midColumn={
+                    midColumnComponent?.props?.children?.some(
+                      (component: any) => !!component,
+                    ) ? (
+                      midColumnComponent
+                    ) : (
+                      <Spinner />
+                    )
+                  }
+                />
+              </Suspense>
+            </CommunityModulesUploadProvider>
+          </CommunityModulesDeleteBoxContextProvider>
+        </CommunityModuleContextProvider>
+      </KymaModuleContextProvider>
+    </ModuleTemplatesContextProvider>
+  );
+};
+
+interface KymaModulesProps {
+  defaultColumn?: string;
+  namespaced?: boolean;
+}
+
+const KymaModules = ({ defaultColumn, namespaced }: KymaModulesProps) => {
+  const {
+    performCancel,
+    performDelete,
+    handleResourceDelete,
+    showDeleteDialog,
+  } = useDeleteResource({
+    resourceType: t('kyma-modules.title'),
+    forceConfirmDelete: true,
+  });
+  return (
+    <Suspense fallback={<Spinner />}>
+      <ColumnWrapper
+        defaultColumn={defaultColumn}
+        namespaced={namespaced}
+        DeleteMessageBox={DeleteResourceModal}
+        performDelete={performDelete}
+        performCancel={performCancel}
+        showDeleteDialog={showDeleteDialog}
+        handleResourceDelete={handleResourceDelete}
+      />
+    </Suspense>
+  );
+};
+
+export default (
+  <>
+    <Route path={'kymamodules'} element={<KymaModules />} />
+    <Route
+      path="kymamodules/namespaces/:namespace/:resourceType/:resourceName"
+      element={<KymaModules defaultColumn="details" />}
+    />
+    <Route
+      path="kymamodules/:resourceType/:resourceName"
+      element={<KymaModules defaultColumn="details" />}
+    />
+    <Route
+      path={'namespaces/:globalnamespace/kymamodules'}
+      element={<KymaModules namespaced={true} />}
+    />
+    <Route
+      path="namespaces/:globalnamespace/kymamodules/namespaces/:namespace/:resourceType/:resourceName"
+      element={<KymaModules defaultColumn="details" namespaced={true} />}
+    />
+    <Route
+      path="namespaces/:globalnamespace/kymamodules/:resourceType/:resourceName"
+      element={<KymaModules defaultColumn="details" namespaced={true} />}
+    />
+  </>
+);

@@ -1,0 +1,135 @@
+import { useTranslation } from 'react-i18next';
+import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { useAtomValue } from 'jotai';
+import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { useUrl } from 'hooks/useUrl';
+import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { Link } from 'shared/components/Link/Link';
+
+interface PortProps {
+  serviceName: string;
+  port: any;
+  services: any[] | null;
+}
+
+const Port = ({ serviceName, port, services }: PortProps) => {
+  const { namespaceUrl } = useUrl();
+
+  const serviceLink = services?.find(
+    ({ metadata }: any) => metadata.name === serviceName,
+  ) ? (
+    <Link url={namespaceUrl(`services/${serviceName}`)}>{serviceName}</Link>
+  ) : (
+    <span>{serviceName || EMPTY_TEXT_PLACEHOLDER}</span>
+  );
+
+  if (port?.number) {
+    return port.name ? (
+      `${port.name}:${port.number}`
+    ) : (
+      <>
+        {serviceLink}:{port.number}
+      </>
+    );
+  } else {
+    return EMPTY_TEXT_PLACEHOLDER;
+  }
+};
+
+interface RulesProps {
+  rules: any[];
+}
+
+export const Rules = ({ rules }: RulesProps) => {
+  const { t } = useTranslation();
+  const namespace = useAtomValue(activeNamespaceIdAtom);
+
+  const { data: services } = useGetList()(
+    `/api/v1/namespaces/${namespace}/services`,
+  ) as { data: any[] | null };
+
+  const Backend = ({
+    backend,
+    services,
+  }: {
+    backend: any;
+    services: any[] | null;
+  }) => {
+    if (backend.service) {
+      return (
+        <Port
+          serviceName={backend?.service.name}
+          port={backend?.service?.port}
+          services={services}
+        />
+      );
+    } else if (backend.resource) {
+      return (
+        <>
+          <p>
+            {t('ingresses.labels.apiGroup')}: {backend.resource.apiGroup}
+          </p>
+          <p>
+            {t('ingresses.labels.kind')}: {backend.resource.kind}
+          </p>
+          <p>
+            {t('common.labels.name')}:{' '}
+            <GoToDetailsLink
+              kind={backend.resource.kind}
+              apiVersion={backend.resource.apiGroup}
+              name={backend.resource.name}
+              noBrackets
+            />
+          </p>
+        </>
+      );
+    } else {
+      return EMPTY_TEXT_PLACEHOLDER;
+    }
+  };
+
+  return (
+    <>
+      {rules.map((rule, i) => (
+        <UI5Panel
+          key={`rule-${i}`}
+          title={t('ingresses.labels.rules')}
+          accessibleName={t('ingresses.accessible-name.rules')}
+        >
+          {rule.host && (
+            <LayoutPanelRow
+              name={t('ingresses.labels.host')}
+              value={rule.host}
+            />
+          )}
+          <GenericList
+            key={`rules${i}`}
+            title={t('ingresses.labels.paths')}
+            headerRenderer={() => [
+              t('ingresses.labels.path'),
+              t('ingresses.labels.path-type'),
+              t('ingresses.labels.backend'),
+            ]}
+            rowRenderer={(path: any) => [
+              path.path,
+              path.pathType,
+              <Backend
+                key={path.path}
+                backend={path.backend}
+                services={services}
+              />,
+            ]}
+            entries={rule?.http?.paths}
+            searchSettings={{
+              showSearchField: false,
+            }}
+          />
+        </UI5Panel>
+      ))}
+    </>
+  );
+};

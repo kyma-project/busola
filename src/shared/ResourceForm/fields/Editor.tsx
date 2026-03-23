@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import { Editor as MonacoEditor } from 'shared/components/MonacoEditorESM/Editor';
 
-type EditorProps = {
+export type EditorProps = {
   value?: any;
   onChange?: (value: any) => void;
   setValue?: (value: any) => void;
@@ -109,7 +109,6 @@ export function Editor({
       onChange={handleChange}
       error={error}
       schemaId={schemaId}
-      /*@ts-expect-error Type mismatch between js and ts*/
       placeholder={t('clusters.wizard.editor-placeholder')}
       schema={schema}
     />
