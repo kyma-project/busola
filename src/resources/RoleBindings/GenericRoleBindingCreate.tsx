@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { RefObject, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { MessageStrip } from '@ui5/webcomponents-react';
@@ -22,7 +22,7 @@ import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 interface GenericRoleBindingCreateProps {
-  formElementRef: React.RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement>;
   namespace: string;
   onChange: () => void;
   setCustomValid: (valid: boolean) => void;

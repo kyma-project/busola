@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { RefObject, useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -13,7 +13,7 @@ import { useAtomValue } from 'jotai';
 
 interface GenericRoleCreateProps {
   onChange: () => void;
-  formElementRef: React.RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement>;
   setCustomValid: (valid: boolean) => void;
   pluralKind: string;
   singularName: string;
