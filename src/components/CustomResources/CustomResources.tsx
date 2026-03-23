@@ -5,23 +5,21 @@ import pluralize from 'pluralize';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCustomResourceUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
+import CRCreate, { CRD } from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { LayoutColumnName } from 'types';
 
 export type Version = {
-  name: string;
+  name?: string;
   served?: boolean;
-  additionalPrinterColumns?: { name: string; jsonPath: string }[];
+  storage?: boolean;
+  schema?: Record<string, any>;
+  additionalPrinterColumns?: { name?: string; jsonPath?: string }[];
 };
 
 type CustomResourcesProps = {
-  crd: {
-    spec: { group: string; names: { plural: string; kind: string } };
-    apiVersion: string;
-    metadata: { name: string; namespace?: string };
-  };
+  crd: CRD;
   version: Version;
   showTitle?: boolean;
   omitColumnsIds?: string[];
@@ -85,7 +83,7 @@ export function CustomResources({
   const customColumns = version.additionalPrinterColumns?.map((column) => ({
     header: column.name,
     value: (resource: Record<string, any>) =>
-      getJsonPath(resource, column.jsonPath),
+      getJsonPath(resource, column.jsonPath ?? ''),
   }));
   // CRD can have infinite number of additionalPrinterColumns what would be impossible to fit into the table
   if (customColumns?.length && customColumns?.length > 5)

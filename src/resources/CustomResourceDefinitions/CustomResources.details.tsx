@@ -1,16 +1,40 @@
 import jsyaml from 'js-yaml';
 import { useAtomValue } from 'jotai';
-import { useCallback, useEffect, useMemo } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import {
+  CreateResourceFormProps,
+  ResourceDetails,
+} from 'shared/components/ResourceDetails/ResourceDetails';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
-import CRCreate from 'resources/CustomResourceDefinitions/CRCreate';
+import CRCreate, { CRD } from 'resources/CustomResourceDefinitions/CRCreate';
 
-export default function CustomResource({ params }) {
+type CustomResourceProps = {
+  customResourceDefinitionName: string;
+  resourceVersion: string;
+  resourceName?: string;
+  resourceNamespace?: string;
+  isModule?: boolean;
+  isEntireListProtected?: boolean;
+  setResMetadata?: (metadata: {
+    group?: string;
+    version?: string;
+    kind?: string;
+  }) => void;
+  headerActions?: ReactNode[];
+  layoutNumber?: 'midColumn' | 'endColumn';
+  layoutCloseCreateUrl?: string;
+};
+
+export default function CustomResource({
+  params,
+}: {
+  params: CustomResourceProps;
+}) {
   const { t } = useTranslation();
   const namespace = useAtomValue(activeNamespaceIdAtom);
   const {
@@ -22,6 +46,8 @@ export default function CustomResource({ params }) {
     isEntireListProtected,
     setResMetadata,
     headerActions,
+    layoutNumber,
+    layoutCloseCreateUrl,
   } = params;
 
   const { data, loading } = useGet(
@@ -29,8 +55,8 @@ export default function CustomResource({ params }) {
     {
       pollingInterval: null,
       skip: !customResourceDefinitionName,
-    },
-  );
+    } as any,
+  ) as { data: CRD | null; loading: boolean };
 
   const selectedVersion = useMemo(() => {
     if (!data?.spec?.versions) return null;
@@ -52,7 +78,9 @@ export default function CustomResource({ params }) {
   }, [data, isModule, setResMetadata, selectedVersion]);
 
   const CRCreateWrapper = useCallback(
-    (props) => <CRCreate {...props} crd={data} layoutNumber="midColumn" />,
+    (props: CreateResourceFormProps) => (
+      <CRCreate {...props} crd={data ?? undefined} layoutNumber="midColumn" />
+    ),
     [data],
   );
 
@@ -74,10 +102,10 @@ export default function CustomResource({ params }) {
   const customColumns = [
     {
       header: t('custom-resources.headers.api-version'),
-      value: (resource) => resource.apiVersion,
+      value: (resource: Record<string, any>) => resource.apiVersion,
     },
   ];
-  const yamlPreview = (resource) => {
+  const yamlPreview = (resource: Record<string, any>) => {
     return Object.keys(resource || {})
       ?.map((key) => {
         if (typeof resource[key] === 'object' && key !== 'metadata') {
@@ -96,7 +124,7 @@ export default function CustomResource({ params }) {
 
   return (
     <ResourceDetails
-      layoutNumber={params.layoutNumber ?? 'endColumn'}
+      layoutNumber={layoutNumber ?? 'endColumn'}
       resourceUrl={resourceUrl}
       resourceType={crdName}
       resourceName={resourceName}
@@ -104,11 +132,11 @@ export default function CustomResource({ params }) {
       customColumns={customColumns}
       createResourceForm={CRCreateWrapper}
       customComponents={[yamlPreview]}
-      layoutCloseCreateUrl={params.layoutCloseCreateUrl}
+      layoutCloseCreateUrl={layoutCloseCreateUrl}
       disableDelete={isModule}
       isEntireListProtected={isEntireListProtected}
       headerActions={headerActions}
-      windowTitle={isModule ? t('kyma-modules.title') : null}
+      windowTitle={isModule ? t('kyma-modules.title') : undefined}
     />
   );
 }

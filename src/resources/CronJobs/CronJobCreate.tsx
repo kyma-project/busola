@@ -17,8 +17,25 @@ import {
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 
-function isCronJobValid(cronJob) {
+type CronJobCreateProps = {
+  namespace?: string;
+  resource?: Record<string, any>;
+  resourceUrl?: string;
+} & Omit<
+  ResourceFormProps,
+  | 'pluralKind'
+  | 'singularName'
+  | 'resource'
+  | 'initialResource'
+  | 'updateInitialResource'
+  | 'setResource'
+  | 'presets'
+  | 'createUrl'
+>;
+
+function isCronJobValid(cronJob?: Record<string, any>) {
   const containers =
     jp.value(cronJob, '$.spec.jobTemplate.spec.template.spec.containers') || [];
 
@@ -35,7 +52,7 @@ export default function CronJobCreate({
   setCustomValid,
   resourceUrl,
   ...props
-}) {
+}: CronJobCreateProps) {
   const { t } = useTranslation();
 
   const [cronJob, setCronJob] = useState(
@@ -60,7 +77,7 @@ export default function CronJobCreate({
   }, [initialCronJob, namespace, layoutState?.showEdit?.resource]);
 
   useEffect(() => {
-    setCustomValid(isCronJobValid(cronJob));
+    setCustomValid?.(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
 
   const isEdit = useMemo(
@@ -70,7 +87,7 @@ export default function CronJobCreate({
   );
 
   const schema = useContext(SchemaContext);
-  const scheduleDesc = getDescription(schema, 'spec.schedule');
+  const scheduleDesc = getDescription(schema, 'spec.schedule') ?? '';
   const containersDesc = getDescription(
     schema,
     'spec.jobTemplate.spec.template.spec.containers',
@@ -87,14 +104,16 @@ export default function CronJobCreate({
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!isEdit && createCronJobPresets(namespace)}
+      presets={(!isEdit && createCronJobPresets(namespace)) || undefined}
       createUrl={resourceUrl}
     >
+      {/* @ts-expect-error Type mismatch between js and ts */}
       <CronJobSpecSection propertyPath="$.spec" />
       <ScheduleSection
         propertyPath="$.spec.schedule"
         tooltipContent={t(scheduleDesc, { defaultValue: scheduleDesc })}
       />
+      {/* @ts-expect-error Type mismatch between js and ts */}
       <ContainersSection
         defaultOpen
         tooltipContent={containersDesc}

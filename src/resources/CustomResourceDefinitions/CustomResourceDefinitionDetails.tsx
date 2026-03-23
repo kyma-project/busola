@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import {
+  ResourceDetails,
+  ResourceDetailsProps,
+} from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EventsList } from 'shared/components/EventsList';
@@ -11,10 +14,24 @@ import CustomResourceDefinitionCreate from './CustomResourceDefinitionCreate';
 import { ResourceDescription } from 'resources/CustomResourceDefinitions';
 import { CRDSpecification } from './CRDSpecification';
 
-export function CustomResourceDefinitionDetails(props) {
+type CustomResourceDefinitionDetailsProps = {
+  namespace?: string;
+} & Omit<
+  ResourceDetailsProps,
+  | 'namespace'
+  | 'customComponents'
+  | 'description'
+  | 'createResourceForm'
+  | 'statusConditions'
+>;
+
+export function CustomResourceDefinitionDetails({
+  namespace,
+  ...props
+}: CustomResourceDefinitionDetailsProps) {
   const { t } = useTranslation();
 
-  const ResourceNames = (resource) => {
+  const ResourceNames = (resource: Record<string, any>) => {
     const headerRenderer = () => [
       t('custom-resource-definitions.headers.kind'),
       t('custom-resource-definitions.headers.list-kind'),
@@ -22,7 +39,7 @@ export function CustomResourceDefinitionDetails(props) {
       t('custom-resource-definitions.headers.singular'),
       t('custom-resource-definitions.headers.short-names'),
     ];
-    const rowRenderer = (entry) => [
+    const rowRenderer = (entry: Record<string, any>) => [
       entry.kind,
       entry.listKind,
       entry.plural,
@@ -45,27 +62,30 @@ export function CustomResourceDefinitionDetails(props) {
     );
   };
 
-  const Events = ({ spec }) => {
-    const eventFilter = (kind) => (e) => {
-      return kind === e.involvedObject?.kind;
-    };
+  const Events = ({ spec }: { spec?: Record<string, any> }) => {
+    const eventFilter =
+      (kind: string) => (e: { involvedObject?: { kind?: string } }) => {
+        return kind === e.involvedObject?.kind;
+      };
 
     return (
       <EventsList
         key="events"
-        namespace={props?.namespace}
+        namespace={namespace}
         filter={eventFilter(spec?.names?.kind)}
       />
     );
   };
 
-  const statusConditions = (resource) => {
-    return resource?.status?.conditions?.map((condition) => {
-      return {
-        header: { titleText: condition.type, status: condition.status },
-        message: condition.message,
-      };
-    });
+  const statusConditions = (resource: Record<string, any>) => {
+    return resource?.status?.conditions?.map(
+      (condition: { type: string; status: string; message: string }) => {
+        return {
+          header: { titleText: condition.type, status: condition.status },
+          message: condition.message,
+        };
+      },
+    );
   };
 
   return (
@@ -77,6 +97,7 @@ export function CustomResourceDefinitionDetails(props) {
         RelatedCRDsList,
         Events,
       ]}
+      namespace={namespace}
       description={ResourceDescription}
       createResourceForm={CustomResourceDefinitionCreate}
       statusConditions={statusConditions}
