@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { cloneDeep } from 'lodash';
@@ -9,7 +9,7 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { createResourceQuotaTemplate } from './templates';
 
 interface ResourceQuotaCreateProps {
-  formElementRef: React.RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement>;
   onChange: () => void;
   setCustomValid: (valid: boolean) => void;
   resourceUrl: string;

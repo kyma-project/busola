@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -12,7 +12,7 @@ import { createContainerTemplate, createReplicaSetTemplate } from './templates';
 interface ReplicaSetCreateProps {
   resourceUrl: string;
   resource: any;
-  formElementRef: React.RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement>;
   namespace: string;
   onChange: () => void;
   setCustomValid: (valid: boolean) => void;
