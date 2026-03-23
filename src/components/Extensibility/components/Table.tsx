@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
 import classNames from 'classnames';
@@ -13,7 +14,7 @@ import { getSearchDetails, getSortDetails } from './helpers';
 
 import './Table.scss';
 
-const handleTableValue = (value: any, t: any) => {
+const handleTableValue = (value: any, t: TFunction) => {
   switch (true) {
     case isNil(value): {
       return { entries: [] };

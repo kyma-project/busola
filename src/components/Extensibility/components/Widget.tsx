@@ -1,4 +1,11 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  memo,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -9,12 +16,24 @@ import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
-export const SimpleRenderer = ({ children }: { children: any }) => {
+export const SimpleRenderer = ({ children }: { children: ReactNode }) => {
   return children;
 };
 SimpleRenderer.copyable = true;
 
-export function InlineWidget({ children, value, structure, ...props }: any) {
+type InlineWidgetProps = {
+  children?: ReactNode;
+  value?: any;
+  structure: any;
+  [key: string]: any;
+};
+
+export function InlineWidget({
+  children,
+  value,
+  structure,
+  ...props
+}: InlineWidgetProps) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
@@ -147,6 +166,18 @@ const SingleWidget = memo(function SingleWidget({
   );
 });
 
+type WidgetProps = {
+  structure: any;
+  value?: any;
+  arrayItems?: any[];
+  inlineRenderer?: any;
+  originalResource?: any;
+  singleRootResource?: any;
+  embedResource?: any;
+  index?: number;
+  [key: string]: any;
+};
+
 export function Widget({
   structure,
   value,
@@ -157,7 +188,7 @@ export function Widget({
   embedResource,
   index,
   ...props
-}: any) {
+}: WidgetProps) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
   const jsonata = useJsonata({

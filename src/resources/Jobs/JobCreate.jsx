@@ -81,7 +81,7 @@ export default function JobCreate({
   );
 
   useEffect(() => {
-    setCustomValid(isJobValid(job));
+    setCustomValid?.(isJobValid(job));
   }, [job, setCustomValid]);
 
   const schema = useContext(SchemaContext);

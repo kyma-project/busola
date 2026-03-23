@@ -23,7 +23,7 @@ export function SingleContainerForm({
   return (
     <ResourceForm.Wrapper
       resource={container}
-      setResource={() => setContainers([...containers])}
+      setResource={() => setContainers?.([...(containers ?? [])])}
     >
       <K8sNameField
         propertyPath="$.name"
