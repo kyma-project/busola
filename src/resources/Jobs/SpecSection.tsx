@@ -3,6 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
+interface SpecSectionProps {
+  value?: Record<string, any>;
+  setValue?: (resource: string | Record<string, any>) => void;
+  readOnly?: boolean;
+  propertyPath?: string;
+}
+
 const restartPolicyOptions = ['Never', 'OnFailure'].map((p) => ({
   key: p,
   text: p,
@@ -13,11 +20,21 @@ const concurrencyPolicyOptions = ['Allow', 'Forbid', 'Replace'].map((p) => ({
   text: p,
 }));
 
-export const CronJobSpecSection = ({ value, setValue, ...props }) => {
+export const CronJobSpecSection = ({
+  value,
+  setValue,
+  readOnly,
+  propertyPath,
+}: SpecSectionProps) => {
   const { t } = useTranslation();
 
   return (
-    <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
+    <ResourceForm.Wrapper
+      resource={value}
+      setResource={setValue}
+      readOnly={readOnly}
+      propertyPath={propertyPath}
+    >
       <ResourceForm.FormField
         propertyPath="$.startingDeadlineSeconds"
         label={t('jobs.create-modal.labels.starting-deadline')}
@@ -76,14 +93,19 @@ export const JobSpecSection = ({
   value: unsafeValue,
   setValue,
   readOnly,
-  ...props
-}) => {
+  propertyPath,
+}: SpecSectionProps) => {
   const value = { template: {}, ...unsafeValue };
 
   const { t } = useTranslation();
 
   return (
-    <ResourceForm.Wrapper resource={value} setResource={setValue} {...props}>
+    <ResourceForm.Wrapper
+      resource={value}
+      setResource={setValue}
+      readOnly={readOnly}
+      propertyPath={propertyPath}
+    >
       <ResourceForm.FormField
         propertyPath="$.parallelism"
         label={t('jobs.create-modal.labels.parallelism')}

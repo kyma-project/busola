@@ -13,13 +13,33 @@ import JobCreate from './JobCreate';
 import { JobCompletions } from './JobCompletions';
 import { ResourceDescription } from 'resources/Jobs';
 
-export function JobDetails(props) {
+interface JobDetailsProps {
+  namespace: string;
+  resourceName: string;
+  resourceUrl?: string;
+  resourceType: string;
+  readOnly?: boolean;
+  resourceGraphConfig?: any;
+  resourceTitle: string;
+  showYamlTab?: boolean;
+}
+
+export function JobDetails({
+  namespace,
+  resourceName,
+  resourceUrl,
+  resourceType,
+  readOnly,
+  resourceTitle,
+  showYamlTab,
+  resourceGraphConfig,
+}: JobDetailsProps) {
   const { t } = useTranslation();
 
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (job) => (
+      value: (job: Record<string, any>) => (
         <ControlledBy
           ownerReferences={job.metadata.ownerReferences}
           namespace={job.metadata.namespace}
@@ -31,7 +51,7 @@ export function JobDetails(props) {
   const customStatusColumns = [
     {
       header: t('jobs.start-time'),
-      value: (job) =>
+      value: (job: Record<string, any>) =>
         job.status.startTime ? (
           <ReadableCreationTimestamp
             key="start"
@@ -43,7 +63,7 @@ export function JobDetails(props) {
     },
     {
       header: t('jobs.completion-time'),
-      value: (job) =>
+      value: (job: Record<string, any>) =>
         job.status.completionTime ? (
           <ReadableCreationTimestamp
             key="completion"
@@ -55,30 +75,32 @@ export function JobDetails(props) {
     },
     {
       header: t('jobs.active'),
-      value: (job) => (
+      value: (job: Record<string, any>) => (
         <div>{job?.status?.active ?? EMPTY_TEXT_PLACEHOLDER}</div>
       ),
     },
     {
       header: t('jobs.failed'),
-      value: (job) => (
+      value: (job: Record<string, any>) => (
         <div>{job?.status?.failed ?? EMPTY_TEXT_PLACEHOLDER}</div>
       ),
     },
     {
       header: t('jobs.ready'),
-      value: (job) => <div>{job?.status?.ready ?? EMPTY_TEXT_PLACEHOLDER}</div>,
+      value: (job: Record<string, any>) => (
+        <div>{job?.status?.ready ?? EMPTY_TEXT_PLACEHOLDER}</div>
+      ),
     },
     {
       header: t('jobs.succeeded'),
-      value: (job) => (
+      value: (job: Record<string, any>) => (
         <div>{job?.status?.succeeded ?? EMPTY_TEXT_PLACEHOLDER}</div>
       ),
     },
   ];
 
-  const statusConditions = (job) => {
-    return job?.status?.conditions?.map((condition) => {
+  const statusConditions = (job: Record<string, any>) => {
+    return job?.status?.conditions?.map((condition: any) => {
       return {
         header: { titleText: condition.type, status: condition.status },
         message:
@@ -110,13 +132,13 @@ export function JobDetails(props) {
   const Events = () => (
     <EventsList
       key="events"
-      namespace={props.namespace}
-      filter={filterByResource('Job', props.resourceName)}
-      hideInvolvedObjects={true}
+      namespace={namespace}
+      filter={filterByResource('Job', resourceName)}
+      hideInvolvedObjects
     />
   );
 
-  const MatchSelector = (job) => (
+  const MatchSelector = (job: Record<string, any>) => (
     <Selector
       key="match-selector"
       namespace={job?.metadata?.namespace}
@@ -126,7 +148,7 @@ export function JobDetails(props) {
     />
   );
 
-  const JobPodTemplate = (job) => (
+  const JobPodTemplate = (job: Record<string, any>) => (
     <PodTemplate key="pod-template" template={job.spec?.template} />
   );
 
@@ -141,7 +163,14 @@ export function JobDetails(props) {
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
       statusBadge={(job) => <JobCompletions key="completions" job={job} />}
-      {...props}
+      namespace={namespace}
+      resourceName={resourceName}
+      resourceUrl={resourceUrl}
+      resourceType={resourceType}
+      readOnly={readOnly}
+      resourceTitle={resourceTitle}
+      showYamlTab={showYamlTab}
+      resourceGraphConfig={resourceGraphConfig}
     />
   );
 }
