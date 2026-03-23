@@ -5,7 +5,7 @@ import { useDownloadKubeconfigWithToken } from './useDownloadKubeconfigWithToken
 
 type GenericSecretsProps = {
   namespace: string;
-  filter?: (secret: Record<string, any>) => boolean;
+  filter?: (secret: Record<string, any>) => any;
   title: string;
   allowKubeconfigDownload?: boolean;
   prefix?: string;

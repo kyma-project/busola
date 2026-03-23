@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -13,6 +13,7 @@ import { validateServiceAccount } from './helpers';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 
 const createDefaultSecret = (serviceAccountName: string) => {
   return {
@@ -31,15 +32,23 @@ const createDefaultSecret = (serviceAccountName: string) => {
 };
 
 type ServiceAccountCreateProps = {
-  formElementRef: RefObject<HTMLFormElement>;
   namespace: string;
-  onChange: (serviceAccount: Record<string, any>) => void;
   setCustomValid: (isValid: boolean) => void;
   resource: Record<string, any>;
   onError: (title: string, message: string, isWarning?: boolean) => void;
   onCompleted: (message: string) => void;
   resourceUrl: string;
-};
+} & Omit<
+  ResourceFormProps,
+  | 'pluralKind'
+  | 'singularName'
+  | 'resource'
+  | 'setResource'
+  | 'createUrl'
+  | 'initialResource'
+  | 'updateInitialResource'
+  | 'afterCreatedFn'
+>;
 
 export default function ServiceAccountCreate({
   formElementRef,
@@ -88,19 +97,20 @@ export default function ServiceAccountCreate({
 
   const { data } = useGetList()(`/api/v1/namespaces/${namespace}/secrets`);
 
-  const createSecretResource = useCreateResource({
-    singularName: 'Secret',
-    pluralKind: 'Secrets',
-    resource: createDefaultSecret(serviceAccount.metadata.name),
-    createUrl: `/api/v1/namespaces/${serviceAccount.metadata.namespace}/secrets`,
-    afterCreatedFn: () => {},
-  });
+  const createSecretResource: () => Promise<null | undefined | boolean> =
+    useCreateResource({
+      singularName: 'Secret',
+      pluralKind: 'Secrets',
+      resource: createDefaultSecret(serviceAccount.metadata.name),
+      createUrl: `/api/v1/namespaces/${serviceAccount.metadata.namespace}/secrets`,
+      afterCreatedFn: () => {},
+    } as any);
 
   useEffect(() => {
     setCustomValid(validateServiceAccount(serviceAccount));
   }, [serviceAccount, setCustomValid]);
 
-  const handleImageChange = (images) => {
+  const handleImageChange = (images: string[]) => {
     const newImages = (images || []).map((image) => {
       return { name: image };
     });
@@ -112,7 +122,7 @@ export default function ServiceAccountCreate({
     setServiceAccount(newServiceAccount);
   };
 
-  async function afterServiceAccountCreate(defaultAfterCreateFn) {
+  async function afterServiceAccountCreate(defaultAfterCreateFn: () => void) {
     if (isEdit || !shouldCreateSecret) {
       defaultAfterCreateFn();
       return;
@@ -151,11 +161,13 @@ export default function ServiceAccountCreate({
           'service-accounts.create-modal.tooltips.image-pull-secrets',
         )}
         propertyPath="$.imagePullSecrets"
-        setValue={(value) => handleImageChange(value)}
-        toInternal={(values) => (values || []).map((value) => value?.name)}
-        options={(data || []).map((i) => ({
-          key: i.metadata.name,
-          text: i.metadata.name,
+        setValue={(value: string[]) => handleImageChange(value)}
+        toInternal={(values: { name: string }[]) =>
+          (values || []).map((value) => value?.name)
+        }
+        options={(data || []).map((option: { metadata: { name: string } }) => ({
+          key: option.metadata.name,
+          text: option.metadata.name,
         }))}
       />
       <ResourceForm.FormField
