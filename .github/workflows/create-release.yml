@@ -120,3 +120,31 @@ jobs:
           body: |
             This PR updates the Busola image versions in dev/main.tf to ${{ github.event.inputs.name }}.
           base: dev
+
+  integration-cluster-test:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-integration-cluster-k3d.yml
+  integration-namespace-test:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-integration-namespace-k3d.yml
+  lint-check:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-lint-check-pr.yml
+  smoke-test-prod:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-smoke-test-prod.yml
+  smoke-test-stage:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-smoke-test-stage.yml
+  kyma-integration-test-dev:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-kyma-integration-tests-dev.yml
+  k8s-chart-smoke-test:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-k8s-chart-smoke-tests.yml
+  lighthouse-test:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-lighthouse.yml
+  unit-tests:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-unit-tests.yml

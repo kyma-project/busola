@@ -16,6 +16,7 @@ on:
       - 'nginx/**'
       - 'resources/**'
       - 'tests/integration/**'
+  workflow_call:
 
 jobs:
   run-smoke-test-prod:
@@ -29,6 +30,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with latest main
+        if: github.event_name != 'release'
         uses: ./.github/actions/merge
       - name: Install k3d
         shell: bash

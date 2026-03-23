@@ -11,6 +11,7 @@ on:
       - 'package.json'
       - 'cypress/**'
       - 'cypress.config.component.ts'
+  workflow_call:
 
 jobs:
   run-unit-and-component-test:
@@ -24,6 +25,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with latest main
+        if: github.event_name != 'release'
         uses: ./.github/actions/merge
       - uses: actions/setup-node@v4
         with:

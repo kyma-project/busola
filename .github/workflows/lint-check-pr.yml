@@ -3,6 +3,7 @@ name: PR Lint Check
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
+  workflow_call:
 
 jobs:
   run-lint-check:
@@ -13,6 +14,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with latest main
+        if: github.event_name != 'release'
         uses: ./.github/actions/merge
       - name: lint_check
         shell: bash
