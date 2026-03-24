@@ -1,12 +1,12 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 
-export const calculatePodState = (pod) => {
+export const calculatePodState = (pod: Record<string, any>) => {
   const containerStatuses = pod?.status?.containerStatuses;
   if (containerStatuses?.length > 0) {
     const waitingStatus = containerStatuses
       .reverse()
-      .find((element) => element.state.waiting);
+      .find((element: Record<string, any>) => element.state.waiting);
     if (waitingStatus) {
       return {
         status: waitingStatus.state.waiting.reason || 'Waiting',
@@ -15,7 +15,7 @@ export const calculatePodState = (pod) => {
     } else {
       const terminatedStatus = containerStatuses
         .reverse()
-        .find((element) => element.state.terminated);
+        .find((element: Record<string, any>) => element.state.terminated);
       if (terminatedStatus) {
         return {
           status: terminatedStatus.state.terminated.reason || 'Terminated',
@@ -27,7 +27,7 @@ export const calculatePodState = (pod) => {
   return { status: pod.status?.phase || 'Unknown' };
 };
 
-const badgeType = (status) => {
+const badgeType = (status: string) => {
   switch (status) {
     case 'Running':
     case 'Succeeded':
@@ -46,7 +46,7 @@ const badgeType = (status) => {
   }
 };
 
-export function PodStatus({ pod }) {
+export function PodStatus({ pod }: { pod: Record<string, any> }) {
   const podState = calculatePodState(pod);
   const message = podState?.message || pod.status?.conditions?.[0]?.message;
 

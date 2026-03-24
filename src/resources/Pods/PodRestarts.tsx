@@ -1,7 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
-export default function PodRestarts({ statuses }) {
+interface PodRestartsProps {
+  statuses: Record<string, any>[];
+}
+
+export default function PodRestarts({ statuses }: PodRestartsProps) {
   const { t } = useTranslation();
 
   const restartCount = statuses?.reduce((acc, c) => acc + c.restartCount, 0);
