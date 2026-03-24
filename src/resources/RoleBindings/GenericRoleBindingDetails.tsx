@@ -1,9 +1,10 @@
+import { ReactNode } from 'react';
 import { RoleSubjects } from './RoleSubjects';
 import { RoleRef } from './RoleRef';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 interface GenericRoleBindingDetailsProps {
-  description: any;
+  description: ReactNode;
   [key: string]: any;
 }
 

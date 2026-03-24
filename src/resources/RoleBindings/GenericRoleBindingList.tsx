@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -6,7 +7,7 @@ import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
 
 interface GenericRoleBindingListProps {
-  description: any;
+  description: ReactNode;
   descriptionKey: string;
   [key: string]: any;
 }

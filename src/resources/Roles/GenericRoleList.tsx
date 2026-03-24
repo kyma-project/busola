@@ -1,7 +1,8 @@
+import { ReactNode } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 interface GenericRoleListProps {
-  description: any;
+  description: ReactNode;
   descriptionKey: string;
   [key: string]: any;
 }
