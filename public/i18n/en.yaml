@@ -1058,6 +1058,7 @@ navigation:
 network-policies:
   accessible-name:
     ip-block: IP Block panel
+    namespace-selector: Namespace Selector panel
     pod-selector: Pod Selector panel
   description: <0>Network Policy</0> allows you to control how a Pod communicates with different network entities.
   headers:

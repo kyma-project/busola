@@ -4,8 +4,24 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Text } from '@ui5/webcomponents-react';
+import { FilteredEntriesType } from 'shared/components/GenericList/components/TableBody';
 
-export const LabelSelector = ({ selector, title }) => {
+export type Selector = {
+  matchLabels: Record<string, string>;
+  matchExpressions: FilteredEntriesType[];
+};
+
+export type LabelSelectorProps = {
+  selector: Selector;
+  accessibleName?: string;
+  title: string;
+};
+
+export const LabelSelector = ({
+  selector,
+  title,
+  accessibleName,
+}: LabelSelectorProps) => {
   const { t } = useTranslation();
 
   if (!selector) {
@@ -15,10 +31,8 @@ export const LabelSelector = ({ selector, title }) => {
   if (selector.matchLabels)
     return (
       <UI5Panel
-        title={title || t('network-policies.headers.pod-selector')}
-        accessibleName={
-          title || t('network-policies.accessible-name.pod-selector')
-        }
+        title={title}
+        accessibleName={accessibleName || title}
         keyComponent="policy-types"
       >
         <LayoutPanelRow

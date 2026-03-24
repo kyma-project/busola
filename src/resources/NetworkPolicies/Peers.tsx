@@ -1,11 +1,26 @@
 import { Tokens } from 'shared/components/Tokens';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { LabelSelector } from './LabelSelector';
+import { LabelSelector, Selector } from './LabelSelector';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-export const NetworkPolicyPeers = ({ peers, title }) => {
+export type NetworkPolicyPeersProps = {
+  title: string;
+  peers: {
+    ipBlock: {
+      cidr: string;
+      except: any;
+    };
+    namespaceSelector: Selector;
+    podSelector: Selector;
+  }[];
+};
+
+export const NetworkPolicyPeers = ({
+  peers,
+  title,
+}: NetworkPolicyPeersProps) => {
   const { t } = useTranslation();
   if (!peers?.length) return null;
 
@@ -32,8 +47,15 @@ export const NetworkPolicyPeers = ({ peers, title }) => {
         <LabelSelector
           selector={peer.namespaceSelector}
           title={t('network-policies.headers.namespace-selector')}
+          accessibleName={t(
+            'network-policies.accessible-name.namespace-selector',
+          )}
         />
-        <LabelSelector selector={peer.podSelector} />
+        <LabelSelector
+          selector={peer.podSelector}
+          title={t('network-policies.headers.pod-selector')}
+          accessibleName={t('network-policies.accessible-name.pod-selector')}
+        />
       </div>
     );
   });
