@@ -10,12 +10,21 @@ import { useNavigate } from 'react-router';
 import { clusterAtom } from 'state/clusterAtom';
 import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 import {
-  ResourceDescription,
-  i18nDescriptionKey,
   docsURL,
+  i18nDescriptionKey,
+  ResourceDescription,
 } from 'resources/Namespaces';
 
-export function NamespaceList(props) {
+export type Namespace = {
+  metadata: {
+    name: string;
+  };
+  status: {
+    phase: string;
+  };
+};
+
+export function NamespaceList(props: any) {
   const { t } = useTranslation();
   const showHiddenNamespaces = useAtomValue(showHiddenNamespacesAtom);
   const cluster = useAtomValue(clusterAtom);
@@ -26,13 +35,13 @@ export function NamespaceList(props) {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: (namespace) => (
+      value: (namespace: Namespace) => (
         <NamespaceStatus namespaceStatus={namespace.status} />
       ),
     },
   ];
 
-  const namespaceFilter = (namespace) => {
+  const namespaceFilter = (namespace: Namespace) => {
     return showHiddenNamespaces
       ? true
       : !hiddenNamespaces.includes(namespace.metadata.name);
@@ -40,9 +49,13 @@ export function NamespaceList(props) {
 
   useEffect(() => {
     if (!hasPermissions) {
-      navigate(`/cluster/${encodeURIComponent(cluster.name)}/no-permissions`);
+      if (cluster) {
+        navigate(`/cluster/${encodeURIComponent(cluster.name)}/no-permissions`);
+      } else {
+        navigate(`/no-permissions`);
+      }
     }
-  }, [cluster.name, hasPermissions, navigate]);
+  }, [cluster, hasPermissions, navigate]);
 
   return (
     <ResourcesList

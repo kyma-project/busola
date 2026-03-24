@@ -31,6 +31,7 @@ import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 import { useDebounce } from 'hooks/useDebounce';
 import { K8sResource } from 'types';
 import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table';
+import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
 
 type AsyncSortFunction = {
   asyncFn: (a: any, b: any) => Promise<any>;
@@ -75,7 +76,7 @@ type GenericListProps = {
   notFoundMessage?: string;
   searchSettings?: SearchSettingsType;
   emptyListProps?: EmptyListProps;
-  columnLayout?: string;
+  columnLayout?: FCLLayout;
   customColumnLayout?: (entry: any) => any;
   enableColumnLayout?: boolean;
   resourceType?: string;

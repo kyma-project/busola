@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Button, Icon, Dialog, Bar, Title } from '@ui5/webcomponents-react';
+import { Bar, Button, Dialog, Icon, Title } from '@ui5/webcomponents-react';
 import { useEventListener } from 'hooks/useEventListener';
 
 import './ErrorModal.scss';
@@ -13,13 +13,14 @@ export type ToastProps = {
 type CloseFn = () => void;
 
 export type ErrorModalProps = ToastProps & {
-  header?: JSX.Element | string;
+  header?: React.ReactNode | string;
   buttonDismissText?: string;
   close: CloseFn;
   actions?: (
     close: CloseFn,
     defaultCloseButton: (close: CloseFn) => React.ReactNode,
-  ) => React.ReactNode[];
+  ) => React.ReactNode[] | React.ReactNode;
+  content: string | React.ReactElement;
   wider?: boolean;
 };
 

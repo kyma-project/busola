@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -20,13 +20,28 @@ import { useNavigate } from 'react-router';
 
 import './NamespaceCreate.scss';
 import { useAtom } from 'jotai';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
 import { ResourceDescription as LimitRangeDescription } from 'resources/LimitRanges';
 import { ResourceDescription as ResourceQuotaDescription } from 'resources/ResourceQuotas';
+import {
+  onChangeFn,
+  onCompletedFn,
+  onErrorFn,
+  setCustomValid,
+} from 'shared/components/ResourceCreate/ResourceCreate';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
 const ISTIO_INJECTION_DISABLED = 'disabled';
+
+export type NamespaceCreateProps = any & {
+  onChange: onChangeFn;
+  resource: any;
+  resourceUrl: string;
+  onCompleted: onCompletedFn;
+  onError: onErrorFn;
+  setCustomValid: setCustomValid;
+};
 
 export default function NamespaceCreate({
   formElementRef,
@@ -37,7 +52,7 @@ export default function NamespaceCreate({
   onError,
   setCustomValid,
   ...props
-}) {
+}: NamespaceCreateProps) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const navigate = useNavigate();
@@ -80,10 +95,14 @@ export default function NamespaceCreate({
 
   // container limits
   const [withLimits, setWithLimits] = useState(false);
-  const [limits, setLimits] = useState(() => createLimitRangeTemplate({}));
+  const [limits, setLimits] = useState<Record<string, any>>(() =>
+    createLimitRangeTemplate({}),
+  );
   // memory quotas
   const [withMemory, setWithMemory] = useState(false);
-  const [memory, setMemory] = useState(() => createResourceQuotaTemplate({}));
+  const [memory, setMemory] = useState<Record<string, any>>(() =>
+    createResourceQuotaTemplate({}),
+  );
 
   const createLimitResource = useCreateResource({
     singularName: 'LimitRange',
@@ -104,7 +123,7 @@ export default function NamespaceCreate({
   async function afterNamespaceCreated() {
     const name = namespace.metadata?.name;
 
-    setLayoutColumn((prevState) => ({
+    setLayoutColumn((prevState: ColumnLayoutState) => ({
       layout: 'OneColumn',
       showCreate: null,
       showEdit: prevState.showEdit,
@@ -114,6 +133,7 @@ export default function NamespaceCreate({
         resourceName: namespace.metadata?.name,
         apiGroup: '',
         apiVersion: 'v1',
+        namespaceId: null,
       },
       midColumn: null,
       endColumn: null,
@@ -154,7 +174,13 @@ export default function NamespaceCreate({
     }
   }
 
-  const renderEditor = ({ defaultEditor, Editor }) => (
+  const renderEditor = ({
+    defaultEditor,
+    Editor,
+  }: {
+    defaultEditor: React.ReactNode;
+    Editor: React.FunctionComponent<any>;
+  }): React.ReactNode => (
     <div>
       <ResourceForm.CollapsibleSection
         title={t('namespaces.name_singular')}
@@ -199,7 +225,7 @@ export default function NamespaceCreate({
       {...props}
       pluralKind="namespaces"
       singularName={t('namespaces.name_singular')}
-      renderEditor={!isEdit ? renderEditor : null}
+      renderEditor={!isEdit ? renderEditor : undefined}
       resource={namespace}
       setResource={setNamespace}
       onChange={onChange}
@@ -241,7 +267,7 @@ export default function NamespaceCreate({
               />
               <MemoryPresets
                 presets={CONFIG.NS_MEMORY_QUOTAS_PRESET}
-                setValue={(val) => {
+                setValue={(val: Record<string, any>) => {
                   setMemory(val);
                 }}
                 disabled={!withMemory}
@@ -285,7 +311,7 @@ export default function NamespaceCreate({
               />
               <LimitPresets
                 presets={CONFIG.NS_CONTAINER_LIMITS_PRESET}
-                setValue={(val) => {
+                setValue={(val: Record<string, any>) => {
                   setLimits(val);
                 }}
                 disabled={!withLimits}

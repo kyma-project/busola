@@ -1,11 +1,25 @@
-export const formatNamespace = ({ name, labels }) => ({
+export type formatNamespaceProps = {
+  name: string;
+  labels: Record<string, string>;
+};
+export const formatNamespace = ({ name, labels }: formatNamespaceProps) => ({
   metadata: {
     name,
     labels,
   },
 });
 
-export const formatMemoryQuotas = ({ namespace, limits, requests }) => ({
+export type formatMemoryQuotasProps = {
+  namespace: string;
+  limits: any;
+  requests: any;
+};
+
+export const formatMemoryQuotas = ({
+  namespace,
+  limits,
+  requests,
+}: formatMemoryQuotasProps) => ({
   apiVersion: 'v1',
   kind: 'ResourceQuota',
   metadata: {
@@ -20,12 +34,19 @@ export const formatMemoryQuotas = ({ namespace, limits, requests }) => ({
   },
 });
 
+export type formatLimitsProps = {
+  namespace: string;
+  max: string;
+  default: string;
+  defaultRequest: string;
+};
+
 export const formatLimits = ({
   namespace,
   max,
   default: _default,
   defaultRequest,
-}) => ({
+}: formatLimitsProps) => ({
   apiVersion: 'v1',
   kind: 'LimitRange',
   metadata: {

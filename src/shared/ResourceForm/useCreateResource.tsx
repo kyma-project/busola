@@ -15,22 +15,41 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
-import { useMemo } from 'react';
+import { FormEvent, useMemo } from 'react';
+import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
 
+export type SkinCreateFn = () => boolean;
+
+export type useCreateResourcesProps = {
+  singularName: string;
+  pluralKind: string;
+  resource: any;
+  initialResource?: any;
+  updateInitialResource?: React.SetStateAction<any>;
+  createUrl?: string;
+  skipCreateFn?: SkinCreateFn;
+  afterCreatedFn?: (defaultAfterCreatedFn: () => void) => void;
+  urlPath?: string;
+  layoutNumber?: string;
+  resetLayout?: boolean;
+  afterCreatedCustomMessage?: string;
+};
+
+export type CreateResourceFn = (e?: FormEvent) => void;
 export function useCreateResource({
   singularName,
   pluralKind,
   resource,
   initialResource,
   updateInitialResource,
-  createUrl,
+  createUrl = '',
   skipCreateFn,
   afterCreatedFn,
   urlPath,
   layoutNumber,
   resetLayout,
   afterCreatedCustomMessage,
-}) {
+}: useCreateResourcesProps): CreateResourceFn {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const notification = useNotification();
@@ -80,7 +99,7 @@ export function useCreateResource({
           nextLayout === 'TwoColumnsMidExpanded'
             ? {
                 ...layoutColumn,
-                layout: nextLayout,
+                layout: nextLayout as FCLLayout,
                 showCreate: null,
                 showEdit: null,
                 midColumn: {
@@ -95,7 +114,7 @@ export function useCreateResource({
               }
             : {
                 ...layoutColumn,
-                layout: nextLayout,
+                layout: nextLayout as FCLLayout,
                 showCreate: null,
                 showEdit: null,
                 endColumn: {
@@ -116,14 +135,14 @@ export function useCreateResource({
     }
   };
 
-  const showError = (error) => {
+  const showError = (error: any) => {
     console.error(error);
     const previousActiveElement = document.activeElement;
     notification.notifyError({
       actions: (close, defaultCloseButton) => {
         const closeWrapper = () => {
           close();
-          previousActiveElement.focus();
+          (previousActiveElement as HTMLElement)?.focus();
         };
         return defaultCloseButton(closeWrapper);
       },
@@ -171,7 +190,7 @@ export function useCreateResource({
         const response = await getRequest(createUrl);
         const updatedResource = await response.json();
 
-        const makeForceUpdateFn = (closeModal) => {
+        const makeForceUpdateFn = (closeModal: () => void) => {
           return async () => {
             resource.metadata.resourceVersion =
               initialResource?.metadata.resourceVersion;
@@ -212,7 +231,7 @@ export function useCreateResource({
     }
   };
 
-  return async (e) => {
+  return async (e?: FormEvent) => {
     if (e) {
       e.preventDefault();
     }
