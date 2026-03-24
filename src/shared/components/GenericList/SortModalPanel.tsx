@@ -61,7 +61,6 @@ export const SortModalPanel = ({
           {t('common.buttons.reset')}
         </Button>
       }
-      /*@ts-expect-error Type mismatch between js and ts*/
       actions={(onClose?: () => void) => [
         <Button
           design="Emphasized"

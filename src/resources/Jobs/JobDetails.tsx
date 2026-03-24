@@ -1,0 +1,178 @@
+import { useTranslation } from 'react-i18next';
+
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+import { Selector } from 'shared/components/Selector/Selector';
+import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
+
+import JobCreate from './JobCreate';
+import { JobCompletions } from './JobCompletions';
+import { ResourceDescription } from 'resources/Jobs';
+
+interface JobDetailsProps {
+  namespace: string;
+  resourceName: string;
+  resourceUrl?: string;
+  resourceType: string;
+  readOnly?: boolean;
+  resourceGraphConfig?: any;
+  resourceTitle: string;
+  showYamlTab?: boolean;
+}
+
+export function JobDetails({
+  namespace,
+  resourceName,
+  resourceUrl,
+  resourceType,
+  readOnly,
+  resourceTitle,
+  showYamlTab,
+  resourceGraphConfig,
+}: JobDetailsProps) {
+  const { t } = useTranslation();
+
+  const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: (job: Record<string, any>) => (
+        <ControlledBy
+          ownerReferences={job.metadata.ownerReferences}
+          namespace={job.metadata.namespace}
+        />
+      ),
+    },
+  ];
+
+  const customStatusColumns = [
+    {
+      header: t('jobs.start-time'),
+      value: (job: Record<string, any>) =>
+        job.status.startTime ? (
+          <ReadableCreationTimestamp
+            key="start"
+            timestamp={job.status.startTime}
+          />
+        ) : (
+          EMPTY_TEXT_PLACEHOLDER
+        ),
+    },
+    {
+      header: t('jobs.completion-time'),
+      value: (job: Record<string, any>) =>
+        job.status.completionTime ? (
+          <ReadableCreationTimestamp
+            key="completion"
+            timestamp={job.status.completionTime}
+          />
+        ) : (
+          EMPTY_TEXT_PLACEHOLDER
+        ),
+    },
+    {
+      header: t('jobs.active'),
+      value: (job: Record<string, any>) => (
+        <div>{job?.status?.active ?? EMPTY_TEXT_PLACEHOLDER}</div>
+      ),
+    },
+    {
+      header: t('jobs.failed'),
+      value: (job: Record<string, any>) => (
+        <div>{job?.status?.failed ?? EMPTY_TEXT_PLACEHOLDER}</div>
+      ),
+    },
+    {
+      header: t('jobs.ready'),
+      value: (job: Record<string, any>) => (
+        <div>{job?.status?.ready ?? EMPTY_TEXT_PLACEHOLDER}</div>
+      ),
+    },
+    {
+      header: t('jobs.succeeded'),
+      value: (job: Record<string, any>) => (
+        <div>{job?.status?.succeeded ?? EMPTY_TEXT_PLACEHOLDER}</div>
+      ),
+    },
+  ];
+
+  const statusConditions = (job: Record<string, any>) => {
+    return job?.status?.conditions?.map((condition: any) => {
+      return {
+        header: { titleText: condition.type, status: condition.status },
+        message:
+          condition.message ?? condition.reason ?? EMPTY_TEXT_PLACEHOLDER,
+        customContent: [
+          {
+            header: t('jobs.conditions.last-probe'),
+            value: condition.lastProbeTime ? (
+              <ReadableCreationTimestamp timestamp={condition.lastProbeTime} />
+            ) : (
+              EMPTY_TEXT_PLACEHOLDER
+            ),
+          },
+          {
+            header: t('jobs.conditions.last-transition'),
+            value: condition.lastTransitionTime ? (
+              <ReadableCreationTimestamp
+                timestamp={condition.lastTransitionTime}
+              />
+            ) : (
+              EMPTY_TEXT_PLACEHOLDER
+            ),
+          },
+        ],
+      };
+    });
+  };
+
+  const Events = () => (
+    <EventsList
+      key="events"
+      namespace={namespace}
+      filter={filterByResource('Job', resourceName)}
+      hideInvolvedObjects
+    />
+  );
+
+  const MatchSelector = (job: Record<string, any>) => (
+    <Selector
+      key="match-selector"
+      namespace={job?.metadata?.namespace}
+      labels={job.spec?.selector?.matchLabels}
+      expressions={job.spec?.selector?.matchExpressions}
+      selector={job.spec?.selector}
+    />
+  );
+
+  const JobPodTemplate = (job: Record<string, any>) => (
+    <PodTemplate key="pod-template" template={job.spec?.template} />
+  );
+
+  const customComponents = [MatchSelector, JobPodTemplate, Events];
+
+  return (
+    <ResourceDetails
+      customColumns={customColumns}
+      customComponents={customComponents}
+      createResourceForm={JobCreate}
+      description={ResourceDescription}
+      customStatusColumns={customStatusColumns}
+      statusConditions={statusConditions}
+      statusBadge={(job) => <JobCompletions key="completions" job={job} />}
+      namespace={namespace}
+      resourceName={resourceName}
+      resourceUrl={resourceUrl}
+      resourceType={resourceType}
+      readOnly={readOnly}
+      resourceTitle={resourceTitle}
+      showYamlTab={showYamlTab}
+      resourceGraphConfig={resourceGraphConfig}
+    />
+  );
+}
+
+export default JobDetails;
