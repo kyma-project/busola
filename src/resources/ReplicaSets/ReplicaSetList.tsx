@@ -1,0 +1,68 @@
+import { useTranslation } from 'react-i18next';
+
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+
+import ReplicaSetCreate from './ReplicaSetCreate';
+import { ReplicaSetStatus } from './ReplicaSetStatus';
+import {
+  ResourceDescription,
+  i18nDescriptionKey,
+  docsURL,
+} from 'resources/ReplicaSets';
+
+const getImages = (replicaSet: any) => {
+  const images =
+    replicaSet.spec.template.spec.containers?.map(
+      (container: any) => container.image,
+    ) || [];
+  return images;
+};
+
+interface ReplicaSetListProps {
+  [key: string]: any;
+}
+
+export function ReplicaSetList(params: ReplicaSetListProps) {
+  const { t } = useTranslation();
+
+  const customColumns = [
+    {
+      header: t('common.headers.owner'),
+      value: (replicaSet: any) => (
+        <ControlledBy
+          ownerReferences={replicaSet.metadata.ownerReferences}
+          kindOnly
+        />
+      ),
+    },
+    {
+      header: t('replica-sets.headers.images'),
+      value: (replicaSet: any) => {
+        const images = getImages(replicaSet);
+        const imagesString = images.join(', ');
+        return <span style={{ overflowWrap: 'anywhere' }}>{imagesString}</span>;
+      },
+    },
+    {
+      header: t('common.headers.pods'),
+      value: (replicaSet: any) => <ReplicaSetStatus replicaSet={replicaSet} />,
+    },
+  ];
+
+  return (
+    <ResourcesList
+      customColumns={customColumns}
+      resourceTitle={t('replica-sets.title')}
+      description={ResourceDescription}
+      {...(params as any)}
+      createResourceForm={ReplicaSetCreate}
+      emptyListProps={{
+        subtitleText: i18nDescriptionKey,
+        url: docsURL,
+      }}
+    />
+  );
+}
+
+export default ReplicaSetList;

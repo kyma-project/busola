@@ -12,7 +12,7 @@ import { LayoutColumnName } from 'types';
 
 type CustomColumn = {
   header?: string;
-  value: (resource: any) => ReactNode;
+  value: (resource: any) => any;
   id?: string;
   visibility?: (resource: any) => boolean;
 };
