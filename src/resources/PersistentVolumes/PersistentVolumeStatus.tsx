@@ -1,8 +1,12 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 
-export function PersistentVolumeStatus({ status }) {
-  const badgeType = (status) => {
+export function PersistentVolumeStatus({
+  status,
+}: {
+  status: Record<string, any>;
+}) {
+  const badgeType = (status: string) => {
     switch (status) {
       case 'Bound':
       case 'Available':

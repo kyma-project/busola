@@ -1,10 +1,19 @@
-import { useState } from 'react';
+import { RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
 import { createPersistentVolumeTemplate } from './templates';
+
+interface PersistentVolumeCreateProps {
+  formElementRef?: RefObject<HTMLFormElement>;
+  onChange?: (resource: any) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resourceUrl: string;
+  resource?: Record<string, any>;
+  [key: string]: any;
+}
 
 export default function PersistentVolumeCreate({
   formElementRef,
@@ -13,7 +22,7 @@ export default function PersistentVolumeCreate({
   resourceUrl,
   resource: initialPersistentVolume,
   ...props
-}) {
+}: PersistentVolumeCreateProps) {
   const { t } = useTranslation();
 
   const [pv, setPv] = useState(
