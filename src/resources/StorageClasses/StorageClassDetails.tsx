@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import {
+  ResourceDetails,
+  ResourceDetailsProps,
+} from 'shared/components/ResourceDetails/ResourceDetails';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { EventsList } from 'shared/components/EventsList';
@@ -13,10 +16,22 @@ import StorageClassCreate from './StorageClassCreate';
 import { Text } from '@ui5/webcomponents-react';
 import { ResourceDescription } from 'resources/StorageClasses';
 
-export function StorageClassDetails(props) {
+type StorageClassDetailsProps = {
+  namespace: string;
+  resourceName: string;
+} & Omit<
+  ResourceDetailsProps,
+  | 'customComponents'
+  | 'description'
+  | 'resourceTitle'
+  | 'singularName'
+  | 'createResourceForm'
+>;
+
+export function StorageClassDetails(props: StorageClassDetailsProps) {
   const { t } = useTranslation();
 
-  const StorageClassConfiguration = (storageclass) => {
+  const StorageClassConfiguration = (storageclass: Record<string, any>) => {
     const parameters = storageclass?.parameters || [];
 
     return (
@@ -50,12 +65,12 @@ export function StorageClassDetails(props) {
           accessibleName={t('storage-classes.accessible-name.parameters')}
         >
           {Object.keys(parameters).length > 0 ? (
-            Object.entries(parameters).map((parameters) => {
+            Object.entries(parameters).map((parameter: [string, any]) => {
               return (
                 <LayoutPanelRow
-                  name={parameters[0]}
-                  value={parameters[1] || EMPTY_TEXT_PLACEHOLDER}
-                  key={parameters[0]}
+                  name={parameter[0]}
+                  value={parameter[1] || EMPTY_TEXT_PLACEHOLDER}
+                  key={parameter[0]}
                 />
               );
             })
@@ -86,7 +101,6 @@ export function StorageClassDetails(props) {
       ]}
       description={ResourceDescription}
       resourceTitle={t('storage-classes.title')}
-      singularName={t('storage-classes.name_singular')}
       createResourceForm={StorageClassCreate}
       {...props}
     />
