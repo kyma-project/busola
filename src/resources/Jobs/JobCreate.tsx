@@ -1,0 +1,130 @@
+import { RefObject, useContext, useEffect, useMemo, useState } from 'react';
+import jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
+
+import { cloneDeep } from 'lodash';
+
+import { ResourceForm } from 'shared/ResourceForm';
+
+import { createJobPresets, createJobTemplate } from './templates';
+import { JobSpecSection } from './SpecSection';
+import { ContainersSection } from './ContainersSection';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { getDescription, SchemaContext } from 'shared/helpers/schema';
+import { useAtomValue } from 'jotai';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
+
+interface JobCreateProps {
+  formElementRef?: RefObject<HTMLFormElement>;
+  namespace?: string;
+  onChange?: (job: Record<string, any>) => void;
+  setCustomValid?: (isValid: boolean) => void;
+  resource?: Record<string, any>;
+  resourceUrl?: string;
+  [key: string]: any;
+}
+
+function isJobValid(job = {}) {
+  const isNameValid = jp.value(job, '$.metadata.name');
+
+  const containers = jp.value(job, '$.spec.template.spec.containers') || [];
+
+  const areContainersValid = !!containers.length;
+
+  return isNameValid && areContainersValid;
+}
+
+export default function JobCreate({
+  formElementRef,
+  namespace,
+  onChange,
+  setCustomValid,
+  resource: initialJob,
+  resourceUrl,
+  ...props
+}: JobCreateProps) {
+  const { t } = useTranslation();
+
+  const defaultSidecarAnnotations = useMemo(() => {
+    return initialJob?.spec?.template?.metadata?.annotations || {};
+  }, [initialJob]);
+
+  const [job, setJob] = useState(
+    initialJob
+      ? cloneDeep(initialJob)
+      : createJobTemplate(namespace, defaultSidecarAnnotations),
+  );
+
+  const [initialResource, setInitialResource] = useState(
+    initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+  );
+  const layoutState = useAtomValue(columnLayoutAtom);
+
+  useEffect(() => {
+    if (layoutState?.showEdit?.resource) return;
+
+    const timeoutId = setTimeout(() => {
+      setJob(
+        initialJob
+          ? cloneDeep(initialJob)
+          : createJobTemplate(namespace, defaultSidecarAnnotations),
+      );
+      setInitialResource(
+        initialJob || createJobTemplate(namespace, defaultSidecarAnnotations),
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [
+    initialJob,
+    namespace,
+    defaultSidecarAnnotations,
+    layoutState?.showEdit?.resource,
+  ]);
+
+  const isEdit = useMemo(
+    () =>
+      !!initialResource?.metadata?.uid && !layoutState?.showCreate?.resource,
+    [initialResource, layoutState?.showCreate?.resource],
+  );
+
+  useEffect(() => {
+    setCustomValid?.(isJobValid(job));
+  }, [job, setCustomValid]);
+
+  const schema = useContext(SchemaContext);
+  const containersDesc = getDescription(
+    schema,
+    'spec.template.spec.containers',
+  );
+
+  return (
+    <ResourceForm
+      {...props}
+      pluralKind="jobs"
+      singularName={t(`jobs.name_singular`)}
+      resource={job}
+      setResource={setJob}
+      initialResource={initialResource}
+      updateInitialResource={setInitialResource}
+      onChange={onChange}
+      formElementRef={formElementRef}
+      presets={!isEdit ? createJobPresets(namespace) : []}
+      createUrl={resourceUrl}
+    >
+      <JobSpecSection propertyPath="$.spec" readOnly={isEdit} />
+      <ContainersSection
+        propertyPath="$.spec.template.spec.containers"
+        tooltipContent={t(containersDesc ?? '', {
+          defaultValue: containersDesc,
+        })}
+        readOnly={isEdit}
+      />
+      <MessageStrip design="Information" hideCloseButton>
+        {t('jobs.create-modal.containers-readonly-in-edit')}
+      </MessageStrip>
+    </ResourceForm>
+  );
+}
