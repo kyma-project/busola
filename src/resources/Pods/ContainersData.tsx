@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
@@ -12,11 +11,17 @@ import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTim
 import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
-ContainersData.propTypes = {
-  containers: PropTypes.arrayOf(PropTypes.object),
-};
+interface ContainersDataProps {
+  type: string;
+  containers: Record<string, any>[];
+  statuses: Record<string, any>[];
+}
 
-export default function ContainersData({ type, containers, statuses }) {
+export default function ContainersData({
+  type,
+  containers,
+  statuses,
+}: ContainersDataProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const setLayout = useSetAtom(columnLayoutAtom);
@@ -25,7 +30,13 @@ export default function ContainersData({ type, containers, statuses }) {
     return null;
   }
 
-  const ContainerComponent = ({ container, status }) => {
+  const ContainerComponent = ({
+    container,
+    status,
+  }: {
+    container: Record<string, any>;
+    status: Record<string, any>;
+  }) => {
     const state =
       status?.state?.running ||
       status?.state?.waiting ||
@@ -41,6 +52,7 @@ export default function ContainersData({ type, containers, statuses }) {
               setLayout({
                 midColumn: null,
                 endColumn: null,
+                startColumn: null,
                 layout: 'OneColumn',
               });
               navigate(
@@ -91,7 +103,11 @@ export default function ContainersData({ type, containers, statuses }) {
         <ContainerComponent
           key={container.name}
           container={container}
-          status={statuses?.find((status) => status.name === container.name)}
+          status={
+            statuses?.find(
+              (status) => status.name === container.name,
+            ) as Record<string, any>
+          }
         />
       ))}
     </UI5Panel>

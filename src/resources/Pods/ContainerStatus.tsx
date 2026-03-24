@@ -1,7 +1,10 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 
-export function ContainerStatus({ status }) {
+interface ContainerStatusProps {
+  status: Record<string, any>;
+}
+export function ContainerStatus({ status }: ContainerStatusProps) {
   const state =
     status?.state?.running ||
     status?.state?.waiting ||
@@ -11,7 +14,7 @@ export function ContainerStatus({ status }) {
     state?.reason || Object.keys(status?.state || {})?.[0] || 'Unknown';
   const message = state?.message || null;
 
-  const badgeType = (status) => {
+  const badgeType = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'running':
       case 'completed':
