@@ -9,10 +9,12 @@ import escape from 'lodash.escape';
 const config = require('../config.js');
 
 const tokenManager = new TokenManager();
+const COMPANION_PUBLIC_KEY_URL =
+  'https://companion.a5c4d12.stage.kyma.ondemand.com/api/public-key';
 const COMPANION_API_BASE_URL = `${
   config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? ''
 }/api/conversations/`;
-const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
+const SKIP_AUTH = true; //config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
 
 // Rate limiter: Max 200 requests per 1 minutes per IP
@@ -25,6 +27,38 @@ const companionRateLimiter = rateLimit({
 });
 
 router.use(express.json());
+
+async function handlePublicKey(req, res) {
+  try {
+    if (!COMPANION_PUBLIC_KEY_URL) {
+      throw new Error('Missing companion public key URL configuration');
+    }
+
+    const requestBody =
+      Buffer.isBuffer(req.body) || typeof req.body === 'string'
+        ? req.body.toString()
+        : JSON.stringify(req.body ?? {});
+
+    const endpointUrl = `${COMPANION_PUBLIC_KEY_URL}`;
+
+    const response = await fetch(endpointUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: requestBody,
+    });
+
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (error) {
+    req.log.warn(error);
+    res.status(500).json({
+      error: 'Failed to exchange encryption key. Request ID: ' + escape(req.id),
+    });
+  }
+}
 
 function extractAuthHeaders(req) {
   return {
@@ -77,7 +111,7 @@ async function handlePromptSuggestions(req, res) {
     const { namespace, resourceType, groupVersion, resourceName } = JSON.parse(
       req.body.toString(),
     );
-    const endpointUrl = COMPANION_API_BASE_URL;
+    const endpointUrl = COMPANION_CONVERSATIONS_API_BASE_URL;
     const payload = {
       resource_kind: resourceType,
       resource_api_version: groupVersion,
@@ -116,7 +150,7 @@ async function handleChatMessage(req, res) {
 
     const endpointUrl = new URL(
       `${encodeURIComponent(conversationId)}/messages`,
-      COMPANION_API_BASE_URL,
+      COMPANION_CONVERSATIONS_API_BASE_URL,
     );
 
     const payload = {
@@ -204,7 +238,7 @@ async function handleFollowUpSuggestions(req, res) {
 
     const endpointUrl = new URL(
       `${encodeURIComponent(conversationId)}/questions`,
-      COMPANION_API_BASE_URL,
+      COMPANION_CONVERSATIONS_API_BASE_URL,
     );
 
     const headers = await buildApiHeaders(authData);
@@ -227,6 +261,7 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
+router.post('/public-key', companionRateLimiter, handlePublicKey);
 router.post('/suggestions', companionRateLimiter, handlePromptSuggestions);
 router.post('/messages', companionRateLimiter, handleChatMessage);
 router.post('/followup', companionRateLimiter, handleFollowUpSuggestions);

@@ -66,6 +66,7 @@ config:
         queryMaxTokens: 8000
       useJoule: false
       jouleConfig:
+        companionApiUrl: ''
         url: ''
         botname: ''
     GARDENER_LOGIN:
