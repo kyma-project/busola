@@ -373,13 +373,13 @@ export const GenericList = ({
         : 'OneColumn';
       setLayoutColumn(
         columnLayout
-          ? {
+          ? ({
               ...layoutState,
               showCreate: null,
               endColumn: customColumnLayout?.(selectedEntry),
               layout: newLayout,
               showEdit: null,
-            }
+            } as ColumnLayoutState)
           : ({
               ...layoutState,
               showCreate: null,

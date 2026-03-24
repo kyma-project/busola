@@ -63,6 +63,8 @@ export type ResourcesListProps = {
   disableHiding?: boolean;
   displayArrow?: boolean;
   accessibleName?: string;
+  loading?: boolean;
+  error?: any;
 };
 
 export type ResourceListRendererProps = Omit<ResourcesListProps, 'filter'> & {
