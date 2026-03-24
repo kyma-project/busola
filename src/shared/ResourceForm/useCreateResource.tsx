@@ -15,7 +15,10 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
-import { useMemo } from 'react';
+import { FormEvent, FormEventHandler, useMemo } from 'react';
+import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+
+export type SkinCreateFn = () => boolean;
 
 export type useCreateResourcesProps = {
   singularName: string;
@@ -23,8 +26,8 @@ export type useCreateResourcesProps = {
   resource: any;
   initialResource?: any;
   updateInitialResource?: React.SetStateAction<any>;
-  createUrl: string;
-  skipCreateFn?: () => void;
+  createUrl?: string;
+  skipCreateFn?: SkinCreateFn;
   afterCreatedFn?: (defaultAfterCreatedFn: () => void) => void;
   urlPath?: string;
   layoutNumber?: string;
@@ -37,14 +40,14 @@ export function useCreateResource({
   resource,
   initialResource,
   updateInitialResource,
-  createUrl,
+  createUrl = '',
   skipCreateFn,
   afterCreatedFn,
   urlPath,
   layoutNumber,
   resetLayout,
   afterCreatedCustomMessage,
-}: useCreateResourcesProps) {
+}: useCreateResourcesProps): FormEventHandler {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const notification = useNotification();
@@ -94,7 +97,7 @@ export function useCreateResource({
           nextLayout === 'TwoColumnsMidExpanded'
             ? {
                 ...layoutColumn,
-                layout: nextLayout,
+                layout: nextLayout as FCLLayout,
                 showCreate: null,
                 showEdit: null,
                 midColumn: {
@@ -109,7 +112,7 @@ export function useCreateResource({
               }
             : {
                 ...layoutColumn,
-                layout: nextLayout,
+                layout: nextLayout as FCLLayout,
                 showCreate: null,
                 showEdit: null,
                 endColumn: {
@@ -226,7 +229,7 @@ export function useCreateResource({
     }
   };
 
-  return async (e?: Event) => {
+  return async (e?: FormEvent) => {
     if (e) {
       e.preventDefault();
     }

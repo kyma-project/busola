@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -29,13 +35,13 @@ import {
   onErrorFn,
   setCustomValid,
 } from 'shared/components/ResourceCreate/ResourceCreate';
+import { CreateResourceFormProps } from 'shared/components/ResourceDetails/ResourceDetails';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';
 const ISTIO_INJECTION_DISABLED = 'disabled';
 
 export type NamespaceCreateProps = any & {
-  formElementRef: React.Ref<any>;
   onChange: onChangeFn;
   resource: any;
   resourceUrl: string;
@@ -180,8 +186,8 @@ export default function NamespaceCreate({
     Editor,
   }: {
     defaultEditor: React.ReactNode;
-    Editor: React.ElementType;
-  }) => (
+    Editor: React.FunctionComponent<any>;
+  }): React.ReactNode => (
     <div>
       <ResourceForm.CollapsibleSection
         title={t('namespaces.name_singular')}
@@ -226,7 +232,7 @@ export default function NamespaceCreate({
       {...props}
       pluralKind="namespaces"
       singularName={t('namespaces.name_singular')}
-      renderEditor={!isEdit ? renderEditor : null}
+      renderEditor={!isEdit ? renderEditor : undefined}
       resource={namespace}
       setResource={setNamespace}
       onChange={onChange}
@@ -268,7 +274,7 @@ export default function NamespaceCreate({
               />
               <MemoryPresets
                 presets={CONFIG.NS_MEMORY_QUOTAS_PRESET}
-                setValue={(val: any) => {
+                setValue={(val: Record<string, any>) => {
                   setMemory(val);
                 }}
                 disabled={!withMemory}
@@ -312,7 +318,7 @@ export default function NamespaceCreate({
               />
               <LimitPresets
                 presets={CONFIG.NS_CONTAINER_LIMITS_PRESET}
-                setValue={(val: any) => {
+                setValue={(val: Record<string, any>) => {
                   setLimits(val);
                 }}
                 disabled={!withLimits}

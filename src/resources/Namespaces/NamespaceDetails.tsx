@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { ToolbarButton } from '@ui5/webcomponents-react';
 
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import {
+  ResourceDetails,
+  ResourceDetailsProps,
+} from 'shared/components/ResourceDetails/ResourceDetails';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangesList } from 'resources/LimitRanges/LimitRangesList';
@@ -17,7 +20,10 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 import { ResourceDescription } from 'resources/Namespaces';
 import { useSetAtom } from 'jotai';
 
-export type NamespaceDetailsProps = any & {
+export type NamespaceDetailsProps = Omit<
+  ResourceDetailsProps,
+  'createResourceForm'
+> & {
   resourceName: string;
 };
 

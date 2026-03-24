@@ -3,8 +3,8 @@ import { createResourceQuotaTemplate } from 'resources/ResourceQuotas/templates'
 import { createLimitRangeTemplate } from 'resources/LimitRanges/templates';
 
 export type LimitPresetsProps = {
-  presets: object;
-  setValue: React.SetStateAction<any>;
+  presets: Record<string, any>;
+  setValue: React.Dispatch<React.SetStateAction<Record<string, any>>>;
   namespaceName: string;
   disabled: boolean;
 };
