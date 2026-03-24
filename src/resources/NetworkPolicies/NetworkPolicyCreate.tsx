@@ -7,6 +7,11 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createNetworkPolicyTemplate } from './templates';
+import { CreateResourceFormProps } from 'shared/components/ResourceDetails/ResourceDetails';
+
+export type NetworkPolicyCreateProps = CreateResourceFormProps & {
+  resourceUrl: string;
+};
 
 export default function NetworkPolicyCreate({
   formElementRef,
@@ -15,7 +20,7 @@ export default function NetworkPolicyCreate({
   resourceUrl,
   resource: initialNetworkPolicy,
   ...props
-}) {
+}: NetworkPolicyCreateProps) {
   const { t } = useTranslation();
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const [networkPolicy, setNetworkPolicy] = useState(

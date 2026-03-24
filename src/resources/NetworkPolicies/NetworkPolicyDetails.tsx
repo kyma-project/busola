@@ -2,7 +2,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Tokens } from 'shared/components/Tokens';
 import { Selector } from 'shared/components/Selector/Selector';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import {
+  ResourceDetails,
+  ResourceDetailsProps,
+} from 'shared/components/ResourceDetails/ResourceDetails';
 
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
@@ -13,7 +16,21 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-export function NetworkPolicyDetails(props) {
+type Policy = {
+  metadata: {
+    namespace: string;
+  };
+  spec: {
+    podSelector: {
+      matchLabels: Record<string, string>;
+      matchExpressions: any;
+    };
+  };
+};
+
+export function NetworkPolicyDetails(
+  props: Omit<ResourceDetailsProps, 'createResourceForm'>,
+) {
   const { t } = useTranslation();
 
   const Events = () => (
@@ -25,7 +42,13 @@ export function NetworkPolicyDetails(props) {
     />
   );
 
-  const Specification = ({ spec }) => (
+  const Specification = ({
+    spec,
+  }: {
+    spec: {
+      policyTypes: string[];
+    };
+  }) => (
     <UI5Panel
       key="specification"
       title={t('common.headers.specification')}
@@ -39,7 +62,13 @@ export function NetworkPolicyDetails(props) {
     </UI5Panel>
   );
 
-  const Ingresses = ({ spec }) => {
+  const Ingresses = ({
+    spec,
+  }: {
+    spec: {
+      ingress: any[];
+    };
+  }) => {
     if (!spec.ingress?.length) return null;
 
     return spec.ingress.map((ingress, idx) => (
@@ -47,7 +76,7 @@ export function NetworkPolicyDetails(props) {
         key={`ingress${idx}`}
         title={t('network-policies.headers.ingress') + ` #${idx + 1}`}
         accessibleName={`${t('network-policies.headers.ingress')} #${idx + 1} panel`}
-        keyComponent={idx}
+        keyComponent={idx.toString()}
       >
         <NetworkPolicyPeers
           peers={ingress.from}
@@ -61,7 +90,13 @@ export function NetworkPolicyDetails(props) {
     ));
   };
 
-  const Egresses = ({ spec }) => {
+  const Egresses = ({
+    spec,
+  }: {
+    spec: {
+      egress: any[];
+    };
+  }) => {
     if (!spec.egress?.length) return null;
 
     return spec.egress.map((egress, idx) => (
@@ -69,7 +104,7 @@ export function NetworkPolicyDetails(props) {
         key={`egress${idx}`}
         title={t('network-policies.headers.egress') + ` #${idx + 1}`}
         accessibleName={`${t('network-policies.headers.egress')} #${idx + 1} panel`}
-        keyComponent={idx}
+        keyComponent={idx.toString()}
       >
         <NetworkPolicyPeers
           peers={egress.to}
@@ -83,7 +118,7 @@ export function NetworkPolicyDetails(props) {
     ));
   };
 
-  const PodSelector = (policy) => {
+  const PodSelector = (policy: Policy) => {
     const { t } = useTranslation();
 
     return (
