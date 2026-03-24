@@ -11,14 +11,22 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
 import { getLastTransitionTime } from 'resources/helpers';
+
 import { ResourceDescription } from 'resources/Deployments';
 
-export function DeploymentDetails(props) {
+type DeploymentDetailsProps = {
+  namespace: string;
+  resourceName: string;
+  resourceUrl?: string;
+  resourceType: string;
+};
+
+export function DeploymentDetails(props: DeploymentDetailsProps) {
   const { t } = useTranslation();
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (deployment) => (
+      value: (deployment: Record<string, any>) => (
         <ControlledBy
           ownerReferences={deployment.metadata.ownerReferences}
           namespace={deployment.metadata.namespace}
@@ -30,58 +38,62 @@ export function DeploymentDetails(props) {
   const customStatusColumns = [
     {
       header: t('common.labels.last-transition'),
-      value: (deployment) =>
+      value: (deployment: Record<string, any>) =>
         getLastTransitionTime(deployment?.status?.conditions),
     },
     {
       header: t('deployments.status.replicas'),
-      value: (deployment) => <div>{deployment?.status?.replicas ?? 0}</div>,
+      value: (deployment: Record<string, any>) => (
+        <div>{deployment?.status?.replicas ?? 0}</div>
+      ),
     },
     {
       header: t('deployments.status.updated-replicas'),
-      value: (deployment) => (
+      value: (deployment: Record<string, any>) => (
         <div>{deployment?.status?.updatedReplicas ?? 0}</div>
       ),
     },
     {
       header: t('deployments.status.available-replicas'),
-      value: (deployment) => (
+      value: (deployment: Record<string, any>) => (
         <div>{deployment?.status?.availableReplicas ?? 0}</div>
       ),
     },
     {
       header: t('deployments.status.unavailable-replicas'),
-      value: (deployment) => (
+      value: (deployment: Record<string, any>) => (
         <div>{deployment?.status?.unavailableReplicas ?? 0}</div>
       ),
     },
     {
       header: t('deployments.status.collision-count'),
-      value: (deployment) => (
+      value: (deployment: Record<string, any>) => (
         <div>{deployment?.status?.collisionCount ?? 0}</div>
       ),
     },
   ];
 
-  const statusConditions = (deployment) => {
-    return deployment?.status?.conditions?.map((condition) => {
-      const overridenStatus = () => {
-        if (condition.type === 'ReplicaFailure')
-          return condition.status === 'True' ? 'Negative' : 'Positive';
-        return undefined;
-      };
-      return {
-        header: {
-          titleText: condition.type,
-          status: condition.status,
-          overrideStatusType: overridenStatus(),
-        },
-        message: condition.message,
-      };
-    });
+  const statusConditions = (deployment: Record<string, any>) => {
+    return deployment?.status?.conditions?.map(
+      (condition: Record<string, any>) => {
+        const overridenStatus = () => {
+          if (condition.type === 'ReplicaFailure')
+            return condition.status === 'True' ? 'Negative' : 'Positive';
+          return undefined;
+        };
+        return {
+          header: {
+            titleText: condition.type,
+            status: condition.status,
+            overrideStatusType: overridenStatus(),
+          },
+          message: condition.message,
+        };
+      },
+    );
   };
 
-  const MatchSelector = (deployment) => (
+  const MatchSelector = (deployment: Record<string, any>) => (
     <Selector
       key="match-selector"
       namespace={deployment.metadata.namespace}
@@ -91,7 +103,7 @@ export function DeploymentDetails(props) {
     />
   );
 
-  const DeploymentPodTemplate = (deployment) => (
+  const DeploymentPodTemplate = (deployment: Record<string, any>) => (
     <PodTemplate key="pod-template" template={deployment.spec.template} />
   );
 
@@ -118,7 +130,7 @@ export function DeploymentDetails(props) {
       customStatusColumns={customStatusColumns}
       statusConditions={statusConditions}
       description={ResourceDescription}
-      {...props}
+      {...(props as any)}
     />
   );
 }

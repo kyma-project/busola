@@ -6,21 +6,28 @@ import { Labels } from 'shared/components/Labels/Labels';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import DaemonSetCreate from './DaemonSetCreate';
-import { DaemonSetStatus } from './DaemonSetStatus';
+import { DaemonSetStatus, DaemonSetType } from './DaemonSetStatus';
 import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
 } from 'resources/DaemonSets';
 
-export function DaemonSetList(props) {
+interface DaemonSetListProps {
+  namespace: string;
+  resourceUrl: string;
+  resourceType: string;
+  [key: string]: any;
+}
+
+export function DaemonSetList(props: DaemonSetListProps) {
   const { t } = useTranslation();
   const restartAction = useRestartAction(props.resourceUrl);
 
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (resource) => (
+      value: (resource: Record<string, any>) => (
         <ControlledBy
           ownerReferences={resource.metadata.ownerReferences}
           kindOnly
@@ -29,13 +36,15 @@ export function DaemonSetList(props) {
     },
     {
       header: t('daemon-sets.node-selector'),
-      value: (resource) => (
+      value: (resource: Record<string, any>) => (
         <Labels labels={resource.spec.template.spec.nodeSelector} />
       ),
     },
     {
       header: t('common.headers.pods'),
-      value: (resource) => <DaemonSetStatus daemonSet={resource} />,
+      value: (resource: DaemonSetType) => (
+        <DaemonSetStatus daemonSet={resource} />
+      ),
     },
   ];
 
