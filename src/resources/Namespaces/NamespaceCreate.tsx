@@ -1,10 +1,4 @@
-import {
-  FunctionComponent,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -35,7 +29,6 @@ import {
   onErrorFn,
   setCustomValid,
 } from 'shared/components/ResourceCreate/ResourceCreate';
-import { CreateResourceFormProps } from 'shared/components/ResourceDetails/ResourceDetails';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_ENABLED = 'enabled';

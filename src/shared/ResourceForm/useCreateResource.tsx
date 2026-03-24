@@ -15,7 +15,7 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
-import { FormEvent, FormEventHandler, useMemo } from 'react';
+import { FormEvent, useMemo } from 'react';
 import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
 
 export type SkinCreateFn = () => boolean;
@@ -34,6 +34,8 @@ export type useCreateResourcesProps = {
   resetLayout?: boolean;
   afterCreatedCustomMessage?: string;
 };
+
+export type CreateResourceFn = (e?: FormEvent) => void;
 export function useCreateResource({
   singularName,
   pluralKind,
@@ -47,7 +49,7 @@ export function useCreateResource({
   layoutNumber,
   resetLayout,
   afterCreatedCustomMessage,
-}: useCreateResourcesProps): FormEventHandler {
+}: useCreateResourcesProps): CreateResourceFn {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const notification = useNotification();
