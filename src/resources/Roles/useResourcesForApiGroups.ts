@@ -3,8 +3,8 @@ import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useAtomValue } from 'jotai';
 import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
 
-export function useResourcesForApiGroups(apiGroups = []) {
-  const [cache, setCache] = useState({});
+export function useResourcesForApiGroups(apiGroups: string[] = []) {
+  const [cache, setCache] = useState<Record<string, any[]>>({});
   const [loading, setLoading] = useState(false);
   const fetch = useSingleGet();
   const groupVersions = useAtomValue(groupVersionsAtom);
@@ -12,17 +12,19 @@ export function useResourcesForApiGroups(apiGroups = []) {
   const loadable = apiGroups.some((apiGroup) => !cache[apiGroup]);
 
   const findMatchingGroupVersions = useCallback(
-    (apiGroup) => {
+    (apiGroup: string) => {
       // core api group
       if (apiGroup === '') return ['v1'];
 
-      return groupVersions.filter((gV) => gV.startsWith(apiGroup + '/'));
+      return (groupVersions ?? []).filter((gV: string) =>
+        gV.startsWith(apiGroup + '/'),
+      );
     },
     [groupVersions],
   );
 
   const fetchApiGroup = useCallback(
-    async (groupVersion) => {
+    async (groupVersion: string) => {
       const url = groupVersion === 'v1' ? '/api/v1' : `/apis/${groupVersion}`;
       try {
         const response = await fetch(url);
@@ -43,9 +45,10 @@ export function useResourcesForApiGroups(apiGroups = []) {
       if (cache[apiGroup]?.length) continue;
       for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
         setLoading(true);
-        const loader = fetchApiGroup(groupVersion, apiGroup)?.then(
-          (resources) => ({ apiGroup, resources }),
-        );
+        const loader = fetchApiGroup(groupVersion)?.then((resources) => ({
+          apiGroup,
+          resources,
+        }));
         loaders.push(loader);
       }
     }

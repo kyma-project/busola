@@ -2,7 +2,11 @@ import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { isRuleInvalid } from './helpers';
 
-export function InvalidRoleError({ rule }) {
+interface InvalidRoleErrorProps {
+  rule: any;
+}
+
+export function InvalidRoleError({ rule }: InvalidRoleErrorProps) {
   const { t } = useTranslation();
 
   return (

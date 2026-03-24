@@ -42,16 +42,24 @@ const verbs = [
   '*',
 ];
 
-export function RuleInput({ rule, rules, setRules, schema }) {
+interface RuleInputProps {
+  rule: any;
+  rules: any[];
+  setRules: (rules: any[]) => void;
+  schema: any;
+}
+
+export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
   const groupVersions = useAtomValue(groupVersionsAtom);
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();
 
-  const apiGroupDesc = getDescription(schema, 'rules.apiGroups');
-  const resourcesDesc = getDescription(schema, 'rules.resources');
-  const verbsDesc = getDescription(schema, 'rules.verbs');
-  const resourceNamesDesc = getDescription(schema, 'rules.resourceNames');
-  const nonResourceURLsDesc = getDescription(schema, 'rules.nonResourceURLs');
+  const apiGroupDesc = getDescription(schema, 'rules.apiGroups') ?? '';
+  const resourcesDesc = getDescription(schema, 'rules.resources') ?? '';
+  const verbsDesc = getDescription(schema, 'rules.verbs') ?? '';
+  const resourceNamesDesc = getDescription(schema, 'rules.resourceNames') ?? '';
+  const nonResourceURLsDesc =
+    getDescription(schema, 'rules.nonResourceURLs') ?? '';
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
   const apiRules = rule.apiGroups.flat();
@@ -60,17 +68,17 @@ export function RuleInput({ rule, rules, setRules, schema }) {
     fetchResources,
     loadable,
     loading,
-  } = useResourcesForApiGroups([...new Set(apiRules)]);
+  } = useResourcesForApiGroups([...new Set(apiRules)] as string[]);
   // introduce special option for '' apiGroup - Combobox doesn't accept empty string key
   const apiGroupsInputOptions = getApiGroupInputOptions(groupVersions);
 
   // there's no endpoint for "all resources" - add just a '*' and specific resources
   // for already choosen apiGroups
-  const getAvailableResources = (resourcesCache) =>
+  const getAvailableResources = (resourcesCache: any) =>
     unique([
       ...(rule.apiGroups
-        .flatMap((apiGroup) => resourcesCache[apiGroup] || [])
-        .map((r) => r.name) || []),
+        .flatMap((apiGroup: any) => resourcesCache[apiGroup] || [])
+        .map((r: any) => r.name) || []),
       '*',
     ]);
   const availableResources = getAvailableResources(resourcesCache);
@@ -79,14 +87,14 @@ export function RuleInput({ rule, rules, setRules, schema }) {
     jp.value(rule, '$.apiGroups', [
       '',
       ...apiGroupsInputOptions
-        .map((g) => g.key)
+        .map((g: any) => g.key)
         .filter((k) => k !== EMPTY_API_GROUP_KEY),
     ]);
     setRules([...rules]);
   };
 
   const addAllResources = () => {
-    fetchResources()?.then((resourcesCache) => {
+    fetchResources()?.then((resourcesCache: any) => {
       const availableResources = getAvailableResources(resourcesCache);
       jp.value(
         rule,
@@ -141,7 +149,7 @@ export function RuleInput({ rule, rules, setRules, schema }) {
         newItemActionWidth={2}
         newItemAction={
           loading ? (
-            <BusyIndicator size="S" active={true} delay="0" />
+            <BusyIndicator size="S" active={true} delay={0} />
           ) : (
             <Button
               design="Transparent"

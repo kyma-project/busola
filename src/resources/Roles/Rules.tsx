@@ -3,7 +3,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@ui5/webcomponents-react';
 
-function VerbStatus({ rule, verb }) {
+function VerbStatus({ rule, verb }: { rule: any; verb: string }) {
   const hasVerb = rule.verbs?.includes(verb) || rule.verbs?.includes('*');
 
   return hasVerb ? (
@@ -13,7 +13,7 @@ function VerbStatus({ rule, verb }) {
   );
 }
 
-export const Rules = (resource) => {
+export const Rules = (resource: any) => {
   const isNamespaced = resource.metadata.namespace;
   const { t } = useTranslation();
 
@@ -51,17 +51,17 @@ export const Rules = (resource) => {
     'deletecollection',
   ];
 
-  const displayArrayValue = (v) => v?.join(', ') || EMPTY_TEXT_PLACEHOLDER;
-  const rowRenderer = (rule) => {
+  const displayArrayValue = (v: any) => v?.join(', ') || EMPTY_TEXT_PLACEHOLDER;
+  const rowRenderer = (rule: any) => {
     const commonFields = [
       ...standardVerbs.map((verb) => ({
         content: <VerbStatus rule={rule} verb={verb} />,
         style: { textAlign: 'center' },
       })),
-      rule.verbs?.filter((v) => !standardVerbs.includes(v)).join(', ') ||
+      rule.verbs?.filter((v: any) => !standardVerbs.includes(v)).join(', ') ||
         EMPTY_TEXT_PLACEHOLDER,
       displayArrayValue(
-        (rule.apiGroups || []).map((apiGroup) =>
+        (rule.apiGroups || []).map((apiGroup: any) =>
           apiGroup ? apiGroup : '(core)',
         ),
       ),

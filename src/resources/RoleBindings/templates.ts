@@ -1,7 +1,7 @@
 export const SUBJECT_KINDS = ['Group', 'ServiceAccount', 'User'];
 export const DEFAULT_APIGROUP = 'rbac.authorization.k8s.io';
 
-export function newSubject(kind) {
+export function newSubject(kind?: string) {
   switch (kind) {
     case 'Group':
       return {
@@ -25,13 +25,13 @@ export function newSubject(kind) {
   }
 }
 
-export function createBindingTemplate(namespace) {
+export function createBindingTemplate(namespace?: string) {
   return namespace
     ? createNamespacedBindingTemplate(namespace)
     : createClusterBindingTemplate();
 }
 
-function createNamespacedBindingTemplate(namespace) {
+function createNamespacedBindingTemplate(namespace: string) {
   return {
     apiVersion: 'rbac.authorization.k8s.io/v1',
     kind: 'RoleBinding',

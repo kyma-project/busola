@@ -6,11 +6,15 @@ import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-const shortRoleKind = (resource) => {
+const shortRoleKind = (resource: any) => {
   return resource.roleRef === 'ClusterRole' ? '(CR)' : '(R)';
 };
 
-export function RoleRef({ roleRef }) {
+interface RoleRefProps {
+  roleRef: any;
+}
+
+export function RoleRef({ roleRef }: RoleRefProps) {
   const { t } = useTranslation();
   const { clusterUrl, namespaceUrl } = useUrl();
   if (!roleRef) {

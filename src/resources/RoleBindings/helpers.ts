@@ -1,4 +1,4 @@
-export function validateSubject(subject) {
+export function validateSubject(subject: any) {
   const hasGroup =
     subject.kind === 'Group' && !!subject.name && !!subject.apiGroup;
   const hasUser =
@@ -8,7 +8,7 @@ export function validateSubject(subject) {
   return hasGroup || hasUser || hasAccount;
 }
 
-export function validateBinding(binding) {
+export function validateBinding(binding: any) {
   const hasSubjects = binding?.subjects?.length;
   const hasRoleRef = binding?.roleRef?.kind || binding?.roleRef?.name;
   const subjectsValid = binding?.subjects?.every(validateSubject);
