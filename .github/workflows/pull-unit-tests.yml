@@ -12,6 +12,10 @@ on:
       - 'cypress/**'
       - 'cypress.config.component.ts'
   workflow_call:
+    inputs:
+      trigger_env:
+        type: string
+        required: false
 
 jobs:
   run-unit-and-component-test:
@@ -25,7 +29,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with latest main
-        if: github.event_name != 'release'
+        if: inputs.trigger_env != 'release-trigger'
         uses: ./.github/actions/merge
       - uses: actions/setup-node@v4
         with:

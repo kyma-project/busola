@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
   workflow_call:
+    inputs:
+      trigger_env:
+        type: string
+        required: false
 
 jobs:
   run-lint-check:
@@ -14,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with latest main
-        if: github.event_name != 'release'
+        if: inputs.trigger_env != 'release-trigger'
         uses: ./.github/actions/merge
       - name: lint_check
         shell: bash

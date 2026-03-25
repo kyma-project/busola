@@ -124,27 +124,45 @@ jobs:
   integration-cluster-test:
     needs: [create-release]
     uses: ./.github/workflows/pull-integration-cluster-k3d.yml
+    with:
+      trigger_env: release-trigger
   integration-namespace-test:
     needs: [create-release]
     uses: ./.github/workflows/pull-integration-namespace-k3d.yml
+    with:
+      trigger_env: release-trigger
   lint-check:
     needs: [create-release]
-    uses: ./.github/workflows/pull-lint-check-pr.yml
+    uses: ./.github/workflows/lint-check-pr.yml
+    with:
+      trigger_env: release-trigger
   smoke-test-prod:
     needs: [create-release]
     uses: ./.github/workflows/pull-smoke-test-prod.yml
+    with:
+      trigger_env: release-trigger
   smoke-test-stage:
     needs: [create-release]
     uses: ./.github/workflows/pull-smoke-test-stage.yml
+    with:
+      trigger_env: release-trigger
   kyma-integration-test-dev:
     needs: [create-release]
     uses: ./.github/workflows/pull-kyma-integration-tests-dev.yml
+    with:
+      trigger_env: release-trigger
   k8s-chart-smoke-test:
     needs: [create-release]
     uses: ./.github/workflows/pull-k8s-chart-smoke-tests.yml
+    with:
+      trigger_env: release-trigger
   lighthouse-test:
     needs: [create-release]
     uses: ./.github/workflows/pull-lighthouse.yml
+    with:
+      trigger_env: release-trigger
   unit-tests:
     needs: [create-release]
     uses: ./.github/workflows/pull-unit-tests.yml
+    with:
+      trigger_env: release-trigger
