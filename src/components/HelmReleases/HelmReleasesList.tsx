@@ -21,7 +21,7 @@ function HelmReleasesList() {
 
   const namespace = useAtomValue(activeNamespaceIdAtom);
   const { namespaceUrl } = useUrl();
-  const resourceUrl = (entry) => {
+  const resourceUrl = (entry: Record<string, any>) => {
     return namespaceUrl(`helm-releases/${entry.releaseName}`, {
       namespace: entry.namespace,
     });
@@ -32,11 +32,11 @@ function HelmReleasesList() {
       : `/api/v1/namespaces/${namespace}/secrets`;
 
   const { data, loading, error } = useGetList(
-    (s) => s.type === 'helm.sh/release.v1',
+    (s: { type: string }) => s.type === 'helm.sh/release.v1',
   )(dataUrl);
 
   const entries = Object.entries(
-    groupBy(data || [], (r) => r.metadata.labels.name),
+    groupBy(data || [], (r: any) => r.metadata.labels.name),
   ).map(([releaseName, releases]) => {
     const recentRelease = findRecentRelease(releases);
     recentRelease.metadata.name = releaseName;
@@ -55,23 +55,23 @@ function HelmReleasesList() {
   const customColumns = [
     {
       header: t('helm-releases.headers.chart'),
-      value: (entry) =>
+      value: (entry: Record<string, any>) =>
         entry.recentRelease?.chart.metadata.name ||
         t('common.statuses.unknown'),
     },
     {
       header: t('helm-releases.headers.revision'),
-      value: (entry) => entry.revision,
+      value: (entry: Record<string, any>) => entry.revision,
     },
     {
       header: t('helm-releases.headers.chart-version'),
-      value: (entry) =>
+      value: (entry: Record<string, any>) =>
         entry.recentRelease?.chart.metadata.version ||
         t('common.statuses.unknown'),
     },
     {
       header: t('common.headers.status'),
-      value: (entry) => (
+      value: (entry: Record<string, any>) => (
         <HelmReleaseStatus status={entry.metadata.labels.status} />
       ),
     },
@@ -81,9 +81,8 @@ function HelmReleasesList() {
     <ResourcesList
       resources={entries}
       customColumns={customColumns}
-      serverDataLoading={loading}
-      serverDataError={error}
-      allowSlashShortcut
+      loading={loading}
+      error={error}
       hasDetailsView
       enableColumnLayout
       customUrl={resourceUrl}
