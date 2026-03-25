@@ -1,20 +1,16 @@
-import { RefObject, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import { createPersistentVolumeClaimTemplate } from './templates';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 
-interface PersistentVolumeClaimCreateProps {
+type PersistentVolumeClaimCreateProps = ResourceFormProps & {
   namespace?: string;
-  formElementRef?: RefObject<HTMLFormElement>;
-  onChange?: (pvc: Record<string, any>) => void;
-  setCustomValid?: (isValid: boolean) => void;
-  resource?: Record<string, any>;
   resourceUrl?: string;
-  [key: string]: any;
-}
+};
 
 export default function PersistentVolumeClaimCreate({
   namespace,
@@ -28,12 +24,12 @@ export default function PersistentVolumeClaimCreate({
   const { t } = useTranslation();
   const [persistentVolumeClaim, setPersistentVolumeClaim] = useState(
     cloneDeep(initialPersistentVolumeClaim) ||
-      createPersistentVolumeClaimTemplate(namespace),
+      createPersistentVolumeClaimTemplate(namespace ?? 'default'),
   );
 
   const [initialResource, setInitialResource] = useState(
     initialPersistentVolumeClaim ||
-      createPersistentVolumeClaimTemplate(namespace),
+      createPersistentVolumeClaimTemplate(namespace ?? 'default'),
   );
   const [prevNamespace, setPrevNamespace] = useState(namespace);
 
@@ -45,11 +41,11 @@ export default function PersistentVolumeClaimCreate({
     setPrevNamespace(namespace);
     setPersistentVolumeClaim(
       cloneDeep(initialPersistentVolumeClaim) ||
-        createPersistentVolumeClaimTemplate(namespace),
+        createPersistentVolumeClaimTemplate(namespace ?? 'default'),
     );
     setInitialResource(
       initialPersistentVolumeClaim ||
-        createPersistentVolumeClaimTemplate(namespace),
+        createPersistentVolumeClaimTemplate(namespace ?? 'default'),
     );
   }
 
