@@ -112,6 +112,7 @@ const ConfigurationForm = ({
 
   return (
     <ResourceForm
+      singularName={''}
       resource={configuration}
       setResource={(val) => {
         setConfiguration(val);

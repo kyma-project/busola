@@ -338,7 +338,6 @@ export function ResourceComponent({
             isEdit={true}
             confirmText={t('common.buttons.save')}
             protectedResource={showProtectedResourceWarning}
-            /*@ts-expect-error Type mismatch between js and ts*/
             protectedResourceWarning={
               <ProtectedResourceWarning entry={resource} withText />
             }

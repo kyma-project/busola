@@ -1,6 +1,9 @@
 import {
+  FormEvent,
   FormEventHandler,
   FunctionComponent,
+  ReactNode,
+  RefObject,
   useContext,
   useEffect,
   useMemo,
@@ -21,7 +24,7 @@ import { CollapsibleSectionProps } from './CollapsibleSection';
 import { LabelProps } from './Label';
 import { FormFieldProps } from './FormField';
 import { TitleProps } from './Title';
-import { useCreateResource } from '../useCreateResource';
+import { SkinCreateFn, useCreateResource } from '../useCreateResource';
 import { K8sNameField, KeyValueField } from '../fields';
 import jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
@@ -47,24 +50,24 @@ import { LayoutColumnName } from 'types';
 
 export type ResourceFormProps = {
   pluralKind?: string; // used for the request path
-  singularName?: string;
+  singularName: string;
   resource: any;
   initialResource: any;
   updateInitialResource?: (res: any) => void;
-  setResource: (res: any) => void;
+  setResource?: (res: any) => void;
   setCustomValid?: (isValid: boolean) => void;
   onChange?: FormEventHandler<HTMLElement>;
-  formElementRef?: React.RefObject<HTMLFormElement>;
-  children?: React.ReactNode;
+  formElementRef?: RefObject<HTMLFormElement>;
+  children?: ReactNode;
   createUrl?: string;
   presets?: Array<any>;
   onPresetSelected?: (preset: any, variables: Record<string, string>) => void;
   renderEditor?: (params: {
-    defaultEditor: React.ReactNode;
+    defaultEditor: ReactNode;
     Editor: FunctionComponent<any>;
-  }) => React.ReactNode;
-  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
-  skipCreateFn?: (res: any) => boolean;
+  }) => ReactNode;
+  onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
+  skipCreateFn?: SkinCreateFn;
   afterCreatedFn?: (res: any) => void;
   afterCreatedCustomMessage?: string;
   className?: string;
@@ -78,13 +81,13 @@ export type ResourceFormProps = {
   onModeChange?: (oldMode: string, newMode: string) => void;
   urlPath?: string;
   layoutNumber?: LayoutColumnName;
-  actions?: React.ReactNode;
+  actions?: ReactNode;
   modeSelectorDisabled?: boolean;
   initialMode?: 'MODE_FORM' | 'MODE_YAML';
   yamlSearchDisabled?: boolean;
   yamlHideDisabled?: boolean;
   stickyHeaderHeight?: number | string;
-  title?: React.ReactNode;
+  title?: ReactNode;
   resetLayout?: boolean;
   formWithoutPanel?: boolean;
 };
@@ -179,7 +182,7 @@ export const ResourceForm: ResourceFormType = (({
   const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,
-    pluralKind,
+    pluralKind: pluralKind || '',
     resource,
     initialResource,
     updateInitialResource,

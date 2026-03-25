@@ -13,6 +13,11 @@ on:
       - 'kyma/**'
       - 'Dockerfile*'
       - 'package.json'
+  workflow_call:
+    inputs:
+      trigger_env:
+        type: string
+        required: false
 
 jobs:
   run-smoke-test-stage:
@@ -26,6 +31,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with latest main
+        if: inputs.trigger_env != 'release-trigger'
         uses: ./.github/actions/merge
       - name: Install k3d
         shell: bash

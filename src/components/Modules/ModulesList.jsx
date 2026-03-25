@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Create, ResourceDescription } from 'components/Modules';
@@ -75,6 +75,14 @@ export default function ModulesList({ namespaced }) {
     layoutState,
   ]);
 
+  const filteredCommunityModules = useMemo(() => {
+    if (!installedCommunityModules?.length) return [];
+    const selectedModulesNames = selectedModules.map((module) => module.name);
+    return installedCommunityModules.filter(
+      (module) => !selectedModulesNames.includes(module.name),
+    );
+  }, [installedCommunityModules, selectedModules]);
+
   if (moduleTemplatesLoading || kymaResourceLoading) {
     return <Spinner />;
   }
@@ -115,7 +123,7 @@ export default function ModulesList({ namespaced }) {
             <CommunityModulesList
               key="community-modules-list"
               moduleTemplates={communityModuleTemplates}
-              selectedModules={installedCommunityModules}
+              selectedModules={filteredCommunityModules}
               modulesLoading={installedCommunityModulesLoading}
               namespaced={namespaced}
               setOpenedModuleIndex={setOpenedCommunityModuleIndex}

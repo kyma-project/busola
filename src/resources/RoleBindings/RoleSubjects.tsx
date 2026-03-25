@@ -1,0 +1,33 @@
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
+import { useTranslation } from 'react-i18next';
+import { SubjectLink } from './SubjectLink';
+
+export const RoleSubjects = (binding: any) => {
+  const { t } = useTranslation();
+
+  const headerRenderer = () => [
+    t('role-bindings.headers.kind'),
+    t('common.headers.name'),
+    t('common.labels.namespace'),
+  ];
+
+  const rowRenderer = (subject: any) => [
+    subject.kind,
+    <SubjectLink key={subject} subject={subject} />,
+    subject.namespace || EMPTY_TEXT_PLACEHOLDER,
+  ];
+
+  return (
+    <GenericList
+      title={t('role-bindings.headers.subjects')}
+      key="subjects"
+      entries={binding?.subjects || []}
+      headerRenderer={headerRenderer}
+      rowRenderer={rowRenderer}
+      searchSettings={{
+        textSearchProperties: ['kind', 'name', 'namespace'],
+      }}
+    />
+  );
+};
