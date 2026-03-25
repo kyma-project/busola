@@ -41,7 +41,7 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
 
   const getStatusType = (status?: string) => {
     if (status === 'Ready') return 'Positive';
-    return undefined;
+    return 'None';
   };
 
   const getStatus = (status?: {
@@ -136,7 +136,6 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
         EMPTY_TEXT_PLACEHOLDER,
     ];
   };
-  /*@ts-expect-error Type mismatch between js and ts*/
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
   // This sets and unsets cluster version.
@@ -152,16 +151,13 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
         <GenericList
           title={t('cluster-overview.headers.nodes')}
           actions={[]}
-          /*@ts-expect-error Type mismatch between js and ts*/
           entries={data || []}
           headerRenderer={headerRenderer}
           rowRenderer={rowRenderer}
-          /*@ts-expect-error Type mismatch between js and ts*/
           serverDataError={error}
           serverDataLoading={!data && loading}
           pagination={{ autoHide: true }}
           testid="cluster-nodes"
-          /*@ts-expect-error Type mismatch between js and ts*/
           searchSettings={{
             showSearchField: false,
             allowSlashShortcut: false,

@@ -1,8 +1,17 @@
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { FilteredEntriesType } from 'shared/components/GenericList/components/TableBody';
 
-export const NetworkPolicyPorts = ({ ports, title }) => {
+export type NetworkPolicyPortsProps = {
+  title: string;
+  ports: FilteredEntriesType[];
+};
+
+export const NetworkPolicyPorts = ({
+  ports,
+  title,
+}: NetworkPolicyPortsProps) => {
   const { t } = useTranslation();
 
   if (!ports?.length) return null;
@@ -12,7 +21,7 @@ export const NetworkPolicyPorts = ({ ports, title }) => {
     t('network-policies.headers.port'),
     t('network-policies.headers.end-port'),
   ];
-  const rowRenderer = ({ port, endPort, protocol }) => [
+  const rowRenderer = ({ port, endPort, protocol }: any) => [
     protocol || EMPTY_TEXT_PLACEHOLDER,
     port || EMPTY_TEXT_PLACEHOLDER,
     endPort || EMPTY_TEXT_PLACEHOLDER,
