@@ -1,7 +1,16 @@
-import { Widget, InlineWidget } from '../Widget';
+import { InlineWidget, Widget, WidgetProps } from '../Widget';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 
-export function FeaturedCard({ value, structure, schema, ...props }) {
+export type FeatureCardProps = WidgetProps & {
+  schema: any;
+};
+
+export function FeaturedCard({
+  value,
+  structure,
+  schema,
+  ...props
+}: FeatureCardProps) {
   const { id, title, description, illustration, design } = structure;
 
   return (
