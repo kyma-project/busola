@@ -57,6 +57,8 @@ export type ResourceDetailsProps = {
     resourceSchema?: Record<string, any>;
     editMode: boolean;
     stickyHeaderHeight: number | string;
+    initialResource?: any;
+    setResource?: (resource: any) => void;
     [key: string]: any;
   }>;
   customConditionsComponents?: CustomColumnsType;

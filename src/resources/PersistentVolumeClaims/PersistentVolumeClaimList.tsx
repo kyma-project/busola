@@ -10,16 +10,9 @@ import {
   i18nDescriptionKey,
   docsURL,
 } from 'resources/PersistentVolumeClaims';
+import { ResourcesListProps } from 'shared/components/ResourcesList/types';
 
-interface PersistentVolumeClaimListProps {
-  namespace?: string;
-  layoutCloseCreateUrl?: string;
-  [key: string]: any;
-}
-
-export function PersistentVolumeClaimList(
-  props: PersistentVolumeClaimListProps,
-) {
+export function PersistentVolumeClaimList(props: ResourcesListProps) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -46,8 +39,6 @@ export function PersistentVolumeClaimList(
     <ResourcesList
       description={ResourceDescription}
       customColumns={customColumns}
-      resourceType="persistentVolumeClaims"
-      resourceUrl="/api/v1/persistentvolumeclaims"
       {...props}
       createResourceForm={PersistentVolumeClaimCreate}
       emptyListProps={{

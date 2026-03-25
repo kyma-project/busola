@@ -17,19 +17,23 @@ import { useUrl } from 'hooks/useUrl';
 import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { ResourceDescription } from 'resources/PersistentVolumeClaims';
+import {
+  PersistentVolumeClaim,
+  ResourceDescription,
+  resourceType,
+} from 'resources/PersistentVolumeClaims';
 import { Link } from 'shared/components/Link/Link';
 
 import './PersistentVolumeClaim.scss';
 
-interface RelatedVolumesProps {
+type RelatedVolumesProps = {
   labels: Record<string, string>;
-}
+};
 
-interface PersistentVolumeClaimDetailsProps {
+type PersistentVolumeClaimDetailsProps = {
   namespace: string;
   resourceName: string;
-}
+};
 
 const RelatedVolumes = ({ labels }: RelatedVolumesProps) => {
   const PVParams = {
@@ -53,7 +57,7 @@ const RelatedVolumes = ({ labels }: RelatedVolumesProps) => {
   return <PersistentVolumesList {...PVParams} key="pv-list" />;
 };
 
-function PVCSelectorSpecification(pvc: any) {
+function PVCSelectorSpecification(pvc: PersistentVolumeClaim) {
   const { t } = useTranslation();
 
   return (
@@ -69,7 +73,7 @@ function PVCSelectorSpecification(pvc: any) {
   );
 }
 
-export const PVCConfiguration = (pvc: any) => {
+export const PVCConfiguration = (pvc: PersistentVolumeClaim) => {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
@@ -139,7 +143,7 @@ export const PVCConfiguration = (pvc: any) => {
           value={pvc.spec?.volumeMode}
         />
         <LayoutPanelRow
-          key={pvc.spec?.accessModes}
+          key={pvc.spec?.accessModes?.toString()}
           name={t('persistent-volume-claims.headers.access-modes')}
           value={<Tokens tokens={pvc.spec?.accessModes} />}
         />
@@ -192,7 +196,9 @@ export function PersistentVolumeClaimDetails(
   const customStatusColumns = [
     {
       header: t('persistent-volume-claims.headers.access-modes'),
-      value: (pvc: any) => <Tokens tokens={pvc?.status?.accessModes} />,
+      value: (pvc: PersistentVolumeClaim) => (
+        <Tokens tokens={pvc?.status?.accessModes} />
+      ),
     },
   ];
 
@@ -205,7 +211,7 @@ export function PersistentVolumeClaimDetails(
     />
   );
 
-  const PVCPods = (pvc: any) => {
+  const PVCPods = (pvc: PersistentVolumeClaim) => {
     const filterByClaim = ({ spec }: { spec: any }) =>
       spec?.volumes?.find(
         (volume: any) =>
@@ -260,7 +266,7 @@ export function PersistentVolumeClaimDetails(
       ]}
       description={ResourceDescription}
       createResourceForm={PersistentVolumeClaimCreate}
-      resourceType="persistentVolumeClaims"
+      resourceType={resourceType}
       {...props}
     />
   );

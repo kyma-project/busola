@@ -3,6 +3,36 @@ import { predefinedCategories } from 'state/navigation/categories';
 import { Description } from 'shared/components/Description/Description';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
+export type PersistentVolumeClaim = {
+  metadata: {
+    name: string;
+    namespace: string;
+    labels?: Record<string, string>;
+  };
+  spec: {
+    storageClassName?: string;
+    volumeName?: string;
+    volumeMode?: string;
+    accessModes?: string[];
+    resources?: {
+      requests?: {
+        storage?: string;
+      };
+      limits?: {
+        storage?: string;
+      };
+    };
+    selector: {
+      matchLabels: Record<string, string> | null;
+      matchExpressions?: any[];
+    };
+  };
+  status: {
+    accessModes?: string[];
+    phase: string;
+  };
+};
+
 export const resourceType = 'PersistentVolumeClaims';
 export const namespaced = true;
 export const apiGroup = '';
