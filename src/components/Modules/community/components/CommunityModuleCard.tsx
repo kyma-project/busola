@@ -13,7 +13,14 @@ import {
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 
-async function isImageAvailable(url) {
+type CommunityModuleCardProps = {
+  module: any;
+  isChecked: (moduleName: string) => boolean;
+  onChange: (value: string, checked: boolean) => void;
+  selectedModules: Map<string, any>;
+};
+
+async function isImageAvailable(url: string) {
   try {
     const response = await fetch(url, { method: 'HEAD' });
     return response.ok;
@@ -23,7 +30,7 @@ async function isImageAvailable(url) {
   }
 }
 
-async function getImageSrc(module) {
+async function getImageSrc(module: any) {
   const defaultImage = '/assets/sap-logo.svg';
   const iconLink = module.versions[0]?.icon?.link;
 
@@ -39,7 +46,7 @@ export default function CommunityModuleCard({
   isChecked,
   onChange,
   selectedModules,
-}) {
+}: CommunityModuleCardProps) {
   const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState('');
 
@@ -114,12 +121,12 @@ export default function CommunityModuleCard({
           <Select
             accessibleName={`${module.name} version select`}
             onChange={(event) => {
-              onChange(event.detail.selectedOption.value, false);
+              onChange(event.detail.selectedOption.value ?? '', false);
             }}
             value={`${module.versions[0].moduleTemplate.name}|${module.versions[0].moduleTemplate.namespace}`}
             className="channel-select"
           >
-            {module.versions?.map((version) => (
+            {module.versions?.map((version: any) => (
               <Option
                 selected={selectedModules.get(module.name)}
                 key={`option-${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}

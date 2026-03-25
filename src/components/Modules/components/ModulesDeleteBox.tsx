@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { Dispatch, FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   CheckBox,
@@ -32,11 +32,11 @@ import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 
 type ModulesListDeleteBoxProps = {
-  DeleteMessageBox: React.FC<any>;
+  DeleteMessageBox: FC<any>;
   moduleTemplates: ModuleTemplateListType;
   selectedModules: { name: string }[];
-  chosenModuleIndex: number;
-  kymaResource: KymaResourceType;
+  chosenModuleIndex: number | null;
+  kymaResource: KymaResourceType | null;
   kymaResourceState?: KymaResourceType;
   detailsOpen: boolean;
   isCommunity?: boolean;
@@ -45,10 +45,10 @@ type ModulesListDeleteBoxProps = {
   performDelete: () => void;
   performCancel: () => void;
   setLayoutColumn: (update: SetStateAction<ColumnLayoutState>) => void;
-  handleModuleUninstall: () => void;
-  setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  setInitialUnchangedResource: React.Dispatch<React.SetStateAction<any>>;
-  setKymaResourceState: React.Dispatch<React.SetStateAction<any>>;
+  handleModuleUninstall?: () => void;
+  setChosenModuleIndex: Dispatch<SetStateAction<number | null>>;
+  setInitialUnchangedResource?: Dispatch<SetStateAction<any>>;
+  setKymaResourceState?: Dispatch<SetStateAction<any>>;
 };
 
 export const ModulesDeleteBox = ({
@@ -101,6 +101,9 @@ export const ModulesDeleteBox = ({
 
   const layoutColumn = useAtomValue(columnLayoutAtom);
   const notification = useNotification();
+
+  const moduleName =
+    chosenModuleIndex != null ? selectedModules[chosenModuleIndex]?.name : '';
 
   const kymaModulesUrl = namespaced
     ? namespaceUrl('kymamodules')
@@ -195,7 +198,7 @@ export const ModulesDeleteBox = ({
     } catch (e) {
       notification.notifyError({
         content: t('modules.community.messages.delete-failure', {
-          module: selectedModules[chosenModuleIndex]?.name,
+          module: moduleName,
           error: e instanceof Error ? e.message : e,
         }),
       });
@@ -204,7 +207,13 @@ export const ModulesDeleteBox = ({
     if (chosenModuleIndex != null) {
       selectedModules.splice(chosenModuleIndex, 1);
     }
-    if (!isCommunity && kymaResource) {
+    if (
+      !isCommunity &&
+      kymaResource &&
+      setKymaResourceState &&
+      setInitialUnchangedResource &&
+      handleModuleUninstall
+    ) {
       setKymaResourceState({
         ...kymaResource,
         spec: {
@@ -223,7 +232,7 @@ export const ModulesDeleteBox = ({
     } catch (e) {
       notification.notifyError({
         content: t('modules.community.messages.delete-failure', {
-          module: selectedModules[chosenModuleIndex]?.name,
+          module: moduleName,
           error: e instanceof Error ? e.message : e,
         }),
       });
@@ -288,9 +297,6 @@ export const ModulesDeleteBox = ({
       navigate(kymaModulesUrl);
     }
   };
-
-  const moduleName =
-    chosenModuleIndex != null ? selectedModules[chosenModuleIndex]?.name : '';
 
   return (
     <DeleteMessageBox
@@ -396,12 +402,12 @@ export const ModulesDeleteBox = ({
           )}
         </>
       }
-      resourceTitle={selectedModules[chosenModuleIndex]?.name}
+      resourceTitle={moduleName}
       deleteFn={() => {
         if (!isCommunity && kymaResource) {
           deleteAllResources();
         } else if (isCommunity) {
-          deleteCommunityResources(selectedModules[chosenModuleIndex]?.name);
+          deleteCommunityResources(moduleName);
         }
       }}
     />
