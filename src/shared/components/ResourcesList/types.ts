@@ -10,9 +10,9 @@ import {
 } from '../GenericList/components/TableBody';
 import { LayoutColumnName } from 'types';
 
-type CustomColumn = {
+export type CustomColumn = {
   header?: string;
-  value: (resource: any) => any;
+  value: (resource: any) => ReactNode | string;
   id?: string;
   visibility?: (resource: any) => boolean;
 };
@@ -30,7 +30,7 @@ export type ResourcesListProps = {
   hasDetailsView?: boolean;
   isCompact?: boolean;
   showTitle?: boolean;
-  filter?: (resource: any) => boolean;
+  filter?: (resource: any) => boolean | Promise<boolean>;
   listHeaderActions?: ReactNode;
   description?: ReactNode;
   readOnly?: boolean;

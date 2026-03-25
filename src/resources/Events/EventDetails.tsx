@@ -12,10 +12,29 @@ import { ResourceDescription } from 'resources/Events';
 import EventCreate from './EventYaml';
 import { Link } from 'shared/components/Link/Link';
 
-const RowComponent = ({ name, value }) =>
+type RowComponentProps = {
+  name: string;
+  value: any;
+};
+
+type EventDetailsProps = {
+  resourceName: string;
+  resourceType: string;
+  resourceUrl: string;
+  i18n: any;
+  layoutCloseCreateUrl: string;
+  namespace: string;
+  readOnly: boolean;
+  resourceGraphConfig: Record<string, any>;
+  resourceTitle: string;
+  showYamlTab?: boolean;
+  [key: string]: any;
+};
+
+const RowComponent = ({ name, value }: RowComponentProps) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
 
-const Specification = (event) => {
+const Specification = (event: any) => {
   const { t } = useTranslation();
 
   return (
@@ -78,14 +97,24 @@ const Specification = (event) => {
   );
 };
 
-export default function EventDetails(props) {
+export default function EventDetails({
+  resourceName,
+  resourceType,
+  resourceUrl,
+  layoutCloseCreateUrl,
+  namespace,
+  resourceGraphConfig,
+  resourceTitle,
+  showYamlTab = true,
+  ...props
+}: EventDetailsProps) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
 
   const customColumns = [
     {
       header: t('common.labels.namespace'),
-      value: (event) => (
+      value: (event: Record<string, any>) => (
         <Link
           data-testid="details-link"
           url={clusterUrl(
@@ -98,7 +127,7 @@ export default function EventDetails(props) {
     },
     {
       header: t('events.headers.last-seen'),
-      value: (event) => (
+      value: (event: Record<string, any>) => (
         <ReadableCreationTimestamp timestamp={event.lastTimestamp} />
       ),
     },
@@ -106,6 +135,14 @@ export default function EventDetails(props) {
 
   return (
     <ResourceDetails
+      resourceUrl={resourceUrl}
+      resourceType={resourceType}
+      resourceName={resourceName}
+      resourceTitle={resourceTitle}
+      layoutCloseCreateUrl={layoutCloseCreateUrl}
+      namespace={namespace}
+      resourceGraphConfig={resourceGraphConfig}
+      showYamlTab={showYamlTab}
       {...props}
       customComponents={[Specification]}
       customColumns={customColumns}
