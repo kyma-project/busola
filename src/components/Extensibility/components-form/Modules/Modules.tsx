@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useUIStore } from '@ui-schema/ui-schema';
+import { useUIStore, WidgetProps } from '@ui-schema/ui-schema';
 
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';
@@ -11,15 +11,32 @@ import { CheckBox, MessageStrip } from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
+import { Resource } from 'components/Extensibility/contexts/DataSources';
 
 import './Modules.scss';
 
-export function Modules({ storeKeys, resource, onChange, schema, required }) {
+type ModulesProps = {
+  resource: Resource;
+  onChange: (action: Record<string, any>) => void;
+} & WidgetProps;
+
+export function Modules({
+  storeKeys,
+  resource,
+  onChange,
+  schema,
+  required,
+}: ModulesProps) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
   const sectionName = schema.get('name');
 
-  const setCheckbox = (fullValue, key, entryValue, checked, index) => {
+  const setCheckbox = (
+    key: string,
+    entryValue: string,
+    checked: boolean,
+    index: number,
+  ) => {
     if (checked) {
       onChange({
         storeKeys,
@@ -41,7 +58,8 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
     }
   };
   const { store } = useUIStore();
-  const { value } = store?.extractValues(storeKeys) || [];
+  const { value } =
+    store?.extractValues(storeKeys) || ({} as Record<string, any>);
   const { itemVars } = useVariables();
   const stableJsonataDeps = useMemo(
     () => ({
@@ -55,10 +73,10 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
 
   const rule = schema.get('schemaRule');
   const options = schema.get('options');
-  const [parsedOptions, setParsedOptions] = useState({});
+  const [parsedOptions, setParsedOptions] = useState<Record<string, any>>({});
 
   useEffect(() => {
-    async function makeJsonata(propObject) {
+    async function makeJsonata(propObject?: string | any) {
       if (typeof propObject === 'string') {
         const [newEnum] = await jsonata(
           propObject,
@@ -70,7 +88,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
       console.warn('Widget::Modules');
       return null;
     }
-    const parsedOpt = {};
+    const parsedOpt = {} as Record<string, any>;
     Promise.all(
       Object.keys(options).map(async (optionName) => {
         if (
@@ -87,7 +105,7 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stableJsonataDeps, rule?.itemVars, storeKeys, options]);
 
-  const Items = parsedOptions?.name?.map((name, index) => {
+  const Items = parsedOptions?.name?.map((name: string, index: number) => {
     if (!name)
       return (
         <MessageStrip
@@ -99,50 +117,59 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
         </MessageStrip>
       );
 
-    const isChecked = !!(value ? value.toJS() : []).find((v) => {
-      return v.name === name;
-    });
+    const isChecked = !!(value ? value.toJS() : []).find(
+      (v: { name: string }) => {
+        return v.name === name;
+      },
+    );
 
-    const channelModuleTemplate = [];
+    const channelModuleTemplate = [] as {
+      text: string;
+      additionalText: string;
+    }[];
 
-    parsedOptions?.moduleTemplates?.map((moduleTemplate) => {
-      if (
-        moduleTemplate?.metadata?.labels[
-          'operator.kyma-project.io/module-name'
-        ] === name
-      ) {
-        if (moduleTemplate?.spec?.descriptor?.component?.version)
+    parsedOptions?.moduleTemplates?.map(
+      (moduleTemplate: Record<string, any>) => {
+        if (
+          moduleTemplate?.metadata?.labels[
+            'operator.kyma-project.io/module-name'
+          ] === name
+        ) {
+          if (moduleTemplate?.spec?.descriptor?.component?.version)
+            return channelModuleTemplate.push({
+              text: moduleTemplate.spec.channel,
+              additionalText: `(version: ${moduleTemplate?.spec?.descriptor?.component?.version})`,
+            });
+
           return channelModuleTemplate.push({
             text: moduleTemplate.spec.channel,
-            additionalText: `(version: ${moduleTemplate?.spec?.descriptor?.component?.version})`,
+            additionalText: '',
           });
+        } else {
+          return '';
+        }
+      },
+    );
 
-        return channelModuleTemplate.push({
-          text: moduleTemplate.spec.channel,
-          additionalText: '',
-        });
-      } else {
-        return '';
-      }
-    });
+    const link = parsedOptions?.moduleTemplates?.find(
+      (moduleTemplate: Record<string, any>) => {
+        const channel = resource?.spec?.modules
+          ? (resource?.spec?.modules[index]?.channel ?? resource?.spec?.channel)
+          : resource?.spec?.channel;
 
-    const link = parsedOptions?.moduleTemplates?.find((moduleTemplate) => {
-      const channel = resource?.spec?.modules
-        ? (resource?.spec?.modules[index]?.channel ?? resource?.spec?.channel)
-        : resource?.spec?.channel;
-
-      if (
-        moduleTemplate?.metadata?.labels[
-          'operator.kyma-project.io/module-name'
-        ] === name &&
-        moduleTemplate?.spec?.channel === channel
-      )
-        return moduleTemplate;
-      else return null;
-    })?.metadata?.annotations['operator.kyma-project.io/doc-url'];
+        if (
+          moduleTemplate?.metadata?.labels[
+            'operator.kyma-project.io/module-name'
+          ] === name &&
+          moduleTemplate?.spec?.channel === channel
+        )
+          return moduleTemplate;
+        else return null;
+      },
+    )?.metadata?.annotations['operator.kyma-project.io/doc-url'];
 
     const isBeta = parsedOptions?.moduleTemplates?.find(
-      (moduleTemplate) =>
+      (moduleTemplate: Record<string, any>) =>
         moduleTemplate?.metadata?.labels[
           'operator.kyma-project.io/module-name'
         ] === name &&
@@ -162,19 +189,21 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             checked={isChecked}
             onChange={(e) => {
               setCheckbox(
-                value,
                 'name',
                 name,
                 e.target.checked,
                 resource?.spec?.modules
-                  ? resource?.spec?.modules.findIndex((module) => {
-                      return module.name === name;
-                    })
+                  ? resource?.spec?.modules.findIndex(
+                      (module: { name: string }) => {
+                        return module.name === name;
+                      },
+                    )
                   : index,
               );
             }}
             text={name}
           />
+          {/* @ts-expect-error Type mismatch between js and ts */}
           <Dropdown
             className="sap-margin-top-tiny"
             label={t('extensibility.widgets.modules.module-channel-label')}
@@ -191,21 +220,25 @@ export function Modules({ storeKeys, resource, onChange, schema, required }) {
             selectedKey={
               resource?.spec?.modules
                 ? resource?.spec?.modules[
-                    resource?.spec?.modules.findIndex((module) => {
-                      return module.name === name;
-                    })
+                    resource?.spec?.modules.findIndex(
+                      (module: { name: string }) => {
+                        return module.name === name;
+                      },
+                    )
                   ]?.channel
                 : ''
             }
-            onSelect={(_, selected) => {
+            onSelect={(_: any, selected: { key: string | number }) => {
               if (selected.key !== -1) {
                 onChange({
                   storeKeys: storeKeys
                     .push(
                       resource?.spec?.modules
-                        ? resource?.spec?.modules.findIndex((module) => {
-                            return module.name === name;
-                          })
+                        ? resource?.spec?.modules.findIndex(
+                            (module: { name: string }) => {
+                              return module.name === name;
+                            },
+                          )
                         : index,
                     )
                     .push('channel'),
