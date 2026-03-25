@@ -5,7 +5,7 @@ export type ColumnState = {
   resourceName: null | string;
   resourceType: null | string;
   rawResourceTypeName?: null | string;
-  namespaceId: null | string;
+  namespaceId?: null | string;
   apiGroup?: null | string;
   apiVersion?: null | string;
 };
