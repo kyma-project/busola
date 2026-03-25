@@ -12,7 +12,12 @@ import { useUrl } from 'hooks/useUrl';
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import PersistentVolumeCreate from './PersistentVolumeCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { ResourceDescription } from 'resources/PersistentVolumes';
+import {
+  PersistentVolumeMetadataType,
+  PersistentVolumeSpecType,
+  PersistentVolumeType,
+  ResourceDescription,
+} from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';
 import { getReadableTimestampWithTime } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { VolumeNFS } from './components/VolumeNFS';
@@ -53,8 +58,8 @@ export function PersistentVolumeDetails({
     spec,
     metadata,
   }: {
-    spec: Record<string, any>;
-    metadata: Record<string, any>;
+    spec: PersistentVolumeSpecType;
+    metadata: PersistentVolumeMetadataType;
   }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
       <UI5Panel
@@ -162,7 +167,7 @@ export function PersistentVolumeDetails({
   const customStatusColumns = [
     {
       header: t('pv.headers.lastPhaseTransitionTime'),
-      value: (pv: Record<string, any>) =>
+      value: (pv: PersistentVolumeType) =>
         getReadableTimestampWithTime(pv?.status?.lastPhaseTransitionTime),
     },
   ];

@@ -11,16 +11,12 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
+  PersistentVolumeType,
 } from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';
+import { ResourcesListProps } from 'shared/components/ResourcesList/types';
 
-interface PersistentVolumeListProps {
-  resourceUrl: string;
-  resourceType: string;
-  [key: string]: any;
-}
-
-export function PersistentVolumeList(props: PersistentVolumeListProps) {
+export function PersistentVolumeList(props: ResourcesListProps) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
 
@@ -35,7 +31,7 @@ export function PersistentVolumeList(props: PersistentVolumeListProps) {
   const customColumns = [
     {
       header: t('pv.headers.storage-class'),
-      value: (pv: Record<string, any>) =>
+      value: (pv: PersistentVolumeType) =>
         storageClasses?.find(
           ({ metadata }) => metadata.name === pv.spec?.storageClassName,
         ) ? (
@@ -55,12 +51,12 @@ export function PersistentVolumeList(props: PersistentVolumeListProps) {
     },
     {
       header: t('pv.headers.capacity'),
-      value: (pv: Record<string, any>) =>
+      value: (pv: PersistentVolumeType) =>
         pv.spec?.capacity?.storage || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pv.headers.claim'),
-      value: (pv: Record<string, any>) =>
+      value: (pv: PersistentVolumeType) =>
         persistentVolumeClaims?.find(
           ({ metadata }) => metadata.name === pv.spec?.claimRef?.name,
         ) ? (
@@ -83,7 +79,7 @@ export function PersistentVolumeList(props: PersistentVolumeListProps) {
     },
     {
       header: t('common.headers.status'),
-      value: (pv: Record<string, any>) => (
+      value: (pv: PersistentVolumeType) => (
         <span style={{ wordBreak: 'keep-all' }}>
           <PersistentVolumeStatus status={pv.status} />
         </span>
