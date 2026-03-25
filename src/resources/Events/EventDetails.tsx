@@ -114,7 +114,7 @@ export default function EventDetails({
   const customColumns = [
     {
       header: t('common.labels.namespace'),
-      value: (event: any) => (
+      value: (event: Record<string, any>) => (
         <Link
           data-testid="details-link"
           url={clusterUrl(
@@ -127,7 +127,7 @@ export default function EventDetails({
     },
     {
       header: t('events.headers.last-seen'),
-      value: (event: any) => (
+      value: (event: Record<string, any>) => (
         <ReadableCreationTimestamp timestamp={event.lastTimestamp} />
       ),
     },
