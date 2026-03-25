@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { Dispatch, FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   CheckBox,
@@ -32,7 +32,7 @@ import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 
 type ModulesListDeleteBoxProps = {
-  DeleteMessageBox: React.FC<any>;
+  DeleteMessageBox: FC<any>;
   moduleTemplates: ModuleTemplateListType;
   selectedModules: { name: string }[];
   chosenModuleIndex: number | null;
@@ -46,9 +46,9 @@ type ModulesListDeleteBoxProps = {
   performCancel: () => void;
   setLayoutColumn: (update: SetStateAction<ColumnLayoutState>) => void;
   handleModuleUninstall?: () => void;
-  setChosenModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  setInitialUnchangedResource?: React.Dispatch<React.SetStateAction<any>>;
-  setKymaResourceState?: React.Dispatch<React.SetStateAction<any>>;
+  setChosenModuleIndex: Dispatch<SetStateAction<number | null>>;
+  setInitialUnchangedResource?: Dispatch<SetStateAction<any>>;
+  setKymaResourceState?: Dispatch<SetStateAction<any>>;
 };
 
 export const ModulesDeleteBox = ({

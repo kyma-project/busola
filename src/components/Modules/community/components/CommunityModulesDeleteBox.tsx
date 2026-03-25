@@ -2,6 +2,8 @@ import { ModulesDeleteBox } from 'components/Modules/components/ModulesDeleteBox
 import {
   createContext,
   Dispatch,
+  FC,
+  ReactNode,
   SetStateAction,
   useContext,
   useMemo,
@@ -19,10 +21,10 @@ import { ColumnLayoutState } from 'state/columnLayoutAtom';
 type CommunityModulesDeleteBoxContextProviderProps = {
   handleResourceDelete: (options: any) => void;
   showDeleteDialog: boolean;
-  DeleteMessageBox: React.FC<{ moduleName: string }>;
+  DeleteMessageBox: FC<{ moduleName: string }>;
   layoutState: any;
   setLayoutColumn: (update: SetStateAction<ColumnLayoutState>) => void;
-  children: React.ReactNode;
+  children: ReactNode;
   namespaced: boolean;
   performDelete: () => void;
   performCancel: () => void;
@@ -32,7 +34,7 @@ type CommunityModulesDeleteBoxContextType = {
   setOpenedModuleIndex: Dispatch<SetStateAction<number | null>>;
   showDeleteDialog?: boolean;
   openedModuleIndex: number | null;
-  deleteModuleButton: React.ReactNode;
+  deleteModuleButton: ReactNode;
   handleResourceDelete: (options: any) => void;
   namespaced?: boolean;
   performDelete: () => void;
