@@ -9,11 +9,16 @@ import escape from 'lodash.escape';
 const config = require('../config.js');
 
 const tokenManager = new TokenManager();
-const COMPANION_PUBLIC_KEY_URL =
-  'https://companion.a5c4d12.stage.kyma.ondemand.com/api/public-key';
-const COMPANION_API_BASE_URL = `${
-  config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? ''
-}/api/conversations/`;
+
+const COMPANION_BASE_URL = new URL(
+  '/',
+  COMPANION_CONVERSATIONS_API_BASE_URL,
+).toString();
+const COMPANION_PUBLIC_KEY_URL = new URL(
+  '/api/public-key',
+  COMPANION_BASE_URL,
+).toString();
+
 const SKIP_AUTH = true; //config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
 
