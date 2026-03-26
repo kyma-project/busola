@@ -15,10 +15,11 @@ const FormStack = injectPluginStack(FormContainer);
 export function ResourceSchema({
   resource,
   schema,
-  schemaRules = [],
+  schemaRules = {},
   store,
   setStore,
   editMode = false,
+  path: _path,
 }) {
   const onChange = useCallback(
     (actions) => {
