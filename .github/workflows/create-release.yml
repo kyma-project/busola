@@ -166,3 +166,18 @@ jobs:
     uses: ./.github/workflows/pull-unit-tests.yml
     with:
       trigger_env: release-trigger
+  upload-release-report:
+    needs:
+      - integration-cluster-test
+      - integration-namespace-test
+      - lint-check
+      - smoke-test-prod
+      - smoke-test-stage
+      - kyma-integration-test-dev
+      - k8s-chart-smoke-test
+      - lighthouse-test
+      - unit-tests
+    uses: kyma-project/compliancy/.github/workflows/notify-release-report.yml@main
+    with:
+      release_version: ${{ github.event.inputs.name }}
+    secrets: inherit
