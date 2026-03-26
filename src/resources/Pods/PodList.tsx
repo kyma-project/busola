@@ -11,15 +11,14 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
+  PodType,
 } from 'resources/Pods';
 import { Link } from 'shared/components/Link/Link';
+import { ResourcesListProps } from 'shared/components/ResourcesList/types';
 
-interface PodListProps {
-  resourceUrl: string;
-  resourceType: string;
+type PodListProps = ResourcesListProps & {
   showNodeName?: boolean;
-  [key: string]: any;
-}
+};
 
 export function PodList({ showNodeName, ...params }: PodListProps) {
   const { clusterUrl } = useUrl();
@@ -28,7 +27,7 @@ export function PodList({ showNodeName, ...params }: PodListProps) {
   let customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (pod: Record<string, any>) => {
+      value: (pod: PodType) => {
         return (
           <ControlledBy
             ownerReferences={pod.metadata.ownerReferences}
@@ -39,11 +38,11 @@ export function PodList({ showNodeName, ...params }: PodListProps) {
     },
     {
       header: t('common.headers.status'),
-      value: (pod: Record<string, any>) => <PodStatus pod={pod} />,
+      value: (pod: PodType) => <PodStatus pod={pod} />,
     },
     {
       header: t('pods.restarts'),
-      value: (pod: Record<string, any>) => (
+      value: (pod: PodType) => (
         <PodRestarts statuses={pod.status.containerStatuses} />
       ),
     },
@@ -54,7 +53,7 @@ export function PodList({ showNodeName, ...params }: PodListProps) {
       ...customColumns,
       {
         header: t('pods.node'),
-        value: (pod: Record<string, any>) => (
+        value: (pod: PodType) => (
           <Link url={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}>
             {pod.spec.nodeName}
           </Link>

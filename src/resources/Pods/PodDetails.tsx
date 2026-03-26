@@ -13,16 +13,16 @@ import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
 import PodCreate from './PodCreate';
 import { useUrl } from 'hooks/useUrl';
-import { ResourceDescription } from 'resources/Pods';
+import { PodType, ResourceDescription } from 'resources/Pods';
 import { Link } from 'shared/components/Link/Link';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-interface PodDetailsProps {
+type PodDetailsProps = {
   resourceName: string;
   resourceType: string;
   namespace: string;
   [key: string]: any;
-}
+};
 
 export function PodDetails({
   resourceName,
@@ -44,7 +44,7 @@ export function PodDetails({
   const customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (pod: Record<string, any>) => (
+      value: (pod: PodType) => (
         <ControlledBy
           ownerReferences={pod.metadata.ownerReferences}
           namespace={pod.metadata.namespace}
@@ -56,38 +56,34 @@ export function PodDetails({
   const customStatusColumns = [
     {
       header: t('common.labels.last-transition'),
-      value: (pod: Record<string, any>) =>
-        getLastTransitionTime(pod?.status?.conditions),
+      value: (pod: PodType) => getLastTransitionTime(pod?.status?.conditions),
     },
     {
       header: t('pods.status.host-ip'),
-      value: (pod: Record<string, any>) =>
-        pod.status?.hostIP ?? EMPTY_TEXT_PLACEHOLDER,
+      value: (pod: PodType) => pod.status?.hostIP ?? EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pods.status.pod-ip'),
-      value: (pod: Record<string, any>) =>
-        pod.status?.podIP ?? EMPTY_TEXT_PLACEHOLDER,
+      value: (pod: PodType) => pod.status?.podIP ?? EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pods.status.pod-ips'),
-      value: (pod: Record<string, any>) =>
+      value: (pod: PodType) =>
         pod.status?.podIPs?.map((ip: any) => ip.ip).join(', ') ??
         EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pods.status.nominated-node-name'),
-      value: (pod: Record<string, any>) =>
+      value: (pod: PodType) =>
         pod.status?.nominatedNodeName ?? EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pods.status.qos-class'),
-      value: (pod: Record<string, any>) =>
-        pod.status?.qosClass ?? EMPTY_TEXT_PLACEHOLDER,
+      value: (pod: PodType) => pod.status?.qosClass ?? EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
-  const statusConditions = (pod: Record<string, any>) => {
+  const statusConditions = (pod: PodType) => {
     return pod?.status?.conditions?.map((condition: Record<string, any>) => {
       return {
         header: { titleText: condition.type, status: condition.status },
@@ -160,7 +156,7 @@ export function PodDetails({
       description={ResourceDescription}
       createResourceForm={PodCreate}
       statusBadge={(pod) => <PodStatus pod={pod} />}
-      statusConditions={statusConditions}
+      statusConditions={statusConditions as any}
       customStatusColumns={customStatusColumns}
       resourceName={resourceName}
       namespace={namespace}

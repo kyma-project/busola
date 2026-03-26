@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { cloneDeep } from 'lodash';
@@ -7,15 +7,11 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createPodTemplate } from './templates';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 
-interface PodCreateProps {
-  formElementRef?: RefObject<HTMLFormElement>;
-  onChange?: (resource: Record<string, any>) => void;
-  setCustomValid?: (isValid: boolean) => void;
+type PodCreateProps = ResourceFormProps & {
   resourceUrl: string;
-  resource?: Record<string, any>;
-  [key: string]: any;
-}
+};
 
 export default function PodCreate({
   formElementRef,
