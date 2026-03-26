@@ -26,6 +26,9 @@ export type CreateResourceFormProps = {
   resourceSchema?: Record<string, any>;
   editMode: boolean;
   stickyHeaderHeight?: number | string;
+  initialResource: any;
+  singularName: string;
+  setResource: (resource: any) => void;
   setCustomValid?: (isValid: boolean) => void;
   [key: string]: any;
 };
