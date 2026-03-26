@@ -20,6 +20,7 @@ on:
       - '.github/workflows/busola-backend-build.yml'
       - 'backend/**'
       - 'package.json'
+  merge_group:
 
 permissions:
   id-token: write # This is required for requesting the JWT token

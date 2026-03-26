@@ -16,6 +16,7 @@ on:
       - 'kyma/**'
       - 'Dockerfile*'
       - 'package.json'
+  merge_group:
 
 jobs:
   run-accessibility-tests:
