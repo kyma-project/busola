@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericSecrets } from './GenericSecrets';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import {
+  ResourceDetails,
+  ResourceDetailsProps,
+} from 'shared/components/ResourceDetails/ResourceDetails';
 import ServiceAccountCreate from './ServiceAccountCreate';
 import { Button } from '@ui5/webcomponents-react';
 import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
@@ -12,12 +15,12 @@ import { filterByResource } from 'hooks/useMessageList';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-const ServiceAccountSecrets = (serviceAccount) => {
+const ServiceAccountSecrets = (serviceAccount: Record<string, any>) => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-secrets';
   const title = 'Secrets';
 
-  const filterBySecret = (secret) => {
+  const filterBySecret = (secret: Record<string, any>) => {
     const annotations = Object.entries(secret.metadata.annotations ?? {});
     return annotations.find(
       ([key, value]) =>
@@ -31,7 +34,6 @@ const ServiceAccountSecrets = (serviceAccount) => {
       key={listKey}
       namespace={namespace}
       filter={filterBySecret}
-      listKey={listKey}
       title={title}
       allowKubeconfigDownload
       prefix={serviceAccount.metadata.name}
@@ -39,13 +41,16 @@ const ServiceAccountSecrets = (serviceAccount) => {
   );
 };
 
-const ServiceAccountImagePullSecrets = (serviceAccount) => {
+const ServiceAccountImagePullSecrets = (
+  serviceAccount: Record<string, any>,
+) => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-imagepullsecrets';
   const title = 'Image Pull Secrets';
-  const filterBySecret = (secret) =>
+  const filterBySecret = (secret: Record<string, any>) =>
     serviceAccount.imagePullSecrets.find(
-      ({ name: secretName }) => secret.metadata.name === secretName,
+      ({ name: secretName }: { name: string }) =>
+        secret.metadata.name === secretName,
     );
 
   return serviceAccount.imagePullSecrets ? (
@@ -53,14 +58,23 @@ const ServiceAccountImagePullSecrets = (serviceAccount) => {
       key={listKey}
       namespace={namespace}
       filter={filterBySecret}
-      listKey={listKey}
       title={title}
       prefix={serviceAccount.metadata.name}
     />
   ) : null;
 };
 
-export default function ServiceAccountDetails(props) {
+export default function ServiceAccountDetails(
+  props: { namespace: string; resourceName: string } & Omit<
+    ResourceDetailsProps,
+    | 'namespace'
+    | 'resourceName'
+    | 'customComponents'
+    | 'createResourceForm'
+    | 'description'
+    | 'headerActions'
+  >,
+) {
   const { t } = useTranslation();
   const [isTokenModalOpen, setTokenModalOpen] = useState(false);
 
@@ -73,7 +87,7 @@ export default function ServiceAccountDetails(props) {
     />
   );
 
-  const Configuration = (value) => (
+  const Configuration = (value: { automountServiceAccountToken: boolean }) => (
     <UI5Panel
       fixed
       keyComponent={'serviceaccount-configuration'}
@@ -109,7 +123,7 @@ export default function ServiceAccountDetails(props) {
           ServiceAccountImagePullSecrets,
           Events,
         ]}
-        createResourceForm={ServiceAccountCreate}
+        createResourceForm={ServiceAccountCreate as any}
         description={ResourceDescription}
         headerActions={headerActions}
         {...props}
