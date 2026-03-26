@@ -174,7 +174,7 @@ export type Structure = {
   design: string;
   source: string;
   visibility: boolean;
-  widget?: any;
+  widget?: keyof typeof widgets;
   valuePreprocessor?: any;
   children?: Structure[];
 };
@@ -298,7 +298,7 @@ export function Widget({
   }
   let Renderer = structure.children ? Plain : Text;
   if (structure.widget) {
-    Renderer = (widgets as any)[structure.widget];
+    Renderer = widgets[structure.widget] as any;
     if (!Renderer) {
       return `no widget ${structure.widget}`;
     }
