@@ -25,6 +25,7 @@ import {
 import { Link } from 'shared/components/Link/Link';
 
 import './PersistentVolumeClaim.scss';
+import { PersistentVolumeType } from 'resources/PersistentVolumes';
 
 type RelatedVolumesProps = {
   labels: Record<string, string>;
@@ -40,7 +41,7 @@ const RelatedVolumes = ({ labels }: RelatedVolumesProps) => {
     hasDetailsView: true,
     resourceUrl: '/api/v1/persistentvolumes',
     resourceType: 'persistentVolumes',
-    filter: (pv: any) => {
+    filter: (pv: PersistentVolumeType) => {
       if (!pv.metadata?.labels) return false;
 
       const pvLabels = Object?.entries(pv.metadata?.labels);
