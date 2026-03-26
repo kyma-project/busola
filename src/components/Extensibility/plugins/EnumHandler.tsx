@@ -1,8 +1,19 @@
 import { useEffect, useState } from 'react';
-import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
+import {
+  ComponentPluginType,
+  getNextPlugin,
+} from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { WidgetProps, WidgetsBindingFactory } from '@ui-schema/ui-schema';
+import { Resource } from '../contexts/DataSources';
+
+type EnumHandlerProps = {
+  currentPluginIndex: number;
+  value: any;
+  resource: Resource;
+} & WidgetProps;
 
 export function EnumHandler({
   schema,
@@ -11,14 +22,17 @@ export function EnumHandler({
   value,
   resource,
   ...props
-}) {
+}: EnumHandlerProps) {
   const { itemVars } = useVariables();
   const jsonata = useJsonata({ resource });
 
   const rule = schema.get('schemaRule');
 
   const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
+  const Plugin = getNextPlugin(
+    nextPluginIndex,
+    props.widgets,
+  ) as ComponentPluginType<Record<string, any>, WidgetsBindingFactory>;
 
   const schemaEnum = schema.get('enum');
 

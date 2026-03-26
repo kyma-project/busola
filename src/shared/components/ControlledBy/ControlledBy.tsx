@@ -18,18 +18,21 @@ type GoToDetailsLinkProps = {
   namespace?: string;
   noBrackets?: boolean;
 };
+
+export type OwnerReferences =
+  | {
+      apiVersion: string;
+      kind: string;
+      name: string;
+    }[]
+  | {
+      apiVersion: string;
+      kind: string;
+      name: string;
+    };
+
 type ControlledByProps = {
-  ownerReferences:
-    | {
-        apiVersion: string;
-        kind: string;
-        name: string;
-      }[]
-    | {
-        apiVersion: string;
-        kind: string;
-        name: string;
-      };
+  ownerReferences: OwnerReferences;
   namespace?: string;
   kindOnly?: boolean;
   placeholder?: ReactNode;

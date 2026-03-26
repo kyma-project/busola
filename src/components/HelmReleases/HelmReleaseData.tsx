@@ -28,7 +28,7 @@ export function HelmReleaseData({
   release,
 }: {
   releaseSecret: Record<string, any>;
-  release: Release;
+  release?: Release;
 }) {
   const { t } = useTranslation();
 
@@ -46,7 +46,6 @@ export function HelmReleaseData({
     <Fragment key="helm-release-data">
       <ReleaseDataPanel release={release} secret={releaseSecret} />
       <ChartContent chart={release.chart} />
-      {/*@ts-expect-error Type mismatch between js and ts*/}
       <ReadonlyEditorPanel
         title={t('helm-releases.headers.release-manifest')}
         value={jsyaml.dump(release.manifest)}

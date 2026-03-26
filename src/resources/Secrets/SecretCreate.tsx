@@ -1,6 +1,11 @@
 import { useState, useEffect, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
+import {
+  ComboBox,
+  ComboBoxDomRef,
+  ComboBoxItem,
+  Ui5CustomEvent,
+} from '@ui5/webcomponents-react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { DataField } from 'shared/ResourceForm/fields';
@@ -12,6 +17,21 @@ import { configurationAtom } from 'state/configuration/configurationAtom';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { cloneDeep } from 'lodash';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type SecretCreateProps = {
+  namespace?: string;
+  resourceUrl?: string;
+} & Omit<
+  ResourceFormProps,
+  | 'pluralKind'
+  | 'singularName'
+  | 'initialResource'
+  | 'updateInitialResource'
+  | 'setResource'
+  | 'createUrl'
+  | 'presets'
+>;
 
 export default function SecretCreate({
   namespace,
@@ -21,7 +41,7 @@ export default function SecretCreate({
   resourceUrl,
   setCustomValid,
   ...props
-}) {
+}: SecretCreateProps) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
     initialSecret
@@ -76,7 +96,7 @@ export default function SecretCreate({
         ...secret,
         data: {
           ...(currentDef?.data || []).reduce(
-            (acc, key) => ({ ...acc, [key]: '' }),
+            (acc: Record<string, any>, key: string) => ({ ...acc, [key]: '' }),
             {},
           ),
           ...(secret.data || {}),
@@ -92,12 +112,15 @@ export default function SecretCreate({
   const schema = useContext(SchemaContext);
   const dataDesc = getDescription(schema, 'data');
 
-  const onChangeInput = (event, setValue) => {
+  const onChangeInput = (
+    event: Ui5CustomEvent<ComboBoxDomRef>,
+    setValue: (text: string) => void,
+  ) => {
     const selectedOption = options.find(
       (o) => o.text === event.target.value,
     ) ?? {
-      key: event.target._state.filterValue,
-      text: event.target._state.filterValue,
+      key: (event.target as any)._state.filterValue,
+      text: (event.target as any)._state.filterValue,
     };
     setValue(selectedOption.text);
   };
@@ -115,7 +138,9 @@ export default function SecretCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      presets={!isEdit && createPresets(secretDefs, namespace || '')}
+      presets={
+        (!isEdit && createPresets(secretDefs, namespace || '')) || undefined
+      }
     >
       <ResourceForm.FormField
         required

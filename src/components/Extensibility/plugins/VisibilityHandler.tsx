@@ -1,9 +1,21 @@
 import { useContext, useEffect, useState } from 'react';
-import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
+import {
+  ComponentPluginType,
+  getNextPlugin,
+} from '@ui-schema/ui-schema/PluginStack';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
 import { TriggerContext } from '../contexts/Trigger';
+import { WidgetProps, WidgetsBindingFactory } from '@ui-schema/ui-schema';
+import { Resource } from '../contexts/DataSources';
+
+type VisibilityHandlerProps = {
+  value: any;
+  currentPluginIndex: number;
+  resource: Resource;
+  onChange: (action: Record<string, any>) => void;
+} & WidgetProps;
 
 export function VisibilityHandler({
   value,
@@ -14,7 +26,7 @@ export function VisibilityHandler({
   onChange,
   required,
   ...props
-}) {
+}: VisibilityHandlerProps) {
   const triggers = useContext(TriggerContext);
   const { itemVars } = useVariables();
   const jsonata = useJsonata({ resource });
@@ -34,7 +46,7 @@ export function VisibilityHandler({
             visibilityFormula,
             itemVars(resource, rule?.itemVars, storeKeys),
           );
-          setVisible(result);
+          setVisible(result as any);
         } else if (visibilityFormula === false) {
           setVisible(false);
         }
@@ -75,7 +87,10 @@ export function VisibilityHandler({
   }
 
   const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
+  const Plugin = getNextPlugin(
+    nextPluginIndex,
+    props.widgets,
+  ) as ComponentPluginType<Record<string, any>, WidgetsBindingFactory>;
 
   return (
     <Plugin

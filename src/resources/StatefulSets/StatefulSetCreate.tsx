@@ -7,6 +7,20 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createStatefulSetTemplate } from './templates';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type StatefulSetCreateProps = {
+  resourceUrl: string;
+} & Omit<
+  ResourceFormProps,
+  | 'pluralKind'
+  | 'singularName'
+  | 'initialResource'
+  | 'setResource'
+  | 'updateInitialResource'
+  | 'createUrl'
+  | 'onlyYaml'
+>;
 
 export default function StatefulSetCreate({
   formElementRef,
@@ -15,7 +29,7 @@ export default function StatefulSetCreate({
   resource: initialStatefulSet,
   resourceUrl,
   ...props
-}) {
+}: StatefulSetCreateProps) {
   const { t } = useTranslation();
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
