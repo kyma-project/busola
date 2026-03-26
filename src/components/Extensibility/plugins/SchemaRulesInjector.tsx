@@ -1,12 +1,28 @@
 import { last } from 'lodash';
-import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
+import {
+  ComponentPluginType,
+  getNextPlugin,
+} from '@ui-schema/ui-schema/PluginStack';
 import { List, fromJS } from 'immutable';
+import {
+  StoreSchemaType,
+  WidgetProps,
+  WidgetsBindingFactory,
+} from '@ui-schema/ui-schema';
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
-const propertiesWrapper = (src) => ({
-  map: (cb) => List(src?.map(([key, val]) => cb(val, key))),
+const propertiesWrapper = (src: [string, any][]) => ({
+  map: (cb: (val: any, key: string) => any) =>
+    List(src?.map(([key, val]) => cb(val, key))),
   toJSON: () => src,
 });
+
+type SchemaRulesInjectorProps = {
+  currentPluginIndex: number;
+  rootRule: Record<string, any>;
+  value: any;
+  resource: Record<string, any>;
+} & WidgetProps;
 
 export function SchemaRulesInjector({
   schema,
@@ -15,14 +31,17 @@ export function SchemaRulesInjector({
   value,
   resource,
   ...props
-}) {
+}: SchemaRulesInjectorProps) {
   const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
+  const Plugin = getNextPlugin(
+    nextPluginIndex,
+    props.widgets,
+  ) as ComponentPluginType<Record<string, any>, WidgetsBindingFactory>;
 
   const { children: childRules, ...itemRule } =
     schema.get('schemaRule') ?? rootRule;
 
-  let newSchema = schema.mergeDeep(itemRule);
+  let newSchema: StoreSchemaType = schema.mergeDeep(itemRule);
 
   if (schema.get('items')) {
     const newItems = schema.get('items').set('schemaRule', childRules[0]);
@@ -31,7 +50,7 @@ export function SchemaRulesInjector({
 
   if (newSchema.get('properties')) {
     const newProperties = childRules
-      ?.map((rule) => {
+      ?.map((rule: Record<string, any>) => {
         if (rule.custom) {
           return ['', fromJS({ ...rule, schemaRule: rule })];
         }
@@ -43,13 +62,12 @@ export function SchemaRulesInjector({
 
         return property ? [propertyKey, property] : null;
       })
-      .filter((rule) => !!rule);
+      .filter((rule: [string, any] | null) => !!rule);
 
     newSchema = newSchema.set('properties', propertiesWrapper(newProperties));
   }
 
   return (
-    // eslint-disable-next-line react-hooks/static-components
     <Plugin
       {...props}
       currentPluginIndex={nextPluginIndex}

@@ -107,16 +107,14 @@ export default function CronJobCreate({
       presets={(!isEdit && createCronJobPresets(namespace)) || undefined}
       createUrl={resourceUrl}
     >
-      {/* @ts-expect-error Type mismatch between js and ts */}
       <CronJobSpecSection propertyPath="$.spec" />
       <ScheduleSection
         propertyPath="$.spec.schedule"
         tooltipContent={t(scheduleDesc, { defaultValue: scheduleDesc })}
       />
-      {/* @ts-expect-error Type mismatch between js and ts */}
       <ContainersSection
         defaultOpen
-        tooltipContent={containersDesc}
+        tooltipContent={containersDesc ?? undefined}
         propertyPath="$.spec.jobTemplate.spec.template.spec.containers"
       />
     </ResourceForm>

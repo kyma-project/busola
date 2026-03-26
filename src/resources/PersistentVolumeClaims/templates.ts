@@ -1,4 +1,4 @@
-export const createPersistentVolumeClaimTemplate = (namespace) => {
+export const createPersistentVolumeClaimTemplate = (namespace: string) => {
   return {
     apiVersion: 'v1',
     kind: 'PersistentVolumeClaim',

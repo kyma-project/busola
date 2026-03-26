@@ -1,10 +1,22 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
-
 import { ResourceForm } from 'shared/ResourceForm';
-
 import { createStorageClassTemplate } from './templates';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type StorageClassCreateProps = {
+  resourceUrl: string;
+} & Omit<
+  ResourceFormProps,
+  | 'pluralKind'
+  | 'singularName'
+  | 'initialResource'
+  | 'setResource'
+  | 'updateInitialResource'
+  | 'createUrl'
+  | 'onlyYaml'
+>;
 
 export default function StorageClassCreate({
   onChange,
@@ -13,7 +25,7 @@ export default function StorageClassCreate({
   resource: initialStorageClass,
   setCustomValid,
   ...props
-}) {
+}: StorageClassCreateProps) {
   const { t } = useTranslation();
 
   const [storageClass, setStorageClass] = useState(

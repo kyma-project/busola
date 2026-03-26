@@ -1,7 +1,21 @@
-import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
+import {
+  ComponentPluginType,
+  getNextPlugin,
+} from '@ui-schema/ui-schema/PluginStack';
 import jp from 'jsonpath';
 
 import { useVariables } from '../hooks/useVariables';
+import {
+  StoreKeys,
+  WidgetProps,
+  WidgetsBindingFactory,
+} from '@ui-schema/ui-schema';
+
+type CustomFieldInjectorProps = {
+  currentPluginIndex: number;
+  value: any;
+  resource: Record<string, any>;
+} & WidgetProps;
 
 export function CustomFieldInjector({
   schema,
@@ -10,17 +24,19 @@ export function CustomFieldInjector({
   value,
   resource,
   ...props
-}) {
+}: CustomFieldInjectorProps) {
   const { vars, setVar } = useVariables();
 
   const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
+  const Plugin = getNextPlugin(
+    nextPluginIndex,
+    props.widgets,
+  ) as ComponentPluginType<Record<string, any>, WidgetsBindingFactory>;
 
   const { path } = schema.get('schemaRule') || {};
 
   if (path || !storeKeys.size) {
     return (
-      // eslint-disable-next-line react-hooks/static-components
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
@@ -42,18 +58,17 @@ export function CustomFieldInjector({
     const varPath = `$.${varName}${varSuffix}`;
 
     return (
-      // eslint-disable-next-line react-hooks/static-components
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
         schema={schema}
         value={jp.value(vars, varPath)}
-        onChange={(e) => setVar(varPath, e.data.value)}
+        onChange={(e: Record<string, any>) => setVar(varPath, e.data.value)}
         storeKeys={storeKeys.set(-1, `$${varName}`)}
       />
     );
   } else {
-    function getValue(storeKeys, resource) {
+    function getValue(storeKeys: StoreKeys, resource: Record<string, any>) {
       let value = resource;
       const keys = storeKeys.toJS();
       keys.filter((key) => key !== '').forEach((key) => (value = value?.[key]));
@@ -61,12 +76,10 @@ export function CustomFieldInjector({
     }
 
     return (
-      // eslint-disable-next-line react-hooks/static-components
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
         schema={schema}
-        onChange={() => {}}
         value={getValue(storeKeys, resource)}
         storeKeys={storeKeys}
         resource={resource}

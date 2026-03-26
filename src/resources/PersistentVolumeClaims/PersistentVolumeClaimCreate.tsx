@@ -5,6 +5,12 @@ import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import { createPersistentVolumeClaimTemplate } from './templates';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type PersistentVolumeClaimCreateProps = ResourceFormProps & {
+  namespace?: string;
+  resourceUrl?: string;
+};
 
 export default function PersistentVolumeClaimCreate({
   namespace,
@@ -14,16 +20,16 @@ export default function PersistentVolumeClaimCreate({
   resource: initialPersistentVolumeClaim,
   setCustomValid,
   ...props
-}) {
+}: PersistentVolumeClaimCreateProps) {
   const { t } = useTranslation();
   const [persistentVolumeClaim, setPersistentVolumeClaim] = useState(
     cloneDeep(initialPersistentVolumeClaim) ||
-      createPersistentVolumeClaimTemplate(namespace),
+      createPersistentVolumeClaimTemplate(namespace ?? 'default'),
   );
 
   const [initialResource, setInitialResource] = useState(
     initialPersistentVolumeClaim ||
-      createPersistentVolumeClaimTemplate(namespace),
+      createPersistentVolumeClaimTemplate(namespace ?? 'default'),
   );
   const [prevNamespace, setPrevNamespace] = useState(namespace);
 
@@ -35,11 +41,11 @@ export default function PersistentVolumeClaimCreate({
     setPrevNamespace(namespace);
     setPersistentVolumeClaim(
       cloneDeep(initialPersistentVolumeClaim) ||
-        createPersistentVolumeClaimTemplate(namespace),
+        createPersistentVolumeClaimTemplate(namespace ?? 'default'),
     );
     setInitialResource(
       initialPersistentVolumeClaim ||
-        createPersistentVolumeClaimTemplate(namespace),
+        createPersistentVolumeClaimTemplate(namespace ?? 'default'),
     );
   }
 

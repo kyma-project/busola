@@ -2,8 +2,14 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { useTranslation } from 'react-i18next';
 import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { X509Certificate } from '@peculiar/x509';
 
-export function CertificatePanel({ name, certificate }) {
+type CertificatePanelProps = {
+  name: string;
+  certificate: X509Certificate;
+};
+
+export function CertificatePanel({ name, certificate }: CertificatePanelProps) {
   const { t, i18n } = useTranslation();
   const { format: formatDate } = new Intl.DateTimeFormat('en');
 
@@ -28,7 +34,10 @@ export function CertificatePanel({ name, certificate }) {
       <LayoutPanelRow
         name={t('secrets.certificate-panel.expires')}
         value={
-          <CertificateDate lang={i18n.language} date={certificate.notAfter} />
+          <CertificateDate
+            lang={i18n.language}
+            date={`${certificate.notAfter}`}
+          />
         }
       />
     </UI5Panel>
