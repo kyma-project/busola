@@ -29,11 +29,9 @@ const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
 interface ContainersLogsProps {
-  params: {
-    namespace: string;
-    podName: string;
-    containerName: string;
-  };
+  namespace: string;
+  podName: string;
+  containerName: string;
 }
 
 const scrollToSelectedLog = (selectedLogIndex: MutableRefObject<number>) => {
@@ -49,7 +47,11 @@ const scrollToSelectedLog = (selectedLogIndex: MutableRefObject<number>) => {
   }
 };
 
-const ContainersLogs = ({ params }: ContainersLogsProps) => {
+const ContainersLogs = ({
+  namespace,
+  containerName,
+  podName,
+}: ContainersLogsProps) => {
   const { t } = useTranslation();
 
   useWindowTitle('Logs');
@@ -69,7 +71,7 @@ const ContainersLogs = ({ params }: ContainersLogsProps) => {
     { text: 'all', key: String(MAX_TIMEFRAME_IN_SECONDS) },
   ];
 
-  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
+  const url = `/api/v1/namespaces/${namespace}/pods/${podName}/log?container=${containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
   useEffect(() => {
@@ -133,7 +135,7 @@ const ContainersLogs = ({ params }: ContainersLogsProps) => {
 
   return (
     <DynamicPageComponent
-      title={params.containerName}
+      title={containerName}
       content={
         <UI5Panel
           title={t('pods.labels.logs')}
@@ -171,7 +173,7 @@ const ContainersLogs = ({ params }: ContainersLogsProps) => {
               />
               <Button
                 disabled={!logsToSave?.length}
-                onClick={() => saveToFile(params.podName, params.containerName)}
+                onClick={() => saveToFile(podName, containerName)}
               >
                 {t('pods.labels.save-to-file')}
               </Button>
@@ -189,7 +191,7 @@ const ContainersLogs = ({ params }: ContainersLogsProps) => {
           <div className="logs-panel-body">
             <LogsPanel
               streamData={streamData}
-              containerName={params.containerName}
+              containerName={containerName}
               searchQuery={searchQuery}
               reverseLogs={reverseLogs}
               showTimestamps={showTimestamps}

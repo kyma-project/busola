@@ -1,5 +1,6 @@
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-interface PortsType {
+
+export interface PortsType {
   name?: string;
   containerPort: number;
   protocol: string;

@@ -16,12 +16,21 @@ import { useUrl } from 'hooks/useUrl';
 import { PodType, ResourceDescription } from 'resources/Pods';
 import { Link } from 'shared/components/Link/Link';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ReactNode } from 'react';
 
 type PodDetailsProps = {
   resourceName: string;
   resourceType: string;
   namespace: string;
   [key: string]: any;
+};
+
+type VolumeType = {
+  [key: string]: {
+    name?: string;
+    secretName?: string;
+    claimName?: string;
+  };
 };
 
 export function PodDetails({
@@ -99,7 +108,7 @@ export function PodDetails({
       t('pods.headers.type'),
       t('common.headers.name'),
     ];
-    const rowRenderer = (volume: Record<string, any>) => {
+    const rowRenderer = (volume: VolumeType) => {
       const volumeType = Object.keys(volume).find((key) => key !== 'name');
       return [
         volume.name,
@@ -126,7 +135,7 @@ export function PodDetails({
         key="volumes"
         title={t('pods.labels.volumes')}
         headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
+        rowRenderer={rowRenderer as (entry: any) => ReactNode[]}
         entries={resource.spec.volumes}
       />
     );

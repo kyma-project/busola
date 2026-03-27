@@ -20,7 +20,7 @@ type PodListProps = ResourcesListProps & {
   showNodeName?: boolean;
 };
 
-export function PodList({ showNodeName, ...params }: PodListProps) {
+export function PodList({ showNodeName, ...props }: PodListProps) {
   const { clusterUrl } = useUrl();
   const { t } = useTranslation();
 
@@ -73,7 +73,7 @@ export function PodList({ showNodeName, ...params }: PodListProps) {
             calculatePodState(b).status,
           ),
       })}
-      {...params}
+      {...props}
       createResourceForm={PodCreate}
       emptyListProps={{
         subtitleText: i18nDescriptionKey,

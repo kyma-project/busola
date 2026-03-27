@@ -4,17 +4,29 @@ import { useNavigate } from 'react-router';
 import { Button } from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ContainerStatus } from './ContainerStatus';
-import { getPorts } from 'shared/components/GetContainersPorts';
+import { getPorts, PortsType } from 'shared/components/GetContainersPorts';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
+type ContainerType = {
+  name: string;
+  image: string;
+  imagePullPolicy: string;
+  ports: PortsType[];
+};
+
+type StatusType = {
+  name: string;
+  state: Record<string, any>;
+};
+
 interface ContainersDataProps {
   type: string;
-  containers: Record<string, any>[];
-  statuses: Record<string, any>[];
+  containers: ContainerType[];
+  statuses: StatusType[];
 }
 
 export default function ContainersData({
@@ -34,8 +46,8 @@ export default function ContainersData({
     container,
     status,
   }: {
-    container: Record<string, any>;
-    status: Record<string, any>;
+    container: ContainerType;
+    status: StatusType;
   }) => {
     const state =
       status?.state?.running ||
@@ -104,9 +116,10 @@ export default function ContainersData({
           key={container.name}
           container={container}
           status={
-            statuses?.find(
-              (status) => status.name === container.name,
-            ) as Record<string, any>
+            statuses?.find((status) => status.name === container.name) ?? {
+              name: '',
+              state: {},
+            }
           }
         />
       ))}

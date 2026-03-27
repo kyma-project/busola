@@ -9,18 +9,12 @@ export type PodType = {
     name: string;
     namespace: string;
     labels: Record<string, string>;
-    ownerReferences:
-      | {
-          apiVersion: string;
-          kind: string;
-          name: string;
-          uid: string;
-        }[]
-      | {
-          apiVersion: string;
-          kind: string;
-          name: string;
-        };
+    ownerReferences: {
+      apiVersion: string;
+      kind: string;
+      name: string;
+      uid: string;
+    }[];
   };
   spec: {
     containers: Array<{
