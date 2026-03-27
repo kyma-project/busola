@@ -13,14 +13,13 @@ const tokenManager = new TokenManager();
 const COMPANION_API_BASE_URL = `${
   config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? ''
 }/api/conversations/`;
-const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 
 const COMPANION_PUBLIC_KEY_URL = new URL(
   '/api/public-key',
   COMPANION_API_BASE_URL,
 ).toString();
 
-const SKIP_AUTH = true; //config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
+const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
 
 // Rate limiter: Max 200 requests per 1 minutes per IP
