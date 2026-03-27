@@ -5,6 +5,11 @@ import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import { createPersistentVolumeTemplate } from './templates';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type PersistentVolumeCreateProps = ResourceFormProps & {
+  resourceUrl: string;
+};
 
 export default function PersistentVolumeCreate({
   formElementRef,
@@ -13,7 +18,7 @@ export default function PersistentVolumeCreate({
   resourceUrl,
   resource: initialPersistentVolume,
   ...props
-}) {
+}: PersistentVolumeCreateProps) {
   const { t } = useTranslation();
 
   const [pv, setPv] = useState(

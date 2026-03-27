@@ -12,7 +12,12 @@ import { useUrl } from 'hooks/useUrl';
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import PersistentVolumeCreate from './PersistentVolumeCreate';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { ResourceDescription } from 'resources/PersistentVolumes';
+import {
+  PersistentVolumeMetadataType,
+  PersistentVolumeSpecType,
+  PersistentVolumeType,
+  ResourceDescription,
+} from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';
 import { getReadableTimestampWithTime } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { VolumeNFS } from './components/VolumeNFS';
@@ -22,23 +27,40 @@ import { VolumeHostPath } from './components/VolumeHostPath';
 import { VolumeISCSI } from './components/VolumeISCSI';
 import { VolumeLocal } from './components/VolumeLocal';
 
-export function PersistentVolumeDetails(props) {
+interface PersistentVolumeDetailsProps {
+  resourceName: string;
+  resourceType: string;
+  [key: string]: any;
+}
+
+export function PersistentVolumeDetails({
+  resourceName,
+  ...props
+}: PersistentVolumeDetailsProps) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
 
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
-  );
+  ) as { data: any[] | null };
 
-  const { data: secrets } = useGetList()('/api/v1/secrets');
+  const { data: secrets } = useGetList()('/api/v1/secrets') as {
+    data: any[] | null;
+  };
 
   const { data: persistentVolumeClaims } = useGetList()(
     '/api/v1/persistentvolumeclaims',
-  );
-  const findSecret = (secretName) =>
+  ) as { data: any[] | null };
+  const findSecret = (secretName: string) =>
     secrets?.find(({ metadata }) => metadata.name === secretName);
 
-  const PvDetails = ({ spec, metadata }) => (
+  const PvDetails = ({
+    spec,
+    metadata,
+  }: {
+    spec: PersistentVolumeSpecType;
+    metadata: PersistentVolumeMetadataType;
+  }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
       <UI5Panel
         title={t('common.headers.specification')}
@@ -75,7 +97,7 @@ export function PersistentVolumeDetails(props) {
                   kind: 'StorageClass',
                   metadata: {
                     name: spec?.storageClassName,
-                  },
+                  } as any,
                 })}
               >
                 {spec?.storageClassName}
@@ -97,7 +119,7 @@ export function PersistentVolumeDetails(props) {
                     kind: 'PersistentVolumeClaim',
                     metadata: {
                       name: spec?.claimRef?.name,
-                    },
+                    } as any,
                   },
                   { namespace: spec?.claimRef?.namespace },
                 )}
@@ -137,7 +159,7 @@ export function PersistentVolumeDetails(props) {
   const Events = () => (
     <EventsList
       key="events"
-      filter={filterByResource('PersistentVolume', props.resourceName)}
+      filter={filterByResource('PersistentVolume', resourceName)}
       hideInvolvedObjects={true}
     />
   );
@@ -145,7 +167,7 @@ export function PersistentVolumeDetails(props) {
   const customStatusColumns = [
     {
       header: t('pv.headers.lastPhaseTransitionTime'),
-      value: (pv) =>
+      value: (pv: PersistentVolumeType) =>
         getReadableTimestampWithTime(pv?.status?.lastPhaseTransitionTime),
     },
   ];
@@ -157,6 +179,7 @@ export function PersistentVolumeDetails(props) {
       customComponents={[PvDetails, Events]}
       description={ResourceDescription}
       createResourceForm={PersistentVolumeCreate}
+      resourceName={resourceName}
       {...props}
     />
   );

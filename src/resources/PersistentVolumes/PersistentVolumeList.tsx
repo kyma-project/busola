@@ -11,25 +11,27 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
+  PersistentVolumeType,
 } from 'resources/PersistentVolumes';
 import { Link } from 'shared/components/Link/Link';
+import { ResourcesListProps } from 'shared/components/ResourcesList/types';
 
-export function PersistentVolumeList(props) {
+export function PersistentVolumeList(props: ResourcesListProps) {
   const { t } = useTranslation();
   const { resourceUrl } = useUrl();
 
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
-  );
+  ) as { data: any[] | null };
 
   const { data: persistentVolumeClaims } = useGetList()(
     '/api/v1/persistentvolumeclaims',
-  );
+  ) as { data: any[] | null };
 
   const customColumns = [
     {
       header: t('pv.headers.storage-class'),
-      value: (pv) =>
+      value: (pv: PersistentVolumeType) =>
         storageClasses?.find(
           ({ metadata }) => metadata.name === pv.spec?.storageClassName,
         ) ? (
@@ -38,7 +40,7 @@ export function PersistentVolumeList(props) {
               kind: 'StorageClass',
               metadata: {
                 name: pv.spec?.storageClassName,
-              },
+              } as any,
             })}
           >
             {pv.spec?.storageClassName}
@@ -49,11 +51,12 @@ export function PersistentVolumeList(props) {
     },
     {
       header: t('pv.headers.capacity'),
-      value: (pv) => pv.spec?.capacity?.storage || EMPTY_TEXT_PLACEHOLDER,
+      value: (pv: PersistentVolumeType) =>
+        pv.spec?.capacity?.storage || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('pv.headers.claim'),
-      value: (pv) =>
+      value: (pv: PersistentVolumeType) =>
         persistentVolumeClaims?.find(
           ({ metadata }) => metadata.name === pv.spec?.claimRef?.name,
         ) ? (
@@ -63,7 +66,7 @@ export function PersistentVolumeList(props) {
                 kind: 'PersistentVolumeClaim',
                 metadata: {
                   name: pv.spec?.claimRef?.name,
-                },
+                } as any,
               },
               { namespace: pv.spec?.claimRef?.namespace },
             )}
@@ -76,7 +79,7 @@ export function PersistentVolumeList(props) {
     },
     {
       header: t('common.headers.status'),
-      value: (pv) => (
+      value: (pv: PersistentVolumeType) => (
         <span style={{ wordBreak: 'keep-all' }}>
           <PersistentVolumeStatus status={pv.status} />
         </span>
