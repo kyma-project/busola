@@ -67,7 +67,6 @@ config:
         queryMaxTokens: 8000
       useJoule: false
       jouleConfig:
-        companionApiUrl: 'https://companion.cp.dev.kyma.cloud.sap'
         url: 'https://kcp-dev-joule-vfglrzqg.eu12.sapdas.cloud.sap/resources/public/webclient/bootstrap.js'
         botname: 'kyma_companion'
     GARDENER_LOGIN:

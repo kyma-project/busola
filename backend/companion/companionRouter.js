@@ -39,23 +39,29 @@ async function handlePublicKey(req, res) {
       throw new Error('Missing companion public key URL configuration');
     }
 
-    const requestBody =
-      Buffer.isBuffer(req.body) || typeof req.body === 'string'
-        ? req.body.toString()
-        : JSON.stringify(req.body ?? {});
+    const parsed =
+      typeof req.body === 'object' && !ArrayBuffer.isView(req.body)
+        ? req.body
+        : JSON.parse(req.body.toString());
 
-    const endpointUrl = `${COMPANION_PUBLIC_KEY_URL}`;
+    const publicKey = parsed.public_key;
+    if (!publicKey || typeof publicKey !== 'string') {
+      return res
+        .status(400)
+        .json({ error: 'Missing or invalid public_key in request body' });
+    }
 
-    const response = await fetch(endpointUrl, {
+    const response = await fetch(COMPANION_PUBLIC_KEY_URL, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: requestBody,
+      body: JSON.stringify({ public_key: publicKey }),
     });
 
     const data = await response.json();
+
     res.status(response.status).json(data);
   } catch (error) {
     req.log.warn(error);
