@@ -50,9 +50,9 @@ import { LayoutColumnName } from 'types';
 
 export type ResourceFormProps = {
   pluralKind?: string; // used for the request path
-  singularName: string;
+  singularName?: string;
   resource: any;
-  initialResource: any;
+  initialResource?: any;
   updateInitialResource?: (res: any) => void;
   setResource?: (res: any) => void;
   setCustomValid?: (isValid: boolean) => void;
@@ -181,7 +181,7 @@ export const ResourceForm: ResourceFormType = (({
 
   const { t } = useTranslation();
   const createResource = useCreateResource({
-    singularName,
+    singularName: singularName ?? '',
     pluralKind: pluralKind || '',
     resource,
     initialResource,
