@@ -1,18 +1,30 @@
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CopiableLink } from 'shared/components/ExternalLink/CopiableLink';
+import { WidgetProps } from 'components/Extensibility/components/Widget';
 
-function getGatewayHost(gateway) {
+type Gateway = {
+  spec: {
+    servers: {
+      hosts: string[];
+      port: {
+        protocol: string;
+      };
+    }[];
+  };
+};
+function getGatewayHost(gateway: Gateway | null) {
   if (!gateway || !gateway.spec) return null;
 
   const properServers = gateway.spec.servers.filter(
     (server) => server.port.protocol === 'HTTPS',
   );
-  if (!properServers.length > 0 || !properServers[0].hosts?.length) return null;
-  return properServers[0].hosts[0].replace('*.', '');
+  if (properServers.length > 0 && properServers[0].hosts?.length)
+    return properServers[0].hosts[0].replace('*.', '');
+  return null;
 }
 
-export const APIRuleHost = ({ value }) => {
+export const APIRuleHost = ({ value }: WidgetProps) => {
   const { t } = useTranslation();
 
   let hostname = value?.host;
@@ -32,7 +44,11 @@ export const APIRuleHost = ({ value }) => {
     loading,
   } = useGet(gatewayUrl, {
     skip: !(gatewayName && gatewayNamespace),
-  });
+  }) as {
+    data: Gateway | null;
+    loading: boolean;
+    error: Error | null;
+  };
 
   if (!value) return t('common.headers.loading');
   if (!isFQDN) {
