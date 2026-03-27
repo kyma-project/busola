@@ -34,6 +34,7 @@ export type PodType = {
     podIPs?: Array<{ ip: string }>;
     nominatedNodeName?: string;
     qosClass?: string;
+    phase?: string;
   };
 };
 

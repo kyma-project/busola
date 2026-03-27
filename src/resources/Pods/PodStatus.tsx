@@ -1,7 +1,8 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
+import { PodType } from '.';
 
-export const calculatePodState = (pod: Record<string, any>) => {
+export const calculatePodState = (pod: PodType) => {
   const containerStatuses = pod?.status?.containerStatuses;
   if (containerStatuses?.length > 0) {
     const waitingStatus = containerStatuses
@@ -46,7 +47,7 @@ const badgeType = (status: string) => {
   }
 };
 
-export function PodStatus({ pod }: { pod: Record<string, any> }) {
+export function PodStatus({ pod }: { pod: PodType }) {
   const podState = calculatePodState(pod);
   const message = podState?.message || pod.status?.conditions?.[0]?.message;
 
