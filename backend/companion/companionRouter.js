@@ -10,13 +10,14 @@ const config = require('../config.js');
 
 const tokenManager = new TokenManager();
 
-const COMPANION_BASE_URL = new URL(
-  '/',
-  COMPANION_CONVERSATIONS_API_BASE_URL,
-).toString();
+const COMPANION_API_BASE_URL = `${
+  config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? ''
+}/api/conversations/`;
+const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
+
 const COMPANION_PUBLIC_KEY_URL = new URL(
   '/api/public-key',
-  COMPANION_BASE_URL,
+  COMPANION_API_BASE_URL,
 ).toString();
 
 const SKIP_AUTH = true; //config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
@@ -116,7 +117,7 @@ async function handlePromptSuggestions(req, res) {
     const { namespace, resourceType, groupVersion, resourceName } = JSON.parse(
       req.body.toString(),
     );
-    const endpointUrl = COMPANION_CONVERSATIONS_API_BASE_URL;
+    const endpointUrl = COMPANION_API_BASE_URL;
     const payload = {
       resource_kind: resourceType,
       resource_api_version: groupVersion,
@@ -155,7 +156,7 @@ async function handleChatMessage(req, res) {
 
     const endpointUrl = new URL(
       `${encodeURIComponent(conversationId)}/messages`,
-      COMPANION_CONVERSATIONS_API_BASE_URL,
+      COMPANION_API_BASE_URL,
     );
 
     const payload = {
@@ -243,7 +244,7 @@ async function handleFollowUpSuggestions(req, res) {
 
     const endpointUrl = new URL(
       `${encodeURIComponent(conversationId)}/questions`,
-      COMPANION_CONVERSATIONS_API_BASE_URL,
+      COMPANION_API_BASE_URL,
     );
 
     const headers = await buildApiHeaders(authData);
