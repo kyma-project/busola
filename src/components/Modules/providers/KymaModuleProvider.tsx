@@ -1,4 +1,13 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  FC,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { ToolbarButton } from '@ui5/webcomponents-react';
 
@@ -8,26 +17,75 @@ import { t } from 'i18next';
 import { useKymaQuery } from '../kymaModulesQueries';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
-import { checkSelectedModule, findModuleStatus } from '../support';
+import {
+  checkSelectedModule,
+  findModuleStatus,
+  KymaResourceType,
+  ModuleTemplateType,
+} from '../support';
 import { ModulesDeleteBox } from '../components/ModulesDeleteBox';
 import { ModuleTemplatesContext } from './ModuleTemplatesProvider';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import pluralize from 'pluralize';
+import { ColumnLayoutState } from 'state/columnLayoutAtom';
 
-export const KymaModuleContext = createContext({
+type KymaModuleContetxProviderProps = {
+  children: ReactNode;
+  setLayoutColumn: Dispatch<SetStateAction<ColumnLayoutState>>;
+  layoutState: ColumnLayoutState;
+  DeleteMessageBox: FC<{
+    onDelete: () => void;
+    onCancel: () => void;
+    resourceName: string;
+  }>;
+  handleResourceDelete: (options: { moduleName?: string }) => void;
+  showDeleteDialog: boolean;
+  namespaced?: boolean;
+  performDelete: () => void;
+  performCancel: () => void;
+};
+
+type KymaModuleContextType = {
+  resourceName: string | null;
+  resourceUrl: string | null;
+  kymaResource: KymaResourceType | null;
+  kymaResourceLoading: boolean;
+  initialUnchangedResource: KymaResourceType | null;
+  kymaResourceState: KymaResourceType | undefined;
+  setKymaResourceState: (state: KymaResourceType) => void;
+  selectedModules: any;
+  setOpenedModuleIndex: Dispatch<SetStateAction<number | null>>;
+  handleResourceDelete: (options: { moduleName?: string }) => void;
+  customHeaderActions: ReactNode;
+  showDeleteDialog: boolean;
+  DeleteMessageBox: FC<{
+    onDelete: () => void;
+    onCancel: () => void;
+    resourceName: string;
+  }>;
+  isCommunityModuleSelected: boolean;
+  namespaced: boolean;
+  performDelete: () => void;
+  performCancel: () => void;
+};
+
+export const KymaModuleContext = createContext<KymaModuleContextType>({
   resourceName: null,
   resourceUrl: null,
   kymaResource: null,
   kymaResourceLoading: false,
   initialUnchangedResource: null,
-  kymaResourceState: null,
+  kymaResourceState: undefined,
   setKymaResourceState: () => {},
   selectedModules: {},
   setOpenedModuleIndex: () => {},
   handleResourceDelete: () => {},
   customHeaderActions: <></>,
+  showDeleteDialog: false,
+  DeleteMessageBox: () => <></>,
+  isCommunityModuleSelected: false,
   namespaced: false,
   performDelete: () => {},
   performCancel: () => {},
@@ -43,20 +101,29 @@ export function KymaModuleContextProvider({
   namespaced,
   performCancel,
   performDelete,
-}) {
+}: KymaModuleContetxProviderProps) {
   const {
     data: kymaResource,
     loading: kymaResourceLoading,
     resourceUrl,
-  } = useKymaQuery();
+  } = useKymaQuery() as {
+    data: any;
+    loading: boolean;
+    resourceUrl: string;
+  };
 
   const [activeKymaModules, setActiveKymaModules] = useState(
     kymaResource?.spec?.modules ?? [],
   );
-  const [openedModuleIndex, setOpenedModuleIndex] = useState();
+  const [openedModuleIndex, setOpenedModuleIndex] = useState<number | null>(
+    null,
+  );
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [initialUnchangedResource, setInitialUnchangedResource] = useState();
-  const [kymaResourceState, setKymaResourceState] = useState();
+  const [initialUnchangedResource, setInitialUnchangedResource] =
+    useState<KymaResourceType | null>(null);
+  const [kymaResourceState, setKymaResourceState] = useState<
+    KymaResourceType | undefined
+  >(undefined);
   const notification = useNotification();
   const { isProtected, isProtectedResource } = useProtectedResources();
 
@@ -101,20 +168,23 @@ export function KymaModuleContextProvider({
     communityModuleTemplates,
   } = useContext(ModuleTemplatesContext);
 
-  const getOpenedModuleIndex = (moduleIndex, activeModules) => {
+  const getOpenedModuleIndex = (
+    moduleIndex: number | null,
+    activeModules?: any[],
+  ) => {
     const index =
       moduleIndex ??
       // Find index of the selected module after a refresh or other case after which we have undefined.
       activeModules?.findIndex((module) =>
         checkSelectedModule(module, layoutState),
       );
-    return index > -1 ? index : undefined;
+    return index !== undefined && index > -1 ? index : undefined;
   };
 
   const getModuleName = () =>
     getOpenedModuleIndex(openedModuleIndex, activeKymaModules) !== undefined
       ? activeKymaModules[
-          getOpenedModuleIndex(openedModuleIndex, activeKymaModules)
+          getOpenedModuleIndex(openedModuleIndex, activeKymaModules) ?? -1
         ]?.name
       : undefined;
 
@@ -127,13 +197,13 @@ export function KymaModuleContextProvider({
     const communityModulesNames = communityModuleTemplates?.items?.map(
       (module) =>
         pluralize(
-          module?.metadata?.labels[
+          (module as ModuleTemplateType)?.metadata?.labels[
             'operator.kyma-project.io/module-name'
           ]?.replace('-', '') || '',
         ),
     );
     return communityModulesNames?.includes(
-      layoutState?.midColumn?.resourceType,
+      layoutState?.midColumn?.resourceType ?? '',
     );
   };
 
@@ -188,6 +258,7 @@ export function KymaModuleContextProvider({
         showDeleteDialog: showDeleteDialog,
         customHeaderActions: customHeaderActions,
         isCommunityModuleSelected: isCommunityModuleSelected(),
+        namespaced: !!namespaced,
         performDelete: performDelete,
         performCancel: performCancel,
       }}
@@ -204,10 +275,9 @@ export function KymaModuleContextProvider({
               performDelete={performDelete}
               performCancel={performCancel}
               selectedModules={activeKymaModules}
-              chosenModuleIndex={getOpenedModuleIndex(
-                openedModuleIndex,
-                activeKymaModules,
-              )}
+              chosenModuleIndex={
+                getOpenedModuleIndex(openedModuleIndex, activeKymaModules) ?? -1
+              }
               kymaResource={kymaResource}
               kymaResourceState={kymaResourceState}
               moduleTemplates={kymaModuleTemplates}
@@ -217,7 +287,7 @@ export function KymaModuleContextProvider({
               setChosenModuleIndex={setOpenedModuleIndex}
               handleModuleUninstall={handleModuleUninstall}
               setLayoutColumn={setLayoutColumn}
-              namespaced={namespaced}
+              namespaced={!!namespaced}
             />
           ),
         document.body,
