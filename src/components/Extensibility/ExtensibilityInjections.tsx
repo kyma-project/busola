@@ -11,16 +11,24 @@ import { usePrepareResourceUrl } from 'resources/helpers';
 import pluralize from 'pluralize';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
-export function ExtensibilityInjectionCore({ resMetaData, root }) {
+type ExtensibilityInjectionCoreProps = {
+  resMetaData: Record<string, any>;
+  root?: Record<string, any> | Record<string, any>[];
+};
+
+export function ExtensibilityInjectionCore({
+  resMetaData,
+  root,
+}: ExtensibilityInjectionCoreProps) {
   const isStatic = resMetaData?.general?.type === 'static';
   const staticResource = {
-    kind: root?.kind || 'Namespace',
-    version: root?.apiVersion || 'v1',
+    kind: (root as Record<string, any>)?.kind || 'Namespace',
+    version: (root as Record<string, any>)?.apiVersion || 'v1',
   };
   const { resource } = resMetaData?.general ?? {};
   const { schema } = useGetSchema({
     resource: isStatic ? staticResource : resource,
-  });
+  } as any);
 
   const resourceUrl = usePrepareResourceUrl({
     apiGroup: resource?.group,
@@ -31,7 +39,7 @@ export function ExtensibilityInjectionCore({ resMetaData, root }) {
   const { data, loading } = useGet(resourceUrl, {
     pollingInterval: 3000,
     skip: !resourceUrl,
-  });
+  } as any) as { data: Record<string, any> | null; loading: boolean };
 
   const [filteredItems, setFilteredItems] = useState([{}]);
   const jsonata = useJsonata({});
@@ -102,7 +110,17 @@ export function ExtensibilityInjectionCore({ resMetaData, root }) {
   );
 }
 
-export default function ExtensibilityInjections({ destination, slot, root }) {
+type ExtensibilityInjectionsProps = {
+  destination: string;
+  slot: string;
+  root?: Record<string, any> | Record<string, any>[];
+};
+
+export default function ExtensibilityInjections({
+  destination,
+  slot,
+  root,
+}: ExtensibilityInjectionsProps) {
   const injections = useGetInjections(destination, slot);
 
   return (injections || []).map((injection, index) => (
@@ -110,7 +128,13 @@ export default function ExtensibilityInjections({ destination, slot, root }) {
   ));
 }
 
-const ExtensibilityInjection = ({ resMetaData, root }) => {
+const ExtensibilityInjection = ({
+  resMetaData,
+  root,
+}: {
+  resMetaData: Record<string, any>;
+  root?: Record<string, any> | Record<string, any>[];
+}) => {
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
   const translationBundleValue = useMemo(

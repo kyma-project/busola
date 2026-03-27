@@ -270,8 +270,7 @@ export function ExtensibilityCreateCore({
 
 export default function ExtensibilityCreate(props: ExtensibilityCreateProps) {
   const resMetaData = useGetCRbyPath();
-  const { urlPath, defaultPlaceholder } =
-    resMetaData?.general || ({} as Record<string, any>);
+  const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
   const translationBundleValue = useMemo(
     () => ({

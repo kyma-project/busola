@@ -15,7 +15,7 @@ import CRCreate, { CRD } from 'resources/CustomResourceDefinitions/CRCreate';
 
 type CustomResourceProps = {
   customResourceDefinitionName: string;
-  resourceVersion: string;
+  resourceVersion?: string;
   resourceName?: string;
   resourceNamespace?: string;
   isModule?: boolean;

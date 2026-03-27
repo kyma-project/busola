@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useContext } from 'react';
+import { useState, useEffect, useMemo, useContext, ReactNode } from 'react';
 import { Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { mapValues } from 'lodash';
 import jsyaml from 'js-yaml';
@@ -6,6 +6,7 @@ import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import {
   UIMetaProvider,
+  UIStoreActions,
   UIStoreProvider,
   createOrderedMap,
   injectPluginStack,
@@ -41,28 +42,35 @@ import { useGetWizard } from './useGetWizard';
 import { WizardButtons } from 'shared/components/WizardButtons/WizardButtons';
 
 // TODO extract this as a helper
-const isK8sResource = (resource) => {
+const isK8sResource = (resource: Record<string, any>) => {
   if (!resource) return true;
   return resource.apiVersion && resource.kind && resource.metadata;
 };
 
 // TODO common container
-function FormContainer({ children }) {
+function FormContainer({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 const FormStack = injectPluginStack(FormContainer);
+
+type ExtensibilityWizardCoreProps = {
+  resource: Record<string, any>;
+  resourceSchema: Record<string, any>;
+  onCancel: () => void;
+  disableOnEdit?: boolean;
+};
 
 export function ExtensibilityWizardCore({
   resource: initialResource,
   resourceSchema,
   onCancel,
   disableOnEdit = false,
-}) {
+}: ExtensibilityWizardCoreProps) {
   const { prepareVars, setVar } = useVariables();
   const { t } = useTranslation();
   const triggers = useContext(TriggerContext);
   const [uploadState, setUploadState] = useState(OPERATION_STATE_INITIAL);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>('');
   const [resourceInitial] = useState(
     JSON.parse(JSON.stringify(initialResource)),
   );
@@ -101,8 +109,11 @@ export function ExtensibilityWizardCore({
   );
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState([]);
 
-  const onChange = (actions, resource) => {
-    if (actions.scopes.includes('value')) {
+  const onChange = (
+    actions: UIStoreActions | UIStoreActions[],
+    resource: string,
+  ) => {
+    if ((actions as UIStoreActions).scopes.includes('value')) {
       setStore((prevStore) => {
         const newStore = storeUpdater(actions)(prevStore[resource]);
         return {
@@ -115,13 +126,15 @@ export function ExtensibilityWizardCore({
 
   useEffect(() => {
     const fullSchemaRules = prepareRules(
-      resourceSchema.steps.flatMap((step) => step.form) ?? [],
+      resourceSchema.steps.flatMap(
+        (step: { form: Record<string, any>[] }) => step.form,
+      ) ?? [],
       disableOnEdit,
       t,
     );
 
     prepareVars(fullSchemaRules);
-    setTimeout(() => triggers.trigger('init', []));
+    setTimeout(() => triggers.trigger('init', [] as any));
   }, [resourceSchema]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [yaml, setYaml] = useState('');
@@ -145,19 +158,25 @@ export function ExtensibilityWizardCore({
       const files = jsyaml.loadAll(yaml);
       if (files.some((file) => typeof file !== 'object')) {
         setError(t('clusters.wizard.not-an-object'));
-      } else if (files.some((file) => !isK8sResource(file))) {
+      } else if (
+        files.some((file) => !isK8sResource(file as Record<string, any>))
+      ) {
         setError(t('upload-yaml.messages.not-a-k8s-resource'));
       } else {
         setResourcesWithStatuses(
           files.map((resource) => {
             return { value: resource };
-          }),
+          }) as any,
         );
 
         setError(null);
       }
-    } catch ({ message }) {
-      setError(message.substr(0, message.indexOf('\n')));
+    } catch (err) {
+      const message = (err as Error)?.message;
+      const newlineIndex = message.indexOf('\n');
+      setError(
+        newlineIndex === -1 ? message : message.substring(0, newlineIndex),
+      );
       setResourcesWithStatuses([]);
     }
   }, [yaml, t, resourceInitial]);
