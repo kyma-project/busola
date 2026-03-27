@@ -17,7 +17,6 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useNotification } from 'shared/contexts/NotificationContext';
 
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
@@ -48,7 +47,6 @@ const DEFAULT_SOURCE_URL =
 export const AddSourceYamls = () => {
   const { t } = useTranslation();
   const notification = useNotification();
-  const post = usePost();
   const { clusterUrl, namespaceUrl } = useUrl();
   const navigate = useNavigate();
 
@@ -70,7 +68,7 @@ export const AddSourceYamls = () => {
     resources: fetchedResources,
     error,
     loading,
-  } = useGetYAMLModuleTemplates(sourceURL, post);
+  } = useGetYAMLModuleTemplates(sourceURL);
 
   const allNamespaces = useAtomValue(namespacesAtom);
   const { communityModuleTemplates } = useContext(ModuleTemplatesContext);

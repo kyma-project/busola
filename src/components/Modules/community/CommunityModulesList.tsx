@@ -36,6 +36,7 @@ import {
   moduleInstallationState,
 } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
+import { UpdateModuleButton } from './components/UpdateModuleButton';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -158,6 +159,24 @@ export const CommunityModulesList = ({
     setModulesToDisplay([...uniqueInstalled, ...moduleTemplatesDuringUpload]);
   }, [installedModules, modulesDuringUpload]);
 
+  const getUpdateTemplate = (
+    moduleName: string,
+  ): ModuleTemplateType | undefined => {
+    const repoModules = moduleTemplates.items.filter(
+      (moduleTemplate) => !moduleTemplate.metadata.creationTimestamp,
+    );
+    const installedModule = installedModules.find((m) => m.name === moduleName);
+    if (!installedModule) return undefined;
+    return repoModules.find(
+      (repoModule) =>
+        getModuleName(repoModule) === moduleName &&
+        repoModule.spec.version !== installedModule.version,
+    );
+  };
+
+  const checkForUpdate = (moduleName: string) =>
+    !!getUpdateTemplate(moduleName);
+
   const handleShowAddModule = () => {
     setLayoutColumn({
       startColumn: {
@@ -248,6 +267,25 @@ export const CommunityModulesList = ({
   };
 
   const actions = [
+    ...[
+      {
+        component: (entry: any) => {
+          const repoTpl = getUpdateTemplate(entry.name);
+          const installedModule = installedModules.find(
+            (m) => m.name === entry.name,
+          );
+          if (!repoTpl || !installedModule) return null;
+          return (
+            <UpdateModuleButton
+              moduleName={entry.name}
+              currentVersion={installedModule.version}
+              newVersion={repoTpl.spec.version}
+              moduleTpl={repoTpl}
+            />
+          );
+        },
+      },
+    ],
     {
       name: t('common.buttons.delete'),
       tooltip: () => t('common.buttons.delete'),
@@ -384,6 +422,7 @@ export const CommunityModulesList = ({
             resource,
             moduleTemplates,
             hasDetailsLink,
+            needsUpdate: checkForUpdate(resource.name),
           })
         }
         disableHiding={false}

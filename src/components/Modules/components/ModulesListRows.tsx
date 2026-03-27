@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Tag, Text } from '@ui5/webcomponents-react';
+import { FlexBox, Panel, Tag, Text } from '@ui5/webcomponents-react';
 import { compare } from 'compare-versions';
 import {
   findModuleStatus,
@@ -12,7 +12,7 @@ import {
 } from '../support';
 import { useGetManagerStatus, useGetModuleResource } from '../hooks';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
@@ -22,6 +22,7 @@ import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
+import { UpdateModuleButton } from '../community/components/UpdateModuleButton';
 
 type RowResourceType = {
   name: string;
@@ -44,6 +45,7 @@ type ModulesListRowsProps = {
   moduleTemplates: ModuleTemplateListType;
   protectedResource?: boolean;
   hasDetailsLink: (resource: RowResourceType) => boolean;
+  needsUpdate?: boolean;
 };
 
 export const ModulesListRows = ({
@@ -53,6 +55,7 @@ export const ModulesListRows = ({
   hasDetailsLink,
   kymaResource,
   protectedResource,
+  needsUpdate,
 }: ModulesListRowsProps) => {
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
@@ -160,7 +163,7 @@ export const ModulesListRows = ({
     managerResourceState?.state,
     !!managerResourceStateError,
   );
-
+  console.log(resource);
   const isChannelOverridden = moduleIndex
     ? kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined
     : false;
@@ -236,6 +239,47 @@ export const ModulesListRows = ({
             {t('kyma-modules.upgrade-available')}
           </Tag>
         )}
+      {needsUpdate && (
+        <StatusBadge
+          className="sap-margin-begin-tiny"
+          resourceKind="kymas"
+          type={'Critical'}
+          tooltipContent={
+            <>
+              <FlexBox direction="Column">
+                <Text>
+                  <Trans
+                    i18nKey="modules.community.update.current-version"
+                    values={{ currentVersion: resource?.version }}
+                  >
+                    <span></span>
+                  </Trans>
+                </Text>
+                <Text>
+                  {t('modules.community.update.new-version', {
+                    newVersion: currentModuleTemplate?.spec?.version || '',
+                  })}
+                </Text>
+              </FlexBox>
+              <FlexBox
+                justifyContent="End"
+                style={{
+                  borderTop: '1px solid var(--sapObjectHeader_BorderColor)',
+                }}
+              >
+                <UpdateModuleButton
+                  moduleName={resource.name}
+                  currentVersion={resource?.version}
+                  newVersion={currentModuleTemplate?.spec?.version || ''}
+                  moduleTpl={currentModuleTemplate}
+                />
+              </FlexBox>
+            </>
+          }
+        >
+          {t('kyma-modules.outdated')}
+        </StatusBadge>
+      )}
     </>,
     // Module State
     <ModuleStatus

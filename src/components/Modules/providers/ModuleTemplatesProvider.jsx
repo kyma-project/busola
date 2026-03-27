@@ -6,6 +6,7 @@ import {
   useModuleTemplatesQuery,
 } from '../kymaModulesQueries';
 import { splitModuleTemplates } from '../support';
+import { useGetAllSourceYAMLModuleTemplates } from '../hooks';
 
 export const ModuleTemplatesContext = createContext({
   moduleTemplatesLoading: false,
@@ -24,12 +25,25 @@ export function ModuleTemplatesContextProvider({ children }) {
     loading: communityModuleTemplatesLoading,
   } = useExternalCommunityModulesQuery();
 
+  const installedSourceURLs = useMemo(() => {
+    const defaultURL =
+      'https://kyma-project.github.io/community-modules/all-modules.yaml';
+    const sources = (allModuleTemplates?.items || [])
+      .map((item) => item?.metadata?.annotations?.source)
+      .filter((url) => url && url !== defaultURL);
+    return [...new Set(sources)];
+  }, [allModuleTemplates?.items]);
+
+  const { resources: additionalSourceTemplates } =
+    useGetAllSourceYAMLModuleTemplates(installedSourceURLs);
+
   let checkedModuleTemplates;
 
   if (!moduleTemplatesLoading && !communityModuleTemplatesLoading)
-    checkedModuleTemplates = externalCommunityModuleTemplates.flatMap(
-      (res) => res.value,
-    );
+    checkedModuleTemplates = [
+      ...externalCommunityModuleTemplates.flatMap((res) => res.value),
+      ...additionalSourceTemplates,
+    ];
 
   const mergedModuleTemplates = useMemo(
     () => ({
