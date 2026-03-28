@@ -28,7 +28,7 @@ export function AllNamespacesDetails() {
     showTitle: true,
   };
 
-  const LimitrangesList = <LimitRangeList {...limitRangesParams} />;
+  const LimitRangesList = <LimitRangeList {...limitRangesParams} />;
 
   const resourceQuotasParams = {
     hasDetailsView: true,
@@ -79,7 +79,7 @@ export function AllNamespacesDetails() {
             <ResourcesUsage />
             <NamespaceWorkloads />
           </div>
-          {LimitrangesList}
+          {LimitRangesList}
           {ResourceQuotasList}
           {Events}
         </section>

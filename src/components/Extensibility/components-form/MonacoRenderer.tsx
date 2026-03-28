@@ -135,7 +135,6 @@ export function MonacoRenderer({
         <Label required={required}>{tFromStoreKeys(storeKeys, schema)}</Label>
       </div>
       <div className="bsl-col-md--11">
-        {/*@ts-expect-error Type mismatch between js and ts*/}
         <Editor
           autocompletionDisabled
           updateValueOnParentChange

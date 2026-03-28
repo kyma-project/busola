@@ -22,7 +22,7 @@ import { pageSizeAtom } from 'state/settings/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
-import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import pluralize from 'pluralize';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { Table, TableDomRef, Ui5CustomEvent } from '@ui5/webcomponents-react';
@@ -31,6 +31,7 @@ import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 import { useDebounce } from 'hooks/useDebounce';
 import { K8sResource } from 'types';
 import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
 
 type AsyncSortFunction = {
   asyncFn: (a: any, b: any) => Promise<any>;
@@ -75,7 +76,7 @@ type GenericListProps = {
   notFoundMessage?: string;
   searchSettings?: SearchSettingsType;
   emptyListProps?: EmptyListProps;
-  columnLayout?: string;
+  columnLayout?: FCLLayout;
   customColumnLayout?: (entry: any) => any;
   enableColumnLayout?: boolean;
   resourceType?: string;
@@ -368,9 +369,9 @@ export const GenericList = ({
       const { group, version } = extractApiGroupVersion(
         selectedEntry?.apiVersion,
       );
-      const newLayout = enableColumnLayout
-        ? (columnLayout ?? 'TwoColumnsMidExpanded')
-        : 'OneColumn';
+      const newLayout: FCLLayout = enableColumnLayout
+        ? (columnLayout ?? FCLLayout.TwoColumnsMidExpanded)
+        : FCLLayout.OneColumn;
       setLayoutColumn(
         columnLayout
           ? {
@@ -380,7 +381,7 @@ export const GenericList = ({
               layout: newLayout,
               showEdit: null,
             }
-          : ({
+          : {
               ...layoutState,
               showCreate: null,
               midColumn: {
@@ -396,7 +397,7 @@ export const GenericList = ({
               endColumn: null,
               layout: newLayout,
               showEdit: null,
-            } as ColumnLayoutState),
+            },
       );
       const link = `${linkTo(selectedEntry as any)}${
         enableColumnLayout

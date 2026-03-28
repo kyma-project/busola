@@ -59,5 +59,4 @@ export type LayoutColumnName =
   | 'startColumn'
   | 'midColumn'
   | 'endColumn'
-  | undefined
-  | null;
+  | undefined;

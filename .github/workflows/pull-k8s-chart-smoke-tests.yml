@@ -16,8 +16,14 @@ on:
       - 'nginx/**'
       - 'resources/**'
       - 'tests/integration/**'
+  workflow_call:
+    inputs:
+      trigger_env:
+        type: string
+        required: false
+
 jobs:
-  run-integration-test:
+  run-k8s-test:
     runs-on: ubuntu-latest
     env:
       IMG: kyma-dashboard:local-pr-${{github.sha}}
@@ -30,6 +36,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with latest main
+        if: inputs.trigger_env != 'release-trigger'
         uses: ./.github/actions/merge
       - name: Install k3d
         shell: bash

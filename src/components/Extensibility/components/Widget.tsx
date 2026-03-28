@@ -11,9 +11,9 @@ import { useTranslation } from 'react-i18next';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
-import { useGetTranslation, useGetPlaceholder } from '../helpers';
+import { useGetPlaceholder, useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
-import { widgets, valuePreprocessors } from './index';
+import { valuePreprocessors, widgets } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 export const SimpleRenderer = ({ children }: { children: ReactNode }) => {
@@ -166,8 +166,21 @@ const SingleWidget = memo(function SingleWidget({
   );
 });
 
-type WidgetProps = {
-  structure: any;
+export type Structure = {
+  id: string;
+  title: string;
+  description: string;
+  illustration: string;
+  design: string;
+  source: string;
+  visibility: boolean;
+  widget?: keyof typeof widgets;
+  valuePreprocessor?: any;
+  children?: Structure[];
+};
+
+export type WidgetProps = {
+  structure: Structure;
   value?: any;
   arrayItems?: any[];
   inlineRenderer?: any;
@@ -285,7 +298,7 @@ export function Widget({
   }
   let Renderer = structure.children ? Plain : Text;
   if (structure.widget) {
-    Renderer = (widgets as any)[structure.widget];
+    Renderer = widgets[structure.widget] as any;
     if (!Renderer) {
       return `no widget ${structure.widget}`;
     }

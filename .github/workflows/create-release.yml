@@ -15,6 +15,7 @@ on:
 permissions: # used by build images steps
   id-token: write # This is required for requesting the JWT token
   contents: write # This is required for actions/checkout and builds
+  actions: read # This is required for using actions in the workflow
 
 jobs:
   build-busola-web:
@@ -120,3 +121,71 @@ jobs:
           body: |
             This PR updates the Busola image versions in dev/main.tf to ${{ github.event.inputs.name }}.
           base: dev
+
+  integration-cluster-test:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-integration-cluster-k3d.yml
+    with:
+      trigger_env: release-trigger
+  integration-namespace-test:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-integration-namespace-k3d.yml
+    with:
+      trigger_env: release-trigger
+  lint-check:
+    needs: [create-release]
+    uses: ./.github/workflows/lint-check-pr.yml
+    with:
+      trigger_env: release-trigger
+  smoke-test-prod:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-smoke-test-prod.yml
+    with:
+      trigger_env: release-trigger
+  smoke-test-stage:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-smoke-test-stage.yml
+    with:
+      trigger_env: release-trigger
+  kyma-integration-test-dev:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-kyma-integration-tests-dev.yml
+    with:
+      trigger_env: release-trigger
+  k8s-chart-smoke-test:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-k8s-chart-smoke-tests.yml
+    with:
+      trigger_env: release-trigger
+  lighthouse-test:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-lighthouse.yml
+    with:
+      trigger_env: release-trigger
+  unit-tests:
+    needs: [create-release]
+    uses: ./.github/workflows/pull-unit-tests.yml
+    with:
+      trigger_env: release-trigger
+  upload-release-report:
+    needs:
+      - integration-cluster-test
+      - integration-namespace-test
+      - lint-check
+      - smoke-test-prod
+      - smoke-test-stage
+      - kyma-integration-test-dev
+      - k8s-chart-smoke-test
+      - lighthouse-test
+      - unit-tests
+    uses: kyma-project/compliancy/.github/workflows/notify-release-report.yml@main
+    with:
+      release_version: ${{ github.event.inputs.name }}
+    secrets: inherit
+
+  generate-sbom:
+    needs: [create-release]
+    uses: kyma-project/compliance/.github/workflows/generate-busola-sbom.yml@main
+    with:
+      release_version: ${{ github.event.inputs.name }}
+    secrets: inherit

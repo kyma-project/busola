@@ -13,18 +13,27 @@ import './ResourceCreate.scss';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { ReactNode } from 'react';
 
-interface RenderFormArgs {
+export type onErrorFn = (
+  title: string,
+  message: string,
+  isWarning: boolean,
+) => void;
+export type onChangeFn = () => void;
+export type onCompletedFn = (message: string) => void;
+export type setCustomValid = (valid: boolean) => void;
+
+type RenderFormArgs = {
   readOnly?: boolean;
   formElementRef: React.RefObject<HTMLFormElement | null>;
   isValid: boolean;
-  setCustomValid: (valid: boolean) => void;
-  onChange: () => void;
-  onError: (title: string, message: string, isWarning: boolean) => void;
+  setCustomValid: setCustomValid;
+  onChange: onChangeFn;
+  onError: onErrorFn;
   onCompleted: (message: string) => void;
   performManualSubmit: () => void;
   stickyHeaderHeight?: number;
   actions?: ReactNode;
-}
+};
 
 interface ResourceCreateProps {
   performRefetch?: () => void;

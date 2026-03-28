@@ -169,7 +169,6 @@ export function TokenRequestModal({
               {t('service-accounts.headers.download-kubeconfig')}
             </Button>
           </div>
-          {/*@ts-expect-error Type mismatch between js and ts */}
           <Editor
             value={kubeconfigYaml}
             updateValueOnParentChange
