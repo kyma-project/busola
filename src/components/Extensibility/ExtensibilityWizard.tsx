@@ -1,4 +1,12 @@
-import { useState, useEffect, useMemo, useContext, ReactNode } from 'react';
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useContext,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { mapValues } from 'lodash';
 import jsyaml from 'js-yaml';
@@ -32,7 +40,7 @@ import {
   getUIStoreFromResourceObj,
 } from './helpers/immutableConverter';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
-import { createTemplate } from './helpers';
+import { createTemplate, useGetTranslation } from './helpers';
 import { buildPathsFromObject } from 'shared/utils/helpers';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
@@ -54,8 +62,8 @@ function FormContainer({ children }: { children: ReactNode }) {
 const FormStack = injectPluginStack(FormContainer);
 
 type ExtensibilityWizardCoreProps = {
-  resource: Record<string, any>;
-  resourceSchema: Record<string, any>;
+  resource?: Record<string, any>;
+  resourceSchema?: Record<string, any>;
   onCancel: () => void;
   disableOnEdit?: boolean;
 };
@@ -68,7 +76,36 @@ export function ExtensibilityWizardCore({
 }: ExtensibilityWizardCoreProps) {
   const { prepareVars, setVar } = useVariables();
   const { t } = useTranslation();
+  const { t: translator } = useGetTranslation();
   const triggers = useContext(TriggerContext);
+  const settingYaml = (
+    setYaml: Dispatch<SetStateAction<string>>,
+    resources: Record<string, any>,
+  ) => {
+    setYaml(
+      Object.values(resources)
+        .map((resource) => jsyaml.dump(resource))
+        .join('---\n'),
+    );
+  };
+  const settingUploadState = (
+    state: string,
+    setUploadState: Dispatch<SetStateAction<string>>,
+  ) => {
+    setUploadState(state);
+  };
+  const settingError = (
+    message: string | null,
+    setError: Dispatch<SetStateAction<string | null>>,
+  ) => {
+    setError(message);
+  };
+  const settingResourcesWithStatuses = (
+    resWithStatuses: Record<string, any>[],
+    setResourcesWithStatuses: Dispatch<SetStateAction<any[]>>,
+  ) => {
+    setResourcesWithStatuses(resWithStatuses);
+  };
   const [uploadState, setUploadState] = useState(OPERATION_STATE_INITIAL);
   const [error, setError] = useState<string | null>('');
   const [resourceInitial] = useState(
@@ -77,7 +114,7 @@ export function ExtensibilityWizardCore({
   const [selected, setSelected] = useState(1);
 
   const [store, setStore] = useState(() => {
-    return mapValues(resourceSchema.general.resources, (res, key) => {
+    return mapValues(resourceSchema?.general?.resources, (res, key) => {
       if (initialResource && resourceSchema?.defaults?.[key]) {
         const path = buildPathsFromObject(resourceSchema?.defaults[key]);
 
@@ -97,9 +134,9 @@ export function ExtensibilityWizardCore({
   });
 
   const { schemas, loading: loadingSchemas } = useGetResourceSchemas(
-    resourceSchema.general.resources,
+    resourceSchema?.general?.resources,
   );
-  const schemaMaps = useMemo(
+  const schemaMaps: Record<string, any> = useMemo(
     () => mapValues(schemas, (schema) => createOrderedMap(schema)),
     [schemas],
   );
@@ -107,7 +144,7 @@ export function ExtensibilityWizardCore({
     () => mapValues(store, (val) => getResourceObjFromUIStore(val)),
     [store],
   );
-  const [resourcesWithStatuses, setResourcesWithStatuses] = useState([]);
+  const [resourcesWithStatuses, setResourcesWithStatuses] = useState<any[]>([]);
 
   const onChange = (
     actions: UIStoreActions | UIStoreActions[],
@@ -126,7 +163,7 @@ export function ExtensibilityWizardCore({
 
   useEffect(() => {
     const fullSchemaRules = prepareRules(
-      resourceSchema.steps.flatMap(
+      resourceSchema?.steps.flatMap(
         (step: { form: Record<string, any>[] }) => step.form,
       ) ?? [],
       disableOnEdit,
@@ -139,11 +176,7 @@ export function ExtensibilityWizardCore({
 
   const [yaml, setYaml] = useState('');
   useEffect(() => {
-    setYaml(
-      Object.values(resources)
-        .map((resource) => jsyaml.dump(resource))
-        .join('---\n'),
-    );
+    settingYaml(setYaml, resources);
   }, [resources]);
 
   useEffect(() => {
@@ -153,31 +186,33 @@ export function ExtensibilityWizardCore({
   useEffect(() => {
     // TODO common yaml parser with YamlUpload
     try {
-      setUploadState(OPERATION_STATE_INITIAL);
+      settingUploadState(OPERATION_STATE_INITIAL, setUploadState);
 
       const files = jsyaml.loadAll(yaml);
       if (files.some((file) => typeof file !== 'object')) {
-        setError(t('clusters.wizard.not-an-object'));
+        settingError(t('clusters.wizard.not-an-object'), setError);
       } else if (
         files.some((file) => !isK8sResource(file as Record<string, any>))
       ) {
-        setError(t('upload-yaml.messages.not-a-k8s-resource'));
+        settingError(t('upload-yaml.messages.not-a-k8s-resource'), setError);
       } else {
-        setResourcesWithStatuses(
+        settingResourcesWithStatuses(
           files.map((resource) => {
             return { value: resource };
           }) as any,
+          setResourcesWithStatuses,
         );
 
-        setError(null);
+        settingError(null, setError);
       }
     } catch (err) {
       const message = (err as Error)?.message;
       const newlineIndex = message.indexOf('\n');
-      setError(
+      settingError(
         newlineIndex === -1 ? message : message.substring(0, newlineIndex),
+        setError,
       );
-      setResourcesWithStatuses([]);
+      settingResourcesWithStatuses([], setResourcesWithStatuses);
     }
   }, [yaml, t, resourceInitial]);
 
@@ -202,40 +237,42 @@ export function ExtensibilityWizardCore({
   let selectedIndex = 0;
 
   return (
-    <UIMetaProvider widgets={widgets}>
+    <UIMetaProvider widgets={widgets as any} t={translator}>
       <Wizard contentLayout="SingleStep" className="extensibility-wizard">
-        {resourceSchema.steps.map((step, idx) => {
-          selectedIndex = selectedIndex + 1;
-          return (
-            <WizardStep
-              key={idx}
-              titleText={step.name}
-              selected={selected === selectedIndex}
-            >
-              <section className="resource-form">
-                <p>{step?.description}</p>
-                <UIStoreProvider
-                  store={store[step.resource]}
-                  showValidity={true}
-                  rootRule={prepareSchemaRules(step.form)}
-                  onChange={(actions) => onChange(actions, step.resource)}
-                >
-                  <FormStack
-                    isRoot
-                    schema={schemaMaps[step.resource]}
-                    resource={resources[step.resource]}
-                  />
-                </UIStoreProvider>
-              </section>
-              <WizardButtons
-                selectedStep={selected}
-                setSelectedStep={setSelected}
-                firstStep={selectedIndex === 1}
-                onCancel={onCancel}
-              />
-            </WizardStep>
-          );
-        })}
+        {resourceSchema?.steps?.map(
+          (step: Record<string, any>, idx: number) => {
+            selectedIndex = selectedIndex + 1;
+            return (
+              <WizardStep
+                key={idx}
+                titleText={step.name}
+                selected={selected === selectedIndex}
+              >
+                <section className="resource-form">
+                  <p>{step?.description}</p>
+                  <UIStoreProvider
+                    store={store[step.resource]}
+                    showValidity={true}
+                    rootRule={prepareSchemaRules(step.form)}
+                    onChange={(actions) => onChange(actions, step.resource)}
+                  >
+                    <FormStack
+                      isRoot
+                      schema={schemaMaps[step.resource]}
+                      resource={resources[step.resource]}
+                    />
+                  </UIStoreProvider>
+                </section>
+                <WizardButtons
+                  selectedStep={selected}
+                  setSelectedStep={setSelected}
+                  firstStep={selectedIndex === 1}
+                  onCancel={onCancel}
+                />
+              </WizardStep>
+            );
+          },
+        )}
         <WizardStep
           titleText={t('extensibility.wizard.summary')}
           selected={selected === selectedIndex + 1}
@@ -271,8 +308,15 @@ export function ExtensibilityWizardCore({
   );
 }
 
-export function ExtensibilityWizard(props) {
-  const resMetaData = useGetWizard(props?.wizardName);
+type ExtensibilityWizardProps = {
+  wizardName: string;
+  singleRootResource?: Record<string, any>;
+  onCancel: () => void;
+  disableOnEdit?: boolean;
+};
+
+export function ExtensibilityWizard(props: ExtensibilityWizardProps) {
+  const resMetaData = useGetWizard(props?.wizardName) as Record<string, any>;
 
   const size = useMemo(() => Object.keys(resMetaData).length, [resMetaData]);
 
