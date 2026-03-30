@@ -185,7 +185,7 @@ jobs:
 
   generate-sbom:
     needs: [create-release]
-    uses: kyma-project/compliance/.github/workflows/generate-busola-sbom.yml@main
+    uses: kyma-project/compliancy/.github/workflows/generate-busola-sbom.yml@main
     with:
       release_version: ${{ github.event.inputs.name }}
     secrets: inherit
