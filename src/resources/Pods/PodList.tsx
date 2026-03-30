@@ -11,18 +11,23 @@ import {
   ResourceDescription,
   i18nDescriptionKey,
   docsURL,
+  PodType,
 } from 'resources/Pods';
 import { Link } from 'shared/components/Link/Link';
+import { ResourcesListProps } from 'shared/components/ResourcesList/types';
 
-export function PodList(params) {
-  const { showNodeName } = params;
+type PodListProps = ResourcesListProps & {
+  showNodeName?: boolean;
+};
+
+export function PodList({ showNodeName, ...props }: PodListProps) {
   const { clusterUrl } = useUrl();
   const { t } = useTranslation();
 
   let customColumns = [
     {
       header: t('common.headers.owner'),
-      value: (pod) => {
+      value: (pod: PodType) => {
         return (
           <ControlledBy
             ownerReferences={pod.metadata.ownerReferences}
@@ -33,11 +38,13 @@ export function PodList(params) {
     },
     {
       header: t('common.headers.status'),
-      value: (pod) => <PodStatus pod={pod} />,
+      value: (pod: PodType) => <PodStatus pod={pod} />,
     },
     {
       header: t('pods.restarts'),
-      value: (pod) => <PodRestarts statuses={pod.status.containerStatuses} />,
+      value: (pod: PodType) => (
+        <PodRestarts statuses={pod.status.containerStatuses} />
+      ),
     },
   ];
 
@@ -46,7 +53,7 @@ export function PodList(params) {
       ...customColumns,
       {
         header: t('pods.node'),
-        value: (pod) => (
+        value: (pod: PodType) => (
           <Link url={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}>
             {pod.spec.nodeName}
           </Link>
@@ -66,7 +73,7 @@ export function PodList(params) {
             calculatePodState(b).status,
           ),
       })}
-      {...params}
+      {...props}
       createResourceForm={PodCreate}
       emptyListProps={{
         subtitleText: i18nDescriptionKey,

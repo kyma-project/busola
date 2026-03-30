@@ -1,4 +1,4 @@
-export function createPodTemplate(namespace) {
+export function createPodTemplate(namespace: string) {
   return {
     apiVersion: 'v1',
     kind: 'Pod',

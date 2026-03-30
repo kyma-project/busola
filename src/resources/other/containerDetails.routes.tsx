@@ -17,11 +17,9 @@ const RoutedContainerDetails = () => {
   const decodedContainerName = decodeURIComponent(params.containerName || '');
   return (
     <ContainersLogs
-      params={{
-        podName: decodedPodName,
-        containerName: decodedContainerName,
-        namespace: params.namespaceId,
-      }}
+      podName={decodedPodName}
+      containerName={decodedContainerName}
+      namespace={params.namespaceId ?? ''}
     />
   );
 };
