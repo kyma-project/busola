@@ -1,7 +1,18 @@
 import { Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
-function highlightSearch(log, searchText) {
+interface LogsPanelProps {
+  streamData: {
+    error: Error | null;
+    data: string[];
+  };
+  containerName: string;
+  searchQuery: string;
+  reverseLogs: boolean;
+  showTimestamps: boolean;
+}
+
+function highlightSearch(log: string, searchText: string) {
   if (searchText) {
     const logArray = log.split(new RegExp(`(${searchText})`, 'gi'));
     return (
@@ -27,7 +38,7 @@ export const LogsPanel = ({
   searchQuery,
   reverseLogs,
   showTimestamps,
-}) => {
+}: LogsPanelProps) => {
   const { t } = useTranslation();
   const { error, data } = streamData;
   if (error) return <div className="empty-logs">{error.message}</div>;
