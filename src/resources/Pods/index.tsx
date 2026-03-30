@@ -4,6 +4,40 @@ import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
+export type PodType = {
+  metadata: {
+    name: string;
+    namespace: string;
+    labels: Record<string, string>;
+    ownerReferences: {
+      apiVersion: string;
+      kind: string;
+      name: string;
+      uid: string;
+    }[];
+  };
+  spec: {
+    containers: Array<{
+      env?: Array<{
+        valueFrom?: Record<string, any>;
+      }>;
+    }>;
+    volumes?: Array<Record<string, any>>;
+    nodeName?: string;
+  };
+  status: {
+    conditions: Record<string, any>[];
+    containerStatuses: Array<Record<string, any>>;
+    initContainerStatuses?: Array<Record<string, any>>;
+    hostIP?: string;
+    podIP?: string;
+    podIPs?: Array<{ ip: string }>;
+    nominatedNodeName?: string;
+    qosClass?: string;
+    phase?: string;
+  };
+};
+
 function matchByMount(volumeResourceType: any) {
   const valueFromKey = volumeResourceType + 'KeyRef';
 

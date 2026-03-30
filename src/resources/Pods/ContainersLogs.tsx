@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  KeyboardEvent,
+  MutableRefObject,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { saveAs } from 'file-saver';
 import {
   Button,
@@ -22,7 +28,13 @@ const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
-const scrollToSelectedLog = (selectedLogIndex) => {
+interface ContainersLogsProps {
+  namespace: string;
+  podName: string;
+  containerName: string;
+}
+
+const scrollToSelectedLog = (selectedLogIndex: MutableRefObject<number>) => {
   const highlightedLogs = document.getElementsByClassName('logs-highlighted');
   if (selectedLogIndex.current < 0) {
     selectedLogIndex.current = highlightedLogs?.length - 1 || 0;
@@ -35,7 +47,11 @@ const scrollToSelectedLog = (selectedLogIndex) => {
   }
 };
 
-const ContainersLogs = ({ params }) => {
+const ContainersLogs = ({
+  namespace,
+  containerName,
+  podName,
+}: ContainersLogsProps) => {
   const { t } = useTranslation();
 
   useWindowTitle('Logs');
@@ -55,7 +71,7 @@ const ContainersLogs = ({ params }) => {
     { text: 'all', key: String(MAX_TIMEFRAME_IN_SECONDS) },
   ];
 
-  const url = `/api/v1/namespaces/${params.namespace}/pods/${params.podName}/log?container=${params.containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
+  const url = `/api/v1/namespaces/${namespace}/pods/${podName}/log?container=${containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
   useEffect(() => {
@@ -71,7 +87,7 @@ const ContainersLogs = ({ params }) => {
     scrollToSelectedLog(selectedLogIndex);
   }, [searchQuery]);
 
-  const changeSelectedLog = (e) => {
+  const changeSelectedLog = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' || e.key === 'ArrowDown') {
       selectedLogIndex.current = selectedLogIndex.current + 1;
       scrollToSelectedLog(selectedLogIndex);
@@ -89,11 +105,11 @@ const ContainersLogs = ({ params }) => {
     setReverseLogs((prev) => !prev);
   };
 
-  const onLogTimeframeChange = (timeValue) => {
+  const onLogTimeframeChange = (timeValue: string) => {
     setSinceSeconds(timeValue);
   };
 
-  const saveToFile = (podName, containerName) => {
+  const saveToFile = (podName: string, containerName: string) => {
     const dateObj = new Date();
     const day = dateObj.getDate();
     const month = dateObj.getMonth() + 1;
@@ -108,7 +124,7 @@ const ContainersLogs = ({ params }) => {
         { type: 'text/plain' },
       );
       saveAs(file, `${podName}-${containerName}-${date}.txt`);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       notification.notifyError({
         title: t('pods.message.failed-to-download'),
@@ -119,7 +135,7 @@ const ContainersLogs = ({ params }) => {
 
   return (
     <DynamicPageComponent
-      title={params.containerName}
+      title={containerName}
       content={
         <UI5Panel
           title={t('pods.labels.logs')}
@@ -132,7 +148,7 @@ const ContainersLogs = ({ params }) => {
               <Select
                 onChange={(event) => {
                   const selectedTimeFrame = event.detail.selectedOption.value;
-                  onLogTimeframeChange(selectedTimeFrame);
+                  onLogTimeframeChange(selectedTimeFrame ?? '');
                 }}
               >
                 {logTimeframeOptions.map((option) => (
@@ -157,7 +173,7 @@ const ContainersLogs = ({ params }) => {
               />
               <Button
                 disabled={!logsToSave?.length}
-                onClick={() => saveToFile(params.podName, params.containerName)}
+                onClick={() => saveToFile(podName, containerName)}
               >
                 {t('pods.labels.save-to-file')}
               </Button>
@@ -175,7 +191,7 @@ const ContainersLogs = ({ params }) => {
           <div className="logs-panel-body">
             <LogsPanel
               streamData={streamData}
-              containerName={params.containerName}
+              containerName={containerName}
               searchQuery={searchQuery}
               reverseLogs={reverseLogs}
               showTimestamps={showTimestamps}

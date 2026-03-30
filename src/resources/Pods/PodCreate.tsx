@@ -7,6 +7,11 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 import { createPodTemplate } from './templates';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type PodCreateProps = ResourceFormProps & {
+  resourceUrl: string;
+};
 
 export default function PodCreate({
   formElementRef,
@@ -15,7 +20,7 @@ export default function PodCreate({
   setCustomValid,
   resourceUrl,
   ...props
-}) {
+}: PodCreateProps) {
   const { t } = useTranslation();
 
   const namespaceId = useAtomValue(activeNamespaceIdAtom);

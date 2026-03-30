@@ -1,29 +1,53 @@
-import { createContext, useMemo } from 'react';
+import { createContext, ReactNode, useMemo } from 'react';
 
 import {
   useExternalCommunityModulesQuery,
   useModulesReleaseQuery,
   useModuleTemplatesQuery,
 } from '../kymaModulesQueries';
-import { splitModuleTemplates } from '../support';
+import {
+  ModuleReleaseMetas,
+  ModuleTemplateType,
+  splitModuleTemplates,
+} from '../support';
 import { useGetAllSourceYAMLModuleTemplates } from '../hooks';
 
-export const ModuleTemplatesContext = createContext({
-  moduleTemplatesLoading: false,
-  moduleReleaseMetas: { items: [] },
-  moduleReleaseMetasLoading: false,
-  communityModuleTemplates: { items: [] },
-  moduleTemplates: { items: [] },
-});
+type ModuleTemplatesContextType = {
+  moduleTemplatesLoading: boolean;
+  moduleReleaseMetas: { items: ModuleReleaseMetas[] } | null;
+  moduleReleaseMetasLoading: boolean;
+  communityModuleTemplates: { items: ModuleTemplateType[] };
+  moduleTemplates: { items: ModuleTemplateType[] };
+};
 
-export function ModuleTemplatesContextProvider({ children }) {
+export const ModuleTemplatesContext = createContext<ModuleTemplatesContextType>(
+  {
+    moduleTemplatesLoading: false,
+    moduleReleaseMetas: { items: [] },
+    moduleReleaseMetasLoading: false,
+    communityModuleTemplates: { items: [] },
+    moduleTemplates: { items: [] },
+  },
+);
+
+export function ModuleTemplatesContextProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const { data: allModuleTemplates, loading: moduleTemplatesLoading } =
-    useModuleTemplatesQuery({});
+    useModuleTemplatesQuery({}) as {
+      data: { items: ModuleTemplateType[] } | null;
+      loading: boolean;
+    };
 
   const {
     data: externalCommunityModuleTemplates,
     loading: communityModuleTemplatesLoading,
-  } = useExternalCommunityModulesQuery();
+  } = useExternalCommunityModulesQuery() as {
+    data: ModuleTemplateType[] | null;
+    loading: boolean;
+  };
 
   const installedSourceURLs = useMemo(() => {
     const defaultURL =
@@ -37,13 +61,15 @@ export function ModuleTemplatesContextProvider({ children }) {
   const { resources: additionalSourceTemplates } =
     useGetAllSourceYAMLModuleTemplates(installedSourceURLs);
 
-  let checkedModuleTemplates;
+  let checkedModuleTemplates: ModuleTemplateType[];
 
   if (!moduleTemplatesLoading && !communityModuleTemplatesLoading)
     checkedModuleTemplates = [
-      ...externalCommunityModuleTemplates.flatMap((res) => res.value),
+      ...(externalCommunityModuleTemplates?.flatMap((res: any) => res.value) ??
+        []),
       ...additionalSourceTemplates,
-    ];
+    ] as any;
+  else checkedModuleTemplates = [];
 
   const mergedModuleTemplates = useMemo(
     () => ({
@@ -56,7 +82,10 @@ export function ModuleTemplatesContextProvider({ children }) {
   );
 
   const { data: moduleReleaseMetas, loading: moduleReleaseMetasLoading } =
-    useModulesReleaseQuery({});
+    useModulesReleaseQuery({}) as {
+      data: { items: ModuleReleaseMetas[] } | null;
+      loading: boolean;
+    };
 
   const {
     communityTemplates: communityModuleTemplates,

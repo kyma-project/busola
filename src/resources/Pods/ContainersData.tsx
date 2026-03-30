@@ -1,22 +1,39 @@
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import { Button } from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ContainerStatus } from './ContainerStatus';
-import { getPorts } from 'shared/components/GetContainersPorts';
+import { getPorts, PortsType } from 'shared/components/GetContainersPorts';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
-ContainersData.propTypes = {
-  containers: PropTypes.arrayOf(PropTypes.object),
+type ContainerType = {
+  name: string;
+  image: string;
+  imagePullPolicy: string;
+  ports: PortsType[];
 };
 
-export default function ContainersData({ type, containers, statuses }) {
+type StatusType = {
+  name: string;
+  state: Record<string, any>;
+};
+
+interface ContainersDataProps {
+  type: string;
+  containers: ContainerType[];
+  statuses: StatusType[];
+}
+
+export default function ContainersData({
+  type,
+  containers,
+  statuses,
+}: ContainersDataProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const setLayout = useSetAtom(columnLayoutAtom);
@@ -25,7 +42,13 @@ export default function ContainersData({ type, containers, statuses }) {
     return null;
   }
 
-  const ContainerComponent = ({ container, status }) => {
+  const ContainerComponent = ({
+    container,
+    status,
+  }: {
+    container: ContainerType;
+    status: StatusType;
+  }) => {
     const state =
       status?.state?.running ||
       status?.state?.waiting ||
@@ -41,6 +64,7 @@ export default function ContainersData({ type, containers, statuses }) {
               setLayout({
                 midColumn: null,
                 endColumn: null,
+                startColumn: null,
                 layout: 'OneColumn',
               });
               navigate(
@@ -91,7 +115,12 @@ export default function ContainersData({ type, containers, statuses }) {
         <ContainerComponent
           key={container.name}
           container={container}
-          status={statuses?.find((status) => status.name === container.name)}
+          status={
+            statuses?.find((status) => status.name === container.name) ?? {
+              name: '',
+              state: {},
+            }
+          }
         />
       ))}
     </UI5Panel>
