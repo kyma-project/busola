@@ -1,12 +1,10 @@
 ui5-shellbar.header {
   padding: 0 !important;
-  border-radius: 0.5rem;
   container-type: inline-size;
 
   &::part(root) {
     padding-inline-start: 0.75rem;
     padding-inline-end: 1.25rem;
-    box-shadow: var(--sapContainer_Shadow1);
   }
 
   ui5-toggle-button[slot='assistant'] {
