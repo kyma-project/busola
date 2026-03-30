@@ -10,6 +10,19 @@ import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 
 import './RichEditorSection.scss';
 
+type RichEditorSectionItem = {
+  key?: string;
+  value?: string;
+  language?: string;
+};
+
+type RichEditorSectionProps = {
+  item: RichEditorSectionItem | null;
+  onChange: (data: Partial<RichEditorSectionItem>) => void;
+  onDelete: () => void;
+  pushValue: () => void;
+};
+
 function getAvailableLanguages() {
   return (
     languages
@@ -28,7 +41,12 @@ function getAvailableLanguages() {
   );
 }
 
-export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
+export function RichEditorSection({
+  item,
+  onChange,
+  onDelete,
+  pushValue,
+}: RichEditorSectionProps) {
   const { t } = useTranslation();
   const { key, value, language } = item || {};
 
@@ -64,7 +82,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const keyInput = (
     <FormField
       value={key || ''}
-      setValue={(key) => onChange({ key })}
+      setValue={(key: string) => onChange({ key })}
       input={Inputs.Text}
       label={t('components.key-value-form.key')}
       className="sap-margin-bottom-small"
@@ -74,7 +92,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
     />
   );
   const handleChange = useCallback(
-    (value) => onChange({ key: key || '', value }),
+    (value: string) => onChange({ key: key || '', value }),
     [key, onChange],
   );
 
@@ -99,7 +117,6 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   return (
     <ResourceForm.CollapsibleSection
       title={title}
-      language={language || ''}
       actions={deleteButton}
       defaultOpen
       nestingLevel={1}
