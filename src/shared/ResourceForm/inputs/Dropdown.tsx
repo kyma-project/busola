@@ -1,6 +1,17 @@
 import { Dropdown as BusolaDropdown } from 'shared/components/Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 
+type DropdownProps = {
+  value?: string;
+  setValue: (key: string, selected: any) => void;
+  error?: Error;
+  loading?: boolean;
+  selectedKey?: string;
+  accessibleName?: string;
+  options: { key: string; text: string }[];
+  [key: string]: any;
+};
+
 export function Dropdown({
   value,
   setValue,
@@ -8,8 +19,9 @@ export function Dropdown({
   loading,
   selectedKey,
   accessibleName,
+  options,
   ...props
-}) {
+}: DropdownProps) {
   const { t } = useTranslation();
 
   const getValidationState = () => {
@@ -28,14 +40,16 @@ export function Dropdown({
     }
   };
 
-  const { ...dropdownProps } = props;
   return (
     <BusolaDropdown
-      selectedKey={selectedKey ?? value}
-      onSelect={(_, selected) => setValue(selected.key, selected)}
+      selectedKey={selectedKey ?? value ?? ''}
+      onSelect={(_: Event, selected: any) => setValue(selected.key, selected)}
       validationState={getValidationState()}
-      accessibleName={`${accessibleName} Dropdown input`}
-      {...dropdownProps}
+      accessibleName={
+        accessibleName ? `${accessibleName} Dropdown input` : accessibleName
+      }
+      options={options}
+      {...props}
     />
   );
 }

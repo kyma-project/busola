@@ -1,4 +1,28 @@
 import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
+import type { ComboBoxDomRef } from '@ui5/webcomponents-react';
+import { Ref, SyntheticEvent } from 'react';
+
+type Option = {
+  key: string | number;
+  text: string | number;
+};
+
+type ComboboxInputProps = {
+  value?: string | number;
+  setValue?: (key: string | number) => void;
+  selectedKey?: string | number;
+  options: Option[];
+  id?: string;
+  updatesOnInput?: boolean;
+  placeholder?: string;
+  className?: string;
+  _ref?: Ref<ComboBoxDomRef>;
+  onSelectionChange?: (event: SyntheticEvent, option: Option) => void;
+  accessibleName?: string;
+  isNumeric?: boolean;
+  disabled?: boolean;
+  [key: string]: any;
+};
 
 export function ComboboxInput({
   value,
@@ -13,9 +37,9 @@ export function ComboboxInput({
   onSelectionChange,
   accessibleName,
   ...props
-}) {
-  const onChange = (event) => {
-    let selectedOption;
+}: ComboboxInputProps) {
+  const onChange = (event: any) => {
+    let selectedOption: Option;
     if (!props?.isNumeric) {
       selectedOption = options.find((o) => o.text === event.target.value) ?? {
         key: event.target._state.filterValue,
@@ -36,7 +60,7 @@ export function ComboboxInput({
     if (onSelectionChange) {
       onSelectionChange(event, selectedOption);
     } else {
-      setValue(selectedOption.key);
+      setValue?.(selectedOption.key);
     }
   };
 
@@ -51,14 +75,19 @@ export function ComboboxInput({
       onChange={onChange}
       onInput={updatesOnInput ? onChange : () => {}}
       value={
-        options.find((o) => o.key === value || o.key === selectedKey)?.text ??
-        value
+        options
+          .find((o) => o.key === value || o.key === selectedKey)
+          ?.text?.toString() ?? value?.toString()
       }
       placeholder={placeholder}
       {...props}
     >
       {options.map((option, index) => (
-        <ComboBoxItem key={index} id={option.key} text={option.text} />
+        <ComboBoxItem
+          key={index}
+          id={String(option.key)}
+          text={String(option.text)}
+        />
       ))}
     </ComboBox>
   );
