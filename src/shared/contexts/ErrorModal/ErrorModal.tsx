@@ -7,7 +7,7 @@ import './ErrorModal.scss';
 
 export type ToastProps = {
   content: React.ReactNode;
-  title: string;
+  title?: string;
   parentContainer?: HTMLElement | null;
 };
 
