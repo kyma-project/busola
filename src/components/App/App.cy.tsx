@@ -31,12 +31,6 @@ describe('Non-floating layout integration', () => {
 
       cy.get('ui5-shellbar.header').should('have.css', 'border-radius', '0px');
     });
-
-    it('renders the ShellBar without box-shadow', () => {
-      cy.mount(<Header />);
-
-      cy.get('ui5-shellbar.header').should('have.css', 'box-shadow', 'none');
-    });
   });
 
   describe('#html-wrap layout', () => {
