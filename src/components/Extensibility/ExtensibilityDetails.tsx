@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { useContext, useEffect, useMemo } from 'react';
+import { ReactNode, useContext, useEffect, useMemo } from 'react';
 import { useSetAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
@@ -24,6 +24,16 @@ import CustomResource from 'resources/CustomResourceDefinitions/CustomResources.
 import { resourcesConditionsAtom } from 'state/resourceConditionsAtom';
 import { KymaModuleContext } from 'components/Modules/providers/KymaModuleProvider';
 
+type ExtensibilityDetailsCoreProps = {
+  resMetaData: Record<string, any>;
+  resourceName?: string;
+  layoutCloseCreateUrl?: string;
+  namespaceId?: string;
+  isModule?: boolean;
+  isEntireListProtected?: boolean;
+  headerActions?: ReactNode;
+};
+
 export const ExtensibilityDetailsCore = ({
   resMetaData,
   resourceName,
@@ -32,7 +42,7 @@ export const ExtensibilityDetailsCore = ({
   isModule,
   isEntireListProtected,
   headerActions,
-}) => {
+}: ExtensibilityDetailsCoreProps) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
 
@@ -50,7 +60,7 @@ export const ExtensibilityDetailsCore = ({
   const { schema } = useGetSchema({
     resource,
     additionalId: 'Details',
-  });
+  } as any);
 
   const jsonata = useJsonata({});
 
@@ -93,13 +103,16 @@ export const ExtensibilityDetailsCore = ({
   const dataSources = resMetaData?.dataSources || {};
   const general = resMetaData?.general || {};
 
-  const prepareVisibility = async (def, resource) => {
+  const prepareVisibility = async (
+    def: Record<string, any>,
+    resource: Record<string, any>,
+  ) => {
     setResourcesConditions(resource.status);
     const [visible, error] = await jsonata(def.visibility, { resource }, true);
     return { visible, error };
   };
 
-  const prepareDisableEdit = async (resource) => {
+  const prepareDisableEdit = async (resource: Record<string, any>) => {
     if (disableEdit && typeof disableEdit === 'string') {
       const [isDisabled] = await jsonata(disableEdit, { resource });
       return typeof isDisabled === 'boolean' ? isDisabled : false;
@@ -112,9 +125,8 @@ export const ExtensibilityDetailsCore = ({
       layoutCloseCreateUrl={layoutCloseCreateUrl}
       disableEdit={prepareDisableEdit}
       disableDelete={disableDelete}
-      resourceTitle={resourceTitle}
       headerActions={headerActions}
-      windowTitle={isModule ? tBusola('kyma-modules.title') : null}
+      windowTitle={isModule ? tBusola('kyma-modules.title') : undefined}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({
@@ -202,7 +214,7 @@ export const ExtensibilityDetailsCore = ({
                 originalResource={resource}
               />
             )
-          : null
+          : undefined
       }
       customHealthCards={
         Array.isArray(health) && health?.length > 0
@@ -232,6 +244,20 @@ export const ExtensibilityDetailsCore = ({
   );
 };
 
+type ExtensibilityDetailsProps = {
+  resourceName?: string;
+  resourceType?: string;
+  layoutCloseCreateUrl?: string;
+  namespaceId?: string | null;
+  isModule?: boolean;
+  isEntireListProtected?: boolean;
+  setResMetadata?: (metadata: {
+    group?: string;
+    version?: string;
+    kind?: string;
+  }) => void;
+};
+
 export default function ExtensibilityDetails({
   resourceName,
   resourceType,
@@ -240,7 +266,7 @@ export default function ExtensibilityDetails({
   isModule = false,
   isEntireListProtected = false,
   setResMetadata,
-}) {
+}: ExtensibilityDetailsProps) {
   const resMetaData = useGetCRbyPath(resourceType);
   useEffect(() => {
     if (isModule && setResMetadata && resMetaData) {
@@ -255,7 +281,7 @@ export default function ExtensibilityDetails({
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 
   const { customHeaderActions: headerActions, isCommunityModuleSelected } =
-    useContext(KymaModuleContext);
+    useContext(KymaModuleContext) as any;
 
   const translationBundleValue = useMemo(
     () => ({
@@ -269,9 +295,9 @@ export default function ExtensibilityDetails({
     return (
       <CustomResource
         params={{
-          customResourceDefinitionName: resourceType,
+          customResourceDefinitionName: resourceType ?? '',
           resourceName,
-          resourceNamespace: namespaceId,
+          resourceNamespace: namespaceId ?? undefined,
           layoutCloseCreateUrl,
           layoutNumber: 'midColumn',
           headerActions,
@@ -292,7 +318,7 @@ export default function ExtensibilityDetails({
             resMetaData={resMetaData}
             resourceName={resourceName}
             layoutCloseCreateUrl={layoutCloseCreateUrl}
-            namespaceId={namespaceId}
+            namespaceId={namespaceId ?? undefined}
             isModule={isModule}
             isEntireListProtected={
               isEntireListProtected && !isCommunityModuleSelected

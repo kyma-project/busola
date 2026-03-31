@@ -84,7 +84,6 @@ const ColumnWrapper = ({
   let startColumnComponent = null;
   if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
     startColumnComponent = (
-      /*@ts-expect-error Type mismatch between js and ts*/
       <Details
         resourceName={resourceName}
         namespaceId={namespaceId}
@@ -93,7 +92,6 @@ const ColumnWrapper = ({
     );
   } else {
     startColumnComponent = (
-      /*@ts-expect-error Type mismatch between js and ts*/
       <List
         rawResourceType={extension?.general?.resource?.kind}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
@@ -140,7 +138,6 @@ const ColumnWrapper = ({
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     midColumnComponent = (
-      /*@ts-expect-error Type mismatch between js and ts*/
       <Details
         resourceName={layoutState?.midColumn?.resourceName ?? resourceName}
         namespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}

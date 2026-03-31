@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Dispatch, useEffect, useMemo, useState } from 'react';
 import {
   Card,
   CheckBox,
@@ -13,12 +13,48 @@ import {
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import { useTranslation } from 'react-i18next';
 import {
+  DEFAULT_IMAGE_SRC,
   findModuleSpec,
   findModuleStatus,
+  KymaResourceType,
   setChannel,
 } from 'components/Modules/support';
+import { SetStateAction } from 'jotai';
 
-async function isImageAvailable(url) {
+type ModulesCardProps = {
+  module: {
+    name: string;
+    channels: [
+      {
+        version: string;
+        channel: string;
+        isMetaRelease: boolean;
+        isBeta: boolean;
+      },
+    ];
+    icon: { link: string; name: string };
+    docsUrl?: string;
+  };
+  kymaResource: KymaResourceType;
+  index: number;
+  isChecked: (name: string) => boolean;
+  setCheckbox: (
+    module: Record<string, any>,
+    checked: boolean,
+    index: number,
+  ) => void;
+  checkIfStatusModuleIsBeta: (name: string) => boolean;
+  selectedModules: {
+    name: string;
+    channel?: string;
+    version?: string;
+  }[];
+  setSelectedModules: Dispatch<
+    SetStateAction<{ name: string; channel?: string; version?: string }[]>
+  >;
+};
+
+async function isImageAvailable(url: string) {
   try {
     const response = await fetch(url, { method: 'HEAD' });
     return response.ok;
@@ -28,14 +64,13 @@ async function isImageAvailable(url) {
   }
 }
 
-async function getImageSrc(module) {
-  const defaultImage = '/assets/sap-logo.svg';
+async function getImageSrc(module: Record<string, any>) {
   const iconLink = module.icon.link;
 
   if (iconLink && (await isImageAvailable(iconLink))) {
     return iconLink;
   } else {
-    return defaultImage;
+    return DEFAULT_IMAGE_SRC;
   }
 }
 
@@ -48,7 +83,7 @@ export default function ModulesCard({
   checkIfStatusModuleIsBeta,
   selectedModules,
   setSelectedModules,
-}) {
+}: ModulesCardProps) {
   const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState('');
 
@@ -64,7 +99,8 @@ export default function ModulesCard({
   const defaultVersion = useMemo(
     () =>
       module?.channels?.find(
-        (channel) => channel?.channel === kymaResource?.spec?.channel,
+        (channel: { version: string; channel: string }) =>
+          channel?.channel === kymaResource?.spec?.channel,
       )?.version,
     [kymaResource?.spec?.channel, module],
   );
@@ -82,7 +118,7 @@ export default function ModulesCard({
     }
   };
 
-  const getNameForVersion = (version) => {
+  const getNameForVersion = (version: string) => {
     if (typeof version === 'string' && version.startsWith('v')) {
       return version;
     }
@@ -174,7 +210,7 @@ export default function ModulesCard({
             onChange={(event) => {
               setChannel(
                 module,
-                event.detail.selectedOption.value,
+                event.detail.selectedOption.value ?? '',
                 index,
                 selectedModules,
                 setSelectedModules,
@@ -185,11 +221,13 @@ export default function ModulesCard({
           >
             {defaultVersion && (
               <Option
-                selected={module?.channels?.find(
-                  (channel) =>
-                    channel.channel ===
-                    findModuleSpec(kymaResource, module.name)?.channel,
-                )}
+                selected={
+                  !!module?.channels?.find(
+                    (channel) =>
+                      channel.channel ===
+                      findModuleSpec(kymaResource, module.name)?.channel,
+                  )
+                }
                 value={'predefined'}
               >
                 {`${t(

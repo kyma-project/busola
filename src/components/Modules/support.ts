@@ -4,6 +4,7 @@ import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { resolveType } from './components/ModuleStatus';
 
 export const DEFAULT_K8S_NAMESPACE: string = 'default';
+export const DEFAULT_IMAGE_SRC = '/assets/sap-logo.svg';
 
 export const enum ModuleTemplateStatus {
   Ready = 'Ready',

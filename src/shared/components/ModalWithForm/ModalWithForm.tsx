@@ -42,7 +42,7 @@ type ModalWithFormProps = {
   invalidPopupMessage?: string;
   className?: string;
   getToggleFormFn?: (fn: () => void) => void;
-  item?: any;
+  item?: Record<string, any>;
   [key: string]: any;
 };
 
