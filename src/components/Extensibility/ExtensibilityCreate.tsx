@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useRef,
+  RefObject,
 } from 'react';
 import { fromJS } from 'immutable';
 import pluralize from 'pluralize';
@@ -38,6 +39,35 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { TranslationBundleContext } from './helpers';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
+
+type ExtensibilityCreateProps = {
+  resourceType: string;
+  resourceUrl: string;
+  resource?: Record<string, any>;
+  resourceSchema?: Record<string, any>;
+  resourceName?: string;
+  editMode?: boolean;
+  formElementRef?: RefObject<HTMLFormElement | null>;
+} & Omit<
+  ResourceFormProps,
+  | 'resource'
+  | 'setResource'
+  | 'pluralKind'
+  | 'singularName'
+  | 'onPresetSelected'
+  | 'onModeChange'
+  | 'createUrl'
+  | 'onlyYaml'
+  | 'presets'
+  | 'initialResource'
+  | 'updateInitialResource'
+  | 'afterCreatedFn'
+  | 'handleNameChange'
+  | 'urlPath'
+  | 'disableDefaultFields'
+  | 'formElementRef'
+>;
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -49,7 +79,7 @@ export function ExtensibilityCreateCore({
   resourceName,
   editMode = false,
   ...props
-}) {
+}: ExtensibilityCreateProps) {
   const { prepareVars, readVars } = useVariables();
   const namespace = useAtomValue(activeNamespaceIdAtom);
   const layoutState = useAtomValue(columnLayoutAtom);
@@ -125,13 +155,13 @@ export function ExtensibilityCreateCore({
     [initialResource, layoutState?.showCreate?.resource],
   );
 
-  const updateStore = (res) => {
+  const updateStore = (res: Record<string, any>) => {
     readVars(res);
     const newStore = fromJS(res);
     setStore((prevStore) => prevStore.set('values', newStore));
   };
 
-  const afterCreatedFn = async (defaultAfterCreatedFn) => {
+  const afterCreatedFn = async (defaultAfterCreatedFn: () => void) => {
     if (createResource?.details) {
       defaultAfterCreatedFn();
     } else {
@@ -155,7 +185,7 @@ export function ExtensibilityCreateCore({
   } = useGetSchema({
     resource: api,
     additionalId: 'Create',
-  });
+  } as any);
 
   const formRules = useMemo(() => {
     const fullSchemaRules = prepareRules(
@@ -166,13 +196,13 @@ export function ExtensibilityCreateCore({
 
     prepareVars(fullSchemaRules);
     readVars(resource);
-    setTimeout(() => triggers.trigger('init', []));
+    setTimeout(() => triggers.trigger('init', [] as any));
 
     return prepareSchemaRules(fullSchemaRules);
   }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNameChange = useCallback(
-    (resourceName) => {
+    (resourceName: string) => {
       jp.value(resource, '$.metadata.name', resourceName);
       jp.value(
         resource,
@@ -201,11 +231,7 @@ export function ExtensibilityCreateCore({
         );
         setStore(getUIStoreFromResourceObj(updatedResource));
         readVars(updatedResource, variables);
-        triggers.trigger('init', []);
-      }}
-      onReset={() => {
-        readVars(getResourceObjFromUIStore(store));
-        triggers.trigger('init', []);
+        triggers.trigger('init', [] as any);
       }}
       onModeChange={(oldMode, newMode) => {
         if (newMode === ModeSelector.MODE_YAML) {
@@ -216,7 +242,7 @@ export function ExtensibilityCreateCore({
           });
         }
       }}
-      formElementRef={formElementRef}
+      formElementRef={formElementRef as RefObject<HTMLFormElement> | undefined}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
@@ -242,7 +268,7 @@ export function ExtensibilityCreateCore({
   );
 }
 
-export default function ExtensibilityCreate(props) {
+export default function ExtensibilityCreate(props: ExtensibilityCreateProps) {
   const resMetaData = useGetCRbyPath();
   const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
 

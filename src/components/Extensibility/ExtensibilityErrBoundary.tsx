@@ -1,11 +1,21 @@
-import { Component } from 'react';
+import { Component, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { TFunction } from 'i18next';
 
-class ExtensibilityErrBoundaryComponent extends Component {
-  constructor(props) {
+type ExtensibilityErrBoundaryProps = {
+  customMessage?: string;
+  t: TFunction;
+  children: ReactNode;
+};
+
+class ExtensibilityErrBoundaryComponent extends Component<
+  ExtensibilityErrBoundaryProps,
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: ExtensibilityErrBoundaryProps) {
     super(props);
     this.state = {
       hasError: false,
@@ -13,12 +23,12 @@ class ExtensibilityErrBoundaryComponent extends Component {
     };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: Error | null) {
     // Update state so the next render will show the fallback UI.
     return { hasError: true, error };
   }
 
-  componentDidCatch(error) {
+  componentDidCatch(error: Error | null) {
     Sentry.captureException(error);
   }
 
@@ -26,13 +36,13 @@ class ExtensibilityErrBoundaryComponent extends Component {
     if (this.state.hasError) {
       const message = `${
         this.props.customMessage || this.props.t('extensibility.error')
-      } ${this.state.error.message}`;
+      } ${this.state?.error?.message}`;
 
-      const hasCause = this.state.error.cause !== undefined;
+      const hasCause = this.state?.error?.cause !== undefined;
 
       return (
         <UI5Panel
-          title={this.state.error.name}
+          title={this.state?.error?.name}
           role="alert"
           accessibleName={this.props.t('components.accessible-name.error')}
         >
@@ -45,7 +55,7 @@ class ExtensibilityErrBoundaryComponent extends Component {
             {hasCause ? (
               <Editor
                 height="10em"
-                value={JSON.stringify(this.state.error.cause, null, 2)}
+                value={JSON.stringify(this.state?.error?.cause, null, 2)}
                 autocompletionDisabled
                 readOnly
               />
@@ -59,7 +69,9 @@ class ExtensibilityErrBoundaryComponent extends Component {
   }
 }
 
-export const ExtensibilityErrBoundary = ({ ...props }) => {
+export const ExtensibilityErrBoundary = ({
+  ...props
+}: Omit<ExtensibilityErrBoundaryProps, 't'>) => {
   const { t } = useTranslation();
 
   return <ExtensibilityErrBoundaryComponent {...props} t={t} />;
