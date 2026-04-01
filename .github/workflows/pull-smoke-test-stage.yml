@@ -13,7 +13,6 @@ on:
       - 'kyma/**'
       - 'Dockerfile*'
       - 'package.json'
-  merge_group:
   workflow_call:
     inputs:
       trigger_env:

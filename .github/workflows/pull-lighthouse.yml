@@ -10,7 +10,6 @@ on:
       - 'tests/**'
       - 'nginx/**'
       - 'src/**'
-  merge_group:
   workflow_call:
     inputs:
       trigger_env:
