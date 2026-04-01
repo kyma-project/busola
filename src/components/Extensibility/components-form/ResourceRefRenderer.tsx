@@ -14,13 +14,13 @@ import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
 import { useUrl } from 'hooks/useUrl';
 import { usePermittedUrl } from 'hooks/usePermittedUrl';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 import { Resource } from '../contexts/DataSources';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type ResourceRefRenderProps = {
   onChange: (params: SchemaOnChangeParams) => void;
   value: any;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   resource: any;
   widgets: { WidgetRenderer: React.ComponentType<any> };

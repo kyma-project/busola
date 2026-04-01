@@ -5,13 +5,13 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 import MessageStripDesign from '@ui5/webcomponents/dist/types/MessageStripDesign';
 import { Resource } from '../contexts/DataSources';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type AlertRendererProps = {
   value: any;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   originalResource: Resource;
   resource?: Resource;
