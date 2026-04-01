@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
@@ -43,12 +43,10 @@ type ModulesListProps = {
   namespaced: boolean;
   resourceUrl: string;
   protectedResource: boolean;
-  setOpenedModuleIndex: React.Dispatch<
-    React.SetStateAction<number | undefined>
-  >;
+  setOpenedModuleIndex: Dispatch<SetStateAction<number | null>>;
   handleResourceDelete: (resourceData: any) => void;
   customSelectedEntry?: string;
-  setSelectedEntry?: React.Dispatch<React.SetStateAction<any>>;
+  setSelectedEntry?: Dispatch<SetStateAction<any>>;
 };
 
 export const KymaModulesList = ({

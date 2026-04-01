@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { RefObject, useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Create, ResourceDescription } from 'components/Modules';
@@ -21,7 +21,7 @@ import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/c
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 
-export default function ModulesList({ namespaced }) {
+export default function ModulesList({ namespaced }: { namespaced: boolean }) {
   const { t } = useTranslation();
   useWindowTitle(t('kyma-modules.title'));
 
@@ -51,7 +51,9 @@ export default function ModulesList({ namespaced }) {
     handleResourceDelete: handleCommunityModuleDelete,
   } = useContext(CommunityModulesDeleteBoxContext);
 
-  const [selectedEntry, setSelectedEntry] = useState(null);
+  const [selectedEntry, setSelectedEntry] = useState<string | undefined>(
+    undefined,
+  );
   const { isProtected, isProtectedResource } = useProtectedResources();
 
   useEffect(() => {
@@ -77,7 +79,9 @@ export default function ModulesList({ namespaced }) {
 
   const filteredCommunityModules = useMemo(() => {
     if (!installedCommunityModules?.length) return [];
-    const selectedModulesNames = selectedModules.map((module) => module.name);
+    const selectedModulesNames = selectedModules.map(
+      (module: { name: string }) => module.name,
+    );
     return installedCommunityModules.filter(
       (module) => !selectedModulesNames.includes(module.name),
     );
@@ -107,11 +111,11 @@ export default function ModulesList({ namespaced }) {
               key="kyma-modules-list"
               resource={kymaResource}
               moduleTemplates={moduleTemplates}
-              resourceName={resourceName}
+              resourceName={resourceName ?? ''}
               selectedModules={selectedModules}
               kymaResource={kymaResource}
               namespaced={namespaced}
-              resourceUrl={resourceUrl}
+              resourceUrl={resourceUrl ?? ''}
               protectedResource={showProtectedResourceWarning}
               setOpenedModuleIndex={setOpenedManagedModuleIndex}
               handleResourceDelete={handleResourceDelete}
@@ -122,6 +126,7 @@ export default function ModulesList({ namespaced }) {
           {isCommunityModulesEnabled && (
             <CommunityModulesList
               key="community-modules-list"
+              resourceUrl={resourceUrl ?? ''}
               moduleTemplates={communityModuleTemplates}
               selectedModules={filteredCommunityModules}
               modulesLoading={installedCommunityModulesLoading}
@@ -137,6 +142,7 @@ export default function ModulesList({ namespaced }) {
       inlineEditForm={() => (
         <ResourceCreate
           isEdit={true}
+          title=""
           confirmText={t('common.buttons.save')}
           protectedResource={showProtectedResourceWarning}
           protectedResourceWarning={
@@ -146,9 +152,12 @@ export default function ModulesList({ namespaced }) {
           renderForm={(props) => (
             <ErrorBoundary>
               <Create
-                resource={kymaResource}
-                resourceUrl={resourceUrl}
                 {...props}
+                resource={kymaResource}
+                resourceUrl={resourceUrl ?? ''}
+                formElementRef={
+                  props.formElementRef as RefObject<HTMLFormElement>
+                }
               />
             </ErrorBoundary>
           )}

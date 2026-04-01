@@ -24,15 +24,14 @@ import { SetStateAction } from 'jotai';
 type ModulesCardProps = {
   module: {
     name: string;
-    channels: [
-      {
-        version: string;
-        channel: string;
-        isMetaRelease: boolean;
-        isBeta: boolean;
-      },
-    ];
-    icon: { link: string; name: string };
+    channels: {
+      version: string;
+      channel: string;
+      isMetaRelease?: boolean;
+      isBeta?: boolean;
+    }[];
+
+    icon: { link?: string; name?: string };
     docsUrl?: string;
   };
   kymaResource: KymaResourceType;

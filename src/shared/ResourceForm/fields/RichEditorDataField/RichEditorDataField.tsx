@@ -3,7 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { RichEditorSection } from './RichEditorSection';
 
-function createInternalState(data, previousInitialState) {
+type InternalItem = {
+  key: string;
+  value: string;
+  language: string;
+} | null;
+
+type RichEditorDataFieldProps = {
+  value?: Record<string, string>;
+  setValue?: (data: Record<string, string>) => void;
+  tooltipContent?: string;
+  propertyPath?: string;
+};
+
+function createInternalState(
+  data: Record<string, string>,
+  previousInitialState: InternalItem[] | null,
+): InternalItem[] {
   const dataAsArray = transformData(data, previousInitialState);
 
   if (checkIfLastItemIsNotNull(dataAsArray)) {
@@ -14,7 +30,10 @@ function createInternalState(data, previousInitialState) {
   }
 }
 
-function transformData(obj, internalData) {
+function transformData(
+  obj: Record<string, string>,
+  internalData: InternalItem[] | null,
+): InternalItem[] {
   return Object.entries(obj || {}).map(([key, value]) => {
     return {
       key,
@@ -24,18 +43,18 @@ function transformData(obj, internalData) {
   });
 }
 
-function checkIfLastItemIsNotNull(arr) {
-  return !arr.length || arr[arr.length - 1];
+function checkIfLastItemIsNotNull(arr: InternalItem[]): boolean {
+  return !arr.length || !!arr[arr.length - 1];
 }
 
 export function RichEditorDataField({
-  value: data,
+  value: data = {},
   setValue: setData,
   tooltipContent,
-  propertyPath: _propertyPath, // used by Wrapper
-}) {
+  propertyPath: _propertyPath,
+}: RichEditorDataFieldProps) {
   const { t } = useTranslation();
-  const [internalData, setInternalData] = useState(() =>
+  const [internalData, setInternalData] = useState<InternalItem[]>(() =>
     createInternalState(data, null),
   );
 
@@ -48,9 +67,11 @@ export function RichEditorDataField({
 
   // update original data source
   const pushValue = useCallback(() => {
-    setData(
+    setData?.(
       Object.fromEntries(
-        internalData.filter(Boolean).map(({ key, value }) => [key, value]),
+        internalData
+          .filter((item): item is NonNullable<InternalItem> => Boolean(item))
+          .map(({ key, value }) => [key, value]),
       ),
     );
   }, [setData, internalData]);
@@ -70,7 +91,7 @@ export function RichEditorDataField({
               internalData[index] = {
                 ...item,
                 ...data,
-              };
+              } as InternalItem;
               return [...internalData];
             });
           }}
