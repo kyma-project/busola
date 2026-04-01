@@ -51,12 +51,19 @@ async function handlePublicKey(req, res) {
         .json({ error: 'Missing or invalid public_key in request body' });
     }
 
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    if (!SKIP_AUTH) {
+      const AUTH_TOKEN = await tokenManager.getToken();
+      headers.Authorization = `Bearer ${AUTH_TOKEN}`;
+    }
+
     const response = await fetch(COMPANION_PUBLIC_KEY_URL, {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ public_key: publicKey }),
     });
 
