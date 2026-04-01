@@ -149,15 +149,13 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
             <ProtectedResourceWarning entry={kymaResource} withText />
           }
           isProtectedResourceModificationBlocked={isResourceProtected}
-          renderForm={(props) => (
+          renderForm={({ formElementRef, ...props }) => (
             <ErrorBoundary>
               <Create
                 {...props}
                 resource={kymaResource}
                 resourceUrl={resourceUrl ?? ''}
-                formElementRef={
-                  props.formElementRef as RefObject<HTMLFormElement>
-                }
+                formElementRef={formElementRef as RefObject<HTMLFormElement>}
               />
             </ErrorBoundary>
           )}
