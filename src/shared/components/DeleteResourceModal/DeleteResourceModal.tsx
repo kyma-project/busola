@@ -1,5 +1,7 @@
+import { memo, ReactNode, useEffect, useRef } from 'react';
 import {
   Button,
+  type ButtonDomRef,
   CheckBox,
   FlexBox,
   MessageBox,
@@ -11,7 +13,6 @@ import { useAtom } from 'jotai';
 
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteAtom } from 'state/settings/dontConfirmDeleteAtom';
-import { memo, ReactNode } from 'react';
 
 interface DeleteResourceModalProps {
   resourceTitle?: string;
@@ -66,16 +67,29 @@ function DeleteResourceModal({
     dontConfirmDeleteAtom,
   );
 
+  const deleteButtonRef = useRef<ButtonDomRef>(null);
+
+  useEffect(() => {
+    if (!showDeleteDialog) return;
+    const raf = requestAnimationFrame(() => {
+      deleteButtonRef.current?.focus();
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [showDeleteDialog]);
+
   return (
     <MessageBox
       style={{ maxWidth: '700px' }}
       type="Warning"
       titleText={customTitle || defaultTitle}
       open={showDeleteDialog}
+      initialFocus="delete-confirmation"
       className="ui5-content-density-compact"
       actions={[
         <Button
           key="delete-confirmation"
+          id="delete-confirmation"
+          ref={deleteButtonRef}
           data-testid="delete-confirmation"
           design="Emphasized"
           onClick={() => performDelete(resource, resourceUrl, deleteFn)}
