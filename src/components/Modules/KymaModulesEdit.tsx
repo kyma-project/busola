@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { createPatch } from 'rfc6902';
 import { useTranslation } from 'react-i18next';
 
@@ -138,6 +138,7 @@ export default function KymaModulesEdit({
 
   const resourceName = kymaResource?.metadata.name;
 
+  //TODO: Remove type casting after migration of kymaModulesQueries to TS
   const { data: moduleReleaseMetas, loading: loadingModulesReleaseMetas } =
     useModulesReleaseQuery({
       skip: !resourceName,
@@ -228,7 +229,11 @@ export default function KymaModulesEdit({
     });
   };
 
-  const onChange = (module: any, value: string, index: number) => {
+  const onChange = (
+    module: { name: string; channels: [{ version: string; channel: string }] },
+    value: string,
+    index: number,
+  ) => {
     setChannel(module, value, index, selectedModules, setSelectedModules);
     setKymaResource({
       ...kymaResource,
@@ -241,7 +246,7 @@ export default function KymaModulesEdit({
   };
 
   const renderModules = () => {
-    const modulesList: JSX.Element[] = [];
+    const modulesList: ReactNode[] = [];
     modulesEditData?.forEach((module) => {
       const index = selectedModules?.findIndex((selectedModule) => {
         return selectedModule.name === module?.name;
@@ -326,13 +331,14 @@ export default function KymaModulesEdit({
     return <div className="gridbox-editModule">{modulesList}</div>;
   };
 
-  const showError = (error: Error | null) => {
+  const showError = (error: Error) => {
     console.error(error);
     notification.notifyError({
       content: t('common.create-form.messages.patch-failure', {
         resourceType: t('kyma-modules.kyma'),
         error: error?.message,
       }),
+      title: '',
     });
   };
 
@@ -341,6 +347,7 @@ export default function KymaModulesEdit({
       content: t('common.create-form.messages.patch-success', {
         resourceType: t('kyma-modules.kyma'),
       }),
+      title: '',
     });
 
     setIsResourceEdited({

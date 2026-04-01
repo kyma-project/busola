@@ -182,7 +182,7 @@ export const ResourceForm: ResourceFormType = (({
   const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName: singularName ?? '',
-    pluralKind: pluralKind || '',
+    pluralKind: pluralKind ?? '',
     resource,
     initialResource,
     updateInitialResource,
