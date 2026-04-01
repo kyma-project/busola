@@ -82,7 +82,6 @@ export default function ConfigMapCreate({
       setCustomValid={setCustomValid}
       nameProps={{ readOnly: !!initialConfigMap?.metadata?.name }}
     >
-      {/* @ts-expect-error Type mismatch between js and ts */}
       <RichEditorDataField
         propertyPath="$.data"
         tooltipContent={t(dataDesc, { defaultValue: dataDesc })}
