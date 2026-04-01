@@ -7,7 +7,7 @@ import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { createPatch } from 'rfc6902';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { Button } from '@ui5/webcomponents-react';
+import { Button, List, ListItemStandard } from '@ui5/webcomponents-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
@@ -34,6 +34,50 @@ export type useCreateResourcesProps = {
   resetLayout?: boolean;
   afterCreatedCustomMessage?: string;
 };
+
+function createErrorContent(
+  t: Function,
+  error: any,
+  isEdit: boolean,
+  singularName: string,
+): React.ReactNode {
+  if (error instanceof HttpError) {
+    console.log(error.errorDetails);
+    const causes = error.errorDetails.causes;
+    return (
+      <List
+        headerText={t(
+          isEdit
+            ? 'common.create-form.messages.patch-failure'
+            : 'common.create-form.messages.create-failure',
+          {
+            resourceType: singularName,
+            error: '',
+          },
+        )}
+      >
+        {causes.map((cause: any) => (
+          <>
+            <p>Type: {cause.reason}</p>
+            <p>Cause: {cause.message}</p>
+            <p>Affected Field: {cause.field}</p>
+            <ListItemStandard />
+          </>
+        ))}
+      </List>
+    );
+  } else {
+    return t(
+      isEdit
+        ? 'common.create-form.messages.patch-failure'
+        : 'common.create-form.messages.create-failure',
+      {
+        resourceType: singularName,
+        error: error.message,
+      },
+    );
+  }
+}
 
 export type CreateResourceFn = (e?: FormEvent) => void;
 export function useCreateResource({
@@ -137,6 +181,7 @@ export function useCreateResource({
 
   const showError = (error: any) => {
     console.error(error);
+    const errorContent = createErrorContent(t, error, isEdit, singularName);
     const previousActiveElement = document.activeElement;
     notification.notifyError({
       actions: (close, defaultCloseButton) => {
@@ -146,15 +191,7 @@ export function useCreateResource({
         };
         return defaultCloseButton(closeWrapper);
       },
-      content: t(
-        isEdit
-          ? 'common.create-form.messages.patch-failure'
-          : 'common.create-form.messages.create-failure',
-        {
-          resourceType: singularName,
-          error: error.message,
-        },
-      ),
+      content: errorContent,
     });
   };
 
@@ -225,6 +262,7 @@ export function useCreateResource({
           wider: true,
         });
       } else {
+        console.log(e, '_----');
         showError(e);
         return false;
       }

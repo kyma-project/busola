@@ -1,4 +1,5 @@
 import { FetchFn, useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
 
 export type PostFn = (
   url: string,
@@ -8,19 +9,31 @@ export type PostFn = (
 
 export const createPostFn: (fetch: FetchFn) => PostFn =
   (fetch) => async (url: string, data, options) => {
-    const response = await fetch({
-      relativeUrl: url,
-      init: {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
+    try {
+      const response = await fetch({
+        relativeUrl: url,
+        init: {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      },
-    });
-    if (typeof options?.refetch === 'function') options.refetch();
-    return await response.json();
+      });
+      if (!response.ok) {
+        console.log('response not ok');
+      }
+      if (typeof options?.refetch === 'function') options.refetch();
+      const x = await response.json();
+      return x;
+    } catch (e) {
+      if (e instanceof HttpError) {
+        const jsonError = e.message; // must await for response
+        console.log('---------', jsonError);
+      }
+      throw e;
+    }
   };
 
 export const usePost = () => {
