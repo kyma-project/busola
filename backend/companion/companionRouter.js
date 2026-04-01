@@ -10,14 +10,14 @@ const config = require('../config.js');
 
 const tokenManager = new TokenManager();
 
-const COMPANION_API_BASE_URL = `${
-  config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? ''
-}/api/conversations/`;
+const companionApiBaseUrl =
+  config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? '';
 
-const COMPANION_PUBLIC_KEY_URL = new URL(
-  '/api/public-key',
-  COMPANION_API_BASE_URL,
-).toString();
+const COMPANION_API_BASE_URL = `${companionApiBaseUrl}/api/conversations/`;
+
+const COMPANION_PUBLIC_KEY_URL = companionApiBaseUrl
+  ? new URL('/api/public-key', companionApiBaseUrl).toString()
+  : '';
 
 const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
