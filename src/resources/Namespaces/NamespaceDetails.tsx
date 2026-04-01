@@ -68,7 +68,6 @@ export default function NamespaceDetails(props: NamespaceDetailsProps) {
 
   const headerActions = (
     <ToolbarButton
-      icon="add"
       onClick={() => {
         setShowAdd(true);
       }}

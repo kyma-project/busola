@@ -85,7 +85,6 @@ export function AdvancedContainersView({
           tooltipContent={containersDesc}
           actions={(setOpen) => (
             <Button
-              icon="add"
               onClick={() => {
                 const path = '$.spec.template.spec.containers';
                 const nextContainers = [
