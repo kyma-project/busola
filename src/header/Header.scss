@@ -1,7 +1,6 @@
 ui5-shellbar {
   box-shadow: var(--sapShell_Shadow);
-  position: relative;
-  z-index: 2;
+  z-index: 3;
 
   header {
     padding: 0 !important;

@@ -2,16 +2,20 @@
   --_ui5_side_navigation_padding: 0.2rem 0.7rem 0.75rem 0.75rem !important;
 }
 
+aside {
+  z-index: 2;
+}
+
 .sidebar__content {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
-  border-right: 1px solid var(--sapGroup_ContentBorderColor);
-  box-shadow: var(--sapShell_Shadow);
 
   ui5-side-navigation {
     border-radius: 0;
+    border-right: 1px solid var(--sapGroup_ContentBorderColor);
+    box-shadow: var(--sapContent_Shadow0);
 
     .namespace-combobox {
       z-index: 0;
