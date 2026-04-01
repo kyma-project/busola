@@ -230,7 +230,7 @@ export default function KymaModulesEdit({
   };
 
   const onChange = (
-    module: { name: string; channels: [{ version: string; channel: string }] },
+    module: { name: string; channels: { version: string; channel: string }[] },
     value: string,
     index: number,
   ) => {
