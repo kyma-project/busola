@@ -8,10 +8,10 @@
   flex-grow: 1;
   height: 100%;
   border-right: 1px solid var(--sapGroup_ContentBorderColor);
+  box-shadow: var(--sapShell_Shadow);
 
   ui5-side-navigation {
     border-radius: 0;
-    box-shadow: none;
 
     .namespace-combobox {
       z-index: 0;
