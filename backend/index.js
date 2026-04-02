@@ -3,6 +3,7 @@ import { handleK8sRequests } from './kubernetes/handler';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
+import kubeconfigRouter from './kubeconfig/kubeconfigRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
 import crypto from 'crypto';
@@ -87,12 +88,14 @@ if (isDocker) {
   serveMonaco(app);
   app.use('/backend/ai-chat', companionRouter);
   app.use('/backend/modules', communityRouter);
+  app.use('/kubeconfig', kubeconfigRouter);
   app.use('/backend', handleK8sRequests);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
   app.use('/backend/ai-chat', companionRouter);
   app.use('/backend/modules', communityRouter);
+  app.use('/kubeconfig', kubeconfigRouter);
   app.use('/backend', handleK8sRequests);
 }
 

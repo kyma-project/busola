@@ -32,8 +32,8 @@ import {
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
     kubeconfigUrl: string;
-    showClustersList?: boolean; //todo
-    defaultKubeconfig?: string; //todo
+    showClustersList?: boolean;
+    defaultKubeconfig?: string;
   };
   isEnabled: boolean;
 }
@@ -255,6 +255,35 @@ export function useLoginWithKubeconfigID() {
     }
 
     if (!dependenciesReady || flowStarted) {
+      return;
+    }
+
+    const defaultKubeconfig = kubeconfigIdFeature?.config?.defaultKubeconfig;
+    const hasNoClusters = Object.keys(clusters || {}).length === 0;
+
+    if (
+      !kubeconfigId &&
+      kubeconfigIdFeature?.isEnabled &&
+      defaultKubeconfig &&
+      hasNoClusters
+    ) {
+      // Auto-load default kubeconfig when no kubeconfigID query param is present,
+      // the feature is enabled, a default is configured, and no clusters are loaded yet.
+      lastProcessedKubeconfigIdRef.current = defaultKubeconfig;
+      setHandledKubeconfigId('loading');
+      loadKubeconfigIdCluster(
+        defaultKubeconfig,
+        kubeconfigIdFeature,
+        clusters,
+        clusterInfo,
+        t,
+        setContextsState,
+        { manualKubeConfigId, setManualKubeConfigId },
+      ).then((val) => {
+        if (val === 'done') {
+          setHandledKubeconfigId('done');
+        }
+      });
       return;
     }
 
