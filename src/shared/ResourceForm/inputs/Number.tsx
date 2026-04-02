@@ -1,4 +1,4 @@
-import { Input, InputDomRef, InputPropTypes } from '@ui5/webcomponents-react';
+import { Input, InputPropTypes } from '@ui5/webcomponents-react';
 
 type NumberProps = {
   value?: string | number;
@@ -13,9 +13,10 @@ export function Number({ value = '', setValue, ...props }: NumberProps) {
     <Input
       type="Number"
       value={String(value)}
-      onInput={(e) =>
-        setValue(parseInt((e.target as unknown as InputDomRef).value) ?? null)
-      }
+      onInput={(e) => {
+        const parsed = parseInt(e.target.value);
+        setValue(isNaN(parsed) ? null : parsed);
+      }}
       {...props}
     />
   );

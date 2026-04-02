@@ -46,7 +46,7 @@ export function Dropdown({
       onSelect={(_: Event, selected: any) => setValue(selected.key, selected)}
       validationState={getValidationState()}
       accessibleName={
-        accessibleName ? `${accessibleName} Dropdown input` : accessibleName
+        accessibleName ? `${accessibleName} Dropdown input` : undefined
       }
       options={options}
       {...props}

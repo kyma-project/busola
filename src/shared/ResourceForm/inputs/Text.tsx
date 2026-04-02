@@ -6,8 +6,8 @@ type WrappedTextProps = {
   onChange?: (e: { target: InputDomRef }) => void;
 } & Omit<InputPropTypes, 'value' | 'onInput'>;
 
-export function Text({ key, ...props }: WrappedTextProps & { key?: string }) {
-  return <WrappedText key={key} {...props} />;
+export function Text({ ...props }: WrappedTextProps) {
+  return <WrappedText {...props} />;
 }
 
 export function WrappedText({
@@ -21,11 +21,7 @@ export function WrappedText({
   return (
     <Input
       value={value || ''}
-      onInput={
-        onChange ??
-        ((e) =>
-          setValue && setValue((e.target as unknown as InputDomRef).value))
-      }
+      onInput={onChange ?? ((e) => setValue && setValue(e.target.value))}
       {...props}
     />
   );

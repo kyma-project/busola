@@ -1,6 +1,6 @@
 import { ComboBox, ComboBoxItem } from '@ui5/webcomponents-react';
-import type { ComboBoxDomRef } from '@ui5/webcomponents-react';
-import { Ref, SyntheticEvent } from 'react';
+import type { ComboBoxDomRef, Ui5CustomEvent } from '@ui5/webcomponents-react';
+import { Ref } from 'react';
 
 type Option = {
   key: string | number;
@@ -17,7 +17,10 @@ type ComboboxInputProps = {
   placeholder?: string;
   className?: string;
   _ref?: Ref<ComboBoxDomRef>;
-  onSelectionChange?: (event: SyntheticEvent, option: Option) => void;
+  onSelectionChange?: (
+    event: Ui5CustomEvent<ComboBoxDomRef>,
+    option: Option,
+  ) => void;
   accessibleName?: string;
   isNumeric?: boolean;
   disabled?: boolean;
@@ -36,18 +39,22 @@ export function ComboboxInput({
   _ref,
   onSelectionChange,
   accessibleName,
-  ...props
+  isNumeric,
+  disabled,
 }: ComboboxInputProps) {
-  const onChange = (event: any) => {
+  const onChange = (event: Ui5CustomEvent<ComboBoxDomRef>) => {
+    const target = event.target as ComboBoxDomRef & {
+      _state: { filterValue: string };
+    };
     let selectedOption: Option;
-    if (!props?.isNumeric) {
-      selectedOption = options.find((o) => o.text === event.target.value) ?? {
-        key: event.target._state.filterValue,
-        text: event.target._state.filterValue,
+    if (!isNumeric) {
+      selectedOption = options.find((o) => o.text === target.value) ?? {
+        key: target._state.filterValue,
+        text: target._state.filterValue,
       };
     } else {
-      const newValue = Number(event.target.value);
-      const filterValue = Number(event.target._state.filterValue);
+      const newValue = Number(target.value);
+      const filterValue = Number(target._state.filterValue);
       if (isNaN(newValue) && isNaN(filterValue)) {
         return;
       }
@@ -70,7 +77,7 @@ export function ComboboxInput({
       accessibleName={`${accessibleName} Combobox input`}
       id={id || 'combobox-input'}
       ref={_ref}
-      disabled={props.disabled || !options?.length}
+      disabled={disabled || !options?.length}
       filter="Contains"
       onChange={onChange}
       onInput={updatesOnInput ? onChange : () => {}}
@@ -80,7 +87,6 @@ export function ComboboxInput({
           ?.text?.toString() ?? value?.toString()
       }
       placeholder={placeholder}
-      {...props}
     >
       {options.map((option, index) => (
         <ComboBoxItem
