@@ -72,10 +72,9 @@ data:
             visibility: $exists(spec.clusterIPs)
             widget: Labels
           - name: Ports
-            source: >-
-              $count(spec.ports) ? $map(spec.ports, function($value) {$value.port =
-              $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~>
-              $join('') : [ $string($value.name), ' (', $string($value.port), ') --> (', $string($value.targetPort), ')'] ~> $join('') }) ~> $join(', ')  : '-'
+            source: spec.ports
+            widget: Ports
+            visibility: $exists(spec.ports)
           - name: Selector
             source: spec.selector
             visibility: $exists(spec.selector)
@@ -332,10 +331,9 @@ data:
       source: spec.clusterIP
       sort: true
     - name: Ports
-      source: >-
-        $count(spec.ports) ? $map(spec.ports, function($value) {$value.port =
-        $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~>
-        $join('') : [ $string($value.name), ' (', $string($value.port), ') --> (', $string($value.targetPort), ')'] ~> $join('') }) ~> $join(', ')  : '-'
+      source: spec.ports
+      widget: Ports
+      separator: ', '
     - name: External IPs
       source: >-
         $count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress,

@@ -700,6 +700,8 @@ extensibility:
       module-channel-label: Module channel overwrite
       module-channel-placeholder: Uses Default Kyma Channel
       no-modules: No modules available
+    ports:
+      error: 'Configuration error: The ports widget configuration is incorrect. Path value must be an array type.'
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
   wizard:
