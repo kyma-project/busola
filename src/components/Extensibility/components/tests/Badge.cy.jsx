@@ -87,4 +87,25 @@ describe('Badge Component', () => {
     cy.get('[data-testid="has-tooltip"]').click();
     cy.contains('popover').should('be.visible');
   });
+
+  it('Renders a badge with links in a popover', () => {
+    const value = 'yes';
+    const structure = {
+      description: [
+        { text: 'See ' },
+        { text: 'the docs', href: 'https://example.com/docs' },
+        { text: ' for details.' },
+      ],
+    };
+
+    cy.mount(<Badge value={value} structure={structure} />);
+
+    cy.get('[data-testid="has-tooltip"]').should('have.length', 1);
+    cy.get('[data-testid="has-tooltip"]').click();
+    cy.contains('See ').should('be.visible');
+    cy.get('a[href="https://example.com/docs"]')
+      .should('be.visible')
+      .and('contain.text', 'the docs');
+    cy.contains(' for details.').should('be.visible');
+  });
 });

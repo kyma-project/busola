@@ -3,12 +3,18 @@ import { isNil } from 'lodash';
 import { useJsonata } from '../hooks/useJsonata';
 import { useTranslation } from 'react-i18next';
 
+import { Link } from '@ui5/webcomponents-react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import {
   useGetPlaceholder,
   useGetTranslation,
   getBadgeType,
 } from 'components/Extensibility/helpers';
+
+interface DescriptionLinkSegment {
+  text: string;
+  href?: string;
+}
 
 interface BadgeProps {
   value: any;
@@ -52,7 +58,9 @@ export function Badge({
   );
   const jsonata = useJsonata(stableJsonataDeps);
 
-  const [tooltip, setTooltip] = useState<string | null>(null);
+  const [tooltip, setTooltip] = useState<
+    string | DescriptionLinkSegment[] | null
+  >(null);
   const [tooltipError, setTooltipError] = useState<Error | null>(null);
   const [badgeType, setBadgeType] = useState<string | null>(null);
 
@@ -75,6 +83,29 @@ export function Badge({
 
   const getTooltipContent = (description: any) => {
     if (tooltip && !tooltipError) {
+      if (
+        Array.isArray(tooltip) &&
+        tooltip.every((item) => typeof item === 'object' && 'text' in item)
+      ) {
+        return (
+          <>
+            {(tooltip as DescriptionLinkSegment[]).map((segment, index) =>
+              segment.href ? (
+                <Link
+                  key={index}
+                  href={segment.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {segment.text}
+                </Link>
+              ) : (
+                <span key={index}>{segment.text}</span>
+              ),
+            )}
+          </>
+        );
+      }
       return tooltip;
     }
     if (tooltip === null && !tooltipError) {
