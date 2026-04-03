@@ -41,6 +41,7 @@ export function ComboboxInput({
   accessibleName,
   isNumeric,
   disabled,
+  ...props
 }: ComboboxInputProps) {
   const onChange = (event: Ui5CustomEvent<ComboBoxDomRef>) => {
     const target = event.target as ComboBoxDomRef & {
@@ -87,6 +88,7 @@ export function ComboboxInput({
           ?.text?.toString() ?? value?.toString()
       }
       placeholder={placeholder}
+      {...props}
     >
       {options.map((option, index) => (
         <ComboBoxItem
