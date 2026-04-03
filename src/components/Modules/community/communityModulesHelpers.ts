@@ -195,6 +195,17 @@ export function getInstalledModules(
       }
     }
 
+    // Fallback: Check manager labels if no version was found in the containers
+    if (!installedVersions.has(managerKey)) {
+      const labels = foundManager.metadata?.labels || {};
+      const versionFromLabel =
+        labels['app.kubernetes.io/version'] || labels['version'];
+
+      if (versionFromLabel) {
+        installedVersions.set(managerKey, versionFromLabel);
+      }
+    }
+
     return true;
   });
 

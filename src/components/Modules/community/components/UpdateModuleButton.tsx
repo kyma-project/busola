@@ -18,12 +18,13 @@ import {
   useNotification,
 } from 'shared/contexts/NotificationContext';
 import { TFunction } from 'i18next';
+import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 
 type UpdateModuleButtonProps = {
   moduleName: string;
   currentVersion: string;
   newVersion: string;
-  moduleTpl: ModuleTemplateType;
+  moduleTpl: ModuleTemplateType | undefined;
 };
 
 async function applyModuleTemplateResource(
@@ -121,50 +122,70 @@ export const UpdateModuleButton = ({
     await fetchResourcesToApply(templateMap, setResourcesToApply, postRequest);
     setPendingUpdate(true);
   };
-
+  console.log(moduleTpl);
   return (
     <>
       <Button onClick={() => setIsDialogOpen(true)}>
         {t('kyma-modules.update')}
       </Button>
-      <MessageBox
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        titleText={t('modules.community.update.title')}
-        actions={[
-          <Button key="update" design="Emphasized" onClick={handleUpdate}>
-            {t('kyma-modules.update')}
-          </Button>,
-          <Button key="cancel" onClick={() => setIsDialogOpen(false)}>
-            {t('common.buttons.cancel')}
-          </Button>,
-        ]}
-      >
-        <Trans
-          i18nKey="modules.community.update.confirmation"
-          values={{ moduleName }}
+      {isDialogOpen && (
+        <MessageBox
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          titleText={t('modules.community.update.title')}
+          actions={[
+            <Button key="update" design="Emphasized" onClick={handleUpdate}>
+              {t('kyma-modules.update')}
+            </Button>,
+            <Button key="cancel" onClick={() => setIsDialogOpen(false)}>
+              {t('common.buttons.cancel')}
+            </Button>,
+          ]}
         >
-          <span style={{ fontWeight: 'bold' }}></span>
-        </Trans>
-        <FlexBox direction="Column">
-          <Text>
-            <Trans
-              i18nKey="modules.community.update.current-version"
-              values={{ currentVersion }}
-            >
-              <span style={{ color: 'blue' }}></span>
-            </Trans>
-          </Text>
-          <Text>
-            <Trans
-              i18nKey="modules.community.update.latest-version"
-              values={{ latestVersion: newVersion }}
-            >
-              <span style={{ color: 'green' }}></span>
-            </Trans>
-          </Text>
-        </FlexBox>
-      </MessageBox>
+          <Trans
+            i18nKey="modules.community.update.confirmation"
+            values={{ moduleName }}
+          >
+            <span style={{ fontWeight: 'bold' }}></span>
+          </Trans>
+          <FlexBox
+            direction="Row"
+            gap={'0.5rem'}
+            className="sap-margin-top-small"
+          >
+            <FlexBox direction="Column" alignItems="End">
+              <Text>
+                <Trans
+                  i18nKey="modules.community.update.current-version"
+                  values={{ currentVersion }}
+                >
+                  <span
+                    style={{ color: 'var(--sapContent_LabelColor)' }}
+                  ></span>
+                </Trans>
+              </Text>
+              <Text>
+                <Trans
+                  i18nKey="modules.community.update.latest-version"
+                  values={{ latestVersion: newVersion }}
+                >
+                  <span
+                    style={{ color: 'var(--sapContent_LabelColor)' }}
+                  ></span>
+                </Trans>
+              </Text>
+            </FlexBox>
+            <FlexBox alignItems="End">
+              {moduleTpl?.spec.info?.releaseNotes && (
+                <ExternalLink
+                  url={moduleTpl?.spec.info?.releaseNotes}
+                  text="Release notes"
+                />
+              )}
+            </FlexBox>
+          </FlexBox>
+        </MessageBox>
+      )}
     </>
   );
 };

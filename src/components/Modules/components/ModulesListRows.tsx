@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FlexBox, Panel, Tag, Text } from '@ui5/webcomponents-react';
+import { FlexBox, Tag, Text } from '@ui5/webcomponents-react';
 import { compare } from 'compare-versions';
 import {
   findModuleStatus,
@@ -23,6 +23,7 @@ import { TFunction } from 'i18next';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
 import { UpdateModuleButton } from '../community/components/UpdateModuleButton';
+import './ModulesListRows.scss';
 
 type RowResourceType = {
   name: string;
@@ -163,11 +164,11 @@ export const ModulesListRows = ({
     managerResourceState?.state,
     !!managerResourceStateError,
   );
-  console.log(resource);
+
   const isChannelOverridden = moduleIndex
     ? kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined
     : false;
-
+  console.log(currentModuleTemplate);
   return [
     // Name
     <>
@@ -224,7 +225,7 @@ export const ModulesListRows = ({
       )}
     </>,
     // Version
-    <>
+    <FlexBox key="version" alignItems="Center" wrap="Wrap">
       {moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER}
       {!kymaResource &&
         resource?.templateVersion &&
@@ -246,7 +247,7 @@ export const ModulesListRows = ({
           type={'Critical'}
           tooltipContent={
             <>
-              <FlexBox direction="Column">
+              <FlexBox direction="Column" className="sap-margin-bottom-small">
                 <Text>
                   <Trans
                     i18nKey="modules.community.update.current-version"
@@ -262,10 +263,9 @@ export const ModulesListRows = ({
                 </Text>
               </FlexBox>
               <FlexBox
-                justifyContent="End"
-                style={{
-                  borderTop: '1px solid var(--sapObjectHeader_BorderColor)',
-                }}
+                alignItems="End"
+                direction="Column"
+                className="status-update-button"
               >
                 <UpdateModuleButton
                   moduleName={resource.name}
@@ -280,7 +280,7 @@ export const ModulesListRows = ({
           {t('kyma-modules.outdated')}
         </StatusBadge>
       )}
-    </>,
+    </FlexBox>,
     // Module State
     <ModuleStatus
       key={`module-state-${resource.name}`}
