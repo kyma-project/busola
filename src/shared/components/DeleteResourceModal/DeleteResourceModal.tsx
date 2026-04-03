@@ -10,7 +10,6 @@ import {
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { dontConfirmDeleteAtom } from 'state/settings/dontConfirmDeleteAtom';
 
