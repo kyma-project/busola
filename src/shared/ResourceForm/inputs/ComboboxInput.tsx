@@ -24,7 +24,7 @@ type ComboboxInputProps = {
   accessibleName?: string;
   isNumeric?: boolean;
   disabled?: boolean;
-  [key: string]: any;
+  'data-testid'?: string;
 };
 
 export function ComboboxInput({
@@ -88,7 +88,7 @@ export function ComboboxInput({
           ?.text?.toString() ?? value?.toString()
       }
       placeholder={placeholder}
-      {...props}
+      data-testid={props['data-testid']}
     >
       {options.map((option, index) => (
         <ComboBoxItem
