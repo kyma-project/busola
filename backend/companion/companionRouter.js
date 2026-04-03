@@ -9,9 +9,16 @@ import escape from 'lodash.escape';
 const config = require('../config.js');
 
 const tokenManager = new TokenManager();
-const COMPANION_API_BASE_URL = `${
-  config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? ''
-}/api/conversations/`;
+
+const companionApiBaseUrl =
+  config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? '';
+
+const COMPANION_API_BASE_URL = `${companionApiBaseUrl}/api/conversations/`;
+
+const COMPANION_PUBLIC_KEY_URL = companionApiBaseUrl
+  ? new URL('/api/public-key', companionApiBaseUrl).toString()
+  : '';
+
 const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
 
@@ -25,6 +32,51 @@ const companionRateLimiter = rateLimit({
 });
 
 router.use(express.json());
+
+async function handlePublicKey(req, res) {
+  try {
+    if (!COMPANION_PUBLIC_KEY_URL) {
+      throw new Error('Missing companion public key URL configuration');
+    }
+
+    const parsed =
+      typeof req.body === 'object' && !ArrayBuffer.isView(req.body)
+        ? req.body
+        : JSON.parse(req.body.toString());
+
+    const publicKey = parsed.public_key;
+    if (!publicKey || typeof publicKey !== 'string') {
+      return res
+        .status(400)
+        .json({ error: 'Missing or invalid public_key in request body' });
+    }
+
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    if (!SKIP_AUTH) {
+      const AUTH_TOKEN = await tokenManager.getToken();
+      headers.Authorization = `Bearer ${AUTH_TOKEN}`;
+    }
+
+    const response = await fetch(COMPANION_PUBLIC_KEY_URL, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ public_key: publicKey }),
+    });
+
+    const data = await response.json();
+
+    res.status(response.status).json(data);
+  } catch (error) {
+    req.log.warn(error);
+    res.status(500).json({
+      error: 'Failed to exchange encryption key. Request ID: ' + escape(req.id),
+    });
+  }
+}
 
 function extractAuthHeaders(req) {
   return {
@@ -227,6 +279,7 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
+router.post('/public-key', companionRateLimiter, handlePublicKey);
 router.post('/suggestions', companionRateLimiter, handlePromptSuggestions);
 router.post('/messages', companionRateLimiter, handleChatMessage);
 router.post('/followup', companionRateLimiter, handleFollowUpSuggestions);
