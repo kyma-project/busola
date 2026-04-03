@@ -44,9 +44,7 @@ type CommunityModulesListProps = {
   modulesLoading: boolean;
   namespaced: boolean;
   resourceUrl: string;
-  setOpenedModuleIndex: React.Dispatch<
-    React.SetStateAction<number | undefined>
-  >;
+  setOpenedModuleIndex: React.Dispatch<React.SetStateAction<number | null>>;
   handleResourceDelete: (resourceData: any) => void;
   customSelectedEntry?: string;
   setSelectedEntry?: React.Dispatch<React.SetStateAction<any>>;

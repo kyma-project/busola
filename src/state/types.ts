@@ -84,6 +84,7 @@ export type ExtGeneral = {
   id?: string;
   externalNodes?: ExtensibilityNodesExt[];
   customElement?: string;
+  defaultPlaceholder?: string;
 };
 
 export type ExtResource = {

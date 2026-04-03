@@ -69,6 +69,7 @@ type KymaModuleContextType = {
   namespaced: boolean;
   performDelete: () => void;
   performCancel: () => void;
+  moduleTemplatesLoading: boolean;
 };
 
 export const KymaModuleContext = createContext<KymaModuleContextType>({
@@ -89,6 +90,7 @@ export const KymaModuleContext = createContext<KymaModuleContextType>({
   namespaced: false,
   performDelete: () => {},
   performCancel: () => {},
+  moduleTemplatesLoading: false,
 });
 
 export function KymaModuleContextProvider({
@@ -261,6 +263,7 @@ export function KymaModuleContextProvider({
         namespaced: !!namespaced,
         performDelete: performDelete,
         performCancel: performCancel,
+        moduleTemplatesLoading: moduleTemplatesLoading,
       }}
     >
       {createPortal(

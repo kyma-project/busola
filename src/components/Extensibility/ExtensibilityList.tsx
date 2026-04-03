@@ -29,13 +29,36 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 import '../../web-components/eventListenerTracker';
 import { configFeaturesNames } from 'state/types';
+import { ResourcesListProps } from 'shared/components/ResourcesList/types';
+
+type ExtensibilityListCoreProps = {
+  resMetaData?: Record<string, any>;
+  filterFunction?: (value: any) => boolean;
+  resourceUrl?: string;
+} & Omit<
+  ResourcesListProps,
+  | 'createResourceForm'
+  | 'sortBy'
+  | 'searchSettings'
+  | 'emptyListProps'
+  | 'readOnly'
+  | 'resourceType'
+  | 'resourceTitle'
+  | 'namespace'
+  | 'i18n'
+  | 'createFormProps'
+  | 'description'
+  | 'customColumns'
+  | 'filter'
+  | 'resourceUrl'
+>;
 
 export const ExtensibilityListCore = ({
   resMetaData,
   filterFunction,
   rawResourceType,
   ...props
-}) => {
+}: ExtensibilityListCoreProps) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
   const jsonata = useJsonata({});
@@ -55,7 +78,7 @@ export const ExtensibilityListCore = ({
   const dataSources = resMetaData?.dataSources || {};
   const { schema } = useGetSchema({
     resource,
-  });
+  } as any);
 
   const listProps = usePrepareListProps({
     resourceCustomType: getExtensibilityPath(resMetaData?.general),
@@ -66,7 +89,8 @@ export const ExtensibilityListCore = ({
   });
 
   const resourceTitle = resMetaData?.general?.name;
-  const newListProps = { ...listProps };
+  const newListProps = { ...listProps } as ResourcesListProps &
+    Record<string, any>;
   newListProps.resourceTitle = exists('name')
     ? t('name')
     : resourceTitle || pluralize(prettifyKind(resource?.kind || ''));
@@ -84,7 +108,7 @@ export const ExtensibilityListCore = ({
   newListProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
         header: widgetT(column),
-        value: (resource) => (
+        value: (resource: Record<string, any>) => (
           <Widget
             key={i}
             value={resource}
@@ -102,7 +126,7 @@ export const ExtensibilityListCore = ({
     typeof resMetaData?.resource?.filter === 'string' ||
     typeof generalFilter === 'string';
 
-  const filterFn = async (value) =>
+  const filterFn = async (value: any) =>
     await applyFormula(
       value,
       resMetaData?.resource?.filter || generalFilter,
@@ -112,10 +136,10 @@ export const ExtensibilityListCore = ({
   newListProps.filter = isFilterAString ? filterFn : filterFunction;
 
   const sortOptions = (resMetaData?.list || []).filter(
-    (element) => element.sort,
+    (element: Record<string, any>) => element.sort,
   );
   const searchOptions = (resMetaData?.list || []).filter(
-    (element) => element.search,
+    (element: Record<string, any>) => element.search,
   );
 
   const textSearchProperties = getTextSearchProperties({
@@ -130,7 +154,6 @@ export const ExtensibilityListCore = ({
       {...newListProps}
       {...props}
       rawResourceType={rawResourceType}
-      displayLabelForLabels
       disableCreate={disableCreate}
       disableDelete={disableDelete}
       createResourceForm={ExtensibilityCreate}
@@ -142,14 +165,21 @@ export const ExtensibilityListCore = ({
           textSearchProperties(defaultSearchProperties),
       }}
       emptyListProps={{
-        subtitleText: newListProps?.description,
-        url: emptyListUrl,
+        subtitleText: newListProps?.description as string,
+        url: emptyListUrl ?? undefined,
       }}
     />
   );
 };
 
-const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
+type ExtensibilityListProps = {
+  overrideResMetadata?: Record<string, any>;
+} & Omit<ExtensibilityListCoreProps, 'resMetaData'>;
+
+const ExtensibilityList = ({
+  overrideResMetadata,
+  ...props
+}: ExtensibilityListProps) => {
   const defaultResMetadata = useGetCRbyPath();
   const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};

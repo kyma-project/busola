@@ -172,7 +172,7 @@ export const getResourceListPath = (resource: any) => {
 };
 
 export const findChannel = (
-  module: { name: string; channels: [{ version: string; channel: string }] },
+  module: { name: string; channels: { version: string; channel: string }[] },
   channel: string,
 ) => {
   return module.channels.find(
@@ -249,7 +249,7 @@ export const getModuleName = (moduleTemplate: ModuleTemplateType): string => {
 };
 
 export const setChannel = (
-  module: { name: string; channels: [{ version: string; channel: string }] },
+  module: { name: string; channels: { version: string; channel: string }[] },
   channel: string,
   index: number,
   selectedModules: {

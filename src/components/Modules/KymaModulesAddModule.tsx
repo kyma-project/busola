@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -9,10 +9,32 @@ import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { KymaModuleContext } from './providers/KymaModuleProvider';
 
 import './KymaModulesAddModule.scss';
-import { findModuleStatus } from './support';
+import {
+  findModuleStatus,
+  KymaResourceStatusModuleType,
+  ModuleReleaseMetas,
+} from './support';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 
-export default function KymaModulesAddModule(props) {
+type ChannelType = {
+  channel: string;
+  version: string;
+  isBeta?: boolean;
+  isMetaRelease?: boolean;
+};
+type ModulesAddData = {
+  name: string;
+  docsUrl?: string;
+  channels: ChannelType[];
+  icon: {
+    link?: string;
+    name?: string;
+  };
+  isMetaRelease?: boolean;
+};
+
+export default function KymaModulesAddModule(props: ResourceFormProps) {
   const { t } = useTranslation();
 
   const {
@@ -29,14 +51,16 @@ export default function KymaModulesAddModule(props) {
 
   const [resource, setResource] = useState(cloneDeep(kymaResource));
 
-  const [selectedModules, setSelectedModules] = useState([]);
+  const [selectedModules, setSelectedModules] = useState<
+    KymaResourceStatusModuleType[]
+  >([]);
 
   useEffect(() => {
     if (selectedModules && kymaResource) {
       const newModules = selectedModules.filter(
         (newModules) =>
           !activeKymaModules.find(
-            (activeModules) => activeModules.name === newModules.name,
+            (activeModules: any) => activeModules.name === newModules.name,
           ),
       );
       const mergedModules = activeKymaModules.concat(newModules);
@@ -57,10 +81,11 @@ export default function KymaModulesAddModule(props) {
 
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
-  });
+  }) as { data: { items: ModuleReleaseMetas[] } | null };
 
   const [columnsCount, setColumnsCount] = useState(2);
-  const [cardsContainerRef, setCardsContainerRef] = useState(null);
+  const [cardsContainerRef, setCardsContainerRef] =
+    useState<HTMLDivElement | null>(null);
 
   const calculateColumns = useCallback(() => {
     if (cardsContainerRef?.clientWidth) {
@@ -100,92 +125,101 @@ export default function KymaModulesAddModule(props) {
     );
   }
 
-  const modulesAddData = moduleTemplates?.items.reduce((acc, module) => {
-    const name = module.metadata.labels['operator.kyma-project.io/module-name'];
-    const existingModule = acc.find((item) => item.name === name);
-    const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
-      (installedModule) => installedModule.name === name,
-    );
-    const moduleMetaRelase = moduleReleaseMetas?.items.find(
-      (item) => item.spec.moduleName === name,
-    );
+  const modulesAddData = moduleTemplates?.items.reduce(
+    (acc: ModulesAddData[], module) => {
+      const name =
+        module.metadata.labels['operator.kyma-project.io/module-name'];
+      const existingModule = acc.find((item) => item.name === name);
+      const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
+        (installedModule) => installedModule.name === name,
+      );
+      const moduleMetaRelase = moduleReleaseMetas?.items.find(
+        (item) => item.spec.moduleName === name,
+      );
 
-    const isModuleMetaRelease = acc.find(
-      (item) => item.name === moduleMetaRelase?.spec?.moduleName,
-    );
+      const isModuleMetaRelease = acc.find(
+        (item: any) => item.name === moduleMetaRelase?.spec?.moduleName,
+      );
 
-    if (module.spec.channel && !isModuleMetaRelease) {
-      if (!existingModule && !isAlreadyInstalled) {
-        acc.push({
-          name: name,
-          channels: [
-            {
-              channel: module.spec.channel,
-              version: module.spec.descriptor.component.version,
-              isBeta:
-                module.metadata.labels['operator.kyma-project.io/beta'] ===
-                'true',
+      if (module.spec.channel && !isModuleMetaRelease) {
+        if (!existingModule && !isAlreadyInstalled) {
+          acc.push({
+            name: name,
+            channels: [
+              {
+                channel: module.spec.channel,
+                version: module.spec.descriptor.component.version,
+                isBeta:
+                  module.metadata.labels['operator.kyma-project.io/beta'] ===
+                  'true',
+              },
+            ],
+            docsUrl:
+              module.metadata.annotations['operator.kyma-project.io/doc-url'],
+            icon: {
+              link: module.spec?.info?.icons?.[0]?.link,
+              name: module.spec?.info?.icons?.[0]?.name,
             },
-          ],
-          docsUrl:
-            module.metadata.annotations['operator.kyma-project.io/doc-url'],
-          icon: {
-            link: module.spec?.info?.icons[0]?.link,
-            name: module.spec?.info?.icons[0]?.name,
-          },
-          isMetaRelease: false,
-        });
-      } else if (existingModule) {
-        existingModule.channels?.push({
-          channel: module.spec.channel,
-          version: module.spec.descriptor.component.version,
-          isBeta:
-            module.metadata.labels['operator.kyma-project.io/beta'] === 'true',
-          isMetaRelease: false,
-        });
-      }
-    } else {
-      if (!existingModule && !isAlreadyInstalled) {
-        moduleMetaRelase?.spec.channels.forEach((channel) => {
-          if (!acc.find((item) => item.name === name)) {
-            acc.push({
-              name: name,
-              channels: [
-                {
+            isMetaRelease: false,
+          });
+        } else if (existingModule) {
+          existingModule.channels?.push({
+            channel: module.spec.channel,
+            version: module.spec.descriptor.component.version,
+            isBeta:
+              module.metadata.labels['operator.kyma-project.io/beta'] ===
+              'true',
+            isMetaRelease: false,
+          });
+        }
+      } else {
+        if (!existingModule && !isAlreadyInstalled) {
+          moduleMetaRelase?.spec.channels.forEach((channel) => {
+            if (!acc.find((item) => item.name === name)) {
+              acc.push({
+                name: name,
+                channels: [
+                  {
+                    channel: channel.channel,
+                    version: channel.version,
+                    isBeta: moduleMetaRelase.spec.beta ?? false,
+                    isMetaRelease: true,
+                  },
+                ],
+                docsUrl: module.spec.info?.documentation,
+                icon: {
+                  link: module.spec?.info?.icons?.[0]?.link,
+                  name: module.spec?.info?.icons?.[0]?.name,
+                },
+              });
+            } else {
+              acc
+                ?.find((item) => item?.name === name)
+                ?.channels.push({
                   channel: channel.channel,
                   version: channel.version,
                   isBeta: moduleMetaRelase.spec.beta ?? false,
                   isMetaRelease: true,
-                },
-              ],
-              docsUrl: module.spec.info.documentation,
-              icon: {
-                link: module.spec?.info?.icons[0]?.link,
-                name: module.spec?.info?.icons[0]?.name,
-              },
-            });
-          } else {
-            acc
-              .find((item) => item.name === name)
-              .channels.push({
-                channel: channel.channel,
-                version: channel.version,
-                isBeta: moduleMetaRelase.spec.beta ?? false,
-                isMetaRelease: true,
-              });
-          }
-        });
+                });
+            }
+          });
+        }
       }
-    }
 
-    return acc ?? [];
-  }, []);
+      return acc ?? [];
+    },
+    [],
+  );
 
-  const isChecked = (name) => {
+  const isChecked = (name?: string) => {
     return !!selectedModules?.find((module) => module.name === name);
   };
 
-  const setCheckbox = (module, checked, index) => {
+  const setCheckbox = (
+    module: Record<string, any>,
+    checked: boolean,
+    index: number,
+  ) => {
     const newSelectedModules = [...selectedModules];
     if (checked) {
       newSelectedModules.push({
@@ -197,7 +231,7 @@ export default function KymaModulesAddModule(props) {
     setSelectedModules(newSelectedModules);
   };
 
-  const checkIfSelectedModuleIsBeta = (moduleName) => {
+  const checkIfSelectedModuleIsBeta = (moduleName?: string) => {
     return selectedModules.some(({ name, channel }) => {
       if (moduleName && name !== moduleName) {
         return false;
@@ -206,25 +240,25 @@ export default function KymaModulesAddModule(props) {
 
       return moduleData
         ? moduleData.channels.some(
-            ({ channel: ch, isBeta }) =>
+            ({ channel: ch, isBeta }: ChannelType) =>
               ch === (channel || kymaResource.spec.channel) && isBeta,
           )
         : false;
     });
   };
 
-  const checkIfStatusModuleIsBeta = (moduleName) => {
-    return modulesAddData
+  const checkIfStatusModuleIsBeta = (moduleName: string) => {
+    return !!modulesAddData
       ?.find((mod) => mod.name === moduleName)
       ?.channels.some(
-        ({ channel: ch, isBeta }) =>
+        ({ channel: ch, isBeta }: ChannelType) =>
           ch === findModuleStatus(kymaResource, moduleName)?.channel ||
           (kymaResource.spec.channel && isBeta),
       );
   };
 
   const renderCards = () => {
-    const columns = Array.from({ length: columnsCount }, () => []);
+    const columns: ReactNode[] = Array.from({ length: columnsCount }, () => []);
 
     modulesAddData?.forEach((module, i) => {
       const index = selectedModules?.findIndex((kymaResourceModule) => {
@@ -244,7 +278,7 @@ export default function KymaModulesAddModule(props) {
           checkIfStatusModuleIsBeta={checkIfStatusModuleIsBeta}
         />
       );
-      columns[i % columnsCount].push(card);
+      (columns[i % columnsCount] as any)?.push(card);
     });
 
     return (
@@ -267,15 +301,13 @@ export default function KymaModulesAddModule(props) {
   return (
     <ResourceForm
       {...props}
-      createUrl={kymaResourceUrl}
+      createUrl={kymaResourceUrl ?? undefined}
       pluralKind={'kymas'}
       singularName={'Kyma'}
       resource={resource}
       setResource={setResource}
       initialResource={initialUnchangedResource}
       disableDefaultFields
-      formElementRef={props.formElementRef}
-      onChange={props.onChange}
       layoutNumber="startColumn"
       resetLayout
       afterCreatedCustomMessage={t('kyma-modules.messages.module-added')}
