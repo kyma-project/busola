@@ -108,11 +108,7 @@ export function KymaModuleContextProvider({
     data: kymaResource,
     loading: kymaResourceLoading,
     resourceUrl,
-  } = useKymaQuery() as {
-    data: any;
-    loading: boolean;
-    resourceUrl: string;
-  };
+  } = useKymaQuery();
 
   const [activeKymaModules, setActiveKymaModules] = useState(
     kymaResource?.spec?.modules ?? [],
@@ -161,6 +157,7 @@ export function KymaModuleContextProvider({
     afterCreatedFn: () =>
       notification.notifySuccess({
         content: t('kyma-modules.messages.module-uninstall'),
+        title: '',
       }),
   });
 
@@ -191,7 +188,7 @@ export function KymaModuleContextProvider({
       : undefined;
 
   const isMaintenancePending = findModuleStatus(
-    kymaResource,
+    kymaResource as KymaResourceType,
     getModuleName(),
   )?.maintenance;
 
@@ -246,7 +243,7 @@ export function KymaModuleContextProvider({
   return (
     <KymaModuleContext.Provider
       value={{
-        resourceName: kymaResource?.metadata?.name,
+        resourceName: kymaResource?.metadata?.name ?? null,
         resourceUrl: resourceUrl,
         kymaResource: kymaResource,
         kymaResourceLoading: kymaResourceLoading,
