@@ -31,7 +31,7 @@ import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesBu
 import pluralize from 'pluralize';
 import { ColumnLayoutState } from 'state/columnLayoutAtom';
 
-type KymaModuleContetxProviderProps = {
+type KymaModuleContextProviderProps = {
   children: ReactNode;
   setLayoutColumn: Dispatch<SetStateAction<ColumnLayoutState>>;
   layoutState: ColumnLayoutState;
@@ -103,7 +103,7 @@ export function KymaModuleContextProvider({
   namespaced,
   performCancel,
   performDelete,
-}: KymaModuleContetxProviderProps) {
+}: KymaModuleContextProviderProps) {
   const {
     data: kymaResource,
     loading: kymaResourceLoading,
