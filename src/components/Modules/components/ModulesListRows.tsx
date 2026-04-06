@@ -46,7 +46,7 @@ type ModulesListRowsProps = {
   moduleTemplates: ModuleTemplateListType;
   protectedResource?: boolean;
   hasDetailsLink: (resource: RowResourceType) => boolean;
-  needsUpdate?: boolean;
+  newestModuleTemplate?: ModuleTemplateType;
 };
 
 export const ModulesListRows = ({
@@ -56,7 +56,7 @@ export const ModulesListRows = ({
   hasDetailsLink,
   kymaResource,
   protectedResource,
-  needsUpdate,
+  newestModuleTemplate,
 }: ModulesListRowsProps) => {
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
@@ -168,7 +168,7 @@ export const ModulesListRows = ({
   const isChannelOverridden = moduleIndex
     ? kymaResource?.spec?.modules?.[moduleIndex]?.channel !== undefined
     : false;
-  console.log(currentModuleTemplate);
+
   return [
     // Name
     <>
@@ -240,7 +240,7 @@ export const ModulesListRows = ({
             {t('kyma-modules.upgrade-available')}
           </Tag>
         )}
-      {needsUpdate && (
+      {!!newestModuleTemplate && (
         <StatusBadge
           className="sap-margin-begin-tiny"
           resourceKind="kymas"
@@ -258,7 +258,7 @@ export const ModulesListRows = ({
                 </Text>
                 <Text>
                   {t('modules.community.update.new-version', {
-                    newVersion: currentModuleTemplate?.spec?.version || '',
+                    newVersion: newestModuleTemplate?.spec?.version || '',
                   })}
                 </Text>
               </FlexBox>
@@ -270,7 +270,7 @@ export const ModulesListRows = ({
                 <UpdateModuleButton
                   moduleName={resource.name}
                   currentVersion={resource?.version}
-                  newVersion={currentModuleTemplate?.spec?.version || ''}
+                  newVersion={newestModuleTemplate?.spec?.version || ''}
                   moduleTpl={currentModuleTemplate}
                 />
               </FlexBox>
