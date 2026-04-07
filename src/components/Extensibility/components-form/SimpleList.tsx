@@ -1,9 +1,8 @@
-import {
-  PluginStack,
-  StoreKeys,
-  StoreSchemaType,
-  useUIStore,
-} from '@ui-schema/ui-schema';
+import { ComponentType } from 'react';
+import { WidgetEngine as WidgetEngineBase } from '@ui-schema/react/WidgetEngine';
+const WidgetEngine = WidgetEngineBase as ComponentType<any>;
+import { useUIStore } from '@ui-schema/react/UIStore';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 import { Button, FlexBox } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -19,7 +18,7 @@ import { CollapsibleSectionProps } from 'shared/ResourceForm/components/Collapsi
 type SimpleListProps = {
   storeKeys: StoreKeys;
   onChange: (params: SchemaOnChangeParams) => void;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   schemaKeys: StoreKeys;
   showValidity?: boolean;
   required?: boolean;
@@ -92,13 +91,12 @@ export function SimpleList({
               <li key={index}>
                 <FlexBox alignItems="Center">
                   <div className="bsl-col-md--11 simple-list">
-                    <PluginStack
+                    <WidgetEngine
                       showValidity={showValidity}
                       schema={itemsSchema}
                       parentSchema={schema}
                       storeKeys={ownKeys}
                       level={level + 1}
-                      /*@ts-expect-error Some type mismatch or probably no longer used*/
                       schemaKeys={schemaKeys?.push('items')}
                       placeholder={tExt(schemaPlaceholder)}
                       isListItem

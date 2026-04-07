@@ -1,29 +1,22 @@
 import {
   useMemo,
   useCallback,
-  ReactNode,
   SetStateAction,
   Dispatch,
+  ComponentType,
 } from 'react';
 import { isEmpty } from 'lodash';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
-import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
-import {
-  StoreSchemaType,
-  UIStoreProvider,
-  UIStoreType,
-  storeUpdater,
-} from '@ui-schema/ui-schema';
-import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
+import { createOrderedMap } from '@ui-schema/ui-schema/createMap';
+import { UIMetaProvider } from '@ui-schema/react/UIMeta';
+import { UIStoreProvider, UIStoreType } from '@ui-schema/react/UIStore';
+import { storeUpdater } from '@ui-schema/react/storeUpdater';
+import { WidgetEngine as WidgetEngineBase } from '@ui-schema/react/WidgetEngine';
+const WidgetEngine = WidgetEngineBase as ComponentType<any>;
 
 import widgets from './components-form';
 import { OrderedMap } from 'immutable';
 import { useGetTranslation } from './helpers';
-
-function FormContainer({ children }: { children: ReactNode }) {
-  return <>{children}</>;
-}
-const FormStack = injectPluginStack(FormContainer);
+import { SomeSchema } from '@ui-schema/ui-schema';
 
 type ResourceSchemaProps = {
   resource: Record<string, any>;
@@ -57,14 +50,15 @@ export function ResourceSchema({
   const uiStore = useMemo(() => store, [store]);
 
   const schemaMap = useMemo(
-    () => createOrderedMap(schema) as StoreSchemaType & OrderedMap<string, any>,
+    () =>
+      createOrderedMap(schema ?? {}) as SomeSchema & OrderedMap<string, any>,
     [schema],
   );
 
   if (isEmpty(schema)) return null;
 
   return (
-    <UIMetaProvider widgets={widgets as any} t={translator}>
+    <UIMetaProvider binding={widgets as any} t={translator}>
       <UIStoreProvider
         store={uiStore}
         showValidity={true}
@@ -72,7 +66,7 @@ export function ResourceSchema({
         rootRule={schemaRules}
         editMode={editMode}
       >
-        <FormStack isRoot schema={schemaMap} resource={resource} />
+        <WidgetEngine isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>
     </UIMetaProvider>
   );

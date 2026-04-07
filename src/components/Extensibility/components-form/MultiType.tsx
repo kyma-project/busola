@@ -1,5 +1,8 @@
 import { SegmentedButton, SegmentedButtonItem } from '@ui5/webcomponents-react';
-import { PluginStack, StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { ComponentType } from 'react';
+import { WidgetEngine as WidgetEngineBase } from '@ui-schema/react/WidgetEngine';
+const WidgetEngine = WidgetEngineBase as ComponentType<any>;
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 import { isNil } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -11,7 +14,7 @@ import {
 
 type MultiTypeProps = {
   onChange: (params: SchemaOnChangeParams) => void;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   resource: Record<string, any>;
 } & Record<string, any>;
@@ -90,9 +93,8 @@ export function MultiType({
           </SegmentedButton>
         )}
       />
-      <PluginStack
+      <WidgetEngine
         {...props}
-        /*@ts-expect-error Type mismatch or probably no longer used*/
         onChange={onChange}
         schema={newSchema}
         storeKeys={storeKeys}
