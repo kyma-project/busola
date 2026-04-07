@@ -1262,7 +1262,6 @@ resource-graph:
   buttons:
     go-to-details: Go to details
   error: Something went wrong during rendering the graph.
-  save-as-dot: DOT format
   title: Resource Graph
 resource-quotas:
   description: A <0>Resource Quota</0> provides constraints that limit aggregate resource consumption per namespace.
