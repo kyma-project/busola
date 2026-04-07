@@ -36,7 +36,7 @@ import {
   moduleInstallationState,
 } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
-import { UpdateModuleButton } from './components/UpdateModuleButton';
+import { UpdateModuleButton } from '../components/moduleUpdate/UpdateModuleButton';
 import { getUpdateTemplate } from './communityModulesHelpers';
 
 type CommunityModulesListProps = {

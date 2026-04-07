@@ -338,7 +338,6 @@ export default function KymaModulesEdit({
         resourceType: t('kyma-modules.kyma'),
         error: error?.message,
       }),
-      title: '',
     });
   };
 
@@ -347,7 +346,6 @@ export default function KymaModulesEdit({
       content: t('common.create-form.messages.patch-success', {
         resourceType: t('kyma-modules.kyma'),
       }),
-      title: '',
     });
 
     setIsResourceEdited({

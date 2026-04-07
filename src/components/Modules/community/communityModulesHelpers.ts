@@ -1,4 +1,3 @@
-import { module } from './../../../../backend/node_modules/webpack/types.d';
 import {
   getModuleName,
   ModuleTemplateListType,
@@ -291,19 +290,14 @@ export async function getAllResourcesYamls(
 export const getUpdateTemplate = (
   moduleName: string,
   moduleTemplates: ModuleTemplateListType,
-  installedModules: ModuleTemplateType[],
+  installedModules: any[],
 ): ModuleTemplateType | undefined => {
   const repoModules = moduleTemplates.items.filter(
     (moduleTemplate) => !moduleTemplate.metadata.creationTimestamp,
   );
+
   const installedModule = installedModules.find((m) => m.name === moduleName);
-  console.log(
-    repoModules.find(
-      (repoModule) =>
-        getModuleName(repoModule) === moduleName &&
-        repoModule.spec.version !== installedModule?.version,
-    ),
-  );
+
   if (!installedModule) return undefined;
   return repoModules.find(
     (repoModule) =>

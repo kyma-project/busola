@@ -990,6 +990,7 @@ modules:
       install-failure: 'Failed to install the {{resourceType}}: {{error}}'
       module-added: Community Module added
       module-uninstall: Community Module deleted
+      module-update-started: Module update started
       modules-updated: Community Modules updated
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
       resources-delete-in-progress: Resources are still being deleted. Try again later.
@@ -1023,9 +1024,8 @@ modules:
     title: Community Modules
     update:
       confirmation: Update <0>{{moduleName}}</0>?
-      current-version: <0>Current version:</0> {{currentVersion}}
-      latest-version: <0>Latest version:</0> {{latestVersion}}
-      new-version: 'New version: {{newVersion}}'
+      current-version: 'Current version:'
+      latest-version: 'Latest version:'
       title: Update Module
 namespaces:
   create-modal:

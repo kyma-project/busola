@@ -12,7 +12,7 @@ import {
 } from '../support';
 import { useGetManagerStatus, useGetModuleResource } from '../hooks';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
@@ -22,7 +22,8 @@ import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
-import { UpdateModuleButton } from '../community/components/UpdateModuleButton';
+import { UpdateModuleButton } from './moduleUpdate/UpdateModuleButton';
+import { VersionUpdateTooltip } from './moduleUpdate/VersionUpdateTooltip';
 import './ModulesListRows.scss';
 
 type RowResourceType = {
@@ -246,35 +247,20 @@ export const ModulesListRows = ({
           resourceKind="kymas"
           type={'Critical'}
           tooltipContent={
-            <>
-              <FlexBox direction="Column" className="sap-margin-bottom-small">
-                <Text>
-                  <Trans
-                    i18nKey="modules.community.update.current-version"
-                    values={{ currentVersion: resource?.version }}
-                  >
-                    <span></span>
-                  </Trans>
-                </Text>
-                <Text>
-                  {t('modules.community.update.new-version', {
-                    newVersion: newestModuleTemplate?.spec?.version || '',
-                  })}
-                </Text>
-              </FlexBox>
-              <FlexBox
-                alignItems="End"
-                direction="Column"
-                className="status-update-button"
-              >
-                <UpdateModuleButton
-                  moduleName={resource.name}
-                  currentVersion={resource?.version}
-                  newVersion={newestModuleTemplate?.spec?.version || ''}
-                  moduleTpl={currentModuleTemplate}
-                />
-              </FlexBox>
-            </>
+            <VersionUpdateTooltip
+              currentVersion={resource?.version || ''}
+              latestVersion={newestModuleTemplate?.spec?.version || ''}
+              button={
+                currentModuleTemplate && (
+                  <UpdateModuleButton
+                    moduleName={resource.name}
+                    currentVersion={resource?.version || ''}
+                    newVersion={newestModuleTemplate?.spec?.version || ''}
+                    moduleTpl={currentModuleTemplate}
+                  />
+                )
+              }
+            />
           }
         >
           {t('kyma-modules.outdated')}

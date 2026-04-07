@@ -44,6 +44,7 @@ export type CustomResourceDefinitionsType = {
 export type KymaResourceSpecModuleType = {
   name: string;
   channel?: string;
+  managed?: boolean;
 };
 
 export type KymaResourceStatusTemplate = {
