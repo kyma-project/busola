@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useUIStore, WidgetProps } from '@ui-schema/ui-schema';
+import { useUIStore } from '@ui-schema/react/UIStore';
+import { WidgetProps } from '@ui-schema/react';
 
 import { useJsonata } from '../../hooks/useJsonata';
 import { useVariables } from '../../hooks/useVariables';

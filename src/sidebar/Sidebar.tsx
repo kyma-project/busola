@@ -14,7 +14,7 @@ export const Sidebar = () => {
   if (noSidebarPathnames.includes(pathname)) return null;
 
   return (
-    <aside className="sap-margin-end-tiny sap-margin-top-tiny">
+    <aside>
       <section className="sidebar__content">
         <Suspense fallback={<Spinner />}>
           <ErrorBoundary

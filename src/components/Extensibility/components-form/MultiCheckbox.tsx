@@ -6,11 +6,11 @@ import {
   SchemaOnChangeParams,
   OptionType,
 } from 'components/Extensibility/helpers';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type MultiCheckboxProps = {
   onChange?: (params: SchemaOnChangeParams) => void;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   required?: boolean;
   resource?: Record<string, any>;

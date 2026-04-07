@@ -13,12 +13,12 @@ import { usePermittedUrl } from 'hooks/usePermittedUrl';
 
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type ResourceRendererProps = {
   onChange: (params: SchemaOnChangeParams) => void;
   value: any;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   required: boolean;
   compact?: boolean;

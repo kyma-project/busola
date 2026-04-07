@@ -5,13 +5,13 @@ import {
   getPropsFromSchema,
   SchemaOnChangeParams,
 } from 'components/Extensibility/helpers';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 import { FormFieldProps } from 'shared/ResourceForm/components/FormField';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type SwitchRendererProps = {
   onChange: (params: SchemaOnChangeParams) => void;
   value: any;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   required?: boolean;
   compact?: boolean;
