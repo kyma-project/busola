@@ -157,7 +157,6 @@ export function KymaModuleContextProvider({
     afterCreatedFn: () =>
       notification.notifySuccess({
         content: t('kyma-modules.messages.module-uninstall'),
-        title: '',
       }),
   });
 
@@ -189,7 +188,7 @@ export function KymaModuleContextProvider({
 
   const isMaintenancePending = findModuleStatus(
     kymaResource as KymaResourceType,
-    getModuleName(),
+    getModuleName() ?? '',
   )?.maintenance;
 
   const isCommunityModuleSelected = () => {

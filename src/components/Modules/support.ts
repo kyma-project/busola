@@ -195,7 +195,7 @@ export const findExtension = (resourceKind: string, extensions: any) => {
 
 export const findModuleStatus = (
   kymaResource: KymaResourceType,
-  moduleName?: string,
+  moduleName: string,
 ) => {
   return kymaResource?.status?.modules?.find(
     (module: { name: string }) => moduleName === module?.name,
