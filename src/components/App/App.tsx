@@ -47,6 +47,7 @@ import ClusterRoutes from './ClusterRoutes';
 import { IncorrectPath } from './IncorrectPath';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ContextChooserMessage } from 'components/Clusters/components/ContextChooser/ContextChooser';
+import { KubeconfigList } from 'components/KubeconfigList/KubeconfigList';
 
 import { themeAtom } from 'state/settings/themeAtom';
 import { initTheme } from './initTheme';
@@ -204,6 +205,7 @@ export default function App() {
                     />
                   )}
                 <Route path="clusters" element={<ClusterList />} />
+                <Route path="kubeconfig" element={<KubeconfigList />} />
                 <Route
                   path="cluster/:currentClusterName"
                   element={<Navigate to="overview" />}
