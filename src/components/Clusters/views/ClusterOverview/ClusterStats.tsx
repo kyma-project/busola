@@ -325,7 +325,7 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
             />
           </div>
         )}
-        <Injections destination="ClusterOverview" slot="health" root="" />
+        <Injections destination="ClusterOverview" slot="health" />
       </div>
     </section>
   );

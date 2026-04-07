@@ -1,0 +1,253 @@
+import { useEffect, useMemo } from 'react';
+import pluralize from 'pluralize';
+import { useTranslation } from 'react-i18next';
+
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { usePrepareListProps } from 'resources/helpers';
+import { prettifyKind } from 'shared/utils/helpers';
+import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
+import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
+
+import { useGetCRbyPath } from './useGetCRbyPath';
+import ExtensibilityCreate from './ExtensibilityCreate';
+import {
+  applyFormula,
+  getResourceUrl,
+  getTextSearchProperties,
+  TranslationBundleContext,
+  useCreateResourceDescription,
+  useGetTranslation,
+} from './helpers';
+import { sortBy } from './helpers/sortBy';
+import { Widget } from './components/Widget';
+import { DataSourcesContextProvider } from './contexts/DataSources';
+import { useJsonata } from './hooks/useJsonata';
+import { useFeature } from 'hooks/useFeature';
+import { createPortal } from 'react-dom';
+import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+
+import '../../web-components/eventListenerTracker';
+import { configFeaturesNames } from 'state/types';
+import { ResourcesListProps } from 'shared/components/ResourcesList/types';
+
+type ExtensibilityListCoreProps = {
+  resMetaData?: Record<string, any>;
+  filterFunction?: (value: any) => boolean;
+  resourceUrl?: string;
+} & Omit<
+  ResourcesListProps,
+  | 'createResourceForm'
+  | 'sortBy'
+  | 'searchSettings'
+  | 'emptyListProps'
+  | 'readOnly'
+  | 'resourceType'
+  | 'resourceTitle'
+  | 'namespace'
+  | 'i18n'
+  | 'createFormProps'
+  | 'description'
+  | 'customColumns'
+  | 'filter'
+  | 'resourceUrl'
+>;
+
+export const ExtensibilityListCore = ({
+  resMetaData,
+  filterFunction,
+  rawResourceType,
+  ...props
+}: ExtensibilityListCoreProps) => {
+  const { t, widgetT, exists } = useGetTranslation();
+  const { t: tBusola } = useTranslation();
+  const jsonata = useJsonata({});
+
+  const {
+    resource,
+    description,
+    features,
+    filter: generalFilter,
+  } = resMetaData?.general ?? {};
+
+  const { disableCreate, disableDelete } = features?.actions ?? {
+    disableCreate: props.disableCreate,
+    disableDelete: props.disableDelete,
+  };
+
+  const dataSources = resMetaData?.dataSources || {};
+  const { schema } = useGetSchema({
+    resource,
+  } as any);
+
+  const listProps = usePrepareListProps({
+    resourceCustomType: getExtensibilityPath(resMetaData?.general),
+    resourceI18Key: 'name',
+    apiGroup: resource?.group,
+    apiVersion: resource?.version,
+    hasDetailsView: !!resMetaData?.details,
+  });
+
+  const resourceTitle = resMetaData?.general?.name;
+  const newListProps = { ...listProps } as ResourcesListProps &
+    Record<string, any>;
+  newListProps.resourceTitle = exists('name')
+    ? t('name')
+    : resourceTitle || pluralize(prettifyKind(resource?.kind || ''));
+
+  if (resource?.kind) {
+    newListProps.resourceUrl = listProps.resourceUrl?.replace(
+      /[a-z0-9-]+\/?$/,
+      pluralize(resource.kind).toLowerCase(),
+    );
+  }
+  newListProps.createFormProps = { resourceSchema: resMetaData };
+
+  newListProps.description = useCreateResourceDescription(description);
+
+  newListProps.customColumns = Array.isArray(resMetaData?.list)
+    ? resMetaData?.list.map((column, i) => ({
+        header: widgetT(column),
+        value: (resource: Record<string, any>) => (
+          <Widget
+            key={i}
+            value={resource}
+            structure={column}
+            schema={schema}
+            dataSources={dataSources}
+            originalResource={resource}
+            inlineContext={true}
+          />
+        ),
+      }))
+    : [];
+
+  const isFilterAString =
+    typeof resMetaData?.resource?.filter === 'string' ||
+    typeof generalFilter === 'string';
+
+  const filterFn = async (value: any) =>
+    await applyFormula(
+      value,
+      resMetaData?.resource?.filter || generalFilter,
+      tBusola,
+    );
+
+  newListProps.filter = isFilterAString ? filterFn : filterFunction;
+
+  const sortOptions = (resMetaData?.list || []).filter(
+    (element: Record<string, any>) => element.sort,
+  );
+  const searchOptions = (resMetaData?.list || []).filter(
+    (element: Record<string, any>) => element.search,
+  );
+
+  const textSearchProperties = getTextSearchProperties({
+    searchOptions,
+    defaultSearch: true,
+  });
+
+  const emptyListUrl = getResourceUrl(description);
+
+  return (
+    <ResourcesList
+      {...newListProps}
+      {...props}
+      rawResourceType={rawResourceType}
+      disableCreate={disableCreate}
+      disableDelete={disableDelete}
+      createResourceForm={ExtensibilityCreate}
+      sortBy={(defaultSortOptions) =>
+        sortBy(jsonata, sortOptions, t, defaultSortOptions)
+      }
+      searchSettings={{
+        textSearchProperties: (defaultSearchProperties) =>
+          textSearchProperties(defaultSearchProperties),
+      }}
+      emptyListProps={{
+        subtitleText: newListProps?.description as string,
+        url: emptyListUrl ?? undefined,
+      }}
+    />
+  );
+};
+
+type ExtensibilityListProps = {
+  overrideResMetadata?: Record<string, any>;
+} & Omit<ExtensibilityListCoreProps, 'resMetaData'>;
+
+const ExtensibilityList = ({
+  overrideResMetadata,
+  ...props
+}: ExtensibilityListProps) => {
+  const defaultResMetadata = useGetCRbyPath();
+  const resMetaData = overrideResMetadata || defaultResMetadata;
+  const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
+  const { isEnabled: isExtensibilityCustomComponentsEnabled } = useFeature(
+    configFeaturesNames.EXTENSIBILITY_CUSTOM_COMPONENTS,
+  );
+
+  useEffect(() => {
+    const customElement = resMetaData?.general?.customElement;
+    const customScript = resMetaData?.customScript;
+
+    if (
+      isExtensibilityCustomComponentsEnabled &&
+      customElement &&
+      customScript &&
+      !customElements.get(customElement)
+    ) {
+      const script = document.createElement('script');
+      script.type = 'module';
+      const scriptBlob = new Blob([customScript], {
+        type: 'application/javascript',
+      });
+      const blobURL = URL.createObjectURL(scriptBlob);
+      script.src = blobURL;
+
+      // Clean up the Blob URL after the script loads
+      script.onload = () => {
+        URL.revokeObjectURL(blobURL);
+      };
+
+      script.onerror = (e) => {
+        console.error('Script loading or execution error:', e);
+      };
+      document.head.appendChild(script);
+
+      return () => {
+        document.head.removeChild(script);
+      };
+    }
+  }, [resMetaData, isExtensibilityCustomComponentsEnabled]);
+
+  const translationBundleValue = useMemo(
+    () => ({
+      translationBundle: getExtensibilityPath(resMetaData?.general),
+      defaultResourcePlaceholder: defaultPlaceholder,
+    }),
+    [resMetaData?.general, defaultPlaceholder],
+  );
+
+  return (
+    <TranslationBundleContext.Provider value={translationBundleValue}>
+      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
+        <ExtensibilityErrBoundary key={urlPath}>
+          {isExtensibilityCustomComponentsEnabled && resMetaData?.customHtml ? (
+            <>
+              <div
+                id="custom-html"
+                dangerouslySetInnerHTML={{ __html: resMetaData.customHtml }}
+              ></div>
+              {createPortal(<YamlUploadDialog />, document.body)}
+            </>
+          ) : (
+            <ExtensibilityListCore resMetaData={resMetaData} {...props} />
+          )}
+        </ExtensibilityErrBoundary>
+      </DataSourcesContextProvider>
+    </TranslationBundleContext.Provider>
+  );
+};
+
+export default ExtensibilityList;

@@ -23,7 +23,7 @@ on:
         required: false
 
 jobs:
-  run-integration-test:
+  run-k8s-test:
     runs-on: ubuntu-latest
     env:
       IMG: kyma-dashboard:local-pr-${{github.sha}}

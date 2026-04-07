@@ -9,6 +9,7 @@ import {
   SearchSettingsType,
 } from '../GenericList/components/TableBody';
 import { LayoutColumnName } from 'types';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
 
 export type CustomColumn = {
   header?: string;
@@ -44,14 +45,14 @@ export type ResourcesListProps = {
   layoutNumber?: LayoutColumnName;
   filterFn?: (resource: any) => boolean;
   createFormRef?: RefObject<any> | null;
-  resources?: Record<string, any>[];
+  resources?: Record<string, any>[] | Record<string, any>;
   columns?: CustomColumn[];
   title?: string;
   customListActions?: Actions;
   pagination?: PaginationType;
   emptyListProps?: EmptyListProps;
   nameSelector?: (entry?: Record<string, any>) => string;
-  columnLayout?: string;
+  columnLayout?: FCLLayout;
   customColumnLayout?: (entry: any) => any;
   layoutCloseCreateUrl?: string;
   sortBy?: SortByObject | ((a: any) => SortByObject);
@@ -65,6 +66,7 @@ export type ResourcesListProps = {
   accessibleName?: string;
   loading?: boolean;
   error?: any;
+  skipDataLoading?: boolean;
 };
 
 export type ResourceListRendererProps = Omit<ResourcesListProps, 'filter'> & {
@@ -79,5 +81,4 @@ export type ResourceProps = Omit<
   'loading' | 'error' | 'silentRefetch' | 'resources'
 > & {
   filter?: (resource: any) => boolean | Promise<boolean>;
-  skipDataLoading?: boolean;
 };

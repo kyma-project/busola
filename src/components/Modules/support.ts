@@ -4,6 +4,7 @@ import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { resolveType } from './components/ModuleStatus';
 
 export const DEFAULT_K8S_NAMESPACE: string = 'default';
+export const DEFAULT_IMAGE_SRC = '/assets/sap-logo.svg';
 
 export const enum ModuleTemplateStatus {
   Ready = 'Ready',
@@ -171,7 +172,7 @@ export const getResourceListPath = (resource: any) => {
 };
 
 export const findChannel = (
-  module: { name: string; channels: [{ version: string; channel: string }] },
+  module: { name: string; channels: { version: string; channel: string }[] },
   channel: string,
 ) => {
   return module.channels.find(
@@ -248,7 +249,7 @@ export const getModuleName = (moduleTemplate: ModuleTemplateType): string => {
 };
 
 export const setChannel = (
-  module: { name: string; channels: [{ version: string; channel: string }] },
+  module: { name: string; channels: { version: string; channel: string }[] },
   channel: string,
   index: number,
   selectedModules: {

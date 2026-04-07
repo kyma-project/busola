@@ -9,8 +9,8 @@ export type CustomColumn = {
   visibility?: (
     resource: any,
   ) =>
-    | Promise<{ visible: boolean; error?: Error }>
-    | { visible: boolean; error?: Error };
+    | Promise<{ visible: boolean; error?: Error | null }>
+    | { visible: boolean; error?: Error | null };
 };
 
 export type CustomColumnsType = Array<CustomColumn>;
