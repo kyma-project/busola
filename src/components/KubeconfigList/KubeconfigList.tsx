@@ -21,13 +21,14 @@ export function KubeconfigList() {
       <h1>{t('kubeconfig.list.title', 'Kubeconfig Files')}</h1>
       {error && <p className="error">{error}</p>}
       <ul>
-        {files.map((file) => (
-          <li key={file}>
-            <a href={`/kubeconfig/${file}`} download={file}>
-              {file}
-            </a>
-          </li>
-        ))}
+        {files.map((file) => {
+          const nameWithoutExt = file.replace(/\.(yaml|yml)$/, '');
+          return (
+            <li key={file}>
+              <a href={`/kubeconfig/${nameWithoutExt}`}>{file}</a>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
