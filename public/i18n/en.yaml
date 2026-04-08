@@ -104,6 +104,8 @@ clusters:
   gardener:
     button: Connect a Gardener cluster
     error: 'Connecting clusters failed: {{message}}.'
+  kubeconfig-list:
+    title: Kubeconfig files
   labels:
     client-id: Client ID
     client-secret: Client Secret

@@ -25,7 +25,7 @@ export function KubeconfigList() {
 
   return (
     <DynamicPageComponent
-      title={t('kubeconfig.list.title', 'Kubeconfig Files')}
+      title={t('clusters.kubeconfig-list.title', 'Kubeconfig Files')}
       content={
         <GenericList
           entries={files.map((file) => ({ name: file }))}

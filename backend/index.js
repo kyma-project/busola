@@ -1,4 +1,4 @@
-/* global  require, process */
+/* global  require, process, __dirname */
 import { handleK8sRequests } from './kubernetes/handler';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
