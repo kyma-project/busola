@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from '@ui5/webcomponents-react';
+import { useSetAtom } from 'jotai';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import './KubeconfigList.scss';
+import { clusterAtom } from 'state/clusterAtom';
 
 export function KubeconfigList() {
   const { t } = useTranslation();
+  const setCluster = useSetAtom(clusterAtom);
   const [files, setFiles] = useState<string[]>([]);
 
   useEffect(() => {
@@ -24,25 +27,25 @@ export function KubeconfigList() {
     <DynamicPageComponent
       title={t('kubeconfig.list.title', 'Kubeconfig Files')}
       content={
-        <>
-          <GenericList
-            className="kubeconfig-list"
-            entries={files.map((file) => ({ name: file }))}
-            headerRenderer={() => [t('common.headers.name')]}
-            rowRenderer={(entry) => {
-              const nameWithoutExt = entry.name.replace(/\.(yaml|yml)$/, '');
-              return [
-                <a
-                  key={`${entry.name}-link`}
-                  href={`/kubeconfig/${nameWithoutExt}`}
-                >
-                  {entry.name}
-                </a>,
-              ];
-            }}
-            hasDetailsView
-          />
-        </>
+        <GenericList
+          entries={files.map((file) => ({ name: file }))}
+          headerRenderer={() => [t('common.headers.name')]}
+          rowRenderer={(entry) => {
+            const nameWithoutExt = entry.name.replace(/\.(yaml|yml)$/, '');
+            return [
+              <Link
+                key={`${entry.name}-link`}
+                wrappingType={'Normal'}
+                design={'Emphasized'}
+                onClick={() => setCluster(null)}
+                href={`/kubeconfig/${nameWithoutExt}`}
+              >
+                {entry.name}
+              </Link>,
+            ];
+          }}
+          hasDetailsView
+        />
       }
     />
   );
