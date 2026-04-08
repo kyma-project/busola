@@ -6,7 +6,7 @@ type ContentWrapperProps = {
 
 export const ContentWrapper = ({ children }: ContentWrapperProps) => {
   return (
-    <div id="content-wrap" className="sap-margin-top-tiny">
+    <div id="content-wrap">
       <div className="content-scroll">{children}</div>
     </div>
   );

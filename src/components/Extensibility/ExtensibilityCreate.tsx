@@ -187,19 +187,21 @@ export function ExtensibilityCreateCore({
     additionalId: 'Create',
   } as any);
 
-  const formRules = useMemo(() => {
-    const fullSchemaRules = prepareRules(
-      createResource?.form ?? [],
-      editMode,
-      t,
-    );
+  const fullSchemaRules = useMemo(
+    () => prepareRules(createResource?.form ?? [], editMode, t),
+    [createResource], // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
+  const formRules = useMemo(
+    () => prepareSchemaRules(fullSchemaRules),
+    [fullSchemaRules],
+  );
+
+  useEffect(() => {
     prepareVars(fullSchemaRules);
     readVars(resource);
     setTimeout(() => triggers.trigger('init', [] as any));
-
-    return prepareSchemaRules(fullSchemaRules);
-  }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fullSchemaRules]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNameChange = useCallback(
     (resourceName: string) => {

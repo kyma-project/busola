@@ -16,12 +16,12 @@ import {
   SchemaOnChangeParams,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type StringRendererProps = {
   onChange: (params: SchemaOnChangeParams) => void;
   value: any;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   required?: boolean;
   placeholder?: string;
