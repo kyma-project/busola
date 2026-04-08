@@ -9,6 +9,7 @@ vi.mock('@ui5/webcomponents-react', () => {
     Popover: forwardRef((props, ref) => (
       <div ref={ref}>{props.open ? props.children : null}</div>
     )),
+    Text: (props) => <span>{props.children}</span>,
   };
 });
 
