@@ -53,7 +53,9 @@ export function Badge({
   const jsonata = useJsonata(stableJsonataDeps);
 
   const [tooltip, setTooltip] = useState<string | null>(null);
-  const [tooltipError, setTooltipError] = useState<Error | null>(null);
+  const [tooltipError, setTooltipError] = useState<Error | null | undefined>(
+    null,
+  );
   const [badgeType, setBadgeType] = useState<string | null>(null);
 
   useEffect(() => {
