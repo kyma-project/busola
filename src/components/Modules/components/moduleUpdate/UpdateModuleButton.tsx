@@ -18,7 +18,7 @@ import {
   useNotification,
 } from 'shared/contexts/NotificationContext';
 import { TFunction } from 'i18next';
-import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
+//import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import './UpdateModuleButton.scss';
 
 type UpdateModuleButtonProps = {
@@ -128,7 +128,7 @@ export const UpdateModuleButton = ({
     await fetchResourcesToApply(templateMap, setResourcesToApply, postRequest);
     setPendingUpdate(true);
   };
-  console.log(moduleTpl);
+
   return (
     <>
       <Button onClick={() => setIsDialogOpen(true)}>
