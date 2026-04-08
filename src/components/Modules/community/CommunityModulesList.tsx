@@ -38,6 +38,7 @@ import {
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { UpdateModuleButton } from '../components/moduleUpdate/UpdateModuleButton';
 import { getUpdateTemplate } from './communityModulesHelpers';
+import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -80,6 +81,7 @@ export const CommunityModulesList = ({
   setSelectedEntry,
 }: CommunityModulesListProps) => {
   const { t } = useTranslation();
+  const { preloadedCommunityTemplates } = useContext(ModuleTemplatesContext);
 
   const { data: communityExtentions, silentRefetch: getCommunityExtentions } =
     useGetList(
@@ -253,7 +255,7 @@ export const CommunityModulesList = ({
         component: (entry: any) => {
           const repoTpl = getUpdateTemplate(
             entry.name,
-            moduleTemplates,
+            preloadedCommunityTemplates,
             installedModules,
           );
           const installedModule = installedModules.find(
@@ -409,7 +411,7 @@ export const CommunityModulesList = ({
             hasDetailsLink,
             newestModuleTemplate: getUpdateTemplate(
               resource.name,
-              moduleTemplates,
+              preloadedCommunityTemplates,
               installedModules,
             ),
           })

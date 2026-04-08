@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { FlexBox, Tag, Text } from '@ui5/webcomponents-react';
-import { compare } from 'compare-versions';
 import {
   findModuleStatus,
   findModuleTemplate,
@@ -228,19 +227,6 @@ export const ModulesListRows = ({
     // Version
     <FlexBox key="version" alignItems="Center" wrap="Wrap">
       {moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER}
-      {!kymaResource &&
-        resource?.templateVersion &&
-        resource?.version &&
-        compare(resource?.templateVersion, resource?.version, '>') && (
-          <Tag
-            className="sap-margin-begin-tiny"
-            hideStateIcon
-            colorScheme="6"
-            design="Set2"
-          >
-            {t('kyma-modules.upgrade-available')}
-          </Tag>
-        )}
       {!!newestModuleTemplate && (
         <StatusBadge
           className="sap-margin-begin-tiny"

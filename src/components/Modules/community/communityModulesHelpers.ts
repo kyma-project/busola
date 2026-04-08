@@ -289,17 +289,13 @@ export async function getAllResourcesYamls(
 
 export const getUpdateTemplate = (
   moduleName: string,
-  moduleTemplates: ModuleTemplateListType,
+  repoTemplates: ModuleTemplateType[],
   installedModules: any[],
 ): ModuleTemplateType | undefined => {
-  const repoModules = moduleTemplates.items.filter(
-    (moduleTemplate) => !moduleTemplate.metadata.creationTimestamp,
-  );
-
   const installedModule = installedModules.find((m) => m.name === moduleName);
 
   if (!installedModule) return undefined;
-  return repoModules.find(
+  return repoTemplates.find(
     (repoModule) =>
       getModuleName(repoModule) === moduleName &&
       repoModule.spec.version !== installedModule.version,

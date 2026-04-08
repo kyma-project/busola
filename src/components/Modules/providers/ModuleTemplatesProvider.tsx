@@ -18,6 +18,7 @@ type ModuleTemplatesContextType = {
   moduleReleaseMetasLoading: boolean;
   communityModuleTemplates: { items: ModuleTemplateType[] };
   moduleTemplates: { items: ModuleTemplateType[] };
+  preloadedCommunityTemplates: ModuleTemplateType[];
 };
 
 export const ModuleTemplatesContext = createContext<ModuleTemplatesContextType>(
@@ -27,6 +28,7 @@ export const ModuleTemplatesContext = createContext<ModuleTemplatesContextType>(
     moduleReleaseMetasLoading: false,
     communityModuleTemplates: { items: [] },
     moduleTemplates: { items: [] },
+    preloadedCommunityTemplates: [],
   },
 );
 
@@ -67,9 +69,19 @@ export function ModuleTemplatesContextProvider({
     checkedModuleTemplates = [
       ...(externalCommunityModuleTemplates?.flatMap((res: any) => res.value) ??
         []),
-      ...additionalSourceTemplates,
     ] as any;
   else checkedModuleTemplates = [];
+
+  const preloadedCommunityTemplates: ModuleTemplateType[] = useMemo(
+    () =>
+      [
+        ...(externalCommunityModuleTemplates?.flatMap(
+          (res: any) => res.value,
+        ) ?? []),
+        ...additionalSourceTemplates,
+      ] as any,
+    [externalCommunityModuleTemplates, additionalSourceTemplates],
+  );
 
   const mergedModuleTemplates = useMemo(
     () => ({
@@ -103,6 +115,7 @@ export function ModuleTemplatesContextProvider({
       moduleTemplatesLoading:
         moduleTemplatesLoading || communityModuleTemplatesLoading,
       communityModuleTemplates,
+      preloadedCommunityTemplates,
     }),
     [
       moduleTemplates,
@@ -111,6 +124,7 @@ export function ModuleTemplatesContextProvider({
       moduleTemplatesLoading,
       communityModuleTemplatesLoading,
       communityModuleTemplates,
+      preloadedCommunityTemplates,
     ],
   );
 
