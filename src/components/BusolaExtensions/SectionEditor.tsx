@@ -1,12 +1,10 @@
-import { ReactNode, RefObject, useMemo, useState } from 'react';
-import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
-import {
-  UIStoreProvider,
-  storeUpdater,
-  createStore,
-} from '@ui-schema/ui-schema';
-import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import { ComponentType, RefObject, useMemo, useState } from 'react';
+import { UIMetaProvider } from '@ui-schema/react/UIMeta';
+import { UIStoreProvider, createStore } from '@ui-schema/react/UIStore';
+import { storeUpdater } from '@ui-schema/react/storeUpdater';
+import { WidgetEngine as WidgetEngineBase } from '@ui-schema/react/WidgetEngine';
+const WidgetEngine = WidgetEngineBase as ComponentType<any>;
+import { createOrderedMap } from '@ui-schema/ui-schema/createMap';
 import jsyaml from 'js-yaml';
 import { fromJS } from 'immutable';
 
@@ -14,11 +12,6 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { limitedWidgets } from 'components/Extensibility/components-form';
 import { getResourceObjFromUIStore } from 'components/Extensibility/helpers/immutableConverter';
 import { useTranslation } from 'react-i18next';
-
-function FormContainer({ children }: { children: ReactNode }) {
-  return <>{children}</>;
-}
-const FormStack = injectPluginStack(FormContainer);
 
 type SectionEditorProps = {
   data: string;
@@ -48,7 +41,7 @@ export function SectionEditor({
   };
 
   return (
-    <UIMetaProvider widgets={limitedWidgets as any} t={(key) => t(key)}>
+    <UIMetaProvider binding={limitedWidgets as any} t={(key) => t(key)}>
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <ResourceForm
           resource={resource}
@@ -59,7 +52,7 @@ export function SectionEditor({
           onSubmit={() => onSubmit(jsyaml.dump(resource))}
           setResource={() => {}}
         >
-          <FormStack isRoot schema={schemaMap} resource={resource} />
+          <WidgetEngine isRoot schema={schemaMap} resource={resource} />
         </ResourceForm>
       </UIStoreProvider>
     </UIMetaProvider>

@@ -3,23 +3,22 @@ import {
   useEffect,
   useMemo,
   useContext,
-  ReactNode,
   Dispatch,
   SetStateAction,
+  ComponentType,
 } from 'react';
 import { Wizard, WizardStep } from '@ui5/webcomponents-react';
 import { mapValues } from 'lodash';
 import jsyaml from 'js-yaml';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import {
-  UIMetaProvider,
-  UIStoreActions,
-  UIStoreProvider,
-  createOrderedMap,
-  injectPluginStack,
-  storeUpdater,
-} from '@ui-schema/ui-schema';
+import { UIMetaProvider } from '@ui-schema/react/UIMeta';
+import { UIStoreProvider } from '@ui-schema/react/UIStore';
+import { storeUpdater } from '@ui-schema/react/storeUpdater';
+import { WidgetEngine as WidgetEngineBase } from '@ui-schema/react/WidgetEngine';
+const WidgetEngine = WidgetEngineBase as ComponentType<any>;
+import { createOrderedMap } from '@ui-schema/ui-schema/createMap';
+import { UIStoreActions } from '@ui-schema/react';
 
 import { useGetResourceSchemas } from 'hooks/useGetSchema';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
@@ -54,12 +53,6 @@ const isK8sResource = (resource: Record<string, any>) => {
   if (!resource) return true;
   return resource.apiVersion && resource.kind && resource.metadata;
 };
-
-// TODO common container
-function FormContainer({ children }: { children: ReactNode }) {
-  return <>{children}</>;
-}
-const FormStack = injectPluginStack(FormContainer);
 
 type ExtensibilityWizardCoreProps = {
   resource?: Record<string, any>;
@@ -150,7 +143,10 @@ export function ExtensibilityWizardCore({
     actions: UIStoreActions | UIStoreActions[],
     resource: string,
   ) => {
-    if ((actions as UIStoreActions).scopes.includes('value')) {
+    if (
+      'scopes' in (actions as any) &&
+      (actions as any).scopes.includes('value')
+    ) {
       setStore((prevStore) => {
         const newStore = storeUpdater(actions)(prevStore[resource]);
         return {
@@ -237,7 +233,7 @@ export function ExtensibilityWizardCore({
   let selectedIndex = 0;
 
   return (
-    <UIMetaProvider widgets={widgets as any} t={translator}>
+    <UIMetaProvider binding={widgets as any} t={translator}>
       <Wizard contentLayout="SingleStep" className="extensibility-wizard">
         {resourceSchema?.steps?.map(
           (step: Record<string, any>, idx: number) => {
@@ -256,7 +252,7 @@ export function ExtensibilityWizardCore({
                     rootRule={prepareSchemaRules(step.form)}
                     onChange={(actions) => onChange(actions, step.resource)}
                   >
-                    <FormStack
+                    <WidgetEngine
                       isRoot
                       schema={schemaMaps[step.resource]}
                       resource={resources[step.resource]}
