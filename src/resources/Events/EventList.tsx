@@ -78,6 +78,7 @@ export function EventList({
   const customColumns: CustomColumn[] = [
     {
       header: t('events.headers.type'),
+      width: '60px',
       value: (e) => (
         <div>
           {e.type === 'Warning' ? (

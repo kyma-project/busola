@@ -65,6 +65,7 @@ type GenericListProps = {
   title?: string;
   entries?: FilteredEntriesType[];
   headerRenderer: () => (string | ReactNode)[];
+  columnWidths?: (string | undefined)[];
   rowRenderer: (entry: any, actions?: any) => ReactNode[];
   actions?: Actions;
   extraHeaderContent?: ReactNode;
@@ -116,6 +117,7 @@ export const GenericList = ({
   extraHeaderContent,
   title,
   headerRenderer,
+  columnWidths,
   rowRenderer,
   testid,
   serverDataError,
@@ -482,6 +484,7 @@ export const GenericList = ({
           <HeaderRenderer
             actions={actions}
             headerRenderer={headerRenderer}
+            columnWidths={columnWidths}
             disableHiding={disableHiding}
             noHideFields={noHideFields ?? []}
           />
