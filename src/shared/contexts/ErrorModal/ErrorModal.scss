@@ -8,8 +8,8 @@
   }
 }
 
-.list.contentPartNoPadding::part(content) {
-  padding: 0;
+.contentPartNoPadding::part(content) {
+  padding: 0 !important;
   min-width: 30vw;
 }
 

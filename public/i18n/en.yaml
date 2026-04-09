@@ -280,12 +280,14 @@ common:
     force-update: Force update
     messages:
       create-failure: The {{resourceType}} creation failed.
+      create-failure-header: Creation failed
       create-success: '{{resourceType}} created'
       error-details:
         affected-field: 'Affected Field: {{field}}'
         title: Errors
       force-update: All remote changes are overwritten if you force the resource update.
       patch-failure: The {{resourceType}} update failed.
+      patch-failure-header: Update failed
       patch-success: '{{resourceType}} updated'
     modes:
       form: Form

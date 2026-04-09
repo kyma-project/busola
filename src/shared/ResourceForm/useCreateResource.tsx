@@ -207,7 +207,11 @@ export function useCreateResource({
         };
         return defaultCloseButton(closeWrapper);
       },
-      header: 'Creation Failed',
+      header: t(
+        isEdit
+          ? 'common.create-form.messages.patch-failure-header'
+          : 'common.create-form.messages.create-failure-header',
+      ),
       content: errorContent,
     });
   };
@@ -279,7 +283,6 @@ export function useCreateResource({
           wider: true,
         });
       } else {
-        console.log(e, '_----');
         showError(e);
         return false;
       }

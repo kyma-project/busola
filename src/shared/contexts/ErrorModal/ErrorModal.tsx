@@ -1,6 +1,13 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Bar, Button, Dialog, Icon, Title } from '@ui5/webcomponents-react';
+import {
+  Bar,
+  Button,
+  Dialog,
+  Icon,
+  Text,
+  Title,
+} from '@ui5/webcomponents-react';
 import { useEventListener } from 'hooks/useEventListener';
 
 import './ErrorModal.scss';
@@ -93,7 +100,11 @@ export function ErrorModal({
       }
       open
     >
-      {content}
+      {typeof content !== 'string' ? (
+        content
+      ) : (
+        <Text className={'sap-margin-small'}>{content}</Text>
+      )}
     </Dialog>
   );
 }
