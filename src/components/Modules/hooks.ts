@@ -158,7 +158,16 @@ export const useFetchModuleData = (
       setLoading(false);
       isFetching.current = false;
     },
-    [moduleTemplates, clusterNodes, namespaceNodes, selector, label],
+    [
+      moduleTemplates,
+      clusterNodes,
+      namespaceNodes,
+      allNodes,
+      singleGetFn,
+      fetch,
+      selector,
+      label,
+    ],
   );
 
   useEffect(() => {
@@ -166,6 +175,7 @@ export const useFetchModuleData = (
       return;
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAll(false);
 
     if (pollingInterval && pollingInterval > 0) {
