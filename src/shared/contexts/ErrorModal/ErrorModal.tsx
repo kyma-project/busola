@@ -50,15 +50,20 @@ export function ErrorModal({
   );
 
   const defaultCloseButton = (close: CloseFn): React.ReactNode => (
-    <Button design="Emphasized" onClick={close}>
-      {buttonDismissText}
-    </Button>
+    <Button onClick={close}>{buttonDismissText}</Button>
   );
 
   return (
     <Dialog
       onClose={close}
-      className={classNames('error-modal', { 'error-modal--wider': wider })}
+      className={classNames(
+        'error-modal',
+        'contentPartNoPadding',
+        'popupHeaderNoLeftPadding',
+        {
+          'error-modal--wider': wider,
+        },
+      )}
       header={
         <Bar
           design="Header"
@@ -66,10 +71,10 @@ export function ErrorModal({
             <>
               <Icon
                 design="Negative"
-                name="message-error"
+                name="error"
                 className="sap-margin-end-tiny"
               />
-              <Title level="H5">{header}</Title>
+              <Title>{header}</Title>
             </>
           }
         />
