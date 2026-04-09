@@ -53,20 +53,6 @@ When connecting to a cluster from a local Busola instance (running via `npm star
 
 10. Use the kubeconfig to connect to your cluster in the Busola **Connect cluster** wizard.
 
-### Using the Token with Docker
-
-If you run Busola in Docker, mount the generated kubeconfig as a bind mount and pass its name as a query parameter:
-
-```bash
-export KUBECONFIG=busola-dev.yaml
-docker run --rm -it -p 3001:3001 \
-  -v "${KUBECONFIG}":/app/core-ui/kubeconfig/$(basename "${KUBECONFIG}") \
-  --pid=host --name busola \
-  europe-docker.pkg.dev/kyma-project/prod/busola:latest
-```
-
-Then open `http://localhost:3001?kubeconfigID=busola-dev.yaml` in your browser.
-
 ### Security Countermeasures
 
 When developing new features in Busola, adhere to the following rules. This will help you to mitigate any security-related threats.
