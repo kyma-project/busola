@@ -71,7 +71,7 @@ export const ServiceAccountTokenStatus = ({
           }}
           placement="End"
         >
-          <Text className="description">
+          <Text className="popover-description">
             {accountTokenValues.tooltipContent}
           </Text>
         </Popover>,

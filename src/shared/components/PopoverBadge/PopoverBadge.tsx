@@ -60,7 +60,7 @@ export const PopoverBadge = ({
           }}
           placement="End"
         >
-          <Text className="description">{tooltipContent}</Text>
+          <Text className="popover-description">{tooltipContent}</Text>
         </Popover>,
         document.body,
       )}
