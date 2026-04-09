@@ -332,7 +332,6 @@ export default function KymaModulesEdit({
     notification.notifyError({
       content: t('common.create-form.messages.patch-failure', {
         resourceType: t('kyma-modules.kyma'),
-        error: error?.message,
       }),
     });
   };

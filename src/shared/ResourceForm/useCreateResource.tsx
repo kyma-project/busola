@@ -57,28 +57,40 @@ function createErrorContent(
           )}
         </Text>
 
-        <List headerText={'Errors'}>
+        <List headerText={t('common.create-form.messages.error-details.title')}>
           {causes.map((cause: any) => (
             <ListItemStandard
-              type={'Active'}
-              text={'Affected Field: ' + cause.field}
+              text={t(
+                'common.create-form.messages.error-details.affected-field',
+                { field: cause.field },
+              )}
               description={cause.message}
               wrappingType={'Normal'}
-              // additionalText={cause.reason}
             />
           ))}
         </List>
       </>
     );
   } else {
-    return t(
-      isEdit
-        ? 'common.create-form.messages.patch-failure'
-        : 'common.create-form.messages.create-failure',
-      {
-        resourceType: singularName,
-        error: error.message,
-      },
+    return (
+      <>
+        <Text className="sap-padding">
+          {t(
+            isEdit
+              ? 'common.create-form.messages.patch-failure'
+              : 'common.create-form.messages.create-failure',
+            {
+              resourceType: singularName,
+            },
+          )}
+        </Text>
+        <List headerText={t('common.create-form.messages.error-details.title')}>
+          <ListItemStandard
+            text={error.message}
+            wrappingType={'Normal'}
+          ></ListItemStandard>
+        </List>
+      </>
     );
   }
 }

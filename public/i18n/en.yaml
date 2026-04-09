@@ -279,10 +279,13 @@ common:
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     force-update: Force update
     messages:
-      create-failure: The {{resourceType }} creation failed.
+      create-failure: The {{resourceType}} creation failed.
       create-success: '{{resourceType}} created'
+      error-details:
+        affected-field: 'Affected Field: {{field}}'
+        title: Errors
       force-update: All remote changes are overwritten if you force the resource update.
-      patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
+      patch-failure: The {{resourceType}} update failed.
       patch-success: '{{resourceType}} updated'
     modes:
       form: Form

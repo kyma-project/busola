@@ -21,7 +21,7 @@ export type ErrorModalProps = ToastProps & {
     close: CloseFn,
     defaultCloseButton: (close: CloseFn) => React.ReactNode,
   ) => React.ReactNode[] | React.ReactNode;
-  content: string | React.ReactElement;
+  content: React.ReactNode;
   wider?: boolean;
 };
 
