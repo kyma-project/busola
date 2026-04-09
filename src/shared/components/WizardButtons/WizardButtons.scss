@@ -1,0 +1,7 @@
+.wizard-buttons {
+  ui5-button {
+    &::part(button) {
+      text-transform: capitalize;
+    }
+  }
+}
