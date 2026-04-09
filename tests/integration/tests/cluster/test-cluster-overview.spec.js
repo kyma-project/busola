@@ -52,9 +52,7 @@ context('Test Cluster Overview', () => {
     cy.contains(
       'ui5-card.counting-card.item',
       'HPAs Statistical Injection Example',
-    )
-      .find('ui5-link.counting-card__link')
-      .click();
+    ).click();
 
     cy.get('ui5-dynamic-page-title')
       .find('ui5-title')

@@ -14,16 +14,16 @@ import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
 import { useUrl } from 'hooks/useUrl';
 import { usePermittedUrl } from 'hooks/usePermittedUrl';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
 import { Resource } from '../contexts/DataSources';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type ResourceRefRenderProps = {
   onChange: (params: SchemaOnChangeParams) => void;
   value: any;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   resource: any;
-  widgets: { WidgetRenderer: React.ComponentType<any> };
+  binding?: { WidgetRenderer?: React.ComponentType<any> };
   required: boolean;
   originalResource: Resource;
   nestingLevel: number;
@@ -37,7 +37,7 @@ export function ResourceRefRender({
   schema,
   storeKeys,
   resource,
-  widgets,
+  binding,
   required,
   originalResource,
   nestingLevel,
@@ -66,7 +66,7 @@ export function ResourceRefRender({
 
   const valueRef = useRef<string | Record<string, any> | null>();
 
-  const { WidgetRenderer } = widgets;
+  const WidgetRenderer = binding?.WidgetRenderer;
   const ownSchema = schema.delete('widget');
 
   const schemaResource = schema.get('resource') || {};
@@ -156,12 +156,12 @@ export function ResourceRefRender({
       error={error}
       nestingLevel={nestingLevel}
     >
-      {schema.get('type') === 'object' && (
+      {schema.get('type') === 'object' && WidgetRenderer && (
         <WidgetRenderer
           {...props}
           storeKeys={storeKeys}
           schema={ownSchema}
-          widgets={widgets}
+          binding={binding}
         />
       )}
     </ExternalResourceRef>

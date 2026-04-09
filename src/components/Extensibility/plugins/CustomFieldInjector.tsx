@@ -1,45 +1,30 @@
-import {
-  ComponentPluginType,
-  getNextPlugin,
-} from '@ui-schema/ui-schema/PluginStack';
 import jp from 'jsonpath';
 
 import { useVariables } from '../hooks/useVariables';
-import {
-  StoreKeys,
-  WidgetProps,
-  WidgetsBindingFactory,
-} from '@ui-schema/ui-schema';
+import { WidgetPluginProps } from '@ui-schema/react';
+import { StoreKeys } from '@ui-schema/ui-schema';
 
 type CustomFieldInjectorProps = {
-  currentPluginIndex: number;
   value: any;
   resource: Record<string, any>;
-} & WidgetProps;
+} & WidgetPluginProps;
 
 export function CustomFieldInjector({
   schema,
   storeKeys,
-  currentPluginIndex,
+  Next,
   value,
   resource,
   ...props
 }: CustomFieldInjectorProps) {
   const { vars, setVar } = useVariables();
 
-  const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(
-    nextPluginIndex,
-    props.widgets,
-  ) as ComponentPluginType<Record<string, any>, WidgetsBindingFactory>;
-
   const { path } = schema.get('schemaRule') || {};
 
   if (path || !storeKeys.size) {
     return (
-      <Plugin
+      <Next.Component
         {...props}
-        currentPluginIndex={nextPluginIndex}
         schema={schema}
         storeKeys={storeKeys}
         value={value}
@@ -52,15 +37,14 @@ export function CustomFieldInjector({
 
   if (varName) {
     const varSuffix = storeKeys
-      .filter((item) => typeof item === 'number')
-      .map((item) => `[${item}]`)
+      .filter((item: string | number) => typeof item === 'number')
+      .map((item: string | number) => `[${item}]`)
       .join('');
     const varPath = `$.${varName}${varSuffix}`;
 
     return (
-      <Plugin
+      <Next.Component
         {...props}
-        currentPluginIndex={nextPluginIndex}
         schema={schema}
         value={jp.value(vars, varPath)}
         onChange={(e: Record<string, any>) => setVar(varPath, e.data.value)}
@@ -71,14 +55,18 @@ export function CustomFieldInjector({
     function getValue(storeKeys: StoreKeys, resource: Record<string, any>) {
       let value = resource;
       const keys = storeKeys.toJS();
-      keys.filter((key) => key !== '').forEach((key) => (value = value?.[key]));
+      keys
+        .filter((key: string | number) => key !== '')
+        .forEach(
+          (key: string | number) =>
+            (value = value?.[key as keyof typeof value]),
+        );
       return value;
     }
 
     return (
-      <Plugin
+      <Next.Component
         {...props}
-        currentPluginIndex={nextPluginIndex}
         schema={schema}
         value={getValue(storeKeys, resource)}
         storeKeys={storeKeys}

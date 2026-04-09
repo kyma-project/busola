@@ -7,14 +7,12 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 interface CopyButtonProps {
   contentToCopy: string;
   resourceName?: string;
-  iconOnly?: boolean;
   className?: string;
 }
 
 const CopyButton = ({
   contentToCopy,
   resourceName,
-  iconOnly = true,
   className,
 }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
@@ -43,18 +41,12 @@ const CopyButton = ({
       onClick={() => handleCopy()}
       tooltip={!copied ? t('common.tooltips.copy-to-clipboard') : undefined}
       accessibleName={
-        iconOnly && copied
+        copied
           ? t('common.tooltips.copied-to-clipboard', { resourceName })
           : t('common.tooltips.copy-to-clipboard')
       }
-      aria-live={iconOnly ? 'polite' : undefined}
-    >
-      {!iconOnly
-        ? copied
-          ? t('common.buttons.copied')
-          : t('common.buttons.copy')
-        : null}
-    </Button>
+      aria-live="polite"
+    />
   );
 };
 
