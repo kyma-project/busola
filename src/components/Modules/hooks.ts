@@ -158,8 +158,7 @@ export const useFetchModuleData = (
       setLoading(false);
       isFetching.current = false;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [moduleTemplates, clusterNodes, namespaceNodes],
+    [moduleTemplates, clusterNodes, namespaceNodes, selector, label],
   );
 
   useEffect(() => {
@@ -173,8 +172,7 @@ export const useFetchModuleData = (
       const intervalId = setInterval(() => fetchAll(true), pollingInterval);
       return () => clearInterval(intervalId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moduleTemplates, moduleTemplatesLoading, pollingInterval]);
+  }, [fetchAll, moduleTemplatesLoading, pollingInterval]);
 
   const getItem = useCallback(
     (name: string, namespace: string) => data[`${name}:${namespace}`],

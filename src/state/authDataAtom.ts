@@ -85,7 +85,7 @@ async function handleLogin({
   setAuth,
   onAfterLogin,
   onError,
-}: handleLoginProps): Promise<void> {
+}: handleLoginProps): Promise<() => void> {
   const setupAuthEventsHooks = (
     userManager: UserManager,
     useAccessToken: boolean,
@@ -107,8 +107,8 @@ async function handleLogin({
     userManager: UserManager,
     user: User | null,
     useAccessToken: boolean,
-  ) => {
-    document.addEventListener('visibilitychange', async () => {
+  ): (() => void) => {
+    const handler = async () => {
       if (document.visibilityState === 'visible') {
         if (!!user?.expired || (user?.expires_in && user?.expires_in <= 5)) {
           try {
@@ -123,7 +123,9 @@ async function handleLogin({
           }
         }
       }
-    });
+    };
+    document.addEventListener('visibilitychange', handler);
+    return () => document.removeEventListener('visibilitychange', handler);
   };
 
   const oidcParams = parseOIDCparams(userCredentials);
@@ -139,8 +141,13 @@ async function handleLogin({
         : await userManager.signinRedirectCallback(window.location.href);
     setAuth({ token: getToken(user, useAccessToken) });
     setupAuthEventsHooks(userManager, useAccessToken);
-    setupVisibilityEventsHooks(userManager, user, useAccessToken);
+    const cleanupVisibility = setupVisibilityEventsHooks(
+      userManager,
+      user,
+      useAccessToken,
+    );
     onAfterLogin();
+    return cleanupVisibility;
   } catch (e) {
     // ignore 'No state in response' error - it means we didn't fire login request yet
     if (e instanceof Error)
@@ -166,6 +173,7 @@ export function useAuthHandler() {
   const setLastFetched = useSetAtom(openapiLastFetchedAtom);
   const [isLoading, setIsLoading] = useState(true);
   const prevClusterRef = useRef<typeof cluster>(null);
+  const cleanupVisibilityRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (!cluster) {
@@ -173,6 +181,9 @@ export function useAuthHandler() {
       setIsLoading(false);
     } else {
       if (isEqual(prevClusterRef.current, cluster)) return; // Skip if unchanged
+
+      cleanupVisibilityRef.current?.();
+      cleanupVisibilityRef.current = null;
 
       const userCredentials = cluster.currentContext?.user?.user;
 
@@ -232,6 +243,8 @@ export function useAuthHandler() {
           setAuth,
           onAfterLogin,
           onError,
+        }).then((cleanup) => {
+          if (cleanup) cleanupVisibilityRef.current = cleanup;
         });
       }
     }
@@ -239,6 +252,12 @@ export function useAuthHandler() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster]);
+
+  useEffect(() => {
+    return () => {
+      cleanupVisibilityRef.current?.();
+    };
+  }, []);
 
   return { isLoading };
 }

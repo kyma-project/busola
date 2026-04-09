@@ -78,8 +78,8 @@ export const DataSourcesContextProvider: FC<Props> = ({
   const [store, updateStore] = useObjectState<Store>();
   // safer than useState for concurrency - we don't want to duplicate the requests
   const dataSourcesDict = useRef<DataSourcesDict>({});
-  // refetch intervals
-  const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
+  // refetch intervals per data source
+  const intervals = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const fallbackNamespace = useAtomValue(activeNamespaceIdAtom);
   const stateConditions = useAtomValue(resourcesConditionsAtom);
   const [refetchSource, setRefetchSource] = useState('');
@@ -89,8 +89,10 @@ export const DataSourcesContextProvider: FC<Props> = ({
   };
 
   // clear timeouts on component unmount
-
-  useEffect(() => () => intervals.current.forEach(clearInterval), []);
+  useEffect(
+    () => () => Object.values(intervals.current).forEach(clearInterval),
+    [],
+  );
   useEffect(
     () => () => {
       if (stateConditions && store) {
@@ -229,12 +231,12 @@ export const DataSourcesContextProvider: FC<Props> = ({
       });
 
       const REFETCH_INTERVAL = 6000;
-      intervals.current.forEach(clearInterval);
-      intervals.current.push(
-        setInterval(
-          () => fetchResource(dataSource, dataSourceName, resource),
-          REFETCH_INTERVAL,
-        ),
+      if (intervals.current[dataSourceName]) {
+        clearInterval(intervals.current[dataSourceName]);
+      }
+      intervals.current[dataSourceName] = setInterval(
+        () => fetchResource(dataSource, dataSourceName, resource),
+        REFETCH_INTERVAL,
       );
       if (refetchSource) {
         setRefetchSource('reFetched');

@@ -135,17 +135,9 @@ const useGetHook = (processDataFn) =>
       cleanupPolling();
       // POLLING
       if (!pollingInterval || receivedForbidden || shouldSkip) return;
-      intervalIdRef.current = setInterval(refetch(true, data), pollingInterval);
+      intervalIdRef.current = setInterval(refetch(true, null), pollingInterval);
       return cleanupPolling;
-    }, [
-      path,
-      pollingInterval,
-      data,
-      error,
-      shouldSkip,
-      refetch,
-      cleanupPolling,
-    ]);
+    }, [path, pollingInterval, error, shouldSkip, refetch, cleanupPolling]);
 
     useEffect(() => {
       // INITIAL FETCH on path being set/changed
