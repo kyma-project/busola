@@ -80,7 +80,14 @@ export function EventList({
       header: t('events.headers.type'),
       width: '60px',
       value: (e) => (
-        <div>
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            marginRight: '6px',
+          }}
+        >
           {e.type === 'Warning' ? (
             <Tooltip content={e.type}>
               <ObjectStatus
