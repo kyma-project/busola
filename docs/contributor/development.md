@@ -46,10 +46,10 @@ When connecting to a cluster from a local Busola instance (running via `npm star
 
 8. In the modal that opens, choose the token expiration time (for example, `86400s` for 24 hours) from the dropdown.
 
-> [!NOTE]
-> The token is deactivated automatically after the expiration time. Choose a duration that fits your development session.
+   > [!NOTE]
+   > The token is deactivated automatically after the expiration time. Choose a duration that fits your development session.
 
-9.  Copy or download the generated kubeconfig.
+9. Copy or download the generated kubeconfig.
 
 10. Use the kubeconfig to connect to your cluster in the Busola **Connect cluster** wizard.
 
