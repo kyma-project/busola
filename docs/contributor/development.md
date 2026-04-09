@@ -17,6 +17,56 @@ The apps you started run at the following addresses:
 - `Busola` - [http://localhost:8080](http://localhost:8080)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
+## Generating a Token for Local Busola Instances
+
+When connecting to a cluster from a local Busola instance (running via `npm start` or Docker), you must provide a kubeconfig that contains a valid authentication token. The following steps show how to create a dedicated ServiceAccount and generate a kubeconfig with a token for it — entirely from the Busola UI.
+
+> [!NOTE]
+> You need an existing cluster connection in Busola to complete these steps. Use your current kubeconfig to connect first, then follow the steps below to create a dedicated token for future logins.
+
+1. In your namespace, go to **Configuration** > **Service Accounts**.
+
+2. Select **Create**, fill in the name (for example, `busola-dev`), and choose **Create**.
+
+3. To grant the ServiceAccount access to cluster resources, in **Cluster Overview** go to **Configuration** > **Cluster Role Bindings**.
+
+4. Open the `cluster-admin` role, and choose **Edit**.
+
+   > [!NOTE]
+   > The `cluster-admin` role grants full access to all cluster resources. For local development this is typically convenient, but in shared or sensitive environments consider using a more restrictive ClusterRole.
+
+5. In **Subjects** section, choose **Add Subject**, and in the newly created Subject, provide the following information:
+   - **Kind**: Service Account
+   - **Namespace**: The name of your namespace where you created your Service Account
+   - **Service Account Name**: The name of your Service Account (for example, `busola-dev`)
+
+6. Switch to the **View** tab, and select the newly created Subject.
+
+7. Select **Generate TokenRequest**.
+
+8. In the modal that opens, choose the token expiration time (for example, `86400s` for 24 hours) from the dropdown.
+
+> [!NOTE]
+> The token is deactivated automatically after the expiration time. Choose a duration that fits your development session.
+
+9.  Copy or download the generated kubeconfig.
+
+10. Use the kubeconfig to connect to your cluster in the Busola **Connect cluster** wizard.
+
+### Using the Token with Docker
+
+If you run Busola in Docker, mount the generated kubeconfig as a bind mount and pass its name as a query parameter:
+
+```bash
+export KUBECONFIG=busola-dev.yaml
+docker run --rm -it -p 3001:3001 \
+  -v "${KUBECONFIG}":/app/core-ui/kubeconfig/$(basename "${KUBECONFIG}") \
+  --pid=host --name busola \
+  europe-docker.pkg.dev/kyma-project/prod/busola:latest
+```
+
+Then open `http://localhost:3001?kubeconfigID=busola-dev.yaml` in your browser.
+
 ### Security Countermeasures
 
 When developing new features in Busola, adhere to the following rules. This will help you to mitigate any security-related threats.
