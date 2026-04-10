@@ -28,6 +28,10 @@ export function KubeconfigList() {
       title={t('clusters.kubeconfig-list.title', 'Kubeconfig Files')}
       content={
         <GenericList
+          sortBy={{
+            name: (a: { name: string }, b: { name: string }) =>
+              a.name?.localeCompare(b.name),
+          }}
           entries={files.map((file) => ({ name: file }))}
           headerRenderer={() => [t('common.headers.name')]}
           rowRenderer={(entry) => {
@@ -44,7 +48,6 @@ export function KubeconfigList() {
               </Link>,
             ];
           }}
-          hasDetailsView
         />
       }
     />
