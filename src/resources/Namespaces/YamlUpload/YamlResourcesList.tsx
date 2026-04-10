@@ -27,7 +27,7 @@ import { activeNamespaceIdAtom } from '../../../state/activeNamespaceIdAtom';
 import { SeparatorLine } from './SeparatorLine';
 import { ValidationSwitch } from './ValidationSwitch';
 
-export function YamlResourcesList({ resourcesData }) {
+export function YamlResourcesList({ resourcesData }: { resourcesData: any[] }) {
   const { t } = useTranslation();
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const defaultNamespace = namespaceId || 'default';
@@ -52,7 +52,7 @@ export function YamlResourcesList({ resourcesData }) {
     );
   }, [resources]);
 
-  const getIcon = (status) => {
+  const getIcon = (status: string) => {
     switch (status) {
       case STATE_WAITING:
         return 'pending';
@@ -66,7 +66,7 @@ export function YamlResourcesList({ resourcesData }) {
     }
   };
 
-  const getStatus = (status) => {
+  const getStatus = (status: string) => {
     return t(`upload-yaml.statuses.${status.toLowerCase()}`);
   };
 
@@ -82,7 +82,7 @@ export function YamlResourcesList({ resourcesData }) {
 
   useEffect(() => {
     if (resourcesListRef?.current && percentage === 100) {
-      resourcesListRef.current.focus();
+      (resourcesListRef.current as HTMLElement).focus();
     }
   }, [resourcesListRef, percentage]);
 

@@ -1,10 +1,7 @@
 /* global cy, describe, it */
 import { useTranslation } from 'react-i18next';
 import { Selector } from '../Selector';
-
-const MockedRelatedPods = ({ namespace }) => (
-  <div>Related Pods for {namespace}</div>
-);
+import { MockedRelatedPods } from './MockedRelatedPods';
 
 describe('Selector tests', () => {
   describe('Selector tests for Kubernetes resources', () => {
