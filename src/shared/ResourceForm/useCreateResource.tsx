@@ -60,7 +60,7 @@ function createErrorContent(
         <List headerText={t('common.create-form.messages.error-details.title')}>
           {causes.map((cause: any) => (
             <ListItemStandard
-              id={cause.field}
+              key={cause.field}
               text={t(
                 'common.create-form.messages.error-details.affected-field',
                 { field: cause.field },
