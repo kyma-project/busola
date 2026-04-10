@@ -17,6 +17,7 @@ import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { FormEvent, useMemo } from 'react';
 import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import { TFunction } from 'i18next';
 
 export type SkinCreateFn = () => boolean;
 
@@ -36,7 +37,7 @@ export type useCreateResourcesProps = {
 };
 
 function createErrorContent(
-  t: Function,
+  t: TFunction,
   error: any,
   isEdit: boolean,
   singularName: string,

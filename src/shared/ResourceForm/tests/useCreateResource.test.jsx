@@ -1,18 +1,16 @@
-import { Button } from '@ui5/webcomponents-react';
+import { Button, List, Text } from '@ui5/webcomponents-react';
 import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
 import { useCreateResource } from '../useCreateResource';
 
 import { createPatch } from 'rfc6902';
 import { ignoreConsoleErrors } from 'setupTests';
-
-vi.mock('@ui5/webcomponents-react', () => {
-  return {
-    Button: (props) => <button {...props}>{props.children}</button>,
-  };
-});
+import React from 'react';
 
 const mockNotifySuccess = vi.fn();
 const mockNotifyError = vi.fn();
+
+const errorMessage = 'very specific error message';
+
 vi.mock('shared/contexts/NotificationContext', () => ({
   useNotification: () => ({
     notifySuccess: mockNotifySuccess,
@@ -112,19 +110,36 @@ describe('useCreateResource', () => {
     rerender(<Testbed {...props} />);
 
     mockFetch.mockImplementationOnce(() => {
-      throw Error('very specific error message');
+      throw Error(errorMessage);
     });
 
-    ignoreConsoleErrors(['very specific error message']);
+    ignoreConsoleErrors([errorMessage]);
 
     fireEvent.click(getByText('Act'));
 
     await waitFor(() => {
       expect(mockNotifySuccess).not.toHaveBeenCalled();
-      expect(mockNotifyError).toHaveBeenCalledWith({
-        actions: expect.any(Function),
-        content: 'common.create-form.messages.create-failure',
-      });
+      expect(mockNotifyError).toHaveBeenCalled();
+      assertNotifyErrorContent(mockNotifyError.mock.calls[0][0]);
     });
   });
 });
+
+function assertNotifyErrorContent(callArgs) {
+  expect(callArgs.content.type).toBe(React.Fragment);
+
+  const fragmentChildren = callArgs.content.props.children;
+  expect(fragmentChildren).toHaveLength(2);
+
+  const textComponent = fragmentChildren[0];
+  expect(textComponent.type).toBe(Text);
+  expect(textComponent.props.children).toBe(
+    'common.create-form.messages.create-failure',
+  );
+
+  const listComponent = fragmentChildren[1];
+  expect(listComponent.type).toBe(List);
+
+  const listItemStandard = listComponent.props.children;
+  expect(listItemStandard.props.text).toBe(errorMessage);
+}
