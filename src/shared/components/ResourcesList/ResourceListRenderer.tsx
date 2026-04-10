@@ -312,6 +312,8 @@ export function ResourceListRenderer({
     return customColumns?.map((col) => col?.header || null);
   };
 
+  const columnWidths = customColumns?.map((col) => col?.width);
+
   const rowRenderer = (entry: any) => {
     const rowColumns = customColumns?.map((col, index) => {
       if (col?.value && index === nameColIndex) {
@@ -440,6 +442,7 @@ export function ResourceListRenderer({
           actions={actions}
           entries={(resources || []) as any[]}
           headerRenderer={headerRenderer}
+          columnWidths={columnWidths}
           rowRenderer={rowRenderer}
           serverDataError={error}
           serverDataLoading={loading}
