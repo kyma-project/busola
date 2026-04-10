@@ -125,29 +125,6 @@ KYMA_COMPANION:
       defaultKubeconfig: AAAAA-BBBBB
   ```
 
-- **KUBECONFIG FILE LIST** – Busola can serve a list of kubeconfig files placed in a dedicated directory and let users connect to a cluster by clicking a link.
-
-  **How it works:**
-  1. Place one or more `.yaml` or `.yml` kubeconfig files in the `public/kubeconfig/` directory (or `/core-ui/kubeconfig/` when running inside Docker).
-  2. The backend exposes `GET /backend/kubeconfig`, which reads that directory and returns a JSON array of the matching filenames.
-  3. The `/kubeconfig` route in Busola renders a **Kubeconfig Files** page listing all available files.
-  4. Clicking a filename navigates to `/kubeconfig/<name>` (extension stripped), which immediately redirects to `/?kubeconfigID=<name>.yaml`, triggering the standard `KUBECONFIG_ID` flow to load that cluster.
-  5. Clicking a link also resets the currently active cluster so the new kubeconfig is loaded cleanly.
-
-  **File placement:**
-
-  | Mode              | Directory                        |
-  | ----------------- | -------------------------------- |
-  | Local development | `<repo-root>/public/kubeconfig/` |
-  | Docker            | `/core-ui/kubeconfig/`           |
-
-  **Routes:**
-
-  | Path                | Component            | Description                               |
-  | ------------------- | -------------------- | ----------------------------------------- |
-  | `/kubeconfig`       | `KubeconfigList`     | Lists all available kubeconfig files      |
-  | `/kubeconfig/:name` | `KubeconfigRedirect` | Redirects to `/?kubeconfigID=<name>.yaml` |
-
 - **LEGAL_LINKS** – is used to show or hide legal links. You can find all the available links in the following example.
   In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include both the default link, which takes you to the default address, and a link that depends on your chosen language.
 
