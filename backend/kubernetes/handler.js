@@ -6,6 +6,7 @@ import { tokenAuthAgent } from '../utils/https-agent.js';
 import { buildK8sRequestPath } from './path-utils.js';
 
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const escape = require('lodash.escape');
 
@@ -61,16 +62,17 @@ export async function handleK8sRequests(req, res) {
   const useAgent = authorization && !cert && !key;
   const agent = useAgent ? tokenAuthAgent : undefined;
 
+  const isHttps = targetApiServer.protocol === 'https:';
+  const defaultPort = isHttps ? 443 : 80;
+  const requestModule = isHttps ? https : http;
+
   const options = {
     hostname: targetApiServer.hostname,
     path: buildK8sRequestPath(targetApiServer, req.originalUrl),
     headers,
     method: req.method,
-    port: targetApiServer.port || 443,
-    ca,
-    cert,
-    key,
-    agent,
+    port: targetApiServer.port || defaultPort,
+    ...(isHttps && { ca, cert, key, agent }),
   };
   workaroundForNodeMetrics(req);
 
@@ -89,40 +91,43 @@ export async function handleK8sRequests(req, res) {
 
   try {
     await new Promise((resolve, reject) => {
-      const k8sRequest = https.request(options, async function (k8sResponse) {
-        if (
-          k8sResponse.headers &&
-          (k8sResponse.headers['Content-Type']?.includes('\\') ||
-            k8sResponse.headers['content-encoding']?.includes('\\'))
-        ) {
-          reject(new Error('Response headers are potentially dangerous'));
-          return;
-        }
+      const k8sRequest = requestModule.request(
+        options,
+        async function (k8sResponse) {
+          if (
+            k8sResponse.headers &&
+            (k8sResponse.headers['Content-Type']?.includes('\\') ||
+              k8sResponse.headers['content-encoding']?.includes('\\'))
+          ) {
+            reject(new Error('Response headers are potentially dangerous'));
+            return;
+          }
 
-        // change all 503 into 502
-        const statusCode =
-          k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
+          // change all 503 into 502
+          const statusCode =
+            k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
 
-        // Ensure charset is specified in content type
-        let contentType = k8sResponse.headers['Content-Type'] || 'text/json';
-        if (!contentType.includes('charset=')) {
-          contentType += '; charset=utf-8';
-        }
+          // Ensure charset is specified in content type
+          let contentType = k8sResponse.headers['Content-Type'] || 'text/json';
+          if (!contentType.includes('charset=')) {
+            contentType += '; charset=utf-8';
+          }
 
-        res.writeHead(statusCode, {
-          'Content-Type': contentType,
-          'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
-          'X-Content-Type-Options': 'nosniff',
-        });
+          res.writeHead(statusCode, {
+            'Content-Type': contentType,
+            'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
+            'X-Content-Type-Options': 'nosniff',
+          });
 
-        try {
-          await pipeline(k8sResponse, res);
-          resolve();
-        } catch (err) {
-          req.log.warn('K8s response pipeline error:', err);
-          reject(err);
-        }
-      });
+          try {
+            await pipeline(k8sResponse, res);
+            resolve();
+          } catch (err) {
+            req.log.warn('K8s response pipeline error:', err);
+            reject(err);
+          }
+        },
+      );
 
       k8sRequest.on('error', (err) => {
         reject(err);
