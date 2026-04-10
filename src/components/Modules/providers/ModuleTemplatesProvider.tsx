@@ -35,10 +35,7 @@ export function ModuleTemplatesContextProvider({
   children: ReactNode;
 }) {
   const { data: allModuleTemplates, loading: moduleTemplatesLoading } =
-    useModuleTemplatesQuery({}) as {
-      data: { items: ModuleTemplateType[] } | null;
-      loading: boolean;
-    };
+    useModuleTemplatesQuery({});
 
   const {
     data: externalCommunityModuleTemplates,
@@ -67,10 +64,7 @@ export function ModuleTemplatesContextProvider({
   );
 
   const { data: moduleReleaseMetas, loading: moduleReleaseMetasLoading } =
-    useModulesReleaseQuery({}) as {
-      data: { items: ModuleReleaseMetas[] } | null;
-      loading: boolean;
-    };
+    useModulesReleaseQuery({});
 
   const {
     communityTemplates: communityModuleTemplates,

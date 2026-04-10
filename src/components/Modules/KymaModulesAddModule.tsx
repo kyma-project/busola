@@ -9,11 +9,7 @@ import { useModulesReleaseQuery } from './kymaModulesQueries';
 import { KymaModuleContext } from './providers/KymaModuleProvider';
 
 import './KymaModulesAddModule.scss';
-import {
-  findModuleStatus,
-  KymaResourceStatusModuleType,
-  ModuleReleaseMetas,
-} from './support';
+import { findModuleStatus, KymaResourceStatusModuleType } from './support';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
 import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 
@@ -81,7 +77,7 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
 
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
     skip: !resourceName,
-  }) as { data: { items: ModuleReleaseMetas[] } | null };
+  });
 
   const [columnsCount, setColumnsCount] = useState(2);
   const [cardsContainerRef, setCardsContainerRef] =
