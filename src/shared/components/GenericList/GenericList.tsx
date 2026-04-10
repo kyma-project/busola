@@ -18,7 +18,10 @@ import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import ListActions from 'shared/components/ListActions/ListActions';
 import { Sort, SortModalPanel } from './SortModalPanel';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
-import { pageSizeAtom } from 'state/settings/pageSizeAtom';
+import {
+  AVAILABLE_PAGE_SIZES,
+  pageSizeAtom,
+} from 'state/settings/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
@@ -510,7 +513,7 @@ export const GenericList = ({
       </Table>
       {pagination &&
         (!pagination.autoHide ||
-          filteredEntries.length > (pagination?.itemsPerPage ?? 0)) && (
+          filteredEntries.length > AVAILABLE_PAGE_SIZES[0]) && (
           <Pagination
             itemsTotal={filteredEntries.length}
             currentPage={currentPage}
