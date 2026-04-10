@@ -62,7 +62,7 @@ See the following example:
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="50%">
 
-This is an exaple with link in the description:
+The following is an example with a link in the description:
 
 ```yaml
 - source: status.value
@@ -73,7 +73,7 @@ This is an exaple with link in the description:
       - Running
       - ok
     critical: $item < 0
-  description: For more information about the status go {{[here](https://help.sap.com)}}
+  description: For more information about the status, see {{[here](https://help.sap.com)}}
 ```
 
 <br/><br/>
