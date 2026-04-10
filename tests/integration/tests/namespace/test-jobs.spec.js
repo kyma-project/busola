@@ -155,7 +155,7 @@ context('Test Jobs', () => {
     cy.contains('After a Job is created, the containers are read-only.');
 
     cy.get('.edit-form')
-      .get('ui5-button[icon="add"][disabled]')
+      .get('ui5-button[disabled]')
       .contains('Add Container')
       .should('be.visible');
 
