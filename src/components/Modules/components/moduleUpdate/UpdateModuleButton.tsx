@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Button, Label, MessageBox, Text } from '@ui5/webcomponents-react';
+import {
+  Button,
+  CheckBox,
+  Label,
+  MessageBox,
+  Text,
+} from '@ui5/webcomponents-react';
 import {
   DEFAULT_K8S_NAMESPACE,
   ModuleTemplateType,
 } from 'components/Modules/support';
 import { useAtomValue } from 'jotai';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { fetchResourcesToApply } from '../../community/communityModulesHelpers';
@@ -26,6 +32,7 @@ type UpdateModuleButtonProps = {
   currentVersion: string;
   newVersion: string;
   moduleTpl: ModuleTemplateType;
+  oldModuleTemplates?: ModuleTemplateType[];
 };
 
 async function applyModuleTemplateResource(
@@ -70,13 +77,16 @@ export const UpdateModuleButton = ({
   currentVersion,
   newVersion,
   moduleTpl,
+  oldModuleTemplates = [],
 }: UpdateModuleButtonProps) => {
   const { t } = useTranslation();
   const postRequest = usePost();
   const patchRequest = useUpdate();
+  const deleteRequest = useDelete();
   const singleGet = useSingleGet();
   const notification = useNotification();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deleteOldTemplate, setDeleteOldTemplate] = useState(true);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
@@ -123,6 +133,23 @@ export const UpdateModuleButton = ({
       content: t('modules.community.messages.module-update-started'),
     });
 
+    if (deleteOldTemplate && oldModuleTemplates.length > 0) {
+      await Promise.all(
+        oldModuleTemplates.map(async ({ metadata: { name, namespace } }) => {
+          const url = `/apis/operator.kyma-project.io/v1beta2/namespaces/${namespace}/moduletemplates/${name}`;
+          try {
+            await deleteRequest(url);
+          } catch (e) {
+            notification.notifyError({
+              content: t('modules.community.messages.delete-template-failure', {
+                error: e instanceof Error ? e.message : '',
+              }),
+            });
+          }
+        }),
+      );
+    }
+
     const templateMap = new Map<string, ModuleTemplateType>();
     templateMap.set(moduleName, moduleTpl);
     await fetchResourcesToApply(templateMap, setResourcesToApply, postRequest);
@@ -131,7 +158,12 @@ export const UpdateModuleButton = ({
 
   return (
     <>
-      <Button onClick={() => setIsDialogOpen(true)}>
+      <Button
+        onClick={() => {
+          setDeleteOldTemplate(true);
+          setIsDialogOpen(true);
+        }}
+      >
         {t('kyma-modules.update')}
       </Button>
       {isDialogOpen && (
@@ -176,6 +208,16 @@ export const UpdateModuleButton = ({
               />
             )} */}
           </div>
+          {oldModuleTemplates.length > 0 && (
+            <CheckBox
+              data-testid="delete-old-template"
+              className="sap-margin-top-small"
+              checked={deleteOldTemplate}
+              onChange={(e) => setDeleteOldTemplate(e.target.checked)}
+              text={t('modules.community.update.delete-old-template')}
+              accessibleName={t('modules.community.update.delete-old-template')}
+            />
+          )}
         </MessageBox>
       )}
     </>
