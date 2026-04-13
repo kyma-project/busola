@@ -19,7 +19,7 @@ The apps you started run at the following addresses:
 
 ## Generating a Token for Busola Instances
 
-For instructions on how to generate an authentication token for a Busola instance, see [Generating a Token for Kyma Dashboard Instances](../user/01-43-generate-token.md).
+For instructions on how to generate an authentication token for a Busola instance, see [Generating a Token for Busola Instances](../user/01-43-generate-token.md).
 
 ### Security Countermeasures
 
