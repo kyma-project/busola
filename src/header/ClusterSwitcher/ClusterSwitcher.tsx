@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   Button,
+  ButtonDomRef,
   List,
   ListItemStandard,
   Popover,
@@ -27,6 +28,8 @@ export function ClusterSwitcher() {
   const setShowCompanion = useSetAtom(showKymaCompanionAtom);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [popoverMinWidth, setPopoverMinWidth] = useState<string | undefined>();
+  const buttonRef = useRef<ButtonDomRef>(null);
 
   const isOnClustersPage = location.pathname === '/clusters';
 
@@ -63,10 +66,16 @@ export function ClusterSwitcher() {
   return (
     <div slot="content">
       <Button
+        ref={buttonRef}
         id="clusterSwitcherOpener"
         design="Transparent"
         endIcon="navigation-down-arrow"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          if (buttonRef.current) {
+            setPopoverMinWidth(`${buttonRef.current.offsetWidth}px`);
+          }
+          setIsOpen(true);
+        }}
       >
         {title}
       </Button>
@@ -77,6 +86,9 @@ export function ClusterSwitcher() {
           open={isOpen}
           onClose={() => setIsOpen(false)}
           placement="Bottom"
+          style={{
+            minWidth: popoverMinWidth,
+          }}
         >
           <List
             onItemClick={(e) => {
