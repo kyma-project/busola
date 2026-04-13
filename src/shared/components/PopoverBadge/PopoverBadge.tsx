@@ -1,6 +1,6 @@
 import React, { ReactNode, useRef, useState } from 'react';
 
-import { ObjectStatus, Popover } from '@ui5/webcomponents-react';
+import { ObjectStatus, Popover, Text } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 
 import './PopoverBadge.scss';
@@ -60,7 +60,7 @@ export const PopoverBadge = ({
           }}
           placement="End"
         >
-          {tooltipContent}
+          <Text className="popover-description">{tooltipContent}</Text>
         </Popover>,
         document.body,
       )}
