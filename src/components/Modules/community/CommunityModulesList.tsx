@@ -36,6 +36,9 @@ import {
   moduleInstallationState,
 } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
+import { UpdateModuleButton } from '../components/moduleUpdate/UpdateModuleButton';
+import { getUpdateTemplate } from './communityModulesHelpers';
+import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -78,6 +81,7 @@ export const CommunityModulesList = ({
   setSelectedEntry,
 }: CommunityModulesListProps) => {
   const { t } = useTranslation();
+  const { preloadedCommunityTemplates } = useContext(ModuleTemplatesContext);
 
   const { data: communityExtentions, silentRefetch: getCommunityExtentions } =
     useGetList(
@@ -246,6 +250,29 @@ export const CommunityModulesList = ({
   };
 
   const actions = [
+    ...[
+      {
+        component: (entry: any) => {
+          const repoTpl = getUpdateTemplate(
+            entry.name,
+            preloadedCommunityTemplates,
+            installedModules,
+          );
+          const installedModule = installedModules.find(
+            (m) => m.name === entry.name,
+          );
+          if (!repoTpl || !installedModule) return null;
+          return (
+            <UpdateModuleButton
+              moduleName={entry.name}
+              currentVersion={installedModule.version}
+              newVersion={repoTpl.spec.version}
+              moduleTpl={repoTpl}
+            />
+          );
+        },
+      },
+    ],
     {
       name: t('common.buttons.delete'),
       tooltip: () => t('common.buttons.delete'),
@@ -382,6 +409,11 @@ export const CommunityModulesList = ({
             resource,
             moduleTemplates,
             hasDetailsLink,
+            newestModuleTemplate: getUpdateTemplate(
+              resource.name,
+              preloadedCommunityTemplates,
+              installedModules,
+            ),
           })
         }
         disableHiding={false}

@@ -1,15 +1,19 @@
 import { FileInput } from 'shared/components/FileInput/FileInput';
 
-export function YamlFileUploader({ onYamlContentAdded }) {
-  const readFile = (file) => {
-    return new Promise((resolve) => {
+export function YamlFileUploader({
+  onYamlContentAdded,
+}: {
+  onYamlContentAdded: (content: string) => void;
+}) {
+  const readFile = (file: File) => {
+    return new Promise<string>((resolve) => {
       const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target.result);
+      reader.onload = (e) => resolve(e?.target?.result as string);
       reader.readAsText(file);
     });
   };
 
-  const onYamlContentUploaded = (files) => {
+  const onYamlContentUploaded = (files: FileList) => {
     void Promise.all([...files]?.map(readFile))
       .then((contents) => {
         onYamlContentAdded(contents.join('\n---\n'));

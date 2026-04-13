@@ -37,8 +37,8 @@ describe('CountingCard', () => {
     cy.contains('ExtraInfo2').should('exist');
     cy.contains('222').should('exist');
     cy.get('ui5-card.counting-card.test123')
-      .find('ui5-link.counting-card__link')
-      .should('exist');
+      .should('have.attr', 'role', 'button')
+      .and('have.attr', 'tabindex', '0');
     cy.get('ui5-card.counting-card.test123')
       .find('ui5-button')
       .should('have.text', 'Nice Button');
@@ -65,7 +65,7 @@ describe('CountingCard', () => {
     );
 
     cy.get('ui5-card.counting-card.test123')
-      .find('ui5-link.counting-card__link')
-      .should('not.exist');
+      .should('not.have.attr', 'role', 'button')
+      .and('not.have.attr', 'tabindex', '0');
   });
 });

@@ -83,7 +83,6 @@ export function GenericList({
       actions={(setOpen) => (
         <Button
           design="Transparent"
-          icon="add"
           onClick={() => {
             addItem(itemTemplate);
             setOpen(true);

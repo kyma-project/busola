@@ -118,7 +118,7 @@ export const ProtectedResourceWarning = ({
           open={protectedWarningOpen}
           onClose={() => setProtectedWarningOpen(false)}
         >
-          <Text className="description">{popoverMessage}</Text>
+          <Text className="popover-description">{popoverMessage}</Text>
         </Popover>,
         document.body,
       )}

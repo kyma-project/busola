@@ -38,5 +38,28 @@ context(
 
       cy.contains('Memory Usage').scrollIntoView().should('be.visible');
     });
+
+    it('Check CountingCard navigation', () => {
+      cy.contains('ui5-card.counting-card.item', 'Pods Overview')
+        .scrollIntoView()
+        .click();
+
+      cy.get('ui5-dynamic-page-title')
+        .find('ui5-title')
+        .contains('Pods')
+        .should('be.visible');
+
+      // Navigate back using Cypress history to test subsequent cards
+      cy.go('back');
+
+      cy.contains('ui5-card.counting-card.item', 'Deployments Overview')
+        .scrollIntoView()
+        .click();
+
+      cy.get('ui5-dynamic-page-title')
+        .find('ui5-title')
+        .contains('Deployments')
+        .should('be.visible');
+    });
   },
 );

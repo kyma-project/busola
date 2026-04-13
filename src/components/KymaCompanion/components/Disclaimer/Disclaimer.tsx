@@ -36,11 +36,7 @@ export default function Disclaimer({ hideDisclaimer }: DisclaimerProps) {
             ]}
           />
         </Text>
-        <Button
-          className="sap-margin-top-small"
-          onClick={hideDisclaimer}
-          icon="discussion"
-        >
+        <Button className="sap-margin-top-small" onClick={hideDisclaimer}>
           {t('kyma-companion.disclaimer.back-conversation')}
         </Button>
       </FlexBox>

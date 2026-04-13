@@ -81,12 +81,7 @@ export function KeyValueField({
   if (encodable) {
     actions = [
       ...actions,
-      <Button
-        key="button-encode"
-        design="Transparent"
-        icon={valuesEncoded ? 'show' : 'hide'}
-        onClick={toggleEncoding}
-      >
+      <Button key="button-encode" design="Transparent" onClick={toggleEncoding}>
         {valuesEncoded
           ? t('secrets.buttons.decode')
           : t('secrets.buttons.encode')}

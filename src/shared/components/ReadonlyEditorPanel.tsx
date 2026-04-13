@@ -51,7 +51,6 @@ export function ReadonlyEditorPanel({
         {isBase64 && (
           <Button
             design="Transparent"
-            icon={isEncoded ? 'show' : 'hide'}
             disabled={!value}
             onClick={() => {
               return isEncoded ? encode() : decode();

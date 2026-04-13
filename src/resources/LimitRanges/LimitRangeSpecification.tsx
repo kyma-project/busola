@@ -61,21 +61,23 @@ export default function LimitRangeSpecification({
         }
       });
 
-      const props = Array.from(resourceTypes).map((resourceType: any) => {
-        const entry: any = {
-          resource: resourceType,
-        };
+      const transformedProps = Array.from(resourceTypes).map(
+        (resourceType: any) => {
+          const entry: any = {
+            resource: resourceType,
+          };
 
-        keys.forEach((key) => {
-          if (limit[key] && limit[key][resourceType] !== undefined) {
-            entry[key] = limit[key][resourceType];
-          }
-        });
+          keys.forEach((key) => {
+            if (limit[key] && limit[key][resourceType] !== undefined) {
+              entry[key] = limit[key][resourceType];
+            }
+          });
 
-        return entry;
-      });
+          return entry;
+        },
+      );
 
-      return props.map((prop) => {
+      return transformedProps.map((prop) => {
         return { type: limit.type, ...prop };
       });
     });
@@ -99,7 +101,7 @@ export default function LimitRangeSpecification({
         keys.flatMap((key) => (limit[key] ? Object.keys(limit[key]) : [])),
       );
 
-      const props = Array.from(resourceTypes).map((resourceType) => {
+      const transLimitsProps = Array.from(resourceTypes).map((resourceType) => {
         const entry: any = { resource: resourceType };
 
         keys.forEach((key) => {
@@ -113,7 +115,8 @@ export default function LimitRangeSpecification({
 
       return {
         type: limit.type,
-        props: props.length > 0 ? props : emptyLimit[0].props,
+        props:
+          transLimitsProps.length > 0 ? transLimitsProps : emptyLimit[0].props,
       };
     });
   }, [resource]);
@@ -169,7 +172,7 @@ export default function LimitRangeSpecification({
           <GenericList
             key={`${limit.type}-${index}`}
             title={limit.type || ''}
-            entries={limit.props || []}
+            entries={(limit.props || []) as any[]}
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
             searchSettings={{

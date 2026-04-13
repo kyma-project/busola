@@ -65,6 +65,20 @@ describe('Pagination', () => {
     cy.get('@onChangePage').should('have.been.calledWith', 4);
   });
 
+  it('Does not render ellipsis placeholders when there is only one page', () => {
+    cy.mount(
+      <Pagination
+        itemsTotal={25}
+        itemsPerPage={Number.MAX_SAFE_INTEGER}
+        currentPage={1}
+        onChangePage={cy.stub().as('onChangePage')}
+        setLocalPageSize={cy.stub().as('setLocalPageSize')}
+      />,
+    );
+
+    cy.get('ui5-button:contains("...")').should('have.length', 0);
+  });
+
   it('Disables correct links', () => {
     cy.mount(
       <Pagination
