@@ -17,7 +17,7 @@ The apps you started run at the following addresses:
 - `Busola` - [http://localhost:8080](http://localhost:8080)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
-## Generating a Token for Local Busola Instances
+## Generating a Token for Busola Instances
 
 When connecting to a cluster from a local Busola instance (running via `npm start` or Docker), you must provide a kubeconfig that contains a valid authentication token. The following steps show how to create a dedicated ServiceAccount and generate a kubeconfig with a token for it — entirely from the Busola UI.
 
