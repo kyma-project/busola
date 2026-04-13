@@ -1,6 +1,6 @@
-# Generating a Token for Busola Instances
+# Generating a Token for Kyma Dashboard Instances
 
-When connecting to a cluster from a Busola instance (running via `npm start` or Docker), you must provide a kubeconfig that contains a valid authentication token. The following steps show how to create a dedicated ServiceAccount and generate a kubeconfig with a token for it — entirely from the Kyma dashboaard.
+When connecting to a cluster from a Kyma dashboard instance (running via `npm start` or Docker), you must provide a kubeconfig that contains a valid authentication token. The following steps show how to create a dedicated ServiceAccount and generate a kubeconfig with a token for it — entirely from the Kyma dashboaard.
 
 > [!NOTE]
 > You need an existing cluster connection in Busola to complete these steps. Use your current kubeconfig to connect first, then follow the steps below to create a dedicated token for future logins.
@@ -32,4 +32,4 @@ When connecting to a cluster from a Busola instance (running via `npm start` or 
 
 9. Copy or download the generated kubeconfig.
 
-10. Use the kubeconfig to connect to your cluster in the Busola **Connect cluster** wizard.
+10. Use the kubeconfig to connect to your cluster in the Kyma dashboard **Connect cluster** wizard.
