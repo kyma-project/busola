@@ -10,6 +10,7 @@ import {
   ModuleTemplateType,
   splitModuleTemplates,
 } from '../support';
+import { useGetAllSourceYAMLModuleTemplates } from '../hooks';
 
 type ModuleTemplatesContextType = {
   moduleTemplatesLoading: boolean;
@@ -17,6 +18,7 @@ type ModuleTemplatesContextType = {
   moduleReleaseMetasLoading: boolean;
   communityModuleTemplates: { items: ModuleTemplateType[] };
   moduleTemplates: { items: ModuleTemplateType[] };
+  preloadedCommunityTemplates: ModuleTemplateType[];
 };
 
 export const ModuleTemplatesContext = createContext<ModuleTemplatesContextType>(
@@ -26,6 +28,7 @@ export const ModuleTemplatesContext = createContext<ModuleTemplatesContextType>(
     moduleReleaseMetasLoading: false,
     communityModuleTemplates: { items: [] },
     moduleTemplates: { items: [] },
+    preloadedCommunityTemplates: [],
   },
 );
 
@@ -45,13 +48,37 @@ export function ModuleTemplatesContextProvider({
     loading: boolean;
   };
 
+  const installedSourceURLs = useMemo(() => {
+    const defaultURL =
+      'https://kyma-project.github.io/community-modules/all-modules.yaml';
+    const sources = (allModuleTemplates?.items || [])
+      .map((item) => item?.metadata?.annotations?.source)
+      .filter((url) => url && url !== defaultURL);
+    return [...new Set(sources)];
+  }, [allModuleTemplates?.items]);
+
+  const { resources: additionalSourceTemplates } =
+    useGetAllSourceYAMLModuleTemplates(installedSourceURLs);
+
   let checkedModuleTemplates: ModuleTemplateType[];
 
   if (!moduleTemplatesLoading && !communityModuleTemplatesLoading)
-    checkedModuleTemplates = externalCommunityModuleTemplates?.flatMap(
-      (res: any) => res.value,
-    ) as any;
+    checkedModuleTemplates = [
+      ...(externalCommunityModuleTemplates?.flatMap((res: any) => res.value) ??
+        []),
+    ] as any;
   else checkedModuleTemplates = [];
+
+  const preloadedCommunityTemplates: ModuleTemplateType[] = useMemo(
+    () =>
+      [
+        ...(externalCommunityModuleTemplates?.flatMap(
+          (res: any) => res.value,
+        ) ?? []),
+        ...additionalSourceTemplates,
+      ] as any,
+    [externalCommunityModuleTemplates, additionalSourceTemplates],
+  );
 
   const mergedModuleTemplates = useMemo(
     () => ({
@@ -82,6 +109,7 @@ export function ModuleTemplatesContextProvider({
       moduleTemplatesLoading:
         moduleTemplatesLoading || communityModuleTemplatesLoading,
       communityModuleTemplates,
+      preloadedCommunityTemplates,
     }),
     [
       moduleTemplates,
@@ -90,6 +118,7 @@ export function ModuleTemplatesContextProvider({
       moduleTemplatesLoading,
       communityModuleTemplatesLoading,
       communityModuleTemplates,
+      preloadedCommunityTemplates,
     ],
   );
 

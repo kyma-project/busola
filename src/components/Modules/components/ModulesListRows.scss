@@ -1,0 +1,12 @@
+.status-update-button {
+  margin-bottom: -0.5rem;
+  &::before {
+    content: '';
+    position: relative;
+    left: 1rem;
+    width: calc(100% + 2rem);
+    height: 1px;
+    margin-bottom: 0.5rem;
+    background-color: var(--sapPageFooter_BorderColor);
+  }
+}
