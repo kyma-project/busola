@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Navigate,
@@ -206,7 +206,14 @@ export default function App() {
                     />
                   )}
                 <Route path="clusters" element={<ClusterList />} />
-                <Route path="kubeconfig" element={<KubeconfigList />} />
+                <Route
+                  path="kubeconfig"
+                  element={
+                    <Suspense fallback={<Spinner />}>
+                      <KubeconfigList />
+                    </Suspense>
+                  }
+                />
                 <Route
                   path="kubeconfig/:name"
                   element={<KubeconfigRedirect />}

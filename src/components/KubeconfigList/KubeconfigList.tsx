@@ -41,7 +41,13 @@ export function KubeconfigList() {
                 key={`${entry.name}-link`}
                 wrappingType={'Normal'}
                 design={'Emphasized'}
-                onClick={() => setCluster(null)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCluster(null);
+                  setTimeout(() => {
+                    window.location.href = `/kubeconfig/${nameWithoutExt}`;
+                  }, 100); // Ensure state reset before navigation
+                }}
                 href={`/kubeconfig/${nameWithoutExt}`}
               >
                 {entry.name}
