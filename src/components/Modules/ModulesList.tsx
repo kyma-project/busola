@@ -51,9 +51,12 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
     handleResourceDelete: handleCommunityModuleDelete,
   } = useContext(CommunityModulesDeleteBoxContext);
 
-  const [selectedEntry, setSelectedEntry] = useState<string | undefined>(
-    undefined,
-  );
+  const [selectedKymaEntry, setSelectedKymaEntry] = useState<
+    string | undefined
+  >(undefined);
+  const [selectedCommunityEntry, setSelectedCommunityEntry] = useState<
+    string | undefined
+  >(undefined);
   const { isProtected, isProtectedResource } = useProtectedResources();
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
       installedCommunityModules?.length
     ) {
       const timeoutId = setTimeout(() => {
-        setSelectedEntry(
+        setSelectedCommunityEntry(
           installedCommunityModules.find((moduleTemplate) =>
             checkSelectedModule(moduleTemplate, layoutState),
           )?.name,
@@ -119,8 +122,11 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
               protectedResource={showProtectedResourceWarning}
               setOpenedModuleIndex={setOpenedManagedModuleIndex}
               handleResourceDelete={handleResourceDelete}
-              customSelectedEntry={selectedEntry}
-              setSelectedEntry={setSelectedEntry}
+              customSelectedEntry={selectedKymaEntry}
+              setSelectedEntry={(name) => {
+                setSelectedKymaEntry(name);
+                setSelectedCommunityEntry(undefined);
+              }}
             />
           )}
           {isCommunityModulesEnabled && (
@@ -133,8 +139,11 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
               namespaced={namespaced}
               setOpenedModuleIndex={setOpenedCommunityModuleIndex}
               handleResourceDelete={handleCommunityModuleDelete}
-              customSelectedEntry={selectedEntry}
-              setSelectedEntry={setSelectedEntry}
+              customSelectedEntry={selectedCommunityEntry}
+              setSelectedEntry={(name) => {
+                setSelectedCommunityEntry(name);
+                setSelectedKymaEntry(undefined);
+              }}
             />
           )}
         </>

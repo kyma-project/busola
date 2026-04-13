@@ -256,6 +256,9 @@ export const GenericList = ({
   useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
+    // customRowClick lists manage selection via customSelectedEntry
+    if (customRowClick) return;
+
     const selected = entries
       .filter((entry) => {
         const name = entry?.metadata?.name;
@@ -332,7 +335,9 @@ export const GenericList = ({
     const item = (
       (nameColElement?.children?.[0] as HTMLElement)?.innerText ??
       (nameColElement as HTMLElement)?.innerText
-    )?.trimEnd();
+    )
+      ?.replace(/\n/g, '')
+      ?.trimEnd();
 
     const hasNamepace = namespaceColIndex !== -1;
     const namespaceColElement = hasNamepace
@@ -348,10 +353,7 @@ export const GenericList = ({
         (entry?.metadata?.name === item ||
           pluralize(entry?.spec?.names?.kind ?? '') === item ||
           entry?.name === item) &&
-        (!hasNamepace ||
-          entry?.metadata?.namespace === itemNamespace ||
-          // special case for Community Modules
-          entry?.resource?.metadata?.namespace === itemNamespace)
+        (!hasNamepace || entry?.metadata?.namespace === itemNamespace)
       );
     });
 

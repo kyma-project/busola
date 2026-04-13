@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { IllustratedMessage } from '@ui5/webcomponents-react';
-import pluralize from 'pluralize';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { BodyFallback } from './BodyFallback';
@@ -119,30 +118,18 @@ export const TableBody = ({
   }
 
   return pagedItems.map((e: FilteredEntriesType, index: number) => {
-    // Special case for Kyma modules
+    // Module entries use `.name` instead of `.metadata.name`
     let isModuleSelected;
-    if (
-      window.location.href.includes('kymamodules') &&
-      layoutState?.midColumn
-    ) {
-      // Workaround for modules like btp-operator on refresh
-      const resourceType = layoutState.midColumn.resourceType;
-      const resourceTypeDotIndex = resourceType?.indexOf('.') || -1;
-      const resourceTypeBase =
-        resourceTypeDotIndex !== -1
-          ? resourceType?.substring(0, resourceTypeDotIndex)
-          : resourceType;
+    if (e?.name && entrySelected) {
+      const namespaceMatches =
+        entrySelectedNamespace === '' ||
+        entrySelectedNamespace === e?.namespace ||
+        entrySelectedNamespace === e?.resource?.metadata?.namespace;
 
-      // Check if the entry is selected using click or refresh
-      isModuleSelected = entrySelected
-        ? entrySelected instanceof Array
-          ? entrySelected.some((entry) => entry === e?.name) &&
-            (entrySelectedNamespace === e?.namespace ||
-              entrySelectedNamespace === e?.resource?.metadata?.namespace)
-          : entrySelected === e?.name &&
-            (entrySelectedNamespace === e?.namespace ||
-              entrySelectedNamespace === e?.resource?.metadata?.namespace)
-        : pluralize(e?.name?.replace('-', '') || '') === resourceTypeBase;
+      isModuleSelected =
+        entrySelected instanceof Array
+          ? entrySelected.some((entry) => entry === e?.name) && namespaceMatches
+          : entrySelected === e?.name && namespaceMatches;
     }
     const entrySelectedMatches =
       entrySelected instanceof Array
