@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@ui5/webcomponents-react';
-import { useSetAtom } from 'jotai';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { clusterAtom } from 'state/clusterAtom';
 
 export function KubeconfigList() {
   const { t } = useTranslation();
-  const setCluster = useSetAtom(clusterAtom);
   const [files, setFiles] = useState<string[]>([]);
 
   useEffect(() => {
@@ -41,13 +38,6 @@ export function KubeconfigList() {
                 key={`${entry.name}-link`}
                 wrappingType={'Normal'}
                 design={'Emphasized'}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setCluster(null);
-                  setTimeout(() => {
-                    window.location.href = `/kubeconfig/${nameWithoutExt}`;
-                  }, 100); // Ensure state reset before navigation
-                }}
                 href={`/kubeconfig/${nameWithoutExt}`}
               >
                 {entry.name}
