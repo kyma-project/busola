@@ -1,6 +1,6 @@
 import { Button } from '@ui5/webcomponents-react';
 import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
-import { useRestartResource } from './useRestartResource';
+import { useRestartResource } from '../useRestartResource';
 import { ignoreConsoleWarns } from 'setupTests';
 
 vi.mock('@ui5/webcomponents-react', () => ({
