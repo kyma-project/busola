@@ -17,7 +17,7 @@ When connecting to a cluster from a Busola instance (running via `npm start` or 
    > The `cluster-admin` role grants full access to all cluster resources. For local development, this is typically convenient, but in shared or sensitive environments, consider using a more restrictive ClusterRole.
 
 5. In the **Subjects** section, choose **Add Subject**, and in the newly created Subject, provide the following information:
-   - **Kind**: Service Account
+   - **Kind**: ServiceAccount
    - **Namespace**: The name of your namespace where you created your Service Account
    - **Service Account Name**: The name of your Service Account (for example, `busola-dev`)
 
