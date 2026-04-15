@@ -17,7 +17,6 @@ export class HttpError extends Error {
 export async function throwHttpError(response) {
   try {
     const parsed = await response.json();
-    console.log('Parsed:', parsed);
     return new HttpError(
       parsed.message || 'Unknown error',
       parsed.status,

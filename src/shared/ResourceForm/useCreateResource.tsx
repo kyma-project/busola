@@ -43,7 +43,6 @@ function createErrorContent(
   singularName: string,
 ): React.ReactNode {
   if (error instanceof HttpError) {
-    console.log(error.errorDetails);
     const causes = error.errorDetails.causes;
     return (
       <>
@@ -198,7 +197,6 @@ export function useCreateResource({
   };
 
   const showError = (error: any) => {
-    console.error(error);
     const errorContent = createErrorContent(t, error, isEdit, singularName);
     const previousActiveElement = document.activeElement;
     notification.notifyError({
