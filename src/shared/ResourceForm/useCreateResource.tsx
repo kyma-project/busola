@@ -7,7 +7,7 @@ import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { createPatch } from 'rfc6902';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { Button, List, ListItemStandard, Text } from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
 import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
@@ -17,7 +17,7 @@ import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { FormEvent, useMemo } from 'react';
 import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
-import { TFunction } from 'i18next';
+import { ErrorContent } from 'shared/ResourceForm/components/ErrorDetails';
 
 export type SkinCreateFn = () => boolean;
 
@@ -35,66 +35,6 @@ export type useCreateResourcesProps = {
   resetLayout?: boolean;
   afterCreatedCustomMessage?: string;
 };
-
-function createErrorContent(
-  t: TFunction,
-  error: any,
-  isEdit: boolean,
-  singularName: string,
-): React.ReactNode {
-  if (error instanceof HttpError) {
-    const causes = error.errorDetails.causes;
-    return (
-      <>
-        <Text className="sap-padding">
-          {t(
-            isEdit
-              ? 'common.create-form.messages.patch-failure'
-              : 'common.create-form.messages.create-failure',
-            {
-              resourceType: singularName,
-            },
-          )}
-        </Text>
-
-        <List headerText={t('common.create-form.messages.error-details.title')}>
-          {causes.map((cause: any) => (
-            <ListItemStandard
-              key={cause.field}
-              text={t(
-                'common.create-form.messages.error-details.affected-field',
-                { field: cause.field },
-              )}
-              description={cause.message}
-              wrappingType={'Normal'}
-            />
-          ))}
-        </List>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Text className="sap-padding">
-          {t(
-            isEdit
-              ? 'common.create-form.messages.patch-failure'
-              : 'common.create-form.messages.create-failure',
-            {
-              resourceType: singularName,
-            },
-          )}
-        </Text>
-        <List headerText={t('common.create-form.messages.error-details.title')}>
-          <ListItemStandard
-            text={error.message}
-            wrappingType={'Normal'}
-          ></ListItemStandard>
-        </List>
-      </>
-    );
-  }
-}
 
 export type CreateResourceFn = (e?: FormEvent) => void;
 export function useCreateResource({
@@ -197,7 +137,9 @@ export function useCreateResource({
   };
 
   const showError = (error: any) => {
-    const errorContent = createErrorContent(t, error, isEdit, singularName);
+    const errorContent = (
+      <ErrorContent singularName={singularName} isEdit={isEdit} error={error} />
+    );
     const previousActiveElement = document.activeElement;
     notification.notifyError({
       actions: (close, defaultCloseButton) => {

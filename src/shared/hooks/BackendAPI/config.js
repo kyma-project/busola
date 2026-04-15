@@ -21,7 +21,7 @@ export async function throwHttpError(response) {
       parsed.message || 'Unknown error',
       parsed.status,
       parsed.code || response.status,
-      parsed.details,
+      parsed.details || null,
     );
   } catch (e) {
     console.warn('Failed to parse error response as JSON:', e);
