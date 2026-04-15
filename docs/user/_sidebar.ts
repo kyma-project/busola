@@ -14,6 +14,10 @@ export default [
     link: './01-42-configure-busola.md',
   },
   {
+    text: 'Generating a Token for Busola Instances',
+    link: './01-43-generate-token.md',
+  },
+  {
     text: 'Troubleshooting Guides',
     link: './troubleshooting-guides/README.md',
     collapsed: true,
