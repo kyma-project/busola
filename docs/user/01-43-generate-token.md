@@ -9,14 +9,14 @@ When connecting to a cluster from a Busola instance (running via `npm start` or 
 
 2. Select **Create**, fill in the name (for example, `busola-dev`), and choose **Create**.
 
-3. To grant the ServiceAccount access to cluster resources, in **Cluster Overview** go to **Configuration** > **Cluster Role Bindings**.
+3. To grant the ServiceAccount access to cluster resources, in **Cluster Overview**, go to **Configuration** > **Cluster Role Bindings**.
 
 4. Open the `cluster-admin` role binding, and choose **Edit**.
 
    > [!NOTE]
-   > The `cluster-admin` role grants full access to all cluster resources. For local development this is typically convenient, but in shared or sensitive environments consider using a more restrictive ClusterRole.
+   > The `cluster-admin` role grants full access to all cluster resources. For local development, this is typically convenient, but in shared or sensitive environments, consider using a more restrictive ClusterRole.
 
-5. In **Subjects** section, choose **Add Subject**, and in the newly created Subject, provide the following information:
+5. In the **Subjects** section, choose **Add Subject**, and in the newly created Subject, provide the following information:
    - **Kind**: Service Account
    - **Namespace**: The name of your namespace where you created your Service Account
    - **Service Account Name**: The name of your Service Account (for example, `busola-dev`)
