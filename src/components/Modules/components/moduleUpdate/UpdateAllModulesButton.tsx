@@ -9,6 +9,7 @@ import {
   TableHeaderRow,
   TableRow,
   TableSelectionMulti,
+  TableSelectionMultiDomRef,
   Text,
 } from '@ui5/webcomponents-react';
 import {
@@ -29,7 +30,6 @@ import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadRes
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
-import './UpdateAllModulesButton.scss';
 
 type UpdatableModule = {
   moduleName: string;
@@ -79,7 +79,7 @@ export const UpdateAllModulesButton = () => {
   );
   const [pendingUpdate, setPendingUpdate] = useState(false);
 
-  const selectionRef = useRef(null);
+  const selectionRef = useRef<TableSelectionMultiDomRef | null>(null);
 
   const { preloadedCommunityTemplates } = useContext(ModuleTemplatesContext);
   const { installedCommunityModules } = useContext(CommunityModuleContext);
@@ -207,7 +207,7 @@ export const UpdateAllModulesButton = () => {
           ]}
         >
           <Text>{t('modules.community.update.update-all-confirmation')}</Text>
-          <div className="update-all-modules-list sap-margin-top-small">
+          <div className="sap-margin-top-small">
             <Table
               features={
                 <TableSelectionMulti
@@ -218,10 +218,18 @@ export const UpdateAllModulesButton = () => {
               }
               headerRow={
                 <TableHeaderRow>
-                  <TableHeaderCell>Module</TableHeaderCell>
-                  <TableHeaderCell>Current Version</TableHeaderCell>
-                  <TableHeaderCell>Latest Version</TableHeaderCell>
-                  <TableHeaderCell>Note</TableHeaderCell>
+                  <TableHeaderCell>
+                    {t('modules.community.update.module')}
+                  </TableHeaderCell>
+                  <TableHeaderCell>
+                    {t('modules.community.update.current-version')}
+                  </TableHeaderCell>
+                  <TableHeaderCell>
+                    {t('modules.community.update.latest-version')}
+                  </TableHeaderCell>
+                  <TableHeaderCell>
+                    {t('modules.community.update.note')}
+                  </TableHeaderCell>
                 </TableHeaderRow>
               }
             >

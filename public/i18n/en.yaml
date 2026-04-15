@@ -1028,9 +1028,11 @@ modules:
       current-version: 'Current version:'
       delete-old-template: Delete old ModuleTemplate
       latest-version: 'Latest version:'
+      module: Module
+      note: Note
       title: Update Module
       update-all: Update All
-      update-all-confirmation: Select the modules you want to update.
+      update-all-confirmation: Choose the modules to update.
       update-all-title: Update Community Modules
 namespaces:
   create-modal:

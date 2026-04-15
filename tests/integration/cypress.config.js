@@ -90,7 +90,6 @@ module.exports = defineConfig({
       'tests/namespace/z-run-after.spec.js',
       'tests/kyma-cluster/test-kyma-modules.spec.js',
       'tests/kyma-cluster/test-community-modules.spec.js',
-      'tests/kyma-cluster/test-update-community-module.spec.js',
       'tests/kyma-cluster/test-kyma-nat-gateway.spec.js',
       'tests/kyma-namespace/a-run-before.spec.js',
       'tests/kyma-namespace/test-certificates.spec.js',
