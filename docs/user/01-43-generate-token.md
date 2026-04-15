@@ -17,7 +17,7 @@ You have an existing cluster remotely connected to Kyma dashboard. At the same t
    > The `cluster-admin` role grants full access to all cluster resources. For local development, this is typically convenient, but in shared or sensitive environments, consider using a more restrictive ClusterRole.
 
 5. In the **Subjects** section, choose **Add Subject**, and in the newly created Subject, provide the following information:
-   - **Kind**: ServiceAccount
+   - **Kind**: `ServiceAccount`
    - **Namespace**: The name of your namespace where you created your Service Account
    - **Service Account Name**: The name of your Service Account (for example, `busola-dev`)
 
