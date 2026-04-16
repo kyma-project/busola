@@ -98,9 +98,15 @@ export function ClusterSwitcher() {
         <MenuItem
           data-cluster="all-clusters"
           text={t('clusters.overview.title-all-clusters')}
+          accessibleName={t('clusters.overview.title-all-clusters')}
         />
         {inactiveClusterNames.map((name) => (
-          <MenuItem key={name} data-cluster={name} text={name} />
+          <MenuItem
+            key={name}
+            data-cluster={name}
+            text={name}
+            accessibleName={name}
+          />
         ))}
       </Menu>
     </div>
