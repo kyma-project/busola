@@ -140,7 +140,7 @@ context('Test Companion UI', () => {
 
   describe('Availability outside of cluster context', () => {
     it('Companion should not be available on cluster list', () => {
-      cy.setBusolaFeature('KYMA_COMPANION', false);
+      cy.setBusolaFeature('KYMA_COMPANION', true);
       cy.reload();
       cy.get('ui5-shellbar').as('shellbar');
 
@@ -148,9 +148,8 @@ context('Test Companion UI', () => {
 
       cy.wait(500);
 
-      cy.get('ui5-popover#cluster-switcher-popover')
-        .find('ui5-li[accessible-name="Clusters"]:visible')
-        .should('contain.text', 'Clusters')
+      cy.get('ui5-menu[opener="clusterSwitcherOpener"]')
+        .find('ui5-menu-item[accessible-name="Clusters"]:visible')
         .find('li[part="native-li"]')
         .click({ force: true });
 
