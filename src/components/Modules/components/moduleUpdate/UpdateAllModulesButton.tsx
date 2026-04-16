@@ -240,7 +240,10 @@ export const UpdateAllModulesButton = () => {
                       <TableCell>{moduleName}</TableCell>
                       <TableCell>{currentVersion}</TableCell>
                       <TableCell>{newVersion}</TableCell>
-                      <TableCell></TableCell>
+                      <TableCell>
+                        {/* TODO: Has to be adjusted when we get Release Notes in modules - 
+                        https://github.com/kyma-project/busola/issues/4826 */}
+                      </TableCell>
                     </TableRow>
                   ),
                 )}

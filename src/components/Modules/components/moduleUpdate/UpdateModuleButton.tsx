@@ -199,7 +199,8 @@ export const UpdateModuleButton = ({
               {`${t('modules.community.update.latest-version')}:`}
             </Label>
             <Text>{newVersion}</Text>
-            {/*TODO: Has to be adjusted when we get Release Notes in modules */}
+            {/*TODO: Has to be adjusted when we get Release Notes in modules - 
+            https://github.com/kyma-project/busola/issues/4826*/}
             {/* {moduleTpl?.spec?.info?.releaseNotes && (
               <ExternalLink
                 linkClassName="release-notes-link"
