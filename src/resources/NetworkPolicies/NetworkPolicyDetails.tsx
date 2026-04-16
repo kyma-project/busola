@@ -28,16 +28,18 @@ type Policy = {
   };
 };
 
-export function NetworkPolicyDetails(
-  props: Omit<ResourceDetailsProps, 'createResourceForm'>,
-) {
+export function NetworkPolicyDetails({
+  namespace,
+  resourceName,
+  ...props
+}: Omit<ResourceDetailsProps, 'createResourceForm'>) {
   const { t } = useTranslation();
 
   const Events = () => (
     <EventsList
       key="events"
-      namespace={props.namespace}
-      filter={filterByResource('NetworkPolicy', props.resourceName)}
+      namespace={namespace}
+      filter={filterByResource('NetworkPolicy', resourceName)}
       hideInvolvedObjects={true}
     />
   );
@@ -146,6 +148,8 @@ export function NetworkPolicyDetails(
       customComponents={customComponents}
       description={ResourceDescription}
       createResourceForm={NetworkPolicyCreate}
+      namespace={namespace}
+      resourceName={resourceName}
       {...props}
     />
   );

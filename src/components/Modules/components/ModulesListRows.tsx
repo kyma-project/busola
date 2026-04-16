@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Tag, Text } from '@ui5/webcomponents-react';
-import { compare } from 'compare-versions';
+import { FlexBox, Tag, Text } from '@ui5/webcomponents-react';
 import {
   findModuleStatus,
   findModuleTemplate,
@@ -22,6 +21,9 @@ import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
+import { UpdateModuleButton } from './moduleUpdate/UpdateModuleButton';
+import { VersionUpdateTooltip } from './moduleUpdate/VersionUpdateTooltip';
+import './ModulesListRows.scss';
 
 type RowResourceType = {
   name: string;
@@ -44,6 +46,7 @@ type ModulesListRowsProps = {
   moduleTemplates: ModuleTemplateListType;
   protectedResource?: boolean;
   hasDetailsLink: (resource: RowResourceType) => boolean;
+  newestModuleTemplate?: ModuleTemplateType;
 };
 
 export const ModulesListRows = ({
@@ -53,6 +56,7 @@ export const ModulesListRows = ({
   hasDetailsLink,
   kymaResource,
   protectedResource,
+  newestModuleTemplate,
 }: ModulesListRowsProps) => {
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
@@ -221,22 +225,34 @@ export const ModulesListRows = ({
       )}
     </>,
     // Version
-    <>
+    <FlexBox key="version" alignItems="Center" wrap="Wrap">
       {moduleStatus?.version || EMPTY_TEXT_PLACEHOLDER}
-      {!kymaResource &&
-        resource?.templateVersion &&
-        resource?.version &&
-        compare(resource?.templateVersion, resource?.version, '>') && (
-          <Tag
-            className="sap-margin-begin-tiny"
-            hideStateIcon
-            colorScheme="6"
-            design="Set2"
-          >
-            {t('kyma-modules.upgrade-available')}
-          </Tag>
-        )}
-    </>,
+      {!!newestModuleTemplate && (
+        <StatusBadge
+          className="sap-margin-begin-tiny"
+          resourceKind="kymas"
+          type={'Critical'}
+          tooltipContent={
+            <VersionUpdateTooltip
+              currentVersion={resource?.version || ''}
+              latestVersion={newestModuleTemplate?.spec?.version || ''}
+              button={
+                currentModuleTemplate && (
+                  <UpdateModuleButton
+                    moduleName={resource.name}
+                    currentVersion={resource?.version || ''}
+                    newVersion={newestModuleTemplate?.spec?.version || ''}
+                    moduleTpl={currentModuleTemplate}
+                  />
+                )
+              }
+            />
+          }
+        >
+          {t('kyma-modules.outdated')}
+        </StatusBadge>
+      )}
+    </FlexBox>,
     // Module State
     <ModuleStatus
       key={`module-state-${resource.name}`}

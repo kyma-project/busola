@@ -16,6 +16,7 @@ export type CustomColumn = {
   value: (resource: any) => ReactNode | string;
   id?: string;
   visibility?: (resource: any) => boolean;
+  width?: string;
 };
 
 export type ResourcesListProps = {

@@ -1,4 +1,4 @@
-/* global  require, process */
+/* global  require, process, __dirname */
 import { handleK8sRequests } from './kubernetes/handler';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
 import companionRouter from './companion/companionRouter';
@@ -12,6 +12,7 @@ const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
+const path = require('path');
 const config = require('./config.js');
 
 const app = express();
@@ -58,6 +59,23 @@ const SLOW_REQUEST_THRESHOLD_MS = parseInt(
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
 app.use('/proxy', proxyRateLimiter, proxyHandler);
+
+app.get('/backend/kubeconfig', (req, res) => {
+  const kubeconfigDir = path.join(
+    __dirname,
+    process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
+  );
+  fs.readdir(kubeconfigDir, (err, files) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to read kubeconfig directory' });
+      return;
+    }
+    const yamlFiles = files.filter(
+      (f) => f.endsWith('.yaml') || f.endsWith('.yml'),
+    );
+    res.json(yamlFiles);
+  });
+});
 
 let server = null;
 

@@ -138,18 +138,14 @@ export default function KymaModulesEdit({
 
   const resourceName = kymaResource?.metadata.name;
 
-  //TODO: Remove type casting after migration of kymaModulesQueries to TS
   const { data: moduleReleaseMetas, loading: loadingModulesReleaseMetas } =
     useModulesReleaseQuery({
       skip: !resourceName,
-    }) as { data: ModuleReleaseMetaListType | null; loading: boolean };
+    });
   const { data: moduleTemplates, loading: loadingModuleTemplates } =
     useModuleTemplatesQuery({
       skip: !resourceName,
-    }) as {
-      data: { items: ModuleTemplateType[] } | null;
-      loading: boolean;
-    };
+    });
 
   const notification = useNotification();
 
@@ -338,7 +334,6 @@ export default function KymaModulesEdit({
         resourceType: t('kyma-modules.kyma'),
         error: error?.message,
       }),
-      title: '',
     });
   };
 
@@ -347,7 +342,6 @@ export default function KymaModulesEdit({
       content: t('common.create-form.messages.patch-success', {
         resourceType: t('kyma-modules.kyma'),
       }),
-      title: '',
     });
 
     setIsResourceEdited({

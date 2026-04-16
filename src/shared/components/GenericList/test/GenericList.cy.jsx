@@ -282,6 +282,46 @@ describe('GenericList', () => {
     cy.contains(title).should('exist');
   });
 
+  describe('Pagination', () => {
+    const manyEntries = Array.from({ length: 25 }, (_, i) => ({
+      id: `${i}`,
+      name: `entry_${i}`,
+      description: `desc_${i}`,
+      metadata: { labels: {} },
+    }));
+
+    it('Keeps pagination visible when autoHide is true and all entries fit on one page', () => {
+      // Even with a page size larger than total entries, pagination should
+      // remain visible so the user can change the page size back.
+      cy.mount(
+        <GenericList
+          entries={manyEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+          pagination={{ autoHide: true, itemsPerPage: Number.MAX_SAFE_INTEGER }}
+        />,
+      );
+
+      cy.get('.pagination').should('exist');
+    });
+
+    it('Hides pagination with autoHide when entries fit the smallest page size', () => {
+      const fewEntries = mockEntries; // only 3 entries
+
+      cy.mount(
+        <GenericList
+          entries={fewEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+          pagination={{ autoHide: true }}
+        />,
+      );
+
+      // Pagination should not be visible since 3 entries <= smallest page size (10)
+      cy.get('.pagination').should('not.exist');
+    });
+  });
+
   describe('Search', () => {
     it('Shows search field by default', () => {
       cy.mount(

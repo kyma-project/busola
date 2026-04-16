@@ -51,6 +51,7 @@ export function Header() {
   const cluster = useAtomValue(clusterAtom);
 
   const isOnClustersPage = location.pathname === '/clusters';
+  const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
   const { isEnabled: isKymaCompanionEnabled, useJoule: usesJoule } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
@@ -78,7 +79,9 @@ export function Header() {
               : t('clusters.overview.title-current-cluster'),
           },
         }}
-        startButton={!isOnClustersPage && <SidebarSwitcher />}
+        startButton={
+          !isOnClustersPage && !isOnKubeconfigPage && <SidebarSwitcher />
+        }
         onLogoClick={() => {
           navigateSafely(() => {
             if (cluster?.name && !isOnClustersPage) {
@@ -95,7 +98,7 @@ export function Header() {
         }}
         logo={<img alt="SAP" src="/assets/sap-logo.svg" />}
         primaryTitle={t('common.product-title')}
-        content={<ClusterSwitcher />}
+        content={!isOnKubeconfigPage && <ClusterSwitcher />}
         profile={
           <Avatar
             icon="customer"
@@ -106,7 +109,8 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
         searchField={
-          !isOnClustersPage && (
+          !isOnClustersPage &&
+          !isOnKubeconfigPage && (
             <CommandPaletteSearchBar
               shouldFocus={isSearchOpen}
               slot="searchField"

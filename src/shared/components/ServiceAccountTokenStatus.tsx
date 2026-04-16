@@ -1,6 +1,6 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
-import { Popover, Token } from '@ui5/webcomponents-react';
+import { Popover, Text, Token } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
 import { useRef, useState } from 'react';
 
@@ -71,7 +71,9 @@ export const ServiceAccountTokenStatus = ({
           }}
           placement="End"
         >
-          {accountTokenValues.tooltipContent}
+          <Text className="popover-description">
+            {accountTokenValues.tooltipContent}
+          </Text>
         </Popover>,
         document.body,
       )}
