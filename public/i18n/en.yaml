@@ -1025,9 +1025,9 @@ modules:
     title: Community Modules
     update:
       confirmation: Update <0>{{moduleName}}</0>?
-      current-version: 'Current version:'
+      current-version: Current version
       delete-old-template: Delete old ModuleTemplate
-      latest-version: 'Latest version:'
+      latest-version: Latest version
       module: Module
       note: Note
       title: Update Module

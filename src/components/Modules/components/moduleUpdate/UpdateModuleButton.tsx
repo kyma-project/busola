@@ -191,12 +191,12 @@ export const UpdateModuleButton = ({
           </Text>
           <div className="module-versions-container sap-margin-top-small">
             <Label style={{ textAlign: 'right' }}>
-              {t('modules.community.update.current-version')}
+              {`${t('modules.community.update.current-version')}:`}
             </Label>
             <Text>{currentVersion}</Text>
             <div />
             <Label style={{ textAlign: 'right' }}>
-              {t('modules.community.update.latest-version')}
+              {`${t('modules.community.update.latest-version')}:`}
             </Label>
             <Text>{newVersion}</Text>
             {/*TODO: Has to be adjusted when we get Release Notes in modules */}
