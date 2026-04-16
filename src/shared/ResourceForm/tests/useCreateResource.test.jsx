@@ -120,13 +120,16 @@ describe('useCreateResource', () => {
 
     await waitFor(() => {
       expect(mockNotifySuccess).not.toHaveBeenCalled();
-      expect(mockNotifyError).toHaveBeenCalled();
-      assertNotifyErrorContent(mockNotifyError.mock.calls[0][0]);
+      expect(mockNotifyError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          content: expect.objectContaining({
+            type: ErrorDetails,
+            props: expect.objectContaining({
+              error: expect.objectContaining({ message: errorMessage }),
+            }),
+          }),
+        }),
+      );
     });
   });
 });
-
-function assertNotifyErrorContent(callArgs) {
-  expect(callArgs.content.type).toEqual(ErrorDetails);
-  expect(callArgs.content.props.error.message).toBe(errorMessage);
-}
