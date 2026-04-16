@@ -20,8 +20,7 @@ export const createPostFn: (fetch: FetchFn) => PostFn =
       },
     });
     if (typeof options?.refetch === 'function') options.refetch();
-    const x = await response.json();
-    return x;
+    return await response.json();
   };
 
 export const usePost = () => {
