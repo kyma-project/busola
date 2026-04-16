@@ -1,10 +1,11 @@
-import { Button, List, Text } from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
 import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
 import { useCreateResource } from '../useCreateResource';
 
 import { createPatch } from 'rfc6902';
 import { ignoreConsoleErrors } from 'setupTests';
 import React from 'react';
+import { ErrorDetails } from 'shared/ResourceForm/components/ErrorDetails';
 
 const mockNotifySuccess = vi.fn();
 const mockNotifyError = vi.fn();
@@ -126,20 +127,6 @@ describe('useCreateResource', () => {
 });
 
 function assertNotifyErrorContent(callArgs) {
-  expect(callArgs.content.type).toBe(React.Fragment);
-
-  const fragmentChildren = callArgs.content.props.children;
-  expect(fragmentChildren).toHaveLength(2);
-
-  const textComponent = fragmentChildren[0];
-  expect(textComponent.type).toBe(Text);
-  expect(textComponent.props.children).toBe(
-    'common.create-form.messages.create-failure',
-  );
-
-  const listComponent = fragmentChildren[1];
-  expect(listComponent.type).toBe(List);
-
-  const listItemStandard = listComponent.props.children;
-  expect(listItemStandard.props.text).toBe(errorMessage);
+  expect(callArgs.content.type).toEqual(ErrorDetails);
+  expect(callArgs.content.props.error.message).toBe(errorMessage);
 }

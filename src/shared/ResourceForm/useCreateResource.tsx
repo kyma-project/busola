@@ -17,7 +17,7 @@ import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { FormEvent, useMemo } from 'react';
 import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
-import { ErrorContent } from 'shared/ResourceForm/components/ErrorDetails';
+import { ErrorDetails } from 'shared/ResourceForm/components/ErrorDetails';
 
 export type SkinCreateFn = () => boolean;
 
@@ -137,9 +137,6 @@ export function useCreateResource({
   };
 
   const showError = (error: any) => {
-    const errorContent = (
-      <ErrorContent singularName={singularName} isEdit={isEdit} error={error} />
-    );
     const previousActiveElement = document.activeElement;
     notification.notifyError({
       actions: (close, defaultCloseButton) => {
@@ -154,7 +151,13 @@ export function useCreateResource({
           ? 'common.create-form.messages.patch-failure-header'
           : 'common.create-form.messages.create-failure-header',
       ),
-      content: errorContent,
+      content: (
+        <ErrorDetails
+          singularName={singularName}
+          isEdit={isEdit}
+          error={error}
+        />
+      ),
     });
   };
 

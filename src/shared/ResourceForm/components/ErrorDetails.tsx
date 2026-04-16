@@ -75,13 +75,11 @@ export type ErrorContentProps = {
   isEdit: boolean;
   singularName: string;
 };
-export function ErrorContent({
+export function ErrorDetails({
   error,
   isEdit,
   singularName,
 }: ErrorContentProps): React.ReactNode {
-  const { t } = useTranslation();
-
   if (error instanceof HttpError && error.errorDetails.causes) {
     const causes = error.errorDetails.causes;
     return (
