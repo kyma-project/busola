@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -89,23 +88,20 @@ export function EventList({
           }}
         >
           {e.type === 'Warning' ? (
-            <Tooltip content={e.type}>
-              <ObjectStatus
-                aria-label="Warning"
-                icon={<Icon accessibleName="Warning" name="warning" />}
-                className="has-tooltip"
-                state="Critical"
-              />
-            </Tooltip>
+            <ObjectStatus
+              aria-label="Warning"
+              icon={<Icon accessibleName="Warning" name="warning" />}
+              state="Critical"
+              title={e.type}
+            />
           ) : (
-            <Tooltip content={e.type}>
-              <ObjectStatus
-                aria-label="Normal"
-                className="has-tooltip bsl-icon-m"
-                icon={<Icon accessibleName="Normal" name="information" />}
-                state="Information"
-              />
-            </Tooltip>
+            <ObjectStatus
+              aria-label="Normal"
+              className="bsl-icon-m"
+              icon={<Icon accessibleName="Normal" name="information" />}
+              state="Information"
+              title={e.type}
+            />
           )}
         </div>
       ),
