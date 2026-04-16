@@ -80,7 +80,7 @@ export function ErrorDetails({
   isEdit,
   singularName,
 }: ErrorContentProps): React.ReactNode {
-  if (error instanceof HttpError && error.errorDetails.causes) {
+  if (error instanceof HttpError && error.errorDetails?.causes) {
     const causes = error.errorDetails.causes;
     return (
       <>
