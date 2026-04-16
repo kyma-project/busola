@@ -9,7 +9,7 @@ import { ColumnLayoutState } from 'state/columnLayoutAtom';
 
 export type FilteredEntriesType = {
   name: string;
-  namespace: string;
+  namespace?: string;
   resource?: { metadata?: { namespace: string } };
   metadata?: { name: string; namespace: string; uid: string };
   [key: string]: any;
