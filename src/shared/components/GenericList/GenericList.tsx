@@ -427,6 +427,7 @@ export const GenericList = ({
       testid={testid}
       className={className}
       accessibleName={`${title} panel`}
+      stickyHeader
     >
       <Table
         noData={

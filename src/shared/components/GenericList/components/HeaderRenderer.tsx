@@ -5,6 +5,8 @@ import {
   TableHeaderCell,
 } from '@ui5/webcomponents-react';
 
+import './HeaderRenderer.scss';
+
 type HeaderRendererProps = {
   actions: any[];
   headerRenderer: () => any;
@@ -67,7 +69,7 @@ export const HeaderRenderer = ({
   };
   const Header =
     headerRenderer()?.length || emptyColumn ? (
-      <TableHeaderRow slot="headerRow">
+      <TableHeaderRow slot="headerRow" sticky>
         {headerRenderer()?.map((h: any, index: number) => {
           return (
             <TableHeaderCell
