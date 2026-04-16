@@ -1,6 +1,5 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import './WizardButtons.scss';
 
 interface WizardButtonProps {
   selectedStep: number;
@@ -36,7 +35,7 @@ export function WizardButtons({
   };
 
   return (
-    <div className={`${className} sap-margin-top-small wizard-buttons`}>
+    <div className={`${className} sap-margin-top-small`}>
       {!firstStep && (
         <Button
           design="Transparent"

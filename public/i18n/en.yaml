@@ -87,9 +87,9 @@ clusters:
     title: Connect Cluster
   auth-type: Authentication type
   buttons:
-    connect-cluster: Connect cluster
-    next-step: Next step
-    previous-step: Previous step
+    connect-cluster: Connect Cluster
+    next-step: Next Step
+    previous-step: Previous Step
   common:
     api-server-address: API Server Address
     download-kubeconfig: Download Kubeconfig
