@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM --platform=$BUILDPLATFORM node:24.14-alpine3.23 AS builder
+FROM --platform=$BUILDPLATFORM node:24.15-alpine3.23 AS builder
 ARG default_tag
 ARG tag
 
