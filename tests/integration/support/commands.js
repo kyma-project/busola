@@ -261,9 +261,11 @@ Cypress.Commands.add(
 Cypress.Commands.add('changeCluster', (clusterName) => {
   cy.get('ui5-shellbar').find('#clusterSwitcherOpener').click();
 
-  cy.get(`[accessible-name="${clusterName}"]:visible`)
-    .find('span[part="title"]')
-    .click({ force: true });
+  cy.get(`ui5-menu-item[accessible-name="${clusterName}"]:visible`)
+    .find('li[part="native-li"]')
+    .click({
+      force: true,
+    });
 });
 
 Cypress.Commands.add(
