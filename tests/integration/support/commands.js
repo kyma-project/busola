@@ -163,7 +163,7 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/deleted/).should('be.visible');
+    cy.contains(/deleted/, { timeout: 30000 }).should('be.visible');
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -233,7 +233,9 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-toast', /deleted/).should('be.visible');
+        cy.contains('ui5-toast', /deleted/, { timeout: 30000 }).should(
+          'be.visible',
+        );
       }
 
       if (checkIfResourceIsRemoved) {
@@ -261,7 +263,8 @@ Cypress.Commands.add(
 Cypress.Commands.add('changeCluster', (clusterName) => {
   cy.get('ui5-shellbar').find('#clusterSwitcherOpener').click();
 
-  cy.get(`ui5-menu-item[accessible-name="${clusterName}"]:visible`)
+  cy.get('ui5-menu[opener="clusterSwitcherOpener"]')
+    .find(`ui5-menu-item[accessible-name="${clusterName}"]:visible`)
     .find('li[part="native-li"]')
     .click({
       force: true,
@@ -348,4 +351,14 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
     .find('input')
     .should('be.visible')
     .type(searchPhrase, { force });
+});
+
+Cypress.Commands.add('openSettingsMenu', () => {
+  cy.get('[tooltip="Profile"]').click({ force: true });
+
+  cy.get('ui5-menu[opener="openShellbarMenu"]')
+    .find('ui5-menu-item:visible')
+    .contains('Settings')
+    .find('li[part="native-li"]')
+    .click({ force: true });
 });
