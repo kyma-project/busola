@@ -1,10 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM --platform=$BUILDPLATFORM  alpine:3.23.3 AS base
-# install node
-RUN apk add --update nodejs npm
-
-# ---- Install ependencies ----
-FROM --platform=$BUILDPLATFORM base AS build
+FROM --platform=$BUILDPLATFORM node:24.15-alpine3.23 AS builder
 WORKDIR /app
 COPY . .
 RUN npm ci
