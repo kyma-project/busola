@@ -70,10 +70,10 @@ context('Test multiple context kubeconfig', () => {
 
       cy.contains('Next').click({ force: true });
 
-      cy.get('ui5-button:visible').contains('Next step').click();
+      cy.get('ui5-button:visible').contains('Next Step').click();
 
       cy.get(`[accessible-name="last-step"]:visible`)
-        .contains('Connect cluster')
+        .contains('Connect Cluster')
         .click({ force: true });
 
       cy.contains('Cluster Overview').should('exist');
