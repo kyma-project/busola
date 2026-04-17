@@ -8,7 +8,8 @@ RUN npm ci
 RUN npm run build
 
 # ---- Serve ----
-FROM base AS release
+FROM node:24.14-alpine3.23
+
 WORKDIR /app
 COPY --chown=65532:65532 --from=builder /app/backend-production.js ./
 COPY --chown=65532:65532 settings settings/
