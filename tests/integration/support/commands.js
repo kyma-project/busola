@@ -265,10 +265,7 @@ Cypress.Commands.add('changeCluster', (clusterName) => {
 
   cy.get('ui5-menu[opener="clusterSwitcherOpener"]')
     .find(`ui5-menu-item[accessible-name="${clusterName}"]:visible`)
-    .find('li[part="native-li"]')
-    .click({
-      force: true,
-    });
+    .click({ force: true });
 });
 
 Cypress.Commands.add(
@@ -357,8 +354,6 @@ Cypress.Commands.add('openSettingsMenu', () => {
   cy.get('[tooltip="Profile"]').click({ force: true });
 
   cy.get('ui5-menu[opener="openShellbarMenu"]')
-    .find('ui5-menu-item:visible')
-    .contains('Settings')
-    .find('li[part="native-li"]')
+    .find('ui5-menu-item[accessible-name="Settings"]:visible')
     .click({ force: true });
 });
