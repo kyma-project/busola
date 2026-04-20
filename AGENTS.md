@@ -13,6 +13,7 @@ Busola is a web-based UI for managing Kubernetes resources, with optional Kyma-s
 ## Commands
 
 ### Development
+
 ```bash
 npm start                          # Frontend (port 8080) + backend (port 3001) concurrently
 npm run busola                     # Frontend only
@@ -20,6 +21,7 @@ npm run backend                    # Backend only with hot-reload
 ```
 
 ### Build
+
 ```bash
 npm run build                      # Frontend only (Vite)
 npm run build:docker               # Frontend build with IS_DOCKER=true
@@ -27,6 +29,7 @@ cd backend && npm run build        # Backend webpack bundle (separate step; auto
 ```
 
 ### Testing
+
 ```bash
 npm test                           # Unit tests (Vitest, jsdom)
 npm run component-test             # Cypress component tests (interactive)
@@ -35,6 +38,7 @@ cd backend && npm test             # Backend unit tests (Vitest, Node env)
 ```
 
 ### Linting
+
 ```bash
 npm run eslint-check               # ESLint (src/ + backend/)
 npm run eslint-fix                 # Auto-fix ESLint issues
@@ -67,6 +71,7 @@ All UI components come from `@ui5/webcomponents-react` (SAP Fiori design system)
 `backend/index.js` sets up the Express middleware chain: body-parser → (optional gzip) → (dev-only CORS) → pino logger → routes. The `/proxy` route handles external HTTPS proxying with rate limiting. Kubernetes API requests are handled separately by the `/backend` route via `backend/kubernetes/handler.js`. Special routes include `/backend/ai-chat/` (streaming AI companion) and `/backend/kubeconfig`.
 
 `backend/config.js` merges feature flags from three YAML sources in order:
+
 1. `backend/settings/defaultConfig.yaml` (base defaults)
 2. `backend/environments/{ENVIRONMENT}/config.yaml` (when `ENVIRONMENT` env var is set)
 3. `backend/config/config.yaml` (when the file exists — in production this file is mounted from a Kubernetes ConfigMap)
@@ -78,6 +83,7 @@ There is also a separate `public/defaultConfig.yaml` that configures frontend st
 Extensions are loaded **client-side** in `src/state/navigation/extensionsAtom.ts` by fetching YAML files from the static asset path: `/extensions/extensions.yaml`, `/extensions/statics.yaml`, `/extensions/wizards.yaml`. Built-in extension definitions live in `public/extensions/`. Kyma-specific extensions live in `kyma/extensions/`.
 
 Relevant feature flags (checked via `useFeature()`):
+
 - `EXTENSIBILITY` — master toggle; **disabled by default** in `defaultConfig.yaml`, enabled in Kyma environment configs (`kyma/environments/*/config.yaml`)
 - `EXTENSIBILITY_INJECTIONS` — controls injection points
 - `EXTENSIBILITY_CUSTOM_COMPONENTS` — controls custom components
@@ -112,17 +118,17 @@ Never mention Claude or any AI tool in commit messages.
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/index.tsx` | App bootstrap: i18next, router, theme provider |
-| `src/components/App/App.tsx` | Root layout, auth, cluster setup |
-| `src/components/App/ClusterRoutes.jsx` | Cluster-level and namespace-level routing trees |
-| `src/resources/index.tsx` | Aggregates all resource modules, calls `createResourceRoutes()` |
-| `src/resources/createResourceRoutes.tsx` | Route builder function for resource CRUD |
-| `backend/index.js` | Express app and middleware chain |
-| `backend/kubernetes/handler.js` | Kubernetes API handler |
-| `backend/config.js` | Feature flag / config loader (3-source YAML merge) |
-| `public/defaultConfig.yaml` | Frontend storage config (patched by Dockerfile) |
-| `vite.config.mts` | Frontend bundler config |
-| `tsconfig.json` | TypeScript config (`baseUrl: src` enables path aliases) |
-| `eslint.config.ts` | ESLint flat config |
+| File                                     | Purpose                                                         |
+| ---------------------------------------- | --------------------------------------------------------------- |
+| `src/index.tsx`                          | App bootstrap: i18next, router, theme provider                  |
+| `src/components/App/App.tsx`             | Root layout, auth, cluster setup                                |
+| `src/components/App/ClusterRoutes.jsx`   | Cluster-level and namespace-level routing trees                 |
+| `src/resources/index.tsx`                | Aggregates all resource modules, calls `createResourceRoutes()` |
+| `src/resources/createResourceRoutes.tsx` | Route builder function for resource CRUD                        |
+| `backend/index.js`                       | Express app and middleware chain                                |
+| `backend/kubernetes/handler.js`          | Kubernetes API handler                                          |
+| `backend/config.js`                      | Feature flag / config loader (3-source YAML merge)              |
+| `public/defaultConfig.yaml`              | Frontend storage config (patched by Dockerfile)                 |
+| `vite.config.mts`                        | Frontend bundler config                                         |
+| `tsconfig.json`                          | TypeScript config (`baseUrl: src` enables path aliases)         |
+| `eslint.config.ts`                       | ESLint flat config                                              |
