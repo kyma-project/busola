@@ -28,7 +28,7 @@ RUN npm run build
 RUN npm prune --omit=dev
 
 # ---- Environments Configuration ----
-FROM --platform=$BUILDPLATFORM node:24.14-alpine3.23 AS configuration
+FROM --platform=$BUILDPLATFORM node:24.15-alpine3.23 AS configuration
 WORKDIR /kyma
 
 RUN apk add make
@@ -40,7 +40,7 @@ RUN npm ci
 RUN make prepare-configuration
 
 # ---- Copy result ----
-FROM node:24.14-alpine3.23
+FROM node:24.15-alpine3.23
 WORKDIR /app
 
 COPY --chown=65532:65532 --from=builder /app/build /app/core-ui
