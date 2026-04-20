@@ -144,6 +144,8 @@ export const Chat = ({
             handleFollowUpError,
             clusterUrl: cluster.currentContext.cluster.cluster.server,
             token: authData.token,
+            clientCertificateData: authData['client-certificate-data'],
+            clientKeyData: authData['client-key-data'],
             certificateAuthorityData:
               cluster.currentContext.cluster.cluster[
                 'certificate-authority-data'
@@ -171,6 +173,8 @@ export const Chat = ({
           handleFollowUpError,
           clusterUrl: cluster.currentContext.cluster.cluster.server,
           token: authData.token,
+          clientCertificateData: authData['client-certificate-data'],
+          clientKeyData: authData['client-key-data'],
           certificateAuthorityData:
             cluster.currentContext.cluster.cluster[
               'certificate-authority-data'

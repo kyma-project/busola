@@ -79,17 +79,24 @@ async function handlePublicKey(req, res) {
 }
 
 function extractAuthHeaders(req) {
+  const {
+    clusterUrl,
+    certificateAuthorityData,
+    clusterToken,
+    clientCertificateData,
+    clientKeyData,
+    sessionId,
+  } =
+    typeof req.body === 'object' && !ArrayBuffer.isView(req.body)
+      ? req.body
+      : JSON.parse(req.body.toString());
   return {
-    clusterUrl: req.headers['x-cluster-url'],
-    certificateAuthorityData:
-      req.headers['x-cluster-certificate-authority-data'],
-    clusterToken: req.headers['x-k8s-authorization']?.replace(
-      /^Bearer\s+/i,
-      '',
-    ),
-    clientCertificateData: req.headers['x-client-certificate-data'],
-    clientKeyData: req.headers['x-client-key-data'],
-    sessionId: req.headers['session-id'],
+    clusterUrl,
+    certificateAuthorityData,
+    clusterToken,
+    clientCertificateData,
+    clientKeyData,
+    sessionId,
   };
 }
 

@@ -5,7 +5,9 @@ interface GetFollowUpQuestionsParams {
   handleFollowUpQuestions: (results: any) => void;
   handleFollowUpError: () => void;
   clusterUrl: string;
-  token: string;
+  token?: string;
+  clientCertificateData?: string;
+  clientKeyData?: string;
   certificateAuthorityData: string;
 }
 
@@ -15,22 +17,27 @@ export default async function getFollowUpQuestions({
   handleFollowUpError,
   clusterUrl,
   token,
+  clientCertificateData,
+  clientKeyData,
   certificateAuthorityData,
 }: GetFollowUpQuestionsParams): Promise<void> {
   try {
     const { backendAddress } = getClusterConfig();
     const url = `${backendAddress}/ai-chat/followup`;
-    const k8sAuthorization = `Bearer ${token}`;
 
     const response = await fetch(url, {
       headers: {
         accept: 'application/json',
         'content-type': 'application/json',
-        'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-        'X-Cluster-Url': clusterUrl,
-        'X-K8s-Authorization': k8sAuthorization,
-        'Session-Id': sessionID,
       },
+      body: JSON.stringify({
+        clusterUrl,
+        certificateAuthorityData,
+        sessionId: sessionID,
+        clusterToken: token,
+        clientCertificateData,
+        clientKeyData,
+      }),
       method: 'POST',
     });
 
