@@ -10,7 +10,7 @@ Creates a pull request against `kyma-project/busola` from a personal fork that p
 ## Prerequisites
 
 - `gh` authenticated to github.com (`gh auth status`)
-- Working directory is `/Users/D061255/Repos/busola` (or the busola repo root)
+- Working directory is the busola repo root
 - Changes are staged or committed locally
 
 ## Step 1: Verify gh Authentication
