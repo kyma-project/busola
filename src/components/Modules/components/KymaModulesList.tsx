@@ -145,6 +145,7 @@ export const KymaModulesList = ({
         }
         disableHiding={false}
         displayArrow
+        hasRowDetails={hasDetailsLink}
         title={'Modules'}
         sortBy={{
           name: (a: { name: any }, b: { name: any }) =>

@@ -44,6 +44,7 @@ type TableBodyProps = {
   actions: any[];
   rowRenderer: (entry: FilteredEntriesType, index: number) => any;
   displayArrow: boolean;
+  hasRowDetails?: (entry: FilteredEntriesType) => boolean;
   enableColumnLayout: boolean;
 };
 
@@ -62,6 +63,7 @@ export const TableBody = ({
   actions,
   rowRenderer,
   displayArrow,
+  hasRowDetails,
   enableColumnLayout,
 }: TableBodyProps) => {
   const { i18n, t } = useTranslation();
@@ -150,7 +152,8 @@ export const TableBody = ({
         entry={e}
         actions={actions}
         rowRenderer={rowRenderer}
-        displayArrow={displayArrow}
+        displayArrow={displayArrow && (hasRowDetails?.(e) ?? true)}
+        hasDetails={hasRowDetails?.(e) ?? true}
         enableColumnLayout={enableColumnLayout}
       />
     );

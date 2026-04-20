@@ -86,6 +86,7 @@ type GenericListProps = {
   hasDetailsView?: boolean;
   disableHiding?: boolean;
   displayArrow?: boolean;
+  hasRowDetails?: (entry: any) => boolean;
   nameColIndex?: number;
   namespaceColIndex?: number;
   noHideFields?: string[];
@@ -136,6 +137,7 @@ export const GenericList = ({
   hasDetailsView,
   disableHiding = true,
   displayArrow = false,
+  hasRowDetails,
   nameColIndex = 0,
   namespaceColIndex = -1,
   noHideFields,
@@ -507,6 +509,7 @@ export const GenericList = ({
           actions={actions}
           rowRenderer={rowRenderer}
           displayArrow={displayArrow}
+          hasRowDetails={hasRowDetails}
           enableColumnLayout={!!enableColumnLayout}
         />
       </Table>

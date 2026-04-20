@@ -208,6 +208,7 @@ export const CommunityModulesList = ({
         }
         disableHiding={false}
         displayArrow
+        hasRowDetails={hasDetailsLink}
         title={t('modules.community.installed-modules')}
         sortBy={{
           name: (a: { name: any }, b: { name: any }) =>
