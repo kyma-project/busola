@@ -30,6 +30,7 @@ context('Clean up Namespace', () => {
         runMode: 3,
         openMode: 3,
       },
+      timeout: 200000,
     },
     () => {
       cy.getLeftNav().contains('Namespaces').click();

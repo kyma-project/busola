@@ -13,13 +13,16 @@ Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
   });
   afterEach(function () {
     if (this.currentTest.state === 'failed') {
-      if (!Cypress.config('isInteractive')) {
+      const retriesRemaining =
+        (this.currentTest._retries ?? 0) -
+        (this.currentTest.currentRetry() ?? 0);
+      if (!Cypress.config('isInteractive') && retriesRemaining === 0) {
         // isInteractive is true for headed browsers (suite started with 'cypress open' command)
         // and false for headless ('cypress run')
         // This will skip remaining test in the current context when a test fails.
         Cypress.runner.stop();
       }
-      if (skipAllSuits) {
+      if (skipAllSuits && retriesRemaining === 0) {
         cy.task('dynamicSharedStore', {
           name: 'cancelTests',
           value: true,
