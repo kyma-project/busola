@@ -1,5 +1,4 @@
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
@@ -39,10 +38,8 @@ export function RoleRef({ roleRef }: RoleRefProps) {
         name={t('role-bindings.headers.role-ref')}
         value={
           <>
-            <Link url={roleDetailsLink()}>{roleRef.name}</Link>
-            <Tooltip delay={[0, 0]} content={roleRef.kind}>
-              {shortRoleKind(roleRef.kind)}
-            </Tooltip>
+            <Link url={roleDetailsLink()}>{roleRef.name}</Link>{' '}
+            <span title={roleRef.kind}>{shortRoleKind(roleRef.kind)}</span>
           </>
         }
       />
