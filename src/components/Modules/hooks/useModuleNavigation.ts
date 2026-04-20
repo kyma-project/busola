@@ -130,6 +130,11 @@ export function useModuleNavigation({
       return;
     }
 
+    setOpenedModuleIndex(
+      installedModules.findIndex((entry) => entry.name === moduleName),
+    );
+    setSelectedEntry?.(moduleName);
+
     if (isNamespaced && !resource.metadata.namespace) {
       resource.metadata.namespace = DEFAULT_K8S_NAMESPACE;
     }
@@ -148,11 +153,6 @@ export function useModuleNavigation({
     } catch {
       // Fetch failed — fall through with template data
     }
-
-    setOpenedModuleIndex(
-      installedModules.findIndex((entry) => entry.name === moduleName),
-    );
-    setSelectedEntry?.(moduleName);
 
     const hasExtension = !!findExtension(kind, extensions);
     const moduleCrd = findCrd(kind, crds);

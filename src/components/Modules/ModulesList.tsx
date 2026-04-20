@@ -65,11 +65,11 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
       installedCommunityModules?.length
     ) {
       const timeoutId = setTimeout(() => {
-        setSelectedCommunityEntry(
-          installedCommunityModules.find((moduleTemplate) =>
-            checkSelectedModule(moduleTemplate, layoutState),
-          )?.name,
+        const match = installedCommunityModules.find((moduleTemplate) =>
+          checkSelectedModule(moduleTemplate, layoutState),
         );
+        // Only set, never clear — polling would otherwise wipe click selections.
+        if (match?.name) setSelectedCommunityEntry(match.name);
       }, 0);
 
       return () => clearTimeout(timeoutId);

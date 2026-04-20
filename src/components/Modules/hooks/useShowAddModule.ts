@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router';
 import {
@@ -15,7 +16,7 @@ export function useShowAddModule(
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
 
-  return () => {
+  return useCallback(() => {
     setLayoutColumn({
       startColumn: {
         resourceType: 'kymas',
@@ -39,5 +40,5 @@ export function useShowAddModule(
       `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true&createType=${createType}`,
     );
     setIsFormOpen((state) => ({ ...state, formOpen: true }));
-  };
+  }, [resourceUrl, createType, navigate, setLayoutColumn, setIsFormOpen]);
 }
