@@ -1,6 +1,7 @@
 /* global  require, process, __dirname */
 import { handleK8sRequests } from './kubernetes/handler';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
+import rateLimit from 'express-rate-limit';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
@@ -60,7 +61,14 @@ app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
 app.use('/proxy', proxyRateLimiter, proxyHandler);
 
-app.get('/backend/kubeconfig', (req, res) => {
+const kubeconfigRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.get('/backend/kubeconfig', kubeconfigRateLimiter, (req, res) => {
   const kubeconfigDir = path.join(
     __dirname,
     process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
