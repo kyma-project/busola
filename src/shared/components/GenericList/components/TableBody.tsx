@@ -120,7 +120,7 @@ export const TableBody = ({
   }
 
   return pagedItems.map((e: FilteredEntriesType, index: number) => {
-    // Module entries use `.name` instead of `.metadata.name`
+    // Module entries match on `.name` since they lack `.metadata.name`.
     let isModuleSelected;
     if (e?.name && entrySelected) {
       const namespaceMatches =
@@ -137,6 +137,7 @@ export const TableBody = ({
       entrySelected instanceof Array
         ? entrySelected.some((entry) => entry === e?.metadata?.name)
         : entrySelected === e?.metadata?.name;
+    const hasDetails = hasRowDetails?.(e) ?? true;
     return (
       <RowRenderer
         isSelected={
@@ -152,8 +153,8 @@ export const TableBody = ({
         entry={e}
         actions={actions}
         rowRenderer={rowRenderer}
-        displayArrow={displayArrow && (hasRowDetails?.(e) ?? true)}
-        hasDetails={hasRowDetails?.(e) ?? true}
+        displayArrow={displayArrow && hasDetails}
+        hasDetails={hasDetails}
         enableColumnLayout={enableColumnLayout}
       />
     );

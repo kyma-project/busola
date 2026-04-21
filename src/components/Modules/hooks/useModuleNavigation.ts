@@ -117,9 +117,9 @@ export function useModuleNavigation({
     }
 
     const kind = resource.kind;
-    if (!findExtension(kind, extensions) && !findCrd(kind, crds)) {
-      return;
-    }
+    const hasExtension = !!findExtension(kind, extensions);
+    const moduleCrd = findCrd(kind, crds);
+    if (!hasExtension && !moduleCrd) return;
 
     const { group, version } = extractApiGroupVersion(resource.apiVersion);
 
@@ -151,11 +151,8 @@ export function useModuleNavigation({
           liveResource.metadata?.namespace ?? resource.metadata.namespace;
       }
     } catch {
-      // Fetch failed — fall through with template data
+      // best-effort enrichment — continue with template metadata
     }
-
-    const hasExtension = !!findExtension(kind, extensions);
-    const moduleCrd = findCrd(kind, crds);
 
     const partialPath = createModulePartialPath(
       hasExtension,
