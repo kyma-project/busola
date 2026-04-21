@@ -57,12 +57,16 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hi, I am your Kyma assistant!');
 
     cy.wait('@getPromptSuggestions').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: 'default',
-        resourceType: 'Namespace',
-        groupVersion: 'v1',
-        namespace: '',
-      });
+      const { body } = interception.request;
+      expect(body).to.have.property('resourceName', 'default');
+      expect(body).to.have.property('resourceType', 'Namespace');
+      expect(body).to.have.property('groupVersion', 'v1');
+      expect(body).to.have.property('namespace', '');
+      expect(body).to.have.property('clusterUrl');
+      expect(body).to.have.property('certificateAuthorityData');
+      expect(body).to.have.property('clusterToken');
+      expect(body).to.have.property('clientCertificateData');
+      expect(body).to.have.property('clientKeyData');
     });
     cy.wait(1000);
 
