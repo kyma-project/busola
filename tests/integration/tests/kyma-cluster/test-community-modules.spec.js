@@ -150,6 +150,58 @@ context('Test Community Modules views', () => {
       .should('be.visible');
   });
 
+  it('Retains row highlight and details after refresh', () => {
+    cy.get('.community-modules-list')
+      .find('ui5-table-row')
+      .contains('busola')
+      .click();
+
+    cy.getMidColumn().should('be.visible');
+
+    cy.reload();
+    cy.wait(2000);
+
+    cy.getMidColumn().should('be.visible');
+    cy.get('.community-modules-list')
+      .find('ui5-table-row.row-selected')
+      .contains('busola')
+      .should('be.visible');
+
+    cy.closeMidColumn();
+  });
+
+  it('Edit inside module details keeps the list in View mode', () => {
+    cy.get('.community-modules-list')
+      .find('ui5-table-row')
+      .contains('busola')
+      .click();
+
+    cy.getMidColumn().should('be.visible');
+    cy.getMidColumn().inspectTab('Edit');
+
+    cy.get('.community-modules-list')
+      .find('ui5-table-row')
+      .contains('busola')
+      .should('be.visible');
+
+    cy.closeMidColumn();
+  });
+
+  it('Entering Edit mode on the list closes open details', () => {
+    cy.get('.community-modules-list')
+      .find('ui5-table-row')
+      .contains('busola')
+      .click();
+
+    cy.getMidColumn().should('be.visible');
+
+    cy.get('.kyma-modules > ui5-tabcontainer').inspectTab('Edit');
+
+    cy.getMidColumn().should('not.be.visible');
+
+    cy.inspectTab('View');
+  });
+
   it('Test changing Community Module version', () => {
     cy.inspectTab('Edit');
 
