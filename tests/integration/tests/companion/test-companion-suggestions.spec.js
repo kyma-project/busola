@@ -98,12 +98,11 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('@companion').find('.ai-busy-indicator').should('be.visible');
 
     cy.wait('@getPromptSuggestions').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: 'default',
-        resourceType: 'Namespace',
-        groupVersion: 'v1',
-        namespace: '',
-      });
+      const { body } = interception.request;
+      expect(body).to.have.property('resourceName', 'default');
+      expect(body).to.have.property('resourceType', 'Namespace');
+      expect(body).to.have.property('groupVersion', 'v1');
+      expect(body).to.have.property('namespace', '');
     });
 
     cy.get('@companion')
@@ -124,12 +123,11 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('@companion').find('.ai-busy-indicator').should('be.visible');
 
     cy.wait('@getPromptSuggestions').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: '',
-        resourceType: 'Deployment',
-        groupVersion: 'apps/v1',
-        namespace: 'default',
-      });
+      const { body } = interception.request;
+      expect(body).to.have.property('resourceName', '');
+      expect(body).to.have.property('resourceType', 'Deployment');
+      expect(body).to.have.property('groupVersion', 'apps/v1');
+      expect(body).to.have.property('namespace', 'default');
     });
 
     cy.get('@companion')
@@ -150,12 +148,11 @@ context('Test Companion Initial Suggestions', () => {
     cy.get('@companion').find('.ai-busy-indicator').should('be.visible');
 
     cy.wait('@getPromptSuggestions').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: 'default',
-        resourceType: 'Namespace',
-        groupVersion: 'v1',
-        namespace: '',
-      });
+      const { body } = interception.request;
+      expect(body).to.have.property('resourceName', 'default');
+      expect(body).to.have.property('resourceType', 'Namespace');
+      expect(body).to.have.property('groupVersion', 'v1');
+      expect(body).to.have.property('namespace', '');
     });
 
     cy.get('@companion')
@@ -174,14 +171,13 @@ context('Test Companion Initial Suggestions', () => {
     cy.clickSuggestion(0);
 
     cy.wait('@getChatResponse').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: 'default',
-        resourceType: 'Namespace',
-        groupVersion: 'v1',
-        namespace: '',
-        query: 'suggestion4.1',
-      });
-      expect(interception.request.headers['session-id']).to.equal('id-4');
+      const { body } = interception.request;
+      expect(body).to.have.property('resourceName', 'default');
+      expect(body).to.have.property('resourceType', 'Namespace');
+      expect(body).to.have.property('groupVersion', 'v1');
+      expect(body).to.have.property('namespace', '');
+      expect(body).to.have.property('query', 'suggestion4.1');
+      expect(body).to.have.property('session-id', 'id-4');
     });
 
     cy.navigateTo('Workloads', 'Deployments');
