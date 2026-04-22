@@ -42,6 +42,7 @@ kubectl apply -f https://github.com/kyma-project/telemetry-manager/releases/late
 echo "Apply modules fixtures"
 kubectl apply -f tests/integration/fixtures/module-templates-crd.yaml
 kubectl apply -f tests/integration/fixtures/test-crd-kyma.yaml
+kubectl wait --for=condition=established --timeout=60s crd/kymas.operator.kyma-project.io
 kubectl apply -f tests/integration/fixtures/modules
 kubectl apply -f tests/integration/fixtures/community-modules
 
