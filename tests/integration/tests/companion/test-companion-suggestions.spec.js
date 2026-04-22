@@ -85,7 +85,7 @@ context('Test Companion Initial Suggestions', () => {
       expect(body).to.have.property('certificateAuthorityData');
       expect(body).to.have.property('clientCertificateData');
       expect(body).to.have.property('clientKeyData');
-      expect(body).to.have.property('session-id', 'id-1');
+      expect(body).to.have.property('sessionId', 'id-1');
     });
   });
 
@@ -177,7 +177,7 @@ context('Test Companion Initial Suggestions', () => {
       expect(body).to.have.property('groupVersion', 'v1');
       expect(body).to.have.property('namespace', '');
       expect(body).to.have.property('query', 'suggestion4.1');
-      expect(body).to.have.property('session-id', 'id-4');
+      expect(body).to.have.property('sessionId', 'id-4');
     });
 
     cy.navigateTo('Workloads', 'Deployments');

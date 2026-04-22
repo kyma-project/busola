@@ -127,8 +127,8 @@ context('Test Companion Chat Behavior', () => {
       expect(body).to.have.property('resourceType', 'Namespace');
       expect(body).to.have.property('groupVersion', 'v1');
       expect(body).to.have.property('namespace', '');
-      expect(body).to.have.property('query', 'suggestion1.1');
-      expect(body).to.have.property('session-id', 'test-id');
+      expect(body).to.have.property('query', 'suggestion1');
+      expect(body).to.have.property('sessionId', 'test-id');
     });
     cy.wait(250);
 
@@ -154,7 +154,7 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hello, this is an AI response');
 
     cy.wait('@getFollowUpSuggestions').then((interception) => {
-      expect(interception.request.headers['session-id']).to.equal('test-id');
+      expect(interception.request.headers['sessionId']).to.equal('test-id');
     });
     cy.wait(2500);
 
@@ -205,7 +205,7 @@ context('Test Companion Chat Behavior', () => {
       expect(body).to.have.property('groupVersion', 'v1');
       expect(body).to.have.property('namespace', '');
       expect(body).to.have.property('query', 'followup3');
-      expect(body).to.have.property('session-id', 'test-id');
+      expect(body).to.have.property('sessionId', 'test-id');
     });
     cy.wait(250);
 
@@ -231,7 +231,7 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hello, this is an AI response');
 
     cy.wait('@getFollowUpSuggestions').then((interception) => {
-      expect(interception.request.headers['session-id']).to.equal('test-id');
+      expect(interception.request.headers['sessionId']).to.equal('test-id');
     });
     cy.wait(2500);
 
@@ -386,7 +386,7 @@ context('Test Companion Chat Behavior', () => {
       expect(body).to.have.property('groupVersion', 'v1');
       expect(body).to.have.property('namespace', 'default');
       expect(body).to.have.property('query', 'followup5');
-      expect(body).to.have.property('session-id', 'test-id');
+      expect(body).to.have.property('sessionId', 'test-id');
     });
     cy.wait(1000);
   });
