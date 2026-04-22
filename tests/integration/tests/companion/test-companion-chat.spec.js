@@ -154,7 +154,7 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hello, this is an AI response');
 
     cy.wait('@getFollowUpSuggestions').then((interception) => {
-      expect(interception.request.headers['sessionId']).to.equal('test-id');
+      expect(interception.request.body['sessionId']).to.equal('test-id');
     });
     cy.wait(2500);
 
@@ -231,7 +231,7 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hello, this is an AI response');
 
     cy.wait('@getFollowUpSuggestions').then((interception) => {
-      expect(interception.request.headers['sessionId']).to.equal('test-id');
+      expect(interception.request.body['sessionId']).to.equal('test-id');
     });
     cy.wait(2500);
 
