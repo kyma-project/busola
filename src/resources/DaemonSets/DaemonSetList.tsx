@@ -22,7 +22,7 @@ interface DaemonSetListProps {
 
 export function DaemonSetList(props: DaemonSetListProps) {
   const { t } = useTranslation();
-  const restartAction = useRestartAction(props.resourceUrl);
+  const restartAction = useRestartAction(props.resourceUrl, props.namespace);
 
   const customColumns = [
     {
