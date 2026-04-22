@@ -60,14 +60,19 @@ export function useModuleNavigation({
   const getScope = useGetScope();
   const fetch = useFetch();
 
-  const hasDetailsLink = (resource: {
-    name: string;
-    resource?: { kind: string };
-  }) => {
-    const kind = resource?.resource?.kind ?? '';
-    const hasExtension = !!findExtension(kind, extensions);
-    const hasCrd = !!findCrd(kind, crds);
-    return hasExtension || hasCrd;
+  const hasDetailsLink = (resource: ModuleEntry) => {
+    const kind =
+      resource?.resource?.kind ??
+      findModuleTemplate(
+        moduleTemplates,
+        resource?.name,
+        resource?.channel ?? '',
+        resource?.version ?? '',
+        resource?.template,
+        resource?.namespace,
+      )?.spec?.data?.kind ??
+      '';
+    return !!findExtension(kind, extensions) || !!findCrd(kind, crds);
   };
 
   const customColumnLayout = (resource: ModuleEntry) => {

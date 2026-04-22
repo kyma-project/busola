@@ -70,8 +70,17 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
     m?.resource?.kind === midColumn?.rawResourceTypeName &&
     m?.resource?.metadata?.name === midColumn?.resourceName &&
     (m?.resource?.metadata?.namespace ?? '') === (midColumn?.namespaceId ?? '');
+
+  const matchesTemplateData = (t: any) =>
+    t?.spec?.data?.kind === midColumn?.rawResourceTypeName &&
+    t?.spec?.data?.metadata?.name === midColumn?.resourceName;
+  const templateModuleName = (items?: any[]) =>
+    items?.find(matchesTemplateData)?.metadata?.labels?.[
+      'operator.kyma-project.io/module-name'
+    ];
   const layoutMatchedKyma = midColumn?.rawResourceTypeName
-    ? kymaResource?.status?.modules?.find(matchesLayout)?.name
+    ? (kymaResource?.status?.modules?.find(matchesLayout)?.name ??
+      templateModuleName(moduleTemplates?.items))
     : undefined;
   const layoutMatchedCommunity = midColumn?.rawResourceTypeName
     ? installedCommunityModules?.find(matchesLayout)?.name
