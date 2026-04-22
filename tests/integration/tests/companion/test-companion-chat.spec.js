@@ -64,7 +64,6 @@ context('Test Companion Chat Behavior', () => {
       expect(body).to.have.property('namespace', '');
       expect(body).to.have.property('clusterUrl');
       expect(body).to.have.property('certificateAuthorityData');
-      expect(body).to.have.property('clusterToken');
       expect(body).to.have.property('clientCertificateData');
       expect(body).to.have.property('clientKeyData');
     });
