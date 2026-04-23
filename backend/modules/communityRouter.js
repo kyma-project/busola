@@ -26,7 +26,7 @@ async function handleGetCommunityResource(req, res) {
         message: 'Invalid or untrusted link provided.',
       });
     } else {
-      const response = await fetch(link);
+      const response = await fetch(url.href);
       if (response.status === 404) {
         return res.status(404).json({
           message: `The resource doesn't exist`,

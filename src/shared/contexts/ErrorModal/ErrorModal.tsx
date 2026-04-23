@@ -1,6 +1,13 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Bar, Button, Dialog, Icon, Title } from '@ui5/webcomponents-react';
+import {
+  Bar,
+  Button,
+  Dialog,
+  Icon,
+  Text,
+  Title,
+} from '@ui5/webcomponents-react';
 import { useEventListener } from 'hooks/useEventListener';
 
 import './ErrorModal.scss';
@@ -21,7 +28,7 @@ export type ErrorModalProps = ToastProps & {
     close: CloseFn,
     defaultCloseButton: (close: CloseFn) => React.ReactNode,
   ) => React.ReactNode[] | React.ReactNode;
-  content: string | React.ReactElement;
+  content: React.ReactNode;
   wider?: boolean;
 };
 
@@ -50,15 +57,20 @@ export function ErrorModal({
   );
 
   const defaultCloseButton = (close: CloseFn): React.ReactNode => (
-    <Button design="Emphasized" onClick={close}>
-      {buttonDismissText}
-    </Button>
+    <Button onClick={close}>{buttonDismissText}</Button>
   );
 
   return (
     <Dialog
       onClose={close}
-      className={classNames('error-modal', { 'error-modal--wider': wider })}
+      className={classNames(
+        'error-modal',
+        'contentPartNoPadding',
+        'popupHeaderNoLeftPadding',
+        {
+          'error-modal--wider': wider,
+        },
+      )}
       header={
         <Bar
           design="Header"
@@ -66,10 +78,10 @@ export function ErrorModal({
             <>
               <Icon
                 design="Negative"
-                name="message-error"
+                name="error"
                 className="sap-margin-end-tiny"
               />
-              <Title level="H5">{header}</Title>
+              <Title>{header}</Title>
             </>
           }
         />
@@ -88,7 +100,11 @@ export function ErrorModal({
       }
       open
     >
-      {content}
+      {typeof content !== 'string' ? (
+        content
+      ) : (
+        <Text className={'sap-margin-small'}>{content}</Text>
+      )}
     </Dialog>
   );
 }

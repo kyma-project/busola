@@ -173,6 +173,7 @@ export function useAuthHandler() {
       setIsLoading(false);
     } else {
       if (isEqual(prevClusterRef.current, cluster)) return; // Skip if unchanged
+      prevClusterRef.current = cluster;
 
       const userCredentials = cluster.currentContext?.user?.user;
 

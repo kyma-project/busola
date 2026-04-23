@@ -18,7 +18,10 @@ import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import ListActions from 'shared/components/ListActions/ListActions';
 import { Sort, SortModalPanel } from './SortModalPanel';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
-import { pageSizeAtom } from 'state/settings/pageSizeAtom';
+import {
+  AVAILABLE_PAGE_SIZES,
+  pageSizeAtom,
+} from 'state/settings/pageSizeAtom';
 import { UI5Panel } from '../UI5Panel/UI5Panel';
 import { EmptyListComponent } from '../EmptyListComponent/EmptyListComponent';
 import { useUrl } from 'hooks/useUrl';
@@ -86,6 +89,7 @@ type GenericListProps = {
   hasDetailsView?: boolean;
   disableHiding?: boolean;
   displayArrow?: boolean;
+  hasRowDetails?: (entry: any) => boolean;
   nameColIndex?: number;
   namespaceColIndex?: number;
   noHideFields?: string[];
@@ -136,6 +140,7 @@ export const GenericList = ({
   hasDetailsView,
   disableHiding = true,
   displayArrow = false,
+  hasRowDetails,
   nameColIndex = 0,
   namespaceColIndex = -1,
   noHideFields,
@@ -256,6 +261,9 @@ export const GenericList = ({
   useEffect(() => setCurrentPage(1), [searchQuery]);
 
   useEffect(() => {
+    // customRowClick lists manage selection via customSelectedEntry
+    if (customRowClick) return;
+
     const selected = entries
       .filter((entry) => {
         const name = entry?.metadata?.name;
@@ -332,7 +340,9 @@ export const GenericList = ({
     const item = (
       (nameColElement?.children?.[0] as HTMLElement)?.innerText ??
       (nameColElement as HTMLElement)?.innerText
-    )?.trimEnd();
+    )
+      ?.replace(/\n/g, '')
+      ?.trimEnd();
 
     const hasNamepace = namespaceColIndex !== -1;
     const namespaceColElement = hasNamepace
@@ -348,10 +358,7 @@ export const GenericList = ({
         (entry?.metadata?.name === item ||
           pluralize(entry?.spec?.names?.kind ?? '') === item ||
           entry?.name === item) &&
-        (!hasNamepace ||
-          entry?.metadata?.namespace === itemNamespace ||
-          // special case for Community Modules
-          entry?.resource?.metadata?.namespace === itemNamespace)
+        (!hasNamepace || entry?.metadata?.namespace === itemNamespace)
       );
     });
 
@@ -505,12 +512,13 @@ export const GenericList = ({
           actions={actions}
           rowRenderer={rowRenderer}
           displayArrow={displayArrow}
+          hasRowDetails={hasRowDetails}
           enableColumnLayout={!!enableColumnLayout}
         />
       </Table>
       {pagination &&
         (!pagination.autoHide ||
-          filteredEntries.length > (pagination?.itemsPerPage ?? 0)) && (
+          filteredEntries.length > AVAILABLE_PAGE_SIZES[0]) && (
           <Pagination
             itemsTotal={filteredEntries.length}
             currentPage={currentPage}

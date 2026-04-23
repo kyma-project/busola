@@ -1,6 +1,7 @@
-/* global  require, process */
+/* global  require, process, __dirname */
 import { handleK8sRequests } from './kubernetes/handler';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
+import rateLimit from 'express-rate-limit';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
@@ -12,6 +13,7 @@ const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
+const path = require('path');
 const config = require('./config.js');
 
 const app = express();
@@ -58,6 +60,31 @@ const SLOW_REQUEST_THRESHOLD_MS = parseInt(
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
 app.use('/proxy', proxyRateLimiter, proxyHandler);
+
+const kubeconfigRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 30,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.get('/backend/kubeconfig', kubeconfigRateLimiter, (req, res) => {
+  const kubeconfigDir = path.join(
+    __dirname,
+    process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
+  );
+  fs.readdir(kubeconfigDir, (err, files) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to read kubeconfig directory' });
+      return;
+    }
+    const yamlFiles = files.filter(
+      (f) => f.endsWith('.yaml') || f.endsWith('.yml'),
+    );
+    res.json(yamlFiles);
+  });
+});
 
 let server = null;
 

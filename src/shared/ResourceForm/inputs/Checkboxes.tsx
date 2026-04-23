@@ -1,4 +1,3 @@
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { CheckBox, FlexBox, Icon } from '@ui5/webcomponents-react';
 
 type Option = {
@@ -39,17 +38,12 @@ export function Checkboxes({
             text={text}
           />
           {description && (
-            <Tooltip
-              className="has-tooltip"
-              delay={[0, 0]}
-              content={description}
-            >
-              <Icon
-                className="bsl-icon-m"
-                name="message-information"
-                design="Information"
-              />
-            </Tooltip>
+            <Icon
+              className="bsl-icon-m"
+              name="message-information"
+              design="Information"
+              title={description}
+            />
           )}
         </FlexBox>
       ))}

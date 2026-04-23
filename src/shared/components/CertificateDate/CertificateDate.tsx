@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { FormattedDatetime } from 'shared/components/FormattedDate/FormattedDate';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Icon } from '@ui5/webcomponents-react';
 import useDateNow from 'shared/hooks/useDateNow';
 
@@ -59,13 +58,12 @@ export function CertificateDate({ date, lang }: CertificateDateProps) {
   return (
     <>
       <FormattedDatetime date={date} lang={lang} />
-      <Tooltip content={certificateDetails.tooltipContent}>
-        <Icon
-          accessibleName={certificateDetails.ariaLabel}
-          name={certificateDetails.glyph}
-          className={`bsl-has-color-status-${certificateDetails.colorIndex} has-tooltip bsl-icon-s sap-margin-begin-tiny`}
-        />
-      </Tooltip>
+      <Icon
+        accessibleName={certificateDetails.ariaLabel}
+        name={certificateDetails.glyph}
+        title={certificateDetails.tooltipContent}
+        className={`bsl-has-color-status-${certificateDetails.colorIndex} bsl-icon-s sap-margin-begin-tiny`}
+      />
     </>
   );
 }
