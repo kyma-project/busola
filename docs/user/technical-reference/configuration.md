@@ -30,13 +30,13 @@ Initialization of the Busola features is based on the **stage** property, which 
 
 - Busola backend default cluster configuration, loaded from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/backend/settings/defaultConfig.yaml) file.
 - Busola cluster configuration available at `public/config/config.yaml` for local development or `/core-ui/config/config.yaml` in the container.
-  To mount the configuration in a deployed Busola on a k8s cluster, create the ConfigMap `busola/busola-config` under the key **config**.
+  To mount the configuration in a deployed Busola on a Kubernetes cluster, create the ConfigMap `busola/busola-config` under the key **config**.
 
 ### Frontend
 
 - Busola frontend default cluster configuration, loaded from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/public/defaultConfig.yaml) file.
 - Busola cluster configuration available at `public/config/config.yaml` for local development or `/core-ui/config/config.yaml` in the container.
-  To mount the configuration in a deployed Busola on a k8s cluster, create the ConfigMap `busola/busola-config` under the key **config**.
+  To mount the configuration in a deployed Busola on a Kubernetes cluster, create the ConfigMap `busola/busola-config` under the key **config**.
 - Environment-specific configuration with `extensibility` and `config` located in `public/environments`. Activate it with the `active.env` file. See [Environment-Specific Settings](#environment-specific-settings).
 - **Per-cluster configuration**, available in the target cluster in ConfigMap `kube-public/busola-config` under the key **config**. Busola requests that resource during the bootstrap process.
 
