@@ -147,6 +147,7 @@
   },
   "overrides": {
     "d3-color": "^3.1.0",
-    "prismjs": "1.30.0"
+    "prismjs": "1.30.0",
+    "underscore": "^1.13.8"
   }
 }
