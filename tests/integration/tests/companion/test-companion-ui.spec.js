@@ -143,8 +143,6 @@ context('Test Companion UI', () => {
       cy.setBusolaFeature('KYMA_COMPANION', true);
       cy.reload();
 
-      cy.wait(2000);
-
       cy.get('ui5-shellbar').as('shellbar');
 
       cy.get('@shellbar').find('#clusterSwitcherOpener').click();
