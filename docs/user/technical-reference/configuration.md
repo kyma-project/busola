@@ -19,6 +19,7 @@ You can configure Busola at two levels:
 - Busola backend default cluster configuration, loaded from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/backend/settings/defaultConfig.yaml) file.
 - Busola cluster configuration available at `public/config/config.yaml` for local development or `/core-ui/config/config.yaml` in the container.
   To mount the configuration in a deployed Busola on a Kubernetes cluster, create the ConfigMap `busola/busola-config` under the key **config**.
+- Environment-specific configuration with `config.yaml` located in `backend/environments`. Activate it with the `active.env` file. See [Environment-Specific Settings](#environment-specific-settings).
 
 ### Frontend
 
