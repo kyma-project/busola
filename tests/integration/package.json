@@ -19,7 +19,7 @@
     "test:accesibility:local": "CYPRESS_LOCAL_DEV=true cypress run --spec \"tests/accessibility/*.spec.js\" --browser chrome"
   },
   "devDependencies": {
-    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-7.3.0.tgz",
+    "@continuum/continuum-javascript-professional": "file:./lib/continuum-continuum-javascript-professional-6.1.0.tgz",
     "cypress": "^15.14.1",
     "cypress-file-upload": "^5.0.8",
     "cypress-plugin-tab": "^2.0.0",
