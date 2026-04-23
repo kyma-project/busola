@@ -151,6 +151,7 @@ context('Test Companion UI', () => {
 
       cy.get('ui5-menu[opener="clusterSwitcherOpener"]')
         .find('ui5-menu-item[accessible-name="Clusters"]:visible')
+        .find('li[part="native-li"]')
         .click({ force: true });
 
       cy.wait(1000);
