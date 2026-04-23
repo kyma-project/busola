@@ -4,7 +4,7 @@ The document explains the usage of feature flags in Busola, lists and describes 
 
 ## Configuring Feature Flags
 
-[Configuration.md](Here is descritpion how to work with conflig files in busola)
+[Configuration.md](Here is description how to work with config files in busola)
 
 ## Configurable Flags for Frontend
 
