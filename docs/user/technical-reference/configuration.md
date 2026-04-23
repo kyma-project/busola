@@ -14,6 +14,8 @@ You can configure Busola at two levels:
 - Installation-Level Configuration — adjusts backend and frontend for all clusters.
 - Per-Cluster Configuration — configures the Busola frontend for a specific cluster only.
 
+[//]: # 'Prawdopodobnie do wywalenia, jedynie EXTERNAL_NODES tego niby używa, ale nie znalazłem w kodzie, żeby to było brane pod uwagę.'
+
 ## Features Priority
 
 Initialization of the Busola features is based on the **stage** property, which can take one of the following values:
