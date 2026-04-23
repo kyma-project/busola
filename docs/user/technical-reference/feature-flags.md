@@ -16,10 +16,9 @@ For details on the ConfigMap structure and available configuration keys, see [Bu
 
 You can configure feature flags globally for all clusters at the Busola installation level. There are two options:
 
-- Modify the `config.yaml` file in your environment directory under `public/environments`. This affects all clusters managed by that Busola installation.
-- Set the `ENVIRONMENT` environment variable to point to a custom environment directory that contains your `config.yaml` with the desired flags.
+- Modify the `config.yaml` in `public/config`.
+- Set the `ENVIRONMENT` environment variable to point to a custom environment. For details on environment-specific settings, see [Busola Configuration](configuration.md#environment-specific-settings).
 
-For details on environment-specific settings, see [Busola Configuration](configuration.md#environment-specific-settings).
 
 ## Features Priority
 
