@@ -11,7 +11,7 @@ export default [
   },
   {
     text: 'Configuring Busola',
-    link: './01-42-configure-busola.md',
+    link: './01-42-configuration-busola-deployment.md',
   },
   {
     text: 'Generating a Token for Busola Instances',

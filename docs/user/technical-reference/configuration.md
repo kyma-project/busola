@@ -1,35 +1,46 @@
 # Busola Configuration
 
-Learn about the default configuration in Busola and how to change it.
+Learn about the configuration works in Busola and how to change it.
 
 ## Configuration Sources
 
-Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence.
+Busola configuration is the product of gathering and merging the configurations from several individual sources.
+The order of configuration is important.
+The order is from least to the most important as given in ####Backend and ####Frotnend section.
+
+## Configuration can be configured at two levels:
+
+- Installation-Level Configuration which can adjust backend and frontend for all clusters.
+- Per-Cluster Configuration which can only configure busola frotnend for specific cluster.
+
+[//]: # 'Prawdopodobnie do wywalenia, jedynie EXTERNAL_NODES tego niby izywa, ale nie znalazłem w kodzie zeby to bylo brane pod uwage'
+
+## Features Priority
+
+Initialization of the Busola features is based on the **stage** property, which can take one of the following values:
+
+- `PRIMARY` - the feature is resolved while the application bootstraps. Features that must be immediately visible must be set as `PRIMARY`, for example, the main navigation structure.
+- `SECONDARY` - the feature is resolved after the application is ready, it must be used for non-critical features, for example, additional navigation nodes.
 
 > [!NOTE]
-> Use the `busola-config` ConfigMap **only to configure Busola features**, not storage. To override the storage configuration, you must use environment variables. For details, see [Configure Busola with environment variables](../01-42-configure-busola.md).
+> Some features must be run before the application starts the bootstrap process, so they are out of the ordinary feature flow.
+> [//]: # ()
 
-### Backend
+#### Backend
 
 - Busola backend default cluster configuration, acquired from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/backend/settings/defaultConfig.yaml) file.
-- Busola cluster configuration, available in the Busola cluster in the ConfigMap `busola/busola-config` under the key **config**.
-  This data is mounted to the `busola` Pods, and during the local development,
-  the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/backend/settings/defaultConfig.yaml) file is used.
+- Busola cluster configuration available at `public/config/config.yaml` for local development or `/core-ui/config/config.yaml` in the container.
+  The configuration can be mounted in deployed busola on k8s cluster by creating the ConfigMap `busola/busola-config` under the key **config**.
 
-### Frontend
+#### Frontend
 
-- Built-in, hardcoded defaults.
 - Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/public/defaultConfig.yaml) file.
-- Busola cluster configuration, available in the Busola cluster in the ConfigMap `busola/busola-config` under the key **config**.
-  This data is mounted to the `busola` Pods, and during the local development,
-  the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/public/defaultConfig.yaml) file is used.
-- Target cluster configuration, available in the target cluster in ConfigMap `kube-public/busola-config` under the key **config**. Busola performs a request for that resource during the bootstrap process.
-- Busola active environment, `active.env` file is used.
-- Custom configuration with `extensibility` and `config` located in `public/environments`. See [Environment-Specific Settings](#environment-specific-settings).
+- Busola cluster configuration available at `public/config/config.yaml` for local development or `/core-ui/config/config.yaml` in the container.
+  The configuration can be mounted in deployed busola on k8s cluster by creating the ConfigMap `busola/busola-config` under the key **config**.
+- Environment specific configuration with `extensibility` and `config` located in `public/environments`. Activated by `active.env` file. See [Environment-Specific Settings](#environment-specific-settings).
+- **Per cluster configuration**, available in the target cluster in ConfigMap `kube-public/busola-config` under the key **config**. Busola performs a request for that resource during the bootstrap process.
 
 ## Changing the Configuration
-
-If you have the required authorizations and access to the kubeconfig, you can change the settings for the Busola cluster configuration and the target cluster configuration.
 
 With the `feature` toggles, you can switch each Busola feature on or off and configure them to fit your needs.
 Features comprise the following elements:
@@ -47,7 +58,7 @@ You can provide an override to the default configuration with your own environme
 Follow this pattern to structure your custom environment directory and place it in `public/environments`.
 
 ```
-custom-env/
+my-env/
 ├── config
 │   └── config.yaml
 └── extensions

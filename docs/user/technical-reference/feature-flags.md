@@ -4,33 +4,7 @@ The document explains the usage of feature flags in Busola, lists and describes 
 
 ## Configuring Feature Flags
 
-Feature flags can be configured at two levels:
-
-### Per-Cluster Configuration
-
-You can configure feature flags for a specific cluster by uploading a `busola-config` ConfigMap to the `kube-public` namespace of that cluster. When you log in to the cluster, Busola reads the ConfigMap and applies the feature flags accordingly.
-
-For details on the ConfigMap structure and available configuration keys, see [Busola Configuration](configuration.md).
-
-### Installation-Level Configuration
-
-You can configure feature flags globally for all clusters at the Busola installation level. There are two options:
-
-- Modify the `config.yaml` in `public/config`.
-- Set the `ENVIRONMENT` environment variable to point to a custom environment. For details on environment-specific settings, see [Busola Configuration](configuration.md#environment-specific-settings).
-
-
-## Features Priority
-
-Initialization of the Busola features is based on the **stage** property, which can take one of the following values:
-
-- `PRIMARY` - the feature is resolved while the application bootstraps. Features that must be immediately visible must be set as `PRIMARY`, for example, the main navigation structure.
-- `SECONDARY` - the feature is resolved after the application is ready, it must be used for non-critical features, for example, additional navigation nodes.
-
-If the **stage** property is not set, the feature is loaded only on demand, most often by an iframe. Use the `useFeature` hook to request usage of such a feature.
-
-> [!NOTE]
-> Some features must be run before the application starts the bootstrap process, so they are out of the ordinary feature flow.
+[Configuration.md](Here is descritpion how to work with conflig files in busola)
 
 ## Configurable Flags for Frontend
 

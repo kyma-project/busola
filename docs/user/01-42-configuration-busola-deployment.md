@@ -1,4 +1,4 @@
-# Configuring Busola
+# Configuring Busola Deployment
 
 ## Prerequisites
 
@@ -10,6 +10,8 @@
 You can configure Busola to suit your needs. To do so, follow these steps:
 
 1. Go to the `resources/customization` folder and adjust the provided configuration as needed.
+   The changed configuration is replacing all busola default configuration except `defaultConig.yaml`.
+   For more info: [configuration](technical-reference/configuration.md).
 2. Set the **NAMESPACE** shell environment variable:
 
    ```bash
