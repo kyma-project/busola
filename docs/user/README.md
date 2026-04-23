@@ -35,5 +35,5 @@ You can use Kyma dashboard to perform the following actions:
 - [Extensibility](01-30-extensibility.md)
 - [Deploying and Accessing Busola in a Kubernetes Cluster](01-40-deploy-access-kubernetes.md)
 - [Deploying and Accessing Busola in k3d](01-41-deploy-access-k3d.md)
-- [Configuring Busola](01-42-configure-busola.md)
+- [Configuring Busola](01-42-configuring-busola-deployment.md)
 - [Feature Flags](technical-reference/feature-flags.md)
