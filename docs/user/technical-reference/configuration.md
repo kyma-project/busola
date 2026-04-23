@@ -14,18 +14,6 @@ You can configure Busola at two levels:
 - Installation-Level Configuration — adjusts backend and frontend for all clusters.
 - Per-Cluster Configuration — configures the Busola frontend for a specific cluster only.
 
-[//]: # 'Prawdopodobnie do wywalenia, jedynie EXTERNAL_NODES tego niby używa, ale nie znalazłem w kodzie, żeby to było brane pod uwagę.'
-
-## Features Priority
-
-Initialization of the Busola features is based on the **stage** property, which can take one of the following values:
-
-- `PRIMARY` - Busola resolves the feature while the application bootstraps. Set features as `PRIMARY` when they must be immediately visible, for example, the main navigation structure.
-- `SECONDARY` - Busola resolves the feature after the application is ready. Use this stage for non-critical features, for example, additional navigation nodes.
-
-> [!NOTE]
-> Some features must run before the application starts the bootstrap process, so they are out of the ordinary feature flow.
-
 ### Backend
 
 - Busola backend default cluster configuration, loaded from the [defaultConfig.yaml](https://github.com/kyma-project/busola/blob/main/backend/settings/defaultConfig.yaml) file.
