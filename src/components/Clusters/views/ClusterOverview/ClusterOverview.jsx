@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router';
@@ -19,7 +18,6 @@ import ClusterStats from './ClusterStats';
 import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner';
 
 import './ClusterOverview.scss';
@@ -52,19 +50,6 @@ export function ClusterOverview() {
   });
   const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
   const isSAPUser = useCheckSAPUser();
-
-  const setLayoutColumn = useSetAtom(columnLayoutAtom);
-  useEffect(() => {
-    setLayoutColumn({
-      layout: 'OneColumn',
-      startColumn: {
-        resourceType: 'Cluster',
-        rawResourceTypeName: 'Cluster',
-      },
-      midColumn: null,
-      endColumn: null,
-    });
-  }, [setLayoutColumn]);
 
   const actions = (
     <section aria-label="Cluster actions" className="actions">
