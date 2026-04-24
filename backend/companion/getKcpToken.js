@@ -20,6 +20,15 @@ export async function getKcpToken() {
     throw new Error('Client Secret is not configured.');
   }
 
+  // Validate credentials contain only safe characters to prevent header injection
+  // from file-sourced data (no control characters or newlines)
+  if (!/^[\x20-\x7E]+$/.test(clientId)) {
+    throw new Error('Client ID contains invalid characters.');
+  }
+  if (!/^[\x20-\x7E]+$/.test(clientSecret)) {
+    throw new Error('Client Secret contains invalid characters.');
+  }
+
   // Prepare request data
   const requestBody = new URLSearchParams();
   requestBody.append('grant_type', grantType);
