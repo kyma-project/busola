@@ -61,7 +61,7 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
     onActivate: () => {
       const pathname = `/cluster/${encodeURIComponent(
         activeClusterName ?? '',
-      )}/namespaces/${namespace}/helm-releases/${name}`;
+      )}/namespaces/${namespace}/helm-releases/${name}?layout=TwoColumnsMidExpanded`;
       navigate(pathname);
     },
     customActionText: 'command-palette.item-actions.navigate',

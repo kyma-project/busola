@@ -124,12 +124,7 @@ export function ResourceListRenderer({
     e.preventDefault();
 
     setLayoutColumn({
-      midColumn: null,
-      showCreate: null,
-      endColumn: null,
-      layout: 'OneColumn',
-      showEdit: null,
-      startColumn: {
+      midColumn: {
         resourceName: entry?.metadata?.name ?? e.target.innerText,
         resourceType: resourceType,
         rawResourceTypeName: rawResourceType,
@@ -137,9 +132,22 @@ export function ResourceListRenderer({
         apiGroup: entry.metadata.group,
         apiVersion: entry.apiVersion,
       },
+      showCreate: null,
+      endColumn: null,
+      layout: 'TwoColumnsMidExpanded',
+      showEdit: null,
+      startColumn: {
+        resourceName: null,
+        resourceType: resourceType,
+        rawResourceTypeName: rawResourceType,
+        namespaceId: entry?.metadata?.namespace ?? null,
+        apiGroup: entry.metadata.group,
+        apiVersion: entry.apiVersion,
+      },
     });
+    const url = `${linkTo(entry)}?layout=TwoColumnsMidExpanded`;
 
-    navigate(`${linkTo(entry)}`);
+    navigate(url);
   };
 
   const defaultColumns = [

@@ -62,7 +62,7 @@ export function DetailsCard({
 
             navigate(
               clusterUrl(
-                `${namespacePart}${node.resourceType}/${resource.metadata.name}`,
+                `${namespacePart}${node.resourceType}/${resource.metadata.name}?layout=TwoColumnsMidExpanded`,
               ),
             );
 

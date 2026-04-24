@@ -68,7 +68,7 @@ function makeListItem(
   const name = item.metadata.name;
 
   const namespacePart = `namespaces/${item.metadata.namespace}`;
-  const link = `${namespacePart}/${matchedNode.pathSegment}/${name}`;
+  const link = `${namespacePart}/${matchedNode.pathSegment}/${name}?layout=TwoColumnsMidExpanded`;
 
   return {
     label: name,

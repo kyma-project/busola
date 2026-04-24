@@ -11,6 +11,7 @@ type LinkProps = {
   dataTestId?: string;
   design?: 'Default' | 'Subtle' | 'Emphasized';
   resetLayout?: boolean;
+  layout?: string | false;
   onClick?: any;
   style?: React.CSSProperties;
 };
@@ -21,16 +22,19 @@ export const Link = ({
   children,
   dataTestId,
   design = 'Emphasized',
-  resetLayout = true,
+  layout = 'TwoColumnsMidExpanded',
+  resetLayout = false,
   onClick,
   style = {},
 }: LinkProps) => {
   const setLayout = useSetAtom(columnLayoutAtom);
   const navigate = useNavigate();
+  const finalUrl = layout
+    ? `${url}${url.includes('?') ? '&' : '?'}layout=${layout}`
+    : url;
 
   function handleOnlick(resetLayout: any, url: any, e: any) {
     e.preventDefault();
-
     if (resetLayout) {
       setLayout({
         startColumn: null,
@@ -49,9 +53,9 @@ export const Link = ({
       className={className}
       data-testid={dataTestId}
       onClick={(e) =>
-        onClick ? onClick(e) : handleOnlick(resetLayout, url, e)
+        onClick ? onClick(e) : handleOnlick(resetLayout, finalUrl, e)
       }
-      href={url}
+      href={finalUrl}
       target="_blank"
       style={style}
     >
