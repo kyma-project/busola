@@ -52,7 +52,6 @@ EXTENSIBILITY_INJECTIONS:
   ```yaml
   EXTERNAL_NODES:
     isEnabled: true
-    stage: SECONDARY
     nodes:
       - category: My Category
         icon: course-book

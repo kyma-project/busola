@@ -5,7 +5,6 @@ export type Scope = 'namespace' | 'cluster';
 
 export interface ConfigFeature {
   isEnabled?: boolean;
-  stage?: 'PRIMARY' | 'SECONDARY';
   [key: string]: any;
 }
 
