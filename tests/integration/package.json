@@ -24,5 +24,8 @@
     "cypress-file-upload": "^5.0.8",
     "cypress-plugin-tab": "^2.0.0",
     "js-yaml": "^4.1.1"
+  },
+  "overrides": {
+    "axios": "^0.31.0"
   }
 }
