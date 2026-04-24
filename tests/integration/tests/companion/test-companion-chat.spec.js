@@ -58,10 +58,10 @@ context('Test Companion Chat Behavior', () => {
 
     cy.wait('@getPromptSuggestions').then((interception) => {
       const { body } = interception.request;
-      expect(body).to.have.property('resourceName', 'default');
-      expect(body).to.have.property('resourceType', 'Namespace');
-      expect(body).to.have.property('groupVersion', 'v1');
-      expect(body).to.have.property('namespace', '');
+      expect(body.resourceName).to.deep.equal('default');
+      expect(body.resourceType).to.deep.equal('Namespace');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('');
       expect(body).to.have.property('clusterUrl');
       expect(body).to.have.property('certificateAuthorityData');
       expect(body).to.have.property('clientCertificateData');
@@ -123,12 +123,12 @@ context('Test Companion Chat Behavior', () => {
 
     cy.wait('@getChatResponse').then((interception) => {
       const { body } = interception.request;
-      expect(body).to.have.property('resourceName', 'default');
-      expect(body).to.have.property('resourceType', 'Namespace');
-      expect(body).to.have.property('groupVersion', 'v1');
-      expect(body).to.have.property('namespace', '');
-      expect(body).to.have.property('query', 'suggestion1');
-      expect(body).to.have.property('sessionId', 'test-id');
+      expect(body.resourceName).to.deep.equal('default');
+      expect(body.resourceType).to.deep.equal('Namespace');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('');
+      expect(body.query).to.deep.equal('suggestion1');
+      expect(body.sessionId).to.deep.equal('test-id');
     });
     cy.wait(250);
 
@@ -200,12 +200,12 @@ context('Test Companion Chat Behavior', () => {
 
     cy.wait('@getChatResponse').then((interception) => {
       const { body } = interception.request;
-      expect(body).to.have.property('resourceName', 'default');
-      expect(body).to.have.property('resourceType', 'Namespace');
-      expect(body).to.have.property('groupVersion', 'v1');
-      expect(body).to.have.property('namespace', '');
-      expect(body).to.have.property('query', 'followup3');
-      expect(body).to.have.property('sessionId', 'test-id');
+      expect(body.resourceName).to.deep.equal('default');
+      expect(body.resourceType).to.deep.equal('Namespace');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('');
+      expect(body.query).to.deep.equal('followup3');
+      expect(body.sessionId).to.deep.equal('test-id');
     });
     cy.wait(250);
 
@@ -381,12 +381,12 @@ context('Test Companion Chat Behavior', () => {
 
     cy.wait('@getChatResponse').then((interception) => {
       const { body } = interception.request;
-      expect(body).to.have.property('resourceName', '');
-      expect(body).to.have.property('resourceType', 'ServiceAccount');
-      expect(body).to.have.property('groupVersion', 'v1');
-      expect(body).to.have.property('namespace', 'default');
-      expect(body).to.have.property('query', 'followup5');
-      expect(body).to.have.property('sessionId', 'test-id');
+      expect(body.resourceName).to.deep.equal('');
+      expect(body.resourceType).to.deep.equal('ServiceAccount');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('default');
+      expect(body.query).to.deep.equal('followup5');
+      expect(body.sessionId).to.deep.equal('test-id');
     });
     cy.wait(1000);
   });
@@ -441,10 +441,10 @@ context('Test Companion Chat Behavior', () => {
 
     cy.wait('@getPromptSuggestions').then((interception) => {
       const { body } = interception.request;
-      expect(body).to.have.property('resourceName', '');
-      expect(body).to.have.property('resourceType', 'ServiceAccount');
-      expect(body).to.have.property('groupVersion', 'v1');
-      expect(body).to.have.property('namespace', 'default');
+      expect(body.resourceName).to.deep.equal('');
+      expect(body.resourceType).to.deep.equal('ServiceAccount');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('default');
     });
     cy.wait(1000);
 
