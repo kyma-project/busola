@@ -1033,7 +1033,7 @@ modules:
     update:
       confirmation: Update <0>{{moduleName}}</0>?
       current-version: Current version
-      delete-old-template: Delete old ModuleTemplate
+      delete-old-templates: Delete old module templates
       latest-version: Latest version
       module: Module
       note: Note

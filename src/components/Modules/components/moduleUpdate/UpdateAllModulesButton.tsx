@@ -14,6 +14,7 @@ import {
 } from '@ui5/webcomponents-react';
 import {
   DEFAULT_K8S_NAMESPACE,
+  getModuleName,
   ModuleTemplateType,
 } from 'components/Modules/support';
 import { useAtomValue } from 'jotai';
@@ -30,6 +31,10 @@ import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadRes
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
+import {
+  useDeleteOldModuleTemplates,
+  DeleteOldModulesCheck,
+} from './DeleteOldModulesCheck';
 
 type UpdatableModule = {
   moduleName: string;
@@ -82,7 +87,8 @@ export const UpdateAllModulesButton = () => {
   const selectionRef = useRef<TableSelectionMultiDomRef | null>(null);
 
   const { preloadedCommunityTemplates } = useContext(ModuleTemplatesContext);
-  const { installedCommunityModules } = useContext(CommunityModuleContext);
+  const { installedCommunityModules, installedCommunityModuleTemplates } =
+    useContext(CommunityModuleContext);
 
   const clusterNodes = useAtomValue(allNodesAtom).filter(
     (node) => !node.namespaced,
@@ -107,6 +113,19 @@ export const UpdateAllModulesButton = () => {
       };
     })
     .filter((m): m is UpdatableModule => m !== null);
+
+  const allOldModuleTemplates = updatableModules.flatMap(
+    ({ moduleName, newVersion }) =>
+      (installedCommunityModuleTemplates.items ?? []).filter(
+        (tpl) =>
+          tpl.metadata.creationTimestamp !== undefined &&
+          getModuleName(tpl) === moduleName &&
+          tpl.spec.version !== newVersion,
+      ),
+  );
+
+  const { deleteOldTemplates, setDeleteOldTemplate, deleteOldTemplate } =
+    useDeleteOldModuleTemplates(allOldModuleTemplates);
 
   const uploadResources = useUploadResources(
     resourcesToApply,
@@ -162,6 +181,7 @@ export const UpdateAllModulesButton = () => {
 
   const handleOpen = () => {
     setSelectedModuleNames(new Set(updatableModules.map((m) => m.moduleName)));
+    setDeleteOldTemplate(true);
     setIsDialogOpen(true);
   };
 
@@ -171,6 +191,8 @@ export const UpdateAllModulesButton = () => {
     notification.notifySuccess({
       content: t('modules.community.messages.module-update-started'),
     });
+
+    await deleteOldTemplates();
 
     const templateMap = new Map<string, ModuleTemplateType>();
     updatableModules
@@ -206,49 +228,54 @@ export const UpdateAllModulesButton = () => {
             </Button>,
           ]}
         >
-          <Text>{t('modules.community.update.update-all-confirmation')}</Text>
-          <div className="sap-margin-top-small">
-            <Table
-              features={
-                <TableSelectionMulti
-                  ref={selectionRef}
-                  selected={[...selectedModuleNames].join(' ')}
-                  onChange={handleSelectionChange}
-                />
-              }
-              headerRow={
-                <TableHeaderRow>
-                  <TableHeaderCell>
-                    {t('modules.community.update.module')}
-                  </TableHeaderCell>
-                  <TableHeaderCell>
-                    {t('modules.community.update.current-version')}
-                  </TableHeaderCell>
-                  <TableHeaderCell>
-                    {t('modules.community.update.latest-version')}
-                  </TableHeaderCell>
-                  <TableHeaderCell>
-                    {t('modules.community.update.note')}
-                  </TableHeaderCell>
-                </TableHeaderRow>
-              }
-            >
-              {updatableModules.length !== 0 &&
-                updatableModules.map(
-                  ({ moduleName, currentVersion, newVersion }) => (
-                    <TableRow key={moduleName} rowKey={moduleName}>
-                      <TableCell>{moduleName}</TableCell>
-                      <TableCell>{currentVersion}</TableCell>
-                      <TableCell>{newVersion}</TableCell>
-                      <TableCell>
-                        {/* TODO: Has to be adjusted when we get Release Notes in modules - 
+          <Text className="sap-margin-small">
+            {t('modules.community.update.update-all-confirmation')}
+          </Text>
+          <Table
+            features={
+              <TableSelectionMulti
+                ref={selectionRef}
+                selected={[...selectedModuleNames].join(' ')}
+                onChange={handleSelectionChange}
+              />
+            }
+            headerRow={
+              <TableHeaderRow>
+                <TableHeaderCell>
+                  {t('modules.community.update.module')}
+                </TableHeaderCell>
+                <TableHeaderCell>
+                  {t('modules.community.update.current-version')}
+                </TableHeaderCell>
+                <TableHeaderCell>
+                  {t('modules.community.update.latest-version')}
+                </TableHeaderCell>
+                <TableHeaderCell>
+                  {t('modules.community.update.note')}
+                </TableHeaderCell>
+              </TableHeaderRow>
+            }
+          >
+            {updatableModules.length !== 0 &&
+              updatableModules.map(
+                ({ moduleName, currentVersion, newVersion }) => (
+                  <TableRow key={moduleName} rowKey={moduleName}>
+                    <TableCell>{moduleName}</TableCell>
+                    <TableCell>{currentVersion}</TableCell>
+                    <TableCell>{newVersion}</TableCell>
+                    <TableCell>
+                      {/* TODO: Has to be adjusted when we get Release Notes in modules - 
                         https://github.com/kyma-project/busola/issues/4826 */}
-                      </TableCell>
-                    </TableRow>
-                  ),
-                )}
-            </Table>
-          </div>
+                    </TableCell>
+                  </TableRow>
+                ),
+              )}
+          </Table>
+          <DeleteOldModulesCheck
+            oldModuleTemplates={allOldModuleTemplates}
+            deleteOldTemplate={deleteOldTemplate}
+            setDeleteOldTemplate={setDeleteOldTemplate}
+          />
         </MessageBox>
       )}
     </>

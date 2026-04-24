@@ -1,19 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import {
-  Button,
-  CheckBox,
-  Label,
-  MessageBox,
-  Text,
-} from '@ui5/webcomponents-react';
+import { Button, Label, MessageBox, Text } from '@ui5/webcomponents-react';
 import {
   DEFAULT_K8S_NAMESPACE,
   ModuleTemplateType,
 } from 'components/Modules/support';
 import { useAtomValue } from 'jotai';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import { fetchResourcesToApply } from '../../community/communityModulesHelpers';
@@ -26,6 +20,10 @@ import {
 import { TFunction } from 'i18next';
 //import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import './UpdateModuleButton.scss';
+import {
+  useDeleteOldModuleTemplates,
+  DeleteOldModulesCheck,
+} from './DeleteOldModulesCheck';
 
 type UpdateModuleButtonProps = {
   moduleName: string;
@@ -82,15 +80,16 @@ export const UpdateModuleButton = ({
   const { t } = useTranslation();
   const postRequest = usePost();
   const patchRequest = useUpdate();
-  const deleteRequest = useDelete();
   const singleGet = useSingleGet();
   const notification = useNotification();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [deleteOldTemplate, setDeleteOldTemplate] = useState(true);
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
   const [pendingUpdate, setPendingUpdate] = useState(false);
+
+  const { deleteOldTemplates, setDeleteOldTemplate, deleteOldTemplate } =
+    useDeleteOldModuleTemplates(oldModuleTemplates);
 
   const clusterNodes = useAtomValue(allNodesAtom).filter(
     (node) => !node.namespaced,
@@ -133,22 +132,7 @@ export const UpdateModuleButton = ({
       content: t('modules.community.messages.module-update-started'),
     });
 
-    if (deleteOldTemplate && oldModuleTemplates.length > 0) {
-      await Promise.all(
-        oldModuleTemplates.map(async ({ metadata: { name, namespace } }) => {
-          const url = `/apis/operator.kyma-project.io/v1beta2/namespaces/${namespace}/moduletemplates/${name}`;
-          try {
-            await deleteRequest(url);
-          } catch (e) {
-            notification.notifyError({
-              content: t('modules.community.messages.delete-template-failure', {
-                error: e instanceof Error ? e.message : '',
-              }),
-            });
-          }
-        }),
-      );
-    }
+    await deleteOldTemplates();
 
     const templateMap = new Map<string, ModuleTemplateType>();
     templateMap.set(moduleName, moduleTpl);
@@ -209,16 +193,11 @@ export const UpdateModuleButton = ({
               />
             )} */}
           </div>
-          {oldModuleTemplates.length > 0 && (
-            <CheckBox
-              data-testid="delete-old-template"
-              className="sap-margin-top-small"
-              checked={deleteOldTemplate}
-              onChange={(e) => setDeleteOldTemplate(e.target.checked)}
-              text={t('modules.community.update.delete-old-template')}
-              accessibleName={t('modules.community.update.delete-old-template')}
-            />
-          )}
+          <DeleteOldModulesCheck
+            oldModuleTemplates={oldModuleTemplates}
+            deleteOldTemplate={deleteOldTemplate}
+            setDeleteOldTemplate={setDeleteOldTemplate}
+          />
         </MessageBox>
       )}
     </>
