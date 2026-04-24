@@ -79,6 +79,20 @@ async function handlePublicKey(req, res) {
 }
 
 function extractAuthHeaders(req) {
+  let parsedBody;
+
+  if (typeof req.body === 'object' && !ArrayBuffer.isView(req.body)) {
+    parsedBody = req.body;
+  } else {
+    try {
+      parsedBody = JSON.parse(req.body.toString());
+    } catch (_) {
+      const error = new Error('Invalid JSON in request body');
+      error.status = 400;
+      throw error;
+    }
+  }
+
   const {
     clusterUrl,
     certificateAuthorityData,
@@ -86,10 +100,7 @@ function extractAuthHeaders(req) {
     clientCertificateData,
     clientKeyData,
     sessionId,
-  } =
-    typeof req.body === 'object' && !ArrayBuffer.isView(req.body)
-      ? req.body
-      : JSON.parse(req.body.toString());
+  } = parsedBody;
   return {
     clusterUrl,
     certificateAuthorityData,

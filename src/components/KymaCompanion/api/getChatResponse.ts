@@ -210,6 +210,12 @@ export default async function getChatResponse({
   certificateAuthorityData,
   t,
 }: GetChatResponseArgs): Promise<void> {
+  if (
+    !clusterAuth?.token &&
+    !(clusterAuth?.clientCertificateData && clusterAuth?.clientKeyData)
+  ) {
+    throw new Error('Missing authentication credentials');
+  }
   const { backendAddress } = getClusterConfig();
   const url = `${backendAddress}/ai-chat/messages`;
   const payload = {

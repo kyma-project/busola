@@ -138,19 +138,27 @@ export const Chat = ({
           // handle partial error
           updateLatestMessage({ partialAIFailure: true });
           setFollowUpLoading();
-          getFollowUpQuestions({
-            sessionID,
-            handleFollowUpQuestions,
-            handleFollowUpError,
-            clusterUrl: cluster.currentContext.cluster.cluster.server,
-            token: authData.token,
-            clientCertificateData: authData['client-certificate-data'],
-            clientKeyData: authData['client-key-data'],
-            certificateAuthorityData:
-              cluster.currentContext.cluster.cluster[
-                'certificate-authority-data'
-              ],
-          });
+          if (
+            cluster &&
+            authData &&
+            cluster.currentContext?.cluster?.cluster?.server
+          ) {
+            getFollowUpQuestions({
+              sessionID,
+              handleFollowUpQuestions,
+              handleFollowUpError,
+              clusterUrl: cluster.currentContext.cluster.cluster.server,
+              token: authData.token,
+              clientCertificateData: authData['client-certificate-data'],
+              clientKeyData: authData['client-key-data'],
+              certificateAuthorityData:
+                cluster.currentContext.cluster.cluster[
+                  'certificate-authority-data'
+                ],
+            });
+          } else {
+            handleFollowUpError();
+          }
         } else {
           const displayRetry = response.data.error !== null || allTasksError;
           removeLastMessage();
@@ -167,19 +175,27 @@ export const Chat = ({
         setLoading(false);
       } else {
         setFollowUpLoading();
-        getFollowUpQuestions({
-          sessionID,
-          handleFollowUpQuestions,
-          handleFollowUpError,
-          clusterUrl: cluster.currentContext.cluster.cluster.server,
-          token: authData.token,
-          clientCertificateData: authData['client-certificate-data'],
-          clientKeyData: authData['client-key-data'],
-          certificateAuthorityData:
-            cluster.currentContext.cluster.cluster[
-              'certificate-authority-data'
-            ],
-        });
+        if (
+          cluster &&
+          authData &&
+          cluster.currentContext?.cluster?.cluster?.server
+        ) {
+          getFollowUpQuestions({
+            sessionID,
+            handleFollowUpQuestions,
+            handleFollowUpError,
+            clusterUrl: cluster.currentContext.cluster.cluster.server,
+            token: authData.token,
+            clientCertificateData: authData['client-certificate-data'],
+            clientKeyData: authData['client-key-data'],
+            certificateAuthorityData:
+              cluster.currentContext.cluster.cluster[
+                'certificate-authority-data'
+              ],
+          });
+        } else {
+          handleFollowUpError();
+        }
       }
     }
     concatMsgToLatestMessage(response, isLoading, isFeedback);

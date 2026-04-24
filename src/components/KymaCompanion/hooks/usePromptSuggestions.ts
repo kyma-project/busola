@@ -82,26 +82,32 @@ export function usePromptSuggestions(
       setLoading(true);
       setInitialSuggestions([]);
       try {
-        const result = await getPromptSuggestions({
-          post,
-          namespace: namespace,
-          resourceType: resourceType,
-          groupVersion: groupVersion,
-          resourceName: resourceName,
-          clusterUrl: cluster?.currentContext?.cluster?.cluster?.server,
-          certificateAuthorityData:
-            cluster?.currentContext?.cluster?.cluster?.[
-              'certificate-authority-data'
-            ],
-          clusterAuth: {
-            token: authData?.token,
-            clientCertificateData: authData?.['client-certificate-data'],
-            clientKeyData: authData?.['client-key-data'],
-          },
-        });
-        if (result) {
-          setInitialSuggestions(result.promptSuggestions);
-          setSessionID(result.conversationId);
+        if (!cluster || !authData) {
+          throw new Error(
+            'Missing required authentication context: cluster or authData is undefined.',
+          );
+        } else {
+          const result = await getPromptSuggestions({
+            post,
+            namespace,
+            resourceType,
+            groupVersion,
+            resourceName,
+            clusterUrl: cluster.currentContext?.cluster?.cluster?.server,
+            certificateAuthorityData:
+              cluster.currentContext?.cluster?.cluster?.[
+                'certificate-authority-data'
+              ],
+            clusterAuth: {
+              token: authData.token,
+              clientCertificateData: authData['client-certificate-data'],
+              clientKeyData: authData['client-key-data'],
+            },
+          });
+          if (result) {
+            setInitialSuggestions(result.promptSuggestions);
+            setSessionID(result.conversationId);
+          }
         }
       } finally {
         setLoading(false);
