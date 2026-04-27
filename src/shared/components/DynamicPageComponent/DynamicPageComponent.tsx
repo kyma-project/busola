@@ -432,6 +432,8 @@ export const DynamicPageComponent = ({
 
               const params = new URLSearchParams(window.location.search);
               let showEdit = null;
+              let targetPath = window.location.pathname;
+              let closeSideColumns = false;
 
               if (newTabName === 'edit') {
                 showEdit = { resource: null } as ShowEdit;
@@ -439,9 +441,13 @@ export const DynamicPageComponent = ({
                 if (layoutColumn.layout !== 'OneColumn') {
                   if (isFirstColumnWithEdit) {
                     params.set('editColumn', 'startColumn');
-                    showEdit = layoutColumn?.showEdit;
+                    params.set('showEdit', 'true');
+                    params.delete('layout');
+                    showEdit = layoutColumn?.showEdit ?? showEdit;
+                    closeSideColumns = true;
+                    if (layoutCloseUrl) targetPath = layoutCloseUrl;
                   } else {
-                    params.set('editColumn', 'startColumn');
+                    params.delete('editColumn');
                     params.set('showEdit', 'true');
                   }
                 } else {
@@ -454,8 +460,14 @@ export const DynamicPageComponent = ({
               setLayoutColumn({
                 ...layoutColumn,
                 showEdit,
+                ...(closeSideColumns && {
+                  midColumn: null,
+                  endColumn: null,
+                  layout: 'OneColumn',
+                  showCreate: null,
+                }),
               });
-              navigate(`${window.location.pathname}?${params.toString()}`);
+              navigate(`${targetPath}?${params.toString()}`);
             });
           }}
         >

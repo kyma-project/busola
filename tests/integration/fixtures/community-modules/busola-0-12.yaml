@@ -8,6 +8,14 @@ metadata:
   name: busola-0-12
   namespace: kyma-system
 spec:
+  data:
+    apiVersion: operator.kyma-project.io/v1beta2
+    kind: Kyma
+    metadata:
+      name: default
+      namespace: kyma-system
+    spec:
+      channel: regular
   descriptor:
     component:
       componentReferences: []
