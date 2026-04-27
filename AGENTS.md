@@ -8,7 +8,13 @@ Busola is a web-based UI for managing Kubernetes resources, with optional Kyma-s
 
 **Stack:** React 18, TypeScript, Vite, React Router 7, Jotai, SAP UI5 WebComponents (@ui5/webcomponents-react), Express 5, Vitest, Cypress.
 
-**Requirements:** Node 24.x.
+**Requirements:** Node 24.x, npm 11.x.
+
+## Setup
+
+```bash
+npm install   # Installs root and backend deps (postinstall runs cd backend && npm install automatically)
+```
 
 ## Commands
 
@@ -100,15 +106,20 @@ Translation source files live at `public/i18n/[lang].yaml`. At runtime they are 
 ## Adding a New Resource Type
 
 1. Create `/src/resources/[ResourceType]/` with `[ResourceType]List.tsx`, `[ResourceType]Details.tsx`, `[ResourceType]Create.tsx`, and `index.tsx`.
-2. `index.tsx` exports `resourceType`, `namespaced`, `apiGroup`, `apiVersion`, `category`, `List`, `Details`, `Create` (lazy-loaded). It does **not** call `createResourceRoutes()` directly.
+2. `index.tsx` exports `resourceType`, `namespaced`, `apiGroup`, `apiVersion`, `category`, `List`, `Details`, `Create` (lazy-loaded), `ResourceDescription`, `i18nDescriptionKey`, `docsURL`, and optionally `resourceGraphConfig()` (graph relations to other resource types). It does **not** call `createResourceRoutes()` directly.
 3. Add the module to the `resources` array in `/src/resources/index.tsx`; `createResourceRoutes()` is called there via `.map(createResourceRoutes)`.
-4. The `namespaced` boolean determines whether the resource appears under `ClusterRoutes` or `NamespaceRoutes` — set it correctly or the resource will silently end up in the wrong routing tree.
+4. The `namespaced` boolean determines whether the resource appears under `ClusterRoutes.jsx` or `NamespaceRoutes.tsx` — set it correctly or the resource will silently end up in the wrong routing tree.
 
 ## Testing Conventions
 
 - Unit tests: `*.test.[jt]s?(x)` next to the source file (Vitest + Testing Library).
 - Component tests: `*.cy.{js,jsx,ts,tsx}` (Cypress, Vite devserver).
 - Backend tests: `backend/**/*.test.js` (Vitest, Node environment).
+
+## Security Guidelines
+
+- **XSRF:** Never store auth tokens as cookies; send as bearer tokens only. State-changing operations (`POST`/`PUT`/`DELETE`) must only trigger on explicit user actions — not during view navigation.
+- **XSS:** Sanitize all user input before DOM insertion. Do not allow `unsafe-eval` in Content-Security-Policy headers.
 
 ## Commits
 
@@ -122,7 +133,8 @@ Never mention Claude or any AI tool in commit messages.
 | ---------------------------------------- | --------------------------------------------------------------- |
 | `src/index.tsx`                          | App bootstrap: i18next, router, theme provider                  |
 | `src/components/App/App.tsx`             | Root layout, auth, cluster setup                                |
-| `src/components/App/ClusterRoutes.jsx`   | Cluster-level and namespace-level routing trees                 |
+| `src/components/App/ClusterRoutes.jsx`   | Cluster-scoped routing tree                                     |
+| `src/components/App/NamespaceRoutes.tsx` | Namespace-scoped routing tree                                   |
 | `src/resources/index.tsx`                | Aggregates all resource modules, calls `createResourceRoutes()` |
 | `src/resources/createResourceRoutes.tsx` | Route builder function for resource CRUD                        |
 | `backend/index.js`                       | Express app and middleware chain                                |

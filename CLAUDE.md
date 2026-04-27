@@ -12,4 +12,4 @@ Available skills:
 
 - `.agents/skills/create-compliant-pr/` — Create a PR that passes all busola CI checks
 
-> **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), add a `.claude-plugin/plugin.json` pointing to `.agents/skills/` and register the repo in the Claude Code plugin registry. This gives proper slash command autocomplete without moving any files.
+> **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), place a markdown file per skill in `.claude/commands/` (e.g. `.claude/commands/create-compliant-pr.md`).
