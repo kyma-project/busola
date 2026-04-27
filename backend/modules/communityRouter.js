@@ -20,7 +20,7 @@ async function handleGetCommunityResource(req, res) {
     const allowedDomains = ['githubusercontent.com', 'github.com', 'github.io'];
     const isAllowedHost = allowedDomains.some(
       (domain) =>
-        url.hostname === domain || url.hostname.endsWith(`.${domain}`)
+        url.hostname === domain || url.hostname.endsWith(`.${domain}`),
     );
     if (url.protocol !== 'https:' || !isAllowedHost) {
       return res.status(400).json({
