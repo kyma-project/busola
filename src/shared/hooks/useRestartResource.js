@@ -2,17 +2,22 @@ import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import jp from 'jsonpath';
+import pluralize from 'pluralize';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-export function useRestartResource(baseUrl) {
+export function useRestartResource(baseUrl, namespace) {
   const { t } = useTranslation();
   const patchRequest = useUpdate();
   const notification = useNotification();
 
   return async (resource) => {
-    const url = baseUrl + '/' + resource.metadata.name;
+    const url =
+      namespace === '-all-'
+        ? `/apis/${resource.apiVersion}/namespaces/${resource.metadata.namespace}/${pluralize(resource.kind?.toLowerCase())}/${resource.metadata.name}`
+        : baseUrl + '/' + resource.metadata.name;
+
     const updatedResource = cloneDeep(resource);
     jp.value(
       updatedResource,
@@ -34,10 +39,10 @@ export function useRestartResource(baseUrl) {
   };
 }
 
-export function useRestartAction(baseUrl) {
+export function useRestartAction(baseUrl, namespace) {
   const { t } = useTranslation();
   const { isProtected } = useProtectedResources();
-  const restartResource = useRestartResource(baseUrl);
+  const restartResource = useRestartResource(baseUrl, namespace);
 
   return {
     name: t('common.buttons.restart'),

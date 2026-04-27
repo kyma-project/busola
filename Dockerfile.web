@@ -34,7 +34,7 @@ RUN npm ci
 RUN make prepare-configuration
 
 # ---- Serve ----
-FROM nginxinc/nginx-unprivileged:1.29.5-alpine3.23
+FROM nginxinc/nginx-unprivileged:1.29.8-alpine3.23
 WORKDIR /app
 
 # apps
