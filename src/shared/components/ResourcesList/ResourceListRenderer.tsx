@@ -150,6 +150,7 @@ export function ResourceListRenderer({
     navigate(url);
   };
 
+  const isNamespace = resourceType === 'Namespaces';
   const defaultColumns = [
     {
       header: t('common.headers.name'),
@@ -162,8 +163,13 @@ export function ResourceListRenderer({
           ) : (
             <Link
               url={`${linkTo(entry)}`}
-              onClick={(e: Ui5CustomEvent<LinkDomRef, LinkClickEventDetail>) =>
-                onLinkClick(entry, e)
+              layout={isNamespace ? false : 'TwoColumnsMidExpanded'}
+              resetLayout={isNamespace}
+              onClick={
+                isNamespace
+                  ? undefined
+                  : (e: Ui5CustomEvent<LinkDomRef, LinkClickEventDetail>) =>
+                      onLinkClick(entry, e)
               }
               style={{ fontWeight: 'bold' }}
             >
