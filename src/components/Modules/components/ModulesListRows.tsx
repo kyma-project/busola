@@ -97,14 +97,16 @@ export const ModulesListRows = ({
 
   useEffect(() => {
     const checkIfNamespaceIsMissing = async () => {
-      if (currentModuleTemplate?.spec?.data?.metadata?.namespace) {
-        setModuleResourceWithNamespace(currentModuleTemplate?.spec.data);
-      } else {
-        const newModuleResource = await populateWithNamespace(
-          currentModuleTemplate?.spec.data,
-        );
-        setModuleResourceWithNamespace(newModuleResource);
+      const data = currentModuleTemplate?.spec?.data;
+      if (!data) {
+        setModuleResourceWithNamespace(null);
+        return;
       }
+      if (data.metadata?.namespace) {
+        setModuleResourceWithNamespace(data);
+        return;
+      }
+      setModuleResourceWithNamespace(await populateWithNamespace(data));
     };
     checkIfNamespaceIsMissing();
   }, [currentModuleTemplate]); // eslint-disable-line react-hooks/exhaustive-deps
