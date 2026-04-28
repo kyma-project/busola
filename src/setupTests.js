@@ -10,21 +10,51 @@ window.ResizeObserver = ResizeObserverPolyfill;
 
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
+
+const sanitizeLogValue = (value) => {
+  if (typeof value === 'string') {
+    return value.replace(/[\r\n\u2028\u2029]+/g, ' ');
+  }
+
+  if (value instanceof Error) {
+    const sanitizedError = new Error(
+      value.message.replace(/[\r\n\u2028\u2029]+/g, ' '),
+    );
+    sanitizedError.name = value.name;
+    if (value.stack) {
+      sanitizedError.stack = value.stack.replace(/[\r\n\u2028\u2029]+/g, ' ');
+    }
+    return sanitizedError;
+  }
+
+  return value;
+};
+
+const getLogSearchValue = (value) => {
+  if (value instanceof Error) {
+    return sanitizeLogValue(value.message);
+  }
+
+  return sanitizeLogValue(String(value ?? ''));
+};
+
 export const ignoreConsoleErrors = (patterns) => {
   console.error = (...data) => {
     for (const d of data) {
-      if (patterns.some((pattern) => d.toString().includes(pattern))) return;
+      if (patterns.some((pattern) => getLogSearchValue(d).includes(pattern)))
+        return;
     }
-    originalConsoleError(...data);
+    originalConsoleError(...data.map(sanitizeLogValue));
   };
 };
 
 export const ignoreConsoleWarns = (patterns) => {
   console.warn = (...data) => {
     for (const d of data) {
-      if (patterns.some((pattern) => d.toString().includes(pattern))) return;
+      if (patterns.some((pattern) => getLogSearchValue(d).includes(pattern)))
+        return;
     }
-    originalConsoleWarn(...data);
+    originalConsoleWarn(...data.map(sanitizeLogValue));
   };
 };
 
