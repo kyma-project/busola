@@ -8,7 +8,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
-import { useRef } from 'react';
+import { JSX, useRef } from 'react';
 
 const expirationSecondsOptions = [
   {
@@ -39,7 +39,6 @@ const ComboboxInputWithSeconds = ({
   generateTokenRequest: () => void;
 }) => {
   return (
-    //@ts-expect-error Mismatch between js and ts
     <ComboboxInput
       id="event-version-combobox"
       required

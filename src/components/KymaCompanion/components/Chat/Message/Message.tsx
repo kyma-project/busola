@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { Icon, Text } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { formatMessage } from 'components/KymaCompanion/utils/formatMarkdown';

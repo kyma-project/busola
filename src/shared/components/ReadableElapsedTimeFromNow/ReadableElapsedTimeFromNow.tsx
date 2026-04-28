@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { JSX, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import useDateNow from 'shared/hooks/useDateNow';

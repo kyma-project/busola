@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
 import { useUrl } from 'hooks/useUrl';

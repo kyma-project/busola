@@ -1,4 +1,4 @@
-import { ReactNode, RefObject, useState, useEffect } from 'react';
+import { ReactNode, RefObject, useState, useEffect, JSX } from 'react';
 import { Dialog, Button, ButtonPropTypes, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 const options: Intl.DateTimeFormatOptions = {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, JSX, useContext, useMemo } from 'react';
 import { useGetInstalledNotInstalledModules } from 'components/Modules/hooks';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import {
