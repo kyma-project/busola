@@ -106,6 +106,8 @@ context('Test Jobs', () => {
     cy.contains(/Imagebusybox/);
     cy.contains(/Imagenode:14-alpine/);
 
+    cy.wait(500);
+
     // controlled-by
     cy.get('ui5-card')
       .should('contain.text', 'Controlled By')
