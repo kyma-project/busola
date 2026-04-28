@@ -21,6 +21,9 @@ export default async function getFollowUpQuestions({
   clientKeyData,
   certificateAuthorityData,
 }: GetFollowUpQuestionsParams): Promise<void> {
+  if (!token && !(clientCertificateData && clientKeyData)) {
+    throw new Error('Missing authentication credentials');
+  }
   try {
     const { backendAddress } = getClusterConfig();
     const url = `${backendAddress}/ai-chat/followup`;

@@ -82,7 +82,11 @@ export function usePromptSuggestions(
       setLoading(true);
       setInitialSuggestions([]);
       try {
-        if (!cluster || !authData) {
+        if (
+          !cluster ||
+          !authData ||
+          !cluster.currentContext?.cluster?.cluster?.server
+        ) {
           throw new Error(
             'Missing required authentication context: cluster or authData is undefined.',
           );
