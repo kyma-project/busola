@@ -23,7 +23,7 @@
     "lodash.merge": "^4.6.2",
     "lodash.isempty": "^4.4.0",
     "pino-http": "^11.0.0",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",

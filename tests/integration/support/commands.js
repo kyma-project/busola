@@ -145,7 +145,10 @@ Cypress.Commands.add('getEndColumn', () => {
 
 Cypress.Commands.add(
   'deleteInDetails',
-  (resourceType, resourceName, columnLayout = false) => {
+  (resourceType, resourceName, columnLayout = false, options = {}) => {
+    const { customHeaderText = null } = options;
+    const headerText = customHeaderText || `Delete ${resourceType}`;
+
     if (columnLayout) {
       cy.wait(1000); //wait for button
 
@@ -157,9 +160,9 @@ Cypress.Commands.add(
       cy.get('ui5-button').contains('Delete').should('be.visible').click();
     }
 
-    cy.contains(`Delete ${resourceType} ${resourceName}`);
+    cy.contains(customHeaderText || `Delete ${resourceType} ${resourceName}`);
 
-    cy.get(`[header-text="Delete ${resourceType}"]:visible`)
+    cy.get(`[header-text="${headerText}"]:visible`)
       .find('[data-testid="delete-confirmation"]')
       .click();
 
@@ -216,7 +219,13 @@ Cypress.Commands.add(
       cy.checkItemOnGenericListLink(resourceName);
     }
 
-    cy.get('ui5-button[data-testid="delete"]').click();
+    if (parentSelector) {
+      cy.get(parentSelector)
+        .find('ui5-button[data-testid="delete"]:visible')
+        .click();
+    } else {
+      cy.get('ui5-button[data-testid="delete"]').click();
+    }
 
     if (confirmationEnabled) {
       const headerText = customHeaderText || `Delete ${resourceType}`;
