@@ -1,10 +1,4 @@
-import {
-  KeyboardEvent,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { KeyboardEvent, RefObject, useEffect, useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import {
   Button,
@@ -34,7 +28,7 @@ interface ContainersLogsProps {
   containerName: string;
 }
 
-const scrollToSelectedLog = (selectedLogIndex: MutableRefObject<number>) => {
+const scrollToSelectedLog = (selectedLogIndex: RefObject<number>) => {
   const highlightedLogs = document.getElementsByClassName('logs-highlighted');
   if (selectedLogIndex.current < 0) {
     selectedLogIndex.current = highlightedLogs?.length - 1 || 0;

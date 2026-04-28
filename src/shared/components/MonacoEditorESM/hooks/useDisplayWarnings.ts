@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { editor, Uri } from 'monaco-editor';
 
 export const useDisplayWarnings = ({
@@ -6,7 +6,7 @@ export const useDisplayWarnings = ({
   descriptor,
 }: {
   autocompletionDisabled: boolean;
-  descriptor: MutableRefObject<Uri>;
+  descriptor: RefObject<Uri>;
 }) => {
   const [markers, setMarkers] = useState<editor.IMarker[]>([]);
 

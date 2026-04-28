@@ -37,7 +37,7 @@ export const createPath = (
 };
 
 interface ColumnWrapperProps {
-  list: ReactElement;
+  list: ReactElement<any>;
   details: ReactElement;
   create: ReactElement | null;
   resourceType: string;

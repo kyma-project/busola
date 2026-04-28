@@ -5,7 +5,7 @@ import {
   TextArea,
   TextAreaDomRef,
 } from '@ui5/webcomponents-react';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
@@ -28,7 +28,7 @@ const CONTRACT_THRESHOLD = 2;
 type QueryInputProps = {
   loading: boolean;
   sendPrompt: (prompt: string) => void;
-  containerRef: React.MutableRefObject<HTMLDivElement | null>;
+  containerRef: RefObject<HTMLDivElement | null>;
 };
 
 export default function QueryInput({

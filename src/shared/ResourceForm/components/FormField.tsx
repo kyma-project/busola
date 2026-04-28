@@ -4,7 +4,7 @@ import { Label } from './Label';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
 import { useCreateResourceDescription } from 'components/Extensibility/helpers';
-import { JSXElementConstructor, ReactElement, useState } from 'react';
+import { JSX, JSXElementConstructor, ReactElement, useState } from 'react';
 
 import './FormField.scss';
 
