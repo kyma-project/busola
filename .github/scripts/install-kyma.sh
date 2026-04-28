@@ -12,7 +12,7 @@ kubectl_apply_url() {
   local url="$1"
   shift
   local attempt=0
-  local max_attempts=5
+  local max_attempts=10
   until kubectl apply -f "$url" "$@"; do
     attempt=$((attempt + 1))
     if [ "$attempt" -ge "$max_attempts" ]; then
