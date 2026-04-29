@@ -88,8 +88,6 @@ export function usePromptSuggestions(
       fetchedResourceRef.current = resourceKey;
       fetchSuggestions();
       setIsReset(false);
-    } else if (!resourceType) {
-      setLoading(false);
     }
   }, [currentResource, options?.skip, post, setSessionID, isReset, setIsReset]);
 
