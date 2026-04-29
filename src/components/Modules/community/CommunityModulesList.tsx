@@ -15,6 +15,7 @@ import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { UpdateModuleButton } from '../components/moduleUpdate/UpdateModuleButton';
 import { getUpdateTemplate } from './communityModulesHelpers';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
+import { UpdateAllModulesButton } from '../components/moduleUpdate/UpdateAllModulesButton';
 import { useModuleNavigation } from 'components/Modules/hooks/useModuleNavigation';
 import { useModuleCrdsAndExtensions } from 'components/Modules/hooks/useModuleCrdsAndExtensions';
 import { useShowAddModule } from 'components/Modules/hooks/useShowAddModule';
@@ -144,12 +145,19 @@ export const CommunityModulesList = ({
             (m) => m.name === entry.name,
           );
           if (!repoTpl || !installedModule) return null;
+          const oldModuleTemplates = moduleTemplates.items.filter(
+            (tpl) =>
+              tpl.metadata.creationTimestamp !== undefined &&
+              getModuleName(tpl) === entry.name &&
+              tpl.spec.version !== repoTpl.spec.version,
+          );
           return (
             <UpdateModuleButton
               moduleName={entry.name}
               currentVersion={installedModule.version}
               newVersion={repoTpl.spec.version}
               moduleTpl={repoTpl}
+              oldModuleTemplates={oldModuleTemplates}
             />
           );
         },
@@ -186,6 +194,7 @@ export const CommunityModulesList = ({
           <Button key="add-community-module" onClick={handleShowAddModule}>
             {t('common.buttons.add')}
           </Button>,
+          <UpdateAllModulesButton key="update-all-community-modules" />,
         ]}
         customColumnLayout={customColumnLayout as any}
         enableColumnLayout

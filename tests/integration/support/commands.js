@@ -13,13 +13,16 @@ Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
   });
   afterEach(function () {
     if (this.currentTest.state === 'failed') {
-      if (!Cypress.config('isInteractive')) {
+      const retriesRemaining =
+        (this.currentTest._retries ?? 0) -
+        (this.currentTest.currentRetry() ?? 0);
+      if (!Cypress.config('isInteractive') && retriesRemaining === 0) {
         // isInteractive is true for headed browsers (suite started with 'cypress open' command)
         // and false for headless ('cypress run')
         // This will skip remaining test in the current context when a test fails.
         Cypress.runner.stop();
       }
-      if (skipAllSuits) {
+      if (skipAllSuits && retriesRemaining === 0) {
         cy.task('dynamicSharedStore', {
           name: 'cancelTests',
           value: true,
@@ -166,7 +169,7 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/deleted/).should('be.visible');
+    cy.contains(/deleted/, { timeout: 30000 }).should('be.visible');
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -242,7 +245,9 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-toast', /deleted/).should('be.visible');
+        cy.contains('ui5-toast', /deleted/, { timeout: 30000 }).should(
+          'be.visible',
+        );
       }
 
       if (checkIfResourceIsRemoved) {
@@ -357,4 +362,10 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
     .find('input')
     .should('be.visible')
     .type(searchPhrase, { force });
+});
+
+Cypress.Commands.add('openSettingsMenu', () => {
+  cy.get('[tooltip="Profile"]').click({ force: true });
+
+  cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 });

@@ -3,6 +3,7 @@ import { FlexBox, Tag, Text } from '@ui5/webcomponents-react';
 import {
   findModuleStatus,
   findModuleTemplate,
+  getModuleName,
   KymaResourceType,
   ModuleTemplateListType,
   ModuleTemplateStatus,
@@ -245,6 +246,13 @@ export const ModulesListRows = ({
                     currentVersion={resource?.version || ''}
                     newVersion={newestModuleTemplate?.spec?.version || ''}
                     moduleTpl={currentModuleTemplate}
+                    oldModuleTemplates={moduleTemplates.items.filter(
+                      (tpl) =>
+                        tpl.metadata.creationTimestamp !== undefined &&
+                        getModuleName(tpl) === resource.name &&
+                        tpl.spec.version !==
+                          newestModuleTemplate?.spec?.version,
+                    )}
                   />
                 )
               }

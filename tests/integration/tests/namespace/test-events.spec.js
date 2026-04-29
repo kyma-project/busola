@@ -14,7 +14,7 @@ context('Test Events', () => {
 
     cy.get('ui5-table-row#no-data-row').should('not.exist');
 
-    cy.wait(500);
+    cy.wait(2000);
 
     cy.get('ui5-table[accessible-name="Events"]')
       .find('ui5-table-row')

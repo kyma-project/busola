@@ -270,6 +270,7 @@ common:
     retry: Retry
     revert: Revert
     save: Save
+    select-all: Select All
     submit: Submit
     update: Update
     upload: Upload
@@ -1031,9 +1032,15 @@ modules:
     title: Community Modules
     update:
       confirmation: Update <0>{{moduleName}}</0>?
-      current-version: 'Current version:'
-      latest-version: 'Latest version:'
+      current-version: Current version
+      delete-old-templates: Delete old module templates
+      latest-version: Latest version
+      module: Module
+      note: Note
       title: Update Module
+      update-all: Update All
+      update-all-confirmation: Choose the modules to update.
+      update-all-title: Update Community Modules
 namespaces:
   create-modal:
     apply-limits: Apply Limits per Container
