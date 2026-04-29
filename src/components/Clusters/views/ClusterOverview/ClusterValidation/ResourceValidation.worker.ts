@@ -20,7 +20,10 @@ const ResourceValidation = {
 const allowedOrigin = self.location.origin;
 
 self.onmessage = (event: MessageEvent) => {
-  if (event.origin && event.origin !== allowedOrigin) {
+  if (event.origin && event.origin !== '') {
+    if (event.origin !== allowedOrigin) {
+      return;
+    }
     return;
   }
 

@@ -75,7 +75,12 @@ const allowedOrigin = self.location.origin;
 function isTrustedMessageEvent(event) {
   if (!event || typeof event !== 'object') return false;
   if (event.isTrusted === false) return false;
-  return event.origin === allowedOrigin;
+
+  const eventOrigin = typeof event.origin === 'string' ? event.origin : '';
+
+  if (eventOrigin === '') return true;
+
+  return eventOrigin === allowedOrigin;
 }
 
 self.onmessage = ($event) => {
