@@ -11,6 +11,8 @@ context('Clean up Namespace', () => {
   it('Delete the Namespace (step 1)', () => {
     cy.getLeftNav().contains('Namespaces').click();
 
+    cy.wait(2000);
+
     cy.deleteFromGenericList('Namespace', Cypress.env('NAMESPACE_NAME'), {
       clearSearch: false,
       checkIfResourceIsRemoved: false,
@@ -24,7 +26,26 @@ context('Clean up Namespace', () => {
   });
 
   it(
-    'Check if the Namespace is terminated (step 2)',
+    'Force remove finalizers if namespace is stuck terminating (step 2)',
+    { timeout: 60000 },
+    () => {
+      const ns = Cypress.env('NAMESPACE_NAME');
+      cy.exec(
+        `kubectl get ns ${ns} --ignore-not-found -o jsonpath='{.metadata.finalizers}'`,
+        { failOnNonZeroExit: false, timeout: 15000 },
+      ).then((result) => {
+        if (result.stdout && result.stdout !== '[]') {
+          cy.exec(
+            `kubectl patch ns ${ns} --type=merge -p '{"metadata":{"finalizers":[]}}'`,
+            { failOnNonZeroExit: false, timeout: 15000 },
+          );
+        }
+      });
+    },
+  );
+
+  it(
+    'Check if the Namespace is terminated (step 3)',
     {
       retries: {
         runMode: 3,
