@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom';
 
 interface PopoverBadgeProps {
   children?: ReactNode;
-  tooltipContent: ReactNode;
+  tooltipContent: ReactNode | string;
   type: 'Information' | 'Positive' | 'Negative' | 'Critical' | 'None';
   className?: string;
 }
@@ -60,7 +60,11 @@ export const PopoverBadge = ({
           }}
           placement="End"
         >
-          <Text className="popover-description">{tooltipContent}</Text>
+          {typeof tooltipContent === 'string' ? (
+            <Text className="popover-description">{tooltipContent}</Text>
+          ) : (
+            <>{tooltipContent}</>
+          )}
         </Popover>,
         document.body,
       )}

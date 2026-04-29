@@ -7,6 +7,7 @@ context('Clean up Namespace', () => {
   before(() => {
     cy.loginAndSelectCluster();
   });
+
   it('Delete the Namespace (step 1)', () => {
     cy.getLeftNav().contains('Namespaces').click();
 
@@ -29,8 +30,11 @@ context('Clean up Namespace', () => {
         runMode: 3,
         openMode: 3,
       },
+      timeout: 200000,
     },
     () => {
+      cy.getLeftNav().contains('Namespaces').click();
+
       cy.get('ui5-table')
         .contains(Cypress.env('NAMESPACE_NAME'), { timeout: 180_000 })
         .should('not.exist');
