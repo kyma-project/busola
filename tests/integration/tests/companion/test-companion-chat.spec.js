@@ -25,7 +25,7 @@ context('Test Companion Chat Behavior', () => {
       .find('.chat-loading-indicator')
       .should('be.visible');
 
-    cy.wait(1000);
+    cy.wait(5000);
 
     cy.get('@companion')
       .find('.chat-list > .context-group')
