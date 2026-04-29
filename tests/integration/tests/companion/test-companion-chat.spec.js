@@ -25,6 +25,8 @@ context('Test Companion Chat Behavior', () => {
       .find('.chat-loading-indicator')
       .should('be.visible');
 
+    cy.wait('@getPromptSuggestions');
+
     cy.get('@companion')
       .find('.chat-list > .context-group')
       .should('have.length', 1)

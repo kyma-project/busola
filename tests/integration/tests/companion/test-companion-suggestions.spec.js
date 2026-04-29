@@ -44,6 +44,7 @@ context('Test Companion Initial Suggestions', () => {
   it('loads initial suggestions and sessionID correctly', () => {
     cy.openCompanion();
     cy.get('.kyma-companion').as('companion');
+    cy.wait(1000);
 
     cy.get('@companion')
       .find('.chat-loading-screen')
