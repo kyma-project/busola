@@ -136,13 +136,9 @@ context('Test Pizzas', () => {
       .contains('ui5-link', 'pizzas/diavola')
       .click({ force: true });
 
-    cy.getMidColumn()
-      .contains('Hot salami, Pickled jalapeños, Cheese')
-      .should('be.visible');
+    cy.contains('Hot salami, Pickled jalapeños, Cheese').should('be.visible');
 
-    cy.getMidColumn()
-      .contains('Diavola is such a spicy pizza')
-      .should('be.visible');
+    cy.contains('Diavola is such a spicy pizza').should('be.visible');
 
     cy.getLeftNav()
       .contains(/^Pizzas$/)
