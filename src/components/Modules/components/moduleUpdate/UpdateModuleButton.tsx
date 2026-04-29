@@ -20,12 +20,17 @@ import {
 import { TFunction } from 'i18next';
 //import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
 import './UpdateModuleButton.scss';
+import {
+  useDeleteOldModuleTemplates,
+  DeleteOldModulesCheck,
+} from './DeleteOldModulesCheck';
 
 type UpdateModuleButtonProps = {
   moduleName: string;
   currentVersion: string;
   newVersion: string;
   moduleTpl: ModuleTemplateType;
+  oldModuleTemplates?: ModuleTemplateType[];
 };
 
 async function applyModuleTemplateResource(
@@ -70,6 +75,7 @@ export const UpdateModuleButton = ({
   currentVersion,
   newVersion,
   moduleTpl,
+  oldModuleTemplates = [],
 }: UpdateModuleButtonProps) => {
   const { t } = useTranslation();
   const postRequest = usePost();
@@ -81,6 +87,9 @@ export const UpdateModuleButton = ({
     [],
   );
   const [pendingUpdate, setPendingUpdate] = useState(false);
+
+  const { deleteOldTemplates, setDeleteOldTemplate, deleteOldTemplate } =
+    useDeleteOldModuleTemplates(oldModuleTemplates);
 
   const clusterNodes = useAtomValue(allNodesAtom).filter(
     (node) => !node.namespaced,
@@ -123,6 +132,8 @@ export const UpdateModuleButton = ({
       content: t('modules.community.messages.module-update-started'),
     });
 
+    await deleteOldTemplates();
+
     const templateMap = new Map<string, ModuleTemplateType>();
     templateMap.set(moduleName, moduleTpl);
     await fetchResourcesToApply(templateMap, setResourcesToApply, postRequest);
@@ -131,7 +142,12 @@ export const UpdateModuleButton = ({
 
   return (
     <>
-      <Button onClick={() => setIsDialogOpen(true)}>
+      <Button
+        onClick={() => {
+          setDeleteOldTemplate(true);
+          setIsDialogOpen(true);
+        }}
+      >
         {t('kyma-modules.update')}
       </Button>
       {isDialogOpen && (
@@ -159,15 +175,16 @@ export const UpdateModuleButton = ({
           </Text>
           <div className="module-versions-container sap-margin-top-small">
             <Label style={{ textAlign: 'right' }}>
-              {t('modules.community.update.current-version')}
+              {`${t('modules.community.update.current-version')}:`}
             </Label>
             <Text>{currentVersion}</Text>
             <div />
             <Label style={{ textAlign: 'right' }}>
-              {t('modules.community.update.latest-version')}
+              {`${t('modules.community.update.latest-version')}:`}
             </Label>
             <Text>{newVersion}</Text>
-            {/*TODO: Has to be adjusted when we get Release Notes in modules */}
+            {/*TODO: Has to be adjusted when we get Release Notes in modules - 
+            https://github.com/kyma-project/busola/issues/4826*/}
             {/* {moduleTpl?.spec?.info?.releaseNotes && (
               <ExternalLink
                 linkClassName="release-notes-link"
@@ -176,6 +193,11 @@ export const UpdateModuleButton = ({
               />
             )} */}
           </div>
+          <DeleteOldModulesCheck
+            oldModuleTemplates={oldModuleTemplates}
+            deleteOldTemplate={deleteOldTemplate}
+            setDeleteOldTemplate={setDeleteOldTemplate}
+          />
         </MessageBox>
       )}
     </>
