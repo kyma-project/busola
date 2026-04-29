@@ -138,12 +138,10 @@ context('Test Pizzas', () => {
 
     cy.getMidColumn()
       .contains('Hot salami, Pickled jalapeños, Cheese')
-      .scrollIntoView()
       .should('be.visible');
 
     cy.getMidColumn()
       .contains('Diavola is such a spicy pizza')
-      .scrollIntoView()
       .should('be.visible');
 
     cy.getLeftNav()
