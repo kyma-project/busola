@@ -206,7 +206,13 @@ context('Test Community Modules update-all functionality', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
     cy.typeInSearch('ModuleTemplates', true);
     cy.clickGenericListLink('ModuleTemplates');
-    cy.typeInSearch(OLD_TEMPLATE_NAME, true);
+
+    cy.getMidColumn()
+      .get('ui5-input[id^=search-]:visible')
+      .find('input')
+      .should('be.visible')
+      .type(OLD_TEMPLATE_NAME, { force: true });
+
     cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('be.visible');
 
     cy.getLeftNav().contains('Cluster Overview').click();
@@ -276,7 +282,13 @@ context('Test Community Modules update-all functionality', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
     cy.typeInSearch('ModuleTemplates', true);
     cy.clickGenericListLink('ModuleTemplates');
-    cy.typeInSearch(OLD_TEMPLATE_NAME, true);
+
+    cy.getMidColumn()
+      .get('ui5-input[id^=search-]:visible')
+      .find('input')
+      .should('be.visible')
+      .type(OLD_TEMPLATE_NAME, { force: true });
+
     cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('not.exist');
 
     cy.getLeftNav().contains('Cluster Overview').click();
