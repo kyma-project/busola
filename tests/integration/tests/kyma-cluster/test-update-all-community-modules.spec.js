@@ -110,7 +110,7 @@ context('Test Community Modules update-all functionality', () => {
       .contains('Update All')
       .click();
 
-    cy.get('ui5-dialog.update-all-modules-dialog]').should('be.visible');
+    cy.get('ui5-dialog.update-all-modules-dialog').should('be.visible');
 
     cy.get('ui5-dialog.update-all-modules-dialog')
       .find('[data-testid="delete-old-template"]')
