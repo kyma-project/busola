@@ -52,15 +52,13 @@ context('Test Community Modules update-all functionality', () => {
 
   it('"Update all" button is visible when an update is available', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
-      .find('ui5-button')
-      .contains('Update all')
+      .contains('ui5-button', 'Update all')
       .should('be.visible');
   });
 
   it('Opens the update-all dialog when "Update all" is clicked', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
-      .find('ui5-button')
-      .contains('Update all')
+      .contains('ui5-button', 'Update all')
       .click();
 
     cy.get(
