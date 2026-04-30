@@ -3,6 +3,7 @@ kind: ModuleTemplate
 metadata:
   annotations:
     operator.kyma-project.io/is-cluster-scoped: 'false'
+    source: 'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-0-12.yaml' # Link to a higher version to test the update functionality
   labels:
     operator.kyma-project.io/module-name: busola
   name: busola-0-11
