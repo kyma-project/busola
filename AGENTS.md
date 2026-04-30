@@ -43,6 +43,18 @@ npm run component-test-headless    # Cypress component tests (CI)
 cd backend && npm test             # Backend unit tests (Vitest, Node env)
 ```
 
+Integration tests (Cypress, require a running cluster) live in `tests/integration/`:
+
+```bash
+cd tests/integration
+npm run test:cluster               # Cluster-scoped + extensibility + companion tests
+npm run test:namespace             # Namespace-scoped resource tests
+npm run test:kyma-e2e              # Kyma-specific end-to-end tests
+npm run test:accesibility          # Accessibility tests
+```
+
+These are the most important tests in the project — run them against a real cluster before merging changes that affect Kubernetes resource handling, routing, or UI flows.
+
 ### Linting
 
 ```bash
@@ -76,11 +88,13 @@ All UI components come from `@ui5/webcomponents-react` (SAP Fiori design system)
 
 `backend/index.js` sets up the Express middleware chain: body-parser → (optional gzip) → (dev-only CORS) → pino logger → routes. The `/proxy` route handles external HTTPS proxying with rate limiting. Kubernetes API requests are handled separately by the `/backend` route via `backend/kubernetes/handler.js`. Special routes include `/backend/ai-chat/` (streaming AI companion) and `/backend/kubeconfig`.
 
-`backend/config.js` merges feature flags from three YAML sources in order:
+`backend/config.js` merges feature flags from three YAML sources. The intended order (highest priority last) is:
 
 1. `backend/settings/defaultConfig.yaml` (base defaults)
-2. `backend/environments/{ENVIRONMENT}/config.yaml` (when `ENVIRONMENT` env var is set)
-3. `backend/config/config.yaml` (when the file exists — in production this file is mounted from a Kubernetes ConfigMap)
+2. `backend/config/config.yaml` (when the file exists — in production this file is mounted from a Kubernetes ConfigMap)
+3. `backend/environments/{ENVIRONMENT}/config.yaml` (when `ENVIRONMENT` env var is set; should win over all)
+
+Note: the current code applies env config before config.yaml (steps 2 and 3 are swapped), which is a known bug.
 
 There is also a separate `public/defaultConfig.yaml` that configures frontend storage defaults (e.g. `sessionStorage` vs `localStorage`). This is distinct from the backend config and is patched by the Dockerfile via `yq`.
 
@@ -97,7 +111,12 @@ Relevant feature flags (checked via `useFeature()`):
 
 ### Feature Flags
 
-Checked at runtime via the `useFeature()` hook. Base definitions in `backend/settings/defaultConfig.yaml`. Flags absent from config default to `isEnabled: false`. Examples: `KYMA_COMPANION`, `GZIP`, `ALLOW_PRIVATE_IPS`.
+Feature flags are defined in `backend/settings/defaultConfig.yaml` and consumed in **both** the backend and frontend:
+
+- **Backend:** accessed directly via `config.features?.FLAG_NAME?.isEnabled` after `require('./config.js')`. Example: `config.features?.GZIP?.isEnabled` in `backend/index.js`.
+- **Frontend:** accessed via the `useFeature('FLAG_NAME')` hook. Flags absent from config default to `isEnabled: false`.
+
+Examples: `KYMA_COMPANION`, `GZIP`, `ALLOW_PRIVATE_IPS`, `EXTENSIBILITY`.
 
 ### Internationalization
 
