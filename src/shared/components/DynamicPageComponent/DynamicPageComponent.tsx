@@ -36,8 +36,8 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { LayoutColumnName } from 'types';
 
 const useGetHeaderHeight = (
-  dynamicPageRef: RefObject<DynamicPageDomRef>,
-  tabContainerRef: RefObject<TabContainerDomRef>,
+  dynamicPageRef: RefObject<DynamicPageDomRef | null>,
+  tabContainerRef: RefObject<TabContainerDomRef | null>,
 ) => {
   const [headerHeight, setHeaderHeight] = useState<number | undefined>(
     undefined,

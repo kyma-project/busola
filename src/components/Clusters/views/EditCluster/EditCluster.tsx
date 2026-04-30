@@ -67,7 +67,7 @@ type ClusterDataFormProps = {
   onChange?: (resource?: any) => void;
   onSubmit?: (event: FormEvent<HTMLElement | HTMLFormElement>) => void;
   resourceUrl?: string;
-  formElementRef?: RefObject<HTMLElement | HTMLFormElement>;
+  formElementRef?: RefObject<HTMLElement | HTMLFormElement | null>;
   className?: string;
   modeSelectorDisabled?: boolean;
   initialMode?: 'MODE_FORM' | 'MODE_YAML';
@@ -218,7 +218,7 @@ export const ClusterDataForm = ({
       setResource={setResource}
       initialResource={kubeconfig}
       onChange={onChange}
-      formElementRef={formElementRef as RefObject<HTMLFormElement>}
+      formElementRef={formElementRef as RefObject<HTMLFormElement | null>}
       createUrl={resourceUrl}
       onSubmit={onSubmit}
       autocompletionDisabled
@@ -311,7 +311,7 @@ export const ClusterDataForm = ({
 };
 
 type EditClusterComponentProps = {
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement | null>;
   onChange: () => void;
   resourceUrl?: string;
   editedCluster: Record<string, any>;

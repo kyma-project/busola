@@ -13,7 +13,7 @@ import { useAtomValue } from 'jotai';
 
 interface GenericRoleCreateProps {
   onChange: () => void;
-  formElementRef: RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement | null>;
   setCustomValid: (valid: boolean) => void;
   pluralKind: string;
   singularName: string;

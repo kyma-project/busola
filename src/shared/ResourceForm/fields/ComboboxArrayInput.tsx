@@ -62,7 +62,6 @@ export function ComboboxArrayInput({
       inputs={[
         ({ value, setValue, ref, updateValue, focus, index }: any) => {
           return (
-            /*@ts-expect-error Type mismatch between js and ts*/
             <Inputs.ComboboxInput
               updatesOnInput={false}
               key={index}
@@ -72,9 +71,6 @@ export function ComboboxArrayInput({
               selectedKey={value}
               setValue={setValue}
               options={options}
-              onKeyDown={focus}
-              onBlur={onBlur}
-              fullWidth
               onSelectionChange={(
                 _: any,
                 selected: { key: any; text: any },

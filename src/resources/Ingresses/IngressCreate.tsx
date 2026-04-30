@@ -8,7 +8,7 @@ import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 
 interface IngressCreateProps {
-  formElementRef: RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement | null>;
   onChange: FormEventHandler<HTMLElement>;
   setCustomValid: (valid: boolean) => void;
   resourceUrl: string;

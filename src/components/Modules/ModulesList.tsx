@@ -179,7 +179,9 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
                 {...props}
                 resource={kymaResource}
                 resourceUrl={resourceUrl ?? ''}
-                formElementRef={formElementRef as RefObject<HTMLFormElement>}
+                formElementRef={
+                  formElementRef as RefObject<HTMLFormElement | null>
+                }
               />
             </ErrorBoundary>
           )}

@@ -15,7 +15,7 @@ import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 interface JobCreateProps {
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   namespace?: string;
   onChange?: (job: Record<string, any>) => void;
   setCustomValid?: (isValid: boolean) => void;

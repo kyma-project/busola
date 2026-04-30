@@ -117,7 +117,7 @@ export function CustomResources({
     createResourceForm: (props: {
       [x: string]: any;
       onChange: FormEventHandler<HTMLElement>;
-      formElementRef: RefObject<HTMLFormElement>;
+      formElementRef: RefObject<HTMLFormElement | null>;
       layoutNumber: LayoutColumnName;
       resource: any;
     }) => <CRCreate {...props} crd={crd} layoutNumber="midColumn" />,

@@ -9,7 +9,7 @@ import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 
 type CustomResourceDefinitionCreateProps = {
   namespace?: string;
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   onChange?: (resource: Record<string, any>) => void;
   setCustomValid?: (isValid: boolean) => void;
   resource?: Record<string, any>;

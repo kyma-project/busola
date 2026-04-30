@@ -45,11 +45,8 @@ const ComboboxInputWithSeconds = ({
       updatesOnInput={false}
       options={expirationSecondsOptions}
       selectedKey={value}
-      onSelectionChange={(
-        _: CustomEvent,
-        selected: { key: number; text: string },
-      ): void => {
-        setValue(selected.key);
+      onSelectionChange={(_, selected): void => {
+        setValue(Number(selected.key));
         generateTokenRequest();
       }}
     />
@@ -71,7 +68,7 @@ export function TokenRequestModal({
 }: TokenRequestModalProps) {
   const { t } = useTranslation();
   const downloadKubeconfig = useDownloadKubeconfigWithToken();
-  const modalRef = useRef(null);
+  const modalRef = useRef<HTMLElement>(null);
 
   const {
     kubeconfigYaml,
@@ -106,7 +103,7 @@ export function TokenRequestModal({
       open={isModalOpen}
       onClose={handleCloseModal}
       headerText={t('service-accounts.token-request.generate')}
-      ref={modalRef}
+      ref={modalRef as any}
       footer={
         <Bar
           design="Footer"

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, RefObject } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
@@ -6,6 +6,7 @@ import {
   ShellBarItem,
   ToggleButton,
 } from '@ui5/webcomponents-react';
+import type { ShellBarDomRef } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router';
@@ -66,7 +67,7 @@ export function Header() {
     }));
   }, [setShowCompanion, usesJoule]);
 
-  const shellbarRef = useRef(null);
+  const shellbarRef = useRef<ShellBarDomRef>(null);
 
   return (
     <>
@@ -127,7 +128,7 @@ export function Header() {
           }
           setIsSearchOpen(false);
         }}
-        ref={shellbarRef}
+        ref={shellbarRef as RefObject<ShellBarDomRef>}
       >
         <SnowFeature />
         <FeedbackPopover />

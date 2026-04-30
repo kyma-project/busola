@@ -1,7 +1,7 @@
 import { Dispatch, RefObject, SetStateAction } from 'react';
 
 export const checkAuthRequiredInputs = (
-  authFormRef: RefObject<HTMLFormElement>,
+  authFormRef: RefObject<HTMLFormElement | null>,
   setHasInvalidInputs: Dispatch<SetStateAction<boolean>>,
 ) => {
   const invalidList = authFormRef?.current?.querySelectorAll(':invalid');
