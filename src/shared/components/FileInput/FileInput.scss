@@ -6,7 +6,7 @@
   background: var(--sapButton_Background);
   padding: 45px 25px;
   border: 2px dashed var(--sapList_BorderColor);
-  color: #0a6ed1;
+  color: var(--sapLinkColor);
 
   &,
   & > * {
