@@ -79,17 +79,35 @@ async function handlePublicKey(req, res) {
 }
 
 function extractAuthHeaders(req) {
+  let parsedBody;
+
+  if (typeof req.body === 'object' && !ArrayBuffer.isView(req.body)) {
+    parsedBody = req.body;
+  } else {
+    try {
+      parsedBody = JSON.parse(req.body.toString());
+    } catch (_) {
+      const error = new Error('Invalid JSON in request body');
+      error.status = 400;
+      throw error;
+    }
+  }
+
+  const {
+    clusterUrl,
+    certificateAuthorityData,
+    clusterToken,
+    clientCertificateData,
+    clientKeyData,
+    sessionId,
+  } = parsedBody;
   return {
-    clusterUrl: req.headers['x-cluster-url'],
-    certificateAuthorityData:
-      req.headers['x-cluster-certificate-authority-data'],
-    clusterToken: req.headers['x-k8s-authorization']?.replace(
-      /^Bearer\s+/i,
-      '',
-    ),
-    clientCertificateData: req.headers['x-client-certificate-data'],
-    clientKeyData: req.headers['x-client-key-data'],
-    sessionId: req.headers['session-id'],
+    clusterUrl,
+    certificateAuthorityData,
+    clusterToken,
+    clientCertificateData,
+    clientKeyData,
+    sessionId,
   };
 }
 
