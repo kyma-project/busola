@@ -110,15 +110,15 @@ context('Test Community Modules update-all functionality', () => {
       .contains('Update All')
       .click();
 
-    cy.get(
-      'ui5-dialog.update-all-modules-dialog, [class*="update-all-modules-dialog"]',
-    ).should('be.visible');
+    cy.get('ui5-dialog.update-all-modules-dialog]').should('be.visible');
 
-    cy.get(
-      'ui5-dialog.update-all-modules-dialog, [class*="update-all-modules-dialog"]',
-    )
+    cy.get('ui5-dialog.update-all-modules-dialog')
       .find('[data-testid="delete-old-template"]')
-      .should('be.visible')
+      .should('be.visible');
+
+    cy.get('ui5-dialog.update-all-modules-dialog')
+      .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('be.checked');
   });
 
@@ -133,6 +133,7 @@ context('Test Community Modules update-all functionality', () => {
       'ui5-dialog.update-all-modules-dialog, [class*="update-all-modules-dialog"]',
     )
       .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('not.be.checked');
 
     cy.get(
@@ -151,6 +152,7 @@ context('Test Community Modules update-all functionality', () => {
       'ui5-dialog.update-all-modules-dialog, [class*="update-all-modules-dialog"]',
     )
       .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('be.checked');
 
     cy.get(
@@ -181,6 +183,7 @@ context('Test Community Modules update-all functionality', () => {
       'ui5-dialog.update-all-modules-dialog, [class*="update-all-modules-dialog"]',
     )
       .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('not.be.checked');
 
     cy.get(

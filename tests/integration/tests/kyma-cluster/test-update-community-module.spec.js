@@ -107,7 +107,11 @@ context('Test Update Community Module', () => {
 
     cy.get('.update-module-dialog')
       .find('[data-testid="delete-old-template"]')
-      .should('be.visible')
+      .should('be.visible');
+
+    cy.get('.update-module-dialog')
+      .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('be.checked');
   });
 
@@ -137,6 +141,7 @@ context('Test Update Community Module', () => {
 
     cy.get('.update-module-dialog')
       .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('not.be.checked');
 
     cy.get('.update-module-dialog')
@@ -151,6 +156,7 @@ context('Test Update Community Module', () => {
 
     cy.get('.update-module-dialog')
       .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('be.checked');
 
     cy.get('.update-module-dialog')
@@ -173,6 +179,7 @@ context('Test Update Community Module', () => {
 
     cy.get('.update-module-dialog')
       .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('not.be.checked');
 
     cy.get('.update-module-dialog')
@@ -252,6 +259,7 @@ context('Test Update Community Module', () => {
 
     cy.get('.update-module-dialog')
       .find('[data-testid="delete-old-template"]')
+      .find('[type="checkbox"]')
       .should('be.checked');
 
     cy.get('.update-module-dialog')
