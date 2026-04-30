@@ -15,7 +15,7 @@ context('Test Community Modules update-all functionality', () => {
     cy.loginAndSelectCluster();
   });
 
-  it('Installs busola module at old version as precondition', () => {
+  it('Install busola module at old version as precondition', () => {
     cy.getLeftNav().contains('Cluster Overview').click();
     cy.get('ui5-card').contains('Modify Modules').click();
     cy.url().should('match', /.*\/kymamodules/);
@@ -26,28 +26,6 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.wait(1000);
     cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
-
-    cy.get('[accessible-name="add-yamls"]').click();
-
-    cy.get(`[header-text="Add Source YAML"]:visible`)
-      .find('[data-testid="add-to-namespace-select"]')
-      .click();
-    cy.get('ui5-option-custom:visible').contains('default').click();
-
-    cy.get('[accessible-name="Source YAML URL"]')
-      .find('input')
-      .click()
-      .clear()
-      .type(OLD_FIXTURE_URL);
-
-    cy.wait(1000);
-
-    cy.get(`[header-text="Add Source YAML"]:visible`)
-      .find('ui5-button')
-      .contains('Add')
-      .click();
-
-    cy.wait(1000);
 
     cy.get('ui5-title').contains(MODULE_NAME).click();
 
