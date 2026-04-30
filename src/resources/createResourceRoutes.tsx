@@ -108,21 +108,15 @@ const ColumnWrapper = ({
     hasDetailsView: props.hasDetailsView,
   });
 
-  const midColumnMatchesResource =
-    layoutState?.midColumn?.resourceType === props.resourceType;
-
   const elementDetailsProps = usePrepareDetailsProps({
     resourceCustomType: props.resourceCustomType,
     resourceType: props.resourceType,
     resourceI18Key: props.resourceI18Key,
     apiGroup: props.apiGroup,
     apiVersion: props.apiVersion,
-    resourceName: midColumnMatchesResource
-      ? (layoutState?.midColumn?.resourceName ?? resourceName)
-      : resourceName,
-    namespaceId: midColumnMatchesResource
-      ? (layoutState?.midColumn?.namespaceId ?? namespaceId ?? undefined)
-      : (namespaceId ?? undefined),
+    resourceName: layoutState?.midColumn?.resourceName ?? resourceName,
+    namespaceId:
+      layoutState?.midColumn?.namespaceId ?? namespaceId ?? undefined,
     showYamlTab: props.showYamlTab,
   });
 

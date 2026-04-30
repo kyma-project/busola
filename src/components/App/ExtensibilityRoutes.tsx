@@ -108,9 +108,6 @@ const ColumnWrapper = ({
     resourceCustomType: undefined,
   });
 
-  const midColumnMatchesResource =
-    layoutState?.midColumn?.resourceType === (urlPath ?? resourceType);
-
   let midColumnComponent = null;
 
   if (layoutState?.showCreate?.resourceType) {
@@ -138,26 +135,12 @@ const ColumnWrapper = ({
   if (
     !layoutState?.showCreate &&
     layoutState?.midColumn &&
-    midColumnMatchesResource &&
     !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
   ) {
     midColumnComponent = (
       <Details
         resourceName={layoutState?.midColumn?.resourceName ?? resourceName}
         namespaceId={layoutState.midColumn?.namespaceId ?? namespaceId}
-        resourceType={urlPath ?? resourceType}
-      />
-    );
-  } else if (
-    !layoutState?.showCreate &&
-    !midColumnMatchesResource &&
-    resourceName &&
-    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
-  ) {
-    midColumnComponent = (
-      <Details
-        resourceName={resourceName}
-        namespaceId={namespaceId}
         resourceType={urlPath ?? resourceType}
       />
     );

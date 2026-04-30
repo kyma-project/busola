@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSetAtom, useAtomValue } from 'jotai';
 import { sessionIDAtom } from '../../../state/companion/sessionIDAtom';
 import getPromptSuggestions from '../api/getPromptSuggestions';
@@ -45,11 +45,24 @@ export function usePromptSuggestions(
   const columnLayout = useAtomValue(columnLayoutAtom);
   const [loading, setLoading] = useState(true);
   const fetchedResourceRef = useRef('');
+  const [currentResource, setCurrentResource] = useState<CurrentResource>({
+    namespace: '',
+    resourceName: '',
+    resourceType: '',
+    groupVersion: '',
+  });
 
-  const currentResource = useMemo(
-    () => getResourceFromColumnnLayout(columnLayout),
-    [columnLayout],
-  );
+  useEffect(() => {
+    const { namespace, resourceType, groupVersion, resourceName } =
+      getResourceFromColumnnLayout(columnLayout);
+
+    setCurrentResource({
+      namespace,
+      resourceName,
+      resourceType,
+      groupVersion,
+    });
+  }, [columnLayout]);
 
   useEffect(() => {
     if (options?.skip) {

@@ -1,5 +1,9 @@
 import { useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router';
+import {
+  NavigationType,
+  useNavigationType,
+  useSearchParams,
+} from 'react-router';
 import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
@@ -97,6 +101,8 @@ export function usePrepareLayoutColumns({
   const createType = searchParams.get('createType');
   const showEdit = searchParams.get('showEdit');
   const editColumn = searchParams.get('editColumn');
+  const navigationType = useNavigationType();
+
   const newLayoutState = useMemo(() => {
     if (isModule) {
       return {
@@ -284,12 +290,28 @@ export function usePrepareLayoutColumns({
   ]);
 
   useEffect(() => {
-    setLayoutColumn(newLayoutState);
-  }, [newLayoutState, setLayoutColumn]);
+    if (navigationType === NavigationType.Pop) {
+      setLayoutColumn(newLayoutState);
+    }
+    console.log(
+      'newLayoutState',
+      newLayoutState,
+      'navigationType',
+      navigationType,
+    );
+  }, [newLayoutState, setLayoutColumn, navigationType]);
 
   useEffect(() => {
     setIsFormOpen({
       formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
     });
   }, [newLayoutState.showCreate, newLayoutState.showEdit, setIsFormOpen]);
+
+  useEffect(() => {
+    setLayoutColumn(newLayoutState);
+    setIsFormOpen({
+      formOpen: !!newLayoutState.showCreate || !!newLayoutState.showEdit,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }
