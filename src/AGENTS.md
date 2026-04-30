@@ -51,15 +51,15 @@ Translation source files live at `public/i18n/[lang].yaml`. At runtime they are 
 
 ## Key Files
 
-| File                                    | Purpose                                                         |
-| --------------------------------------- | --------------------------------------------------------------- |
-| `index.tsx`                             | App bootstrap: i18next, router, theme provider                  |
-| `components/App/App.tsx`               | Root layout, auth, cluster setup                                |
-| `components/App/ClusterRoutes.jsx`     | Cluster-scoped routing tree                                     |
-| `components/App/NamespaceRoutes.tsx`   | Namespace-scoped routing tree                                   |
-| `resources/index.tsx`                   | Aggregates all resource modules, calls `createResourceRoutes()` |
-| `resources/createResourceRoutes.tsx`    | Route builder function for resource CRUD                        |
-| `public/defaultConfig.yaml`             | Frontend storage config (patched by Dockerfile)                 |
-| `vite.config.mts`                       | Frontend bundler config                                         |
-| `tsconfig.json`                         | TypeScript config (`baseUrl: src` enables path aliases)         |
-| `eslint.config.ts`                      | ESLint flat config                                              |
+| File                                 | Purpose                                                         |
+| ------------------------------------ | --------------------------------------------------------------- |
+| `index.tsx`                          | App bootstrap: i18next, router, theme provider                  |
+| `components/App/App.tsx`             | Root layout, auth, cluster setup                                |
+| `components/App/ClusterRoutes.jsx`   | Cluster-scoped routing tree                                     |
+| `components/App/NamespaceRoutes.tsx` | Namespace-scoped routing tree                                   |
+| `resources/index.tsx`                | Aggregates all resource modules, calls `createResourceRoutes()` |
+| `resources/createResourceRoutes.tsx` | Route builder function for resource CRUD                        |
+| `public/defaultConfig.yaml`          | Frontend storage config (patched by Dockerfile)                 |
+| `vite.config.mts`                    | Frontend bundler config                                         |
+| `tsconfig.json`                      | TypeScript config (`baseUrl: src` enables path aliases)         |
+| `eslint.config.ts`                   | ESLint flat config                                              |

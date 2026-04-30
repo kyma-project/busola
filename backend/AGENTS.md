@@ -39,9 +39,9 @@ npm test   # run from the backend/ directory
 
 ## Key Files
 
-| File                    | Purpose                                          |
-| ----------------------- | ------------------------------------------------ |
-| `index.js`              | Express app and middleware chain                 |
-| `config.js`             | Feature flag / config loader (3-source YAML merge) |
-| `kubernetes/handler.js` | Kubernetes API handler                           |
-| `settings/defaultConfig.yaml` | Base feature flag definitions              |
+| File                          | Purpose                                            |
+| ----------------------------- | -------------------------------------------------- |
+| `index.js`                    | Express app and middleware chain                   |
+| `config.js`                   | Feature flag / config loader (3-source YAML merge) |
+| `kubernetes/handler.js`       | Kubernetes API handler                             |
+| `settings/defaultConfig.yaml` | Base feature flag definitions                      |
