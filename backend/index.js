@@ -1,6 +1,7 @@
 /* global  require, process, __dirname */
 import { handleK8sRequests } from './kubernetes/handler';
 import { proxyHandler, proxyRateLimiter } from './proxy.js';
+import rateLimit from 'express-rate-limit';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
@@ -60,7 +61,15 @@ app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
 app.use('/proxy', proxyRateLimiter, proxyHandler);
 
-app.get('/backend/kubeconfig', (req, res) => {
+const kubeconfigRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 30,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.get('/backend/kubeconfig', kubeconfigRateLimiter, (req, res) => {
   const kubeconfigDir = path.join(
     __dirname,
     process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
@@ -98,6 +107,31 @@ if (
 const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 const isDocker = process.env.IS_DOCKER === 'true';
+
+// TEMPORARY: proxy/IP topology diagnostic — remove after investigation
+app.get('/backend/_diagnostic-ip', (req, res) => {
+  const xff = req.headers['x-forwarded-for'] || '';
+  const xffEntries = xff
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const info = {
+    reqIp: req.ip,
+    reqIps: req.ips,
+    socketRemoteAddress: req.socket?.remoteAddress,
+    xForwardedFor: xff,
+    xForwardedForEntries: xffEntries,
+    xForwardedForCount: xffEntries.length,
+    xForwardedProto: req.headers['x-forwarded-proto'] || null,
+    xForwardedHost: req.headers['x-forwarded-host'] || null,
+    xRealIp: req.headers['x-real-ip'] || null,
+    via: req.headers['via'] || null,
+    forwarded: req.headers['forwarded'] || null,
+    trustProxySetting: app.get('trust proxy'),
+  };
+  req.log.info(info, 'ip-diagnostic');
+  res.json(info);
+});
 
 if (isDocker) {
   // Running in dev mode

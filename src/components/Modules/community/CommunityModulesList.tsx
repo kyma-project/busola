@@ -1,35 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@ui5/webcomponents-react';
-import pluralize from 'pluralize';
 import {
-  createModulePartialPath,
-  DEFAULT_K8S_NAMESPACE,
-  findCrd,
-  findExtension,
-  findModuleTemplate,
   getModuleName,
-  KymaResourceStatusTemplate,
   ModuleTemplateListType,
-  ModuleTemplateType,
 } from 'components/Modules/support';
-import { useUrl } from 'hooks/useUrl';
-import { extractApiGroupVersion } from 'resources/Roles/helpers';
-import {
-  columnLayoutAtom,
-  ColumnState,
-  ShowCreate,
-} from 'state/columnLayoutAtom';
-import { useSetAtom } from 'jotai';
-import { isFormOpenAtom } from 'state/formOpenAtom';
-import {
-  useGet,
-  useGetList,
-  useGetScope,
-} from 'shared/hooks/BackendAPI/useGet';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useNavigate } from 'react-router';
-import { useFetchModuleData } from 'components/Modules/hooks';
 import { ModulesListRows } from 'components/Modules/components/ModulesListRows';
 import {
   CommunityModulesInstallationContext,
@@ -39,6 +15,10 @@ import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { UpdateModuleButton } from '../components/moduleUpdate/UpdateModuleButton';
 import { getUpdateTemplate } from './communityModulesHelpers';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
+import { UpdateAllModulesButton } from '../components/moduleUpdate/UpdateAllModulesButton';
+import { useModuleNavigation } from 'components/Modules/hooks/useModuleNavigation';
+import { useModuleCrdsAndExtensions } from 'components/Modules/hooks/useModuleCrdsAndExtensions';
+import { useShowAddModule } from 'components/Modules/hooks/useShowAddModule';
 
 type CommunityModulesListProps = {
   moduleTemplates: ModuleTemplateListType;
@@ -83,44 +63,26 @@ export const CommunityModulesList = ({
   const { t } = useTranslation();
   const { preloadedCommunityTemplates } = useContext(ModuleTemplatesContext);
 
-  const { data: communityExtentions, silentRefetch: getCommunityExtentions } =
-    useGetList(
-      (ext: { metadata: { labels: Record<string, string> } }) =>
-        ext.metadata.labels['app.kubernetes.io/part-of'] !== 'Kyma',
-    )('/api/v1/configmaps?labelSelector=busola.io/extension=resource', {
-      pollingInterval: 0,
-    } as any);
+  const { extensions, crds } = useModuleCrdsAndExtensions('community', [
+    installedModules,
+  ]);
 
-  const { data: crds, silentRefetch: getCrds } = useGet(
-    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`,
-    {
-      pollingInterval: 0,
-    } as any,
-  );
-  useEffect(() => {
-    getCommunityExtentions();
-    getCrds();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [installedModules]);
+  const { handleClickResource, hasDetailsLink, customColumnLayout } =
+    useModuleNavigation({
+      moduleTemplates,
+      extensions,
+      crds,
+      namespaced,
+      installedModules,
+      setOpenedModuleIndex,
+      setSelectedEntry,
+    });
 
-  const navigate = useNavigate();
-  const { clusterUrl, namespaceUrl } = useUrl();
-  const setLayoutColumn = useSetAtom(columnLayoutAtom);
-  const setIsFormOpen = useSetAtom(isFormOpenAtom);
-  const { getItem: getModuleResource } = useFetchModuleData(
-    moduleTemplates,
-    (module: ModuleTemplateType) => module?.spec?.data ?? null,
-    'resource',
-    modulesLoading,
-  );
-  const getScope = useGetScope();
+  const handleShowAddModule = useShowAddModule(resourceUrl, 'community');
 
   const { modulesDuringUpload } = useContext(
     CommunityModulesInstallationContext,
   );
-
-  const [modulesToDisplay, setModulesToDisplay] =
-    useState<any[]>(installedModules);
 
   // When multiple instances of the same module templates exist in different namespaces, we want to display only one instance of the module
   function dedupeByModuleManager(modules: any[]) {
@@ -138,7 +100,7 @@ export const CommunityModulesList = ({
     });
   }
 
-  useEffect(() => {
+  const modulesToDisplay = useMemo(() => {
     const uniqueInstalled = dedupeByModuleManager(installedModules);
 
     const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
@@ -149,42 +111,15 @@ export const CommunityModulesList = ({
     });
 
     if (modulesDuringProcessing.length === 0) {
-      setModulesToDisplay(uniqueInstalled);
-      return;
+      return uniqueInstalled;
     }
 
     const moduleTemplatesDuringUpload = modulesDuringProcessing
       .filter((m) => m.state !== State.Finished)
       .map((m) => createFakeModuleTemplateWithStatus(m));
 
-    setModulesToDisplay([...uniqueInstalled, ...moduleTemplatesDuringUpload]);
+    return [...uniqueInstalled, ...moduleTemplatesDuringUpload];
   }, [installedModules, modulesDuringUpload]);
-
-  const handleShowAddModule = () => {
-    setLayoutColumn({
-      startColumn: {
-        resourceType: 'kymas',
-        rawResourceTypeName: 'Kyma',
-        namespaceId: 'kyma-system',
-        apiGroup: 'operator.kyma-project.io',
-        apiVersion: 'v1beta2',
-      } as ColumnState,
-      midColumn: null,
-      endColumn: null,
-      layout: 'TwoColumnsMidExpanded',
-      showCreate: {
-        resourceType: 'kymas',
-        rawResourceTypeName: 'Kyma',
-        createType: 'community',
-        resourceUrl: resourceUrl,
-      } as ShowCreate,
-    });
-
-    navigate(
-      `${window.location.pathname}?layout=TwoColumnsMidExpanded&showCreate=true&createType=community`,
-    );
-    setIsFormOpen((state) => ({ ...state, formOpen: true }));
-  };
 
   const headerRenderer = () => [
     t('common.headers.name'),
@@ -196,62 +131,10 @@ export const CommunityModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
-  const hasDetailsLink = (resource: {
-    name: string;
-    channel: string;
-    version: string;
-    namespace?: string;
-    resource: { kind: string; metadata: { name: string; namespace: string } };
-  }) => {
-    const currentModuleTemplate = findModuleTemplate(
-      moduleTemplates,
-      resource.name,
-      resource.channel,
-      resource.version,
-      undefined,
-      resource.namespace,
-    );
-
-    const moduleResource = getModuleResource(
-      currentModuleTemplate?.metadata?.name ?? '',
-      currentModuleTemplate?.spec?.manager?.namespace ?? '',
-    );
-
-    const moduleStatus = moduleResource?.status;
-    const isDeletionFailed = moduleStatus?.state === 'Warning';
-    const isError = moduleStatus?.state === 'Error';
-
-    const hasResource = !!moduleResource;
-
-    const hasExtension = !!findExtension(
-      resource?.resource?.kind,
-      communityExtentions,
-    );
-    const moduleCrd = findCrd(resource?.resource?.kind, crds);
-
-    return (
-      hasResource &&
-      (!isDeletionFailed || !isError) &&
-      (hasExtension || !!moduleCrd)
-    );
-  };
-
-  const customColumnLayout = (resource: {
-    name: string;
-    namespace: string;
-  }) => {
-    const moduleResource = getModuleResource(resource.name, resource.namespace);
-
-    return {
-      resourceName: resource?.name,
-      resourceType: pluralize(moduleResource?.kind || ''),
-      namespaceId: moduleResource?.metadata?.namespace || '',
-    };
-  };
-
   const actions = [
     ...[
       {
+        name: 'update',
         component: (entry: any) => {
           const repoTpl = getUpdateTemplate(
             entry.name,
@@ -262,12 +145,19 @@ export const CommunityModulesList = ({
             (m) => m.name === entry.name,
           );
           if (!repoTpl || !installedModule) return null;
+          const oldModuleTemplates = moduleTemplates.items.filter(
+            (tpl) =>
+              tpl.metadata.creationTimestamp !== undefined &&
+              getModuleName(tpl) === entry.name &&
+              tpl.spec.version !== repoTpl.spec.version,
+          );
           return (
             <UpdateModuleButton
               moduleName={entry.name}
               currentVersion={installedModule.version}
               newVersion={repoTpl.spec.version}
               moduleTpl={repoTpl}
+              oldModuleTemplates={oldModuleTemplates}
             />
           );
         },
@@ -293,98 +183,6 @@ export const CommunityModulesList = ({
     },
   ];
 
-  const handleClickResource = async (
-    moduleName: string,
-    moduleStatus: {
-      name: string;
-      channel: string;
-      version: string;
-      namespace: string;
-      resource: {
-        kind: string;
-        apiVersion: string;
-        metadata: { name: string; namespace: string };
-      };
-      template: KymaResourceStatusTemplate;
-    },
-  ) => {
-    setOpenedModuleIndex(
-      installedModules?.findIndex((entry) => entry.name === moduleName),
-    );
-
-    setSelectedEntry?.(moduleName);
-
-    const moduleTemplate = findModuleTemplate(
-      moduleTemplates,
-      moduleName,
-      moduleStatus.channel,
-      moduleStatus.version,
-      moduleStatus?.template,
-      moduleStatus?.resource?.metadata?.namespace,
-    );
-    if (!moduleStatus.resource) {
-      const moduleResource = moduleTemplate?.spec?.data;
-      moduleStatus.resource = {
-        kind: moduleResource?.kind ?? '',
-        apiVersion: moduleResource?.apiVersion ?? '',
-        metadata: {
-          name: moduleResource?.metadata?.name ?? '',
-          namespace: moduleResource?.metadata?.namespace ?? '',
-        },
-      };
-    }
-
-    const hasExtension = !!findExtension(
-      moduleStatus?.resource?.kind,
-      communityExtentions,
-    );
-    const moduleCrd = findCrd(moduleStatus?.resource?.kind, crds);
-    const skipRedirect = !hasDetailsLink(moduleStatus);
-
-    if (skipRedirect) {
-      return;
-    }
-
-    const { group, version } = extractApiGroupVersion(
-      moduleStatus?.resource?.apiVersion,
-    );
-    const moduleIsNamespaced = await getScope(
-      group,
-      version,
-      moduleStatus?.resource?.kind,
-    );
-
-    const partialPath = createModulePartialPath(
-      hasExtension,
-      moduleStatus.resource,
-      moduleCrd,
-      moduleIsNamespaced,
-    );
-
-    const path = namespaced
-      ? namespaceUrl(partialPath)
-      : clusterUrl(partialPath);
-
-    setLayoutColumn((prev) => ({
-      startColumn: prev.startColumn,
-      midColumn: {
-        resourceType: hasExtension
-          ? pluralize(moduleStatus?.resource?.kind || '').toLowerCase()
-          : moduleCrd?.metadata?.name,
-        resourceName: moduleStatus?.resource?.metadata?.name,
-        namespaceId: moduleIsNamespaced
-          ? moduleStatus?.resource?.metadata.namespace || DEFAULT_K8S_NAMESPACE
-          : '',
-        apiGroup: group,
-        apiVersion: version,
-      } as ColumnState,
-      layout: 'TwoColumnsMidExpanded',
-      endColumn: null,
-    }));
-
-    navigate(`${path}?layout=TwoColumnsMidExpanded`);
-  };
-
   return (
     <React.Fragment key="commmunity-modules-list">
       <GenericList
@@ -396,6 +194,7 @@ export const CommunityModulesList = ({
           <Button key="add-community-module" onClick={handleShowAddModule}>
             {t('common.buttons.add')}
           </Button>,
+          <UpdateAllModulesButton key="update-all-community-modules" />,
         ]}
         customColumnLayout={customColumnLayout as any}
         enableColumnLayout
@@ -418,6 +217,7 @@ export const CommunityModulesList = ({
         }
         disableHiding={false}
         displayArrow
+        hasRowDetails={hasDetailsLink}
         title={t('modules.community.installed-modules')}
         sortBy={{
           name: (a: { name: any }, b: { name: any }) =>
@@ -437,7 +237,6 @@ export const CommunityModulesList = ({
           } as any
         }
         customSelectedEntry={customSelectedEntry}
-        namespaceColIndex={1}
       />
     </React.Fragment>
   );

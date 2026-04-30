@@ -41,7 +41,6 @@ config:
         dsn: ''
     EXTERNAL_NODES:
       isEnabled: true
-      stage: SECONDARY
     HIDDEN_NAMESPACES:
       isEnabled: true
       config:

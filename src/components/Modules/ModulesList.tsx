@@ -1,4 +1,4 @@
-import { RefObject, useContext, useEffect, useMemo, useState } from 'react';
+import { RefObject, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Create, ResourceDescription } from 'components/Modules';
@@ -12,10 +12,10 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { CommunityModulesList } from 'components/Modules/community/CommunityModulesList';
 import { CommunityModuleContext } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContext } from './providers/ModuleTemplatesProvider';
-import { checkSelectedModule } from './support';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFeature } from 'hooks/useFeature';
+import { useUrl } from 'hooks/useUrl';
 import { configFeaturesNames } from 'state/types';
 import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
@@ -26,6 +26,10 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
   useWindowTitle(t('kyma-modules.title'));
 
   const layoutState = useAtomValue(columnLayoutAtom);
+  const { clusterUrl, namespaceUrl } = useUrl();
+  const modulesListUrl = namespaced
+    ? namespaceUrl('kymamodules')
+    : clusterUrl('kymamodules');
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );
@@ -51,31 +55,44 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
     handleResourceDelete: handleCommunityModuleDelete,
   } = useContext(CommunityModulesDeleteBoxContext);
 
-  const [selectedEntry, setSelectedEntry] = useState<string | undefined>(
-    undefined,
-  );
+  const [selectedKymaEntry, setSelectedKymaEntry] = useState<
+    string | undefined
+  >(undefined);
+  const [selectedCommunityEntry, setSelectedCommunityEntry] = useState<
+    string | undefined
+  >(undefined);
   const { isProtected, isProtectedResource } = useProtectedResources();
 
-  useEffect(() => {
-    if (
-      !installedCommunityModulesLoading &&
-      installedCommunityModules?.length
-    ) {
-      const timeoutId = setTimeout(() => {
-        setSelectedEntry(
-          installedCommunityModules.find((moduleTemplate) =>
-            checkSelectedModule(moduleTemplate, layoutState),
-          )?.name,
-        );
-      }, 0);
+  // Match on full CR identity — modules can share a kind, so matching on
+  // kind alone would cross-highlight unrelated rows.
+  const midColumn = layoutState?.midColumn;
+  const matchesLayout = (m: any) =>
+    m?.resource?.kind === midColumn?.rawResourceTypeName &&
+    m?.resource?.metadata?.name === midColumn?.resourceName &&
+    (m?.resource?.metadata?.namespace ?? '') === (midColumn?.namespaceId ?? '');
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [
-    installedCommunityModulesLoading,
-    installedCommunityModules,
-    layoutState,
-  ]);
+  const matchesTemplateData = (t: any) =>
+    t?.spec?.data?.kind === midColumn?.rawResourceTypeName &&
+    t?.spec?.data?.metadata?.name === midColumn?.resourceName;
+  const templateModuleName = (items?: any[]) =>
+    items?.find(matchesTemplateData)?.metadata?.labels?.[
+      'operator.kyma-project.io/module-name'
+    ];
+  const layoutMatchedKyma = midColumn?.rawResourceTypeName
+    ? (kymaResource?.status?.modules?.find(matchesLayout)?.name ??
+      templateModuleName(moduleTemplates?.items))
+    : undefined;
+  const layoutMatchedCommunity = midColumn?.rawResourceTypeName
+    ? installedCommunityModules?.find(matchesLayout)?.name
+    : undefined;
+
+  const isDetailsOpen = !!layoutState?.midColumn;
+  const displayedKymaEntry = isDetailsOpen
+    ? (layoutMatchedKyma ?? selectedKymaEntry)
+    : undefined;
+  const displayedCommunityEntry = isDetailsOpen
+    ? (layoutMatchedCommunity ?? selectedCommunityEntry)
+    : undefined;
 
   const filteredCommunityModules = useMemo(() => {
     if (!installedCommunityModules?.length) return [];
@@ -104,6 +121,7 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
       title={t('kyma-modules.title')}
       description={ResourceDescription}
       isFirstColumnWithEdit={true}
+      layoutCloseUrl={modulesListUrl}
       content={
         <>
           {kymaResource && (
@@ -119,8 +137,11 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
               protectedResource={showProtectedResourceWarning}
               setOpenedModuleIndex={setOpenedManagedModuleIndex}
               handleResourceDelete={handleResourceDelete}
-              customSelectedEntry={selectedEntry}
-              setSelectedEntry={setSelectedEntry}
+              customSelectedEntry={displayedKymaEntry}
+              setSelectedEntry={(name) => {
+                setSelectedKymaEntry(name);
+                setSelectedCommunityEntry(undefined);
+              }}
             />
           )}
           {isCommunityModulesEnabled && (
@@ -133,8 +154,11 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
               namespaced={namespaced}
               setOpenedModuleIndex={setOpenedCommunityModuleIndex}
               handleResourceDelete={handleCommunityModuleDelete}
-              customSelectedEntry={selectedEntry}
-              setSelectedEntry={setSelectedEntry}
+              customSelectedEntry={displayedCommunityEntry}
+              setSelectedEntry={(name) => {
+                setSelectedCommunityEntry(name);
+                setSelectedKymaEntry(undefined);
+              }}
             />
           )}
         </>

@@ -22,7 +22,7 @@ The Busola project contains additional sub-projects:
 
 <!-- markdown-link-check-enable -->
 
-- [`node`](https://nodejs.org/en/) in version 22.x
+- [`node`](https://nodejs.org/en/) in version 24.x
 
 ## Installation
 

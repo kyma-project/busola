@@ -1,4 +1,3 @@
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import cronstrue from 'cronstrue/i18n';
 import { useTranslation } from 'react-i18next';
 
@@ -15,9 +14,5 @@ export function CronJobSchedule({ schedule }: CronJobScheduleProps) {
     tooltip = '';
   }
 
-  return (
-    <Tooltip position="bottom" content={tooltip}>
-      {schedule}
-    </Tooltip>
-  );
+  return <span title={tooltip}>{schedule}</span>;
 }

@@ -1,4 +1,4 @@
-# Configuring Busola
+# Configuring Busola Deployment
 
 ## Prerequisites
 
@@ -7,9 +7,11 @@
 
 ## Procedure
 
-You can configure Busola to suit your needs. To do so, follow these steps:
+Follow these steps to configure your Busola deployment:
 
 1. Go to the `resources/customization` folder and adjust the provided configuration as needed.
+   Your changes replace all Busola default configuration except `defaultConfig.yaml`.
+   For more information, see [Configuration](technical-reference/configuration.md).
 2. Set the **NAMESPACE** shell environment variable:
 
    ```bash
@@ -24,7 +26,7 @@ You can configure Busola to suit your needs. To do so, follow these steps:
 
    ```
 
-4. To verify that your configuration has been applied, go to your Cluster Overview, choose **Feedback > Give Feedback**. The link you provided in `resources/customization/config/config.yaml` should open. By default it's `kyma-project.io`.
+4. To verify that your configuration has been applied, go to your Cluster Overview, choose **Feedback > Give Feedback**. The link you provided in `resources/customization/config/config.yaml` should open. By default, it's `kyma-project.io`.
 
 5. To check if your extensions are loaded properly, select your namespace, and check if your resource is there. For example, **Kustomized Horizontal Pod Autoscalers** in the **Discovery and Network** section, as provided in `resources/customization/extensions/extensions.yaml`.
 

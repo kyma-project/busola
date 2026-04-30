@@ -3,6 +3,7 @@ import { FlexBox, Tag, Text } from '@ui5/webcomponents-react';
 import {
   findModuleStatus,
   findModuleTemplate,
+  getModuleName,
   KymaResourceType,
   ModuleTemplateListType,
   ModuleTemplateStatus,
@@ -97,14 +98,16 @@ export const ModulesListRows = ({
 
   useEffect(() => {
     const checkIfNamespaceIsMissing = async () => {
-      if (currentModuleTemplate?.spec?.data?.metadata?.namespace) {
-        setModuleResourceWithNamespace(currentModuleTemplate?.spec.data);
-      } else {
-        const newModuleResource = await populateWithNamespace(
-          currentModuleTemplate?.spec.data,
-        );
-        setModuleResourceWithNamespace(newModuleResource);
+      const data = currentModuleTemplate?.spec?.data;
+      if (!data) {
+        setModuleResourceWithNamespace(null);
+        return;
       }
+      if (data.metadata?.namespace) {
+        setModuleResourceWithNamespace(data);
+        return;
+      }
+      setModuleResourceWithNamespace(await populateWithNamespace(data));
     };
     checkIfNamespaceIsMissing();
   }, [currentModuleTemplate]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -243,6 +246,13 @@ export const ModulesListRows = ({
                     currentVersion={resource?.version || ''}
                     newVersion={newestModuleTemplate?.spec?.version || ''}
                     moduleTpl={currentModuleTemplate}
+                    oldModuleTemplates={moduleTemplates.items.filter(
+                      (tpl) =>
+                        tpl.metadata.creationTimestamp !== undefined &&
+                        getModuleName(tpl) === resource.name &&
+                        tpl.spec.version !==
+                          newestModuleTemplate?.spec?.version,
+                    )}
                   />
                 )
               }
