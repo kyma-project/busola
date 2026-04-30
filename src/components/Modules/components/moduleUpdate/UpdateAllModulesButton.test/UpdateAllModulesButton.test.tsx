@@ -164,7 +164,6 @@ describe('UpdateAllModulesButton', () => {
   });
 
   it('renders "Update all" button for multiple updatable modules', () => {
-    // Verify the button appears when there are 2 updatable modules
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts(
       [installedModuleA, installedModuleB],

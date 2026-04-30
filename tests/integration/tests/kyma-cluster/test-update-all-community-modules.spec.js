@@ -52,13 +52,15 @@ context('Test Community Modules update-all functionality', () => {
 
   it('"Update all" button is visible when an update is available', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
-      .contains('ui5-button', 'Update all')
+      .find('ui5-button')
+      .contains('Update All')
       .should('be.visible');
   });
 
   it('Opens the update-all dialog when "Update all" is clicked', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
-      .contains('ui5-button', 'Update all')
+      .find('ui5-button')
+      .contains('Update All')
       .click();
 
     cy.get(
@@ -105,7 +107,7 @@ context('Test Community Modules update-all functionality', () => {
   it('Delete checkbox is checked by default in the dialog', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .find('ui5-button')
-      .contains('Update all')
+      .contains('Update All')
       .click();
 
     cy.get(
@@ -142,7 +144,7 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .find('ui5-button')
-      .contains('Update all')
+      .contains('Update All')
       .click();
 
     cy.get(
@@ -162,7 +164,7 @@ context('Test Community Modules update-all functionality', () => {
   it('Confirms update without deleting old ModuleTemplates when checkbox is unchecked', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .find('ui5-button')
-      .contains('Update all')
+      .contains('Update All')
       .click();
 
     cy.get(
@@ -237,7 +239,7 @@ context('Test Community Modules update-all functionality', () => {
   it('Confirms update and shows success notification', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .find('ui5-button')
-      .contains('Update all')
+      .contains('Update All')
       .click();
 
     cy.get(
