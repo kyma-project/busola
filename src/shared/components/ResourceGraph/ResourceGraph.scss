@@ -40,7 +40,7 @@
 
     & > text {
       font-weight: bold;
-      color: #0f0;
+      color: var(--sapTextColor);
     }
 
     & > text + text {
