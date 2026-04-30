@@ -122,19 +122,22 @@ export function ResourceListRenderer({
     e: Ui5CustomEvent<LinkDomRef, LinkClickEventDetail>,
   ) => {
     e.preventDefault();
+    const isNamespace = resourceType === 'Namespaces';
 
     setLayoutColumn({
-      midColumn: {
-        resourceName: entry?.metadata?.name ?? e.target.innerText,
-        resourceType: resourceType,
-        rawResourceTypeName: rawResourceType,
-        namespaceId: entry?.metadata?.namespace ?? null,
-        apiGroup: entry.metadata.group,
-        apiVersion: entry.apiVersion,
-      },
+      midColumn: !isNamespace
+        ? {
+            resourceName: entry?.metadata?.name ?? e.target.innerText,
+            resourceType: resourceType,
+            rawResourceTypeName: rawResourceType,
+            namespaceId: entry?.metadata?.namespace ?? null,
+            apiGroup: entry.metadata.group,
+            apiVersion: entry.apiVersion,
+          }
+        : null,
       showCreate: null,
       endColumn: null,
-      layout: 'TwoColumnsMidExpanded',
+      layout: isNamespace ? 'OneColumn' : 'TwoColumnsMidExpanded',
       showEdit: null,
       startColumn: {
         resourceName: null,
@@ -150,7 +153,6 @@ export function ResourceListRenderer({
     navigate(url);
   };
 
-  const isNamespace = resourceType === 'Namespaces';
   const defaultColumns = [
     {
       header: t('common.headers.name'),
@@ -163,13 +165,8 @@ export function ResourceListRenderer({
           ) : (
             <Link
               url={`${linkTo(entry)}`}
-              layout={isNamespace ? false : 'TwoColumnsMidExpanded'}
-              resetLayout={isNamespace}
-              onClick={
-                isNamespace
-                  ? undefined
-                  : (e: Ui5CustomEvent<LinkDomRef, LinkClickEventDetail>) =>
-                      onLinkClick(entry, e)
+              onClick={(e: Ui5CustomEvent<LinkDomRef, LinkClickEventDetail>) =>
+                onLinkClick(entry, e)
               }
               style={{ fontWeight: 'bold' }}
             >
