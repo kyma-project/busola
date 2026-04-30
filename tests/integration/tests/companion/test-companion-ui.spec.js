@@ -142,6 +142,7 @@ context('Test Companion UI', () => {
     it('Companion should not be available on cluster list', () => {
       cy.setBusolaFeature('KYMA_COMPANION', true);
       cy.reload();
+
       cy.get('ui5-shellbar').as('shellbar');
 
       cy.get('@shellbar').find('#clusterSwitcherOpener').click();

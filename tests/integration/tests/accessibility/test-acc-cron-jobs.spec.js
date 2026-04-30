@@ -24,6 +24,8 @@ context('Accessibility test Cron Jobs', () => {
 
     cy.getLeftNav().contains('Namespaces').click();
 
+    cy.wait(1000);
+
     cy.typeInSearch(NAMESPACE_NAME);
 
     cy.clickListLink(NAMESPACE_NAME);
