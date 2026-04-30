@@ -192,7 +192,7 @@ context('Test Community Modules update-all functionality', () => {
       .find('ui5-button[design="Emphasized"]')
       .click();
 
-    cy.contains('module-update-started').should('be.visible');
+    cy.contains('Module update started').should('be.visible');
 
     cy.wait(3000);
 
@@ -255,7 +255,7 @@ context('Test Community Modules update-all functionality', () => {
       .find('ui5-button[design="Emphasized"]')
       .click();
 
-    cy.contains('module-update-started').should('be.visible');
+    cy.contains('Module update started').should('be.visible');
   });
 
   it('Shows new version in the list after update and verifies old ModuleTemplate was deleted', () => {
