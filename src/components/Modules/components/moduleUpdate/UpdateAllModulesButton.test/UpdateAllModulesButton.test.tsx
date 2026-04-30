@@ -30,12 +30,12 @@ vi.mock('resources/Namespaces/YamlUpload/useUploadResources', () => ({
 
 const fetchResourcesToApplyMock = vi.fn().mockResolvedValue(undefined);
 const getUpdateTemplateMock = vi.fn();
-vi.mock('../../community/communityModulesHelpers', () => ({
+vi.mock('../../../community/communityModulesHelpers', () => ({
   fetchResourcesToApply: (...args: any[]) => fetchResourcesToApplyMock(...args),
   getUpdateTemplate: (...args: any[]) => getUpdateTemplateMock(...args),
 }));
 
-vi.mock('./DeleteOldModulesCheck', async () => {
+vi.mock('../DeleteOldModulesCheck/DeleteOldModulesCheck', async () => {
   const { useState } = await import('react');
   return {
     useDeleteOldModuleTemplates: (_tpls: any[]) => {

@@ -10,8 +10,8 @@ import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
-import { fetchResourcesToApply } from '../../community/communityModulesHelpers';
-import { uploadResource } from '../../community/communityModulesInstallHelpers';
+import { fetchResourcesToApply } from '../../../community/communityModulesHelpers';
+import { uploadResource } from '../../../community/communityModulesInstallHelpers';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import {
   NotificationContextArgs,
@@ -23,7 +23,7 @@ import './UpdateModuleButton.scss';
 import {
   useDeleteOldModuleTemplates,
   DeleteOldModulesCheck,
-} from './DeleteOldModulesCheck';
+} from '../DeleteOldModulesCheck/DeleteOldModulesCheck';
 
 type UpdateModuleButtonProps = {
   moduleName: string;
