@@ -57,12 +57,15 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hi, I am your Kyma assistant!');
 
     cy.wait('@getPromptSuggestions').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: 'default',
-        resourceType: 'Namespace',
-        groupVersion: 'v1',
-        namespace: '',
-      });
+      const { body } = interception.request;
+      expect(body.resourceName).to.deep.equal('default');
+      expect(body.resourceType).to.deep.equal('Namespace');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('');
+      expect(body).to.have.property('clusterUrl');
+      expect(body).to.have.property('certificateAuthorityData');
+      expect(body).to.have.property('clientCertificateData');
+      expect(body).to.have.property('clientKeyData');
     });
     cy.wait(1000);
 
@@ -119,14 +122,13 @@ context('Test Companion Chat Behavior', () => {
       .should('have.class', 'tasks-list');
 
     cy.wait('@getChatResponse').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: 'default',
-        resourceType: 'Namespace',
-        groupVersion: 'v1',
-        namespace: '',
-        query: 'suggestion1',
-      });
-      expect(interception.request.headers['session-id']).to.equal('test-id');
+      const { body } = interception.request;
+      expect(body.resourceName).to.deep.equal('default');
+      expect(body.resourceType).to.deep.equal('Namespace');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('');
+      expect(body.query).to.deep.equal('suggestion1');
+      expect(body.sessionId).to.deep.equal('test-id');
     });
     cy.wait(250);
 
@@ -152,7 +154,7 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hello, this is an AI response');
 
     cy.wait('@getFollowUpSuggestions').then((interception) => {
-      expect(interception.request.headers['session-id']).to.equal('test-id');
+      expect(interception.request.body['sessionId']).to.equal('test-id');
     });
     cy.wait(2500);
 
@@ -197,14 +199,13 @@ context('Test Companion Chat Behavior', () => {
       .should('have.class', 'tasks-list');
 
     cy.wait('@getChatResponse').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: 'default',
-        resourceType: 'Namespace',
-        groupVersion: 'v1',
-        namespace: '',
-        query: 'followup3',
-      });
-      expect(interception.request.headers['session-id']).to.equal('test-id');
+      const { body } = interception.request;
+      expect(body.resourceName).to.deep.equal('default');
+      expect(body.resourceType).to.deep.equal('Namespace');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('');
+      expect(body.query).to.deep.equal('followup3');
+      expect(body.sessionId).to.deep.equal('test-id');
     });
     cy.wait(250);
 
@@ -230,7 +231,7 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hello, this is an AI response');
 
     cy.wait('@getFollowUpSuggestions').then((interception) => {
-      expect(interception.request.headers['session-id']).to.equal('test-id');
+      expect(interception.request.body['sessionId']).to.equal('test-id');
     });
     cy.wait(2500);
 
@@ -379,14 +380,13 @@ context('Test Companion Chat Behavior', () => {
       .should('have.class', 'tasks-list');
 
     cy.wait('@getChatResponse').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: '',
-        resourceType: 'ServiceAccount',
-        groupVersion: 'v1',
-        namespace: 'default',
-        query: 'followup5',
-      });
-      expect(interception.request.headers['session-id']).to.equal('test-id');
+      const { body } = interception.request;
+      expect(body.resourceName).to.deep.equal('');
+      expect(body.resourceType).to.deep.equal('ServiceAccount');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('default');
+      expect(body.query).to.deep.equal('followup5');
+      expect(body.sessionId).to.deep.equal('test-id');
     });
     cy.wait(1000);
   });
@@ -440,12 +440,11 @@ context('Test Companion Chat Behavior', () => {
       .should('contain.text', 'Hi, I am your Kyma assistant!');
 
     cy.wait('@getPromptSuggestions').then((interception) => {
-      expect(interception.request.body).to.deep.equal({
-        resourceName: '',
-        resourceType: 'ServiceAccount',
-        groupVersion: 'v1',
-        namespace: 'default',
-      });
+      const { body } = interception.request;
+      expect(body.resourceName).to.deep.equal('');
+      expect(body.resourceType).to.deep.equal('ServiceAccount');
+      expect(body.groupVersion).to.deep.equal('v1');
+      expect(body.namespace).to.deep.equal('default');
     });
     cy.wait(1000);
 

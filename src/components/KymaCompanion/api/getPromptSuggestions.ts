@@ -1,11 +1,20 @@
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
+interface ClusterAuth {
+  token?: string;
+  clientCertificateData?: string;
+  clientKeyData?: string;
+}
+
 interface GetPromptSuggestionsParams {
   post: PostFn;
   namespace?: string;
   resourceType: string;
   groupVersion?: string;
   resourceName?: string;
+  clusterUrl: string;
+  certificateAuthorityData: string;
+  clusterAuth: ClusterAuth;
 }
 
 export interface PromptSuggestionsResponse {
@@ -19,6 +28,9 @@ export default async function getPromptSuggestions({
   resourceType = '',
   groupVersion = '',
   resourceName = '',
+  clusterUrl,
+  certificateAuthorityData,
+  clusterAuth,
 }: GetPromptSuggestionsParams): Promise<PromptSuggestionsResponse | false> {
   try {
     const response = await post('/ai-chat/suggestions', {
@@ -26,6 +38,11 @@ export default async function getPromptSuggestions({
       resourceType,
       groupVersion,
       resourceName,
+      clusterUrl,
+      certificateAuthorityData,
+      clusterToken: clusterAuth?.token,
+      clientCertificateData: clusterAuth?.clientCertificateData,
+      clientKeyData: clusterAuth?.clientKeyData,
     });
 
     if (
