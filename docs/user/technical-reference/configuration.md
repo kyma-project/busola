@@ -11,8 +11,11 @@ The order matters — Busola applies sources from least to most important, as li
 
 You can configure Busola at two levels:
 
-- Installation-Level Configuration — adjusts backend and frontend for all clusters. Configured using environment variables (ENVs).
+- Installation-Level Configuration — adjusts backend and frontend for all clusters.
 - Per-Cluster Configuration — configures the Busola frontend for a specific cluster only. Configured using the `busola-config` ConfigMap.
+
+> [!TIP]
+> To customize Busola for your installation, use environment variables (ENVs). Other configuration files may change between releases and are not recommended for customization.
 
 ### Backend
 
