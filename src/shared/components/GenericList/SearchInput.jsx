@@ -96,9 +96,12 @@ export function SearchInput({
   }, [filteredEntries, searchQuery, suggestionProperties]);
 
   const renderSearchList = () => {
-    return suggestions.map((suggestion, index) => (
-      <SuggestionItem key={index} id={suggestion} text={suggestion} />
-    ));
+    return suggestions.map((suggestion, index) => {
+      console.log('TEST-suggestion', suggestion, index);
+      return (
+        <SuggestionItem key={index} id={suggestion} text={String(suggestion)} />
+      );
+    });
   };
 
   return (
