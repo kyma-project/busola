@@ -5,7 +5,7 @@ metadata:
     operator.kyma-project.io/is-cluster-scoped: 'false'
   labels:
     operator.kyma-project.io/module-name: busola
-  name: busola-0-12
+  name: busola-1-0-32
   namespace: kyma-system
 spec:
   data:
@@ -56,6 +56,6 @@ spec:
   moduleName: busola
   requiresDowntime: false
   resources:
-    - link: https://github.com/kyma-project/busola/releases/download/v0.0.12/busola.yaml
+    - link: https://github.com/kyma-project/busola/releases/download/1.0.32/busola.yaml
       name: rawManifest
-  version: v0.0.12
+  version: 1.0.32

@@ -6,7 +6,7 @@ metadata:
     source: 'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-0-12.yaml' # Link to a higher version to test the update functionality
   labels:
     operator.kyma-project.io/module-name: busola
-  name: busola-0-11
+  name: busola-1-0-31
   namespace: kyma-system
 spec:
   data:
@@ -57,6 +57,6 @@ spec:
   moduleName: busola
   requiresDowntime: false
   resources:
-    - link: https://github.com/kyma-project/busola/releases/download/v0.0.11/busola.yaml
+    - link: https://github.com/kyma-project/busola/releases/download/1.0.31/busola.yaml
       name: rawManifest
-  version: v0.0.11
+  version: 1.0.31
