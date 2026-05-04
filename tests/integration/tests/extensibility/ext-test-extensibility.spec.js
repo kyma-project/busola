@@ -93,7 +93,7 @@ context('Test Extensibility Create/Update', () => {
       .wait(1000)
       .clear()
       .type(EXTENSION_NAME)
-      .get('ui5-suggestion-item:visible')
+      .get('ui5-suggestion-item')
       .contains('li', EXTENSION_NAME)
       .click();
 
@@ -119,7 +119,7 @@ context('Test Extensibility Create/Update', () => {
       .wait(1000)
       .clear()
       .type(EXTENSION_NAME)
-      .get('ui5-suggestion-item:visible')
+      .get('ui5-suggestion-item')
       .contains('li', EXTENSION_NAME)
       .click();
 

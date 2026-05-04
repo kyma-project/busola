@@ -208,9 +208,7 @@ Cypress.Commands.add(
     cy.wait(1000);
 
     if (selectSearchResult) {
-      cy.get('ui5-suggestion-item:visible')
-        .contains('li', resourceName)
-        .click();
+      cy.get('ui5-suggestion-item').contains('li', resourceName).click();
     }
 
     if (searchInPlainTableText) {

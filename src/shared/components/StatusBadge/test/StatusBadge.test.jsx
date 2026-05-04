@@ -1,4 +1,4 @@
-import { act, cloneElement, forwardRef } from 'react';
+import { act, cloneElement } from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -6,9 +6,9 @@ import userEvent from '@testing-library/user-event';
 vi.mock('@ui5/webcomponents-react', () => {
   return {
     ObjectStatus: (props) => <div role={props.role}>{props.children}</div>,
-    Popover: forwardRef((props, ref) => (
-      <div ref={ref}>{props.open ? props.children : null}</div>
-    )),
+    Popover: (props) => (
+      <div ref={props.ref}>{props.open ? props.children : null}</div>
+    ),
     Text: (props) => <span>{props.children}</span>,
   };
 });
