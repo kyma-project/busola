@@ -104,8 +104,8 @@
   "devDependencies": {
     "@eslint/js": "^9.38.0",
     "@nabla/vite-plugin-eslint": "^2.0.6",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/jest-dom": "^6.4.5",
+    "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/didyoumean": "^1.2.0",
     "@types/file-saver": "^2.0.5",
