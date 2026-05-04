@@ -235,7 +235,7 @@ context('Test Community Modules views', () => {
 
     cy.wait(500);
 
-    cy.get('ui5-option:visible').contains('0.0.12').click();
+    cy.get('ui5-option:visible').contains('v0.0.12').click();
 
     // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
     // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
@@ -257,7 +257,7 @@ context('Test Community Modules views', () => {
 
     cy.get('.community-modules-list')
       .find('ui5-table-row')
-      .contains('0.0.12')
+      .contains('v0.0.12')
       .should('be.visible');
   });
 

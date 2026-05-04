@@ -58,4 +58,4 @@ spec:
   resources:
     - link: https://github.com/kyma-project/busola/releases/download/v0.0.12/busola.yaml
       name: rawManifest
-  version: 0.0.12
+  version: v0.0.12
