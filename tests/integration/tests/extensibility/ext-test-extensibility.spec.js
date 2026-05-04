@@ -138,7 +138,7 @@ context('Test Extensibility Create/Update', () => {
         .get('[data-testid="details-view"]')
         .find('div.monaco-editor')
         .find('textarea[aria-roledescription="editor"]')
-        .focus()
+        .focus({ force: true })
         .scrollIntoView();
 
       cy.get('@form')

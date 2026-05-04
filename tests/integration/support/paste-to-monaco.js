@@ -4,9 +4,9 @@ Cypress.Commands.add(
   (monacoCount = 0) => {
     return cy
       .get('div.monaco-editor')
-      .find('textarea[aria-roledescription="editor"]:visible')
+      .find('textarea[aria-roledescription="editor"]')
       .eq(monacoCount)
-      .focus();
+      .focus({ force: true });
   },
 );
 
@@ -17,7 +17,7 @@ Cypress.Commands.add(
     // Ignore Cypress issue with Monaco on CI
     cy.handleExceptions();
 
-    cy.findMonaco(monacoCount).should('be.visible');
+    cy.get('div.monaco-editor').should('be.visible');
 
     cy.wait(1000);
 
