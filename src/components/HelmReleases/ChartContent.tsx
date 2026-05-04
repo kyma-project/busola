@@ -4,8 +4,8 @@ import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
 
 type Option = {
-  text: string;
-  key: string;
+  text: string | number;
+  key: string | number;
   data?: any;
 };
 
@@ -21,13 +21,11 @@ export function ChartContent({
 
   const files = [...(chart?.files || []), ...(chart?.templates || [])];
 
-  const options: Option[] = files
-    .filter(({ name }) => name !== undefined)
-    .map(({ name, data }) => ({
-      text: name as string,
-      key: name as string,
-      data,
-    }));
+  const options: Option[] = files.map(({ name, data }) => ({
+    text: name as string,
+    key: name as string,
+    data,
+  }));
 
   const [currentFile, setCurrentFile] = useState<Option>(options[0]);
 
@@ -36,9 +34,9 @@ export function ChartContent({
       <ComboboxInput
         value={currentFile?.key}
         options={options}
-        onSelectionChange={(_, selected) => {
-          if (selected.key !== '') {
-            setCurrentFile(selected as Option);
+        onSelectionChange={(_, selected: Option) => {
+          if (selected.key !== -1) {
+            setCurrentFile(selected);
           }
         }}
       />

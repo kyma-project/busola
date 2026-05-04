@@ -71,6 +71,8 @@ export function ComboboxArrayInput({
               selectedKey={value}
               setValue={setValue}
               options={options}
+              onKeyDown={focus}
+              onBlur={onBlur}
               onSelectionChange={(
                 _: any,
                 selected: { key: any; text: any },

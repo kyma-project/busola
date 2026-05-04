@@ -45,8 +45,11 @@ const ComboboxInputWithSeconds = ({
       updatesOnInput={false}
       options={expirationSecondsOptions}
       selectedKey={value}
-      onSelectionChange={(_, selected): void => {
-        setValue(Number(selected.key));
+      onSelectionChange={(
+        _,
+        selected: { key: number | string; text: number | string },
+      ): void => {
+        setValue(selected.key as number);
         generateTokenRequest();
       }}
     />

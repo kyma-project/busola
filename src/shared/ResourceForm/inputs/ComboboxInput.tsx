@@ -26,7 +26,7 @@ type ComboboxInputProps = {
   disabled?: boolean;
   required?: boolean;
   'data-testid'?: string;
-};
+} & Record<string, any>;
 
 export function ComboboxInput({
   value,
@@ -92,6 +92,8 @@ export function ComboboxInput({
       }
       placeholder={placeholder}
       data-testid={props['data-testid']}
+      onKeyDown={props.onKeyDown}
+      onBlur={props.onBlur}
     >
       {options.map((option, index) => (
         <ComboBoxItem
