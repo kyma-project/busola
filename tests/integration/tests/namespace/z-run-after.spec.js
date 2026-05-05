@@ -9,7 +9,7 @@ context('Clean up Namespace', () => {
   });
 
   it('Delete the Namespace (step 1)', () => {
-    cy.getLeftNav().contains('Namespaces').click();
+    cy.getLeftNav().contains('Namespaces').click({ force: true });
 
     cy.deleteFromGenericList('Namespace', Cypress.env('NAMESPACE_NAME'), {
       clearSearch: false,
@@ -33,7 +33,7 @@ context('Clean up Namespace', () => {
       timeout: 200000,
     },
     () => {
-      cy.getLeftNav().contains('Namespaces').click();
+      cy.getLeftNav().contains('Namespaces').click({ force: true });
 
       cy.get('ui5-table')
         .contains(Cypress.env('NAMESPACE_NAME'), { timeout: 180_000 })
