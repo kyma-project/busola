@@ -194,15 +194,17 @@ Cypress.Commands.add(
     cy.wait(1000);
     if (parentSelector) {
       cy.get(parentSelector)
-        .find('ui5-input[id^=search-]:visible', { timeout: 10000 })
-        .should('not.have.attr', 'disabled')
+        .find('ui5-input[id^=search-]:visible')
+        .shadow()
         .find('input')
-        .type(resourceName);
+        .should('not.have.attr', 'disabled', { timeout: 5000 })
+        .type(resourceName, { force: true });
     } else {
-      cy.get('ui5-input[id^=search-]:visible', { timeout: 10000 })
-        .should('not.have.attr', 'disabled')
+      cy.get('ui5-input[id^=search-]:visible')
+        .shadow()
         .find('input')
-        .type(resourceName);
+        .should('not.have.attr', 'disabled', { timeout: 5000 })
+        .type(resourceName, { force: true });
     }
 
     cy.wait(1000);
