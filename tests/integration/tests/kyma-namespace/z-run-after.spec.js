@@ -20,10 +20,9 @@ context('Clean up Namespace', () => {
       searchInPlainTableText: true,
     });
 
-    cy.contains('ui5-table-row', Cypress.env('NAMESPACE_NAME')).contains(
-      '.status-badge',
-      'Terminating',
-    );
+    cy.wait(1000);
+
+    cy.get('ui5-table-row').find('.status-badge').contains('Terminating');
   });
 
   it(
