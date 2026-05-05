@@ -108,6 +108,31 @@ const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 const isDocker = process.env.IS_DOCKER === 'true';
 
+// TEMPORARY: proxy/IP topology diagnostic — remove after investigation
+app.get('/backend/_diagnostic-ip', (req, res) => {
+  const xff = req.headers['x-forwarded-for'] || '';
+  const xffEntries = xff
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const info = {
+    reqIp: req.ip,
+    reqIps: req.ips,
+    socketRemoteAddress: req.socket?.remoteAddress,
+    xForwardedFor: xff,
+    xForwardedForEntries: xffEntries,
+    xForwardedForCount: xffEntries.length,
+    xForwardedProto: req.headers['x-forwarded-proto'] || null,
+    xForwardedHost: req.headers['x-forwarded-host'] || null,
+    xRealIp: req.headers['x-real-ip'] || null,
+    via: req.headers['via'] || null,
+    forwarded: req.headers['forwarded'] || null,
+    trustProxySetting: app.get('trust proxy'),
+  };
+  req.log.info(info, 'ip-diagnostic');
+  res.json(info);
+});
+
 if (isDocker) {
   // Running in dev mode
   // yup, order matters here

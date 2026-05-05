@@ -10,8 +10,8 @@ export default [
     link: './01-41-deploy-access-k3d.md',
   },
   {
-    text: 'Configuring Busola',
-    link: './01-42-configure-busola.md',
+    text: 'Configuring Busola Deployment',
+    link: './01-42-configuring-busola-deployment.md',
   },
   {
     text: 'Generating a Token for Busola Instances',
