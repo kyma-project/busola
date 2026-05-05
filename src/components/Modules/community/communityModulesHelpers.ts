@@ -287,6 +287,16 @@ export async function getAllResourcesYamls(
   return [];
 }
 
+function compareVersions(a: string, b: string): number {
+  const aParts = a.split('.').map(Number);
+  const bParts = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+    const diff = (aParts[i] ?? 0) - (bParts[i] ?? 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
+
 export const getUpdateTemplate = (
   moduleName: string,
   repoTemplates: ModuleTemplateType[],
@@ -295,9 +305,12 @@ export const getUpdateTemplate = (
   const installedModule = installedModules.find((m) => m.name === moduleName);
 
   if (!installedModule) return undefined;
-  return repoTemplates.find(
+  const candidates = repoTemplates.filter(
     (repoModule) =>
       getModuleName(repoModule) === moduleName &&
-      repoModule.spec.version !== installedModule.version,
+      compareVersions(repoModule.spec.version, installedModule.version) > 0,
   );
+  return candidates.sort((a, b) =>
+    compareVersions(b.spec.version, a.spec.version),
+  )[0];
 };
