@@ -14,12 +14,6 @@ const proxyRateLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-function sanitizeForLog(value) {
-  const text =
-    value instanceof Error ? value.stack || value.message : String(value);
-  return text.replace(/[\r\n\t]/g, ' ').slice(0, 2000);
-}
-
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
   if (!targetUrl) {
@@ -57,7 +51,7 @@ async function proxyHandler(req, res) {
           await pipeline(proxyRes, res);
           resolve();
         } catch (err) {
-          console.error('Proxy response pipeline error:', sanitizeForLog(err));
+          req.log.error('Proxy response pipeline error:', err.message);
           reject(err);
         }
       });
@@ -70,13 +64,13 @@ async function proxyHandler(req, res) {
         proxyReq.end(req.body);
       } else {
         pipeline(req, proxyReq).catch((err) => {
-          console.error('Request pipeline error:', sanitizeForLog(err));
+          req.log.error('Request pipeline error:', err.message);
           proxyReq.destroy(err);
         });
       }
     });
   } catch (error) {
-    console.error('Proxy error:', sanitizeForLog(error));
+    req.log.error('Proxy error:', error.message);
     if (!res.headersSent) {
       res.status(502).send('An error occurred while making the proxy request.');
     }
