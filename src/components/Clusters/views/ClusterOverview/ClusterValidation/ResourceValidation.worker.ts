@@ -17,16 +17,7 @@ const ResourceValidation = {
   },
 };
 
-const allowedOrigin = self.location.origin;
-
 self.onmessage = (event: MessageEvent) => {
-  if (event.origin && event.origin !== '') {
-    if (event.origin !== allowedOrigin) {
-      return;
-    }
-    return;
-  }
-
   const [method, ...parameters] = event.data;
 
   if (method === 'validate') {

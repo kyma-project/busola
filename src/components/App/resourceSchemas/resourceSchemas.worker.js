@@ -70,28 +70,7 @@ async function createJSONSchemas(openAPISchemas, clusterName) {
   });
 }
 
-const allowedOrigin = self.location.origin;
-
-function isTrustedMessageEvent(event) {
-  if (!event || typeof event !== 'object') return false;
-  if (event.isTrusted === false) return false;
-
-  const eventOrigin = typeof event.origin === 'string' ? event.origin : '';
-
-  if (eventOrigin === '') return true;
-
-  return eventOrigin === allowedOrigin;
-}
-
 self.onmessage = ($event) => {
-  if (!isTrustedMessageEvent($event)) {
-    self.postMessage({
-      type: 'customError',
-      error: new Error('Untrusted message origin'),
-    });
-    return;
-  }
-
   const message = $event.data[0];
 
   if (message === 'sendingOpenapi') {
