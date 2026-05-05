@@ -140,7 +140,7 @@ export function ResourceListRenderer({
       layout: isNamespace ? 'OneColumn' : 'TwoColumnsMidExpanded',
       showEdit: null,
       startColumn: {
-        resourceName: null,
+        resourceName: isNamespace ? entry?.metadata?.name : null,
         resourceType: resourceType,
         rawResourceTypeName: rawResourceType,
         namespaceId: entry?.metadata?.namespace ?? null,
@@ -148,7 +148,8 @@ export function ResourceListRenderer({
         apiVersion: entry.apiVersion,
       },
     });
-    const url = `${linkTo(entry)}?layout=TwoColumnsMidExpanded`;
+    const layoutLinkParam = isNamespace ? '' : '?layout=TwoColumnsMidExpanded';
+    const url = `${linkTo(entry)}${layoutLinkParam}`;
 
     navigate(url);
   };
