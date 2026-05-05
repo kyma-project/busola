@@ -17,7 +17,7 @@ const ResourceValidation = {
   },
 };
 
-self.onmessage = (event: MessageEvent) => {
+self.onmessage = (event) => {
   const [method, ...parameters] = event.data;
 
   if (method === 'validate') {
