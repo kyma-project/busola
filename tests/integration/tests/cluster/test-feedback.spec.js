@@ -149,6 +149,8 @@ context('Test Feedback Popover', () => {
 
     cy.get('@popover').should('not.contain.text', 'New');
 
+    cy.get('@opener').click();
+
     cy.get('@popover')
       .find('ui5-button[design="Default"]')
       .should('be.visible')
