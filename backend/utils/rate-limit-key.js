@@ -34,8 +34,8 @@ export function getK8sCredentialFromBody(req) {
   return parsed?.clusterToken || parsed?.clientCertificateData;
 }
 
-// Reject before the rate limiter when no credential is present, so a missing
-// credential cannot fall back to req.ip and become a global throttle key.
+// Reject before the rate limiter when no credential is present, so the
+// keyGenerator never has to handle a missing credential.
 export function requireCredential(extractCredential) {
   return function (req, res, next) {
     if (!extractCredential(req)) {
