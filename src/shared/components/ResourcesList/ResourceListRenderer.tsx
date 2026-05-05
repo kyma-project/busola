@@ -77,6 +77,7 @@ export function ResourceListRenderer({
   displayArrow = enableColumnLayout,
   accessibleName,
   createFormRef = null,
+  noRedirectAfterDelete = false,
 }: ResourceListRendererProps) {
   useVersionWarning({
     resourceUrl,
@@ -296,6 +297,7 @@ export function ResourceListRenderer({
           handler: (resource: K8sResource) => {
             handleResourceDelete({
               resourceUrl: prepareResourceUrl(resourceUrl, resource),
+              noRedirectAfterDelete,
             } as any);
             setActiveResource(resource);
           },

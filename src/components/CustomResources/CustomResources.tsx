@@ -111,6 +111,7 @@ export function CustomResources({
     isCompact: true,
     showTitle,
     customColumns,
+    noRedirectAfterDelete: true,
     testid: 'crd-custom-resources',
     omitColumnsIds,
     disableCreate,
