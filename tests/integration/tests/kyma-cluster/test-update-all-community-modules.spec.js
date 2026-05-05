@@ -1,11 +1,11 @@
 /// <reference types="cypress" />
 
 const MODULE_NAME = 'busola';
-const OLD_VERSION = '0.0.11';
-const NEW_VERSION = '0.0.12';
+const OLD_VERSION = '1.0.31';
+const NEW_VERSION = '1.0.32';
 const OLD_FIXTURE_URL =
-  'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-0-11.yaml';
-const OLD_TEMPLATE_NAME = `${MODULE_NAME}-0-11`;
+  'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-1-0-31.yaml';
+const OLD_TEMPLATE_NAME = `${MODULE_NAME}-1-0-31`;
 const KYMA_SYSTEM_NAMESPACE = 'kyma-system';
 
 context('Test Community Modules update-all functionality', () => {
@@ -208,7 +208,7 @@ context('Test Community Modules update-all functionality', () => {
     cy.clickGenericListLink('ModuleTemplates');
 
     cy.getMidColumn()
-      .get('ui5-input[id^=search-]:visible')
+      .find('ui5-input[id^=search-]:visible')
       .find('input')
       .should('be.visible')
       .type(OLD_TEMPLATE_NAME, { force: true });
@@ -284,7 +284,7 @@ context('Test Community Modules update-all functionality', () => {
     cy.clickGenericListLink('ModuleTemplates');
 
     cy.getMidColumn()
-      .get('ui5-input[id^=search-]:visible')
+      .contains('ui5-input[id^=search-]:visible')
       .find('input')
       .should('be.visible')
       .type(OLD_TEMPLATE_NAME, { force: true });
