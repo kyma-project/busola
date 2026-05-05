@@ -47,18 +47,7 @@ if (process.env.ENVIRONMENT) {
 
 if (process.env.NODE_ENV === 'development') {
   console.log('Use development settings of cors');
-  app.use(
-    cors({
-      origin: (origin, callback) => {
-        // Allow requests with no origin (e.g. curl, Postman) and localhost-only origins
-        if (!origin || /^https?:\/\/localhost(:\d+)?$/.test(origin)) {
-          callback(null, true);
-        } else {
-          callback(new Error('CORS: origin not allowed'));
-        }
-      },
-    }),
-  );
+  app.use(cors({ origin: '*' }));
 }
 
 // Add Pino logging middleware (attaches req.log to all requests)
