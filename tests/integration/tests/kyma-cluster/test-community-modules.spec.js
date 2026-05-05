@@ -110,7 +110,7 @@ context('Test Community Modules views', () => {
       .click()
       .clear()
       .type(
-        'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-0-12.yaml',
+        'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-1-0-32.yaml',
       );
 
     // Check if error 'all modules installed' is displayed
