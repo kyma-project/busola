@@ -62,3 +62,6 @@ extensions/downloads/*
 bin
 
 .eslintcache
+
+# Claude Code
+.claude/settings.local.json
