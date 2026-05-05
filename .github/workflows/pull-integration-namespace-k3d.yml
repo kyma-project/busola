@@ -15,6 +15,7 @@ on:
       - 'nginx/**'
       - 'resources/**'
       - 'tests/integration/**'
+  merge_group:
   workflow_call:
     inputs:
       trigger_env:

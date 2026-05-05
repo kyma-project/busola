@@ -35,6 +35,7 @@ on:
       - '.github/workflows/pull-kyma-intergation-tests.yml'
       - 'resources/**'
       - 'tests/integration/**'
+  merge_group:
 
 permissions:
   id-token: write # This is required for requesting the JWT token
