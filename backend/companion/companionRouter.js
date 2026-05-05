@@ -5,6 +5,11 @@ import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 import escape from 'lodash.escape';
+import {
+  getK8sCredentialFromBody,
+  hashCredential,
+  requireCredential,
+} from '../utils/rate-limit-key.js';
 
 const config = require('../config.js');
 
@@ -22,13 +27,15 @@ const COMPANION_PUBLIC_KEY_URL = companionApiBaseUrl
 const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
 
-// Rate limiter: Max 200 requests per 1 minutes per IP
+const requireCompanionCredential = requireCredential(getK8sCredentialFromBody);
+
 const companionRateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
   max: 200,
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: (req) => hashCredential(getK8sCredentialFromBody(req), 'cred'),
 });
 
 router.use(express.json());
@@ -297,9 +304,24 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
-router.post('/public-key', companionRateLimiter, handlePublicKey);
-router.post('/suggestions', companionRateLimiter, handlePromptSuggestions);
-router.post('/messages', companionRateLimiter, handleChatMessage);
-router.post('/followup', companionRateLimiter, handleFollowUpSuggestions);
+router.post('/public-key', handlePublicKey);
+router.post(
+  '/suggestions',
+  requireCompanionCredential,
+  companionRateLimiter,
+  handlePromptSuggestions,
+);
+router.post(
+  '/messages',
+  requireCompanionCredential,
+  companionRateLimiter,
+  handleChatMessage,
+);
+router.post(
+  '/followup',
+  requireCompanionCredential,
+  companionRateLimiter,
+  handleFollowUpSuggestions,
+);
 
 export default router;
