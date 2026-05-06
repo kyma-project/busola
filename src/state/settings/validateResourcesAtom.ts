@@ -1,6 +1,6 @@
 import { atomWithStorage } from 'jotai/utils';
 import { useAtom } from 'jotai';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 
@@ -44,15 +44,6 @@ export const useSyncedValidateResources = () => {
       ? validationFeature.config?.policies || []
       : [];
   }, [validationFeature]);
-
-  useEffect(() => {
-    if (typeof validateResources === 'boolean' && configPolicies.length > 0) {
-      setValidateResources({
-        isEnabled: validateResources,
-        policies: configPolicies,
-      });
-    }
-  }, [validateResources, configPolicies, setValidateResources]);
 
   return useMemo(() => {
     const extendedState = getExtendedValidateResourceState(validateResources);
