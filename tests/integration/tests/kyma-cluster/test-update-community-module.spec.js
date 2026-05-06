@@ -40,7 +40,10 @@ context('Test Update Community Module', () => {
 
     cy.get('ui5-option-custom:visible').contains('default').click();
 
-    cy.get('ui5-button:visible').contains('Add').click();
+    cy.get('ui5-dialog[header-text="Add Source YAML"]')
+      .find('ui5-button:visible')
+      .contains('Add')
+      .click();
 
     cy.wait(1000);
 
