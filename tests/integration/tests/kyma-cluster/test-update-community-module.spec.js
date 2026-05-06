@@ -90,6 +90,7 @@ context('Test Update Community Module', () => {
     cy.get('.community-modules-list')
       .find('ui5-table-row')
       .contains('ui5-button', 'Update')
+      .find('button')
       .click();
 
     cy.get('.update-module-dialog').should('be.visible');
