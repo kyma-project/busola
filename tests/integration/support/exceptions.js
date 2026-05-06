@@ -36,7 +36,11 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       // Exceptions due to reported issues to monaco editor.
       err.message.includes('items is not iterable') ||
-      err.message.includes('Canceled')
+      err.message.includes('Canceled') ||
+      // Level Access Continuum - token not available in local environment
+      err.message.includes(
+        'Unexpectedly encountered a non-200 status code (401 Unauthorized) while attempting to GET data from https://sap.levelaccess.net',
+      )
     )
       return false;
   });
