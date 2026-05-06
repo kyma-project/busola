@@ -16,7 +16,6 @@ context('Clean up Namespace', () => {
       checkIfResourceIsRemoved: false,
       selectSearchResult: true,
       searchInPlainTableText: true,
-      force: true,
     });
 
     cy.wait(1000);
