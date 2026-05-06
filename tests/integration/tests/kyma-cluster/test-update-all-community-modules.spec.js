@@ -217,7 +217,6 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.getLeftNav().contains('Cluster Overview').click();
     cy.get('ui5-card').contains('Modify Modules').click();
-    cy.inspectTab('View');
   });
 
   it('Reinstalls old version to prepare for delete-old-templates test', () => {
@@ -293,7 +292,6 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.getLeftNav().contains('Cluster Overview').click();
     cy.get('ui5-card').contains('Modify Modules').click();
-    cy.inspectTab('View');
   });
 
   it('Cleans up — deletes the installed busola module', () => {

@@ -218,7 +218,6 @@ context('Test Update Community Module', () => {
 
     cy.getLeftNav().contains('Cluster Overview').click();
     cy.get('ui5-card').contains('Modify Modules').click();
-    cy.inspectTab('View');
   });
 
   it('Update button is not visible when no updates are available', () => {
@@ -228,7 +227,7 @@ context('Test Update Community Module', () => {
       .should('not.exist');
   });
 
-  it(`Cleans up: reinstall v${OLD_VERSION} to prepare for delete-old-templates test`, () => {
+  it(`Reinstall old version to prepare for delete-old-templates test`, () => {
     cy.inspectTab('Edit');
 
     cy.wait(1000);
@@ -304,7 +303,6 @@ context('Test Update Community Module', () => {
 
     cy.getLeftNav().contains('Cluster Overview').click();
     cy.get('ui5-card').contains('Modify Modules').click();
-    cy.inspectTab('View');
   });
 
   it('Cleans up the installed module', () => {
