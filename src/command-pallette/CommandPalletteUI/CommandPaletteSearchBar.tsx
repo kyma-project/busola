@@ -15,7 +15,7 @@ type CommandPaletteSearchBarProps = {
   slot?: string;
   shouldFocus?: boolean;
   setShouldFocus?: (_: boolean) => void;
-  shellbarRef?: RefObject<HTMLElement>;
+  shellbarRef?: RefObject<HTMLElement | null>;
 };
 
 export function CommandPaletteSearchBar({

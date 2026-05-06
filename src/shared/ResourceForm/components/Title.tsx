@@ -1,5 +1,5 @@
 import { FlexBox, Icon, Label } from '@ui5/webcomponents-react';
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
 export type TitleProps = {

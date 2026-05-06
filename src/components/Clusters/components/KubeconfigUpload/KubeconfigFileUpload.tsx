@@ -41,7 +41,6 @@ export function KubeconfigFileUpload({
           />
         </>
       </Title>
-      {/*@ts-expect-error Type mismatch between js and ts*/}
       <FileInput
         fileInputChanged={onKubeconfigFileUploaded}
         acceptedFileFormats=".yaml,.yml"

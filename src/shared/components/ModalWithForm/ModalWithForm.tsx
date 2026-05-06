@@ -1,4 +1,4 @@
-import { ReactNode, RefObject, useState, useEffect } from 'react';
+import { ReactNode, RefObject, useState, useEffect, JSX } from 'react';
 import { Dialog, Button, ButtonPropTypes, Bar } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,7 +20,7 @@ type ButtonArgs = {
 
 type RenderFormProps = {
   readOnly?: boolean;
-  formElementRef: React.RefObject<HTMLFormElement>;
+  formElementRef: React.RefObject<HTMLFormElement | null>;
   isValid: boolean;
   setCustomValid: (valid: boolean) => void;
   onChange: () => void;
@@ -67,7 +67,7 @@ export const ModalWithForm = ({
   const { isValid, formElementRef, setCustomValid, revalidate } =
     useCustomFormValidator() as {
       isValid: boolean;
-      formElementRef: RefObject<HTMLFormElement>;
+      formElementRef: RefObject<HTMLFormElement | null>;
       setCustomValid: (valid: boolean) => void;
       revalidate: () => void;
     };

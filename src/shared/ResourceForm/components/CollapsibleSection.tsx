@@ -1,4 +1,12 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+  Dispatch,
+  JSX,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import classnames from 'classnames';
 import { ResourceFormWrapper } from './Wrapper';
 import { Panel } from '@ui5/webcomponents-react';
@@ -14,15 +22,15 @@ export type CollapsibleSectionProps = {
   title: string | JSX.Element;
   defaultTitleType?: boolean;
   actions?:
-    | React.ReactNode[]
+    | ReactNode[]
     | JSX.Element
     | ((setOpen: Dispatch<SetStateAction<boolean | undefined>>) => JSX.Element);
-  children: React.ReactNode;
+  children: ReactNode;
   resource?: Record<string, any> | string;
   setResource?: (resource: Record<string, any> | string) => void;
   className?: string;
   required?: boolean;
-  tooltipContent?: React.ReactNode;
+  tooltipContent?: ReactNode;
   nestingLevel?: number;
 };
 

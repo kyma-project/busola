@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/createMap';
 import {
@@ -25,7 +26,7 @@ type DropdownCompProps = {
 const getEnumComponent = (
   enumValues: any,
   isKeyInput: boolean = true,
-  input: () => JSX.Element = Inputs.Text,
+  input: () => JSX.Element = Inputs.Text as any,
 ) => {
   if (!Array.isArray(enumValues)) return input;
 
@@ -37,7 +38,6 @@ const getEnumComponent = (
     value,
     ...props
   }: DropdownCompProps) => (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <Dropdown
       {...props}
       value={value}
@@ -61,9 +61,9 @@ const getValueComponent = (valueInfo: Record<string, any>) => {
 
   switch (type) {
     case 'number':
-      return getEnumComponent(valueEnum, false, Inputs.Number);
+      return getEnumComponent(valueEnum, false, Inputs.Number as any);
     case 'string':
-      return getEnumComponent(valueEnum, false, Inputs.Text);
+      return getEnumComponent(valueEnum, false, Inputs.Text as any);
     case 'object': {
       const FieldComp = ({
         setValue,

@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash';
 import { createLimitRangeTemplate } from './templates';
 
 interface LimitRangeCreateProps {
-  formElementRef: RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement | null>;
   onChange: FormEventHandler<HTMLElement>;
   setCustomValid: (valid: boolean) => void;
   resourceUrl: string;

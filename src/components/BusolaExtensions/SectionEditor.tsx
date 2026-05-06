@@ -17,7 +17,7 @@ type SectionEditorProps = {
   data: string;
   schema: Record<string, any>;
   onlyYaml?: boolean;
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   onSubmit: (yamlData: string) => void;
 };
 

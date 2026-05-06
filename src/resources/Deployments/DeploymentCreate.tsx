@@ -20,7 +20,7 @@ const ISTIO_INJECTION_ENABLED = 'true';
 const ISTIO_INJECTION_DISABLED = 'false';
 
 type DeploymentCreateProps = {
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   namespace: string;
   onChange?: (job: Record<string, any>) => void;
   setCustomValid?: (isValid: boolean) => void;

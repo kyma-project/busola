@@ -19,7 +19,7 @@ const AVAILABLE_THEMES: Theme[] = [
 ];
 
 interface ThemeChooserProps {
-  listRef: RefObject<ListDomRef>;
+  listRef: RefObject<ListDomRef | null>;
 }
 
 export default function ThemeChooser({ listRef }: ThemeChooserProps) {

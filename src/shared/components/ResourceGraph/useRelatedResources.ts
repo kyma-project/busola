@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import {
@@ -56,7 +56,7 @@ function getNamespacePart({
 
 // BFS
 async function cycle(
-  store: MutableRefObject<ResourceGraphStore>,
+  store: RefObject<ResourceGraphStore>,
   depth: number,
   config: ResourceGraphConfig,
   context: ResourceGraphContext,
@@ -182,7 +182,7 @@ type useRelatedResourcesProps = {
 };
 
 type useRelatedResourcesReturnValue = {
-  store: MutableRefObject<ResourceGraphStore>;
+  store: RefObject<ResourceGraphStore>;
   startedLoading: boolean;
   startLoading: () => void;
 };

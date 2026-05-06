@@ -21,6 +21,7 @@ import { useUrl } from 'hooks/useUrl';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useRef } from 'react';
+import type { SideNavigationDomRef } from '@ui5/webcomponents-react';
 
 export function SidebarNavigation() {
   const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
@@ -30,7 +31,9 @@ export function SidebarNavigation() {
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
-  const sidebarRef = useRef(null);
+  const sidebarRef = useRef<SideNavigationDomRef & { closePicker: () => void }>(
+    null,
+  );
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =

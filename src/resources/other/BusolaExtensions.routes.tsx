@@ -53,7 +53,6 @@ const ColumnWrapper = ({ defaultColumn = 'list' }: ColumnWrapperProps) => {
     rawResourceTypeName: 'ConfigMap',
   });
 
-  // @ts-expect-error hook not yet migrated to TS
   const elementCreateProps = usePrepareCreateProps({
     resourceType: 'ConfigMap',
     resourceTypeForTitle: t('extensibility.title'),

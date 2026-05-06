@@ -66,7 +66,6 @@ export default function NodeDetails({ nodeName }: NodeDetailsProps) {
         </div>
       ),
     () => (
-      // @ts-expect-error EventsList is untyped JSX - hideInvolvedObjects and isClusterView are optional at runtime
       <EventsList
         key="events-list"
         filter={filterByHost}

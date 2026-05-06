@@ -21,7 +21,9 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 type NavItemProps = {
   node: NavNode;
   subItem?: boolean;
-  sidebarRef: RefObject<SideNavigationDomRef & { closePicker: () => void }>;
+  sidebarRef: RefObject<
+    (SideNavigationDomRef & { closePicker: () => void }) | null
+  >;
   isSelected?: boolean;
 };
 

@@ -79,7 +79,7 @@ context('Test Command Palette navigation', () => {
     openCommandPalette();
 
     getQueryInput().type('deployments{enter}');
-
+    cy.wait(1000);
     openCommandPalette();
 
     getQueryInput().type('ns/-a');

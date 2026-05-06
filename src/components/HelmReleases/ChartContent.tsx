@@ -4,8 +4,8 @@ import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
 
 type Option = {
-  text?: string;
-  key?: string | number;
+  text: string | number;
+  key: string | number;
   data?: any;
 };
 
@@ -21,9 +21,9 @@ export function ChartContent({
 
   const files = [...(chart?.files || []), ...(chart?.templates || [])];
 
-  const options = files.map(({ name, data }) => ({
-    text: name,
-    key: name,
+  const options: Option[] = files.map(({ name, data }) => ({
+    text: name as string,
+    key: name as string,
     data,
   }));
 
@@ -31,11 +31,10 @@ export function ChartContent({
 
   const actions = (
     <div style={{ width: '300px' }}>
-      {/*@ts-expect-error Type mismatch between js and ts*/}
       <ComboboxInput
         value={currentFile?.key}
         options={options}
-        onSelectionChange={(_: Event, selected: Option) => {
+        onSelectionChange={(_, selected: Option) => {
           if (selected.key !== -1) {
             setCurrentFile(selected);
           }
@@ -45,7 +44,6 @@ export function ChartContent({
   );
 
   return (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <ReadonlyEditorPanel
       title={t('helm-releases.headers.chart-files')}
       value={atob(currentFile?.data || '')}

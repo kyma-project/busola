@@ -7,7 +7,7 @@ import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMe
 import { useFormEditTracking } from 'shared/hooks/useFormEditTracking';
 
 export type SingleFormProps = {
-  formElementRef?: React.RefObject<HTMLFormElement>;
+  formElementRef?: React.RefObject<HTMLFormElement | null>;
   createResource?: (e: React.FormEvent<HTMLFormElement>) => void;
   children: React.ReactNode;
   resource?: Record<string, any>;
