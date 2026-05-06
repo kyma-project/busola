@@ -220,6 +220,8 @@ context('Test Community Modules update-all functionality', () => {
   });
 
   it('Reinstalls old version to prepare for delete-old-templates test', () => {
+    cy.wait(1000);
+
     cy.inspectTab('Edit');
 
     cy.wait(1000);

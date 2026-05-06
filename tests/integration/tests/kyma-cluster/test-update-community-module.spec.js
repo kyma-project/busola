@@ -24,26 +24,6 @@ context('Test Update Community Module', () => {
 
     cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
 
-    cy.get('[accessible-name="add-yamls"]').click();
-
-    cy.get(`[header-text="Add Source YAML"]:visible`)
-      .find('[data-testid="add-to-namespace-select"]')
-      .click();
-
-    cy.get('ui5-option-custom:visible').contains('default').click();
-
-    cy.get('[accessible-name="Source YAML URL"]')
-      .find('input')
-      .click()
-      .clear()
-      .type(OLD_FIXTURE_URL);
-
-    cy.wait(1000);
-
-    cy.get('ui5-button:visible').contains('Add').click();
-
-    cy.wait(1000);
-
     cy.get('ui5-card').contains(MODULE_NAME).should('be.visible');
 
     cy.get('ui5-title').contains(MODULE_NAME).click();
