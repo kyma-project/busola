@@ -36,7 +36,7 @@ export const RowComponent = ({ name, value }: RowComponentProps) =>
 
 export const Specification = (event: any) => {
   const { t } = useTranslation();
-  console.log('event', event);
+
   return (
     <UI5Card
       title={t('common.headers.configuration')}
