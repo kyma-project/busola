@@ -22,11 +22,11 @@
 }
 
 .logs {
-  color: white;
+  color: var(--sapButton_Emphasized_TextColor);
   padding-left: 15px;
   font-family: 'Consolas', monospace;
   font-size: 12px;
-  background-color: #252525;
+  background-color: var(--sapShellColor);
 }
 
 .logs-highlighted {

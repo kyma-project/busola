@@ -1,25 +1,29 @@
 .markdown {
   /* Theming */
   .light {
-    --panel-background: #ebebeb;
-    --panel-text: #333;
-    --formatted-text: #000;
-    --link: #004bfa;
-    --border: #777;
-    --code: rgba(255, 255, 255, 0.8);
+    --panel-background: var(--sapList_HeaderBackground);
+    --panel-text: var(--sapTextColor);
+    --formatted-text: var(--sapTextColor);
+    --link: var(--sapLinkColor);
+    --border: var(--sapField_BorderColor);
+    --code: color-mix(in srgb, var(--sapField_Background) 80%, transparent);
     --table: var(--code);
-    --table-header: rgba(128, 128, 128, 0.2);
+    --table-header: color-mix(
+      in srgb,
+      var(--sapList_HeaderBackground) 20%,
+      transparent
+    );
   }
 
   .dark {
-    --panel-background: #252525;
-    --panel-text: #ccc;
-    --formatted-text: #fff;
-    --link: #7b9ff2;
-    --border: #777;
-    --code: rgba(0, 0, 0, 0.3);
+    --panel-background: var(--sapShellColor);
+    --panel-text: var(--sapContent_LabelColor);
+    --formatted-text: var(--sapTextColor);
+    --link: var(--sapLinkColor);
+    --border: var(--sapField_BorderColor);
+    --code: color-mix(in srgb, var(--sapShellColor) 30%, transparent);
     --table: var(--code);
-    --table-header: #000;
+    --table-header: var(--sapShellColor);
   }
 
   /* Headings */
