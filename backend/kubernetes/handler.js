@@ -1,14 +1,34 @@
 /* global Buffer, require */
+import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
 import { pipeline } from 'stream/promises';
 import { tokenAuthAgent } from '../utils/https-agent.js';
+import {
+  getK8sCredentialFromHeaders,
+  hashCredential,
+  requireCredential,
+} from '../utils/rate-limit-key.js';
 import { buildK8sRequestPath } from './path-utils.js';
 
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const escape = require('lodash.escape');
+
+export const requireK8sCredential = requireCredential(
+  getK8sCredentialFromHeaders,
+);
+
+export const k8sRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 2000,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) =>
+    hashCredential(getK8sCredentialFromHeaders(req), 'k8s'),
+});
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
