@@ -6,7 +6,7 @@ import { Button } from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
 import './SecretData.scss';
 import { base64Decode } from 'shared/helpers';
-import { UI5Panel } from '../UI5Panel/UI5Panel';
+import { UI5Card } from '../UI5Card/UI5Card';
 
 type SecretComponentProps = {
   name: string;
@@ -81,7 +81,7 @@ export default function SecretData({
   };
 
   return (
-    <UI5Panel
+    <UI5Card
       title={t('secrets.data')}
       accessibleName={`${t('secrets.data')} panel`}
       headerActions={
@@ -99,6 +99,6 @@ export default function SecretData({
       }
     >
       {body()}
-    </UI5Panel>
+    </UI5Card>
   );
 }
