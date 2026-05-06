@@ -19,8 +19,8 @@ import { ResourceDescription } from 'resources/CronJobs';
 import { Link } from 'shared/components/Link/Link';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 type CronJobDetailsProps = Omit<
   ResourceDetailsProps,
@@ -87,11 +87,10 @@ export function CronJobDetails({
   }: {
     spec: { schedule: string; concurrencyPolicy: ReactNode };
   }) => (
-    <UI5Panel
-      key="specification"
+    <UI5Card
+      keyComponent="specification"
       title={t('common.headers.specification')}
       accessibleName={t('common.accessible-name.specification')}
-      keyComponent="specification-panel"
     >
       <LayoutPanelRow
         name={t('cron-jobs.schedule')}
@@ -105,7 +104,7 @@ export function CronJobDetails({
           />
         }
       />
-    </UI5Panel>
+    </UI5Card>
   );
 
   const Events = () => (
