@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
+import { createRef } from 'react';
 import { UI5Card } from './UI5Card';
 
 describe('UI5Card', () => {
@@ -143,5 +144,17 @@ describe('UI5Card', () => {
     );
 
     expect(container.querySelector('.bsl-card-toolbar')).not.toBeNull();
+  });
+
+  it('forwards a ref to the underlying Card element', () => {
+    const ref = createRef<HTMLElement>();
+    const { container } = render(
+      <UI5Card title="T" ref={ref}>
+        x
+      </UI5Card>,
+    );
+
+    expect(ref.current).not.toBeNull();
+    expect(ref.current).toBe(container.querySelector('ui5-card'));
   });
 });

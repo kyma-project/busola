@@ -71,4 +71,26 @@ describe('UI5Card', () => {
     );
     cy.get('[data-testid="inner"]').should('have.class', 'sap-margin-small');
   });
+
+  it('forwards a ref to the underlying ui5-card element', () => {
+    let capturedRef: HTMLElement | null = null;
+
+    cy.mount(
+      <UI5Card
+        title="T"
+        ref={(el) => {
+          capturedRef = el;
+        }}
+      >
+        x
+      </UI5Card>,
+    );
+
+    cy.get('ui5-card')
+      .should('exist')
+      .then(() => {
+        expect(capturedRef).not.to.be.null;
+        expect(capturedRef?.tagName.toLowerCase()).to.equal('ui5-card');
+      });
+  });
 });
