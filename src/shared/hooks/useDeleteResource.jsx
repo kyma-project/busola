@@ -47,7 +47,7 @@ export function useDeleteResource({
     setShowDeleteDialog(false);
   }, []);
   const performDelete = useCallback(
-    async (resource, resourceUrl, deleteFn) => {
+    async (resource, resourceUrl, deleteFn, noRedirectAfterDelete) => {
       const withoutQueryString = (path) => path?.split('?')?.[0];
       const url = withoutQueryString(resourceUrl);
 
@@ -82,7 +82,10 @@ export function useDeleteResource({
             }),
           });
 
-          if (navigateToListAfterDelete || forceRedirect) {
+          if (
+            navigateToListAfterDelete ||
+            (forceRedirect && !noRedirectAfterDelete)
+          ) {
             if (window.location.search.includes('layout')) {
               if (window.location.pathname.includes('busolaextensions')) {
                 navigate(
@@ -165,9 +168,9 @@ export function useDeleteResource({
   );
 
   const handleResourceDelete = useCallback(
-    ({ resource, resourceUrl, deleteFn }) => {
+    ({ resource, resourceUrl, deleteFn, noRedirectAfterDelete }) => {
       if (dontConfirmDelete && !forceConfirmDelete) {
-        performDelete(resource, resourceUrl, deleteFn);
+        performDelete(resource, resourceUrl, deleteFn, noRedirectAfterDelete);
       } else {
         setShowDeleteDialog(true);
       }

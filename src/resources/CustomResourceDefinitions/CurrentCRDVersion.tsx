@@ -91,7 +91,7 @@ export const CurrentCRDVersion = (resource: CRD) => {
         omitColumnsIds={
           resource.spec.scope !== 'Namespaced' ? ['namespace'] : []
         }
-        hideCreateOption={true}
+        disableCreate={true}
         simpleEmptyListMessage={true}
       />
       <AdditionalPrinterColumns

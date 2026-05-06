@@ -13,10 +13,10 @@ import { ResourcesListProps } from 'shared/components/ResourcesList/types';
 import { CRD } from './CRCreate';
 
 export function CustomResourceDefinitionList({
-  hideCreateOption,
+  disableCreate,
   ...props
 }: {
-  hideCreateOption?: boolean;
+  disableCreate?: boolean;
   resourceUrl: string;
   resourceType: string;
 } & Partial<ResourcesListProps>) {
@@ -42,7 +42,7 @@ export function CustomResourceDefinitionList({
       customColumns={customColumns}
       {...props}
       createResourceForm={
-        hideCreateOption ? undefined : CustomResourceDefinitionCreate
+        disableCreate ? undefined : CustomResourceDefinitionCreate
       }
       searchSettings={{
         textSearchProperties: ['spec.names.categories'],

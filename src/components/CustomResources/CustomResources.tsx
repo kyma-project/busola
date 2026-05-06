@@ -23,7 +23,7 @@ type CustomResourcesProps = {
   version: Version;
   showTitle?: boolean;
   omitColumnsIds?: string[];
-  hideCreateOption?: boolean;
+  disableCreate?: boolean;
   enableColumnLayout?: boolean;
   layoutCloseCreateUrl?: string;
   simpleEmptyListMessage?: boolean;
@@ -34,7 +34,7 @@ export function CustomResources({
   version,
   showTitle = true,
   omitColumnsIds,
-  hideCreateOption,
+  disableCreate,
   enableColumnLayout,
   layoutCloseCreateUrl,
   simpleEmptyListMessage = false,
@@ -111,9 +111,10 @@ export function CustomResources({
     isCompact: true,
     showTitle,
     customColumns,
+    noRedirectAfterDelete: true,
     testid: 'crd-custom-resources',
     omitColumnsIds,
-    hideCreateOption,
+    disableCreate,
     createResourceForm: (props: {
       [x: string]: any;
       onChange: FormEventHandler<HTMLElement>;
