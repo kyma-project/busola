@@ -285,7 +285,7 @@ context('Test Community Modules update-all functionality', () => {
     cy.clickGenericListLink('ModuleTemplates');
 
     cy.getMidColumn()
-      .contains('ui5-input[id^=search-]:visible')
+      .find('ui5-input[id^=search-]:visible')
       .find('input')
       .should('be.visible')
       .type(OLD_TEMPLATE_NAME, { force: true });
