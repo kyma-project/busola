@@ -58,7 +58,7 @@ function makeListItem(
       navigate(
         `/cluster/${encodeURIComponent(
           activeClusterName ?? '',
-        )}/overview/nodes/${name}`,
+        )}/overview/nodes/${name}?layout=TwoColumnsMidExpanded`,
       ),
     customActionText: 'command-palette.item-actions.navigate',
   };

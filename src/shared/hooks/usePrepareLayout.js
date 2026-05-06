@@ -293,6 +293,12 @@ export function usePrepareLayoutColumns({
     if (navigationType === NavigationType.Pop) {
       setLayoutColumn(newLayoutState);
     }
+    console.log(
+      'newLayoutState',
+      newLayoutState,
+      'navigationType',
+      navigationType,
+    );
   }, [newLayoutState, setLayoutColumn, navigationType]);
 
   useEffect(() => {

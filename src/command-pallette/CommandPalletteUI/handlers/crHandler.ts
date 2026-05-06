@@ -98,9 +98,11 @@ function navigateTo({
     : `customresources/${crd.metadata.name}/${crName}`; // generic route
 
   if (isNamespaced) {
-    navigate(`${clusterPath}/namespaces/${namespace}/${path}`);
+    navigate(
+      `${clusterPath}/namespaces/${namespace}/${path}?layout=ThreeColumnsEndExpanded`,
+    );
   } else {
-    navigate(clusterPath + '/' + path);
+    navigate(clusterPath + '/' + path + '?layout=ThreeColumnsEndExpanded');
   }
 }
 

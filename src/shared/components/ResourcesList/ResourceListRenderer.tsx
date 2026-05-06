@@ -122,15 +122,25 @@ export function ResourceListRenderer({
     e: Ui5CustomEvent<LinkDomRef, LinkClickEventDetail>,
   ) => {
     e.preventDefault();
+    const isNamespace = resourceType === 'Namespaces';
 
     setLayoutColumn({
-      midColumn: null,
+      midColumn: !isNamespace
+        ? {
+            resourceName: entry?.metadata?.name ?? e.target.innerText,
+            resourceType: resourceType,
+            rawResourceTypeName: rawResourceType,
+            namespaceId: entry?.metadata?.namespace ?? null,
+            apiGroup: entry.metadata.group,
+            apiVersion: entry.apiVersion,
+          }
+        : null,
       showCreate: null,
       endColumn: null,
-      layout: 'OneColumn',
+      layout: isNamespace ? 'OneColumn' : 'TwoColumnsMidExpanded',
       showEdit: null,
       startColumn: {
-        resourceName: entry?.metadata?.name ?? e.target.innerText,
+        resourceName: isNamespace ? entry?.metadata?.name : null,
         resourceType: resourceType,
         rawResourceTypeName: rawResourceType,
         namespaceId: entry?.metadata?.namespace ?? null,
@@ -138,8 +148,10 @@ export function ResourceListRenderer({
         apiVersion: entry.apiVersion,
       },
     });
+    const layoutLinkParam = isNamespace ? '' : '?layout=TwoColumnsMidExpanded';
+    const url = `${linkTo(entry)}${layoutLinkParam}`;
 
-    navigate(`${linkTo(entry)}`);
+    navigate(url);
   };
 
   const defaultColumns = [
