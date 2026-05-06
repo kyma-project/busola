@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { UI5Card } from './UI5Card';
+import { UI5Panel } from '../UI5Panel/UI5Panel';
 
 describe('UI5Card', () => {
   it('renders children inside the card', () => {
@@ -103,6 +104,19 @@ describe('UI5Card', () => {
 
     expect(getByTestId('outer')).not.toHaveClass('sap-margin-small');
     expect(getByTestId('inner')).toHaveClass('sap-margin-small');
+  });
+
+  it('propagates the nesting context to a UI5Panel rendered inside a UI5Card', () => {
+    const { getByTestId } = render(
+      <UI5Card title="Outer" testid="outer">
+        <UI5Panel title="Inner" testid="inner-panel">
+          x
+        </UI5Panel>
+      </UI5Card>,
+    );
+
+    expect(getByTestId('outer')).not.toHaveClass('sap-margin-small');
+    expect(getByTestId('inner-panel')).toHaveClass('sap-margin-small');
   });
 
   it('renders headerActions twice (invisible + visible) when combined with modeActions', () => {

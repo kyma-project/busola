@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import './LimitRangeSpecification.scss';
 import { LimitRangeProps } from './LimitRangeDetails';
 
@@ -122,7 +122,7 @@ export default function LimitRangeSpecification({
   }, [resource]);
 
   const headerRenderer = () => [
-    isCompact ? t('limit-ranges.headers.type') : null,
+    ...(isCompact ? [t('limit-ranges.headers.type')] : []),
     t('limit-ranges.headers.resource'),
     t('limit-ranges.headers.min'),
     t('limit-ranges.headers.max'),
@@ -139,17 +139,15 @@ export default function LimitRangeSpecification({
     default: defaultValue,
     defaultRequest,
     maxLimitRequestRatio,
-  }: FlatLimitProps) => {
-    return [
-      isCompact ? type : null,
-      resource || EMPTY_TEXT_PLACEHOLDER,
-      min || EMPTY_TEXT_PLACEHOLDER,
-      max || EMPTY_TEXT_PLACEHOLDER,
-      defaultValue || EMPTY_TEXT_PLACEHOLDER,
-      defaultRequest || EMPTY_TEXT_PLACEHOLDER,
-      maxLimitRequestRatio || EMPTY_TEXT_PLACEHOLDER,
-    ];
-  };
+  }: FlatLimitProps) => [
+    ...(isCompact ? [type] : []),
+    resource || EMPTY_TEXT_PLACEHOLDER,
+    min || EMPTY_TEXT_PLACEHOLDER,
+    max || EMPTY_TEXT_PLACEHOLDER,
+    defaultValue || EMPTY_TEXT_PLACEHOLDER,
+    defaultRequest || EMPTY_TEXT_PLACEHOLDER,
+    maxLimitRequestRatio || EMPTY_TEXT_PLACEHOLDER,
+  ];
 
   return isCompact ? (
     <GenericList
@@ -162,7 +160,7 @@ export default function LimitRangeSpecification({
       className="limit-range-spec compact"
     />
   ) : (
-    <UI5Panel
+    <UI5Card
       title={t('limit-ranges.headers.limits')}
       accessibleName={t('limit-ranges.accessible-name.limits')}
       className={'limit-range-spec'}
@@ -181,6 +179,6 @@ export default function LimitRangeSpecification({
           />
         ),
       )}
-    </UI5Panel>
+    </UI5Card>
   );
 }
