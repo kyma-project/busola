@@ -25,8 +25,8 @@ import { allNodesAtom } from 'state/navigation/allNodesAtom';
 import {
   fetchResourcesToApply,
   getUpdateTemplate,
-} from '../../community/communityModulesHelpers';
-import { uploadResource } from '../../community/communityModulesInstallHelpers';
+} from '../../../community/communityModulesHelpers';
+import { uploadResource } from '../../../community/communityModulesInstallHelpers';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
@@ -34,7 +34,7 @@ import { CommunityModuleContext } from 'components/Modules/community/providers/C
 import {
   useDeleteOldModuleTemplates,
   DeleteOldModulesCheck,
-} from './DeleteOldModulesCheck';
+} from '../DeleteOldModulesCheck/DeleteOldModulesCheck';
 
 type UpdatableModule = {
   moduleName: string;

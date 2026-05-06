@@ -12,10 +12,10 @@ import {
   moduleInstallationState,
 } from 'components/Modules/community/providers/CommunitModulesInstalationProvider';
 import { State } from 'components/Modules/community/components/uploadStateAtom';
-import { UpdateModuleButton } from '../components/moduleUpdate/UpdateModuleButton';
+import { UpdateModuleButton } from '../components/moduleUpdate/UpdateModuleButton/UpdateModuleButton';
 import { getUpdateTemplate } from './communityModulesHelpers';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
-import { UpdateAllModulesButton } from '../components/moduleUpdate/UpdateAllModulesButton';
+import { UpdateAllModulesButton } from '../components/moduleUpdate/UpdateAllModulesButton.test/UpdateAllModulesButton';
 import { useModuleNavigation } from 'components/Modules/hooks/useModuleNavigation';
 import { useModuleCrdsAndExtensions } from 'components/Modules/hooks/useModuleCrdsAndExtensions';
 import { useShowAddModule } from 'components/Modules/hooks/useShowAddModule';
