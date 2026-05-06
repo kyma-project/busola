@@ -16,8 +16,12 @@ function tryParseBody(req) {
     if (req.body) {
       return JSON.parse(req.body.toString());
     }
-  } catch (_) {
-    // ignore — extractors must not throw
+  } catch (err) {
+    // Don't rethrow — runs inside the rate-limit keyGenerator which must not throw.
+    req.log?.warn(
+      err,
+      'Failed to parse request body for credential extraction',
+    );
   }
   return null;
 }
