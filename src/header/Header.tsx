@@ -155,7 +155,12 @@ export function Header() {
             {showCompanion.useJoule && <JouleChat />}
           </>
         )}
-        {isTerminalEnabled && <Button icon={'command-line-interfaces'} />}
+        {isTerminalEnabled && (
+          <ToggleButton
+            icon={'command-line-interfaces'}
+            accessibleName={t('terminal.name')}
+          />
+        )}
         <ShellBarItem
           onClick={() => setIsGetHelpOpen(true)}
           id="openGetHelpMenu"
