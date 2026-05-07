@@ -89,7 +89,7 @@ describe('UI5Card', () => {
     cy.get('ui5-card')
       .should('exist')
       .then(() => {
-        expect(capturedRef).not.to.be.null;
+        expect(capturedRef).to.not.equal(null);
         expect(capturedRef?.tagName.toLowerCase()).to.equal('ui5-card');
       });
   });
