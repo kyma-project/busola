@@ -155,9 +155,7 @@ export function Header() {
             {showCompanion.useJoule && <JouleChat />}
           </>
         )}
-        {isTerminalEnabled && (
-          <Button icon={'sap-icon://command-line-interfaces'} />
-        )}
+        {isTerminalEnabled && <Button icon={'command-line-interfaces'} />}
         <ShellBarItem
           onClick={() => setIsGetHelpOpen(true)}
           id="openGetHelpMenu"
