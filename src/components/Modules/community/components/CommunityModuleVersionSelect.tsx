@@ -32,7 +32,7 @@ export default function CommunityModuleVersionSelect({
             key={`${idx}-${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}
             value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
           >
-            {`${version.textToDisplay} (namespace: ${version.moduleTemplate.namespace})`}
+            {`${version.textToDisplay}${version.moduleTemplate.namespace ? ` (namespace: ${version.moduleTemplate.namespace})` : ''}`}
           </Option>
         ))}
       </Select>
