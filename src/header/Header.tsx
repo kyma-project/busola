@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
-  Button,
   ShellBar,
   ShellBarItem,
   ToggleButton,
