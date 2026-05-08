@@ -419,6 +419,13 @@ export default function CommunityModulesAddModule(props: any) {
                 url={'https://kyma-project.io/#/community-modules/user/README'}
               />
             </MessageStrip>
+            <MessageStrip
+              design="Information"
+              hideCloseButton
+              className="sap-margin-top-small"
+            >
+              {t('modules.community.crd-info-message')}
+            </MessageStrip>
             <CommunityModulesSourcesList />
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
