@@ -90,8 +90,9 @@ context('Test Update Community Module', () => {
     cy.get('.community-modules-list')
       .find('ui5-table-row')
       .contains('ui5-button', 'Update')
-      .find('button')
       .click();
+
+    cy.wait(1000);
 
     cy.get('.update-module-dialog').should('be.visible');
 
@@ -244,7 +245,7 @@ context('Test Update Community Module', () => {
 
     cy.get('ui5-option:visible').contains(OLD_VERSION).click();
 
-    cy.wait(2000);
+    cy.wait(1000);
 
     cy.get('ui5-panel[data-testid="community-modules-edit"]')
       .find('ui5-button')
@@ -254,6 +255,8 @@ context('Test Update Community Module', () => {
     cy.contains('Community Modules updated').should('be.visible');
 
     cy.inspectTab('View');
+
+    cy.wait(3000);
   });
 
   it('Updates the community module and deletes all old ModuleTemplates when checkbox is checked', () => {
