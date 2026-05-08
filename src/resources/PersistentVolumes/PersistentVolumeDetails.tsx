@@ -61,7 +61,7 @@ export function PersistentVolumeDetails({
     spec: PersistentVolumeSpecType;
     metadata: PersistentVolumeMetadataType;
   }) => (
-    <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
+    <>
       <UI5Card
         title={t('common.headers.specification')}
         accessibleName={t('common.accessible-name.specification')}
@@ -140,7 +140,6 @@ export function PersistentVolumeDetails({
       <UI5Card
         title={t('pv.headers.volumeType')}
         accessibleName={`${t('pv.headers.volumeType')} panel`}
-        className="sap-margin-top-small"
       >
         {spec.nfs && <VolumeNFS nfs={spec.nfs} />}
         {spec.csi && <VolumeCSI csi={spec.csi} />}
@@ -154,7 +153,7 @@ export function PersistentVolumeDetails({
         )}
         {spec.local && <VolumeLocal local={spec.local} />}
       </UI5Card>
-    </div>
+    </>
   );
 
   const Events = () => (
