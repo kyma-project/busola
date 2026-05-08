@@ -31,10 +31,10 @@ type EventDetailsProps = {
   [key: string]: any;
 };
 
-export const RowComponent = ({ name, value }: RowComponentProps) =>
+const RowComponent = ({ name, value }: RowComponentProps) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
 
-export const Specification = (event: any) => {
+const Specification = (event: any) => {
   const { t } = useTranslation();
 
   return (
