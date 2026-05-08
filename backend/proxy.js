@@ -51,7 +51,7 @@ async function proxyHandler(req, res) {
           await pipeline(proxyRes, res);
           resolve();
         } catch (err) {
-          req.log.error('Proxy response pipeline error:', err.message);
+          req.log.error({ err }, 'Proxy response pipeline error');
           reject(err);
         }
       });
@@ -64,13 +64,13 @@ async function proxyHandler(req, res) {
         proxyReq.end(req.body);
       } else {
         pipeline(req, proxyReq).catch((err) => {
-          req.log.error('Request pipeline error:', err.message);
+          req.log.error({ err }, 'Request pipeline error');
           proxyReq.destroy(err);
         });
       }
     });
-  } catch (error) {
-    req.log.error('Proxy error:', error.message);
+  } catch (err) {
+    req.log.error({ err }, 'Proxy error');
     if (!res.headersSent) {
       res.status(502).send('An error occurred while making the proxy request.');
     }
