@@ -11,7 +11,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import PersistentVolumeCreate from './PersistentVolumeCreate';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import {
   PersistentVolumeMetadataType,
   PersistentVolumeSpecType,
@@ -62,7 +62,7 @@ export function PersistentVolumeDetails({
     metadata: PersistentVolumeMetadataType;
   }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
-      <UI5Panel
+      <UI5Card
         title={t('common.headers.specification')}
         accessibleName={t('common.accessible-name.specification')}
       >
@@ -135,9 +135,9 @@ export function PersistentVolumeDetails({
           name={t('pv.headers.volumeMode')}
           value={spec?.volumeMode}
         />
-      </UI5Panel>
+      </UI5Card>
 
-      <UI5Panel
+      <UI5Card
         title={t('pv.headers.volumeType')}
         accessibleName={`${t('pv.headers.volumeType')} panel`}
       >
@@ -152,7 +152,7 @@ export function PersistentVolumeDetails({
           />
         )}
         {spec.local && <VolumeLocal local={spec.local} />}
-      </UI5Panel>
+      </UI5Card>
     </div>
   );
 
