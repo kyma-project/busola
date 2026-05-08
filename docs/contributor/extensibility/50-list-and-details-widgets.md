@@ -17,6 +17,7 @@ You can distinguish the following widget types:
   - [`TimeFromNow`](#timefromnow)
 - [Block widgets](#block-widgets) for more complex layouts used only in **data.details.body**
   - [`Alert`](#alert)
+  - [`Card`](#card)
   - [`CodeViewer`](#codeviewer)
   - [`Columns`](#columns)
   - [`EventList`](#eventlist)
@@ -399,6 +400,29 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="70%">
+
+### `Card`
+
+The `Card` widgets render children in a card with its own title (based on its `source` or `name`). When the source resolves to an array, all items are rendered inside a single card.
+
+See the following example:
+
+```yaml
+- name: included.domains
+  widget: Card
+  source: spec.domains.include
+  children:
+    - source: $item
+      name: included.domains
+- name: excluded.domains
+  widget: Card
+  source: spec.domains.exclude
+  children:
+    - source: $item
+      name: excluded.domains
+```
+
+<img src="./assets/display-widgets/Card.png" alt="Example of a card widget" width="50%">
 
 ### `CodeViewer`
 
