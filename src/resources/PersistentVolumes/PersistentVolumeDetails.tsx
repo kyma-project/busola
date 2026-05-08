@@ -140,6 +140,7 @@ export function PersistentVolumeDetails({
       <UI5Card
         title={t('pv.headers.volumeType')}
         accessibleName={`${t('pv.headers.volumeType')} panel`}
+        className="sap-margin-top-small"
       >
         {spec.nfs && <VolumeNFS nfs={spec.nfs} />}
         {spec.csi && <VolumeCSI csi={spec.csi} />}
