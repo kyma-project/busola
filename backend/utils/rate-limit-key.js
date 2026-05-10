@@ -17,7 +17,6 @@ function tryParseBody(req) {
       return JSON.parse(req.body.toString());
     }
   } catch (err) {
-    // Don't rethrow — runs inside the rate-limit keyGenerator which must not throw.
     req.log?.warn(
       err,
       'Failed to parse request body for credential extraction',
