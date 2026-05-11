@@ -36,8 +36,8 @@ export async function handleK8sRequests(req, res) {
   let headersData;
   try {
     headersData = extractHeadersData(req);
-  } catch (e) {
-    req.log.error('Headers error:' + e.message);
+  } catch (err) {
+    req.log.error({ err }, 'Headers error');
     res.contentType('text/plain; charset=utf-8');
     res.status(400).send('Headers are missing or in a wrong format.');
     return;
@@ -45,8 +45,8 @@ export async function handleK8sRequests(req, res) {
 
   try {
     filters.forEach((filter) => filter(req, headersData));
-  } catch (e) {
-    req.log.error('Filters rejected the request: ' + e.message);
+  } catch (err) {
+    req.log.error({ err }, 'Filters rejected the request');
     res.contentType('text/plain; charset=utf-8');
     res.status(400).send('Request ID: ' + escape(req.id));
     return;
