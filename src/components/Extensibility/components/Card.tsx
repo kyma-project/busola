@@ -1,8 +1,3 @@
-import { useState } from 'react';
-import { mapValues } from 'lodash';
-
-import { base64Decode } from 'shared/helpers';
-
 import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
