@@ -1,7 +1,7 @@
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { X509Certificate } from '@peculiar/x509';
 
 type CertificatePanelProps = {
@@ -14,8 +14,7 @@ export function CertificatePanel({ name, certificate }: CertificatePanelProps) {
   const { format: formatDate } = new Intl.DateTimeFormat('en');
 
   return (
-    <UI5Panel
-      fixed
+    <UI5Card
       title={t('secrets.certificate-panel.title', { name })}
       accessibleName={t('secrets.accessible-name.certificate-panel')}
     >
@@ -40,6 +39,6 @@ export function CertificatePanel({ name, certificate }: CertificatePanelProps) {
           />
         }
       />
-    </UI5Panel>
+    </UI5Card>
   );
 }

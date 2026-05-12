@@ -15,7 +15,7 @@ import SecretCreate from './SecretCreate';
 import { ResourceDescription } from 'resources/Secrets';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 function HelmReleaseDataWrapper(secret: Record<string, any>) {
@@ -64,15 +64,14 @@ export function SecretDetails(
   );
 
   const Configuration = (secret: { type: string }) => (
-    <UI5Panel
-      fixed
+    <UI5Card
       keyComponent={'secret-configuration'}
       key="secret-configuration"
       title={t('common.headers.configuration')}
       accessibleName={t('common.accessible-name.configuration')}
     >
       <LayoutPanelRow name={t('secrets.headers.type')} value={secret.type} />
-    </UI5Panel>
+    </UI5Card>
   );
 
   return (
