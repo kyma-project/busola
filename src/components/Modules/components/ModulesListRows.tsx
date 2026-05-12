@@ -245,7 +245,7 @@ export const ModulesListRows = ({
                     moduleName={resource.name}
                     currentVersion={resource?.version || ''}
                     newVersion={newestModuleTemplate?.spec?.version || ''}
-                    moduleTpl={currentModuleTemplate}
+                    moduleTpl={newestModuleTemplate}
                     oldModuleTemplates={moduleTemplates.items.filter(
                       (tpl) =>
                         tpl.metadata.creationTimestamp !== undefined &&
