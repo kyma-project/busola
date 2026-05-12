@@ -81,9 +81,24 @@ export const invalidRequestMethodFilter = (req) => {
   }
 };
 
+export const portFilter = (_req, headersData) => {
+  const port = headersData.targetApiServer.port;
+
+  if (!port) {
+    // no explicit port — protocol default will be used, which is always valid
+    return;
+  }
+
+  const portNumber = Number(port);
+  if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
+    throw Error(`Port ${port} is not a valid port number.`);
+  }
+};
+
 export const filters = [
   invalidRequestMethodFilter,
   localIpFilter,
   pathWhitelistFilter,
   pathInvalidCharacterFilter,
+  portFilter,
 ];

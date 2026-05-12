@@ -26,10 +26,10 @@ const makePartitions = (currentPage: number, pagesCount: number) => {
     }
   }
   // if between the radius and first/last elements are further pages insert placeholders
-  if (partitions[1] !== 2) {
+  if (pagesCount > 1 && partitions[1] !== 2) {
     partitions.splice(1, 0, '...');
   }
-  if (partitions[partitions.length - 2] !== pagesCount - 1) {
+  if (pagesCount > 1 && partitions[partitions.length - 2] !== pagesCount - 1) {
     partitions.splice(partitions.length - 1, 0, '...');
   }
   return partitions;

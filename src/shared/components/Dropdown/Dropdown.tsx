@@ -17,7 +17,13 @@ type DropdownProps = {
   label?: string;
   options: { key: string; text: string }[];
   selectedKey: string;
-  onSelect: (event: Event, option: any) => void;
+  onSelect: (
+    event: Event,
+    option: {
+      key: string;
+      text: string;
+    },
+  ) => void;
   required?: boolean;
   id?: string;
   disabled?: boolean;

@@ -6,7 +6,12 @@ import { SidebarNavigation } from 'sidebar/SidebarNavigation';
 
 import './Sidebar.scss';
 
-const noSidebarPathnames = ['/clusters', '/no-permissions', '/gardener-login'];
+const noSidebarPathnames = [
+  '/clusters',
+  '/no-permissions',
+  '/gardener-login',
+  '/kubeconfig',
+];
 
 export const Sidebar = () => {
   const { t } = useTranslation();
@@ -14,7 +19,7 @@ export const Sidebar = () => {
   if (noSidebarPathnames.includes(pathname)) return null;
 
   return (
-    <aside className="sap-margin-end-tiny sap-margin-top-tiny">
+    <aside>
       <section className="sidebar__content">
         <Suspense fallback={<Spinner />}>
           <ErrorBoundary

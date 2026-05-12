@@ -16,7 +16,7 @@ function Testbed({ setGetResult }) {
 
 describe('useGet', () => {
   it('Tolerancy', async () => {
-    const mock = vi.fn();
+    const setGetResultMock = vi.fn();
 
     mockUseFetch
       .mockImplementationOnce(
@@ -31,7 +31,7 @@ describe('useGet', () => {
         throw new Error('2'); // failing calls
       });
 
-    render(<Testbed setGetResult={mock} />, {
+    render(<Testbed setGetResult={setGetResultMock} />, {
       initialAtoms: [
         [authDataAtom, { token: 'test-token' }],
         [clusterAtom, {}],
@@ -39,22 +39,34 @@ describe('useGet', () => {
     });
 
     // first call - loading
-    expect(mock).toHaveBeenCalledWith(true, null, null);
+    expect(setGetResultMock).toHaveBeenCalledWith(true, null, null);
     // first call - valid data
     await waitFor(() =>
-      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+      expect(setGetResultMock).toHaveBeenCalledWith(
+        false,
+        null,
+        expect.any(Object),
+      ),
     );
     // second call - error, but still show data (1/2)
     await waitFor(() =>
-      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+      expect(setGetResultMock).toHaveBeenCalledWith(
+        false,
+        null,
+        expect.any(Object),
+      ),
     );
     // third call - error, but still show data (2/2)
     await waitFor(() =>
-      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+      expect(setGetResultMock).toHaveBeenCalledWith(
+        false,
+        null,
+        expect.any(Object),
+      ),
     );
     // fourth call - error, start displaying error
     await waitFor(() =>
-      expect(mock).toHaveBeenCalledWith(
+      expect(setGetResultMock).toHaveBeenCalledWith(
         false,
         expect.any(Error),
         expect.any(Object),

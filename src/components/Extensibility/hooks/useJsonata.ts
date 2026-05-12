@@ -9,7 +9,10 @@ import {
   Resource,
 } from '../contexts/DataSources';
 
-export type JsonataValue = [string | null, Error | null];
+export type JsonataValue<T = any> = [
+  NonNullable<T> | null,
+  Error | null | undefined,
+];
 
 export type JsonataFunction = {
   (
@@ -38,13 +41,13 @@ function getDataSourceFetchers(
 }
 
 export function useJsonata({
-  resource,
+  resource = {} as Resource,
   parent,
   embedResource,
   scope,
   arrayItems,
 }: {
-  resource: Resource;
+  resource?: Resource;
   parent?: Resource;
   embedResource?: Resource;
   scope?: any;

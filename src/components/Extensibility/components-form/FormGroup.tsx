@@ -1,12 +1,12 @@
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 import './FormGroup.scss';
 
 type FormGroupProps = {
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
-  widgets: { WidgetRenderer: React.ComponentType<any> };
+  binding?: { WidgetRenderer?: React.ComponentType<any> };
   nestingLevel?: number;
   required?: boolean;
 } & Record<string, any>;
@@ -14,12 +14,12 @@ type FormGroupProps = {
 export function FormGroup({
   schema,
   storeKeys,
-  widgets,
+  binding,
   nestingLevel = 0,
   required = false,
   ...props
 }: FormGroupProps) {
-  const { WidgetRenderer } = widgets;
+  const WidgetRenderer = binding?.WidgetRenderer;
   const ownSchema = schema.delete('widget');
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
@@ -39,13 +39,15 @@ export function FormGroup({
       tooltipContent={tExt(tooltipContent)}
     >
       <div className="form-group__grid-wrapper" style={{ gridTemplateColumns }}>
-        <WidgetRenderer
-          {...props}
-          storeKeys={storeKeys}
-          schema={ownSchema}
-          widgets={widgets}
-          nestingLevel={nestingLevel + 1}
-        />
+        {WidgetRenderer && (
+          <WidgetRenderer
+            {...props}
+            storeKeys={storeKeys}
+            schema={ownSchema}
+            binding={binding}
+            nestingLevel={nestingLevel + 1}
+          />
+        )}
       </div>
     </ResourceForm.CollapsibleSection>
   );

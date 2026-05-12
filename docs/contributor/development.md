@@ -17,6 +17,12 @@ The apps you started run at the following addresses:
 - `Busola` - [http://localhost:8080](http://localhost:8080)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
+## Generating a Token for Busola Instances
+
+You have an existing cluster remotely connected to Busola. At the same time, you want to connect to the cluster from a local Busola instance that you run using `npm start` or Docker. To enable the local connection, you must create a dedicated ServiceAccount and generate a kubeconfig with a token for it.
+
+For instructions on how to generate an authentication token for a Busola instance, see [Generating a Token for Busola Instances](../user/01-43-generate-token.md).
+
 ### Security Countermeasures
 
 When developing new features in Busola, adhere to the following rules. This will help you to mitigate any security-related threats.

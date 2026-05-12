@@ -26,4 +26,4 @@ kubectl apply -f samples.yaml
 
 After uploading the files, refresh the browser. You should see a new item in the left-side navigation.
 
-> **NOTE:** Remember [to enable the extensibility feature](./../../docs//features.md).
+> **NOTE:** Remember [to enable the extensibility feature](./../../docs/user/technical-reference/feature-flags.md).

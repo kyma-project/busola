@@ -43,7 +43,7 @@ These are the available `Badge` widget parameters:
 | --------------- | -------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **placeholder** | No       | string                                         | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.                                                                                                                                                                                                                                                                                                                                                                                                               |
 | **highlights**  | No       |                                                | A map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a [JSONata](100-jsonata.md) rule. Allowed keys are `informative`, `positive`, `warning` and `critical`. <br><br> When no highlights are provided, the following values are automatically handled: <br> - rendered as informative: `initial`, `pending`, `available`, `released`. <br> - rendered as positive: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`. <br> - rendered as warning: `unknown`, `warning`. <br> - rendered as critical: `error`, `failure`, `invalid`. |
-| **description** | No       | string or [JSONata](100-jsonata.md) expression | Used to fetch additional information that will be displayed in a tooltip after clicking on the badge.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **description** | No       | string or [JSONata](100-jsonata.md) expression | Used to fetch additional information that will be displayed in a tooltip after clicking on the badge. It can contain links.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **copyable**    | No       | boolean                                        | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 See the following example:
@@ -61,6 +61,21 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="50%">
+
+The following is an example with a link in the description:
+
+```yaml
+- source: status.value
+  widget: Badge
+  placeholder: '-'
+  highlights:
+    positive:
+      - Running
+      - ok
+    critical: $item < 0
+  description: For more information about the status, see {{[here](https://help.sap.com)}}
+```
+
 <br/><br/>
 
 ### `ControlledBy`

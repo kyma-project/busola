@@ -7,7 +7,7 @@ import {
   SchemaOnChangeParams,
   useGetTranslation,
 } from 'components/Extensibility/helpers';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type NameRendererProps = {
   storeKeys: StoreKeys;
@@ -16,7 +16,7 @@ type NameRendererProps = {
   };
   value: string;
   onChange: (params: SchemaOnChangeParams) => void;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   required?: boolean;
   editMode?: boolean;
 };

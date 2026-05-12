@@ -92,19 +92,14 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
         {entry?.metadata?.name}
       </Link>,
       cpu ? (
-        <>
-          <ProgressIndicatorWithTooltip
-            displayValue={cpu.percentage}
-            value={Number(cpu.percentageValue)}
-            tooltip={{
-              content: t('cluster-overview.tooltips.cpu-used-percentage', {
-                percentage: cpu.percentage,
-              }),
-              position: 'bottom',
-            }}
-            accessibleName="CPU usage"
-          />
-        </>
+        <ProgressIndicatorWithTooltip
+          displayValue={cpu.percentage}
+          value={Number(cpu.percentageValue)}
+          tooltip={t('cluster-overview.tooltips.cpu-used-percentage', {
+            percentage: cpu.percentage,
+          })}
+          accessibleName="CPU usage"
+        />
       ) : (
         EMPTY_TEXT_PLACEHOLDER
       ),
@@ -112,12 +107,9 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
         <ProgressIndicatorWithTooltip
           displayValue={memory.percentage}
           value={Number(memory.percentageValue)}
-          tooltip={{
-            content: t('cluster-overview.tooltips.memory-used-percentage', {
-              percentage: memory.percentage,
-            }),
-            position: 'bottom',
-          }}
+          tooltip={t('cluster-overview.tooltips.memory-used-percentage', {
+            percentage: memory.percentage,
+          })}
           accessibleName="Memory usage"
         />
       ) : (

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Input, Label, SuggestionItem } from '@ui5/webcomponents-react';
+import { Icon, Input, SuggestionItem } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
@@ -9,7 +9,6 @@ import { getEntryMatches } from 'shared/components/GenericList/helpers';
 import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import './SearchInput.scss';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
@@ -103,23 +102,19 @@ export function SearchInput({
   };
 
   return (
-    <div className="search-input-container">
-      <Label for={`search-${entriesKind}`} showColon>
-        {t('common.tooltips.search')}
-      </Label>
-      <Input
-        id={`search-${entriesKind}`}
-        className="search-input"
-        accessibleName={`search-${entriesKind}`}
-        type="Search"
-        icon={<Icon name="search" className="search-icon" />}
-        ref={searchInputRef}
-        value={searchQuery}
-        onInput={(e) => handleQueryChange(e.target.value)}
-        showSuggestions={showSuggestion}
-      >
-        {showSuggestion && renderSearchList()}
-      </Input>
-    </div>
+    <Input
+      id={`search-${entriesKind}`}
+      className="search-input"
+      accessibleName={`search-${entriesKind}`}
+      type="Search"
+      icon={<Icon name="search" className="search-icon" />}
+      ref={searchInputRef}
+      placeholder={t('common.tooltips.search')}
+      value={searchQuery}
+      onInput={(e) => handleQueryChange(e.target.value)}
+      showSuggestions={showSuggestion}
+    >
+      {showSuggestion && renderSearchList()}
+    </Input>
   );
 }

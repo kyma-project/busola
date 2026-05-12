@@ -120,20 +120,20 @@ Cypress.Commands.add('loginAndSelectCluster', function (params) {
       },
     );
 
-    cy.get('ui5-button:visible').contains('Next step').click();
+    cy.get('ui5-button:visible').contains('Next Step').click();
 
     if (staticToken) {
-      cy.get('ui5-button:visible').contains('Next step').click();
+      cy.get('ui5-button:visible').contains('Next Step').click();
     }
 
     if (storage) {
       cy.contains(storage).parent('ui5-radio-button').click();
     }
 
-    cy.get('ui5-button:visible').contains('Next step').click();
+    cy.get('ui5-button:visible').contains('Next Step').click();
 
     cy.get(`[accessible-name="last-step"]:visible`)
-      .contains('Connect cluster')
+      .contains('Connect Cluster')
       .click({ force: true });
 
     cy.url().should('match', expectedLocation);

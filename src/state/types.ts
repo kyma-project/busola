@@ -5,7 +5,6 @@ export type Scope = 'namespace' | 'cluster';
 
 export interface ConfigFeature {
   isEnabled?: boolean;
-  stage?: 'PRIMARY' | 'SECONDARY';
   [key: string]: any;
 }
 
@@ -30,6 +29,7 @@ export const configFeaturesNames = {
   FEEDBACK: 'FEEDBACK',
   SNOW: 'SNOW',
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',
+  TERMINAL: 'TERMINAL',
 } as const;
 
 export type ConfigFeatureList = {
@@ -84,6 +84,7 @@ export type ExtGeneral = {
   id?: string;
   externalNodes?: ExtensibilityNodesExt[];
   customElement?: string;
+  defaultPlaceholder?: string;
 };
 
 export type ExtResource = {

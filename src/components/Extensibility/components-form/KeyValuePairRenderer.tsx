@@ -1,5 +1,5 @@
 import { KeyValueField } from 'shared/ResourceForm/fields';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import { createOrderedMap } from '@ui-schema/ui-schema/createMap';
 import {
   SchemaOnChangeParams,
   useGetTranslation,
@@ -12,7 +12,7 @@ import {
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 import './KeyValuePairRenderer.scss';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type DropdownCompProps = {
   onChange: (params: { target: { value: string } }) => void;
@@ -93,7 +93,7 @@ const getValueComponent = (valueInfo: Record<string, any>) => {
 
 type KeyValuePairRendererProps = {
   storeKeys: StoreKeys;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   value: any;
   onChange: (params: SchemaOnChangeParams) => void;
   required: boolean;

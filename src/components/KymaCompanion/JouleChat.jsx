@@ -7,6 +7,10 @@ import { authDataAtom } from 'state/authDataAtom';
 import { useCurrentResource } from 'components/KymaCompanion/utils/useResource';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
+import {
+  encryptAuthPayload,
+  clearSessionKeys,
+} from 'components/KymaCompanion/utils/encryption';
 
 export default function JouleChat() {
   const [showKymaCompanion, setShowKymaCompanion] = useAtom(
@@ -31,28 +35,48 @@ export default function JouleChat() {
     authDataRef.current = authData;
   }, [currentResource, cluster, authData]);
 
+  // Clear cached session keys when cluster or auth changes
+  // so the next getApplicationContext() call triggers a fresh key exchange
+  useEffect(() => {
+    clearSessionKeys();
+  }, [cluster, authData]);
+
   useEffect(() => {
     if (!isEnabled || !jouleConfig?.url || !jouleConfig?.botname) {
       return;
     }
 
     const bridgeImpl = {
-      getApplicationContext: () => {
+      getApplicationContext: async () => {
         const resourceContext = resourceRef.current || {};
         const clusterData =
           clusterRef.current?.currentContext?.cluster?.cluster;
         const auth = authDataRef.current;
 
-        return {
-          ...resourceContext,
-          clusterUrl: clusterData?.server,
-          certificateAuthorityData: clusterData?.['certificate-authority-data'],
-          auth: {
-            token: auth?.token,
-            clientCertificateData: auth?.['client-certificate-data'],
-            clientKeyData: auth?.['client-key-data'],
-          },
-        };
+        if (!clusterData?.server) {
+          return { ...resourceContext, auth: null };
+        }
+
+        try {
+          const encryptedAuth = await encryptAuthPayload({
+            clusterUrl: clusterData.server,
+            certificateAuthorityData:
+              clusterData['certificate-authority-data'] ?? '',
+            auth: {
+              token: auth?.token,
+              clientCertificateData: auth?.['client-certificate-data'],
+              clientKeyData: auth?.['client-key-data'],
+            },
+          });
+
+          return {
+            ...resourceContext,
+            auth: encryptedAuth,
+          };
+        } catch (error) {
+          console.error('Failed to encrypt Joule application context', error);
+          return { ...resourceContext, auth: null };
+        }
       },
       onClose: () => {
         setShowKymaCompanion((prevState) => ({

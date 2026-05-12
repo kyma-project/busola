@@ -15,8 +15,7 @@ interface K8sResourceSelectBaseProps {
   'data-testid'?: string;
 }
 
-interface K8sResourceSelectWithUseGetListProps
-  extends K8sResourceSelectBaseProps {
+interface K8sResourceSelectWithUseGetListProps extends K8sResourceSelectBaseProps {
   url?: string | null;
   filter?: (item: any) => Promise<string | true | null>;
 }

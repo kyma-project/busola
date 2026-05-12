@@ -53,15 +53,17 @@ const Specification = (event: any) => {
               <ObjectStatus
                 aria-label="Warning"
                 icon={<Icon accessibleName="Warning" name="warning" />}
-                className="has-tooltip sap-margin-begin-tiny"
+                className="sap-margin-begin-tiny"
                 state="Critical"
+                title={event.type}
               />
             ) : (
               <ObjectStatus
                 aria-label="Normal"
                 icon={<Icon accessibleName="Normal" name="information" />}
-                className="has-tooltip sap-margin-begin-tiny"
+                className="sap-margin-begin-tiny"
                 state="Information"
+                title={event.type}
               />
             )}
           </Text>

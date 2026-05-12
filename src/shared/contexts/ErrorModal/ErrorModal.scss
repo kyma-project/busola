@@ -1,10 +1,22 @@
 .error-modal {
   &::part(content) {
-    padding: 20px !important;
     max-width: 33rem;
   }
 
   &--wider::part(content) {
     max-width: 75vw;
   }
+}
+
+.contentPartNoPadding::part(content) {
+  padding: 0 !important;
+  min-width: 30vw;
+}
+
+.popupHeaderNoLeftPadding::part(header) {
+  padding-left: 0;
+}
+
+.popupHeaderNoLeftPadding::part(footer) {
+  padding-right: 0;
 }

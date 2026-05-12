@@ -59,7 +59,7 @@ export const getUrl = async (
         ? getResourceUrl(resource, namespaceId)
         : getResourceUrl(resource);
     } catch {
-      return null;
+      return '';
     }
   }
 };

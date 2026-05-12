@@ -27,7 +27,7 @@ type DeploymentListProps = {
 };
 export function DeploymentList(props: DeploymentListProps) {
   const { t } = useTranslation();
-  const restartAction = useRestartAction(props.resourceUrl);
+  const restartAction = useRestartAction(props.resourceUrl, props.namespace);
 
   const customColumns = [
     {

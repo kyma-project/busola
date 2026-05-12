@@ -70,7 +70,6 @@ export function ClusterOverview() {
     <section aria-label="Cluster actions" className="actions">
       <ToolbarButton
         key="upload-yaml"
-        icon="add"
         onClick={() => {
           setShowAdd(true);
         }}

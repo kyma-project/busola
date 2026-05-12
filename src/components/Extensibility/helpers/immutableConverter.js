@@ -1,5 +1,5 @@
-import { createStore } from '@ui-schema/ui-schema';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import { createStore } from '@ui-schema/react/UIStore';
+import { createOrderedMap } from '@ui-schema/ui-schema/createMap';
 import { isPlainObject, get } from 'lodash';
 
 function existsInTemplate(template, path) {

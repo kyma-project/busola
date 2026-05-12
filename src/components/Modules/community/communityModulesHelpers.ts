@@ -195,6 +195,17 @@ export function getInstalledModules(
       }
     }
 
+    // Fallback: Check manager labels if no version was found in the containers
+    if (!installedVersions.has(managerKey)) {
+      const labels = foundManager.metadata?.labels || {};
+      const versionFromLabel =
+        labels['app.kubernetes.io/version'] || labels['version'];
+
+      if (versionFromLabel) {
+        installedVersions.set(managerKey, versionFromLabel);
+      }
+    }
+
     return true;
   });
 
@@ -275,3 +286,18 @@ export async function getAllResourcesYamls(
   }
   return [];
 }
+
+export const getUpdateTemplate = (
+  moduleName: string,
+  repoTemplates: ModuleTemplateType[],
+  installedModules: any[],
+): ModuleTemplateType | undefined => {
+  const installedModule = installedModules.find((m) => m.name === moduleName);
+
+  if (!installedModule) return undefined;
+  return repoTemplates.find(
+    (repoModule) =>
+      getModuleName(repoModule) === moduleName &&
+      repoModule.spec.version !== installedModule.version,
+  );
+};

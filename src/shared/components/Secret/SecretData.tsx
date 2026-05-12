@@ -87,7 +87,6 @@ export default function SecretData({
       headerActions={
         <Button
           design="Transparent"
-          icon={isEncoded ? 'show' : 'hide'}
           disabled={!secret?.data}
           onClick={() => {
             return isEncoded ? encode() : decode();

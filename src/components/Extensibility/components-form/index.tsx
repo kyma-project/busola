@@ -5,19 +5,18 @@ import {
   FunctionComponent,
   ReactNode,
 } from 'react';
-import { WidgetRenderer } from '@ui-schema/ui-schema/WidgetRenderer';
+import { WidgetRenderer } from '@ui-schema/react/WidgetRenderer';
 
-import {
-  DefaultHandler,
-  DependentHandler,
-  ConditionalHandler,
-  CombiningHandler,
-  ReferencingHandler,
-  ExtractStorePlugin,
-} from '@ui-schema/ui-schema/Plugins';
-import { PluginSimpleStack } from '@ui-schema/ui-schema/PluginSimpleStack';
-import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
-import { validators } from '@ui-schema/ui-schema/Validators/validators';
+import { DefaultHandler } from '@ui-schema/react/DefaultHandler';
+import { DependentHandler } from '@ui-schema/react/DependentHandler';
+import { ConditionalHandler } from '@ui-schema/react/ConditionalHandler';
+import { CombiningHandler } from '@ui-schema/react/CombiningHandler';
+import { ReferencingHandler } from '@ui-schema/react/ReferencingHandler';
+import { ExtractStorePlugin } from '@ui-schema/react/ExtractStorePlugin';
+import { ValidityReporter } from '@ui-schema/react/ValidityReporter';
+import { ObjectRenderer } from '@ui-schema/react/ObjectRenderer';
+import { schemaPluginsAdapterBuilder } from '@ui-schema/react/SchemaPluginsAdapter';
+import { validatorPlugin } from '@ui-schema/json-schema/ValidatorPlugin';
 
 import { SchemaRulesInjector } from '../plugins/SchemaRulesInjector';
 import { CustomFieldInjector } from '../plugins/CustomFieldInjector';
@@ -43,9 +42,12 @@ import { AlertRenderer } from './AlertRenderer';
 import { MultiCheckbox } from './MultiCheckbox';
 import { MultiType } from './MultiType';
 import { Modules } from './Modules/Modules';
-import { StoreSchemaType } from '@ui-schema/ui-schema';
+import { BindingTypeGeneric } from '@ui-schema/react';
+import { SomeSchema } from '@ui-schema/ui-schema';
 
-const pluginStack = [
+const SchemaPluginsAdapter = schemaPluginsAdapterBuilder([validatorPlugin]);
+
+const widgetPlugins = [
   // TODO
   // ContextSwitcher,
   ReferencingHandler,
@@ -59,14 +61,11 @@ const pluginStack = [
   EnumHandler,
   TriggerHandler,
   VisibilityHandler,
-  PluginSimpleStack,
+  SchemaPluginsAdapter,
   ValidityReporter,
 ];
 
-export const widgets = {
-  RootRenderer: ({ children }: { children: ReactNode }) => (
-    <div>{children}</div>
-  ),
+export const widgets: BindingTypeGeneric = {
   GroupRenderer: ({ children }: { children: ReactNode }) => (
     <>
       {Children.map(children, (child, i) =>
@@ -76,12 +75,12 @@ export const widgets = {
       )}
     </>
   ),
-  WidgetRenderer: ({
+  WidgetRenderer: (({
     schema,
     required,
     ...props
   }: {
-    schema: StoreSchemaType;
+    schema: SomeSchema;
     required: boolean;
   } & Record<string, any>) => {
     required = schema.get('required') ?? required;
@@ -90,41 +89,23 @@ export const widgets = {
       required,
       ...props,
     });
-  },
-  pluginStack,
-  pluginSimpleStack: validators.filter(Boolean),
-  types: {
+  }) as any,
+  widgetPlugins,
+  widgets: {
+    // type-based widgets
+    object: ObjectRenderer,
     string: StringRenderer,
     boolean: SwitchRenderer,
     number: NumberRenderer,
     integer: NumberRenderer,
     array: GenericList,
-  },
-  custom: {
-    /*
-    Accordions: AccordionsRenderer,
-    */
+    // custom widgets
     Text: StringRenderer,
     Switch: SwitchRenderer,
     Number: NumberRenderer,
     Jsonata,
-    /*
-    Text: TextRenderer,
-    StringIcon: StringIconRenderer,
-    TextIcon: TextIconRenderer,
-    NumberIcon: NumberIconRenderer,
-    NumberSlider,
-    */
     SimpleList,
     GenericList,
-    /*
-    OptionsCheck,
-    OptionsRadio,
-    Select,
-    SelectMulti,
-    Card: CardRenderer,
-    LabelBox,
-    */
     Name: NameRenderer,
     KeyValuePair: KeyValuePairRenderer,
     CodeEditor: MonacoRenderer,
@@ -138,10 +119,9 @@ export const widgets = {
   },
 };
 export default widgets;
-export const limitedWidgets = {
+export const limitedWidgets: BindingTypeGeneric = {
   ...widgets,
-  pluginSimpleStack: widgets.pluginSimpleStack.filter(Boolean),
-  pluginStack: [
+  widgetPlugins: [
     ReferencingHandler,
     ExtractStorePlugin,
     CombiningHandler,
@@ -149,6 +129,6 @@ export const limitedWidgets = {
     DependentHandler,
     ConditionalHandler,
     EnumHandler,
-    PluginSimpleStack,
+    SchemaPluginsAdapter,
   ],
 };

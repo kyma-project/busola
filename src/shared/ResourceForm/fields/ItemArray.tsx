@@ -116,7 +116,6 @@ export function ItemArray({
       tooltipContent={tooltipContent}
       actions={(setOpen: Dispatch<SetStateAction<boolean | undefined>>) => (
         <Button
-          icon="add"
           onClick={() => {
             setValues?.([...values, newResourceTemplateFn()]);
             setOpen(true);

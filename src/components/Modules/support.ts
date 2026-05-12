@@ -4,6 +4,7 @@ import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { resolveType } from './components/ModuleStatus';
 
 export const DEFAULT_K8S_NAMESPACE: string = 'default';
+export const DEFAULT_IMAGE_SRC = '/assets/sap-logo.svg';
 
 export const enum ModuleTemplateStatus {
   Ready = 'Ready',
@@ -43,6 +44,7 @@ export type CustomResourceDefinitionsType = {
 export type KymaResourceSpecModuleType = {
   name: string;
   channel?: string;
+  managed?: boolean;
 };
 
 export type KymaResourceStatusTemplate = {
@@ -171,7 +173,7 @@ export const getResourceListPath = (resource: any) => {
 };
 
 export const findChannel = (
-  module: { name: string; channels: [{ version: string; channel: string }] },
+  module: { name: string; channels: { version: string; channel: string }[] },
   channel: string,
 ) => {
   return module.channels.find(
@@ -234,8 +236,10 @@ export const findModuleTemplate = (
         moduleTemplate.metadata.labels[
           'operator.kyma-project.io/module-name'
         ] &&
-      !moduleTemplate.spec.channel &&
-      moduleTemplate.spec.version === version &&
+      (!channel ||
+        !moduleTemplate.spec.channel ||
+        moduleTemplate.spec.channel === channel) &&
+      (!version || moduleTemplate.spec.version === version) &&
       (!namespace || moduleTemplate.metadata.namespace === namespace),
   );
 };
@@ -248,7 +252,7 @@ export const getModuleName = (moduleTemplate: ModuleTemplateType): string => {
 };
 
 export const setChannel = (
-  module: { name: string; channels: [{ version: string; channel: string }] },
+  module: { name: string; channels: { version: string; channel: string }[] },
   channel: string,
   index: number,
   selectedModules: {

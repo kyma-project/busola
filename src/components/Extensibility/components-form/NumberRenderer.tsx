@@ -5,12 +5,12 @@ import {
   getPropsFromSchema,
   SchemaOnChangeParams,
 } from 'components/Extensibility/helpers';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type NumberRendererProps = {
   onChange: (params: SchemaOnChangeParams) => void;
   value: number | null;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   required?: boolean;
   placeholder?: string;

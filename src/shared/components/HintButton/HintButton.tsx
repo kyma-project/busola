@@ -56,7 +56,7 @@ export function HintButton({
           }}
           placement="End"
         >
-          <Text tabIndex={-1} className="description">
+          <Text tabIndex={-1} className="popover-description">
             {desc}
           </Text>
         </Popover>,

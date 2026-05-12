@@ -151,6 +151,10 @@ ui5-tabcontainer::part(content) {
   cursor: pointer;
 }
 
+.popover-description {
+  line-height: var(--sapContent_LineHeight);
+}
+
 @mixin input-icon(
   $background-image,
   $padding-left: 48px,

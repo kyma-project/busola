@@ -8,11 +8,11 @@
     "test": "NODE_OPTIONS='--no-experimental-strip-types' npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
-    "lighthouse": "^13.0.0",
-    "playwright": "^1.55.0",
+    "@playwright/test": "^1.59.1",
+    "lighthouse": "^13.0.3",
+    "playwright": "^1.59.1",
     "playwright-lighthouse": "^4.0.0",
-    "@playwright/browser-chromium": "^1.55.0"
+    "@playwright/browser-chromium": "^1.59.1"
   },
   "author": "",
   "license": "ISC"

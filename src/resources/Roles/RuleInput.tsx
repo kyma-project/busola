@@ -130,7 +130,7 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
         defaultOpen
         nestingLevel={2}
         actions={
-          <Button icon="add" onClick={addAllApiGroups} design="Transparent">
+          <Button onClick={addAllApiGroups} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>
         }
@@ -165,7 +165,6 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
         actions={[
           <Button
             key="add"
-            icon="add"
             design="Transparent"
             onClick={addAllResources}
             disabled={loading || !apiRules?.length}
@@ -192,12 +191,7 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
         defaultOpen
         nestingLevel={2}
         actions={[
-          <Button
-            key="add"
-            icon="add"
-            onClick={addAllVerbs}
-            design="Transparent"
-          >
+          <Button key="add" onClick={addAllVerbs} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>,
         ]}

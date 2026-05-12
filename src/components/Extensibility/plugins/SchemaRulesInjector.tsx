@@ -1,14 +1,7 @@
 import { last } from 'lodash';
-import {
-  ComponentPluginType,
-  getNextPlugin,
-} from '@ui-schema/ui-schema/PluginStack';
 import { List, fromJS } from 'immutable';
-import {
-  StoreSchemaType,
-  WidgetProps,
-  WidgetsBindingFactory,
-} from '@ui-schema/ui-schema';
+import { WidgetPluginProps } from '@ui-schema/react';
+import { SomeSchema } from '@ui-schema/ui-schema';
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = (src: [string, any][]) => ({
@@ -18,30 +11,23 @@ const propertiesWrapper = (src: [string, any][]) => ({
 });
 
 type SchemaRulesInjectorProps = {
-  currentPluginIndex: number;
   rootRule: Record<string, any>;
   value: any;
   resource: Record<string, any>;
-} & WidgetProps;
+} & WidgetPluginProps;
 
 export function SchemaRulesInjector({
   schema,
-  currentPluginIndex,
+  Next,
   rootRule,
   value,
   resource,
   ...props
 }: SchemaRulesInjectorProps) {
-  const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(
-    nextPluginIndex,
-    props.widgets,
-  ) as ComponentPluginType<Record<string, any>, WidgetsBindingFactory>;
-
   const { children: childRules, ...itemRule } =
     schema.get('schemaRule') ?? rootRule;
 
-  let newSchema: StoreSchemaType = schema.mergeDeep(itemRule);
+  let newSchema: SomeSchema = schema.mergeDeep(itemRule);
 
   if (schema.get('items')) {
     const newItems = schema.get('items').set('schemaRule', childRules[0]);
@@ -68,9 +54,8 @@ export function SchemaRulesInjector({
   }
 
   return (
-    <Plugin
+    <Next.Component
       {...props}
-      currentPluginIndex={nextPluginIndex}
       schema={newSchema}
       value={value}
       resource={resource}

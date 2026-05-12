@@ -43,7 +43,7 @@ export function VerticalTabs({
         )}
       </List>
       {(children as ReactElement<{ id: number }>[]).filter(
-        ({ props }) => props.id === tabId,
+        ({ props: { id } }: { props: { id: number } }) => id === tabId,
       )}
     </section>
   );

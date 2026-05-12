@@ -77,6 +77,7 @@ export function ResourceListRenderer({
   displayArrow = enableColumnLayout,
   accessibleName,
   createFormRef = null,
+  noRedirectAfterDelete = false,
 }: ResourceListRendererProps) {
   useVersionWarning({
     resourceUrl,
@@ -296,6 +297,7 @@ export function ResourceListRenderer({
           handler: (resource: K8sResource) => {
             handleResourceDelete({
               resourceUrl: prepareResourceUrl(resourceUrl, resource),
+              noRedirectAfterDelete,
             } as any);
             setActiveResource(resource);
           },
@@ -311,6 +313,8 @@ export function ResourceListRenderer({
   const headerRenderer = () => {
     return customColumns?.map((col) => col?.header || null);
   };
+
+  const columnWidths = customColumns?.map((col) => col?.width);
 
   const rowRenderer = (entry: any) => {
     const rowColumns = customColumns?.map((col, index) => {
@@ -440,6 +444,7 @@ export function ResourceListRenderer({
           actions={actions}
           entries={(resources || []) as any[]}
           headerRenderer={headerRenderer}
+          columnWidths={columnWidths}
           rowRenderer={rowRenderer}
           serverDataError={error}
           serverDataLoading={loading}

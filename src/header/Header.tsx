@@ -8,7 +8,7 @@ import {
 } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
@@ -51,9 +51,14 @@ export function Header() {
   const cluster = useAtomValue(clusterAtom);
 
   const isOnClustersPage = location.pathname === '/clusters';
+  const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
   const { isEnabled: isKymaCompanionEnabled, useJoule: usesJoule } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
+  );
+
+  const { isEnabled: isTerminalEnabled } = useFeature(
+    configFeaturesNames.TERMINAL,
   );
 
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
@@ -78,7 +83,9 @@ export function Header() {
               : t('clusters.overview.title-current-cluster'),
           },
         }}
-        startButton={!isOnClustersPage && <SidebarSwitcher />}
+        startButton={
+          !isOnClustersPage && !isOnKubeconfigPage && <SidebarSwitcher />
+        }
         onLogoClick={() => {
           navigateSafely(() => {
             if (cluster?.name && !isOnClustersPage) {
@@ -95,7 +102,7 @@ export function Header() {
         }}
         logo={<img alt="SAP" src="/assets/sap-logo.svg" />}
         primaryTitle={t('common.product-title')}
-        content={<ClusterSwitcher />}
+        content={!isOnKubeconfigPage && <ClusterSwitcher />}
         profile={
           <Avatar
             icon="customer"
@@ -106,7 +113,8 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
         searchField={
-          !isOnClustersPage && (
+          !isOnClustersPage &&
+          !isOnKubeconfigPage && (
             <CommandPaletteSearchBar
               shouldFocus={isSearchOpen}
               slot="searchField"
@@ -145,6 +153,12 @@ export function Header() {
             />
             {showCompanion.useJoule && <JouleChat />}
           </>
+        )}
+        {isTerminalEnabled && (
+          <ToggleButton
+            icon={'command-line-interfaces'}
+            accessibleName={t('terminal.name')}
+          />
         )}
         <ShellBarItem
           onClick={() => setIsGetHelpOpen(true)}

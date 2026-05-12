@@ -7,7 +7,7 @@ interface WizardButtonProps {
   firstStep?: boolean;
   customFinish?: string;
   lastStep?: boolean;
-  onComplete: () => void;
+  onComplete?: () => void;
   onCancel: () => void;
   invalid?: boolean;
   className?: string;

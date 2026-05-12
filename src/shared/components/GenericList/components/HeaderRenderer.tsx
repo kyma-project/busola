@@ -8,6 +8,7 @@ import {
 type HeaderRendererProps = {
   actions: any[];
   headerRenderer: () => any;
+  columnWidths?: (string | undefined)[];
   disableHiding: boolean;
   noHideFields: string[];
 };
@@ -15,6 +16,7 @@ type HeaderRendererProps = {
 export const HeaderRenderer = ({
   actions,
   headerRenderer,
+  columnWidths,
   disableHiding = true,
   noHideFields,
 }: HeaderRendererProps) => {
@@ -76,6 +78,7 @@ export const HeaderRenderer = ({
               popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
               importance={checkCellImportance(h)}
               minWidth={setCellMinWidth(h)}
+              width={columnWidths?.[index]}
               aria-label={`${typeof h === 'object' ? index : h}-column`}
             >
               <Text>{h}</Text>

@@ -11,7 +11,7 @@ import {
   Ui5CustomEvent,
 } from '@ui5/webcomponents-react';
 import { t } from 'i18next';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 type JsonataInputProps = {
   value: string;
@@ -23,7 +23,7 @@ type JsonataInputProps = {
 type JsonataProps = {
   value: string;
   onChange?: (params: SchemaOnChangeParams) => void;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   storeKeys: StoreKeys;
   required?: boolean;
   compact?: boolean;

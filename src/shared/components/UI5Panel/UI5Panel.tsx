@@ -21,6 +21,7 @@ type UI5PanelProps = {
   headerTop?: string;
   testid?: string;
   accessibleName?: string;
+  role?: string;
 };
 
 export const UI5Panel = ({
@@ -37,6 +38,7 @@ export const UI5Panel = ({
   headerTop = '0',
   testid,
   accessibleName,
+  role,
 }: UI5PanelProps) => {
   const isNested = useContext(NestedPanelContext);
   // top-level panels have no margin, nested panels have margin
@@ -60,6 +62,7 @@ export const UI5Panel = ({
   return (
     <NestedPanelContext.Provider value={true}>
       <Panel
+        role={role}
         data-testid={testid}
         fixed={fixed}
         key={keyComponent}

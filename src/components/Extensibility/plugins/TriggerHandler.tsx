@@ -1,22 +1,14 @@
 import { useCallback, useContext, useEffect } from 'react';
-import {
-  ComponentPluginType,
-  getNextPlugin,
-} from '@ui-schema/ui-schema/PluginStack';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
+import { WidgetPluginProps } from '@ui-schema/react';
 
 import { useVariables } from '../hooks/useVariables';
 import { JsonataFunction, useJsonata } from '../hooks/useJsonata';
 import { TriggerContext } from '../contexts/Trigger';
-import {
-  StoreKeys,
-  StoreSchemaType,
-  WidgetProps,
-  WidgetsBindingFactory,
-} from '@ui-schema/ui-schema';
 import { Resource } from '../contexts/DataSources';
 
 const getSubscriptions = (
-  schema: StoreSchemaType,
+  schema: SomeSchema,
   jsonata: JsonataFunction,
   resource: Resource,
   itemVars: (resource: any, names: any, storeKeys: any) => any,
@@ -75,14 +67,13 @@ const getSubscriptions = (
 };
 
 type TriggerHandlerProps = {
-  currentPluginIndex: number;
   onChange: (action: Record<string, any>) => void;
   resource: Resource;
   value: any;
-} & WidgetProps;
+} & WidgetPluginProps;
 
 export function TriggerHandler({
-  currentPluginIndex,
+  Next,
   schema,
   required,
   storeKeys,
@@ -91,11 +82,6 @@ export function TriggerHandler({
   value,
   ...props
 }: TriggerHandlerProps) {
-  const nextPluginIndex = currentPluginIndex + 1;
-  const Plugin = getNextPlugin(
-    nextPluginIndex,
-    props.widgets,
-  ) as ComponentPluginType<Record<string, any>, WidgetsBindingFactory>;
   const { itemVars } = useVariables();
   const jsonata = useJsonata({ resource });
   const rule = schema.get('schemaRule');
@@ -110,7 +96,7 @@ export function TriggerHandler({
       rule,
       storeKeys,
       onChange,
-      required,
+      required ?? false,
       triggers,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,10 +115,9 @@ export function TriggerHandler({
   );
 
   return (
-    <Plugin
+    <Next.Component
       {...props}
       value={value}
-      currentPluginIndex={nextPluginIndex}
       onChange={myChange}
       schema={schema}
       storeKeys={storeKeys}

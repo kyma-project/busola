@@ -10,7 +10,7 @@ import {
   useGetTranslation,
 } from 'components/Extensibility/helpers';
 import { JsonataFunction, useJsonata } from '../hooks/useJsonata';
-import { StoreKeys, StoreSchemaType } from '@ui-schema/ui-schema';
+import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 
 function getValue(storeKeys: StoreKeys, resource: any) {
   let value = resource;
@@ -35,7 +35,7 @@ function formatValue(value: any, language: string, formatAsString: boolean) {
   }
 }
 
-async function getLanguage(jsonata: JsonataFunction, schema: StoreSchemaType) {
+async function getLanguage(jsonata: JsonataFunction, schema: SomeSchema) {
   const languageFormula = schema.get('language');
   if (!languageFormula) return 'json';
 
@@ -46,7 +46,7 @@ async function getLanguage(jsonata: JsonataFunction, schema: StoreSchemaType) {
 type MonacoRendererProps = {
   storeKeys: StoreKeys;
   onChange: (params: SchemaOnChangeParams) => void;
-  schema: StoreSchemaType;
+  schema: SomeSchema;
   required: boolean;
   resource: any;
   nestingLevel?: number;
