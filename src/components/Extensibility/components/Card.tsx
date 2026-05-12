@@ -27,12 +27,6 @@ export function CardWidget({
   ...props
 }: CardProps) {
   const { widgetT } = useGetTranslation();
-  const [isDecoded] = useState(false);
-
-  if (isDecoded) {
-    value = mapValues(value, base64Decode);
-  }
-
   const items = Array.isArray(value) ? value : [value];
 
   return (
