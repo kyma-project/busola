@@ -1,10 +1,9 @@
-import { createContext, ReactNode, useContext } from 'react';
+import { ReactNode, useContext } from 'react';
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
+import { NestedContainerContext } from './NestedContainerContext';
 import './UI5Card.scss';
-
-const NestedCardContext = createContext(false);
 
 type UI5CardProps = {
   title: string | ReactNode;
@@ -29,7 +28,7 @@ export const UI5Card = ({
   accessibleName,
   role,
 }: UI5CardProps) => {
-  const isNested = useContext(NestedCardContext);
+  const isNested = useContext(NestedContainerContext);
   const shouldHaveMargin = isNested;
 
   const useNativeHeader =
@@ -67,7 +66,7 @@ export const UI5Card = ({
   );
 
   return (
-    <NestedCardContext.Provider value={true}>
+    <NestedContainerContext.Provider value={true}>
       <Card
         role={role}
         data-testid={testid}
@@ -78,6 +77,6 @@ export const UI5Card = ({
       >
         {children}
       </Card>
-    </NestedCardContext.Provider>
+    </NestedContainerContext.Provider>
   );
 };
