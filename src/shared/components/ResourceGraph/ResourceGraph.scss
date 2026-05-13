@@ -2,12 +2,19 @@
   height: 500px;
 }
 
+.graph-card {
+  &::part(content) {
+    padding: 1rem;
+  }
+}
+
 #graph-area {
   display: flex;
   justify-content: center;
   background: var(--sapNeutralBackground);
   height: 500px;
   position: relative;
+  border-radius: var(--_ui5_card_border-radius);
 
   & > :first-child {
     height: 100%;
