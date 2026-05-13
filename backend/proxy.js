@@ -1,18 +1,8 @@
 /* global Buffer */
-import rateLimit from 'express-rate-limit';
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import { pipeline } from 'stream/promises';
 import { isPrivateAddressCached, isValidHost } from './utils/network-utils.js';
-
-// Rate limiter: Max 100 requests per 1 minutes per IP
-const proxyRateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 100,
-  message: 'Too many requests from this IP, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
 
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
@@ -77,4 +67,4 @@ async function proxyHandler(req, res) {
   }
 }
 
-export { proxyHandler, proxyRateLimiter };
+export { proxyHandler };
