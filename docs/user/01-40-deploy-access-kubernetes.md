@@ -9,7 +9,7 @@ For more details about environment configuration, see [Environment-Specific Sett
 
 ### Per-IP Rate Limiting
 
-For self-hosted deployments, there is no edge-level protection (such as Cloud Armor) in front of Busola, so per-IP rate limiting is handled at the ingress layer.
+For self-hosted deployments, there is no edge-level protection (such as Cloud Armor) in front of Busola. The shipped Ingress configuration includes per-IP rate limiting as a default security measure, but you can configure a different approach or skip it entirely.
 
 #### ingress-nginx (default)
 
