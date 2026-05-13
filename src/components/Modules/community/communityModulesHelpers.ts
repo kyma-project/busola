@@ -3,6 +3,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/Modules/support';
+import { compareVersions } from 'compare-versions';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 export type VersionInfo = {
@@ -285,16 +286,6 @@ export async function getAllResourcesYamls(
     return yamlRes.flat();
   }
   return [];
-}
-
-function compareVersions(a: string, b: string): number {
-  const aParts = a.split('.').map(Number);
-  const bParts = b.split('.').map(Number);
-  for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
-    const diff = (aParts[i] ?? 0) - (bParts[i] ?? 0);
-    if (diff !== 0) return diff;
-  }
-  return 0;
 }
 
 export const getUpdateTemplate = (

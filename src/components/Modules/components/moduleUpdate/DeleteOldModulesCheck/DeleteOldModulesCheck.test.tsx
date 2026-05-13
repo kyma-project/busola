@@ -148,7 +148,7 @@ describe('DeleteOldModulesCheck', () => {
         detail: { checked: false },
       }),
     );
-    // Setter is wired through onChange synthetic handler so verify it's a function passed down
-    expect(typeof setter).toBe('function');
+
+    expect(setter).toHaveBeenCalledWith(false);
   });
 });
