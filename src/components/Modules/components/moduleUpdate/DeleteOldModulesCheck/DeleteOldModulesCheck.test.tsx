@@ -141,13 +141,9 @@ describe('DeleteOldModulesCheck', () => {
     );
     const cb = container.querySelector(
       '[data-testid="delete-old-template"]',
-    ) as HTMLElement;
-    cb?.dispatchEvent(
-      new CustomEvent('change', {
-        bubbles: true,
-        detail: { checked: false },
-      }),
-    );
+    ) as HTMLInputElement;
+    (cb as any).checked = false;
+    cb?.dispatchEvent(new Event('change', { bubbles: true }));
 
     expect(setter).toHaveBeenCalledWith(false);
   });
