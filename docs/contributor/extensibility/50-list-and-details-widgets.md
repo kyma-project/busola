@@ -403,7 +403,7 @@ See the following example:
 
 ### `Card`
 
-The `Card` widgets render children in a card with its own title (based on its `source` or `name`). When the source resolves to an array, all items are rendered inside a single card.
+The `Card` widgets render children in a card with its own title, based on its `source` or `name`. When the source resolves to an array, all items are rendered inside a single card.
 
 See the following example:
 
