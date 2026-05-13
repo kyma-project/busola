@@ -32,7 +32,7 @@ export default function CommunityModuleVersionSelect({
             key={`${idx}-${installedVersion.moduleTemplate.name}|${installedVersion.moduleTemplate.namespace}`}
             value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
           >
-            {/* namespace can be undefined if ModuleTemplates CRD is not yet applied to the cluster, only present in app memory */}
+            {/* namespace is checked as there is a problem with duplicates (TODO: https://github.com/kyma-project/busola/issues/4938) */}
             {`${version.textToDisplay}${version.moduleTemplate.namespace ? ` (namespace: ${version.moduleTemplate.namespace})` : ''}`}
           </Option>
         ))}
