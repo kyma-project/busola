@@ -9,11 +9,21 @@ For more details about environment configuration, see [Environment-Specific Sett
 
 ### Per-IP Rate Limiting
 
-The shipped Ingress sets per-IP limits for `ingress-nginx`: 50 RPS sustained (~250 burst) and 50 concurrent connections per source IP. Tune in `resources/ingress/ingress.yaml`.
+For self-hosted deployments, there is no edge-level protection (such as Cloud Armor) in front of Busola, so per-IP rate limiting is handled at the ingress layer.
 
-The annotations are nginx-specific and silently ignored by other controllers (Traefik, HAProxy, etc.) — for those, configure equivalent limits at your own edge. If you run ingress-nginx but it's not the cluster's default IngressClass, add `ingressClassName: nginx` to the Ingress so the annotations take effect.
+#### ingress-nginx (default)
 
-For APIRule (Istio) deployments, per-IP rate limiting is not configured by default — APIRule v2alpha1 has no native rate-limit field. Configure an `EnvoyFilter` at your gateway, or rely on an upstream WAF.
+The shipped `resources/ingress/ingress.yaml` includes per-IP rate-limit annotations for `ingress-nginx`: 50 RPS sustained (~250 burst) and 50 concurrent connections per source IP. These defaults protect the instance out of the box. To tune them, edit the values directly in `resources/ingress/ingress.yaml`.
+
+If `ingress-nginx` is installed in your cluster but is not the default IngressClass, the annotations will have no effect. In that case, add `ingressClassName: nginx` to the Ingress manifest so the controller picks them up.
+
+#### Other Ingress Controllers (Traefik, HAProxy, etc.)
+
+The nginx-specific annotations are silently ignored by other controllers. If you use a different ingress controller, configure equivalent per-IP rate limits at your own edge.
+
+#### APIRule (Istio) Deployments
+
+Per-IP rate limiting is not configured by default for APIRule-based deployments. APIRule v2alpha1 has no native rate-limit field. To add per-IP throttling, configure an [`EnvoyFilter`](https://istio.io/latest/docs/reference/config/networking/envoy-filter/) at your Istio gateway, or rely on an upstream web application firewall (WAF).
 
 ## Deploying Busola in a Kubernetes Cluster
 
