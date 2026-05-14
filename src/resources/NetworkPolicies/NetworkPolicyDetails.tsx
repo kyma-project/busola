@@ -10,11 +10,11 @@ import {
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
 import NetworkPolicyCreate from './NetworkPolicyCreate';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ResourceDescription } from 'resources/NetworkPolicies';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 type Policy = {
   metadata: {
@@ -51,7 +51,7 @@ export function NetworkPolicyDetails({
       policyTypes: string[];
     };
   }) => (
-    <UI5Panel
+    <UI5Card
       key="specification"
       title={t('common.headers.specification')}
       accessibleName={t('common.accessible-name.specification')}
@@ -61,7 +61,7 @@ export function NetworkPolicyDetails({
         name={t('network-policies.headers.policy-types')}
         value={<Tokens tokens={spec.policyTypes || []} />}
       />
-    </UI5Panel>
+    </UI5Card>
   );
 
   const Ingresses = ({
@@ -74,7 +74,7 @@ export function NetworkPolicyDetails({
     if (!spec.ingress?.length) return null;
 
     return spec.ingress.map((ingress, idx) => (
-      <UI5Panel
+      <UI5Card
         key={`ingress${idx}`}
         title={t('network-policies.headers.ingress') + ` #${idx + 1}`}
         accessibleName={`${t('network-policies.headers.ingress')} #${idx + 1} panel`}
@@ -88,7 +88,7 @@ export function NetworkPolicyDetails({
           ports={ingress.ports}
           title={t('network-policies.headers.policy-port')}
         />
-      </UI5Panel>
+      </UI5Card>
     ));
   };
 
@@ -102,7 +102,7 @@ export function NetworkPolicyDetails({
     if (!spec.egress?.length) return null;
 
     return spec.egress.map((egress, idx) => (
-      <UI5Panel
+      <UI5Card
         key={`egress${idx}`}
         title={t('network-policies.headers.egress') + ` #${idx + 1}`}
         accessibleName={`${t('network-policies.headers.egress')} #${idx + 1} panel`}
@@ -116,7 +116,7 @@ export function NetworkPolicyDetails({
           ports={egress.ports}
           title={t('network-policies.headers.policy-port')}
         />
-      </UI5Panel>
+      </UI5Card>
     ));
   };
 

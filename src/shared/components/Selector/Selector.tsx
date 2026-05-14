@@ -5,7 +5,7 @@ import { RelatedPods } from '../RelatedPods';
 import { MatchExpressionsList } from '../MatchExpressionsList';
 import { isEmpty, isEqual } from 'lodash';
 import { Text, Title } from '@ui5/webcomponents-react';
-import { UI5Panel } from '../UI5Panel/UI5Panel';
+import { UI5Card } from '../UI5Card/UI5Card';
 
 type SelectorDetailsProps = {
   expressions: any;
@@ -78,7 +78,7 @@ export const Selector = ({
   const selectorLabels = !isEmpty(labels) ? labels : null;
 
   return (
-    <UI5Panel
+    <UI5Card
       title={
         <>
           <Title level="H5">{title || t('selector.title')}</Title>
@@ -103,6 +103,6 @@ export const Selector = ({
           RelatedResources={RelatedResources}
         />
       )}
-    </UI5Panel>
+    </UI5Card>
   );
 };
