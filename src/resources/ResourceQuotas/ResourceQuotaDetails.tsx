@@ -3,7 +3,6 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ResourceDescription } from '.';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
 import ResourceQuotaLimits from './ResourceQuotaLimits';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
@@ -14,6 +13,7 @@ import {
   mapUsagesToChartsData,
 } from './support';
 import { usePodsMetricsQuery } from 'resources/Pods/podQueries';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 export type ResourceQuota = {
   kind: string;
@@ -53,7 +53,7 @@ export default function ResourceQuotaDetails(props: any) {
     (resource: ResourceQuota) => (
       <Fragment key="resource-quota-details">
         {(resource.spec.scopes || resource.spec.scopeSelector) && (
-          <UI5Panel
+          <UI5Card
             title={t('common.headers.specification')}
             accessibleName={t('common.accessible-name.specification')}
           >
@@ -64,7 +64,7 @@ export default function ResourceQuotaDetails(props: any) {
               />
             )}
             {resource.spec?.scopeSelector && (
-              <UI5Panel
+              <UI5Card
                 title={t('resource-quotas.headers.scope-selectors')}
                 accessibleName={`${t('resource-quotas.headers.scope-selectors')} panel`}
               >
@@ -89,9 +89,9 @@ export default function ResourceQuotaDetails(props: any) {
                     )}
                   </Fragment>
                 ))}
-              </UI5Panel>
+              </UI5Card>
             )}
-          </UI5Panel>
+          </UI5Card>
         )}
       </Fragment>
     ),
