@@ -1542,6 +1542,8 @@ storage-classes:
     volume-binding-mode: Volume Binding Mode
   name_singular: StorageClass
   title: Storage Classes
+terminal:
+  name: Busola Terminal
 upload-yaml:
   errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.

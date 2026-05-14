@@ -9,7 +9,7 @@ import {
 import type { ShellBarDomRef } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
@@ -56,6 +56,10 @@ export function Header() {
 
   const { isEnabled: isKymaCompanionEnabled, useJoule: usesJoule } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
+  );
+
+  const { isEnabled: isTerminalEnabled } = useFeature(
+    configFeaturesNames.TERMINAL,
   );
 
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
@@ -150,6 +154,12 @@ export function Header() {
             />
             {showCompanion.useJoule && <JouleChat />}
           </>
+        )}
+        {isTerminalEnabled && (
+          <ToggleButton
+            icon={'command-line-interfaces'}
+            accessibleName={t('terminal.name')}
+          />
         )}
         <ShellBarItem
           onClick={() => setIsGetHelpOpen(true)}

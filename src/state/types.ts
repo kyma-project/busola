@@ -29,6 +29,7 @@ export const configFeaturesNames = {
   FEEDBACK: 'FEEDBACK',
   SNOW: 'SNOW',
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',
+  TERMINAL: 'TERMINAL',
 } as const;
 
 export type ConfigFeatureList = {
