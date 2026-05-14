@@ -1,12 +1,13 @@
 import { atomWithStorage } from 'jotai/utils';
 import { useAtom } from 'jotai';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 
 export type ExtendedValidateResources = {
   isEnabled: boolean;
   policies?: string[];
+  userModified?: boolean;
 };
 
 export type ValidateResources = boolean | ExtendedValidateResources;
@@ -45,13 +46,40 @@ export const useSyncedValidateResources = () => {
       : [];
   }, [validationFeature]);
 
+  useEffect(() => {
+    if (configPolicies.length === 0) return;
+
+    if (typeof validateResources === 'boolean') {
+      // Upgrade old boolean format to object shape
+      setValidateResources({
+        isEnabled: validateResources,
+        policies: configPolicies,
+        userModified: false,
+      });
+    } else if (validateResources.userModified === undefined) {
+      // Migrate old object format: sync policies from current config
+      setValidateResources({
+        isEnabled: validateResources.isEnabled,
+        policies: configPolicies,
+        userModified: false,
+      });
+    }
+  }, [validateResources, configPolicies, setValidateResources]);
+
   return useMemo(() => {
     const extendedState = getExtendedValidateResourceState(validateResources);
+
+    // When the user hasn't explicitly customized policies, always defer to the
+    // feature-flag config so admin changes are reflected immediately.
+    const effectivePolicies =
+      extendedState.userModified === true
+        ? (extendedState.policies ?? configPolicies)
+        : configPolicies;
 
     return [
       {
         isEnabled: extendedState.isEnabled,
-        policies: extendedState.policies ?? configPolicies,
+        policies: effectivePolicies,
       },
       setValidateResources,
     ] as const;

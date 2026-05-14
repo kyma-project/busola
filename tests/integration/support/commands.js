@@ -366,7 +366,7 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
 });
 
 Cypress.Commands.add('openSettingsMenu', () => {
-  cy.get('[tooltip="Profile"]').click({ force: true });
+  cy.get('[tooltip="User Menu"]').click({ force: true });
 
   cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 });
