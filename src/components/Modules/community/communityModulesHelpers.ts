@@ -3,6 +3,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/Modules/support';
+import { compareVersions } from 'compare-versions';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 export type VersionInfo = {
@@ -295,9 +296,12 @@ export const getUpdateTemplate = (
   const installedModule = installedModules.find((m) => m.name === moduleName);
 
   if (!installedModule) return undefined;
-  return repoTemplates.find(
+  const candidates = repoTemplates.filter(
     (repoModule) =>
       getModuleName(repoModule) === moduleName &&
-      repoModule.spec.version !== installedModule.version,
+      compareVersions(repoModule.spec.version, installedModule.version) > 0,
   );
+  return candidates.sort((a, b) =>
+    compareVersions(b.spec.version, a.spec.version),
+  )[0];
 };

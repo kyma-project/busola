@@ -1,18 +1,8 @@
 /* global Buffer */
-import rateLimit from 'express-rate-limit';
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import { pipeline } from 'stream/promises';
 import { isPrivateAddressCached, isValidHost } from './utils/network-utils.js';
-
-// Rate limiter: Max 100 requests per 1 minutes per IP
-const proxyRateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 100,
-  message: 'Too many requests from this IP, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
 
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
@@ -51,7 +41,7 @@ async function proxyHandler(req, res) {
           await pipeline(proxyRes, res);
           resolve();
         } catch (err) {
-          req.log.error('Proxy response pipeline error:', err.message);
+          req.log.error({ err }, 'Proxy response pipeline error');
           reject(err);
         }
       });
@@ -64,17 +54,17 @@ async function proxyHandler(req, res) {
         proxyReq.end(req.body);
       } else {
         pipeline(req, proxyReq).catch((err) => {
-          req.log.error('Request pipeline error:', err.message);
+          req.log.error({ err }, 'Request pipeline error');
           proxyReq.destroy(err);
         });
       }
     });
-  } catch (error) {
-    req.log.error('Proxy error:', error.message);
+  } catch (err) {
+    req.log.error({ err }, 'Proxy error');
     if (!res.headersSent) {
       res.status(502).send('An error occurred while making the proxy request.');
     }
   }
 }
 
-export { proxyHandler, proxyRateLimiter };
+export { proxyHandler };
