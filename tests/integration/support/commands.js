@@ -362,6 +362,7 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
   cy.get('ui5-input[id^=search-]:visible')
     .find('input')
     .should('be.visible')
+    .should('not.be.disabled')
     .type(searchPhrase, { force });
 });
 

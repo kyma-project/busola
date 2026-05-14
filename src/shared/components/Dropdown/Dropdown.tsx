@@ -96,7 +96,7 @@ export function Dropdown({
     const popover = comboboxRef?.current?.shadowRoot?.querySelector(
       'ui5-responsive-popover',
     );
-    popover.open = open;
+    if (popover) popover.open = open;
   };
 
   const combobox = (
