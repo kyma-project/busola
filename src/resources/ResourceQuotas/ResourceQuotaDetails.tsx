@@ -64,17 +64,18 @@ export default function ResourceQuotaDetails(props: any) {
               />
             )}
             {resource.spec?.scopeSelector && (
-              <UI5Card
-                title={t('resource-quotas.headers.scope-selectors')}
-                accessibleName={`${t('resource-quotas.headers.scope-selectors')} panel`}
-              >
+              <>
+                <Title
+                  level="H6"
+                  size="H6"
+                  className="resource-quota-spec-subheader sap-margin-small"
+                >
+                  {t('resource-quotas.headers.scope-selectors')}
+                </Title>
+
                 {resource.spec.scopeSelector?.matchExpressions?.map((scope) => (
                   <Fragment key={scope.scopeName}>
-                    <Title
-                      level="H6"
-                      size="H6"
-                      className="resource-quota-spec-subheader sap-margin-small"
-                    >
+                    <Title level="H6" size="H6" className=" sap-margin-small">
                       {scope.scopeName}
                     </Title>
                     <LayoutPanelRow
@@ -89,7 +90,7 @@ export default function ResourceQuotaDetails(props: any) {
                     )}
                   </Fragment>
                 ))}
-              </UI5Card>
+              </>
             )}
           </UI5Card>
         )}
@@ -104,7 +105,7 @@ export default function ResourceQuotaDetails(props: any) {
       return (
         <Fragment key="resource-quota-limits">
           {!!monitoringCharts.length && (
-            <div className="cluster-stats sap-margin-tiny">
+            <div className="cluster-stats">
               {monitoringCharts.map((chartData, index) => (
                 <div
                   key={`${chartData.headerTitle}-${index}`}
