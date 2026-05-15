@@ -21,7 +21,7 @@ import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/c
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { MessageStrip } from '@ui5/webcomponents-react';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useModuleTemplateCRDExists } from './hooks';
 
 export default function ModulesList({ namespaced }: { namespaced: boolean }) {
   const { t } = useTranslation();
@@ -35,9 +35,8 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );
-  const { data: moduleTemplateCRD, loading: moduleTemplateCRDLoading } = useGet(
-    '/apis/apiextensions.k8s.io/v1/customresourcedefinitions/moduletemplates.operator.kyma-project.io',
-  );
+  const { exists: moduleTemplateCRDExists, loading: moduleTemplateCRDLoading } =
+    useModuleTemplateCRDExists();
 
   const {
     resourceName,
@@ -151,7 +150,7 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
           )}
           {isCommunityModulesEnabled && (
             <>
-              {!moduleTemplateCRDLoading && !moduleTemplateCRD && (
+              {!moduleTemplateCRDLoading && !moduleTemplateCRDExists && (
                 <MessageStrip design="Information" hideCloseButton>
                   {t('modules.community.crd-info-message')}
                 </MessageStrip>
