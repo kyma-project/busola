@@ -34,7 +34,7 @@ import {
 } from 'shared/contexts/NotificationContext';
 
 import 'components/Modules/KymaModulesAddModule.scss';
-import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
+import { useGet, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import {
   CommunityModulesInstallationContext,
   moduleInstallationState,
@@ -53,7 +53,6 @@ import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
 import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList/CommunityModulesSourcesList';
 import { TFunction } from 'i18next';
-import { useModuleTemplateCRDExists } from '../hooks';
 
 function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
@@ -195,8 +194,9 @@ export default function CommunityModulesAddModule(props: any) {
   const navigate = useNavigate();
   const { isEnabled: isCommunityModulesEnabled } =
     useFeature('COMMUNITY_MODULES');
-  const { exists: moduleTemplateCRDExists, loading: moduleTemplateCRDLoading } =
-    useModuleTemplateCRDExists();
+  const { data: moduleTemplateCRD, loading: moduleTemplateCRDLoading } = useGet(
+    '/apis/apiextensions.k8s.io/v1/customresourcedefinitions/moduletemplates.operator.kyma-project.io',
+  );
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
 
   const [refreshExtenshionsCount, setRefreshExtenshions] = useAtom(
@@ -422,7 +422,7 @@ export default function CommunityModulesAddModule(props: any) {
                 url={'https://kyma-project.io/#/community-modules/user/README'}
               />
             </MessageStrip>
-            {!moduleTemplateCRDLoading && !moduleTemplateCRDExists && (
+            {!moduleTemplateCRDLoading && !moduleTemplateCRD && (
               <MessageStrip
                 design="Information"
                 hideCloseButton

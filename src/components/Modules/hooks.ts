@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import pluralize from 'pluralize';
-import { useGet, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
+import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
@@ -444,14 +444,4 @@ export function useGetYAMLModuleTemplates(sourceURL: string) {
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { resources, error, loading };
-}
-
-const MODULE_TEMPLATE_CRD = 'moduletemplates.operator.kyma-project.io';
-
-export function useModuleTemplateCRDExists() {
-  const { data, loading } = useGet(
-    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${MODULE_TEMPLATE_CRD}`,
-    { pollingInterval: null } as any,
-  );
-  return { exists: !!data, loading };
 }
