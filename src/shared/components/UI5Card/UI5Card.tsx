@@ -76,7 +76,7 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
           role={role}
           data-testid={testid}
           key={keyComponent}
-          className={`${className} ${shouldHaveMargin ? 'sap-margin-small' : ''}`}
+          className={`${className} ${shouldHaveMargin ? 'sap-margin-small bsl-card--nested' : ''}`}
           accessibleName={accessibleName}
           header={useNativeHeader ? nativeHeader : toolbarHeader}
         >

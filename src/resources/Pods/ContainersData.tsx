@@ -5,11 +5,11 @@ import { Button } from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ContainerStatus } from './ContainerStatus';
 import { getPorts, PortsType } from 'shared/components/GetContainersPorts';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 type ContainerType = {
   name: string;
@@ -54,7 +54,7 @@ export default function ContainersData({
       status?.state?.waiting ||
       status?.state?.terminated;
     return (
-      <UI5Panel
+      <UI5Card
         title={container.name}
         accessibleName={`${container.name} panel`}
         headerActions={
@@ -105,12 +105,12 @@ export default function ContainersData({
             value={getPorts(container.ports)}
           />
         )}
-      </UI5Panel>
+      </UI5Card>
     );
   };
 
   return (
-    <UI5Panel title={type} accessibleName={`${type} panel`}>
+    <UI5Card title={type} accessibleName={`${type} panel`}>
       {containers.map((container) => (
         <ContainerComponent
           key={container.name}
@@ -123,6 +123,6 @@ export default function ContainersData({
           }
         />
       ))}
-    </UI5Panel>
+    </UI5Card>
   );
 }
