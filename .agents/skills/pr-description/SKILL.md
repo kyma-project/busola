@@ -70,7 +70,7 @@ Changes proposed in this pull request:
   - refactor: A code change that neither fixes a bug nor adds a feature
   - test: Adding tests
   - revert: Revert commit
-  - chore: Maintainance changes to the build process or auxiliary tools, libraries, workflows, etc.
+  - chore: Maintenance changes to the build process or auxiliary tools, libraries, workflows, etc.
 - [x] Related issues are linked.
 - [x] Explain clearly why you created the PR and what changes it introduces
 - [x] All necessary steps are delivered, for example, tests, documentation, merging
