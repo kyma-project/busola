@@ -11,7 +11,7 @@ import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { Link } from 'shared/components/Link/Link';
 import { createPortal } from 'react-dom';
-import { UI5Card } from 'shared/components/UI5Card/UI5Card';
+import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
 
 type CustomResourcesOfTypeProps = {
   crdName: string;
@@ -51,12 +51,7 @@ export default function CustomResourcesOfType({
 
   if (loading) return <Spinner />;
   if (error) {
-    return (
-      <UI5Card
-        title={error.message}
-        accessibleName={t('components.accessible-name.error')}
-      />
-    );
+    return <ErrorPanel error={error} />;
   }
   if (!crd) {
     return null;

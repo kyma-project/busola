@@ -13,7 +13,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { createPortal } from 'react-dom';
 import { Crd } from 'types';
 import './GroupingListPage.scss';
-import { UI5Card } from 'shared/components/UI5Card/UI5Card';
+import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
 
 type GroupingListPageProps = {
   title: string;
@@ -49,12 +49,7 @@ export function GroupingListPage({
   }
 
   if (error) {
-    return (
-      <UI5Card
-        title={error.message}
-        accessibleName={t('components.accessible-name.error')}
-      />
-    );
+    return <ErrorPanel error={error} />;
   }
 
   let entries = Object.entries(crdsByGroup);
