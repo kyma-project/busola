@@ -70,5 +70,12 @@ export default defineConfig(
         'prefer-const': 'error',
       },
     },
+
+    {
+      files: ['scripts/**/*.{js,mjs,cjs,ts,mts,cts}'],
+      languageOptions: {
+        globals: globals.node,
+      },
+    },
   ],
 );
