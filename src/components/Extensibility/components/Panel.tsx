@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Button, Title } from '@ui5/webcomponents-react';
+import { Button, Text, Title } from '@ui5/webcomponents-react';
+import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 import { useTranslation } from 'react-i18next';
 import { mapValues } from 'lodash';
 import classNames from 'classnames';
@@ -8,7 +9,7 @@ import { base64Decode } from 'shared/helpers';
 
 import { useCreateResourceDescription, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 interface PanelProps {
   value: any;
@@ -46,11 +47,17 @@ export function Panel({
   }
 
   return (
-    <UI5Panel
+    <UI5Card
       accessibleName={`${widgetT(structure)} panel`}
       title={
         <>
           <Title level="H5">{widgetT(structure)}</Title>
+          {description && (
+            <>
+              <ToolbarSeparator />
+              <Text>{description as string}</Text>
+            </>
+          )}
           {Array.isArray(header)
             ? header.map((def: any, idx: number) => (
                 <Widget
@@ -75,7 +82,6 @@ export function Panel({
           </Button>
         )
       }
-      description={description as string}
     >
       {Array.isArray(structure?.children) && (
         <div className={bodyClassNames}>
@@ -94,6 +100,6 @@ export function Panel({
           ))}
         </div>
       )}
-    </UI5Panel>
+    </UI5Card>
   );
 }

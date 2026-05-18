@@ -1,5 +1,5 @@
 import { forwardRef, ReactNode, useContext } from 'react';
-import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
+import { Card, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import { NestedContainerContext } from './NestedContainerContext';
@@ -34,13 +34,6 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
   ) => {
     const isNested = useContext(NestedContainerContext);
     const shouldHaveMargin = isNested;
-
-    const useNativeHeader =
-      !modeActions && !headerActions && typeof title === 'string';
-
-    const nativeHeader = (
-      <CardHeader titleText={typeof title === 'string' ? title : undefined} />
-    );
 
     const toolbarHeader = (
       <Toolbar
@@ -78,7 +71,7 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
           key={keyComponent}
           className={`${className} ${shouldHaveMargin ? 'sap-margin-small bsl-card--nested' : ''}`}
           accessibleName={accessibleName}
-          header={useNativeHeader ? nativeHeader : toolbarHeader}
+          header={toolbarHeader}
         >
           {children}
         </Card>
