@@ -51,7 +51,11 @@ export default function CustomResourcesOfType({
 
   if (loading) return <Spinner />;
   if (error) {
-    return <ErrorPanel error={error} />;
+    return (
+      <div className="sap-margin-small">
+        <ErrorPanel error={error} />
+      </div>
+    );
   }
   if (!crd) {
     return null;

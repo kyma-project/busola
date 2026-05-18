@@ -49,7 +49,11 @@ export function GroupingListPage({
   }
 
   if (error) {
-    return <ErrorPanel error={error} />;
+    return (
+      <div className="sap-margin-small">
+        <ErrorPanel error={error} />
+      </div>
+    );
   }
 
   let entries = Object.entries(crdsByGroup);
