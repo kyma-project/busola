@@ -72,7 +72,7 @@ export default defineConfig(
     },
 
     {
-      files: ['scripts/**/*.{js,mjs,cjs,ts,mts,cts}'],
+      files: ['.agents/skills/**/*.{js,mjs,cjs,ts,mts,cts}'],
       languageOptions: {
         globals: globals.node,
       },

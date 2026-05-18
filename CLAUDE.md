@@ -11,6 +11,6 @@ Agent skills for this repository are maintained in `.agents/skills/`. Each skill
 Available skills:
 
 - `.agents/skills/create-compliant-pr/` — Create a PR that passes all busola CI checks
-- `.agents/skills/cve-check/` — Triage CVE reports (npm audit JSON) and produce a prioritised remediation checklist
+- `.agents/skills/cve-check/` — Triage CVE compliance reports and produce a prioritised remediation checklist (expired-SLA findings first)
 
 > **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), place a markdown file per skill in `.claude/commands/` (e.g. `.claude/commands/create-compliant-pr.md`).
