@@ -23,10 +23,14 @@ type DropdownCompProps = {
   [key: string]: any;
 };
 
+type EnumInputComponent =
+  | ((props: Inputs.WrappedTextProps) => JSX.Element)
+  | ((props: Inputs.NumberProps) => JSX.Element);
+
 const getEnumComponent = (
   enumValues: any,
   isKeyInput: boolean = true,
-  input: () => JSX.Element = Inputs.Text as any,
+  input: EnumInputComponent = Inputs.Text,
 ) => {
   if (!Array.isArray(enumValues)) return input;
 
@@ -57,13 +61,13 @@ const getEnumComponent = (
 };
 
 const getValueComponent = (valueInfo: Record<string, any>) => {
-  const { type, keyEnum: valuKeyEnum, valueEnum } = valueInfo || {};
+  const { type, keyEnum: valueKeyEnum, valueEnum } = valueInfo || {};
 
   switch (type) {
     case 'number':
-      return getEnumComponent(valueEnum, false, Inputs.Number as any);
+      return getEnumComponent(valueEnum, false, Inputs.Number);
     case 'string':
-      return getEnumComponent(valueEnum, false, Inputs.Text as any);
+      return getEnumComponent(valueEnum, false, Inputs.Text);
     case 'object': {
       const FieldComp = ({
         setValue,
@@ -79,7 +83,7 @@ const getValueComponent = (valueInfo: Record<string, any>) => {
             setValue(v);
           }}
           input={{
-            key: getEnumComponent(valuKeyEnum),
+            key: getEnumComponent(valueKeyEnum),
             value: getEnumComponent(valueEnum, false),
           }}
         />
