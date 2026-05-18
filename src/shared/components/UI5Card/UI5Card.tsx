@@ -48,7 +48,13 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
           modeActions ? ' bsl-card-toolbar--with-mode-actions' : ''
         }`}
       >
-        {typeof title === 'string' ? <Title level="H4">{title}</Title> : title}
+        {typeof title === 'string' ? (
+          <Title level="H6" size="H6">
+            {title}
+          </Title>
+        ) : (
+          title
+        )}
         {headerActions && modeActions && (
           <>
             <div className="header-actions invisible" aria-hidden="true">
