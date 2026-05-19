@@ -11,5 +11,6 @@ Agent skills for this repository are maintained in `.agents/skills/`. Each skill
 Available skills:
 
 - `.agents/skills/create-compliant-pr/` — Create a PR that passes all busola CI checks
+- `.agents/skills/pr-description/` — Generate a PR description from the project template
 
 > **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), place a markdown file per skill in `.claude/commands/` (e.g. `.claude/commands/create-compliant-pr.md`).
