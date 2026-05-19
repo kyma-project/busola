@@ -3,7 +3,13 @@ import { useGenerateTokenRequest } from './useGenerateTokenRequest';
 import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToken';
 import { useEventListener } from 'hooks/useEventListener';
 
-import { Button, MessageStrip, Dialog, Bar } from '@ui5/webcomponents-react';
+import {
+  Button,
+  MessageStrip,
+  Dialog,
+  Bar,
+  DialogDomRef,
+} from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
@@ -71,7 +77,7 @@ export function TokenRequestModal({
 }: TokenRequestModalProps) {
   const { t } = useTranslation();
   const downloadKubeconfig = useDownloadKubeconfigWithToken();
-  const modalRef = useRef<HTMLElement>(null);
+  const modalRef = useRef<DialogDomRef>(null);
 
   const {
     kubeconfigYaml,
@@ -106,7 +112,7 @@ export function TokenRequestModal({
       open={isModalOpen}
       onClose={handleCloseModal}
       headerText={t('service-accounts.token-request.generate')}
-      ref={modalRef as any}
+      ref={modalRef}
       footer={
         <Bar
           design="Footer"
