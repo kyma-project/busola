@@ -7,6 +7,7 @@ import { configFeaturesNames } from 'state/types';
 export type ExtendedValidateResources = {
   isEnabled: boolean;
   policies?: string[];
+  // This flag indicates whether the user has explicitly modified the policies or if they are still in sync with the feature config.
   userModified?: boolean;
 };
 
