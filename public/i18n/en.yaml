@@ -989,7 +989,7 @@ modules:
       advanced: Community module advanced settings
       edit: Community modules edit panel
     add-module: Add Community Modules
-    crd-info-message: To use Community Modules, you must install the ModuleTemplate CustomResourceDefinition (CRD).
+    crd-info-message: To use Community Modules, install the ModuleTemplate CustomResourceDefinition (CRD).
     documentation: Documentation
     installed-modules: Community Modules
     messages:
