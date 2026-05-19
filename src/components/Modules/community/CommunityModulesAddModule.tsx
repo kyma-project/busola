@@ -222,28 +222,17 @@ export default function CommunityModulesAddModule(props: any) {
     notInstalledCommunityModuleTemplates,
     installedCommunityModuleTemplates,
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
-    installedVersions,
   } = useContext(CommunityModuleContext);
 
   const { callback, modulesDuringUpload } = useContext(
     CommunityModulesInstallationContext,
   );
 
-  const upgradeableCommunityModuleTemplates = useMemo(() => {
-    if (!installedCommunityModuleTemplates?.items) {
-      return { items: [] };
-    }
-
-    const upgradeable = installedCommunityModuleTemplates.items.filter(
-      (module) => {
-        const managerKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
-        const installedVersion = installedVersions.get(managerKey);
-        return installedVersion && installedVersion !== module.spec.version;
-      },
+  const installedModuleNames = useMemo(() => {
+    return new Set(
+      (installedCommunityModuleTemplates?.items || []).map(getModuleName),
     );
-
-    return { items: upgradeable };
-  }, [installedCommunityModuleTemplates, installedVersions]);
+  }, [installedCommunityModuleTemplates]);
 
   const modulesToHide = useMemo(() => {
     return new Set(
@@ -254,15 +243,26 @@ export default function CommunityModulesAddModule(props: any) {
   }, [modulesDuringUpload]);
 
   const allAvailableModuleTemplates = useMemo(() => {
-    const combinedItems = [
-      ...(notInstalledCommunityModuleTemplates?.items || []),
-      ...(upgradeableCommunityModuleTemplates?.items || []),
-    ].filter((module) => !modulesToHide.has(getModuleName(module)));
+    const combinedItems = (
+      notInstalledCommunityModuleTemplates?.items || []
+    ).filter((module) => {
+      if (modulesToHide.has(getModuleName(module))) return false;
+      // For prefetched templates, hide if the same module is already installed.
+      // If the template has no source annotation we cannot
+      // confirm the origin, so we treat it as a different module and show it.
+      const isPrefetched = !module.metadata.namespace;
+      if (isPrefetched) {
+        const source = module.metadata?.annotations?.source;
+        if (!source) return true;
+        return !installedModuleNames.has(getModuleName(module));
+      }
+      return true;
+    });
     return { items: combinedItems };
   }, [
     notInstalledCommunityModuleTemplates,
-    upgradeableCommunityModuleTemplates,
     modulesToHide,
+    installedModuleNames,
   ]);
 
   const availableCommunityModules = useMemo(() => {
