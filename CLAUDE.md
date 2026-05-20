@@ -14,5 +14,6 @@ Available skills:
 - `.agents/skills/review-pr/` — Review a pull request's changes against a GitHub issue's requirements and acceptance criteria
 - `.agents/skills/pr-description/` — Generate a PR description from the project template
 - `.agents/skills/review-code/` — Review current branch changes against a GitHub issue's requirements and acceptance criteria
+- `.agents/skills/should-i-rerun-test/` — Analyze Cypress integration test failures on a given PR
 
 > **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), place a markdown file per skill in `.claude/commands/` (e.g. `.claude/commands/create-compliant-pr.md`).
