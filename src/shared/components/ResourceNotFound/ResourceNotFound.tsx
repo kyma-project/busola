@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
-import { UI5Panel } from '../UI5Panel/UI5Panel';
+import { UI5Card } from '../UI5Card/UI5Card';
 
 type ResourceNotFoundProps = {
   resource: string;
@@ -25,7 +25,7 @@ export const ResourceNotFound = ({
   return (
     <DynamicPageComponent
       title=""
-      content={<UI5Panel title={title} accessibleName={`${title} panel`} />}
+      content={<UI5Card title={title} accessibleName={`${title} card`} />}
       layoutCloseUrl={layoutCloseUrl}
       layoutNumber={layoutNumber}
     />
