@@ -139,15 +139,17 @@ export default function LimitRangeSpecification({
     default: defaultValue,
     defaultRequest,
     maxLimitRequestRatio,
-  }: FlatLimitProps) => [
-    ...(isCompact ? [type] : []),
-    resource || EMPTY_TEXT_PLACEHOLDER,
-    min || EMPTY_TEXT_PLACEHOLDER,
-    max || EMPTY_TEXT_PLACEHOLDER,
-    defaultValue || EMPTY_TEXT_PLACEHOLDER,
-    defaultRequest || EMPTY_TEXT_PLACEHOLDER,
-    maxLimitRequestRatio || EMPTY_TEXT_PLACEHOLDER,
-  ];
+  }: FlatLimitProps) => {
+    return [
+      isCompact ? type : null,
+      resource || EMPTY_TEXT_PLACEHOLDER,
+      min || EMPTY_TEXT_PLACEHOLDER,
+      max || EMPTY_TEXT_PLACEHOLDER,
+      defaultValue || EMPTY_TEXT_PLACEHOLDER,
+      defaultRequest || EMPTY_TEXT_PLACEHOLDER,
+      maxLimitRequestRatio || EMPTY_TEXT_PLACEHOLDER,
+    ];
+  };
 
   return isCompact ? (
     <GenericList

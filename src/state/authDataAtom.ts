@@ -77,6 +77,11 @@ export function createUserManager(
     scope: `openid ${[...uniqueScopes].join(' ')}`,
     response_type: 'code',
     response_mode: 'query',
+    // Disable library's built-in automatic renewal — we handle it manually via
+    // addAccessTokenExpiring so there is only ever one concurrent signinSilent()
+    // call. Two concurrent calls race on providers that rotate refresh tokens,
+    // causing the second request to fail with "invalid_grant".
+    automaticSilentRenew: false,
   });
 }
 
@@ -91,15 +96,16 @@ async function handleLogin({
     useAccessToken: boolean,
   ) => {
     userManager.events.addAccessTokenExpiring(async () => {
-      const user = await userManager.signinSilent();
-      setAuth({
-        token: getToken(user, useAccessToken),
-      });
-    });
-    userManager.events.addSilentRenewError((e) => {
-      console.warn('silent renew failed', e);
-      setAuth(null);
-      onError(e);
+      try {
+        const user = await userManager.signinSilent();
+        setAuth({
+          token: getToken(user, useAccessToken),
+        });
+      } catch (e) {
+        console.warn('silent renew failed', e);
+        setAuth(null);
+        onError(e instanceof Error ? e : new Error(String(e)));
+      }
     });
   };
 

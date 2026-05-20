@@ -18,10 +18,12 @@ async function handleGetCommunityResource(req, res) {
     const url = new URL(link);
     // Only allow HTTPS protocol and restrict to specific trusted domains.
     const allowedDomains = ['githubusercontent.com', 'github.com', 'github.io'];
-    if (
-      url.protocol !== 'https:' ||
-      !allowedDomains.some((domain) => url.hostname.endsWith(domain))
-    ) {
+    const isAllowedHost = allowedDomains.some(
+      (domain) =>
+        url.hostname === domain || url.hostname.endsWith(`.${domain}`),
+    );
+    const isDefaultHttpPort = !url.port || url.port === '443';
+    if (url.protocol !== 'https:' || !isAllowedHost || !isDefaultHttpPort) {
       return res.status(400).json({
         message: 'Invalid or untrusted link provided.',
       });
