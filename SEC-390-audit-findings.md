@@ -127,3 +127,41 @@ The CSP contains `style-src 'self' 'unsafe-inline'`. This is an explicit hard-fa
 | V-8  | Backend API responses lack security headers; no Cache-Control on sensitive K8s data | Violation     | FIXED                        |
 | V-9  | `Access-Control-Allow-Origin: *` on authenticated `/backend/modules`                | Violation     | FIXED                        |
 | G-1  | `X-XSS-Protection` set (deprecated)                                                 | Finding       | FIXED                        |
+
+---
+
+## Runtime Compliance Check
+
+**Executed:** 2026-05-20  
+**Method:** Live HTTP probes against the Express backend (`npm run backend`, port 3001)  
+**nginx layer:** Not testable at runtime — Docker unavailable in this environment. nginx header correctness is covered by the static configuration tests in [backend/security-headers.test.js](backend/security-headers.test.js).
+
+### Express Backend — Headers Observed
+
+Four endpoints were probed. Headers present on every response are marked ✓ or ✗.
+
+| Required header                                     | Expected value                                                | Observed                                       | Result                                         |
+| --------------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| `X-Content-Type-Options`                            | `nosniff`                                                     | `nosniff`                                      | ✓                                              |
+| `Referrer-Policy`                                   | `strict-origin-when-cross-origin`                             | `strict-origin-when-cross-origin`              | ✓                                              |
+| `Cross-Origin-Opener-Policy`                        | `same-origin`                                                 | `same-origin`                                  | ✓                                              |
+| `Cross-Origin-Resource-Policy`                      | `same-site`                                                   | `same-site`                                    | ✓                                              |
+| `X-XSS-Protection`                                  | absent                                                        | absent                                         | ✓                                              |
+| `Access-Control-Allow-Origin` on `/backend/modules` | not set by router (dev global cors sets `*` in dev mode only) | `*` (dev global cors)                          | ✓ (router-level removed; `*` is dev-mode only) |
+| `Cache-Control: no-store` on K8s proxy responses    | `no-store`                                                    | not testable at runtime without a live cluster | — (verified by code review + unit test)        |
+
+### Endpoints Probed
+
+| Endpoint                                                      | Status | Security headers present |
+| ------------------------------------------------------------- | ------ | ------------------------ |
+| `GET /backend/kubeconfig`                                     | 200    | All four ✓               |
+| `GET /backend/api/v1/namespaces` (no creds)                   | 400    | All four ✓               |
+| `GET /backend/api/v1/namespaces` (fake cluster URL, filtered) | 400    | All four ✓               |
+| `POST /backend/modules/community-resource` (no creds)         | 400    | All four ✓               |
+| `POST /backend/ai-chat/public-key`                            | 500    | All four ✓               |
+
+### Notes
+
+- `Strict-Transport-Security` and `Content-Security-Policy` are intentionally absent from Express backend responses: HSTS is only meaningful at the TLS terminator (nginx), and CSP is ignored by browsers on non-HTML API responses.
+- `Access-Control-Allow-Origin: *` appears on all dev-mode responses due to the global `cors({ origin: '*' })` middleware gated on `NODE_ENV === 'development'`. This middleware does not run in production.
+- `Cache-Control: no-store` on K8s proxy responses requires a live Kubernetes cluster to verify at runtime. The code change is confirmed in [backend/kubernetes/handler.js:139](backend/kubernetes/handler.js#L139) and covered by the static unit test in [backend/security-headers.test.js](backend/security-headers.test.js).
