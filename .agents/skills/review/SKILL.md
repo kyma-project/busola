@@ -71,9 +71,6 @@ Emit the review in the following format (Markdown):
 ```
 ## Issue Review: #<number> — <title>
 
-### Summary
-<Two to four sentences: what the issue requested and what the branch delivers. Call out the overall alignment verdict: Fulfilled / Partially fulfilled / Not addressed.>
-
 ### Requirements Checklist
 | # | Requirement | Verdict | Notes |
 |---|-------------|---------|-------|
@@ -83,9 +80,6 @@ Emit the review in the following format (Markdown):
 ### Gaps & Concerns
 <Bullet list of anything that warrants follow-up: missing coverage, scope creep, regressions, open questions.>
 *(Omit this section if there are no concerns.)*
-
-### Positive signals
-<Bullet list of things the implementation does especially well in relation to the issue intent.>
 
 ### Verdict
 **<LGTM | Needs work | Blocked>** — <one sentence rationale>
