@@ -15,8 +15,9 @@ export function DataField({ title, ...props }: DataFieldProps) {
         pattern: '([A-Za-z0-9.][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
       }}
       input={{
-        value: ({ setValue, ...inputProps }) => (
+        value: ({ setValue, key, ...inputProps }) => (
           <TextArea
+            key={key}
             onChange={(e) => setValue(e.target.value)}
             growing
             growingMaxRows={10}
