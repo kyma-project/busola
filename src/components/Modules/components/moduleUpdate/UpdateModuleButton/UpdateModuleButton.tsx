@@ -10,8 +10,8 @@ import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { allNodesAtom } from 'state/navigation/allNodesAtom';
-import { fetchResourcesToApply } from '../../community/communityModulesHelpers';
-import { uploadResource } from '../../community/communityModulesInstallHelpers';
+import { fetchResourcesToApply } from '../../../community/communityModulesHelpers';
+import { uploadResource } from '../../../community/communityModulesInstallHelpers';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import {
   NotificationContextArgs,
@@ -23,7 +23,7 @@ import './UpdateModuleButton.scss';
 import {
   useDeleteOldModuleTemplates,
   DeleteOldModulesCheck,
-} from './DeleteOldModulesCheck';
+} from '../DeleteOldModulesCheck/DeleteOldModulesCheck';
 
 type UpdateModuleButtonProps = {
   moduleName: string;
@@ -87,7 +87,6 @@ export const UpdateModuleButton = ({
     [],
   );
   const [pendingUpdate, setPendingUpdate] = useState(false);
-
   const { deleteOldTemplates, setDeleteOldTemplate, deleteOldTemplate } =
     useDeleteOldModuleTemplates(oldModuleTemplates);
 
@@ -143,10 +142,12 @@ export const UpdateModuleButton = ({
   return (
     <>
       <Button
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           setDeleteOldTemplate(true);
           setIsDialogOpen(true);
         }}
+        data-testid="update-module-btn"
       >
         {t('kyma-modules.update')}
       </Button>
@@ -175,12 +176,12 @@ export const UpdateModuleButton = ({
           </Text>
           <div className="module-versions-container sap-margin-top-small">
             <Label style={{ textAlign: 'right' }}>
-              {`${t('modules.community.update.current-version')}:`}
+              {`${t('modules.community.update.current-version')}: `}
             </Label>
             <Text>{currentVersion}</Text>
             <div />
             <Label style={{ textAlign: 'right' }}>
-              {`${t('modules.community.update.latest-version')}:`}
+              {`${t('modules.community.update.latest-version')}: `}
             </Label>
             <Text>{newVersion}</Text>
             {/*TODO: Has to be adjusted when we get Release Notes in modules - 

@@ -20,6 +20,8 @@ import { configFeaturesNames } from 'state/types';
 import { CommunityModulesDeleteBoxContext } from 'components/Modules/community/components/CommunityModulesDeleteBox';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
+import { MessageStrip } from '@ui5/webcomponents-react';
+import { useModuleTemplateCRDExists } from './hooks';
 
 export default function ModulesList({ namespaced }: { namespaced: boolean }) {
   const { t } = useTranslation();
@@ -33,6 +35,8 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );
+  const { exists: moduleTemplateCRDExists, loading: moduleTemplateCRDLoading } =
+    useModuleTemplateCRDExists();
 
   const {
     resourceName,
@@ -145,21 +149,28 @@ export default function ModulesList({ namespaced }: { namespaced: boolean }) {
             />
           )}
           {isCommunityModulesEnabled && (
-            <CommunityModulesList
-              key="community-modules-list"
-              resourceUrl={resourceUrl ?? ''}
-              moduleTemplates={communityModuleTemplates}
-              selectedModules={filteredCommunityModules}
-              modulesLoading={installedCommunityModulesLoading}
-              namespaced={namespaced}
-              setOpenedModuleIndex={setOpenedCommunityModuleIndex}
-              handleResourceDelete={handleCommunityModuleDelete}
-              customSelectedEntry={displayedCommunityEntry}
-              setSelectedEntry={(name) => {
-                setSelectedCommunityEntry(name);
-                setSelectedKymaEntry(undefined);
-              }}
-            />
+            <>
+              {!moduleTemplateCRDLoading && !moduleTemplateCRDExists && (
+                <MessageStrip design="Information" hideCloseButton>
+                  {t('modules.community.crd-info-message')}
+                </MessageStrip>
+              )}
+              <CommunityModulesList
+                key="community-modules-list"
+                resourceUrl={resourceUrl ?? ''}
+                moduleTemplates={communityModuleTemplates}
+                selectedModules={filteredCommunityModules}
+                modulesLoading={installedCommunityModulesLoading}
+                namespaced={namespaced}
+                setOpenedModuleIndex={setOpenedCommunityModuleIndex}
+                handleResourceDelete={handleCommunityModuleDelete}
+                customSelectedEntry={displayedCommunityEntry}
+                setSelectedEntry={(name) => {
+                  setSelectedCommunityEntry(name);
+                  setSelectedKymaEntry(undefined);
+                }}
+              />
+            </>
           )}
         </>
       }

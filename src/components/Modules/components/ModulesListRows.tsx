@@ -22,7 +22,7 @@ import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
 import { TFunction } from 'i18next';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
-import { UpdateModuleButton } from './moduleUpdate/UpdateModuleButton';
+import { UpdateModuleButton } from './moduleUpdate/UpdateModuleButton/UpdateModuleButton';
 import { VersionUpdateTooltip } from './moduleUpdate/VersionUpdateTooltip';
 import './ModulesListRows.scss';
 
@@ -245,7 +245,7 @@ export const ModulesListRows = ({
                     moduleName={resource.name}
                     currentVersion={resource?.version || ''}
                     newVersion={newestModuleTemplate?.spec?.version || ''}
-                    moduleTpl={currentModuleTemplate}
+                    moduleTpl={newestModuleTemplate}
                     oldModuleTemplates={moduleTemplates.items.filter(
                       (tpl) =>
                         tpl.metadata.creationTimestamp !== undefined &&
