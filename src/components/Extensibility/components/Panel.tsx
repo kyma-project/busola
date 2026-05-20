@@ -55,7 +55,7 @@ export function Panel({
           {description && (
             <>
               <ToolbarSeparator />
-              <Text>{description as string}</Text>
+              <Text>{description}</Text>
             </>
           )}
           {Array.isArray(header)
