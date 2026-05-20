@@ -248,9 +248,7 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
   const checkIfStatusModuleIsBeta = (moduleName: string) => {
     return !!modulesAddData
       ?.find((mod) => mod.name === moduleName)
-      ?.channels.some(({ channel: ch, isBeta }: ChannelType) => {
-        return kymaResource.spec.channel && isBeta;
-      });
+      ?.channels.some(({ isBeta }: ChannelType) => isBeta);
   };
 
   const renderCards = () => {
