@@ -3,7 +3,13 @@ import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import jsyaml from 'js-yaml';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { unwrap } from 'jotai/utils';
 import { permissionSetsAtom, PermissionSetState } from './permissionSetsAtom';
+
+const permissionSetsAtomSync = unwrap(
+  permissionSetsAtom,
+  (prev) => prev ?? null,
+);
 import { useUrl } from 'hooks/useUrl';
 import { ConfigMapResponse, getConfigMaps } from './utils/getConfigMaps';
 import { getFetchFn } from './utils/getFetchFn';
@@ -195,26 +201,27 @@ export const useGetValidationSchemas = () => {
   const fetchFn = getFetchFn(useAtomValue);
   const cluster = useAtomValue(clusterAtom);
   const auth = useAtomValue(authDataAtom);
-  const permissionSet = useAtomValue(permissionSetsAtom);
+  const permissionSet = useAtomValue(permissionSetsAtomSync);
   const { namespace } = useUrl();
 
   useEffect(() => {
     const setValidationSchema = async () => {
       if (!cluster) {
         setSchemas(emptyValidationSchema);
-      } else {
-        const { rules, policies } = await fetchValidationConfig(
-          fetchFn,
-          cluster.currentContext.namespace,
-          namespace,
-          permissionSet,
-        );
-
-        setSchemas({
-          rules,
-          policies,
-        });
+        return;
       }
+      if (!permissionSet) return;
+      const { rules, policies } = await fetchValidationConfig(
+        fetchFn,
+        cluster.currentContext.namespace,
+        namespace,
+        permissionSet,
+      );
+
+      setSchemas({
+        rules,
+        policies,
+      });
     };
     setValidationSchema();
     // eslint-disable-next-line react-hooks/exhaustive-deps

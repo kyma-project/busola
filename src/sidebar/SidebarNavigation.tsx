@@ -1,4 +1,5 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { unwrap } from 'jotai/utils';
 import {
   SideNavigation,
   SideNavigationItem,
@@ -23,8 +24,13 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useRef } from 'react';
 import type { SideNavigationDomRef } from '@ui5/webcomponents-react';
 
+const sidebarNavigationNodesSync = unwrap(
+  sidebarNavigationNodesAtom,
+  (prev) => prev ?? [],
+);
+
 export function SidebarNavigation() {
-  const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
+  const navigationNodes = useAtomValue(sidebarNavigationNodesSync);
   const isSidebarCondensed = useAtomValue(isSidebarCondensedAtom);
   const namespace = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();

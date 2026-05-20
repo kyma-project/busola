@@ -5,11 +5,11 @@ import { GenericRoleCreate } from 'resources/Roles/GenericRoleCreate';
 
 import { createClusterRoleTemplate, createClusterRolePresets } from './helpers';
 import { useAtomValue } from 'jotai';
-import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
+import { groupVersionsAtomSync } from 'state/discoverability/groupVersionsAtom';
 
 export default function ClusterRoleCreate(props) {
   const { t } = useTranslation();
-  const groupVersions = useAtomValue(groupVersionsAtom);
+  const groupVersions = useAtomValue(groupVersionsAtomSync);
 
   const createTemplate = useCallback(() => createClusterRoleTemplate(), []);
 

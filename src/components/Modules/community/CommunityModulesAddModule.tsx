@@ -42,7 +42,7 @@ import {
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { MutationFn, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useAtomValue } from 'jotai/index';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import {
   CallbackFn,
   installCommunityModule,
@@ -207,10 +207,10 @@ export default function CommunityModulesAddModule(props: any) {
   const patchRequest = useUpdate();
 
   const singleGet = useSingleGet();
-  const clusterNodes = useAtomValue(allNodesAtom).filter(
+  const clusterNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+  const namespaceNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => node.namespaced,
   );
 

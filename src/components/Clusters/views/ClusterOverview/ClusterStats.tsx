@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
@@ -325,7 +325,9 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
             />
           </div>
         )}
-        <Injections destination="ClusterOverview" slot="health" />
+        <Suspense fallback={null}>
+          <Injections destination="ClusterOverview" slot="health" />
+        </Suspense>
       </div>
     </section>
   );
