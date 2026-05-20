@@ -1,20 +1,27 @@
 # Skill: review
 
-Review the current branch's changes against the requirements and acceptance criteria of a linked GitHub issue. Evaluates whether the implementation fulfils the _intent_ of the issue — not just whether the code is technically correct.
+Review a pull request's changes against the requirements and acceptance criteria of the linked GitHub issue. Evaluates whether the implementation fulfils the _intent_ of the issue — not just whether the code is technically correct.
 
 ## Input
 
-Accepts an optional GitHub issue number as an argument (e.g. `/review 1234`).
+Accepts a GitHub pull request number as an argument (e.g. `/review 1234`).
 
 If no number is provided, try to infer it automatically in this order:
 
-1. The current branch name.
-2. The most recent commit messages on the branch.
-3. If still not found, ask the user to supply the issue number before continuing.
+1. The current branch name — look for an open PR associated with it via `gh pr view`.
+2. If still not found, ask the user to supply the PR number before continuing.
 
 ## Step-by-step instructions
 
-### 1 — Fetch issue details
+### 1 — Fetch PR details and extract the linked issue number
+
+Using the GitHub MCP tool (preferred) or `gh pr view <number> --json number,title,body,headRefName`, retrieve the PR body.
+
+Scan the PR body for a **Related issue(s)** section (or similar headings like "Related Issues", "Fixes", "Closes"). Extract the GitHub issue number(s) referenced there (e.g. `#1234`, `https://github.com/.../issues/1234`).
+
+If no linked issue is found in the PR description, ask the user to supply the issue number before continuing.
+
+### 2 — Fetch issue details
 
 Using the GitHub MCP tool (preferred) or `gh issue view <number> --json title,body,labels,milestone`, retrieve:
 
@@ -30,27 +37,24 @@ Parse the body carefully. Issues in this repo often contain:
 
 Extract every requirement or acceptance-criteria item into a structured list. If no explicit AC section exists, derive implicit requirements from the description.
 
-### 2 — Collect changed files on the current branch
+### 3 — Collect changed files and diff from the PR
+
+Using the GitHub MCP tool (preferred) or the `gh` CLI, retrieve the list of files changed in the PR and the full diff:
 
 ```bash
-git diff main...HEAD --name-only
+gh pr diff <number>
+gh pr view <number> --json files
 ```
 
-Then fetch the full diff:
+Also collect the list of commits on the PR:
 
 ```bash
-git diff main...HEAD
+gh pr view <number> --json commits
 ```
 
-Also collect the list of commits:
+### 4 — Review against issue requirements
 
-```bash
-git log main...HEAD --oneline
-```
-
-### 3 — Review against issue requirements
-
-For each requirement / acceptance-criteria item extracted in step 1, evaluate whether the diff addresses it. Produce a verdict for each item:
+For each requirement / acceptance-criteria item extracted in step 2, evaluate whether the diff addresses it. Produce a verdict for each item:
 
 - **Fulfilled** — the change clearly implements or satisfies the item.
 - **Partially fulfilled** — the change makes progress but leaves gaps; explain what is missing.
@@ -59,12 +63,12 @@ For each requirement / acceptance-criteria item extracted in step 1, evaluate wh
 
 Also look for:
 
-- **Scope creep** — changes unrelated to the issue that landed in the same branch.
+- **Scope creep** — changes unrelated to the issue that landed in the same PR.
 - **Regressions** — modifications to existing functionality not covered by the issue.
 - **Missing tests** — acceptance criteria that imply test coverage where none was added.
 - **UI/UX alignment** — if the issue references a mockup or describes specific UI behaviour, flag any divergence in the changed components.
 
-### 4 — Produce structured review output
+### 5 — Produce structured review output
 
 Emit the review in the following format (Markdown):
 
@@ -93,7 +97,7 @@ Verdicts:
 
 ## Notes
 
-- Focus on _intent fulfilment_, not code style. Linting and formatting are checked separately by CI.
+- Focus on _intent fulfilment_, as well as code style. Check if the code is following good practices.
 - Do not repeat generic code-review advice (e.g. "add error handling") unless the issue explicitly requires it.
 - Keep the review actionable: every gap should indicate what specifically needs to change.
 - If the issue body is empty or the issue cannot be fetched, say so clearly and fall back to a plain diff review with a caveat.
