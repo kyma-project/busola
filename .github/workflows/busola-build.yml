@@ -59,4 +59,4 @@ jobs:
       dockerfile: Dockerfile.fips
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       use-restricted-registry: true
-      build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/${{ contains(['pull_request_target','merge_group'], github.event_name) && 'dev' || 'prod' }}/busola@${{ needs.build-busola-image.outputs.digest }}
+      build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/${{ contains(fromJSON('["pull_request_target","merge_group"]'), github.event_name) && 'dev' || 'prod' }}/busola@${{ needs.build-busola-image.outputs.digest }}
