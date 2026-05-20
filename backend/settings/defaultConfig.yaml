@@ -9,3 +9,12 @@ config:
         skipAuth: false
     ALLOW_PRIVATE_IPS:
       isEnabled: false
+    KUBERNETES_PROXY:
+      config:
+        allowedPorts: [443, 6443, 8443]
+    COMMUNITY_MODULES:
+      config:
+        allowedDomains:
+          - githubusercontent.com
+          - github.com
+          - github.io

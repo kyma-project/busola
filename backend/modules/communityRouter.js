@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import jsyaml from 'js-yaml';
+import config from '../config.js';
 
 const router = express.Router();
 router.use(express.json());
@@ -16,8 +17,9 @@ async function handleGetCommunityResource(req, res) {
 
   try {
     const url = new URL(link);
-    // Only allow HTTPS protocol and restrict to specific trusted domains.
-    const allowedDomains = ['githubusercontent.com', 'github.com', 'github.io'];
+    // Only allow HTTPS protocol and restrict to configured trusted domains.
+    const allowedDomains = config.features?.COMMUNITY_MODULES?.config
+      ?.allowedDomains ?? ['githubusercontent.com', 'github.com', 'github.io'];
     const isAllowedHost = allowedDomains.some(
       (domain) =>
         url.hostname === domain || url.hostname.endsWith(`.${domain}`),

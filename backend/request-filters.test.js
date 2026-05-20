@@ -379,18 +379,6 @@ describe('portFilter tests', () => {
       headersData: { targetApiServer: { port: '8443' } },
     },
     {
-      description: 'should allow port 80 (standard HTTP port)',
-      headersData: { targetApiServer: { port: '80' } },
-    },
-    {
-      description: 'should allow port 1 (minimum valid port)',
-      headersData: { targetApiServer: { port: '1' } },
-    },
-    {
-      description: 'should allow port 65535 (maximum valid port)',
-      headersData: { targetApiServer: { port: '65535' } },
-    },
-    {
       description: 'should allow empty port (protocol default will be used)',
       headersData: { targetApiServer: { port: '' } },
     },
@@ -417,6 +405,24 @@ describe('portFilter tests', () => {
       headersData: { targetApiServer: { port: 'abc' } },
       expectedError: 'Port abc is not a valid port number.',
     },
+    {
+      description:
+        'should throw an error for port 80 (not in allowed port list)',
+      headersData: { targetApiServer: { port: '80' } },
+      expectedError: 'Port 80 is not in the allowed port list.',
+    },
+    {
+      description:
+        'should throw an error for port 1 (not in allowed port list)',
+      headersData: { targetApiServer: { port: '1' } },
+      expectedError: 'Port 1 is not in the allowed port list.',
+    },
+    {
+      description:
+        'should throw an error for port 65535 (not in allowed port list)',
+      headersData: { targetApiServer: { port: '65535' } },
+      expectedError: 'Port 65535 is not in the allowed port list.',
+    },
   ];
 
   test.each(successTestCases)('$description', ({ headersData }) => {
@@ -429,4 +435,33 @@ describe('portFilter tests', () => {
       expect(() => portFilter({}, headersData)).toThrowError(expectedError);
     },
   );
+});
+
+describe('portFilter with ALLOW_PRIVATE_IPS feature flag', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test('should allow any valid port when ALLOW_PRIVATE_IPS is enabled', async () => {
+    vi.doMock('./config.js', () => ({
+      default: {
+        features: {
+          ALLOW_PRIVATE_IPS: { isEnabled: true },
+        },
+      },
+    }));
+
+    const { portFilter: portFilterDev } = await import('./request-filters.js');
+
+    expect(() =>
+      portFilterDev({}, { targetApiServer: { port: '80' } }),
+    ).not.toThrow();
+    expect(() =>
+      portFilterDev({}, { targetApiServer: { port: '8080' } }),
+    ).not.toThrow();
+  });
 });

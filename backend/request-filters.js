@@ -1,5 +1,5 @@
 import net from 'net';
-import { isPrivateIp } from './utils/network-utils.js';
+import { isPrivateIp, isPrivateAddressCached } from './utils/network-utils.js';
 import config from './config.js';
 
 export const localIpFilter = (_req, headersData) => {
@@ -92,6 +92,35 @@ export const portFilter = (_req, headersData) => {
   const portNumber = Number(port);
   if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
     throw Error(`Port ${port} is not a valid port number.`);
+  }
+
+  // Skip allowlist enforcement in private-IP-allowed (dev) mode
+  if (config.features?.ALLOW_PRIVATE_IPS?.isEnabled) {
+    return;
+  }
+
+  const allowedPorts = config.features?.KUBERNETES_PROXY?.config
+    ?.allowedPorts ?? [443, 6443, 8443];
+  if (!allowedPorts.includes(portNumber)) {
+    throw Error(`Port ${portNumber} is not in the allowed port list.`);
+  }
+};
+
+export const localHostnameFilter = async (_req, headersData) => {
+  const hostname = headersData.targetApiServer.hostname || '';
+
+  if (config.features?.ALLOW_PRIVATE_IPS?.isEnabled) {
+    return;
+  }
+
+  // Bare IPs are already handled by the synchronous localIpFilter.
+  // This filter resolves hostnames to catch domains that map to private addresses.
+  if (net.isIP(hostname) !== 0) {
+    return;
+  }
+
+  if (await isPrivateAddressCached(hostname)) {
+    throw Error('Hostname resolves to a private address.');
   }
 };
 
