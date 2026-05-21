@@ -188,7 +188,7 @@ Cypress.Commands.add(
       customHeaderText = null,
     } = options;
 
-    cy.wait(1000);
+    cy.wait(2000);
     if (parentSelector) {
       cy.get(parentSelector)
         .find('ui5-input[id^=search-]:visible')
@@ -202,7 +202,7 @@ Cypress.Commands.add(
         .type(resourceName, { force: true });
     }
 
-    cy.wait(1000);
+    cy.wait(2000);
 
     if (selectSearchResult) {
       cy.get('ui5-suggestion-item')
