@@ -127,7 +127,10 @@ context('Test reduced permissions', () => {
   });
 
   it('Download kubeconfig for Service Account', () => {
-    cy.getLeftNav().find('ui5-side-navigation-item[text="Namespaces"]').click();
+    cy.getLeftNav()
+      .find('ui5-side-navigation-item')
+      .contains('Namespaces')
+      .click();
 
     cy.goToNamespaceDetails();
 

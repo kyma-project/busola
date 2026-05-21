@@ -6,7 +6,10 @@ context('Create Namespace', () => {
   before(cy.loginAndSelectCluster);
 
   it('Create Namespace', () => {
-    cy.getLeftNav().find('ui5-side-navigation-item[text="Namespaces"]').click();
+    cy.getLeftNav()
+      .find('ui5-side-navigation-item')
+      .contains('Namespaces')
+      .click();
 
     cy.openCreate();
 

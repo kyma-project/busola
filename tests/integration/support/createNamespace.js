@@ -1,7 +1,10 @@
 Cypress.Commands.add('createNamespace', (namespaceName) => {
   cy.log('Create a Namespace');
 
-  cy.getLeftNav().find('ui5-side-navigation-item[text="Namespaces"]').click();
+  cy.getLeftNav()
+    .find('ui5-side-navigation-item')
+    .contains('Namespaces')
+    .click();
 
   cy.openCreate();
 

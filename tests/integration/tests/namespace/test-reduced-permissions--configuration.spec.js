@@ -90,7 +90,10 @@ context('Test reduced permissions 2', () => {
 
     cy.getLeftNav().contains('Back To Cluster Overview').click();
 
-    cy.getLeftNav().find('ui5-side-navigation-item[text="Namespaces"]').click();
+    cy.getLeftNav()
+      .find('ui5-side-navigation-item')
+      .contains('Namespaces')
+      .click();
 
     cy.wait(1000);
 

@@ -105,7 +105,10 @@ context('Test app settings and preferences', () => {
 
     cy.getLeftNav().contains('Back To Cluster Overview').click();
 
-    cy.getLeftNav().find('ui5-side-navigation-item[text="Namespaces"]').click();
+    cy.getLeftNav()
+      .find('ui5-side-navigation-item')
+      .contains('Namespaces')
+      .click();
 
     cy.get('ui5-table-row')
       .contains(/^kube-system/)
