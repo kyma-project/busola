@@ -211,6 +211,7 @@ Cypress.Commands.add(
       cy.get('ui5-suggestion-item')
         .contains('li', resourceName)
         .click({ force: true });
+      cy.wait(1000);
     }
 
     if (searchInPlainTableText) {
