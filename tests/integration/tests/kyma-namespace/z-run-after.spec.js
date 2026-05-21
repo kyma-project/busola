@@ -12,7 +12,6 @@ context('Clean up Namespace', () => {
     cy.getLeftNav()
       .find('ui5-side-navigation-item')
       .contains('Namespaces')
-      .first()
       .click();
 
     cy.wait(1000);

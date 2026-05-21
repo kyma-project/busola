@@ -228,7 +228,9 @@ Cypress.Commands.add(
         .find('ui5-button[data-testid="delete"]:visible')
         .click();
     } else {
-      cy.get('ui5-button[data-testid="delete"]').click();
+      cy.contains('ui5-table-row', resourceName)
+        .find('ui5-button[data-testid="delete"]')
+        .click();
     }
 
     if (confirmationEnabled) {
