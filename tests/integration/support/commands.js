@@ -208,9 +208,10 @@ Cypress.Commands.add(
     cy.wait(1000);
 
     if (selectSearchResult) {
-      cy.get('ui5-suggestion-item')
-        .contains('li', resourceName)
-        .click({ force: true });
+      cy.get('ui5-suggestion-item', { timeout: 5000 }).should('exist');
+      cy.get('ui5-input[id^=search-]:visible')
+        .find('input')
+        .type('{downArrow}{enter}', { force: true });
       cy.wait(1000);
     }
 
