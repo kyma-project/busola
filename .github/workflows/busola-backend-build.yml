@@ -36,8 +36,6 @@ jobs:
   build-backend-image:
     needs: select-environment
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
-    permissions:
-      id-token: write # This is required for requesting the JWT token
     if: github.event.pull_request.draft == false
     with:
       name: busola-backend
