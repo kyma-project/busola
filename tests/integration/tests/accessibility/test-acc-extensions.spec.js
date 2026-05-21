@@ -91,10 +91,7 @@ context('Accessibility test Extensions view', () => {
   });
 
   it('Clean up', () => {
-    cy.getLeftNav()
-      .find('ui5-side-navigation-item')
-      .contains('Namespaces')
-      .click();
+    cy.getLeftNav().find('ui5-side-navigation-item[text="Namespaces"]').click();
 
     cy.deleteFromGenericList('Namespace', 'pizzas', {
       clearSearch: false,

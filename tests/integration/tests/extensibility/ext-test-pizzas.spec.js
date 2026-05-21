@@ -64,10 +64,7 @@ context('Test Pizzas', () => {
   it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .find('ui5-side-navigation-item')
-      .contains('Namespaces')
-      .click();
+    cy.getLeftNav().find('ui5-side-navigation-item[text="Namespaces"]').click();
 
     cy.wait(500).typeInSearch('pizzas');
 
