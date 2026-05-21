@@ -145,8 +145,8 @@ export default function LimitRangeSpecification({
       resource || EMPTY_TEXT_PLACEHOLDER,
       min || EMPTY_TEXT_PLACEHOLDER,
       max || EMPTY_TEXT_PLACEHOLDER,
-      defaultValue || EMPTY_TEXT_PLACEHOLDER,
       defaultRequest || EMPTY_TEXT_PLACEHOLDER,
+      defaultValue || EMPTY_TEXT_PLACEHOLDER,
       maxLimitRequestRatio || EMPTY_TEXT_PLACEHOLDER,
     ];
   };
