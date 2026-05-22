@@ -27,6 +27,7 @@ import { ClusterSwitcher } from './ClusterSwitcher/ClusterSwitcher';
 import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
+import { TerminalButton } from './TerminalButton';
 import FeedbackPopover from './Feedback/FeedbackPopover';
 import JouleChat from 'components/KymaCompanion/JouleChat';
 
@@ -134,6 +135,7 @@ export function Header() {
         ref={shellbarRef}
       >
         <SnowFeature />
+        <TerminalButton />
         <FeedbackPopover />
         {isKymaCompanionEnabled && isSAPUser && !isOnClustersPage && (
           <>
