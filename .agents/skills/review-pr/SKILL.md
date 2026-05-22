@@ -1,10 +1,10 @@
-# Skill: review
+# Skill: review-pr
 
 Review a pull request's changes against the requirements and acceptance criteria of the linked GitHub issue. Evaluates whether the implementation fulfils the _intent_ of the issue — not just whether the code is technically correct.
 
 ## Input
 
-Accepts a GitHub pull request number as an argument (e.g. `/review 1234`).
+Accepts a GitHub pull request number as an argument (e.g. `/review-pr 1234`).
 
 If no number is provided, try to infer it automatically in this order:
 
