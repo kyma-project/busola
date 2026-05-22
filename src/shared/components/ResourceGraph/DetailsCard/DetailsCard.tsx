@@ -67,9 +67,23 @@ export function DetailsCard({
             );
 
             setLayoutColumn({
-              layout: 'OneColumn',
-              startColumn: null,
-              midColumn: null,
+              layout: 'TwoColumnsMidExpanded',
+              startColumn: {
+                resourceName: null,
+                resourceType: node.resourceType,
+                rawResourceTypeName: node.resourceTypeCased,
+                namespaceId: resource.metadata.namespace,
+                apiGroup: node.apiGroup,
+                apiVersion: node.apiVersion,
+              },
+              midColumn: {
+                resourceName: resource.metadata.name,
+                resourceType: node.resourceType,
+                rawResourceTypeName: node.resourceTypeCased,
+                namespaceId: resource.metadata.namespace,
+                apiGroup: node.apiGroup,
+                apiVersion: node.apiVersion,
+              },
               endColumn: null,
             });
           }}
