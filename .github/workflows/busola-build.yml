@@ -63,7 +63,7 @@ jobs:
     name: Build Fips Image
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
     if: github.event.pull_request.draft == false
-    needs: [build-busola-image]
+    needs: [select-environment, build-busola-image]
     with:
       name: fips-busola
       dockerfile: Dockerfile.fips

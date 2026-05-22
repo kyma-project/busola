@@ -10,7 +10,7 @@ function getConfigDir() {
   if (environment) {
     return path.join('environments', environment);
   }
-  return 'some changes';
+  return '';
 }
 
 function getEnvConfig() {
