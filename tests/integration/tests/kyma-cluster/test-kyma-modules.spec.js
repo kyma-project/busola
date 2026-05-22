@@ -135,6 +135,79 @@ context('Test Kyma Modules views', () => {
     cy.inspectTab('View');
   });
 
+  it('Opens module details with the correct resource when a row is clicked', () => {
+    cy.wait(1000);
+
+    cy.get('.modules-list')
+      .find('ui5-table-row')
+      .contains('api-gateway')
+      .click();
+
+    cy.getMidColumn().should('be.visible');
+    cy.getMidColumn().contains('APIGateway').should('be.visible');
+    cy.getMidColumn().contains('default').should('be.visible');
+
+    cy.closeMidColumn();
+  });
+
+  it('Retains row highlight and details after refresh', () => {
+    cy.get('.modules-list')
+      .find('ui5-table-row')
+      .contains('api-gateway')
+      .click();
+
+    cy.getMidColumn().should('be.visible');
+
+    cy.reload();
+    cy.wait(2000);
+
+    cy.getMidColumn().should('be.visible');
+    cy.get('.modules-list')
+      .find('ui5-table-row.row-selected')
+      .contains('api-gateway')
+      .should('be.visible');
+
+    cy.closeMidColumn();
+  });
+
+  it('Edit inside module details keeps the list in View mode', () => {
+    cy.get('.modules-list')
+      .find('ui5-table-row')
+      .contains('api-gateway')
+      .click();
+
+    cy.getMidColumn().should('be.visible');
+    cy.getMidColumn().inspectTab('Edit');
+
+    cy.get('.modules-list')
+      .find('ui5-table-row')
+      .contains('api-gateway')
+      .should('be.visible');
+
+    cy.closeMidColumn();
+  });
+
+  it('Entering Edit mode on the list closes open details', () => {
+    cy.get('.modules-list')
+      .find('ui5-table-row')
+      .contains('api-gateway')
+      .click();
+
+    cy.getMidColumn().should('be.visible');
+
+    cy.get('.kyma-modules ui5-tabcontainer')
+      .first()
+      .find('[role="tablist"]')
+      .find('[role="tab"]')
+      .contains('Edit')
+      .should('be.visible')
+      .click();
+
+    cy.getMidColumn().should('not.be.visible');
+
+    cy.inspectTab('View');
+  });
+
   it('Test changing Module Channel', () => {
     cy.inspectTab('Edit');
 
@@ -162,13 +235,15 @@ context('Test Kyma Modules views', () => {
 
     cy.inspectTab('View');
 
-    cy.wait(10000);
-
-    cy.get('ui5-table-row').contains('eventing').should('be.visible');
-
-    cy.get('ui5-table-row').contains('fast').should('be.visible');
-
-    cy.get('ui5-table-row').contains('Overridden').should('be.visible');
+    cy.get('ui5-table-row', { timeout: 15000 })
+      .contains('eventing')
+      .should('be.visible');
+    cy.get('ui5-table-row', { timeout: 15000 })
+      .contains('fast')
+      .should('be.visible');
+    cy.get('ui5-table-row', { timeout: 15000 })
+      .contains('Overridden')
+      .should('be.visible');
   });
 
   it('Test changing Module Channel to Predefined', () => {
@@ -196,11 +271,12 @@ context('Test Kyma Modules views', () => {
 
     cy.inspectTab('View');
 
-    cy.wait(10000);
-
-    cy.get('ui5-table-row').contains('eventing').should('be.visible');
-
-    cy.get('ui5-table-row').contains('Overridden').should('not.be.exist');
+    cy.get('ui5-table-row', { timeout: 15000 })
+      .contains('eventing')
+      .should('be.visible');
+    cy.contains('ui5-table-row', 'Overridden', { timeout: 15000 }).should(
+      'not.exist',
+    );
   });
 
   it('Test deleting Modules from List and Details', { retries: 3 }, () => {
@@ -210,23 +286,28 @@ context('Test Kyma Modules views', () => {
       customHeaderText: 'Delete Module',
     });
 
-    // Uncomment after adding local KLM
-    // cy.typeInSearch('api-gateway');
-    //
-    // cy.get('ui5-table-row')
-    //   .contains('api-gateway')
-    //   .click();
-    //
-    // cy.deleteInDetails('Module', 'api-gateway', true);
-    //
-    // cy.wait(20000);
-    //
-    // cy.get('ui5-input[id^=search-]:visible')
-    //   .find('input')
-    //   .clear();
-    //
-    // cy.get('ui5-table')
-    //   .contains('ui5-illustrated-message', 'No modules')
-    //   .should('be.visible');
+    cy.get('.modules-list')
+      .find('ui5-input[id^=search-]:visible')
+      .find('input')
+      .type('api-gateway');
+
+    cy.get('.modules-list')
+      .find('ui5-table-row')
+      .contains('api-gateway')
+      .click();
+
+    cy.deleteInDetails('Module', 'api-gateway', true, {
+      customHeaderText: 'Delete Module',
+    });
+
+    cy.get('.modules-list')
+      .find('ui5-input[id^=search-]:visible')
+      .find('input')
+      .clear();
+
+    cy.get('.modules-list', { timeout: 15000 })
+      .find('ui5-illustrated-message')
+      .contains('No modules')
+      .should('be.visible');
   });
 });
