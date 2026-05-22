@@ -1,0 +1,16 @@
+.terminal-container {
+  .terminal-card {
+    height: 35vh;
+    width: 100%;
+  }
+}
+
+.terminal-card {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 60px;
+    padding: 0 1rem;
+  }
+}

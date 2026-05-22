@@ -60,7 +60,7 @@ import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
-import { Terminal } from './Terminal/Terminal';
+import { BusolaTerminal } from './BusolaTerminal/BusolaTerminal';
 
 export default function App() {
   const theme = useAtomValue(themeAtom);
@@ -233,7 +233,7 @@ export default function App() {
               <Settings />
             </ContentWrapper>
           </div>
-          {showTerminal && <Terminal />}
+          {showTerminal && <BusolaTerminal />}
         </div>
       </SplitterElement>
       {showCompanion.show && !showCompanion.useJoule ? (
