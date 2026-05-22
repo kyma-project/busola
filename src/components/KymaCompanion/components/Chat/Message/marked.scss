@@ -1,30 +1,13 @@
 .markdown {
-  /* Theming */
-  .light {
-    --panel-background: var(--sapList_HeaderBackground);
-    --panel-text: var(--sapTextColor);
-    --formatted-text: var(--sapTextColor);
-    --link: var(--sapLinkColor);
-    --border: var(--sapField_BorderColor);
-    --code: color-mix(in srgb, var(--sapField_Background) 80%, transparent);
-    --table: var(--code);
-    --table-header: color-mix(
-      in srgb,
-      var(--sapList_HeaderBackground) 20%,
-      transparent
-    );
-  }
-
-  .dark {
-    --panel-background: var(--sapShellColor);
-    --panel-text: var(--sapContent_LabelColor);
-    --formatted-text: var(--sapTextColor);
-    --link: var(--sapLinkColor);
-    --border: var(--sapField_BorderColor);
-    --code: color-mix(in srgb, var(--sapShellColor) 30%, transparent);
-    --table: var(--code);
-    --table-header: var(--sapShellColor);
-  }
+  /* Theming — SAP semantic variables adapt automatically to all supported themes */
+  --panel-background: var(--sapNeutralBackground);
+  --panel-text: var(--sapTextColor);
+  --formatted-text: var(--sapTextColor);
+  --link: var(--sapLinkColor);
+  --border: var(--sapNeutralBorderColor);
+  --code: color-mix(in srgb, var(--sapBaseColor) 80%, transparent);
+  --table: var(--code);
+  --table-header: color-mix(in srgb, var(--sapNeutralColor) 20%, transparent);
 
   /* Headings */
   h1,

@@ -7,17 +7,18 @@
 
   i {
     font-size: 2.5em;
-    color: var(--sapNegativeColor);
+    color: var(--sapNegativeElementColor);
   }
 
   header {
     padding-top: 30px;
     font-size: 36px;
+    color: var(--sapGroup_TitleTextColor);
   }
 
   p {
     font-size: 18px;
-    color: var(--sapContent_LabelColor);
+    color: var(--sapTextColor);
     text-align: center;
   }
 }
