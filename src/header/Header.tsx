@@ -20,6 +20,7 @@ import {
 } from 'state/clustersAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
+import { showTerminalAtom } from 'state/showTerminalAtom';
 import { configFeaturesNames } from 'state/types';
 
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
@@ -27,7 +28,6 @@ import { ClusterSwitcher } from './ClusterSwitcher/ClusterSwitcher';
 import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
-import { TerminalButton } from './TerminalButton';
 import FeedbackPopover from './Feedback/FeedbackPopover';
 import JouleChat from 'components/KymaCompanion/JouleChat';
 
@@ -63,6 +63,7 @@ export function Header() {
   );
 
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
+  const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
   useEffect(() => {
     setShowCompanion((prevState) => ({
@@ -135,7 +136,6 @@ export function Header() {
         ref={shellbarRef}
       >
         <SnowFeature />
-        <TerminalButton />
         <FeedbackPopover />
         {isKymaCompanionEnabled && isSAPUser && !isOnClustersPage && (
           <>
@@ -158,8 +158,10 @@ export function Header() {
         )}
         {isTerminalEnabled && (
           <ToggleButton
-            icon={'command-line-interfaces'}
+            icon="command-line-interfaces"
             accessibleName={t('terminal.name')}
+            pressed={showTerminal}
+            onClick={() => setShowTerminal((prev) => !prev)}
           />
         )}
         <ShellBarItem

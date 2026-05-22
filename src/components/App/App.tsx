@@ -37,6 +37,7 @@ import {
   SplitterLayout,
 } from '@ui5/webcomponents-react';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
+import { showTerminalAtom } from 'state/showTerminalAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
 import { Settings } from 'components/Settings/Settings';
 import { Header } from 'header/Header';
@@ -59,6 +60,7 @@ import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
+import { Terminal } from './Terminal/Terminal';
 
 export default function App() {
   const theme = useAtomValue(themeAtom);
@@ -104,6 +106,7 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
+  const showTerminal = useAtomValue(showTerminalAtom);
 
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();
@@ -230,6 +233,7 @@ export default function App() {
               <Settings />
             </ContentWrapper>
           </div>
+          {showTerminal && <Terminal />}
         </div>
       </SplitterElement>
       {showCompanion.show && !showCompanion.useJoule ? (
