@@ -37,7 +37,6 @@ export function StorageClassDetails(props: StorageClassDetailsProps) {
     return (
       <UI5Card
         keyComponent={'storageclass-configuration'}
-        key="storageclass-configuration"
         title={t('storage-classes.headers.configuration')}
         accessibleName={t('common.accessible-name.configuration')}
       >
