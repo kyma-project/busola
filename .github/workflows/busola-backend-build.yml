@@ -26,15 +26,8 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
-  select-environment:
-    runs-on: ubuntu-latest
-    environment: restricted
-    #uncomment after gating is allowed - environment: ${{ github.event.pull_request.author_association != 'COLLABORATOR' && github.event.pull_request.author_association != 'OWNER' && 'restricted' || 'internal' }}
-    steps:
-      - name: Approved
-        run: echo "Build approved, environment selected"
   build-backend-image:
-    needs: select-environment
+    needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     if: github.event.pull_request.draft == false
     with:
