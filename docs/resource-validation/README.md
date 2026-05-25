@@ -6,13 +6,13 @@ With Busola's resource validation feature, you can validate resources, for examp
 
 ## Select policies
 
-You can choose which policies should be validated in the user settings or set a [feature flag](../features.md).
+You can choose which policies should be validated in the user settings or set a [feature flag](../user/technical-reference/feature-flags.md).
 
 In the user settings, go to **Clusters > Resource Validation**. Click on **Customize** in the **Enabled Policies** section.
 
 <img src="./assets/customize-policy-preferences.png" alt="Settings menu when choosing which policies to enable" width="40%" style="border: 1px solid #D2D5D9">
 
-In the [feature flag](../features.md) config, set the following specifications:
+In the [feature flag](../user/technical-reference/feature-flags.md) config, set the following specifications:
 
 ```yaml
 RESOURCE_VALIDATION:
@@ -58,6 +58,6 @@ To see the full specifications, check the [example rule-set](../../examples/reso
 
 ## Scan the cluster
 
-With the **CLUSTER_VALIDATION** [feature flag](../features.md) enabled, you can use these rules to scan existing resources in your cluster.
+With the **CLUSTER_VALIDATION** [feature flag](../user/technical-reference/feature-flags.md) enabled, you can use these rules to scan existing resources in your cluster.
 
 The Cluster Validation panel is located on the Cluster Overview page.

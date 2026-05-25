@@ -15,18 +15,20 @@ describe('UI5Card', () => {
     expect(getByTestId('child')).toBeInTheDocument();
   });
 
-  it('uses the native CardHeader for a plain string title with no actions', () => {
+  it('uses the toolbar-style header for a plain string title (no native CardHeader path)', () => {
     const { container } = render(<UI5Card title="Simple">children</UI5Card>);
 
-    expect(container.querySelector('.bsl-card-toolbar')).toBeNull();
-    expect(container.querySelector('ui5-card-header')).not.toBeNull();
+    expect(container.querySelector('.bsl-card-toolbar')).not.toBeNull();
+    expect(container.querySelector('ui5-card-header')).toBeNull();
   });
 
-  it('renders the title text on the native CardHeader', () => {
+  it('wraps a string title in <Title level="H6"> inside the toolbar', () => {
     const { container } = render(<UI5Card title="Hello">x</UI5Card>);
 
-    const header = container.querySelector('ui5-card-header');
-    expect(header?.getAttribute('title-text')).toBe('Hello');
+    const title = container.querySelector('ui5-title');
+    expect(title).not.toBeNull();
+    expect(title?.getAttribute('level')).toBe('H6');
+    expect(title?.textContent).toBe('Hello');
   });
 
   it('uses the toolbar-style header when modeActions is provided alongside headerActions', () => {

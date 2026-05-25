@@ -1,14 +1,34 @@
 /* global Buffer, require */
+import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
 import { pipeline } from 'stream/promises';
 import { tokenAuthAgent } from '../utils/https-agent.js';
+import {
+  getK8sCredentialFromHeaders,
+  hashCredential,
+  requireCredential,
+} from '../utils/rate-limit-key.js';
 import { buildK8sRequestPath } from './path-utils.js';
 
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const escape = require('lodash.escape');
+
+export const requireK8sCredential = requireCredential(
+  getK8sCredentialFromHeaders,
+);
+
+export const k8sRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 2000,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) =>
+    hashCredential(getK8sCredentialFromHeaders(req), 'k8s'),
+});
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
@@ -36,8 +56,8 @@ export async function handleK8sRequests(req, res) {
   let headersData;
   try {
     headersData = extractHeadersData(req);
-  } catch (e) {
-    req.log.error('Headers error:' + e.message);
+  } catch (err) {
+    req.log.error({ err }, 'Headers error');
     res.contentType('text/plain; charset=utf-8');
     res.status(400).send('Headers are missing or in a wrong format.');
     return;
@@ -45,8 +65,8 @@ export async function handleK8sRequests(req, res) {
 
   try {
     filters.forEach((filter) => filter(req, headersData));
-  } catch (e) {
-    req.log.error('Filters rejected the request: ' + e.message);
+  } catch (err) {
+    req.log.error({ err }, 'Filters rejected the request');
     res.contentType('text/plain; charset=utf-8');
     res.status(400).send('Request ID: ' + escape(req.id));
     return;

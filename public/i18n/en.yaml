@@ -270,6 +270,7 @@ common:
     retry: Retry
     revert: Revert
     save: Save
+    select-all: Select All
     submit: Submit
     update: Update
     upload: Upload
@@ -988,6 +989,7 @@ modules:
       advanced: Community module advanced settings
       edit: Community modules edit panel
     add-module: Add Community Modules
+    crd-info-message: To use Community Modules, install the ModuleTemplate CustomResourceDefinition (CRD).
     documentation: Documentation
     installed-modules: Community Modules
     messages:
@@ -1031,9 +1033,15 @@ modules:
     title: Community Modules
     update:
       confirmation: Update <0>{{moduleName}}</0>?
-      current-version: 'Current version:'
-      latest-version: 'Latest version:'
+      current-version: Current version
+      delete-old-templates: Delete old module templates
+      latest-version: Latest version
+      module: Module
+      note: Note
       title: Update Module
+      update-all: Update All
+      update-all-confirmation: Choose the modules to update.
+      update-all-title: Update Community Modules
 namespaces:
   create-modal:
     apply-limits: Apply Limits per Container
@@ -1535,6 +1543,8 @@ storage-classes:
     volume-binding-mode: Volume Binding Mode
   name_singular: StorageClass
   title: Storage Classes
+terminal:
+  name: Busola Terminal
 upload-yaml:
   errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
