@@ -28,7 +28,6 @@ import { SkinCreateFn, useCreateResource } from '../useCreateResource';
 import { K8sNameField, KeyValueField } from '../fields';
 import jp from 'jsonpath';
 import { Form, FormItem } from '@ui5/webcomponents-react';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 import { useAtom, useAtomValue } from 'jotai';
 import {
@@ -47,6 +46,7 @@ import { isFormOpenAtom } from 'state/formOpenAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { editor } from 'monaco-editor';
 import { LayoutColumnName } from 'types';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 export type ResourceFormProps = {
   pluralKind?: string; // used for the request path
@@ -89,7 +89,7 @@ export type ResourceFormProps = {
   stickyHeaderHeight?: number | string;
   title?: ReactNode;
   resetLayout?: boolean;
-  formWithoutPanel?: boolean;
+  formWithoutCard?: boolean;
 };
 
 type ResourceFormType = FunctionComponent<ResourceFormProps> & {
@@ -137,10 +137,9 @@ export const ResourceForm: ResourceFormType = (({
   initialMode,
   yamlSearchDisabled,
   yamlHideDisabled,
-  stickyHeaderHeight,
   title,
   resetLayout,
-  formWithoutPanel,
+  formWithoutCard,
 }) => {
   const layoutState = useAtomValue(columnLayoutAtom);
 
@@ -287,7 +286,7 @@ export const ResourceForm: ResourceFormType = (({
       labelSpan="S0 M0 L0 XL0"
       layout="S1 M1 L1 XL1"
     >
-      {(mode === ModeSelector.MODE_FORM || formWithoutPanel) && (
+      {(mode === ModeSelector.MODE_FORM || formWithoutCard) && (
         <FormItem>
           <div className="full-width sap-margin-bottom-tiny">
             <ResourceFormWrapper
@@ -352,7 +351,7 @@ export const ResourceForm: ResourceFormType = (({
 
   return (
     <section className={classnames('resource-form', className)}>
-      {formWithoutPanel ? (
+      {formWithoutCard ? (
         <form
           ref={formElementRef}
           onSubmit={onSubmit || createResource}
@@ -362,13 +361,11 @@ export const ResourceForm: ResourceFormType = (({
           {formContent}
         </form>
       ) : (
-        <UI5Panel
-          key={`edit-panel-${singularName}`}
-          className="resource-form--panel card-shadow sap-margin-y-small"
-          stickyHeader={true}
+        <UI5Card
+          key={`edit-card-${singularName}`}
+          className="resource-form--card card-shadow sap-margin-y-small"
           title={title}
-          accessibleName={`${title} panel`}
-          headerTop={stickyHeaderHeight + 'px'}
+          accessibleName={`${title} card`}
           headerActions={
             <>
               {actions}
@@ -412,7 +409,7 @@ export const ResourceForm: ResourceFormType = (({
             )}
             {formContent}
           </form>
-        </UI5Panel>
+        </UI5Card>
       )}
       {createPortal(
         <UnsavedMessageBox

@@ -64,8 +64,8 @@ form .resource-form {
   }
 }
 
-.resource-form--panel,
-.resource-form--panel::part(content) {
+.resource-form--card,
+.resource-form--card::part(content) {
   min-height: calc(100vh - 19rem);
   height: 100%;
 }

@@ -307,7 +307,7 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
       layoutNumber="startColumn"
       resetLayout
       afterCreatedCustomMessage={t('kyma-modules.messages.module-added')}
-      formWithoutPanel
+      formWithoutCard
       className="add-modules-form"
     >
       {modulesAddData?.length !== 0 ? (

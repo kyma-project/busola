@@ -404,7 +404,7 @@ export default function CommunityModulesAddModule(props: any) {
           afterCreatedCustomMessage={t(
             'modules.community.messages.module-added',
           )}
-          formWithoutPanel
+          formWithoutCard
           className="add-modules-form"
           onSubmit={handleSubmit}
         >
