@@ -220,19 +220,12 @@ export default function CommunityModulesAddModule(props: any) {
 
   const {
     notInstalledCommunityModuleTemplates,
-    installedCommunityModuleTemplates,
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
   } = useContext(CommunityModuleContext);
 
   const { callback, modulesDuringUpload } = useContext(
     CommunityModulesInstallationContext,
   );
-
-  const installedModuleNames = useMemo(() => {
-    return new Set(
-      (installedCommunityModuleTemplates?.items || []).map(getModuleName),
-    );
-  }, [installedCommunityModuleTemplates]);
 
   const modulesToHide = useMemo(() => {
     return new Set(
@@ -245,25 +238,9 @@ export default function CommunityModulesAddModule(props: any) {
   const allAvailableModuleTemplates = useMemo(() => {
     const combinedItems = (
       notInstalledCommunityModuleTemplates?.items || []
-    ).filter((module) => {
-      if (modulesToHide.has(getModuleName(module))) return false;
-      // For prefetched templates, hide if the same module is already installed.
-      // If the template has no source annotation we cannot
-      // confirm the origin, so we treat it as a different module and show it.
-      const isPrefetched = !module.metadata.namespace;
-      if (isPrefetched) {
-        const source = module.metadata?.annotations?.source;
-        if (!source) return true;
-        return !installedModuleNames.has(getModuleName(module));
-      }
-      return true;
-    });
+    ).filter((module) => !modulesToHide.has(getModuleName(module)));
     return { items: combinedItems };
-  }, [
-    notInstalledCommunityModuleTemplates,
-    modulesToHide,
-    installedModuleNames,
-  ]);
+  }, [notInstalledCommunityModuleTemplates, modulesToHide]);
 
   const availableCommunityModules = useMemo(() => {
     if (!notInstalledCommunityModulesLoading) {
