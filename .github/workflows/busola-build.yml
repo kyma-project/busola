@@ -42,16 +42,11 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
-  select-environment:
-    runs-on: ubuntu-latest
-    environment: restricted
-    #uncomment after gating is allowed - environment: ${{ github.event.pull_request.author_association != 'COLLABORATOR' && github.event.pull_request.author_association != 'OWNER' && 'restricted' || 'internal' }}
-    steps:
-      - name: Approved
-        run: echo "Build approved, environment selected"
+  approve-run:
+    uses: ./.github/workflow/approval-run.yaml
   build-busola-image:
     name: Build Image
-    needs: select-environment
+    needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
     if: github.event.pull_request.draft == false
     with:
@@ -63,7 +58,7 @@ jobs:
     name: Build Fips Image
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
     if: github.event.pull_request.draft == false
-    needs: [select-environment, build-busola-image]
+    needs: [approve-run, build-busola-image]
     with:
       name: fips-busola
       dockerfile: Dockerfile.fips
