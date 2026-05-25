@@ -5,7 +5,7 @@ import {
   ResourceDetails,
   ResourceDetailsProps,
 } from 'shared/components/ResourceDetails/ResourceDetails';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
@@ -35,8 +35,7 @@ export function StorageClassDetails(props: StorageClassDetailsProps) {
     const parameters = storageclass?.parameters || [];
 
     return (
-      <UI5Panel
-        fixed
+      <UI5Card
         keyComponent={'storageclass-configuration'}
         key="storageclass-configuration"
         title={t('storage-classes.headers.configuration')}
@@ -58,8 +57,7 @@ export function StorageClassDetails(props: StorageClassDetailsProps) {
           name={t('storage-classes.headers.allow-volume-expansion')}
           value={storageclass.allowVolumeExpansion || EMPTY_TEXT_PLACEHOLDER}
         />
-        <UI5Panel
-          fixed
+        <UI5Card
           keyComponent={'storageclass-parameters'}
           title={t('storage-classes.headers.parameters')}
           accessibleName={t('storage-classes.accessible-name.parameters')}
@@ -77,8 +75,8 @@ export function StorageClassDetails(props: StorageClassDetailsProps) {
           ) : (
             <Text>{t('common.messages.no-entries-found')}</Text>
           )}
-        </UI5Panel>
-      </UI5Panel>
+        </UI5Card>
+      </UI5Card>
     );
   };
 
