@@ -12,8 +12,8 @@ import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
 import { ResourceDescription } from 'resources/ServiceAccounts';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 const ServiceAccountSecrets = (serviceAccount: Record<string, any>) => {
   const namespace = serviceAccount.metadata.namespace;
@@ -88,8 +88,7 @@ export default function ServiceAccountDetails(
   );
 
   const Configuration = (value: { automountServiceAccountToken: boolean }) => (
-    <UI5Panel
-      fixed
+    <UI5Card
       keyComponent={'serviceaccount-configuration'}
       key="serviceaccount-configuration"
       title={t('common.headers.configuration')}
@@ -103,7 +102,7 @@ export default function ServiceAccountDetails(
           />
         }
       />
-    </UI5Panel>
+    </UI5Card>
   );
   const headerActions = [
     <Button
