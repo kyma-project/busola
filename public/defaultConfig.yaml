@@ -19,7 +19,7 @@ config:
         kyma-project-io:
           default: https://kyma-project.io
         help-sap-com:
-          default: https://help.sap.com/docs/btp/sap-business-technology-platform/btp-basic-platform-concepts?locale=en-US&profile=20054071
+          default: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-environment
     KUBECONFIG_ID:
       isEnabled: true
       config:

@@ -64,7 +64,7 @@ context('Accessibility test Pizza Orders', () => {
       .contains('Namespaces')
       .click();
 
-    cy.wait(1000);
+    cy.wait(2000);
 
     cy.typeInSearch('pizzas');
 

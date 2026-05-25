@@ -3,7 +3,7 @@ name: Accessibility Tests
 on:
   schedule:
     - cron: '0 6 * * 1'
-  pull_request_target:
+  pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/accessibility-tests.yml'
@@ -49,7 +49,7 @@ jobs:
         env:
           ACC_AMP_TOKEN: ${{ secrets.ACC_AMP_TOKEN }}
         run: |
-          IS_PR=$([ "${{ github.event_name }}" == 'pull_request' ] || [ "${{ github.event_name }}" == 'pull_request_target' ] && echo true || echo false)
+          IS_PR=$([ "${{ github.event_name }}" == 'pull_request' ] && echo true || echo false)
           k3d kubeconfig get kyma > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3001          
           cd tests/integration
