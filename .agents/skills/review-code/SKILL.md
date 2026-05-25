@@ -97,3 +97,4 @@ Verdicts:
 - Do not repeat generic code-review advice (e.g. "add error handling") unless the issue explicitly requires it.
 - Keep the review actionable: every gap should indicate what specifically needs to change.
 - If the issue body is empty or the issue cannot be fetched, say so clearly and fall back to a plain diff review with a caveat.
+- Do not review commits coming from main or other branches that are not part of the current branch. Focus only on the changes introduced by the current branch.
