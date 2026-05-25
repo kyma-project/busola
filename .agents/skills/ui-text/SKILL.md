@@ -11,6 +11,7 @@ Ensure all user-visible text in `public/i18n/en.yaml` complies with the
 ## Mode Detection
 
 Check the argument passed when the skill was invoked:
+
 - No argument or empty string → **Cleanup Mode** (analyze entire file)
 - Argument is `review` → **Review Mode** (analyze only changed keys vs `main`)
 
@@ -18,15 +19,15 @@ Check the argument passed when the skill was invoked:
 
 Determine a key's text type from its YAML path segments (split the full dotted key on `.`):
 
-| If any path segment equals | Text type |
-|---------------------------|-----------|
-| `buttons` | button |
-| `labels` or `statuses` | label |
-| `headings` | heading |
-| `tooltips` | tooltip |
-| `messages` | message |
-| `placeholders` | placeholder |
-| None of the above | message (default) |
+| If any path segment equals | Text type         |
+| -------------------------- | ----------------- |
+| `buttons`                  | button            |
+| `labels` or `statuses`     | label             |
+| `headings`                 | heading           |
+| `tooltips`                 | tooltip           |
+| `messages`                 | message           |
+| `placeholders`             | placeholder       |
+| None of the above          | message (default) |
 
 **Special case:** If the final key segment itself contains the substring `tooltip`
 (e.g. `cpu-limits-tooltip`), classify as `tooltip`.
@@ -45,10 +46,10 @@ Function, Subscription, EventingBackend, Kyma, SAP.
 
 **R1 — Capitalization:**
 
-| Text type | Rule |
-|-----------|------|
-| `label`, `heading` | Title Case — capitalize all words except: articles (a, an, the), short prepositions (at, by, for, in, of, on, to, up), and conjunctions (and, but, or, nor). Always capitalize the first word regardless of type. |
-| `button`, `message`, `tooltip`, `placeholder` | Sentence case — capitalize only the first word and proper nouns (see Kyma/Kubernetes list above). |
+| Text type                                     | Rule                                                                                                                                                                                                              |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`, `heading`                            | Title Case — capitalize all words except: articles (a, an, the), short prepositions (at, by, for, in, of, on, to, up), and conjunctions (and, but, or, nor). Always capitalize the first word regardless of type. |
+| `button`, `message`, `tooltip`, `placeholder` | Sentence case — capitalize only the first word and proper nouns (see Kyma/Kubernetes list above).                                                                                                                 |
 
 Skip values that consist entirely of interpolation variables (e.g. `{{count}}`).
 
@@ -65,6 +66,7 @@ variable) must end with `.`.
 Sentence fragments and very short values (fewer than 5 words) — skip.
 
 Examples:
+
 - `"The resource was deleted successfully"` → 5+ words, has verb → add period: `"The resource was deleted successfully."`
 - `"Failed to load resources"` → fragment (no explicit subject) → skip
 - `"No entries found"` → only 3 words → skip
@@ -72,7 +74,7 @@ Examples:
 
 **R4 — No ampersand:**
 
-Any text type: replace ` & ` with ` and `.
+Any text type: replace `&` with `and`.
 
 **R5 — No generic confirmation buttons:**
 
@@ -122,6 +124,7 @@ Read `public/i18n/en.yaml` in full.
 **Step 2 — Walk and classify all keys**
 
 Walk every leaf string value. For each value:
+
 1. Derive the full dotted key path.
 2. Classify text type using the Key Classification table.
 3. Apply R1–R5.
@@ -154,11 +157,13 @@ Show all proposed changes grouped by rule:
 ```
 
 Then ask:
+
 > "Apply these N mechanical changes to `public/i18n/en.yaml`? (yes/no)"
 
 **Step 4 — Apply if approved**
 
 If yes: edit `public/i18n/en.yaml` applying every proposed change **except**:
+
 - R5 violations (Yes/No buttons) — never auto-fix; they are informational only
 - R2 trailing-colon flags — never auto-fix; they are informational only
 
@@ -180,26 +185,32 @@ Generated: YYYY-MM-DD
 Total suggestions: N
 
 ## E1 — Error messages missing context (N items)
+
 | Key | Current value | Suggestion |
-|-----|--------------|------------|
-| ... | ...          | ...        |
+| --- | ------------- | ---------- |
+| ... | ...           | ...        |
 
 ## E2 — Tooltips too long (N items)
+
 [same table format]
 
 ## E3 — Passive voice (N items)
+
 [same table format]
 
 ## E4 — User-blaming language (N items)
+
 [same table format]
 
 ## E5 — Placeholder duplicates label (N items)
+
 [same table format]
 ```
 
 **Step 7 — Report**
 
 Output:
+
 > "Layer 1: N changes applied to `public/i18n/en.yaml`.
 > Layer 2: M editorial suggestions written to `docs/ui-text-editorial-suggestions.md`. Review and apply manually."
 
@@ -212,16 +223,19 @@ Output:
 Run: `git diff main -- public/i18n/en.yaml`
 
 Parse lines starting with `+` (excluding `+++`). To reconstruct the full dotted key path:
+
 1. Read the full `public/i18n/en.yaml` file.
 2. For each `+` line in the diff, match the changed value against the file to identify its exact key path.
 3. If ambiguous (same value appears under multiple keys), use surrounding diff context lines (the indented YAML structure) to narrow down the parent path.
 
 Example: a diff chunk like
+
 ```
  clusters:
    buttons:
 +    test-key: New Value
 ```
+
 maps to key path `clusters.buttons.test-key` with value `New Value`.
 
 If no changed lines found: output "No i18n changes found in this branch." and stop.
@@ -236,14 +250,16 @@ Apply Layer 1 rules (R1–R5) and Layer 2 rules (E1–E5) to changed keys only.
 ## UI Text Review
 
 ### Layer 1 — Mechanical violations (N)
+
 | Key | Current value | Rule | Suggested fix |
-|-----|--------------|------|---------------|
-| ... | ...          | R1   | ...           |
+| --- | ------------- | ---- | ------------- |
+| ... | ...           | R1   | ...           |
 
 ### Layer 2 — Editorial suggestions (M)
+
 | Key | Current value | Rule | Suggestion |
-|-----|--------------|------|------------|
-| ... | ...          | E1   | ...        |
+| --- | ------------- | ---- | ---------- |
+| ... | ...           | E1   | ...        |
 ```
 
 If no violations at all: output "No violations found." and stop.
@@ -252,6 +268,7 @@ If no violations at all: output "No violations found." and stop.
 
 If there are Layer 1 violations, propose edits to `public/i18n/en.yaml` for those
 keys only. Show as a diff, then ask:
+
 > "Apply these N Layer 1 fixes to `public/i18n/en.yaml`? (yes/no)"
 
 Apply if approved. **Layer 2 items are informational — never propose applying them.**
