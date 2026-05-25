@@ -3,9 +3,24 @@
     height: 35vh;
     width: 100%;
 
-    .terminal-content {
-      padding: 1rem;
+    &::part(root) {
+      display: flex;
+      flex-direction: column;
       height: 100%;
+    }
+
+    &::part(content) {
+      display: flex;
+      height: calc(100% - 4rem);
+    }
+
+    .terminal-content {
+      flex: 1;
+      padding: 1rem;
+
+      .xterm {
+        height: 100%;
+      }
     }
   }
 
