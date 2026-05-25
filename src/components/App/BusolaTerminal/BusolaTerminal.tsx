@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { showTerminalAtom } from 'state/showTerminalAtom';
-import { useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import './BusolaTerminal.scss';
 import '@xterm/xterm/css/xterm.css';
 
 export function BusolaTerminal() {
   const { t } = useTranslation();
   const termDOM = useRef<HTMLDivElement>(null);
-  const setShowTerminal = useSetAtom(showTerminalAtom);
+  const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
   useEffect(() => {
     if (!termDOM?.current) return;
@@ -47,14 +47,33 @@ export function BusolaTerminal() {
             <div>
               <Button
                 design="Transparent"
-                icon="full-screen"
-                onClick={() => {}}
+                icon={
+                  showTerminal.isFullscreen ? 'exit-full-screen' : 'full-screen'
+                }
+                onClick={() =>
+                  setShowTerminal((prev) => ({
+                    ...prev,
+                    isFullscreen: !prev.isFullscreen,
+                  }))
+                }
+              />
+              <Button
+                design="Transparent"
+                icon={showTerminal.isDocked ? 'pushpin-off' : 'pushpin-on'}
+                onClick={() =>
+                  setShowTerminal((prev) => ({
+                    ...prev,
+                    isDocked: !prev.isDocked,
+                  }))
+                }
               />
               <Button
                 design="Transparent"
                 icon="decline"
                 tooltip={t('common.buttons.close')}
-                onClick={() => setShowTerminal(false)}
+                onClick={() =>
+                  setShowTerminal((prev) => ({ ...prev, isOpen: false }))
+                }
               />
             </div>
           </div>

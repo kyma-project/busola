@@ -160,8 +160,10 @@ export function Header() {
           <ToggleButton
             icon="command-line-interfaces"
             accessibleName={t('terminal.name')}
-            pressed={showTerminal}
-            onClick={() => setShowTerminal((prev) => !prev)}
+            pressed={showTerminal.isOpen}
+            onClick={() =>
+              setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }))
+            }
           />
         )}
         <ShellBarItem

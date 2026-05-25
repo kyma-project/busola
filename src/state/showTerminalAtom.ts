@@ -1,4 +1,14 @@
 import { atom } from 'jotai';
 
-export const showTerminalAtom = atom<boolean>(false);
+export type TerminalState = {
+  isDocked: boolean;
+  isFullscreen: boolean;
+  isOpen: boolean;
+};
+
+export const showTerminalAtom = atom<TerminalState>({
+  isDocked: true,
+  isFullscreen: false,
+  isOpen: false,
+});
 showTerminalAtom.debugLabel = 'showTerminalAtom';

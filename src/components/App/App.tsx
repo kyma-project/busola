@@ -106,7 +106,7 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
-  const showTerminal = useAtomValue(showTerminalAtom);
+  const { isOpen: showTerminal } = useAtomValue(showTerminalAtom);
 
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();
