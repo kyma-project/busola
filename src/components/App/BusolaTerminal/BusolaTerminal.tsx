@@ -3,36 +3,53 @@ import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { showTerminalAtom } from 'state/showTerminalAtom';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
+import { themeAtom } from 'state/settings/themeAtom';
+import { getXtermTheme } from './terminalThemes';
 import './BusolaTerminal.scss';
 import '@xterm/xterm/css/xterm.css';
 
 export function BusolaTerminal() {
   const { t } = useTranslation();
   const termDOM = useRef<HTMLDivElement>(null);
+  const termRef = useRef<Terminal | null>(null);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
+  const theme = useAtomValue(themeAtom);
 
   useEffect(() => {
     if (!termDOM?.current) return;
-    // init
-    const term = new Terminal();
+    const term = new Terminal({ theme: getXtermTheme(theme) });
+    termRef.current = term;
 
-    // config
-    term.open(termDOM?.current);
+    term.open(termDOM.current);
     term.focus();
 
-    // focus
-    window.addEventListener('focus', () => {
-      term.focus();
-    });
+    const onFocus = () => term.focus();
+    window.addEventListener('focus', onFocus);
 
     return () => {
-      term?.dispose?.();
-      window.removeEventListener('focus', () => {
-        term.focus();
-      });
+      term.dispose();
+      termRef.current = null;
+      window.removeEventListener('focus', onFocus);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const applyTheme = () => {
+      if (termRef.current) {
+        termRef.current.options.theme = getXtermTheme(theme);
+      }
+    };
+
+    applyTheme();
+
+    if (theme === 'light_dark') {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      mq.addEventListener('change', applyTheme);
+      return () => mq.removeEventListener('change', applyTheme);
+    }
+  }, [theme]);
 
   const containerClass = [
     'terminal-container',
