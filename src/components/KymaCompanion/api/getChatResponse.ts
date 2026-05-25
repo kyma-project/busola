@@ -37,44 +37,18 @@ type GetChatResponseArgs = {
   t: TFunction;
 };
 
-const fillAuthHeaders = (
-  headers: Record<string, string>,
-  clusterAuth: ClusterAuth,
-) => {
-  if (clusterAuth?.token) {
-    headers['X-K8s-Authorization'] = clusterAuth?.token;
-  } else if (clusterAuth?.clientCertificateData && clusterAuth?.clientKeyData) {
-    headers['X-Client-Certificate-Data'] = clusterAuth?.clientCertificateData;
-    headers['X-Client-Key-Data'] = clusterAuth?.clientKeyData;
-  } else {
-    throw new Error('Missing authentication credentials');
-  }
-};
-const createBasicHeaders = (
-  certificateAuthorityData: string,
-  clusterUrl: string,
-  sessionID: string,
-) => {
-  const headers: Record<string, string> = {
-    Accept: 'text/event-stream',
-    'Content-Type': 'application/json',
-    'X-Cluster-Certificate-Authority-Data': certificateAuthorityData,
-    'X-Cluster-Url': clusterUrl,
-    'Session-Id': sessionID,
-  };
-  return headers;
-};
-
 async function fetchResponse(
   url: RequestInfo | URL,
-  headers: Record<string, string>,
   body: string,
   sessionID: string,
   handleChatResponse: { (chunk: MessageChunk): void },
   handleError: { (errResponse: ErrResponse): void },
 ): Promise<boolean> {
   return fetch(url, {
-    headers,
+    headers: {
+      Accept: 'text/event-stream',
+      'Content-Type': 'application/json',
+    },
     body,
     method: 'POST',
   })
@@ -236,6 +210,12 @@ export default async function getChatResponse({
   certificateAuthorityData,
   t,
 }: GetChatResponseArgs): Promise<void> {
+  if (
+    !clusterAuth?.token &&
+    !(clusterAuth?.clientCertificateData && clusterAuth?.clientKeyData)
+  ) {
+    throw new Error('Missing authentication credentials');
+  }
   const { backendAddress } = getClusterConfig();
   const url = `${backendAddress}/ai-chat/messages`;
   const payload = {
@@ -244,13 +224,13 @@ export default async function getChatResponse({
     resourceType,
     groupVersion,
     resourceName,
-  };
-  const headers = createBasicHeaders(
-    certificateAuthorityData,
     clusterUrl,
-    sessionID,
-  );
-  fillAuthHeaders(headers, clusterAuth);
+    certificateAuthorityData,
+    sessionId: sessionID,
+    clusterToken: clusterAuth?.token,
+    clientCertificateData: clusterAuth?.clientCertificateData,
+    clientKeyData: clusterAuth?.clientKeyData,
+  };
 
   const fetchWrapper = async function (
     handleResponse: handleChatResponseFn,
@@ -258,7 +238,6 @@ export default async function getChatResponse({
   ): Promise<boolean> {
     return fetchResponse(
       url,
-      headers,
       JSON.stringify(payload),
       sessionID,
       handleResponse,

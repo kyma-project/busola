@@ -1,7 +1,10 @@
 /* global  require, process, __dirname */
-import { handleK8sRequests } from './kubernetes/handler';
-import { proxyHandler, proxyRateLimiter } from './proxy.js';
-import rateLimit from 'express-rate-limit';
+import {
+  handleK8sRequests,
+  k8sRateLimiter,
+  requireK8sCredential,
+} from './kubernetes/handler';
+import { proxyHandler } from './proxy.js';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
@@ -59,17 +62,9 @@ const SLOW_REQUEST_THRESHOLD_MS = parseInt(
 );
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
-app.use('/proxy', proxyRateLimiter, proxyHandler);
+app.use('/proxy', proxyHandler);
 
-const kubeconfigRateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 30,
-  message: 'Too many requests, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-app.get('/backend/kubeconfig', kubeconfigRateLimiter, (req, res) => {
+app.get('/backend/kubeconfig', (req, res) => {
   const kubeconfigDir = path.join(
     __dirname,
     process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
@@ -113,14 +108,14 @@ if (isDocker) {
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend/ai-chat', companionRouter);
-  app.use('/backend/modules', communityRouter);
-  app.use('/backend', handleK8sRequests);
+  app.use('/backend/modules', requireK8sCredential, communityRouter);
+  app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
   app.use('/backend/ai-chat', companionRouter);
-  app.use('/backend/modules', communityRouter);
-  app.use('/backend', handleK8sRequests);
+  app.use('/backend/modules', requireK8sCredential, communityRouter);
+  app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
 }
 
 process.on('SIGINT', function () {

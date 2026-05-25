@@ -16,3 +16,9 @@
     text-align: start;
   }
 }
+
+.update-all-modules-dialog {
+  &::part(content) {
+    padding: 0 !important;
+  }
+}
