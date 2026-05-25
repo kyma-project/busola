@@ -34,8 +34,18 @@ export function BusolaTerminal() {
     };
   }, []);
 
+  const containerClass = [
+    'terminal-container',
+    showTerminal.isFullscreen && 'terminal-container--fullscreen',
+    !showTerminal.isDocked &&
+      !showTerminal.isFullscreen &&
+      'terminal-container--popup',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div className="terminal-container">
+    <div className={containerClass}>
       <Card
         className="terminal-card"
         accessibleName={t('terminal.name')}
@@ -79,7 +89,7 @@ export function BusolaTerminal() {
           </div>
         }
       >
-        <div ref={termDOM} className="terminal"></div>
+        <div ref={termDOM} className="terminal-content"></div>
       </Card>
     </div>
   );
