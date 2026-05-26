@@ -9,7 +9,7 @@ import { getXtermTheme } from './terminalThemes';
 import './BusolaTerminal.scss';
 import '@xterm/xterm/css/xterm.css';
 
-export function BusolaTerminal() {
+export function BusolaTerminal({ dockedHeight }: { dockedHeight?: number }) {
   const { t } = useTranslation();
   const termDOM = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);
@@ -64,8 +64,13 @@ export function BusolaTerminal() {
     .filter(Boolean)
     .join(' ');
 
+  const containerStyle =
+    dockedHeight && showTerminal.isDocked && !showTerminal.isFullscreen
+      ? { height: `${dockedHeight}px`, flexShrink: 0 as const }
+      : undefined;
+
   return (
-    <div className={containerClass}>
+    <div className={containerClass} style={containerStyle}>
       <Card
         className="terminal-card"
         accessibleName={t('terminal.name')}

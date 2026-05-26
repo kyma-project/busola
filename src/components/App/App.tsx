@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Navigate,
@@ -33,9 +33,11 @@ import { multipleContextsAtom } from 'state/multipleContextsAtom';
 import {
   Button,
   Dialog,
+  Icon,
   SplitterElement,
   SplitterLayout,
 } from '@ui5/webcomponents-react';
+import horizontalGripIcon from '@ui5/webcomponents-icons/dist/horizontal-grip.js';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { showTerminalAtom } from 'state/showTerminalAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
@@ -106,7 +108,47 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
-  const { isOpen: showTerminal } = useAtomValue(showTerminalAtom);
+  const [showTerminalState, setShowTerminalState] = useAtom(showTerminalAtom);
+  const {
+    isOpen: isTerminalOpen,
+    isDocked: isTerminalDocked,
+    isFullscreen: isTerminalFullscreen,
+    dockedHeight,
+  } = showTerminalState;
+
+  const TERMINAL_MIN_HEIGHT = 100;
+  const effectiveTerminalHeight =
+    dockedHeight || Math.round(window.innerHeight * 0.35);
+
+  const handleSeparatorMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      const startY = e.clientY;
+      const startHeight = effectiveTerminalHeight;
+
+      const onMouseMove = (ev: MouseEvent) => {
+        const delta = startY - ev.clientY;
+        const newHeight = Math.max(
+          TERMINAL_MIN_HEIGHT,
+          Math.min(startHeight + delta, window.innerHeight - 150),
+        );
+        setShowTerminalState((prev) => ({ ...prev, dockedHeight: newHeight }));
+      };
+
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
+      };
+
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'row-resize';
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    },
+    [effectiveTerminalHeight, setShowTerminalState],
+  );
 
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();
@@ -148,92 +190,117 @@ export default function App() {
       >
         <div id="html-wrap">
           <Header />
-          <div id="page-wrap">
-            <Sidebar key={cluster?.name} />
-            {search.get('kubeconfigID') &&
-              manualKubeConfigId.formOpen &&
-              createPortal(
-                <Dialog open={true}>
-                  <ResourceForm.Single
-                    formElementRef={authFormRef}
-                    createResource={updateManualKubeConfigIdState}
-                  >
-                    <AuthForm
-                      resource={authFormState}
-                      setResource={setAuthFormState}
-                      checkRequiredInputs={checkRequiredInputs}
-                    />
-                    <div className="auth-form-dialog-footer">
-                      <Button disabled={hasInvalidInputs} type="Submit">
-                        {t('clusters.add.title')}
-                      </Button>
-                    </div>
-                  </ResourceForm.Single>
-                </Dialog>,
-                document.body,
-              )}
-            {search.get('kubeconfigID') &&
-              !!contextsState?.contexts?.length &&
-              kubeconfigIdState === 'loading' &&
-              createPortal(
-                <ContextChooserMessage
-                  contextState={contextsState}
-                  setValue={(value: string) =>
-                    setContextsState((state) => ({
-                      ...state,
-                      chosenContext: value,
-                    }))
-                  }
-                  onCancel={() => {
-                    setContextsState({} as any);
-                    removePreviousPath();
-                    navigate('/clusters');
-                  }}
-                />,
-                document.body,
-              )}
-            <ContentWrapper>
-              <Routes key={cluster?.name}>
-                {kubeconfigIdState !== 'loading' &&
-                  !search.get('kubeconfigID') && (
-                    <Route
-                      path="*"
-                      element={
-                        <IncorrectPath
-                          to="/clusters"
-                          message={t(
-                            'components.incorrect-path.message.clusters',
-                          )}
-                        />
-                      }
-                    />
-                  )}
-                <Route path="clusters" element={<ClusterList />} />
-                <Route
-                  path="kubeconfig"
-                  element={
-                    <Suspense fallback={<Spinner />}>
-                      <KubeconfigList />
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="kubeconfig/:name"
-                  element={<KubeconfigRedirect />}
-                />
-                <Route
-                  path="cluster/:currentClusterName"
-                  element={<Navigate to="overview" />}
-                />
-                <Route path="cluster/:currentClusterName">
-                  <Route path="*" element={<ClusterRoutes />} />
-                </Route>
-                {makeGardenerLoginRoute}
-              </Routes>
-              <Settings />
-            </ContentWrapper>
+          <div id="main-area">
+            <div id="page-wrap">
+              <Sidebar key={cluster?.name} />
+              {search.get('kubeconfigID') &&
+                manualKubeConfigId.formOpen &&
+                createPortal(
+                  <Dialog open={true}>
+                    <ResourceForm.Single
+                      formElementRef={authFormRef}
+                      createResource={updateManualKubeConfigIdState}
+                    >
+                      <AuthForm
+                        resource={authFormState}
+                        setResource={setAuthFormState}
+                        checkRequiredInputs={checkRequiredInputs}
+                      />
+                      <div className="auth-form-dialog-footer">
+                        <Button disabled={hasInvalidInputs} type="Submit">
+                          {t('clusters.add.title')}
+                        </Button>
+                      </div>
+                    </ResourceForm.Single>
+                  </Dialog>,
+                  document.body,
+                )}
+              {search.get('kubeconfigID') &&
+                !!contextsState?.contexts?.length &&
+                kubeconfigIdState === 'loading' &&
+                createPortal(
+                  <ContextChooserMessage
+                    contextState={contextsState}
+                    setValue={(value: string) =>
+                      setContextsState((state) => ({
+                        ...state,
+                        chosenContext: value,
+                      }))
+                    }
+                    onCancel={() => {
+                      setContextsState({} as any);
+                      removePreviousPath();
+                      navigate('/clusters');
+                    }}
+                  />,
+                  document.body,
+                )}
+              <ContentWrapper>
+                <Routes key={cluster?.name}>
+                  {kubeconfigIdState !== 'loading' &&
+                    !search.get('kubeconfigID') && (
+                      <Route
+                        path="*"
+                        element={
+                          <IncorrectPath
+                            to="/clusters"
+                            message={t(
+                              'components.incorrect-path.message.clusters',
+                            )}
+                          />
+                        }
+                      />
+                    )}
+                  <Route path="clusters" element={<ClusterList />} />
+                  <Route
+                    path="kubeconfig"
+                    element={
+                      <Suspense fallback={<Spinner />}>
+                        <KubeconfigList />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path="kubeconfig/:name"
+                    element={<KubeconfigRedirect />}
+                  />
+                  <Route
+                    path="cluster/:currentClusterName"
+                    element={<Navigate to="overview" />}
+                  />
+                  <Route path="cluster/:currentClusterName">
+                    <Route path="*" element={<ClusterRoutes />} />
+                  </Route>
+                  {makeGardenerLoginRoute}
+                </Routes>
+                <Settings />
+              </ContentWrapper>
+            </div>
+            {isTerminalOpen && isTerminalDocked && !isTerminalFullscreen && (
+              <div
+                className="terminal-separator"
+                onMouseDown={handleSeparatorMouseDown}
+              >
+                <span className="terminal-separator__line-before" />
+                <span className="terminal-separator__grip">
+                  <Icon
+                    name={horizontalGripIcon}
+                    className="terminal-separator__grip-icon"
+                  />
+                </span>
+                <span className="terminal-separator__line-after" />
+              </div>
+            )}
+            {isTerminalOpen && (
+              <BusolaTerminal
+                dockedHeight={
+                  isTerminalDocked && !isTerminalFullscreen
+                    ? effectiveTerminalHeight
+                    : undefined
+                }
+              />
+            )}
           </div>
-          {showTerminal && <BusolaTerminal />}
         </div>
       </SplitterElement>
       {showCompanion.show && !showCompanion.useJoule ? (
