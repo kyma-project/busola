@@ -122,7 +122,7 @@ const TokenForm = ({
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.exec-command')}
           input={Inputs.Text}
-          value={exec.command}
+          value={[exec.command, ...(exec.args || [])].join(' ')}
           readOnly
         />
       )}
