@@ -338,9 +338,7 @@ export default function KymaModulesEdit({
 
   const onSuccess = () => {
     notification.notifySuccess({
-      content: t('common.create-form.messages.patch-success', {
-        resourceType: t('kyma-modules.kyma'),
-      }),
+      content: t('kyma-modules.updated'),
     });
 
     setIsResourceEdited({
