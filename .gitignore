@@ -62,3 +62,4 @@ extensions/downloads/*
 bin
 
 .eslintcache
+**/settings.local.json
