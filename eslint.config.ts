@@ -70,12 +70,5 @@ export default defineConfig(
         'prefer-const': 'error',
       },
     },
-
-    {
-      files: ['.agents/skills/**/*.{js,mjs,cjs,ts,mts,cts}'],
-      languageOptions: {
-        globals: globals.node,
-      },
-    },
   ],
 );

@@ -11,7 +11,7 @@ Agent skills for this repository are maintained in `.agents/skills/`. Each skill
 Available skills:
 
 - `.agents/skills/create-compliant-pr/` — Create a PR that passes all busola CI checks
-- `.agents/skills/cve-check/` — Triage CVE compliance reports: parses the report and assesses each finding against busola's Dockerfiles to recommend risk-accept or fix per CVE
+- `.agents/skills/cve-check/` — Assess a single CVE against busola's code — identifies the affected Dockerfile and recommends risk-accept or fix
 - `.agents/skills/pr-description/` — Generate a PR description from the project template
 
 > **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), place a markdown file per skill in `.claude/commands/` (e.g. `.claude/commands/create-compliant-pr.md`).
