@@ -23,6 +23,9 @@ export function BusolaTerminal() {
 
     term.open(termDOM.current);
     term.focus();
+    term.write(
+      'Hello from terminal. TODO: Logic and functionality will be implemented in future tasks',
+    );
 
     const onFocus = () => term.focus();
     window.addEventListener('focus', onFocus);
