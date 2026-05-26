@@ -37,7 +37,7 @@ permissions:
 
 jobs:
   approve-run:
-    uses: ./.github/workflow/approval-run.yaml
+    uses: ./.github/workflows/approval-run.yaml
   build-web-image:
     needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
