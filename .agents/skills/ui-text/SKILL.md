@@ -1,12 +1,16 @@
 ---
 name: ui-text
-description: Audit and fix user-visible text in public/i18n/en.yaml against Kyma content guidelines. Use /ui-text for full-file cleanup, /ui-text review for PR review of changed keys.
+description: Audit and fix user-visible text in public/i18n/en.yaml against SAP Fiori and Kyma content guidelines (Fiori takes precedence on conflicts). Use /ui-text for full-file cleanup, /ui-text review for PR review of changed keys.
 ---
 
 # UI Text Quality
 
 Ensure all user-visible text in `public/i18n/en.yaml` complies with the
+[SAP Fiori UI Text Guidelines](https://www.sap.com/design-system/fiori-design-web/v1-145/foundations/writing-and-wording/ux-writing/ui-text-guidelines-for-sap-fiori)
+and the
 [Kyma UI content guidelines](https://github.com/kyma-project/community/blob/main/docs/guidelines/content-guidelines/05-ui-elements.md).
+
+**Where the two guidelines conflict, Fiori takes precedence.**
 
 ## Mode Detection
 
@@ -29,8 +33,12 @@ Determine a key's text type from its YAML path segments (split the full dotted k
 | `placeholders`             | placeholder       |
 | None of the above          | message (default) |
 
-**Special case:** If the final key segment itself contains the substring `tooltip`
-(e.g. `cpu-limits-tooltip`), classify as `tooltip`.
+**Special cases:**
+
+- If the final key segment itself contains the substring `tooltip`
+  (e.g. `cpu-limits-tooltip`), classify as `tooltip`.
+- If the final key segment is exactly `title` or `subtitle`
+  (e.g. `clusters.empty.title`), classify as `heading`.
 
 ## Kyma/Kubernetes Proper Nouns
 
@@ -46,21 +54,26 @@ Function, Subscription, EventingBackend, Kyma, SAP.
 
 **R1 — Capitalization:**
 
-| Text type                                     | Rule                                                                                                                                                                                                              |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`, `heading`                            | Title Case — capitalize all words except: articles (a, an, the), short prepositions (at, by, for, in, of, on, to, up), and conjunctions (and, but, or, nor). Always capitalize the first word regardless of type. |
-| `button`, `message`, `tooltip`, `placeholder` | Sentence case — capitalize only the first word and proper nouns (see Kyma/Kubernetes list above).                                                                                                                 |
+| Text type                               | Rule                                                                                                                                                                                                              |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`, `heading`, `tooltip`, `button` | Title Case — capitalize all words except: articles (a, an, the), short prepositions (at, by, for, in, of, on, to, up), and conjunctions (and, but, or, nor). Always capitalize the first word regardless of type. |
+| `message`, `placeholder`                | Sentence case — capitalize only the first word and proper nouns (see Kyma/Kubernetes list above).                                                                                                                 |
+
+_Note: Fiori classifies both buttons and tooltips as title case, overriding the Kyma guideline (sentence case)._
+
+**Exception:** `tooltip` values that contain more than 2 sentence-ending punctuation marks
+(`.`, `!`, `?`) are multi-sentence descriptive paragraphs — **skip R1 for these** (they are
+already flagged by E2 as too long; the recommended fix is to shorten them, not to title-case them).
 
 Skip values that consist entirely of interpolation variables (e.g. `{{count}}`).
 
 **R2 — No punctuation in labels and buttons:**
 
-`label`, `heading`, `button` values must not end with `.`, `!`, `?`.
-(Trailing `:` is also a smell — flag with suggestion but don't auto-fix.)
+`label`, `heading`, `button`, `tooltip` values must not end with `.`, `!`, `?`.
 
 **R3 — Sentence-ending punctuation:**
 
-`message` and `tooltip` values that are complete sentences (heuristic: 5+ words,
+`message` values that are complete sentences (heuristic: 5+ words,
 contains a verb, does not end with a Kubernetes resource name or an interpolation
 variable) must end with `.`.
 Sentence fragments and very short values (fewer than 5 words) — skip.
@@ -80,6 +93,12 @@ Any text type: replace `&` with `and`.
 
 `button` values that are exactly `Yes` or `No` (case-insensitive) → flag.
 Do not auto-fix; note: "Replace with an action verb (e.g. Delete, Confirm, Cancel)."
+
+**R6 — No "successfully" in messages:**
+
+`message` values containing the word `successfully` (case-insensitive) → remove the word and
+adjust surrounding text to remain grammatical.
+Example: `"Configuration was saved successfully."` → `"Configuration was saved."`
 
 ### Layer 2 — Editorial Rules
 
@@ -113,6 +132,27 @@ Suggest object-focused rewrite: "You entered an invalid name." → "The name is 
 `placeholder` value identical to a sibling `label` key under the same YAML parent
 → flag: "Placeholder duplicates the label. Use a hint or example instead."
 
+**E6 — "Duplicate" as a verb:**
+
+Any value where `duplicate` is used as a verb (e.g. "Duplicate this", "Duplicate resource",
+button labeled "Duplicate") → flag: "Use 'Copy' instead of 'Duplicate' as a verb (Fiori)."
+
+**E7 — Log in / Log out wording:**
+
+Any value containing `log in`, `log on`, `log off`, or `log out` (case-insensitive, including
+`Login`, `Logout`, `Log In`, `Log Out`) → flag:
+"Use 'Sign In' / 'Sign Out' instead of 'Log In' / 'Log Out' (Fiori)."
+
+**E8 — Ellipsis in placeholders:**
+
+`placeholder` values ending with `...` or `…` → flag:
+"Remove trailing ellipsis from placeholder text (Fiori: placeholders should not end with ellipsis)."
+
+**E9 — Plural shorthand (s):**
+
+Any value containing the pattern `\(\s*s\s*\)` (e.g. `item(s)`, `resource(s)`) → flag:
+"Avoid '(s)' shorthand. Use separate singular and plural strings instead."
+
 ---
 
 ## Cleanup Mode
@@ -127,11 +167,16 @@ Walk every leaf string value. For each value:
 
 1. Derive the full dotted key path.
 2. Classify text type using the Key Classification table.
-3. Apply R1–R5.
+3. Apply R1–R6.
 4. Record violations as `{ key, current_value, proposed_value, rule }`.
 
 Skip empty values. Skip values that are only interpolation variables.
 For values containing HTML tags (e.g. `<0>ConfigMap</0>`, `<strong>`): apply capitalization and punctuation rules to visible text only; do not alter tag syntax or attributes.
+
+> **Implementation note:** Use `grep`, `python3`, or `bash` scripts to scan the file
+> programmatically — do not read the file line-by-line in plain text. A 1500-line YAML
+> file analyzed manually in LLM context is slow and error-prone. Example: use `grep -n`
+> to find R4/R6 candidates instantly, and a Python script to walk the YAML tree for R1/R2/R3.
 
 **Step 3 — Present Layer 1 diff**
 
@@ -151,7 +196,7 @@ Show all proposed changes grouped by rule:
 |-----|---------|----------|
 | ... | ...     | ...      |
 
-[R3, R4, R5 sections follow the same pattern]
+[R3, R4, R5, R6 sections follow the same pattern]
 
 **Total: N changes across M rules.**
 ```
@@ -165,13 +210,12 @@ Then ask:
 If yes: edit `public/i18n/en.yaml` applying every proposed change **except**:
 
 - R5 violations (Yes/No buttons) — never auto-fix; they are informational only
-- R2 trailing-colon flags — never auto-fix; they are informational only
 
 If no: skip edits, but continue to Step 5.
 
 **Step 5 — Layer 2 analysis**
 
-Walk every leaf value again. Apply E1–E5. Collect:
+Walk every leaf value again. Apply E1–E9. Collect:
 `{ key, current_value, suggestion_text, rule_code }`
 
 **Step 6 — Write editorial report**
@@ -203,6 +247,22 @@ Total suggestions: N
 [same table format]
 
 ## E5 — Placeholder duplicates label (N items)
+
+[same table format]
+
+## E6 — "Duplicate" as a verb (N items)
+
+[same table format]
+
+## E7 — Log in / Log out wording (N items)
+
+[same table format]
+
+## E8 — Ellipsis in placeholders (N items)
+
+[same table format]
+
+## E9 — Plural shorthand (s) (N items)
 
 [same table format]
 ```
@@ -242,7 +302,7 @@ If no changed lines found: output "No i18n changes found in this branch." and st
 
 **Step 2 — Analyze changed keys**
 
-Apply Layer 1 rules (R1–R5) and Layer 2 rules (E1–E5) to changed keys only.
+Apply Layer 1 rules (R1–R6) and Layer 2 rules (E1–E9) to changed keys only.
 
 **Step 3 — Output Part A: violations summary**
 
