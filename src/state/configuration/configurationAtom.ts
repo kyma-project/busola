@@ -10,10 +10,10 @@ import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
 import { apiGroupAtom } from '../discoverability/apiGroupsAtom';
 import { getFeatures } from './getFeatures';
-
-const apiGroupAtomSync = unwrap(apiGroupAtom, (prev) => prev ?? null);
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { getConfigDir } from 'shared/utils/env';
+
+const apiGroupAtomSync = unwrap(apiGroupAtom, (prev) => prev ?? null);
 
 type Configuration = {
   features?: ConfigFeatureList;

@@ -5,16 +5,16 @@ import jsyaml from 'js-yaml';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { unwrap } from 'jotai/utils';
 import { permissionSetsAtom, PermissionSetState } from './permissionSetsAtom';
-
-const permissionSetsAtomSync = unwrap(
-  permissionSetsAtom,
-  (prev) => prev ?? null,
-);
 import { useUrl } from 'hooks/useUrl';
 import { ConfigMapResponse, getConfigMaps } from './utils/getConfigMaps';
 import { getFetchFn } from './utils/getFetchFn';
 import { JSONSchema4 } from 'json-schema';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
+
+const permissionSetsAtomSync = unwrap(
+  permissionSetsAtom,
+  (prev) => prev ?? null,
+);
 
 export type Rule = {
   uniqueName: string;
