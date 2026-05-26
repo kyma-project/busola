@@ -36,7 +36,10 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
+  approve-run:
+    uses: ./.github/workflow/approval-run.yaml
   build-web-image:
+    needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     if: github.event.pull_request.draft == false
     with:
