@@ -14,12 +14,15 @@ on:
       - '.github/workflows/busola-backend-build.yml'
       - 'backend/**'
       - 'package.json'
+      - 'package-lock.json'
+
   pull_request_target:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
       - '.github/workflows/busola-backend-build.yml'
       - 'backend/**'
       - 'package.json'
+      - 'package-lock.json'
 
 permissions:
   id-token: write # This is required for requesting the JWT token
