@@ -84,7 +84,7 @@ function makeListItem(
     onActivate: () => {
       const pathname = `/cluster/${encodeURIComponent(
         activeClusterName ?? '',
-      )}/${pathSegment}/${name}`;
+      )}/${pathSegment}/${name}?layout=TwoColumnsMidExpanded`;
       navigate(pathname);
     },
     customActionText: customActionText
@@ -172,7 +172,7 @@ function makeSingleNamespaceLinks(
     onActivate: () => {
       const pathname = `/cluster/${encodeURIComponent(
         activeClusterName ?? '',
-      )}/namespaces/${name}`;
+      )}/namespaces/${name}?layout=TwoColumnsMidExpanded`;
       navigate(pathname);
     },
     customActionText: 'command-palette.item-actions.navigate',
