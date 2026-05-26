@@ -18,8 +18,8 @@ export const VersionUpdateTooltip = ({
   return (
     <>
       <FlexBox direction="Column" className="sap-margin-bottom-small">
-        <Text>{`${t('modules.community.update.current-version')} ${currentVersion}`}</Text>
-        <Text>{`${t('modules.community.update.latest-version')} ${latestVersion}`}</Text>
+        <Text>{`${t('modules.community.update.current-version')}: ${currentVersion}`}</Text>
+        <Text>{`${t('modules.community.update.latest-version')}: ${latestVersion}`}</Text>
       </FlexBox>
       <FlexBox
         alignItems="End"

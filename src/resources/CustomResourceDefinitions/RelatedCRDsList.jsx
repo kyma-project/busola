@@ -27,7 +27,7 @@ export function RelatedCRDsList(resource) {
       filter={filterByCategories}
       title={t('custom-resource-definitions.subtitle.related-crds')}
       pagination={{ itemsPerPage: 5 }}
-      hideCreateOption={true}
+      disableCreate={true}
     />
   );
 }

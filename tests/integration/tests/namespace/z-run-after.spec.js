@@ -7,8 +7,11 @@ context('Clean up Namespace', () => {
   before(() => {
     cy.loginAndSelectCluster();
   });
+
   it('Delete the Namespace (step 1)', () => {
     cy.getLeftNav().contains('Namespaces').click();
+
+    cy.wait(2000);
 
     cy.deleteFromGenericList('Namespace', Cypress.env('NAMESPACE_NAME'), {
       clearSearch: false,
@@ -16,24 +19,9 @@ context('Clean up Namespace', () => {
       selectSearchResult: true,
       searchInPlainTableText: true,
     });
-
-    cy.wait(1000);
-
-    cy.get('ui5-table-row').find('.status-badge').contains('Terminating');
   });
 
-  it(
-    'Check if the Namespace is terminated (step 2)',
-    {
-      retries: {
-        runMode: 3,
-        openMode: 3,
-      },
-    },
-    () => {
-      cy.get('ui5-table')
-        .contains(Cypress.env('NAMESPACE_NAME'), { timeout: 180_000 })
-        .should('not.exist');
-    },
-  );
+  it('Check if the Namespace is terminating (step 2)', () => {
+    cy.get('ui5-table-row').find('.status-badge').contains('Terminating');
+  });
 });

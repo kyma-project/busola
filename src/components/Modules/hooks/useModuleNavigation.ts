@@ -60,14 +60,19 @@ export function useModuleNavigation({
   const getScope = useGetScope();
   const fetch = useFetch();
 
-  const hasDetailsLink = (resource: {
-    name: string;
-    resource?: { kind: string };
-  }) => {
-    const kind = resource?.resource?.kind ?? '';
-    const hasExtension = !!findExtension(kind, extensions);
-    const hasCrd = !!findCrd(kind, crds);
-    return hasExtension || hasCrd;
+  const hasDetailsLink = (resource: ModuleEntry) => {
+    const kind =
+      resource?.resource?.kind ??
+      findModuleTemplate(
+        moduleTemplates,
+        resource?.name,
+        resource?.channel ?? '',
+        resource?.version ?? '',
+        resource?.template,
+        resource?.namespace,
+      )?.spec?.data?.kind ??
+      '';
+    return !!findExtension(kind, extensions) || !!findCrd(kind, crds);
   };
 
   const customColumnLayout = (resource: ModuleEntry) => {
@@ -117,9 +122,9 @@ export function useModuleNavigation({
     }
 
     const kind = resource.kind;
-    if (!findExtension(kind, extensions) && !findCrd(kind, crds)) {
-      return;
-    }
+    const hasExtension = !!findExtension(kind, extensions);
+    const moduleCrd = findCrd(kind, crds);
+    if (!hasExtension && !moduleCrd) return;
 
     const { group, version } = extractApiGroupVersion(resource.apiVersion);
 
@@ -151,11 +156,8 @@ export function useModuleNavigation({
           liveResource.metadata?.namespace ?? resource.metadata.namespace;
       }
     } catch {
-      // Fetch failed — fall through with template data
+      // best-effort enrichment — continue with template metadata
     }
-
-    const hasExtension = !!findExtension(kind, extensions);
-    const moduleCrd = findCrd(kind, crds);
 
     const partialPath = createModulePartialPath(
       hasExtension,

@@ -53,6 +53,7 @@ import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
 import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList/CommunityModulesSourcesList';
 import { TFunction } from 'i18next';
+import { useModuleTemplateCRDExists } from '../hooks';
 
 function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
@@ -194,6 +195,8 @@ export default function CommunityModulesAddModule(props: any) {
   const navigate = useNavigate();
   const { isEnabled: isCommunityModulesEnabled } =
     useFeature('COMMUNITY_MODULES');
+  const { exists: moduleTemplateCRDExists, loading: moduleTemplateCRDLoading } =
+    useModuleTemplateCRDExists();
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
 
   const [refreshExtenshionsCount, setRefreshExtenshions] = useAtom(
@@ -419,6 +422,15 @@ export default function CommunityModulesAddModule(props: any) {
                 url={'https://kyma-project.io/#/community-modules/user/README'}
               />
             </MessageStrip>
+            {!moduleTemplateCRDLoading && !moduleTemplateCRDExists && (
+              <MessageStrip
+                design="Information"
+                hideCloseButton
+                className="sap-margin-top-small"
+              >
+                {t('modules.community.crd-info-message')}
+              </MessageStrip>
+            )}
             <CommunityModulesSourcesList />
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()

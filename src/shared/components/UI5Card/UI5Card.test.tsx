@@ -22,12 +22,12 @@ describe('UI5Card', () => {
     expect(container.querySelector('ui5-card-header')).toBeNull();
   });
 
-  it('wraps a string title in <Title level="H4"> inside the toolbar', () => {
+  it('wraps a string title in <Title level="H6"> inside the toolbar', () => {
     const { container } = render(<UI5Card title="Hello">x</UI5Card>);
 
     const title = container.querySelector('ui5-title');
     expect(title).not.toBeNull();
-    expect(title?.getAttribute('level')).toBe('H4');
+    expect(title?.getAttribute('level')).toBe('H6');
     expect(title?.textContent).toBe('Hello');
   });
 
