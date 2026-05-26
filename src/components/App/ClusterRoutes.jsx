@@ -10,14 +10,12 @@ import { useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { unwrap } from 'jotai/utils';
 
-import { WithTitle } from 'shared/hooks/useWindowTitle';
-import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { clusterAtom } from 'state/clusterAtom';
 import { clustersAtom } from 'state/clustersAtom';
 import { languageAtom } from 'state/settings/languageAtom';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { authDataAtom } from 'state/authDataAtom';
-import { otherRoutes } from 'resources/other';
+import { otherRoutes, overviewRoutes } from 'resources/other';
 import { resourceRoutes } from 'resources';
 
 import NamespaceRoutes from './NamespaceRoutes';
@@ -115,18 +113,7 @@ export default function ClusterRoutes() {
           }
         />
       )}
-      {/*  overview route should stay static  */}
-      <Route
-        path="overview"
-        element={
-          <Suspense fallback={<Spinner />}>
-            <WithTitle title={t('clusters.overview.title-current-cluster')}>
-              <ClusterOverview />
-            </WithTitle>
-          </Suspense>
-        }
-      />
-
+      {overviewRoutes}
       {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
       {extensibilityRoutes}
       {resourceRoutes}
