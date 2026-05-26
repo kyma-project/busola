@@ -43,7 +43,7 @@ permissions:
 
 jobs:
   approve-run:
-    uses: ./.github/workflow/approval-run.yaml
+    uses: ./.github/workflows/approval-run.yaml
   build-busola-image:
     name: Build Image
     needs: approve-run

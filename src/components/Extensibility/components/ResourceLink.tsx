@@ -104,6 +104,7 @@ export function ResourceLink({
         } as any,
         { namespace: namespace ?? undefined },
       )}
+      layout={name ? 'TwoColumnsMidExpanded' : false}
     >
       {tExt(value)}
     </Link>
