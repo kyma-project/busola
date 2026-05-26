@@ -90,9 +90,7 @@ export default function CommunityModulesEdit() {
     setCommunityModulesTemplatesToApply,
   ] = useState(new Map<string, ModuleTemplateType>());
 
-  const { moduleTemplatesLoading, communityModuleTemplates } = useContext(
-    ModuleTemplatesContext,
-  );
+  const { moduleTemplatesLoading } = useContext(ModuleTemplatesContext);
   const {
     installedCommunityModules,
     installedCommunityModuleTemplates,
@@ -103,10 +101,7 @@ export default function CommunityModulesEdit() {
   const availableCommunityModules = useMemo(() => {
     if (!moduleTemplatesLoading && !installedCommunityModulesLoading) {
       const allTemplates: ModuleTemplateListType = {
-        items: [
-          ...(installedCommunityModuleTemplates?.items || []),
-          ...(communityModuleTemplates?.items || []),
-        ],
+        items: [...(installedCommunityModuleTemplates?.items || [])],
       };
       return getAvailableCommunityModules(
         allTemplates,
@@ -117,7 +112,6 @@ export default function CommunityModulesEdit() {
       return new Map();
     }
   }, [
-    communityModuleTemplates,
     moduleTemplatesLoading,
     installedCommunityModuleTemplates,
     installedCommunityModulesLoading,
@@ -128,7 +122,8 @@ export default function CommunityModulesEdit() {
     (value?: string) => {
       if (!value) return;
       const [name, namespace] = value.split('|');
-      const items = communityModuleTemplates.items as ModuleTemplateType[];
+      const items =
+        installedCommunityModuleTemplates.items as ModuleTemplateType[];
       const newModuleTemplateToApply = items.find(
         (item) =>
           item.metadata.namespace === namespace && item.metadata.name === name,
@@ -162,11 +157,7 @@ export default function CommunityModulesEdit() {
         return newMap;
       });
     },
-    [
-      communityModuleTemplates,
-      installedCommunityModuleTemplates,
-      setIsResourceEdited,
-    ],
+    [installedCommunityModuleTemplates, setIsResourceEdited],
   );
 
   useEffect(() => {

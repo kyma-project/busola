@@ -177,6 +177,8 @@ export function getInstalledModules(
   const installedVersions = new Map<string, string>();
 
   const installedModuleTemplates = moduleTemplates.items?.filter((module) => {
+    if (!module.metadata.namespace) return false; // prefetched template, not on cluster
+
     const managerKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
     const foundManager = managers[managerKey];
 
@@ -209,7 +211,6 @@ export function getInstalledModules(
 
     return true;
   });
-
   return {
     items: installedModuleTemplates,
     installedVersions,
