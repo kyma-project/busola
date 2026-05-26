@@ -93,7 +93,7 @@ export const Link = ({
     return u.pathname + u.search;
   })();
 
-  function handleOnlick(resetLayout: any, url: any, e: any) {
+  function handleOnClick(resetLayout: any, url: any, e: any) {
     e.preventDefault();
     if (resetLayout) {
       setLayout(getLayoutFromUrl(url));
@@ -108,7 +108,7 @@ export const Link = ({
       className={className}
       data-testid={dataTestId}
       onClick={(e) =>
-        onClick ? onClick(e) : handleOnlick(resetLayout, finalUrl, e)
+        onClick ? onClick(e) : handleOnClick(resetLayout, finalUrl, e)
       }
       href={finalUrl}
       target="_blank"
