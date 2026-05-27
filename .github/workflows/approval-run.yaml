@@ -5,7 +5,7 @@ permissions: {}
 jobs:
   select-environment:
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'pull_request_target' &&  'restricted' || 'no-resitriced' }}
+    environment: ${{ github.event_name == 'pull_request_target' &&  'restricted' || 'no-restricted' }}
     #uncomment after gating is allowed - environment: ${{ github.event.pull_request.author_association != 'COLLABORATOR' && github.event.pull_request.author_association != 'OWNER' && 'restricted' || 'internal' }}
     steps:
       - name: Approved
