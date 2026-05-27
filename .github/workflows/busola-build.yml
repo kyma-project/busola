@@ -17,6 +17,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile'
       - 'nginx/nginx.conf'
@@ -29,6 +30,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile*'
       - 'nginx/**'
@@ -43,12 +45,12 @@ permissions:
 
 jobs:
   approve-run:
-    uses: ./.github/workflow/approval-run.yaml
+    uses: ./.github/workflows/approval-run.yaml
   build-busola-image:
     name: Build Image
     needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
-    if: github.event.pull_request.draft == false
+    if: ${{(needs.approve-run.result == 'success' || needs.approve-run.result == 'skipped') && github.event.pull_request.draft != true}}
     with:
       name: busola
       dockerfile: Dockerfile

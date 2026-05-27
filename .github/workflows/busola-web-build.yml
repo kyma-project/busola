@@ -16,6 +16,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile.web'
       - 'nginx/nginx.conf'
@@ -27,6 +28,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile.web'
       - 'nginx/nginx.conf'
@@ -37,11 +39,12 @@ permissions:
 
 jobs:
   approve-run:
-    uses: ./.github/workflow/approval-run.yaml
+    uses: ./.github/workflows/approval-run.yaml
   build-web-image:
+#    Need to set always because github actions sets `success` as false and won't run the job
+    if: always()
     needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
-    if: github.event.pull_request.draft == false
     with:
       name: busola-web
       dockerfile: Dockerfile.web
@@ -49,6 +52,7 @@ jobs:
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
 
   extract-image-tag:
+    if: always()
     name: Extract image tag
     runs-on: ubuntu-latest
     needs: build-web-image
@@ -68,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-web-image, extract-image-tag]
     # open PR only if the image tag starts with 'v20' ensuring only commit tags sent to dev
-    if: startsWith(needs.extract-image-tag.outputs.image_tag, 'v20')
+    if: always() && startsWith(needs.extract-image-tag.outputs.image_tag, 'v20')
     steps:
       - name: Checkout busola-deploy repo
         uses: actions/checkout@v4
