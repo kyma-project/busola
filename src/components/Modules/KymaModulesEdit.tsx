@@ -338,7 +338,7 @@ export default function KymaModulesEdit({
 
   const onSuccess = () => {
     notification.notifySuccess({
-      content: t('kyma-modules.updated'),
+      content: t('kyma-modules.messages.updated'),
     });
 
     setIsResourceEdited({
