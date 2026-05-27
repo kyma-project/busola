@@ -502,7 +502,7 @@ components:
     messages:
       delete:
         failure: 'Failed to delete the {{resourceType}}: {{error}}'
-        success: '{{resourceType}} deleted'
+        success: '{{resourceType}} set for deletion'
   rich-editor-data-field:
     language-placeholder: Choose language
 config-maps:

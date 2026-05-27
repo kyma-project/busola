@@ -169,7 +169,7 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/deleted/, { timeout: 30000 }).should('be.visible');
+    cy.contains(/set for deletion/, { timeout: 30000 }).should('be.visible');
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -245,7 +245,7 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-toast', /deleted/, { timeout: 30000 }).should(
+        cy.contains('ui5-toast', /set for deletion/, { timeout: 30000 }).should(
           'be.visible',
         );
       }
