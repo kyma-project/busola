@@ -21,24 +21,28 @@ Check the argument passed when the skill was invoked:
 
 ## Key Classification
 
-Determine a key's text type from its YAML path segments (split the full dotted key on `.`):
-
-| If any path segment equals | Text type         |
-| -------------------------- | ----------------- |
-| `buttons`                  | button            |
-| `labels` or `statuses`     | label             |
-| `headings`                 | heading           |
-| `tooltips`                 | tooltip           |
-| `messages`                 | message           |
-| `placeholders`             | placeholder       |
-| None of the above          | message (default) |
+Determine a key's text type from its YAML path segments (split the full dotted key on `.`).
+**Special cases take priority** — check them first before the table:
 
 **Special cases:**
 
 - If the final key segment itself contains the substring `tooltip`
   (e.g. `cpu-limits-tooltip`), classify as `tooltip`.
-- If the final key segment is exactly `title` or `subtitle`
+- If the final key segment is exactly `title`
   (e.g. `clusters.empty.title`), classify as `heading`.
+- If the final key segment is exactly `subtitle`, classify as `message`.
+
+If no special case matches, use the table:
+
+| If any path segment equals | Text type         |
+| -------------------------- | ----------------- |
+| `buttons`                  | button            |
+| `labels` or `statuses`     | label             |
+| `headings` or `headers`    | heading           |
+| `tooltips`                 | tooltip           |
+| `messages`                 | message           |
+| `placeholders`             | placeholder       |
+| None of the above          | message (default) |
 
 ## Kyma/Kubernetes Proper Nouns
 
@@ -47,6 +51,8 @@ Pod, Deployment, StatefulSet, DaemonSet, ReplicaSet, Service, Ingress, ConfigMap
 Secret, Namespace, ClusterRole, ClusterRoleBinding, RoleBinding, ServiceAccount,
 CronJob, Job, PersistentVolumeClaim, PersistentVolume, StorageClass, APIRule,
 Function, Subscription, EventingBackend, Kyma, SAP.
+
+Plurals of protected nouns are also protected (e.g. Pods, Namespaces, Services).
 
 ## Rule Set
 
@@ -65,9 +71,7 @@ _Note: Fiori classifies both buttons and tooltips as title case, overriding the 
 (`.`, `!`, `?`) are multi-sentence descriptive paragraphs — **skip R1 for these** (they are
 already flagged by E2 as too long; the recommended fix is to shorten them, not to title-case them).
 
-Skip values that consist entirely of interpolation variables (e.g. `{{count}}`).
-
-**R2 — No punctuation in labels and buttons:**
+**R2 — No trailing punctuation in labels, headings, buttons, and tooltips:**
 
 `label`, `heading`, `button`, `tooltip` values must not end with `.`, `!`, `?`.
 
@@ -80,7 +84,8 @@ Sentence fragments and very short values (fewer than 5 words) — skip.
 
 Examples:
 
-- `"The resource was deleted successfully"` → 5+ words, has verb → add period: `"The resource was deleted successfully."`
+- `"The resource was deleted"` → 4 words → skip
+- `"The Deployment was not found in this namespace"` → 5+ words, has verb → add period: `"The Deployment was not found in this namespace."`
 - `"Failed to load resources"` → fragment (no explicit subject) → skip
 - `"No entries found"` → only 3 words → skip
 - `"Connecting to {{clusterName}}"` → ends with interpolation variable → skip (no period required)
@@ -94,11 +99,13 @@ Any text type: replace `&` with `and`.
 `button` values that are exactly `Yes` or `No` (case-insensitive) → flag.
 Do not auto-fix; note: "Replace with an action verb (e.g. Delete, Confirm, Cancel)."
 
-**R6 — No "successfully" in messages:**
+**R6 — No "successfully":**
 
-`message` values containing the word `successfully` (case-insensitive) → remove the word and
-adjust surrounding text to remain grammatical.
+Any value (all text types) containing the word `successfully` (case-insensitive) → remove the word and
+adjust surrounding text to remain grammatical. If `successfully` was the first word, capitalize the new
+first word.
 Example: `"Configuration was saved successfully."` → `"Configuration was saved."`
+Example: `"Successfully connected to the cluster."` → `"Connected to the cluster."`
 
 ### Layer 2 — Editorial Rules
 
@@ -134,13 +141,14 @@ Suggest object-focused rewrite: "You entered an invalid name." → "The name is 
 
 **E6 — "Duplicate" as a verb:**
 
-Any value where `duplicate` is used as a verb (e.g. "Duplicate this", "Duplicate resource",
-button labeled "Duplicate") → flag: "Use 'Copy' instead of 'Duplicate' as a verb (Fiori)."
+Any value where `duplicate` is used as a verb → flag: "Use 'Copy' instead of 'Duplicate' as a verb (Fiori)."
+Heuristic: flag if the value is a `button` type, or if `duplicate` appears as the first word of the value (imperative form).
+Do not flag uses as a noun (e.g. "This entry is a duplicate").
 
 **E7 — Log in / Log out wording:**
 
-Any value containing `log in`, `log on`, `log off`, or `log out` (case-insensitive, including
-`Login`, `Logout`, `Log In`, `Log Out`) → flag:
+Any value containing `log in`, `log-in`, `log on`, `log off`, `log out`, `log-out`
+(case-insensitive, including `Login`, `Logout`, `Log In`, `Log Out`) → flag:
 "Use 'Sign In' / 'Sign Out' instead of 'Log In' / 'Log Out' (Fiori)."
 
 **E8 — Ellipsis in placeholders:**
@@ -168,15 +176,20 @@ Walk every leaf string value. For each value:
 1. Derive the full dotted key path.
 2. Classify text type using the Key Classification table.
 3. Apply R1–R6.
-4. Record violations as `{ key, current_value, proposed_value, rule }`.
+4. Record violations as `{ key, current_value, proposed_value, rule }`. For R5 (informational only), omit `proposed_value`.
 
-Skip empty values. Skip values that are only interpolation variables.
+Skip empty values. Skip values that consist entirely of interpolation variables (e.g. `{{count}}`).
+For values that mix static text with interpolation variables (e.g. `CPU used: {{percentage}}`),
+apply all rules to the static text portions only — treat `{{...}}` tokens as opaque placeholders
+that must not be altered or moved.
 For values containing HTML tags (e.g. `<0>ConfigMap</0>`, `<strong>`): apply capitalization and punctuation rules to visible text only; do not alter tag syntax or attributes.
 
 > **Implementation note:** Use `grep`, `python3`, or `bash` scripts to scan the file
 > programmatically — do not read the file line-by-line in plain text. A 1500-line YAML
 > file analyzed manually in LLM context is slow and error-prone. Example: use `grep -n`
 > to find R4/R6 candidates instantly, and a Python script to walk the YAML tree for R1/R2/R3.
+> For YAML block scalars (lines following a `|` or `>` key), collect all continuation lines
+> as part of that key's value before applying rules.
 
 **Step 3 — Present Layer 1 diff**
 
@@ -188,15 +201,22 @@ Show all proposed changes grouped by rule:
 ### R1 — Capitalization (N changes)
 | Key | Current | Proposed |
 |-----|---------|----------|
-| clusters.buttons.connect-cluster | Connect Cluster | Connect cluster |
+| clusters.messages.connection-failed | Error Connecting To Cluster | Error connecting to cluster |
 | ...                               | ...             | ...             |
 
-### R2 — No punctuation in labels (N changes)
+### R2 — No trailing punctuation (N changes)
 | Key | Current | Proposed |
 |-----|---------|----------|
 | ... | ...     | ...      |
 
-[R3, R4, R5, R6 sections follow the same pattern]
+[R3, R4, R6 sections follow the same pattern]
+
+### R5 — Generic confirmation buttons (N flags)
+| Key | Current |
+|-----|---------|
+| ... | Yes     |
+
+_R5 violations have no proposed value — they are informational flags only. Do not include them in the change count._
 
 **Total: N changes across M rules.**
 ```
@@ -280,7 +300,7 @@ Output:
 
 **Step 1 — Get changed keys**
 
-Run: `git diff main -- public/i18n/en.yaml`
+Run: `git diff main...HEAD -- public/i18n/en.yaml`
 
 Parse lines starting with `+` (excluding `+++`). To reconstruct the full dotted key path:
 
@@ -331,4 +351,8 @@ keys only. Show as a diff, then ask:
 
 > "Apply these N Layer 1 fixes to `public/i18n/en.yaml`? (yes/no)"
 
-Apply if approved. **Layer 2 items are informational — never propose applying them.**
+Apply if approved, **except**:
+
+- R5 violations (Yes/No buttons) — never auto-fix; they are informational only
+
+**Layer 2 items are informational — never propose applying them.**
