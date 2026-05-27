@@ -174,7 +174,7 @@ export const StatusBadge = ({
       <ObjectStatus
         aria-label={badgeContent}
         role="status"
-        inverted
+        inverted={type !== 'Positive'}
         state={type}
         className={classes}
         data-testid="no-tooltip"
