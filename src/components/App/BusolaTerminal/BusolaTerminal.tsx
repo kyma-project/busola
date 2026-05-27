@@ -22,18 +22,19 @@ export function BusolaTerminal({ dockedHeight }: { dockedHeight?: number }) {
     termRef.current = term;
 
     term.open(termDOM.current);
-    term.focus();
     term.write(
       'Hello from terminal. TODO: Logic and functionality will be implemented in future tasks',
     );
 
-    const onFocus = () => term.focus();
-    window.addEventListener('focus', onFocus);
+    // input
+    term.onData((data) => {
+      // TODO: Temporary. Implement terminal input handling logic in future tasks.
+      term.write(data);
+    });
 
     return () => {
       term.dispose();
       termRef.current = null;
-      window.removeEventListener('focus', onFocus);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -82,6 +83,7 @@ export function BusolaTerminal({ dockedHeight }: { dockedHeight?: number }) {
             <div>
               <Button
                 design="Transparent"
+                accessibleName="full-screen-terminal"
                 icon={
                   showTerminal.isFullscreen ? 'exit-full-screen' : 'full-screen'
                 }
@@ -105,6 +107,7 @@ export function BusolaTerminal({ dockedHeight }: { dockedHeight?: number }) {
               /> */}
               <Button
                 design="Transparent"
+                accessibleName="close-terminal"
                 icon="decline"
                 tooltip={t('common.buttons.close')}
                 onClick={() =>

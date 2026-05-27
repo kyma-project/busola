@@ -1,4 +1,11 @@
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import {
   Navigate,
@@ -63,6 +70,7 @@ import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
 import { BusolaTerminal } from './BusolaTerminal/BusolaTerminal';
+import { TERMINAL_MIN_HEIGHT } from './BusolaTerminal/terminalThemes';
 
 export default function App() {
   const theme = useAtomValue(themeAtom);
@@ -116,9 +124,10 @@ export default function App() {
     dockedHeight,
   } = showTerminalState;
 
-  const TERMINAL_MIN_HEIGHT = 100;
-  const effectiveTerminalHeight =
-    dockedHeight || Math.round(window.innerHeight * 0.35);
+  const effectiveTerminalHeight = useMemo(
+    () => dockedHeight || Math.round(window.innerHeight * 0.35),
+    [dockedHeight],
+  );
 
   const handleSeparatorMouseDown = useCallback(
     (e: React.MouseEvent) => {

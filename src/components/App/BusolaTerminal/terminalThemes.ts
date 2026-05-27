@@ -47,3 +47,5 @@ export function getXtermTheme(theme: Theme): ITheme {
       return LIGHT_XTERM_THEME;
   }
 }
+
+export const TERMINAL_MIN_HEIGHT = 100;
