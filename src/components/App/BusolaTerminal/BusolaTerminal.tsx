@@ -92,16 +92,17 @@ export function BusolaTerminal({ dockedHeight }: { dockedHeight?: number }) {
                   }))
                 }
               />
-              <Button
+              {/*TODO: Initial changes are ready (docking, undocking). It will be improved (e.g. moving undocked terminal) in the next task. */}
+              {/* <Button
                 design="Transparent"
-                icon={showTerminal.isDocked ? 'pushpin-off' : 'pushpin-on'}
+                icon={showTerminal.isDocked ? 'pushpin-on' : 'pushpin-off'}
                 onClick={() =>
                   setShowTerminal((prev) => ({
                     ...prev,
                     isDocked: !prev.isDocked,
                   }))
                 }
-              />
+              /> */}
               <Button
                 design="Transparent"
                 icon="decline"
