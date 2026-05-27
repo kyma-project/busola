@@ -52,7 +52,7 @@ Secret, Namespace, ClusterRole, ClusterRoleBinding, RoleBinding, ServiceAccount,
 CronJob, Job, PersistentVolumeClaim, PersistentVolume, StorageClass, APIRule,
 Function, Subscription, EventingBackend, Kyma, SAP.
 
-Plurals of protected nouns are also protected (e.g. Pods, Namespaces, Services).
+Plurals of protected nouns are also protected (e.g. Pods, Services).
 
 ## Rule Set
 
