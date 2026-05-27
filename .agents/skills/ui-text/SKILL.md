@@ -6,7 +6,7 @@ description: Audit and fix user-visible text in public/i18n/en.yaml against SAP 
 # UI Text Quality
 
 Ensure all user-visible text in `public/i18n/en.yaml` complies with the
-[SAP Fiori UI Text Guidelines](https://www.sap.com/design-system/fiori-design-web/v1-145/foundations/writing-and-wording/ux-writing/ui-text-guidelines-for-sap-fiori)
+[SAP Fiori UI Text Guidelines](https://www.sap.com/design-system/fiori-design-web/v1-145/foundations/writing-and-wording/ux-writing/ui-text-guidelines-for-sap-fiori) <!-- markdown-link-check-disable-line -->
 and the
 [Kyma UI content guidelines](https://github.com/kyma-project/community/blob/main/docs/guidelines/content-guidelines/05-ui-elements.md).
 
