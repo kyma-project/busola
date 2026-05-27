@@ -931,7 +931,7 @@ kyma-modules:
   messages:
     failure: 'Failed to install the {{resourceType}}: {{error}}'
     module-added: Module added
-    module-uninstall: Module deleted
+    module-uninstall: Module set for deletion
     modules-update-failed: Modules update failed
     modules-updated: Modules updated
     success: '{{resourceType}} installed'
@@ -998,7 +998,7 @@ modules:
       example-format: 'Example format: http://github.com/project/repo/file.yaml'
       install-failure: 'Failed to install the {{resourceType}}: {{error}}'
       module-added: Community Module added
-      module-uninstall: Community Module deleted
+      module-uninstall: Community Module set for deletion
       module-update-started: Module update started
       modules-updated: Community Modules updated
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
