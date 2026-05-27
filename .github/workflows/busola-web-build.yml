@@ -16,6 +16,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile.web'
       - 'nginx/nginx.conf'
@@ -27,6 +28,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile.web'
       - 'nginx/nginx.conf'
@@ -36,9 +38,12 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
+  approve-run:
+    uses: ./.github/workflows/approval-run.yaml
   build-web-image:
+    if: ${{ always() }}
+    needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
-    if: github.event.pull_request.draft == false
     with:
       name: busola-web
       dockerfile: Dockerfile.web

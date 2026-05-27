@@ -1,7 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useSetAtom } from 'jotai';
 import { Text } from '@ui5/webcomponents-react';
 
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
@@ -18,36 +17,22 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Description } from 'shared/components/Description/Description';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 interface NodeDetailsProps {
   nodeName: string;
+  layoutCloseCreateUrl?: string;
 }
 
-export default function NodeDetails({ nodeName }: NodeDetailsProps) {
+export default function NodeDetails({
+  nodeName,
+  layoutCloseCreateUrl,
+}: NodeDetailsProps) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
   const node: any = useMemo(() => data?.node, [data]);
   useWindowTitle(t('nodes.title_details', { nodeName }));
   const { data: resources, loading: loadingMetrics } =
     useResourceByNode(nodeName);
-
-  const setLayoutColumn = useSetAtom(columnLayoutAtom);
-  useEffect(() => {
-    setLayoutColumn({
-      layout: 'OneColumn',
-      startColumn: {
-        resourceType: 'nodes',
-        resourceName: nodeName,
-        rawResourceTypeName: 'Node',
-        apiVersion: 'v1',
-        namespaceId: null,
-      },
-      midColumn: null,
-      endColumn: null,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nodeName]);
 
   if (loading) return <Spinner />;
   if (error) return <Text>{(error as any)?.message || String(error)}</Text>;
@@ -66,7 +51,6 @@ export default function NodeDetails({ nodeName }: NodeDetailsProps) {
         </div>
       ),
     () => (
-      // @ts-expect-error EventsList is untyped JSX - hideInvolvedObjects and isClusterView are optional at runtime
       <EventsList
         key="events-list"
         filter={filterByHost}
@@ -104,6 +88,7 @@ export default function NodeDetails({ nodeName }: NodeDetailsProps) {
         hideLabels
         hideAnnotations
         customColumns={customColumns}
+        layoutCloseCreateUrl={layoutCloseCreateUrl}
         description={
           <Description
             i18nKey={'nodes.description'}
