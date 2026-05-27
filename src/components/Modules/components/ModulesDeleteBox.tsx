@@ -275,6 +275,10 @@ export const ModulesDeleteBox = ({
       if (communityResourcesUrls?.length) {
         await deleteResources(deleteFn, communityResourcesUrls);
       }
+
+      notification.notifySuccess({
+        content: t('modules.community.messages.module-uninstall'),
+      });
     } catch (e: unknown) {
       console.warn('Error while deleting community module', e);
       notification.notifyError({
