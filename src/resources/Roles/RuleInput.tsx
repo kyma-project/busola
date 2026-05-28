@@ -12,7 +12,7 @@ import {
 } from './helpers';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
-import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
+import { groupVersionsAtomSync } from 'state/discoverability/groupVersionsAtom';
 import { getDescription } from 'shared/helpers/schema';
 
 const nonResourceUrls = [
@@ -50,7 +50,7 @@ interface RuleInputProps {
 }
 
 export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
-  const groupVersions = useAtomValue(groupVersionsAtom);
+  const groupVersions = useAtomValue(groupVersionsAtomSync);
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();
 

@@ -9,7 +9,7 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { createResourceQuotaTemplate } from './templates';
 
 interface ResourceQuotaCreateProps {
-  formElementRef: RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement | null>;
   onChange: () => void;
   setCustomValid: (valid: boolean) => void;
   resourceUrl: string;

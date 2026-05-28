@@ -53,11 +53,11 @@ context('Test Services', () => {
     cy.loginAndSelectCluster();
 
     cy.getLeftNav().contains('Namespaces').click();
-
+    cy.wait(1000);
     cy.typeInSearch('services');
 
     cy.clickListLink('services');
-
+    cy.wait(1000);
     cy.getLeftNav().contains('Examples').click();
 
     cy.getLeftNav().contains('Custom Services').click();

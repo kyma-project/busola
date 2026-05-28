@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router';
 import { Crd, LayoutColumnName } from 'types';
 
 type BusolaExtensionCreateProps = {
-  formElementRef: RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement | null>;
   onChange: FormEventHandler<HTMLFormElement>;
   layoutNumber: LayoutColumnName;
 };

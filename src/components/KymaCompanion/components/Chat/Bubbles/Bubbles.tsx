@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { BusyIndicator, Button, FlexBox } from '@ui5/webcomponents-react';
 import './Bubbles.scss';
 

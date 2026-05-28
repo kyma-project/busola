@@ -1,4 +1,5 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { unwrap } from 'jotai/utils';
 import {
   SideNavigation,
   SideNavigationItem,
@@ -21,16 +22,24 @@ import { useUrl } from 'hooks/useUrl';
 import { NamespaceChooser } from 'header/NamespaceChooser/NamespaceChooser';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useRef } from 'react';
+import type { SideNavigationDomRef } from '@ui5/webcomponents-react';
+
+const sidebarNavigationNodesSync = unwrap(
+  sidebarNavigationNodesAtom,
+  (prev) => prev ?? [],
+);
 
 export function SidebarNavigation() {
-  const navigationNodes = useAtomValue(sidebarNavigationNodesAtom);
+  const navigationNodes = useAtomValue(sidebarNavigationNodesSync);
   const isSidebarCondensed = useAtomValue(isSidebarCondensedAtom);
   const namespace = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { navigateSafely } = useFormNavigation();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
-  const sidebarRef = useRef(null);
+  const sidebarRef = useRef<SideNavigationDomRef & { closePicker: () => void }>(
+    null,
+  );
 
   const { clusterUrl, namespaceUrl } = useUrl();
   const { resourceType = '' } =

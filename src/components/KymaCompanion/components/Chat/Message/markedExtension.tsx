@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import CodePanel from 'components/KymaCompanion/components/Chat/CodePanel/CodePanel';
 
 export const UI5Renderer = {

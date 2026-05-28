@@ -28,7 +28,7 @@ import { KymaResourceType, ModuleTemplateListType } from '../support';
 import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { SetStateAction, useAtomValue } from 'jotai';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
 
 type ModulesListDeleteBoxProps = {
@@ -77,10 +77,10 @@ export const ModulesDeleteBox = ({
   const deleteFn = useDelete();
   const singleGet = useSingleGet();
   const post = usePost();
-  const clusterNodes = useAtomValue(allNodesAtom).filter(
+  const clusterNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+  const namespaceNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => node.namespaced,
   );
   const [resourceCounts, setResourceCounts] = useState<Record<

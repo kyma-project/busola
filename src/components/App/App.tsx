@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Navigate,
@@ -80,7 +80,7 @@ export default function App() {
   }>({});
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setNamespace(namespace);
   }, [setNamespace, namespace]);
 

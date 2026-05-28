@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { Text } from '@ui5/webcomponents-react';
 
 interface PodTemplateRowProps {

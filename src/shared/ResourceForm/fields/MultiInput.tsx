@@ -5,6 +5,7 @@ import {
   createRef,
   Dispatch,
   SetStateAction,
+  JSX,
 } from 'react';
 import { Button, FlexBox } from '@ui5/webcomponents-react';
 import classnames from 'classnames';
