@@ -54,7 +54,7 @@ describe('StatusBadge', () => {
       await act(async () => {
         const status = queryByRole('status');
         expect(status).toBeInTheDocument();
-        expect(status).toHaveTextContent('common.statuses.initial');
+        expect(status).toHaveTextContent('Common.Statuses.Initial');
       });
     });
   });
