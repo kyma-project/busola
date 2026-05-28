@@ -125,6 +125,9 @@ export default function App() {
     dockedHeight,
   } = showTerminalState;
 
+  const [terminalMinHeight, setTerminalMinHeight] =
+    useState(TERMINAL_MIN_HEIGHT);
+
   const effectiveTerminalHeight = useMemo(
     () => dockedHeight || Math.round(window.innerHeight * 0.35),
     [dockedHeight],
@@ -139,7 +142,7 @@ export default function App() {
       const onMouseMove = (ev: MouseEvent) => {
         const delta = startY - ev.clientY;
         const newHeight = Math.max(
-          TERMINAL_MIN_HEIGHT,
+          terminalMinHeight,
           Math.min(startHeight + delta, window.innerHeight - 150),
         );
         setShowTerminalState((prev) => ({ ...prev, dockedHeight: newHeight }));
@@ -157,7 +160,7 @@ export default function App() {
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
     },
-    [effectiveTerminalHeight, setShowTerminalState],
+    [effectiveTerminalHeight, setShowTerminalState, terminalMinHeight],
   );
 
   const updateManualKubeConfigIdState = (e: any) => {
@@ -308,6 +311,7 @@ export default function App() {
                     ? effectiveTerminalHeight
                     : undefined
                 }
+                onMinHeightComputed={setTerminalMinHeight}
               />
             )}
           </div>

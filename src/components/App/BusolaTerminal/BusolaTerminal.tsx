@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
+import { FitAddon } from '@xterm/addon-fit';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { showTerminalAtom } from 'state/showTerminalAtom';
 import { useAtom, useAtomValue } from 'jotai';
@@ -9,19 +10,30 @@ import { getXtermTheme } from './terminalThemes';
 import './BusolaTerminal.scss';
 import '@xterm/xterm/css/xterm.css';
 
-export function BusolaTerminal({ dockedHeight }: { dockedHeight?: number }) {
+export function BusolaTerminal({
+  dockedHeight,
+  onMinHeightComputed,
+}: {
+  dockedHeight?: number;
+  onMinHeightComputed?: (minHeight: number) => void;
+}) {
   const { t } = useTranslation();
   const termDOM = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);
+  const fitAddonRef = useRef<FitAddon | null>(null);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const theme = useAtomValue(themeAtom);
 
   useEffect(() => {
     if (!termDOM?.current) return;
     const term = new Terminal({ theme: getXtermTheme(theme) });
+    const fitAddon = new FitAddon();
     termRef.current = term;
+    fitAddonRef.current = fitAddon;
 
+    term.loadAddon(fitAddon);
     term.open(termDOM.current);
+    fitAddon.fit();
     term.write(
       'Hello from terminal. TODO: Logic and functionality will be implemented in future tasks',
     );
@@ -32,9 +44,29 @@ export function BusolaTerminal({ dockedHeight }: { dockedHeight?: number }) {
       term.write(data);
     });
 
+    const observer = new ResizeObserver(() => {
+      fitAddon.fit();
+      if (onMinHeightComputed && termDOM.current) {
+        const xtermRow =
+          termDOM.current.querySelector<HTMLElement>('.xterm-rows > div');
+        const cardHeader = termDOM.current
+          .closest('.terminal-card')
+          ?.querySelector<HTMLElement>('.terminal-card__header')?.offsetHeight;
+        const cellHeight = xtermRow?.offsetHeight ?? 20;
+        const headerHeight = cardHeader ?? 60;
+        const contentPadding = 40; // 1rem top + bottom from padding + rounded up for a better experience.
+        onMinHeightComputed(
+          Math.ceil(headerHeight + contentPadding + cellHeight),
+        );
+      }
+    });
+    observer.observe(termDOM.current);
+
     return () => {
+      observer.disconnect();
       term.dispose();
       termRef.current = null;
+      fitAddonRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
