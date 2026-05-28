@@ -1,8 +1,9 @@
-import { forwardRef, ReactNode, useContext } from 'react';
+import { forwardRef, ReactNode, useContext, useState } from 'react';
 import { Card, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import { NestedContainerContext } from './NestedContainerContext';
+import { HintButton } from '../HintButton/HintButton';
 import './UI5Card.scss';
 
 type UI5CardProps = {
@@ -15,6 +16,7 @@ type UI5CardProps = {
   testid?: string;
   accessibleName?: string;
   role?: string;
+  description?: string;
 };
 
 export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
@@ -29,11 +31,13 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
       testid,
       accessibleName,
       role,
+      description,
     },
     ref,
   ) => {
     const isNested = useContext(NestedContainerContext);
     const shouldHaveMargin = isNested;
+    const [showDescription, setShowDescription] = useState(false);
 
     const toolbarHeader = (
       <Toolbar
@@ -58,6 +62,13 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
             <ToolbarSpacer className="toolbar-spacer" />
             <div className="header-actions">{headerActions}</div>
           </>
+        )}
+        {description && (
+          <HintButton
+            setShowTitleDescription={setShowDescription}
+            showTitleDescription={showDescription}
+            description={description}
+          />
         )}
         {headerActions && !modeActions && (
           <>
