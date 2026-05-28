@@ -68,12 +68,15 @@ Plurals of protected nouns are also protected (e.g. Pods, Services).
 _Note: Fiori classifies both buttons and tooltips as title case, overriding the Kyma guideline (sentence case)._
 
 **Exception:** `tooltip` values that contain more than 2 sentence-ending punctuation marks
-(`.`, `!`, `?`) are multi-sentence descriptive paragraphs — **skip R1 for these** (they are
+(`.` or `?`) are multi-sentence descriptive paragraphs — **skip R1 for these** (they are
 already flagged by E2 as too long; the recommended fix is to shorten them, not to title-case them).
 
-**R2 — No trailing punctuation in labels, headings, buttons, and tooltips:**
+**R2 — Punctuation restrictions in UI elements:**
 
-`label`, `heading`, `button`, `tooltip` values must not end with `.`, `!`, `?`.
+- `label`, `heading`, `button`, `tooltip` values must not end with `.` or `?`.
+- Any value (all text types) must not contain `!`. Exclamation marks are perceived as alarming or
+  offensive (SAP Style Guide). Remove or rephrase.
+  Exception: values inside quoted strings that are part of technical examples (e.g. code snippets) — skip.
 
 **R3 — Sentence-ending punctuation:**
 
@@ -107,6 +110,12 @@ first word.
 Example: `"Configuration was saved successfully."` → `"Configuration was saved."`
 Example: `"Successfully connected to the cluster."` → `"Connected to the cluster."`
 
+**R7 — No semicolons:**
+
+Any value (all text types) containing a semicolon (`;`) used to join sentences or phrases →
+split into two separate sentences. Capitalize the first word of the new second sentence.
+Example: `"File cannot be opened; check network settings."` → `"File cannot be opened. Check network settings."`
+
 ### Layer 2 — Editorial Rules
 
 Layer 2 findings are **never auto-applied**. They are informational only.
@@ -120,7 +129,7 @@ flag: "Consider adding context: what happened, why, and what the user can do."
 **E2 — Tooltip length:**
 
 `tooltip` values containing more than 2 sentence-ending punctuation marks
-(`.`, `!`, `?`) → flag: "Tooltip is too long (>2 sentences). Trim or link to docs."
+(`.` or `?`) → flag: "Tooltip is too long (>2 sentences). Trim or link to docs."
 
 **E3 — Passive voice:**
 
@@ -161,6 +170,13 @@ Any value containing `log in`, `log-in`, `log on`, `log off`, `log out`, `log-ou
 Any value containing the pattern `\(\s*s\s*\)` (e.g. `item(s)`, `resource(s)`) → flag:
 "Avoid '(s)' shorthand. Use separate singular and plural strings instead."
 
+**E10 — Negative formulation:**
+
+`message` values containing `not valid`, `not permitted`, `not allowed`, or `is invalid`
+(case-insensitive) → flag:
+"Consider a positive formulation that focuses on what the user can do (SAP Style Guide).
+Example: 'Enter a future delivery date.' instead of 'The date is not valid.'"
+
 ---
 
 ## Cleanup Mode
@@ -175,7 +191,7 @@ Walk every leaf string value. For each value:
 
 1. Derive the full dotted key path.
 2. Classify text type using the Key Classification table.
-3. Apply R1–R6.
+3. Apply R1–R7 (R2 has two sub-rules; apply both).
 4. Record violations as `{ key, current_value, proposed_value, rule }`. For R5 (informational only), omit `proposed_value`.
 
 Skip empty values. Skip values that consist entirely of interpolation variables (e.g. `{{count}}`).
@@ -204,12 +220,12 @@ Show all proposed changes grouped by rule:
 | clusters.messages.connection-failed | Error Connecting To Cluster | Error connecting to cluster |
 | ...                               | ...             | ...             |
 
-### R2 — No trailing punctuation (N changes)
+### R2 — Punctuation restrictions (N changes)
 | Key | Current | Proposed |
 |-----|---------|----------|
 | ... | ...     | ...      |
 
-[R3, R4, R6 sections follow the same pattern]
+[R3, R4, R6, R7 sections follow the same pattern; R2 exclamation mark violations are listed under R2]
 
 ### R5 — Generic confirmation buttons (N flags)
 | Key | Current |
@@ -235,7 +251,7 @@ If no: skip edits, but continue to Step 5.
 
 **Step 5 — Layer 2 analysis**
 
-Walk every leaf value again. Apply E1–E9. Collect:
+Walk every leaf value again. Apply E1–E10. Collect:
 `{ key, current_value, suggestion_text, rule_code }`
 
 **Step 6 — Write editorial report**
@@ -285,6 +301,10 @@ Total suggestions: N
 ## E9 — Plural shorthand (s) (N items)
 
 [same table format]
+
+## E10 — Negative formulation (N items)
+
+[same table format]
 ```
 
 **Step 7 — Report**
@@ -322,7 +342,7 @@ If no changed lines found: output "No i18n changes found in this branch." and st
 
 **Step 2 — Analyze changed keys**
 
-Apply Layer 1 rules (R1–R6) and Layer 2 rules (E1–E9) to changed keys only.
+Apply Layer 1 rules (R1–R7) and Layer 2 rules (E1–E10) to changed keys only.
 
 **Step 3 — Output Part A: violations summary**
 
