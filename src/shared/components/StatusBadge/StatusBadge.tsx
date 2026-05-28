@@ -68,6 +68,13 @@ const prepareTranslationPath = (
     .replace(/\s/g, '-')}`;
 };
 
+const formatBadgeText = (value: string) => {
+  return value
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space before capital letters
+    .toLowerCase() // Convert to lowercase
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+};
+
 const TYPE_FALLBACK = new Map([
   ['positive', 'Positive'],
   ['critical', 'Critical'],
@@ -166,7 +173,7 @@ export const StatusBadge = ({
         type={type}
         className={classes}
       >
-        {badgeContent}
+        {formatBadgeText(badgeContent)}
       </PopoverBadge>
     );
   } else if (noTooltip) {
@@ -180,13 +187,13 @@ export const StatusBadge = ({
         data-testid="no-tooltip"
         showDefaultIcon={type !== 'Information'}
       >
-        {badgeContent}
+        {formatBadgeText(badgeContent)}
       </ObjectStatus>
     );
   } else {
     return (
       <PopoverBadge tooltipContent={content} type={type} className={classes}>
-        {badgeContent}
+        {formatBadgeText(badgeContent)}
       </PopoverBadge>
     );
   }
