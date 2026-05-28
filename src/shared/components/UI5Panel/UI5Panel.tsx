@@ -8,8 +8,8 @@ import {
 import { Panel, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
-import './UI5Panel.scss';
 import { HintButton } from '../HintButton/HintButton';
+import './UI5Panel.scss';
 
 const NestedPanelContext = createContext(false);
 
