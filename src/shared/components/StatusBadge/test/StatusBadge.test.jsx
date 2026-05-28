@@ -60,7 +60,7 @@ describe('StatusBadge', () => {
   });
 
   it('renders status text with DEFAULT_STATUSES_PATH', async () => {
-    const DEFAULT_STATUSES_PATH = 'common.statuses.initial';
+    const DEFAULT_STATUSES_PATH = 'Common.Statuses.Initial';
     const { queryByRole } = render(<StatusBadge>Initial</StatusBadge>);
     await waitFor(async () => {
       await act(async () => {
@@ -73,7 +73,7 @@ describe('StatusBadge', () => {
 
   it('renders status text with RESOURCE_STATUSES_PATH', async () => {
     const RESOURCE_KIND = 'resource';
-    const RESOURCE_STATUSES_PATH = 'resource.statuses.initial';
+    const RESOURCE_STATUSES_PATH = 'Resource.Statuses.Initial';
     const { queryByRole } = render(
       <StatusBadge resourceKind={RESOURCE_KIND}>Initial</StatusBadge>,
     );
