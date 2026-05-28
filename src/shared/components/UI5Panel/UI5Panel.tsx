@@ -1,9 +1,15 @@
-import { createContext, ReactNode, useContext, useEffect } from 'react';
-import { Panel, Text, Title } from '@ui5/webcomponents-react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { Panel, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
-import { ToolbarSeparator } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSeparator/index.js';
 import './UI5Panel.scss';
+import { HintButton } from '../HintButton/HintButton';
 
 const NestedPanelContext = createContext(false);
 
@@ -43,6 +49,7 @@ export const UI5Panel = ({
   const isNested = useContext(NestedPanelContext);
   // top-level panels have no margin, nested panels have margin
   const shouldHaveMargin = isNested;
+  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     if (headerTop !== '0')
@@ -88,10 +95,11 @@ export const UI5Panel = ({
               title
             )}
             {description && (
-              <>
-                <ToolbarSeparator />
-                <Text>{description}</Text>
-              </>
+              <HintButton
+                setShowTitleDescription={setShowDescription}
+                showTitleDescription={showDescription}
+                description={description}
+              />
             )}
             {headerActions && modeActions && (
               <>
