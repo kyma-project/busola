@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import {
@@ -7,7 +7,7 @@ import {
   match,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
 import { useAtomValue } from 'jotai';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { NavNode } from 'state/types';
 import {
   FetchRequest,
@@ -56,7 +56,7 @@ function getNamespacePart({
 
 // BFS
 async function cycle(
-  store: MutableRefObject<ResourceGraphStore>,
+  store: RefObject<ResourceGraphStore>,
   depth: number,
   config: ResourceGraphConfig,
   context: ResourceGraphContext,
@@ -182,7 +182,7 @@ type useRelatedResourcesProps = {
 };
 
 type useRelatedResourcesReturnValue = {
-  store: MutableRefObject<ResourceGraphStore>;
+  store: RefObject<ResourceGraphStore>;
   startedLoading: boolean;
   startLoading: () => void;
 };
@@ -192,10 +192,10 @@ export function useRelatedResources({
   config,
   events,
 }: useRelatedResourcesProps): useRelatedResourcesReturnValue {
-  const clusterNodes = useAtomValue(allNodesAtom).filter(
+  const clusterNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+  const namespaceNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => node.namespaced,
   );
   const [startedLoading, setStartedLoading] = useState(false);

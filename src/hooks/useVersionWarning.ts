@@ -3,7 +3,10 @@ import { useEffect } from 'react';
 import { useFeature } from 'hooks/useFeature';
 import * as Sentry from '@sentry/react';
 import { useAtomValue } from 'jotai';
+import { unwrap } from 'jotai/utils';
 import { configFeaturesNames } from 'state/types';
+
+const apiGroupAtomSync = unwrap(apiGroupAtom, (prev) => prev ?? null);
 
 export function useVersionWarning({
   resourceUrl,
@@ -12,7 +15,7 @@ export function useVersionWarning({
   resourceUrl: string;
   resourceType: string;
 }) {
-  const apiGroups = useAtomValue(apiGroupAtom);
+  const apiGroups = useAtomValue(apiGroupAtomSync);
   const { isEnabled: isTrackingEnabled } = useFeature(
     configFeaturesNames.SENTRY,
   );

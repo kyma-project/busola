@@ -7,6 +7,8 @@ import { configFeaturesNames } from 'state/types';
 export type ExtendedValidateResources = {
   isEnabled: boolean;
   policies?: string[];
+  // This flag indicates whether the user has explicitly modified the policies or if they are still in sync with the feature config.
+  userModified?: boolean;
 };
 
 export type ValidateResources = boolean | ExtendedValidateResources;
@@ -46,10 +48,21 @@ export const useSyncedValidateResources = () => {
   }, [validationFeature]);
 
   useEffect(() => {
-    if (typeof validateResources === 'boolean' && configPolicies.length > 0) {
+    if (configPolicies.length === 0) return;
+
+    if (typeof validateResources === 'boolean') {
+      // Upgrade old boolean format to object shape
       setValidateResources({
         isEnabled: validateResources,
         policies: configPolicies,
+        userModified: false,
+      });
+    } else if (validateResources.userModified === undefined) {
+      // Migrate old object format: sync policies from current config
+      setValidateResources({
+        isEnabled: validateResources.isEnabled,
+        policies: configPolicies,
+        userModified: false,
       });
     }
   }, [validateResources, configPolicies, setValidateResources]);
@@ -57,10 +70,17 @@ export const useSyncedValidateResources = () => {
   return useMemo(() => {
     const extendedState = getExtendedValidateResourceState(validateResources);
 
+    // When the user hasn't explicitly customized policies, always defer to the
+    // feature-flag config so admin changes are reflected immediately.
+    const effectivePolicies =
+      extendedState.userModified === true
+        ? (extendedState.policies ?? configPolicies)
+        : configPolicies;
+
     return [
       {
         isEnabled: extendedState.isEnabled,
-        policies: extendedState.policies ?? configPolicies,
+        policies: effectivePolicies,
       },
       setValidateResources,
     ] as const;

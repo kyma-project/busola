@@ -19,7 +19,7 @@ export const useGenerateTokenRequest = (
   generate: boolean,
   namespace: string,
   serviceAccountName: string,
-  modalRef?: RefObject<HTMLElement>,
+  modalRef?: RefObject<HTMLElement | null>,
 ) => {
   const { t } = useTranslation();
   const post = usePost();

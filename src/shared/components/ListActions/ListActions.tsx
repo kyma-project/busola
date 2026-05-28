@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import { Button, Menu, MenuItem } from '@ui5/webcomponents-react';
 
 import './ListActions.scss';

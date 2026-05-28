@@ -1,6 +1,12 @@
 import pluralize from 'pluralize';
 import { useAtomValue } from 'jotai';
+import { unwrap } from 'jotai/utils';
 import { permissionSetsAtom } from 'state/permissionSetsAtom';
+
+const permissionSetsAtomSync = unwrap(
+  permissionSetsAtom,
+  (prev) => prev ?? null,
+);
 
 export function hasPermissionsFor(
   apiGroup,
@@ -33,7 +39,11 @@ export function hasPermissionsFor(
 }
 
 export function useHasPermissionsFor(queries) {
-  const permissionSet = useAtomValue(permissionSetsAtom);
+  const permissionSet = useAtomValue(permissionSetsAtomSync);
+
+  if (permissionSet === null) {
+    return queries.map(() => null);
+  }
 
   return queries.map(([apiGroup, resourceType, verbs]) =>
     hasPermissionsFor(apiGroup, resourceType, permissionSet, verbs),

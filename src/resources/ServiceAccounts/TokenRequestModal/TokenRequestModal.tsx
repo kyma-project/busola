@@ -3,12 +3,18 @@ import { useGenerateTokenRequest } from './useGenerateTokenRequest';
 import { useDownloadKubeconfigWithToken } from '../useDownloadKubeconfigWithToken';
 import { useEventListener } from 'hooks/useEventListener';
 
-import { Button, MessageStrip, Dialog, Bar } from '@ui5/webcomponents-react';
+import {
+  Button,
+  MessageStrip,
+  Dialog,
+  Bar,
+  DialogDomRef,
+} from '@ui5/webcomponents-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxInput } from 'shared/ResourceForm/inputs';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
-import { useRef } from 'react';
+import { JSX, useRef } from 'react';
 
 const expirationSecondsOptions = [
   {
@@ -39,7 +45,6 @@ const ComboboxInputWithSeconds = ({
   generateTokenRequest: () => void;
 }) => {
   return (
-    //@ts-expect-error Mismatch between js and ts
     <ComboboxInput
       id="event-version-combobox"
       required
@@ -47,10 +52,10 @@ const ComboboxInputWithSeconds = ({
       options={expirationSecondsOptions}
       selectedKey={value}
       onSelectionChange={(
-        _: CustomEvent,
-        selected: { key: number; text: string },
+        _,
+        selected: { key: number | string; text: number | string },
       ): void => {
-        setValue(selected.key);
+        setValue(selected.key as number);
         generateTokenRequest();
       }}
     />
@@ -72,7 +77,7 @@ export function TokenRequestModal({
 }: TokenRequestModalProps) {
   const { t } = useTranslation();
   const downloadKubeconfig = useDownloadKubeconfigWithToken();
-  const modalRef = useRef(null);
+  const modalRef = useRef<DialogDomRef>(null);
 
   const {
     kubeconfigYaml,

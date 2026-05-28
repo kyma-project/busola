@@ -935,6 +935,7 @@ kyma-modules:
     modules-update-failed: Modules update failed
     modules-updated: Modules updated
     success: '{{resourceType}} installed'
+    updated: Modules updated
   modify-modules: Modify Modules
   module-state: Module State
   modules-channel: Modules Channel

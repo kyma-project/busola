@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
+import { act } from 'react';
 import { useTokenValidation } from './useTokenValidation';
 import * as tiktoken from 'js-tiktoken';
 

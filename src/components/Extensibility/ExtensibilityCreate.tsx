@@ -244,7 +244,9 @@ export function ExtensibilityCreateCore({
           });
         }
       }}
-      formElementRef={formElementRef as RefObject<HTMLFormElement> | undefined}
+      formElementRef={
+        formElementRef as RefObject<HTMLFormElement | null> | undefined
+      }
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml={!schema}

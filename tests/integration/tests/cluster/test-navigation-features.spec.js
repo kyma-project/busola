@@ -32,7 +32,7 @@ context('Test navigation features', () => {
 
     cy.wait(500).typeInSearch('cronjob-controller');
 
-    cy.get('ui5-suggestion-item:visible')
+    cy.get('ui5-suggestion-item')
       .contains('li', /cronjob-controller/)
       .click();
 

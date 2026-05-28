@@ -11,7 +11,7 @@ import './KubeconfigUpload.scss';
 type KubeconfigUploadProps = {
   kubeconfig?: Kubeconfig;
   setKubeconfig: (config?: Kubeconfig) => void;
-  formRef: RefObject<HTMLElement>;
+  formRef: RefObject<HTMLElement | null>;
 };
 
 export function KubeconfigUpload({

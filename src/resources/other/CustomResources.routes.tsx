@@ -81,7 +81,6 @@ export const ColumnWrapper = () => {
     },
   );
 
-  // @ts-expect-error hook not yet migrated to TS
   const elementCreateProps = usePrepareCreateProps({
     resourceType: crdResourceName,
     apiGroup: 'apiextensions.k8s.io',

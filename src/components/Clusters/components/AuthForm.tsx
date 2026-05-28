@@ -122,7 +122,7 @@ const TokenForm = ({
         <ResourceForm.FormField
           label={t('clusters.wizard.auth.exec-command')}
           input={Inputs.Text}
-          value={exec.command}
+          value={[exec.command, ...(exec.args || [])].join(' ')}
           readOnly
         />
       )}
@@ -148,7 +148,7 @@ const TokenForm = ({
 };
 
 type AuthFormProps = {
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   resource?: Kubeconfig;
   setResource?: (resource: Record<string, any>) => void;
   revalidate?: () => void;

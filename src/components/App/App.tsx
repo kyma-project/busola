@@ -2,6 +2,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -92,7 +93,7 @@ export default function App() {
   }>({});
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setNamespace(namespace);
   }, [setNamespace, namespace]);
 

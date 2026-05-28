@@ -22,7 +22,7 @@ import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 import { getDescription, SchemaContext } from 'shared/helpers/schema';
 
 interface GenericRoleBindingCreateProps {
-  formElementRef: RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement | null>;
   namespace: string;
   onChange: () => void;
   setCustomValid: (valid: boolean) => void;

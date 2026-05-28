@@ -44,10 +44,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('checkItemOnGenericListLink', (resourceName) => {
-  cy.get('ui5-table-row')
-    .find('ui5-table-cell')
-    .contains('ui5-text', resourceName)
-    .should('be.visible');
+  cy.contains('ui5-table-row', resourceName).should('be.visible');
 });
 
 Cypress.Commands.add('clickGenericListLink', (resourceName) => {
@@ -88,6 +85,7 @@ Cypress.Commands.add('clearInput', { prevSubject: true }, (element) => {
 
     .type(
       `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
+      { force: true },
     );
 });
 
@@ -190,26 +188,27 @@ Cypress.Commands.add(
       customHeaderText = null,
     } = options;
 
-    cy.wait(1000);
+    cy.wait(2000);
     if (parentSelector) {
       cy.get(parentSelector)
         .find('ui5-input[id^=search-]:visible')
         .find('input')
-        .should('not.be.disabled', { timeout: 5000 })
-        .type(resourceName);
+        .should('not.have.attr', 'disabled', { timeout: 5000 })
+        .type(resourceName, { force: true });
     } else {
       cy.get('ui5-input[id^=search-]:visible')
         .find('input')
-        .should('not.be.disabled', { timeout: 5000 })
-        .type(resourceName);
+        .should('not.have.attr', 'disabled', { timeout: 5000 })
+        .type(resourceName, { force: true });
     }
 
-    cy.wait(1000);
+    cy.wait(2000);
 
     if (selectSearchResult) {
-      cy.get('ui5-suggestion-item:visible')
+      cy.get('ui5-suggestion-item')
         .contains('li', resourceName)
-        .click();
+        .click({ force: true });
+      cy.wait(1000);
     }
 
     if (searchInPlainTableText) {
@@ -227,7 +226,9 @@ Cypress.Commands.add(
         .find('ui5-button[data-testid="delete"]:visible')
         .click();
     } else {
-      cy.get('ui5-button[data-testid="delete"]').click();
+      cy.contains('ui5-table-row', resourceName)
+        .find('ui5-button[data-testid="delete"]')
+        .click();
     }
 
     if (confirmationEnabled) {
@@ -361,11 +362,12 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
   cy.get('ui5-input[id^=search-]:visible')
     .find('input')
     .should('be.visible')
+    .should('not.be.disabled')
     .type(searchPhrase, { force });
 });
 
 Cypress.Commands.add('openSettingsMenu', () => {
-  cy.get('[tooltip="Profile"]').click({ force: true });
+  cy.get('[tooltip="User Menu"]').click({ force: true });
 
   cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 });

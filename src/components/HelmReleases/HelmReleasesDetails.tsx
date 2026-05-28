@@ -39,7 +39,6 @@ export default function HelmReleasesDetails({
 
   if (!releaseSecret) {
     return (
-      /*@ts-expect-error Type mismatch between js and ts*/
       <ResourceNotFound
         resource={prettifyNameSingular(undefined, t('helm-releases.title'))}
       />
@@ -64,7 +63,6 @@ export default function HelmReleasesDetails({
       />
     ),
     () => (
-      /*@ts-expect-error Type mismatch between js and ts*/
       <EventsList
         key="events"
         namespace={namespace ?? ''}
@@ -100,7 +98,6 @@ export default function HelmReleasesDetails({
       customStatusColumns={customStatusColumns}
       statusBadge={statusBadge}
       createResourceForm={() => (
-        /*@ts-expect-error Type mismatch between js and ts*/
         <ResourceCreate
           title={'HelmRelease'}
           isEdit={true}

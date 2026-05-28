@@ -17,6 +17,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile'
       - 'nginx/nginx.conf'
@@ -29,6 +30,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile*'
       - 'nginx/**'
@@ -43,7 +45,7 @@ permissions:
 
 jobs:
   approve-run:
-    uses: ./.github/workflow/approval-run.yaml
+    uses: ./.github/workflows/approval-run.yaml
   build-busola-image:
     name: Build Image
     needs: approve-run
