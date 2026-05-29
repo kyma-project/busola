@@ -45,12 +45,15 @@ function loadConfig() {
 
     mergedConfig = defaultConfig.config;
 
-    const envConfig = getEnvConfig();
-    if (!isEmpty(envConfig))
-      mergedConfig = merge(mergedConfig, envConfig).config;
-
     const config = getConfig();
-    if (!isEmpty(config)) mergedConfig = merge(mergedConfig, config).config;
+    if (!isEmpty(config)) {
+      mergedConfig = merge(mergedConfig, config).config;
+    }
+
+    const envConfig = getEnvConfig();
+    if (!isEmpty(envConfig)) {
+      mergedConfig = merge(mergedConfig, envConfig).config;
+    }
   } catch (e) {
     console.warn('Error loading config:', e?.message || e);
   }
