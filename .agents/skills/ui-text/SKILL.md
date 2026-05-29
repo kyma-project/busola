@@ -218,8 +218,15 @@ Walk every leaf string value. For each value:
 
 1. Derive the full dotted key path.
 2. Classify text type using the Key Classification table.
-3. Apply R1–R7 (R2 has two sub-rules; apply both).
+3. Apply R2–R7 only (**skip R1 in Cleanup Mode** — see note below).
 4. Record violations as `{ key, current_value, proposed_value, rule }`. For R5 (informational only), omit `proposed_value`.
+
+> **Why skip R1 in Cleanup Mode?**
+> R1 (capitalization) produces ~200–300 proposed changes on a full file run, of which roughly
+> 60–70% are false positives: keys classified as `message` by default that are actually rendered
+> as headings, labels, or buttons in the UI (see implementation note 6). A diff of 300 changes
+> is not reviewable in practice. R1 is therefore reserved for **Review Mode**, where it is applied
+> only to the handful of keys changed in a given PR — a manageable set to verify manually.
 
 Skip empty values. Skip values that consist entirely of interpolation variables (e.g. `{{count}}`).
 Skip values that are **URL strings** — values that contain `://` or start with `www.` are domain/URL labels and must not be capitalized (e.g. `"help.sap.com"`, `"kyma-project.io"`).
