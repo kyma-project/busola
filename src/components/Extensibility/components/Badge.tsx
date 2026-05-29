@@ -100,11 +100,11 @@ export function Badge({
       type={badgeType as any}
       tooltipContent={getTooltipContent(structure.description)}
     >
-      {formatBadgeText(tExt(value))}
+      {formatBadgeText(tExt(value).toString())}
     </StatusBadge>
   ) : (
     <StatusBadge autoResolveType={!badgeType} type={badgeType as any}>
-      {formatBadgeText(tExt(value))}
+      {formatBadgeText(tExt(value).toString())}
     </StatusBadge>
   );
 }
