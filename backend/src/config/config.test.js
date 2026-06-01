@@ -28,9 +28,11 @@ function writeSampleConfig(configPath, key, value) {
     value: value,
   };
   const data = {
-    config: {},
+    config: {
+      features: {},
+    },
   };
-  data.config[key] = feature;
+  data.config.features[key] = feature;
   vol.mkdirSync(path.dirname(configPath), { recursive: true });
   fs.writeFileSync(configPath, JSON.stringify(data));
 }
@@ -111,8 +113,8 @@ describe('Given all config files, all are merged', () => {
     const config = loadConfig('/');
     console.log(config);
     //THEN
-    expect(config?.FEATURE_A?.value).toBe(expectedDefaultValue);
-    expect(config?.FEATURE_B?.value).toBe(expectedConfigValue);
-    expect(config?.FEATURE_C?.value).toBe(expectedEnvConfigValue);
+    expect(config?.features?.FEATURE_A?.value).toBe(expectedDefaultValue);
+    expect(config?.features?.FEATURE_B?.value).toBe(expectedConfigValue);
+    expect(config?.features?.FEATURE_C?.value).toBe(expectedEnvConfigValue);
   });
 });

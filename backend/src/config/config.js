@@ -43,22 +43,22 @@ function loadConfig(basePath) {
       fs.readFileSync(path.join(basePath, './settings/defaultConfig.yaml')),
     );
 
-    mergedConfig = defaultConfig.config;
+    mergedConfig = defaultConfig;
 
     const config = getConfig(basePath);
     if (!isEmpty(config)) {
-      mergedConfig = merge(mergedConfig, config).config;
+      mergedConfig = merge(mergedConfig, config);
     }
 
     const envConfig = getEnvConfig(basePath);
     if (!isEmpty(envConfig)) {
-      mergedConfig = merge(mergedConfig, envConfig).config;
+      mergedConfig = merge(mergedConfig, envConfig);
     }
   } catch (e) {
     console.warn('Error loading config:', e);
   }
 
-  return mergedConfig;
+  return mergedConfig.config;
 }
 
 export default loadConfig;
