@@ -4,6 +4,11 @@ import merge from 'lodash.merge';
 import path from 'path';
 import isEmpty from 'lodash.isempty';
 
+const configPaths = {
+  DEFAULT_CONFIG_PATH: './settings/defaultConfig.yaml',
+  CONFIG_PATH: './config/config.yaml',
+};
+
 function getEnvDir() {
   const environment = process.env.ENVIRONMENT;
 
@@ -15,7 +20,6 @@ function getEnvDir() {
 
 function getEnvConfig(basePath) {
   const envConfigDir = getEnvDir();
-  console.log('path', envConfigDir);
 
   let configYaml = {};
 
@@ -30,7 +34,7 @@ function getEnvConfig(basePath) {
 
 function getConfig(basePath) {
   let config = {};
-  const configPath = path.join(basePath, './config/config.yaml');
+  const configPath = path.join(basePath, configPaths.CONFIG_PATH);
   if (fs.existsSync(configPath)) {
     config = jsyaml.load(fs.readFileSync(configPath));
   }
@@ -38,30 +42,33 @@ function getConfig(basePath) {
   return config || {};
 }
 
+function getDefaultConfig(basePath) {
+  return jsyaml.load(
+    fs.readFileSync(path.join(basePath, configPaths.DEFAULT_CONFIG_PATH)),
+  );
+}
+
 function loadConfig(basePath) {
   let mergedConfig = {};
 
   try {
-    const defaultConfig = jsyaml.load(
-      fs.readFileSync(path.join(basePath, './settings/defaultConfig.yaml')),
-    );
+    const defaultConfig = getDefaultConfig(basePath);
 
-    mergedConfig = defaultConfig.config;
-
+    mergedConfig = defaultConfig;
     const config = getConfig(basePath);
     if (!isEmpty(config)) {
-      mergedConfig = merge(mergedConfig, config).config;
+      merge(mergedConfig, config);
     }
-
     const envConfig = getEnvConfig(basePath);
+
     if (!isEmpty(envConfig)) {
-      mergedConfig = merge(mergedConfig, envConfig).config;
+      merge(mergedConfig, envConfig);
     }
   } catch (e) {
     console.warn('Error loading config:', e);
   }
 
-  return mergedConfig;
+  return mergedConfig.config;
 }
 
 export default loadConfig;

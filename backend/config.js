@@ -2,4 +2,4 @@
 
 import loadConfig from './src/config/config.js';
 
-module.exports = loadConfig('./');
+export default loadConfig('./');

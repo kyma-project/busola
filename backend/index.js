@@ -25,9 +25,7 @@ app.use(express.raw({ type: '*/*', limit: '100mb' }));
 
 console.log('FIPS enabled: ', crypto.getFips() === 1);
 
-console.log(config.features?.FEATURE_A?.value);
-console.log(config.features);
-
+console.log(config);
 const gzipEnabled = config.features?.GZIP?.isEnabled;
 if (gzipEnabled)
   app.use(
