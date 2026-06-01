@@ -7,25 +7,25 @@ import {
 import { proxyHandler } from './proxy.js';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
-import { pinoMiddleware, createSlowRequestLogger } from './logging';
+import { createSlowRequestLogger, pinoMiddleware } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
 import crypto from 'crypto';
-import { fillActiveEnvForFrontend } from './utils/active-env';
+import config from './src/config/config';
 
+import { fillActiveEnvForFrontend } from './utils/active-env';
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const config = require('./config.js');
 
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
 
 console.log('FIPS enabled: ', crypto.getFips() === 1);
-
 console.log(config);
+
 const gzipEnabled = config.features?.GZIP?.isEnabled;
 if (gzipEnabled)
   app.use(

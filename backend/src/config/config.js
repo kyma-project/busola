@@ -48,27 +48,28 @@ function getDefaultConfig(basePath) {
   );
 }
 
-function loadConfig(basePath) {
+export function loadConfig(basePath) {
   let mergedConfig = {};
 
   try {
     const defaultConfig = getDefaultConfig(basePath);
 
-    mergedConfig = defaultConfig;
+    mergedConfig = defaultConfig.config;
     const config = getConfig(basePath);
     if (!isEmpty(config)) {
-      merge(mergedConfig, config);
+      merge(mergedConfig, config.config);
     }
     const envConfig = getEnvConfig(basePath);
 
     if (!isEmpty(envConfig)) {
-      merge(mergedConfig, envConfig);
+      merge(mergedConfig, envConfig.config);
     }
   } catch (e) {
     console.warn('Error loading config:', e);
   }
 
-  return mergedConfig.config;
+  return mergedConfig || {};
 }
 
-export default loadConfig;
+const config = loadConfig('./');
+export default config;

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, vi } from 'vitest';
 import { fs, vol } from 'memfs';
-import loadConfig from './config.js';
+import { loadConfig } from './config.js';
 import path from 'path';
 import jsyaml from 'js-yaml';
 
@@ -130,7 +130,7 @@ describe('Check how configs are merged', () => {
       FEATURE_A: { value: expectedDefaultValue },
     });
     createConfig(testConfigPaths.CONFIG_PATH, {
-      FEATURE_B: { value: expectedConfigValue },
+      FEATURE_A: { value: expectedConfigValue },
     });
     vi.stubEnv('ENVIRONMENT', 'my-env');
     createConfig(testConfigPaths.ENV_CONFIG_PATH, {
@@ -184,5 +184,30 @@ describe('Check how configs are merged', () => {
     expect(config?.features?.COMMON_FEATURE?.value).toBe(
       expectedMergedEnvValue,
     );
+  });
+});
+
+describe('Check error handling', () => {
+  it('default config is not available', () => {
+    //GIVEN
+    vol.rmSync(testConfigPaths.DEFAULT_CONFIG_PATH);
+    vol.rmdirSync(path.dirname(testConfigPaths.DEFAULT_CONFIG_PATH));
+
+    //WHEN
+    const config = loadConfig('/');
+
+    //THEN
+    expect(config).toStrictEqual({});
+  });
+
+  it('env is set but the file doesnt exist, the default config is returned', () => {
+    //GIVEN
+    vi.stubEnv('ENVIRONMENT', 'not-existing');
+
+    //WHEN
+    const config = loadConfig('/');
+
+    //THEN
+    expect(config?.features?.STH_ELSE?.value).toStrictEqual('some-value');
   });
 });
