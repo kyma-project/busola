@@ -119,6 +119,7 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
       }
     };
   }, [cardsContainerRef, calculateColumns]);
+
   const modulesAddData = useMemo(
     () =>
       moduleTemplates?.items.reduce((acc: ModulesAddData[], moduleTpl) => {
@@ -207,7 +208,13 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
 
         return acc ?? [];
       }, []),
-    [moduleTemplates, moduleReleaseMetas, initialUnchangedResource],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      kymaResource?.spec?.modules,
+      moduleTemplates,
+      moduleReleaseMetas,
+      initialUnchangedResource,
+    ],
   );
 
   useEffect(() => {
