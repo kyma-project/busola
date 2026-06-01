@@ -55,6 +55,8 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-title').contains('api-gateway').click();
 
+    cy.wait(1000);
+
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
       .should('not.be.disabled')
@@ -71,6 +73,7 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-card').contains('eventing').should('be.visible');
 
+    cy.wait(1000);
     // Add second module
     cy.get('ui5-title').contains('eventing').click();
 
