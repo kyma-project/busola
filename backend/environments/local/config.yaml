@@ -1,0 +1,10 @@
+config:
+  features:
+    ALLOW_PRIVATE_IPS:
+      isEnabled: false
+    KYMA_COMPANION:
+      config:
+        apiBaseUrl: 'https://companion.cp.dev.kyma.cloud.sap'
+        tokenUrl: 'https://kymatest.accounts400.ondemand.com/oauth2/token'
+    FEATURE_C:
+      value: env

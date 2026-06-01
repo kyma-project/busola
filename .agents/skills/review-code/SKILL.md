@@ -33,13 +33,13 @@ Extract every requirement or acceptance-criteria item into a structured list. If
 ### 2 — Collect changed files on the current branch
 
 ```bash
-git diff main...HEAD --name-only
+git diff main --name-only
 ```
 
 Then fetch the full diff:
 
 ```bash
-git diff main...HEAD
+git diff main
 ```
 
 Also collect the list of commits:

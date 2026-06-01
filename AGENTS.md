@@ -43,7 +43,7 @@ cd backend && npm run build        # Backend webpack bundle (separate step; auto
 npm test                           # Frontend unit tests (Vitest, jsdom)
 npm run component-test             # Cypress component tests (interactive)
 npm run component-test-headless    # Cypress component tests (CI)
-cd backend && npm test             # Backend unit tests (Vitest, Node env)
+cd backend && npm test             # Backend unit tests (Vitest, Node `env`)
 ```
 
 Integration tests (Cypress, require a running cluster) live in `tests/integration/`:
