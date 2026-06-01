@@ -27,3 +27,5 @@ backend-production.js
 backend-production.js.LICENSE*
 core-ui
 busola.log
+
+environments/local

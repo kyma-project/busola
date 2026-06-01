@@ -1,4 +1,5 @@
 /* global module, require, process */
 
-const loadConfig = require('backend/src/config/config');
+import loadConfig from './src/config/config.js';
+
 module.exports = loadConfig('./');

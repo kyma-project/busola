@@ -59,7 +59,7 @@ describe('Given one config file value is correct', () => {
     const config = loadConfig('/');
     console.log(config);
     //THEN
-    expect(config?.FEATURE_A?.value).toBe(expectedValue);
+    expect(config?.features?.FEATURE_A?.value).toBe(expectedValue);
   });
   it('should return config Value', () => {
     // GIVEN
@@ -70,7 +70,7 @@ describe('Given one config file value is correct', () => {
     const config = loadConfig('/');
     console.log(config);
     //THEN
-    expect(config?.FEATURE_A?.value).toBe(expectedValue);
+    expect(config?.features?.FEATURE_A?.value).toBe(expectedValue);
   });
   it('should return env config Value', () => {
     // GIVEN
@@ -82,7 +82,7 @@ describe('Given one config file value is correct', () => {
     const config = loadConfig('/');
     console.log(config);
     //THEN
-    expect(config?.FEATURE_A?.value).toBe(expectedValue);
+    expect(config?.features?.FEATURE_A?.value).toBe(expectedValue);
   });
 });
 

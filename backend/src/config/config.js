@@ -6,6 +6,7 @@ import isEmpty from 'lodash.isempty';
 
 function getEnvDir() {
   const environment = process.env.ENVIRONMENT;
+
   if (environment) {
     return path.join('environments', environment);
   }
@@ -14,6 +15,8 @@ function getEnvDir() {
 
 function getEnvConfig(basePath) {
   const envConfigDir = getEnvDir();
+  console.log('path', envConfigDir);
+
   let configYaml = {};
 
   if (envConfigDir) {
@@ -43,22 +46,22 @@ function loadConfig(basePath) {
       fs.readFileSync(path.join(basePath, './settings/defaultConfig.yaml')),
     );
 
-    mergedConfig = defaultConfig;
+    mergedConfig = defaultConfig.config;
 
     const config = getConfig(basePath);
     if (!isEmpty(config)) {
-      mergedConfig = merge(mergedConfig, config);
+      mergedConfig = merge(mergedConfig, config).config;
     }
 
     const envConfig = getEnvConfig(basePath);
     if (!isEmpty(envConfig)) {
-      mergedConfig = merge(mergedConfig, envConfig);
+      mergedConfig = merge(mergedConfig, envConfig).config;
     }
   } catch (e) {
     console.warn('Error loading config:', e);
   }
 
-  return mergedConfig.config;
+  return mergedConfig;
 }
 
 export default loadConfig;
