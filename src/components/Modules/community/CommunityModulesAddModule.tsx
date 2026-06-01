@@ -4,7 +4,7 @@ import { SetStateAction, useAtom, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
-import { MessageStrip } from '@ui5/webcomponents-react';
+import { IllustratedMessage, MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   getAvailableCommunityModules,
@@ -412,13 +412,16 @@ export default function CommunityModulesAddModule(props: any) {
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
             ) : (
-              <MessageStrip
-                design="Critical"
-                hideCloseButton
-                className="sap-margin-top-small"
-              >
-                {t('modules.community.no-modules')}
-              </MessageStrip>
+              <>
+                <IllustratedMessage
+                  name="tnt/Components"
+                  design="Scene"
+                  key="all-modules-added"
+                  titleText={t('modules.community.no-modules')}
+                  subtitleText=" "
+                  className="emptyListComponent"
+                ></IllustratedMessage>
+              </>
             )}
           </>
         </ResourceForm>

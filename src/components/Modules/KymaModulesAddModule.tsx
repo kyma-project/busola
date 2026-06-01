@@ -1,5 +1,12 @@
-import { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { MessageStrip } from '@ui5/webcomponents-react';
+import {
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { IllustratedMessage, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -112,6 +119,103 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
       }
     };
   }, [cardsContainerRef, calculateColumns]);
+  const modulesAddData = useMemo(
+    () =>
+      moduleTemplates?.items.reduce((acc: ModulesAddData[], moduleTpl) => {
+        const name =
+          moduleTpl.metadata.labels['operator.kyma-project.io/module-name'];
+        const existingModule = acc.find((item) => item.name === name);
+        const isAlreadyInstalled =
+          initialUnchangedResource?.spec?.modules?.find(
+            (installedModule) => installedModule.name === name,
+          );
+        const moduleReleaseMeta = moduleReleaseMetas?.items.find(
+          (item) => item.spec.moduleName === name,
+        );
+
+        const isModuleMetaRelease = acc.find(
+          (item: any) => item.name === moduleReleaseMeta?.spec?.moduleName,
+        );
+
+        if (moduleTpl.spec.channel && !isModuleMetaRelease) {
+          if (!existingModule && !isAlreadyInstalled) {
+            acc.push({
+              name: name,
+              channels: [
+                {
+                  channel: moduleTpl.spec.channel,
+                  version: moduleTpl.spec.descriptor.component.version,
+                  isBeta:
+                    moduleTpl.metadata.labels[
+                      'operator.kyma-project.io/beta'
+                    ] === 'true',
+                },
+              ],
+              docsUrl:
+                moduleTpl.metadata.annotations[
+                  'operator.kyma-project.io/doc-url'
+                ],
+              icon: {
+                link: moduleTpl.spec?.info?.icons?.[0]?.link,
+                name: moduleTpl.spec?.info?.icons?.[0]?.name,
+              },
+              isMetaRelease: false,
+            });
+          } else if (existingModule) {
+            existingModule.channels?.push({
+              channel: moduleTpl.spec.channel,
+              version: moduleTpl.spec.descriptor.component.version,
+              isBeta:
+                moduleTpl.metadata.labels['operator.kyma-project.io/beta'] ===
+                'true',
+              isMetaRelease: false,
+            });
+          }
+        } else {
+          if (!existingModule && !isAlreadyInstalled) {
+            moduleReleaseMeta?.spec.channels.forEach((channel) => {
+              if (!acc.find((item) => item.name === name)) {
+                acc.push({
+                  name: name,
+                  channels: [
+                    {
+                      channel: channel.channel,
+                      version: channel.version,
+                      isBeta: moduleReleaseMeta.spec.beta ?? false,
+                      isMetaRelease: true,
+                    },
+                  ],
+                  docsUrl: moduleTpl.spec.info?.documentation,
+                  icon: {
+                    link: moduleTpl.spec?.info?.icons?.[0]?.link,
+                    name: moduleTpl.spec?.info?.icons?.[0]?.name,
+                  },
+                });
+              } else {
+                acc
+                  ?.find((item) => item?.name === name)
+                  ?.channels.push({
+                    channel: channel.channel,
+                    version: channel.version,
+                    isBeta: moduleReleaseMeta.spec.beta ?? false,
+                    isMetaRelease: true,
+                  });
+              }
+            });
+          }
+        }
+
+        return acc ?? [];
+      }, []),
+    [moduleTemplates, moduleReleaseMetas, initialUnchangedResource],
+  );
+
+  useEffect(() => {
+    props.setIsAddDisabled?.(
+      modulesAddData?.length === 0 && !!kymaResource?.spec?.modules,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modulesAddData, kymaResource?.spec?.modules]);
 
   if (loading || !kymaResource) {
     return (
@@ -120,94 +224,6 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
       </div>
     );
   }
-
-  const modulesAddData = moduleTemplates?.items.reduce(
-    (acc: ModulesAddData[], moduleTpl) => {
-      const name =
-        moduleTpl.metadata.labels['operator.kyma-project.io/module-name'];
-      const existingModule = acc.find((item) => item.name === name);
-      const isAlreadyInstalled = initialUnchangedResource?.spec?.modules?.find(
-        (installedModule) => installedModule.name === name,
-      );
-      const moduleReleaseMeta = moduleReleaseMetas?.items.find(
-        (item) => item.spec.moduleName === name,
-      );
-
-      const isModuleMetaRelease = acc.find(
-        (item: any) => item.name === moduleReleaseMeta?.spec?.moduleName,
-      );
-
-      if (moduleTpl.spec.channel && !isModuleMetaRelease) {
-        if (!existingModule && !isAlreadyInstalled) {
-          acc.push({
-            name: name,
-            channels: [
-              {
-                channel: moduleTpl.spec.channel,
-                version: moduleTpl.spec.descriptor.component.version,
-                isBeta:
-                  moduleTpl.metadata.labels['operator.kyma-project.io/beta'] ===
-                  'true',
-              },
-            ],
-            docsUrl:
-              moduleTpl.metadata.annotations[
-                'operator.kyma-project.io/doc-url'
-              ],
-            icon: {
-              link: moduleTpl.spec?.info?.icons?.[0]?.link,
-              name: moduleTpl.spec?.info?.icons?.[0]?.name,
-            },
-            isMetaRelease: false,
-          });
-        } else if (existingModule) {
-          existingModule.channels?.push({
-            channel: moduleTpl.spec.channel,
-            version: moduleTpl.spec.descriptor.component.version,
-            isBeta:
-              moduleTpl.metadata.labels['operator.kyma-project.io/beta'] ===
-              'true',
-            isMetaRelease: false,
-          });
-        }
-      } else {
-        if (!existingModule && !isAlreadyInstalled) {
-          moduleReleaseMeta?.spec.channels.forEach((channel) => {
-            if (!acc.find((item) => item.name === name)) {
-              acc.push({
-                name: name,
-                channels: [
-                  {
-                    channel: channel.channel,
-                    version: channel.version,
-                    isBeta: moduleReleaseMeta.spec.beta ?? false,
-                    isMetaRelease: true,
-                  },
-                ],
-                docsUrl: moduleTpl.spec.info?.documentation,
-                icon: {
-                  link: moduleTpl.spec?.info?.icons?.[0]?.link,
-                  name: moduleTpl.spec?.info?.icons?.[0]?.name,
-                },
-              });
-            } else {
-              acc
-                ?.find((item) => item?.name === name)
-                ?.channels.push({
-                  channel: channel.channel,
-                  version: channel.version,
-                  isBeta: moduleReleaseMeta.spec.beta ?? false,
-                  isMetaRelease: true,
-                });
-            }
-          });
-        }
-      }
-
-      return acc ?? [];
-    },
-    [],
-  );
 
   const isChecked = (name?: string) => {
     return !!selectedModules?.find((module) => module.name === name);
@@ -323,21 +339,23 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
           {renderCards()}
         </>
       ) : kymaResource?.spec?.modules ? (
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          className="sap-margin-top-small"
-        >
-          {t('kyma-modules.all-modules-added')}
-        </MessageStrip>
+        <IllustratedMessage
+          name="tnt/Components"
+          design="Scene"
+          key="all-modules-added"
+          titleText={t('kyma-modules.all-modules-added')}
+          subtitleText=" "
+          className="emptyListComponent"
+        ></IllustratedMessage>
       ) : (
-        <MessageStrip
-          design="Critical"
-          hideCloseButton
-          className="sap-margin-top-small"
-        >
-          {t('kyma-modules.no-modules')}
-        </MessageStrip>
+        <IllustratedMessage
+          name="tnt/Components"
+          design="Scene"
+          key="all-modules-added"
+          titleText={t('kyma-modules.no-modules')}
+          subtitleText=" "
+          className="emptyListComponent"
+        ></IllustratedMessage>
       )}
     </ResourceForm>
   );

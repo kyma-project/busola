@@ -69,6 +69,7 @@ const ColumnWrapper = ({
       ? searchParams.get('resourceNamespace')
       : rawNamespace;
   const [resMetadata, setResMetadata] = useState<any>(null);
+  const [isAddDisabled, setIsAddDisabled] = useState(false);
 
   useEffect(() => {
     setLayoutColumn((prev: any) => {
@@ -170,10 +171,14 @@ const ColumnWrapper = ({
                 title={t('kyma-modules.add-module')}
                 confirmText={t('common.buttons.add')}
                 layoutCloseCreateUrl={url}
+                disableEdit={isAddDisabled}
                 renderForm={(renderProps: any) => {
                   return (
                     <ErrorBoundary>
-                      <KymaModulesAddModule {...renderProps} />
+                      <KymaModulesAddModule
+                        {...renderProps}
+                        setIsAddDisabled={setIsAddDisabled}
+                      />
                     </ErrorBoundary>
                   );
                 }}
