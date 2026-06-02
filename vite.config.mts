@@ -26,6 +26,7 @@ export default defineConfig({
       '^/backend/.*': {
         target: 'http://localhost:3001',
         changeOrigin: true,
+        ws: true,
       },
       '/proxy': {
         target: 'http://localhost:3001',
@@ -69,7 +70,7 @@ export default defineConfig({
   },
 });
 
-function mergeYamlFiles(filesPath) {
+function mergeYamlFiles(filesPath: string) {
   let mergedYamlContent = '';
 
   const files = glob.sync(filesPath);
