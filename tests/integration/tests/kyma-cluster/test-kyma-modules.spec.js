@@ -87,7 +87,7 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-table-row').contains('api-gateway').should('be.visible');
 
-    // Check if "You have added all the modules" is  visible
+    // Check if illustrated message is visible if there are no modules
     cy.get('ui5-panel[data-testid="kyma-modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
@@ -96,6 +96,10 @@ context('Test Kyma Modules views', () => {
       .get('ui5-illustrated-message')
       .find('ui5-title', 'You have added all the modules')
       .should('be.visible');
+
+    cy.get('[data-testid="create-form-footer-bar"]')
+      .contains('ui5-button:visible', 'Add')
+      .should('be.disabled');
   });
 
   it('Test number of Modules in Modules Overview card', () => {
