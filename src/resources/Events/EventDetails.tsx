@@ -54,6 +54,7 @@ const Specification = (event: any) => {
                 <ObjectStatus
                   aria-label="Error"
                   icon={<Icon accessibleName="Error" name="error" />}
+                  className="sap-margin-begin-tiny"
                   state="Negative"
                   title={event.type}
                 />
