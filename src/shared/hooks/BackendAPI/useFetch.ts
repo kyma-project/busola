@@ -6,6 +6,11 @@ import { throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { authDataAtom, AuthDataState } from '../../../state/authDataAtom';
 import { getClusterConfig } from '../../../state/utils/getBackendInfo';
 import { ActiveClusterState, clusterAtom } from '../../../state/clusterAtom';
+import {
+  ssoDataAtom,
+  SsoDataState,
+  checkForTokenExpiration,
+} from 'state/ssoDataAtom';
 
 export type FetchFn = ({
   relativeUrl,
@@ -21,9 +26,11 @@ export const createFetchFn =
   ({
     authData,
     cluster,
+    ssoData,
   }: {
     authData: AuthDataState;
     cluster: ActiveClusterState;
+    ssoData: SsoDataState;
   }): FetchFn =>
   async ({
     relativeUrl,
@@ -34,11 +41,15 @@ export const createFetchFn =
     init?: any;
     abortController?: AbortController;
   }) => {
+    const token = authData && 'token' in authData ? authData.token : undefined;
+    checkForTokenExpiration(token);
+    checkForTokenExpiration(ssoData?.id_token);
+
     init = {
       ...init,
       headers: {
         ...(init?.headers || {}),
-        ...createHeaders(authData, cluster),
+        ...createHeaders(authData, cluster, ssoData),
       },
       signal: abortController?.signal,
     };
@@ -55,10 +66,12 @@ export const createFetchFn =
 export const useFetch = () => {
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
+  const ssoData = useAtomValue(ssoDataAtom);
 
   const fetchFn = createFetchFn({
     authData,
     cluster,
+    ssoData,
   });
   return fetchFn;
 };

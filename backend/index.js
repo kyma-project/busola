@@ -5,6 +5,7 @@ import {
   requireK8sCredential,
 } from './kubernetes/handler';
 import { proxyHandler } from './proxy.js';
+import { setupJWTCheck } from './jwtCheck';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { pinoMiddleware, createSlowRequestLogger } from './logging';
@@ -52,6 +53,8 @@ if (process.env.NODE_ENV === 'development') {
   console.log('Use development settings of cors');
   app.use(cors({ origin: '*' }));
 }
+
+setupJWTCheck(app);
 
 // Add Pino logging middleware (attaches req.log to all requests)
 app.use(pinoMiddleware);

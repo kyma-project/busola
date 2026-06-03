@@ -25,6 +25,7 @@ import { ClusterValidationConfigurationDialog } from './ClusterValidationConfigu
 
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
+import { ssoDataAtom } from 'state/ssoDataAtom';
 import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import {
   getDefaultScanConfiguration,
@@ -42,15 +43,17 @@ export const ClusterValidation = () => {
 
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
+  const ssoData = useAtomValue(ssoDataAtom);
 
   const { fetch, post } = useMemo(() => {
     const fetch = createFetchFn({
       authData,
       cluster,
+      ssoData,
     });
     const post = createPostFn(fetch);
     return { fetch, post };
-  }, [authData, cluster]);
+  }, [authData, cluster, ssoData]);
 
   const defaultPolicySet = usePolicySet();
   const { namespaces } = useAvailableNamespaces();

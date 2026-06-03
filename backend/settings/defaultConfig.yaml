@@ -2,6 +2,10 @@ config:
   features:
     GZIP:
       isEnabled: true
+    JWT_CHECK_CONFIG:
+      config:
+        issuer: https://apskyxzcl.accounts400.ondemand.com
+        jwksUri: https://apskyxzcl.accounts400.ondemand.com/.well-known/jwks.json
     KYMA_COMPANION:
       config:
         apiBaseUrl: 'https://companion.cp.dev.kyma.cloud.sap'
