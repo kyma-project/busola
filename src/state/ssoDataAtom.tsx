@@ -122,5 +122,7 @@ export function checkForTokenExpiration(token?: string) {
       setSSOAuthData(null);
       window.location.reload();
     }
-  } catch (_) {} // ignore errors from non-JWT tokens
+  } catch (_) {
+    // ignore errors from non-JWT tokens
+  }
 }

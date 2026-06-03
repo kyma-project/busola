@@ -1,5 +1,6 @@
-const { expressjwt } = require('express-jwt');
-const jwks = require('jwks-rsa');
+/* global global, process */
+import { expressjwt } from 'express-jwt';
+import jwks from 'jwks-rsa';
 
 const jwtCheck = ({ issuer, jwksUri }) =>
   expressjwt({
