@@ -137,6 +137,7 @@ export function EventList({
       ? [
           {
             header: t('common.headers.namespace'),
+            width: '20ch',
             value: (entry: any) => entry.metadata.namespace,
             id: 'namespace',
           },
@@ -156,10 +157,12 @@ export function EventList({
     },
     {
       header: t('events.headers.count'),
+      width: '10ch',
       value: (e) => <p>{e.count || EMPTY_TEXT_PLACEHOLDER}</p>,
     },
     {
       header: t('events.headers.last-seen'),
+      width: '26ch',
       value: (e) => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
     },
   ];
