@@ -78,9 +78,9 @@ Network, File, System, Interface) as standalone protected nouns.
 
 **R1 — Capitalization:**
 
-| Text type                               | Rule                                                                                                                                                                                                              |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`, `heading`, `tooltip`, `button` | Title Case — capitalize all words except: articles (a, an, the), short prepositions (at, by, for, in, of, on, to, up), and conjunctions (and, but, or, nor). Always capitalize the first word regardless of type. |
+| Text type                               | Rule                                                                                                                                                                                                                                   |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`, `heading`, `tooltip`, `button` | Title Case — capitalize all words except: articles (a, an, the), short prepositions (at, by, for, in, of, on, to, up), and conjunctions (and, but, or, nor). Always capitalize the first word regardless of type.                      |
 | `message`, `placeholder`                | Sentence case — capitalize only the first word of each sentence and proper nouns (see Kyma/Kubernetes list above). A new sentence begins after `. `, `? `, or `! ` within the value — capitalize the first word of each such sentence. |
 
 _Note: Fiori classifies both buttons and tooltips as title case, overriding the Kyma guideline (sentence case)._
