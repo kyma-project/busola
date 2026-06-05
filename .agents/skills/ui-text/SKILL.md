@@ -231,6 +231,7 @@ Walk every leaf string value. For each value:
 Skip empty values. Skip values that consist entirely of interpolation variables (e.g. `{{count}}`).
 Skip values that are **URL strings** — values that contain `://` or start with `www.` are domain/URL labels and must not be capitalized (e.g. `"help.sap.com"`, `"kyma-project.io"`).
 Skip values that are **UI phrase fragments** — strings that are concatenated with other strings at runtime and therefore never displayed as a standalone sentence. A value is a phrase fragment if **either**:
+
 - It consists of 1–3 static words (after stripping interpolation variables) AND starts with a preposition, article, conjunction, or lowercase verb (e.g. `of`, `in`, `a`, `an`, `the`, `and`, `or`, `upload`, `replace`, `uploaded`). Example: `"of {{pagesCount}}"` rendered as `"Page 1 of 5"`, or `"upload"` rendered as `"...click to upload"`.
 - It starts with `or ` or `and ` (suggesting it is the second half of a sentence begun in a preceding UI element). Example: `"or paste it here:"` displayed directly below a drag-and-drop zone.
 
@@ -254,46 +255,38 @@ Apply R1 only to static text **outside** the tag pairs. Do not alter tag syntax.
 > 1. **Value starts with `{{var}}`** — the interpolation variable counts as content. The first
 >    static word after it is mid-sentence, not a sentence start. Do NOT capitalize it.
 >    Example: `"{{resourceType}} set for deletion"` → no change (not `"{{resourceType}} Set for deletion"`).
->
 > 2. **Value starts with `<0>content</0>`** — the content inside the tag counts as the sentence
 >    start. The first static word after the closing tag is mid-sentence.
 >    Example: `"<0>Helm Release</0> tracks the installed charts."` → no change to `tracks`.
->
 > 3. **`WORD: ` label prefix** — if a value begins with an all-caps word followed by `: `
 >    (e.g. `CAUTION: The Service Level...`), treat the text after `: ` as a new sentence start.
 >    The all-caps word is a label/emphasis prefix, not part of the sentence.
->
 > 4. **Colon as sentence boundary** — within a value, a `: ` after a complete phrase signals
 >    that the following text starts a new clause. Capitalize the first word after `: ` only if
 >    it would otherwise be a sentence start (i.e. the colon follows the very first word/label).
 >    Do not capitalize every word after every colon (e.g. `"Parse error: {{error}}, previous..."` — `previous` stays lowercase).
->
 > 5. **Boolean/code literals** — values like `true`, `false`, `null`, `default` that appear as
 >    code or configuration values inside a sentence (e.g. `"(default: false)"`, `"If true, the..."`)
 >    must not be capitalized by R1. Skip capitalization for words that are clearly boolean/code literals.
->
 > 6. **Classification limitation** — The YAML key path is a heuristic, not a guarantee. Some
 >    keys classified as `message` (default) are actually rendered as headings in the UI via
 >    `<Title>`, `titleText=`, or `headerText=` props. These keys are typically short (2–4 words),
 >    imperative or noun-phrase shaped (e.g. `"Provide Kubeconfig"`, `"Scan Result"`, `"Cascade Delete"`),
 >    and already in Title Case. Do **not** change them to sentence case — verify by grepping for the
 >    key in `src/` to confirm its render context before flagging a capitalization change.
->
 > 7. **Technology standard names as values** — some values are displayed as the content of a
 >    `LayoutPanelRow` `value=` prop (not a label), but represent official standard/technology names
 >    such as `"Container Storage Interface"`, `"Fibre Channel"`, `"Network File System"`, `"iSCSI"`.
 >    These are proper nouns and must retain their standard capitalization regardless of text type.
 >    Add them to the protected nouns list.
->
 > 8. **Multi-rule conflict resolution** — when a key violates multiple rules, apply them in this order
 >    to produce the correct final value:
 >    1. R7 (semicolon split) — restructures the sentence first
 >    2. R3 (add period) — applied to the restructured sentence
 >    3. R1 (capitalization) — applied to the result
 >    4. R2 (remove trailing `.` or `?`) — applied last, after capitalization
->    Example: `"Couldn't load ID; config not changed"` → R7: `"Couldn't load ID. Config not changed"` →
->    R3: `"Couldn't load ID. Config not changed."` → R1: no change → R2: no trailing punct → done.
->
+>       Example: `"Couldn't load ID; config not changed"` → R7: `"Couldn't load ID. Config not changed"` →
+>       R3: `"Couldn't load ID. Config not changed."` → R1: no change → R2: no trailing punct → done.
 > 9. **Button name references in messages** — when a `message` value references a button by name
 >    (e.g. `"Click Load Resources after selecting..."`), the button name must use the same
 >    capitalization as the button itself (Title Case). Do not apply sentence-case lowercasing to
