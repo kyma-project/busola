@@ -21,8 +21,9 @@ export function getSSOAuthData(): SsoDataState {
   return JSON.parse(sessionStorage.getItem(SSO_KEY) || 'null');
 }
 
-export function getIsSSOEnabled() {
-  return process.env.NODE_ENV !== 'development';
+export function useIsSSOEnabled() {
+  const configuration = useAtomValue(configurationAtom);
+  return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
 }
 
 function createSSOAuth(ssoConfig: ConfigFeature) {
@@ -93,7 +94,7 @@ export function useSSOLogin() {
   const configuration = useAtomValue(configurationAtom);
   const ssoConfig = configuration?.features?.SSO_LOGIN;
   const [ssoState, setSsoState] = useAtom(ssoDataAtom);
-  const isSSOEnabled = getIsSSOEnabled();
+  const isSSOEnabled = useIsSSOEnabled();
 
   useEffect(() => {
     if (!isSSOEnabled || getSSOAuthData()?.id_token || ssoState?.id_token) {
@@ -115,8 +116,7 @@ export function checkForTokenExpiration(token?: string) {
   const timeout = 30; // s
   try {
     const expirationTimestamp = (jwtDecode(token) as JwtPayload).exp!;
-    const secondsLeft =
-      new Date(expirationTimestamp).getTime() - Date.now() / 1000;
+    const secondsLeft = expirationTimestamp - Math.floor(Date.now() / 1000);
 
     if (secondsLeft < timeout) {
       setSSOAuthData(null);

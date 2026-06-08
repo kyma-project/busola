@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { authDataAtom } from './authDataAtom';
 import { clusterAtom } from './clusterAtom';
 import { getIntendedPath, clearIntendedPath } from './intendedPathAtom';
-import { ssoDataAtom, getIsSSOEnabled } from './ssoDataAtom';
+import { ssoDataAtom, useIsSSOEnabled } from './ssoDataAtom';
 
 const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
@@ -61,7 +61,7 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
   const [search] = useSearchParams();
   const navigate = useNavigate();
   const initDone = useRef(false);
-  const isSSOEnabled = getIsSSOEnabled();
+  const isSSOEnabled = useIsSSOEnabled();
 
   useEffect(() => {
     if (initDone.current === true) {

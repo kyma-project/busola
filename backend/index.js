@@ -54,10 +54,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: '*' }));
 }
 
-setupJWTCheck(app);
-
 // Add Pino logging middleware (attaches req.log to all requests)
 app.use(pinoMiddleware);
+
+setupJWTCheck(app);
 
 const SLOW_REQUEST_THRESHOLD_MS = parseInt(
   process.env.SLOW_REQUEST_THRESHOLD_MS || '4000',

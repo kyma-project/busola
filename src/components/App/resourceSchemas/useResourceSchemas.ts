@@ -17,7 +17,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useAtom, useSetAtom } from 'jotai';
-import { ssoDataAtom, getIsSSOEnabled } from 'state/ssoDataAtom';
+import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
@@ -31,7 +31,7 @@ export const useResourceSchemas = () => {
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
   const { currentCluster } = clusterInfo;
-  const isSSOEnabled = getIsSSOEnabled();
+  const isSSOEnabled = useIsSSOEnabled();
 
   const setSchemasState = useSetAtom(schemaWorkerStatusAtom);
   const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedAtom);
