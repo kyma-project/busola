@@ -16,6 +16,7 @@ export default defineConfig(
       '**/*.test.js*',
       '**/__mocks__/**',
       '**/build/**',
+      'backend/core-ui',
     ]),
 
     {

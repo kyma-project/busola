@@ -1,3 +1,4 @@
+/* global process */
 import fs from 'node:fs';
 import jsyaml from 'js-yaml';
 import merge from 'lodash.merge';
