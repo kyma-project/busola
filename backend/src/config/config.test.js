@@ -4,8 +4,6 @@ import { loadConfig } from './config.js';
 import path from 'path';
 import jsyaml from 'js-yaml';
 
-// tell vitest to use fs mock from __mocks__ folder
-// this can be done in a setup file if fs should always be mocked
 vi.mock('node:fs', async () => {
   const { fs } = await import('memfs');
   return { default: fs, ...fs };
@@ -24,8 +22,6 @@ const testConfigPaths = {
 };
 
 beforeEach(() => {
-  // reset the state of in-memory fs
-  vol.reset();
   // DefaultConfig is required to exist
   createConfig(testConfigPaths.DEFAULT_CONFIG_PATH, {
     STH_ELSE: { value: 'some-value' },
@@ -34,6 +30,8 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllEnvs();
+  // reset the state of in-memory fs
+  vol.reset();
 });
 
 function createConfig(configPath, features) {
@@ -55,9 +53,10 @@ describe('Check each config separately', () => {
         value: expectedValue,
       },
     });
-    //WHEN
 
+    //WHEN
     const config = loadConfig('/');
+
     //THEN
     expect(config?.features?.FEATURE_A?.value).toBe(expectedValue);
   });
@@ -72,13 +71,14 @@ describe('Check each config separately', () => {
 
     //WHEN
     const config = loadConfig('/');
+
     //THEN
     expect(config?.features?.FEATURE_A?.value).toBe(expectedValue);
   });
   it('should return env config value', () => {
     // GIVEN
     const expectedValue = 'MY_CUSTOM_ENV';
-    vi.stubEnv('ENVIRONMENT', 'my-env');
+    vi.stubEnv('ENVIRONMENT', customEnv);
     createConfig(testConfigPaths.ENV_CONFIG_PATH, {
       FEATURE_A: { value: expectedValue },
     });
@@ -100,7 +100,6 @@ describe('Check how configs are merged', () => {
     });
 
     const expectedConfigValue = 'JUST_CONFIG';
-
     createConfig(testConfigPaths.CONFIG_PATH, {
       FEATURE_B: { value: expectedConfigValue },
     });
@@ -121,6 +120,7 @@ describe('Check how configs are merged', () => {
     expect(config?.features?.FEATURE_B?.value).toBe(expectedConfigValue);
     expect(config?.features?.FEATURE_C?.value).toBe(expectedEnvConfigValue);
   });
+
   it('merge configs with the same feature', () => {
     // GIVEN
     const expectedDefaultValue = 'DEFAULT';
@@ -144,7 +144,7 @@ describe('Check how configs are merged', () => {
     expect(config?.features?.FEATURE_A?.value).toBe(expectedEnvConfigValue);
   });
 
-  it('merge configs with the same and separate feature', () => {
+  it('merge configs with the same and unique feature', () => {
     // GIVEN
     const expectedDefaultValue = 'DEFAULT';
     const expectedMergedEnvValue = 'merged-env-value';
@@ -200,7 +200,7 @@ describe('Check error handling', () => {
     expect(config).toStrictEqual({});
   });
 
-  it('env is set but the file doesnt exist, the default config is returned', () => {
+  it('env is set but the env config doesnt exist, the default config is returned', () => {
     //GIVEN
     vi.stubEnv('ENVIRONMENT', 'not-existing');
 
