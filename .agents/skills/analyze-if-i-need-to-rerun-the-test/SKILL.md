@@ -8,6 +8,12 @@ Analyze Cypress integration test failures for a given GitHub PR in the busola re
 /analyse-test [PR Number]
 ```
 
+or
+
+```
+/should-i-rerun-the-test [PR Number]
+```
+
 - `PR Number` : GitHub PR number to analyze.
 
 **Important:** The only shell command you may execute is `.github/scripts/fetch_failed_jobs.sh`. Do not run any other `gh`, `curl`, `node`, or shell commands. Read all downloaded files using the Read tool.
