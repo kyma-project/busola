@@ -61,9 +61,8 @@ export function K8sNameField({
         return (
           <>
             <div className="bsl-col-md--12">
-              {/*@ts-expect-error Type mismatch between js and ts*/}
               <K8sNameInput
-                kind={kind}
+                kind={kind ?? ''}
                 compact
                 required={required}
                 showLabel={false}

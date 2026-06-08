@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { Text, Panel, Title, FlexBox, Button } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useAtom, useAtomValue } from 'jotai';

@@ -1,6 +1,6 @@
 import { Input, InputDomRef, InputPropTypes } from '@ui5/webcomponents-react';
 
-type WrappedTextProps = {
+export type WrappedTextProps = {
   value?: string;
   key?: string;
   setValue?: (value: string) => void;

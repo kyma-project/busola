@@ -1,11 +1,11 @@
 import { Button, Popover, Text } from '@ui5/webcomponents-react';
 import { createPortal } from 'react-dom';
-import React, { ReactNode, useId } from 'react';
+import { Dispatch, JSX, ReactNode, SetStateAction, useId } from 'react';
 import { createTranslationTextWithLinks } from '../../helpers/linkExtractor';
 import { useTranslation } from 'react-i18next'; // this regex catch 2 things, markdown URL or normal URL
 
 type HintButtonProps = {
-  setShowTitleDescription: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowTitleDescription: Dispatch<SetStateAction<boolean>>;
   showTitleDescription: boolean;
   description: string | ReactNode;
   disableLinkDetection?: boolean;

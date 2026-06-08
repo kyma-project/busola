@@ -14,6 +14,7 @@ context('Test resource validation', () => {
   });
 
   it('Check for default policies', () => {
+    cy.wait(1000);
     cy.contains('ui5-button', 'Upload YAML').click();
 
     cy.fixture('examples/resource-validation/pod.yaml').then((podConfig) => {

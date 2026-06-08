@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { unwrap } from 'jotai/utils';
 import { apiGroupAtom } from './apiGroupsAtom';
 
 type GroupVersionSelector = string[] | null;
@@ -20,3 +21,8 @@ export const groupVersionsAtom = atom<Promise<GroupVersionSelector>>(
   },
 );
 groupVersionsAtom.debugLabel = 'groupVersionsAtom';
+
+export const groupVersionsAtomSync = unwrap(
+  groupVersionsAtom,
+  (prev) => prev ?? null,
+);

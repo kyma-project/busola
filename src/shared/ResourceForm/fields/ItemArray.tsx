@@ -1,4 +1,4 @@
-import { Dispatch, RefObject, SetStateAction } from 'react';
+import { Dispatch, JSX, RefObject, SetStateAction } from 'react';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 

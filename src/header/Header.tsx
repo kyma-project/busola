@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, RefObject } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
@@ -6,6 +6,7 @@ import {
   ShellBarItem,
   ToggleButton,
 } from '@ui5/webcomponents-react';
+import type { ShellBarDomRef } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
@@ -20,6 +21,7 @@ import {
 } from 'state/clustersAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
+import { showTerminalAtom } from 'state/showTerminalAtom';
 import { configFeaturesNames } from 'state/types';
 
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
@@ -62,6 +64,7 @@ export function Header() {
   );
 
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
+  const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
   useEffect(() => {
     setShowCompanion((prevState) => ({
@@ -70,7 +73,7 @@ export function Header() {
     }));
   }, [setShowCompanion, usesJoule]);
 
-  const shellbarRef = useRef(null);
+  const shellbarRef = useRef<ShellBarDomRef>(null);
 
   return (
     <>
@@ -131,7 +134,7 @@ export function Header() {
           }
           setIsSearchOpen(false);
         }}
-        ref={shellbarRef}
+        ref={shellbarRef as RefObject<ShellBarDomRef>}
       >
         <SnowFeature />
         <FeedbackPopover />
@@ -156,8 +159,12 @@ export function Header() {
         )}
         {isTerminalEnabled && (
           <ToggleButton
-            icon={'command-line-interfaces'}
+            icon="command-line-interfaces"
             accessibleName={t('terminal.name')}
+            pressed={showTerminal.isOpen}
+            onClick={() =>
+              setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }))
+            }
           />
         )}
         <ShellBarItem

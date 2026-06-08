@@ -7,7 +7,7 @@ import { Button } from '@ui5/webcomponents-react';
 import { Labels } from 'shared/components/Labels/Labels';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { K8sResource } from 'types';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import pluralize from 'pluralize';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
@@ -23,7 +23,7 @@ export function DetailsCard({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clusterUrl } = useUrl();
-  const nodes = useAtomValue(allNodesAtom);
+  const nodes = useAtomValue(allNodesAtomSync);
   const [, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   return (

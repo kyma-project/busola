@@ -27,7 +27,9 @@ type CategoryItemProps = {
   category: Category;
   expandedCategories: string[];
   handleExpandedCategories: (_newValue: ExpandedCategories) => void;
-  sidebarRef: RefObject<SideNavigationDomRef & { closePicker: () => void }>;
+  sidebarRef: RefObject<
+    (SideNavigationDomRef & { closePicker: () => void }) | null
+  >;
 };
 
 export function CategoryItem({

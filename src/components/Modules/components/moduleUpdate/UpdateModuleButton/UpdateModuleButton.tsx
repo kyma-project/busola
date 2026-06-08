@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { fetchResourcesToApply } from '../../../community/communityModulesHelpers';
 import { uploadResource } from '../../../community/communityModulesInstallHelpers';
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
@@ -90,10 +90,10 @@ export const UpdateModuleButton = ({
   const { deleteOldTemplates, setDeleteOldTemplate, deleteOldTemplate } =
     useDeleteOldModuleTemplates(oldModuleTemplates);
 
-  const clusterNodes = useAtomValue(allNodesAtom).filter(
+  const clusterNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+  const namespaceNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => node.namespaced,
   );
 

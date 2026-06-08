@@ -50,7 +50,7 @@ jobs:
     name: Build Image
     needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
-    if: ${{(needs.approve-run.result == 'success' || needs.approve-run.result == 'skipped') && github.event.pull_request.draft != true}}
+    if: github.event.pull_request.draft == false
     with:
       name: busola
       dockerfile: Dockerfile

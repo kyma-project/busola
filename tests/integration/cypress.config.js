@@ -24,6 +24,7 @@ module.exports = defineConfig({
   experimentalInteractiveRunEvents: true,
   numTestsKeptInMemory: 0,
   e2e: {
+    includeShadowDom: true,
     testIsolation: false,
     experimentalRunAllSpecs: true,
     setupNodeEvents(on, config) {
