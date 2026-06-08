@@ -41,8 +41,6 @@ export const createFetchFn =
     init?: any;
     abortController?: AbortController;
   }) => {
-    const token = authData && 'token' in authData ? authData.token : undefined;
-    checkForTokenExpiration(token);
     checkForTokenExpiration(ssoData?.id_token);
 
     init = {
