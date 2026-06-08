@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
+import { unwrap } from 'jotai/utils';
 
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
@@ -18,6 +19,8 @@ import { Tokens } from 'shared/components/Tokens';
 import { ActiveClusterState } from 'state/clusterAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
+
+const kymaResourcesAtomSync = unwrap(kymaResourcesAtom, (prev) => prev ?? null);
 
 type KymaResourcesItem = {
   status?: string;
@@ -48,7 +51,7 @@ export default function ClusterDetails({
 }) {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
-  const kymaResources = useAtomValue(kymaResourcesAtom);
+  const kymaResources = useAtomValue(kymaResourcesAtomSync);
   const config = currentCluster?.config;
   const kymaResourceLabels = useMemo(
     () =>

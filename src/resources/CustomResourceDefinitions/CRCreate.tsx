@@ -36,7 +36,7 @@ export type CRD = {
 
 type CRCreateProps = {
   onChange?: FormEventHandler<HTMLElement>;
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   crd?: CRD;
   layoutNumber: LayoutColumnName;
   resource: any;

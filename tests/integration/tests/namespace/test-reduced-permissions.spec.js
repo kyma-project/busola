@@ -207,6 +207,7 @@ context('Test reduced permissions', () => {
 
     // delete binding
     cy.getLeftNav().contains('Cluster Role Bindings').click();
+    cy.get('ui5-table-row', { timeout: 20000 }).should('exist');
 
     cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME, {
       selectSearchResult: true,
@@ -214,6 +215,7 @@ context('Test reduced permissions', () => {
 
     // delete role
     cy.getLeftNav().contains('Cluster Roles').click();
+    cy.get('ui5-table-row', { timeout: 20000 }).should('exist');
 
     cy.deleteFromGenericList('Cluster Role', CR_NAME, {
       selectSearchResult: true,

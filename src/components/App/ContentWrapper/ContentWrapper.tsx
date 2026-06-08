@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import './ContentWrapper.scss';
 
 type ContentWrapperProps = {

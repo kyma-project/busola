@@ -64,7 +64,7 @@ export function ResourceRefRender({
     [schema, resource, storeKeys, value],
   );
 
-  const valueRef = useRef<string | Record<string, any> | null>();
+  const valueRef = useRef<string | Record<string, any> | null>(undefined);
 
   const WidgetRenderer = binding?.WidgetRenderer;
   const ownSchema = schema.delete('widget');

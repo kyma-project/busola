@@ -2,10 +2,10 @@ import { K8sResource } from 'types';
 import pluralize from 'pluralize';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 
 export const useIsInCurrentNamespace = (resource: K8sResource) => {
-  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+  const namespaceNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => node.namespaced,
   );
   const namespace = useAtomValue(activeNamespaceIdAtom);

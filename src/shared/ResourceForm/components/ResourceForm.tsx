@@ -57,7 +57,7 @@ export type ResourceFormProps = {
   setResource?: (res: any) => void;
   setCustomValid?: (isValid: boolean) => void;
   onChange?: FormEventHandler<HTMLElement>;
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   children?: ReactNode;
   createUrl?: string;
   presets?: Array<any>;

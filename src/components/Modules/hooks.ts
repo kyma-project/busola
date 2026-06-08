@@ -21,7 +21,7 @@ import {
   getNotInstalledModules,
   postForCommunityResources,
 } from 'components/Modules/community/communityModulesHelpers';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useTranslation } from 'react-i18next';
@@ -69,7 +69,7 @@ export const useFetchModuleData = (
   const singleGetFn = useSingleGet();
   const isFetching = useRef(false);
 
-  const allNodes = useAtomValue(allNodesAtom);
+  const allNodes = useAtomValue(allNodesAtomSync);
   const clusterNodes = allNodes.filter((node) => !node.namespaced);
   const namespaceNodes = allNodes.filter((node) => node.namespaced);
 
