@@ -17,7 +17,7 @@ data:
   details: |-
     body:
       - name: Panel
-        widget: Panel
+        widget: Card
         children:
           - name: Array of Strings
             widget: JoinedArray
