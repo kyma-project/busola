@@ -21,6 +21,10 @@ describe('useTokenValidation', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.mocked(tiktoken.encodingForModel).mockImplementation(() => ({
+      encode: vi.fn((text: string) => new Array(text.length).fill(0)),
+      decode: vi.fn(),
+    }));
   });
 
   afterEach(() => {
