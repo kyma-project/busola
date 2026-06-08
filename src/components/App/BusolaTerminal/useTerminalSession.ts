@@ -3,7 +3,6 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { Terminal } from '@xterm/xterm';
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
-import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import {
   terminalSessionAtom,
@@ -74,7 +73,11 @@ async function pollPodReady(
       relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`,
     });
     const pod = await res.json();
-    if (pod?.status?.phase === 'Running') return;
+    const phase = pod?.status?.phase;
+    if (phase === 'Running') return;
+    if (phase === 'Failed' || phase === 'Succeeded') {
+      throw new Error(`Terminal pod entered phase: ${phase}`);
+    }
     await new Promise((resolve) => setTimeout(resolve, POD_POLL_INTERVAL_MS));
   }
   throw new Error('Timed out waiting for terminal pod to become ready.');
@@ -140,24 +143,13 @@ export function useTerminalSession() {
 
         await pollPodReady(fetchFn, podName, abort.signal);
 
-        // --- Backend contract (implemented in #4920) -------------------------
-        // Browsers cannot set custom headers on a WebSocket handshake, so cluster
-        // credentials are exchanged out-of-band:
-        //   1. POST /backend/ws-token  body: createHeaders(authData, cluster)
-        //        -> { token }  (short-lived, single-use)
-        //   2. WS /backend/ws<k8s-attach-path>?...&wsToken=<token>
-        //        subprotocol: v4.channel.k8s.io
-        //        The backend resolves the token to the stored credentials and
-        //        proxies the socket to the cluster's pod/attach endpoint.
-        // Until #4920 lands these calls fail at step 1; full e2e is verified in #4923.
-        // ---------------------------------------------------------------------
-        const credHeaders = createHeaders(authData, cluster);
-        const tokenRes = await fetch('/backend/ws-token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(credHeaders),
+        // A WebSocket handshake can't carry custom headers, so the credentials
+        // are first swapped for a short-lived token the backend (#4920) replays
+        // on the attach upgrade.
+        const tokenRes = await fetchFn({
+          relativeUrl: '/ws-token',
+          init: { method: 'POST' },
         });
-        if (!tokenRes.ok) throw new Error('Failed to obtain ws-token.');
         const { token: wsToken } = await tokenRes.json();
 
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';

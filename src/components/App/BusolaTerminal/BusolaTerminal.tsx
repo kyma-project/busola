@@ -111,9 +111,9 @@ export function BusolaTerminal({
 
   const statusLabel =
     sessionState.status === 'provisioning'
-      ? t('terminal.status.provisioning', 'Connecting…')
+      ? t('terminal.status.provisioning')
       : sessionState.status === 'error'
-        ? t('terminal.status.error', `Error: ${sessionState.errorMessage}`)
+        ? t('terminal.status.error', { error: sessionState.errorMessage })
         : null;
 
   return (

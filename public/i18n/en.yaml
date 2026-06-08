@@ -1546,6 +1546,9 @@ storage-classes:
   title: Storage Classes
 terminal:
   name: Busola Terminal
+  status:
+    error: 'Error: {{error}}'
+    provisioning: Connecting…
 upload-yaml:
   errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
