@@ -85,7 +85,7 @@ config:
     SNOW:
       isEnabled: false
     SSO_LOGIN:
-      isEnabled: true
+      isEnabled: false
       config:
         issuerUrl: https://apskyxzcl.accounts400.ondemand.com
         scope: openid
