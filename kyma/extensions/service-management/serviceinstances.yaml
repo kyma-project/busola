@@ -55,7 +55,7 @@ data:
         widget: Labels
     body:
       - name: specification
-        widget: Panel
+        widget: Card
         children:
           - name: spec.serviceOfferingName
             source: spec.serviceOfferingName
@@ -76,7 +76,7 @@ data:
             widget: Labels
             visibility: '$exists($value) ? $boolean($value) : false'
       - name: spec.userInfo
-        widget: Panel
+        widget: Card
         children:
           - name: spec.groups
             source: spec.userInfo.groups

@@ -25,7 +25,7 @@ data:
       is an open standard authentication protocol built on top of the OAuth 2.0 framework. It provides a secure and flexible way to authenticate and authorize users within applications and systems.
   details: |-
     body:
-      - widget: Panel
+      - widget: Card
         name: Specification
         children:
           - source: spec.supportedSigningAlgs
