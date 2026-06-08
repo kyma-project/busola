@@ -120,5 +120,13 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
         }
       }
     }
-  }, [cluster, authData, search, navigate, handledKubeconfigId, ssoData]);
+  }, [
+    cluster,
+    authData,
+    search,
+    navigate,
+    handledKubeconfigId,
+    ssoData,
+    isSSOEnabled,
+  ]);
 }

@@ -25,7 +25,7 @@ const userRateLimiter = rateLimit({
 });
 
 export function setupJWTCheck(app) {
-  const jwtConfig = global.config.features?.JWT_CHECK_CONFIG;
+  const jwtConfig = global?.config?.features?.JWT_CHECK_CONFIG;
 
   if (!jwtConfig?.isEnabled || !jwtConfig?.config) {
     return;
