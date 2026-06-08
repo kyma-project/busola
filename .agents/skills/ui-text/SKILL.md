@@ -54,29 +54,56 @@ Function, Subscription, EventingBackend, Kyma, SAP.
 
 Plurals of protected nouns are also protected (e.g. Pods, Services).
 
+Also always preserve capitalization for common technical acronyms and proper nouns:
+Kubernetes, CPU, GPU, RAM, API, URL, URI, UUID, HTTP, HTTPS, DNS, JSON, YAML, HTML,
+XML, REST, OAuth, OIDC, RBAC, JWT, TLS, SSL, SSH, CI, CD, IP, CIDR, VPC, SLA,
+ID, VM, AI, UI, PV, PVC,
+AWS, GCP, Azure, Nvidia, Istio, Eventing, Telemetry, Serverless, BTP, Joule, Busola,
+TokenRequest, ResourceQuota, LimitRange, HorizontalPodAutoscaler, PodDisruptionBudget,
+NetworkPolicy, ENTRYPOINT, CMD, JSONata, Docker,
+CRD, iSCSI, CRON, ModuleTemplate,
+P1, P2, P3, P4, Medium, Low, High, Critical,
+Service Level Agreement, Service Level Agreements.
+
+Plurals and common variants of the above are also protected (e.g. APIs, URLs, GPUs, CIDRs, CRs, IDs, VMs, SLAs, CRDs).
+
+Note: compound technology standard names such as "Container Storage Interface", "Fibre Channel",
+"Network File System" are proper names for industry standards — preserve their capitalization
+as complete phrases, but do not add their individual component words (Container, Fibre, Channel,
+Network, File, System, Interface) as standalone protected nouns.
+
 ## Rule Set
 
 ### Layer 1 — Mechanical Rules
 
 **R1 — Capitalization:**
 
-| Text type                               | Rule                                                                                                                                                                                                              |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`, `heading`, `tooltip`, `button` | Title Case — capitalize all words except: articles (a, an, the), short prepositions (at, by, for, in, of, on, to, up), and conjunctions (and, but, or, nor). Always capitalize the first word regardless of type. |
-| `message`, `placeholder`                | Sentence case — capitalize only the first word and proper nouns (see Kyma/Kubernetes list above).                                                                                                                 |
+| Text type                               | Rule                                                                                                                                                                                                                                   |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`, `heading`, `tooltip`, `button` | Title Case — capitalize all words except: articles (a, an, the), short prepositions (at, by, for, in, of, on, to, up), and conjunctions (and, but, or, nor). Always capitalize the first word regardless of type.                      |
+| `message`, `placeholder`                | Sentence case — capitalize only the first word of each sentence and proper nouns (see Kyma/Kubernetes list above). A new sentence begins after `. `, `? `, or `! ` within the value — capitalize the first word of each such sentence. |
 
 _Note: Fiori classifies both buttons and tooltips as title case, overriding the Kyma guideline (sentence case)._
 
-**Exception:** `tooltip` values that contain more than 2 sentence-ending punctuation marks
+**Exception:** `tooltip` values that contain **2 or more** sentence-ending punctuation marks
 (`.` or `?`) are multi-sentence descriptive paragraphs — **skip R1 for these** (they are
 already flagged by E2 as too long; the recommended fix is to shorten them, not to title-case them).
+
+When counting sentence-ending punctuation, **exclude** `.` or `?` that appear inside quoted
+strings (e.g. `'-'`, `'.'`, `'my-name'`) — these are part of example values, not sentence
+boundaries. Only count punctuation that ends an actual sentence clause.
 
 **R2 — Punctuation restrictions in UI elements:**
 
 - `label`, `heading`, `button`, `tooltip` values must not end with `.` or `?`.
+  Exception: values ending with `...` or `…` (ellipsis) — skip, the ellipsis is intentional.
 - Any value (all text types) must not contain `!`. Exclamation marks are perceived as alarming or
   offensive (SAP Style Guide). Remove or rephrase.
+  When removing: replace `!` followed by a space and a word with `. ` + the word capitalized (mid-sentence);
+  remove a trailing `!` entirely.
   Exception: values inside quoted strings that are part of technical examples (e.g. code snippets) — skip.
+  Exception: values under the `kyma-companion.*` key prefix — conversational assistant UI intentionally
+  uses `!` to express enthusiasm and warmth (e.g. `"Hi, I am your Kyma assistant!"`). Skip these.
 
 **R3 — Sentence-ending punctuation:**
 
@@ -128,8 +155,8 @@ flag: "Consider adding context: what happened, why, and what the user can do."
 
 **E2 — Tooltip length:**
 
-`tooltip` values containing more than 2 sentence-ending punctuation marks
-(`.` or `?`) → flag: "Tooltip is too long (>2 sentences). Trim or link to docs."
+`tooltip` values containing **2 or more** sentence-ending punctuation marks
+(`.` or `?`) → flag: "Tooltip is too long (≥2 sentences). Trim or link to docs."
 
 **E3 — Passive voice:**
 
@@ -191,14 +218,30 @@ Walk every leaf string value. For each value:
 
 1. Derive the full dotted key path.
 2. Classify text type using the Key Classification table.
-3. Apply R1–R7 (R2 has two sub-rules; apply both).
+3. Apply R2–R7 only (**skip R1 in Cleanup Mode** — see note below).
 4. Record violations as `{ key, current_value, proposed_value, rule }`. For R5 (informational only), omit `proposed_value`.
 
+> **Why skip R1 in Cleanup Mode?**
+> R1 (capitalization) produces ~200–300 proposed changes on a full file run, of which roughly
+> 60–70% are false positives: keys classified as `message` by default that are actually rendered
+> as headings, labels, or buttons in the UI (see implementation note 6). A diff of 300 changes
+> is not reviewable in practice. R1 is therefore reserved for **Review Mode**, where it is applied
+> only to the handful of keys changed in a given PR — a manageable set to verify manually.
+
 Skip empty values. Skip values that consist entirely of interpolation variables (e.g. `{{count}}`).
+Skip values that are **URL strings** — values that contain `://` or start with `www.` are domain/URL labels and must not be capitalized (e.g. `"help.sap.com"`, `"kyma-project.io"`).
+Skip values that are **UI phrase fragments** — strings that are concatenated with other strings at runtime and therefore never displayed as a standalone sentence. A value is a phrase fragment if **either**:
+
+- It consists of 1–3 static words (after stripping interpolation variables) AND starts with a preposition, article, conjunction, or lowercase verb (e.g. `of`, `in`, `a`, `an`, `the`, `and`, `or`, `upload`, `replace`, `uploaded`). Example: `"of {{pagesCount}}"` rendered as `"Page 1 of 5"`, or `"upload"` rendered as `"...click to upload"`.
+- It starts with `or ` or `and ` (suggesting it is the second half of a sentence begun in a preceding UI element). Example: `"or paste it here:"` displayed directly below a drag-and-drop zone.
+
+Do not apply R1 capitalization to phrase fragments.
 For values that mix static text with interpolation variables (e.g. `CPU used: {{percentage}}`),
 apply all rules to the static text portions only — treat `{{...}}` tokens as opaque placeholders
 that must not be altered or moved.
-For values containing HTML tags (e.g. `<0>ConfigMap</0>`, `<strong>`): apply capitalization and punctuation rules to visible text only; do not alter tag syntax or attributes.
+For values containing HTML tags: this file uses only `<0>`, `</0>`, `<1>`, `</1>` (React i18n component placeholders).
+Text **inside** a paired content tag (e.g. `<0>Cluster Role Binding</0>`) is a highlighted term — preserve it exactly as-is, do not apply R1 to it.
+Apply R1 only to static text **outside** the tag pairs. Do not alter tag syntax.
 
 > **Implementation note:** Use `grep`, `python3`, or `bash` scripts to scan the file
 > programmatically — do not read the file line-by-line in plain text. A 1500-line YAML
@@ -206,6 +249,48 @@ For values containing HTML tags (e.g. `<0>ConfigMap</0>`, `<strong>`): apply cap
 > to find R4/R6 candidates instantly, and a Python script to walk the YAML tree for R1/R2/R3.
 > For YAML block scalars (lines following a `|` or `>` key), collect all continuation lines
 > as part of that key's value before applying rules.
+>
+> **Sentence-start detection edge cases for R1 sentence case:**
+>
+> 1. **Value starts with `{{var}}`** — the interpolation variable counts as content. The first
+>    static word after it is mid-sentence, not a sentence start. Do NOT capitalize it.
+>    Example: `"{{resourceType}} set for deletion"` → no change (not `"{{resourceType}} Set for deletion"`).
+> 2. **Value starts with `<0>content</0>`** — the content inside the tag counts as the sentence
+>    start. The first static word after the closing tag is mid-sentence.
+>    Example: `"<0>Helm Release</0> tracks the installed charts."` → no change to `tracks`.
+> 3. **`WORD: ` label prefix** — if a value begins with an all-caps word followed by `: `
+>    (e.g. `CAUTION: The Service Level...`), treat the text after `: ` as a new sentence start.
+>    The all-caps word is a label/emphasis prefix, not part of the sentence.
+> 4. **Colon as sentence boundary** — within a value, a `: ` after a complete phrase signals
+>    that the following text starts a new clause. Capitalize the first word after `: ` only if
+>    it would otherwise be a sentence start (i.e. the colon follows the very first word/label).
+>    Do not capitalize every word after every colon (e.g. `"Parse error: {{error}}, previous..."` — `previous` stays lowercase).
+> 5. **Boolean/code literals** — values like `true`, `false`, `null`, `default` that appear as
+>    code or configuration values inside a sentence (e.g. `"(default: false)"`, `"If true, the..."`)
+>    must not be capitalized by R1. Skip capitalization for words that are clearly boolean/code literals.
+> 6. **Classification limitation** — The YAML key path is a heuristic, not a guarantee. Some
+>    keys classified as `message` (default) are actually rendered as headings in the UI via
+>    `<Title>`, `titleText=`, or `headerText=` props. These keys are typically short (2–4 words),
+>    imperative or noun-phrase shaped (e.g. `"Provide Kubeconfig"`, `"Scan Result"`, `"Cascade Delete"`),
+>    and already in Title Case. Do **not** change them to sentence case — verify by grepping for the
+>    key in `src/` to confirm its render context before flagging a capitalization change.
+> 7. **Technology standard names as values** — some values are displayed as the content of a
+>    `LayoutPanelRow` `value=` prop (not a label), but represent official standard/technology names
+>    such as `"Container Storage Interface"`, `"Fibre Channel"`, `"Network File System"`, `"iSCSI"`.
+>    These are proper nouns and must retain their standard capitalization regardless of text type.
+>    Add them to the protected nouns list.
+> 8. **Multi-rule conflict resolution** — when a key violates multiple rules, apply them in this order
+>    to produce the correct final value:
+>    1. R7 (semicolon split) — restructures the sentence first
+>    2. R3 (add period) — applied to the restructured sentence
+>    3. R1 (capitalization) — applied to the result
+>    4. R2 (remove trailing `.` or `?`) — applied last, after capitalization
+>       Example: `"Couldn't load ID; config not changed"` → R7: `"Couldn't load ID. Config not changed"` →
+>       R3: `"Couldn't load ID. Config not changed."` → R1: no change → R2: no trailing punct → done.
+> 9. **Button name references in messages** — when a `message` value references a button by name
+>    (e.g. `"Click Load Resources after selecting..."`), the button name must use the same
+>    capitalization as the button itself (Title Case). Do not apply sentence-case lowercasing to
+>    inline button-name references.
 
 **Step 3 — Present Layer 1 diff**
 
