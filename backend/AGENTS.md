@@ -16,8 +16,6 @@ This file provides backend-specific guidance for agents working in `backend/`. F
 2. `config/config.yaml` (when the file exists — in production mounted from a Kubernetes ConfigMap)
 3. `environments/{ENVIRONMENT}/config.yaml` (when `ENVIRONMENT` env var is set; should win over all)
 
-Note: the current code applies env config before config.yaml (steps 2 and 3 are swapped), which is a known bug.
-
 Feature flags are consumed in the backend by accessing the loaded config directly:
 
 ```js
