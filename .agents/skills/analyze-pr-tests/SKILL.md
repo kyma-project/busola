@@ -5,13 +5,7 @@ Analyze Cypress integration test failures for a given GitHub PR in the busola re
 ## Usage
 
 ```
-/analyse-test [PR Number]
-```
-
-or
-
-```
-/should-i-rerun-the-test [PR Number]
+/analyze-pr-tests [PR Number]
 ```
 
 - `PR Number` : GitHub PR number to analyze.
