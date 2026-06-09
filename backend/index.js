@@ -19,6 +19,13 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./config.js');
 
+if (config.features?.ALLOW_PRIVATE_IPS?.isEnabled) {
+  console.warn(
+    '[SEC-375] ALLOW_PRIVATE_IPS is enabled: SSRF IP-based protection is disabled. ' +
+      'Do not use this setting in production.',
+  );
+}
+
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
@@ -62,7 +69,7 @@ const SLOW_REQUEST_THRESHOLD_MS = parseInt(
 );
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
-app.use('/proxy', proxyHandler);
+app.use('/proxy', requireK8sCredential, proxyHandler);
 
 app.get('/backend/kubeconfig', (req, res) => {
   const kubeconfigDir = path.join(

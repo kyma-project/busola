@@ -4,6 +4,24 @@ import { URL } from 'url';
 import { pipeline } from 'stream/promises';
 import { isPrivateAddressCached, isValidHost } from './utils/network-utils.js';
 
+const ALLOWED_RESPONSE_HEADERS = [
+  'content-type',
+  'content-length',
+  'content-encoding',
+  'cache-control',
+  'etag',
+  'last-modified',
+];
+
+export function buildSafeProxyHeaders(upstreamHeaders) {
+  const safe = {};
+  for (const h of ALLOWED_RESPONSE_HEADERS) {
+    if (upstreamHeaders[h]) safe[h] = upstreamHeaders[h];
+  }
+  safe['x-content-type-options'] = 'nosniff';
+  return safe;
+}
+
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
   if (!targetUrl) {
@@ -36,7 +54,10 @@ async function proxyHandler(req, res) {
 
     await new Promise((resolve, reject) => {
       const proxyReq = httpsRequest(options, async (proxyRes) => {
-        res.writeHead(proxyRes.statusCode, proxyRes.headers);
+        res.writeHead(
+          proxyRes.statusCode,
+          buildSafeProxyHeaders(proxyRes.headers),
+        );
         try {
           await pipeline(proxyRes, res);
           resolve();

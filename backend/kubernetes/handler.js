@@ -1,7 +1,7 @@
 /* global Buffer, require */
 import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
-import { filters } from '../request-filters';
+import { filters, localHostnameFilter } from '../request-filters';
 import { pipeline } from 'stream/promises';
 import { tokenAuthAgent } from '../utils/https-agent.js';
 import {
@@ -67,6 +67,22 @@ export async function handleK8sRequests(req, res) {
     filters.forEach((filter) => filter(req, headersData));
   } catch (err) {
     req.log.error({ err }, 'Filters rejected the request');
+    res.contentType('text/plain; charset=utf-8');
+    res.status(400).send('Request ID: ' + escape(req.id));
+    return;
+  }
+
+  if (headersData.targetApiServer.protocol !== 'https:') {
+    req.log.error('Non-HTTPS cluster URL rejected');
+    res.contentType('text/plain; charset=utf-8');
+    res.status(400).send('Request ID: ' + escape(req.id));
+    return;
+  }
+
+  try {
+    await localHostnameFilter(req, headersData);
+  } catch (err) {
+    req.log.error({ err }, 'Async filter rejected the request');
     res.contentType('text/plain; charset=utf-8');
     res.status(400).send('Request ID: ' + escape(req.id));
     return;
