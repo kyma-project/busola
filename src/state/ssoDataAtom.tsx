@@ -97,11 +97,13 @@ export function useSSOLogin() {
   const isSSOEnabled = useIsSSOEnabled();
 
   useEffect(() => {
-    if (!isSSOEnabled || getSSOAuthData()?.id_token || ssoState?.id_token) {
-      return;
-    }
-
-    if (!ssoConfig) {
+    if (
+      !isSSOEnabled ||
+      !window.isSecureContext ||
+      !ssoConfig ||
+      getSSOAuthData()?.id_token ||
+      ssoState?.id_token
+    ) {
       return;
     }
 
