@@ -4,11 +4,6 @@ config:
       isEnabled: false
     GZIP:
       isEnabled: true
-    JWT_CHECK_CONFIG:
-      isEnabled: false
-      config:
-        issuer: https://apskyxzcl.accounts400.ondemand.com
-        jwksUri: https://apskyxzcl.accounts400.ondemand.com/.well-known/jwks.json
     KYMA_COMPANION:
       config:
         apiBaseUrl: ''
