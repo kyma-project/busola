@@ -1,0 +1,4 @@
+config:
+  features:
+    FEATURE_C:
+      value: env
