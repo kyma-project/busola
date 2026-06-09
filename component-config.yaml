@@ -1,0 +1,7 @@
+name: kyma-project.io/kyma-runtime/kcp-components/busola
+team: kyma/hasselhoff
+images:
+  - europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest
+  - europe-docker.pkg.dev/kyma-project/prod/busola-web:latest
+  - europe-docker.pkg.dev/kyma-project/prod/busola:latest
+  - europe-docker.pkg.dev/kyma-project/restricted-prod/fips-busola:latest
