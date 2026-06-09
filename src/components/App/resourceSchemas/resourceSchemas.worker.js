@@ -54,7 +54,7 @@ async function createJSONSchemas(openAPISchemas, clusterName) {
 
   const resolved = await new Resolver().resolve(openAPISchemas);
   const schema = openapiSchemaToJsonSchema(resolved, { cloneSchema: false });
-  jsonSchemas.set(clusterName, {});
+  jsonSchemas.set(clusterName, Object.create(null));
 
   Object.values(schema.result.definitions).forEach((definition) => {
     if (definition['x-kubernetes-group-version-kind']) {
