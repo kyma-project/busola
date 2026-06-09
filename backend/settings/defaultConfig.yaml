@@ -6,7 +6,7 @@ config:
       isEnabled: false
       config:
         issuer: https://apskyxzcl.accounts400.ondemand.com
-        jwksUri: https://apskyxzcl.accounts400.ondemand.com/.well-known/jwks.json
+        jwksUri: https://apskyxzcl.accounts400.ondemand.com/oauth2/certs
     KYMA_COMPANION:
       config:
         apiBaseUrl: 'https://companion.cp.dev.kyma.cloud.sap'

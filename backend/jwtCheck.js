@@ -1,7 +1,8 @@
-/* global global, process */
+/* global process */
 import { expressjwt } from 'express-jwt';
 import jwks from 'jwks-rsa';
 import rateLimit from 'express-rate-limit';
+import config from './config.js';
 
 const jwtCheck = ({ issuer, jwksUri }) =>
   expressjwt({
@@ -25,7 +26,7 @@ const userRateLimiter = rateLimit({
 });
 
 export function setupJWTCheck(app) {
-  const jwtConfig = global?.config?.features?.JWT_CHECK_CONFIG;
+  const jwtConfig = config?.features?.JWT_CHECK_CONFIG;
 
   if (!jwtConfig?.isEnabled || !jwtConfig?.config) {
     return;

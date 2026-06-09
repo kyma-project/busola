@@ -14,7 +14,7 @@ export default defineConfig({
     outDir: 'build',
   },
   server: {
-    port: 8080,
+    port: 8000,
     warmup: {
       clientFiles: [
         'cypress/support/component.jsx',
