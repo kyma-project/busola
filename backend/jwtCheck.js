@@ -14,6 +14,10 @@ const jwtCheck = ({ issuer, jwksUri }) =>
     }),
     issuer,
     algorithms: ['RS256'],
+    skip: (req) => {
+      const path = req.path;
+      return path === '/' || path === '/healthz';
+    },
   });
 
 const userRateLimiter = rateLimit({
