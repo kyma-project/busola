@@ -15,7 +15,7 @@ export default mergeConfig(
       coverage: {
         provider: 'v8',
         reportsDirectory: 'coverage/unit',
-        reporter: ['text', 'lcov', 'html'],
+        reporter: ['text', 'lcov', 'html', 'json'],
         include: ['src/**'],
         exclude: [
           'src/**/*.cy.{ts,tsx,js,jsx}',

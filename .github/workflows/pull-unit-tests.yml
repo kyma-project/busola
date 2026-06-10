@@ -43,18 +43,16 @@ jobs:
       - name: run_unit_tests
         shell: bash
         run: |
-          npm run test:coverage
+          npm test
       - name: run_component_tests
         shell: bash
-        env:
-          CYPRESS_COVERAGE: 'true'
         run: |
           npm run component-test-headless
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v7
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
         with:
-          files: ./coverage/unit/lcov.info,./coverage/component/lcov.info
-          fail_ci_if_error: false
+          files: ./coverage/unit/lcov.info ./coverage/component/lcov.info
+          fail-on-error: false
       - name: Upload coverage report as artifact
         uses: actions/upload-artifact@v4
         with:
