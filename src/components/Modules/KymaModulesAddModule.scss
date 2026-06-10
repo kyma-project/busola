@@ -13,6 +13,10 @@
     max-width: var(--card-width);
     height: fit-content;
 
+    .add-module-card-checked {
+      background-color: var(--sapList_SelectionBackgroundColor);
+    }
+
     .addModuleCard {
       --left-spacing: 45px;
 
@@ -44,7 +48,7 @@
       }
 
       .content {
-        margin-left: var(--left-spacing);
+        padding-left: var(--left-spacing);
       }
     }
   }
