@@ -32,7 +32,10 @@ export function setupJWTCheck(app) {
     return;
   }
 
-  if (process.env.NODE_ENV !== 'development') {
+  if (
+    process.env.NODE_ENV !== 'development' &&
+    process.env.JWT_CHECK_ENABLED === 'true'
+  ) {
     app.use('/backend', jwtCheck(jwtConfig.config));
     app.use('/backend', userRateLimiter);
   }
