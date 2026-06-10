@@ -15,8 +15,10 @@
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged --concurrent=false",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "component-test": "npx cypress open --config-file cypress.config.component.ts",
     "component-test-headless": "npx cypress run --headless --config-file cypress.config.component.ts --component --browser chrome",
+    "component-test-coverage": "CYPRESS_COVERAGE=true npx cypress run --headless --config-file cypress.config.component.ts --component --browser chrome",
     "build": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "build:docker": "npm run copy-themes; INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false NODE_OPTIONS=--max-old-space-size=8192 IS_DOCKER=true vite build",
     "copy-themes": "cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon/css_variables.css public/themes/@sap-theming/default.css; for theme in hcb dark hcw ; do cp node_modules/@sap-theming/theming-base-content/content/Base/baseLib/sap_horizon_$theme/css_variables.css public/themes/@sap-theming/$theme.css ; done",
@@ -104,6 +106,7 @@
     "rfc6902": "^5.1.2"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^4.0.3",
     "@eslint/js": "^9.38.0",
     "@nabla/vite-plugin-eslint": "^2.0.6",
     "@testing-library/jest-dom": "^6.9.1",
@@ -120,6 +123,7 @@
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/coverage-v8": "^4.1.8",
     "concurrently": "^7.6.0",
     "cypress": "^15.8.2",
     "eslint": "^9.38.0",
@@ -137,6 +141,7 @@
     "typescript-eslint": "^8.46.2",
     "uuid": "^14.0.0",
     "vite": "^6.4.2",
+    "vite-plugin-istanbul": "^8.0.0",
     "vite-plugin-static-copy": "^2.3.2",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4",
@@ -153,5 +158,13 @@
     "react-json-tree": "^0.20.0",
     "underscore": "^1.13.8",
     "undici": "^7.25.0"
+  },
+  "nyc": {
+    "report-dir": "coverage/component",
+    "reporter": [
+      "lcov",
+      "html",
+      "text"
+    ]
   }
 }
