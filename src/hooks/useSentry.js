@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useRef } from 'react';
 import * as Sentry from '@sentry/react';
 import { useFeature } from './useFeature';
 import { configFeaturesNames } from 'state/types';
@@ -24,14 +24,15 @@ const initSentry = (dsn) => {
 
 export function useSentry() {
   const feature = useFeature(configFeaturesNames.SENTRY);
+  const initializedDsn = useRef(null);
 
-  const dsn = useMemo(() => {
+  useEffect(() => {
     try {
       if (feature?.isEnabled && feature?.config?.dsn) {
         const nextDsn = feature.config.dsn;
-        if (nextDsn !== dsn) {
+        if (nextDsn !== initializedDsn.current) {
+          initializedDsn.current = nextDsn;
           initSentry(nextDsn);
-          return nextDsn;
         }
       }
     } catch (e) {
