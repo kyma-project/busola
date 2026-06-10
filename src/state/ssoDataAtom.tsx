@@ -4,6 +4,7 @@ import { atom, useAtom, useAtomValue } from 'jotai';
 import { configurationAtom } from './configuration/configurationAtom';
 import { ConfigFeature } from './types';
 import { useEffect } from 'react';
+import { getEnv, Envs } from 'shared/utils/env';
 
 const SSO_KEY = 'SSO';
 
@@ -107,7 +108,12 @@ export function useSSOLogin() {
       return;
     }
 
-    handleSSOLogin(ssoConfig, setSsoState);
+    const startLogin = async () => {
+      const bypass = await getEnv(Envs.SSO_LOGIN_BYPASS);
+      if (bypass === 'true') return;
+      handleSSOLogin(ssoConfig, setSsoState);
+    };
+    startLogin();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSSOEnabled, ssoConfig]);
 }
