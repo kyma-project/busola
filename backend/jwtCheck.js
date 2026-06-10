@@ -14,7 +14,7 @@ const jwtCheck = ({ issuer, jwksUri }) =>
     }),
     issuer,
     algorithms: ['RS256'],
-  }).unless({ path: '/' });
+  });
 
 const userRateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
@@ -33,7 +33,7 @@ export function setupJWTCheck(app) {
   }
 
   if (process.env.NODE_ENV !== 'development') {
-    app.use(jwtCheck(jwtConfig.config));
-    app.use(userRateLimiter);
+    app.use('/backend', jwtCheck(jwtConfig.config));
+    app.use('/backend', userRateLimiter);
   }
 }
