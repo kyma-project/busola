@@ -10,7 +10,7 @@ set -o pipefail # prevents errors in a pipeline from being masked
 
 #
 echo "Running kyma-dashboard... with ${IMG} image"
-docker run -d --rm --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT="${ENV}" "${IMG}"
+docker run -d --rm --net=host --pid=host --name kyma-dashboard --env ENVIRONMENT="${ENV}" --env JWT_CHECK_BYPASS=true "${IMG}"
 
 echo "waiting for server to be up..."
 while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' "http://localhost:3001")" != "200" ]]; do sleep 5; done
