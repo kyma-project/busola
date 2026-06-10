@@ -14,8 +14,7 @@ const jwtCheck = ({ issuer, jwksUri }) =>
     }),
     issuer,
     algorithms: ['RS256'],
-    skip: (req) => req.path === '/',
-  });
+  }).unless({ path: '/' });
 
 const userRateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
