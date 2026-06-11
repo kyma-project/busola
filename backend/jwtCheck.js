@@ -2,7 +2,7 @@
 import { expressjwt } from 'express-jwt';
 import jwks from 'jwks-rsa';
 import rateLimit from 'express-rate-limit';
-import config from './config.js';
+import config from './src/config/config';
 
 const jwtCheck = ({ issuer, jwksUri, clientId }) =>
   expressjwt({
