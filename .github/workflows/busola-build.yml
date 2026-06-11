@@ -45,7 +45,13 @@ permissions:
 
 jobs:
   approve-run:
-    uses: ./.github/workflows/approval-run.yaml
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'pull_request_target' &&  'restricted' || 'no-restricted' }}
+    #uncomment after gating is allowed - environment: ${{ github.event.pull_request.author_association != 'COLLABORATOR' && github.event.pull_request.author_association != 'OWNER' && 'restricted' || 'internal' }}
+    steps:
+      - name: Approved
+        run: echo "Build approved, environment selected"
+
   build-busola-image:
     name: Build Image
     needs: approve-run
