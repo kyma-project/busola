@@ -29,6 +29,26 @@ export function useIsSSOEnabled() {
 
 let userManager: UserManager | null = null;
 let handlersAttached = false;
+let loginInProgress = false;
+let registeredSsoStateSetter: ((user: SsoDataState) => void) | null = null;
+let refreshInProgress = false;
+
+async function trySilentRefresh(): Promise<boolean> {
+  if (!userManager || refreshInProgress) return false;
+  refreshInProgress = true;
+  try {
+    const refreshedUser = await userManager.signinSilent();
+    setSSOAuthData(refreshedUser);
+    registeredSsoStateSetter?.(refreshedUser);
+    return true;
+  } catch {
+    setSSOAuthData(null);
+    registeredSsoStateSetter?.(null);
+    return false;
+  } finally {
+    refreshInProgress = false;
+  }
+}
 
 function getOrCreateUserManager(ssoConfig: ConfigFeature): UserManager {
   if (!userManager) {
@@ -55,7 +75,10 @@ async function handleSSOLogin(
   if (!ssoConfig || !ssoConfig.config) {
     throw new Error('SSO configuration not found');
   }
+  if (loginInProgress) return;
+  loginInProgress = true;
   const userManager = getOrCreateUserManager(ssoConfig);
+  registeredSsoStateSetter = setSsoState;
 
   try {
     const storedUser = await userManager?.getUser();
@@ -114,6 +137,8 @@ async function handleSSOLogin(
     }
     await userManager.clearStaleState();
     userManager.signinRedirect();
+  } finally {
+    loginInProgress = false;
   }
 }
 
@@ -153,8 +178,12 @@ export function checkForTokenExpiration(token?: string) {
     const secondsLeft = expirationTimestamp - Math.floor(Date.now() / 1000);
 
     if (secondsLeft < timeout) {
-      setSSOAuthData(null);
-      window.location.reload();
+      trySilentRefresh().then((ok) => {
+        if (!ok) {
+          setSSOAuthData(null);
+          window.location.reload();
+        }
+      });
     }
   } catch (_) {
     // ignore errors from non-JWT tokens
