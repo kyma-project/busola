@@ -18,9 +18,18 @@ on:
       - 'package.json'
 
 jobs:
+  approve-run:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'pull_request' &&  'restricted' || 'no-restricted' }}
+    #uncomment after gating is allowed - environment: ${{ github.event.pull_request.author_association != 'COLLABORATOR' && github.event.pull_request.author_association != 'OWNER' && 'restricted' || 'internal' }}
+    steps:
+      - name: Approved
+        run: echo "Build approved, environment selected"
+
   run-accessibility-tests:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
+    needs: approve-run
     steps:
       - uses: actions/checkout@v4
         with:
