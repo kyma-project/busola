@@ -163,7 +163,7 @@
     "reporter": [
       "lcov",
       "html",
-      "text"
+      "text-summary"
     ]
   }
 }
