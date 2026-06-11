@@ -1,6 +1,13 @@
 name: PR Unit and Component Tests
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'cypress/**'
+      - 'cypress.config.component.ts'
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
@@ -21,6 +28,9 @@ on:
 jobs:
   run-unit-and-component-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -48,6 +58,10 @@ jobs:
         shell: bash
         run: |
           npm run component-test-headless
+      - name: merge_coverage_reports
+        shell: bash
+        run: |
+          npm run coverage:merge
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
@@ -55,7 +69,35 @@ jobs:
           fail-on-error: false
       - name: Upload coverage report as artifact
         uses: actions/upload-artifact@v4
+        if: success() || failure()
         with:
           name: coverage-report
           path: coverage/
           retention-days: 14
+
+  summary:
+    runs-on: ubuntu-latest
+    needs: run-unit-and-component-test
+    if: success() || failure()
+    steps:
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: coverage-report
+          path: coverage/
+      - name: Generate summary
+        run: |
+          {
+            echo '# PR Unit and Component Tests'
+            echo '## Coverage'
+            if [ -f coverage/unit/index.html ]; then
+              echo '- Unit coverage report: available in artifacts'
+            fi
+            if [ -f coverage/component/index.html ]; then
+              echo '- Component coverage report: available in artifacts'
+            fi
+            if [ -f coverage/merged/index.html ]; then
+              echo '- Merged coverage report: available in artifacts'
+            fi
+          } >> $GITHUB_STEP_SUMMARY
