@@ -62,10 +62,24 @@ jobs:
         shell: bash
         run: |
           npm run coverage:merge
-      - name: Upload coverage to Coveralls
+      - name: Upload unit coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
-          files: ./coverage/unit/lcov.info ./coverage/component/lcov.info
+          file: ./coverage/unit/lcov.info
+          flag-name: unit
+          parallel: true
+          fail-on-error: false
+      - name: Upload component coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: ./coverage/component/lcov.info
+          flag-name: component
+          parallel: true
+          fail-on-error: false
+      - name: Finalize Coveralls coverage
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
           fail-on-error: false
       - name: Upload coverage report as artifact
         uses: actions/upload-artifact@v4
