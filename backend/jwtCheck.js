@@ -4,7 +4,7 @@ import jwks from 'jwks-rsa';
 import rateLimit from 'express-rate-limit';
 import config from './config.js';
 
-const jwtCheck = ({ issuer, jwksUri }) =>
+const jwtCheck = ({ issuer, jwksUri, clientId }) =>
   expressjwt({
     secret: jwks.expressJwtSecret({
       cache: true,
@@ -13,6 +13,7 @@ const jwtCheck = ({ issuer, jwksUri }) =>
       jwksUri,
     }),
     issuer,
+    audience: clientId,
     algorithms: ['RS256'],
   });
 
