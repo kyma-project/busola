@@ -53,7 +53,7 @@ jobs:
       - name: run_unit_tests
         shell: bash
         run: |
-          npm test
+          npm run test
       - name: run_component_tests
         shell: bash
         run: |
