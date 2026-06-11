@@ -22,7 +22,7 @@ const userRateLimiter = rateLimit({
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.auth?.sub || req.ip,
+  keyGenerator: (req) => req.auth?.sub,
 });
 
 export function setupJWTCheck(app) {
