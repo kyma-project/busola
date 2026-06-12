@@ -5,83 +5,76 @@ import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import eslint from '@nabla/vite-plugin-eslint';
+import istanbul from 'vite-plugin-istanbul';
 import fs from 'fs';
 import { glob } from 'glob';
 
 // https://vitejs.dev/config/
-export default defineConfig(async () => {
-  // Load istanbul only when Cypress coverage instrumentation is requested so
-  // that it doesn't affect regular dev-server or production builds.
-  const istanbulPlugin =
-    process.env.CYPRESS_COVERAGE === 'true'
-      ? [(await import('vite-plugin-istanbul')).default({
-          include: 'src/**',
-          exclude: ['**/*.cy.{ts,tsx}', 'src/setupTests.js'],
-          extension: ['.ts', '.tsx', '.js', '.jsx'],
-          requireEnv: false,
-        })]
-      : [];
-
-  return {
-    build: {
-      outDir: 'build',
-    },
-    server: {
-      port: 8080,
-      warmup: {
-        clientFiles: [
-          'cypress/support/component.jsx',
-          'src/**/*.cy.{js,jsx,ts,tsx}',
-        ],
-      },
-      proxy: {
-        // with options
-        '^/backend/.*': {
-          target: 'http://localhost:3001',
-          changeOrigin: true,
-        },
-        '/proxy': {
-          target: 'http://localhost:3001',
-          changeOrigin: true,
-        },
-      },
-    },
-    plugins: [
-      react(),
-      viteTsconfigPaths(),
-      svgr({
-        include: '**/*.svg?react',
-      }),
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'resource-validation/rule-sets/**/*.yaml',
-            dest: 'resource-validation',
-            rename: 'rule-set.yaml',
-            transform() {
-              return mergeYamlFiles('resource-validation/rule-sets/**/*.yaml');
-            },
-          },
-        ],
-      }),
-      eslint(),
-      ...istanbulPlugin,
-    ],
-    worker: {
-      plugins: () => [viteTsconfigPaths()],
-    },
-    optimizeDeps: {
-      force: true,
-      include: [
-        '@openapi-contrib/openapi-schema-to-json-schema',
-        '@stoplight/json-ref-resolver',
-        'monaco-yaml/yaml.worker.js',
+export default defineConfig({
+  build: {
+    outDir: 'build',
+  },
+  server: {
+    port: 8080,
+    warmup: {
+      clientFiles: [
+        'cypress/support/component.jsx',
+        'src/**/*.cy.{js,jsx,ts,tsx}',
       ],
     },
-    define: {
-      'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER || false),
+    proxy: {
+      // with options
+      '^/backend/.*': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/proxy': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
     },
-  };
+  },
+  plugins: [
+    react(),
+    viteTsconfigPaths(),
+    svgr({
+      include: '**/*.svg?react',
+    }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'resource-validation/rule-sets/**/*.yaml',
+          dest: 'resource-validation',
+          rename: 'rule-set.yaml',
+          transform() {
+            return mergeYamlFiles('resource-validation/rule-sets/**/*.yaml');
+          },
+        },
+      ],
+    }),
+    eslint(),
+    process.env.CYPRESS_COVERAGE === 'true' &&
+      istanbul({
+        include: 'src/**',
+        exclude: ['**/*.cy.{ts,tsx}', 'src/setupTests.js'],
+        extension: ['.ts', '.tsx', '.js', '.jsx'],
+        requireEnv: false,
+      }),
+  ],
+  worker: {
+    plugins: () => [viteTsconfigPaths()],
+  },
+  optimizeDeps: {
+    force: true,
+    include: [
+      '@openapi-contrib/openapi-schema-to-json-schema',
+      '@stoplight/json-ref-resolver',
+      'monaco-yaml/yaml.worker.js',
+    ],
+  },
+  define: {
+    'process.env.IS_DOCKER': JSON.stringify(process.env.IS_DOCKER || false),
+  },
 });
 
 function mergeYamlFiles(filesPath) {
