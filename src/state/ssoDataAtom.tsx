@@ -53,14 +53,13 @@ async function trySilentRefresh(): Promise<boolean> {
 
 function getOrCreateUserManager(ssoConfig: ConfigFeature): UserManager {
   if (!userManager) {
-    const { issuerUrl, clientId, clientSecret, scope } = ssoConfig.config;
+    const { issuerUrl, clientId, scope } = ssoConfig.config;
     userManager = new UserManager({
       redirect_uri: window.location.origin,
       post_logout_redirect_uri: window.location.origin + '/logout.html',
       loadUserInfo: false,
       client_id: clientId,
       authority: issuerUrl,
-      client_secret: clientSecret,
       scope: scope || 'openid',
       response_type: 'code',
       response_mode: 'query',
