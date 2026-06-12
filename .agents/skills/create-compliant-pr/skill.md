@@ -147,17 +147,46 @@ EOF
 )"
 ```
 
-## Step 8: After Opening — Required Manual Steps
+## Step 8: Apply Labels and Enable Maintainer Edits
 
-These cannot be automated:
-
-1. **Add an `area/` label** — required by contribution guidelines for changelog inclusion. Open the PR in the browser and add at least one `area/{capability}` label.
-2. **Enable "Allow edits from maintainers"** — check this option on the PR page.
+### 8a. List available `area/` labels
 
 ```bash
-# Open PR in browser
-gh pr view --repo kyma-project/busola --web
+gh label list --repo kyma-project/busola --limit 100 --json name \
+  --jq '[.[] | .name | select(startswith("area/"))] | sort | .[]'
 ```
+
+### 8b. Choose relevant labels
+
+Based on the PR diff, select the most fitting `area/` label(s). Common choices:
+
+| Changes touch…                   | Label(s)                    |
+| -------------------------------- | --------------------------- |
+| Agent skills, Claude commands    | `area/tooling`              |
+| CI workflows, GitHub Actions     | `area/ci`                   |
+| Kubernetes resource UI           | `area/busola`               |
+| UX / design / i18n               | `area/busola/ux`            |
+| Extensibility / custom resources | `area/busola/extensibility` |
+| Tests                            | `area/tests`                |
+| Docs only                        | `area/documentation`        |
+| Dependencies                     | `area/dependency`           |
+
+Pick at least one. When in doubt, `area/busola` covers general frontend work.
+
+### 8c. Apply labels and enable maintainer edits
+
+```bash
+# Add the label
+gh pr edit <PR-URL> \
+  --repo kyma-project/busola \
+  --add-label "area/<chosen>"
+
+# Enable "Allow edits from maintainers" (gh pr edit has no flag for this — use the API)
+gh api --method PATCH repos/kyma-project/busola/pulls/<PR-NUMBER> \
+  -f maintain_can_modify=true
+```
+
+Replace `<PR-URL>` with the URL returned by `gh pr create`, `<chosen>` with the label from 8b, and `<PR-NUMBER>` with the numeric PR ID from that URL.
 
 ## Compliance Summary
 
