@@ -125,7 +125,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-v8": "^4.1.8",
     "concurrently": "^7.6.0",
-    "cypress": "^15.8.2",
+    "cypress": "^15.17.0",
     "eslint": "^9.38.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
