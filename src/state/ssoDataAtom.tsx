@@ -32,6 +32,7 @@ let handlersAttached = false;
 let loginInProgress = false;
 let registeredSsoStateSetter: ((user: SsoDataState) => void) | null = null;
 let refreshInProgress = false;
+let lastTokenCheckTime = 0;
 
 async function trySilentRefresh(): Promise<boolean> {
   if (!userManager || refreshInProgress) return false;
@@ -172,6 +173,10 @@ export function useSSOLogin() {
 export function checkForTokenExpiration(token?: string) {
   if (!token) return;
 
+  const now = Date.now();
+  if (now - lastTokenCheckTime < 30000) return;
+  lastTokenCheckTime = now;
+
   const timeout = 30; // s
   try {
     const expirationTimestamp = (jwtDecode(token) as JwtPayload).exp!;
@@ -181,6 +186,7 @@ export function checkForTokenExpiration(token?: string) {
       trySilentRefresh().then((ok) => {
         if (!ok) {
           setSSOAuthData(null);
+          // Reset state and trigger re-login flow. Maybe should be improved in the future.
           window.location.reload();
         }
       });
