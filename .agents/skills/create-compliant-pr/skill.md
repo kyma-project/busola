@@ -153,17 +153,32 @@ EOF
 )"
 ```
 
-## Step 8: After Opening — Required Manual Steps
+## Step 8: Apply Label and Enable Maintainer Edits
 
-These cannot be automated:
+### 8a. Choose a label
 
-1. **Add an `area/` label** — required by contribution guidelines for changelog inclusion. Open the PR in the browser and add at least one `area/{capability}` label.
-2. **Enable "Allow edits from maintainers"** — check this option on the PR page.
+Pick the most fitting `area/` label based on what the PR changes:
+
+| Changes touch…               | Label                |
+| ---------------------------- | -------------------- |
+| UI, views, components        | `area/busola`        |
+| Agent skills, Claude tooling | `area/automation`    |
+| Docs, READMEs, skill files   | `area/documentation` |
+| Dependency bumps             | `area/dependency`    |
+| Build, CI, scripts           | `area/tooling`       |
+
+### 8b. Apply the label and enable maintainer edits
 
 ```bash
-# Open PR in browser
-gh pr view --repo kyma-project/busola --web
+# Add the label (use the PR URL returned by gh pr create)
+gh pr edit <PR-URL> --repo kyma-project/busola --add-label "area/<chosen>"
+
+# Enable "Allow edits from maintainers" (gh pr edit has no flag for this)
+gh api --method PATCH repos/kyma-project/busola/pulls/<PR-NUMBER> \
+  -f maintain_can_modify=true
 ```
+
+Replace `<PR-URL>` with the URL from Step 7c and `<PR-NUMBER>` with its numeric ID.
 
 ## Compliance Summary
 
