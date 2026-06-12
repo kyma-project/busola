@@ -9,7 +9,6 @@
       "Bash(npx prettier*)",
       "Bash(git checkout*)",
       "Bash(git pull*)",
-
       "Bash(git remote*)",
       "Bash(git log*)",
       "Bash(git diff*)",
