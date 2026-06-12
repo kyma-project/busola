@@ -1,13 +1,6 @@
 name: PR Unit and Component Tests
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'cypress/**'
-      - 'cypress.config.component.ts'
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
@@ -53,12 +46,13 @@ jobs:
       - name: run_unit_tests
         shell: bash
         run: |
-          npm run test
+          npm run test:coverage
       - name: run_component_tests
         shell: bash
         run: |
           npm run component-test-headless
       - name: merge_coverage_reports
+        if: success()
         shell: bash
         run: |
           npm run coverage:merge
@@ -93,6 +87,7 @@ jobs:
         run: |
           pct() {
             local file=$1
+            [ -f "$file" ] || { echo "N/A"; return; }
             local lf=$(grep -h '^LF:' "$file" | awk -F: '{s+=$2} END {print s}')
             local lh=$(grep -h '^LH:' "$file" | awk -F: '{s+=$2} END {print s}')
             [ "$lf" -gt 0 ] && echo "scale=1; $lh * 100 / $lf" | bc || echo "N/A"

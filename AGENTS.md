@@ -40,7 +40,8 @@ cd backend && npm run build        # Backend webpack bundle (separate step; auto
 ### Testing
 
 ```bash
-npm test                           # Frontend unit tests (Vitest, jsdom) + coverage report → coverage/unit/
+npm test                           # Frontend unit tests (Vitest, jsdom) — watch mode
+npm run test:coverage              # Frontend unit tests (Vitest, jsdom) + coverage report → coverage/unit/
 npm run component-test             # Cypress component tests (interactive)
 npm run component-test-headless    # Cypress component tests (CI) + coverage report → coverage/component/
 npm run coverage:merge             # Merge unit + component reports → coverage/merged/
