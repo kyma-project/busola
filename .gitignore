@@ -63,3 +63,6 @@ bin
 
 .eslintcache
 **/settings.local.json
+
+# Claude Code
+.claude/settings.local.json
