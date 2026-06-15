@@ -19,3 +19,4 @@ jobs:
         with:
           retries: '40'
           polling_interval: '1'
+          ignore_superseded_runs: 'true'
