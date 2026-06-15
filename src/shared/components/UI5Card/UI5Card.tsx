@@ -31,7 +31,7 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
       testid,
       accessibleName,
       role,
-      description = 'test description',
+      description,
     },
     ref,
   ) => {
