@@ -81,7 +81,9 @@ export const Selector = ({
     <UI5Card
       title={
         <>
-          <Title level="H5">{title || t('selector.title')}</Title>
+          <Title size="H6" level="H6">
+            {title || t('selector.title')}
+          </Title>
           {selectorLabels ? (
             <Labels labels={selectorLabels} disableMarginBottom={true} />
           ) : null}
