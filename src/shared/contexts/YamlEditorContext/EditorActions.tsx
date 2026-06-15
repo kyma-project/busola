@@ -45,9 +45,9 @@ export function EditorActions({
   );
 
   const { readOnly } = editor?.getRawOptions() || {};
-  const showAiButton = !readOnly;
   const { status: aiStatus } = useAtomValue(aiInlineEditAtom);
   const aiPopoverOpen = aiStatus !== 'idle';
+  const showAiButton = !readOnly || aiPopoverOpen;
 
   const askAi = () => {
     editor?.getAction('ai-inline-edit.start')?.run();
@@ -135,7 +135,7 @@ export function EditorActions({
 
   return (
     <section className="editor-actions-section">
-      {readOnly && (
+      {readOnly && !aiPopoverOpen && (
         <ObjectStatus
           icon={<Icon name="locked" />}
           showDefaultIcon

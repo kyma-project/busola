@@ -115,6 +115,16 @@ export function useAiInlineEdit({
     }
   }, []);
 
+  // Lock the editor read-only from submit through preview so the diff overlay
+  // can't go stale and Accept (which replaces the whole document) can't clobber
+  // concurrent manual edits.
+  const lockEditor = useCallback((editor: Editor) => {
+    if (lockedRef.current) return;
+    originalReadOnlyRef.current = !!editor.getRawOptions().readOnly;
+    editor.updateOptions({ readOnly: true });
+    lockedRef.current = true;
+  }, []);
+
   // Match the spacer zone's height to the rendered widget so no code is hidden.
   const syncPromptZoneHeight = useCallback(
     (editor: Editor) => {
@@ -244,9 +254,8 @@ export function useAiInlineEdit({
     const endLine = sel?.endLineNumber ?? startLine;
     setSelection({ start: startLine, end: endLine });
 
-    originalReadOnlyRef.current = !!editor.getRawOptions().readOnly;
-    editor.updateOptions({ readOnly: true });
-    lockedRef.current = true;
+    // Keep the editor editable while composing the prompt; it is only locked
+    // once a suggestion is being fetched / previewed (see lockEditor).
     isOpenRef.current = true;
 
     editor.addContentWidget(getWidget());
@@ -331,6 +340,8 @@ export function useAiInlineEdit({
 
     setError(null);
     setStatus('loading');
+    // Freeze the editor for the duration of the request and the preview.
+    lockEditor(editor);
 
     try {
       // Read the selection live at submit time so the referenced range reflects
@@ -350,6 +361,8 @@ export function useAiInlineEdit({
       try {
         jsyaml.load(updatedYaml);
       } catch {
+        // back to an editable prompt so the user can adjust and retry
+        restoreReadOnly(editor);
         setError(t('ai-inline-edit.invalid-yaml'));
         setStatus('error');
         return;
@@ -357,6 +370,7 @@ export function useAiInlineEdit({
 
       const ops = diffLines(currentYaml, updatedYaml);
       if (!hasChanges(ops)) {
+        restoreReadOnly(editor);
         setError(t('ai-inline-edit.no-changes'));
         setStatus('error');
         return;
@@ -366,10 +380,11 @@ export function useAiInlineEdit({
       setStatus('previewing');
     } catch (e) {
       if (controller.signal.aborted) return;
+      restoreReadOnly(editor);
       setError((e as Error)?.message || 'Request failed');
       setStatus('error');
     }
-  }, [editorInstance, renderPreview, t]);
+  }, [editorInstance, renderPreview, lockEditor, restoreReadOnly, t]);
 
   const handleAccept = useCallback(() => {
     const editor = editorInstance;
