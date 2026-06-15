@@ -11,10 +11,9 @@ describe('UI5Card', () => {
     );
 
     cy.get('ui5-card').should('exist');
-    cy.get('.bsl-card-toolbar ui5-title')
+    cy.get('ui5-card-header')
       .should('exist')
-      .and('have.attr', 'level', 'H6')
-      .and('contain.text', 'Card title');
+      .and('have.attr', 'title-text', 'Card title');
     cy.get('[data-testid="content"]').should('contain.text', 'body');
   });
 
