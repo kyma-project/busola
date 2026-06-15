@@ -13,6 +13,7 @@ import { useOnChange } from './hooks/useOnChange';
 import { useCreateEditor } from './hooks/useCreateEditor';
 import { EditorProps } from 'shared/ResourceForm/fields/Editor';
 import { Uri } from 'monaco-editor';
+import { useAiInlineEdit } from 'components/AiInlineEdit/hooks/useAiInlineEdit';
 
 import './Editor.scss';
 
@@ -92,6 +93,12 @@ export function Editor({
   });
   const warnings = useDisplayWarnings({ autocompletionDisabled, descriptor });
 
+  // Inline AI edit ("Ask AI" / Cmd-K). Skipped on read-only editors.
+  const { widget: aiInlineEditWidget } = useAiInlineEdit({
+    editorInstance,
+    readOnly,
+  });
+
   return (
     <div
       className="resource-form__wrapper"
@@ -103,6 +110,7 @@ export function Editor({
         </div>
       )}
       <div ref={divRef} className="resource-form__editor" />
+      {aiInlineEditWidget}
       {placeholder && !value && (
         <div className="resource-form__placeholder">{placeholder}</div>
       )}

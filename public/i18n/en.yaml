@@ -1,3 +1,17 @@
+ai-inline-edit:
+  accept: Accept
+  close: Close
+  discard: Discard
+  generating: Generating suggestion…
+  invalid-yaml: The AI returned invalid YAML, so the suggestion cannot be shown.
+  no-changes: The AI did not suggest any changes.
+  placeholder: Describe the change you want…
+  retry: Try again
+  review: Review the suggested changes
+  selected-line: Referencing line {{line}}
+  selected-lines: Referencing lines {{start}}–{{end}}
+  submit: Suggest changes
+  tooltip: Ask AI to edit the YAML
 apps:
   title: Apps
 cluster-overview:

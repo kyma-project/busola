@@ -6,6 +6,7 @@ import {
 } from './kubernetes/handler';
 import { proxyHandler } from './proxy.js';
 import companionRouter from './companion/companionRouter';
+import aiEditorRouter from './aiEditor/aiEditorRouter';
 import communityRouter from './modules/communityRouter';
 import { createSlowRequestLogger, pinoMiddleware } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
@@ -108,12 +109,14 @@ if (isDocker) {
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend/ai-editor', aiEditorRouter);
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
   app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend/ai-editor', aiEditorRouter);
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
 }
