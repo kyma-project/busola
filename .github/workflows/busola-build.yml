@@ -39,6 +39,10 @@ on:
       - 'tests/integration/**'
   merge_group:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   id-token: write # This is required for requesting the JWT token
   contents: read # This is required for actions/checkout
