@@ -85,3 +85,5 @@ config:
       isEnabled: false
     COMMUNITY_MODULES:
       isEnabled: true
+    SSO_LOGIN:
+      isEnabled: false
