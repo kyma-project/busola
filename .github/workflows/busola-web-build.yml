@@ -34,7 +34,7 @@ on:
       - 'nginx/nginx.conf'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event_name == 'workflow_call' && github.run_id || github.ref }}
   cancel-in-progress: true
 
 permissions:
