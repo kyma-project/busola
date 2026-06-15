@@ -33,6 +33,12 @@ export function setupJWTCheck(app) {
     return;
   }
 
+  if (!jwtConfig.config.clientId) {
+    throw new Error(
+      'JWT_CHECK_CONFIG is enabled but clientId is empty — audience validation would be skipped. Set clientId to the SSO client ID.',
+    );
+  }
+
   if (process.env.JWT_CHECK_BYPASS !== 'true') {
     app.use('/backend', jwtCheck(jwtConfig.config));
     app.use('/backend', userRateLimiter);
