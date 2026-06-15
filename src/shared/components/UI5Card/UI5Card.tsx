@@ -37,6 +37,7 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
 
     const toolbarHeader = (
       <Toolbar
+        toolbarStyle="Clear"
         className={`bsl-card-toolbar${
           modeActions ? ' bsl-card-toolbar--with-mode-actions' : ''
         }`}
