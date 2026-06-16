@@ -16,6 +16,7 @@ permissions: # used by build images steps
   id-token: write # This is required for requesting the JWT token
   contents: write # This is required for actions/checkout and builds
   actions: read # This is required for using actions in the workflow
+  pull-requests: write # This is required for coverage reporting in unit tests
 
 jobs:
   build-busola-web:
