@@ -4,6 +4,8 @@ config:
       isEnabled: false
     GZIP:
       isEnabled: true
+    JWT_CHECK_CONFIG:
+      isEnabled: false
     KYMA_COMPANION:
       config:
         apiBaseUrl: ''

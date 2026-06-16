@@ -65,7 +65,7 @@ function concatBuffers(
 
 async function performKeyExchange(): Promise<SessionKeys> {
   const clientKeys = await window.crypto.subtle.generateKey(
-    { name: 'ECDH', namedCurve: 'P-256' },
+    { name: 'ECDH', namedCurve: 'P-521' },
     false,
     ['deriveBits'],
   );
@@ -98,7 +98,7 @@ async function performKeyExchange(): Promise<SessionKeys> {
   const serverPublicKey = await window.crypto.subtle.importKey(
     'raw',
     fromBase64(companionPublicKeyB64),
-    { name: 'ECDH', namedCurve: 'P-256' },
+    { name: 'ECDH', namedCurve: 'P-521' },
     false,
     [],
   );
@@ -106,7 +106,7 @@ async function performKeyExchange(): Promise<SessionKeys> {
   const sharedSecret = await window.crypto.subtle.deriveBits(
     { name: 'ECDH', public: serverPublicKey },
     clientKeys.privateKey,
-    256,
+    528, // P-521 shared secret is 66 bytes = 528 bits
   );
 
   const hkdfBaseKey = await window.crypto.subtle.importKey(
@@ -120,8 +120,9 @@ async function performKeyExchange(): Promise<SessionKeys> {
   const sharedKeyBytes = await window.crypto.subtle.deriveBits(
     {
       name: 'HKDF',
-      hash: 'SHA-256',
-      salt: new Uint8Array(0) as Uint8Array<ArrayBuffer>,
+      hash: 'SHA-384',
+      // Python's HKDF(salt=None) uses hash-length zero salt (48 bytes for SHA-384)
+      salt: new Uint8Array(48) as Uint8Array<ArrayBuffer>,
       info: textEncoder.encode('ecdh-key-exchange'),
     },
     hkdfBaseKey,
