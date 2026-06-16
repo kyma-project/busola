@@ -86,3 +86,7 @@ config:
       isEnabled: false
     COMMUNITY_MODULES:
       isEnabled: true
+    TERMINAL:
+      isEnabled: false
+      config:
+        image: europe-docker.pkg.dev/kyma-project/prod/dev-toolbox:main

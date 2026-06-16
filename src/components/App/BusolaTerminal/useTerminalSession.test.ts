@@ -1,8 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
 
-// Sentinel atoms so useAtomValue/useSetAtom and useFetch can be stubbed.
+// Sentinel atoms so useAtomValue/useSetAtom and useFetch can be stubbed for the
+// useTerminalSession hook tests. provisionPod/attachToPod take fetchFn directly.
 vi.mock('state/authDataAtom', () => ({ authDataAtom: { id: 'auth' } }));
 vi.mock('state/clusterAtom', () => ({ clusterAtom: { id: 'cluster' } }));
 vi.mock('state/terminalSessionAtom', () => ({
@@ -13,7 +15,8 @@ let mockAuthData: any;
 let mockCluster: any;
 const setSession = vi.fn();
 
-vi.mock('jotai', () => ({
+vi.mock('jotai', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('jotai')>()),
   useAtomValue: (a: any) =>
     a?.id === 'auth'
       ? mockAuthData
@@ -23,43 +26,37 @@ vi.mock('jotai', () => ({
   useSetAtom: () => setSession,
 }));
 
-const fetchFn = vi.fn();
+const hookFetch = vi.fn();
 vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
-  useFetch: () => fetchFn,
+  useFetch: () => hookFetch,
 }));
 
 import {
-  deriveTerminalPodName,
+  generateTerminalPodName,
+  provisionPod,
+  attachToPod,
   useTerminalSession,
 } from './useTerminalSession';
 
-const TERMINAL_NAMESPACE = 'busola-terminal';
+const NS = 'busola-terminal';
+const POD = 'busola-terminal-aabbccdd';
 
-describe('deriveTerminalPodName', () => {
-  it('produces the expected prefix', async () => {
-    const name = await deriveTerminalPodName('https://example.com', 'tok123');
-    expect(name).toMatch(/^busola-terminal-[0-9a-f]{8}$/);
-  });
+const jsonResponse = (data: any) => ({ json: () => Promise.resolve(data) });
 
-  it('is deterministic for the same inputs', async () => {
-    const a = await deriveTerminalPodName('https://cluster.example.com', 'abc');
-    const b = await deriveTerminalPodName('https://cluster.example.com', 'abc');
-    expect(a).toBe(b);
-  });
+// Returns the latest setSession arg, whether it's an updater fn or a value.
+const applyLast = (fn: any) => {
+  const arg = fn.mock.calls.at(-1)?.[0];
+  return typeof arg === 'function' ? arg({}) : arg;
+};
 
-  it('differs for different cluster servers', async () => {
-    const a = await deriveTerminalPodName('https://cluster-a.example.com', 't');
-    const b = await deriveTerminalPodName('https://cluster-b.example.com', 't');
-    expect(a).not.toBe(b);
-  });
+function makeTerm() {
+  return {
+    write: vi.fn(),
+    onData: vi.fn((_handler: (data: string) => void) => ({ dispose: vi.fn() })),
+  };
+}
 
-  it('differs for different tokens', async () => {
-    const a = await deriveTerminalPodName('https://cluster.example.com', 'A');
-    const b = await deriveTerminalPodName('https://cluster.example.com', 'B');
-    expect(a).not.toBe(b);
-  });
-});
-
+// Capture sockets opened internally so tests can drive their callbacks.
 class MockWebSocket {
   static OPEN = 1;
   static CLOSED = 3;
@@ -87,36 +84,6 @@ class MockWebSocket {
 const wsInstances: MockWebSocket[] = [];
 const lastWs = () => wsInstances.at(-1);
 
-function makeTerm() {
-  return {
-    write: vi.fn(),
-    onData: vi.fn((_handler: (data: string) => void) => ({ dispose: vi.fn() })),
-  };
-}
-
-const jsonResponse = (data: any) => ({
-  ok: true,
-  json: () => Promise.resolve(data),
-});
-
-// Default happy-path backend: every call succeeds and the pod is Running.
-function setupHappyFetch(phase = 'Running') {
-  fetchFn.mockImplementation(({ relativeUrl, init }: any) => {
-    const method = init?.method ?? 'GET';
-    if (relativeUrl === '/ws-token')
-      return Promise.resolve(jsonResponse({ token: 'wstok' }));
-    if (method === 'GET' && relativeUrl.includes('/pods/'))
-      return Promise.resolve(jsonResponse({ status: { phase } }));
-    return Promise.resolve(jsonResponse({}));
-  });
-}
-
-// setSession receives either an updater fn (connect) or a value (disconnect).
-function lastSessionState() {
-  const arg = setSession.mock.calls.at(-1)?.[0];
-  return typeof arg === 'function' ? arg({}) : arg;
-}
-
 beforeEach(() => {
   mockAuthData = { token: 'tok123' };
   mockCluster = {
@@ -125,7 +92,7 @@ beforeEach(() => {
     },
   };
   wsInstances.length = 0;
-  fetchFn.mockReset();
+  hookFetch.mockReset();
   setSession.mockReset();
   vi.stubGlobal('WebSocket', MockWebSocket as any);
 });
@@ -135,14 +102,56 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('useTerminalSession.connect', () => {
-  it('ensures the namespace + pod, polls readiness, then opens an attach socket', async () => {
-    setupHappyFetch();
-    const term = makeTerm();
-    const { result } = renderHook(() => useTerminalSession());
+describe('generateTerminalPodName', () => {
+  it('produces the expected prefix', async () => {
+    const name = await generateTerminalPodName('https://example.com', 'tok123');
+    expect(name).toMatch(/^busola-terminal-[0-9a-f]{8}$/);
+  });
 
-    await act(async () => {
-      await result.current.connect(term as any);
+  it('is deterministic for the same inputs', async () => {
+    const a = await generateTerminalPodName('https://cluster.example.com', 'a');
+    const b = await generateTerminalPodName('https://cluster.example.com', 'a');
+    expect(a).toBe(b);
+  });
+
+  it('differs for different cluster servers', async () => {
+    const a = await generateTerminalPodName(
+      'https://cluster-a.example.com',
+      't',
+    );
+    const b = await generateTerminalPodName(
+      'https://cluster-b.example.com',
+      't',
+    );
+    expect(a).not.toBe(b);
+  });
+
+  it('differs for different credentials', async () => {
+    const a = await generateTerminalPodName('https://cluster.example.com', 'A');
+    const b = await generateTerminalPodName('https://cluster.example.com', 'B');
+    expect(a).not.toBe(b);
+  });
+});
+
+describe('provisionPod', () => {
+  const signal = new AbortController().signal;
+
+  function podFetch(phase = 'Running') {
+    return vi.fn(({ relativeUrl, init }: any) => {
+      const method = init?.method ?? 'GET';
+      if (method === 'GET' && relativeUrl.includes('/pods/'))
+        return Promise.resolve(jsonResponse({ status: { phase } }));
+      return Promise.resolve(jsonResponse({}));
+    });
+  }
+
+  it('creates the namespace and pod, then resolves once Running', async () => {
+    const fetchFn = podFetch('Running');
+    await provisionPod({
+      fetchFn: fetchFn as any,
+      podName: POD,
+      image: 'i',
+      signal,
     });
 
     expect(fetchFn).toHaveBeenCalledWith(
@@ -153,119 +162,173 @@ describe('useTerminalSession.connect', () => {
     );
     expect(fetchFn).toHaveBeenCalledWith(
       expect.objectContaining({
-        relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods`,
+        relativeUrl: `/api/v1/namespaces/${NS}/pods`,
         init: expect.objectContaining({ method: 'POST' }),
       }),
     );
+  });
+
+  it('puts the configured image into the pod manifest', async () => {
+    const fetchFn = podFetch('Running');
+    await provisionPod({
+      fetchFn: fetchFn as any,
+      podName: POD,
+      image: 'my-registry/dev:1.2.3',
+      signal,
+    });
+    const podCall = fetchFn.mock.calls.find(([arg]: any) =>
+      arg.relativeUrl.endsWith('/pods'),
+    );
+    expect(podCall?.[0].init.body).toContain('my-registry/dev:1.2.3');
+  });
+
+  it('tolerates a 409 when the namespace or pod already exists', async () => {
+    const conflict = new HttpError('Conflict', 409, 409);
+    const fetchFn = vi.fn(({ init }: any) => {
+      if ((init?.method ?? 'GET') === 'POST') return Promise.reject(conflict);
+      return Promise.resolve(jsonResponse({ status: { phase: 'Running' } }));
+    });
+    await expect(
+      provisionPod({
+        fetchFn: fetchFn as any,
+        podName: POD,
+        image: 'i',
+        signal,
+      }),
+    ).resolves.toBeUndefined();
+  });
+
+  it('rethrows non-409 errors', async () => {
+    const boom = new HttpError('Boom', 500, 500);
+    const fetchFn = vi.fn(() => Promise.reject(boom));
+    await expect(
+      provisionPod({
+        fetchFn: fetchFn as any,
+        podName: POD,
+        image: 'i',
+        signal,
+      }),
+    ).rejects.toBe(boom);
+  });
+
+  it('throws when the pod enters a terminal phase', async () => {
+    const fetchFn = podFetch('Failed');
+    await expect(
+      provisionPod({
+        fetchFn: fetchFn as any,
+        podName: POD,
+        image: 'i',
+        signal,
+      }),
+    ).rejects.toThrow(/Failed/);
+  });
+});
+
+describe('attachToPod', () => {
+  const tokenFetch = () =>
+    vi.fn(() => Promise.resolve(jsonResponse({ token: 'wstok' })));
+
+  async function attach(signal = new AbortController().signal) {
+    const fetchFn = tokenFetch();
+    const term = makeTerm();
+    const sess = vi.fn();
+    const { ws, disposable } = await attachToPod({
+      fetchFn: fetchFn as any,
+      term: term as any,
+      podName: POD,
+      setSession: sess,
+      signal,
+    });
+    return { fetchFn, term, sess, ws: ws as any, disposable };
+  }
+
+  it('requests a ws-token and opens the attach socket', async () => {
+    const { fetchFn, ws } = await attach();
     expect(fetchFn).toHaveBeenCalledWith(
       expect.objectContaining({
         relativeUrl: '/ws-token',
         init: expect.objectContaining({ method: 'POST' }),
       }),
     );
-
-    expect(lastWs()?.url).toContain(
-      `/backend/ws/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/`,
+    expect(ws.url).toContain(
+      `/backend/ws/api/v1/namespaces/${NS}/pods/${POD}/attach?`,
     );
-    expect(lastWs()?.url).toContain('/attach?');
-    expect(lastWs()?.url).toContain('wsToken=wstok');
-    expect(lastWs()?.protocols).toEqual(['v4.channel.k8s.io']);
+    expect(ws.url).toContain('wsToken=wstok');
+    expect(ws.protocols).toEqual(['v4.channel.k8s.io']);
   });
 
-  it('ignores a 409 when the namespace or pod already exists', async () => {
-    const conflict: any = new Error('Conflict');
-    conflict.code = 409;
-    fetchFn.mockImplementation(({ relativeUrl, init }: any) => {
+  it('sets connected on open and writes stdout (channel 1) frames', async () => {
+    const { ws, term, sess } = await attach();
+    ws.onopen();
+    expect(applyLast(sess)).toMatchObject({ status: 'connected' });
+
+    // channel 1 (stdout) + "hi"
+    ws.onmessage({ data: new Uint8Array([1, 104, 105]).buffer });
+    expect(term.write).toHaveBeenCalledWith(new Uint8Array([104, 105]));
+  });
+
+  it('frames terminal input onto the stdin channel (0)', async () => {
+    const { ws, term } = await attach();
+    const onData = term.onData.mock.calls[0][0];
+    onData('x');
+
+    expect(ws.sent).toHaveLength(1);
+    const frame = ws.sent[0] as Uint8Array;
+    expect(frame[0]).toBe(0);
+    expect(Array.from(frame.slice(1))).toEqual(
+      Array.from(new TextEncoder().encode('x')),
+    );
+  });
+
+  it('ignores socket callbacks once the signal is aborted', async () => {
+    const ac = new AbortController();
+    const { ws, sess } = await attach(ac.signal);
+    ac.abort();
+    ws.onopen();
+    expect(sess).not.toHaveBeenCalled();
+  });
+});
+
+describe('useTerminalSession', () => {
+  function setupHappyHookFetch() {
+    hookFetch.mockImplementation(({ relativeUrl, init }: any) => {
       const method = init?.method ?? 'GET';
-      if (method === 'POST' && relativeUrl === '/api/v1/namespaces')
-        return Promise.reject(conflict);
-      if (method === 'POST' && relativeUrl.endsWith('/pods'))
-        return Promise.reject(conflict);
       if (relativeUrl === '/ws-token')
         return Promise.resolve(jsonResponse({ token: 'wstok' }));
       if (method === 'GET' && relativeUrl.includes('/pods/'))
         return Promise.resolve(jsonResponse({ status: { phase: 'Running' } }));
       return Promise.resolve(jsonResponse({}));
     });
+  }
+
+  it('connect provisions the pod and opens the attach socket', async () => {
+    setupHappyHookFetch();
     const { result } = renderHook(() => useTerminalSession());
 
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
 
-    expect(lastWs()).toBeTruthy();
+    expect(lastWs()?.url).toContain('/attach?');
+    expect(lastWs()?.protocols).toEqual(['v4.channel.k8s.io']);
   });
 
-  it('surfaces an error (without opening a socket) when the pod enters a terminal phase', async () => {
-    setupHappyFetch('Failed');
-    const term = makeTerm();
-    const { result } = renderHook(() => useTerminalSession());
-
-    await act(async () => {
-      await result.current.connect(term as any);
-    });
-
-    expect(lastSessionState()).toMatchObject({ status: 'error' });
-    expect(lastWs()).toBeUndefined();
-  });
-
-  it('marks the session connected and writes stdout (channel 1) frames to the terminal', async () => {
-    setupHappyFetch();
-    const term = makeTerm();
-    const { result } = renderHook(() => useTerminalSession());
-
-    await act(async () => {
-      await result.current.connect(term as any);
-    });
-
-    act(() => lastWs()?.onopen?.());
-    expect(lastSessionState()).toMatchObject({ status: 'connected' });
-
-    // channel 1 (stdout) + "hi"
-    act(() =>
-      lastWs()?.onmessage?.({ data: new Uint8Array([1, 104, 105]).buffer }),
-    );
-    expect(term.write).toHaveBeenCalledWith(new Uint8Array([104, 105]));
-  });
-
-  it('frames terminal input onto the stdin channel (0)', async () => {
-    setupHappyFetch();
-    const term = makeTerm();
-    const { result } = renderHook(() => useTerminalSession());
-
-    await act(async () => {
-      await result.current.connect(term as any);
-    });
-
-    const onData = term.onData.mock.calls[0][0];
-    act(() => onData('x'));
-
-    expect(lastWs()?.sent).toHaveLength(1);
-    const frame = lastWs()!.sent[0] as Uint8Array;
-    expect(frame[0]).toBe(0);
-    expect(Array.from(frame.slice(1))).toEqual(
-      Array.from(new TextEncoder().encode('x')),
-    );
-  });
-});
-
-describe('useTerminalSession.disconnect', () => {
-  it('closes the socket, deletes the pod and resets the session', async () => {
-    setupHappyFetch();
+  it('disconnect closes the socket, deletes the pod and resets the session', async () => {
+    setupHappyHookFetch();
     const { result } = renderHook(() => useTerminalSession());
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
     const ws = lastWs()!;
-    fetchFn.mockClear();
+    hookFetch.mockClear();
 
     await act(async () => {
-      await result.current.disconnect('busola-terminal-aabbccdd');
+      await result.current.disconnect(POD);
     });
 
     expect(ws.readyState).toBe(MockWebSocket.CLOSED);
-    expect(fetchFn).toHaveBeenCalledWith({
-      relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/busola-terminal-aabbccdd`,
+    expect(hookFetch).toHaveBeenCalledWith({
+      relativeUrl: `/api/v1/namespaces/${NS}/pods/${POD}`,
       init: { method: 'DELETE' },
     });
     expect(setSession).toHaveBeenLastCalledWith({
@@ -275,13 +338,13 @@ describe('useTerminalSession.disconnect', () => {
     });
   });
 
-  it('does not call the backend when there is no pod to delete', async () => {
+  it('disconnect is a no-op without a pod name', async () => {
     const { result } = renderHook(() => useTerminalSession());
 
     await act(async () => {
       await result.current.disconnect(null);
     });
 
-    expect(fetchFn).not.toHaveBeenCalled();
+    expect(hookFetch).not.toHaveBeenCalled();
   });
 });
