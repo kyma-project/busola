@@ -32,6 +32,8 @@ yarn-error.log*
 
 dist
 coverage
+.nyc_output
+.nyc_merged
 build
 react-components/index.js
 temp

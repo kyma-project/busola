@@ -1,4 +1,3 @@
-/* global require */
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { TokenManager } from './TokenManager';
@@ -11,7 +10,7 @@ import {
   requireCredential,
 } from '../utils/rate-limit-key.js';
 
-const config = require('../config.js');
+import config from '../src/config/config.js';
 
 const tokenManager = new TokenManager();
 

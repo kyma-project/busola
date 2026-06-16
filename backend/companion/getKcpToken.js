@@ -1,5 +1,5 @@
 /* global Buffer, require */
-const config = require('../config.js');
+import config from '../src/config/config.js';
 
 export async function getKcpToken() {
   const tokenUrl = config.features?.KYMA_COMPANION?.config?.tokenUrl ?? '';

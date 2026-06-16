@@ -9,6 +9,7 @@ const MIN_REPLICAS = 2;
 const MAX_REPLICAS = 3;
 const SCALE_TARGET_REF_KIND = 'Deployment';
 const SCALE_TARGET_REF_NAME = 'no-pod';
+const SCALE_TARGET_REF_API_VERSION = 'apps/v1';
 
 context('Test HPA', () => {
   Cypress.skipAfterFail();
@@ -61,6 +62,10 @@ context('Test HPA', () => {
     cy.get('[data-testid="spec.scaleTargetRef.name"]:visible')
       .find('input')
       .type(SCALE_TARGET_REF_NAME, { force: true });
+
+    cy.get('[data-testid="spec.scaleTargetRef.apiVersion"]:visible')
+      .find('input')
+      .type(SCALE_TARGET_REF_API_VERSION, { force: true });
 
     cy.saveChanges('Create');
 

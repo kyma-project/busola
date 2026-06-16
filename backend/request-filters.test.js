@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 // Mock config before imports to ensure default behavior
-vi.mock('./config.js', () => ({
+vi.mock('./src/config/config.js', () => ({
   default: {
     features: {
       ALLOW_PRIVATE_IPS: {
@@ -256,7 +256,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should allow private IPs when feature flag is enabled', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {
           ALLOW_PRIVATE_IPS: {
@@ -278,7 +278,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should block private IPs when feature flag is disabled', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {
           ALLOW_PRIVATE_IPS: {
@@ -302,7 +302,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should block private IPs when feature flag is missing (secure default)', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {},
       },
@@ -322,7 +322,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should allow .cluster.local domains when feature flag is enabled', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {
           ALLOW_PRIVATE_IPS: {
@@ -344,7 +344,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should block .cluster.local domains when feature flag is disabled', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {},
       },
