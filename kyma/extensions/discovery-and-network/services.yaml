@@ -60,7 +60,7 @@ data:
         widget: ControlledBy
     body:
       - name: Specification
-        widget: Panel
+        widget: Card
         children:
           - name: Service Type
             source: spec.type

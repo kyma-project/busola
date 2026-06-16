@@ -32,7 +32,7 @@ data:
       - widget: Columns
         children:
           - name: Summary
-            widget: Panel
+            widget: Card
             children:
               - name: State
                 source: status.messages[-1].state
@@ -71,14 +71,14 @@ data:
         widget: Columns
         children:
           - name: Comments
-            widget: Panel
+            widget: Card
             children:
               - name: Comments
                 widget: JoinedArray
                 source: spec.comments
                 separator: ' || '
           - name: Description
-            widget: Panel
+            widget: Card
             children:
               - source: spec.description
                 name: Description
