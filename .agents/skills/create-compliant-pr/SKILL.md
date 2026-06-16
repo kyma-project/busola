@@ -175,7 +175,7 @@ gh pr edit <PR-URL> --repo kyma-project/busola --add-label "area/<chosen>"
 
 # Enable "Allow edits from maintainers" (gh pr edit has no flag for this)
 gh api --method PATCH repos/kyma-project/busola/pulls/<PR-NUMBER> \
-  -f maintain_can_modify=true
+  -f maintainer_can_modify=true
 ```
 
 Replace `<PR-URL>` with the URL from Step 7c and `<PR-NUMBER>` with its numeric ID.
