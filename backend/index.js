@@ -5,6 +5,7 @@ import {
   requireK8sCredential,
 } from './kubernetes/handler';
 import { proxyHandler } from './proxy.js';
+import { setupJWTCheck } from './jwtCheck';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
 import { createSlowRequestLogger, pinoMiddleware } from './logging';
@@ -55,6 +56,8 @@ if (process.env.NODE_ENV === 'development') {
 
 // Add Pino logging middleware (attaches req.log to all requests)
 app.use(pinoMiddleware);
+
+setupJWTCheck(app);
 
 const SLOW_REQUEST_THRESHOLD_MS = parseInt(
   process.env.SLOW_REQUEST_THRESHOLD_MS || '4000',

@@ -25,6 +25,12 @@ spec:
                   optional: true
                   key: ENVIRONMENT
                   name: environment
+            - name: JWT_CHECK_BYPASS
+              valueFrom:
+                configMapKeyRef:
+                  optional: true
+                  key: JWT_CHECK_BYPASS
+                  name: environment
           volumeMounts:
             - name: config
               mountPath: /app/core-ui/config

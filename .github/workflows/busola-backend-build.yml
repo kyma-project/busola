@@ -24,13 +24,23 @@ on:
       - 'package.json'
       - 'package-lock.json'
 
+concurrency:
+  group: busola-backend-build-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   id-token: write # This is required for requesting the JWT token
   contents: read # This is required for actions/checkout
 
 jobs:
   approve-run:
-    uses: ./.github/workflows/approval-run.yaml
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'pull_request_target' &&  'restricted' || 'no-restricted' }}
+    #uncomment after gating is allowed - environment: ${{ github.event.pull_request.author_association != 'COLLABORATOR' && github.event.pull_request.author_association != 'OWNER' && 'restricted' || 'internal' }}
+    steps:
+      - name: Approved
+        run: echo "Build approved, environment selected"
+
   build-backend-image:
     needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: kyma-project/test-infra/.github/workflows/image-builder.yml@main
@@ -59,7 +69,7 @@ jobs:
   open-pr-for-dev-deploy:
     name: Open PR for dev deploy
     runs-on: ubuntu-latest
-    needs: [build-backend-image, extract-image-tag]
+    needs: [build-backend-image, extract-image-tag, approve-run]
     # open PR only if the image tag starts with 'v20' ensuring only commit tags sent to dev
     if: startsWith(needs.extract-image-tag.outputs.image_tag, 'v20')
     steps:

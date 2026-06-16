@@ -2,9 +2,10 @@ import joinPaths from './path';
 
 export enum Envs {
   ENVIRONMENT = 'ENVIRONMENT',
+  SSO_LOGIN_BYPASS = 'SSO_LOGIN_BYPASS',
 }
 
-async function getEnv(env: Envs): Promise<string> {
+export async function getEnv(env: Envs): Promise<string> {
   const input = await fetchActiveEnv();
   const envs = readEnv(input);
   const desiredEnv = envs.get(env);
