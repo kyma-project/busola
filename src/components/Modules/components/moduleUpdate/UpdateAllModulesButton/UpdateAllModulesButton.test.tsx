@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 
 const { ModuleTemplatesCtx, CommunityModuleCtx } = vi.hoisted(() => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -157,7 +157,9 @@ describe('UpdateAllModulesButton', () => {
   it('opens the dialog when the button is clicked', () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    act(() => {
+      fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    });
     expect(
       screen.getByText('modules.community.update.update-all-title'),
     ).toBeInTheDocument();
@@ -178,7 +180,9 @@ describe('UpdateAllModulesButton', () => {
   it('shows current and new versions in the table', () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    act(() => {
+      fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    });
     expect(screen.getByText('1.0.0')).toBeInTheDocument();
     expect(screen.getByText('2.0.0')).toBeInTheDocument();
   });
@@ -186,8 +190,12 @@ describe('UpdateAllModulesButton', () => {
   it('closes the dialog when Cancel is clicked', () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    fireEvent.click(screen.getByText('modules.community.update.update-all'));
-    fireEvent.click(screen.getByText('common.buttons.cancel'));
+    act(() => {
+      fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    });
+    act(() => {
+      fireEvent.click(screen.getByText('common.buttons.cancel'));
+    });
     expect(
       screen.queryByText('modules.community.update.update-all-title'),
     ).toBeNull();
@@ -196,7 +204,9 @@ describe('UpdateAllModulesButton', () => {
   it('does not render DeleteOldModulesCheck when there are no old templates', () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    act(() => {
+      fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    });
     expect(screen.queryByTestId('delete-old-check')).toBeNull();
   });
 
@@ -204,16 +214,22 @@ describe('UpdateAllModulesButton', () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     const oldTpl = makeTpl('mod-a', '0.9.0');
     renderWithContexts([installedModuleA], [oldTpl], [repoTplA]);
-    fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    act(() => {
+      fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    });
     expect(screen.getByTestId('delete-old-check')).toBeInTheDocument();
   });
 
   it('sends update-started notification and closes dialog on confirm', () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    act(() => {
+      fireEvent.click(screen.getByText('modules.community.update.update-all'));
+    });
 
-    fireEvent.click(screen.getByText('kyma-modules.update'));
+    act(() => {
+      fireEvent.click(screen.getByText('kyma-modules.update'));
+    });
 
     expect(notifySuccessMock).toHaveBeenCalledWith(
       expect.objectContaining({
