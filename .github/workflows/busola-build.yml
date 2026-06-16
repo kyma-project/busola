@@ -40,7 +40,7 @@ on:
   merge_group:
 
 concurrency:
-  group: ${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  group: busola-build-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:

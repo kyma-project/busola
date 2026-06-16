@@ -25,7 +25,7 @@ on:
       - 'package-lock.json'
 
 concurrency:
-  group: ${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  group: busola-backend-build-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
