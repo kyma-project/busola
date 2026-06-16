@@ -153,14 +153,25 @@ export default function JouleChat() {
     const webclient = window.sap?.das?.webclient;
     if (!webclient) return;
 
+    // Direct DOM fallback: webclient API is unresponsive when auth fails and
+    // isOpen() returns false while the iframe container is still visible.
+    const getWebclientEl = () => document.getElementById('cai-webclient-main');
+
     if (
       showKymaCompanion.show &&
       showKymaCompanion.useJoule &&
       !webclient.isOpen()
     ) {
+      const el = getWebclientEl();
+      if (el) el.style.display = '';
       webclient.show();
-    } else if (!showKymaCompanion.show && webclient.isOpen()) {
-      webclient.hide();
+    } else if (!showKymaCompanion.show) {
+      if (webclient.isOpen()) {
+        webclient.hide();
+      } else {
+        const el = getWebclientEl();
+        if (el) el.style.display = 'none';
+      }
     }
   }, [isEnabled, showKymaCompanion]);
 
