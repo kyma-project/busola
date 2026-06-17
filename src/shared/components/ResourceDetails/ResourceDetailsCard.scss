@@ -24,6 +24,10 @@
   min-width: 200px;
 }
 
+.form-without-background::part(layout) {
+  background-color: var(--sapBackgroundColor);
+}
+
 @container (min-width: 550px) {
   .cluster-overview__details-wrapper {
     grid-template-columns: fit-content(100%) max-content;

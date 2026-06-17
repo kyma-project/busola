@@ -3,3 +3,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
 }
+
+.form-without-background::part(layout) {
+  background-color: var(--sapBackgroundColor);
+}
