@@ -8,5 +8,5 @@ config:
       isEnabled: false
     KYMA_COMPANION:
       config:
-        apiBaseUrl: ''
-        tokenUrl: ''
+        apiBaseUrl: 'https://companion.cp.kyma.cloud.sap'
+        tokenUrl: 'https://kyma.accounts.ondemand.com/oauth2/token'
