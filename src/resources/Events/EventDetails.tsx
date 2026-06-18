@@ -50,13 +50,23 @@ const Specification = (event: any) => {
           <Text style={{ display: 'flex', alignItems: 'center' }}>
             {event.type}{' '}
             {event.type === 'Warning' ? (
-              <ObjectStatus
-                aria-label="Warning"
-                icon={<Icon accessibleName="Warning" name="warning" />}
-                className="sap-margin-begin-tiny"
-                state="Critical"
-                title={event.type}
-              />
+              event.message.startsWith('Error') ? (
+                <ObjectStatus
+                  aria-label="Error"
+                  icon={<Icon accessibleName="Error" name="error" />}
+                  className="sap-margin-begin-tiny"
+                  state="Negative"
+                  title={event.type}
+                />
+              ) : (
+                <ObjectStatus
+                  aria-label="Warning"
+                  icon={<Icon accessibleName="Warning" name="warning" />}
+                  className="sap-margin-begin-tiny"
+                  state="Critical"
+                  title={event.type}
+                />
+              )
             ) : (
               <ObjectStatus
                 aria-label="Normal"

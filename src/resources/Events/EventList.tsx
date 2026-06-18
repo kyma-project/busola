@@ -88,12 +88,21 @@ export function EventList({
           }}
         >
           {e.type === 'Warning' ? (
-            <ObjectStatus
-              aria-label="Warning"
-              icon={<Icon accessibleName="Warning" name="warning" />}
-              state="Critical"
-              title={e.type}
-            />
+            e.message.startsWith('Error') ? (
+              <ObjectStatus
+                aria-label="Error"
+                icon={<Icon accessibleName="Error" name="error" />}
+                state="Negative"
+                title={e.type}
+              />
+            ) : (
+              <ObjectStatus
+                aria-label="Warning"
+                icon={<Icon accessibleName="Warning" name="warning" />}
+                state="Critical"
+                title={e.type}
+              />
+            )
           ) : (
             <ObjectStatus
               aria-label="Normal"
