@@ -9,13 +9,7 @@ import {
   useGetTranslation,
   getBadgeType,
 } from 'components/Extensibility/helpers';
-
-const formatBadgeText = (value: string) => {
-  return value
-    .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space before capital letters
-    .toLowerCase() // Convert to lowercase
-    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
-};
+import { toSentenceCase } from 'shared/utils/helpers';
 
 interface BadgeProps {
   value: any;
@@ -100,11 +94,11 @@ export function Badge({
       type={badgeType as any}
       tooltipContent={getTooltipContent(structure.description)}
     >
-      {formatBadgeText(tExt(value).toString())}
+      {toSentenceCase(tExt(value).toString())}
     </StatusBadge>
   ) : (
     <StatusBadge autoResolveType={!badgeType} type={badgeType as any}>
-      {formatBadgeText(tExt(value).toString())}
+      {toSentenceCase(tExt(value).toString())}
     </StatusBadge>
   );
 }
