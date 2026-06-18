@@ -24,6 +24,11 @@ export default defineConfig(
       languageOptions: {
         globals: globals.browser,
       },
+      settings: {
+        react: {
+          version: 'detect',
+        },
+      },
       rules: {
         // React
         'react/react-in-jsx-scope': 'off',
