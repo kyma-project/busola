@@ -418,9 +418,8 @@ export default function CommunityModulesAddModule(props: any) {
                   design="Scene"
                   key="all-modules-added"
                   titleText={t('modules.community.no-modules')}
-                  subtitleText=" "
                   className="emptyListComponent"
-                ></IllustratedMessage>
+                />
               </>
             )}
           </>

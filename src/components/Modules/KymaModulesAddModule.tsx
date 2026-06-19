@@ -337,18 +337,16 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
           design="Scene"
           key="all-modules-added"
           titleText={t('kyma-modules.all-modules-added')}
-          subtitleText=" "
           className="emptyListComponent"
-        ></IllustratedMessage>
+        />
       ) : (
         <IllustratedMessage
           name="tnt/Components"
           design="Scene"
           key="all-modules-added"
           titleText={t('kyma-modules.no-modules')}
-          subtitleText=" "
           className="emptyListComponent"
-        ></IllustratedMessage>
+        />
       )}
     </ResourceForm>
   );
