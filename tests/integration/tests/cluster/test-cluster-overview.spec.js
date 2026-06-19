@@ -87,8 +87,10 @@ context('Test Cluster Overview', () => {
         .first()
         .find('ui5-table-cell')
         .first()
-        .scrollIntoView()
-        .click({ force: true });
+        .as('firstNode');
+
+      cy.get('@firstNode').scrollIntoView().click({ force: true });
+      cy.get('@firstNode').click();
     });
   });
 
