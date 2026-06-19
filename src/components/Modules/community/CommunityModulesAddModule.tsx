@@ -412,15 +412,13 @@ export default function CommunityModulesAddModule(props: any) {
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
             ) : (
-              <>
-                <IllustratedMessage
-                  name="tnt/Components"
-                  design="Scene"
-                  key="all-modules-added"
-                  titleText={t('modules.community.no-modules')}
-                  className="emptyListComponent"
-                />
-              </>
+              <IllustratedMessage
+                name="tnt/Components"
+                design="Scene"
+                key="all-modules-added"
+                titleText={t('modules.community.no-modules')}
+                className="emptyListComponent"
+              />
             )}
           </>
         </ResourceForm>
