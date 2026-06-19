@@ -27,9 +27,10 @@ describe('Badge Component', () => {
 
     cy.get('[role="status"]')
       .should('have.length', 1)
-      .and('contain.text', 'yes')
       .and('have.attr', 'class')
-      .and('match', /positive/);
+      .and('match', /positive/)
+      .get('[data-component-name="ObjectStatusTextContainer"]')
+      .should('contain.text', 'Yes');
   });
 
   it('Renders a badge with error type for custom highlights', () => {
@@ -50,9 +51,10 @@ describe('Badge Component', () => {
 
     cy.get('[role="status"]')
       .should('have.length', 1)
-      .and('contain.text', '-2')
       .and('have.attr', 'class')
-      .and('match', /negative/);
+      .and('match', /negative/)
+      .get('[data-component-name="ObjectStatusTextContainer"]')
+      .should('contain.text', '-2');
   });
 
   it('Renders a custom empty placeholder for empty values', () => {

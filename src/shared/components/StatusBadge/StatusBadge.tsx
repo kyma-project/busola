@@ -7,6 +7,7 @@ import { createTranslationTextWithLinks } from '../../helpers/linkExtractor';
 import './StatusBadge.scss';
 import { PopoverBadge } from '../PopoverBadge/PopoverBadge';
 import { TFunction } from 'i18next';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 const resolveType = (status: string | any) => {
   if (typeof status !== 'string') {
@@ -166,7 +167,7 @@ export const StatusBadge = ({
         type={type}
         className={classes}
       >
-        {badgeContent}
+        {toSentenceCase(badgeContent)}
       </PopoverBadge>
     );
   } else if (noTooltip) {
@@ -174,19 +175,19 @@ export const StatusBadge = ({
       <ObjectStatus
         aria-label={badgeContent}
         role="status"
-        inverted
+        inverted={type !== 'Positive'}
         state={type}
         className={classes}
         data-testid="no-tooltip"
         showDefaultIcon={type !== 'Information'}
       >
-        {badgeContent}
+        {toSentenceCase(badgeContent)}
       </ObjectStatus>
     );
   } else {
     return (
       <PopoverBadge tooltipContent={content} type={type} className={classes}>
-        {badgeContent}
+        {toSentenceCase(badgeContent)}
       </PopoverBadge>
     );
   }

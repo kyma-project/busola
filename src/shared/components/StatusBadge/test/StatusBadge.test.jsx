@@ -54,13 +54,13 @@ describe('StatusBadge', () => {
       await act(async () => {
         const status = queryByRole('status');
         expect(status).toBeInTheDocument();
-        expect(status).toHaveTextContent('common.statuses.initial');
+        expect(status).toHaveTextContent('Common.statuses.initial');
       });
     });
   });
 
   it('renders status text with DEFAULT_STATUSES_PATH', async () => {
-    const DEFAULT_STATUSES_PATH = 'common.statuses.initial';
+    const DEFAULT_STATUSES_PATH = 'Common.statuses.initial';
     const { queryByRole } = render(<StatusBadge>Initial</StatusBadge>);
     await waitFor(async () => {
       await act(async () => {
@@ -73,7 +73,7 @@ describe('StatusBadge', () => {
 
   it('renders status text with RESOURCE_STATUSES_PATH', async () => {
     const RESOURCE_KIND = 'resource';
-    const RESOURCE_STATUSES_PATH = 'resource.statuses.initial';
+    const RESOURCE_STATUSES_PATH = 'Resource.statuses.initial';
     const { queryByRole } = render(
       <StatusBadge resourceKind={RESOURCE_KIND}>Initial</StatusBadge>,
     );
