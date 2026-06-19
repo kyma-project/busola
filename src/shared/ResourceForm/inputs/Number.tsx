@@ -1,6 +1,6 @@
 import { Input, InputPropTypes } from '@ui5/webcomponents-react';
 
-type NumberProps = {
+export type NumberProps = {
   value?: string | number;
   setValue: (value: number | null) => void;
   min?: number;

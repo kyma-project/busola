@@ -15,7 +15,7 @@ import {
   OPERATION_STATE_WAITING,
 } from './YamlUploadDialog';
 import { useAtomValue } from 'jotai';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import retry from 'shared/utils/retry';
 
@@ -74,10 +74,10 @@ export function useUploadResources(
   const post = usePost();
   const patchRequest = useUpdate();
 
-  const clusterNodes = useAtomValue(allNodesAtom).filter(
+  const clusterNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+  const namespaceNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => node.namespaced,
   );
   const filteredResources = resources?.filter(

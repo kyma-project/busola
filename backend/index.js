@@ -5,19 +5,20 @@ import {
   requireK8sCredential,
 } from './kubernetes/handler';
 import { proxyHandler } from './proxy.js';
+import { setupJWTCheck } from './jwtCheck';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
-import { pinoMiddleware, createSlowRequestLogger } from './logging';
+import { createSlowRequestLogger, pinoMiddleware } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
 import crypto from 'crypto';
-import { fillActiveEnvForFrontend } from './utils/active-env';
+import config from './src/config/config';
 
+import { fillActiveEnvForFrontend } from './utils/active-env';
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const config = require('./config.js');
 
 const app = express();
 app.disable('x-powered-by');
@@ -55,6 +56,8 @@ if (process.env.NODE_ENV === 'development') {
 
 // Add Pino logging middleware (attaches req.log to all requests)
 app.use(pinoMiddleware);
+
+setupJWTCheck(app);
 
 const SLOW_REQUEST_THRESHOLD_MS = parseInt(
   process.env.SLOW_REQUEST_THRESHOLD_MS || '4000',

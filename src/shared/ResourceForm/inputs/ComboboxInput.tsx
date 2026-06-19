@@ -24,8 +24,9 @@ type ComboboxInputProps = {
   accessibleName?: string;
   isNumeric?: boolean;
   disabled?: boolean;
+  required?: boolean;
   'data-testid'?: string;
-};
+} & Record<string, any>;
 
 export function ComboboxInput({
   value,
@@ -41,6 +42,7 @@ export function ComboboxInput({
   accessibleName,
   isNumeric,
   disabled,
+  required,
   ...props
 }: ComboboxInputProps) {
   const onChange = (event: Ui5CustomEvent<ComboBoxDomRef>) => {
@@ -79,6 +81,7 @@ export function ComboboxInput({
       id={id || 'combobox-input'}
       ref={_ref}
       disabled={disabled || !options?.length}
+      required={required}
       filter="Contains"
       onChange={onChange}
       onInput={updatesOnInput ? onChange : () => {}}
@@ -89,6 +92,8 @@ export function ComboboxInput({
       }
       placeholder={placeholder}
       data-testid={props['data-testid']}
+      onKeyDown={props.onKeyDown}
+      onBlur={props.onBlur}
     >
       {options.map((option, index) => (
         <ComboBoxItem

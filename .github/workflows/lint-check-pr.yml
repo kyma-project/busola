@@ -9,6 +9,10 @@ on:
         type: string
         required: false
 
+concurrency:
+  group: lint-check-pr-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run-lint-check:
     runs-on: ubuntu-latest

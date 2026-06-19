@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { createContext, FC, useEffect, useRef, useState } from 'react';
+import { createContext, FC, JSX, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';

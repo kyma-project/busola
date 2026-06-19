@@ -1,35 +1,29 @@
-import { useEffect, RefObject, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { useAtomValue } from 'jotai';
 import { Icon, Input } from '@ui5/webcomponents-react';
 import { K8sResource } from 'types';
 import { useEventListener } from 'hooks/useEventListener';
 import { useObjectState } from 'shared/useObjectState';
 import { CommandPaletteUI } from './CommandPaletteUI';
-import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
-import { SCREEN_SIZE_BREAKPOINT_M } from './types';
-import './CommandPaletteSearchBar.scss';
 
 type CommandPaletteSearchBarProps = {
   slot?: string;
   shouldFocus?: boolean;
   setShouldFocus?: (_: boolean) => void;
-  shellbarRef?: RefObject<HTMLElement>;
+  shellbarWidth: number;
 };
 
 export function CommandPaletteSearchBar({
   slot,
   shouldFocus,
   setShouldFocus,
-  shellbarRef,
+  shellbarWidth,
 }: CommandPaletteSearchBarProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(shouldFocus || false);
-  const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
   const [resourceCache, updateResourceCache] =
     useObjectState<Record<string, K8sResource[]>>();
-  const showCompanion = useAtomValue(showKymaCompanionAtom);
   const shouldShowDialog = shouldFocus ? shouldFocus : open;
 
   const htmlWrapEl = document.getElementById('html-wrap');
@@ -66,56 +60,6 @@ export function CommandPaletteSearchBar({
   };
 
   useEventListener('keydown', onKeyPress, [shouldShowDialog]);
-
-  let timer: ReturnType<typeof setTimeout>;
-  function handleChangedWidth() {
-    clearTimeout(timer);
-
-    timer = setTimeout(() => {
-      setShellbarWidth(
-        showCompanion.show && !showCompanion.useJoule
-          ? shellbarRef?.current?.getBoundingClientRect().width || 0
-          : window.innerWidth,
-      );
-    }, 0);
-  }
-
-  useEffect(() => {
-    if (showCompanion.useJoule) return;
-
-    const elementObserver = new ResizeObserver(() => {
-      handleChangedWidth();
-    });
-
-    if (htmlWrapEl) {
-      elementObserver.observe(htmlWrapEl);
-    }
-    return () => {
-      elementObserver.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showCompanion]);
-
-  useEffect(() => {
-    const shellbarCurr = shellbarRef?.current;
-    const searchButton = shellbarCurr?.shadowRoot?.querySelector(
-      '.ui5-shellbar-search-button',
-    ) as HTMLElement;
-    const searchField = shellbarCurr?.shadowRoot?.querySelector(
-      '.ui5-shellbar-search-field',
-    ) as HTMLElement;
-
-    if (searchButton && shellbarWidth > SCREEN_SIZE_BREAKPOINT_M) {
-      searchButton.style.display = 'none';
-
-      // search bar has to be always visible on big screen
-      shellbarCurr?.setAttribute('show-search-field', '');
-    } else if (searchButton && searchField) {
-      searchButton.style.display = 'inline-block';
-      shellbarCurr?.removeAttribute('show-search-field');
-      searchField.style.display = 'none';
-    }
-  }, [shellbarRef?.current, shellbarWidth, shouldShowDialog]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

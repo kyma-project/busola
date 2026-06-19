@@ -5,6 +5,8 @@ import {
   useState,
   useEffect,
   createRef,
+  RefObject,
+  ReactElement,
 } from 'react';
 import jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +15,7 @@ export type ResourceFormWrapperProps = {
   resource?: Record<string, any> | string;
   setResource?: (resource: Record<string, any> | string) => void;
   children?: React.ReactNode;
-  validationRef?: React.MutableRefObject<boolean>;
+  validationRef?: RefObject<boolean>;
   nestingLevel?: number;
   required?: boolean;
 } & Record<string, any>;
@@ -27,16 +29,19 @@ export function ResourceFormWrapper({
 }: ResourceFormWrapperProps) {
   const { t } = useTranslation();
   const [inputRefs, setInputRefs] = useState<
-    React.RefObject<HTMLInputElement>[] | null | undefined
+    RefObject<HTMLInputElement>[] | null | undefined
   >([]);
 
   useEffect(() => {
     setInputRefs(
-      Children.map(children, (_, i) => inputRefs?.[i] || createRef()),
+      Children.map(children, (_, i) => inputRefs?.[i] || createRef()) as
+        | RefObject<HTMLInputElement>[]
+        | null
+        | undefined,
     );
   }, [children]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const isValid = (child: React.ReactElement) => {
+  const isValid = (child: ReactElement<any>) => {
     if (!child.props.validate) {
       return true;
     } else if (child.props.propertyPath) {
@@ -47,7 +52,7 @@ export function ResourceFormWrapper({
     }
   };
 
-  const errorMessage = (child: React.ReactElement) => {
+  const errorMessage = (child: ReactElement<any>) => {
     if (!child.props.validateMessage) {
       return t('common.errors.generic');
     } else if (typeof child.props.validateMessage !== 'function') {
@@ -64,15 +69,15 @@ export function ResourceFormWrapper({
     Children.toArray(children).forEach((child, index) => {
       const inputRef = inputRefs?.[index];
 
-      if ((child as React.ReactElement).props?.validate) {
-        const valid = isValid(child as React.ReactElement);
+      if ((child as ReactElement<any>).props?.validate) {
+        const valid = isValid(child as ReactElement);
 
         if (inputRef?.current) {
           const input =
             inputRef.current?.shadowRoot?.querySelector('.ui5-input-inner');
           if (!valid) {
             (input as any)?.setCustomValidity(
-              errorMessage(child as React.ReactElement),
+              errorMessage(child as ReactElement),
             );
           } else {
             (input as any)?.setCustomValidity('');

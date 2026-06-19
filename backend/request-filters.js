@@ -1,6 +1,6 @@
 import net from 'net';
 import { isPrivateIp } from './utils/network-utils.js';
-import config from './config.js';
+import config from './src/config/config.js';
 
 export const localIpFilter = (_req, headersData) => {
   const hostname = headersData.targetApiServer.hostname || '';

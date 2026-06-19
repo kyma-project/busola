@@ -29,6 +29,10 @@ test('Busola Lighthouse audit', async () => {
       accessibility: 80,
       'best-practices': 100,
     },
+    config: {
+      extends: 'lighthouse:default',
+      settings: { onlyCategories: ['accessibility', 'best-practices'] },
+    },
   });
 
   // fix opening "connect cluster" modal
@@ -70,6 +74,10 @@ test('Busola Lighthouse audit', async () => {
     thresholds: {
       accessibility: 80,
       'best-practices': 85, //best-practices were reduced after the bump of lighthouse version - it detects Monaco which prevents passing
+    },
+    config: {
+      extends: 'lighthouse:default',
+      settings: { onlyCategories: ['accessibility', 'best-practices'] },
     },
   });
 

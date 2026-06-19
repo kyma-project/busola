@@ -16,12 +16,18 @@ export default defineConfig(
       '**/*.test.js*',
       '**/__mocks__/**',
       '**/build/**',
+      'backend/core-ui',
     ]),
 
     {
       files: ['**/*.{js,jsx,mjs,cjs,ts,mts,cts,tsx}'],
       languageOptions: {
         globals: globals.browser,
+      },
+      settings: {
+        react: {
+          version: 'detect',
+        },
       },
       rules: {
         // React

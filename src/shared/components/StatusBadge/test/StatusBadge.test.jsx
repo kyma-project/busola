@@ -1,14 +1,14 @@
-import { cloneElement, forwardRef } from 'react';
+import { act, cloneElement } from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 vi.mock('@ui5/webcomponents-react', () => {
   return {
     ObjectStatus: (props) => <div role={props.role}>{props.children}</div>,
-    Popover: forwardRef((props, ref) => (
-      <div ref={ref}>{props.open ? props.children : null}</div>
-    )),
+    Popover: (props) => (
+      <div ref={props.ref}>{props.open ? props.children : null}</div>
+    ),
     Text: (props) => <span>{props.children}</span>,
   };
 });
@@ -54,13 +54,13 @@ describe('StatusBadge', () => {
       await act(async () => {
         const status = queryByRole('status');
         expect(status).toBeInTheDocument();
-        expect(status).toHaveTextContent('common.statuses.initial');
+        expect(status).toHaveTextContent('Common.statuses.initial');
       });
     });
   });
 
   it('renders status text with DEFAULT_STATUSES_PATH', async () => {
-    const DEFAULT_STATUSES_PATH = 'common.statuses.initial';
+    const DEFAULT_STATUSES_PATH = 'Common.statuses.initial';
     const { queryByRole } = render(<StatusBadge>Initial</StatusBadge>);
     await waitFor(async () => {
       await act(async () => {
@@ -73,7 +73,7 @@ describe('StatusBadge', () => {
 
   it('renders status text with RESOURCE_STATUSES_PATH', async () => {
     const RESOURCE_KIND = 'resource';
-    const RESOURCE_STATUSES_PATH = 'resource.statuses.initial';
+    const RESOURCE_STATUSES_PATH = 'Resource.statuses.initial';
     const { queryByRole } = render(
       <StatusBadge resourceKind={RESOURCE_KIND}>Initial</StatusBadge>,
     );

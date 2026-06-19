@@ -9,7 +9,7 @@ import { cloneDeep } from 'lodash';
 import { createDaemonSetTemplate } from './templates';
 
 type DaemonSetCreateProps = {
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   onChange?: (job: Record<string, any>) => void;
   setCustomValid?: (isValid: boolean) => void;
   resource?: Record<string, any>;

@@ -13,7 +13,15 @@ export default mergeConfig(
       setupFiles: ['./src/setupTests.js'],
       fileParallelism: false,
       coverage: {
-        reporter: ['text'],
+        provider: 'v8',
+        reportsDirectory: 'coverage/unit',
+        reporter: ['text-summary', 'lcov', 'html', 'json'],
+        include: ['src/**'],
+        exclude: [
+          'src/**/*.cy.{ts,tsx,js,jsx}',
+          'src/**/*.test.{ts,tsx,js,jsx}',
+          'src/setupTests.js',
+        ],
       },
     },
   }),

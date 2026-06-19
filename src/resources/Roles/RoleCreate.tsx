@@ -5,7 +5,7 @@ import { createRoleTemplate, createRolePresets } from './helpers';
 import { GenericRoleCreate } from './GenericRoleCreate';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
-import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
+import { groupVersionsAtomSync } from 'state/discoverability/groupVersionsAtom';
 
 interface RoleCreateProps {
   [key: string]: any;
@@ -13,7 +13,7 @@ interface RoleCreateProps {
 
 export default function RoleCreate(props: RoleCreateProps) {
   const { t } = useTranslation();
-  const groupVersions = useAtomValue(groupVersionsAtom);
+  const groupVersions = useAtomValue(groupVersionsAtomSync);
   const namespace = useAtomValue(activeNamespaceIdAtom);
 
   const createTemplate = useCallback(
