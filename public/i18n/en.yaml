@@ -846,6 +846,12 @@ joule-feedback:
 kubeconfig-id:
   error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
+kyma-cli:
+  banner:
+    buttons:
+      documentation: Documentation
+    description: Kyma CLI is an essential tool for application developers who want to get started quickly and efficiently with SAP BTP, Kyma runtime. Designed to streamline workflows, it simplifies complex tasks, enabling developers to deploy and manage applications easily.
+    title: Kyma CLI
 kyma-companion:
   banner:
     buttons:
