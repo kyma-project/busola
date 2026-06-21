@@ -15,7 +15,8 @@
       height: auto;
     }
     ui5-icon {
-      min-width: 1rem;
+      display: flex;
+      align-items: center;
     }
   }
   ui5-table-cell {

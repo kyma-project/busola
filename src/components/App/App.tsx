@@ -67,6 +67,7 @@ import { initTheme } from './initTheme';
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
 import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
+import { useSSOLogin } from 'state/ssoDataAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
@@ -102,8 +103,9 @@ export default function App() {
   useResourceSchemas();
   useSidebarCondensed();
 
-  const { isLoading } = useAuthHandler();
   useGetConfiguration();
+  useSSOLogin();
+  const { isLoading } = useAuthHandler();
   useGetExtensions();
   useGetExtensibilitySchemas();
   useGetValidationSchemas();

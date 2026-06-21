@@ -32,6 +32,9 @@ export const ignoreConsoleWarns = (patterns) => {
 // shutup popper error
 ignoreConsoleErrors(['2']);
 
+// Suppress third-party warnings that are not actionable in tests
+ignoreConsoleWarns(['Lit is in dev mode']);
+
 // Mock IntersectionObserver
 class IntersectionObserver {
   observe = vi.fn();
