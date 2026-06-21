@@ -23,6 +23,7 @@ type ResourceStatusCardContentProps = {
   }[];
   customConditionsComponents?: CustomColumnsType;
   filteredConditionsComponents?: CustomColumn[];
+  aiInsightsButton?: ReactNode;
 };
 
 export const ResourceStatusCardContent = ({
@@ -35,13 +36,18 @@ export const ResourceStatusCardContent = ({
   statusConditions,
   customConditionsComponents,
   filteredConditionsComponents,
+  aiInsightsButton,
 }: ResourceStatusCardContentProps) => {
   return customStatus ? (
-    customStatus
+    <div className="resource-status-card__custom-status">
+      {customStatus}
+      {aiInsightsButton}
+    </div>
   ) : customStatusColumns?.length ||
     customConditionsComponents?.length ||
     statusConditions?.length ? (
     <ResourceStatusCard
+      aiInsightsButton={aiInsightsButton}
       statusBadge={statusBadge ? statusBadge(resource) : null}
       customColumns={
         customStatusColumns?.length ? (

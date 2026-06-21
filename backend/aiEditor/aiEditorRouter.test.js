@@ -16,7 +16,7 @@ vi.mock('../src/config/config.js', () => ({
   },
 }));
 
-import { handleSuggestEdits } from './aiEditorRouter.js';
+import { handleSuggestEdits, handleInsights } from './aiEditorRouter.js';
 import config from '../src/config/config.js';
 import { isValidHost } from '../utils/network-utils.js';
 
@@ -123,5 +123,141 @@ describe('aiEditorRouter / handleSuggestEdits', () => {
     await handleSuggestEdits(makeReq(validBody), res);
 
     expect(res.status).toHaveBeenCalledWith(502);
+  });
+});
+
+const validInsightsBody = {
+  resource_kind: 'Deployment',
+  resource_name: 'my-app',
+  resource_api_version: 'apps/v1',
+  namespace: 'default',
+  clusterUrl: 'https://cluster.example',
+  certificateAuthorityData: 'ca-data',
+  clusterToken: 'token-abc',
+};
+
+describe('aiEditorRouter / handleInsights', () => {
+  beforeEach(() => {
+    config.features.AI_INLINE_EDIT.config.apiBaseUrl = 'https://ai.example.com';
+    isValidHost.mockReturnValue(true);
+    global.fetch = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ insights: 'looks healthy' }),
+    }));
+  });
+
+  it('forwards to <base>/api/insights with x-cluster-* headers from body', async () => {
+    const res = makeRes();
+    await handleInsights(makeReq(validInsightsBody), res);
+
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    const [url, opts] = global.fetch.mock.calls[0];
+    expect(url.toString()).toBe('https://ai.example.com/api/insights');
+    expect(opts.method).toBe('POST');
+    expect(opts.headers['X-Cluster-Url']).toBe('https://cluster.example');
+    expect(opts.headers['X-Cluster-Certificate-Authority-Data']).toBe(
+      'ca-data',
+    );
+    expect(opts.headers['X-K8s-Authorization']).toBe('token-abc');
+    expect(JSON.parse(opts.body)).toEqual({
+      resource_kind: 'Deployment',
+      resource_name: 'my-app',
+      resource_api_version: 'apps/v1',
+      namespace: 'default',
+    });
+    expect(res.json).toHaveBeenCalledWith({ insights: 'looks healthy' });
+  });
+
+  it('uses client certificate headers when no token is supplied', async () => {
+    const res = makeRes();
+    await handleInsights(
+      makeReq({
+        ...validInsightsBody,
+        clusterToken: undefined,
+        clientCertificateData: 'cert',
+        clientKeyData: 'key',
+      }),
+      res,
+    );
+
+    const [, opts] = global.fetch.mock.calls[0];
+    expect(opts.headers['X-Client-Certificate-Data']).toBe('cert');
+    expect(opts.headers['X-Client-Key-Data']).toBe('key');
+    expect(opts.headers['X-K8s-Authorization']).toBeUndefined();
+  });
+
+  it('returns 400 when resource_kind is missing', async () => {
+    const res = makeRes();
+    await handleInsights(
+      makeReq({ ...validInsightsBody, resource_kind: '' }),
+      res,
+    );
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('returns 503 when no backend URL is configured', async () => {
+    config.features.AI_INLINE_EDIT.config.apiBaseUrl = '';
+    const res = makeRes();
+    await handleInsights(makeReq(validInsightsBody), res);
+
+    expect(res.status).toHaveBeenCalledWith(503);
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('rejects a disallowed upstream host without fetching', async () => {
+    isValidHost.mockReturnValue(false);
+    const res = makeRes();
+    await handleInsights(makeReq(validInsightsBody), res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('mirrors the upstream status when the backend responds with an error', async () => {
+    global.fetch = vi.fn(async () => ({
+      ok: false,
+      status: 502,
+      json: async () => ({}),
+    }));
+    const res = makeRes();
+    await handleInsights(makeReq(validInsightsBody), res);
+
+    expect(res.status).toHaveBeenCalledWith(502);
+  });
+
+  it('returns 502 when the backend response is missing insights', async () => {
+    global.fetch = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ unexpected: true }),
+    }));
+    const res = makeRes();
+    await handleInsights(makeReq(validInsightsBody), res);
+
+    expect(res.status).toHaveBeenCalledWith(502);
+  });
+
+  it('defaults optional fields to empty strings when not provided', async () => {
+    const res = makeRes();
+    await handleInsights(
+      makeReq({
+        resource_kind: 'Namespace',
+        clusterUrl: 'https://cluster.example',
+        certificateAuthorityData: 'ca-data',
+        clusterToken: 'token-abc',
+      }),
+      res,
+    );
+
+    const [, opts] = global.fetch.mock.calls[0];
+    expect(JSON.parse(opts.body)).toEqual({
+      resource_kind: 'Namespace',
+      resource_name: '',
+      resource_api_version: '',
+      namespace: '',
+    });
   });
 });

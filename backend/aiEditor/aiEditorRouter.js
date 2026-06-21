@@ -2,6 +2,10 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import escape from 'lodash.escape';
 import { isPrivateAddressCached, isValidHost } from '../utils/network-utils.js';
+import {
+  getK8sCredentialFromBody,
+  hashCredential,
+} from '../utils/rate-limit-key.js';
 import config from '../src/config/config.js';
 
 // Proxies inline-edit requests to the external "kyma-ai-editor" backend so the
@@ -11,12 +15,28 @@ import config from '../src/config/config.js';
 const router = express.Router();
 router.use(express.json());
 
-const aiEditorRateLimiter = rateLimit({
+// Separate limiter instances so /suggest-edits and /insights don't share a
+// single 60 req/min bucket. /suggest-edits keeps the default req.ip key
+// (clients don't pass cluster credentials on that route). /insights keys on
+// the cluster credential supplied in the request body, mirroring how
+// companionRouter avoids req.ip falling back to the upstream proxy IP behind
+// the Cloud LB and starving all users from a single bucket.
+const suggestEditsRateLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 60,
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+});
+
+const insightsRateLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) =>
+    hashCredential(getK8sCredentialFromBody(req) ?? req.ip ?? '', 'ai-editor'),
 });
 
 function httpError(status, message) {
@@ -131,6 +151,98 @@ export async function handleSuggestEdits(req, res) {
   }
 }
 
-router.post('/suggest-edits', aiEditorRateLimiter, handleSuggestEdits);
+router.post('/suggest-edits', suggestEditsRateLimiter, handleSuggestEdits);
+
+function buildInsightsHeaders(authData) {
+  const headers = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  };
+  if (authData.clusterUrl) headers['X-Cluster-Url'] = authData.clusterUrl;
+  if (authData.certificateAuthorityData) {
+    headers['X-Cluster-Certificate-Authority-Data'] =
+      authData.certificateAuthorityData;
+  }
+  if (authData.clusterToken) {
+    headers['X-K8s-Authorization'] = authData.clusterToken;
+  } else if (authData.clientCertificateData && authData.clientKeyData) {
+    headers['X-Client-Certificate-Data'] = authData.clientCertificateData;
+    headers['X-Client-Key-Data'] = authData.clientKeyData;
+  }
+  return headers;
+}
+
+export async function handleInsights(req, res) {
+  try {
+    const apiBaseUrl = getApiBaseUrl();
+    if (!apiBaseUrl) {
+      throw httpError(503, 'AI insights backend is not configured');
+    }
+
+    const body = parseBody(req);
+    const {
+      resource_kind,
+      resource_name = '',
+      resource_api_version = '',
+      namespace = '',
+      clusterUrl,
+      certificateAuthorityData,
+      clusterToken,
+      clientCertificateData,
+      clientKeyData,
+    } = body;
+
+    if (typeof resource_kind !== 'string' || !resource_kind.trim()) {
+      throw httpError(400, 'Missing or invalid "resource_kind"');
+    }
+
+    await assertSafeUpstream(apiBaseUrl);
+    const endpointUrl = new URL('/api/insights', apiBaseUrl);
+
+    const headers = buildInsightsHeaders({
+      clusterUrl,
+      certificateAuthorityData,
+      clusterToken,
+      clientCertificateData,
+      clientKeyData,
+    });
+
+    const response = await fetch(endpointUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        resource_kind,
+        resource_name,
+        resource_api_version,
+        namespace,
+      }),
+    });
+
+    if (!response.ok) {
+      throw httpError(
+        response.status,
+        `AI insights backend responded with status ${response.status}`,
+      );
+    }
+
+    const data = await response.json();
+    if (typeof data?.insights !== 'string') {
+      throw httpError(
+        502,
+        'AI insights backend returned an unexpected response',
+      );
+    }
+
+    res.json({ insights: data.insights });
+  } catch (error) {
+    req.log?.warn(error);
+    res.status(error.status ?? 500).json({
+      error: error.message || 'Failed to fetch AI insights',
+      requestId: escape(req.id ?? ''),
+    });
+  }
+}
+
+router.post('/insights', insightsRateLimiter, handleInsights);
 
 export default router;

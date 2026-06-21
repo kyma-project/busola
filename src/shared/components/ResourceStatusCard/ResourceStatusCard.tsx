@@ -10,6 +10,7 @@ type ResourceStatusCardProps = {
   customColumnsLong: ReactNode;
   conditions: [ConditionItem];
   customConditionsComponent: ReactNode;
+  aiInsightsButton?: ReactNode;
 };
 
 export function ResourceStatusCard({
@@ -18,6 +19,7 @@ export function ResourceStatusCard({
   customColumnsLong,
   conditions,
   customConditionsComponent,
+  aiInsightsButton,
 }: ResourceStatusCardProps) {
   const { t } = useTranslation();
 
@@ -28,7 +30,10 @@ export function ResourceStatusCard({
         header={
           <div className="resource-status-card__header">
             <CardHeader titleText={t('common.headers.status')} />
-            <div className="header__status-badge">{statusBadge}</div>
+            <div className="header__status-badge">
+              {statusBadge}
+              {aiInsightsButton}
+            </div>
           </div>
         }
         className="resource-status-card"

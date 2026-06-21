@@ -57,6 +57,7 @@ export function ClusterSwitcher() {
       ...prevState,
       show: false,
       fullScreen: false,
+      insightsTarget: null,
     }));
     setIsOpen(false);
   };

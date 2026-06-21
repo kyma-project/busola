@@ -25,6 +25,7 @@ import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { ResourceActions } from './ResourceActions';
 import { ResourceDetailsCardContent } from './ResourceDetailsCardContent';
 import { ResourceStatusCardContent } from './ResourceStatusCardContent';
+import { AiInsightsButton } from 'components/AiInsights/components/AiInsightsButton';
 import './ResourceDetailsCard.scss';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
@@ -291,6 +292,7 @@ export function ResourceComponent({
                     statusConditions={statusConditions}
                     customConditionsComponents={customConditionsComponents}
                     filteredConditionsComponents={filteredConditionsComponents}
+                    aiInsightsButton={<AiInsightsButton resource={resource} />}
                   />
                 </div>
                 <ResourceHealthCard

@@ -165,12 +165,15 @@ export function Header() {
                   ...prevState,
                   show: prevState.useJoule ? !prevState.show : true,
                   fullScreen: false,
+                  insightsTarget: null,
                 }));
               }}
               pressed={showCompanion.show}
               slot="assistant"
             />
-            {showCompanion.useJoule && <JouleChat />}
+            {showCompanion.useJoule && !showCompanion.insightsTarget && (
+              <JouleChat />
+            )}
           </>
         )}
         {isTerminalEnabled && (

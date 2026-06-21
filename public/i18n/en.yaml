@@ -12,6 +12,13 @@ ai-inline-edit:
   selected-lines: Referencing lines {{start}}–{{end}}
   submit: Suggest changes
   tooltip: Ask AI to edit the YAML
+ai-insights:
+  context-label: Insights for {{kind}} – {{name}}
+  error:
+    empty: No insights available for this resource.
+    generic: Couldn't load insights. Try again.
+  loading: Generating insights…
+  tooltip: Get AI insights
 apps:
   title: Apps
 cluster-overview:

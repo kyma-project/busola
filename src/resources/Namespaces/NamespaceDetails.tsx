@@ -13,6 +13,7 @@ import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
+import { AiInsightsButton } from 'components/AiInsights/components/AiInsightsButton';
 import { ResourcesUsage } from './ResourcesUsage';
 import NamespaceCreate from './NamespaceCreate';
 import { AllNamespacesDetails } from './AllNamespacesDetails';
@@ -78,8 +79,11 @@ export default function NamespaceDetails(props: NamespaceDetailsProps) {
   const customColumns = [
     {
       header: t('common.headers.status'),
-      value: (namespace: { status: { phase: string } }) => (
-        <NamespaceStatus namespaceStatus={namespace.status} />
+      value: (namespace: any) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          <NamespaceStatus namespaceStatus={namespace.status} />
+          <AiInsightsButton resource={namespace} />
+        </div>
       ),
     },
   ];

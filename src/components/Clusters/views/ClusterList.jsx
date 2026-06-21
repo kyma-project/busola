@@ -67,6 +67,7 @@ function ClusterList() {
       ...prevState,
       show: false,
       fullScreen: false,
+      insightsTarget: null,
     }));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps,
 
