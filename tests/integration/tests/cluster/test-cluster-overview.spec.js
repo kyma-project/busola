@@ -90,6 +90,7 @@ context('Test Cluster Overview', () => {
         .as('firstNode');
 
       cy.get('@firstNode').scrollIntoView().click({ force: true });
+      cy.wait(500);
       cy.get('@firstNode').click();
     });
   });
