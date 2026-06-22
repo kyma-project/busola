@@ -1,4 +1,4 @@
-import { useGetTranslation } from '../helpers';
+import { useCreateResourceDescription, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
@@ -23,11 +23,12 @@ export function CardWidget({
 }: CardProps) {
   const { widgetT } = useGetTranslation();
   const items = Array.isArray(value) ? value : [value];
-
+  const description = useCreateResourceDescription(structure?.description);
   return (
     <UI5Card
       accessibleName={`${widgetT(structure)} card`}
       title={widgetT(structure)}
+      description={description as string}
     >
       {Array.isArray(structure?.children) && (
         <div>
