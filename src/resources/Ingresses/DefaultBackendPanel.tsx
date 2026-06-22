@@ -4,7 +4,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useUrl } from 'hooks/useUrl';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { Link } from 'shared/components/Link/Link';
 
 interface DefaultBackendPanelProps {
@@ -23,7 +23,7 @@ export const DefaultBackendPanel = ({
   ) as { data: any[] | null };
 
   return (
-    <UI5Panel
+    <UI5Card
       title={t('ingresses.labels.default-backend')}
       accessibleName={t('ingresses.accessible-name.default-backend')}
     >
@@ -90,6 +90,6 @@ export const DefaultBackendPanel = ({
           />
         </>
       )}
-    </UI5Panel>
+    </UI5Card>
   );
 };

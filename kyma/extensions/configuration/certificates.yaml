@@ -41,7 +41,7 @@ data:
           source: status.observedGeneration
     body:
       - name: Specification
-        widget: Panel
+        widget: Card
         children:
           - name: issuer
             source: spec.issuerRef.name
@@ -83,7 +83,7 @@ data:
             source: spec.preferredChain
             visibility: $exists(spec.preferredChain)
       - name: spec.keystores
-        widget: Panel
+        widget: Card
         visibility: $exists(spec.keystores)
         children:
           - name: JKS
@@ -137,7 +137,7 @@ data:
                     source: spec.keystores.pkcs12.passwordSecretRef.key
                     visibility: $exists(spec.keystores.pkcs12.passwordSecretRef.key)
       - name: spec.privateKey
-        widget: Panel
+        widget: Card
         visibility: $exists(spec.privateKey)
         children:
           - name: spec.privateKey.algorithm

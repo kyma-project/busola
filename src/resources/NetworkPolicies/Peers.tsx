@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LabelSelector, Selector } from './LabelSelector';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { Title } from '@ui5/webcomponents-react';
 
 export type NetworkPolicyPeersProps = {
   title: string;
@@ -28,12 +28,10 @@ export const NetworkPolicyPeers = ({
     return (
       <div key={idx}>
         {peer.ipBlock ? (
-          <UI5Panel
-            title={title || t('network-policies.headers.ip-block')}
-            accessibleName={
-              title || t('network-policies.accessible-name.ip-block')
-            }
-          >
+          <>
+            <Title className="sap-margin-x-small" size="H6">
+              {title || t('network-policies.headers.ip-block')}
+            </Title>
             <LayoutPanelRow
               name={t('network-policies.headers.cidr')}
               value={peer.ipBlock.cidr || EMPTY_TEXT_PLACEHOLDER}
@@ -42,19 +40,15 @@ export const NetworkPolicyPeers = ({
               name={t('network-policies.headers.exceptions')}
               value={<Tokens tokens={peer.ipBlock?.except} />}
             />
-          </UI5Panel>
+          </>
         ) : null}
         <LabelSelector
           selector={peer.namespaceSelector}
           title={t('network-policies.headers.namespace-selector')}
-          accessibleName={t(
-            'network-policies.accessible-name.namespace-selector',
-          )}
         />
         <LabelSelector
           selector={peer.podSelector}
           title={t('network-policies.headers.pod-selector')}
-          accessibleName={t('network-policies.accessible-name.pod-selector')}
         />
       </div>
     );

@@ -1,7 +1,7 @@
 header: []
 body:
   - name: Summary
-    widget: Panel
+    widget: Card
     children:
       - name: Updated description
         source: spec.description

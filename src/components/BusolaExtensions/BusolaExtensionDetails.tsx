@@ -6,7 +6,10 @@ import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useAtomValue } from 'jotai';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import {
+  ControlledBy,
+  OwnerReferences,
+} from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { useFeature } from 'hooks/useFeature';
@@ -30,7 +33,7 @@ import { SectionEditor } from './SectionEditor';
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';
 import { SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { configFeaturesNames } from 'state/types';
 
 type BusolaExtensionDetailsProps = {
@@ -200,10 +203,9 @@ export function BusolaExtensionDetails({
       }
     };
     return (
-      <UI5Panel
+      <UI5Card
         keyComponent="extensibility-version"
         title={t('extensibility.sections.version')}
-        key={'extensibility-version'}
         accessibleName={t('extensibility.accessible-name.version-panel')}
         headerActions={
           hasMigrationFunction &&
@@ -230,7 +232,7 @@ export function BusolaExtensionDetails({
           name={t('extensibility.version.latest')}
           value={getLatestVersion()}
         />
-      </UI5Panel>
+      </UI5Card>
     );
   };
 
@@ -239,9 +241,7 @@ export function BusolaExtensionDetails({
       header: t('common.headers.owner'),
       value: (secret: {
         metadata: {
-          ownerReferences?:
-            | { kind?: string; name?: string }[]
-            | { kind?: string; name?: string };
+          ownerReferences: OwnerReferences;
         };
       }) => <ControlledBy ownerReferences={secret.metadata.ownerReferences} />,
     },

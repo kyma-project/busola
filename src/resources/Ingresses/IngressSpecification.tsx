@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 interface IngressSpecificationProps {
@@ -16,7 +16,7 @@ export const IngressSpecification = ({
 
   return (
     <>
-      <UI5Panel
+      <UI5Card
         title={t('common.headers.specification')}
         accessibleName={t('common.accessible-name.specification')}
       >
@@ -47,7 +47,7 @@ export const IngressSpecification = ({
             }}
           />
         )}
-      </UI5Panel>
+      </UI5Card>
     </>
   );
 };

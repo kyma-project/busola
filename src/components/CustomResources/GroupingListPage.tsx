@@ -10,10 +10,10 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { createPortal } from 'react-dom';
 import { Crd } from 'types';
 import './GroupingListPage.scss';
+import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
 
 type GroupingListPageProps = {
   title: string;
@@ -50,10 +50,9 @@ export function GroupingListPage({
 
   if (error) {
     return (
-      <UI5Panel
-        title={error.message}
-        accessibleName={t('components.accessible-name.error')}
-      />
+      <div className="sap-margin-small">
+        <ErrorPanel error={error} />
+      </div>
     );
   }
 
