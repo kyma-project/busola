@@ -66,12 +66,6 @@
   .cluster > polygon {
     cursor: pointer;
   }
-
-  .controls {
-    bottom: 10px;
-    position: absolute;
-    left: 10px;
-  }
 }
 
 .graphviz-container {
@@ -87,7 +81,7 @@
   }
 }
 
-.zoom-controls {
+.graph-controls {
   position: absolute;
   bottom: 10px;
   right: 10px;
