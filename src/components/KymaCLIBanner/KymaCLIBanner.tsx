@@ -13,10 +13,11 @@ export function KymaCLIBanner() {
       className="kyma-cli-banner-card"
       title={t('kyma-cli.banner.title')}
       description={t('kyma-cli.banner.description')}
-      design={'information-2'}
-      // image="" // TODO: Add Kyma CLI image???
+      design={'information-4'}
+      image={'KymaCLI'}
       buttons={
         <Button
+          design="Emphasized"
           accessibleRole="Link"
           accessibleName={t('kyma-cli.banner.buttons.documentation')}
           accessibleDescription="Open in new tab link"
