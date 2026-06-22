@@ -63,7 +63,7 @@ data:
         widget: Labels
     body:
       - name: spec.specification
-        widget: Panel
+        widget: Card
         children:
           - name: spec.serviceInstanceName
             source: spec.serviceInstanceName
@@ -88,7 +88,7 @@ data:
             source: spec.secretRootKey
             visibility: '$exists($value) ? $boolean($value) : false'
       - name: spec.userInfo
-        widget: Panel
+        widget: Card
         children:
           - name: spec.groups
             source: spec.userInfo.groups
@@ -99,7 +99,7 @@ data:
             source: spec.userInfo.username
         visibility: $exists(spec.userInfo)
       - name: spec.credentialsRotationPolicy
-        widget: Panel
+        widget: Card
         visibility: $exists(spec.credentialsRotationPolicy)
         children:
           - name: spec.enabled

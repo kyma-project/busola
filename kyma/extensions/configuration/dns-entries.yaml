@@ -43,7 +43,7 @@ data:
           source: status.observedGeneration
     body: 
       - name: Specification
-        widget: Panel
+        widget: Card
         children:
           - name: spec.dnsName
             source: spec.dnsName 

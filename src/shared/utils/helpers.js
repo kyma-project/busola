@@ -106,10 +106,8 @@ export const prettifyKind = (kind) => {
   return parts?.join(' ') || '';
 };
 
-export const getErrorMessage = (error, message = null) => {
-  let errorNotification = message
-    ? message
-    : 'The component cannot be rendered';
+export const getErrorMessage = (error, message = '') => {
+  let errorNotification = message || 'The component cannot be rendered';
 
   if (error?.message && typeof error?.originalMessage !== 'object') {
     errorNotification += `: ${error.message} `;

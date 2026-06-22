@@ -9,6 +9,7 @@ import {
   useGetTranslation,
   getBadgeType,
 } from 'components/Extensibility/helpers';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 interface BadgeProps {
   value: any;
@@ -93,11 +94,11 @@ export function Badge({
       type={badgeType as any}
       tooltipContent={getTooltipContent(structure.description)}
     >
-      {tExt(value)}
+      {toSentenceCase(tExt(value).toString())}
     </StatusBadge>
   ) : (
     <StatusBadge autoResolveType={!badgeType} type={badgeType as any}>
-      {tExt(value)}
+      {toSentenceCase(tExt(value).toString())}
     </StatusBadge>
   );
 }

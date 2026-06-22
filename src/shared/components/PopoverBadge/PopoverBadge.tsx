@@ -37,7 +37,7 @@ export const PopoverBadge = ({
       <ObjectStatus
         aria-label="Status"
         role="status"
-        inverted
+        inverted={type !== 'Positive'}
         state={type}
         className={classes}
         data-testid={'has-tooltip'}

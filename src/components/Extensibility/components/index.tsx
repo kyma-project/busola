@@ -21,6 +21,7 @@ import { Tabs } from './Tabs';
 import { Wizard } from './Wizard';
 import { FeaturedCard } from './FeaturedCard/FeaturedCard';
 import { APIRuleHost } from './APIRules/APIRuleHost';
+import { CardWidget } from './Card';
 import { TimeFromNow } from './TimeFromNow';
 
 import { PendingWrapper } from './PendingWrapper';
@@ -31,6 +32,7 @@ export const widgets = {
   Null: () => '',
   APIRuleHost,
   Alert,
+  Card: CardWidget,
   Badge,
   CodeViewer,
   Columns,

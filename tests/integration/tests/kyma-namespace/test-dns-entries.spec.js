@@ -46,6 +46,7 @@ context('Test DNS Entries', () => {
 
   it('Inspect details', () => {
     cy.getMidColumn().contains(DNS_ENTRY_NAME);
+    cy.getMidColumn().contains('Specification');
     cy.getMidColumn().contains(`DNSName${DNS_NAME}`);
     cy.getMidColumn().contains(`TTL${TTL}`);
   });

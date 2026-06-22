@@ -9,9 +9,9 @@ import {
 } from 'components/CustomResources/CustomResources';
 import { useUrl } from 'hooks/useUrl';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { Link } from 'shared/components/Link/Link';
 import { createPortal } from 'react-dom';
+import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
 
 type CustomResourcesOfTypeProps = {
   crdName: string;
@@ -52,10 +52,9 @@ export default function CustomResourcesOfType({
   if (loading) return <Spinner />;
   if (error) {
     return (
-      <UI5Panel
-        title={error.message}
-        accessibleName={t('components.accessible-name.error')}
-      />
+      <div className="sap-margin-small">
+        <ErrorPanel error={error} />
+      </div>
     );
   }
   if (!crd) {
