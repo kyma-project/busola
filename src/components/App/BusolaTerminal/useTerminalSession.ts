@@ -28,13 +28,15 @@ const STDOUT_CHANNEL = 1;
 const STDERR_CHANNEL = 2;
 
 const ANSI_RESET = '\x1b[0m';
-const ANSI_GREEN = '\x1b[32m';
-const ANSI_YELLOW = '\x1b[33m';
-const ANSI_RED = '\x1b[31m';
+const COLOR_SUCCESS = '\x1b[32m';
+const COLOR_WARNING = '\x1b[33m';
+const COLOR_ERROR = '\x1b[31m';
 
 // \r returns the cursor to column 0 — xterm is in raw mode, so a lone \n staircases.
+const LINE_BREAK = '\r\n';
+
 function terminalMessage(color: string, text: string) {
-  return `\r\n${color}${text}${ANSI_RESET}\r\n`;
+  return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
 }
 
 function getCredential(authData: AuthDataState): string {
@@ -159,7 +161,7 @@ function buildAttachUrl(podName: string, wsToken: string): string {
 
 // WebSocket handshakes can't carry headers, so credentials are first swapped
 // for a short-lived token the backend (#4920) replays on the attach upgrade.
-export async function attachToPod({
+export async function connectTerminal({
   fetchFn,
   term,
   podName,
@@ -188,7 +190,7 @@ export async function attachToPod({
   ws.onopen = () => {
     if (signal.aborted) return;
     setSession((prev) => ({ ...prev, status: 'connected' }));
-    term.write(terminalMessage(ANSI_GREEN, 'Connected to terminal.'));
+    term.write(terminalMessage(COLOR_SUCCESS, 'Connected to terminal.'));
   };
 
   ws.onmessage = (event) => {
@@ -201,7 +203,7 @@ export async function attachToPod({
   ws.onclose = () => {
     if (signal.aborted) return;
     setSession((prev) => ({ ...prev, status: 'idle' }));
-    term.write(terminalMessage(ANSI_YELLOW, 'Connection closed.'));
+    term.write(terminalMessage(COLOR_WARNING, 'Connection closed.'));
   };
 
   ws.onerror = () => {
@@ -263,7 +265,7 @@ export function useTerminalSession() {
         await provisionPod({ fetchFn, podName, image, signal: abort.signal });
 
         onDataDisposableRef.current?.dispose();
-        const { ws, disposable } = await attachToPod({
+        const { ws, disposable } = await connectTerminal({
           fetchFn,
           term,
           podName,
@@ -281,7 +283,7 @@ export function useTerminalSession() {
         }));
         term.write(
           terminalMessage(
-            ANSI_RED,
+            COLOR_ERROR,
             `Error: ${err?.message ?? 'Failed to connect.'}`,
           ),
         );

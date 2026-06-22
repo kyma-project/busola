@@ -34,7 +34,7 @@ vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
 import {
   generateTerminalPodName,
   provisionPod,
-  attachToPod,
+  connectTerminal,
   useTerminalSession,
 } from './useTerminalSession';
 
@@ -224,7 +224,7 @@ describe('provisionPod', () => {
   });
 });
 
-describe('attachToPod', () => {
+describe('connectTerminal', () => {
   const tokenFetch = () =>
     vi.fn(() => Promise.resolve(jsonResponse({ token: 'wstok' })));
 
@@ -232,7 +232,7 @@ describe('attachToPod', () => {
     const fetchFn = tokenFetch();
     const term = makeTerm();
     const sess = vi.fn();
-    const { ws, disposable } = await attachToPod({
+    const { ws, disposable } = await connectTerminal({
       fetchFn: fetchFn as any,
       term: term as any,
       podName: POD,
