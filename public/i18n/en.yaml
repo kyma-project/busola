@@ -18,6 +18,7 @@ ai-insights:
     empty: No insights available for this resource.
     generic: Couldn't load insights. Try again.
   loading: Generating insights…
+  title: Kyma Insights
   tooltip: Get AI insights
 apps:
   title: Apps

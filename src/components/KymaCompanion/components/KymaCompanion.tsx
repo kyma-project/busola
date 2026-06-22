@@ -58,8 +58,7 @@ export default function KymaCompanion() {
   const isInsightsMode = !!insightsTarget;
 
   const handleCloseChat = () => {
-    // Preserve `useJoule` via spread on every close path — overwriting it would
-    // flip Joule users to the in-app Companion for the rest of the session.
+    // Spread to preserve `useJoule` — a literal object would clobber it.
     if (isInsightsMode) {
       setShowCompanion((prev) => ({
         ...prev,
@@ -107,7 +106,9 @@ export default function KymaCompanion() {
             }header`}
           >
             <Title level="H5" size="H5" className="companion-title">
-              {t('kyma-companion.name')}
+              {isInsightsMode
+                ? t('ai-insights.title')
+                : t('kyma-companion.name')}
             </Title>
             <div className="actions-container">
               {!isInsightsMode && !showDisclaimer && !isInitialScreen && (

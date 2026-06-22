@@ -1,26 +1,21 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import escape from 'lodash.escape';
+import { pipeline } from 'stream/promises';
+import { Readable } from 'stream';
 import { isPrivateAddressCached, isValidHost } from '../utils/network-utils.js';
 import {
   getK8sCredentialFromBody,
   hashCredential,
+  requireCredential,
 } from '../utils/rate-limit-key.js';
 import config from '../src/config/config.js';
-
-// Proxies inline-edit requests to the external "kyma-ai-editor" backend so the
-// browser never talks to it directly (no CORS, URL stays server-side). Mirrors
-// the structure of ./companion/companionRouter.js.
 
 const router = express.Router();
 router.use(express.json());
 
-// Separate limiter instances so /suggest-edits and /insights don't share a
-// single 60 req/min bucket. /suggest-edits keeps the default req.ip key
-// (clients don't pass cluster credentials on that route). /insights keys on
-// the cluster credential supplied in the request body, mirroring how
-// companionRouter avoids req.ip falling back to the upstream proxy IP behind
-// the Cloud LB and starving all users from a single bucket.
+// Separate buckets: /insights keys by cluster credential (not req.ip) to avoid
+// all users sharing one bucket behind the Cloud LB.
 const suggestEditsRateLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 60,
@@ -29,6 +24,8 @@ const suggestEditsRateLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+const requireInsightsCredential = requireCredential(getK8sCredentialFromBody);
+
 const insightsRateLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 60,
@@ -36,7 +33,7 @@ const insightsRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   keyGenerator: (req) =>
-    hashCredential(getK8sCredentialFromBody(req) ?? req.ip ?? '', 'ai-editor'),
+    hashCredential(getK8sCredentialFromBody(req), 'ai-editor'),
 });
 
 function httpError(status, message) {
@@ -53,8 +50,7 @@ function allowPrivateIps() {
   return config.features?.ALLOW_PRIVATE_IPS?.isEnabled ?? false;
 }
 
-// SSRF hardening identical to ./proxy.js. The target is server-configured (not
-// user-supplied), but we validate it anyway as defense in depth.
+// Server-configured target, but validate anyway as defense in depth.
 async function assertSafeUpstream(baseUrl) {
   let parsed;
   try {
@@ -197,7 +193,7 @@ export async function handleInsights(req, res) {
     }
 
     await assertSafeUpstream(apiBaseUrl);
-    const endpointUrl = new URL('/api/insights', apiBaseUrl);
+    const endpointUrl = new URL('/api/v2/insights', apiBaseUrl);
 
     const headers = buildInsightsHeaders({
       clusterUrl,
@@ -206,6 +202,7 @@ export async function handleInsights(req, res) {
       clientCertificateData,
       clientKeyData,
     });
+    headers['Accept'] = 'text/event-stream';
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
@@ -225,24 +222,31 @@ export async function handleInsights(req, res) {
       );
     }
 
-    const data = await response.json();
-    if (typeof data?.insights !== 'string') {
-      throw httpError(
-        502,
-        'AI insights backend returned an unexpected response',
-      );
+    if (!response.body) {
+      throw httpError(502, 'AI insights backend returned an empty response');
     }
 
-    res.json({ insights: data.insights });
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    await pipeline(Readable.fromWeb(response.body), res);
   } catch (error) {
     req.log?.warn(error);
-    res.status(error.status ?? 500).json({
-      error: error.message || 'Failed to fetch AI insights',
-      requestId: escape(req.id ?? ''),
-    });
+    if (!res.headersSent) {
+      res.status(error.status ?? 500).json({
+        error: error.message || 'Failed to fetch AI insights',
+        requestId: escape(req.id ?? ''),
+      });
+    }
   }
 }
 
-router.post('/insights', insightsRateLimiter, handleInsights);
+router.post(
+  '/insights',
+  requireInsightsCredential,
+  insightsRateLimiter,
+  handleInsights,
+);
 
 export default router;

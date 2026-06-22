@@ -1,4 +1,5 @@
 import { JSX, useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { useAtomValue } from 'jotai';
 import { BusyIndicator, Label, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
@@ -13,12 +14,8 @@ import 'components/KymaCompanion/components/Chat/Message/marked.scss';
 import { getInsights, InsightsAuth } from '../../api/getInsights';
 import './InsightsView.scss';
 
-// Read-only renderer mirroring Companion's UI5Renderer but WITHOUT CodePanel —
-// CodePanel mounts useDoesNamespaceExist/useDoesResourceExist effects that fire
-// /backend/apis/${apiVersion}/... lookups, which 404 when the LLM omits
-// kind/apiVersion from inline code blocks. The renderer is built per render so
-// the key counter resets each time (marked-react calls these into sibling
-// arrays and needs unique keys).
+// No CodePanel: it fires /backend/apis/... lookups that 404 when the LLM omits
+// kind/apiVersion from code blocks. Counter resets per render for unique keys.
 function buildInsightsRenderer() {
   let n = 0;
   return {
@@ -61,6 +58,7 @@ export function InsightsView({ target }: InsightsViewProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const firstTokenRef = useRef<boolean>(true);
 
   useEffect(() => {
     abortRef.current?.abort();
@@ -70,6 +68,7 @@ export function InsightsView({ target }: InsightsViewProps) {
     setInsights('');
     setError(null);
     setLoading(true);
+    firstTokenRef.current = true;
 
     const auth: InsightsAuth = {
       clusterUrl: cluster?.currentContext?.cluster?.cluster?.server,
@@ -89,10 +88,19 @@ export function InsightsView({ target }: InsightsViewProps) {
       namespace: target.namespace,
       auth,
       signal: controller.signal,
+      onToken: (token) => {
+        if (firstTokenRef.current) {
+          firstTokenRef.current = false;
+          // React 18 batches setInsights with setLoading(false); force a render
+          // so the spinner disappears as soon as the first token arrives.
+          flushSync(() => setInsights(token));
+        } else {
+          setInsights((prev) => prev + token);
+        }
+      },
     })
-      .then((text) => {
+      .then(() => {
         if (controller.signal.aborted) return;
-        setInsights(text);
         setLoading(false);
       })
       .catch((err) => {
@@ -117,13 +125,8 @@ export function InsightsView({ target }: InsightsViewProps) {
     name: target.resourceName,
   });
 
-  // Strip Companion's <div class="yaml-block">/<div class="link"> wrappers so
-  // the inner ```yaml fences render as plain markdown code blocks. Also unwrap
-  // a single ```markdown … ``` fence that wraps the ENTIRE reply — the LLM
-  // sometimes does that, and it would otherwise render as a literal code block
-  // instead of formatted markdown. Anchored to the full trimmed string so a
-  // non-greedy mid-string match doesn't truncate replies that contain a nested
-  // ```yaml example.
+  // Strip companion div wrappers; unwrap a top-level ```markdown fence the LLM
+  // sometimes wraps the entire reply in (anchored to avoid truncating nested blocks).
   const stripped = insights.replace(/<div[^>]*>/g, '').replace(/<\/div>/g, '');
   const trimmed = stripped.trim();
   const sanitized = /^```markdown\s*\n[\s\S]*\n```\s*$/.test(trimmed)
@@ -145,7 +148,7 @@ export function InsightsView({ target }: InsightsViewProps) {
               <MessageStrip design="Negative" hideCloseButton role="alert">
                 {error}
               </MessageStrip>
-            ) : loading ? (
+            ) : loading && !insights ? (
               <div className="ai-insights-view__loading">
                 <BusyIndicator active size="M" delay={0} />
                 <Label>{t('ai-insights.loading')}</Label>

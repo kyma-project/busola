@@ -15,6 +15,7 @@ export type GetInsightsParams = {
   namespace: string;
   auth: InsightsAuth;
   signal?: AbortSignal;
+  onToken: (token: string) => void;
 };
 
 export async function getInsights({
@@ -24,14 +25,15 @@ export async function getInsights({
   namespace,
   auth,
   signal,
-}: GetInsightsParams): Promise<string> {
+  onToken,
+}: GetInsightsParams): Promise<void> {
   const { backendAddress } = getClusterConfig();
 
   const response = await fetch(`${backendAddress}/ai-editor/insights`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Accept: 'application/json',
+      Accept: 'text/event-stream',
     },
     body: JSON.stringify({
       resource_kind: resourceKind,
@@ -53,14 +55,42 @@ export async function getInsights({
       const errorBody = await response.json();
       if (errorBody?.error) message = errorBody.error;
     } catch {
-      // response had no JSON body; keep the status-based message
+      // no JSON body
     }
     throw new Error(message);
   }
 
-  const data = await response.json();
-  if (typeof data?.insights !== 'string') {
-    throw new Error('AI insights backend returned an unexpected response');
+  if (!response.body) {
+    throw new Error('AI insights backend returned an empty response');
   }
-  return data.insights;
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+
+    // Process complete lines; leave any partial last line in the buffer.
+    const lines = buffer.split('\n');
+    buffer = lines.pop() ?? '';
+
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        const data = line.slice(6).trim();
+        if (!data || data === '{}') continue; // done-event payload
+        try {
+          const parsed = JSON.parse(data);
+          if (typeof parsed.token === 'string') {
+            onToken(parsed.token);
+          }
+        } catch {
+          // malformed SSE data — skip
+        }
+      }
+    }
+  }
 }

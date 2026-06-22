@@ -20,9 +20,7 @@ export function AiInsightsButton({ resource }: AiInsightsButtonProps) {
   ) => {
     e?.preventDefault?.();
     e?.stopPropagation?.();
-    // Preserve `useJoule` via spread — overwriting it would flip Joule users to
-    // the in-app Companion for the rest of the session. Insights mode is
-    // rendered regardless of `useJoule` via the App.tsx render guard.
+    // Spread to preserve `useJoule` — a literal object would clobber it.
     setShowCompanion((prev) => ({
       ...prev,
       show: true,

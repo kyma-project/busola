@@ -16,19 +16,42 @@ vi.mock('../src/config/config.js', () => ({
   },
 }));
 
+vi.mock('stream/promises', () => ({
+  pipeline: vi.fn(async () => {}),
+}));
+
 import { handleSuggestEdits, handleInsights } from './aiEditorRouter.js';
 import config from '../src/config/config.js';
 import { isValidHost } from '../utils/network-utils.js';
+import { pipeline } from 'stream/promises';
 
 function makeRes() {
-  const res = {};
+  const res = { headersSent: false };
   res.status = vi.fn(() => res);
   res.json = vi.fn(() => res);
+  res.setHeader = vi.fn();
+  res.write = vi.fn();
+  res.end = vi.fn(() => {
+    res.writableEnded = true;
+  });
   return res;
 }
 
 function makeReq(body) {
   return { body, log: { warn: vi.fn() }, id: 'req-1' };
+}
+
+function makeSSEStream(tokens) {
+  const lines =
+    tokens.map((t) => `data: ${JSON.stringify({ token: t })}\n\n`).join('') +
+    'event: done\ndata: {}\n\n';
+  const encoder = new TextEncoder();
+  return new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode(lines));
+      controller.close();
+    },
+  });
 }
 
 const validBody = {
@@ -140,21 +163,23 @@ describe('aiEditorRouter / handleInsights', () => {
   beforeEach(() => {
     config.features.AI_INLINE_EDIT.config.apiBaseUrl = 'https://ai.example.com';
     isValidHost.mockReturnValue(true);
+    pipeline.mockClear();
     global.fetch = vi.fn(async () => ({
       ok: true,
       status: 200,
-      json: async () => ({ insights: 'looks healthy' }),
+      body: makeSSEStream(['looks ', 'healthy']),
     }));
   });
 
-  it('forwards to <base>/api/insights with x-cluster-* headers from body', async () => {
+  it('forwards to <base>/api/v2/insights with SSE Accept header and x-cluster-* headers from body', async () => {
     const res = makeRes();
     await handleInsights(makeReq(validInsightsBody), res);
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
     const [url, opts] = global.fetch.mock.calls[0];
-    expect(url.toString()).toBe('https://ai.example.com/api/insights');
+    expect(url.toString()).toBe('https://ai.example.com/api/v2/insights');
     expect(opts.method).toBe('POST');
+    expect(opts.headers['Accept']).toBe('text/event-stream');
     expect(opts.headers['X-Cluster-Url']).toBe('https://cluster.example');
     expect(opts.headers['X-Cluster-Certificate-Authority-Data']).toBe(
       'ca-data',
@@ -166,7 +191,20 @@ describe('aiEditorRouter / handleInsights', () => {
       resource_api_version: 'apps/v1',
       namespace: 'default',
     });
-    expect(res.json).toHaveBeenCalledWith({ insights: 'looks healthy' });
+  });
+
+  it('sets SSE response headers and pipes the body via pipeline()', async () => {
+    const res = makeRes();
+    await handleInsights(makeReq(validInsightsBody), res);
+
+    expect(res.setHeader).toHaveBeenCalledWith(
+      'Content-Type',
+      'text/event-stream',
+    );
+    expect(res.setHeader).toHaveBeenCalledWith('Cache-Control', 'no-cache');
+    expect(res.setHeader).toHaveBeenCalledWith('Connection', 'keep-alive');
+    expect(pipeline).toHaveBeenCalledTimes(1);
+    expect(res.json).not.toHaveBeenCalled();
   });
 
   it('uses client certificate headers when no token is supplied', async () => {
@@ -221,18 +259,6 @@ describe('aiEditorRouter / handleInsights', () => {
       ok: false,
       status: 502,
       json: async () => ({}),
-    }));
-    const res = makeRes();
-    await handleInsights(makeReq(validInsightsBody), res);
-
-    expect(res.status).toHaveBeenCalledWith(502);
-  });
-
-  it('returns 502 when the backend response is missing insights', async () => {
-    global.fetch = vi.fn(async () => ({
-      ok: true,
-      status: 200,
-      json: async () => ({ unexpected: true }),
     }));
     const res = makeRes();
     await handleInsights(makeReq(validInsightsBody), res);

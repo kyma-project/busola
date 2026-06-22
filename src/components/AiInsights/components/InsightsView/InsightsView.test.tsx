@@ -69,15 +69,19 @@ describe('InsightsView', () => {
     getInsightsMock.mockReset();
   });
 
-  it('shows a busy indicator before the insights resolve', () => {
+  it('shows a busy indicator before any tokens arrive', () => {
     getInsightsMock.mockReturnValue(new Promise(() => {}));
     renderWithStore();
     expect(document.querySelector('ui5-busy-indicator')).toBeInTheDocument();
     expect(document.querySelector('.markdown.message')).toBeNull();
   });
 
-  it('renders the resolved insights text', async () => {
-    getInsightsMock.mockResolvedValue('looks healthy');
+  it('renders the streamed insights text', async () => {
+    getInsightsMock.mockImplementation((args: any) => {
+      args.onToken('looks ');
+      args.onToken('healthy');
+      return Promise.resolve();
+    });
     renderWithStore();
     await waitFor(() =>
       expect(
@@ -97,7 +101,10 @@ describe('InsightsView', () => {
   });
 
   it('passes the K8s auth to getInsights', async () => {
-    getInsightsMock.mockResolvedValue('ok');
+    getInsightsMock.mockImplementation((args: any) => {
+      args.onToken('ok');
+      return Promise.resolve();
+    });
     renderWithStore();
     await waitFor(() => expect(getInsightsMock).toHaveBeenCalled());
     expect(getInsightsMock.mock.calls[0][0].auth).toEqual({

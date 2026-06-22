@@ -1,8 +1,5 @@
 .context-label {
-  // Anchor 1px above the scroll edge so sub-pixel scroll positions can't leak
-  // a sliver of message text between the label and the viewport top. The
-  // box-shadow extends the label's background 2px upward to cover the overlap
-  // region without affecting layout.
+  // -1px hides sub-pixel leaks; box-shadow covers the 1px overlap area.
   position: sticky;
   top: -1px;
   z-index: 500;
