@@ -148,7 +148,7 @@ const TokenForm = ({
 };
 
 type AuthFormProps = {
-  formElementRef?: RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   resource?: Kubeconfig;
   setResource?: (resource: Record<string, any>) => void;
   revalidate?: () => void;

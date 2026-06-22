@@ -65,8 +65,8 @@ config:
         queryMaxTokens: 8000
       useJoule: false
       jouleConfig:
-        url: ''
-        botname: ''
+        url: 'https://green-joule-cv.eu10.sapdas.cloud.sap/resources/public/webclient/bootstrap.js'
+        botname: 'kyma'
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
@@ -85,3 +85,5 @@ config:
       isEnabled: false
     COMMUNITY_MODULES:
       isEnabled: true
+    SSO_LOGIN:
+      isEnabled: false

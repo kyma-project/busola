@@ -2,6 +2,7 @@ import jsyaml from 'js-yaml';
 import { isArray, mergeWith } from 'lodash';
 import { useEffect, useState } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { unwrap } from 'jotai/utils';
 
 import { clusterAtom, ActiveClusterState } from '../clusterAtom';
 import { authDataAtom } from '../authDataAtom';
@@ -11,6 +12,8 @@ import { apiGroupAtom } from '../discoverability/apiGroupsAtom';
 import { getFeatures } from './getFeatures';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { getConfigDir } from 'shared/utils/env';
+
+const apiGroupAtomSync = unwrap(apiGroupAtom, (prev) => prev ?? null);
 
 type Configuration = {
   features?: ConfigFeatureList;
@@ -94,7 +97,7 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
 export const useGetConfiguration = () => {
   const cluster = useAtomValue(clusterAtom);
   const auth = useAtomValue(authDataAtom);
-  const apis = useAtomValue(apiGroupAtom);
+  const apis = useAtomValue(apiGroupAtomSync);
   const setConfig = useSetAtom(configurationAtom);
   const fetchFn = getFetchFn(useAtomValue);
   const [prevCluster, setPrevCluster] = useState<ActiveClusterState>(null);

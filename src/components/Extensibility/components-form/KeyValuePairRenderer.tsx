@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/createMap';
 import {
@@ -22,10 +23,14 @@ type DropdownCompProps = {
   [key: string]: any;
 };
 
+type EnumInputComponent =
+  | ((props: Inputs.WrappedTextProps) => JSX.Element)
+  | ((props: Inputs.NumberProps) => JSX.Element);
+
 const getEnumComponent = (
   enumValues: any,
   isKeyInput: boolean = true,
-  input: () => JSX.Element = Inputs.Text,
+  input: EnumInputComponent = Inputs.Text,
 ) => {
   if (!Array.isArray(enumValues)) return input;
 
@@ -37,7 +42,6 @@ const getEnumComponent = (
     value,
     ...props
   }: DropdownCompProps) => (
-    /*@ts-expect-error Type mismatch between js and ts*/
     <Dropdown
       {...props}
       value={value}
@@ -57,7 +61,7 @@ const getEnumComponent = (
 };
 
 const getValueComponent = (valueInfo: Record<string, any>) => {
-  const { type, keyEnum: valuKeyEnum, valueEnum } = valueInfo || {};
+  const { type, keyEnum: valueKeyEnum, valueEnum } = valueInfo || {};
 
   switch (type) {
     case 'number':
@@ -79,7 +83,7 @@ const getValueComponent = (valueInfo: Record<string, any>) => {
             setValue(v);
           }}
           input={{
-            key: getEnumComponent(valuKeyEnum),
+            key: getEnumComponent(valueKeyEnum),
             value: getEnumComponent(valueEnum, false),
           }}
         />

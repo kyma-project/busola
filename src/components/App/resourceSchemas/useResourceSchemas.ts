@@ -17,10 +17,12 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useAtom, useSetAtom } from 'jotai';
+import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
   const authData = useAtomValue(authDataAtom);
+  const ssoData = useAtomValue(ssoDataAtom);
   const openApi = useAtomValue(openapiAtom);
   const navigate = useNavigate();
   const cluster = useAtomValue(clusterAtom);
@@ -29,6 +31,7 @@ export const useResourceSchemas = () => {
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
   const { currentCluster } = clusterInfo;
+  const isSSOEnabled = useIsSSOEnabled();
 
   const setSchemasState = useSetAtom(schemaWorkerStatusAtom);
   const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedAtom);
@@ -40,11 +43,13 @@ export const useResourceSchemas = () => {
       openApi?.state === 'hasError' &&
       !isClusterList
     ) {
-      notification.notifyError({
-        content: t('clusters.messages.connection-failed'),
-      });
+      if (!isSSOEnabled || ssoData) {
+        notification.notifyError({
+          content: t('clusters.messages.connection-failed'),
+        });
 
-      navigate('/clusters');
+        navigate('/clusters');
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -55,6 +60,8 @@ export const useResourceSchemas = () => {
     isClusterList,
     navigate,
     t,
+    ssoData,
+    isSSOEnabled,
   ]);
 
   useEffect(() => {

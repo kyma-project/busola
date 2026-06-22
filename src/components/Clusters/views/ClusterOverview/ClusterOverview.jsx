@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFeature } from 'hooks/useFeature';
 import { useNavigate } from 'react-router';
@@ -108,18 +108,28 @@ export function ClusterOverview() {
                   documentationUrl={companionConfig?.documentationLink}
                 />
               )}
-              <Injections destination="ClusterOverview" slot="banner" root="" />
+              <Suspense fallback={null}>
+                <Injections
+                  destination="ClusterOverview"
+                  slot="banner"
+                  root=""
+                />
+              </Suspense>
             </BannerCarousel>
-            <Injections
-              destination="ClusterOverview"
-              slot="details-top"
-              root=""
-            />
+            <Suspense fallback={null}>
+              <Injections
+                destination="ClusterOverview"
+                slot="details-top"
+                root=""
+              />
+            </Suspense>
             <ClusterDetails currentCluster={currentCluster} />
             <ClusterStats nodesData={nodes} />
             <ClusterNodes data={nodes} error={error} loading={loading} />
             {clusterValidation?.isEnabled && <ClusterValidation />}
-            <Injections destination="ClusterOverview" slot="details-bottom" />
+            <Suspense fallback={null}>
+              <Injections destination="ClusterOverview" slot="details-bottom" />
+            </Suspense>
           </>
         }
       />

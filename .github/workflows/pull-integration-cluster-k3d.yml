@@ -22,6 +22,10 @@ on:
         type: string
         required: false
 
+concurrency:
+  group: pull-integration-cluster-k3d-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run-cluster-test:
     runs-on: ubuntu-latest

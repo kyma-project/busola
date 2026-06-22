@@ -8,7 +8,6 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { buildGraph } from 'shared/components/ResourceGraph/buildGraph';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { TABLET, useMinWidth } from 'hooks/useMinWidth';
-import { SaveGraphControls } from './SaveGraphControls';
 import { DetailsCard } from './DetailsCard/DetailsCard';
 import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
@@ -99,11 +98,11 @@ export default function ResourceGraph({
       {startedLoading && dotSrc ? (
         <ErrorBoundary customMessage={t('resource-graph.error')}>
           <div id="graph-area">
-            <MemoizedGraphviz dotSrc={dotSrc} isReady={isReady} />
-            <SaveGraphControls
-              content={dotSrc}
-              // .gv extension is preferred instead of .dot
-              name={`${resource.kind} ${resource.metadata.name}.gv`}
+            <MemoizedGraphviz
+              dotSrc={dotSrc}
+              isReady={isReady}
+              downloadContent={dotSrc}
+              downloadName={`${resource.kind} ${resource.metadata.name}.gv`}
             />
             {clickedResource ? (
               <DetailsCard

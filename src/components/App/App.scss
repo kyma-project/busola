@@ -25,6 +25,79 @@
   position: relative;
 }
 
+#main-area {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.terminal-separator {
+  height: var(--_ui5wcr-SplitterSize);
+  flex-shrink: 0;
+  cursor: row-resize;
+  background-color: var(--sapShell_Background);
+  border-block: var(--_ui5wcr_Splitter_BarBorderStyle);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  touch-action: none;
+
+  &__line-before,
+  &__line-after {
+    background-size: 100% 0.0625rem;
+    height: var(--_ui5wcr-SplitterSize);
+    width: 4rem;
+    background-position: 50%;
+    background-repeat: no-repeat;
+  }
+
+  &__line-before {
+    background-image: linear-gradient(
+      to left,
+      var(--_ui5wcr_Splitter_ContentBorderColor),
+      transparent
+    );
+  }
+
+  &__line-after {
+    background-image: linear-gradient(
+      to right,
+      var(--_ui5wcr_Splitter_ContentBorderColor),
+      transparent
+    );
+  }
+
+  &__grip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 1.5rem;
+    z-index: 1;
+  }
+
+  &__grip-icon {
+    color: var(--_ui5wcr_Splitter_IconColor);
+    padding: 0 0.5rem;
+  }
+
+  &:hover &__line-before,
+  &:hover &__line-after {
+    flex-grow: 1;
+    transition: all 0.1s ease-in;
+  }
+
+  &:focus {
+    outline: var(--_ui5wcr_Splitter_BarOutline);
+    outline-offset: -0.2rem;
+    border-block: var(--_ui5wcr_Splitter_BarBorderFocus);
+  }
+}
+
 .auth-form-dialog-footer {
   padding: 0 16px 16px;
   display: flex;

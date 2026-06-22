@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, JSX, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ComboBox,
@@ -23,9 +23,9 @@ type ExternalResourceRefProps = {
   loading: boolean;
   title: string;
   labelPrefix?: string;
-  tooltipContent?: React.ReactNode;
+  tooltipContent?: ReactNode;
   actions?:
-    | React.ReactNode[]
+    | ReactNode[]
     | JSX.Element
     | ((setOpen: Dispatch<SetStateAction<boolean | undefined>>) => JSX.Element);
   className?: string;
@@ -36,7 +36,7 @@ type ExternalResourceRefProps = {
   noSection?: boolean;
   error?: any;
   index?: number;
-  children?: React.ReactNode;
+  children?: ReactNode;
   nestingLevel: number;
   defaultNamespace?: string;
 };

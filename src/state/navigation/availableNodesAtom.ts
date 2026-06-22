@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { unwrap } from 'jotai/utils';
 
 import { configFeaturesNames, NavNode } from '../types';
 
@@ -28,3 +29,8 @@ export const availableNodesAtom = atom<Promise<NavNode[]>>(async (get) => {
   return [...navNodes, ...extensibilityNodes];
 });
 availableNodesAtom.debugLabel = 'availableNodesAtom';
+
+export const availableNodesAtomSync = unwrap(
+  availableNodesAtom,
+  (prev) => prev ?? [],
+);

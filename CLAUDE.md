@@ -11,8 +11,11 @@ Agent skills for this repository are maintained in `.agents/skills/`. Each skill
 Available skills:
 
 - `.agents/skills/create-compliant-pr/` — Create a PR that passes all busola CI checks
+- `.agents/skills/cve-check/` — Assess a single CVE against busola's code — identifies the affected Dockerfile and recommends risk-accept or fix
 - `.agents/skills/review-pr/` — Review a pull request's changes against a GitHub issue's requirements and acceptance criteria
 - `.agents/skills/pr-description/` — Generate a PR description from the project template
+- `.agents/skills/ui-text/` — Audit and fix user-visible text in `public/i18n/en.yaml` against Kyma content guidelines (`/ui-text` for full-file cleanup, `/ui-text review` for PR review)
 - `.agents/skills/review-code/` — Review current branch changes against a GitHub issue's requirements and acceptance criteria
+- `.agents/skills/analyze-pr-tests` — Analyze Cypress integration test failures on a given PR
 
 > **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), place a markdown file per skill in `.claude/commands/` (e.g. `.claude/commands/create-compliant-pr.md`).

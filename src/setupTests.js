@@ -1,7 +1,8 @@
 /* global afterEach, global, vi */
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
-import { act, cleanup } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
+import { act } from 'react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
 Element.prototype.scroll = () => {};
@@ -30,6 +31,9 @@ export const ignoreConsoleWarns = (patterns) => {
 
 // shutup popper error
 ignoreConsoleErrors(['2']);
+
+// Suppress third-party warnings that are not actionable in tests
+ignoreConsoleWarns(['Lit is in dev mode']);
 
 // Mock IntersectionObserver
 class IntersectionObserver {

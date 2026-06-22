@@ -12,8 +12,7 @@ export const ValidationSwitch = () => {
     validateResourcesAtom,
   );
 
-  const { isEnabled, policies: selectedPolicies = [] } =
-    getExtendedValidateResourceState(validateResources);
+  const { isEnabled } = getExtendedValidateResourceState(validateResources);
 
   return (
     <div className="validate-resources">
@@ -24,9 +23,10 @@ export const ValidationSwitch = () => {
         id="validate-resources-switch"
         accessibleName={t('upload-yaml.labels.validate-resources')}
         onChange={() =>
-          setValidateResources({
-            isEnabled: !isEnabled,
-            policies: selectedPolicies,
+          setValidateResources((prev) => {
+            const ext =
+              typeof prev === 'object' ? prev : { isEnabled: prev as boolean };
+            return { ...ext, isEnabled: !ext.isEnabled };
           })
         }
         checked={isEnabled}

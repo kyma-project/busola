@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 import copyToClipboard from 'copy-to-clipboard';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
@@ -7,7 +7,9 @@ vi.mock('copy-to-clipboard');
 
 vi.mock('@ui5/webcomponents-react', () => {
   return {
-    Button: (props) => <button {...props}>{props.children}</button>,
+    Button: ({ endIcon, ...props }) => (
+      <button {...props}>{props.children}</button>
+    ),
   };
 });
 
@@ -32,7 +34,9 @@ describe('CopiableText', () => {
     const text = 'abcd und 123456';
     const { container } = render(<CopiableText textToCopy={text} />);
 
-    container.querySelector('button').click();
+    act(() => {
+      container.querySelector('button').click();
+    });
 
     expect(copyToClipboard).toHaveBeenCalledWith(text);
   });

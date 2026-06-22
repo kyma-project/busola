@@ -88,12 +88,21 @@ export function EventList({
           }}
         >
           {e.type === 'Warning' ? (
-            <ObjectStatus
-              aria-label="Warning"
-              icon={<Icon accessibleName="Warning" name="warning" />}
-              state="Critical"
-              title={e.type}
-            />
+            e.message.startsWith('Error') ? (
+              <ObjectStatus
+                aria-label="Error"
+                icon={<Icon accessibleName="Error" name="error" />}
+                state="Negative"
+                title={e.type}
+              />
+            ) : (
+              <ObjectStatus
+                aria-label="Warning"
+                icon={<Icon accessibleName="Warning" name="warning" />}
+                state="Critical"
+                title={e.type}
+              />
+            )
           ) : (
             <ObjectStatus
               aria-label="Normal"
@@ -137,6 +146,7 @@ export function EventList({
       ? [
           {
             header: t('common.headers.namespace'),
+            width: '20ch',
             value: (entry: any) => entry.metadata.namespace,
             id: 'namespace',
           },
@@ -156,10 +166,12 @@ export function EventList({
     },
     {
       header: t('events.headers.count'),
+      width: '10ch',
       value: (e) => <p>{e.count || EMPTY_TEXT_PLACEHOLDER}</p>,
     },
     {
       header: t('events.headers.last-seen'),
+      width: '26ch',
       value: (e) => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
     },
   ];
