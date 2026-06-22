@@ -11,9 +11,9 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/ReplicaSets';
 import { EventsList } from 'shared/components/EventsList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { filterByResource } from 'hooks/useMessageList';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 interface ReplicaSetsDetailsProps {
   namespace: string;
@@ -55,7 +55,7 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
     }
 
     return (
-      <UI5Panel
+      <UI5Card
         key="specification"
         title={t('common.headers.specification')}
         accessibleName={t('common.accessible-name.specification')}
@@ -95,7 +95,7 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
             }
           />
         )}
-      </UI5Panel>
+      </UI5Card>
     );
   };
 

@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState, RefObject } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { SCREEN_SIZE_BREAKPOINT_M } from 'command-pallette/CommandPalletteUI/types';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
   ShellBar,
   ShellBarItem,
   ToggleButton,
+  type ShellBarDomRef,
 } from '@ui5/webcomponents-react';
-import type { ShellBarDomRef } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
@@ -21,6 +22,7 @@ import {
 } from 'state/clustersAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
+import { showTerminalAtom } from 'state/showTerminalAtom';
 import { configFeaturesNames } from 'state/types';
 
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
@@ -31,8 +33,8 @@ import { SnowFeature } from './SnowFeature';
 import FeedbackPopover from './Feedback/FeedbackPopover';
 import JouleChat from 'components/KymaCompanion/JouleChat';
 
-import './Header.scss';
 import { GetHelpMenu } from './GetHelpMenu';
+import './Header.scss';
 
 export function Header() {
   useAvailableNamespaces();
@@ -41,6 +43,21 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isGetHelpOpen, setIsGetHelpOpen] = useState(false);
+  const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
+  const isLargeScreen = shellbarWidth > SCREEN_SIZE_BREAKPOINT_M;
+  const shellbarRef = useRef<ShellBarDomRef>(null);
+
+  useEffect(() => {
+    const htmlWrapEl = document.getElementById('html-wrap');
+    if (!htmlWrapEl) return;
+    const observer = new ResizeObserver(() => {
+      setShellbarWidth(
+        shellbarRef.current?.getBoundingClientRect().width ?? window.innerWidth,
+      );
+    });
+    observer.observe(htmlWrapEl);
+    return () => observer.disconnect();
+  }, []);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -63,6 +80,7 @@ export function Header() {
   );
 
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
+  const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
   useEffect(() => {
     setShowCompanion((prevState) => ({
@@ -70,8 +88,6 @@ export function Header() {
       useJoule: usesJoule,
     }));
   }, [setShowCompanion, usesJoule]);
-
-  const shellbarRef = useRef<ShellBarDomRef>(null);
 
   return (
     <>
@@ -120,11 +136,13 @@ export function Header() {
               shouldFocus={isSearchOpen}
               slot="searchField"
               setShouldFocus={setIsSearchOpen}
-              shellbarRef={shellbarRef}
+              shellbarWidth={shellbarWidth}
             />
           )
         }
-        showSearchField
+        showSearchField={isLargeScreen}
+        hideSearchButton={isLargeScreen}
+        disableSearchCollapse={isLargeScreen}
         onSearchButtonClick={(e) => {
           if (!e.detail.searchFieldVisible) {
             setIsSearchOpen(true);
@@ -132,7 +150,7 @@ export function Header() {
           }
           setIsSearchOpen(false);
         }}
-        ref={shellbarRef as RefObject<ShellBarDomRef>}
+        ref={shellbarRef}
       >
         <SnowFeature />
         <FeedbackPopover />
@@ -157,8 +175,12 @@ export function Header() {
         )}
         {isTerminalEnabled && (
           <ToggleButton
-            icon={'command-line-interfaces'}
+            icon="command-line-interfaces"
             accessibleName={t('terminal.name')}
+            pressed={showTerminal.isOpen}
+            onClick={() =>
+              setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }))
+            }
           />
         )}
         <ShellBarItem

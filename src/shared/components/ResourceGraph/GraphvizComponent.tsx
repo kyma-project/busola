@@ -8,11 +8,26 @@ import {
   ReactZoomPanPinchRef,
 } from 'react-zoom-pan-pinch';
 import { Button, Text } from '@ui5/webcomponents-react';
+import { SaveGraphControls } from './SaveGraphControls';
 
-function ZoomControls({ onFitToView }: { onFitToView: () => void }) {
+function GraphControls({
+  onFitToView,
+  downloadContent,
+  downloadName,
+}: {
+  onFitToView: () => void;
+  downloadContent?: string;
+  downloadName?: string;
+}) {
   const { zoomIn, zoomOut } = useControls();
   return (
-    <div className="zoom-controls">
+    <div className="graph-controls">
+      {downloadContent && (
+        <SaveGraphControls
+          content={downloadContent}
+          name={downloadName ?? ''}
+        />
+      )}
       <Button icon="zoom-in" design="Transparent" onClick={() => zoomIn()} />
       <Button icon="zoom-out" design="Transparent" onClick={() => zoomOut()} />
       <Button icon="reset" design="Transparent" onClick={onFitToView} />
@@ -23,9 +38,13 @@ function ZoomControls({ onFitToView }: { onFitToView: () => void }) {
 function GraphvizComponent({
   dotSrc,
   isReady,
+  downloadContent,
+  downloadName,
 }: {
   dotSrc: string;
   isReady: boolean;
+  downloadContent?: string;
+  downloadName?: string;
 }) {
   const { t } = useTranslation();
   const [viz, setViz] = useState<Awaited<ReturnType<typeof instance>> | null>(
@@ -153,7 +172,11 @@ function GraphvizComponent({
           centerOnInit
           onInit={handleInit}
         >
-          <ZoomControls onFitToView={fitToView} />
+          <GraphControls
+            onFitToView={fitToView}
+            downloadContent={downloadContent}
+            downloadName={downloadName}
+          />
           <TransformComponent
             wrapperStyle={{
               width: '100%',

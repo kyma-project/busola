@@ -137,7 +137,7 @@ context('Test Custom Resources', () => {
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/deleted/).should('be.visible');
+    cy.contains(/set for deletion/).should('be.visible');
 
     cy.getEndColumn().should('not.be.visible');
 

@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { MessageStrip } from '@ui5/webcomponents-react';
+import { IllustratedMessage, MessageStrip } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -113,14 +113,6 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
     };
   }, [cardsContainerRef, calculateColumns]);
 
-  if (loading || !kymaResource) {
-    return (
-      <div style={{ height: 'calc(100vh - 14rem)' }}>
-        <Spinner />
-      </div>
-    );
-  }
-
   const modulesAddData = moduleTemplates?.items.reduce(
     (acc: ModulesAddData[], moduleTpl) => {
       const name =
@@ -208,6 +200,23 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
     },
     [],
   );
+
+  useEffect(() => {
+    if (!loading && kymaResource) {
+      props.setIsAddDisabled?.(
+        modulesAddData?.length === 0 && !!kymaResource?.spec?.modules,
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modulesAddData, kymaResource?.spec?.modules]);
+
+  if (loading || !kymaResource) {
+    return (
+      <div style={{ height: 'calc(100vh - 14rem)' }}>
+        <Spinner />
+      </div>
+    );
+  }
 
   const isChecked = (name?: string) => {
     return !!selectedModules?.find((module) => module.name === name);
@@ -323,21 +332,21 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
           {renderCards()}
         </>
       ) : kymaResource?.spec?.modules ? (
-        <MessageStrip
-          design="Information"
-          hideCloseButton
-          className="sap-margin-top-small"
-        >
-          {t('kyma-modules.all-modules-added')}
-        </MessageStrip>
+        <IllustratedMessage
+          name="tnt/Components"
+          design="Scene"
+          key="all-modules-added"
+          titleText={t('kyma-modules.all-modules-added')}
+          className="emptyListComponent"
+        />
       ) : (
-        <MessageStrip
-          design="Critical"
-          hideCloseButton
-          className="sap-margin-top-small"
-        >
-          {t('kyma-modules.no-modules')}
-        </MessageStrip>
+        <IllustratedMessage
+          name="tnt/Components"
+          design="Scene"
+          key="all-modules-added"
+          titleText={t('kyma-modules.no-modules')}
+          className="emptyListComponent"
+        />
       )}
     </ResourceForm>
   );

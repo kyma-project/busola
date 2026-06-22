@@ -8,15 +8,12 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { buildGraph } from 'shared/components/ResourceGraph/buildGraph';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { TABLET, useMinWidth } from 'hooks/useMinWidth';
-import { SaveGraphControls } from './SaveGraphControls';
 import { DetailsCard } from './DetailsCard/DetailsCard';
 import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
-import { Panel, Title } from '@ui5/webcomponents-react';
-import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
-import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
 import './ResourceGraph.scss';
+import { UI5Card } from '../UI5Card/UI5Card';
 
 export default function ResourceGraph({
   resource,
@@ -91,31 +88,21 @@ export default function ResourceGraph({
     return null;
   }
   return (
-    <Panel
-      fixed
-      className="card-shadow"
-      ref={(node: any) => setGraphEl(node)}
+    <UI5Card
+      ref={setGraphEl}
+      className="graph-card"
       accessibleName={t('resource-graph.accessible-name.resource-graph')}
-      header={
-        <Toolbar>
-          <Title level="H5">{t('resource-graph.title')}</Title>
-          {actions && (
-            <>
-              <ToolbarSpacer />
-              {actions}
-            </>
-          )}
-        </Toolbar>
-      }
+      headerActions={actions}
+      title={t('resource-graph.title')}
     >
       {startedLoading && dotSrc ? (
         <ErrorBoundary customMessage={t('resource-graph.error')}>
           <div id="graph-area">
-            <MemoizedGraphviz dotSrc={dotSrc} isReady={isReady} />
-            <SaveGraphControls
-              content={dotSrc}
-              // .gv extension is preferred instead of .dot
-              name={`${resource.kind} ${resource.metadata.name}.gv`}
+            <MemoizedGraphviz
+              dotSrc={dotSrc}
+              isReady={isReady}
+              downloadContent={dotSrc}
+              downloadName={`${resource.kind} ${resource.metadata.name}.gv`}
             />
             {clickedResource ? (
               <DetailsCard
@@ -130,6 +117,6 @@ export default function ResourceGraph({
           <Spinner />
         </div>
       )}
-    </Panel>
+    </UI5Card>
   );
 }

@@ -1,17 +1,10 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 import { Panel, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 import { HintButton } from '../HintButton/HintButton';
+import { NestedContainerContext } from '../UI5Card/NestedContainerContext';
 import './UI5Panel.scss';
-
-const NestedPanelContext = createContext(false);
 
 type UI5PanelProps = {
   fixed?: boolean;
@@ -46,7 +39,7 @@ export const UI5Panel = ({
   accessibleName,
   role,
 }: UI5PanelProps) => {
-  const isNested = useContext(NestedPanelContext);
+  const isNested = useContext(NestedContainerContext);
   // top-level panels have no margin, nested panels have margin
   const shouldHaveMargin = isNested;
   const [showDescription, setShowDescription] = useState(false);
@@ -67,7 +60,7 @@ export const UI5Panel = ({
       });
   });
   return (
-    <NestedPanelContext.Provider value={true}>
+    <NestedContainerContext.Provider value={true}>
       <Panel
         role={role}
         data-testid={testid}
@@ -123,6 +116,6 @@ export const UI5Panel = ({
       >
         {children}
       </Panel>
-    </NestedPanelContext.Provider>
+    </NestedContainerContext.Provider>
   );
 };

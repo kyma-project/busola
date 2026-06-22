@@ -1,15 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { Button } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Title,
+  Toolbar,
+  ToolbarSpacer,
+} from '@ui5/webcomponents-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ContainerStatus } from './ContainerStatus';
 import { getPorts, PortsType } from 'shared/components/GetContainersPorts';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { ReadableElapsedTimeFromNow } from 'shared/components/ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 
 import { useSetAtom } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 type ContainerType = {
   name: string;
@@ -54,31 +59,35 @@ export default function ContainersData({
       status?.state?.waiting ||
       status?.state?.terminated;
     return (
-      <UI5Panel
-        title={container.name}
-        accessibleName={`${container.name} panel`}
-        headerActions={
-          <Button
-            accessibleName={'view-logs-for-' + container.name}
-            onClick={() => {
-              setLayout({
-                midColumn: null,
-                endColumn: null,
-                startColumn: null,
-                layout: 'OneColumn',
-              });
-              navigate(
-                `${window.location.pathname.replace(
-                  window.location.search,
-                  '',
-                )}/containers/${container.name}`,
-              );
-            }}
-          >
-            {t('pods.buttons.view-logs')}
-          </Button>
-        }
-      >
+      <>
+        <Toolbar>
+          <Title level="H6" size="H6" className="sap-margin-begin-tiny">
+            {container.name}
+          </Title>
+          <>
+            <ToolbarSpacer />
+            <Button
+              accessibleName={'view-logs-for-' + container.name}
+              onClick={() => {
+                setLayout({
+                  midColumn: null,
+                  endColumn: null,
+                  startColumn: null,
+                  layout: 'OneColumn',
+                });
+                navigate(
+                  `${window.location.pathname.replace(
+                    window.location.search,
+                    '',
+                  )}/containers/${container.name}`,
+                );
+              }}
+            >
+              {t('pods.buttons.view-logs')}
+            </Button>
+          </>
+        </Toolbar>
+
         <LayoutPanelRow
           name={t('common.headers.status')}
           value={<ContainerStatus status={status} />}
@@ -105,12 +114,12 @@ export default function ContainersData({
             value={getPorts(container.ports)}
           />
         )}
-      </UI5Panel>
+      </>
     );
   };
 
   return (
-    <UI5Panel title={type} accessibleName={`${type} panel`}>
+    <UI5Card title={type} accessibleName={`${type} panel`}>
       {containers.map((container) => (
         <ContainerComponent
           key={container.name}
@@ -123,6 +132,6 @@ export default function ContainersData({
           }
         />
       ))}
-    </UI5Panel>
+    </UI5Card>
   );
 }

@@ -2,12 +2,19 @@
   height: 500px;
 }
 
+.graph-card {
+  &::part(content) {
+    padding: 1rem;
+  }
+}
+
 #graph-area {
   display: flex;
   justify-content: center;
   background: var(--sapNeutralBackground);
   height: 500px;
   position: relative;
+  border-radius: var(--_ui5_card_border-radius);
 
   & > :first-child {
     height: 100%;
@@ -59,12 +66,6 @@
   .cluster > polygon {
     cursor: pointer;
   }
-
-  .controls {
-    bottom: 10px;
-    position: absolute;
-    left: 10px;
-  }
 }
 
 .graphviz-container {
@@ -80,7 +81,7 @@
   }
 }
 
-.zoom-controls {
+.graph-controls {
   position: absolute;
   bottom: 10px;
   right: 10px;

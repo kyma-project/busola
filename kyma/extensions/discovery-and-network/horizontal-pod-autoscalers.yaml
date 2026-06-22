@@ -41,7 +41,7 @@ data:
           source: status.observedGeneration
     body:
       - name: Specification
-        widget: Panel
+        widget: Card
         children:
           - name: Min Replicas
             source: spec.minReplicas
@@ -62,7 +62,7 @@ data:
         children:
           - name: Scale-down behavior
             source: spec.behavior.scaleDown
-            widget: Panel
+            widget: Card
             visibility: $exists(spec.behavior.scaleDown)
             children:
               - name: Stabilization window (seconds)
@@ -84,7 +84,7 @@ data:
           - name: Scale-up behavior
             source: spec.behavior.scaleUp
             visibility: $exists(spec.behavior.scaleUp)
-            widget: Panel
+            widget: Card
             children:
               - name: Stabilization window (seconds)
                 source: stabilizationWindowSeconds

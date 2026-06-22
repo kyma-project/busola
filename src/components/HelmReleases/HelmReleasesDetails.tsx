@@ -103,7 +103,7 @@ export default function HelmReleasesDetails({
           isEdit={true}
           confirmText={t('common.buttons.save')}
           disableEdit={true}
-          renderForm={(props) => (
+          renderForm={(props: any) => (
             <ErrorBoundary>
               <HelmReleasesYaml
                 resource={releaseSecret}

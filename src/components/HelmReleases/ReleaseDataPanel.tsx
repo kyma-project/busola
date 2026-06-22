@@ -2,7 +2,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { Link } from 'shared/components/Link/Link';
 import { Release } from './HelmReleaseData';
 
@@ -19,9 +19,10 @@ export function ReleaseDataPanel({
   const { chart, info } = release;
 
   return (
-    <UI5Panel
-      title={<>{t('helm-releases.headers.chart-information')}</>}
+    <UI5Card
+      title={t('helm-releases.headers.chart-information')}
       accessibleName={t('helm-releases.accessible-name.chart-information')}
+      keyComponent="chart-information"
     >
       {secret?.metadata && (
         <LayoutPanelRow
@@ -69,6 +70,6 @@ export function ReleaseDataPanel({
           value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
         />
       )}
-    </UI5Panel>
+    </UI5Card>
   );
 }

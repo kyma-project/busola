@@ -1,10 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 
 vi.mock('react-i18next', async () => {
   const actual: any = await vi.importActual('react-i18next');
   return {
     ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+        options: {},
+        exists: () => true,
+      },
+    }),
     Trans: ({ i18nKey, values }: any) => `${i18nKey}:${JSON.stringify(values)}`,
   };
 });
@@ -93,7 +101,9 @@ describe('UpdateModuleButton', () => {
 
   it('opens the confirmation dialog when the button is clicked', () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    fireEvent.click(screen.getByText('kyma-modules.update'));
+    act(() => {
+      fireEvent.click(screen.getByText('kyma-modules.update'));
+    });
     expect(
       screen.getByText('modules.community.update.title'),
     ).toBeInTheDocument();
@@ -101,21 +111,29 @@ describe('UpdateModuleButton', () => {
 
   it('shows current and new version in the dialog', () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    fireEvent.click(screen.getByText('kyma-modules.update'));
+    act(() => {
+      fireEvent.click(screen.getByText('kyma-modules.update'));
+    });
     expect(screen.getByText('1.0.0')).toBeInTheDocument();
     expect(screen.getByText('2.0.0')).toBeInTheDocument();
   });
 
   it('closes the dialog when Cancel is clicked', () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    fireEvent.click(screen.getByText('kyma-modules.update'));
-    fireEvent.click(screen.getByText('common.buttons.cancel'));
+    act(() => {
+      fireEvent.click(screen.getByText('kyma-modules.update'));
+    });
+    act(() => {
+      fireEvent.click(screen.getByText('common.buttons.cancel'));
+    });
     expect(screen.queryByText('modules.community.update.title')).toBeNull();
   });
 
   it('does not render DeleteOldModulesCheck when no old templates are provided', () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    fireEvent.click(screen.getByText('kyma-modules.update'));
+    act(() => {
+      fireEvent.click(screen.getByText('kyma-modules.update'));
+    });
     expect(screen.queryByTestId('delete-old-check')).toBeNull();
   });
 
@@ -126,17 +144,23 @@ describe('UpdateModuleButton', () => {
         oldModuleTemplates={[makeTpl('busola', '1.0.0')]}
       />,
     );
-    fireEvent.click(screen.getByText('kyma-modules.update'));
+    act(() => {
+      fireEvent.click(screen.getByText('kyma-modules.update'));
+    });
     expect(screen.getByTestId('delete-old-check')).toBeInTheDocument();
   });
 
   it('notifies update-started and closes dialog on confirm', async () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    fireEvent.click(screen.getByText('kyma-modules.update'));
+    act(() => {
+      fireEvent.click(screen.getByText('kyma-modules.update'));
+    });
 
     // click the Update action inside the dialog (second "kyma-modules.update" text)
-    const buttons = screen.getAllByText('kyma-modules.update');
-    fireEvent.click(buttons[buttons.length - 1]);
+    act(() => {
+      const buttons = screen.getAllByText('kyma-modules.update');
+      fireEvent.click(buttons[buttons.length - 1]);
+    });
 
     expect(notifySuccessMock).toHaveBeenCalledWith(
       expect.objectContaining({
