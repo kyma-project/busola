@@ -151,8 +151,11 @@ context('Test Community Modules views', () => {
   });
 
   it('Opens module details with the correct resource when a row is clicked', () => {
+    cy.wait(10000);
+    cy.reload();
+
     cy.get('.community-modules-list')
-      .find('ui5-table-row[interactive]', { timeout: 30000 })
+      .find('ui5-table-row[interactive]')
       .contains('busola')
       .click();
 
@@ -165,7 +168,7 @@ context('Test Community Modules views', () => {
 
   it('Retains row highlight and details after refresh', () => {
     cy.get('.community-modules-list')
-      .find('ui5-table-row[interactive]', { timeout: 30000 })
+      .find('ui5-table-row[interactive]')
       .contains('busola')
       .click();
 
@@ -185,7 +188,7 @@ context('Test Community Modules views', () => {
 
   it('Edit inside module details keeps the list in View mode', () => {
     cy.get('.community-modules-list')
-      .find('ui5-table-row[interactive]', { timeout: 30000 })
+      .find('ui5-table-row[interactive]')
       .contains('busola')
       .click();
 
@@ -202,7 +205,7 @@ context('Test Community Modules views', () => {
 
   it('Entering Edit mode on the list closes open details', () => {
     cy.get('.community-modules-list')
-      .find('ui5-table-row[interactive]', { timeout: 30000 })
+      .find('ui5-table-row[interactive]')
       .contains('busola')
       .click();
 
