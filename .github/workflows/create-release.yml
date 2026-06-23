@@ -167,7 +167,7 @@ jobs:
     uses: ./.github/workflows/pull-unit-tests.yml
     with:
       trigger_env: release-trigger
-  upload-release-report:
+  upload-release-report-sbom:
     needs:
       - integration-cluster-test
       - integration-namespace-test
