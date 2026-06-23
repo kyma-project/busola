@@ -89,9 +89,7 @@ context('Test Cluster Overview', () => {
         .first()
         .as('firstNode');
 
-      cy.get('@firstNode').scrollIntoView().click({ force: true });
-      cy.wait(500);
-      cy.get('@firstNode').click();
+      cy.get('@firstNode').find('ui5-link').click({ force: true });
     });
   });
 
