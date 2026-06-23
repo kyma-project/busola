@@ -2,8 +2,7 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { Tokens } from 'shared/components/Tokens';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
-import { Text } from '@ui5/webcomponents-react';
+import { Text, Title } from '@ui5/webcomponents-react';
 import { FilteredEntriesType } from 'shared/components/GenericList/components/TableBody';
 
 export type Selector = {
@@ -13,15 +12,10 @@ export type Selector = {
 
 export type LabelSelectorProps = {
   selector: Selector;
-  accessibleName?: string;
   title: string;
 };
 
-export const LabelSelector = ({
-  selector,
-  title,
-  accessibleName,
-}: LabelSelectorProps) => {
+export const LabelSelector = ({ selector, title }: LabelSelectorProps) => {
   const { t } = useTranslation();
 
   if (!selector) {
@@ -30,11 +24,10 @@ export const LabelSelector = ({
 
   if (selector.matchLabels)
     return (
-      <UI5Panel
-        title={title}
-        accessibleName={accessibleName || title}
-        keyComponent="policy-types"
-      >
+      <>
+        <Title className="sap-margin-x-small sap-margin-y-tiny" size="H6">
+          {title}
+        </Title>
         <LayoutPanelRow
           name={t('network-policies.headers.match-labels')}
           value={
@@ -47,7 +40,7 @@ export const LabelSelector = ({
             />
           }
         />
-      </UI5Panel>
+      </>
     );
 
   if (selector.matchExpressions) {
@@ -78,16 +71,13 @@ export const LabelSelector = ({
 
   // selector defined but empty
   return (
-    <UI5Panel
-      title={title || t('network-policies.headers.pod-selector')}
-      accessibleName={
-        title || t('network-policies.accessible-name.pod-selector')
-      }
-      keyComponent="policy-types"
-    >
-      <Text className="sap-margin-begin-small">
+    <>
+      <Title className="sap-margin-x-small sap-margin-y-tiny" size="H6">
+        {title || t('network-policies.headers.pod-selector')}
+      </Title>
+      <Text className="sap-margin-begin-small sap-margin-bottom-small">
         {t('network-policies.present-but-empty')}
       </Text>
-    </UI5Panel>
+    </>
   );
 };

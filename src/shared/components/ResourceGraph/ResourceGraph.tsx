@@ -11,11 +11,9 @@ import { TABLET, useMinWidth } from 'hooks/useMinWidth';
 import { DetailsCard } from './DetailsCard/DetailsCard';
 import { K8sResource } from 'types';
 import { ResourceGraphConfig } from './types';
-import { Panel, Title } from '@ui5/webcomponents-react';
-import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
-import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
 
 import './ResourceGraph.scss';
+import { UI5Card } from '../UI5Card/UI5Card';
 
 export default function ResourceGraph({
   resource,
@@ -90,22 +88,12 @@ export default function ResourceGraph({
     return null;
   }
   return (
-    <Panel
-      fixed
-      className="card-shadow"
-      ref={(node: any) => setGraphEl(node)}
+    <UI5Card
+      ref={setGraphEl}
+      className="graph-card"
       accessibleName={t('resource-graph.accessible-name.resource-graph')}
-      header={
-        <Toolbar>
-          <Title level="H5">{t('resource-graph.title')}</Title>
-          {actions && (
-            <>
-              <ToolbarSpacer />
-              {actions}
-            </>
-          )}
-        </Toolbar>
-      }
+      headerActions={actions}
+      title={t('resource-graph.title')}
     >
       {startedLoading && dotSrc ? (
         <ErrorBoundary customMessage={t('resource-graph.error')}>
@@ -129,6 +117,6 @@ export default function ResourceGraph({
           <Spinner />
         </div>
       )}
-    </Panel>
+    </UI5Card>
   );
 }

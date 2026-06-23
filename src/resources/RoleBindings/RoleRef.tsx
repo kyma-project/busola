@@ -1,9 +1,9 @@
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 const shortRoleKind = (resource: any) => {
   return resource.roleRef === 'ClusterRole' ? '(CR)' : '(R)';
@@ -28,7 +28,7 @@ export function RoleRef({ roleRef }: RoleRefProps) {
   };
 
   return (
-    <UI5Panel
+    <UI5Card
       keyComponent="role-binding"
       key="role-binding"
       title={t('common.headers.configuration')}
@@ -43,6 +43,6 @@ export function RoleRef({ roleRef }: RoleRefProps) {
           </>
         }
       />
-    </UI5Panel>
+    </UI5Card>
   );
 }

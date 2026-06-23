@@ -7,7 +7,7 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { Link } from 'shared/components/Link/Link';
 
 interface PortProps {
@@ -95,7 +95,7 @@ export const Rules = ({ rules }: RulesProps) => {
   return (
     <>
       {rules.map((rule, i) => (
-        <UI5Panel
+        <UI5Card
           key={`rule-${i}`}
           title={t('ingresses.labels.rules')}
           accessibleName={t('ingresses.accessible-name.rules')}
@@ -128,7 +128,7 @@ export const Rules = ({ rules }: RulesProps) => {
               showSearchField: false,
             }}
           />
-        </UI5Panel>
+        </UI5Card>
       ))}
     </>
   );

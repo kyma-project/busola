@@ -37,7 +37,7 @@ data:
         name: warning
         severity: warning
       - name: configuration
-        widget: Panel
+        widget: Card
         children:
           - name: spec.redirectUris
             source: spec.redirectUris
@@ -75,7 +75,7 @@ data:
             source: spec.tokenEndpointAuthMethod
             widget: Labels
       - name: data
-        widget: Panel
+        widget: Card
         source: $secret().items.data
         decodable: true
         children:

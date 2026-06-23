@@ -25,7 +25,7 @@ data:
           source: status.requestsPerDayQuota
     body:
       - name: specification
-        widget: Panel
+        widget: Card
         children:
           - name: issuertype
             source: '$exists(spec.acme) ? "ACME" : $exists(spec.ca) ? "CA" : ""'
