@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { hasCurrentScope } from './hasCurrentScope';
-import { NavNode } from '../../types';
+import { hasCurrentScope } from '../hasCurrentScope';
+import { NavNode } from '../../../types';
 
 const baseNode: NavNode = {
   resourceType: 'pods',

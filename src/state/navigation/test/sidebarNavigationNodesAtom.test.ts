@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { mergeInExtensibilityNav } from './sidebarNavigationNodesAtom';
-import { NavNode } from '../types';
+import { mergeInExtensibilityNav } from '../sidebarNavigationNodesAtom';
+import { NavNode } from '../../types';
 
 const makeNode = (overrides: Partial<NavNode> = {}): NavNode => ({
   resourceType: 'pods',

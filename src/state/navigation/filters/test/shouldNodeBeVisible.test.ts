@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { shouldNodeBeVisible } from './shouldNodeBeVisible';
-import { NavNode } from '../../types';
-import { ConfigFeatureList } from '../../types';
-import { PermissionSet } from '../../permissionSetsAtom';
-import { NavConfigSet } from './shouldNodeBeVisible';
+import { shouldNodeBeVisible } from '../shouldNodeBeVisible';
+import { NavNode } from '../../../types';
+import { ConfigFeatureList } from '../../../types';
+import { PermissionSet } from '../../../permissionSetsAtom';
+import { NavConfigSet } from '../shouldNodeBeVisible';
 
 const resourceIdList = ['/api/v1/pods', '/api/v1/namespaces'];
 

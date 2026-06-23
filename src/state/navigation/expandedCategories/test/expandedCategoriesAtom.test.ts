@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createStore } from 'jotai';
-import { expandedCategoriesAtom } from './expandedCategoriesAtom';
+import { expandedCategoriesAtom } from '../expandedCategoriesAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 

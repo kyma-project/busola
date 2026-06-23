@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { assignNodesToCategories } from './assignToCategories';
-import { NavNode } from '../types';
-import { predefinedCategories } from './categories';
+import { assignNodesToCategories } from '../assignToCategories';
+import { NavNode } from '../../types';
+import { predefinedCategories } from '../categories';
 
 const makeNode = (overrides: Partial<NavNode> = {}): NavNode => ({
   resourceType: 'pods',

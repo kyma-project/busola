@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { isNodeResourcePermitted } from './isNodeResourcePermitted';
-import { NavNode } from '../../types';
-import { PermissionSet } from '../../permissionSetsAtom';
+import { isNodeResourcePermitted } from '../isNodeResourcePermitted';
+import { NavNode } from '../../../types';
+import { PermissionSet } from '../../../permissionSetsAtom';
 
 const baseNode: NavNode = {
   resourceType: 'pods',

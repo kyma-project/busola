@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { areNodeFeaturesEnabled } from './areNodeFeaturesEnabled';
-import { NavNode } from '../../types';
-import { ConfigFeatureList } from '../../types';
+import { areNodeFeaturesEnabled } from '../areNodeFeaturesEnabled';
+import { NavNode } from '../../../types';
+import { ConfigFeatureList } from '../../../types';
 
 const baseNode: NavNode = {
   resourceType: 'pods',

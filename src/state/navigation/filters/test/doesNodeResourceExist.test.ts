@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { doesNodeResourceExist } from './doesNodeResourceExist';
-import { NavNode } from '../../types';
+import { doesNodeResourceExist } from '../doesNodeResourceExist';
+import { NavNode } from '../../../types';
 
 const baseNode: NavNode = {
   resourceType: 'pods',

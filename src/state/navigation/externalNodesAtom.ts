@@ -3,7 +3,7 @@ import { configurationAtom } from '../configuration/configurationAtom';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 
-const createExternalNode = (
+export const createExternalNode = (
   url: string,
   label: string,
   category: string,
@@ -23,7 +23,7 @@ const createExternalNode = (
   externalUrl: url.startsWith('http') ? url : `https://${url}`,
 });
 
-const getExternalNodes = (
+export const getExternalNodes = (
   externalNodesFeature: ConfigFeature | undefined,
 ): NavNode[] => {
   const links = externalNodesFeature!.nodes || [];

@@ -1,4 +1,4 @@
-import { doesResourceExist, doesUserHavePermission } from './permissions';
+import { doesResourceExist, doesUserHavePermission } from '../permissions';
 
 const resourceIdList = [
   '/api/v1/pods',
