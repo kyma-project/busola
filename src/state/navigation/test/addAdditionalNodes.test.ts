@@ -310,11 +310,7 @@ describe('addAdditionalNodes', () => {
     expect(types).toContain('configmaps'); // CM sentinel
     expect(types).toContain('customresourcedefinitions');
     expect(types).toContain('secrets');
-    expect(types).toContain(
-      stubExtensionsNavNode.resourceType === 'configmaps'
-        ? 'configmaps'
-        : stubExtensionsNavNode.resourceType,
-    );
+    expect(result).toContainEqual(stubExtensionsNavNode);
     expect(result).toContainEqual(stubKymaModulesNavNode);
     expect(result.some((n) => n.resourceType === 'customresources')).toBe(true);
     expect(result).toContainEqual(stubHelmReleasesNode);
