@@ -6,6 +6,7 @@ export type InsightsTarget = {
   resourceApiVersion: string;
   namespace: string;
   additionalContext?: string;
+  logLineRange?: string;
 };
 
 export type ShowKymaCompanion = {

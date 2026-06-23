@@ -54,10 +54,13 @@ export function InsightsView({ target }: InsightsViewProps) {
   const currentTheme = useAtomValue(themeAtom);
   const themeClass = isCurrentThemeDark(currentTheme) ? 'dark' : 'light';
 
-  const [insights, setInsights] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [ttft, setTtft] = useState<number | null>(null);
+  // State is reset via a key prop on this component — no setState needed in the effect.
+  const [{ insights, loading, error, ttft }, setViewState] = useState({
+    insights: '',
+    loading: true,
+    error: null as string | null,
+    ttft: null as number | null,
+  });
   const abortRef = useRef<AbortController | null>(null);
   const firstTokenRef = useRef<boolean>(true);
   const startTimeRef = useRef<number>(0);
@@ -66,11 +69,6 @@ export function InsightsView({ target }: InsightsViewProps) {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
-
-    setInsights('');
-    setError(null);
-    setLoading(true);
-    setTtft(null);
     firstTokenRef.current = true;
     startTimeRef.current = performance.now();
 
@@ -96,42 +94,49 @@ export function InsightsView({ target }: InsightsViewProps) {
       onToken: (token) => {
         if (firstTokenRef.current) {
           firstTokenRef.current = false;
-          setTtft(
-            Math.round((performance.now() - startTimeRef.current) / 100) / 10,
+          const elapsed =
+            Math.round((performance.now() - startTimeRef.current) / 100) / 10;
+          // React 18 batches state updates; force a render so the spinner
+          // disappears as soon as the first token arrives.
+          flushSync(() =>
+            setViewState((prev) => ({
+              ...prev,
+              insights: token,
+              ttft: elapsed,
+            })),
           );
-          // React 18 batches setInsights with setLoading(false); force a render
-          // so the spinner disappears as soon as the first token arrives.
-          flushSync(() => setInsights(token));
         } else {
-          setInsights((prev) => prev + token);
+          setViewState((prev) => ({
+            ...prev,
+            insights: prev.insights + token,
+          }));
         }
       },
     })
       .then(() => {
         if (controller.signal.aborted) return;
-        setLoading(false);
+        setViewState((prev) => ({ ...prev, loading: false }));
       })
       .catch((err) => {
         if (controller.signal.aborted) return;
-        setError(err?.message || t('ai-insights.error.generic'));
-        setLoading(false);
+        setViewState((prev) => ({
+          ...prev,
+          error: err?.message || t('ai-insights.error.generic'),
+          loading: false,
+        }));
       });
 
     return () => {
       controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    target.resourceKind,
-    target.resourceName,
-    target.resourceApiVersion,
-    target.namespace,
-  ]);
+  }, []);
 
-  const contextLabel = t('ai-insights.context-label', {
-    kind: target.resourceKind,
-    name: target.resourceName,
-  });
+  const contextLabel =
+    t('ai-insights.context-label', {
+      kind: target.resourceKind,
+      name: target.resourceName,
+    }) + (target.logLineRange ? ` · ${target.logLineRange}` : '');
 
   // Strip companion div wrappers; unwrap a top-level ```markdown fence the LLM
   // sometimes wraps the entire reply in (anchored to avoid truncating nested blocks).

@@ -160,7 +160,10 @@ export default function KymaCompanion() {
         }
       >
         {isInsightsMode ? (
-          <InsightsView target={insightsTarget!} />
+          <InsightsView
+            key={`${insightsTarget!.resourceKind}/${insightsTarget!.namespace}/${insightsTarget!.resourceName}/${insightsTarget!.additionalContext ?? ''}`}
+            target={insightsTarget!}
+          />
         ) : (
           <Chat
             loading={loading}
