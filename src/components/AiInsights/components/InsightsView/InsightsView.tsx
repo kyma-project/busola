@@ -57,8 +57,10 @@ export function InsightsView({ target }: InsightsViewProps) {
   const [insights, setInsights] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [ttft, setTtft] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const firstTokenRef = useRef<boolean>(true);
+  const startTimeRef = useRef<number>(0);
 
   useEffect(() => {
     abortRef.current?.abort();
@@ -68,7 +70,9 @@ export function InsightsView({ target }: InsightsViewProps) {
     setInsights('');
     setError(null);
     setLoading(true);
+    setTtft(null);
     firstTokenRef.current = true;
+    startTimeRef.current = performance.now();
 
     const auth: InsightsAuth = {
       clusterUrl: cluster?.currentContext?.cluster?.cluster?.server,
@@ -91,6 +95,9 @@ export function InsightsView({ target }: InsightsViewProps) {
       onToken: (token) => {
         if (firstTokenRef.current) {
           firstTokenRef.current = false;
+          setTtft(
+            Math.round((performance.now() - startTimeRef.current) / 100) / 10,
+          );
           // React 18 batches setInsights with setLoading(false); force a render
           // so the spinner disappears as soon as the first token arrives.
           flushSync(() => setInsights(token));
@@ -154,16 +161,25 @@ export function InsightsView({ target }: InsightsViewProps) {
                 <Label>{t('ai-insights.loading')}</Label>
               </div>
             ) : (
-              <div className="message-container left-aligned">
-                <div className={`markdown message left-aligned ${themeClass}`}>
-                  <Markdown
-                    renderer={buildInsightsRenderer()}
-                    openLinksInNewTab={false}
+              <>
+                {ttft !== null && (
+                  <span className="ai-insights-view__ttft">
+                    {t('ai-insights.ttft', { seconds: ttft })}
+                  </span>
+                )}
+                <div className="message-container left-aligned">
+                  <div
+                    className={`markdown message left-aligned ${themeClass}`}
                   >
-                    {content}
-                  </Markdown>
+                    <Markdown
+                      renderer={buildInsightsRenderer()}
+                      openLinksInNewTab={false}
+                    >
+                      {content}
+                    </Markdown>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>

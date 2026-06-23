@@ -41,6 +41,18 @@
     align-self: flex-start;
   }
 
+  &__ttft {
+    display: block;
+    margin-inline: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 12px;
+    color: var(--sapNeutralColor);
+  }
+
+  .markdown.message > *:first-child {
+    margin-top: 0;
+  }
+
   &__code {
     background: var(--sapBaseColor);
     padding: 0.5rem 0.75rem;

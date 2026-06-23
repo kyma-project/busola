@@ -20,6 +20,7 @@ ai-insights:
   loading: Generating insights…
   title: Kyma Insights
   tooltip: Get AI insights
+  ttft: ⚡ First response in {{seconds}}s
 apps:
   title: Apps
 cluster-overview:

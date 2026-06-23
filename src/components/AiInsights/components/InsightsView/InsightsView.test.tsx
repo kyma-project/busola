@@ -100,6 +100,28 @@ describe('InsightsView', () => {
     );
   });
 
+  it('shows the TTFT label after the first token arrives', async () => {
+    getInsightsMock.mockImplementation((args: any) => {
+      args.onToken('hello');
+      return Promise.resolve();
+    });
+    renderWithStore();
+    await waitFor(() =>
+      expect(
+        document.querySelector('.ai-insights-view__ttft'),
+      ).toBeInTheDocument(),
+    );
+  });
+
+  it('does not show the TTFT label on error', async () => {
+    getInsightsMock.mockRejectedValue(new Error('boom'));
+    renderWithStore();
+    await waitFor(() =>
+      expect(document.querySelector('ui5-message-strip')).toBeInTheDocument(),
+    );
+    expect(document.querySelector('.ai-insights-view__ttft')).toBeNull();
+  });
+
   it('passes the K8s auth to getInsights', async () => {
     getInsightsMock.mockImplementation((args: any) => {
       args.onToken('ok');
