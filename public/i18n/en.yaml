@@ -13,6 +13,7 @@ ai-inline-edit:
   submit: Suggest changes
   tooltip: Ask AI to edit the YAML
 ai-insights:
+  analyze-logs: Analyze logs with AI
   context-label: Insights for {{kind}} – {{name}}
   error:
     empty: No insights available for this resource.

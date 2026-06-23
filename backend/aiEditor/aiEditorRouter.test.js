@@ -16,9 +16,10 @@ vi.mock('../src/config/config.js', () => ({
   },
 }));
 
-vi.mock('stream/promises', () => ({
-  pipeline: vi.fn(async () => {}),
-}));
+vi.mock('stream/promises', () => {
+  const pipeline = vi.fn(async () => {});
+  return { pipeline, default: { pipeline } };
+});
 
 import { handleSuggestEdits, handleInsights } from './aiEditorRouter.js';
 import config from '../src/config/config.js';

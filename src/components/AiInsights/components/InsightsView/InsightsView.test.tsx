@@ -137,4 +137,25 @@ describe('InsightsView', () => {
       clientKeyData: undefined,
     });
   });
+
+  it('passes additionalContext from the target to getInsights', async () => {
+    getInsightsMock.mockImplementation((args: any) => {
+      args.onToken('ok');
+      return Promise.resolve();
+    });
+    const store = createStore();
+    store.set(clusterAtom as any, {});
+    store.set(authDataAtom as any, {});
+    render(
+      <Provider store={store}>
+        <InsightsView
+          target={{ ...target, additionalContext: '## Logs\nsome log' }}
+        />
+      </Provider>,
+    );
+    await waitFor(() => expect(getInsightsMock).toHaveBeenCalled());
+    expect(getInsightsMock.mock.calls[0][0].additionalContext).toBe(
+      '## Logs\nsome log',
+    );
+  });
 });

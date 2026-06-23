@@ -90,6 +90,7 @@ export function InsightsView({ target }: InsightsViewProps) {
       resourceName: target.resourceName,
       resourceApiVersion: target.resourceApiVersion,
       namespace: target.namespace,
+      additionalContext: target.additionalContext,
       auth,
       signal: controller.signal,
       onToken: (token) => {

@@ -56,12 +56,23 @@ describe('getInsights', () => {
       resource_name: 'my-app',
       resource_api_version: 'apps/v1',
       namespace: 'default',
+      additional_context: null,
       clusterUrl: 'https://cluster.example',
       certificateAuthorityData: 'ca-data',
       clusterToken: 'token-abc',
       clientCertificateData: undefined,
       clientKeyData: undefined,
     });
+  });
+
+  it('includes additional_context in the request body when provided', async () => {
+    await getInsights({
+      ...baseParams,
+      additionalContext: '## Logs\nsome log',
+    });
+
+    const [, opts] = (global.fetch as ReturnType<typeof vi.fn>).mock.calls[0];
+    expect(JSON.parse(opts.body).additional_context).toBe('## Logs\nsome log');
   });
 
   it('calls onToken for each SSE token in order', async () => {

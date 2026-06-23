@@ -5,6 +5,7 @@ export type InsightsTarget = {
   resourceName: string;
   resourceApiVersion: string;
   namespace: string;
+  additionalContext?: string;
 };
 
 export type ShowKymaCompanion = {

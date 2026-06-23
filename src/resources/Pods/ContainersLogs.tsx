@@ -7,6 +7,7 @@ import {
   Select,
   Switch,
 } from '@ui5/webcomponents-react';
+import { useSetAtom } from 'jotai';
 import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -14,6 +15,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 
 import './ContainersLogs.scss';
 import { LogsPanel } from 'resources/Pods/LogsPanel';
@@ -56,6 +58,26 @@ const ContainersLogs = ({
   const [logsToSave, setLogsToSave] = useState([]);
   const [sinceSeconds, setSinceSeconds] = useState(String(DEFAULT_TIMEFRAME));
   const selectedLogIndex = useRef(0);
+  const setShowCompanion = useSetAtom(showKymaCompanionAtom);
+
+  const handleLogInsightsClick = () => {
+    const selectionText = window.getSelection()?.toString().trim() ?? '';
+    const additionalContext = selectionText
+      ? `## User-Selected Log Lines\nThe user has selected the following log lines from the pod for analysis:\n\n\`\`\`\n${selectionText}\n\`\`\``
+      : undefined;
+    setShowCompanion((prev) => ({
+      ...prev,
+      show: true,
+      fullScreen: false,
+      insightsTarget: {
+        resourceKind: 'Pod',
+        resourceName: podName,
+        resourceApiVersion: 'v1',
+        namespace,
+        additionalContext,
+      },
+    }));
+  };
 
   const logTimeframeOptions = [
     { text: '1 hour', key: String(HOUR_IN_SECONDS) },
@@ -171,6 +193,14 @@ const ContainersLogs = ({
               >
                 {t('pods.labels.save-to-file')}
               </Button>
+              <Button
+                icon="ai"
+                design="Transparent"
+                disabled={!logsToSave?.length}
+                onClick={handleLogInsightsClick}
+                tooltip={t('ai-insights.analyze-logs')}
+                accessibleName={t('ai-insights.analyze-logs')}
+              />
               <SearchInput
                 disabled={!logsToSave?.length}
                 entriesKind={'Logs'}

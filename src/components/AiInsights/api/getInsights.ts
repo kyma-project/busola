@@ -13,6 +13,7 @@ export type GetInsightsParams = {
   resourceName: string;
   resourceApiVersion: string;
   namespace: string;
+  additionalContext?: string;
   auth: InsightsAuth;
   signal?: AbortSignal;
   onToken: (token: string) => void;
@@ -23,6 +24,7 @@ export async function getInsights({
   resourceName,
   resourceApiVersion,
   namespace,
+  additionalContext,
   auth,
   signal,
   onToken,
@@ -40,6 +42,7 @@ export async function getInsights({
       resource_name: resourceName,
       resource_api_version: resourceApiVersion,
       namespace,
+      additional_context: additionalContext ?? null,
       clusterUrl: auth.clusterUrl,
       certificateAuthorityData: auth.certificateAuthorityData,
       clusterToken: auth.clusterToken,
