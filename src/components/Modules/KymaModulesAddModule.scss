@@ -13,8 +13,13 @@
     max-width: var(--card-width);
     height: fit-content;
 
+    .add-module-card-checked {
+      background-color: var(--sapList_SelectionBackgroundColor);
+    }
+
     .addModuleCard {
       --left-spacing: 45px;
+      border-radius: 1rem;
 
       .moduleCardHeader {
         position: relative;
@@ -44,13 +49,14 @@
       }
 
       .content {
-        margin-left: var(--left-spacing);
+        padding-left: var(--left-spacing);
       }
     }
   }
 
   .settings-panel {
     width: var(--card-width);
+    border-radius: 0 0 1rem 1rem;
 
     &::part(header) {
       font-family: var(--sapFontFamily);
@@ -62,6 +68,7 @@
     &::part(content) {
       padding: 0 var(--left-spacing);
       padding-bottom: 5px;
+      background-color: inherit;
     }
 
     &__content {
@@ -75,6 +82,10 @@
       }
     }
   }
+}
+
+.ui5-panel::part(content) {
+  background-color: inherit;
 }
 
 .add-modules-form::part(layout) {
