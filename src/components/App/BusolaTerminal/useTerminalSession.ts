@@ -1,9 +1,11 @@
 import { useCallback, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Terminal } from '@xterm/xterm';
-import { authDataAtom, AuthDataState } from 'state/authDataAtom';
+import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
+import { ssoDataAtom } from 'state/ssoDataAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
 import { terminalSessionAtom } from 'state/terminalSessionAtom';
@@ -21,15 +23,10 @@ import {
 const DEFAULT_IMAGE =
   'europe-docker.pkg.dev/kyma-project/prod/dev-toolbox:main';
 
-function getCredential(authData: AuthDataState): string {
-  if (!authData) return '';
-  if ('token' in authData) return authData.token;
-  return authData['client-certificate-data'] ?? '';
-}
-
 export function useTerminalSession() {
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
+  const ssoData = useAtomValue(ssoDataAtom);
   const fetchFn = useFetch();
   const setSession = useSetAtom(terminalSessionAtom);
   const { config } = useFeature(configFeaturesNames.TERMINAL);
@@ -47,7 +44,6 @@ export function useTerminalSession() {
 
       const clusterServer =
         cluster?.currentContext?.cluster?.cluster?.server ?? '';
-      const credential = getCredential(authData);
 
       setSession((prev) => ({
         ...prev,
@@ -56,6 +52,17 @@ export function useTerminalSession() {
       }));
 
       try {
+        const rawHeaders = createHeaders(authData, cluster, ssoData);
+        const authHeaders = Object.fromEntries(
+          Object.entries(
+            rawHeaders as Record<string, string | undefined>,
+          ).filter((entry): entry is [string, string] => entry[1] != null),
+        );
+
+        const credential =
+          authHeaders['X-K8s-Authorization']?.replace('Bearer ', '') ??
+          authHeaders['X-Client-Certificate-Data'] ??
+          '';
         const podName = await generateTerminalPodName(
           clusterServer,
           credential,
@@ -66,7 +73,7 @@ export function useTerminalSession() {
 
         onDataDisposableRef.current?.dispose();
         const { ws, disposable } = await connectTerminal({
-          fetchFn,
+          authHeaders,
           term,
           podName,
           setSession,
@@ -89,7 +96,7 @@ export function useTerminalSession() {
         );
       }
     },
-    [authData, cluster, fetchFn, image, setSession],
+    [authData, cluster, ssoData, fetchFn, image, setSession],
   );
 
   const disconnect = useCallback(

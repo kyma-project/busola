@@ -4,6 +4,7 @@ import { act } from 'react';
 
 vi.mock('state/authDataAtom', () => ({ authDataAtom: { id: 'auth' } }));
 vi.mock('state/clusterAtom', () => ({ clusterAtom: { id: 'cluster' } }));
+vi.mock('state/ssoDataAtom', () => ({ ssoDataAtom: { id: 'sso' } }));
 vi.mock('state/terminalSessionAtom', () => ({
   terminalSessionAtom: { id: 'session' },
 }));
@@ -14,18 +15,26 @@ const setSession = vi.fn();
 
 vi.mock('jotai', async (importOriginal) => ({
   ...(await importOriginal<typeof import('jotai')>()),
-  useAtomValue: (a: any) =>
-    a?.id === 'auth'
-      ? mockAuthData
-      : a?.id === 'cluster'
-        ? mockCluster
-        : undefined,
+  useAtomValue: (a: any) => {
+    if (a?.id === 'auth') return mockAuthData;
+    if (a?.id === 'cluster') return mockCluster;
+    if (a?.id === 'sso') return null;
+    return undefined;
+  },
   useSetAtom: () => setSession,
 }));
 
 const hookFetch = vi.fn();
 vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
   useFetch: () => hookFetch,
+}));
+
+const MOCK_AUTH_HEADERS = {
+  'X-Cluster-Url': 'https://cluster.example.com',
+  'X-K8s-Authorization': 'Bearer tok123',
+};
+vi.mock('shared/hooks/BackendAPI/createHeaders', () => ({
+  createHeaders: () => MOCK_AUTH_HEADERS,
 }));
 
 import { useTerminalSession } from './useTerminalSession';
@@ -91,15 +100,13 @@ describe('useTerminalSession', () => {
   function setupHappyHookFetch() {
     hookFetch.mockImplementation(({ relativeUrl, init }: any) => {
       const method = init?.method ?? 'GET';
-      if (relativeUrl === '/ws-token')
-        return Promise.resolve(jsonResponse({ token: 'wstok' }));
       if (method === 'GET' && relativeUrl.includes('/pods/'))
         return Promise.resolve(jsonResponse({ status: { phase: 'Running' } }));
       return Promise.resolve(jsonResponse({}));
     });
   }
 
-  it('connect provisions the pod and opens the attach socket', async () => {
+  it('connect provisions the pod and opens the attach socket with auth in protocols', async () => {
     setupHappyHookFetch();
     const { result } = renderHook(() => useTerminalSession());
 
@@ -108,7 +115,10 @@ describe('useTerminalSession', () => {
     });
 
     expect(lastWs()?.url).toContain('/attach?');
-    expect(lastWs()?.protocols).toEqual(['v4.channel.k8s.io']);
+    expect(lastWs()?.protocols).toContain('v4.channel.k8s.io');
+    expect(lastWs()?.protocols).toContain(
+      `base64url.header.x-k8s-authorization.${btoa('Bearer tok123').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')}`,
+    );
   });
 
   it('disconnect closes the socket, deletes the pod and resets the session', async () => {

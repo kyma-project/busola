@@ -4,7 +4,10 @@ import { connectTerminal } from './connectTerminal';
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
 
-const jsonResponse = (data: any) => ({ json: () => Promise.resolve(data) });
+const AUTH_HEADERS = {
+  'X-Cluster-Url': 'https://cluster.example.com',
+  'X-K8s-Authorization': 'Bearer tok123',
+};
 
 function makeTerm() {
   return {
@@ -53,37 +56,36 @@ const applyLast = (fn: any) => {
   return typeof arg === 'function' ? arg({}) : arg;
 };
 
-const tokenFetch = () =>
-  vi.fn(() => Promise.resolve(jsonResponse({ token: 'wstok' })));
-
 async function attach(signal = new AbortController().signal) {
-  const fetchFn = tokenFetch();
   const term = makeTerm();
   const sess = vi.fn();
   const { ws, disposable } = await connectTerminal({
-    fetchFn: fetchFn as any,
+    authHeaders: AUTH_HEADERS,
     term: term as any,
     podName: POD,
     setSession: sess,
     signal,
   });
-  return { fetchFn, term, sess, ws: ws as any, disposable };
+  return { term, sess, ws: ws as any, disposable };
+}
+
+function encodeBase64Url(str: string) {
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
 describe('connectTerminal', () => {
-  it('requests a ws-token and opens the attach socket', async () => {
-    const { fetchFn, ws } = await attach();
-    expect(fetchFn).toHaveBeenCalledWith(
-      expect.objectContaining({
-        relativeUrl: '/ws-token',
-        init: expect.objectContaining({ method: 'POST' }),
-      }),
-    );
+  it('opens the attach socket with auth encoded in protocols', async () => {
+    const { ws } = await attach();
     expect(ws.url).toContain(
       `/backend/ws/api/v1/namespaces/${NS}/pods/${POD}/attach?`,
     );
-    expect(ws.url).toContain('wsToken=wstok');
-    expect(ws.protocols).toEqual(['v4.channel.k8s.io']);
+    expect(ws.protocols).toContain('v4.channel.k8s.io');
+    expect(ws.protocols).toContain(
+      `base64url.header.x-cluster-url.${encodeBase64Url('https://cluster.example.com')}`,
+    );
+    expect(ws.protocols).toContain(
+      `base64url.header.x-k8s-authorization.${encodeBase64Url('Bearer tok123')}`,
+    );
   });
 
   it('sets connected on open and writes stdout (channel 1) frames', async () => {

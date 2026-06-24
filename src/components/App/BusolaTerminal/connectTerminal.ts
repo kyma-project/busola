@@ -1,10 +1,7 @@
 import { Terminal } from '@xterm/xterm';
-import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { TerminalSessionState } from 'state/terminalSessionAtom';
 import { TERMINAL_NAMESPACE, CONTAINER_NAME } from './provisionPod';
-
-const ATTACH_SUBPROTOCOL = 'v4.channel.k8s.io';
 
 // Kubernetes attach stream channels — the first byte of every frame.
 const STDIN_CHANNEL = 0;
@@ -23,7 +20,21 @@ export function terminalMessage(color: string, text: string) {
   return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
 }
 
-function buildAttachUrl(podName: string, wsToken: string): string {
+function encodeBase64Url(str: string): string {
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+function buildProtocols(authHeaders: Record<string, string>): string[] {
+  return [
+    'v4.channel.k8s.io',
+    ...Object.entries(authHeaders).map(
+      ([key, value]) =>
+        `base64url.header.${key.toLowerCase()}.${encodeBase64Url(value)}`,
+    ),
+  ];
+}
+
+function buildAttachUrl(podName: string): string {
   const { protocol, host } = window.location;
   const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
   const { backendAddress } = getClusterConfig();
@@ -34,21 +45,21 @@ function buildAttachUrl(podName: string, wsToken: string): string {
     stdout: 'true',
     stderr: 'true',
     tty: 'true',
-    wsToken,
   });
   return `${wsProtocol}//${host}${backendAddress}/ws${attachPath}?${params}`;
 }
 
-// WebSocket handshakes can't carry headers, so credentials are first swapped
-// for a short-lived token the backend (#4920) replays on the attach upgrade.
+// Auth headers are encoded into Sec-WebSocket-Protocol because the browser
+// WebSocket API has no headers parameter. The backend (#4920) decodes them
+// and uses them to proxy the attach to the cluster.
 export async function connectTerminal({
-  fetchFn,
+  authHeaders,
   term,
   podName,
   setSession,
   signal,
 }: {
-  fetchFn: FetchFn;
+  authHeaders: Record<string, string>;
   term: Terminal;
   podName: string;
   setSession: (
@@ -56,15 +67,10 @@ export async function connectTerminal({
   ) => void;
   signal: AbortSignal;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
-  const tokenRes = await fetchFn({
-    relativeUrl: '/ws-token',
-    init: { method: 'POST' },
-  });
-  const { token: wsToken } = await tokenRes.json();
-
-  const ws = new WebSocket(buildAttachUrl(podName, wsToken), [
-    ATTACH_SUBPROTOCOL,
-  ]);
+  const ws = new WebSocket(
+    buildAttachUrl(podName),
+    buildProtocols(authHeaders),
+  );
   ws.binaryType = 'arraybuffer';
 
   ws.onopen = () => {
