@@ -1,25 +1,23 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getEditViewModeState, EditViewTypes } from './editViewModeAtom';
-import { getExtendedValidateResourceState } from './validateResourcesAtom';
+import { getEditViewModeState, EditViewTypes } from '../editViewModeAtom';
+import { getExtendedValidateResourceState } from '../validateResourcesAtom';
 import {
   isCurrentThemeDark,
   isSystemThemeDark,
   applyThemeToLinkNode,
-} from './themeAtom';
-import { AVAILABLE_PAGE_SIZES, pageSizeAtom } from './pageSizeAtom';
-import { disableResourceProtectionAtom } from './disableResourceProtectionAtom';
-import { dontConfirmDeleteAtom } from './dontConfirmDeleteAtom';
-import { isSettingsOpenAtom } from './isSettingsModalOpenAtom';
-import { isSidebarCondensedAtom } from './isSidebarCondensedAtom';
-import { languageAtom } from './languageAtom';
-import { showHiddenNamespacesAtom } from './showHiddenNamespacesAtom';
-import { editViewModeAtom } from './editViewModeAtom';
-import { validateResourcesAtom } from './validateResourcesAtom';
-import { themeAtom } from './themeAtom';
+} from '../themeAtom';
+import { AVAILABLE_PAGE_SIZES, pageSizeAtom } from '../pageSizeAtom';
+import { disableResourceProtectionAtom } from '../disableResourceProtectionAtom';
+import { dontConfirmDeleteAtom } from '../dontConfirmDeleteAtom';
+import { isSettingsOpenAtom } from '../isSettingsModalOpenAtom';
+import { isSidebarCondensedAtom } from '../isSidebarCondensedAtom';
+import { languageAtom } from '../languageAtom';
+import { showHiddenNamespacesAtom } from '../showHiddenNamespacesAtom';
+import { editViewModeAtom } from '../editViewModeAtom';
+import { validateResourcesAtom } from '../validateResourcesAtom';
+import { themeAtom } from '../themeAtom';
 
-// ---------------------------------------------------------------------------
 // getEditViewModeState
-// ---------------------------------------------------------------------------
 
 describe('getEditViewModeState', () => {
   it('converts a string value to defaults with MODE_DEFAULT preferencesViewType and MODE_FORM dynamicViewType', () => {
@@ -57,9 +55,7 @@ describe('getEditViewModeState', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
 // getExtendedValidateResourceState
-// ---------------------------------------------------------------------------
 
 describe('getExtendedValidateResourceState', () => {
   it('wraps true in an object with isEnabled: true', () => {
@@ -90,9 +86,7 @@ describe('getExtendedValidateResourceState', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
 // isSystemThemeDark
-// ---------------------------------------------------------------------------
 
 describe('isSystemThemeDark', () => {
   const mockMatchMedia = (matches: boolean) => {
@@ -113,9 +107,7 @@ describe('isSystemThemeDark', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
 // isCurrentThemeDark
-// ---------------------------------------------------------------------------
 
 describe('isCurrentThemeDark', () => {
   beforeEach(() => {
@@ -158,9 +150,7 @@ describe('isCurrentThemeDark', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
 // applyThemeToLinkNode
-// ---------------------------------------------------------------------------
 
 describe('applyThemeToLinkNode', () => {
   beforeEach(() => {
@@ -218,9 +208,7 @@ describe('applyThemeToLinkNode', () => {
   });
 });
 
-// ---------------------------------------------------------------------------
 // Atom initialisation — exercises module-level code in each atom file
-// ---------------------------------------------------------------------------
 
 describe('Atom definitions', () => {
   it('pageSizeAtom is defined with a debugLabel', () => {
