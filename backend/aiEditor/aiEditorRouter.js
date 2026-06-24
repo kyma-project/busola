@@ -181,6 +181,7 @@ export async function handleInsights(req, res) {
       resource_name = '',
       resource_api_version = '',
       namespace = '',
+      additional_context = null,
       clusterUrl,
       certificateAuthorityData,
       clusterToken,
@@ -212,6 +213,7 @@ export async function handleInsights(req, res) {
         resource_name,
         resource_api_version,
         namespace,
+        additional_context,
       }),
     });
 
