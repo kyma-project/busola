@@ -121,7 +121,22 @@ describe('useTerminalSession', () => {
     );
   });
 
-  it('disconnect closes the socket, deletes the pod and resets the session', async () => {
+  it('connect resets session state (including podName) before provisioning', async () => {
+    setupHappyHookFetch();
+    const { result } = renderHook(() => useTerminalSession());
+
+    await act(async () => {
+      await result.current.connect(makeTerm() as any);
+    });
+
+    expect(setSession).toHaveBeenCalledWith({
+      status: 'provisioning',
+      podName: null,
+      errorMessage: null,
+    });
+  });
+
+  it('disconnect closes the socket and deletes the pod', async () => {
     setupHappyHookFetch();
     const { result } = renderHook(() => useTerminalSession());
     await act(async () => {
@@ -138,11 +153,6 @@ describe('useTerminalSession', () => {
     expect(hookFetch).toHaveBeenCalledWith({
       relativeUrl: `/api/v1/namespaces/${NS}/pods/${POD}`,
       init: { method: 'DELETE' },
-    });
-    expect(setSession).toHaveBeenLastCalledWith({
-      status: 'idle',
-      podName: null,
-      errorMessage: null,
     });
   });
 
@@ -163,6 +173,21 @@ describe('useTerminalSession', () => {
       ([arg]: any) => arg.init?.method === 'DELETE',
     );
     expect(deleteCalls).toHaveLength(1);
+  });
+
+  it('disconnect does not reset session state, preventing a concurrent connect from being overwritten', async () => {
+    setupHappyHookFetch();
+    const { result } = renderHook(() => useTerminalSession());
+    await act(async () => {
+      await result.current.connect(makeTerm() as any);
+    });
+    setSession.mockClear();
+
+    await act(async () => {
+      await result.current.disconnect(POD);
+    });
+
+    expect(setSession).not.toHaveBeenCalled();
   });
 
   it('disconnect is a no-op without a pod name', async () => {

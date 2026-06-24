@@ -50,11 +50,7 @@ export function useTerminalSession() {
       const clusterServer =
         cluster?.currentContext?.cluster?.cluster?.server ?? '';
 
-      setSession((prev) => ({
-        ...prev,
-        status: 'provisioning',
-        errorMessage: null,
-      }));
+      setSession({ status: 'provisioning', podName: null, errorMessage: null });
 
       try {
         const rawHeaders = createHeaders(authData, cluster, ssoData);
@@ -136,10 +132,8 @@ export function useTerminalSession() {
       } catch {
         // best-effort
       }
-
-      setSession({ status: 'idle', podName: null, errorMessage: null });
     },
-    [fetchFn, setSession],
+    [fetchFn],
   );
 
   return { connect, disconnect };

@@ -55,8 +55,7 @@ function buildAttachUrl(podName: string): string {
   return `${wsProtocol}//${host}${backendAddress}/ws${attachPath}?${params}`;
 }
 
-// Auth headers are encoded into Sec-WebSocket-Protocol because the browser
-// WebSocket API has no headers parameter; the backend (#4920) decodes them.
+// Auth encoded into Sec-WebSocket-Protocol — browser WebSocket has no headers param; #4920 decodes.
 export async function connectTerminal({
   authHeaders,
   term,
