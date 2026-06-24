@@ -1,7 +1,8 @@
+/* global Buffer */
 import { Terminal } from '@xterm/xterm';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { TerminalSessionState } from 'state/terminalSessionAtom';
-import { TERMINAL_NAMESPACE, CONTAINER_NAME } from './provisionPod';
+import { CONTAINER_NAME, TERMINAL_NAMESPACE } from './provisionPod';
 
 // Kubernetes attach stream channels — the first byte of every frame.
 const STDIN_CHANNEL = 0;
@@ -26,17 +27,21 @@ export type ConnectionMessages = {
   connectionError: string;
 };
 
-function encodeBase64Url(str: string): string {
-  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
 function buildProtocols(authHeaders: Record<string, string>): string[] {
   return [
     'v4.channel.k8s.io',
-    ...Object.entries(authHeaders).map(
-      ([key, value]) =>
-        `base64url.header.${key.toLowerCase()}.${encodeBase64Url(value)}`,
-    ),
+    ...Object.entries(authHeaders).map(([key, value]) => {
+      let encodedValue = value;
+      if (key === `X-Cluster-Url`) {
+        encodedValue = btoa(value);
+      }
+      // Remove '=' padding , because Websocket doesn;t like = sign
+      return `base64.header.${key.toLowerCase()}.value.${encodedValue.replaceAll('=', '-')}`;
+    }),
+    // ...Object.entries(authHeaders).map(
+    //   ([key, value]) =>
+    //     `base64url.header.${key.toLowerCase()}.${encodeBase64Url('tests')}`,
+    // )
   ];
 }
 
@@ -73,10 +78,11 @@ export async function connectTerminal({
   signal: AbortSignal;
   messages: ConnectionMessages;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
-  const ws = new WebSocket(
-    buildAttachUrl(podName),
-    buildProtocols(authHeaders),
-  );
+  const protocols = buildProtocols(authHeaders);
+  console.log(protocols);
+  const url = buildAttachUrl(podName);
+  console.log(url);
+  const ws = new WebSocket(url, protocols);
   ws.binaryType = 'arraybuffer';
 
   ws.onopen = () => {

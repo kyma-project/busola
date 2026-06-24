@@ -92,6 +92,7 @@ export function useTerminalSession() {
         onDataDisposableRef.current = disposable;
       } catch (err: any) {
         if (err?.name === 'AbortError') return;
+        console.error(err);
         const message = err?.message ?? t('terminal.messages.unknown-error');
         setSession((prev) => ({
           ...prev,
