@@ -7,6 +7,7 @@ import {
 import { proxyHandler } from './proxy.js';
 import { setupJWTCheck } from './jwtCheck';
 import companionRouter from './companion/companionRouter';
+import aiEditorRouter from './aiEditor/aiEditorRouter';
 import communityRouter from './modules/communityRouter';
 import { createSlowRequestLogger, pinoMiddleware } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
@@ -35,8 +36,11 @@ if (gzipEnabled)
           // compression interferes with ReadableStreams. Small chunks are not transmitted for unknown reason
           return false;
         }
-        // Skip compression for streaming endpoint
-        if (req.originalUrl.startsWith('/backend/ai-chat/messages')) {
+        // Skip compression for streaming endpoints
+        if (
+          req.originalUrl.startsWith('/backend/ai-chat/messages') ||
+          req.originalUrl.startsWith('/backend/ai-editor/insights')
+        ) {
           return false;
         }
         // fallback to standard filter function
@@ -111,12 +115,14 @@ if (isDocker) {
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend/ai-editor', aiEditorRouter);
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
   app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend/ai-editor', aiEditorRouter);
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
 }

@@ -2,10 +2,22 @@
   width: 100%;
   max-width: 420px;
 
+  &__custom-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
   &__header {
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    .header__status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
   }
 
   &__details-grid {

@@ -3,8 +3,10 @@ import { Button, Icon, ObjectStatus } from '@ui5/webcomponents-react';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
+import { useAtomValue } from 'jotai';
 import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 import CopyButton from 'shared/components/CopyButton/CopyButton';
+import { aiInlineEditAtom } from 'state/aiEditor/aiInlineEditAtom';
 
 const EDITOR_VISIBILITY = 'editor-visibility';
 const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
@@ -43,6 +45,13 @@ export function EditorActions({
   );
 
   const { readOnly } = editor?.getRawOptions() || {};
+  const { status: aiStatus } = useAtomValue(aiInlineEditAtom);
+  const aiPopoverOpen = aiStatus !== 'idle';
+  const showAiButton = !readOnly || aiPopoverOpen;
+
+  const askAi = () => {
+    editor?.getAction('ai-inline-edit.start')?.run();
+  };
 
   useEffect(() => {
     localStorage.setItem(EDITOR_VISIBILITY, visible.toString());
@@ -126,7 +135,7 @@ export function EditorActions({
 
   return (
     <section className="editor-actions-section">
-      {readOnly && (
+      {readOnly && !aiPopoverOpen && (
         <ObjectStatus
           icon={<Icon name="locked" />}
           showDefaultIcon
@@ -168,6 +177,16 @@ export function EditorActions({
         }
         disabled={hideDisabled}
       />
+      {showAiButton && (
+        <Button
+          design="Transparent"
+          icon="ai"
+          onClick={askAi}
+          className="action-button"
+          tooltip={t('ai-inline-edit.tooltip')}
+          disabled={!editor || aiPopoverOpen}
+        />
+      )}
       <Button
         design="Transparent"
         icon="search"

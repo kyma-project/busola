@@ -15,3 +15,8 @@ config:
         skipAuth: false
     ALLOW_PRIVATE_IPS:
       isEnabled: false
+    # AI-powered inline YAML edits ("Ask AI" / Cmd-K). The backend proxies the
+    # request to `${apiBaseUrl}/v1/suggest-edits`. Empty disables the proxy.
+    AI_INLINE_EDIT:
+      config:
+        apiBaseUrl: 'https://kyma-ai-editor.b4048d1.stage.kyma.ondemand.com'

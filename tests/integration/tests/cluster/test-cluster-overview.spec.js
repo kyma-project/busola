@@ -49,10 +49,11 @@ context('Test Cluster Overview', () => {
       .contains('ui5-text.additional-info', 'test1233456');
 
     // test injected statistical card exists and works
+    // scrollBehavior override: card is below the viewport, global scroll is off
     cy.contains(
       'ui5-card.counting-card.item',
       'HPAs Statistical Injection Example',
-    ).click();
+    ).click({ scrollBehavior: 'center' });
 
     cy.get('ui5-dynamic-page-title')
       .find('ui5-title')
@@ -82,8 +83,13 @@ context('Test Cluster Overview', () => {
 
     cy.wait(500);
 
+    // scrollBehavior override: row is below the viewport, global scroll is off
     cy.contains('ui5-panel', 'Nodes').within((_) => {
-      cy.get('ui5-table-row').first().find('ui5-table-cell').first().click();
+      cy.get('ui5-table-row')
+        .first()
+        .find('ui5-table-cell')
+        .first()
+        .click({ scrollBehavior: 'center' });
     });
   });
 

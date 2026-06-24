@@ -1,0 +1,116 @@
+// Inline AI edit: red/green diff decorations + the anchored prompt widget.
+// Monaco injects decoration/view-zone DOM into the editor, so these selectors
+// are intentionally global (not CSS-module scoped), mirroring Editor.scss.
+
+// --- Diff preview ---------------------------------------------------------
+.ai-diff-removed-line {
+  background-color: rgba(255, 86, 86, 0.18);
+}
+
+// gutter marker for removed lines
+.ai-diff-removed-margin {
+  background-color: rgba(255, 86, 86, 0.45);
+  width: 3px !important;
+  margin-left: 3px;
+}
+
+.ai-diff-added-zone {
+  background-color: rgba(46, 160, 67, 0.18);
+  border-left: 3px solid rgba(46, 160, 67, 0.6);
+  font-family: var(--sapCode_FontFamily, monospace);
+  font-size: 0.75rem;
+  white-space: pre;
+  overflow-x: auto;
+  box-sizing: border-box;
+
+  .ai-diff-added-line {
+    padding-left: 0.5rem;
+    line-height: 1.4;
+  }
+}
+
+// --- Prompt widget --------------------------------------------------------
+.ai-inline-edit-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 24rem;
+  max-width: 80vw;
+  // shift clear of the line-number gutter so the border/shadow aren't clipped.
+  // horizontal only, so it doesn't affect the spacer view-zone height measurement
+  margin-left: 1rem;
+  padding: 0.75rem;
+  background-color: var(--sapGroup_ContentBackground, #fff);
+  border: 1px solid var(--sapList_BorderColor, #d9d9d9);
+  border-radius: var(--sapElement_BorderCornerRadius, 0.5rem);
+  box-shadow: var(--sapContent_Shadow2, 0 2px 8px rgba(0, 0, 0, 0.2));
+
+  .ai-inline-edit-widget__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.375rem;
+  }
+
+  .ai-inline-edit-widget__title {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: bold;
+  }
+
+  .ai-inline-edit-widget__row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  // realtime "Referencing lines x–y" indicator
+  .ai-inline-edit-widget__context {
+    font-size: 0.75rem;
+    color: var(--sapContent_LabelColor);
+  }
+
+  // Companion-style input: a growing TextArea with a round send button overlaid
+  // at the bottom-right.
+  .ai-inline-edit-widget__input {
+    position: relative;
+
+    ui5-textarea {
+      width: 100%;
+      // fixed vertical padding gives the single-row input enough height for the
+      // round send button to sit inside it (same as the Kyma Companion input)
+      --_ui5_textarea_padding_top: 8px !important;
+      --_ui5_textarea_padding_bottom: 8px !important;
+    }
+
+    // reserve room for the overlaid send button so text doesn't run under it
+    ui5-textarea::part(textarea) {
+      padding-right: 2.75rem;
+    }
+  }
+
+  // matches the Kyma Companion input (QueryInput.scss .query-input-actions)
+  .ai-inline-edit-widget__input-actions {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ai-inline-edit-widget__send {
+    min-height: 1.75rem;
+    height: 1.75rem;
+    min-width: 1.75rem;
+    width: 1.75rem;
+    border-radius: 75%;
+  }
+
+  .ai-inline-edit-widget__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}

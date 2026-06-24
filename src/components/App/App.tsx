@@ -194,9 +194,13 @@ export default function App() {
   return (
     <SplitterLayout id="splitter-layout">
       <SplitterElement
-        resizable={showCompanion.show && !showCompanion.useJoule}
+        resizable={
+          showCompanion.show &&
+          (!showCompanion.useJoule || !!showCompanion.insightsTarget)
+        }
         size={
-          showCompanion.show && !showCompanion.useJoule
+          showCompanion.show &&
+          (!showCompanion.useJoule || !!showCompanion.insightsTarget)
             ? showCompanion.fullScreen
               ? '0%'
               : '70%'
@@ -319,7 +323,8 @@ export default function App() {
           </div>
         </div>
       </SplitterElement>
-      {showCompanion.show && !showCompanion.useJoule ? (
+      {showCompanion.show &&
+      (!showCompanion.useJoule || !!showCompanion.insightsTarget) ? (
         <SplitterElement
           resizable={!showCompanion.fullScreen}
           size={showCompanion.fullScreen ? '100%' : '30%'}

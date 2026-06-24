@@ -59,6 +59,7 @@ export function AIBanner({
                 ...prevState,
                 show: true,
                 fullScreen: false,
+                insightsTarget: null,
               }));
             }}
           >

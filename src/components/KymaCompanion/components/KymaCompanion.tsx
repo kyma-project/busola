@@ -10,6 +10,7 @@ import { Chat } from './Chat/Chat';
 import { chatHelpers } from './Chat/chatHelper';
 import { AIError, Author, ChatGroup } from './Chat/types';
 import Disclaimer from './Disclaimer/Disclaimer';
+import { InsightsView } from 'components/AiInsights/components/InsightsView/InsightsView';
 
 import './KymaCompanion.scss';
 import {
@@ -53,16 +54,40 @@ export default function KymaCompanion() {
     setIsInitialScreen(false);
   }
 
+  const insightsTarget = showCompanion.insightsTarget ?? null;
+  const isInsightsMode = !!insightsTarget;
+
   const handleCloseChat = () => {
+    // Spread to preserve `useJoule` — a literal object would clobber it.
+    if (isInsightsMode) {
+      setShowCompanion((prev) => ({
+        ...prev,
+        show: false,
+        fullScreen: false,
+        insightsTarget: null,
+      }));
+      return;
+    }
     if (getShowFeedbackStorageKey() === FEEDBACK_SHOW_TYPE.NO_SHOW) {
-      setShowCompanion({ show: false, fullScreen: false, useJoule: false });
+      setShowCompanion((prev) => ({
+        ...prev,
+        show: false,
+        fullScreen: false,
+        insightsTarget: null,
+      }));
       return;
     }
     const promptsNumber = chatHistory[0].messages.filter(
       (message) => message.author === Author.USER,
     ).length;
     if (promptsNumber > 4) setIsFeedbackDialogOpen(true);
-    else setShowCompanion({ show: false, fullScreen: false, useJoule: false });
+    else
+      setShowCompanion((prev) => ({
+        ...prev,
+        show: false,
+        fullScreen: false,
+        insightsTarget: null,
+      }));
   };
 
   useEffect(() => {
@@ -81,10 +106,12 @@ export default function KymaCompanion() {
             }header`}
           >
             <Title level="H5" size="H5" className="companion-title">
-              {t('kyma-companion.name')}
+              {isInsightsMode
+                ? t('ai-insights.title')
+                : t('kyma-companion.name')}
             </Title>
             <div className="actions-container">
-              {!showDisclaimer && !isInitialScreen && (
+              {!isInsightsMode && !showDisclaimer && !isInitialScreen && (
                 <Button
                   design="Transparent"
                   icon="restart"
@@ -94,7 +121,7 @@ export default function KymaCompanion() {
                   onClick={() => handleRefresh()}
                 />
               )}
-              {!initialLoading && (
+              {(isInsightsMode || !initialLoading) && (
                 <Button
                   design="Transparent"
                   icon={
@@ -104,15 +131,15 @@ export default function KymaCompanion() {
                   }
                   className="action"
                   onClick={() =>
-                    setShowCompanion({
+                    setShowCompanion((prev) => ({
+                      ...prev,
                       show: true,
-                      fullScreen: !showCompanion.fullScreen,
-                      useJoule: false,
-                    })
+                      fullScreen: !prev.fullScreen,
+                    }))
                   }
                 />
               )}
-              {!showDisclaimer && !initialLoading && (
+              {!isInsightsMode && !showDisclaimer && !initialLoading && (
                 <Button
                   design="Transparent"
                   icon="hint"
@@ -132,20 +159,27 @@ export default function KymaCompanion() {
           </div>
         }
       >
-        <Chat
-          loading={loading}
-          setLoading={setLoading}
-          chatHistory={chatHistory}
-          setChatHistory={setChatHistory}
-          isReset={isReset}
-          setIsReset={setIsReset}
-          error={error}
-          setError={setError}
-          hide={showDisclaimer}
-          time={time}
-          isInitialScreen={isInitialScreen}
-          onInitialLoadingChange={setInitialLoading}
-        />
+        {isInsightsMode ? (
+          <InsightsView
+            key={`${insightsTarget!.resourceKind}/${insightsTarget!.namespace}/${insightsTarget!.resourceName}/${insightsTarget!.additionalContext ?? ''}`}
+            target={insightsTarget!}
+          />
+        ) : (
+          <Chat
+            loading={loading}
+            setLoading={setLoading}
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            isReset={isReset}
+            setIsReset={setIsReset}
+            error={error}
+            setError={setError}
+            hide={showDisclaimer}
+            time={time}
+            isInitialScreen={isInitialScreen}
+            onInitialLoadingChange={setInitialLoading}
+          />
+        )}
         {showDisclaimer && (
           <Disclaimer hideDisclaimer={() => setShowDisclaimer(false)} />
         )}

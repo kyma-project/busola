@@ -1,13 +1,15 @@
 .context-label {
+  // -1px hides sub-pixel leaks; box-shadow covers the 1px overlap area.
   position: sticky;
-  top: 0;
+  top: -1px;
   z-index: 500;
   display: flex;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: calc(0.5rem + 1px) 0 0.5rem;
   margin-inline: 0.5rem;
   width: calc(100% - 1rem);
   background: var(--sapBaseColor);
+  box-shadow: 0 -2px 0 var(--sapBaseColor);
 
   &::before,
   &::after {

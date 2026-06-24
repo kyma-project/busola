@@ -10,3 +10,6 @@ config:
       config:
         apiBaseUrl: 'https://companion.cp.stage.kyma.cloud.sap'
         tokenUrl: 'https://kymacanary.accounts.ondemand.com/oauth2/token'
+    AI_INLINE_EDIT:
+      config:
+        apiBaseUrl: 'https://kyma-ai-editor.b4048d1.stage.kyma.ondemand.com'

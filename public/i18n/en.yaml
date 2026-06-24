@@ -1,3 +1,27 @@
+ai-inline-edit:
+  accept: Accept
+  close: Close
+  discard: Discard
+  generating: Generating suggestion…
+  invalid-yaml: The AI returned invalid YAML, so the suggestion cannot be shown.
+  no-changes: The AI did not suggest any changes.
+  placeholder: Describe the change you want…
+  retry: Try again
+  review: Review the suggested changes
+  selected-line: Referencing line {{line}}
+  selected-lines: Referencing lines {{start}}–{{end}}
+  submit: Suggest changes
+  tooltip: Ask AI to edit the YAML
+ai-insights:
+  analyze-logs: Analyze logs
+  context-label: Insights for {{kind}} – {{name}}
+  error:
+    empty: No insights available for this resource.
+    generic: Couldn't load insights. Try again.
+  loading: Generating insights…
+  title: Kyma Insights
+  tooltip: Get AI insights
+  ttft: ⚡ {{seconds}}s
 apps:
   title: Apps
 cluster-overview:
