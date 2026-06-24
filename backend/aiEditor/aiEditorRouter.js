@@ -213,7 +213,7 @@ export async function handleInsights(req, res) {
         resource_name,
         resource_api_version,
         namespace,
-        additional_context,
+        ...(additional_context !== null && { additional_context }),
       }),
     });
 

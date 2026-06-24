@@ -191,7 +191,6 @@ describe('aiEditorRouter / handleInsights', () => {
       resource_name: 'my-app',
       resource_api_version: 'apps/v1',
       namespace: 'default',
-      additional_context: null,
     });
   });
 
@@ -286,7 +285,25 @@ describe('aiEditorRouter / handleInsights', () => {
       resource_name: '',
       resource_api_version: '',
       namespace: '',
-      additional_context: null,
     });
+  });
+
+  it('includes additional_context in the body when provided', async () => {
+    const res = makeRes();
+    await handleInsights(
+      makeReq({ ...validInsightsBody, additional_context: 'some log lines' }),
+      res,
+    );
+
+    const [, opts] = global.fetch.mock.calls[0];
+    expect(JSON.parse(opts.body).additional_context).toBe('some log lines');
+  });
+
+  it('omits additional_context from the body when not provided', async () => {
+    const res = makeRes();
+    await handleInsights(makeReq(validInsightsBody), res);
+
+    const [, opts] = global.fetch.mock.calls[0];
+    expect(JSON.parse(opts.body)).not.toHaveProperty('additional_context');
   });
 });
