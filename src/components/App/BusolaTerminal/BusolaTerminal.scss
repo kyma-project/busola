@@ -73,4 +73,9 @@
     box-shadow: var(--_ui5_popup_header_shadow);
     border-bottom: var(--_ui5_popup_header_border);
   }
+
+  &__status {
+    color: var(--sapContent_LabelColor);
+    font-weight: normal;
+  }
 }

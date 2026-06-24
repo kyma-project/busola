@@ -17,7 +17,7 @@ export async function generateTerminalPodName(
   const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-  return `busola-terminal-${hex.slice(0, 8)}`;
+  return `busola-terminal-${hex.slice(0, 16)}`;
 }
 
 function buildPodManifest(podName: string, image: string) {
@@ -33,7 +33,16 @@ function buildPodManifest(podName: string, image: string) {
     },
     spec: {
       containers: [
-        { image, name: CONTAINER_NAME, resources: {}, stdin: true, tty: true },
+        {
+          image,
+          name: CONTAINER_NAME,
+          resources: {
+            requests: { cpu: '100m', memory: '128Mi' },
+            limits: { cpu: '500m', memory: '256Mi' },
+          },
+          stdin: true,
+          tty: true,
+        },
       ],
       restartPolicy: 'Never',
     },

@@ -146,6 +146,25 @@ describe('useTerminalSession', () => {
     });
   });
 
+  it('deletes the pod only once when disconnect is called repeatedly', async () => {
+    setupHappyHookFetch();
+    const { result } = renderHook(() => useTerminalSession());
+    await act(async () => {
+      await result.current.connect(makeTerm() as any);
+    });
+    hookFetch.mockClear();
+
+    await act(async () => {
+      await result.current.disconnect(POD);
+      await result.current.disconnect(POD);
+    });
+
+    const deleteCalls = hookFetch.mock.calls.filter(
+      ([arg]: any) => arg.init?.method === 'DELETE',
+    );
+    expect(deleteCalls).toHaveLength(1);
+  });
+
   it('disconnect is a no-op without a pod name', async () => {
     const { result } = renderHook(() => useTerminalSession());
 

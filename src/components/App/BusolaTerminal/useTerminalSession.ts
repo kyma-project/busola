@@ -37,9 +37,12 @@ export function useTerminalSession() {
   const wsRef = useRef<WebSocket | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const onDataDisposableRef = useRef<{ dispose: () => void } | null>(null);
+  // Prevents double pod DELETE — close button and unmount cleanup both call disconnect.
+  const disconnectedRef = useRef(false);
 
   const connect = useCallback(
     async (term: Terminal) => {
+      disconnectedRef.current = false;
       abortRef.current?.abort();
       const abort = new AbortController();
       abortRef.current = abort;
@@ -112,6 +115,9 @@ export function useTerminalSession() {
 
   const disconnect = useCallback(
     async (podName: string | null) => {
+      if (disconnectedRef.current) return;
+      disconnectedRef.current = true;
+
       abortRef.current?.abort();
       onDataDisposableRef.current?.dispose();
       onDataDisposableRef.current = null;

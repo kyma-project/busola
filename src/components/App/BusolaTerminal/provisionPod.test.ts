@@ -10,7 +10,7 @@ const jsonResponse = (data: any) => ({ json: () => Promise.resolve(data) });
 describe('generateTerminalPodName', () => {
   it('produces the expected prefix', async () => {
     const name = await generateTerminalPodName('https://example.com', 'tok123');
-    expect(name).toMatch(/^busola-terminal-[0-9a-f]{8}$/);
+    expect(name).toMatch(/^busola-terminal-[0-9a-f]{16}$/);
   });
 
   it('is deterministic for the same inputs', async () => {
