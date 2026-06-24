@@ -205,7 +205,9 @@ export default function ModulesCard({
         data-testid={`module-settings-panel-${module.name}`}
         accessibleName={t('kyma-modules.accessible-name.advanced')}
       >
-        <div className="settings-panel__content sap-margin-y-small">
+        <div
+          className={`settings-panel__content sap-margin-y-small ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
+        >
           <Label>{t('kyma-modules.release-channel') + ':'} </Label>
           <Select
             onChange={(event) => {

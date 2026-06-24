@@ -120,7 +120,9 @@ export default function CommunityModuleCard({
         data-testid={`module-settings-panel-${module.name}`}
         accessibleName={t('modules.community.accessible-name.advanced')}
       >
-        <div className="settings-panel__content sap-margin-y-small">
+        <div
+          className={`settings-panel__content sap-margin-y-small ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
+        >
           <Label>{t('modules.community.origin') + ':'} </Label>
           <Select
             accessibleName={`${module.name} version select`}
