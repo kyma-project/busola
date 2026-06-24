@@ -13,7 +13,7 @@ ai-inline-edit:
   submit: Suggest changes
   tooltip: Ask AI to edit the YAML
 ai-insights:
-  analyze-logs: Analyze logs with AI
+  analyze-logs: Analyze logs
   context-label: Insights for {{kind}} – {{name}}
   error:
     empty: No insights available for this resource.
@@ -21,7 +21,7 @@ ai-insights:
   loading: Generating insights…
   title: Kyma Insights
   tooltip: Get AI insights
-  ttft: ⚡ First response in {{seconds}}s
+  ttft: ⚡ {{seconds}}s
 apps:
   title: Apps
 cluster-overview:

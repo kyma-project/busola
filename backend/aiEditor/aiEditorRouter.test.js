@@ -191,6 +191,7 @@ describe('aiEditorRouter / handleInsights', () => {
       resource_name: 'my-app',
       resource_api_version: 'apps/v1',
       namespace: 'default',
+      additional_context: null,
     });
   });
 
@@ -285,6 +286,7 @@ describe('aiEditorRouter / handleInsights', () => {
       resource_name: '',
       resource_api_version: '',
       namespace: '',
+      additional_context: null,
     });
   });
 });
