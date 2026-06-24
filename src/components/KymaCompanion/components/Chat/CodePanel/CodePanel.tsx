@@ -3,7 +3,7 @@ import { Text, Panel, Title, FlexBox, Button } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useAtom, useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { isCurrentThemeDark, Theme, themeAtom } from 'state/settings/themeAtom';
+import { Theme, themeAtom } from 'state/settings/themeAtom';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
 import { clusterAtom } from 'state/clusterAtom';
@@ -33,16 +33,10 @@ registerIconCollectionForTheme('fpa-icons', {
   sap_horizon: 'fpa-icons-sap-horizon',
 });
 
-function getCustomTheme(theme: Theme) {
-  const isDark = isCurrentThemeDark(theme);
-  const monacoEditorKeyColorLight = '#008080';
-  const monacoEditorKeyColorDark = '#3dc9b0';
-  const monacoEditorTextColorLight = '#0451a5';
-  const monacoEditorTextColorDark = '#ce9178';
-
+function getCustomTheme(_theme: Theme) {
   return {
     'code[class*="language-"]': {
-      color: isDark ? monacoEditorTextColorDark : monacoEditorTextColorLight,
+      color: 'var(--sapTextColor)',
       background: 'var(--sapBaseColor)',
       fontFamily: 'var(--sapFontFamily)',
       fontSize: '14px',
@@ -55,13 +49,13 @@ function getCustomTheme(theme: Theme) {
       borderRadius: '8px',
     },
     comment: {
-      color: isDark ? 'var(--sapLinkColor)' : monacoEditorTextColorDark,
+      color: 'var(--sapLinkColor)',
     },
     keyword: {
-      color: isDark ? monacoEditorKeyColorDark : monacoEditorKeyColorLight,
+      color: 'var(--sapContent_MarkerTextColor)',
     },
     key: {
-      color: isDark ? monacoEditorKeyColorDark : monacoEditorKeyColorLight,
+      color: 'var(--sapContent_MarkerTextColor)',
     },
     punctuation: {
       color: 'var(--sapTextColor)',

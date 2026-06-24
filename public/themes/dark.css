@@ -4,3 +4,8 @@ html,
 #root {
   height: 100%;
 }
+
+:root {
+  --busola-terminal-background: var(--sapShell_Background);
+  --busola-terminal-text: var(--sapShell_TextColor);
+}
