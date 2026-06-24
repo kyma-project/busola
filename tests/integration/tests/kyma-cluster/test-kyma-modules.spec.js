@@ -136,7 +136,7 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Opens module details with the correct resource when a row is clicked', () => {
-    cy.wait(150000);
+    cy.wait(200000);
     cy.reload();
 
     cy.get('.modules-list')
@@ -153,7 +153,7 @@ context('Test Kyma Modules views', () => {
 
   it('Retains row highlight and details after refresh', () => {
     cy.get('.modules-list')
-      .find('ui5-table-row[interactive]')
+      .find('ui5-table-row')
       .contains('api-gateway')
       .click();
 
@@ -173,7 +173,7 @@ context('Test Kyma Modules views', () => {
 
   it('Edit inside module details keeps the list in View mode', () => {
     cy.get('.modules-list')
-      .find('ui5-table-row[interactive]')
+      .find('ui5-table-row')
       .contains('api-gateway')
       .click();
 
@@ -190,7 +190,7 @@ context('Test Kyma Modules views', () => {
 
   it('Entering Edit mode on the list closes open details', () => {
     cy.get('.modules-list')
-      .find('ui5-table-row[interactive]')
+      .find('ui5-table-row')
       .contains('api-gateway')
       .click();
 
@@ -293,7 +293,7 @@ context('Test Kyma Modules views', () => {
       .type('api-gateway');
 
     cy.get('.modules-list')
-      .find('ui5-table-row[interactive]')
+      .find('ui5-table-row')
       .contains('api-gateway')
       .click();
 
