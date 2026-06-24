@@ -41,6 +41,7 @@ data:
           source: status.observedGeneration
     body:
       - name: Specification
+        description: Horizontal Pod Autoscaler specification {{[Documentation](https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/)}}
         widget: Card
         children:
           - name: Min Replicas

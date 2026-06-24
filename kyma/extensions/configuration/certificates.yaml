@@ -87,6 +87,7 @@ data:
         visibility: $exists(spec.keystores)
         children:
           - name: JKS
+            description: Java KeyStore (JKS) is a repository of security, authorization or public key certificates.
             widget: Panel
             visibility: $exists(spec.keystores.jks)
             children:
