@@ -20,6 +20,12 @@ export function terminalMessage(color: string, text: string) {
   return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
 }
 
+export type ConnectionMessages = {
+  connected: string;
+  closed: string;
+  connectionError: string;
+};
+
 function encodeBase64Url(str: string): string {
   return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
@@ -50,14 +56,14 @@ function buildAttachUrl(podName: string): string {
 }
 
 // Auth headers are encoded into Sec-WebSocket-Protocol because the browser
-// WebSocket API has no headers parameter. The backend (#4920) decodes them
-// and uses them to proxy the attach to the cluster.
+// WebSocket API has no headers parameter; the backend (#4920) decodes them.
 export async function connectTerminal({
   authHeaders,
   term,
   podName,
   setSession,
   signal,
+  messages,
 }: {
   authHeaders: Record<string, string>;
   term: Terminal;
@@ -66,6 +72,7 @@ export async function connectTerminal({
     update: (prev: TerminalSessionState) => TerminalSessionState,
   ) => void;
   signal: AbortSignal;
+  messages: ConnectionMessages;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
     buildAttachUrl(podName),
@@ -76,7 +83,7 @@ export async function connectTerminal({
   ws.onopen = () => {
     if (signal.aborted) return;
     setSession((prev) => ({ ...prev, status: 'connected' }));
-    term.write(terminalMessage(COLOR_SUCCESS, 'Connected to terminal.'));
+    term.write(terminalMessage(COLOR_SUCCESS, messages.connected));
   };
 
   ws.onmessage = (event) => {
@@ -89,7 +96,7 @@ export async function connectTerminal({
   ws.onclose = () => {
     if (signal.aborted) return;
     setSession((prev) => ({ ...prev, status: 'idle' }));
-    term.write(terminalMessage(COLOR_WARNING, 'Connection closed.'));
+    term.write(terminalMessage(COLOR_WARNING, messages.closed));
   };
 
   ws.onerror = () => {
@@ -97,7 +104,7 @@ export async function connectTerminal({
     setSession((prev) => ({
       ...prev,
       status: 'error',
-      errorMessage: 'WebSocket connection error.',
+      errorMessage: messages.connectionError,
     }));
   };
 

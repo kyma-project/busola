@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Terminal } from '@xterm/xterm';
 import { authDataAtom } from 'state/authDataAtom';
@@ -24,6 +25,7 @@ const DEFAULT_IMAGE =
   'europe-docker.pkg.dev/kyma-project/prod/dev-toolbox:main';
 
 export function useTerminalSession() {
+  const { t } = useTranslation();
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
@@ -69,7 +71,10 @@ export function useTerminalSession() {
         );
         setSession((prev) => ({ ...prev, podName }));
 
-        await provisionPod({ fetchFn, podName, image, signal: abort.signal });
+        await provisionPod({ fetchFn, podName, image, abortController: abort });
+
+        // Bail if torn down during provisioning — the socket we'd open would leak.
+        if (abort.signal.aborted) return;
 
         onDataDisposableRef.current?.dispose();
         const { ws, disposable } = await connectTerminal({
@@ -78,25 +83,31 @@ export function useTerminalSession() {
           podName,
           setSession,
           signal: abort.signal,
+          messages: {
+            connected: t('terminal.messages.connected'),
+            closed: t('terminal.messages.closed'),
+            connectionError: t('terminal.messages.connection-error'),
+          },
         });
         wsRef.current = ws;
         onDataDisposableRef.current = disposable;
       } catch (err: any) {
         if (err?.name === 'AbortError') return;
+        const message = err?.message ?? t('terminal.messages.unknown-error');
         setSession((prev) => ({
           ...prev,
           status: 'error',
-          errorMessage: err?.message ?? 'Unknown error.',
+          errorMessage: message,
         }));
         term.write(
           terminalMessage(
             COLOR_ERROR,
-            `Error: ${err?.message ?? 'Failed to connect.'}`,
+            t('terminal.status.error', { error: message }),
           ),
         );
       }
     },
-    [authData, cluster, ssoData, fetchFn, image, setSession],
+    [authData, cluster, ssoData, fetchFn, image, setSession, t],
   );
 
   const disconnect = useCallback(

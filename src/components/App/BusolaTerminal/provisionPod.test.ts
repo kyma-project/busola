@@ -39,7 +39,7 @@ describe('generateTerminalPodName', () => {
 });
 
 describe('provisionPod', () => {
-  const signal = new AbortController().signal;
+  const abortController = new AbortController();
 
   function podFetch(phase = 'Running') {
     return vi.fn(({ relativeUrl, init }: any) => {
@@ -56,7 +56,7 @@ describe('provisionPod', () => {
       fetchFn: fetchFn as any,
       podName: POD,
       image: 'i',
-      signal,
+      abortController,
     });
 
     expect(fetchFn).toHaveBeenCalledWith(
@@ -73,13 +73,42 @@ describe('provisionPod', () => {
     );
   });
 
+  it('forwards the abort controller to every request so teardown can cancel them', async () => {
+    const fetchFn = podFetch('Running');
+    await provisionPod({
+      fetchFn: fetchFn as any,
+      podName: POD,
+      image: 'i',
+      abortController,
+    });
+
+    expect(fetchFn).toHaveBeenCalled();
+    for (const [arg] of fetchFn.mock.calls) {
+      expect(arg.abortController).toBe(abortController);
+    }
+  });
+
+  it('stops polling once the controller is aborted', async () => {
+    const fetchFn = podFetch('Pending');
+    const aborted = new AbortController();
+    aborted.abort();
+    await expect(
+      provisionPod({
+        fetchFn: fetchFn as any,
+        podName: POD,
+        image: 'i',
+        abortController: aborted,
+      }),
+    ).rejects.toMatchObject({ name: 'AbortError' });
+  });
+
   it('puts the configured image into the pod manifest', async () => {
     const fetchFn = podFetch('Running');
     await provisionPod({
       fetchFn: fetchFn as any,
       podName: POD,
       image: 'my-registry/dev:1.2.3',
-      signal,
+      abortController,
     });
     const podCall = fetchFn.mock.calls.find(([arg]: any) =>
       arg.relativeUrl.endsWith('/pods'),
@@ -98,7 +127,7 @@ describe('provisionPod', () => {
         fetchFn: fetchFn as any,
         podName: POD,
         image: 'i',
-        signal,
+        abortController,
       }),
     ).resolves.toBeUndefined();
   });
@@ -111,7 +140,7 @@ describe('provisionPod', () => {
         fetchFn: fetchFn as any,
         podName: POD,
         image: 'i',
-        signal,
+        abortController,
       }),
     ).rejects.toBe(boom);
   });
@@ -123,7 +152,7 @@ describe('provisionPod', () => {
         fetchFn: fetchFn as any,
         podName: POD,
         image: 'i',
-        signal,
+        abortController,
       }),
     ).rejects.toThrow(/Failed/);
   });

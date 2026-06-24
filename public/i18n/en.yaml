@@ -1545,6 +1545,11 @@ storage-classes:
   name_singular: StorageClass
   title: Storage Classes
 terminal:
+  messages:
+    closed: Connection closed.
+    connected: Connected to terminal.
+    connection-error: WebSocket connection error.
+    unknown-error: Unknown error.
   name: Busola Terminal
   status:
     error: 'Error: {{error}}'

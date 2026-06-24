@@ -45,10 +45,12 @@ async function createIfMissing(
   fetchFn: FetchFn,
   relativeUrl: string,
   manifest: object,
+  abortController: AbortController,
 ): Promise<void> {
   try {
     await fetchFn({
       relativeUrl,
+      abortController,
       init: {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -63,13 +65,15 @@ async function createIfMissing(
 async function pollPodReady(
   fetchFn: FetchFn,
   podName: string,
-  signal: AbortSignal,
+  abortController: AbortController,
 ): Promise<void> {
   const deadline = Date.now() + POD_POLL_TIMEOUT_MS;
   while (Date.now() < deadline) {
-    if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
+    if (abortController.signal.aborted)
+      throw new DOMException('Aborted', 'AbortError');
     const res = await fetchFn({
       relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`,
+      abortController,
     });
     const pod = await res.json();
     const phase = pod?.status?.phase;
@@ -86,22 +90,28 @@ export async function provisionPod({
   fetchFn,
   podName,
   image,
-  signal,
+  abortController,
 }: {
   fetchFn: FetchFn;
   podName: string;
   image: string;
-  signal: AbortSignal;
+  abortController: AbortController;
 }): Promise<void> {
-  await createIfMissing(fetchFn, '/api/v1/namespaces', {
-    apiVersion: 'v1',
-    kind: 'Namespace',
-    metadata: { name: TERMINAL_NAMESPACE },
-  });
+  await createIfMissing(
+    fetchFn,
+    '/api/v1/namespaces',
+    {
+      apiVersion: 'v1',
+      kind: 'Namespace',
+      metadata: { name: TERMINAL_NAMESPACE },
+    },
+    abortController,
+  );
   await createIfMissing(
     fetchFn,
     `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods`,
     buildPodManifest(podName, image),
+    abortController,
   );
-  await pollPodReady(fetchFn, podName, signal);
+  await pollPodReady(fetchFn, podName, abortController);
 }

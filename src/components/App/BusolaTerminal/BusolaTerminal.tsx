@@ -25,8 +25,7 @@ export function BusolaTerminal({
   const fitAddonRef = useRef<FitAddon | null>(null);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const sessionState = useAtomValue(terminalSessionAtom);
-  // Ref so the cleanup effect always reads the current podName, not the value
-  // captured at mount time when the pod hasn't been created yet.
+  // Ref so the cleanup effect reads the current podName, not the mount-time value.
   const podNameRef = useRef<string | null>(null);
   const theme = useAtomValue(themeAtom);
   const { connect, disconnect } = useTerminalSession();

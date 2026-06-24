@@ -56,7 +56,16 @@ const applyLast = (fn: any) => {
   return typeof arg === 'function' ? arg({}) : arg;
 };
 
-async function attach(signal = new AbortController().signal) {
+const DEFAULT_TEST_MESSAGES = {
+  connected: 'Connected to terminal.',
+  closed: 'Connection closed.',
+  connectionError: 'WebSocket connection error.',
+};
+
+async function attach(
+  signal = new AbortController().signal,
+  messages = DEFAULT_TEST_MESSAGES,
+) {
   const term = makeTerm();
   const sess = vi.fn();
   const { ws, disposable } = await connectTerminal({
@@ -65,6 +74,7 @@ async function attach(signal = new AbortController().signal) {
     podName: POD,
     setSession: sess,
     signal,
+    messages,
   });
   return { term, sess, ws: ws as any, disposable };
 }
@@ -117,5 +127,24 @@ describe('connectTerminal', () => {
     ac.abort();
     ws.onopen();
     expect(sess).not.toHaveBeenCalled();
+  });
+
+  it('writes the provided (translatable) status messages', async () => {
+    const messages = {
+      connected: 'translated-connected',
+      closed: 'translated-closed',
+      connectionError: 'translated-error',
+    };
+    const { ws, term } = await attach(new AbortController().signal, messages);
+
+    ws.onopen();
+    expect(term.write).toHaveBeenCalledWith(
+      expect.stringContaining('translated-connected'),
+    );
+
+    ws.onclose();
+    expect(term.write).toHaveBeenCalledWith(
+      expect.stringContaining('translated-closed'),
+    );
   });
 });
