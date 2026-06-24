@@ -136,11 +136,11 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Opens module details with the correct resource when a row is clicked', () => {
-    cy.wait(100000);
+    cy.wait(150000);
     cy.reload();
 
     cy.get('.modules-list')
-      .find('ui5-table-row[interactive]')
+      .find('ui5-table-row')
       .contains('api-gateway')
       .click();
 

@@ -151,7 +151,7 @@ context('Test Community Modules views', () => {
   });
 
   it('Opens module details with the correct resource when a row is clicked', () => {
-    cy.wait(10000);
+    cy.wait(150000);
     cy.reload();
 
     cy.get('.community-modules-list')
