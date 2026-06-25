@@ -846,6 +846,12 @@ joule-feedback:
 kubeconfig-id:
   error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
+kyma-cli:
+  banner:
+    buttons:
+      documentation: Get Started
+    description: Kyma CLI helps you move faster - from first setup to deploying and managing apps.
+    title: Try Kyma CLI
 kyma-companion:
   banner:
     buttons:

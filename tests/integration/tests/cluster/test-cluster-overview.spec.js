@@ -83,7 +83,13 @@ context('Test Cluster Overview', () => {
     cy.wait(500);
 
     cy.contains('ui5-panel', 'Nodes').within((_) => {
-      cy.get('ui5-table-row').first().find('ui5-table-cell').first().click();
+      cy.get('ui5-table-row')
+        .first()
+        .find('ui5-table-cell')
+        .first()
+        .as('firstNode');
+
+      cy.get('@firstNode').find('ui5-link').click({ force: true });
     });
   });
 
