@@ -1,3 +1,4 @@
+/* global Buffer */
 // TODO: implement stricter validation
 export default function parseProtocolHeaders(secHeader) {
   console.log(secHeader);

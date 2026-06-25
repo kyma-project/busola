@@ -1,3 +1,4 @@
+/* global Buffer */
 import { WebSocket, WebSocketServer } from 'ws';
 import parseProtocolHeaders from './protocolHeaderParser';
 
@@ -57,8 +58,7 @@ export default function registerWebSocket(server) {
         frontWS.send(data);
       });
 
-      k8sWS.addEventListener('onclose', (event) => {
-        //   TODO:
+      k8sWS.addEventListener('onclose', () => {
         console.log('Frontend closed');
         const closingMsg = 'Remote connection closed';
         frontWS.send(encodeMsg(closingMsg));
