@@ -136,7 +136,7 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Opens module details with the correct resource when a row is clicked', () => {
-    cy.wait(200000);
+    cy.wait(1000);
     cy.reload();
 
     cy.get('.modules-list')

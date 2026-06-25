@@ -1,4 +1,5 @@
 import 'cypress-file-upload';
+import jsyaml from 'js-yaml';
 
 Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
   before(function () {
@@ -370,4 +371,30 @@ Cypress.Commands.add('openSettingsMenu', () => {
   cy.get('[tooltip="User Menu"]').click({ force: true });
 
   cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
+});
+
+/**
+ * Extracts ca, cert, and key from a kubeconfig fixture file.
+ * Values are base64-decoded from the first cluster/user entry.
+ * Usage: cy.extractKubeconfigTLS('kubeconfig.yaml').then(({ ca, cert, key }) => { ... })
+ */
+Cypress.Commands.add('extractKubeconfigTLS', (fileName = 'kubeconfig.yaml') => {
+  cy.fixture(fileName).then((content) => {
+    const kubeconfig = jsyaml.load(content);
+
+    const caData =
+      kubeconfig.clusters?.[0]?.cluster?.['certificate-authority-data'];
+    const certData = kubeconfig.users?.[0]?.user?.['client-certificate-data'];
+    const keyData = kubeconfig.users?.[0]?.user?.['client-key-data'];
+
+    return {
+      ca: caData ? Buffer.from(caData, 'base64').toString('utf8') : undefined,
+      cert: certData
+        ? Buffer.from(certData, 'base64').toString('utf8')
+        : undefined,
+      key: keyData
+        ? Buffer.from(keyData, 'base64').toString('utf8')
+        : undefined,
+    };
+  });
 });

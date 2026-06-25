@@ -1,0 +1,6 @@
+apiVersion: operator.kyma-project.io/v1alpha1
+kind: Busola
+metadata:
+  name: default
+  namespace: default
+spec: {}
