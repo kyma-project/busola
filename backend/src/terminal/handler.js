@@ -27,23 +27,33 @@ export default function registerWebSocket(server) {
 
       const remoteURL = buildRemoteURL(url, parsedHeaders.clusterURL);
       console.log('Connecting to: ', remoteURL);
-      const k8sWS = new WebSocket(remoteURL, [parsedHeaders.protocol], {
-        ca: parsedHeaders.ca,
-        cert: parsedHeaders.clientCert,
-        key: parsedHeaders.clientKey,
-        rejectUnauthorized: false,
-      });
 
-      k8sWS.addEventListener('open', (event) => {
-        console.log('Opened websocket', event);
-        // TODO: we can
+      let opts;
+      if (parsedHeaders.token) {
+        opts = {
+          ca: parsedHeaders.ca,
+          headers: {
+            Authorization: parsedHeaders.token,
+          },
+        };
+      } else {
+        opts = {
+          ca: parsedHeaders.ca,
+          cert: parsedHeaders.clientCert,
+          key: parsedHeaders.clientKey,
+        };
+      }
+      const k8sWS = new WebSocket(remoteURL, [parsedHeaders.protocol], opts);
+
+      k8sWS.addEventListener('open', () => {
+        // TODO: we can try to build kubeconfig and add it to env
         const msg = 'kubectl';
         k8sWS.send(encodeMsg(msg));
       });
 
       k8sWS.addEventListener('message', (event) => {
         const data = event.data;
-        // TODO: shoudl we check if frontWS is live?
+        // TODO: Should we check if frontWS is live?
         frontWS.send(data);
       });
 

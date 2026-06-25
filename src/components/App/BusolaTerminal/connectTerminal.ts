@@ -26,17 +26,18 @@ export type ConnectionMessages = {
   connectionError: string;
 };
 
-function buildProtocols(authHeaders: Record<string, string>): string[] {
+function buildProtocols(authHeaders: Headers): string[] {
   return [
     'v4.channel.k8s.io',
-    ...Object.entries(authHeaders).map(([key, value]) => {
-      let encodedValue = value;
-      if (key === `X-Cluster-Url`) {
-        // encode the cluster url only because it's plain text
-        encodedValue = btoa(value);
-      }
-      // Remove '=' padding and slash , because browser Websocket doesn't like acept them
-      return `base64.header.${key.toLowerCase()}.value.${encodedValue.replaceAll('=', '-').replaceAll('/', '%')}`;
+    ...authHeaders.entries().map(([key, value]) => {
+      // In the future we can try to use: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64
+      //Generate Base64URL compatible output from Base64
+      //WebSocket web browser api has problems with =,/ chars
+      let encodedValue = btoa(value)
+        .replaceAll('+', '-')
+        .replaceAll('/', '_')
+        .replaceAll('=', '');
+      return `base64url.header.${key.toLowerCase()}.value.${encodedValue}`;
     }),
   ];
 }
@@ -65,7 +66,7 @@ export async function connectTerminal({
   signal,
   messages,
 }: {
-  authHeaders: Record<string, string>;
+  authHeaders: Headers;
   term: Terminal;
   podName: string;
   setSession: (

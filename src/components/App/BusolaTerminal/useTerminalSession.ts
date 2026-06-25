@@ -16,9 +16,9 @@ import {
   TERMINAL_NAMESPACE,
 } from './provisionPod';
 import {
+  COLOR_ERROR,
   connectTerminal,
   terminalMessage,
-  COLOR_ERROR,
 } from './connectTerminal';
 
 const DEFAULT_IMAGE =
@@ -53,16 +53,12 @@ export function useTerminalSession() {
       setSession({ status: 'provisioning', podName: null, errorMessage: null });
 
       try {
-        const rawHeaders = createHeaders(authData, cluster, ssoData);
-        const authHeaders = Object.fromEntries(
-          Object.entries(
-            rawHeaders as Record<string, string | undefined>,
-          ).filter((entry): entry is [string, string] => entry[1] != null),
-        );
+        const headers = createHeaders(authData, cluster, ssoData);
+        const authHeaders = new Headers(headers);
 
         const credential =
-          authHeaders['X-K8s-Authorization']?.replace('Bearer ', '') ??
-          authHeaders['X-Client-Certificate-Data'] ??
+          authHeaders.get('X-K8s-Authorization')?.replace('Bearer ', '') ??
+          authHeaders.get('X-Client-Certificate-Data') ??
           '';
         const podName = await generateTerminalPodName(
           clusterServer,
