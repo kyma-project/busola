@@ -4,10 +4,10 @@ import { connectTerminal } from './connectTerminal';
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
 
-const AUTH_HEADERS = {
+const AUTH_HEADERS = new Headers({
   'X-Cluster-Url': 'https://cluster.example.com',
   'X-K8s-Authorization': 'Bearer tok123',
-};
+});
 
 function makeTerm() {
   return {
@@ -91,10 +91,10 @@ describe('connectTerminal', () => {
     );
     expect(ws.protocols).toContain('v4.channel.k8s.io');
     expect(ws.protocols).toContain(
-      `base64url.header.x-cluster-url.${encodeBase64Url('https://cluster.example.com')}`,
+      `base64url.header.x-cluster-url.value.${encodeBase64Url('https://cluster.example.com')}`,
     );
     expect(ws.protocols).toContain(
-      `base64url.header.x-k8s-authorization.${encodeBase64Url('Bearer tok123')}`,
+      `base64url.header.x-k8s-authorization.value.${encodeBase64Url('Bearer tok123')}`,
     );
   });
 

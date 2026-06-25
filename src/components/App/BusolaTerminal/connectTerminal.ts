@@ -33,7 +33,7 @@ function buildProtocols(authHeaders: Headers): string[] {
       // In the future we can try to use: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64
       //Generate Base64URL compatible output from Base64
       //WebSocket web browser api has problems with =,/ chars
-      let encodedValue = btoa(value)
+      const encodedValue = btoa(value)
         .replaceAll('+', '-')
         .replaceAll('/', '_')
         .replaceAll('=', '');

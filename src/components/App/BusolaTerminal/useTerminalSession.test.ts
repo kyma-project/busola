@@ -117,7 +117,7 @@ describe('useTerminalSession', () => {
     expect(lastWs()?.url).toContain('/attach?');
     expect(lastWs()?.protocols).toContain('v4.channel.k8s.io');
     expect(lastWs()?.protocols).toContain(
-      `base64url.header.x-k8s-authorization.${btoa('Bearer tok123').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')}`,
+      `base64url.header.x-k8s-authorization.value.${btoa('Bearer tok123').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')}`,
     );
   });
 
