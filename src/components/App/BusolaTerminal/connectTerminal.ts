@@ -1,4 +1,3 @@
-/* global Buffer */
 import { Terminal } from '@xterm/xterm';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { TerminalSessionState } from 'state/terminalSessionAtom';
@@ -75,11 +74,10 @@ export async function connectTerminal({
   signal: AbortSignal;
   messages: ConnectionMessages;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
-  const protocols = buildProtocols(authHeaders);
-  console.log(protocols);
-  const url = buildAttachUrl(podName);
-  console.log(url);
-  const ws = new WebSocket(url, protocols);
+  const ws = new WebSocket(
+    buildAttachUrl(podName),
+    buildProtocols(authHeaders),
+  );
   ws.binaryType = 'arraybuffer';
 
   ws.onopen = () => {
