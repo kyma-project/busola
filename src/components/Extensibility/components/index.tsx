@@ -2,6 +2,7 @@ import { Text } from './Text';
 import { Plain } from './Plain';
 import { Columns } from './Columns';
 import { Panel } from './Panel';
+import { Section } from './Section';
 import { CodeViewer } from './CodeViewer';
 import { Badge } from './Badge';
 import { Table } from './Table';
@@ -50,6 +51,7 @@ export const widgets = {
   ResourceLink,
   ResourceList,
   ResourceRefs,
+  Section,
   StatisticalCard,
   Table,
   Tabs,
