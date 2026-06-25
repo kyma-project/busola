@@ -141,7 +141,7 @@ task('get-statics', () => {
 
 task('pack-statics', () => {
   const env = process.env.ENV;
-  return src(`temp/${env}/statics-local/**/*.yaml`)
+  return src(`temp/${env}/statics-local/**/*.yaml`, { allowEmpty: true })
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('statics.yaml', {
