@@ -1,22 +1,23 @@
 import parseProtocolHeaders from './protocolHeaderParser';
 
+function encodeWithModifiedBase64(inut) {
+  return Buffer.from(inut)
+    .toString('base64')
+    .replaceAll('=', '')
+    .replaceAll('/', '%');
+}
+
 const ca = 'CACERT';
-const caEncoded = Buffer.from(ca).toString('base64').replaceAll('=', '');
+const caEncoded = encodeWithModifiedBase64(ca);
 
 const clientCert = 'client-cert-data';
-const clientCertEncoded = Buffer.from(clientCert)
-  .toString('base64')
-  .replaceAll('=', '');
+const clientCertEncoded = encodeWithModifiedBase64(clientCert);
 
 const clusterURL = 'https://0.0.0.0:46595';
-const clusterURLEncoded = Buffer.from(clusterURL)
-  .toString('base64')
-  .replaceAll('=', '');
+const clusterURLEncoded = encodeWithModifiedBase64(clusterURL);
 
 const clientKey = 'client-key';
-const clientKeyEncoded = Buffer.from(clientKey)
-  .toString('base64')
-  .replaceAll('=', '');
+const clientKeyEncoded = encodeWithModifiedBase64(clientKey);
 
 describe('Parse protocl headers with auth data', () => {
   it('All data is presed and mTLS is used', () => {

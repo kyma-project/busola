@@ -1,3 +1,4 @@
+// TODO: implement stricter validation
 export default function parseProtocolHeaders(secHeader) {
   console.log(secHeader);
   const headers = secHeader.split(',');
@@ -10,8 +11,8 @@ export default function parseProtocolHeaders(secHeader) {
     headers.map((header) => {
       const [rawKey, rawValue] = header.split('.value.');
       const key = rawKey.replace('base64.header.', '').trim();
-      // Restore padding in base64 encoded value, because websocket browser api doesn't accept them
-      const value = rawValue.replaceAll('-', '=');
+      // Restore padding and slash in base64 encoded value, because websocket browser api doesn't accept them
+      const value = rawValue.replaceAll('-', '=').replaceAll('%', '/');
       return [key, value];
     }),
   );

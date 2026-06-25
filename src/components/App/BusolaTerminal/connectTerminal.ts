@@ -33,15 +33,12 @@ function buildProtocols(authHeaders: Record<string, string>): string[] {
     ...Object.entries(authHeaders).map(([key, value]) => {
       let encodedValue = value;
       if (key === `X-Cluster-Url`) {
+        // encode the cluster url only because it's plain text
         encodedValue = btoa(value);
       }
-      // Remove '=' padding , because Websocket doesn;t like = sign
-      return `base64.header.${key.toLowerCase()}.value.${encodedValue.replaceAll('=', '-')}`;
+      // Remove '=' padding and slash , because browser Websocket doesn't like acept them
+      return `base64.header.${key.toLowerCase()}.value.${encodedValue.replaceAll('=', '-').replaceAll('/', '%')}`;
     }),
-    // ...Object.entries(authHeaders).map(
-    //   ([key, value]) =>
-    //     `base64url.header.${key.toLowerCase()}.${encodeBase64Url('tests')}`,
-    // )
   ];
 }
 
