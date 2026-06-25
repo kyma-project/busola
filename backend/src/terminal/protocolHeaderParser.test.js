@@ -1,28 +1,29 @@
 import parseProtocolHeaders from './protocolHeaderParser';
 
-function encodeWithModifiedBase64(inut) {
-  return Buffer.from(inut)
-    .toString('base64')
-    .replaceAll('=', '')
-    .replaceAll('/', '%');
+function encodeBase64URL(input) {
+  return Buffer.from(input).toString('base64url');
+}
+
+function encodeBase64(input) {
+  return Buffer.from(input).toString('base64url');
 }
 
 const ca = 'CACERT';
-const caEncoded = encodeWithModifiedBase64(ca);
+const caEncoded = encodeBase64URL(encodeBase64(ca));
 
 const clientCert = 'client-cert-data';
-const clientCertEncoded = encodeWithModifiedBase64(clientCert);
+const clientCertEncoded = encodeBase64URL(encodeBase64(clientCert));
 
 const clusterURL = 'https://0.0.0.0:46595';
-const clusterURLEncoded = encodeWithModifiedBase64(clusterURL);
+const clusterURLEncoded = encodeBase64URL(clusterURL);
 
 const clientKey = 'client-key';
-const clientKeyEncoded = encodeWithModifiedBase64(clientKey);
+const clientKeyEncoded = encodeBase64URL(encodeBase64(clientKey));
 
 describe('Parse protocl headers with auth data', () => {
   it('All data is presed and mTLS is used', () => {
     //GIVEN
-    const protocolHeader = `v4.channel.k8s.io, base64.header.x-client-certificate-data.value.${clientCertEncoded}, base64.header.x-cluster-url.value.${clusterURLEncoded}, base64.header.x-cluster-certificate-authority-data.value.${caEncoded}, base64.header.x-client-key-data.value.${clientKeyEncoded}`;
+    const protocolHeader = `v4.channel.k8s.io, base64url.header.x-client-certificate-data.value.${clientCertEncoded}, base64url.header.x-cluster-url.value.${clusterURLEncoded}, base64url.header.x-cluster-certificate-authority-data.value.${caEncoded}, base64url.header.x-client-key-data.value.${clientKeyEncoded}`;
 
     //WHEN
     const output = parseProtocolHeaders(protocolHeader);
