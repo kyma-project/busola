@@ -173,7 +173,7 @@ export function Header() {
             {showCompanion.useJoule && <JouleChat />}
           </>
         )}
-        {isTerminalEnabled && (
+        {isTerminalEnabled && !isOnClustersPage && (
           <ToggleButton
             icon="command-line-interfaces"
             accessibleName={t('terminal.name')}

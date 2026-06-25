@@ -139,13 +139,13 @@ export default function ModulesCard({
     <Card
       accessibleName={module.name}
       key={module.name}
-      className="addModuleCard"
+      className={`addModuleCard ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
     >
       <ListItemStandard
-        className="moduleCardHeader"
+        className={`moduleCardHeader ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
         onClick={() => {
           setCheckbox(module, !isChecked(module.name), index);
-          checkIfVersionExistsAndSet();
+          if (!isChecked(module.name)) checkIfVersionExistsAndSet();
         }}
       >
         <CheckBox
@@ -185,7 +185,9 @@ export default function ModulesCard({
           />
         )}
       </ListItemStandard>
-      <div className="content">
+      <div
+        className={`content ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
+      >
         {module.docsUrl && (
           <ExternalLink
             url={module.docsUrl}
@@ -196,14 +198,16 @@ export default function ModulesCard({
         )}
       </div>
       <Panel
-        className="settings-panel"
+        className={`settings-panel ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
         collapsed
         headerText="Advanced"
         noAnimation
         data-testid={`module-settings-panel-${module.name}`}
         accessibleName={t('kyma-modules.accessible-name.advanced')}
       >
-        <div className="settings-panel__content sap-margin-y-small">
+        <div
+          className={`settings-panel__content sap-margin-y-small ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
+        >
           <Label>{t('kyma-modules.release-channel') + ':'} </Label>
           <Select
             onChange={(event) => {

@@ -63,10 +63,10 @@ export default function CommunityModuleCard({
     <Card
       accessibleName={module.name}
       key={`card-${module.name}`}
-      className="addModuleCard"
+      className={`addModuleCard ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
     >
       <ListItemStandard
-        className="moduleCardHeader"
+        className={`moduleCardHeader ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
         key={`list-${module.name}`}
         onClick={() => {
           onChange(
@@ -80,7 +80,9 @@ export default function CommunityModuleCard({
           className="checkbox"
           checked={isChecked(module.name)}
         />
-        <div className="titles">
+        <div
+          className={`titles ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
+        >
           <Title level="H6" size="H6">
             {module.name}
           </Title>
@@ -98,7 +100,9 @@ export default function CommunityModuleCard({
           />
         )}
       </ListItemStandard>
-      <div className="content">
+      <div
+        className={`content ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
+      >
         {module.versions[0]?.docsURL && (
           <ExternalLink
             url={module.versions[0]?.docsURL}
@@ -109,14 +113,16 @@ export default function CommunityModuleCard({
         )}
       </div>
       <Panel
-        className="settings-panel"
+        className={`settings-panel ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
         collapsed
         headerText="Advanced"
         noAnimation
         data-testid={`module-settings-panel-${module.name}`}
         accessibleName={t('modules.community.accessible-name.advanced')}
       >
-        <div className="settings-panel__content sap-margin-y-small">
+        <div
+          className={`settings-panel__content sap-margin-y-small ${isChecked(module.name) ? 'add-module-card-checked' : ''}`}
+        >
           <Label>{t('modules.community.origin') + ':'} </Label>
           <Select
             accessibleName={`${module.name} version select`}

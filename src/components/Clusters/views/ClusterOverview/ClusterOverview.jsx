@@ -27,6 +27,7 @@ import { configFeaturesNames } from 'state/types';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 import DeleteResourceModal from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
+import { KymaCLIBanner } from 'components/KymaCLIBanner/KymaCLIBanner';
 
 const Injections = lazyWithRetries(
   () => import('../../../Extensibility/ExtensibilityInjections'),
@@ -108,6 +109,7 @@ export function ClusterOverview() {
                   documentationUrl={companionConfig?.documentationLink}
                 />
               )}
+              <KymaCLIBanner />
               <Suspense fallback={null}>
                 <Injections
                   destination="ClusterOverview"
