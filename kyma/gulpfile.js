@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { URL } from 'url';
-import { lstatSync, readdirSync, readFile } from 'fs';
+import { lstatSync, readdirSync, readFile, mkdirSync } from 'fs';
 import { dump, load } from 'js-yaml';
 
 import { dest, src, task } from 'gulp';
@@ -134,9 +134,11 @@ task('clean-statics', () => {
 });
 
 task('get-statics', () => {
-  return src(`environments/${process.env.ENV}/statics.json`)
+  const env = process.env.ENV;
+  mkdirSync(`temp/${env}/statics-local`, { recursive: true });
+  return src(`environments/${env}/statics.json`)
     .pipe(loadExtensions)
-    .pipe(dest(`temp/${process.env.ENV}/statics-local/-/-`)); // gulp strips the 2 last path components?
+    .pipe(dest(`temp/${env}/statics-local/-/-`)); // gulp strips the 2 last path components?
 });
 
 task('pack-statics', () => {
