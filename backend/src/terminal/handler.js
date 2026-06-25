@@ -3,17 +3,8 @@ import parseProtocolHeaders from './protocolHeaderParser';
 
 function buildRemoteURL(url, remoteURL) {
   const remoteServerAddress = remoteURL.replace('https://', '');
-  const path = url.pathname.split('/').slice(3).join('/'); //remove backend/ws/
+  const path = url.pathname.split('/').slice(3).join('/'); //remove /backend/ws
   return `wss://${remoteServerAddress}/${path}${url.search}`;
-}
-
-function buildHeaders(rawHeaders) {
-  const headers = {};
-  const size = rawHeaders.length;
-  for (let i = 0; i < size / 2; i++) {
-    headers[rawHeaders[2 * i]] = rawHeaders[2 * i + 1];
-  }
-  return headers;
 }
 
 function encodeMsg(input, std = 0) {
@@ -30,9 +21,8 @@ export default function registerWebSocket(server) {
   try {
     wss.on('connection', (frontWS, req) => {
       const url = new URL(req.url, 'http://' + req.socket.remoteAddress);
-      const headers = buildHeaders(req.rawHeaders);
       const parsedHeaders = parseProtocolHeaders(
-        headers['sec-websocket-protocol'],
+        req.headers['sec-websocket-protocol'],
       );
 
       const remoteURL = buildRemoteURL(url, parsedHeaders.clusterURL);
