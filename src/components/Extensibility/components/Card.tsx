@@ -28,7 +28,7 @@ export function CardWidget({
     <UI5Card
       accessibleName={`${widgetT(structure)} card`}
       title={widgetT(structure)}
-      description={description as string}
+      description={description}
     >
       {Array.isArray(structure?.children) && (
         <div>

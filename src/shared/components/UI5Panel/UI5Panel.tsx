@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useEffect, useState } from 'react';
+import { JSX, ReactNode, useContext, useEffect, useState } from 'react';
 import { Panel, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
@@ -15,7 +15,7 @@ type UI5PanelProps = {
   keyComponent?: string;
   className?: string;
   children?: ReactNode;
-  description?: string;
+  description?: string | JSX.Element;
   stickyHeader?: boolean;
   headerTop?: string;
   testid?: string;

@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode, useContext, useState } from 'react';
+import { forwardRef, JSX, ReactNode, useContext, useState } from 'react';
 import { Card, CardHeader, Title } from '@ui5/webcomponents-react';
 import { Toolbar } from '@ui5/webcomponents-react-compat/dist/components/Toolbar/index.js';
 import { ToolbarSpacer } from '@ui5/webcomponents-react-compat/dist/components/ToolbarSpacer/index.js';
@@ -16,7 +16,7 @@ type UI5CardProps = {
   testid?: string;
   accessibleName?: string;
   role?: string;
-  description?: string;
+  description?: string | JSX.Element;
 };
 
 export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
@@ -53,6 +53,13 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
         ) : (
           title
         )}
+        {description && (
+          <HintButton
+            setShowTitleDescription={setShowDescription}
+            showTitleDescription={showDescription}
+            description={description}
+          />
+        )}
         {headerActions && modeActions && (
           <>
             <div className="header-actions invisible" aria-hidden="true">
@@ -63,13 +70,6 @@ export const UI5Card = forwardRef<HTMLElement, UI5CardProps>(
             <ToolbarSpacer className="toolbar-spacer" />
             <div className="header-actions">{headerActions}</div>
           </>
-        )}
-        {description && (
-          <HintButton
-            setShowTitleDescription={setShowDescription}
-            showTitleDescription={showDescription}
-            description={description}
-          />
         )}
         {headerActions && !modeActions && (
           <>
