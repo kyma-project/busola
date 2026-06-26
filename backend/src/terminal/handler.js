@@ -19,9 +19,9 @@ function encodeMsg(input, std = 0) {
 export default function registerWebSocket(server) {
   const wss = new WebSocketServer({ server });
 
-  try {
-    wss.on('connection', (frontWS, req) => {
-      const url = new URL(req.url, 'http://' + req.socket.remoteAddress);
+  wss.on('connection', (frontWS, req) => {
+    try {
+      const url = new URL(req.url, 'htt://' + req.socket.remoteAddress);
       const parsedHeaders = parseProtocolHeaders(
         req.headers['sec-websocket-protocol'],
       );
@@ -80,8 +80,9 @@ export default function registerWebSocket(server) {
       });
 
       frontWS.on('close', () => k8sWS.close());
-    });
-  } catch (e) {
-    console.error(e);
-  }
+    } catch (e) {
+      frontWS.close(1000, 'Internal Server Error');
+      console.error(e);
+    }
+  });
 }
