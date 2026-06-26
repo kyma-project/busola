@@ -5,7 +5,7 @@ import { DataSources } from 'components/Extensibility/contexts/DataSources';
 import { extensionsAtom, staticsAtom } from 'state/navigation/extensionsAtom';
 import { ExtensibilityNodesExt } from 'state/types';
 
-const createExternalNode = (
+export const createExternalNode = (
   url: string,
   label: string,
   category: string,
@@ -27,7 +27,7 @@ const createExternalNode = (
   dataSources: dataSources,
 });
 
-const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
+export const getExtensibilityNodesExt = (extensions: ExtResource[]) => {
   const externalNodes = extensions
     ?.filter((conf) => {
       return conf.general?.externalNodes;
