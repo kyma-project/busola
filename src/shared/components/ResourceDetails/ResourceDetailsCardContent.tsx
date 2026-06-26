@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import ResourceDetailsCard from './ResourceDetailsCard';
-import { DynamicPageComponent } from '../DynamicPageComponent/DynamicPageComponent';
 import { HintButton } from '../HintButton/HintButton';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { Labels } from 'shared/components/Labels/Labels';

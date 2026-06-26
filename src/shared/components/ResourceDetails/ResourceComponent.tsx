@@ -14,8 +14,6 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 import { ResourceHealthCard } from '../ResourceHealthCard/ResourceHealthCard';
 import { EMPTY_TEXT_PLACEHOLDER } from '../../constants';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
-import { useAtomValue } from 'jotai';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { CustomColumn } from './ResourceCustomStatusColumns';
 import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
@@ -110,7 +108,6 @@ export function ResourceComponent({
     layoutNumber,
   });
 
-  const layoutColumn = useAtomValue(columnLayoutAtom);
   // Use isProtectedResource for showing the icon (always show if resource matches rules)
   const showProtectedResourceWarning =
     isProtectedResource(resource) || isEntireListProtected;
