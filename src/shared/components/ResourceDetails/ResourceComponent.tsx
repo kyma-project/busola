@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Title } from '@ui5/webcomponents-react';
+import { Form, FormGroup, Title } from '@ui5/webcomponents-react';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -25,8 +25,8 @@ import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { ResourceActions } from './ResourceActions';
 import { ResourceDetailsCardContent } from './ResourceDetailsCardContent';
 import { ResourceStatusCardContent } from './ResourceStatusCardContent';
-import './ResourceDetailsCard.scss';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
+import './ResourceDetailsCard.scss';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -260,39 +260,35 @@ export function ResourceComponent({
                 >
                   {title ?? t('common.headers.resource-details')}
                 </Title>
-                <div
-                  className={`resource-details-container ${
-                    layoutColumn.layout === 'MidColumnFullScreen' ||
-                    layoutColumn.layout === 'EndColumnFullScreen' ||
-                    layoutColumn.layout === 'OneColumn'
-                      ? ''
-                      : 'column-view'
-                  }`}
-                >
-                  <ResourceDetailsCardContent
-                    resource={resource}
-                    description={description}
-                    setShowTitleDescription={setShowTitleDescription}
-                    showTitleDescription={showTitleDescription}
-                    lastUpdate={lastUpdate}
-                    renderUpdateDate={renderUpdateDate}
-                    filteredDetailsCardColumns={filteredDetailsCardColumns}
-                    hideLastUpdate={hideLastUpdate}
-                    hideLabels={hideLabels}
-                    hideAnnotations={hideAnnotations}
-                  />
-                  <ResourceStatusCardContent
-                    resource={resource}
-                    statusBadge={statusBadge}
-                    customStatus={customStatus}
-                    customStatusColumns={customStatusColumns}
-                    filteredStatusColumns={filteredStatusColumns}
-                    filteredStatusColumnsLong={filteredStatusColumnsLong}
-                    statusConditions={statusConditions}
-                    customConditionsComponents={customConditionsComponents}
-                    filteredConditionsComponents={filteredConditionsComponents}
-                  />
-                </div>
+                <Form layout="S1 M2 L2 XL2" className="form-without-background">
+                  <FormGroup>
+                    <ResourceDetailsCardContent
+                      resource={resource}
+                      description={description}
+                      setShowTitleDescription={setShowTitleDescription}
+                      showTitleDescription={showTitleDescription}
+                      lastUpdate={lastUpdate}
+                      renderUpdateDate={renderUpdateDate}
+                      filteredDetailsCardColumns={filteredDetailsCardColumns}
+                      hideLastUpdate={hideLastUpdate}
+                      hideLabels={hideLabels}
+                      hideAnnotations={hideAnnotations}
+                    />
+                    <ResourceStatusCardContent
+                      resource={resource}
+                      statusBadge={statusBadge}
+                      customStatus={customStatus}
+                      customStatusColumns={customStatusColumns}
+                      filteredStatusColumns={filteredStatusColumns}
+                      filteredStatusColumnsLong={filteredStatusColumnsLong}
+                      statusConditions={statusConditions}
+                      customConditionsComponents={customConditionsComponents}
+                      filteredConditionsComponents={
+                        filteredConditionsComponents
+                      }
+                    />
+                  </FormGroup>
+                </Form>
                 <ResourceHealthCard
                   customHealthCards={customOverviewCard}
                   showHealthCardsTitle={showHealthCardsTitle}
