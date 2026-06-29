@@ -1,14 +1,19 @@
 .resource-card {
   min-width: 200px;
-}
-
-@container (max-width: 450px) {
-  .resource-card-layout::part(layout) {
-    display: flex;
-    flex-direction: column;
-  }
+  height: min-content;
 }
 
 .form-without-background {
   background-color: var(--sapBackgroundColor);
+  > ui5-form-group {
+    > :not(:first-child) {
+      padding-top: 1rem;
+    }
+  }
+}
+
+@container (max-width: 420px) {
+  .resource-card-layout::part(layout) {
+    grid-template-columns: 1fr !important;
+  }
 }
