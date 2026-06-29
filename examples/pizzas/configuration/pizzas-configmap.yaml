@@ -67,7 +67,8 @@ data:
           - widget: Columns
             children:
               - name: Comments
-                widget: Card
+                description: Comments are important. They help us to make better pizzas.
+            widget: Card
                 children:
                   - name: Comments
                     widget: JoinedArray
