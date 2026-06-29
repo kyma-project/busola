@@ -34,7 +34,7 @@ type ConfigMapResponse =
 
 const defaultValue: Configuration = {};
 
-const getConfigs = async (fetchFn: FetchFn | undefined) => {
+export const getConfigs = async (fetchFn: FetchFn | undefined) => {
   try {
     const cacheBuster = '?cache-buster=' + Date.now();
 

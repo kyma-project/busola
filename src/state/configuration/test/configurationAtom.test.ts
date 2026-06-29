@@ -6,8 +6,14 @@ vi.mock('shared/utils/env', () => ({
 }));
 
 // Import after mocks are registered.
-const { configurationAtom } = await import('../configurationAtom');
-const { mergeWith, isArray } = await import('lodash');
+const { configurationAtom, getConfigs } = await import('../configurationAtom');
+
+const makeFetch = (responses: Record<string, string>) =>
+  vi.fn().mockImplementation((url: string) => {
+    const key = Object.keys(responses).find((k) => url.includes(k));
+    const body = key ? responses[key] : '';
+    return Promise.resolve({ text: () => Promise.resolve(body) });
+  });
 
 describe('configurationAtom', () => {
   let store: ReturnType<typeof createStore>;
@@ -28,7 +34,7 @@ describe('configurationAtom', () => {
     const config = {
       features: {
         EXTENSIBILITY: { isEnabled: true },
-        TERMINAL: { isEnabled: false },
+        SNOW: { isEnabled: false },
       },
     } as any;
 
@@ -76,76 +82,157 @@ describe('configurationAtom', () => {
   });
 });
 
-describe('configuration merge contract (lodash mergeWith array override)', () => {
-  // getConfigs uses mergeWith with a merger that replaces arrays entirely
-  // rather than merging them index-by-index. These tests pin that rule.
-  const arrayOverwriteCustomizer = (obj: any, src: any) => {
-    if (isArray(obj)) return src;
-  };
+describe('getConfigs', () => {
+  beforeEach(() => {
+    vi.stubGlobal('fetch', undefined);
+  });
 
-  it('shallow-merges plain object properties from multiple layers', () => {
-    const defaultCfg = { storageType: 'sessionStorage', extra: 'keep' };
-    const configYaml = { storageType: 'localStorage' };
-    const configMap = {};
-
-    const result = mergeWith(
-      defaultCfg,
-      configYaml,
-      configMap,
-      arrayOverwriteCustomizer,
+  it('returns merged config from defaultConfig and config.yaml', async () => {
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml': 'config:\n  storageType: sessionStorage\n',
+        'config.yaml': 'config:\n  storageType: localStorage\n',
+      }),
     );
 
-    expect(result.storageType).toBe('localStorage');
-    expect(result.extra).toBe('keep');
+    const result = await getConfigs(undefined);
+
+    expect(result?.storageType).toBe('localStorage');
   });
 
-  it('later layers win for scalar values', () => {
-    const base = { storageType: 'sessionStorage' };
-    const override = { storageType: 'localStorage' };
+  it('keeps fields from defaultConfig when config.yaml does not override them', async () => {
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml':
+          'config:\n  storageType: sessionStorage\n  extra: keep\n',
+        'config.yaml': 'config:\n  storageType: localStorage\n',
+      }),
+    );
+    // cast to any because 'extra' is a runtime value that doesn't exist in the Configuration type definition.
+    const result = (await getConfigs(undefined)) as any;
 
-    const result = mergeWith(base, override, arrayOverwriteCustomizer);
-
-    expect(result.storageType).toBe('localStorage');
+    expect(result?.extra).toBe('keep');
   });
 
-  it('replaces arrays entirely instead of merging index-by-index', () => {
-    const base = { items: ['a', 'b', 'c'] };
-    const override = { items: ['x'] };
+  it('merges configmap values on top of defaultConfig and config.yaml', async () => {
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml': 'config:\n  storageType: sessionStorage\n',
+        'config.yaml': '',
+      }),
+    );
+    const fetchFn = vi.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          data: { config: 'config:\n  storageType: localStorage\n' },
+        }),
+    });
 
-    const result = mergeWith(base, override, arrayOverwriteCustomizer);
+    const result = await getConfigs(fetchFn);
 
-    // Without the customizer lodash would produce ['x', 'b', 'c'].
-    expect(result.items).toEqual(['x']);
+    expect(result?.storageType).toBe('localStorage');
   });
 
-  it('keeps the base array when the override does not specify that key', () => {
-    const base = { items: ['a', 'b'] };
-    const override = {};
+  it('calls fetchFn with the busola-config configmap URL', async () => {
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml': 'config: {}\n',
+        'config.yaml': '',
+      }),
+    );
+    const fetchFn = vi.fn().mockResolvedValue({
+      json: () => Promise.resolve({}),
+    });
 
-    const result = mergeWith(base, override, arrayOverwriteCustomizer);
+    await getConfigs(fetchFn);
 
-    expect(result.items).toEqual(['a', 'b']);
+    expect(fetchFn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        relativeUrl: '/api/v1/namespaces/kube-public/configmaps/busola-config',
+      }),
+    );
   });
 
-  it('nested objects are deep-merged', () => {
-    const base = {
-      features: { EXTENSIBILITY: { isEnabled: true, extra: 'keep' } },
-    };
-    const override = { features: { EXTENSIBILITY: { isEnabled: false } } };
+  it('skips configmap when fetchFn is undefined', async () => {
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml': 'config:\n  storageType: sessionStorage\n',
+        'config.yaml': '',
+      }),
+    );
 
-    const result = mergeWith(base, override, arrayOverwriteCustomizer) as any;
+    const result = await getConfigs(undefined);
 
-    expect(result.features.EXTENSIBILITY.isEnabled).toBe(false);
-    expect(result.features.EXTENSIBILITY.extra).toBe('keep');
+    expect(result?.storageType).toBe('sessionStorage');
   });
 
-  it('later layer adds new keys without dropping existing ones', () => {
-    const base = { storageType: 'sessionStorage' } as any;
-    const override = { newKey: 'hello' };
+  it('continues without configmap when fetchFn throws', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml': 'config:\n  storageType: sessionStorage\n',
+        'config.yaml': '',
+      }),
+    );
+    const fetchFn = vi.fn().mockRejectedValue(new Error('cluster unreachable'));
 
-    const result = mergeWith(base, override, arrayOverwriteCustomizer);
+    const result = await getConfigs(fetchFn);
 
-    expect(result.storageType).toBe('sessionStorage');
-    expect(result.newKey).toBe('hello');
+    expect(result?.storageType).toBe('sessionStorage');
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it('arrays from a later layer replace the base array entirely', async () => {
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml':
+          'config:\n  features:\n    HIDDEN_NAMESPACES:\n      isEnabled: true\n      namespaces: [a, b, c]\n',
+        'config.yaml':
+          'config:\n  features:\n    HIDDEN_NAMESPACES:\n      namespaces: [x]\n',
+      }),
+    );
+
+    const result = await getConfigs(undefined);
+
+    expect(result?.features?.HIDDEN_NAMESPACES?.namespaces).toEqual(['x']);
+  });
+
+  it('returns null and warns when the defaultConfig fetch fails', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockRejectedValue(new Error('network error')),
+    );
+
+    const result = await getConfigs(undefined);
+
+    expect(result).toBeNull();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it('falls back when config.yaml contains invalid YAML', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml': 'config:\n  storageType: sessionStorage\n',
+        'config.yaml': ': invalid: yaml: [\n',
+      }),
+    );
+
+    const result = await getConfigs(undefined);
+
+    expect(result?.storageType).toBe('sessionStorage');
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 });

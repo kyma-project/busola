@@ -46,7 +46,7 @@ describe('discoverFeature', () => {
     const check2 = vi.fn().mockResolvedValue({ step: 2 });
     const config = { isEnabled: true, checks: [check1, check2] };
 
-    await discoverFeature('TERMINAL', config);
+    await discoverFeature('SNOW', config);
 
     const secondCallArg = check2.mock.calls[0][1];
     expect(secondCallArg.step).toBe(1);
@@ -88,13 +88,13 @@ describe('getFeatures', () => {
   it('resolves each feature independently', async () => {
     const features = {
       EXTENSIBILITY: { isEnabled: true },
-      TERMINAL: { isEnabled: false },
+      SNOW: { isEnabled: false },
     } as any;
 
     const result = await getFeatures(features);
 
     expect(result.EXTENSIBILITY).toMatchObject({ isEnabled: true });
-    expect(result.TERMINAL).toMatchObject({ isEnabled: false });
+    expect(result.SNOW).toMatchObject({ isEnabled: false });
   });
 
   it('resolves a feature with checks', async () => {
