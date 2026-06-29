@@ -71,6 +71,7 @@ data:
         widget: Columns
         children:
           - name: Comments
+            description: Comments are important. They help us to make better pizzas.
             widget: Card
             children:
               - name: Comments

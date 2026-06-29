@@ -8,6 +8,7 @@ import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
 import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
 import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import DiscoveryIllustration from './assets/Discovery/Team.png';
+import KymaCLIIllustration from './assets/KymaCLI/KymaCLIIllustration.svg';
 import { useAtomValue } from 'jotai';
 import {
   BackgroundStyle,
@@ -29,6 +30,8 @@ const getIllustration = (
       return null;
     case 'Discovery':
       return DiscoveryIllustration;
+    case 'KymaCLI':
+      return KymaCLIIllustration;
     case 'AI':
       switch (theme) {
         case 'sap_horizon_hcw':
@@ -100,6 +103,11 @@ export function FeatureCardBanner({
         return {
           background:
             'linear-gradient(to right, var(--sapContent_Illustrative_Color25), var(--sapContent_Illustrative_Color27))',
+        };
+      case 'information-4':
+        return {
+          background:
+            'linear-gradient(to right, var(--sapLegendBackgroundColor6), var(--sapLegendBackgroundColor18))',
         };
       default:
         return {

@@ -4,9 +4,11 @@ import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { showTerminalAtom } from 'state/showTerminalAtom';
+import { terminalSessionAtom } from 'state/terminalSessionAtom';
 import { useAtom, useAtomValue } from 'jotai';
 import { themeAtom } from 'state/settings/themeAtom';
 import { getXtermTheme } from './terminalThemes';
+import { useTerminalSession } from './useTerminalSession';
 import './BusolaTerminal.scss';
 import '@xterm/xterm/css/xterm.css';
 
@@ -22,7 +24,13 @@ export function BusolaTerminal({
   const termRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
+  const sessionState = useAtomValue(terminalSessionAtom);
+  // Ref so the cleanup effect reads the current podName, not the mount-time value.
+  const podNameRef = useRef<string | null>(null);
   const theme = useAtomValue(themeAtom);
+  const { connect, disconnect } = useTerminalSession();
+
+  podNameRef.current = sessionState.podName;
 
   useEffect(() => {
     if (!termDOM?.current) return;
@@ -34,15 +42,7 @@ export function BusolaTerminal({
     term.loadAddon(fitAddon);
     term.open(termDOM.current);
     fitAddon.fit();
-    term.write(
-      'Hello from terminal. TODO: Logic and functionality will be implemented in future tasks',
-    );
-
-    // input
-    term.onData((data) => {
-      // TODO: Temporary. Implement terminal input handling logic in future tasks.
-      term.write(data);
-    });
+    connect(term);
 
     const observer = new ResizeObserver(() => {
       fitAddon.fit();
@@ -64,6 +64,7 @@ export function BusolaTerminal({
 
     return () => {
       observer.disconnect();
+      disconnect(podNameRef.current);
       term.dispose();
       termRef.current = null;
       fitAddonRef.current = null;
@@ -87,6 +88,11 @@ export function BusolaTerminal({
     }
   }, [theme]);
 
+  const handleClose = () => {
+    disconnect(podNameRef.current);
+    setShowTerminal((prev) => ({ ...prev, isOpen: false }));
+  };
+
   const containerClass = [
     'terminal-container',
     showTerminal.isFullscreen && 'terminal-container--fullscreen',
@@ -102,6 +108,13 @@ export function BusolaTerminal({
       ? { height: `${dockedHeight}px`, flexShrink: 0 as const }
       : undefined;
 
+  const statusLabel =
+    sessionState.status === 'provisioning'
+      ? t('terminal.status.provisioning')
+      : sessionState.status === 'error'
+        ? t('terminal.status.error', { error: sessionState.errorMessage })
+        : null;
+
   return (
     <div className={containerClass} style={containerStyle}>
       <Card
@@ -111,6 +124,9 @@ export function BusolaTerminal({
           <div className="terminal-card__header">
             <Title level="H5" size="H5">
               {t('terminal.name')}
+              {statusLabel && (
+                <span className="terminal-card__status"> — {statusLabel}</span>
+              )}
             </Title>
             <div>
               <Button
@@ -142,9 +158,7 @@ export function BusolaTerminal({
                 accessibleName="close-terminal"
                 icon="decline"
                 tooltip={t('common.buttons.close')}
-                onClick={() =>
-                  setShowTerminal((prev) => ({ ...prev, isOpen: false }))
-                }
+                onClick={handleClose}
               />
             </div>
           </div>
