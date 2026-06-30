@@ -13,12 +13,7 @@ const Stream = Object.freeze({
   STDOUT: 1,
   STDERR: 2,
 });
-/**
- *
- * @param input
- * @param std
- * @returns {Uint8Array<ArrayBuffer>}
- */
+
 function encodeMsg(input, std = Stream.STDIN) {
   const msgEncoded = Buffer.from(input + '\n', 'utf-8');
   const encodedMsgForK8s = new Uint8Array(msgEncoded.length + 1);
@@ -50,25 +45,39 @@ export default function registerWebSocket(server) {
             Authorization: parsedHeaders.token,
           },
         };
-      } else {
+      } else if (parsedHeaders.clientKey && parsedHeaders.clientKey) {
         opts = {
           ca: parsedHeaders.ca,
           cert: parsedHeaders.clientCert,
           key: parsedHeaders.clientKey,
         };
+      } else {
+        frontWS.close(
+          1008,
+          encodeMsg('Not sufficient Auth data provided', Stream.STDOUT),
+        );
+        return;
       }
       const k8sWS = new WebSocket(remoteURL, [parsedHeaders.protocol], opts);
 
       k8sWS.addEventListener('open', () => {
-        // TODO: we can try to build kubeconfig and add it to env
+        // TODO: Currently the busola terminal uses default service account which has 0 permissions to access k8s api.
+        // We can try to build kubeconfig and add it to env
+        // TODO: This is a help command executed at the begining of connection, we can change or remove it completely.
         const msg = 'kubectl';
         k8sWS.send(encodeMsg(msg));
       });
 
       k8sWS.addEventListener('message', (event) => {
-        const data = event.data;
-        // TODO: Should we check if frontWS is live?
-        frontWS.send(data);
+        if (frontWS.readyState === ws.OPEN) {
+          const data = event.data;
+          frontWS.send(data);
+        } else {
+          logger.info(
+            'Front WS is not open, cannot send message, status: ' +
+              frontWS.readyState,
+          );
+        }
       });
 
       k8sWS.addEventListener('onerror', (event) => {
@@ -87,15 +96,20 @@ export default function registerWebSocket(server) {
       });
 
       frontWS.on('message', (data) => {
-        if (k8sWS.readyState.readyState !== WebSocket.OPEN) {
-          // error handling
+        if (k8sWS.readyState === ws.OPEN) {
+          const data = event.data;
+          frontWS.send(data);
+        } else {
+          logger.info(
+            'Front WS is not open, cannot send message, status: ' +
+              k8sWS.readyState,
+          );
         }
-        k8sWS.send(data);
       });
 
       frontWS.on('close', () => k8sWS.close());
     } catch (e) {
-      frontWS.close(1000, encodeMsg('Internal Server Error', Stream.STDOUT));
+      frontWS.close(1011, encodeMsg('Internal Server Error', Stream.STDOUT));
       logger.error({ err: e }, 'Error during WebSocket proxy connections');
     }
   });
