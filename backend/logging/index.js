@@ -46,8 +46,7 @@ function configureWebSocketLogger(req) {
     },
   });
   return logger.logger.child({
-    id: uuid(),
-    url: req.url,
+    req,
   });
 }
 
