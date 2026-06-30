@@ -1,7 +1,6 @@
 /* global Buffer */
 // TODO: implement stricter validation
 export default function parseProtocolHeaders(secHeader) {
-  console.log(secHeader);
   const headers = secHeader.split(',');
   if (headers.length < 1) {
     throw new Error('WebSocket Auth headers are empty');

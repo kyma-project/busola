@@ -69,7 +69,7 @@ export default function registerWebSocket(server) {
       });
 
       k8sWS.addEventListener('message', (event) => {
-        if (frontWS.readyState === ws.OPEN) {
+        if (frontWS.readyState === WebSocket.OPEN) {
           const data = event.data;
           frontWS.send(data);
         } else {
@@ -87,7 +87,7 @@ export default function registerWebSocket(server) {
       k8sWS.addEventListener('onclose', () => {
         logger.info('K8s WebSocket closed');
         const closingMsg = 'Remote connection closed';
-        frontWS.send(encodeMsg(closingMsg, stream.STDOUT));
+        frontWS.send(encodeMsg(closingMsg, Stream.STDOUT));
         frontWS.close();
       });
 
@@ -95,10 +95,10 @@ export default function registerWebSocket(server) {
         logger.error({ err: event }, 'Front WebSocket error: ');
       });
 
-      frontWS.on('message', (data) => {
-        if (k8sWS.readyState === ws.OPEN) {
+      frontWS.addEventListener('message', (event) => {
+        if (k8sWS.readyState === WebSocket.OPEN) {
           const data = event.data;
-          frontWS.send(data);
+          k8sWS.send(data);
         } else {
           logger.info(
             'Front WS is not open, cannot send message, status: ' +
@@ -107,7 +107,7 @@ export default function registerWebSocket(server) {
         }
       });
 
-      frontWS.on('close', () => k8sWS.close());
+      frontWS.addEventListener('close', () => k8sWS.close());
     } catch (e) {
       frontWS.close(1011, encodeMsg('Internal Server Error', Stream.STDOUT));
       logger.error({ err: e }, 'Error during WebSocket proxy connections');
