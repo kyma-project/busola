@@ -130,10 +130,15 @@ describe('groupVersionsAtomSync', () => {
       },
     ]);
 
-    const resolved = await new Promise<string[] | null>((resolve) => {
+    const resolved = await new Promise<string[] | null>((resolve, reject) => {
+      const timer = setTimeout(
+        () => reject(new Error('groupVersionsAtomSync did not resolve')),
+        2000,
+      );
       const unsub = store.sub(groupVersionsAtomSync, () => {
         const val = store.get(groupVersionsAtomSync);
         if (val !== null) {
+          clearTimeout(timer);
           unsub();
           resolve(val);
         }
@@ -160,10 +165,15 @@ describe('groupVersionsAtomSync', () => {
       },
     ]);
 
-    const resolved = await new Promise<string[] | null>((resolve) => {
+    const resolved = await new Promise<string[] | null>((resolve, reject) => {
+      const timer = setTimeout(
+        () => reject(new Error('groupVersionsAtomSync did not resolve')),
+        2000,
+      );
       const unsub = store.sub(groupVersionsAtomSync, () => {
         const val = store.get(groupVersionsAtomSync);
         if (val !== null) {
+          clearTimeout(timer);
           unsub();
           resolve(val);
         }
