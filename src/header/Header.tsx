@@ -15,6 +15,7 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
+import { useJouleEligibility } from 'hooks/useJouleEligibility';
 
 import {
   clustersAtomEffectOnSet,
@@ -71,9 +72,10 @@ export function Header() {
   const isOnClustersPage = location.pathname === '/clusters';
   const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
-  const { isEnabled: isKymaCompanionEnabled, useJoule: usesJoule } = useFeature(
+  const { isEnabled: isKymaCompanionEnabled } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
   );
+  const jouleEligible = useJouleEligibility();
 
   const { isEnabled: isTerminalEnabled } = useFeature(
     configFeaturesNames.TERMINAL,
@@ -85,9 +87,9 @@ export function Header() {
   useEffect(() => {
     setShowCompanion((prevState) => ({
       ...prevState,
-      useJoule: usesJoule,
+      useJoule: jouleEligible,
     }));
-  }, [setShowCompanion, usesJoule]);
+  }, [setShowCompanion, jouleEligible]);
 
   return (
     <>

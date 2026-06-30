@@ -303,6 +303,40 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
+const SHOOT_ID_PATTERN = /^[A-Za-z0-9]([A-Za-z0-9._-]{0,61}[A-Za-z0-9])?$/;
+
+async function handleClusterRegion(req, res) {
+  const { shootId } = req.params;
+  if (!SHOOT_ID_PATTERN.test(shootId)) {
+    return res.status(400).json({ error: 'Invalid shoot ID format' });
+  }
+  if (!companionApiBaseUrl) {
+    return res
+      .status(500)
+      .json({ error: 'Companion API base URL is not configured' });
+  }
+  try {
+    const url = new URL(
+      `/api/tools/cluster-region/${encodeURIComponent(shootId)}`,
+      companionApiBaseUrl,
+    );
+    const headers = { Accept: 'application/json' };
+    if (!SKIP_AUTH) {
+      const AUTH_TOKEN = await tokenManager.getToken();
+      headers.Authorization = `Bearer ${AUTH_TOKEN}`;
+    }
+    const response = await fetch(url.toString(), { method: 'GET', headers });
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (error) {
+    req.log.warn(error);
+    res.status(500).json({
+      error:
+        'Failed to fetch cluster region data. Request ID: ' + escape(req.id),
+    });
+  }
+}
+
 router.post('/public-key', handlePublicKey);
 router.post(
   '/suggestions',
@@ -322,5 +356,6 @@ router.post(
   companionRateLimiter,
   handleFollowUpSuggestions,
 );
+router.get('/cluster-region/:shootId', handleClusterRegion);
 
 export default router;
