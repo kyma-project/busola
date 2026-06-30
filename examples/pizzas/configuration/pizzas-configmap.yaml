@@ -66,11 +66,10 @@ data:
                       compareFunction: $second -$first
           - widget: Columns
             children:
-              - name: Comments
-                description: Comments are important. They help us to make better pizzas.
-            widget: Card
+              - widget: Card
                 children:
                   - name: Comments
+                    description: Comments are important. They help us to make better pizzas.
                     widget: JoinedArray
                     source: spec.comments
                     separator: ' || '
