@@ -5,6 +5,15 @@
 
 .form-without-background {
   background-color: var(--sapBackgroundColor);
+
+  ui5-label {
+    text-align: end;
+  }
+
+  ui5-form-item::part(layout) {
+    align-items: start;
+  }
+
   > ui5-form-group {
     > :not(:first-child) {
       padding-top: 1rem;

@@ -7,15 +7,7 @@ import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
-import {
-  FormItem,
-  Text,
-  Title,
-  Label,
-  FormGroup,
-  Form,
-} from '@ui5/webcomponents-react';
-import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
+import { FormItem, Text, Title, Label, Form } from '@ui5/webcomponents-react';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
@@ -47,9 +39,11 @@ const GardenerProvider = () => {
   if (!provider) return null;
 
   return (
-    <DynamicPageComponent.Column title={t('gardener.headers.provider')}>
+    <FormItem
+      labelContent={<Label showColon>{t('gardener.headers.provider')}</Label>}
+    >
       <p className="gardener-provider">{provider}</p>
-    </DynamicPageComponent.Column>
+    </FormItem>
   );
 };
 
@@ -86,67 +80,91 @@ export default function ClusterDetails({
         {t('cluster-overview.headers.cluster-overview')}
       </Title>
       <Form layout="S1 M2 L2 XL2" className="form-without-background">
-        <FormGroup>
-          <ResourceDetailsCard
-            titleText={t('cluster-overview.headers.metadata')}
-            content={
-              <>
-                {!loading && k8sVersion && (
-                  <FormItem
-                    labelContent={
-                      <Label>{t('clusters.overview.kubernetes-version')}</Label>
-                    }
-                  >
-                    <div>{k8sVersion}</div>
-                  </FormItem>
-                )}
-                {!loading && kymaVersion && (
-                  <DynamicPageComponent.Column
-                    title={t('clusters.overview.kyma-version')}
-                  >
-                    {kymaVersion}
-                  </DynamicPageComponent.Column>
-                )}
-                <DynamicPageComponent.Column
-                  title={t('clusters.storage.title')}
+        <ResourceDetailsCard
+          titleText={t('cluster-overview.headers.metadata')}
+          content={
+            <>
+              {!loading && k8sVersion && (
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.kubernetes-version')}
+                    </Label>
+                  }
                 >
-                  <ClusterStorageType clusterConfig={config} />
-                </DynamicPageComponent.Column>
-                <DynamicPageComponent.Column
-                  title={t('clusters.common.api-server-address')}
+                  <div>{k8sVersion}</div>
+                </FormItem>
+              )}
+              {!loading && kymaVersion && (
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.kyma-version')}
+                    </Label>
+                  }
+                >
+                  <Text>{kymaVersion}</Text>
+                </FormItem>
+              )}
+              <FormItem
+                labelContent={
+                  <Label showColon>{t('clusters.storage.title')}</Label>
+                }
+              >
+                <ClusterStorageType clusterConfig={config} />
+              </FormItem>
+              <FormItem
+                labelContent={
+                  <Label showColon>
+                    {t('clusters.common.api-server-address')}
+                  </Label>
+                }
+              >
+                <Text>
+                  {currentCluster?.currentContext?.cluster?.cluster?.server}
+                </Text>
+              </FormItem>
+              <GardenerProvider />
+              {!!kymaResourceLabels?.['kyma-project.io/global-account-id'] && (
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.global-account-id')}
+                    </Label>
+                  }
                 >
                   <Text>
-                    {currentCluster?.currentContext?.cluster?.cluster?.server}
-                  </Text>
-                </DynamicPageComponent.Column>
-                <GardenerProvider />
-                {!!kymaResourceLabels?.[
-                  'kyma-project.io/global-account-id'
-                ] && (
-                  <DynamicPageComponent.Column
-                    title={t('clusters.overview.global-account-id')}
-                  >
                     {kymaResourceLabels['kyma-project.io/global-account-id']}
-                  </DynamicPageComponent.Column>
-                )}
-                {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
-                  <DynamicPageComponent.Column
-                    title={t('clusters.overview.subaccount-id')}
-                  >
+                  </Text>
+                </FormItem>
+              )}
+              {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.subaccount-id')}
+                    </Label>
+                  }
+                >
+                  <Text>
                     {kymaResourceLabels['kyma-project.io/subaccount-id']}
-                  </DynamicPageComponent.Column>
-                )}
-                {!environmentParametersLoading && !!natGatewayIps && (
-                  <DynamicPageComponent.Column
-                    title={t('clusters.overview.nat-gateway-ips')}
-                  >
-                    <Tokens tokens={natGatewayIps} />
-                  </DynamicPageComponent.Column>
-                )}
-              </>
-            }
-          />
-        </FormGroup>
+                  </Text>
+                </FormItem>
+              )}
+              {!environmentParametersLoading && !!natGatewayIps && (
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.nat-gateway-ips')}
+                    </Label>
+                  }
+                >
+                  <Tokens tokens={natGatewayIps} />
+                </FormItem>
+              )}
+            </>
+          }
+        />
         {(kymaResources || isCommunityModulesEnabled) && (
           <ModuleTemplatesContextProvider>
             <CommunityModuleContextProvider>

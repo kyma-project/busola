@@ -7,7 +7,7 @@ import { K8sResource } from 'types';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { Dispatch, JSX, ReactNode, SetStateAction } from 'react';
 import { CustomColumn } from './ResourceCustomStatusColumns';
-import { FormItem, Label } from '@ui5/webcomponents-react';
+import { FormItem, Label, Text } from '@ui5/webcomponents-react';
 
 type ResourceDetailsCardContentProps = {
   resource: K8sResource & Resource;
@@ -35,6 +35,14 @@ export const ResourceDetailsCardContent = ({
   hideAnnotations,
 }: ResourceDetailsCardContentProps) => {
   const { t } = useTranslation();
+
+  const totalItems =
+    2 + // Resource Type + Age always present
+    (!hideLastUpdate ? 1 : 0) +
+    filteredDetailsCardColumns.length +
+    (!hideLabels ? 1 : 0) +
+    (!hideAnnotations ? 1 : 0);
+  const needsPadding = !hideLabels && !hideAnnotations && totalItems % 2 !== 0;
 
   return (
     <ResourceDetailsCard
@@ -65,11 +73,11 @@ export const ResourceDetailsCardContent = ({
             key="Age"
             labelContent={<Label showColon>{t('common.headers.age')}</Label>}
           >
-            <div>
+            <Text>
               <ReadableElapsedTimeFromNow
                 timestamp={resource.metadata.creationTimestamp}
               />
-            </div>
+            </Text>
           </FormItem>
           {!hideLastUpdate && (
             <FormItem
@@ -78,7 +86,7 @@ export const ResourceDetailsCardContent = ({
                 <Label showColon>{t('common.headers.last-update')}</Label>
               }
             >
-              <div>{renderUpdateDate(lastUpdate)}</div>
+              <Text>{renderUpdateDate(lastUpdate)}</Text>
             </FormItem>
           )}
           {filteredDetailsCardColumns.map((col) => (
@@ -89,6 +97,11 @@ export const ResourceDetailsCardContent = ({
               {col.value(resource)}
             </FormItem>
           ))}
+          {needsPadding && (
+            <FormItem key="padding" labelContent={<Label />}>
+              <span />
+            </FormItem>
+          )}
           {!hideLabels && (
             <FormItem
               className="card-labels"
