@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'jotai';
 import { apiGroupAtom } from '../apiGroupsAtom';
 
@@ -30,6 +30,9 @@ describe('apiGroupAtom', () => {
   beforeEach(() => {
     store = createStore();
     vi.clearAllMocks();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('returns null when no fetch function is available (no auth/cluster)', async () => {
@@ -66,7 +69,6 @@ describe('apiGroupAtom', () => {
       'Failed to fetch API groups:',
       expect.any(Error),
     );
-    consoleWarnSpy.mockRestore();
   });
 
   it('returns null and logs warning when response.json() throws', async () => {
@@ -82,7 +84,6 @@ describe('apiGroupAtom', () => {
 
     expect(result).toBeNull();
     expect(consoleWarnSpy).toHaveBeenCalled();
-    consoleWarnSpy.mockRestore();
   });
 
   it('returns an empty array when the API responds with no groups', async () => {
