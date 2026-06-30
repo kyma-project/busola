@@ -14,6 +14,16 @@ describe('extractShootId', () => {
     );
   });
 
+  it('extracts shoot ID from a real Kyma SKR URL', () => {
+    expect(
+      extractShootId('https://api.c-84c5a2e.stage.kyma.ondemand.com'),
+    ).toBe('c-84c5a2e');
+  });
+
+  it('returns null for an api.* host that is not a Kyma cluster', () => {
+    expect(extractShootId('https://api.foo.example.com')).toBeNull();
+  });
+
   it('returns null when the hostname does not start with api', () => {
     expect(extractShootId('https://k8s.example.com')).toBeNull();
   });

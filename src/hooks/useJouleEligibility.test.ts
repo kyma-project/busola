@@ -104,6 +104,38 @@ describe('useJouleEligibility', () => {
     await waitFor(() => expect(result.current).toBe(false));
   });
 
+  it('fails closed when isEUAccessOnly is missing from the response', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    (fetch as Mock).mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({}),
+    });
+    const { result } = renderHook(() => useJouleEligibility());
+    await waitFor(() =>
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('missing boolean isEUAccessOnly'),
+      ),
+    );
+    expect(result.current).toBe(false);
+  });
+
+  it('fails closed when isEUAccessOnly is not a boolean', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    (fetch as Mock).mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ isEUAccessOnly: 'false' }), // string, not boolean
+    });
+    const { result } = renderHook(() => useJouleEligibility());
+    await waitFor(() =>
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('missing boolean isEUAccessOnly'),
+      ),
+    );
+    expect(result.current).toBe(false);
+  });
+
   it('remains false and warns when EU check fetch fails', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     (fetch as Mock).mockRejectedValue(new Error('network error'));
@@ -164,7 +196,6 @@ describe('useJouleEligibility', () => {
   });
 
   it('skips OIDC check when issuerUrl is empty and proceeds to EU check', async () => {
-    // config.issuerUrl empty → OIDC check skipped
     (fetch as Mock).mockResolvedValue({
       ok: true,
       status: 200,
@@ -188,9 +219,13 @@ describe('useJouleEligibility', () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('does not fetch when server URL cannot yield a shoot ID', () => {
+  it('does not fetch and warns when server URL cannot yield a shoot ID', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     mockUseAtomValue.mockReturnValue(makeCluster('https://k8s.example.com'));
     renderHook(() => useJouleEligibility());
     expect(fetch).not.toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('not a Kyma SKR endpoint'),
+    );
   });
 });

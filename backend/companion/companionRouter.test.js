@@ -50,13 +50,8 @@ describe('handleClusterRegion', () => {
 
   beforeEach(async () => {
     vi.resetModules();
-    // Re-import after mocks are set up; extract the handler via the router's stack
     const mod = await import('./companionRouter.js');
-    const router = mod.default;
-    const layer = router.stack.find(
-      (l) => l.route?.path === '/cluster-region/:shootId',
-    );
-    handleClusterRegion = layer?.route?.stack?.[0]?.handle;
+    handleClusterRegion = mod.handleClusterRegion;
   });
 
   afterEach(() => {

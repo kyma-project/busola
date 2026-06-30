@@ -37,6 +37,16 @@ const companionRateLimiter = rateLimit({
   keyGenerator: (req) => hashCredential(getK8sCredentialFromBody(req), 'cred'),
 });
 
+// Per-shoot: the response is fully determined by shootId.
+const clusterRegionRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 60,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => 'shoot:' + req.params.shootId,
+});
+
 router.use(express.json());
 
 async function handlePublicKey(req, res) {
@@ -331,8 +341,7 @@ async function handleClusterRegion(req, res) {
   } catch (error) {
     req.log.warn(error);
     res.status(500).json({
-      error:
-        'Failed to fetch cluster region data. Request ID: ' + escape(req.id),
+      error: `Failed to fetch cluster region data. Request ID: ${String(req.id)}`,
     });
   }
 }
@@ -356,6 +365,11 @@ router.post(
   companionRateLimiter,
   handleFollowUpSuggestions,
 );
-router.get('/cluster-region/:shootId', handleClusterRegion);
+router.get(
+  '/cluster-region/:shootId',
+  clusterRegionRateLimiter,
+  handleClusterRegion,
+);
 
+export { handleClusterRegion };
 export default router;

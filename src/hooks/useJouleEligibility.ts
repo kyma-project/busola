@@ -10,11 +10,7 @@ import {
 import { KubeconfigOIDCAuth } from 'types';
 import { extractShootId } from 'components/KymaCompanion/utils/extractShootId';
 
-// Strip trailing slashes so e.g. "https://kyma.accounts.ondemand.com/" and
-// "https://kyma.accounts.ondemand.com" compare equal.
-function normalizeUrl(url: string): string {
-  return url.replace(/\/+$/, '');
-}
+const stripTrailingSlash = (url: string) => url.replace(/\/+$/, '');
 
 export function useJouleEligibility(): boolean {
   const { isEnabled, useJoule, config } = useFeature<KymaCompanionFeature>(
@@ -24,10 +20,9 @@ export function useJouleEligibility(): boolean {
   const serverUrl = cluster?.currentContext?.cluster?.cluster?.server;
   const userExec = (cluster?.currentContext?.user?.user as KubeconfigOIDCAuth)
     ?.exec;
-
   const allowedIssuerUrl = config?.issuerUrl;
 
-  // null = in-flight / unknown, true/false = confirmed
+  // null while unknown; fail-closed (Joule disabled) anywhere it stays null.
   const [isEUAccessOnly, setIsEUAccessOnly] = useState<boolean | null>(null);
 
   const isOIDCMismatch = useMemo(() => {
@@ -36,20 +31,24 @@ export function useJouleEligibility(): boolean {
     const params = tryParseOIDCparams({ exec: userExec } as KubeconfigOIDCAuth);
     return (
       !!params?.issuerUrl &&
-      normalizeUrl(params.issuerUrl) !== normalizeUrl(allowedIssuerUrl)
+      stripTrailingSlash(params.issuerUrl) !==
+        stripTrailingSlash(allowedIssuerUrl)
     );
   }, [isEnabled, useJoule, allowedIssuerUrl, userExec]);
 
   useEffect(() => {
-    // When any precondition disqualifies Joule before the fetch, reset to
-    // unknown via cleanup so we don't hold a stale verdict from a previous
-    // cluster.
+    // Reset the verdict on cleanup so a previous cluster's answer never leaks into the next render.
     if (!isEnabled || !useJoule || isOIDCMismatch) {
       return () => setIsEUAccessOnly(null);
     }
     if (!serverUrl) return;
     const shootId = extractShootId(serverUrl);
-    if (!shootId) return;
+    if (!shootId) {
+      console.warn(
+        '[Joule] Disabled: cluster server URL is not a Kyma SKR endpoint; cannot verify region.',
+      );
+      return;
+    }
 
     let cancelled = false;
     fetch(`/backend/ai-chat/cluster-region/${encodeURIComponent(shootId)}`)
@@ -59,15 +58,19 @@ export function useJouleEligibility(): boolean {
       })
       .then((data) => {
         if (cancelled) return;
-        setIsEUAccessOnly(data.isEUAccessOnly === true);
+        if (typeof data?.isEUAccessOnly !== 'boolean') {
+          console.warn(
+            '[Joule] cluster-region response missing boolean isEUAccessOnly; Joule will remain disabled.',
+          );
+          return;
+        }
+        setIsEUAccessOnly(data.isEUAccessOnly);
       })
       .catch((err) => {
         if (cancelled) return;
         console.warn(
           `[Joule] Could not determine cluster region (${err.message}); Joule will remain disabled.`,
         );
-        // Keep the verdict at null → fail-closed in the return logic below.
-        setIsEUAccessOnly(null);
       });
     return () => {
       cancelled = true;
@@ -75,8 +78,7 @@ export function useJouleEligibility(): boolean {
     };
   }, [isEnabled, useJoule, isOIDCMismatch, serverUrl]);
 
-  // Emit a single warning when Joule transitions to disabled for a specific
-  // reason — keeps the console quiet across re-renders.
+  // Warn once per disablement reason — success is the silent default.
   useEffect(() => {
     if (!isEnabled || !useJoule) return;
     if (isOIDCMismatch) {
@@ -85,13 +87,9 @@ export function useJouleEligibility(): boolean {
       );
     } else if (isEUAccessOnly === true) {
       console.warn('[Joule] Disabled: cluster is EU Access Only.');
-    } else if (isEUAccessOnly === false) {
-      console.log('[Joule] Enabled: cluster passed all eligibility checks.');
     }
   }, [isEnabled, useJoule, isOIDCMismatch, isEUAccessOnly]);
 
-  if (!isEnabled || !useJoule) return false;
-  if (isOIDCMismatch) return false;
-  // null = in-flight or fetch failed → fail-closed
+  if (!isEnabled || !useJoule || isOIDCMismatch) return false;
   return isEUAccessOnly === false;
 }
