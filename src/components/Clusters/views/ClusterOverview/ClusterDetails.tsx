@@ -92,7 +92,7 @@ export default function ClusterDetails({
                     </Label>
                   }
                 >
-                  <div>{k8sVersion}</div>
+                  <Text>{k8sVersion}</Text>
                 </FormItem>
               )}
               {!loading && kymaVersion && (

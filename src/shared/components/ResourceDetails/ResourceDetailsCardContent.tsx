@@ -49,7 +49,6 @@ export const ResourceDetailsCardContent = ({
       titleText={t('cluster-overview.headers.metadata')}
       content={
         <>
-          {/* <FormGroup> */}
           <FormItem
             key="Resource Type"
             labelContent={
