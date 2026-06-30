@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { discoverFeature, getFeatures } from '../getFeatures';
 
 describe('discoverFeature', () => {
+  afterEach(() => vi.restoreAllMocks());
   it('returns { isEnabled: false } when rawFeatureConfig is undefined', async () => {
     const result = await discoverFeature('EXTENSIBILITY', undefined);
     expect(result).toEqual({ isEnabled: false });
@@ -61,7 +62,6 @@ describe('discoverFeature', () => {
 
     expect(result).toMatchObject({ isEnabled: false });
     expect(warnSpy).toHaveBeenCalled();
-    warnSpy.mockRestore();
   });
 
   it('treats a config with no isEnabled field as enabled and runs checks', async () => {
@@ -75,6 +75,7 @@ describe('discoverFeature', () => {
 });
 
 describe('getFeatures', () => {
+  afterEach(() => vi.restoreAllMocks());
   it('returns an empty object when rawFeatures is undefined', async () => {
     const result = await getFeatures(undefined);
     expect(result).toEqual({});
@@ -123,6 +124,6 @@ describe('getFeatures', () => {
 
     expect(result.SENTRY).toMatchObject({ isEnabled: false });
     expect(result.FEEDBACK).toMatchObject({ isEnabled: true });
-    warnSpy.mockRestore();
+    expect(warnSpy).toHaveBeenCalled();
   });
 });

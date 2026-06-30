@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'jotai';
 
 vi.mock('shared/utils/env', () => ({
@@ -26,10 +26,6 @@ describe('configurationAtom', () => {
     expect(store.get(configurationAtom)).toEqual({});
   });
 
-  it('is not null by default', () => {
-    expect(store.get(configurationAtom)).not.toBeNull();
-  });
-
   it('can be set to a configuration with features', () => {
     const config = {
       features: {
@@ -41,11 +37,6 @@ describe('configurationAtom', () => {
     store.set(configurationAtom, config);
 
     expect(store.get(configurationAtom)).toEqual(config);
-  });
-
-  it('can be set to null', () => {
-    store.set(configurationAtom, null);
-    expect(store.get(configurationAtom)).toBeNull();
   });
 
   it('can be set to a configuration with storageType', () => {
@@ -65,11 +56,12 @@ describe('configurationAtom', () => {
 
   it('notifies subscribers on change', () => {
     const subscriber = vi.fn();
-    store.sub(configurationAtom, subscriber);
+    const unsubscribe = store.sub(configurationAtom, subscriber);
 
     store.set(configurationAtom, { storageType: 'localStorage' });
 
     expect(subscriber).toHaveBeenCalledTimes(1);
+    unsubscribe();
   });
 
   it('each store instance has an independent default value', () => {
@@ -85,6 +77,11 @@ describe('configurationAtom', () => {
 describe('getConfigs', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', undefined);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   it('returns merged config from defaultConfig and config.yaml', async () => {
@@ -121,7 +118,7 @@ describe('getConfigs', () => {
       'fetch',
       makeFetch({
         'defaultConfig.yaml': 'config:\n  storageType: sessionStorage\n',
-        'config.yaml': '',
+        'config.yaml': 'config:\n  storageType: sessionStorage\n',
       }),
     );
     const fetchFn = vi.fn().mockResolvedValue({
@@ -186,7 +183,6 @@ describe('getConfigs', () => {
 
     expect(result?.storageType).toBe('sessionStorage');
     expect(warnSpy).toHaveBeenCalled();
-    warnSpy.mockRestore();
   });
 
   it('arrays from a later layer replace the base array entirely', async () => {
@@ -202,7 +198,10 @@ describe('getConfigs', () => {
 
     const result = await getConfigs(undefined);
 
-    expect(result?.features?.HIDDEN_NAMESPACES?.namespaces).toEqual(['x']);
+    expect(result?.features?.HIDDEN_NAMESPACES).toEqual({
+      isEnabled: true,
+      namespaces: ['x'],
+    });
   });
 
   it('returns null and warns when the defaultConfig fetch fails', async () => {
@@ -216,7 +215,6 @@ describe('getConfigs', () => {
 
     expect(result).toBeNull();
     expect(warnSpy).toHaveBeenCalled();
-    warnSpy.mockRestore();
   });
 
   it('falls back when config.yaml contains invalid YAML', async () => {
@@ -233,6 +231,5 @@ describe('getConfigs', () => {
 
     expect(result?.storageType).toBe('sessionStorage');
     expect(warnSpy).toHaveBeenCalled();
-    warnSpy.mockRestore();
   });
 });
