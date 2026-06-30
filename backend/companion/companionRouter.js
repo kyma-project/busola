@@ -37,15 +37,16 @@ const companionRateLimiter = rateLimit({
   keyGenerator: (req) => hashCredential(getK8sCredentialFromBody(req), 'cred'),
 });
 
-// Per-shoot: the response is fully determined by shootId.
-const clusterRegionRateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 60,
-  message: 'Too many requests, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-  keyGenerator: (req) => 'shoot:' + req.params.shootId,
-});
+// Cluster region is immutable — safe to cache for the process lifetime.
+const CLUSTER_REGION_CACHE_MAX = 1000;
+const clusterRegionCache = new Map();
+
+function clusterRegionCacheSet(shootId, data) {
+  if (clusterRegionCache.size >= CLUSTER_REGION_CACHE_MAX) {
+    clusterRegionCache.delete(clusterRegionCache.keys().next().value);
+  }
+  clusterRegionCache.set(shootId, data);
+}
 
 router.use(express.json());
 
@@ -325,6 +326,11 @@ async function handleClusterRegion(req, res) {
       .status(500)
       .json({ error: 'Companion API base URL is not configured' });
   }
+
+  if (clusterRegionCache.has(shootId)) {
+    return res.status(200).json(clusterRegionCache.get(shootId));
+  }
+
   try {
     const url = new URL(
       `/api/tools/cluster-region/${encodeURIComponent(shootId)}`,
@@ -337,6 +343,9 @@ async function handleClusterRegion(req, res) {
     }
     const response = await fetch(url.toString(), { method: 'GET', headers });
     const data = await response.json();
+    if (response.ok) {
+      clusterRegionCacheSet(shootId, data);
+    }
     res.status(response.status).json(data);
   } catch (error) {
     req.log.warn(error);
@@ -365,11 +374,7 @@ router.post(
   companionRateLimiter,
   handleFollowUpSuggestions,
 );
-router.get(
-  '/cluster-region/:shootId',
-  clusterRegionRateLimiter,
-  handleClusterRegion,
-);
+router.get('/cluster-region/:shootId', handleClusterRegion);
 
-export { handleClusterRegion };
+export { handleClusterRegion, CLUSTER_REGION_CACHE_MAX };
 export default router;

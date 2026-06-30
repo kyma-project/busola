@@ -47,11 +47,13 @@ function makeMockReq(shootId) {
 
 describe('handleClusterRegion', () => {
   let handleClusterRegion;
+  let CLUSTER_REGION_CACHE_MAX;
 
   beforeEach(async () => {
     vi.resetModules();
     const mod = await import('./companionRouter.js');
     handleClusterRegion = mod.handleClusterRegion;
+    CLUSTER_REGION_CACHE_MAX = mod.CLUSTER_REGION_CACHE_MAX;
   });
 
   afterEach(() => {
@@ -144,5 +146,69 @@ describe('handleClusterRegion', () => {
     const [url, opts] = fetchMock.mock.calls[0];
     expect(url).toContain('/api/tools/cluster-region/c-abc123');
     expect(opts.headers.Authorization).toBe('Bearer mock-token');
+  });
+
+  it('returns cached response on second request without hitting the companion API', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ isEUAccessOnly: false }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const req = makeMockReq('c-cached');
+    await handleClusterRegion(req, makeMockRes());
+    expect(fetchMock).toHaveBeenCalledOnce();
+
+    const res2 = makeMockRes();
+    await handleClusterRegion(makeMockReq('c-cached'), res2);
+    expect(fetchMock).toHaveBeenCalledOnce(); // still only once
+    expect(res2._status).toBe(200);
+    expect(res2._body.isEUAccessOnly).toBe(false);
+  });
+
+  it('does not cache error responses', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        json: async () => ({ error: 'upstream failure' }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({ isEUAccessOnly: false }),
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await handleClusterRegion(makeMockReq('c-err'), makeMockRes());
+    const res2 = makeMockRes();
+    await handleClusterRegion(makeMockReq('c-err'), res2);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(res2._status).toBe(200);
+  });
+
+  it('evicts the oldest entry when the cache reaches its limit', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ isEUAccessOnly: false }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    for (let i = 0; i < CLUSTER_REGION_CACHE_MAX; i++) {
+      await handleClusterRegion(makeMockReq(`c-fill${i}`), makeMockRes());
+    }
+    expect(fetchMock).toHaveBeenCalledTimes(CLUSTER_REGION_CACHE_MAX);
+
+    await handleClusterRegion(makeMockReq('c-new'), makeMockRes());
+    expect(fetchMock).toHaveBeenCalledTimes(CLUSTER_REGION_CACHE_MAX + 1);
+
+    await handleClusterRegion(makeMockReq('c-fill0'), makeMockRes());
+    expect(fetchMock).toHaveBeenCalledTimes(CLUSTER_REGION_CACHE_MAX + 2);
+
+    await handleClusterRegion(makeMockReq('c-fill2'), makeMockRes());
+    expect(fetchMock).toHaveBeenCalledTimes(CLUSTER_REGION_CACHE_MAX + 2);
   });
 });
