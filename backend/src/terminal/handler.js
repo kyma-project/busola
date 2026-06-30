@@ -1,14 +1,25 @@
 /* global Buffer */
 import { WebSocket, WebSocketServer } from 'ws';
 import parseProtocolHeaders from './protocolHeaderParser';
+import { pinoWebSocketLogger } from '../../logging/';
 
 function buildRemoteURL(url, remoteURL) {
   const remoteServerAddress = remoteURL.replace('https://', '');
   const path = url.pathname.split('/').slice(3).join('/'); //remove /backend/ws
   return `wss://${remoteServerAddress}/${path}${url.search}`;
 }
-
-function encodeMsg(input, std = 0) {
+const Stream = Object.freeze({
+  STDIN: 0,
+  STDOUT: 1,
+  STDERR: 2,
+});
+/**
+ *
+ * @param input
+ * @param std
+ * @returns {Uint8Array<ArrayBuffer>}
+ */
+function encodeMsg(input, std = Stream.STDIN) {
   const msgEncoded = Buffer.from(input + '\n', 'utf-8');
   const encodedMsgForK8s = new Uint8Array(msgEncoded.length + 1);
   encodedMsgForK8s[0] = std; // set STD[IN,OUT,ERR]
@@ -20,6 +31,8 @@ export default function registerWebSocket(server) {
   const wss = new WebSocketServer({ server });
 
   wss.on('connection', (frontWS, req) => {
+    const logger = pinoWebSocketLogger(req);
+    logger.info('Starting WebSocket connection proxy');
     try {
       const url = new URL(req.url, 'htt://' + req.socket.remoteAddress);
       const parsedHeaders = parseProtocolHeaders(
@@ -27,7 +40,7 @@ export default function registerWebSocket(server) {
       );
 
       const remoteURL = buildRemoteURL(url, parsedHeaders.clusterURL);
-      console.log('Connecting to: ', remoteURL);
+      logger.info('Connecting to:' + remoteURL);
 
       let opts;
       if (parsedHeaders.token) {
@@ -58,19 +71,20 @@ export default function registerWebSocket(server) {
         frontWS.send(data);
       });
 
+      k8sWS.addEventListener('onerror', (event) => {
+        logger.error({ err: event }, 'K8s WebSocket error: ');
+      });
+
       k8sWS.addEventListener('onclose', () => {
-        console.log('Frontend closed');
+        logger.info('K8s WebSocket closed');
         const closingMsg = 'Remote connection closed';
-        frontWS.send(encodeMsg(closingMsg));
+        frontWS.send(encodeMsg(closingMsg, stream.STDOUT));
         frontWS.close();
       });
 
-      k8sWS.addEventListener('error', (error) => {
-        console.error('WebSocket error:', error);
-        //   TODO:
+      frontWS.addEventListener('error', (event) => {
+        logger.error({ err: event }, 'Front WebSocket error: ');
       });
-
-      frontWS.on('error', console.log);
 
       frontWS.on('message', (data) => {
         if (k8sWS.readyState.readyState !== WebSocket.OPEN) {
@@ -81,8 +95,8 @@ export default function registerWebSocket(server) {
 
       frontWS.on('close', () => k8sWS.close());
     } catch (e) {
-      frontWS.close(1000, 'Internal Server Error');
-      console.error(e);
+      frontWS.close(1000, encodeMsg('Internal Server Error', Stream.STDOUT));
+      logger.error({ err: e }, 'Error during WebSocket proxy connections');
     }
   });
 }

@@ -28,8 +28,31 @@ function configureLogger() {
   });
 }
 
-export const pinoMiddleware = configureLogger();
+function configureWebSocketLogger(req) {
+  const isDev = process.env.NODE_ENV !== 'production';
 
+  const logger = PinoHttp({
+    autoLogging: !!isDev, //to disable the automatic "request completed" and "request errored" logging.
+    genReqId: (req) => {
+      req.id = uuid();
+      return req.id;
+    },
+    serializers: {
+      req: (req) => ({
+        id: req.id,
+        method: req.method,
+        url: req.url,
+      }),
+    },
+  });
+  return logger.logger.child({
+    id: uuid(),
+    url: req.url,
+  });
+}
+
+export const pinoMiddleware = configureLogger();
+export const pinoWebSocketLogger = configureWebSocketLogger;
 export function createSlowRequestLogger(thresholdMs = 4000) {
   return (req, res, next) => {
     if (req.log) {
