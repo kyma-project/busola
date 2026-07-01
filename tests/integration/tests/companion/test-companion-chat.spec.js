@@ -617,7 +617,7 @@ context('Test Companion Chat Behavior', () => {
     cy.inspectTab('View');
     cy.wait(5000);
 
-    cy.contains('.page-header__column', 'Replicas')
+    cy.contains('.ui5-form-item-layout', 'Replicas')
       .contains('span', '2')
       .should('be.visible');
 
