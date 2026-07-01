@@ -29,60 +29,64 @@ data:
           namespace: $root.metadata.namespace
           kind: $item.spec.ownerReferences[0].kind
     body:
-      - widget: Columns
+      - name: Details
+        widget: Section
         children:
-          - name: Summary
-            widget: Card
+          - widget: Columns
             children:
-              - name: State
-                source: status.messages[-1].state
-                widget: Badge
-              - name: Message
-                source: status.messages[-1].message
+              - name: Summary
+                widget: Card
+                children:
+                  - name: State
+                    source: status.messages[-1].state
+                    widget: Badge
+                  - name: Message
+                    source: status.messages[-1].message
+                  - name: Toppings
+                    source: $join(spec.toppings.name, ', ')
+                  - name: Toppings price
+                    source: $sum(spec.toppings.price)
               - name: Toppings
-                source: $join(spec.toppings.name, ', ')
-              - name: Toppings price
-                source: $sum(spec.toppings.price)
-          - name: Toppings
-            source: spec.toppings
-            widget: Table
-            collapsible:
-              - name: Quantity
-                source: quantity
+                source: spec.toppings
+                widget: Table
+                collapsible:
+                  - name: Quantity
+                    source: quantity
+                children:
+                  - name: Name
+                    search: true
+                    source: name
+                    sort: true
+                  - name: Price ($)
+                    source: price
+                    search:
+                      searchFunction: $filter($item.price, function($p){$p > $number($input)})
+                    sort:
+                      default: true
+                      compareFunction: $second -$first
+          - widget: Columns
             children:
-              - name: Name
-                search: true
-                source: name
-                sort: true
-              - name: Price ($)
-                source: price
-                search:
-                  searchFunction: $filter($item.price, function($p){$p > $number($input)})
-                sort:
-                  default: true
-                  compareFunction: $second -$first
-      - name: Pizza's recipe secret
-        widget: ResourceList
-        source: $secretRecipe()
-        sort:
-          - source: type
-            default: true
-      - name: columns
-        widget: Columns
+              - widget: Card
+                children:
+                  - name: Comments
+                    description: Comments are important. They help us to make better pizzas.
+                    widget: JoinedArray
+                    source: spec.comments
+                    separator: ' || '
+              - name: Description
+                widget: Card
+                children:
+                  - source: spec.description
+                    name: Description
+      - name: Recipe
+        widget: Section
         children:
-          - name: Comments
-            description: Comments are important. They help us to make better pizzas.
-            widget: Card
-            children:
-              - name: Comments
-                widget: JoinedArray
-                source: spec.comments
-                separator: ' || '
-          - name: Description
-            widget: Card
-            children:
-              - source: spec.description
-                name: Description
+          - name: Pizza's recipe secret
+            widget: ResourceList
+            source: $secretRecipe()
+            sort:
+              - source: type
+                default: true
     resourceGraph:
       colorVariant: 2
       dataSources:

@@ -254,8 +254,8 @@ export function ResourceComponent({
               <section aria-labelledby="namespace-details-heading">
                 <Title
                   level="H3"
-                  size="H3"
-                  className="sap-margin-top-small sap-margin-bottom-medium"
+                  size="H4"
+                  className="sap-margin-top-small sap-margin-bottom-small"
                   id="namespace-details-heading"
                 >
                   {title ?? t('common.headers.resource-details')}
