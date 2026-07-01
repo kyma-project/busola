@@ -10,11 +10,11 @@ metadata:
   namespace: kyma-system
 spec:
   data:
-    apiVersion: operator.kyma-project.io/v1beta2
-    kind: Kyma
+    apiVersion: operator.kyma-project.io/v1alpha1
+    kind: Busola
     metadata:
       name: default
-      namespace: kyma-system
+      namespace: default
     spec:
       channel: regular
   descriptor:
