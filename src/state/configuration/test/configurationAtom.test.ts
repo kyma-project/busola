@@ -217,6 +217,27 @@ describe('getConfigs', () => {
     expect(warnSpy).toHaveBeenCalled();
   });
 
+  it('falls back to defaultConfig when config.yaml fetch throws a network error', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation((url: string) => {
+        if (url.includes('defaultConfig.yaml')) {
+          return Promise.resolve({
+            text: () =>
+              Promise.resolve('config:\n  storageType: sessionStorage\n'),
+          });
+        }
+        return Promise.reject(new Error('network error'));
+      }),
+    );
+
+    const result = await getConfigs(undefined);
+
+    expect(result?.storageType).toBe('sessionStorage');
+    expect(warnSpy).toHaveBeenCalled();
+  });
+
   it('falls back when config.yaml contains invalid YAML', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.stubGlobal(

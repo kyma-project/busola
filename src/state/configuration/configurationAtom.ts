@@ -47,9 +47,6 @@ export const getConfigs = async (fetchFn: FetchFn | undefined) => {
     ) as Config;
 
     const configDir = await getConfigDir();
-    const configResponse = await fetch(
-      configDir + '/config/config.yaml' + cacheBuster,
-    );
 
     let configMapResponse: ConfigMapResponse;
     if (fetchFn) {
@@ -67,6 +64,9 @@ export const getConfigs = async (fetchFn: FetchFn | undefined) => {
     // Check if there is config.yaml - case for deploying Busola in a Cluster
     let configParams: Config = {};
     try {
+      const configResponse = await fetch(
+        configDir + '/config/config.yaml' + cacheBuster,
+      );
       configParams = jsyaml.load(await configResponse.text()) as Config;
     } catch (e) {
       console.warn('Cannot load config.yaml: ', e);

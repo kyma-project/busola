@@ -53,6 +53,15 @@ describe('discoverFeature', () => {
     expect(secondCallArg.step).toBe(1);
   });
 
+  it('disables the feature when a check resolves with { isEnabled: false }', async () => {
+    const disablingCheck = vi.fn().mockResolvedValue({ isEnabled: false });
+    const config = { isEnabled: true, checks: [disablingCheck] };
+
+    const result = await discoverFeature('EXTENSIBILITY', config);
+
+    expect(result).toMatchObject({ isEnabled: false });
+  });
+
   it('returns { isEnabled: false } and warns when a check throws', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const failingCheck = vi.fn().mockRejectedValue(new Error('network error'));
