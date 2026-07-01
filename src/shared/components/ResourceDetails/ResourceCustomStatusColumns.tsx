@@ -1,5 +1,4 @@
-import { FormItem } from '@ui5/webcomponents-react';
-import { DynamicPageComponent } from '../DynamicPageComponent/DynamicPageComponent';
+import { FormItem, Label } from '@ui5/webcomponents-react';
 
 export type CustomColumn = {
   header?: string;
@@ -30,7 +29,7 @@ export function ResourceCustomStatusColumns({
       {filteredStatusColumns?.map((col) => (
         <FormItem
           key={col.header}
-          labelContent={<DynamicPageComponent title={col.header ?? ''} />}
+          labelContent={<Label showColon>{col.header}</Label>}
         >
           <div>{col.value(resource)}</div>
         </FormItem>
