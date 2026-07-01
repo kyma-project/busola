@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('getBackendInfo — getClusterConfig', () => {
   beforeEach(() => {
-    // jsdom defaults window.location.hostname to '' — reset between tests
+    vi.resetModules();
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { ...window.location, hostname: 'localhost' },
@@ -20,9 +20,6 @@ describe('getBackendInfo — getClusterConfig', () => {
       value: { ...window.location, hostname: 'my-cluster.example.com' },
     });
 
-    // Reset modules so the module-level `domain` variable is re-evaluated
-    // with the new hostname after we change window.location.hostname above
-    vi.resetModules();
     const { getClusterConfig } = await import('../getBackendInfo');
     expect(getClusterConfig().domain).toBe('my-cluster.example.com');
   });

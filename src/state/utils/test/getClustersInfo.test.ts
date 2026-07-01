@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { createStore } from 'jotai';
+import React from 'react';
+import { createStore, Provider as JotaiProvider } from 'jotai';
 import { clusterAtom } from 'state/clusterAtom';
 import { clustersAtom, ClustersState } from 'state/clustersAtom';
 
@@ -27,6 +28,14 @@ const clusterB = {
   config: { storage: 'sessionStorage' as const },
 };
 
+function renderWithStore() {
+  const store = createStore();
+  const wrapper = ({ children }: { children: React.ReactNode }) =>
+    React.createElement(JotaiProvider, { store }, children);
+  const { result } = renderHook(() => useClustersInfo(), { wrapper });
+  return result;
+}
+
 describe('useClustersInfo', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -35,7 +44,7 @@ describe('useClustersInfo', () => {
   });
 
   it('exposes currentCluster, clusters, setCurrentCluster, setClusters, removeCluster, navigate', () => {
-    const { result } = renderHook(() => useClustersInfo());
+    const result = renderWithStore();
     const keys = Object.keys(result.current);
     expect(keys).toEqual(
       expect.arrayContaining([
@@ -50,23 +59,23 @@ describe('useClustersInfo', () => {
   });
 
   it('returns null as currentCluster when no cluster is active', () => {
-    const { result } = renderHook(() => useClustersInfo());
+    const result = renderWithStore();
     expect(result.current.currentCluster).toBeNull();
   });
 
   it('returns an empty object as clusters when none are stored', () => {
-    const { result } = renderHook(() => useClustersInfo());
+    const result = renderWithStore();
     expect(result.current.clusters).toEqual({});
   });
 
   it('exposes the navigate function from react-router', () => {
-    const { result } = renderHook(() => useClustersInfo());
+    const result = renderWithStore();
     expect(result.current.navigate).toBe(mockNavigate);
   });
 
   describe('removeCluster', () => {
     it('removes the named cluster and clears currentCluster', () => {
-      const { result } = renderHook(() => useClustersInfo());
+      const result = renderWithStore();
 
       act(() => {
         result.current.setClusters({
@@ -87,7 +96,7 @@ describe('useClustersInfo', () => {
     });
 
     it('does not mutate remaining clusters when one is removed', () => {
-      const { result } = renderHook(() => useClustersInfo());
+      const result = renderWithStore();
 
       act(() => {
         result.current.setClusters({
@@ -104,7 +113,7 @@ describe('useClustersInfo', () => {
     });
 
     it('removing the only cluster leaves an empty clusters map', () => {
-      const { result } = renderHook(() => useClustersInfo());
+      const result = renderWithStore();
 
       act(() => {
         result.current.setClusters({ 'cluster-a': clusterA });
@@ -118,7 +127,7 @@ describe('useClustersInfo', () => {
     });
 
     it('removing a non-existent cluster does not throw and preserves state', () => {
-      const { result } = renderHook(() => useClustersInfo());
+      const result = renderWithStore();
 
       act(() => {
         result.current.setClusters({ 'cluster-a': clusterA });
