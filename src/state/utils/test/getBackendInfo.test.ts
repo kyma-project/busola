@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-describe('getClusterConfig', () => {
+describe('getBackendInfo — getClusterConfig', () => {
   beforeEach(() => {
     // jsdom defaults window.location.hostname to '' — reset between tests
     Object.defineProperty(window, 'location', {
@@ -25,14 +25,6 @@ describe('getClusterConfig', () => {
     vi.resetModules();
     const { getClusterConfig } = await import('../getBackendInfo');
     expect(getClusterConfig().domain).toBe('my-cluster.example.com');
-  });
-
-  it('returns both domain and backendAddress fields', async () => {
-    const { getClusterConfig } = await import('../getBackendInfo');
-    const config = getClusterConfig();
-
-    expect(config).toHaveProperty('domain');
-    expect(config).toHaveProperty('backendAddress');
   });
 
   it('returns a new object on each call (not a shared reference)', async () => {

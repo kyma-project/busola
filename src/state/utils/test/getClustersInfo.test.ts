@@ -1,7 +1,17 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
 import { createStore } from 'jotai';
 import { clusterAtom } from 'state/clusterAtom';
 import { clustersAtom, ClustersState } from 'state/clustersAtom';
+
+const mockNavigate = vi.fn();
+
+vi.mock('react-router', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router')>();
+  return { ...actual, useNavigate: () => mockNavigate };
+});
+
+import { useClustersInfo } from '../getClustersInfo';
 
 const clusterA = {
   contextName: 'cluster-a',
@@ -17,68 +27,111 @@ const clusterB = {
   config: { storage: 'sessionStorage' as const },
 };
 
-// removeCluster logic extracted for direct testing:
-// given a store, mirrors what useClustersInfo.removeCluster does
-function removeCluster(store: ReturnType<typeof createStore>, name: string) {
-  const clusters = store.get(clustersAtom);
-  const next = { ...clusters };
-  delete next[name];
-  store.set(clustersAtom, next);
-  store.set(clusterAtom, null);
-}
-
-describe('getClustersInfo — removeCluster logic', () => {
+describe('useClustersInfo', () => {
   beforeEach(() => {
     localStorage.clear();
     sessionStorage.clear();
+    mockNavigate.mockClear();
   });
 
-  it('removes the named cluster from clustersAtom', () => {
-    const store = createStore();
-    store.set(clustersAtom, { 'cluster-a': clusterA, 'cluster-b': clusterB });
-
-    removeCluster(store, 'cluster-a');
-
-    const clusters = store.get(clustersAtom) as ClustersState;
-    expect(clusters).not.toHaveProperty('cluster-a');
-    expect(clusters).toHaveProperty('cluster-b');
+  it('exposes currentCluster, clusters, setCurrentCluster, setClusters, removeCluster, navigate', () => {
+    const { result } = renderHook(() => useClustersInfo());
+    const keys = Object.keys(result.current);
+    expect(keys).toEqual(
+      expect.arrayContaining([
+        'currentCluster',
+        'clusters',
+        'setCurrentCluster',
+        'setClusters',
+        'removeCluster',
+        'navigate',
+      ]),
+    );
   });
 
-  it('sets clusterAtom to null after removal', () => {
-    const store = createStore();
-    store.set(clustersAtom, { 'cluster-a': clusterA });
-    store.set(clusterAtom, { ...clusterA, name: 'cluster-a' });
-
-    removeCluster(store, 'cluster-a');
-
-    expect(store.get(clusterAtom)).toBeNull();
+  it('returns null as currentCluster when no cluster is active', () => {
+    const { result } = renderHook(() => useClustersInfo());
+    expect(result.current.currentCluster).toBeNull();
   });
 
-  it('does not mutate remaining clusters when one is removed', () => {
-    const store = createStore();
-    store.set(clustersAtom, { 'cluster-a': clusterA, 'cluster-b': clusterB });
-
-    removeCluster(store, 'cluster-a');
-
-    const remaining = store.get(clustersAtom) as ClustersState;
-    expect(remaining?.['cluster-b']).toEqual(clusterB);
+  it('returns an empty object as clusters when none are stored', () => {
+    const { result } = renderHook(() => useClustersInfo());
+    expect(result.current.clusters).toEqual({});
   });
 
-  it('removing the only cluster leaves an empty clusters map', () => {
-    const store = createStore();
-    store.set(clustersAtom, { 'cluster-a': clusterA });
-
-    removeCluster(store, 'cluster-a');
-
-    expect(store.get(clustersAtom)).toEqual({});
+  it('exposes the navigate function from react-router', () => {
+    const { result } = renderHook(() => useClustersInfo());
+    expect(result.current.navigate).toBe(mockNavigate);
   });
 
-  it('removing a non-existent cluster does not throw and preserves state', () => {
-    const store = createStore();
-    store.set(clustersAtom, { 'cluster-a': clusterA });
+  describe('removeCluster', () => {
+    it('removes the named cluster and clears currentCluster', () => {
+      const { result } = renderHook(() => useClustersInfo());
 
-    expect(() => removeCluster(store, 'does-not-exist')).not.toThrow();
-    expect(store.get(clustersAtom)).toHaveProperty('cluster-a');
+      act(() => {
+        result.current.setClusters({
+          'cluster-a': clusterA,
+          'cluster-b': clusterB,
+        });
+        result.current.setCurrentCluster({ ...clusterA, name: 'cluster-a' });
+      });
+
+      act(() => {
+        result.current.removeCluster('cluster-a');
+      });
+
+      const clusters = result.current.clusters as ClustersState;
+      expect(clusters).not.toHaveProperty('cluster-a');
+      expect(clusters).toHaveProperty('cluster-b');
+      expect(result.current.currentCluster).toBeNull();
+    });
+
+    it('does not mutate remaining clusters when one is removed', () => {
+      const { result } = renderHook(() => useClustersInfo());
+
+      act(() => {
+        result.current.setClusters({
+          'cluster-a': clusterA,
+          'cluster-b': clusterB,
+        });
+      });
+
+      act(() => {
+        result.current.removeCluster('cluster-a');
+      });
+
+      expect(result.current.clusters?.['cluster-b']).toEqual(clusterB);
+    });
+
+    it('removing the only cluster leaves an empty clusters map', () => {
+      const { result } = renderHook(() => useClustersInfo());
+
+      act(() => {
+        result.current.setClusters({ 'cluster-a': clusterA });
+      });
+
+      act(() => {
+        result.current.removeCluster('cluster-a');
+      });
+
+      expect(result.current.clusters).toEqual({});
+    });
+
+    it('removing a non-existent cluster does not throw and preserves state', () => {
+      const { result } = renderHook(() => useClustersInfo());
+
+      act(() => {
+        result.current.setClusters({ 'cluster-a': clusterA });
+      });
+
+      expect(() => {
+        act(() => {
+          result.current.removeCluster('does-not-exist');
+        });
+      }).not.toThrow();
+
+      expect(result.current.clusters).toHaveProperty('cluster-a');
+    });
   });
 });
 

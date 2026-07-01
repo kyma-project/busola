@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { PermissionSetState } from 'state/permissionSetsAtom';
 
 const mockGetPermissionResourceRules = vi.fn();
 const mockDoesUserHavePermission = vi.fn();
@@ -26,6 +27,33 @@ function makeFetchFn(response: unknown) {
   return vi.fn().mockResolvedValue(makeJsonResponse(response));
 }
 
+// In getConfigMaps, doesUserHavePermission is called twice:
+//   1st call: with the permissionSet passed in by the caller (namespace-scoped)
+//   2nd call: with the result of getPermissionResourceRules (cluster-scoped)
+// We distinguish them by the permissionSet argument identity.
+const NAMESPACE_PERMISSION_SET: PermissionSetState = [];
+const CLUSTER_PERMISSION_SET: PermissionSetState = [];
+
+function mockPermissions({
+  namespaceAccess,
+  clusterAccess,
+}: {
+  namespaceAccess: boolean;
+  clusterAccess: boolean;
+}) {
+  mockGetPermissionResourceRules.mockResolvedValue(CLUSTER_PERMISSION_SET);
+  mockDoesUserHavePermission.mockImplementation(
+    (
+      _perms: string[],
+      _resource: unknown,
+      permissionSet: PermissionSetState,
+    ) =>
+      permissionSet === CLUSTER_PERMISSION_SET
+        ? clusterAccess
+        : namespaceAccess,
+  );
+}
+
 describe('getConfigMaps', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -36,7 +64,7 @@ describe('getConfigMaps', () => {
       undefined,
       'kube-public',
       'default',
-      [],
+      NAMESPACE_PERMISSION_SET,
       'app=busola',
     );
     expect(result).toBeNull();
@@ -45,17 +73,13 @@ describe('getConfigMaps', () => {
   it('uses cluster-wide URL when user has cluster access', async () => {
     const items = [{ metadata: { name: 'cm-1' }, data: { key: 'val' } }];
     const fetchFn = makeFetchFn({ items });
-    // namespace check: has access; cluster check: has access
-    mockDoesUserHavePermission
-      .mockReturnValueOnce(true)
-      .mockReturnValueOnce(true);
-    mockGetPermissionResourceRules.mockResolvedValue([]);
+    mockPermissions({ namespaceAccess: true, clusterAccess: true });
 
     const result = await getConfigMaps(
       fetchFn,
       'kube-public',
       'default',
-      [],
+      NAMESPACE_PERMISSION_SET,
       'app=busola',
     );
 
@@ -68,17 +92,13 @@ describe('getConfigMaps', () => {
   it('falls back to namespaced URL when cluster access is denied but namespace access is granted', async () => {
     const items = [{ metadata: { name: 'cm-ns' }, data: {} }];
     const fetchFn = makeFetchFn({ items });
-    // namespace check: has access; cluster check: no access
-    mockDoesUserHavePermission
-      .mockReturnValueOnce(true)
-      .mockReturnValueOnce(false);
-    mockGetPermissionResourceRules.mockResolvedValue([]);
+    mockPermissions({ namespaceAccess: true, clusterAccess: false });
 
     const result = await getConfigMaps(
       fetchFn,
       'kube-public',
       'my-namespace',
-      [],
+      NAMESPACE_PERMISSION_SET,
       'type=config',
     );
 
@@ -91,15 +111,13 @@ describe('getConfigMaps', () => {
 
   it('uses empty URL and returns empty array when user has no access at all', async () => {
     const fetchFn = makeFetchFn({ items: [] });
-    // namespace check: no access; cluster check: no access
-    mockDoesUserHavePermission.mockReturnValue(false);
-    mockGetPermissionResourceRules.mockResolvedValue([]);
+    mockPermissions({ namespaceAccess: false, clusterAccess: false });
 
     const result = await getConfigMaps(
       fetchFn,
       'kube-public',
       'default',
-      [],
+      NAMESPACE_PERMISSION_SET,
       'app=busola',
     );
 
@@ -109,18 +127,14 @@ describe('getConfigMaps', () => {
 
   it('uses kubeconfigNamespace when currentNamespace is null', async () => {
     const fetchFn = makeFetchFn({ items: [] });
-    // namespace check: has access; cluster check: no access → namespaced URL
-    mockDoesUserHavePermission
-      .mockReturnValueOnce(true)
-      .mockReturnValueOnce(false);
-    mockGetPermissionResourceRules.mockResolvedValue([]);
+    mockPermissions({ namespaceAccess: true, clusterAccess: false });
 
     // null is valid at runtime even though the type says string
     await getConfigMaps(
       fetchFn,
       'kube-public',
       null as unknown as string,
-      [],
+      NAMESPACE_PERMISSION_SET,
       'x=y',
     );
 
@@ -132,15 +146,14 @@ describe('getConfigMaps', () => {
 
   it('returns empty array and warns on fetch error', async () => {
     const fetchFn = vi.fn().mockRejectedValue(new Error('network failure'));
-    mockDoesUserHavePermission.mockReturnValue(true);
-    mockGetPermissionResourceRules.mockResolvedValue([]);
+    mockPermissions({ namespaceAccess: true, clusterAccess: true });
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const result = await getConfigMaps(
       fetchFn,
       'kube-public',
       'default',
-      [],
+      NAMESPACE_PERMISSION_SET,
       'app=x',
     );
 
@@ -154,14 +167,13 @@ describe('getConfigMaps', () => {
 
   it('returns empty array when response has no items field', async () => {
     const fetchFn = makeFetchFn(undefined);
-    mockDoesUserHavePermission.mockReturnValue(true);
-    mockGetPermissionResourceRules.mockResolvedValue([]);
+    mockPermissions({ namespaceAccess: true, clusterAccess: true });
 
     const result = await getConfigMaps(
       fetchFn,
       'kube-public',
       'default',
-      [],
+      NAMESPACE_PERMISSION_SET,
       'app=x',
     );
 
