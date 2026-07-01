@@ -72,6 +72,15 @@ export const KymaModulesList = ({
     t('kyma-modules.documentation'),
   ];
 
+  const hasDetailsLinkIntermediateStatesAware = (resource: {
+    name: string;
+  }) => {
+    const index = selectedModules?.findIndex((kymaResourceModule) => {
+      return kymaResourceModule.name === resource.name;
+    });
+    return !(index < 0 || protectedResource) && hasDetailsLink(resource);
+  };
+
   const actions = [
     {
       name: t('common.buttons.delete'),
@@ -139,13 +148,14 @@ export const KymaModulesList = ({
             resource,
             kymaResource,
             moduleTemplates,
-            hasDetailsLink,
+            hasDetailsLink: () =>
+              hasDetailsLinkIntermediateStatesAware(resource),
             protectedResource,
           })
         }
         disableHiding={false}
         displayArrow
-        hasRowDetails={hasDetailsLink}
+        hasRowDetails={hasDetailsLinkIntermediateStatesAware}
         title={'Modules'}
         sortBy={{
           name: (a: { name: any }, b: { name: any }) =>

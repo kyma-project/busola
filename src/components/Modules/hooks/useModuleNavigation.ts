@@ -45,6 +45,21 @@ type UseModuleNavigationOptions = {
   setSelectedEntry?: (name: string) => void;
 };
 
+const checkIfStateIsPositive = (state: string) => {
+  const positiveStates = [
+    'Available',
+    'Ready',
+    'Bound',
+    'Running',
+    'Success',
+    'Succeeded',
+    'Progressing',
+    'Ok',
+    'Finished',
+  ];
+  return positiveStates.includes(state);
+};
+
 export function useModuleNavigation({
   moduleTemplates,
   extensions,
@@ -72,7 +87,11 @@ export function useModuleNavigation({
         resource?.namespace,
       )?.spec?.data?.kind ??
       '';
-    return !!findExtension(kind, extensions) || !!findCrd(kind, crds);
+
+    return (
+      (!!findExtension(kind, extensions) || !!findCrd(kind, crds)) &&
+      checkIfStateIsPositive(resource.state)
+    );
   };
 
   const customColumnLayout = (resource: ModuleEntry) => {

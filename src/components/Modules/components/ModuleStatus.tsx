@@ -16,6 +16,7 @@ export const resolveType = (status: string): ValueState => {
     case 'Succeeded':
     case 'Progressing':
     case 'Ok':
+    case 'Finished':
       return ValueState.Positive;
     case 'Processing':
     case 'Deleting':
@@ -33,9 +34,6 @@ export const resolveType = (status: string): ValueState => {
     case 'Downloading':
     case 'Released':
       return ValueState.Information;
-    case 'Finished':
-      return ValueState.Positive;
-
     default:
       return ValueState.None;
   }
