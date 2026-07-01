@@ -10,6 +10,7 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { getErrorMessage, prettifyNameSingular } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CustomColumnsType } from './ResourceCustomStatusColumns';
+import { ConditionItem } from '../ConditionList/ConditionList';
 import { isEmpty } from 'lodash';
 import { ResourceGraphConfig } from '../ResourceGraph/types';
 import { ResourceComponent } from './ResourceComponent';
@@ -70,12 +71,7 @@ export type ResourceDetailsProps = {
   statusBadge?: (resource: any) => ReactNode;
   customStatusColumns?: CustomColumnsType;
   customStatus?: ReactNode;
-  statusConditions?: (resource: any) => Array<{
-    type: string;
-    status: string;
-    reason?: string;
-    message?: string;
-  }>;
+  statusConditions?: (resource: any) => ConditionItem[] | null;
   headerContent?: ReactNode;
   className?: string;
   headerDescription?: string;

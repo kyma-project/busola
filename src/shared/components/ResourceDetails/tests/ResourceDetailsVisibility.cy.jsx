@@ -52,15 +52,15 @@ describe('ResourceDetails visibility', () => {
       },
     );
 
-    cy.contains('some-header--hidden:', { timeout: 10000 }).should('not.exist');
+    cy.contains('some-header--hidden', { timeout: 10000 }).should('not.exist');
     cy.contains('should not be visible', { timeout: 10000 }).should(
       'not.exist',
     );
 
-    cy.contains('some-header--visible:', { timeout: 10000 }).should('exist');
+    cy.contains('some-header--visible', { timeout: 10000 }).should('exist');
     cy.contains('should be visible', { timeout: 10000 }).should('exist');
 
-    cy.contains('some-header--with-error:', { timeout: 10000 }).should('exist');
+    cy.contains('some-header--with-error', { timeout: 10000 }).should('exist');
     cy.contains('will be ignored', { timeout: 10000 }).should('not.exist');
     cy.contains('common.messages.error', { timeout: 10000 }).should('exist');
   });

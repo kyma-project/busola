@@ -5,6 +5,7 @@ import {
   CustomColumnsType,
   ResourceCustomStatusColumns,
 } from './ResourceCustomStatusColumns';
+import { ConditionItem } from '../ConditionList/ConditionList';
 import { K8sResource } from 'types';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
 
@@ -15,12 +16,7 @@ type ResourceStatusCardContentProps = {
   customStatusColumns?: CustomColumnsType;
   filteredStatusColumns: CustomColumn[];
   filteredStatusColumnsLong: CustomColumn[];
-  statusConditions?: (resource: any) => {
-    type: string;
-    status: string;
-    reason?: string;
-    message?: string;
-  }[];
+  statusConditions?: (resource: any) => ConditionItem[] | null;
   customConditionsComponents?: CustomColumnsType;
   filteredConditionsComponents?: CustomColumn[];
 };
