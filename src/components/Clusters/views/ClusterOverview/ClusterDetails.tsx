@@ -79,7 +79,11 @@ export default function ClusterDetails({
       >
         {t('cluster-overview.headers.cluster-overview')}
       </Title>
-      <Form layout="S1 M2 L2 XL2" className="form-without-background">
+      <Form
+        layout="S1 M2 L2 XL2"
+        labelSpan="S12 M12 L12 XL12"
+        className="form-without-background"
+      >
         <ResourceDetailsCard
           titleText={t('cluster-overview.headers.metadata')}
           content={

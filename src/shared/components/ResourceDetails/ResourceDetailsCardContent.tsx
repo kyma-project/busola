@@ -93,7 +93,7 @@ export const ResourceDetailsCardContent = ({
               key={col.header}
               labelContent={<Label showColon>{col.header ?? ''}</Label>}
             >
-              {col.value(resource)}
+              <div>{col.value(resource)}</div>
             </FormItem>
           ))}
           {needsPadding && (
