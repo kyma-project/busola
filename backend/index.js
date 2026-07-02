@@ -14,6 +14,8 @@ import crypto from 'crypto';
 import config from './src/config/config';
 
 import { fillActiveEnvForFrontend } from './utils/active-env';
+import registerWebSocket from './src/terminal/handler';
+
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
@@ -120,6 +122,8 @@ if (isDocker) {
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
 }
+
+registerWebSocket(server);
 
 process.on('SIGINT', function () {
   console.log('SIGINT received, cleaning up...');
