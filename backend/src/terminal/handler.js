@@ -126,7 +126,7 @@ export default function registerWebSocket(server) {
       });
 
       k8sWS.addEventListener('error', (event) => {
-        logger.error({ err: event }, 'K8s WebSocket error: ');
+        req.logger.error({ err: event }, 'K8s WebSocket error: ');
       });
 
       k8sWS.addEventListener('close', () => {
