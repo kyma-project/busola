@@ -34,7 +34,6 @@ const handleUpgrade = (webSocketServer) => {
     const logger = pinoWebSocketLogger(req);
     logger.info({ url: req.url }, 'Upgrade Triggered');
     const { pathname } = new URL(req.url, baseURLStub);
-    logger.info(req.headers);
     if (!pathname.startsWith(webSocketPath)) {
       socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
       return;
@@ -48,9 +47,10 @@ const handleUpgrade = (webSocketServer) => {
     } catch (e) {
       if (e instanceof InvalidInputError) {
         socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
-        return;
       }
       logger.error({ err: e }, 'Error during parsing headers');
+      socket.end('HTTP/1.1 500 Internal Server Error\r\n\r\n');
+      return;
     }
 
     req.logger = logger;
@@ -109,8 +109,7 @@ export default function registerWebSocket(server) {
         // TODO: Currently the busola terminal uses default service account which has 0 permissions to access k8s api.
         // We can try to build kubeconfig and add it to env
         // TODO: This is a help command executed at the begining of connection, we can change or remove it completely.
-        const msg = 'kubectl';
-        k8sWS.send(encodeMsg(msg));
+        k8sWS.send(encodeMsg('kubectl'));
       });
 
       k8sWS.addEventListener('message', (event) => {

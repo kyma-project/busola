@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { connectTerminal } from './connectTerminal';
+import { encodeBase64Url } from 'shared/utils/base64url';
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
@@ -77,10 +78,6 @@ async function attach(
     messages,
   });
   return { term, sess, ws: ws as any, disposable };
-}
-
-function encodeBase64Url(str: string) {
-  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
 describe('connectTerminal', () => {

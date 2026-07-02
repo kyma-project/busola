@@ -2,6 +2,8 @@
 import { InvalidInputError } from '../errors/errors';
 
 export default function parseProtocolHeaders(secHeader) {
+  if (!secHeader)
+    throw new InvalidInputError('Missing sec-websocket-protocol header');
   const [protocol, ...headers] = secHeader.trim().split(',');
   if (protocol !== '' && headers.length < 1) {
     throw new InvalidInputError('WebSocket Auth headers are empty');

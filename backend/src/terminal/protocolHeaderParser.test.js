@@ -95,6 +95,15 @@ describe('Throws error when parsing protocol invalid headers', () => {
       'WebSocket Auth headers are empty',
     );
   });
+  it('sec-websocket-protocol header is missing', () => {
+    //GIVEN
+    const protocolHeader = undefined;
+
+    //WHEN
+    expect(() => parseProtocolHeaders(protocolHeader)).toThrow(
+      'Missing sec-websocket-protocol header',
+    );
+  });
   it('Auth header is malformed', () => {
     //GIVEN
     const protocolHeader = `v4.channel.k8s.io, base64url.header.x-client-certificate-data.value.`;

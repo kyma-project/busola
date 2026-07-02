@@ -1,6 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
+import { useTerminalSession } from './useTerminalSession';
+import { encodeBase64Url } from 'shared/utils/base64url';
 
 vi.mock('state/authDataAtom', () => ({ authDataAtom: { id: 'auth' } }));
 vi.mock('state/clusterAtom', () => ({ clusterAtom: { id: 'cluster' } }));
@@ -36,8 +38,6 @@ const MOCK_AUTH_HEADERS = {
 vi.mock('shared/hooks/BackendAPI/createHeaders', () => ({
   createHeaders: () => MOCK_AUTH_HEADERS,
 }));
-
-import { useTerminalSession } from './useTerminalSession';
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
@@ -117,7 +117,7 @@ describe('useTerminalSession', () => {
     expect(lastWs()?.url).toContain('/attach?');
     expect(lastWs()?.protocols).toContain('v4.channel.k8s.io');
     expect(lastWs()?.protocols).toContain(
-      `base64url.header.x-k8s-authorization.value.${btoa('Bearer tok123').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')}`,
+      `base64url.header.x-k8s-authorization.value.${encodeBase64Url('Bearer tok123')}`,
     );
   });
 

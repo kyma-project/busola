@@ -2,6 +2,7 @@ import { Terminal } from '@xterm/xterm';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { TerminalSessionState } from 'state/terminalSessionAtom';
 import { CONTAINER_NAME, TERMINAL_NAMESPACE } from './provisionPod';
+import { encodeBase64Url } from 'shared/utils/base64url';
 
 // Kubernetes attach stream channels — the first byte of every frame.
 const STDIN_CHANNEL = 0;
@@ -30,14 +31,7 @@ function buildProtocols(authHeaders: Headers): string[] {
   return [
     'v4.channel.k8s.io',
     ...authHeaders.entries().map(([key, value]) => {
-      // In the future we can try to use: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64
-      //Generate Base64URL compatible output from Base64
-      //WebSocket web browser api has problems with =,/ chars
-      const encodedValue = btoa(value)
-        .replaceAll('+', '-')
-        .replaceAll('/', '_')
-        .replaceAll('=', '');
-      return `base64url.header.${key.toLowerCase()}.value.${encodedValue}`;
+      return `base64url.header.${key.toLowerCase()}.value.${encodeBase64Url(value)}`;
     }),
   ];
 }
