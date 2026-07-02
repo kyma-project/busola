@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { encodeBase64Url } from './base64url';
 
 it('produces base64url-safe output without +, / or = characters', () => {
