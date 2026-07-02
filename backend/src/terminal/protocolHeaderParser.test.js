@@ -5,7 +5,7 @@ function encodeBase64URL(input) {
 }
 
 function encodeBase64(input) {
-  return Buffer.from(input).toString('base64url');
+  return Buffer.from(input).toString('base64');
 }
 
 const ca = 'CACERT';

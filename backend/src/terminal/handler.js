@@ -6,7 +6,7 @@ import { InvalidInputError } from '../errors/errors';
 
 function buildRemoteURL(url, remoteURL) {
   const remoteServerAddress = remoteURL.replace('https://', '');
-  const path = url.pathname.split('/').slice(3).join('/'); //remove /backend/ws
+  const path = url.pathname.slice(webSocketPath.length); //remove /backend/ws
   return `wss://${remoteServerAddress}/${path}${url.search}`;
 }
 
