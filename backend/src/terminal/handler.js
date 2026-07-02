@@ -47,9 +47,10 @@ const handleUpgrade = (webSocketServer) => {
     } catch (e) {
       if (e instanceof InvalidInputError) {
         socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+      } else {
+        socket.end('HTTP/1.1 500 Internal Server Error\r\n\r\n');
+        logger.error({ err: e }, 'Error during parsing headers');
       }
-      logger.error({ err: e }, 'Error during parsing headers');
-      socket.end('HTTP/1.1 500 Internal Server Error\r\n\r\n');
       return;
     }
 
