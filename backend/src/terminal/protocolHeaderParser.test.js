@@ -23,7 +23,7 @@ const clientKeyEncoded = encodeBase64URL(encodeBase64(clientKey));
 const token = 'Bearer XYZ.ABC.LMN';
 const tokenEncoded = encodeBase64URL(token);
 
-describe('Parse protocl headers with auth data', () => {
+describe('Parse protocol headers with auth data', () => {
   it('All data is present and mTLS is used', () => {
     //GIVEN
     const protocolHeader = `v4.channel.k8s.io, base64url.header.x-client-certificate-data.value.${clientCertEncoded}, base64url.header.x-cluster-url.value.${clusterURLEncoded}, base64url.header.x-cluster-certificate-authority-data.value.${caEncoded}, base64url.header.x-client-key-data.value.${clientKeyEncoded}`;

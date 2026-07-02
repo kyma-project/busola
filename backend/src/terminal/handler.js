@@ -125,11 +125,11 @@ export default function registerWebSocket(server) {
         }
       });
 
-      k8sWS.addEventListener('onerror', (event) => {
+      k8sWS.addEventListener('error', (event) => {
         logger.error({ err: event }, 'K8s WebSocket error: ');
       });
 
-      k8sWS.addEventListener('onclose', () => {
+      k8sWS.addEventListener('close', () => {
         req.logger.info('K8s WebSocket closed');
         const closingMsg = 'Remote connection closed';
         frontWS.send(encodeMsg(closingMsg, Stream.STDOUT));
@@ -146,7 +146,7 @@ export default function registerWebSocket(server) {
           k8sWS.send(data);
         } else {
           req.logger.info(
-            'Front WS is not open, cannot send message, status: ' +
+            'K8s WS is not open, cannot send message, status: ' +
               k8sWS.readyState,
           );
         }
