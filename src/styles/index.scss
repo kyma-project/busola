@@ -34,7 +34,7 @@ body {
 .panel-grid {
   display: grid;
   grid-template-columns: 2fr 2fr;
-  gap: 1rem 2rem;
+  gap: 1rem;
 
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;

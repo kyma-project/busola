@@ -22,17 +22,15 @@ export function Section({
   ...props
 }: SectionProps) {
   const { widgetT } = useGetTranslation();
+  const sectionId = `section-heading-${structure.name?.replace(/\s+/g, '-')}`;
 
   return (
-    <section
-      aria-labelledby={`section-heading-${structure.name}`}
-      data-testid="extensibility-section"
-    >
+    <section aria-labelledby={sectionId} data-testid="extensibility-section">
       <Title
         level="H3"
         size="H4"
         className="sap-margin-top-small sap-margin-bottom-small"
-        id={`section-heading-${structure.name}`}
+        id={sectionId}
       >
         {widgetT(structure)}
       </Title>
