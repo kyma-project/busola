@@ -26,6 +26,7 @@ const ssoData = { id_token: 'sso-token' } as any;
 
 describe('getFetchFn', () => {
   beforeEach(() => {
+    sessionStorage.clear();
     mockCreateFetchFn.mockClear();
     mockCreateFetchFn.mockReturnValue(mockFetchFn);
   });
@@ -79,6 +80,7 @@ describe('getFetchFn', () => {
     const store = createStore();
     store.set(authDataAtom, authData);
     store.set(clusterAtom, cluster);
+    store.set(ssoDataAtom, null);
 
     getFetchFn(store.get);
 

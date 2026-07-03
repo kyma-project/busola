@@ -27,12 +27,7 @@ function makeFetchFn(response: unknown) {
   return vi.fn().mockResolvedValue(makeJsonResponse(response));
 }
 
-// In getConfigMaps, doesUserHavePermission is called twice:
-//   1st call: with the permissionSet passed in by the caller (namespace-scoped)
-//   2nd call: with the result of getPermissionResourceRules (cluster-scoped)
-// We distinguish them by the permissionSet argument identity.
 const NAMESPACE_PERMISSION_SET: PermissionSetState = [];
-const CLUSTER_PERMISSION_SET: PermissionSetState = [];
 
 function mockPermissions({
   namespaceAccess,
@@ -41,17 +36,10 @@ function mockPermissions({
   namespaceAccess: boolean;
   clusterAccess: boolean;
 }) {
-  mockGetPermissionResourceRules.mockResolvedValue(CLUSTER_PERMISSION_SET);
-  mockDoesUserHavePermission.mockImplementation(
-    (
-      _perms: string[],
-      _resource: unknown,
-      permissionSet: PermissionSetState,
-    ) =>
-      permissionSet === CLUSTER_PERMISSION_SET
-        ? clusterAccess
-        : namespaceAccess,
-  );
+  mockGetPermissionResourceRules.mockResolvedValue([]);
+  mockDoesUserHavePermission
+    .mockReturnValueOnce(namespaceAccess)
+    .mockReturnValueOnce(clusterAccess);
 }
 
 describe('getConfigMaps', () => {

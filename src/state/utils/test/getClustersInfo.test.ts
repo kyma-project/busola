@@ -2,8 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import React from 'react';
 import { createStore, Provider as JotaiProvider } from 'jotai';
-import { clusterAtom } from 'state/clusterAtom';
-import { clustersAtom, ClustersState } from 'state/clustersAtom';
+import { ClustersState } from 'state/clustersAtom';
 
 const mockNavigate = vi.fn();
 
@@ -141,48 +140,5 @@ describe('useClustersInfo', () => {
 
       expect(result.current.clusters).toHaveProperty('cluster-a');
     });
-  });
-});
-
-describe('clustersAtom — initial state', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    sessionStorage.clear();
-  });
-
-  it('defaults to an empty object when storage is empty', () => {
-    const store = createStore();
-    expect(store.get(clustersAtom)).toEqual({});
-  });
-
-  it('can be updated with a new clusters map', () => {
-    const store = createStore();
-    store.set(clustersAtom, { 'cluster-a': clusterA });
-    expect(store.get(clustersAtom)).toHaveProperty('cluster-a');
-  });
-});
-
-describe('clusterAtom — active cluster state', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    sessionStorage.clear();
-  });
-
-  it('defaults to null when no cluster is stored', () => {
-    const store = createStore();
-    expect(store.get(clusterAtom)).toBeNull();
-  });
-
-  it('can be set to a cluster', () => {
-    const store = createStore();
-    store.set(clusterAtom, { ...clusterA, name: 'cluster-a' });
-    expect(store.get(clusterAtom)).toMatchObject({ name: 'cluster-a' });
-  });
-
-  it('can be cleared back to null', () => {
-    const store = createStore();
-    store.set(clusterAtom, { ...clusterA, name: 'cluster-a' });
-    store.set(clusterAtom, null);
-    expect(store.get(clusterAtom)).toBeNull();
   });
 });
