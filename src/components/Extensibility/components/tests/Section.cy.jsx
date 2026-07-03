@@ -23,7 +23,7 @@ describe('Section Component', () => {
     cy.mount(<Section structure={structure} value={{}} />);
 
     cy.get('[data-testid="extensibility-section"]')
-      .should('have.attr', 'aria-labelledby', 'section-heading-My Section')
+      .should('have.attr', 'aria-labelledby', 'section-heading-My-Section')
       .then(($section) => {
         const labelId = $section.attr('aria-labelledby');
         cy.get(`#${CSS.escape(labelId)}`).should('exist');
