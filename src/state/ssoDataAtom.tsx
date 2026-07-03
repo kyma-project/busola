@@ -103,15 +103,19 @@ async function handleSSOLogin(
     if (storedUser && !storedUser.expired) {
       user = storedUser;
     } else {
-      const isOurCallback = isOwnOidcCallback(ssoConfig.config.clientId);
-
-      if (isOurCallback) {
-        user = await userManager?.signinRedirectCallback(window.location.href);
-      } else {
+      const hasCode = new URLSearchParams(window.location.search).has('code');
+      if (hasCode && !isOwnOidcCallback(ssoConfig.config.clientId)) {
+        // A redirect callback is in progress, but it belongs to a different
+        // UserManager (e.g. cluster OIDC). Don't touch it — just wait; the
+        // other handler will process the code and then navigate away.
+        return;
+      }
+      if (!hasCode) {
         await userManager.clearStaleState();
         userManager.signinRedirect();
         return;
       }
+      user = await userManager?.signinRedirectCallback(window.location.href);
     }
 
     if (!handlersAttached) {

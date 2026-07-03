@@ -164,7 +164,14 @@ async function handleLogin({
       // before redirecting. Checking the stored client_id tells us definitively
       // whether this callback URL belongs to this UserManager — without relying
       // on the 'iss' URL which varies across environments.
-      if (!isOwnOidcCallback(oidcParams.clientId)) {
+      const hasCode = new URLSearchParams(window.location.search).has('code');
+      if (hasCode && !isOwnOidcCallback(oidcParams.clientId)) {
+        // A redirect callback is in progress, but it belongs to a different
+        // UserManager (e.g. SSO). Don't touch it — just wait; the other
+        // handler will process the code and then navigate away.
+        return;
+      }
+      if (!hasCode) {
         await userManager.clearStaleState();
         await userManager.signinRedirect();
         return;
