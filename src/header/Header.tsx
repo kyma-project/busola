@@ -15,7 +15,7 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
-import { useJouleEligibility } from 'hooks/useJouleEligibility';
+import { useJouleEligibility } from 'components/KymaCompanion/hooks/useJouleEligibility';
 
 import {
   clustersAtomEffectOnSet,
@@ -84,11 +84,14 @@ export function Header() {
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
+  // If eligibility changes while the panel is open (e.g. cluster switch),
+  // close it rather than swap the assistant mid-session.
   useEffect(() => {
-    setShowCompanion((prevState) => ({
-      ...prevState,
-      useJoule: jouleEligible,
-    }));
+    setShowCompanion((prevState) =>
+      prevState.show
+        ? { ...prevState, show: false, useJoule: jouleEligible }
+        : { ...prevState, useJoule: jouleEligible },
+    );
   }, [setShowCompanion, jouleEligible]);
 
   return (

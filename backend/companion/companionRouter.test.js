@@ -167,7 +167,7 @@ describe('handleClusterRegion', () => {
     expect(res2._body.isEUAccessOnly).toBe(false);
   });
 
-  it('does not cache error responses', async () => {
+  it('does not cache transient 5xx responses (retries on next request)', async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({
@@ -187,6 +187,41 @@ describe('handleClusterRegion', () => {
     await handleClusterRegion(makeMockReq('c-err'), res2);
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(res2._status).toBe(200);
+  });
+
+  it('negatively caches 404 responses without re-hitting the companion API', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      json: async () => ({ error: 'Not Found' }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res1 = makeMockRes();
+    await handleClusterRegion(makeMockReq('c-missing'), res1);
+    expect(res1._status).toBe(404);
+    expect(fetchMock).toHaveBeenCalledOnce();
+
+    const res2 = makeMockRes();
+    await handleClusterRegion(makeMockReq('c-missing'), res2);
+    expect(res2._status).toBe(404);
+    expect(fetchMock).toHaveBeenCalledOnce(); // served from the negative cache
+  });
+
+  it('does not leak the upstream error body to the client', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 502,
+      json: async () => {
+        throw new Error('Unexpected token < in JSON'); // HTML error page
+      },
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res = makeMockRes();
+    await handleClusterRegion(makeMockReq('c-bad-gateway'), res);
+    expect(res._status).toBe(502);
+    expect(res._body.error).toMatch(/Failed to fetch cluster region data/);
   });
 
   it('evicts the oldest entry when the cache reaches its limit', async () => {

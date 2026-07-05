@@ -9,6 +9,7 @@ import {
   hashCredential,
   requireCredential,
 } from '../utils/rate-limit-key.js';
+import { createBoundedCache } from '../utils/bounded-cache.js';
 
 import config from '../src/config/config.js';
 
@@ -39,14 +40,13 @@ const companionRateLimiter = rateLimit({
 
 // Cluster region is immutable — safe to cache for the process lifetime.
 const CLUSTER_REGION_CACHE_MAX = 1000;
-const clusterRegionCache = new Map();
-
-function clusterRegionCacheSet(shootId, data) {
-  if (clusterRegionCache.size >= CLUSTER_REGION_CACHE_MAX) {
-    clusterRegionCache.delete(clusterRegionCache.keys().next().value);
-  }
-  clusterRegionCache.set(shootId, data);
-}
+const clusterRegionCache = createBoundedCache({
+  max: CLUSTER_REGION_CACHE_MAX,
+});
+const clusterRegionNegativeCache = createBoundedCache({
+  max: CLUSTER_REGION_CACHE_MAX,
+  ttlMs: 60 * 1000,
+});
 
 router.use(express.json());
 
@@ -327,8 +327,13 @@ async function handleClusterRegion(req, res) {
       .json({ error: 'Companion API base URL is not configured' });
   }
 
-  if (clusterRegionCache.has(shootId)) {
-    return res.status(200).json(clusterRegionCache.get(shootId));
+  const cached = clusterRegionCache.get(shootId);
+  if (cached !== undefined) {
+    return res.status(200).json(cached);
+  }
+  const negative = clusterRegionNegativeCache.get(shootId);
+  if (negative !== undefined) {
+    return res.status(negative.status).json(negative.body);
   }
 
   try {
@@ -342,14 +347,27 @@ async function handleClusterRegion(req, res) {
       headers.Authorization = `Bearer ${AUTH_TOKEN}`;
     }
     const response = await fetch(url.toString(), { method: 'GET', headers });
-    const data = await response.json();
-    if (response.ok) {
-      clusterRegionCacheSet(shootId, data);
+
+    const isOk = response.status >= 200 && response.status < 300;
+    if (!isOk) {
+      // Upstream error body may be HTML (LB page) — don't forward it.
+      const body = { error: 'Failed to fetch cluster region data' };
+      // Cache 4xx only; 5xx are transient.
+      if (response.status >= 400 && response.status < 500) {
+        clusterRegionNegativeCache.set(shootId, {
+          status: response.status,
+          body,
+        });
+      }
+      return res.status(response.status).json(body);
     }
-    res.status(response.status).json(data);
+
+    const data = await response.json();
+    clusterRegionCache.set(shootId, data);
+    return res.status(200).json(data);
   } catch (error) {
     req.log.warn(error);
-    res.status(500).json({
+    return res.status(500).json({
       error: `Failed to fetch cluster region data. Request ID: ${String(req.id)}`,
     });
   }
@@ -374,6 +392,7 @@ router.post(
   companionRateLimiter,
   handleFollowUpSuggestions,
 );
+// Unauthenticated; authenticating it is a pending follow-up.
 router.get('/cluster-region/:shootId', handleClusterRegion);
 
 export { handleClusterRegion, CLUSTER_REGION_CACHE_MAX };

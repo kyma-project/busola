@@ -50,6 +50,7 @@ config:
         documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
         model: 'gpt-4.1'
         queryMaxTokens: 8000
+        issuerUrl: 'https://kymatest.accounts400.ondemand.com'
       useJoule: false
       jouleConfig:
         url: ''

@@ -82,15 +82,27 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
       }
     };
 
-    return mergeWith(
+    // Excludes the cluster's busola-config ConfigMap, so it's trusted for
+    // values a cluster admin must not override (the Joule issuer gate).
+    const deploymentConfiguration = mergeWith(
+      {},
+      defaultParams?.config,
+      configParams?.config,
+      customizer,
+    ) as Configuration;
+
+    const configuration = mergeWith(
+      {},
       defaultParams?.config,
       configParams?.config,
       mapParams?.config,
       customizer,
     ) as Configuration;
+
+    return { configuration, deploymentConfiguration };
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
-    return null;
+    return { configuration: null, deploymentConfiguration: null };
   }
 };
 
@@ -99,6 +111,7 @@ export const useGetConfiguration = () => {
   const auth = useAtomValue(authDataAtom);
   const apis = useAtomValue(apiGroupAtomSync);
   const setConfig = useSetAtom(configurationAtom);
+  const setDeploymentConfig = useSetAtom(deploymentConfigurationAtom);
   const fetchFn = getFetchFn(useAtomValue);
   const [prevCluster, setPrevCluster] = useState<ActiveClusterState>(null);
   const [prevHasFetchFn, setPrevHasFetchFn] = useState(false);
@@ -110,9 +123,11 @@ export const useGetConfiguration = () => {
 
     if (!cluster || clusterChanged || fetchFnBecameAvailable) {
       const setClusterConfig = async () => {
-        const configs = await getConfigs(fetchFn);
-        const updatedFeatures = await getFeatures(configs?.features);
-        setConfig({ ...configs, features: updatedFeatures });
+        const { configuration, deploymentConfiguration } =
+          await getConfigs(fetchFn);
+        const updatedFeatures = await getFeatures(configuration?.features);
+        setConfig({ ...configuration, features: updatedFeatures });
+        setDeploymentConfig(deploymentConfiguration ?? {});
         setPrevCluster(cluster);
         setPrevHasFetchFn(hasFetchFn);
       };
@@ -125,3 +140,6 @@ export const useGetConfiguration = () => {
 
 export const configurationAtom = atom<Configuration>(defaultValue);
 configurationAtom.debugLabel = 'configurationAtom';
+
+export const deploymentConfigurationAtom = atom<Configuration>(defaultValue);
+deploymentConfigurationAtom.debugLabel = 'deploymentConfigurationAtom';

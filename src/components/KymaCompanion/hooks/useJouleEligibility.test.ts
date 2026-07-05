@@ -9,6 +9,8 @@ import {
 } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useJouleEligibility } from './useJouleEligibility';
+import { clusterAtom } from 'state/clusterAtom';
+import { deploymentConfigurationAtom } from 'state/configuration/configurationAtom';
 
 vi.mock('hooks/useFeature');
 vi.mock('jotai', async (importOriginal) => {
@@ -44,12 +46,21 @@ const makeCluster = (serverUrl = SKR_SERVER, oidcIssuerUrl?: string) => ({
   },
 });
 
+// The trusted issuer comes from the deployment config atom, not from useFeature.
+function stubAtoms(cluster: unknown, issuerUrl = '') {
+  mockUseAtomValue.mockImplementation((atom: unknown) => {
+    if (atom === deploymentConfigurationAtom) {
+      return { features: { KYMA_COMPANION: { config: { issuerUrl } } } };
+    }
+    if (atom === clusterAtom) return cluster;
+    return undefined;
+  });
+}
+
 function stubFeature(overrides: Record<string, unknown> = {}) {
   mockUseFeature.mockReturnValue({
     isEnabled: true,
     useJoule: true,
-    config: { issuerUrl: '' },
-    jouleConfig: { url: 'https://joule.example.com', botname: 'kyma' },
     ...overrides,
   });
 }
@@ -57,7 +68,7 @@ function stubFeature(overrides: Record<string, unknown> = {}) {
 describe('useJouleEligibility', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn());
-    mockUseAtomValue.mockReturnValue(makeCluster());
+    stubAtoms(makeCluster());
     stubFeature();
   });
 
@@ -164,13 +175,11 @@ describe('useJouleEligibility', () => {
     expect(result.current).toBe(false);
   });
 
-  it('returns false and warns when OIDC issuer does not match config.issuerUrl', () => {
+  it('returns false and warns when OIDC issuer does not match the deployment issuer', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    stubFeature({
-      config: { issuerUrl: 'https://kyma.accounts.ondemand.com' },
-    });
-    mockUseAtomValue.mockReturnValue(
+    stubAtoms(
       makeCluster(SKR_SERVER, 'https://other.ias.example.com'),
+      'https://kyma.accounts.ondemand.com',
     );
     const { result } = renderHook(() => useJouleEligibility());
     expect(result.current).toBe(false);
@@ -180,11 +189,9 @@ describe('useJouleEligibility', () => {
   });
 
   it('treats issuer URLs differing only by trailing slash as a match', async () => {
-    stubFeature({
-      config: { issuerUrl: 'https://kyma.accounts.ondemand.com' },
-    });
-    mockUseAtomValue.mockReturnValue(
+    stubAtoms(
       makeCluster(SKR_SERVER, 'https://kyma.accounts.ondemand.com/'),
+      'https://kyma.accounts.ondemand.com',
     );
     (fetch as Mock).mockResolvedValue({
       ok: true,
@@ -195,21 +202,19 @@ describe('useJouleEligibility', () => {
     await waitFor(() => expect(result.current).toBe(true));
   });
 
-  it('skips OIDC check when issuerUrl is empty and proceeds to EU check', async () => {
+  it('skips OIDC check when the deployment issuer is empty and proceeds to EU check', async () => {
     (fetch as Mock).mockResolvedValue({
       ok: true,
       status: 200,
       json: async () => ({ isEUAccessOnly: false }),
     });
-    mockUseAtomValue.mockReturnValue(
-      makeCluster(SKR_SERVER, 'https://any.ias.example.com'),
-    );
+    stubAtoms(makeCluster(SKR_SERVER, 'https://any.ias.example.com'), '');
     const { result } = renderHook(() => useJouleEligibility());
     await waitFor(() => expect(result.current).toBe(true));
   });
 
   it('does not fetch when cluster has no server URL', () => {
-    mockUseAtomValue.mockReturnValue({
+    stubAtoms({
       currentContext: {
         cluster: { cluster: {} },
         user: { user: { token: 'tok' } },
@@ -221,7 +226,7 @@ describe('useJouleEligibility', () => {
 
   it('does not fetch and warns when server URL cannot yield a shoot ID', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    mockUseAtomValue.mockReturnValue(makeCluster('https://k8s.example.com'));
+    stubAtoms(makeCluster('https://k8s.example.com'));
     renderHook(() => useJouleEligibility());
     expect(fetch).not.toHaveBeenCalled();
     expect(warnSpy).toHaveBeenCalledWith(
